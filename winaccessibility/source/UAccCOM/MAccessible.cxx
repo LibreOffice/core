@@ -65,7 +65,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
-using namespace com::sun::star::accessibility::AccessibleStateType;
 
 namespace {
 
@@ -128,53 +127,60 @@ bool queryTableCell(XAccessible* pXAcc, XInterface** ppXI)
     return true;
 }
 
+
+void lcl_addIA2State(AccessibleStates& rStates, sal_Int64 nUnoState)
+{
+    switch (nUnoState)
+    {
+        case css::accessibility::AccessibleStateType::ACTIVE:
+            rStates |= IA2_STATE_ACTIVE;
+            break;
+        case css::accessibility::AccessibleStateType::ARMED:
+            rStates |= IA2_STATE_ARMED;
+            break;
+        case css::accessibility::AccessibleStateType::DEFUNC:
+            rStates |= IA2_STATE_DEFUNCT;
+            break;
+        case css::accessibility::AccessibleStateType::EDITABLE:
+            rStates |= IA2_STATE_EDITABLE;
+            break;
+        case css::accessibility::AccessibleStateType::HORIZONTAL:
+            rStates |= IA2_STATE_HORIZONTAL;
+            break;
+        case css::accessibility::AccessibleStateType::ICONIFIED:
+            rStates |= IA2_STATE_ICONIFIED;
+            break;
+        case css::accessibility::AccessibleStateType::MANAGES_DESCENDANTS:
+            rStates |= IA2_STATE_MANAGES_DESCENDANTS;
+            break;
+        case css::accessibility::AccessibleStateType::MODAL:
+            rStates |= IA2_STATE_MODAL;
+            break;
+        case css::accessibility::AccessibleStateType::MULTI_LINE:
+            rStates |= IA2_STATE_MULTI_LINE;
+            break;
+        case css::accessibility::AccessibleStateType::OPAQUE:
+            rStates |= IA2_STATE_OPAQUE;
+            break;
+        case css::accessibility::AccessibleStateType::SINGLE_LINE:
+            rStates |= IA2_STATE_SINGLE_LINE;
+            break;
+        case css::accessibility::AccessibleStateType::STALE:
+            rStates |= IA2_STATE_STALE;
+            break;
+        case css::accessibility::AccessibleStateType::TRANSIENT:
+            rStates |= IA2_STATE_TRANSIENT;
+            break;
+        case css::accessibility::AccessibleStateType::VERTICAL:
+            rStates |= IA2_STATE_VERTICAL;
+            break;
+        default:
+            // no match
+            break;
+    }
 }
 
-// IA2 states mapping, and name
-// maintenance the consistency, change one array, change the three all
-long const IA2_STATES[] =
-{
-    IA2_STATE_ACTIVE,                   // =                    0x1;
-    IA2_STATE_ARMED,                    // =                    0x2;
-    IA2_STATE_DEFUNCT,                  // =                    0x4;
-    IA2_STATE_EDITABLE,                 // =                    0x8;
-    IA2_STATE_HORIZONTAL,               // =                    0x10;
-    IA2_STATE_ICONIFIED,                // =                    0x20;
-    IA2_STATE_INVALID_ENTRY,            // =                    0x80;
-    IA2_STATE_MANAGES_DESCENDANTS,      // =                    0x100;
-    IA2_STATE_MODAL,                    // =                    0x200;
-    IA2_STATE_MULTI_LINE,               // =                    0x400;
-    IA2_STATE_OPAQUE,                   // =                    0x800;
-    IA2_STATE_REQUIRED,                 // =                    0x2000;
-    IA2_STATE_SELECTABLE_TEXT,          // =                    0x3000;
-    IA2_STATE_SINGLE_LINE,              // =                    0x4000;
-    IA2_STATE_STALE,                    // =                    0x8000;
-    IA2_STATE_SUPPORTS_AUTOCOMPLETION,  // =                    0x10000;
-    IA2_STATE_TRANSIENT,                //=                     0x20000;
-    IA2_STATE_VERTICAL                  // =                    0x40000;
-};
-
-sal_Int64 const UNO_STATES[] =
-{
-    ACTIVE,
-    ARMED,
-    DEFUNC,
-    EDITABLE,
-    HORIZONTAL,
-    ICONIFIED,
-    -1,             //IA2_STATE_INVALID_ENTRY
-    MANAGES_DESCENDANTS,
-    MODAL,
-    MULTI_LINE,
-    OPAQUE,
-    -1,             //IA2_STATE_REQUIRED
-    -1,             //IA2_STATE_SELECTABLE_TEXT
-    SINGLE_LINE,
-    STALE,
-    -1,             //IA2_STATE_SUPPORTS_AUTOCOMPLETION
-    TRANSIENT,      //IA2_STATE_TRANSIENT
-    VERTICAL
-};
+}
 
 using namespace com::sun::star::accessibility::AccessibleRole;
 
@@ -2582,13 +2588,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RP
         m_xContext->getAccessibleStateSet();
 
     *states = 0x0;
-    for( std::size_t j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
+    for (int i = 0; i < 63; ++i)
     {
-        if( (UNO_STATES[j] != -1) && (nRStateSet & UNO_STATES[j]) )
-        {
-            *states |= IA2_STATES[j];
-        }
+        sal_Int64 nUnoState = sal_Int64(1) << i;
+        if (nRStateSet & nUnoState)
+            lcl_addIA2State(*states, nUnoState);
     }
+
     return S_OK;
 
 
