@@ -34,11 +34,11 @@
 #include <svx/svdoashp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/lok.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace sdr;
 
@@ -53,7 +53,7 @@ SdrDragView::SdrDragView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mbDragLimit(false)
     , mbDragHdl(false)
     , mbDragStripes(false)
-    , mbSolidDragging(utl::ConfigManager::IsFuzzing() || SvtOptionsDrawinglayer::IsSolidDragCreate())
+    , mbSolidDragging(utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Drawinglayer::SolidDragCreate::get())
     , mbResizeAtCenter(false)
     , mbCrookAtCenter(false)
     , mbDragWithCopy(false)
@@ -914,7 +914,7 @@ bool SdrDragView::IsSolidDragging() const
 {
     // allow each user to disable by having a local setting, but using AND for
     // checking allowance
-    return mbSolidDragging && SvtOptionsDrawinglayer::IsSolidDragCreate();
+    return mbSolidDragging && officecfg::Office::Common::Drawinglayer::SolidDragCreate::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,6 +36,7 @@
 #include <comphelper/threadpool.hxx>
 #include <comphelper/lok.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
 
@@ -243,7 +244,7 @@ namespace drawinglayer::primitive2d
             double fViewSizeX(aVisibleDiscreteRange.getWidth());
             double fViewSizeY(aVisibleDiscreteRange.getHeight());
             const double fViewVisibleArea(fViewSizeX * fViewSizeY);
-            const double fMaximumVisibleArea(SvtOptionsDrawinglayer::GetQuadratic3DRenderLimit());
+            const double fMaximumVisibleArea(officecfg::Office::Common::Drawinglayer::Quadratic3DRenderLimit::get());
             double fReduceFactor(1.0);
 
             if(fViewVisibleArea > fMaximumVisibleArea)

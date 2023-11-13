@@ -30,6 +30,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
+#include <officecfg/Office/Common.hxx>
 
 
 namespace sdr::overlay
@@ -63,7 +64,7 @@ namespace sdr::overlay
         {
             if(OverlayType::Invert != aOverlayType)
             {
-                if(!SvtOptionsDrawinglayer::IsTransparentSelection())
+                if(!officecfg::Office::Common::Drawinglayer::TransparentSelection::get())
                 {
                     // not possible when switched off by user
                     return OverlayType::Invert;
