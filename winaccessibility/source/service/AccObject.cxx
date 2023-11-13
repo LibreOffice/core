@@ -600,7 +600,6 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
         assert(false);
         return IState;
     }
-    short Role = m_accRole;
 
     switch( nState )
     {
@@ -608,7 +607,7 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
         IState = STATE_SYSTEM_BUSY;
         break;
     case  CHECKED:
-        if( Role == PUSH_BUTTON || Role == TOGGLE_BUTTON )
+        if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON)
         {
             IState = STATE_SYSTEM_PRESSED;
         }
@@ -666,7 +665,7 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
         {
             sal_Bool isExpanded = true;
             sal_Bool isExpandable = true;
-            if( Role == PUSH_BUTTON || Role == TOGGLE_BUTTON  || BUTTON_DROPDOWN == Role )
+            if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON  || m_accRole == BUTTON_DROPDOWN)
             {
                 IState = STATE_SYSTEM_HASPOPUP;
             }
