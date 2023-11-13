@@ -395,6 +395,7 @@ inline constexpr OUString SC_UNO_SRCHTYPE             = u"SearchType"_ustr;
 inline constexpr OUString SC_UNO_SRCHWORDS            = u"SearchWords"_ustr;
 inline constexpr OUString SC_UNO_SRCHFILTERED         = u"SearchFiltered"_ustr;
 inline constexpr OUString SC_UNO_SRCHFORMATTED        = u"SearchFormatted"_ustr;
+inline constexpr OUString SC_UNO_SRCHWCESCCHAR        = u"WildcardEscapeCharacter"_ustr;
 
 //  old (5.2) property names for page styles - for compatibility only!
 inline constexpr OUString OLD_UNO_PAGE_BACKCOLOR      = u"BackgroundColor"_ustr;

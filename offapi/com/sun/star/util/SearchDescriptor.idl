@@ -123,6 +123,12 @@ published service SearchDescriptor
      */
     [optional, property] boolean SearchWildcard;
 
+    /** Specifices the character used to escape special characters in wildcards.
+
+        @since LibreOffice 24.2
+     */
+    [optional, property] long WildcardEscapeCharacter;
+
 };
 
 

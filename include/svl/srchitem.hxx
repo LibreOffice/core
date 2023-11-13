@@ -138,6 +138,9 @@ public:
     inline  bool            GetWildcard() const;
             void            SetWildcard( bool bVal );
 
+    inline  sal_Int32       GetWildcardEscapeCharacter() const;
+    inline  void            SetWildcardEscapeCharacter(sal_Int32 val);
+
             bool            GetPattern() const { return m_bPattern; }
             void            SetPattern(bool bNewPattern) { m_bPattern = bNewPattern; }
 
@@ -245,6 +248,16 @@ bool SvxSearchItem::GetRegExp() const
 bool SvxSearchItem::GetWildcard() const
 {
     return m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::WILDCARD ;
+}
+
+sal_Int32 SvxSearchItem::GetWildcardEscapeCharacter() const
+{
+    return m_aSearchOpt.WildcardEscapeCharacter;
+}
+
+void SvxSearchItem::SetWildcardEscapeCharacter(sal_Int32 val)
+{
+    m_aSearchOpt.WildcardEscapeCharacter = val;
 }
 
 bool SvxSearchItem::IsLEVRelaxed() const

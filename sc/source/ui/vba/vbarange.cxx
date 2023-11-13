@@ -3108,7 +3108,6 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
     // sanity check required params
     if ( What.isEmpty()  )
         throw uno::RuntimeException("Range::Replace, missing params" );
-    OUString sWhat = VBAToRegexp( What);
     // #TODO #FIXME SearchFormat & ReplacesFormat are not processed
     // What do we do about MatchByte... we don't seem to support that
     const SvxSearchItem& globalSearchOptions = ScGlobal::GetSearchItem();
@@ -3120,8 +3119,9 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
         uno::Reference< util::XReplaceDescriptor > xDescriptor =
             xReplace->createReplaceDescriptor();
 
-        xDescriptor->setSearchString( sWhat);
-        xDescriptor->setPropertyValue( SC_UNO_SRCHREGEXP, uno::Any( true ) );
+        xDescriptor->setSearchString(What);
+        xDescriptor->setPropertyValue(SC_UNO_SRCHWILDCARD, uno::Any(true));
+        xDescriptor->setPropertyValue(SC_UNO_SRCHWCESCCHAR, uno::Any(sal_Int32('~')));
         xDescriptor->setReplaceString( Replacement);
         if ( LookAt.hasValue() )
         {
@@ -3215,8 +3215,6 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     else
         throw uno::RuntimeException("Range::Find, missing search-for-what param" );
 
-    OUString sSearch = VBAToRegexp( sWhat );
-
     const SvxSearchItem& globalSearchOptions = ScGlobal::GetSearchItem();
     SvxSearchItem newOptions( globalSearchOptions );
 
@@ -3224,8 +3222,9 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     if( xSearch.is() )
     {
         uno::Reference< util::XSearchDescriptor > xDescriptor = xSearch->createSearchDescriptor();
-        xDescriptor->setSearchString( sSearch );
-        xDescriptor->setPropertyValue( SC_UNO_SRCHREGEXP, uno::Any( true ) );
+        xDescriptor->setSearchString(sWhat);
+        xDescriptor->setPropertyValue(SC_UNO_SRCHWILDCARD, uno::Any(true));
+        xDescriptor->setPropertyValue(SC_UNO_SRCHWCESCCHAR, uno::Any(sal_Int32('~')));
 
         uno::Reference< excel::XRange > xAfterRange;
         uno::Reference< table::XCellRange > xStartCell;
