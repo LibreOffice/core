@@ -1304,7 +1304,7 @@ SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
     mnBorderRight(0),
     mnBorderLower(0),
     mpLayerAdmin(new SdrLayerAdmin(&rModel.GetLayerAdmin())),
-    nPageNum(0),
+    m_nPageNum(0),
     mbMaster(bMasterPage),
     mbInserted(false),
     mbObjectsNotPersistent(false),
@@ -1366,7 +1366,7 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     mnBorderRight = rSrcPage.mnBorderRight;
     mnBorderLower = rSrcPage.mnBorderLower;
     mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
-    nPageNum = rSrcPage.nPageNum;
+    m_nPageNum = rSrcPage.m_nPageNum;
 
     if(rSrcPage.TRG_HasMasterPage())
     {
@@ -1570,10 +1570,10 @@ bool SdrPage::IsBackgroundFullSize() const
 // #i68775# React on PageNum changes (from Model in most cases)
 void SdrPage::SetPageNum(sal_uInt16 nNew)
 {
-    if(nNew != nPageNum)
+    if(nNew != m_nPageNum)
     {
         // change
-        nPageNum = nNew;
+        m_nPageNum = nNew;
 
         // notify visualisations, also notifies e.g. buffered MasterPages
         ActionChanged();
@@ -1592,7 +1592,7 @@ sal_uInt16 SdrPage::GetPageNum() const
         if (getSdrModelFromSdrPage().IsPagNumsDirty())
             getSdrModelFromSdrPage().RecalcPageNums(false);
     }
-    return nPageNum;
+    return m_nPageNum;
 }
 
 void SdrPage::SetChanged()

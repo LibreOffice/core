@@ -444,7 +444,7 @@ protected:
     // new MasterPageDescriptorVector
     std::unique_ptr<sdr::MasterPageDescriptor> mpMasterPageDescriptor;
 
-    sal_uInt16          nPageNum;
+    sal_uInt16          m_nPageNum;
 
     bool                mbMaster : 1;               // flag if this is a MasterPage
     bool                mbInserted : 1;
