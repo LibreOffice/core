@@ -630,7 +630,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         case accessibility::AccessibleEventId::ROLE_CHANGED:
         {
             uno::Reference< accessibility::XAccessibleContext > xContext = getAccessibleContextFromSource( aEvent.Source );
-            atk_object_wrapper_set_role( mpWrapper, xContext->getAccessibleRole() );
+            atk_object_wrapper_set_role(mpWrapper, xContext->getAccessibleRole(), xContext->getAccessibleStateSet());
             break;
         }
 

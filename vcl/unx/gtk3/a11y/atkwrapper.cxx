@@ -167,7 +167,7 @@ AtkStateType mapAtkState( sal_Int64 nState )
     return type;
 }
 
-static AtkRole mapToAtkRole( sal_Int16 nRole )
+static AtkRole mapToAtkRole(sal_Int16 nRole, sal_Int64 nStates)
 {
     switch (nRole)
     {
@@ -310,7 +310,11 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         case accessibility::AccessibleRole::WINDOW:
             return ATK_ROLE_WINDOW;
         case accessibility::AccessibleRole::BUTTON_DROPDOWN:
+        {
+            if (nStates & css::accessibility::AccessibleStateType::CHECKABLE)
+                return ATK_ROLE_TOGGLE_BUTTON;
             return ATK_ROLE_PUSH_BUTTON;
+        }
         case accessibility::AccessibleRole::BUTTON_MENU:
 #if ATK_CHECK_VERSION(2, 46, 0)
             return ATK_ROLE_PUSH_BUTTON_MENU;
@@ -972,7 +976,7 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
         pWrap->mpOrig = orig;
 
         AtkObject* atk_obj = ATK_OBJECT(pWrap);
-        atk_obj->role = mapToAtkRole( xContext->getAccessibleRole() );
+        atk_obj->role = mapToAtkRole(xContext->getAccessibleRole(), xContext->getAccessibleStateSet());
         atk_obj->accessible_parent = parent;
 
         ooo_wrapper_registry_add( rxAccessible, atk_obj );
@@ -1070,10 +1074,10 @@ void atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child
 
 /*****************************************************************************/
 
-void atk_object_wrapper_set_role(AtkObjectWrapper* wrapper, sal_Int16 role)
+void atk_object_wrapper_set_role(AtkObjectWrapper* wrapper, sal_Int16 role, sal_Int64 nStates)
 {
     AtkObject *atk_obj = ATK_OBJECT( wrapper );
-    atk_object_set_role( atk_obj, mapToAtkRole( role ) );
+    atk_object_set_role(atk_obj, mapToAtkRole(role, nStates));
 }
 
 /*****************************************************************************/
