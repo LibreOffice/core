@@ -1116,7 +1116,6 @@ void OfaViewTabPage::UpdateHardwareAccelStatus()
     }
 #if HAVE_FEATURE_SKIA
     m_xUseHardwareAccell->set_sensitive(!m_xUseSkia->get_active());
-    m_xUseHardwareAccellImg->set_visible(m_xUseSkia->get_active());
 #endif
 }
 
