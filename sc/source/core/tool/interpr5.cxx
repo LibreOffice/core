@@ -1342,10 +1342,15 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
                 && ((_bSub && std::fabs(fVal1 - fVal2) <= SAL_MAX_INT32)
                     || (!_bSub && std::fabs(fVal1 + fVal2) <= SAL_MAX_INT32)))
         {
+            // Limit to microseconds resolution on date inflicted or duration
+            // values of 24 hours or more.
+            const sal_uInt64 nEpsilon = ((std::fabs(fVal1) >= 1.0 || std::fabs(fVal2) >= 1.0) ?
+                    ::tools::Duration::kAccuracyEpsilonNanosecondsMicroseconds :
+                    ::tools::Duration::kAccuracyEpsilonNanoseconds);
             if (_bSub)
-                PushDouble( ::tools::Duration( fVal1 - fVal2).GetInDays());
+                PushDouble( ::tools::Duration( fVal1 - fVal2, nEpsilon).GetInDays());
             else
-                PushDouble( ::tools::Duration( fVal1 + fVal2).GetInDays());
+                PushDouble( ::tools::Duration( fVal1 + fVal2, nEpsilon).GetInDays());
         }
         else
         {
