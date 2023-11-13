@@ -34,10 +34,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <pageformatpanel.hrc>
 #include <cmdid.h>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -132,8 +132,8 @@ void PageFormatPanel::Initialize()
     SetMarginFieldUnit();
     m_aCustomEntry = mxCustomEntry->get_label();
 
-    mxPaperWidth->set_max(mxPaperWidth->normalize(SvtOptionsDrawinglayer::GetMaximumPaperWidth()), FieldUnit::CM);
-    mxPaperHeight->set_max(mxPaperHeight->normalize(SvtOptionsDrawinglayer::GetMaximumPaperHeight()), FieldUnit::CM);
+    mxPaperWidth->set_max(mxPaperWidth->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperWidth::get()), FieldUnit::CM);
+    mxPaperHeight->set_max(mxPaperHeight->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperHeight::get()), FieldUnit::CM);
 
     mxPaperSizeBox->connect_changed( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
     mxPaperOrientation->connect_changed( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));

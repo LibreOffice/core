@@ -49,13 +49,13 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <svx/svxids.hrc>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <svl/slstitm.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <sal/log.hxx>
 #include <svl/grabbagitem.hxx>
+#include <officecfg/Office/Common.hxx>
 
 // static ----------------------------------------------------------------
 
@@ -276,16 +276,16 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
 
     // #i4219# take Maximum now from configuration (1/100th cm)
     // was: 11900 -> 119 cm ;new value 3 meters -> 300 cm -> 30000
-    m_xPaperWidthEdit->set_max(m_xPaperWidthEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperWidth()), FieldUnit::CM);
-    m_xPaperHeightEdit->set_max(m_xPaperHeightEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperHeight()), FieldUnit::CM);
+    m_xPaperWidthEdit->set_max(m_xPaperWidthEdit->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperWidth::get()), FieldUnit::CM);
+    m_xPaperHeightEdit->set_max(m_xPaperHeightEdit->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperHeight::get()), FieldUnit::CM);
 
     // #i4219# also for margins (1/100th cm). Was: 9999, keeping.
-    m_xLeftMarginEdit->set_max(m_xLeftMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperLeftMargin()), FieldUnit::MM);
-    m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperRightMargin()), FieldUnit::MM);
-    m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperTopMargin()), FieldUnit::MM);
-    m_xBottomMarginEdit->set_max(m_xBottomMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperBottomMargin()), FieldUnit::MM);
+    m_xLeftMarginEdit->set_max(m_xLeftMarginEdit->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperLeftMargin::get()), FieldUnit::MM);
+    m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperRightMargin::get()), FieldUnit::MM);
+    m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperTopMargin::get()), FieldUnit::MM);
+    m_xBottomMarginEdit->set_max(m_xBottomMarginEdit->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperBottomMargin::get()), FieldUnit::MM);
     m_xGutterMarginEdit->set_max(
-        m_xGutterMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperLeftMargin()),
+        m_xGutterMarginEdit->normalize(officecfg::Office::Common::Drawinglayer::MaximumPaperLeftMargin::get()),
         FieldUnit::MM);
 
     // Get the i18n framework numberings and add them to the listbox.

@@ -43,37 +43,6 @@ Color GetStripeColorB()
     return Color(ColorTransparency, officecfg::Office::Common::Drawinglayer::StripeColorB::get());
 }
 
-// #i4219#
-sal_uInt32 GetMaximumPaperWidth()
-{
-    return officecfg::Office::Common::Drawinglayer::MaximumPaperWidth::get();
-}
-
-sal_uInt32 GetMaximumPaperHeight()
-{
-    return officecfg::Office::Common::Drawinglayer::MaximumPaperHeight::get();
-}
-
-sal_uInt32 GetMaximumPaperLeftMargin()
-{
-    return officecfg::Office::Common::Drawinglayer::MaximumPaperLeftMargin::get();
-}
-
-sal_uInt32 GetMaximumPaperRightMargin()
-{
-    return officecfg::Office::Common::Drawinglayer::MaximumPaperRightMargin::get();
-}
-
-sal_uInt32 GetMaximumPaperTopMargin()
-{
-    return officecfg::Office::Common::Drawinglayer::MaximumPaperTopMargin::get();
-}
-
-sal_uInt32 GetMaximumPaperBottomMargin()
-{
-    return officecfg::Office::Common::Drawinglayer::MaximumPaperBottomMargin::get();
-}
-
 static bool gbPixelSnapHairlineForwardInitial(false);
 static bool gbPixelSnapHairlineForwardLast(true);
 

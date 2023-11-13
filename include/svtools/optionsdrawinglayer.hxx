@@ -42,14 +42,6 @@ namespace SvtOptionsDrawinglayer
 SVT_DLLPUBLIC Color       GetStripeColorA();
 SVT_DLLPUBLIC Color       GetStripeColorB();
 
-// #i4219#
-SVT_DLLPUBLIC sal_uInt32  GetMaximumPaperWidth();
-SVT_DLLPUBLIC sal_uInt32  GetMaximumPaperHeight();
-SVT_DLLPUBLIC sal_uInt32  GetMaximumPaperLeftMargin();
-SVT_DLLPUBLIC sal_uInt32  GetMaximumPaperRightMargin();
-SVT_DLLPUBLIC sal_uInt32  GetMaximumPaperTopMargin();
-SVT_DLLPUBLIC sal_uInt32  GetMaximumPaperBottomMargin();
-
 // #i95644# helper to check if AA is allowed on this system. Currently, for WIN it's disabled
 // and OutDevSupportType::TransparentRect is checked (this  hits XRenderExtension, e.g.
 // currently for SunRay as long as not supported there)
