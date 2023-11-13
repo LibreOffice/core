@@ -44,10 +44,17 @@ static void InitCurl_easy(CURL* const pCURL)
         assert(rc == CURLE_OK);
         rc = curl_easy_setopt(pCURL, CURLOPT_PROXY_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         assert(rc == CURLE_OK);
+#if (LIBCURL_VERSION_MAJOR > 7) || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 85)
         rc = curl_easy_setopt(pCURL, CURLOPT_PROTOCOLS_STR, "https");
         assert(rc == CURLE_OK);
         rc = curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS_STR, "https");
         assert(rc == CURLE_OK);
+#else
+        rc = curl_easy_setopt(pCURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS);
+        assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTPS);
+        assert(rc == CURLE_OK);
+#endif
     }
 
     curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
