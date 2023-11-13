@@ -39,6 +39,12 @@
 #include <drawview.hxx>
 #include <undolayer.hxx>
 
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
+#include <svx/svditer.hxx>
+#include <sdpage.hxx>
+#include <svx/sdrpaintwindow.hxx>
+
 namespace sd {
 
 /**
@@ -47,12 +53,17 @@ namespace sd {
 LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, vcl::Window* pParent)
     : TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL ) ),
     DropTargetHelper( this ),
-    pDrViewSh(pViewSh)
+    pDrViewSh(pViewSh),
+    m_aBringLayerObjectsToAttentionDelayTimer("LayerTabBar m_aBringLayerObjectsToAttentionDelayTimer")
 {
     EnableEditMode();
     SetSizePixel(Size(0, 0));
     SetMaxPageWidth( 150 );
     SetHelpId( HID_SD_TABBAR_LAYERS );
+
+    m_aBringLayerObjectsToAttentionDelayTimer.SetInvokeHandler(
+                LINK(this, LayerTabBar, BringLayerObjectsToAttentionDelayTimerHdl));
+    m_aBringLayerObjectsToAttentionDelayTimer.SetTimeout(500);
 }
 
 LayerTabBar::~LayerTabBar()
@@ -135,6 +146,87 @@ void LayerTabBar::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
     pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::SYNCHRON);
+}
+
+void LayerTabBar::MouseMove(const MouseEvent &rMEvt)
+{
+    sal_uInt16 nPageId = 0;
+    if (!rMEvt.IsLeaveWindow())
+        nPageId = GetPageId(rMEvt.GetPosPixel());
+    BringLayerObjectsToAttention(nPageId);
+    return;
+}
+
+void LayerTabBar::BringLayerObjectsToAttention(const sal_uInt16 nPageId)
+{
+    if (nPageId == m_nBringLayerObjectsToAttentionLastPageId)
+        return;
+
+    m_aBringLayerObjectsToAttentionDelayTimer.Stop();
+
+    m_nBringLayerObjectsToAttentionLastPageId = nPageId;
+
+    std::vector<basegfx::B2DRange> aRanges;
+
+    if (nPageId != 0)
+    {
+        OUString aLayerName(GetLayerName(nPageId));
+        if (pDrViewSh->GetView()->GetSdrPageView()->IsLayerVisible(aLayerName))
+        {
+            SdrLayerAdmin& rLayerAdmin = pDrViewSh->GetDoc()->GetLayerAdmin();
+            SdrObjListIter aIter(pDrViewSh->GetActualPage(), SdrIterMode::DeepWithGroups);
+            while (aIter.IsMore())
+            {
+                SdrObject* pObj = aIter.Next();
+                assert(pObj != nullptr);
+                if (pObj && (aLayerName == rLayerAdmin.GetLayerPerID(pObj->GetLayer())->GetName()))
+                {
+                    ::tools::Rectangle aRect(pObj->GetLogicRect());
+                    if (!aRect.IsEmpty())
+                        aRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                    // skip over objects in groups
+                    if (pObj->IsGroupObject())
+                    {
+                        SdrObjListIter aSubListIter(pObj->GetSubList(), SdrIterMode::DeepWithGroups);
+                        while (aSubListIter.IsMore())
+                        {
+                            aIter.Next();
+                            aSubListIter.Next();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    if (aRanges.empty())
+        m_xOverlayObject.reset();
+    else
+    {
+        m_xOverlayObject.reset(new sdr::overlay::OverlaySelection(
+                                   sdr::overlay::OverlayType::Invert,
+                                   Color(), std::move(aRanges), true/*unused for Invert type*/));
+        m_aBringLayerObjectsToAttentionDelayTimer.Start();
+    }
+}
+
+IMPL_LINK_NOARG(LayerTabBar, BringLayerObjectsToAttentionDelayTimerHdl, Timer *, void)
+{
+    m_aBringLayerObjectsToAttentionDelayTimer.Stop();
+    if (m_xOverlayObject)
+    {
+        if (SdrView* pView = pDrViewSh->GetDrawView())
+        {
+            if (SdrPaintWindow* pPaintWindow = pView->GetPaintWindow(0))
+            {
+                const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager =
+                        pPaintWindow->GetOverlayManager();
+                xOverlayManager->add(*m_xOverlayObject);
+            }
+        }
+    }
 }
 
 void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
@@ -302,6 +394,7 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
+        BringLayerObjectsToAttention();
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
         pDispatcher->ExecutePopup("layertab");
     }

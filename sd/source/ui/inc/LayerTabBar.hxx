@@ -27,6 +27,8 @@
 #include <vcl/transfer.hxx>
 #include <sddllapi.h>
 
+#include <svx/sdr/overlay/overlayobject.hxx>
+
 namespace sd {
 
 /**
@@ -82,6 +84,7 @@ public:
     virtual void        Select() override;
     virtual void        DoubleClick() override;
 
+    SD_DLLPUBLIC virtual void MouseMove(const MouseEvent& rMEvt) override;
     SD_DLLPUBLIC virtual void MouseButtonDown(const MouseEvent& rMEvt) override; // export for unit test
 
     virtual void        Command(const CommandEvent& rCEvt) override;
@@ -98,6 +101,12 @@ public:
 
 private:
     DrawViewShell* pDrViewSh;
+
+    AutoTimer m_aBringLayerObjectsToAttentionDelayTimer;
+    sal_uInt16 m_nBringLayerObjectsToAttentionLastPageId = 0;
+    std::unique_ptr<sdr::overlay::OverlayObject> m_xOverlayObject;
+    void BringLayerObjectsToAttention(const sal_uInt16 nPageId = 0);
+    DECL_LINK(BringLayerObjectsToAttentionDelayTimerHdl, Timer *, void);
 
     // Expects not-localized, real layer name in rText and writes it to maAuxiliaryText.
     void SetLayerName( sal_uInt16 nPageId, const OUString& rText );
