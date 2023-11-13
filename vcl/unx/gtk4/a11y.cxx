@@ -464,21 +464,6 @@ static void lo_accessible_get_property(GObject* object, guint property_id, GValu
         {
             GtkAccessibleRole eRole(map_accessible_role(accessible->uno_accessible));
             g_value_set_enum(value, eRole);
-
-            // for now set GTK_ACCESSIBLE_PROPERTY_LABEL as a proof of concept
-            if (accessible->uno_accessible)
-            {
-                css::uno::Reference<css::accessibility::XAccessibleContext> xContext(
-                    accessible->uno_accessible->getAccessibleContext());
-                css::uno::Reference<css::accessibility::XAccessibleText> xAccessibleText(
-                    xContext, css::uno::UNO_QUERY);
-                if (xAccessibleText)
-                {
-                    gtk_accessible_update_property(
-                        GTK_ACCESSIBLE(accessible), GTK_ACCESSIBLE_PROPERTY_LABEL,
-                        xAccessibleText->getText().toUtf8().getStr(), -1);
-                }
-            }
             break;
         }
         default:
@@ -588,6 +573,12 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
     assert(xContext.is() && "No accessible context");
 
     GtkAccessible* pGtkAccessible = GTK_ACCESSIBLE(ret);
+
+    // set accessible name and description
+    gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                   xContext->getAccessibleName().toUtf8().getStr(),
+                                   GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                   xContext->getAccessibleDescription().toUtf8().getStr(), -1);
 
     applyStates(pGtkAccessible, xContext);
 
