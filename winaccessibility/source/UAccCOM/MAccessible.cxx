@@ -188,9 +188,6 @@ void lcl_addIA2State(AccessibleStates& rStates, sal_Int64 nUnoState, sal_Int16 n
 
 }
 
-using namespace com::sun::star::accessibility::AccessibleRole;
-
-
 AccObjectWinManager* CMAccessible::g_pAccObjectManager = nullptr;
 
 CMAccessible::CMAccessible():
@@ -1822,14 +1819,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             m_xAccessible->getAccessibleContext();
         if(!pRContext.is())
             return E_FAIL;
-        long Role = pRContext->getAccessibleRole();
+        const sal_Int16 nRole = pRContext->getAccessibleRole();
 
         *groupLevel = 0;
         *similarItemsInGroup = 0;
         *positionInGroup = 0;
 
-        if (Role != AccessibleRole::DOCUMENT && Role != AccessibleRole::DOCUMENT_PRESENTATION &&
-                Role != AccessibleRole::DOCUMENT_SPREADSHEET && Role != AccessibleRole::DOCUMENT_TEXT)
+        if (nRole != AccessibleRole::DOCUMENT && nRole != AccessibleRole::DOCUMENT_PRESENTATION &&
+                nRole != AccessibleRole::DOCUMENT_SPREADSHEET && nRole != AccessibleRole::DOCUMENT_TEXT)
         {
             Reference< XAccessibleGroupPosition > xGroupPosition( pRContext, UNO_QUERY );
             if ( xGroupPosition.is() )
@@ -1854,7 +1851,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
 
         Reference<XAccessibleContext> pRParentContext = pParentAcc->getAccessibleContext();
 
-        if( Role ==  RADIO_BUTTON )
+        if (nRole == AccessibleRole::RADIO_BUTTON)
         {
             int index = 0;
             int number = 0;
@@ -1874,7 +1871,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
                     {
                         if( getTheParentOfMember(pRParentContext->getAccessibleChild(j).get())
                             == static_cast<XAccessible*>(pRAcc.get()) &&
-                            pRParentContext->getAccessibleChild(j)->getAccessibleContext()->getAccessibleRole() == RADIO_BUTTON)
+                            pRParentContext->getAccessibleChild(j)->getAccessibleContext()->getAccessibleRole() == AccessibleRole::RADIO_BUTTON)
                             number++;
                         if (pRParentContext->getAccessibleChild(j).get() == m_xAccessible.get())
                             index = number;
@@ -1887,7 +1884,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             return S_OK;
         }
 
-        else if ( COMBO_BOX == Role )
+        else if (nRole == AccessibleRole::COMBO_BOX)
         {
             *groupLevel = 1;
             *similarItemsInGroup = 0;
@@ -1935,7 +1932,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             }
             return S_OK;
         }
-        else if ( PAGE_TAB == Role )
+        else if (nRole == AccessibleRole::PAGE_TAB)
         {
             *groupLevel = 1;
             sal_Int64 nChildCount = pRParentContext->getAccessibleChildCount();
@@ -1958,8 +1955,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
         {
             level++;
             pRParentContext = pParentAcc->getAccessibleContext();
-            Role = pRParentContext->getAccessibleRole();
-            if( (Role == TREE) || (Role == LIST) )
+            const sal_Int16 nParentRole = pRParentContext->getAccessibleRole();
+            if ((nParentRole == AccessibleRole::TREE) || (nParentRole == AccessibleRole::LIST))
                 isFound = true;
             pParentAcc = pRParentContext->getAccessibleParent();
         }
