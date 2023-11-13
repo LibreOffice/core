@@ -37,7 +37,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_accessible_relation_set,\
 	boost_headers \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sw_htmlexport,\
+$(eval $(call gb_CppunitTest_set_include,sw_accessible_relation_set,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/uibase/inc \
