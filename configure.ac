@@ -12681,7 +12681,7 @@ AC_MSG_CHECKING([whether to enable gpgmepp])
 if test "$enable_gpgmepp" = no; then
     AC_MSG_RESULT([no])
 elif test "$enable_mpl_subset" = "yes"; then
-    AC_MSG_RESULT([no (MPL only])
+    AC_MSG_RESULT([no (MPL only)])
 elif test "$enable_fuzzers" = "yes"; then
     AC_MSG_RESULT([no (oss-fuzz)])
 elif test \( \( "$_os" = "Linux" -o "$_os" = "Darwin" \) -a "$ENABLE_NSS" = TRUE \) -o "$_os" = "WINNT" ; then
