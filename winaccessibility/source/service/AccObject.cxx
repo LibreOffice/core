@@ -719,14 +719,11 @@ void  AccObject::DecreaseState( sal_Int64 xState )
 
     if( xState == FOCUSABLE)
     {
-        short Role = m_accRole ;
-        if(Role == MENU_ITEM
-                || Role == RADIO_MENU_ITEM
-                || Role == CHECK_MENU_ITEM)
+        if (m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM)
             return;
         else
         {
-            if (Role == TOGGLE_BUTTON || Role == PUSH_BUTTON || BUTTON_DROPDOWN == Role)
+            if (m_accRole == TOGGLE_BUTTON || m_accRole == PUSH_BUTTON || m_accRole == BUTTON_DROPDOWN)
             {
                 if( ( m_pParentObj !=nullptr ) && (TOOL_BAR == m_pParentObj->m_accRole ) )
                     return;
@@ -906,8 +903,6 @@ void AccObject::UpdateState()
             m_pIMAcc->IncreaseState( STATE_SYSTEM_INVISIBLE );
     }
 
-    short Role = m_accRole;
-
     switch(m_accRole)
     {
     case LABEL:
@@ -949,19 +944,19 @@ void AccObject::UpdateState()
     if( isEnable )
     {
 
-        if(!(Role == FILLER || Role == END_NOTE || Role == FOOTER || Role == FOOTNOTE || Role == GROUP_BOX || Role == RULER
-                || Role == HEADER || Role == ICON || Role == INTERNAL_FRAME || Role == LABEL || Role == LAYERED_PANE
-                || Role == SCROLL_BAR || Role == SCROLL_PANE || Role == SPLIT_PANE || Role == STATIC || Role == STATUS_BAR
-                || Role == TOOL_TIP || Role == NOTIFICATION))
+        if (!(m_accRole == FILLER || m_accRole == END_NOTE || m_accRole == FOOTER || m_accRole == FOOTNOTE || m_accRole == GROUP_BOX || m_accRole == RULER
+                || m_accRole == HEADER || m_accRole == ICON || m_accRole == INTERNAL_FRAME || m_accRole == LABEL || m_accRole == LAYERED_PANE
+                || m_accRole == SCROLL_BAR || m_accRole == SCROLL_PANE || m_accRole == SPLIT_PANE || m_accRole == STATIC || m_accRole == STATUS_BAR
+                || m_accRole == TOOL_TIP || m_accRole == NOTIFICATION))
         {
-            if( SEPARATOR == Role  )
+            if (m_accRole == SEPARATOR)
             {
                 if( ( m_pParentObj != nullptr ) && ( MENU == m_pParentObj->m_accRole  || POPUP_MENU == m_pParentObj->m_accRole ))
                     IncreaseState( FOCUSABLE );
             }
 
-            else if (TABLE_CELL == Role || TABLE == Role || PANEL == Role || OPTION_PANE == Role ||
-                     COLUMN_HEADER == Role)
+            else if (m_accRole == TABLE_CELL || m_accRole == TABLE || m_accRole == PANEL || m_accRole == OPTION_PANE ||
+                     m_accRole == COLUMN_HEADER)
             {
                 if (isFocusable)
                     IncreaseState( FOCUSABLE );
@@ -985,11 +980,11 @@ void AccObject::UpdateState()
     else
     {
         m_pIMAcc->IncreaseState( STATE_SYSTEM_UNAVAILABLE );
-        if( !((Role == MENU_ITEM) ||
-                (Role == RADIO_MENU_ITEM) ||
-                (Role == CHECK_MENU_ITEM)) )
+        if( !((m_accRole == MENU_ITEM) ||
+                (m_accRole == RADIO_MENU_ITEM) ||
+                (m_accRole == CHECK_MENU_ITEM)) )
         {
-            if  ( Role == TOGGLE_BUTTON || Role == PUSH_BUTTON || BUTTON_DROPDOWN == Role)
+            if  (m_accRole == TOGGLE_BUTTON || m_accRole == PUSH_BUTTON || m_accRole == BUTTON_DROPDOWN)
             {
                 if(( m_pParentObj != nullptr )&& (TOOL_BAR ==  m_pParentObj->m_accRole ) )
                     IncreaseState( FOCUSABLE );
