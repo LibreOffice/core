@@ -44,10 +44,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-#ifdef DEBUGSPRMREADER
-#include <stdio.h>
-#endif
-
 using namespace ::com::sun::star::lang;
 
 namespace
@@ -2833,19 +2829,6 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
         }
 
         maEntries.push_back(aEntry);
-
-#ifdef DEBUGSPRMREADER
-        {
-            sal_Int32 nLen;
-            sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
-            WW8SprmIter aIter(pSprms, nLen, maSprmParser);
-            while (aIter.GetSprms())
-            {
-                SAL_INFO("sw.sprmreader",  "id is " << std::hex << aIter.GetCurrentId());
-                aIter.advance();
-            }
-        }
-#endif
     }
 
     //one more FC than grrpl entries
