@@ -1344,7 +1344,9 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         {
             // Limit to microseconds resolution on date inflicted or duration
             // values of 24 hours or more.
-            const sal_uInt64 nEpsilon = ((std::fabs(fVal1) >= 1.0 || std::fabs(fVal2) >= 1.0) ? 999 : 300);
+            const sal_uInt64 nEpsilon = ((std::fabs(fVal1) >= 1.0 || std::fabs(fVal2) >= 1.0) ?
+                    ::tools::Duration::kAccuracyEpsilonNanosecondsMicroseconds :
+                    ::tools::Duration::kAccuracyEpsilonNanoseconds);
             if (_bSub)
                 PushDouble( ::tools::Duration( fVal1 - fVal2, nEpsilon).GetInDays());
             else
