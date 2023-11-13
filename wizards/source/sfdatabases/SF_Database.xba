@@ -164,7 +164,7 @@ Public Function CreateDataset(Optional ByVal SQLCommand As Variant _
 &apos;&apos;&apos;	or an SQL SELECT statement.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		SQLCommand: as a case-sensitive string, a table name, a query name
-&apos;&apos;&apos;			or a valid SQL SELECT statement. Identifiers may be srrounded
+&apos;&apos;&apos;			or a valid SQL SELECT statement. Identifiers may be surrounded
 &apos;&apos;&apos;			with square brackets
 &apos;&apos;&apos;		DirectSql: when True, the statement is processed by the targeted RDBMS
 &apos;&apos;&apos;		Filter: an additional condition that records must match, expressed

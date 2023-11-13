@@ -24,7 +24,7 @@ Option Explicit
 &apos;&apos;&apos;			- any SELECT SQL statement may define the dataset.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The proposed API supports next main purposes:
-&apos;&apos;&apos;			- browse for- and backward thru the dataset to get its content
+&apos;&apos;&apos;			- browse for- and backward through the dataset to get its content
 &apos;&apos;&apos;			- update any record with new values
 &apos;&apos;&apos;			- create new records or delete some.
 &apos;&apos;&apos;		So-called &quot;CRUD&quot; operations (create, read, update, delete).
@@ -32,7 +32,7 @@ Option Explicit
 &apos;&apos;&apos;		Service invocation:
 &apos;&apos;&apos;			A dataset is characterized by
 &apos;&apos;&apos;				- the parent database
-&apos;&apos;&apos;				- a table/query name or an SQL SELECT statemnt
+&apos;&apos;&apos;				- a table/query name or an SQL SELECT statement
 &apos;&apos;&apos;				- the DirectSQL option to bypass the processing of SQL by LibreOffice
 &apos;&apos;&apos;				- an optional filter
 &apos;&apos;&apos;				- an optional sorting order
@@ -58,7 +58,7 @@ Option Explicit
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Updates performance:
 &apos;&apos;&apos;			This module provides methods to update data stored in database tables.
-&apos;&apos;&apos;			Note that the proposed Update() and Insert() methods wil always be
+&apos;&apos;&apos;			Note that the proposed Update() and Insert() methods will always be
 &apos;&apos;&apos;			SLOWER or MUCH SLOWER than equivalent SQL statements.
 &apos;&apos;&apos;			Always privilege SQL when considering massive updates.
 &apos;&apos;&apos;
@@ -691,7 +691,7 @@ Public Function Insert(ParamArray pvArgs As Variant) As Long
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		When the primary key is an AutoValue field: the autovalue of the new record
 &apos;&apos;&apos;			(to facilitate the use of the new primary key in foreign keys)
-&apos;&apos;&apos;		Otherwise: 0 (= successful), -1 (= not sucessful)
+&apos;&apos;&apos;		Otherwise: 0 (= successful), -1 (= not successful)
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		DBREADONLYERROR			The actual method cannot be executed
 &apos;&apos;&apos;		RECORDUPDATEERROR		When value to store does not fit the type of the field
