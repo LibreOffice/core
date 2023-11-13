@@ -98,17 +98,27 @@ class SwAddPrinterTabPage final : public SfxTabPage
     bool m_bPreview;
 
     std::unique_ptr<weld::CheckButton>  m_xGrfCB;
+    std::unique_ptr<weld::Widget>  m_xGrfImg;
     std::unique_ptr<weld::CheckButton>  m_xCtrlFieldCB;
+    std::unique_ptr<weld::Widget>  m_xCtrlFieldImg;
     std::unique_ptr<weld::CheckButton>  m_xBackgroundCB;
+    std::unique_ptr<weld::Widget>  m_xBackgroundImg;
     std::unique_ptr<weld::CheckButton>  m_xBlackFontCB;
+    std::unique_ptr<weld::Widget>  m_xBlackFontImg;
     std::unique_ptr<weld::CheckButton>  m_xPrintHiddenTextCB;
+    std::unique_ptr<weld::Widget>  m_xPrintHiddenTextImg;
     std::unique_ptr<weld::CheckButton>  m_xPrintTextPlaceholderCB;
+    std::unique_ptr<weld::Widget>  m_xPrintTextPlaceholderImg;
 
     std::unique_ptr<weld::Widget>       m_xPagesFrame;
     std::unique_ptr<weld::CheckButton>  m_xLeftPageCB;
+    std::unique_ptr<weld::Widget>  m_xLeftPageImg;
     std::unique_ptr<weld::CheckButton>  m_xRightPageCB;
+    std::unique_ptr<weld::Widget>  m_xRightPageImg;
     std::unique_ptr<weld::CheckButton>  m_xProspectCB;
+    std::unique_ptr<weld::Widget>  m_xProspectImg;
     std::unique_ptr<weld::CheckButton>  m_xProspectCB_RTL;
+    std::unique_ptr<weld::Widget>  m_xProspectImg_RTL;
 
     std::unique_ptr<weld::Widget>       m_xCommentsFrame;
     std::unique_ptr<weld::RadioButton>  m_xNoRB;
@@ -116,10 +126,14 @@ class SwAddPrinterTabPage final : public SfxTabPage
     std::unique_ptr<weld::RadioButton>  m_xEndRB;
     std::unique_ptr<weld::RadioButton>  m_xEndPageRB;
     std::unique_ptr<weld::RadioButton>  m_xInMarginsRB;
+    std::unique_ptr<weld::Widget>  m_xMarginsImg;
 
     std::unique_ptr<weld::CheckButton>  m_xPrintEmptyPagesCB;
+    std::unique_ptr<weld::Widget>  m_xPrintEmptyPagesImg;
     std::unique_ptr<weld::CheckButton>  m_xPaperFromSetupCB;
+    std::unique_ptr<weld::Widget>  m_xPaperFromSetupImg;
     std::unique_ptr<weld::ComboBox> m_xFaxLB;
+    std::unique_ptr<weld::Widget> m_xFaxImg;
 
     DECL_LINK(AutoClickHdl, weld::Toggleable&, void);
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
