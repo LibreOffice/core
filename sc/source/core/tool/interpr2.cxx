@@ -28,6 +28,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/duration.hxx>
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 
@@ -923,6 +924,7 @@ void ScInterpreter::ScGetTimeValue()
             nFuncFmtType = SvNumFormatType::TIME;
             double fDateVal = rtl::math::approxFloor(fVal);
             double fTimeVal = fVal - fDateVal;
+            fTimeVal = ::tools::Duration(fTimeVal).GetInDays();  // force corrected
             PushDouble(fTimeVal);
         }
         else
