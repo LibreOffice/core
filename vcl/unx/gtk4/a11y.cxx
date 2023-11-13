@@ -288,8 +288,9 @@ static void applyStates(GtkAccessible* pGtkAccessible,
         GTK_ACCESSIBLE_STATE_SELECTED,
         bool(nStates & com::sun::star::accessibility::AccessibleStateType::SELECTED), -1);
 
-    const sal_Int16 nRole = xContext->getAccessibleRole();
-    if (nRole == com::sun::star::accessibility::AccessibleRole::CHECK_BOX)
+    // when explicitly setting any value for GTK_ACCESSIBLE_STATE_CHECKED,
+    // Gtk will also report ATSPI_STATE_CHECKABLE on the AT-SPI layer
+    if (nStates & com::sun::star::accessibility::AccessibleStateType::CHECKABLE)
     {
         GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
         if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
@@ -298,7 +299,9 @@ static void applyStates(GtkAccessible* pGtkAccessible,
             eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
         gtk_accessible_update_state(pGtkAccessible, GTK_ACCESSIBLE_STATE_CHECKED, eState, -1);
     }
-    else if (nRole == com::sun::star::accessibility::AccessibleRole::TOGGLE_BUTTON)
+
+    const sal_Int16 nRole = xContext->getAccessibleRole();
+    if (nRole == com::sun::star::accessibility::AccessibleRole::TOGGLE_BUTTON)
     {
         GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
         if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
