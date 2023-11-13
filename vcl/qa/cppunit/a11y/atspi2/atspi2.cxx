@@ -25,7 +25,7 @@
 using namespace css;
 
 // from gtk3/a11y/atkwrapper.cxx
-static AtspiRole mapToAtspiRole(sal_Int16 nRole)
+static AtspiRole mapToAtspiRole(sal_Int16 nRole, sal_Int64 nStates)
 {
     switch (nRole)
     {
@@ -103,7 +103,6 @@ static AtspiRole mapToAtspiRole(sal_Int16 nRole)
         MAP_DIRECT(TREE);
         MAP(VIEW_PORT, VIEWPORT);
         MAP_DIRECT(WINDOW);
-        MAP(BUTTON_DROPDOWN, PUSH_BUTTON);
 #if ATSPI_ROLE_COUNT > 130 /* ATSPI_ROLE_PUSH_BUTTON_MENU is 129 */
         MAP(BUTTON_MENU, PUSH_BUTTON_MENU);
 #else
@@ -130,7 +129,10 @@ static AtspiRole mapToAtspiRole(sal_Int16 nRole)
 
 #undef MAP_DIRECT
 #undef MAP
-
+        case css::accessibility::AccessibleRole::BUTTON_DROPDOWN:
+            if (nStates & css::accessibility::AccessibleStateType::CHECKABLE)
+                return ATSPI_ROLE_TOGGLE_BUTTON;
+            return ATSPI_ROLE_PUSH_BUTTON;
         default:
             SAL_WARN("vcl.gtk", "Unmapped accessible role: " << nRole);
             return ATSPI_ROLE_UNKNOWN;
@@ -265,7 +267,8 @@ void Atspi2TestTree::compareObjects(const uno::Reference<accessibility::XAccessi
      * to ATK, which in turn converts it to ATSPI.  However, ATK and ATSPI are roughly equivalent
      * (ATK basically follows ATSPI), but LO's internal might have more complex mappings that can't
      * be represented with a round trip. */
-    const auto nLORole = mapToAtspiRole(xLOContext->getAccessibleRole());
+    const AtspiRole nLORole
+        = mapToAtspiRole(xLOContext->getAccessibleRole(), xLOContext->getAccessibleStateSet());
     const auto nAtspiRole = pAtspiAccessible.getRole();
     CPPUNIT_ASSERT_EQUAL(nLORole, nAtspiRole);
     /* name (no need to worry about debugging suffixes as AccessibilityTools::nameEquals does, as
