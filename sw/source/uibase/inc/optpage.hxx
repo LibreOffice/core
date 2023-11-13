@@ -170,15 +170,25 @@ class SwStdFontTabPage final : public SfxTabPage
 
     std::unique_ptr<weld::Label> m_xLabelFT;
     std::unique_ptr<weld::ComboBox> m_xStandardBox;
+    std::unique_ptr<weld::Widget> m_xStandardBoxImg;
     std::unique_ptr<FontSizeBox> m_xStandardHeightLB;
+    std::unique_ptr<weld::Widget> m_xStandardHeightImg;
     std::unique_ptr<weld::ComboBox> m_xTitleBox;
+    std::unique_ptr<weld::Widget> m_xTitleBoxImg;
     std::unique_ptr<FontSizeBox> m_xTitleHeightLB;
+    std::unique_ptr<weld::Widget> m_xTitleHeightImg;
     std::unique_ptr<weld::ComboBox> m_xListBox;
+    std::unique_ptr<weld::Widget> m_xListBoxImg;
     std::unique_ptr<FontSizeBox> m_xListHeightLB;
+    std::unique_ptr<weld::Widget> m_xListHeightImg;
     std::unique_ptr<weld::ComboBox> m_xLabelBox;
+    std::unique_ptr<weld::Widget> m_xLabelBoxImg;
     std::unique_ptr<FontSizeBox> m_xLabelHeightLB;
+    std::unique_ptr<weld::Widget> m_xLabelHeightImg;
     std::unique_ptr<weld::ComboBox> m_xIdxBox;
+    std::unique_ptr<weld::Widget> m_xIdxBoxImg;
     std::unique_ptr<FontSizeBox> m_xIndexHeightLB;
+    std::unique_ptr<weld::Widget> m_xIndexHeightImg;
     std::unique_ptr<weld::Button> m_xStandardPB;
 
     DECL_LINK(StandardHdl, weld::Button&, void );

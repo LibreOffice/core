@@ -653,15 +653,25 @@ SwStdFontTabPage::SwStdFontTabPage(weld::Container* pPage, weld::DialogControlle
     , m_sScriptComplex(SwResId(ST_SCRIPT_CTL))
     , m_xLabelFT(m_xBuilder->weld_label("label1"))
     , m_xStandardBox(m_xBuilder->weld_combo_box("standardbox"))
+    , m_xStandardBoxImg(m_xBuilder->weld_widget("lockstandardbox"))
     , m_xStandardHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("standardheight")))
+    , m_xStandardHeightImg(m_xBuilder->weld_widget("lockstandardheight"))
     , m_xTitleBox(m_xBuilder->weld_combo_box("titlebox"))
+    , m_xTitleBoxImg(m_xBuilder->weld_widget("locktitlebox"))
     , m_xTitleHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("titleheight")))
+    , m_xTitleHeightImg(m_xBuilder->weld_widget("locktitleheight"))
     , m_xListBox(m_xBuilder->weld_combo_box("listbox"))
+    , m_xListBoxImg(m_xBuilder->weld_widget("locklistbox"))
     , m_xListHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("listheight")))
+    , m_xListHeightImg(m_xBuilder->weld_widget("locklistheight"))
     , m_xLabelBox(m_xBuilder->weld_combo_box("labelbox"))
+    , m_xLabelBoxImg(m_xBuilder->weld_widget("locklabelbox"))
     , m_xLabelHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("labelheight")))
+    , m_xLabelHeightImg(m_xBuilder->weld_widget("locklabelheight"))
     , m_xIdxBox(m_xBuilder->weld_combo_box("idxbox"))
+    , m_xIdxBoxImg(m_xBuilder->weld_widget("lockidxbox"))
     , m_xIndexHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("indexheight")))
+    , m_xIndexHeightImg(m_xBuilder->weld_widget("lockindexheight"))
     , m_xStandardPB(m_xBuilder->weld_button("standard"))
 {
     m_xStandardBox->make_sorted();
@@ -1035,6 +1045,45 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     m_xListHeightLB->set_value( CalcToPoint( nListHeight    , MapUnit::MapTwip, 10 ) );
     m_xLabelHeightLB->set_value( CalcToPoint( nLabelHeight   , MapUnit::MapTwip, 10 ));
     m_xIndexHeightLB->set_value( CalcToPoint( nIndexHeight   , MapUnit::MapTwip, 10 ));
+
+
+    if (m_nFontGroup == FONT_GROUP_DEFAULT)
+    {
+        bool bReadonly = officecfg::Office::Writer::DefaultFont::Standard::isReadOnly();
+        m_xStandardBox->set_sensitive(!bReadonly);
+        m_xStandardBoxImg->set_visible(bReadonly);
+        bReadonly = officecfg::Office::Writer::DefaultFont::StandardHeight::isReadOnly();
+        m_xStandardHeightLB->set_sensitive(!bReadonly);
+        m_xStandardHeightImg->set_visible(bReadonly);
+
+        bReadonly = officecfg::Office::Writer::DefaultFont::Heading::isReadOnly();
+        m_xTitleBox->set_sensitive(!bReadonly);
+        m_xTitleBoxImg->set_visible(bReadonly);
+        bReadonly = officecfg::Office::Writer::DefaultFont::HeadingHeight::isReadOnly();
+        m_xTitleHeightLB->set_sensitive(!bReadonly);
+        m_xTitleHeightImg->set_visible(bReadonly);
+
+        bReadonly = officecfg::Office::Writer::DefaultFont::List::isReadOnly();
+        m_xListBox->set_sensitive(!bReadonly);
+        m_xListBoxImg->set_visible(bReadonly);
+        bReadonly = officecfg::Office::Writer::DefaultFont::ListHeight::isReadOnly();
+        m_xListHeightLB->set_sensitive(!bReadonly);
+        m_xListHeightImg->set_visible(bReadonly);
+
+        bReadonly = officecfg::Office::Writer::DefaultFont::Caption::isReadOnly();
+        m_xLabelBox->set_sensitive(!bReadonly);
+        m_xLabelBoxImg->set_visible(bReadonly);
+        bReadonly = officecfg::Office::Writer::DefaultFont::CaptionHeight::isReadOnly();
+        m_xLabelHeightLB->set_sensitive(!bReadonly);
+        m_xLabelHeightImg->set_visible(bReadonly);
+
+        bReadonly = officecfg::Office::Writer::DefaultFont::Index::isReadOnly();
+        m_xIdxBox->set_sensitive(!bReadonly);
+        m_xIdxBoxImg->set_visible(bReadonly);
+        bReadonly = officecfg::Office::Writer::DefaultFont::IndexHeight::isReadOnly();
+        m_xIndexHeightLB->set_sensitive(!bReadonly);
+        m_xIndexHeightImg->set_visible(bReadonly);
+    }
 
     m_xStandardBox->save_value();
     m_xTitleBox->save_value();

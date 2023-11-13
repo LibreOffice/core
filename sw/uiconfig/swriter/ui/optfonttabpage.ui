@@ -18,7 +18,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=3 n-rows=6 -->
+          <!-- n-columns=5 n-rows=6 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -36,7 +36,7 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -50,7 +50,7 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">2</property>
+                <property name="left-attach">4</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -64,7 +64,7 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
               </packing>
             </child>
@@ -78,7 +78,7 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">2</property>
               </packing>
             </child>
@@ -92,7 +92,7 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>
@@ -106,7 +106,7 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">4</property>
               </packing>
             </child>
@@ -120,7 +120,7 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">5</property>
               </packing>
             </child>
@@ -144,7 +144,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">1</property>
               </packing>
             </child>
@@ -168,7 +168,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">2</property>
               </packing>
             </child>
@@ -192,7 +192,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>
@@ -216,7 +216,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">4</property>
               </packing>
             </child>
@@ -240,7 +240,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">5</property>
               </packing>
             </child>
@@ -263,7 +263,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">2</property>
+                <property name="left-attach">4</property>
                 <property name="top-attach">1</property>
               </packing>
             </child>
@@ -286,7 +286,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">2</property>
+                <property name="left-attach">4</property>
                 <property name="top-attach">2</property>
               </packing>
             </child>
@@ -309,7 +309,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">2</property>
+                <property name="left-attach">4</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>
@@ -332,7 +332,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">2</property>
+                <property name="left-attach">4</property>
                 <property name="top-attach">4</property>
               </packing>
             </child>
@@ -355,9 +355,145 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">2</property>
+                <property name="left-attach">4</property>
                 <property name="top-attach">5</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockstandardbox">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="locktitlebox">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="locklistbox">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="locklabelbox">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockidxbox">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockstandardheight">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="locktitleheight">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="locklistheight">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="locklabelheight">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockindexheight">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
