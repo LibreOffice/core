@@ -2453,8 +2453,6 @@ cui/source/options/doclinkdialog.cxx
 cui/source/options/doclinkdialog.hxx
 cui/source/options/fontsubs.cxx
 cui/source/options/fontsubs.hxx
-cui/source/options/optaboutconfig.cxx
-cui/source/options/optaboutconfig.hxx
 cui/source/options/optaccessibility.cxx
 cui/source/options/optaccessibility.hxx
 cui/source/options/optasian.cxx
