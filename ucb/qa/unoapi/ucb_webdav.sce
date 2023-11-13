@@ -15,12 +15,5 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
--o ucb.UcbContentProviderProxyFactory
--o ucb.UcbPropertiesManager
--o ucb.UcbStore
--o ucpchelp.CHelpContentProvider
--o ucpfile.FileProvider
--o ucpftp.FTPContentProvider
--o ucphier.HierarchyContentProvider
--o ucphier.HierarchyDataSource
--o ucppkg.PackageContentProvider
+-o ucb.UniversalContentBroker
+-o ucpdav.WebDAVContentProvider
