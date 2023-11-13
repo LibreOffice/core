@@ -1554,9 +1554,9 @@ void ChartController::impl_initializeAccessible()
         impl_initializeAccessible( dynamic_cast<AccessibleChartView&>(*xInit) );
 #endif
 }
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
 void ChartController::impl_initializeAccessible( AccessibleChartView& rAccChartView )
 {
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
     uno::Reference< XAccessible > xParent;
     {
         SolarMutexGuard aGuard;
@@ -1570,8 +1570,10 @@ void ChartController::impl_initializeAccessible( AccessibleChartView& rAccChartV
     }
 
     rAccChartView.initialize(*this, getChartModel(), m_xChartView, xParent, m_xViewWindow);
-#endif
 }
+#else
+void ChartController::impl_initializeAccessible( AccessibleChartView& /* rAccChartView */) {}
+#endif
 
 const o3tl::sorted_vector< OUString >& ChartController::impl_getAvailableCommands()
 {
