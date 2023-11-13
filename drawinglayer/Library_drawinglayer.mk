@@ -52,6 +52,10 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
     vcl \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,drawinglayer,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/animation/animationtiming \
     drawinglayer/source/attribute/fillgraphicattribute \

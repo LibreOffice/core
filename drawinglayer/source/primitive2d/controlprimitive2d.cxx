@@ -36,10 +36,10 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/window.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
 
@@ -98,7 +98,7 @@ namespace drawinglayer::primitive2d
                     basegfx::B2DVector aDiscreteSize(rViewInformation.getObjectToViewTransformation() * aScale);
 
                     // limit to a maximum square size, e.g. 300x150 pixels (45000)
-                    const double fDiscreteMax(SvtOptionsDrawinglayer::GetQuadraticFormControlRenderLimit());
+                    const double fDiscreteMax(officecfg::Office::Common::Drawinglayer::QuadraticFormControlRenderLimit::get());
                     const double fDiscreteQuadratic(aDiscreteSize.getX() * aDiscreteSize.getY());
                     const bool bScaleUsed(fDiscreteQuadratic > fDiscreteMax);
                     double fFactor(1.0);

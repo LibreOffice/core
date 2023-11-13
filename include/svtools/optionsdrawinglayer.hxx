@@ -80,16 +80,10 @@ SVT_DLLPUBLIC bool       IsAAPossibleOnThisSystem();
 // primitives
 SVT_DLLPUBLIC bool        IsAntiAliasing();
 SVT_DLLPUBLIC bool        IsSnapHorVerLinesToDiscrete();
-SVT_DLLPUBLIC bool        IsSolidDragCreate();
-SVT_DLLPUBLIC bool        IsRenderDecoratedTextDirect();
-SVT_DLLPUBLIC bool        IsRenderSimpleTextDirect();
-SVT_DLLPUBLIC sal_uInt32  GetQuadratic3DRenderLimit();
-SVT_DLLPUBLIC sal_uInt32  GetQuadraticFormControlRenderLimit();
 
 SVT_DLLPUBLIC void        SetAntiAliasing( bool bOn, bool bTemporary );
 
 // #i97672# selection settings
-SVT_DLLPUBLIC bool        IsTransparentSelection();
 SVT_DLLPUBLIC sal_uInt16  GetTransparentSelectionPercent();
 SVT_DLLPUBLIC sal_uInt16  GetSelectionMaximumLuminancePercent();
 
