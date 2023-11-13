@@ -125,6 +125,7 @@ AtkStateType mapAtkState( sal_Int64 nState )
         MAP_DIRECT( ACTIVE );
         MAP_DIRECT( ARMED );
         MAP_DIRECT( BUSY );
+        MAP_DIRECT( CHECKABLE );
         MAP_DIRECT( CHECKED );
         MAP_DIRECT( EDITABLE );
         MAP_DIRECT( ENABLED );

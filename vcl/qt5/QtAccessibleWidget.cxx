@@ -578,6 +578,9 @@ void lcl_addState(QAccessible::State* state, sal_Int64 nState)
         case AccessibleStateType::BUSY:
             state->busy = true;
             break;
+        case AccessibleStateType::CHECKABLE:
+            state->checkable = true;
+            break;
         case AccessibleStateType::CHECKED:
             state->checked = true;
             break;

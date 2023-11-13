@@ -239,6 +239,12 @@ constants AccessibleStateType
     */
     const hyper COLLAPSE = 8589934592;
 
+    /** Indicates this object is checkable, i.e. it has the potential
+        to be checked.
+        See also the CHECKED state.
+    */
+    const hyper CHECKABLE = 17179869184;
+
 };
 
 }; }; }; };

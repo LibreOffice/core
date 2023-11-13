@@ -128,7 +128,7 @@ bool queryTableCell(XAccessible* pXAcc, XInterface** ppXI)
 }
 
 
-void lcl_addIA2State(AccessibleStates& rStates, sal_Int64 nUnoState)
+void lcl_addIA2State(AccessibleStates& rStates, sal_Int64 nUnoState, sal_Int16 nRole)
 {
     switch (nUnoState)
     {
@@ -137,6 +137,12 @@ void lcl_addIA2State(AccessibleStates& rStates, sal_Int64 nUnoState)
             break;
         case css::accessibility::AccessibleStateType::ARMED:
             rStates |= IA2_STATE_ARMED;
+            break;
+        case css::accessibility::AccessibleStateType::CHECKABLE:
+            // STATE_SYSTEM_PRESSED is used instead of STATE_SYSTEM_CHECKED for these button
+            // roles (s. AccObject::GetMSAAStateFromUNO), so don't set CHECKABLE state for them
+            if (nRole != AccessibleRole::PUSH_BUTTON && nRole != AccessibleRole::TOGGLE_BUTTON)
+                rStates |= IA2_STATE_CHECKABLE;
             break;
         case css::accessibility::AccessibleStateType::DEFUNC:
             rStates |= IA2_STATE_DEFUNCT;
@@ -2592,7 +2598,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RP
     {
         sal_Int64 nUnoState = sal_Int64(1) << i;
         if (nRStateSet & nUnoState)
-            lcl_addIA2State(*states, nUnoState);
+            lcl_addIA2State(*states, nUnoState, m_xContext->getAccessibleRole());
     }
 
     return S_OK;
