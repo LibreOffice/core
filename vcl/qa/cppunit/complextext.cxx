@@ -191,6 +191,8 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaching)
     testCachedGlyphs( "test", "Dejavu Sans" );
     // This font does not have latin characters, will need fallback.
     testCachedGlyphs( "test", "Noto Kufi Arabic" );
+    // see tdf#103492
+    testCachedGlyphs( u"يوسف My name is"_ustr, "Liberation Sans");
 }
 
 static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aFontName, bool rtl )
