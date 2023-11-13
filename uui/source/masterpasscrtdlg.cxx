@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -33,10 +34,27 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl, weld::Entry&, void)
     m_xOKBtn->set_sensitive(aPasswordText.getLength() >= 1);
     m_xPasswdStrengthBar->set_percentage(
         SvPasswordHelper::GetPasswordStrengthPercentage(aPasswordText));
+
+    if(m_oPasswordPolicy)
+    {
+        bool bPasswordMeetsPolicy
+            = SvPasswordHelper::PasswordMeetsPolicy(aPasswordText, m_oPasswordPolicy);
+        m_xEDMasterPasswordCrt->set_message_type(bPasswordMeetsPolicy ? weld::EntryMessageType::Normal
+                                                 : weld::EntryMessageType::Error);
+        m_xPasswordPolicyLabel->set_visible(!bPasswordMeetsPolicy);
+    }
 }
 
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl, weld::Button&, void)
 {
+    if (m_oPasswordPolicy
+        && !SvPasswordHelper::PasswordMeetsPolicy(m_xEDMasterPasswordCrt->get_text(),
+                                                  m_oPasswordPolicy))
+    {
+        m_xEDMasterPasswordCrt->grab_focus();
+        return;
+    }
+
     // compare both passwords and show message box if there are not equal!!
     if (m_xEDMasterPasswordCrt->get_text() == m_xEDMasterPasswordRepeat->get_text())
         m_xDialog->response(RET_OK);
@@ -57,13 +75,20 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog(weld::Window* pParent, co
     : GenericDialogController(pParent, "uui/ui/setmasterpassworddlg.ui", "SetMasterPasswordDialog")
     , rResLocale(rLocale)
     , m_xEDMasterPasswordCrt(m_xBuilder->weld_entry("password1"))
+    , m_xPasswordPolicyLabel(m_xBuilder->weld_label("passpolicylabel"))
     , m_xEDMasterPasswordRepeat(m_xBuilder->weld_entry("password2"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xPasswdStrengthBar(m_xBuilder->weld_level_bar("password1levelbar"))
+    , m_oPasswordPolicy(officecfg::Office::Common::Security::Scripting::PasswordPolicy::get())
 {
     m_xOKBtn->set_sensitive(false);
     m_xOKBtn->connect_clicked( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );
     m_xEDMasterPasswordCrt->connect_changed( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
+    if (m_oPasswordPolicy)
+    {
+        m_xPasswordPolicyLabel->set_label(
+            officecfg::Office::Common::Security::Scripting::PasswordPolicyErrorMessage::get());
+    }
 }
 
 MasterPasswordCreateDialog::~MasterPasswordCreateDialog()
