@@ -1399,13 +1399,23 @@ void WinSalPrinter::markInvalid()
 
 // need wrappers for StarTocW/A to use structured exception handling
 // since SEH does not mix with standard exception handling's cleanup
-static int lcl_StartDocW( HDC hDC, DOCINFOW const * pInfo, WinSalPrinter* pPrt )
+static int lcl_StartDocW1( HDC hDC, DOCINFOW const * pInfo, WinSalPrinter* pPrt )
 {
     int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::StartDocW( hDC, pInfo );
     CATCH_DRIVER_EX_END( "exception in StartDocW", pPrt );
     return nRet;
+}
+
+static int lcl_StartDocW( HDC hDC, DOCINFOW const * pInfo, WinSalPrinter* pPrt )
+{
+    //tdf#127547 - Freeze/crash in Microsoft Print to PDF dialog, if we try to paste while
+    // executing the StartDocW method, Windows will call back into us on a separate thread,
+    // where we will attempt to take the SolarMutex.
+    SolarMutexReleaser aReleaser;
+
+    return lcl_StartDocW1(hDC, pInfo, pPrt);
 }
 
 bool WinSalPrinter::StartJob( const OUString* pFileName,
