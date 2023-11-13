@@ -7532,7 +7532,7 @@ AC_SUBST(GPERF)
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.6 >= 0.6.0],enabled)
+libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.6 >= 0.6.1],enabled)
 
 dnl ===================================================================
 dnl C++11
