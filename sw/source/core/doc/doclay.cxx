@@ -389,7 +389,8 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                         GetNodes().MakeTextNode( aRg.aStart.GetNode(),
                                     GetDfltTextFormatColl() );
 
-                    getIDocumentContentOperations().MoveNodeRange( aRg, oPos->GetNode(), SwMoveFlags::DEFAULT );
+                    // Create undo actions if undo is enabled.
+                    getIDocumentContentOperations().MoveNodeRange( aRg, oPos->GetNode(), SwMoveFlags::CREATEUNDOOBJ );
                 }
                 else
                 {
@@ -404,13 +405,9 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                 OSL_ENSURE( aIndex.GetNode().GetTextNode(),
                         "a TextNode should be here" );
                 oPos.reset();       // Deregister index!
-                GetNodes().Delete( aIndex );
-
-                // This is a hack: whilst FlyFrames/Headers/Footers are not undoable we delete all Undo objects
-                if( GetIDocumentUndoRedo().DoesUndo() )
-                {
-                    GetIDocumentUndoRedo().DelAllUndoObj();
-                }
+                // Delete the empty paragraph after the table, in a way that undo is aware of this.
+                SwPaM aPaM(aIndex);
+                getIDocumentContentOperations().DelFullPara(aPaM);
             }
             else
             {

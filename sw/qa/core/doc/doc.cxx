@@ -41,6 +41,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <sortedobjs.hxx>
+#include <itabenum.hxx>
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
@@ -517,6 +518,48 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitExpandGlossary)
     CPPUNIT_ASSERT(pPage2->GetSortedObjs());
     const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitFlyInsertUndo)
+{
+    // Given a document with an inline table, which is then turned into a floating one:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    const SwFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFlyFormats.empty());
+    // Insert a table:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->GoPrevCell();
+    pWrtShell->Insert("A1");
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert("A2");
+    // Select cell:
+    pWrtShell->SelAll();
+    // Select table:
+    pWrtShell->SelAll();
+    // Wrap the table in a text frame:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+    CPPUNIT_ASSERT(!rFlyFormats.empty());
+
+    // When undoing the conversion to floating table:
+    pDoc->GetUndoManager().Undo();
+
+    // Then make sure we don't have a frame anymore:
+    // Without the accompanying fix in place, this test would have failed, there was no undo action
+    // to execute.
+    CPPUNIT_ASSERT(rFlyFormats.empty());
+
+    // And when redoing the conversion:
+    pDoc->GetUndoManager().Redo();
+
+    // Then make sure we again have a frame:
+    CPPUNIT_ASSERT(!rFlyFormats.empty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
