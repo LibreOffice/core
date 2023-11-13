@@ -29,6 +29,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/mieclip.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
@@ -1502,6 +1503,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 xStm->Seek(0);
 
                 OutlinerView* pOLV = GetTextEditOutlinerView();
+                MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
 
                 if (pOLV)
                 {
@@ -1511,7 +1513,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if (aRect.Contains(aPos) || (!bDrag && IsTextEdit()))
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
-                        pOLV->Read(*xStm, EETextFormat::Html, mpDocSh->GetHeaderAttributes());
+                        SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(*xStm);
+                        pOLV->Read(*pHtmlStream, EETextFormat::Html, mpDocSh->GetHeaderAttributes());
                         bReturn = true;
                     }
                 }
