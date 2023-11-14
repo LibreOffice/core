@@ -313,14 +313,24 @@ static void applyStates(GtkAccessible* pGtkAccessible,
 }
 
 static void applyObjectAttribute(GtkAccessible* pGtkAccessible, std::u16string_view rName,
-                                 std::u16string_view rValue)
+                                 const OUString& rValue)
 {
     assert(pGtkAccessible);
 
-    if (rName == u"level")
+    if (rName == u"colindextext")
+    {
+        gtk_accessible_update_relation(pGtkAccessible, GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT,
+                                       rValue.toUtf8().getStr(), -1);
+    }
+    else if (rName == u"level")
     {
         const int nLevel = o3tl::toInt32(rValue);
         gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_LEVEL, nLevel, -1);
+    }
+    else if (rName == u"rowindextext")
+    {
+        gtk_accessible_update_relation(pGtkAccessible, GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT,
+                                       rValue.toUtf8().getStr(), -1);
     }
 }
 
