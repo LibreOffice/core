@@ -195,8 +195,6 @@ private:
     bool    bPickThrough                : 1;    // Misc/TextObject/Selectable
     bool    bDoubleClickTextEdit        : 1;    // Misc/DclickTextedit
     bool    bClickChangeRotation        : 1;    // Misc/RotateClick
-    bool    bEnableSdremote             : 1;    // Misc/Start/EnableSdremote
-    bool    bPresenterScreenFullScreen  : 1;    // Misc/Start/PresenterScreenFullScreen
     bool    bSolidDragging              : 1;    // Misc/ModifyWithAttributes
     bool    bSummationOfParagraphs      : 1;    // misc/SummationOfParagraphs
     bool    bTabBarVisible              : 1;    // Misc/TabBarVisible
@@ -247,8 +245,6 @@ public:
     bool    IsPickThrough() const { Init(); return bPickThrough; }
     bool    IsDoubleClickTextEdit() const { Init(); return bDoubleClickTextEdit; }
     bool    IsClickChangeRotation() const { Init(); return bClickChangeRotation; }
-    bool    IsEnableSdremote() const { Init(); return bEnableSdremote; }
-    bool    IsPresenterScreenFullScreen() const { Init(); return bPresenterScreenFullScreen; }
     bool    IsSolidDragging() const { Init(); return bSolidDragging; }
     bool    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs; };
     bool    IsTabBarVisible() const { Init(); return bTabBarVisible; };
@@ -290,8 +286,6 @@ public:
     void    SetPickThrough( bool bOn ) { if( bPickThrough != bOn ) { OptionsChanged(); bPickThrough = bOn; } }
     void    SetDoubleClickTextEdit( bool bOn ) { if( bDoubleClickTextEdit != bOn ) { OptionsChanged(); bDoubleClickTextEdit = bOn; } }
     void    SetClickChangeRotation( bool bOn ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
-    void    SetEnableSdremote( bool bOn ) { if( bEnableSdremote != bOn ) { OptionsChanged(); bEnableSdremote = bOn; } }
-    void    SetPresenterScreenFullScreen( bool bOn ) { if ( bPresenterScreenFullScreen != bOn) { OptionsChanged(); bPresenterScreenFullScreen = bOn; } }
     void    SetSummationOfParagraphs( bool bOn ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
     void    SetTabBarVisible( bool bOn ){ if ( bOn != bTabBarVisible ) { OptionsChanged(); bTabBarVisible = bOn; } }
     /** Set the printer independent layout mode.
