@@ -133,7 +133,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     if (nullptr == pSource)
         // SfxItemState::UNKNOWN aka current default (nullptr)
         // just use/return nullptr
-        return pSource;
+        return nullptr;
 
     if (IsInvalidItem(pSource))
         // SfxItemState::DONTCARE aka invalid item
