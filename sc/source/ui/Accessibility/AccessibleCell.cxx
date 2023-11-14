@@ -495,7 +495,14 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
 {
     SolarMutexGuard aGuard;
 
-    uno::Any strRet;
+    // report row and column index text via attributes as specified in ARIA which map
+    // to attributes of the same name for AT-SPI2, IAccessible2, UIA
+    // https://www.w3.org/TR/core-aam-1.2/#ariaRowIndexText
+    // https://www.w3.org/TR/core-aam-1.2/#ariaColIndexText
+    const OUString sRowIndexText = maCellAddress.Format(ScRefFlags::ROW_VALID);
+    const OUString sColIndexText = maCellAddress.Format(ScRefFlags::COL_VALID);
+    OUString sAttributes = "rowindextext:" + sRowIndexText + ";colindextext:" + sColIndexText + ";";
+
     if (mpViewShell)
     {
         OUString strFor = mpViewShell->GetFormula(maCellAddress) ;
@@ -519,9 +526,10 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
                 strFor += "false";
             strFor += ";";
         }
-        strRet <<= strFor ;
+        sAttributes += strFor ;
     }
-    return strRet;
+
+    return uno::Any(sAttributes);
 }
 
 // cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.
