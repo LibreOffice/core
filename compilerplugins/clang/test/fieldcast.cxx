@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#if defined _WIN32 //TODO, #include <sys/file.h>
+// expected-no-diagnostics
+#else
+
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
@@ -53,4 +57,7 @@ class Test5
     std::shared_ptr<Foo> m_p;
     void test1() { (void)dynamic_cast<Bar*>(m_p.get()); }
 };
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
