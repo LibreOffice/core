@@ -33,6 +33,7 @@ import com.sun.star.io.XObjectInputStream;
 import com.sun.star.io.XObjectOutputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XPersistObject;
+import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -154,6 +155,11 @@ public class _XPersistObject extends MultiMethodTest {
                     }
                     bResult &= locRes;
                 }
+
+                XComponent comp = UnoRuntime.queryInterface(XComponent.class, oCopy);
+                if (comp != null) {
+                    comp.dispose();
+                }
             } else {
                 Object oCopy = tParam.getMSF().createInstance(sname);
                 XPersistObject persCopy = UnoRuntime.queryInterface(XPersistObject.class, oCopy);
@@ -162,6 +168,10 @@ public class _XPersistObject extends MultiMethodTest {
 
                 bResult = persCopy.getServiceName().equals(sname);
 
+                XComponent comp = UnoRuntime.queryInterface(XComponent.class, oCopy);
+                if (comp != null) {
+                    comp.dispose();
+                }
             }
 
         } catch (com.sun.star.uno.Exception e) {

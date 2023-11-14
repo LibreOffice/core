@@ -22,6 +22,7 @@ import lib.MultiMethodTest;
 
 import java.util.Arrays;
 
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.UnoRuntime;
@@ -57,6 +58,11 @@ public class _XCloneable extends MultiMethodTest {
         result &= checkImplementationID(oObj, clone);
 
         tRes.tested("createClone()", result) ;
+
+        XComponent comp = UnoRuntime.queryInterface(XComponent.class, clone);
+        if (comp != null) {
+            comp.dispose();
+        }
     }
 
     protected byte[] getImplementationID(XInterface ifc) {
