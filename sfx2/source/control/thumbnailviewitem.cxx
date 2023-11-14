@@ -155,7 +155,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 
     // Draw background
     if( mbSelected && mbHover)
-        aFillColor = pAttrs->aSelectHighlightColor;
+        aFillColor = pAttrs->aHighlightColor;
     else if (mbSelected || mbHover)
     {
         aFillColor = pAttrs->aHighlightColor;
@@ -268,10 +268,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
         BColor aTextColor = pAttrs->aTextColor;
         if(mbSelected)
         {
-            if (mbHover)
-                aTextColor = pAttrs->aSelectHighlightTextColor;
-            else
-                aTextColor = pAttrs->aHighlightTextColor;
+            aTextColor = pAttrs->aHighlightTextColor;
         }
 
         rSeq[nPrimitives++] = drawinglayer::primitive2d::Primitive2DReference(

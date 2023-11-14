@@ -37,10 +37,8 @@ TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> x
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     maHighlightColor = rSettings.GetHighlightColor();
     maHighlightTextColor = rSettings.GetHighlightTextColor();
-    maSelectHighlightColor = rSettings.GetActiveColor();
-    maSelectHighlightTextColor = rSettings.GetActiveTextColor();
 
-    mfHighlightTransparence = 0.25;
+    mfHighlightTransparence = 0.75;
 
     UpdateColors();
 }

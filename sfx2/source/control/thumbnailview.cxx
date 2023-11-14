@@ -253,8 +253,6 @@ void ThumbnailView::ImplInit()
     maTextColor = rSettings.GetWindowTextColor();
     maHighlightColor = rSettings.GetHighlightColor();
     maHighlightTextColor = rSettings.GetHighlightTextColor();
-    maSelectHighlightColor = rSettings.GetActiveColor();
-    maSelectHighlightTextColor = rSettings.GetActiveTextColor();
 
     mfHighlightTransparence = SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01;
 
@@ -271,8 +269,6 @@ void ThumbnailView::UpdateColors()
     mpItemAttrs->aTextColor = maTextColor.getBColor();
     mpItemAttrs->aHighlightColor = maHighlightColor.getBColor();
     mpItemAttrs->aHighlightTextColor = maHighlightTextColor.getBColor();
-    mpItemAttrs->aSelectHighlightColor = maSelectHighlightColor.getBColor();
-    mpItemAttrs->aSelectHighlightTextColor = maSelectHighlightTextColor.getBColor();
     mpItemAttrs->fHighlightTransparence = mfHighlightTransparence;
 }
 

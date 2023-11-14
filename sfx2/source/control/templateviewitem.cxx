@@ -61,7 +61,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
 
     // Draw background
     if( mbSelected && mbHover)
-        aFillColor = pAttrs->aSelectHighlightColor;
+        aFillColor = pAttrs->aHighlightColor;
     else if (mbSelected || mbHover)
     {
         aFillColor = pAttrs->aHighlightColor;
