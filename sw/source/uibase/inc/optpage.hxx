@@ -45,7 +45,6 @@ class SwContentOptPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xVRulerRightCBox;
     std::unique_ptr<weld::Widget> m_xVRulerRightImg;
     std::unique_ptr<weld::ComboBox> m_xVMetric;
-    std::unique_ptr<weld::Widget> m_xVMetricImg;
     std::unique_ptr<weld::CheckButton> m_xSmoothCBox;
     std::unique_ptr<weld::Widget> m_xSmoothImg;
 
@@ -56,7 +55,6 @@ class SwContentOptPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xDrwCB;
     std::unique_ptr<weld::Widget> m_xDrwImg;
     std::unique_ptr<weld::CheckButton> m_xPostItCB;
-    std::unique_ptr<weld::Widget> m_xPostItImg;
 
     std::unique_ptr<weld::Frame> m_xSettingsFrame;
     std::unique_ptr<weld::Label> m_xSettingsLabel;

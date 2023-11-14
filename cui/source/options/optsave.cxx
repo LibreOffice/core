@@ -108,10 +108,8 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xWarnAlienFormatCB(m_xBuilder->weld_check_button("warnalienformat"))
     , m_xWarnAlienFormatImg(m_xBuilder->weld_widget("lockwarnalienformat"))
     , m_xDocTypeLB(m_xBuilder->weld_combo_box("doctype"))
-    , m_xDocTypeImg(m_xBuilder->weld_widget("lockdoctype"))
     , m_xSaveAsFT(m_xBuilder->weld_label("saveas_label"))
     , m_xSaveAsLB(m_xBuilder->weld_combo_box("saveas"))
-    , m_xSaveAsImg(m_xBuilder->weld_widget("locksaveas"))
     , m_xODFWarningFI(m_xBuilder->weld_widget("odfwarning_image"))
     , m_xODFWarningFT(m_xBuilder->weld_label("odfwarning_label"))
 {

@@ -198,7 +198,6 @@ class OfaLanguagesTabPage : public SfxTabPage
     std::unique_ptr<SvxLanguageBox> m_xAsianLanguageLB;
     std::unique_ptr<SvxLanguageBox> m_xComplexLanguageLB;
     std::unique_ptr<weld::CheckButton> m_xCurrentDocCB;
-    std::unique_ptr<weld::Widget> m_xCurrentDocImg;
     std::unique_ptr<weld::CheckButton> m_xAsianSupportCB;
     std::unique_ptr<weld::Widget> m_xAsianSupportImg;
     std::unique_ptr<weld::CheckButton> m_xCTLSupportCB;

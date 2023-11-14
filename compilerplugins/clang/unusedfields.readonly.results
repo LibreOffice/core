@@ -230,7 +230,7 @@ dbaccess/source/ui/inc/sqledit.hxx:42
     dbaui::SQLEditView m_aColorConfig const svtools::ColorConfig
 dbaccess/source/ui/inc/WCopyTable.hxx:258
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
-editeng/source/editeng/impedit.hxx:522
+editeng/source/editeng/impedit.hxx:518
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:114
     OCommonEmbeddedObject m_aClassName OUString
@@ -284,17 +284,17 @@ i18npool/inc/textconversion.hxx:79
     i18npool::Hangul_Index address sal_Int16
 i18npool/inc/textconversion.hxx:80
     i18npool::Hangul_Index count sal_Int16
-include/basegfx/utils/gradienttools.hxx:47
-    (anonymous namespace)::ColorToBColorConverter::(anonymous union at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:46:9) mValue sal_uInt32
-include/basegfx/utils/gradienttools.hxx:55
-    (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:48:13) B sal_uInt8
-include/basegfx/utils/gradienttools.hxx:56
-    (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:48:13) G sal_uInt8
-include/basegfx/utils/gradienttools.hxx:57
-    (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:48:13) R sal_uInt8
-include/basic/sbstar.hxx:50
-    StarBASIC aErrorHdl Link<StarBASIC *, _Bool>
+include/basegfx/utils/gradienttools.hxx:43
+    (anonymous namespace)::ColorToBColorConverter::(anonymous union at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:42:9) mValue sal_uInt32
+include/basegfx/utils/gradienttools.hxx:51
+    (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:44:13) B sal_uInt8
+include/basegfx/utils/gradienttools.hxx:52
+    (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:44:13) G sal_uInt8
+include/basegfx/utils/gradienttools.hxx:53
+    (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:44:13) R sal_uInt8
 include/basic/sbstar.hxx:51
+    StarBASIC aErrorHdl Link<StarBASIC *, _Bool>
+include/basic/sbstar.hxx:52
     StarBASIC aBreakHdl Link<StarBASIC *, BasicDebugFlags>
 include/comphelper/parallelsort.hxx:164
     comphelper::(anonymous namespace)::Binner maLabels uint8_t[51200]
@@ -308,50 +308,54 @@ include/connectivity/sdbcx/VTable.hxx:78
     connectivity::sdbcx::OTable m_xIndexes std::unique_ptr<OCollection>
 include/connectivity/sqlparse.hxx:104
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
-include/docmodel/theme/FormatScheme.hxx:240
+include/docmodel/theme/FormatScheme.hxx:239
     model::BlipEffect mnRadius sal_Int32
-include/docmodel/theme/FormatScheme.hxx:241
+include/docmodel/theme/FormatScheme.hxx:240
     model::BlipEffect mbGrow _Bool
-include/docmodel/theme/FormatScheme.hxx:242
+include/docmodel/theme/FormatScheme.hxx:241
     model::BlipEffect mnAlpha sal_Int32
-include/docmodel/theme/FormatScheme.hxx:244
+include/docmodel/theme/FormatScheme.hxx:243
     model::BlipEffect mnHue sal_Int32
-include/docmodel/theme/FormatScheme.hxx:245
+include/docmodel/theme/FormatScheme.hxx:244
     model::BlipEffect mnSaturation sal_Int32
-include/docmodel/theme/FormatScheme.hxx:246
+include/docmodel/theme/FormatScheme.hxx:245
     model::BlipEffect mnLuminance sal_Int32
 include/editeng/lrspitem.hxx:254
     SvxGutterRightMarginItem m_nRightGutterMargin tools::Long
-include/filter/msfilter/svdfppt.hxx:717
+include/filter/msfilter/svdfppt.hxx:718
     PPTExtParaSheet aExtParaLevel PPTExtParaLevel[10]
-include/filter/msfilter/svdfppt.hxx:888
-    ImplPPTParaPropSet nDontKnow1 sal_uInt32
 include/filter/msfilter/svdfppt.hxx:889
-    ImplPPTParaPropSet nDontKnow2 sal_uInt32
+    ImplPPTParaPropSet nDontKnow1 sal_uInt32
 include/filter/msfilter/svdfppt.hxx:890
+    ImplPPTParaPropSet nDontKnow2 sal_uInt32
+include/filter/msfilter/svdfppt.hxx:891
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
-include/formula/formulahelper.hxx:40
+include/formula/formulahelper.hxx:39
     formula::FormulaHelper m_aSysLocale SvtSysLocale
 include/oox/core/contexthandler2.hxx:231
     oox::core::ContextHandler2Helper mnRootStackSize size_t
 include/oox/ole/axbinarywriter.hxx:153
     oox::ole::AxBinaryPropertyWriter maStreamProps ComplexPropVector
-include/sfx2/lokhelper.hxx:36
+include/sfx2/lokhelper.hxx:66
     LokMouseEventData maLogicPosition std::optional<Point>
-include/sfx2/msg.hxx:95
+include/sfx2/msg.hxx:94
     SfxTypeAttrib nAID sal_uInt16
-include/sfx2/msg.hxx:96
+include/sfx2/msg.hxx:95
     SfxTypeAttrib pName const char *
-include/sfx2/msg.hxx:105
+include/sfx2/msg.hxx:104
     SfxType createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:106
+include/sfx2/msg.hxx:105
     SfxType pType const std::type_info *
-include/sfx2/msg.hxx:107
+include/sfx2/msg.hxx:106
     SfxType nAttribs sal_uInt16
-include/sfx2/msg.hxx:108
+include/sfx2/msg.hxx:107
     SfxType aAttrib SfxTypeAttrib[1]
-include/sfx2/msg.hxx:118
+include/sfx2/msg.hxx:117
     SfxType0 pType const std::type_info *
+include/svl/itempool.hxx:182
+    SfxItemPool::Item2Range m_begin o3tl::sorted_vector<SfxPoolItem *>::const_iterator
+include/svl/itempool.hxx:183
+    SfxItemPool::Item2Range m_end o3tl::sorted_vector<SfxPoolItem *>::const_iterator
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale SvtSysLocale
 include/svx/diagram/IDiagramHelper.hxx:72
@@ -362,7 +366,7 @@ include/svx/graphctl.hxx:52
     GraphCtrl xVD ScopedVclPtrInstance<VirtualDevice>
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:49
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
-include/svx/svdetc.hxx:183
+include/svx/svdetc.hxx:182
     SdrGlobalData maSysLocale SvtSysLocale
 include/svx/svdmark.hxx:141
     SdrMarkList maPointName OUString
@@ -394,9 +398,9 @@ include/unoidl/unoidl.hxx:455
     unoidl::ConstantValue::(anonymous union at /home/noel/libo-plugin/include/unoidl/unoidl.hxx:445:5) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories Directories
-include/vcl/bitmap.hxx:101
+include/vcl/bitmap.hxx:106
     BitmapSystemData mnWidth int
-include/vcl/bitmap.hxx:102
+include/vcl/bitmap.hxx:107
     BitmapSystemData mnHeight int
 include/vcl/formatter.hxx:128
     Formatter m_aStaticFormatter StaticFormatter
@@ -444,13 +448,13 @@ oox/source/drawingml/chart/objectformatter.cxx:722
     oox::drawingml::chart::ObjectFormatterData maFromLocale Locale
 reportdesign/source/ui/inc/ColorListener.hxx:35
     rptui::OColorListener m_aColorConfig svtools::ColorConfig
-sal/osl/unx/process.cxx:832
+sal/osl/unx/process.cxx:836
     (anonymous namespace)::osl_procStat signal char[24]
-sal/osl/unx/process.cxx:833
+sal/osl/unx/process.cxx:837
     (anonymous namespace)::osl_procStat blocked char[24]
-sal/osl/unx/process.cxx:834
+sal/osl/unx/process.cxx:838
     (anonymous namespace)::osl_procStat sigignore char[24]
-sal/osl/unx/process.cxx:835
+sal/osl/unx/process.cxx:839
     (anonymous namespace)::osl_procStat sigcatch char[24]
 sal/qa/OStringBuffer/rtl_OStringBuffer.cxx:1674
     rtl_OStringBuffer::append_001 empty OString
@@ -542,13 +546,13 @@ sc/source/ui/inc/inputhdl.hxx:68
     ScInputHandler pFormulaDataPara std::unique_ptr<ScTypedCaseStrSet>
 sc/source/ui/inc/tabcont.hxx:37
     ScTabControl bErrorShown _Bool
-sc/source/ui/vba/vbaformatconditions.hxx:36
-    ScVbaFormatConditions mxSheetConditionalEntries css::uno::Reference<css::sheet::XSheetConditionalEntries>
-sc/source/ui/vba/vbaformatconditions.hxx:37
-    ScVbaFormatConditions mxStyles css::uno::Reference<ov::excel::XStyles>
 sc/source/ui/vba/vbaformatconditions.hxx:38
-    ScVbaFormatConditions mxRangeParent css::uno::Reference<ov::excel::XRange>
+    ScVbaFormatConditions mxSheetConditionalEntries css::uno::Reference<css::sheet::XSheetConditionalEntries>
 sc/source/ui/vba/vbaformatconditions.hxx:39
+    ScVbaFormatConditions mxStyles rtl::Reference<ScVbaStyles>
+sc/source/ui/vba/vbaformatconditions.hxx:40
+    ScVbaFormatConditions mxRangeParent css::uno::Reference<ov::excel::XRange>
+sc/source/ui/vba/vbaformatconditions.hxx:41
     ScVbaFormatConditions mxParentRangePropertySet css::uno::Reference<css::beans::XPropertySet>
 sc/source/ui/vba/vbaworksheet.hxx:49
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase>[2]
@@ -564,9 +568,9 @@ sd/source/core/CustomAnimationCloner.cxx:70
     sd::(anonymous namespace)::CustomAnimationClonerImpl maSourceNodeVector std::vector<Reference<XAnimationNode> >
 sd/source/core/CustomAnimationCloner.cxx:71
     sd::(anonymous namespace)::CustomAnimationClonerImpl maCloneNodeVector std::vector<Reference<XAnimationNode> >
-sd/source/ui/inc/unopage.hxx:161
+sd/source/ui/inc/unopage.hxx:162
     SdDrawPage maTypeSequence css::uno::Sequence<css::uno::Type>
-sd/source/ui/inc/unopage.hxx:221
+sd/source/ui/inc/unopage.hxx:222
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/sidebar/MasterPageContainer.cxx:141
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated Image
@@ -598,11 +602,11 @@ starmath/inc/ElementsDockingWindow.hxx:42
     SmElementsControl maFormat SmFormat
 store/source/storbios.cxx:52
     (anonymous namespace)::OStoreSuperBlock m_aMarked L
-svl/source/crypto/cryptosign.cxx:270
+svl/source/crypto/cryptosign.cxx:274
     (anonymous namespace)::PKIStatusInfo status SECItem
-svl/source/crypto/cryptosign.cxx:290
+svl/source/crypto/cryptosign.cxx:294
     (anonymous namespace)::TimeStampResp status PKIStatusInfo
-svl/source/crypto/cryptosign.cxx:291
+svl/source/crypto/cryptosign.cxx:295
     (anonymous namespace)::TimeStampResp timeStampToken SECItem
 svl/source/misc/strmadpt.cxx:52
     SvDataPipe_Impl::Page m_aBuffer sal_Int8[1]
@@ -686,7 +690,7 @@ sw/source/core/text/inftxt.cxx:546
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<VirtualDevice>
 sw/source/core/text/redlnitr.hxx:75
     SwRedlineItr m_pSet std::unique_ptr<SfxItemSet>
-sw/source/filter/html/htmltab.cxx:2851
+sw/source/filter/html/htmltab.cxx:2852
     CellSaveStruct m_xCnts std::shared_ptr<HTMLTableCnts>
 sw/source/filter/inc/rtf.hxx:33
     RTFSurround::(unnamed union at /home/noel/libo-plugin/sw/source/filter/inc/rtf.hxx:26:5) nVal sal_uInt8
@@ -702,7 +706,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:117
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:80
     SwInsertField_Data m_aDBDataSource css::uno::Any
-toolkit/source/awt/vclxtoolkit.cxx:436
+toolkit/source/awt/vclxtoolkit.cxx:437
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 toolkit/source/controls/table/gridtablerenderer.cxx:71
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortAscending BitmapEx
@@ -720,8 +724,8 @@ ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 ucb/source/ucp/package/pkgprovider.hxx:48
     package_ucp::ContentProvider m_pPackages std::unique_ptr<Packages>
-ucb/source/ucp/webdav-curl/CurlSession.cxx:130
-    (anonymous namespace)::CurlOption::(anonymous union at /home/noel/libo-plugin/ucb/source/ucp/webdav-curl/CurlSession.cxx:129:5) pValue const void *const
+ucb/source/ucp/webdav-curl/CurlSession.cxx:132
+    (anonymous namespace)::CurlOption::(anonymous union at /home/noel/libo-plugin/ucb/source/ucp/webdav-curl/CurlSession.cxx:131:5) pValue const void *const
 ucbhelper/source/client/proxydecider.cxx:133
     ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const InternetProxyServer
 ucbhelper/source/provider/propertyvalueset.cxx:79
@@ -796,11 +800,11 @@ vcl/inc/salwtype.hxx:171
     SalWheelMouseEvent mbDeltaIsPixel _Bool
 vcl/inc/salwtype.hxx:224
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:273
+vcl/inc/svdata.hxx:276
     ImplSVWinData mbIsLiveResize _Bool
-vcl/inc/svdata.hxx:325
+vcl/inc/svdata.hxx:328
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:332
+vcl/inc/svdata.hxx:335
     ImplSVNWFData mbNoFrameJunctionForPopups _Bool
 vcl/inc/toolbox.h:110
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>
@@ -906,8 +910,8 @@ writerfilter/source/ooxml/OOXMLFactory.hxx:60
     writerfilter::ooxml::AttributeInfo m_nResource ResourceType
 writerfilter/source/ooxml/OOXMLFactory.hxx:61
     writerfilter::ooxml::AttributeInfo m_nRef Id
-writerperfect/inc/WPXSvInputStream.hxx:71
-    writerperfect::WPXSvInputStream mpReadBuffer const unsigned char *
+writerperfect/inc/WPXSvInputStream.hxx:70
+    writerperfect::WPXSvInputStream mnReadBufferLength unsigned long
 xmloff/inc/MultiPropertySetHelper.hxx:85
     MultiPropertySetHelper aEmptyAny css::uno::Any
 xmloff/source/chart/SchXMLChartContext.cxx:447

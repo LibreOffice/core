@@ -69,10 +69,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xWarnAlienFormatCB;
     std::unique_ptr<weld::Widget> m_xWarnAlienFormatImg;
     std::unique_ptr<weld::ComboBox> m_xDocTypeLB;
-    std::unique_ptr<weld::Widget> m_xDocTypeImg;
     std::unique_ptr<weld::Label> m_xSaveAsFT;
     std::unique_ptr<weld::ComboBox> m_xSaveAsLB;
-    std::unique_ptr<weld::Widget> m_xSaveAsImg;
     std::unique_ptr<weld::Widget> m_xODFWarningFI;
     std::unique_ptr<weld::Label> m_xODFWarningFT;
 

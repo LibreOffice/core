@@ -2140,7 +2140,6 @@ public:
     bool m_bZeroCursor;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
-    boost::property_tree::ptree m_aCallbackWindowResult;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
 
     ViewCallback(LibLODocument_Impl* pDocument)

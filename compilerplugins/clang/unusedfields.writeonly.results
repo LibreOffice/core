@@ -280,7 +280,7 @@ dbaccess/source/ui/browser/dbloader.cxx:60
     (anonymous namespace)::DBContentLoader m_xListener Reference<XLoadEventListener>
 dbaccess/source/ui/inc/RelationController.hxx:36
     dbaui::ORelationController m_xWaitObject std::unique_ptr<weld::WaitObject>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:317
+desktop/qa/desktop_lib/test_desktop_lib.cxx:313
     DesktopLOKTest m_bModified _Bool
 desktop/source/app/app.cxx:1239
     desktop::(anonymous namespace)::ExecuteGlobals pCTLLanguageOptions std::unique_ptr<SvtCTLOptions>
@@ -370,8 +370,8 @@ i18nutil/source/utility/paper.cxx:318
     paperword string char *
 include/basegfx/DrawCommands.hxx:82
     gfx::LinearGradientInfo maMatrix basegfx::B2DHomMatrix
-include/basegfx/utils/gradienttools.hxx:58
-    (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:48:13) T sal_uInt8
+include/basegfx/utils/gradienttools.hxx:54
+    (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:44:13) T sal_uInt8
 include/basic/basmgr.hxx:59
     BasicError nReason BasicErrorReason
 include/basic/sbxvar.hxx:75
@@ -384,41 +384,41 @@ include/comphelper/parallelsort.hxx:88
     comphelper::(anonymous namespace)::ProfileZone mbDummy _Bool
 include/comphelper/unique_disposing_ptr.hxx:31
     comphelper::unique_disposing_ptr m_xTerminateListener css::uno::Reference<css::frame::XTerminateListener>
-include/docmodel/theme/FormatScheme.hxx:93
+include/docmodel/theme/FormatScheme.hxx:92
     model::GradientFill mbRotateWithShape _Bool
-include/docmodel/theme/FormatScheme.hxx:367
+include/docmodel/theme/FormatScheme.hxx:366
     model::LineEnd meType LineEndType
-include/docmodel/theme/FormatScheme.hxx:368
+include/docmodel/theme/FormatScheme.hxx:367
     model::LineEnd meWidth LineEndWidth
-include/docmodel/theme/FormatScheme.hxx:369
+include/docmodel/theme/FormatScheme.hxx:368
     model::LineEnd meLength LineEndLength
-include/docmodel/theme/FormatScheme.hxx:381
+include/docmodel/theme/FormatScheme.hxx:380
     model::LineDash maCustomList std::vector<DashStop>
-include/docmodel/theme/FormatScheme.hxx:393
+include/docmodel/theme/FormatScheme.hxx:392
     model::LineStyle maHeadEnd LineEnd
-include/docmodel/theme/FormatScheme.hxx:394
+include/docmodel/theme/FormatScheme.hxx:393
     model::LineStyle maTailEnd LineEnd
-include/docmodel/theme/FormatScheme.hxx:415
+include/docmodel/theme/FormatScheme.hxx:414
     model::Effect mnRadius sal_Int32
-include/docmodel/theme/FormatScheme.hxx:418
+include/docmodel/theme/FormatScheme.hxx:417
     model::Effect mnScaleX sal_Int32
-include/docmodel/theme/FormatScheme.hxx:419
+include/docmodel/theme/FormatScheme.hxx:418
     model::Effect mnScaley sal_Int32
-include/docmodel/theme/FormatScheme.hxx:420
+include/docmodel/theme/FormatScheme.hxx:419
     model::Effect mnScewX sal_Int32
-include/docmodel/theme/FormatScheme.hxx:421
+include/docmodel/theme/FormatScheme.hxx:420
     model::Effect mnScewY sal_Int32
-include/docmodel/theme/FormatScheme.hxx:425
+include/docmodel/theme/FormatScheme.hxx:424
     model::Effect mnEndAlpha double
-include/docmodel/theme/FormatScheme.hxx:426
+include/docmodel/theme/FormatScheme.hxx:425
     model::Effect mnEndPosition double
-include/docmodel/theme/FormatScheme.hxx:427
+include/docmodel/theme/FormatScheme.hxx:426
     model::Effect mnStartAlpha double
-include/docmodel/theme/FormatScheme.hxx:428
+include/docmodel/theme/FormatScheme.hxx:427
     model::Effect mnStartPosition double
-include/docmodel/theme/FormatScheme.hxx:429
+include/docmodel/theme/FormatScheme.hxx:428
     model::Effect mnFadeDirection sal_Int32
-include/docmodel/theme/FormatScheme.hxx:430
+include/docmodel/theme/FormatScheme.hxx:429
     model::Effect mbGrow _Bool
 include/drawinglayer/attribute/sdrallattribute3d.hxx:42
     drawinglayer::attribute::SdrLineFillShadowAttribute3D maLineStartEnd const SdrLineStartEndAttribute
@@ -430,9 +430,9 @@ include/editeng/outlobj.hxx:44
     OutlinerParaObjData mbIsEditDoc _Bool
 include/editeng/splwrap.hxx:52
     SvxSpellWrapper xWait std::unique_ptr<weld::WaitObject>
-include/editeng/unotext.hxx:431
+include/editeng/unotext.hxx:430
     SvxUnoTextBase xParentText css::uno::Reference<css::text::XText>
-include/editeng/unotext.hxx:600
+include/editeng/unotext.hxx:599
     SvxUnoTextContentEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/framework/addonsoptions.hxx:75
     framework::MergeNotebookBarInstruction aMergePoint OUString
@@ -462,13 +462,13 @@ include/opencl/platforminfo.hxx:30
     OpenCLDeviceInfo mnComputeUnits size_t
 include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
-include/sfx2/AccessibilityIssue.hxx:63
+include/sfx2/AccessibilityIssue.hxx:64
     sfx::AccessibilityIssue m_pParent weld::Window *
 include/sfx2/minfitem.hxx:38
     SfxMacroInfoItem aCommentText OUString
 include/sfx2/viewsh.hxx:188
     SfxViewShell m_xHelper std::shared_ptr<SfxStoringHelper>
-include/svl/poolitem.hxx:126
+include/svl/poolitem.hxx:145
     SfxPoolItem m_bDeleted _Bool
 include/svl/sigstruct.hxx:127
     SignatureInformation hasInconsistentSigningTime _Bool
@@ -556,6 +556,8 @@ include/svx/gridctrl.hxx:258
     DbGridControl m_pCursorDisposeListener std::unique_ptr<DisposeListenerGridBridge>
 include/svx/ofaitem.hxx:44
     OfaXColorListItem mxRef rtl::Reference<XColorList>
+include/svx/sdasitm.hxx:55
+    SdrCustomShapeGeometryItem m_aHash size_t
 include/svx/srchdlg.hxx:166
     SvxSearchDialog pSearchController std::unique_ptr<SvxSearchController>
 include/svx/srchdlg.hxx:167
@@ -588,7 +590,7 @@ include/vcl/opengl/OpenGLContext.hxx:27
     GLWindow bMultiSampleSupported _Bool
 include/vcl/pdfextoutdevdata.hxx:86
     vcl::PDFExtOutDevData mbSinglePageSheets _Bool
-include/vcl/salnativewidgets.hxx:492
+include/vcl/salnativewidgets.hxx:493
     PushButtonValue mbSingleLine _Bool
 include/vcl/sysdata.hxx:69
     SystemEnvData pSalFrame SalFrame *
@@ -706,6 +708,8 @@ sc/inc/fillinfo.hxx:287
     ScTableInfo mDataBarInfos std::vector<std::unique_ptr<const ScDataBarInfo> >
 sc/inc/fillinfo.hxx:288
     ScTableInfo mIconSetInfos std::vector<std::unique_ptr<const ScIconSetInfo> >
+sc/inc/patattr.hxx:56
+    ScPatternAttr mxHashCode std::optional<sal_uInt32>
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:78
@@ -716,17 +720,17 @@ sc/inc/scmod.hxx:100
     ScModule m_pErrorHdl std::unique_ptr<SfxErrorHandler>
 sc/inc/tabopparams.hxx:37
     ScInterpreterTableOpParams bValid _Bool
-sc/qa/unit/subsequent_export_test.cxx:2187
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2185:18) mnRow SCROW
-sc/qa/unit/subsequent_export_test.cxx:2188
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2185:18) mnStyle SvxBorderLineStyle
-sc/qa/unit/subsequent_export_test.cxx:2189
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2185:18) mnWidth tools::Long
-sc/source/core/data/column4.cxx:1449
+sc/qa/unit/subsequent_export_test.cxx:2218
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2216:18) mnRow SCROW
+sc/qa/unit/subsequent_export_test.cxx:2219
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2216:18) mnStyle SvxBorderLineStyle
+sc/qa/unit/subsequent_export_test.cxx:2220
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2216:18) mnWidth tools::Long
+sc/source/core/data/column4.cxx:1451
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
-sc/source/core/data/column.cxx:1312
-    (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
 sc/source/core/data/column.cxx:1313
+    (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
+sc/source/core/data/column.cxx:1314
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags ScCloneFlags
 sc/source/core/data/table2.cxx:4041
     (anonymous namespace)::OutlineArrayFinder mpArray ScOutlineArray *
@@ -776,8 +780,6 @@ sc/source/filter/xml/xmlexternaltabi.hxx:110
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/ui/inc/AccessibleText.hxx:197
     ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
-sc/source/ui/inc/datastream.hxx:104
-    sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/drawview.hxx:41
     ScDrawView pDropMarker std::unique_ptr<SdrDropMarkerOverlay>
 sc/source/ui/inc/drwtrans.hxx:44
@@ -852,7 +854,7 @@ sd/source/ui/inc/navigatr.hxx:144
     SdNavigatorWin mpPageNameCtrlItem std::unique_ptr<SdPageNameControllerItem>
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:72
     sd::tools::TimerBasedTaskExecution mpSelf std::shared_ptr<TimerBasedTaskExecution>
-sd/source/ui/inc/unopage.hxx:274
+sd/source/ui/inc/unopage.hxx:275
     SdPageLinkTargets mxPage css::uno::Reference<css::drawing::XDrawPage>
 sd/source/ui/inc/ViewShellImplementation.hxx:78
     sd::ViewShell::Implementation::ToolBarManagerLock mpLock ::std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock> >
@@ -878,7 +880,7 @@ sfx2/inc/notebookbar/NotebookbarTabControl.hxx:42
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 sfx2/source/appl/fileobj.hxx:40
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
-sfx2/source/doc/sfxbasemodel.cxx:472
+sfx2/source/doc/sfxbasemodel.cxx:482
     (anonymous namespace)::SfxSaveGuard m_pFramesLock std::unique_ptr<SfxOwnFramesLocker>
 sfx2/source/inc/appdata.hxx:68
     SfxAppData_Impl maDocTopics std::vector<SfxDdeDocTopic_Impl *>
@@ -904,7 +906,7 @@ sfx2/source/inc/templdgi.hxx:207
     SfxTemplateDialog_Impl m_xToolbarDropTargetHelper std::unique_ptr<ToolbarDropTarget>
 sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener ClassificationPropertyListener
-sfx2/source/view/viewsh.cxx:555
+sfx2/source/view/viewsh.cxx:747
     LOKDocumentFocusListener m_aRefList std::unordered_set<uno::Reference<uno::XInterface> >
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex normal glm::vec3
@@ -918,15 +920,15 @@ slideshow/source/engine/slideshowimpl.cxx:446
     (anonymous namespace)::SlideShowImpl mpNavigationNext std::shared_ptr<SlideOverlayButton>
 slideshow/source/engine/slideshowimpl.cxx:1059
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl SlideShowImpl *const
-slideshow/test/testview.cxx:50
+slideshow/test/testview.cxx:51
     (anonymous namespace)::ImplTestView maCreatedSprites std::vector<std::pair<basegfx::B2DVector, double> >
-slideshow/test/testview.cxx:53
+slideshow/test/testview.cxx:54
     (anonymous namespace)::ImplTestView maPriority basegfx::B1DRange
 soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
 starmath/inc/mathml/mathmlimport.hxx:47
     SmXMLImportWrapper m_bUseHTMLMLEntities _Bool
-starmath/inc/view.hxx:189
+starmath/inc/view.hxx:192
     SmCmdBoxWindow aController SmEditController
 stoc/source/servicemanager/servicemanager.cxx:389
     (anonymous namespace)::OServiceManager m_SetLoadedFactories HashSet_Ref
@@ -966,31 +968,31 @@ svl/qa/unit/test_URIHelper.cxx:291
     Data begin sal_Int32
 svl/qa/unit/test_URIHelper.cxx:292
     Data end sal_Int32
-svl/source/crypto/cryptosign.cxx:100
+svl/source/crypto/cryptosign.cxx:104
     (anonymous namespace)::MessageImprint hashedMessage SECItem
-svl/source/crypto/cryptosign.cxx:135
-    (anonymous namespace)::TimeStampReq version SECItem
-svl/source/crypto/cryptosign.cxx:137
-    (anonymous namespace)::TimeStampReq reqPolicy SECItem
-svl/source/crypto/cryptosign.cxx:138
-    (anonymous namespace)::TimeStampReq nonce SECItem
 svl/source/crypto/cryptosign.cxx:139
+    (anonymous namespace)::TimeStampReq version SECItem
+svl/source/crypto/cryptosign.cxx:141
+    (anonymous namespace)::TimeStampReq reqPolicy SECItem
+svl/source/crypto/cryptosign.cxx:142
+    (anonymous namespace)::TimeStampReq nonce SECItem
+svl/source/crypto/cryptosign.cxx:143
     (anonymous namespace)::TimeStampReq certReq SECItem
-svl/source/crypto/cryptosign.cxx:140
+svl/source/crypto/cryptosign.cxx:144
     (anonymous namespace)::TimeStampReq extensions Extension *
-svl/source/crypto/cryptosign.cxx:148
+svl/source/crypto/cryptosign.cxx:152
     (anonymous namespace)::GeneralName name CERTName
-svl/source/crypto/cryptosign.cxx:156
+svl/source/crypto/cryptosign.cxx:160
     (anonymous namespace)::GeneralNames names GeneralName
-svl/source/crypto/cryptosign.cxx:164
+svl/source/crypto/cryptosign.cxx:168
     (anonymous namespace)::IssuerSerial issuer GeneralNames
-svl/source/crypto/cryptosign.cxx:165
+svl/source/crypto/cryptosign.cxx:169
     (anonymous namespace)::IssuerSerial serialNumber SECItem
-svl/source/crypto/cryptosign.cxx:175
+svl/source/crypto/cryptosign.cxx:179
     (anonymous namespace)::ESSCertIDv2 certHash SECItem
-svl/source/crypto/cryptosign.cxx:176
+svl/source/crypto/cryptosign.cxx:180
     (anonymous namespace)::ESSCertIDv2 issuerSerial IssuerSerial
-svl/source/crypto/cryptosign.cxx:184
+svl/source/crypto/cryptosign.cxx:188
     (anonymous namespace)::SigningCertificateV2 certs ESSCertIDv2 **
 svl/source/misc/inethist.cxx:45
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
@@ -1096,7 +1098,7 @@ svx/source/sidebar/textcolumns/TextColumnsPropertyPanel.hxx:40
     svx::sidebar::TextColumnsPropertyPanel maColumnsNumberController sfx2::sidebar::ControllerItem
 svx/source/sidebar/textcolumns/TextColumnsPropertyPanel.hxx:41
     svx::sidebar::TextColumnsPropertyPanel maColumnsSpacingController sfx2::sidebar::ControllerItem
-svx/source/tbxctrls/tbcontrl.cxx:337
+svx/source/tbxctrls/tbcontrl.cxx:338
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:95
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -1110,7 +1112,7 @@ sw/inc/textboxhelper.hxx:215
     SwTextBoxNode m_bIsCloningInProgress _Bool
 sw/inc/unoframe.hxx:303
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
-sw/inc/view.hxx:195
+sw/inc/view.hxx:198
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
 sw/inc/viewopt.hxx:46
     ViewOptFlags1 bPagebreak _Bool
@@ -1118,7 +1120,7 @@ sw/inc/viewopt.hxx:47
     ViewOptFlags1 bColumnbreak _Bool
 sw/inc/viewopt.hxx:50
     ViewOptFlags1 bRef _Bool
-sw/qa/core/doc/doc.cxx:403
+sw/qa/core/doc/doc.cxx:404
     (anonymous namespace)::SelectionChangeListener m_aAnchors std::vector<uno::Reference<text::XTextRange> >
 sw/source/core/inc/swfont.hxx:988
     SvStatistics nGetTextSize sal_uInt16
@@ -1132,10 +1134,8 @@ sw/source/core/inc/swfont.hxx:992
     SvStatistics nChangeFont sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:135
     SwImplProtocol m_aVars std::vector<tools::Long>
-sw/source/core/table/swtable.cxx:3048
+sw/source/core/table/swtable.cxx:3050
     SwTableCellInfo::Impl m_HandledTableBoxes TableBoxes_t
-sw/source/core/text/porfld.hxx:66
-    SwFieldPortion m_nAttrFieldType sal_uInt16
 sw/source/filter/html/swhtml.hxx:390
     SwHTMLParser m_aOrphanedTableBoxes std::vector<std::unique_ptr<SwTableBox> >
 sw/source/filter/inc/rtf.hxx:29
@@ -1248,7 +1248,7 @@ vcl/inc/sft.hxx:168
     vcl::TTGlobalFontInfo_ linegap int
 vcl/inc/sft.hxx:172
     vcl::TTGlobalFontInfo_ typoLineGap int
-vcl/inc/svdata.hxx:469
+vcl/inc/svdata.hxx:472
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
 vcl/inc/toolbarvalue.hxx:47
     ToolbarValue mbIsTopDockingArea _Bool
@@ -1298,7 +1298,7 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:82
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:20975
+vcl/unx/gtk3/gtkinst.cxx:21000
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection gpointer
@@ -1308,11 +1308,9 @@ vcl/workben/vcldemo.cxx:1741
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/DocumentProtection.hxx:50
     writerfilter::dmapper::DocumentProtection m_sRedlineProtectionKey OUString
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:1107
-    writerfilter::dmapper::DomainMapper_Impl m_nLastTableCellParagraphDepth sal_Int32
 writerfilter/source/dmapper/DomainMapperTableHandler.cxx:244
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
-writerfilter/source/dmapper/PropertyMap.hxx:220
+writerfilter/source/dmapper/PropertyMap.hxx:227
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 writerfilter/source/dmapper/WriteProtection.hxx:36
     writerfilter::dmapper::WriteProtection m_nCryptProviderType sal_Int32

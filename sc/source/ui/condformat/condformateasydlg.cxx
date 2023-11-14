@@ -31,22 +31,6 @@ void UpdateStyleList(const ScDocument* pDocument, weld::ComboBox& rCombo)
     FillStyleListBox(pDocument, rCombo);
     rCombo.set_active_text(sSelectedStyle);
 }
-
-ScTabViewShell* GetTabViewShell(const SfxBindings* pBindings)
-{
-    if (!pBindings)
-        return nullptr;
-    SfxDispatcher* pDispacher = pBindings->GetDispatcher();
-    if (!pDispacher)
-        return nullptr;
-    SfxViewFrame* pFrame = pDispacher->GetFrame();
-    if (!pFrame)
-        return nullptr;
-    SfxViewShell* pViewShell = pFrame->GetViewShell();
-    if (!pViewShell)
-        return nullptr;
-    return dynamic_cast<ScTabViewShell*>(pViewShell);
-}
 }
 
 namespace sc
@@ -74,10 +58,6 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mxButtonCancel(m_xBuilder->weld_button("cancel"))
 {
     mxButtonRangeEdit->SetReferences(this, mxRangeEntry.get());
-    mpTabViewShell = GetTabViewShell(pBindings);
-    if (!mpTabViewShell)
-        mpTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-    OSL_ENSURE(mpTabViewShell, "Missing view shell!");
     const ScConditionMode* pCurrentMode
         = pViewData->GetDocument().GetEasyConditionalFormatDialogData();
     if (!pCurrentMode)

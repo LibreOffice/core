@@ -104,7 +104,6 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xDrwCB(m_xBuilder->weld_check_button("drawings"))
     , m_xDrwImg(m_xBuilder->weld_widget("lockdrawings"))
     , m_xPostItCB(m_xBuilder->weld_check_button("comments"))
-    , m_xPostItImg(m_xBuilder->weld_widget("lockcomments"))
     , m_xSettingsFrame(m_xBuilder->weld_frame("settingsframe"))
     , m_xSettingsLabel(m_xBuilder->weld_label("settingslabel"))
     , m_xMetricLabel(m_xBuilder->weld_label("measureunitlabel"))

@@ -67,7 +67,6 @@ private:
     std::unique_ptr<OLEStorageImpl> mpOLEStorage;
     std::unique_ptr<ZipStorageImpl> mpZipStorage;
     sal_Int64 mnLength;
-    unsigned long mnReadBufferLength;
     unsigned long mnReadBufferPos;
     bool mbCheckedOLE;
     bool mbCheckedZip;

@@ -391,7 +391,6 @@ WPXSvInputStream::WPXSvInputStream(Reference<XInputStream> const& xStream)
     , mxSeekable(xStream, UNO_QUERY)
     , maData(0)
     , mnLength(0)
-    , mnReadBufferLength(0)
     , mnReadBufferPos(0)
     , mbCheckedOLE(false)
     , mbCheckedZip(false)
@@ -739,8 +738,7 @@ WPXSvInputStream::~WPXSvInputStream() {}
 long WPXSvInputStream::tell()
 {
     tools::Long retVal = tellImpl();
-    return retVal - static_cast<tools::Long>(mnReadBufferLength)
-           + static_cast<tools::Long>(mnReadBufferPos);
+    return retVal + static_cast<tools::Long>(mnReadBufferPos);
 }
 
 int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
@@ -763,12 +761,9 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
         retVal = -1;
     }
 
-    if (tmpOffset < tellImpl()
-        && o3tl::make_unsigned(tmpOffset)
-               >= static_cast<unsigned long>(tellImpl()) - mnReadBufferLength)
+    if (tmpOffset < tellImpl() && o3tl::make_unsigned(tmpOffset) >= o3tl::make_unsigned(tellImpl()))
     {
-        mnReadBufferPos = static_cast<unsigned long>(
-            tmpOffset + static_cast<tools::Long>(mnReadBufferLength) - tellImpl());
+        mnReadBufferPos = static_cast<unsigned long>(tmpOffset - tellImpl());
         return retVal;
     }
 
@@ -779,7 +774,7 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
 
 bool WPXSvInputStream::isEnd()
 {
-    if (mnReadBufferPos != mnReadBufferLength)
+    if (mnReadBufferPos != 0)
         return false;
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return true;

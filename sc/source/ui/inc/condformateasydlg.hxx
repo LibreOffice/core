@@ -40,7 +40,6 @@ private:
     ScDocument* mpDocument;
     ScConditionMode meMode;
     ScAddress maPosition;
-    ScTabViewShell* mpTabViewShell;
 
     std::unique_ptr<weld::Entry> mxNumberEntry;
     std::unique_ptr<weld::Entry> mxNumberEntry2;
