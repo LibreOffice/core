@@ -1806,8 +1806,7 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
     }
 }
 
-void ScInputHandler::LOKSendFormulabarUpdate(EditView* pActiveView,
-                                             const SfxViewShell* pActiveViewSh,
+void ScTabViewShell::LOKSendFormulabarUpdate(EditView* pActiveView,
                                              const OUString& rText,
                                              const ESelection& rSelection)
 {
@@ -1824,13 +1823,35 @@ void ScInputHandler::LOKSendFormulabarUpdate(EditView* pActiveView,
             OUString::number(rSelection.nStartPara) + ";" + OUString::number(rSelection.nEndPara);
     }
 
+    sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(this);
+
+    // We can get three updates per keystroke, StartExtTextInput, ExtTextInput and PostExtTextInput
+    // Skip duplicate updates. Be conservative and don't skip duplicates that are 5+ seconds
+    // apart.
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    if (maSendFormulabarUpdate.m_nShellId == nCurrentShellId &&
+        maSendFormulabarUpdate.m_aText == rText &&
+        maSendFormulabarUpdate.m_aSelection == aSelection &&
+        std::chrono::duration_cast<std::chrono::seconds>(
+            now - maSendFormulabarUpdate.m_nTimeStamp) < std::chrono::seconds(5))
+    {
+        return;
+    }
+
+    maSendFormulabarUpdate.m_nShellId = nCurrentShellId;
+    maSendFormulabarUpdate.m_aText = rText;
+    maSendFormulabarUpdate.m_aSelection = aSelection;
+    maSendFormulabarUpdate.m_nTimeStamp = now;
+    maSendFormulabarUpdate.Send();
+}
+
+void ScTabViewShell::SendFormulabarUpdate::Send()
+{
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
     (*pData)["action_type"] = "setText";
-    (*pData)["text"] = rText;
-    (*pData)["selection"] = aSelection;
-
-    sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(pActiveViewSh);
-    OUString sWindowId = OUString::number(nCurrentShellId) + "formulabar";
+    (*pData)["text"] = m_aText;
+    (*pData)["selection"] = m_aSelection;
+    OUString sWindowId = OUString::number(m_nShellId) + "formulabar";
     jsdialog::SendAction(sWindowId, "sc_input_window", std::move(pData));
 }
 
@@ -2815,9 +2836,9 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         if (pActiveView)
             aSel = pActiveView->GetSelection();
 
-        ScInputHandler::LOKSendFormulabarUpdate(pActiveView, pActiveViewSh,
-                                                ScEditUtil::GetMultilineString(*mpEditEngine),
-                                                aSel);
+        pActiveViewSh->LOKSendFormulabarUpdate(pActiveView,
+                                               ScEditUtil::GetMultilineString(*mpEditEngine),
+                                               aSel);
     }
 
     UpdateFormulaMode();
@@ -4295,7 +4316,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         if (aSel.nEndPara == EE_PARA_NOT_FOUND)
                             aSel.nEndPara = 0;
 
-                        ScInputHandler::LOKSendFormulabarUpdate(pActiveView, pActiveViewSh, aString, aSel);
+                        pActiveViewSh->LOKSendFormulabarUpdate(pActiveView, aString, aSel);
                         // TODO: deprecated?
                         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8());
                     }
@@ -4459,7 +4480,7 @@ void ScInputHandler::InputSelection( const EditView* pView )
     {
         EditView* pActiveView = pTopView ? pTopView : pTableView;
         ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
-        ScInputHandler::LOKSendFormulabarUpdate(pActiveView, pActiveViewSh, GetEditString(), aSel);
+        pActiveViewSh->LOKSendFormulabarUpdate(pActiveView, GetEditString(), aSel);
     }
 }
 
