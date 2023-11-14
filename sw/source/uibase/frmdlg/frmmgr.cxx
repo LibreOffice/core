@@ -666,6 +666,10 @@ void SwFlyFrameAttrMgr::SetFrameSizeFromTable()
     // The whole table is selected: default fly width should be the table width
     // in this case.
     m_aSet.Put(pTableFormat->GetFrameSize());
+
+    // The table can have its own border already, so an additional fly border makes no sense.
+    SvxBoxItem aBoxItem(RES_BOX);
+    m_aSet.Put(aBoxItem);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
