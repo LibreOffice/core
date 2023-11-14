@@ -153,7 +153,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilte
     , mbEmbedImages(false)
     , m_bCfgPrintLayout( false )
     , m_bParaDotLeaders( false )
-    , m_bPrettyPrint( true )
 {
     SetBaseURL(rBaseURL);
 

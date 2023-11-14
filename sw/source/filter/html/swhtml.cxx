@@ -1523,7 +1523,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::TEXTTOKEN:
     case HtmlTokenId::CDATA:
         // insert string without spanning attributes at the end.
-        if( !aToken.isEmpty() && ' '==aToken[0] && !IsReadPRE() )
+        if (!aToken.isEmpty() && ' ' == aToken[0] && !IsReadPRE() && !GetPreserveSpaces())
         {
             sal_Int32 nPos = m_pPam->GetPoint()->GetContentIndex();
             const SwTextNode* pTextNode = nPos ? m_pPam->GetPoint()->GetNode().GetTextNode() : nullptr;

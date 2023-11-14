@@ -278,6 +278,7 @@ class SW_DLLPUBLIC SwHTMLWriter : public Writer
 
     FieldUnit m_eCSS1Unit;
 
+    bool m_bPrettyPrint = true; // Allows to add new lines to make it more readable
     bool m_bLFPossible = false; // a line break can be inserted
     bool m_bSpacePreserve = false; // Using xml::space="preserve", or "white-space: pre-wrap" style
     bool m_bPreserveSpacesOnWrite = false; // If export should use m_bSpacePreserve
@@ -419,7 +420,6 @@ public:
 #define sCSS2_P_CLASS_leaders "leaders"
     bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
     bool m_bParaDotLeaders : 1;       // for TOC dot leaders
-    bool m_bPrettyPrint : 1;          // Allows to add new lines to make it more readable
     // 26
 
     /// Tracks which text portion attributes are currently open: a which id -> open count map.
@@ -623,6 +623,7 @@ public:
     /// Determines the prefix string needed to respect the requested namespace alias.
     OString GetNamespace() const;
 
+    bool IsPrettyPrint() const { return !m_bSpacePreserve && m_bPrettyPrint; }
     bool IsLFPossible() const { return !m_bSpacePreserve && m_bLFPossible; }
     void SetLFPossible(bool val) { m_bLFPossible = val; }
     bool IsSpacePreserve() const { return m_bSpacePreserve; }

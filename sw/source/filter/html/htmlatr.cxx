@@ -772,7 +772,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
     if( rInfo.bInNumberBulletList && bNumberedForListItem )
     {
         HtmlWriter html(rWrt.Strm(), rWrt.maNamespace);
-        html.prettyPrint(rWrt.m_bPrettyPrint);
+        html.prettyPrint(rWrt.IsPrettyPrint());
         html.start(OOO_STRING_SVTOOLS_HTML_li ""_ostr);
         if (!bNumbered)
         {
@@ -1015,7 +1015,7 @@ static void OutHTML_SwFormatOff( SwHTMLWriter& rWrt, const SwHTMLTextCollOutputI
 
     if( rInfo.ShouldOutputToken() )
     {
-        if (rWrt.m_bPrettyPrint && rWrt.IsLFPossible())
+        if (rWrt.IsPrettyPrint() && rWrt.IsLFPossible())
             rWrt.OutNewLine( true );
 
         // if necessary, for BLOCKQUOTE, ADDRESS and DD another paragraph token
@@ -2012,26 +2012,70 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rWrt, sal_Int32 nPos )
     }
 }
 
-static bool NeedPreserveWhitespace(std::u16string_view str)
+static constexpr bool IsLF(sal_Unicode ch) { return ch == '\n'; }
+
+static constexpr bool IsWhitespaceExcludingLF(sal_Unicode ch)
+{
+    return ch == ' ' || ch == '\t' || ch == '\r';
+}
+
+static constexpr bool IsWhitespaceIncludingLF(sal_Unicode ch)
+{
+    return IsWhitespaceExcludingLF(ch) || IsLF(ch);
+}
+
+static bool NeedPreserveWhitespace(std::u16string_view str, bool xml)
 {
     if (str.empty())
         return false;
     // leading / trailing spaces
-    if (o3tl::internal::implIsWhitespace(str.front())
-        || o3tl::internal::implIsWhitespace(str.back()))
+    // A leading / trailing \n would turn into a leading / trailing <br/>,
+    // and will not disappear, even without space preserving option
+    if (IsWhitespaceExcludingLF(str.front()) || IsWhitespaceExcludingLF(str.back()))
         return true;
-    bool bWasSpace = false;
-    for (auto ch : str)
+    for (size_t i = 0; i < str.size(); ++i)
     {
-        if (o3tl::internal::implIsWhitespace(ch))
+        if (xml)
         {
-            if (bWasSpace)
-                return true; // Second whitespace in a row
-            else
-                bWasSpace = true;
+            // No need to consider \n, which convert to <br/>, when it's after a space
+            // (but handle it *before* a space)
+            if (IsWhitespaceIncludingLF(str[i]))
+            {
+                do
+                {
+                    ++i;
+                    if (i == str.size())
+                        return false;
+                } while (IsLF(str[i]));
+                if (IsWhitespaceExcludingLF(str[i]))
+                    return true; // Second whitespace in a row
+            }
         }
-        else
-            bWasSpace = false;
+        else // html
+        {
+            // Only consider \n, when an adjacent space is not \n - which would be eaten
+            // without a space preserving option
+            if (IsWhitespaceExcludingLF(str[i]))
+            {
+                ++i;
+                if (i == str.size())
+                    return false;
+                if (IsWhitespaceIncludingLF(str[i]))
+                    return true; // Any whitespace after a non-LF whitespace
+            }
+            else if (IsLF(str[i]))
+            {
+                do
+                {
+                    ++i;
+                    if (i == str.size())
+                        return false;
+                }
+                while (IsLF(str[i]));
+                if (IsWhitespaceExcludingLF(str[i]))
+                    return true; // A non-LF whitespace after a LF
+            }
+        }
     }
     return false;
 }
@@ -2067,7 +2111,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         rWrt.SetLFPossible(true);
 
         HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
-        aHtml.prettyPrint(rWrt.m_bPrettyPrint);
+        aHtml.prettyPrint(rWrt.IsPrettyPrint());
         aHtml.start(OOO_STRING_SVTOOLS_HTML_horzrule ""_ostr);
 
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
@@ -2250,7 +2294,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     bool bOldLFPossible = rWrt.IsLFPossible();
     bool bOldSpacePreserve = rWrt.IsSpacePreserve();
     if (rWrt.IsPreserveSpacesOnWritePrefSet())
-        rWrt.SetSpacePreserve(NeedPreserveWhitespace(rStr));
+        rWrt.SetSpacePreserve(NeedPreserveWhitespace(rStr, rWrt.mbReqIF));
     OutHTML_SwFormat( rWrt, rFormat, pNd->GetpSwAttrSet(), aFormatInfo );
 
     // If we didn't open a new line before the paragraph tag, we do that now
@@ -2265,7 +2309,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     // now it's a good opportunity again for an LF - if it is still allowed
     // FIXME: for LOK case we set rWrt.m_nWishLineLen as -1, for now keep old flow
     // when LOK side will be fixed - don't insert new line at the beginning
-    if( rWrt.IsLFPossible() && rWrt.m_bPrettyPrint && rWrt.m_nWishLineLen >= 0 &&
+    if( rWrt.IsLFPossible() && rWrt.IsPrettyPrint() && rWrt.m_nWishLineLen >= 0 &&
         rWrt.GetLineLen() >= rWrt.m_nWishLineLen )
     {
         rWrt.OutNewLine();
@@ -2504,7 +2548,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
                         nWordLen = nEnd;
                     nWordLen -= nStrPos;
 
-                    if( rWrt.m_bPrettyPrint && rWrt.m_nWishLineLen >= 0 &&
+                    if( rWrt.IsPrettyPrint() && rWrt.m_nWishLineLen >= 0 &&
                         (nLineLen >= rWrt.m_nWishLineLen ||
                         (nLineLen+nWordLen) >= rWrt.m_nWishLineLen ) )
                     {
@@ -2520,7 +2564,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
                     {
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
                         HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
-                        aHtml.prettyPrint(rWrt.m_bPrettyPrint);
+                        aHtml.prettyPrint(rWrt.IsPrettyPrint());
                         aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
                     }
                     else if (c == CH_TXT_ATR_FORMELEMENT)
@@ -2599,7 +2643,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         else
         {
             HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
-            aHtml.prettyPrint(rWrt.m_bPrettyPrint);
+            aHtml.prettyPrint(rWrt.IsPrettyPrint());
             aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
             const SvxULSpaceItem& rULSpace = pNd->GetSwAttrSet().Get(RES_UL_SPACE);
             if (rULSpace.GetLower() > 0 && !bEndOfCell)
@@ -2626,7 +2670,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         }
 
         HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
-        aHtml.prettyPrint(rWrt.m_bPrettyPrint);
+        aHtml.prettyPrint(rWrt.IsPrettyPrint());
         aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pString);
         aHtml.end();
