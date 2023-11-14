@@ -928,16 +928,6 @@ InternetProxyDecider::~InternetProxyDecider()
 }
 
 
-bool InternetProxyDecider::shouldUseProxy( const OUString & rProtocol,
-                                           const OUString & rHost,
-                                           sal_Int32 nPort ) const
-{
-    const InternetProxyServer & rData = m_xImpl->getProxy( rProtocol,
-                                                           rHost,
-                                                           nPort );
-    return !rData.aName.isEmpty();
-}
-
 OUString InternetProxyDecider::getProxy(
                                             const OUString & rProtocol,
                                             const OUString & rHost,

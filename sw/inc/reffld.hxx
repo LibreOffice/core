@@ -163,8 +163,6 @@ public:
     virtual OUString    GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
 
-    void SetText(OUString sText, SwRootFrame* pLayout);
-
     virtual OUString    GetPar2() const override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;

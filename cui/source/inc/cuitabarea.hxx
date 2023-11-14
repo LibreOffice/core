@@ -747,8 +747,6 @@ public:
 
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
 
-    void    SetCtlPreviewOld( const SfxItemSet& rAttrs ) { m_aCtlPreviewOld.SetAttributes( rAttrs ); }
-
     virtual void FillUserData() override;
 };
 

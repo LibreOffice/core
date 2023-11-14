@@ -1162,45 +1162,6 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, si
     return true;
 }
 
-bool Bitmap::CombineOr(const Bitmap& rMask)
-{
-    assert(!dynamic_cast<AlphaMask*>(this) && "should rather be calling AlphaMask::AlphaCombineOr");
-    assert(!dynamic_cast<const AlphaMask*>(&rMask)
-           && "should rather be calling AlphaMask::AlphaCombineOr");
-    ScopedReadAccess pMaskAcc(const_cast<Bitmap&>(rMask));
-    BitmapScopedWriteAccess pAcc(*this);
-
-    if (!pMaskAcc || !pAcc)
-        return false;
-
-    const tools::Long nWidth = std::min(pMaskAcc->Width(), pAcc->Width());
-    const tools::Long nHeight = std::min(pMaskAcc->Height(), pAcc->Height());
-    const Color aColBlack(COL_BLACK);
-    const BitmapColor aWhite(pAcc->GetBestMatchingColor(COL_WHITE));
-    const BitmapColor aBlack(pAcc->GetBestMatchingColor(aColBlack));
-    const BitmapColor aMaskBlack(pMaskAcc->GetBestMatchingColor(aColBlack));
-
-    for (tools::Long nY = 0; nY < nHeight; nY++)
-    {
-        Scanline pScanline = pAcc->GetScanline(nY);
-        Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
-        for (tools::Long nX = 0; nX < nWidth; nX++)
-        {
-            if (pMaskAcc->GetPixelFromData(pScanlineMask, nX) != aMaskBlack
-                || pAcc->GetPixelFromData(pScanline, nX) != aBlack)
-            {
-                pAcc->SetPixelOnData(pScanline, nX, aWhite);
-            }
-            else
-            {
-                pAcc->SetPixelOnData(pScanline, nX, aBlack);
-            }
-        }
-    }
-
-    return true;
-}
-
 // TODO: Have a look at OutputDevice::ImplDrawAlpha() for some
 // optimizations. Might even consolidate the code here and there.
 bool Bitmap::Blend(const AlphaMask& rAlpha, const Color& rBackgroundColor)

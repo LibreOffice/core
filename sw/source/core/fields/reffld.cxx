@@ -366,18 +366,6 @@ SwGetRefField::~SwGetRefField()
 {
 }
 
-void SwGetRefField::SetText(OUString sText, SwRootFrame* pLayout)
-{
-    if (pLayout->IsHideRedlines())
-    {
-        m_sTextRLHidden = sText;
-    }
-    else
-    {
-        m_sText = sText;
-    }
-}
-
 OUString SwGetRefField::GetDescription() const
 {
     return SwResId(STR_REFERENCE);

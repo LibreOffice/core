@@ -240,15 +240,6 @@ public:
                                 const tools::Rectangle& rRectSrc,
                                 const Bitmap* pBmpSrc );
 
-    /** Perform boolean OR operation with another bitmap
-
-        @param rMask
-        The mask bitmap in the selected combine operation
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                    CombineOr( const Bitmap& rMask );
-
     /** Alpha-blend the given bitmap against a specified uniform
           background color.
 

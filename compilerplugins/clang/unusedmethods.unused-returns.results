@@ -28,7 +28,7 @@ framework/source/fwe/classes/addonsoptions.cxx:281
     _Bool framework::AddonsOptions_Impl::ReadToolBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
 framework/source/fwe/classes/addonsoptions.cxx:283
     _Bool framework::AddonsOptions_Impl::ReadNotebookBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
-i18nlangtag/source/languagetag/languagetag.cxx:302
+i18nlangtag/source/languagetag/languagetag.cxx:303
     const rtl::OUString & LanguageTagImpl::getBcp47() const
 include/basegfx/range/b2dconnectedranges.hxx:214
     type-parameter-?-? basegfx::B2DConnectedRanges::forEachAggregate(type-parameter-?-?) const
@@ -40,9 +40,9 @@ include/basic/sbstar.hxx:63
     _Bool StarBASIC::RTError(ErrCode,const rtl::OUString &,int,int,int)
 include/comphelper/backupfilehelper.hxx:205
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(std::basic_string_view<char16_t>)
-include/editeng/editview.hxx:279
+include/editeng/editview.hxx:280
     ErrCode EditView::Read(SvStream &,enum EETextFormat,SvKeyValueIterator *)
-include/editeng/outliner.hxx:282
+include/editeng/outliner.hxx:284
     _Bool OutlinerView::Command(const CommandEvent &)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::crypto::AgileEngine::decryptHmacKey()
@@ -164,7 +164,7 @@ include/test/a11y/AccessibilityTools.hxx:261
     rtl::OUString AccessibilityTools::debugName(com::sun::star::accessibility::XAccessibleAction *)
 include/test/a11y/AccessibilityTools.hxx:262
     rtl::OUString AccessibilityTools::debugName(com::sun::star::accessibility::XAccessibleText *)
-include/test/a11y/eventposter.hxx:91
+include/test/a11y/eventposter.hxx:90
     _Bool test::EventPosterHelper::operator!() const
 include/test/helper/shape.hxx:41
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const com::sun::star::uno::Reference<com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
@@ -172,10 +172,12 @@ include/test/sheet/xnamedrange.hxx:22
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
-include/tools/multisel.hxx:94
+include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
 include/tools/urlobj.hxx:738
     _Bool INetURLObject::SetParam(std::basic_string_view<char16_t>,enum INetURLObject::EncodeMechanism,unsigned short)
+include/unotools/lingucfg.hxx:193
+    _Bool SvtLinguConfig::GetElementNamesFor(const rtl::OUString &,com::sun::star::uno::Sequence<rtl::OUString> &) const
 include/unotools/localedatawrapper.hxx:163
     const com::sun::star::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
 include/vcl/BinaryDataContainer.hxx:61
@@ -278,7 +280,7 @@ sc/source/ui/vba/vbaformat.hxx:145
     com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:136
+sd/source/filter/eppt/pptx-epptooxml.cxx:140
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/filter/html/htmlex.hxx:74
     _Bool HtmlExport::WriteHtml(const rtl::OUString &,_Bool,std::basic_string_view<char16_t>)
@@ -308,19 +310,21 @@ sw/inc/calc.hxx:125
     SwSbxValue & SwSbxValue::MakeDouble()
 sw/inc/crsrsh.hxx:601
     _Bool SwCursorShell::TrySelectOuterTable()
-sw/inc/docary.hxx:300
+sw/inc/docary.hxx:308
     _Bool SwExtraRedlineTable::DeleteAllTableRedlines(SwDoc &,const SwTable &,_Bool,enum RedlineType)
-sw/inc/docary.hxx:301
+sw/inc/docary.hxx:309
     _Bool SwExtraRedlineTable::DeleteTableRowRedline(SwDoc *,const SwTableLine &,_Bool,enum RedlineType)
-sw/inc/docary.hxx:302
+sw/inc/docary.hxx:310
     _Bool SwExtraRedlineTable::DeleteTableCellRedline(SwDoc *,const SwTableBox &,_Bool,enum RedlineType)
-sw/inc/editsh.hxx:493
+sw/inc/editsh.hxx:177
+    _Bool SwEditShell::ReplaceKeepComments(const rtl::OUString &)
+sw/inc/editsh.hxx:497
     _Bool SwEditShell::OutlineUpDown(short)
-sw/inc/editsh.hxx:656
+sw/inc/editsh.hxx:660
     const GraphicAttr * SwEditShell::GetGraphicAttr(GraphicAttr &) const
-sw/inc/editsh.hxx:669
+sw/inc/editsh.hxx:673
     _Bool SwEditShell::GetGrfSize(Size &) const
-sw/inc/editsh.hxx:834
+sw/inc/editsh.hxx:838
     unsigned short SwEditShell::GetRefMarks(std::vector<rtl::OUString> *) const
 sw/inc/IDocumentUndoRedo.hxx:99
     _Bool IDocumentUndoRedo::Undo()
@@ -328,6 +332,8 @@ sw/inc/IDocumentUndoRedo.hxx:180
     _Bool IDocumentUndoRedo::Repeat(sw::RepeatContext &,const unsigned short)
 sw/inc/node.hxx:438
     _Bool SwContentNode::GoNext(struct SwPosition *,enum SwCursorSkipMode) const
+sw/inc/redline.hxx:267
+    _Bool SwRangeRedline::PopAllDataAfter(int)
 sw/inc/tblafmt.hxx:271
     _Bool SwTableAutoFormatTable::Load(SvStream &)
 sw/source/core/inc/laycache.hxx:64
@@ -338,7 +344,7 @@ sw/source/filter/ww8/ww8toolbar.hxx:337
     _Bool Tcg::ImportCustomToolBar(SfxObjectShell &)
 sw/source/uibase/inc/drawbase.hxx:54
     _Bool SwDrawBase::MouseMove(const MouseEvent &)
-sw/source/uibase/inc/fldmgr.hxx:118
+sw/source/uibase/inc/fldmgr.hxx:117
     const com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:78
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
@@ -354,11 +360,11 @@ vcl/inc/font/FeatureCollector.hxx:44
     _Bool vcl::font::FeatureCollector::collect()
 vcl/inc/impgraph.hxx:187
     _Bool ImpGraphic::swapOutGraphic(SvStream &)
-vcl/inc/pdf/pdfwriter_impl.hxx:1338
+vcl/inc/pdf/pdfwriter_impl.hxx:1331
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/inc/pdf/pdfwriter_impl.hxx:1339
+vcl/inc/pdf/pdfwriter_impl.hxx:1332
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/inc/pdf/pdfwriter_impl.hxx:1340
+vcl/inc/pdf/pdfwriter_impl.hxx:1333
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
 vcl/inc/ppdparser.hxx:199
     _Bool psp::PPDParser::getMargins(std::basic_string_view<char16_t>,int &,int &,int &,int &) const
@@ -382,10 +388,26 @@ vcl/inc/qt5/QtMainWindow.hxx:29
     QString QtMainWindow::tr(const char *,const char *,int)
 vcl/inc/qt5/QtMainWindow.hxx:29
     QString QtMainWindow::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtMenu.hxx:42
+    QString QtMenu::tr(const char *,const char *,int)
+vcl/inc/qt5/QtMenu.hxx:42
+    QString QtMenu::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtObject.hxx:35
     QString QtObject::tr(const char *,const char *,int)
 vcl/inc/qt5/QtObject.hxx:35
     QString QtObject::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtTimer.hxx:27
+    QString QtTimer::tr(const char *,const char *,int)
+vcl/inc/qt5/QtTimer.hxx:27
+    QString QtTimer::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtWidget.hxx:37
+    QString QtWidget::tr(const char *,const char *,int)
+vcl/inc/qt5/QtWidget.hxx:37
+    QString QtWidget::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtXAccessible.hxx:27
+    QString QtXAccessible::tr(const char *,const char *,int)
+vcl/inc/qt5/QtXAccessible.hxx:27
+    QString QtXAccessible::trUtf8(const char *,const char *,int)
 vcl/inc/salgdi.hxx:361
     _Bool SalGraphics::UpdateSettings(AllSettings &)
 vcl/inc/salgdi.hxx:363
@@ -396,8 +418,6 @@ vcl/inc/salinst.hxx:177
     _Bool SalInstance::CallEventCallback(const void *,int)
 vcl/inc/salprn.hxx:116
     _Bool SalPrinter::EndJob()
-vcl/inc/salvtables.hxx:1773
-    _Bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter &,int) const
 vcl/inc/unx/gtk/gtkdata.hxx:336
     int GtkSalDisplay::CaptureMouse(SalFrame *)
 vcl/inc/unx/salframe.h:167
@@ -408,21 +428,5 @@ vcl/unx/kf5/KFFilePicker.hxx:29
     QString KFFilePicker::tr(const char *,const char *,int)
 vcl/unx/kf5/KFFilePicker.hxx:29
     QString KFFilePicker::trUtf8(const char *,const char *,int)
-workdir/../vcl/inc/qt5/QtMenu.hxx:42
-    QString QtMenu::tr(const char *,const char *,int)
-workdir/../vcl/inc/qt5/QtMenu.hxx:42
-    QString QtMenu::trUtf8(const char *,const char *,int)
-workdir/../vcl/inc/qt5/QtTimer.hxx:27
-    QString QtTimer::tr(const char *,const char *,int)
-workdir/../vcl/inc/qt5/QtTimer.hxx:27
-    QString QtTimer::trUtf8(const char *,const char *,int)
-workdir/../vcl/inc/qt5/QtWidget.hxx:37
-    QString QtWidget::tr(const char *,const char *,int)
-workdir/../vcl/inc/qt5/QtWidget.hxx:37
-    QString QtWidget::trUtf8(const char *,const char *,int)
-workdir/../vcl/inc/qt5/QtXAccessible.hxx:27
-    QString QtXAccessible::tr(const char *,const char *,int)
-workdir/../vcl/inc/qt5/QtXAccessible.hxx:27
-    QString QtXAccessible::trUtf8(const char *,const char *,int)
 writerfilter/source/dmapper/TagLogger.hxx:59
     typename enable_if<std::is_integral_v<T>, void>::type writerfilter::TagLogger::attribute(const std::basic_string<char> &,type-parameter-?-?)

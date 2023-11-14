@@ -82,27 +82,6 @@ public:
     ~InternetProxyDecider();
 
     /**
-      * Informs whether a proxy server should be used.
-      *
-      * @param rProtocol contains the internet protocol to be used to
-      *         access the server (i.e. "ftp", "http"). The protocol string
-      *         is handled case-insensitive and must not be empty.
-      * @param rHost contains the name of the server that should be accessed.
-      *         This parameter might be left empty. In this case the
-      *         implementation will return whether a proxy is configured
-      *         for the given protocol.
-      * @param nPort contains the port of the server that should be accessed.
-      *         If host is not empty this parameter must always contain a valid
-      *         port number, for instance the default port for the requested
-      *         protocol(i.e. 80 or http).
-      * @return true if a proxy server should be used, false otherwise.
-      */
-    bool
-    shouldUseProxy( const OUString & rProtocol,
-                    const OUString & rHost,
-                    sal_Int32 nPort ) const;
-
-    /**
       * Returns the proxy server to be used.
       *
       * @param rProtocol contains the internet protocol to be used to

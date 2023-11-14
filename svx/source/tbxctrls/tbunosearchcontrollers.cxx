@@ -419,11 +419,6 @@ void FindTextFieldControl::append_text(const OUString& rText)
     m_xWidget->append_text(rText);
 }
 
-void FindTextFieldControl::set_entry_message_type(weld::EntryMessageType eType)
-{
-    m_xWidget->set_entry_message_type(eType);
-}
-
 namespace {
 
 class SearchToolbarControllersManager
