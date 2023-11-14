@@ -451,10 +451,15 @@ class SwCompareOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xAutoRB;
     std::unique_ptr<weld::RadioButton> m_xWordRB;
     std::unique_ptr<weld::RadioButton> m_xCharRB;
+    std::unique_ptr<weld::Widget> m_xCompareModeImg;
     std::unique_ptr<weld::CheckButton> m_xRsidCB;
+    std::unique_ptr<weld::Widget> m_xRsidImg;
     std::unique_ptr<weld::CheckButton> m_xIgnoreCB;
+    std::unique_ptr<weld::Widget> m_xIgnoreImg;
     std::unique_ptr<weld::SpinButton> m_xLenNF;
+    std::unique_ptr<weld::Widget> m_xLenImg;
     std::unique_ptr<weld::CheckButton> m_xStoreRsidCB;
+    std::unique_ptr<weld::Widget> m_xStoreRsidImg;
 
     DECL_LINK(ComparisonHdl, weld::Toggleable&, void);
     DECL_LINK(IgnoreHdl, weld::Toggleable&, void);

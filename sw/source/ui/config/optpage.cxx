@@ -2457,10 +2457,15 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::D
     , m_xAutoRB(m_xBuilder->weld_radio_button("auto"))
     , m_xWordRB(m_xBuilder->weld_radio_button("byword"))
     , m_xCharRB(m_xBuilder->weld_radio_button("bycharacter"))
+    , m_xCompareModeImg(m_xBuilder->weld_widget("lockcomparemode"))
     , m_xRsidCB(m_xBuilder->weld_check_button("useRSID"))
+    , m_xRsidImg(m_xBuilder->weld_widget("lockuseRSID"))
     , m_xIgnoreCB(m_xBuilder->weld_check_button("ignore"))
+    , m_xIgnoreImg(m_xBuilder->weld_widget("lockignore"))
     , m_xLenNF(m_xBuilder->weld_spin_button("ignorelen"))
+    , m_xLenImg(m_xBuilder->weld_widget("lockignorelen"))
     , m_xStoreRsidCB(m_xBuilder->weld_check_button("storeRSID"))
+    , m_xStoreRsidImg(m_xBuilder->weld_widget("lockstoreRSID"))
 {
     Link<weld::Toggleable&,void> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
     m_xAutoRB->connect_toggled( aLnk );
@@ -2581,22 +2586,48 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
         m_xIgnoreCB->set_sensitive(true);
         m_xLenNF->set_sensitive(true);
     }
+
+    if (officecfg::Office::Writer::Comparison::Mode::isReadOnly())
+    {
+        m_xAutoRB->set_sensitive(false);
+        m_xWordRB->set_sensitive(false);
+        m_xCharRB->set_sensitive(false);
+        m_xCompareModeImg->set_visible(true);
+    }
+
     m_xAutoRB->save_state();
     m_xWordRB->save_state();
     m_xCharRB->save_state();
 
     m_xRsidCB->set_active( pOpt->IsUseRsid() );
+    if (officecfg::Office::Writer::Comparison::UseRSID::isReadOnly())
+    {
+        m_xRsidCB->set_sensitive(false);
+        m_xRsidImg->set_visible(true);
+    }
     m_xRsidCB->save_state();
 
     m_xIgnoreCB->set_active( pOpt->IsIgnorePieces() );
+    if (officecfg::Office::Writer::Comparison::IgnorePieces::isReadOnly())
+    {
+        m_xIgnoreCB->set_sensitive(false);
+        m_xIgnoreImg->set_visible(true);
+    }
     m_xIgnoreCB->save_state();
 
     m_xLenNF->set_sensitive( m_xIgnoreCB->get_active() && eCmpMode != SwCompareMode::Auto );
 
     m_xLenNF->set_value( pOpt->GetPieceLen() );
+    if (officecfg::Office::Writer::Comparison::IgnoreLength::isReadOnly())
+    {
+        m_xLenNF->set_sensitive(false);
+        m_xLenImg->set_visible(true);
+    }
     m_xLenNF->save_value();
 
     m_xStoreRsidCB->set_active(pOpt->IsStoreRsid());
+    m_xStoreRsidCB->set_sensitive(!officecfg::Office::Writer::Comparison::StoreRSID::isReadOnly());
+    m_xStoreRsidImg->set_visible(officecfg::Office::Writer::Comparison::StoreRSID::isReadOnly());
     m_xStoreRsidCB->save_state();
 }
 
