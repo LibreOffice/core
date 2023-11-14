@@ -530,7 +530,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                                                   GetView().GetViewFrame(),
                                                   GetView().GetFrameWeld(),
                                                   aSet));
-            pDlg->StartExecuteAsync([pDlg, nSlot, this](sal_Int32 nResult) {
+            pDlg->StartExecuteAsync([aSet, pDlg, nSlot, this](sal_Int32 nResult) {
                 if (nResult == RET_OK && pDlg->GetOutputItemSet())
                 {
                     SwFlyFrameAttrMgr aAttrMgr( true, GetShellPtr(), Frmmgr_Type::TEXT, nullptr );
@@ -540,8 +540,17 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     rShell.StartAllAction();
                     rShell.StartUndo(SwUndoId::INSERT);
 
-                    const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                        aAttrMgr.SetAttrSet(*pOutSet);
+                    SfxItemSet aOutSet(*pDlg->GetOutputItemSet());
+                    const SvxBoxItem* pBox = aSet.GetItem(RES_BOX);
+                    if (pBox && !aOutSet.HasItem(RES_BOX))
+                    {
+                        // The input set had border info but the output set not, then copy it over
+                        // to not lose the custom border info. This can happen when a whole table
+                        // is selected and that case has its own defaults, not matching the frame
+                        // style.
+                        aOutSet.Put(*pBox);
+                    }
+                    aAttrMgr.SetAttrSet(aOutSet);
 
                     // At first delete the selection at the ClickToEditField.
                     if( rShell.IsInClickToEdit() )

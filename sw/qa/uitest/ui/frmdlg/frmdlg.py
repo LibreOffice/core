@@ -98,6 +98,11 @@ class Test(UITestCase):
             # inserted first, only then it could be marked as "split allowed".
             self.assertEqual(fly_split_visible, True)
 
+            # Without the accompanying fix in place, this test would have failed with:
+            # AssertionError: 2 != 0
+            # i.e. the frame had a border by default when the table already had its own border.
+            self.assertEqual(xComponent.TextFrames.Frame1.LeftBorder.LineWidth, 0)
+
     def test_insert_simple_frame(self):
         # Given a Writer document:
         with self.ui_test.create_doc_in_start_center("writer") as xComponent:
