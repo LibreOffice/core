@@ -2824,6 +2824,153 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
     CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_NoPreserveSpaces)
+{
+    // Test cases where "PreserveSpaces" should not introduce respective markup
+
+    const auto assertXPath_NoWhiteSpaceInStyle
+        = [this](const xmlDocUniquePtr& pDoc, const OString& rXPath) {
+              xmlXPathObjectPtr pXmlObj = getXPathNode(pDoc, rXPath);
+              xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+              CPPUNIT_ASSERT_EQUAL_MESSAGE(rXPath.getStr(), 1, xmlXPathNodeSetGetLength(pXmlNodes));
+              xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+              if (xmlChar* prop = xmlGetProp(pXmlNode, BAD_CAST("style")))
+              {
+                  OUString style = OUString::fromUtf8(reinterpret_cast<const char*>(prop));
+                  CPPUNIT_ASSERT_MESSAGE(rXPath.getStr(), style.indexOf("white-space:") < 0);
+              }
+              xmlXPathFreeObject(pXmlObj);
+          };
+    const auto assertXPath_HasWhiteSpaceInStyle
+        = [this](const xmlDocUniquePtr& pDoc, const OString& rXPath) {
+              const OUString style = getXPath(pDoc, rXPath, "style");
+              CPPUNIT_ASSERT_MESSAGE(rXPath.getStr(), style.indexOf("white-space: pre-wrap") >= 0);
+          };
+
+    createSwDoc("test_no_space_preserve.fodt");
+
+    // Export to plain HTML, using PreserveSpaces:
+    uno::Reference<css::frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    css::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("PreserveSpaces", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+
+    // No whitespace preservation, where no leading / trailing / double whitespace
+    assertXPath_NoWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[1]");
+    // Whitespace preserved for a leading space
+    assertXPath_HasWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[2]");
+    // Whitespace preserved for a trailing space
+    assertXPath_HasWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[3]");
+    // Whitespace preserved for a double space
+    assertXPath_HasWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[4]");
+    // No whitespace preservation for leading / trailing breaks
+    assertXPath_NoWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[5]");
+    // Whitespace preserved for a leading break + space
+    assertXPath_HasWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[6]");
+    // Whitespace preserved for a trailing space + break
+    assertXPath_HasWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[7]");
+    // No whitespace preservation for a middle break
+    assertXPath_NoWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[8]");
+    // Whitespace preserved for a middle space + break
+    assertXPath_HasWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[9]");
+    // Whitespace preserved for a middle break + space
+    assertXPath_HasWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[10]");
+    // No whitespace preservation for a trailing space and SVG
+    assertXPath_NoWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[11]");
+
+    // Test import
+
+    setImportFilterName("HTML (StarWriter)");
+    UnoApiTest::load(maTempFile.GetURL());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("No special spaces"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(" Leading space"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Trailing space "), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Double  space"), getParagraph(4)->getString());
+    // Trailing break is removed in SwHTMLParser::AppendTextNode, and replaced with para spacing
+    CPPUNIT_ASSERT_EQUAL(OUString("\nLeading/trailing breaks"), getParagraph(5)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("\n Leading break + space"), getParagraph(6)->getString());
+    // Trailing break is removed in SwHTMLParser::AppendTextNode, and replaced with para spacing
+    CPPUNIT_ASSERT_EQUAL(OUString("Trailing space + break "), getParagraph(7)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Middle\nbreak"), getParagraph(8)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Middle space \n+ break"), getParagraph(9)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Middle break\n + space"), getParagraph(10)->getString());
+    // The SVG is replaced by a space in SwXParagraph::getString()
+    CPPUNIT_ASSERT_EQUAL(OUString("Trailing space and SVG  "), getParagraph(11)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoPreserveSpaces)
+{
+    // Test cases where "PreserveSpaces" should not introduce respective markup
+
+    createSwDoc("test_no_space_preserve.fodt");
+
+    // Export to ReqIF, using PreserveSpaces:
+    uno::Reference<css::frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    css::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("PreserveSpaces", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+
+    // No whitespace preservation, where no leading / trailing / double whitespace
+    assertXPathNoAttribute(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[1]", "space");
+    // Whitespace preserved for a leading space
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[2]", "space",
+                u"preserve");
+    // Whitespace preserved for a trailing space
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[3]", "space",
+                u"preserve");
+    // Whitespace preserved for a double space
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[4]", "space",
+                u"preserve");
+    // No whitespace preservation for leading / trailing breaks
+    assertXPathNoAttribute(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[5]", "space");
+    // Whitespace preserved for a leading break + space
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[6]", "space",
+                u"preserve");
+    // No whitespace preservation for a trailing space + break
+    assertXPathNoAttribute(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[7]", "space");
+    // No whitespace preservation for a middle break
+    assertXPathNoAttribute(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[8]", "space");
+    // No whitespace preservation for a middle space + break
+    assertXPathNoAttribute(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[9]", "space");
+    // Whitespace preserved for a middle break + space
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[10]", "space",
+                u"preserve");
+    // No whitespace preservation for a trailing space and SVG
+    assertXPathNoAttribute(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[11]", "space");
+
+    // Test import
+
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    UnoApiTest::load(maTempFile.GetURL());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("No special spaces"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(" Leading space"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Trailing space "), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Double  space"), getParagraph(4)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("\nLeading/trailing breaks\n"), getParagraph(5)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("\n Leading break + space"), getParagraph(6)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Trailing space + break \n"), getParagraph(7)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Middle\nbreak"), getParagraph(8)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Middle space \n+ break"), getParagraph(9)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Middle break\n + space"), getParagraph(10)->getString());
+    // The SVG is replaced by a space in SwXParagraph::getString()
+    CPPUNIT_ASSERT_EQUAL(OUString("Trailing space and SVG  "), getParagraph(11)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
 {
     // Given a document with a formula:
