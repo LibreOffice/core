@@ -134,7 +134,7 @@ bool LayerTabBar::IsRealNameOfStandardLayer(std::u16string_view rName)
 void LayerTabBar::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-    pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::ASYNCHRON);
+    pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::SYNCHRON);
 }
 
 void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)

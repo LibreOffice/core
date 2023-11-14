@@ -1278,7 +1278,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     if ( !aActiveLayer.isEmpty() && pPV )
-        rSet.Put( SfxBoolItem(SID_TOGGLELAYERVISIBILITY, pPageView->IsLayerVisible(aActiveLayer)) );
+        rSet.Put( SfxBoolItem(SID_TOGGLELAYERVISIBILITY, !pPageView->IsLayerVisible(aActiveLayer)) );
 
     // are the modules available?
 

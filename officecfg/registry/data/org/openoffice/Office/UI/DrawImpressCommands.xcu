@@ -999,10 +999,10 @@
           <value xml:lang="en-US">Toggle Layer Visibility</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Show Layer</value>
+          <value xml:lang="en-US">~Hide Layer</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Show Layer (Shift+Click)</value>
+          <value xml:lang="en-US">~Hide Layer (Shift+Click)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
