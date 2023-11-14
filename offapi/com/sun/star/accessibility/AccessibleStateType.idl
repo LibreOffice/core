@@ -34,7 +34,7 @@ module com { module sun { module star { module accessibility {
 
     <p>These states are giving values corresponding to the bits of a 64-bit
     value, since we OR them together to create bitsets to represent the
-    combinated state of an accessibility object .</p>
+    combined state of an accessibility object .</p>
 
     @since OOo 1.1.2
 */
