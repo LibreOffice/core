@@ -91,9 +91,26 @@ enum ObjectSelectionType
 };
 
 class ScFormEditData;
-class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
+class SC_DLLPUBLIC ScTabViewShell : public SfxViewShell, public ScDBFunc
 {
 private:
+    struct SendFormulabarUpdate
+    {
+        OUString m_aText;
+        OUString m_aSelection;
+        sal_uInt64 m_nShellId;
+        std::chrono::steady_clock::time_point m_nTimeStamp;
+
+        SendFormulabarUpdate()
+            : m_nShellId(0)
+        {
+        }
+
+        void Send();
+    };
+
+    SendFormulabarUpdate maSendFormulabarUpdate;
+
     ObjectSelectionType     eCurOST;
     sal_uInt16              nDrawSfxId;
     SdrObjKind              eFormObjKind;
@@ -403,6 +420,7 @@ public:
     /// is equal to nCurrentTabIndex
     static void notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pForViewShell, bool bColumns, bool bRows, bool bSizes,
                                                     bool bHidden, bool bFiltered, bool bGroups, SCTAB nCurrentTabIndex);
+    void LOKSendFormulabarUpdate(EditView* pEditView, const OUString& rText, const ESelection& rSelection);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     static  css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 
