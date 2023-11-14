@@ -189,6 +189,7 @@ protected:
 
     void SetNamespace(std::u16string_view rNamespace);
 
+    bool GetPreserveSpaces() const { return m_bPreserveSpaces; }
     void SetPreserveSpaces(bool val) { m_bPreserveSpaces = val; }
 
 public:
