@@ -791,8 +791,9 @@ OUString RTFDocumentImpl::getStyleName(int nIndex)
     if (!m_pSuperstream)
     {
         OUString aRet;
-        if (m_aStyleNames.find(nIndex) != m_aStyleNames.end())
-            aRet = m_aStyleNames[nIndex];
+        auto it = m_aStyleNames.find(nIndex);
+        if (it != m_aStyleNames.end())
+            aRet = it->second;
         return aRet;
     }
 
@@ -804,8 +805,9 @@ Id RTFDocumentImpl::getStyleType(int nIndex)
     if (!m_pSuperstream)
     {
         Id nRet = 0;
-        if (m_aStyleTypes.find(nIndex) != m_aStyleTypes.end())
-            nRet = m_aStyleTypes[nIndex];
+        auto it = m_aStyleTypes.find(nIndex);
+        if (it != m_aStyleTypes.end())
+            nRet = it->second;
         return nRet;
     }
 
