@@ -1259,19 +1259,31 @@ SwTableOptionsTabPage::SwTableOptionsTabPage(weld::Container* pPage, weld::Dialo
     , m_pWrtShell(nullptr)
     , m_bHTMLMode(false)
     , m_xHeaderCB(m_xBuilder->weld_check_button("header"))
+    , m_xHeaderImg(m_xBuilder->weld_widget("lockheader"))
     , m_xRepeatHeaderCB(m_xBuilder->weld_check_button("repeatheader"))
+    , m_xRepeatHeaderImg(m_xBuilder->weld_widget("lockrepeatheader"))
     , m_xDontSplitCB(m_xBuilder->weld_check_button("dontsplit"))
+    , m_xDontSplitImg(m_xBuilder->weld_widget("lockdontsplit"))
     , m_xBorderCB(m_xBuilder->weld_check_button("border"))
+    , m_xBorderImg(m_xBuilder->weld_widget("lockborder"))
     , m_xNumFormattingCB(m_xBuilder->weld_check_button("numformatting"))
+    , m_xNumFormattingImg(m_xBuilder->weld_widget("locknumformatting"))
     , m_xNumFormatFormattingCB(m_xBuilder->weld_check_button("numfmtformatting"))
+    , m_xNumFormatFormattingImg(m_xBuilder->weld_widget("locknumfmtformatting"))
     , m_xNumAlignmentCB(m_xBuilder->weld_check_button("numalignment"))
+    , m_xNumAlignmentImg(m_xBuilder->weld_widget("locknumalignment"))
     , m_xRowMoveMF(m_xBuilder->weld_metric_spin_button("rowmove", FieldUnit::CM))
+    , m_xRowMoveImg(m_xBuilder->weld_widget("lockrowmove"))
     , m_xColMoveMF(m_xBuilder->weld_metric_spin_button("colmove", FieldUnit::CM))
+    , m_xColMoveImg(m_xBuilder->weld_widget("lockcolmove"))
     , m_xRowInsertMF(m_xBuilder->weld_metric_spin_button("rowinsert", FieldUnit::CM))
+    , m_xRowInsertImg(m_xBuilder->weld_widget("lockrowinsert"))
     , m_xColInsertMF(m_xBuilder->weld_metric_spin_button("colinsert", FieldUnit::CM))
+    , m_xColInsertImg(m_xBuilder->weld_widget("lockcolinsert"))
     , m_xFixRB(m_xBuilder->weld_radio_button("fix"))
     , m_xFixPropRB(m_xBuilder->weld_radio_button("fixprop"))
     , m_xVarRB(m_xBuilder->weld_radio_button("var"))
+    , m_xBehaviorOfImg(m_xBuilder->weld_widget("lockbehaviorof"))
 {
     Link<weld::Toggleable&,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
     m_xNumFormattingCB->connect_toggled(aLnk);
@@ -1423,9 +1435,20 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     }
 
     m_xRowMoveMF->set_value(m_xRowMoveMF->normalize(pModOpt->GetTableHMove()), FieldUnit::TWIP);
+    m_xRowMoveMF->set_sensitive(!officecfg::Office::Writer::Table::Shift::Row::isReadOnly());
+    m_xRowMoveImg->set_visible(officecfg::Office::Writer::Table::Shift::Row::isReadOnly());
+
     m_xColMoveMF->set_value(m_xColMoveMF->normalize(pModOpt->GetTableVMove()), FieldUnit::TWIP);
+    m_xColMoveMF->set_sensitive(!officecfg::Office::Writer::Table::Shift::Column::isReadOnly());
+    m_xColMoveImg->set_visible(officecfg::Office::Writer::Table::Shift::Column::isReadOnly());
+
     m_xRowInsertMF->set_value(m_xRowInsertMF->normalize(pModOpt->GetTableHInsert()), FieldUnit::TWIP);
+    m_xRowInsertMF->set_sensitive(!officecfg::Office::Writer::Table::Insert::Row::isReadOnly());
+    m_xRowInsertImg->set_visible(officecfg::Office::Writer::Table::Insert::Row::isReadOnly());
+
     m_xColInsertMF->set_value(m_xColInsertMF->normalize(pModOpt->GetTableVInsert()), FieldUnit::TWIP);
+    m_xColInsertMF->set_sensitive(!officecfg::Office::Writer::Table::Insert::Column::isReadOnly());
+    m_xColInsertImg->set_visible(officecfg::Office::Writer::Table::Insert::Column::isReadOnly());
 
     switch(pModOpt->GetTableMode())
     {
@@ -1445,17 +1468,44 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
         m_xDontSplitCB->hide();
     }
 
+    if (officecfg::Office::Writer::Table::Change::Effect::isReadOnly())
+    {
+        m_xFixRB->set_sensitive(false);
+        m_xFixPropRB->set_sensitive(false);
+        m_xVarRB->set_sensitive(false);
+        m_xBehaviorOfImg->set_visible(true);
+    }
+
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(m_bHTMLMode);
     const SwInsertTableFlags nInsTableFlags = aInsOpts.mnInsMode;
 
     m_xHeaderCB->set_active(bool(nInsTableFlags & SwInsertTableFlags::Headline));
+    m_xHeaderCB->set_sensitive(!officecfg::Office::Writer::Insert::Table::Header::isReadOnly());
+    m_xHeaderImg->set_visible(officecfg::Office::Writer::Insert::Table::Header::isReadOnly());
+
     m_xRepeatHeaderCB->set_active((!m_bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
+    m_xRepeatHeaderCB->set_sensitive(!officecfg::Office::Writer::Insert::Table::RepeatHeader::isReadOnly());
+    m_xRepeatHeaderImg->set_visible(officecfg::Office::Writer::Insert::Table::RepeatHeader::isReadOnly());
+
     m_xDontSplitCB->set_active(!(nInsTableFlags & SwInsertTableFlags::SplitLayout));
+    m_xDontSplitCB->set_sensitive(!officecfg::Office::Writer::Insert::Table::Split::isReadOnly());
+    m_xDontSplitImg->set_visible(officecfg::Office::Writer::Insert::Table::Split::isReadOnly());
+
     m_xBorderCB->set_active(bool(nInsTableFlags & SwInsertTableFlags::DefaultBorder));
+    m_xBorderCB->set_sensitive(!officecfg::Office::Writer::Insert::Table::Border::isReadOnly());
+    m_xBorderImg->set_visible(officecfg::Office::Writer::Insert::Table::Border::isReadOnly());
 
     m_xNumFormattingCB->set_active(pModOpt->IsInsTableFormatNum(m_bHTMLMode));
+    m_xNumFormattingCB->set_sensitive(!officecfg::Office::Writer::Table::Input::NumberRecognition::isReadOnly());
+    m_xNumFormattingImg->set_visible(officecfg::Office::Writer::Table::Input::NumberRecognition::isReadOnly());
+
     m_xNumFormatFormattingCB->set_active(pModOpt->IsInsTableChangeNumFormat(m_bHTMLMode));
+    m_xNumFormatFormattingCB->set_sensitive(!officecfg::Office::Writer::Table::Input::NumberFormatRecognition::isReadOnly());
+    m_xNumFormatFormattingImg->set_visible(officecfg::Office::Writer::Table::Input::NumberFormatRecognition::isReadOnly());
+
     m_xNumAlignmentCB->set_active(pModOpt->IsInsTableAlignNum(m_bHTMLMode));
+    m_xNumAlignmentCB->set_sensitive(!officecfg::Office::Writer::Table::Input::Alignment::isReadOnly());
+    m_xNumAlignmentImg->set_visible(officecfg::Office::Writer::Table::Input::Alignment::isReadOnly());
 
     m_xHeaderCB->save_state();
     m_xRepeatHeaderCB->save_state();
@@ -1474,9 +1524,12 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
 
 IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, weld::Toggleable&, void)
 {
-    m_xNumFormatFormattingCB->set_sensitive(m_xNumFormattingCB->get_active());
-    m_xNumAlignmentCB->set_sensitive(m_xNumFormattingCB->get_active());
-    m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active());
+    m_xNumFormatFormattingCB->set_sensitive(m_xNumFormattingCB->get_active() &&
+        !officecfg::Office::Writer::Table::Input::NumberFormatRecognition::isReadOnly());
+    m_xNumAlignmentCB->set_sensitive(m_xNumFormattingCB->get_active() &&
+        !officecfg::Office::Writer::Table::Input::Alignment::isReadOnly());
+    m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active() &&
+        !officecfg::Office::Writer::Insert::Table::RepeatHeader::isReadOnly());
 }
 
 void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)

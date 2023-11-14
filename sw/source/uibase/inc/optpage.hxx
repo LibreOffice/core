@@ -226,23 +226,35 @@ class SwTableOptionsTabPage final : public SfxTabPage
     bool        m_bHTMLMode;
 
     std::unique_ptr<weld::CheckButton> m_xHeaderCB;
+    std::unique_ptr<weld::Widget> m_xHeaderImg;
     std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
+    std::unique_ptr<weld::Widget> m_xRepeatHeaderImg;
     std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
+    std::unique_ptr<weld::Widget> m_xDontSplitImg;
     std::unique_ptr<weld::CheckButton> m_xBorderCB;
+    std::unique_ptr<weld::Widget> m_xBorderImg;
 
     std::unique_ptr<weld::CheckButton> m_xNumFormattingCB;
+    std::unique_ptr<weld::Widget> m_xNumFormattingImg;
     std::unique_ptr<weld::CheckButton> m_xNumFormatFormattingCB;
+    std::unique_ptr<weld::Widget> m_xNumFormatFormattingImg;
     std::unique_ptr<weld::CheckButton> m_xNumAlignmentCB;
+    std::unique_ptr<weld::Widget> m_xNumAlignmentImg;
 
     std::unique_ptr<weld::MetricSpinButton> m_xRowMoveMF;
+    std::unique_ptr<weld::Widget> m_xRowMoveImg;
     std::unique_ptr<weld::MetricSpinButton> m_xColMoveMF;
+    std::unique_ptr<weld::Widget> m_xColMoveImg;
 
     std::unique_ptr<weld::MetricSpinButton> m_xRowInsertMF;
+    std::unique_ptr<weld::Widget> m_xRowInsertImg;
     std::unique_ptr<weld::MetricSpinButton> m_xColInsertMF;
+    std::unique_ptr<weld::Widget> m_xColInsertImg;
 
     std::unique_ptr<weld::RadioButton> m_xFixRB;
     std::unique_ptr<weld::RadioButton> m_xFixPropRB;
     std::unique_ptr<weld::RadioButton> m_xVarRB;
+    std::unique_ptr<weld::Widget> m_xBehaviorOfImg;
 
     DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
 
