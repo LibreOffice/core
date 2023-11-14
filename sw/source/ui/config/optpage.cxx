@@ -1972,23 +1972,31 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage(weld::Container* pPage, weld::D
                                                  const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/optredlinepage.ui", "OptRedLinePage", &rSet)
     , m_xInsertLB(m_xBuilder->weld_combo_box("insert"))
+    , m_xInsertImg(m_xBuilder->weld_widget("lockinsert"))
     , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertcolor"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xInsertColorImg(m_xBuilder->weld_widget("lockinsertcolor"))
     , m_xInsertedPreviewWN(new SvxFontPrevWindow)
     , m_xInsertedPreview(new weld::CustomWeld(*m_xBuilder, "insertedpreview", *m_xInsertedPreviewWN))
     , m_xDeletedLB(m_xBuilder->weld_combo_box("deleted"))
+    , m_xDeletedImg(m_xBuilder->weld_widget("lockdeleted"))
     , m_xDeletedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletedcolor"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xDeletedColorImg(m_xBuilder->weld_widget("lockdeletedcolor"))
     , m_xDeletedPreviewWN(new SvxFontPrevWindow)
     , m_xDeletedPreview(new weld::CustomWeld(*m_xBuilder, "deletedpreview", *m_xDeletedPreviewWN))
     , m_xChangedLB(m_xBuilder->weld_combo_box("changed"))
+    , m_xChangedImg(m_xBuilder->weld_widget("lockchanged"))
     , m_xChangedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changedcolor"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xChangedColorImg(m_xBuilder->weld_widget("lockchangedcolor"))
     , m_xChangedPreviewWN(new SvxFontPrevWindow)
     , m_xChangedPreview(new weld::CustomWeld(*m_xBuilder, "changedpreview", *m_xChangedPreviewWN))
     , m_xMarkPosLB(m_xBuilder->weld_combo_box("markpos"))
+    , m_xMarkPosImg(m_xBuilder->weld_widget("lockmarkpos"))
     , m_xMarkColorLB(new ColorListBox(m_xBuilder->weld_menu_button("markcolor"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xMarkColorImg(m_xBuilder->weld_widget("lockmarkcolor"))
     , m_xMarkPreviewWN(new SwMarkPreview)
     , m_xMarkPreview(new weld::CustomWeld(*m_xBuilder, "markpreview", *m_xMarkPreviewWN))
 {
@@ -2161,18 +2169,32 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
 
     Color nColor = rInsertAttr.m_nColor;
     m_xInsertColorLB->SelectEntry(nColor);
+    m_xInsertColorLB->set_sensitive(!officecfg::Office::Writer::Revision::TextDisplay::Insert::Attribute::isReadOnly());
+    m_xInsertColorImg->set_visible(officecfg::Office::Writer::Revision::TextDisplay::Insert::Attribute::isReadOnly());
 
     nColor = rDeletedAttr.m_nColor;
     m_xDeletedColorLB->SelectEntry(nColor);
+    m_xDeletedColorLB->set_sensitive(!officecfg::Office::Writer::Revision::TextDisplay::Delete::Attribute::isReadOnly());
+    m_xDeletedColorImg->set_visible(officecfg::Office::Writer::Revision::TextDisplay::Delete::Attribute::isReadOnly());
 
     nColor = rChangedAttr.m_nColor;
     m_xChangedColorLB->SelectEntry(nColor);
+    m_xChangedColorLB->set_sensitive(!officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Attribute::isReadOnly());
+    m_xChangedColorImg->set_visible(officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Attribute::isReadOnly());
 
     m_xMarkColorLB->SelectEntry(pOpt->GetMarkAlignColor());
+    m_xMarkColorLB->set_sensitive(!officecfg::Office::Writer::Revision::LinesChanged::Color::isReadOnly());
+    m_xMarkColorImg->set_visible(officecfg::Office::Writer::Revision::LinesChanged::Color::isReadOnly());
 
     m_xInsertLB->set_active(0);
+    m_xInsertLB->set_sensitive(!officecfg::Office::Writer::Revision::TextDisplay::Insert::Color::isReadOnly());
+    m_xInsertImg->set_visible(officecfg::Office::Writer::Revision::TextDisplay::Insert::Color::isReadOnly());
     m_xDeletedLB->set_active(0);
+    m_xDeletedLB->set_sensitive(!officecfg::Office::Writer::Revision::TextDisplay::Delete::Color::isReadOnly());
+    m_xDeletedImg->set_visible(officecfg::Office::Writer::Revision::TextDisplay::Delete::Color::isReadOnly());
     m_xChangedLB->set_active(0);
+    m_xChangedLB->set_sensitive(!officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Color::isReadOnly());
+    m_xChangedImg->set_visible(officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Color::isReadOnly());
 
     lcl_FillRedlineAttrListBox(*m_xInsertLB, rInsertAttr, aInsertAttrMap, SAL_N_ELEMENTS(aInsertAttrMap));
     lcl_FillRedlineAttrListBox(*m_xDeletedLB, rDeletedAttr, aDeletedAttrMap, SAL_N_ELEMENTS(aDeletedAttrMap));
@@ -2188,6 +2210,8 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
         case text::HoriOrientation::INSIDE:   nPos = 4;   break;
     }
     m_xMarkPosLB->set_active(nPos);
+    m_xMarkPosLB->set_sensitive(!officecfg::Office::Writer::Revision::LinesChanged::Mark::isReadOnly());
+    m_xMarkPosImg->set_visible(officecfg::Office::Writer::Revision::LinesChanged::Mark::isReadOnly());
 
     // show settings in preview
     AttribHdl(*m_xInsertLB);

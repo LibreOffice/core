@@ -363,22 +363,30 @@ public:
 class SwRedlineOptionsTabPage final : public SfxTabPage
 {
     std::unique_ptr<weld::ComboBox> m_xInsertLB;
+    std::unique_ptr<weld::Widget> m_xInsertImg;
     std::unique_ptr<ColorListBox> m_xInsertColorLB;
+    std::unique_ptr<weld::Widget> m_xInsertColorImg;
     std::unique_ptr<SvxFontPrevWindow> m_xInsertedPreviewWN;
     std::unique_ptr<weld::CustomWeld> m_xInsertedPreview;
 
     std::unique_ptr<weld::ComboBox> m_xDeletedLB;
+    std::unique_ptr<weld::Widget> m_xDeletedImg;
     std::unique_ptr<ColorListBox> m_xDeletedColorLB;
+    std::unique_ptr<weld::Widget> m_xDeletedColorImg;
     std::unique_ptr<SvxFontPrevWindow> m_xDeletedPreviewWN;
     std::unique_ptr<weld::CustomWeld> m_xDeletedPreview;
 
     std::unique_ptr<weld::ComboBox> m_xChangedLB;
+    std::unique_ptr<weld::Widget> m_xChangedImg;
     std::unique_ptr<ColorListBox> m_xChangedColorLB;
+    std::unique_ptr<weld::Widget> m_xChangedColorImg;
     std::unique_ptr<SvxFontPrevWindow> m_xChangedPreviewWN;
     std::unique_ptr<weld::CustomWeld> m_xChangedPreview;
 
     std::unique_ptr<weld::ComboBox> m_xMarkPosLB;
+    std::unique_ptr<weld::Widget> m_xMarkPosImg;
     std::unique_ptr<ColorListBox> m_xMarkColorLB;
+    std::unique_ptr<weld::Widget> m_xMarkColorImg;
     std::unique_ptr<SwMarkPreview> m_xMarkPreviewWN;
     std::unique_ptr<weld::CustomWeld> m_xMarkPreview;
 
