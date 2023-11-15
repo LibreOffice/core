@@ -68,6 +68,55 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableBorder)
     // missing.
     CPPUNIT_ASSERT_EQUAL(4, nHorizontalBorders);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitTableMergedBorder)
+{
+    // Given a document with a split table, first row in frame 1 has merged cells:
+    createSwDoc("split-table-merged-border.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+
+    // When rendering that document:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+
+    // Then make sure that the master table has a bottom border with the correct widths:
+    MetafileXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    std::set<int> aHorizontalBorderStarts;
+    std::set<int> aHorizontalBorderEnds;
+    // Collect the horizontal borders:
+    for (int i = 0; i < xmlXPathNodeSetGetLength(pXmlNodes); i += 2)
+    {
+        xmlNodePtr pStart = pXmlNodes->nodeTab[i];
+        xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
+        xmlChar* pStartY = xmlGetProp(pStart, BAD_CAST("y"));
+        xmlChar* pEndY = xmlGetProp(pEnd, BAD_CAST("y"));
+        sal_Int32 nStartY = o3tl::toInt32(reinterpret_cast<char const*>(pStartY));
+        sal_Int32 nEndY = o3tl::toInt32(reinterpret_cast<char const*>(pEndY));
+        if (nStartY != nEndY)
+        {
+            // Vertical border.
+            continue;
+        }
+
+        xmlChar* pStartX = xmlGetProp(pStart, BAD_CAST("x"));
+        xmlChar* pEndX = xmlGetProp(pEnd, BAD_CAST("x"));
+        sal_Int32 nStartX = o3tl::toInt32(reinterpret_cast<char const*>(pStartX));
+        sal_Int32 nEndX = o3tl::toInt32(reinterpret_cast<char const*>(pEndX));
+        aHorizontalBorderStarts.insert(nStartX);
+        aHorizontalBorderEnds.insert(nEndX);
+    }
+    xmlXPathFreeObject(pXmlObj);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aHorizontalBorderStarts.size());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. the frame 1 bottom border ended sooner than expected, resulting in a buggy, partial
+    // bottom border.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aHorizontalBorderEnds.size());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
