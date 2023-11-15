@@ -72,7 +72,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     virtual void lcl_startCharacterGroup() override;
     virtual void lcl_endCharacterGroup() override;
     virtual void lcl_text(const sal_uInt8 * data, size_t len) override;
-    virtual void lcl_utext(const sal_uInt8 * data, size_t len) override;
+    virtual void lcl_utext(const sal_Unicode * data, size_t len) override;
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) override;
     virtual void lcl_table(Id name,
                            writerfilter::Reference<Table>::Pointer_t ref) override;

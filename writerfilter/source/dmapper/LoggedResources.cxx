@@ -171,13 +171,13 @@ void LoggedStream::text(const sal_uInt8* data, size_t len)
 #endif
 }
 
-void LoggedStream::utext(const sal_uInt8* data, size_t len)
+void LoggedStream::utext(const sal_Unicode* const data, size_t const len)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("utext");
     mHelper.startElement("data");
 
-    OUString sText(reinterpret_cast<const sal_Unicode*>(data), len);
+    OUString const sText(data, len);
 
     LoggedResourcesHelper::chars(sText);
 

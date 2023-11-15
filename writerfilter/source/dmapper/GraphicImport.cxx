@@ -2010,7 +2010,7 @@ void GraphicImport::lcl_text(const sal_uInt8 * /*_data*/, size_t /*len*/)
 }
 
 
-void GraphicImport::lcl_utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
+void GraphicImport::lcl_utext(const sal_Unicode * /*_data*/, size_t /*len*/)
 {
 }
 

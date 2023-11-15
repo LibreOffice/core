@@ -63,7 +63,7 @@ public:
     void startTextBoxContent() override;
     void endTextBoxContent() override;
     void text(const sal_uInt8* data, size_t len) override;
-    void utext(const sal_uInt8* data, size_t len) override;
+    void utext(const sal_Unicode* data, size_t len) override;
     void positionOffset(const OUString& rText, bool bVertical) override;
     void align(const OUString& rText, bool bVertical) override;
     void positivePercentage(const OUString& rText) override;
@@ -89,7 +89,7 @@ protected:
     virtual void lcl_startTextBoxContent() = 0;
     virtual void lcl_endTextBoxContent() = 0;
     virtual void lcl_text(const sal_uInt8* data, size_t len) = 0;
-    virtual void lcl_utext(const sal_uInt8* data, size_t len) = 0;
+    virtual void lcl_utext(const sal_Unicode* data, size_t len) = 0;
     virtual void lcl_positionOffset(const OUString& /*rText*/, bool /*bVertical*/) {}
     virtual css::awt::Point getPositionOffset() override { return css::awt::Point(); }
     virtual void lcl_align(const OUString& /*rText*/, bool /*bVertical*/) {}

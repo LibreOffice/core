@@ -189,7 +189,7 @@ void FontTable::lcl_text(const sal_uInt8*, size_t )
 {
 }
 
-void FontTable::lcl_utext(const sal_uInt8* , size_t)
+void FontTable::lcl_utext(const sal_Unicode*, size_t)
 {
 }
 

@@ -404,7 +404,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     checkNeedPap();
                     // flush previously deferred break - needed for testFdo49893_2
                     // which has consecutive \page with no text between
-                    sal_uInt8 const nothing[] = { 0 /*MSVC doesn't allow it to be empty*/ };
+                    sal_Unicode const nothing[] = { 0 /*MSVC doesn't allow it to be empty*/ };
                     Mapper().utext(nothing, 0);
                 }
                 sal_uInt8 const sBreak[] = { 0xc };
@@ -427,7 +427,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTFKeyword::CHFTNSEP:
         {
             static const sal_Unicode uFtnEdnSep = 0x3;
-            Mapper().utext(reinterpret_cast<const sal_uInt8*>(&uFtnEdnSep), 1);
+            Mapper().utext(&uFtnEdnSep, 1);
         }
         break;
         default:
