@@ -524,7 +524,7 @@ ShapeContextHandler::getShape()
                 oox::drawingml::ShapeIdMap aShapeMap;
                 lcl_createShapeMap(pShape, aShapeMap);
 
-                // Travers aShapeMap and generate edge related properties.
+                // Traverse aShapeMap and generate edge related properties.
                 for (auto& rIt : aShapeMap)
                 {
                     if ((rIt.second)->getServiceName() == "com.sun.star.drawing.ConnectorShape")
