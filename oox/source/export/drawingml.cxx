@@ -4320,8 +4320,9 @@ void DrawingML::WritePresetShape( const OString& pShape, MSO_SPT eShapeType, boo
     static std::map< OString, std::vector<OString> > aAdjMap = lcl_getAdjNames();
     // If there are predefined adj names for this shape type, look them up now.
     std::vector<OString> aAdjustments;
-    if (aAdjMap.find(pShape) != aAdjMap.end())
-        aAdjustments = aAdjMap[pShape];
+    auto it = aAdjMap.find(pShape);
+    if (it != aAdjMap.end())
+        aAdjustments = it->second;
 
     mpFS->startElementNS(XML_a, XML_prstGeom, XML_prst, pShape);
     mpFS->startElementNS(XML_a, XML_avLst);

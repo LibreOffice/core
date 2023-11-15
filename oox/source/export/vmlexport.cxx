@@ -1236,8 +1236,9 @@ static OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
     if (xShape->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
     {
         comphelper::SequenceAsHashMap aInteropGrabBag(xShape->getPropertyValue("InteropGrabBag"));
-        if (aInteropGrabBag.find("AnchorId") != aInteropGrabBag.end())
-            aInteropGrabBag["AnchorId"] >>= aResult;
+        auto it = aInteropGrabBag.find("AnchorId");
+        if (it != aInteropGrabBag.end())
+            it->second >>= aResult;
     }
 
     return aResult;

@@ -224,8 +224,10 @@ static OUString lcl_dbg_out(const SfxPoolItem & rItem)
 {
     OUString aStr("[ ");
 
-    if (GetItemWhichMap().find(rItem.Which()) != GetItemWhichMap().end())
-        aStr += GetItemWhichMap()[rItem.Which()];
+    auto & rWhichMap = GetItemWhichMap();
+    auto it = rWhichMap.find(rItem.Which());
+    if ( it != rWhichMap.end())
+        aStr += it->second;
     else
         aStr += OUString::number(rItem.Which());
 

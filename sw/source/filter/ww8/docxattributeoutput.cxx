@@ -4413,8 +4413,9 @@ static void impl_borders( FSHelperPtr const & pSerializer,
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
         const table::BorderLine2 *aStyleProps = nullptr;
-        if( rTableStyleConf.find( *pBrd ) != rTableStyleConf.end() )
-            aStyleProps = &rTableStyleConf[ *pBrd ];
+        auto it = rTableStyleConf.find( *pBrd );
+        if( it != rTableStyleConf.end() )
+            aStyleProps = &(it->second);
 
         if (!tagWritten && rOptions.bWriteTag)
         {

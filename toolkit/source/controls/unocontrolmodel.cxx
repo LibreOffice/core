@@ -900,8 +900,9 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                         if ( !pFD )
                         {
                             pFD.reset(new css::awt::FontDescriptor);
-                            if ( maData.find( BASEPROPERTY_FONTDESCRIPTOR ) != maData.end() ) // due to defaults...
-                                maData[ BASEPROPERTY_FONTDESCRIPTOR ] >>= *pFD;
+                            auto it = maData.find( BASEPROPERTY_FONTDESCRIPTOR );
+                            if ( it != maData.end() ) // due to defaults...
+                                it->second >>= *pFD;
                         }
                         pFD->Name = InStream->readUTF();
                         pFD->StyleName = InStream->readUTF();
@@ -917,8 +918,9 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                         if ( !pFD )
                         {
                             pFD.reset(new css::awt::FontDescriptor);
-                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
-                                maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
+                            auto it = maData.find(BASEPROPERTY_FONTDESCRIPTOR);
+                            if ( it != maData.end() ) // due to defaults...
+                                it->second >>= *pFD;
                         }
                         pFD->Width = static_cast<sal_Int16>(InStream->readLong());
                         pFD->Height = static_cast<sal_Int16>(InStream->readLong());
@@ -934,8 +936,9 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                         if ( !pFD )
                         {
                             pFD.reset(new css::awt::FontDescriptor);
-                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
-                                maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
+                            auto it = maData.find(BASEPROPERTY_FONTDESCRIPTOR);
+                            if ( it != maData.end() ) // due to defaults...
+                                it->second >>= *pFD;
                         }
                         pFD->Weight = vcl::unohelper::ConvertFontWeight(static_cast<FontWeight>(InStream->readShort()));
                         pFD->Slant =  static_cast<css::awt::FontSlant>(InStream->readShort());

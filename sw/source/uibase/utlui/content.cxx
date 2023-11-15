@@ -1135,8 +1135,9 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     if (SwView* pView = GetActiveView(); pView && pView->GetDocShell())
     {
         OUString sDocTitle = pView->GetDocShell()->GetTitle();
-        if (lcl_DocOutLineExpandStateMap.find(sDocTitle) != lcl_DocOutLineExpandStateMap.end())
-            mOutLineNodeMap = lcl_DocOutLineExpandStateMap[sDocTitle];
+        auto it = lcl_DocOutLineExpandStateMap.find(sDocTitle);
+        if (it != lcl_DocOutLineExpandStateMap.end())
+            mOutLineNodeMap = it->second;
         if (comphelper::LibreOfficeKit::isActive()) {
             if (pView->m_nNaviExpandedStatus < 0)
                 m_nActiveBlock = 1;

@@ -251,8 +251,8 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
 
 bool    SwLabelConfig::HasLabel(const OUString& rManufacturer, const OUString& rType)
 {
-    return ( ( m_aLabels.find(rManufacturer) != m_aLabels.end() ) &&
-             ( m_aLabels[rManufacturer].find(rType) != m_aLabels[rManufacturer].end() ) );
+    auto it = m_aLabels.find(rManufacturer);
+    return ( it != m_aLabels.end() ) && ( it->second.find(rType) != it->second.end() );
 }
 
 // label is always saved as a custom label

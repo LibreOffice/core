@@ -100,8 +100,9 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
 
     // get EmbeddedObjects property inside grab bag
     comphelper::SequenceAsHashMap objectsList;
-    if (aGrabBag.find(sEmbeddingsPropName) != aGrabBag.end())
-        objectsList << aGrabBag[sEmbeddingsPropName];
+    auto grabIt = aGrabBag.find(sEmbeddingsPropName);
+    if (grabIt != aGrabBag.end())
+        objectsList << grabIt->second;
 
     uno::Sequence< beans::PropertyValue > aGrabBagAttribute{ comphelper::makePropertyValue("ProgID",
                                                                                            rProgId) };

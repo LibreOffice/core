@@ -1170,8 +1170,9 @@ uno::Reference<XAccessible > SAL_CALL
                 throw lang::IndexOutOfBoundsException();
             }
             ScMyAddress addr = CalcScAddressFromRangeList(mpMarkedRanges.get(),nSelectedChildIndex);
-            if( m_mapSelectionSend.find(addr) != m_mapSelectionSend.end() )
-                xAccessible = m_mapSelectionSend[addr];
+            auto it = m_mapSelectionSend.find(addr);
+            if( it != m_mapSelectionSend.end() )
+                xAccessible = it->second;
             else
                 xAccessible = getAccessibleCellAt(addr.Row(), addr.Col());
         }
