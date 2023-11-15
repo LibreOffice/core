@@ -964,11 +964,12 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
     if( m_aPosHelper.isMathematicalOrientationRadius() && m_bUseRings )
         nExplodeableSlot = m_aZSlots.front().size()-1;
 
-    sal_Int32 nRingPtCnt = pDataSrc->getNPoints(pSeries, eType);
+    sal_Int32 nBegin = pDataSrc->getBeginIndex(pSeries, eType);
+    sal_Int32 nEnd = pDataSrc->getEndIndex(pSeries, eType);
 
     // Find sum of entries for this ring or sub-pie
     double ringSum = 0;
-    for (sal_Int32 nPointIndex = 0; nPointIndex < nRingPtCnt; nPointIndex++ ) {
+    for (sal_Int32 nPointIndex = nBegin; nPointIndex < nEnd; nPointIndex++ ) {
         double fY = pDataSrc->getData(pSeries, nPointIndex, eType);
         if (!std::isnan(fY) ) ringSum += fY;
     }
@@ -980,7 +981,7 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
             // Left of-pie has the "composite" wedge (the one expanded in the right
             // subgraph) facing to the right in the chart, to allow the expansion
             // lines to meet it
-            double compositeVal = pDataSrc->getData(pSeries, nRingPtCnt - 1, eType);
+            double compositeVal = pDataSrc->getData(pSeries, nEnd - 1, eType);
             return compositeVal * 360 / (ringSum * 2);
         } else {
             /// The angle degree offset is set by the same property of the
@@ -994,7 +995,7 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
 
     double fLogicYForNextPoint = 0.0;
     ///iterate through all points to create shapes
-    for(sal_Int32 nPointIndex = 0; nPointIndex < nRingPtCnt; nPointIndex++ )
+    for(sal_Int32 nPointIndex = nBegin; nPointIndex < nEnd; nPointIndex++ )
     {
         double fLogicInnerRadius, fLogicOuterRadius;
 
@@ -1060,8 +1061,7 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
             const bool bConcentricExplosion = m_bUseRings && (m_aZSlots.front().size() > 1);
             rtl::Reference<SvxShape> xPointShape =
                 createDataPoint(eType, xSeriesGroupShape_Shapes,
-                        xPointProperties, aParam, nRingPtCnt,
-                        bConcentricExplosion);
+                        xPointProperties, aParam, nEnd, bConcentricExplosion);
 
             ///point color:
             if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
@@ -1134,11 +1134,12 @@ void PieChart::createOneBar(
 {
     bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
 
-    sal_Int32 nBarPtCnt = pDataSrc->getNPoints(pSeries, eType);
+    sal_Int32 nBegin = pDataSrc->getBeginIndex(pSeries, eType);
+    sal_Int32 nEnd = pDataSrc->getEndIndex(pSeries, eType);
 
     // Find sum of entries for this bar chart
     double barSum = 0;
-    for (sal_Int32 nPointIndex = 0; nPointIndex < nBarPtCnt; nPointIndex++ ) {
+    for (sal_Int32 nPointIndex = nBegin; nPointIndex < nEnd; nPointIndex++ ) {
         double fY = pDataSrc->getData(pSeries, nPointIndex, eType);
         if (!std::isnan(fY) ) barSum += fY;
     }
@@ -1146,7 +1147,7 @@ void PieChart::createOneBar(
     double fBarBottom = 0.0;
     double fBarTop = -0.5;  // make the bar go from -0.5 to 0.5
     ///iterate through all points to create shapes
-    for(sal_Int32 nPointIndex = 0; nPointIndex < nBarPtCnt; nPointIndex++ )
+    for(sal_Int32 nPointIndex = nBegin; nPointIndex < nEnd; nPointIndex++ )
     {
         aParam.mfDepth  = getTransformedDepth() * (n3DRelativeHeight / 100.0);
 
@@ -2005,7 +2006,14 @@ double PieDataSrc::getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
     return fabs(pSeries->getYValue( nPtIdx ));
 }
 
-sal_Int32 PieDataSrc::getNPoints(const VDataSeries* pSeries,
+sal_Int32 PieDataSrc::getBeginIndex([[maybe_unused]]const VDataSeries* pSeries,
+            [[maybe_unused]] enum SubPieType eType) const
+{
+    assert(eType == SubPieType::NONE);
+    return 0;
+}
+
+sal_Int32 PieDataSrc::getEndIndex(const VDataSeries* pSeries,
             [[maybe_unused]] enum SubPieType eType) const
 {
     assert(eType == SubPieType::NONE);
@@ -2030,14 +2038,25 @@ uno::Reference< beans::XPropertySet > PieDataSrc::getProps(
 // behaviors should be supported later.
 // TODO
 
-sal_Int32 OfPieDataSrc::getNPoints(const VDataSeries* pSeries,
+sal_Int32 OfPieDataSrc::getBeginIndex(const VDataSeries* pSeries,
+            enum SubPieType eType) const
+{
+    if (eType == SubPieType::LEFT) {
+        return 0;
+    } else {
+        assert(eType == SubPieType::RIGHT);
+        return pSeries->getTotalPointCount() - 3;
+    }
+}
+
+sal_Int32 OfPieDataSrc::getEndIndex(const VDataSeries* pSeries,
             enum SubPieType eType) const
 {
     if (eType == SubPieType::LEFT) {
         return pSeries->getTotalPointCount() - 2;
     } else {
         assert(eType == SubPieType::RIGHT);
-        return 3;
+        return pSeries->getTotalPointCount();
     }
 }
 
@@ -2056,8 +2075,10 @@ double OfPieDataSrc::getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
                 fabs(pSeries->getYValue(n+2));
         }
     } else {
+        // nPtIdx should be in [n, n+2]
         assert(eType == SubPieType::RIGHT);
-        return fabs(pSeries->getYValue(nPtIdx + n));
+        assert(nPtIdx >= n && nPtIdx <= n+2);
+        return fabs(pSeries->getYValue(nPtIdx));
     }
 }
 
@@ -2078,7 +2099,7 @@ uno::Reference< beans::XPropertySet > OfPieDataSrc::getProps(
         }
     } else {
         assert(eType == SubPieType::RIGHT);
-        return pSeries->getPropertiesOfPoint(nPtIdx + n);
+        return pSeries->getPropertiesOfPoint(nPtIdx);
     }
 }
 

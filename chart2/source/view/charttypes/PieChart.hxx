@@ -60,8 +60,10 @@ public:
     PieDataSrcBase() = default;
     virtual ~PieDataSrcBase() = default;
 
-    // Get number of points in the given pie subtype
-    virtual sal_Int32 getNPoints(const VDataSeries* pSeries,
+    // Beginning and ending indices for given pie subtype
+    virtual sal_Int32 getBeginIndex(const VDataSeries* pSeries,
+                enum SubPieType eType) const = 0;
+    virtual sal_Int32 getEndIndex(const VDataSeries* pSeries,
                 enum SubPieType eType) const = 0;
 
     // Get the value for the given pie wedge, for the given subtype
@@ -80,7 +82,9 @@ public:
 class PieDataSrc : public PieDataSrcBase
 {
 public:
-    sal_Int32 getNPoints(const VDataSeries* pSeries,
+    sal_Int32 getBeginIndex(const VDataSeries* pSeries,
+                enum SubPieType eType) const;
+    sal_Int32 getEndIndex(const VDataSeries* pSeries,
                 enum SubPieType eType) const;
 
     double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
@@ -100,7 +104,9 @@ public:
     // Minimum sensible number of data points
     static sal_Int32 minPoints() { return 4; }
 
-    sal_Int32 getNPoints(const VDataSeries* pSeries,
+    sal_Int32 getBeginIndex(const VDataSeries* pSeries,
+                enum SubPieType eType) const;
+    sal_Int32 getEndIndex(const VDataSeries* pSeries,
                 enum SubPieType eType) const;
 
     double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
