@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
     xField.set(xPortion->getPropertyValue("TextField"), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aMap(xField->getPropertyValue("Fields"));
-    CPPUNIT_ASSERT(aMap.find("LocalURL") != aMap.end());
+    CPPUNIT_ASSERT(aMap.contains("LocalURL"));
     auto aActual = aMap["LocalURL"].get<OUString>();
     CPPUNIT_ASSERT_EQUAL(OUString("file:///home/me/test.pdf"), aActual);
 }
@@ -165,15 +165,15 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyTargetURL1)
     xField.set(xPortion->getPropertyValue("TextField"), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aMap(xField->getPropertyValue("Fields"));
 
-    CPPUNIT_ASSERT(aMap.find("URL") != aMap.end());
+    CPPUNIT_ASSERT(aMap.contains("URL"));
     CPPUNIT_ASSERT_EQUAL(OUString("https://display.url/test1.pdf#page=1"),
                          aMap["URL"].get<OUString>());
 
-    CPPUNIT_ASSERT(aMap.find("TargetURL") != aMap.end());
+    CPPUNIT_ASSERT(aMap.contains("TargetURL"));
     CPPUNIT_ASSERT_EQUAL(OUString("https://target.url/test2.pdf#page=2"),
                          aMap["TargetURL"].get<OUString>());
 
-    CPPUNIT_ASSERT(aMap.find("TargetType") != aMap.end());
+    CPPUNIT_ASSERT(aMap.contains("TargetType"));
     CPPUNIT_ASSERT_EQUAL(OUString("1"), aMap["TargetType"].get<OUString>());
 }
 
