@@ -60,6 +60,9 @@ void f()
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
     f((("foo")));
 
+    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
+    S s10 = { "foo" };
+
     // Only generate one warning here, not two, for a macro argument used twice in the macro's
     // expansion:
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
