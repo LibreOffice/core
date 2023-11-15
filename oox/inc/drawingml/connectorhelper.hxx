@@ -103,6 +103,6 @@ void applyConnections(oox::drawingml::ShapePtr& rConnector, oox::drawingml::Shap
 */
 void applyBentHandleAdjustments(oox::drawingml::ShapePtr pConnector);
 
-} // end namespace ConnecorHelper
+} // end namespace ConnectorHelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
