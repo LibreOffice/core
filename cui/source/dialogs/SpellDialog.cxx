@@ -1504,6 +1504,8 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         //start position
         if (!IsUndoEditMode() && bIsErrorActive)
         {
+            aAttribList.clear();
+            m_xEditEngine->GetCharAttribs(0, aAttribList);
             const EECharAttrib* pFontColor = FindCharAttrib(nCursor, EE_CHAR_COLOR, aAttribList);
             const EECharAttrib* pErrorAttrib = FindCharAttrib(m_nErrorStart, EE_CHAR_GRABBAG, aAttribList);
             if (pFontColor && pErrorAttrib)
@@ -1968,7 +1970,6 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 aPortion1.eLanguage = eLang;
 
                 aPortion1.sText = m_xEditEngine->GetText(ESelection(0, nStart, 0, aStart->nPosition));
-
                 bool bIsIgnoreError = m_aIgnoreErrorsAt.find( nStart ) != m_aIgnoreErrorsAt.end();
                 if( bIsIgnoreError )
                 {
