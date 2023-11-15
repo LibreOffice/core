@@ -2434,8 +2434,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 lcl_startParagraphGroup();
                 m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
                 lcl_startCharacterGroup();
-                sal_uInt8 const sBreak[] = { 0xd };
-                lcl_text(sBreak, 1);
+                sal_Unicode const sBreak[] = { 0x0d };
+                lcl_utext(reinterpret_cast<sal_uInt8 const*>(sBreak), 1);
                 lcl_endCharacterGroup();
                 lcl_endParagraphGroup();
             }
@@ -3625,8 +3625,8 @@ void DomainMapper::lcl_endSectionGroup()
         // style, so force a dummy paragraph.
         lcl_startParagraphGroup();
         lcl_startCharacterGroup();
-        sal_uInt8 const sBreak[] = { 0xd };
-        lcl_text(sBreak, 1);
+        sal_Unicode const sBreak[] = { 0x0d };
+        lcl_utext(reinterpret_cast<sal_uInt8 const*>(sBreak), 1);
         lcl_endCharacterGroup();
         lcl_endParagraphGroup();
     }
@@ -3917,14 +3917,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                     return;
                 case 0x0d:
                 {
-                    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
-                    if (pContext && m_pImpl->isBreakDeferred(COLUMN_BREAK))
-                    {
-                        pContext->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
-                        m_pImpl->clearDeferredBreak(COLUMN_BREAK);
-                    }
-                    ResetStyleProperties();
-                    finishParagraph();
+                    assert(!"paragraph break is handled by utext() now");
                     return;
                 }
                 case cFieldStart:
