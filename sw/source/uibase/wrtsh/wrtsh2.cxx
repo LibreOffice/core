@@ -516,9 +516,16 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     //A CursorShell is always a WrtShell
     SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
 
-    SwDocShell* pDShell = rSh.GetView().GetDocShell();
+    ::LoadURL(rSh.GetView(), rURL, nFilter, rTargetFrameName);
+
+}
+
+void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
+              const OUString& rTargetFrameName)
+{
+    SwDocShell* pDShell = rView.GetDocShell();
     OSL_ENSURE( pDShell, "No DocShell?!");
-    SfxViewFrame& rViewFrame = *rSh.GetView().GetViewFrame();
+    SfxViewFrame& rViewFrame = *rView.GetViewFrame();
 
     if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, rViewFrame.GetFrameWeld()))
         return;
@@ -527,7 +534,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     // unless we are jumping to a TOC mark.
     if (comphelper::LibreOfficeKit::isActive() && !rURL.startsWith("#"))
     {
-        rVSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
+        rView.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
         return;
     }
 
