@@ -28,8 +28,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/stritem.hxx>
@@ -890,34 +888,8 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
             aReferName = pMed->GetName();
     }
 
-    if (INetURLObject(rURL).IsExoticProtocol())
-    {
-        // Default to ignoring exotic protocols
-        bool bAllow = false;
-        if (pObjShell)
-        {
-            // If the document had macros when loaded then follow the allowed macro-mode
-            if (pObjShell->GetHadCheckedMacrosOnLoad())
-                bAllow = pObjShell->AdjustMacroMode();
-            else // otherwise ask the user, defaulting to cancel
-            {
-                assert(pFrame && "if we have pObjShell we have pFrame");
-                //Reuse URITools::onOpenURI warning string
-                ScopedVclPtrInstance<MessageDialog> xQueryBox(&pFrame->GetWindow(),
-                                                               SfxResId(STR_DANGEROUS_TO_OPEN),
-                                                               VclMessageType::Warning, VclButtonsType::YesNo);
-                xQueryBox->set_primary_text(xQueryBox->get_primary_text().replaceFirst("$(ARG1)",
-                    INetURLObject::decode(rURL, INetURLObject::DecodeMechanism::Unambiguous)));
-                //TODO: xQueryBox->set_default_response(RET_NO);
-                bAllow = xQueryBox->Execute() == RET_YES;
-            }
-        }
-        if (!bAllow)
-        {
-            SAL_WARN("sc", "ScGlobal::OpenURL ignoring: " << rURL);
-            return;
-        }
-    }
+    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pObjShell, pFrame ? &pFrame->GetWindow() : nullptr))
+        return;
 
     SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
     SfxStringItem aReferer( SID_REFERER, aReferName );
