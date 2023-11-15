@@ -14,6 +14,7 @@
 
 namespace oox::shape
 {
+/// Handles CT_WordprocessingCanvas, used for wpc element, which is a drawing canvas for Word.
 class WordprocessingCanvasContext final : public oox::core::FragmentHandler2
 {
 public:
