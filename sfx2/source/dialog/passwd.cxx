@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
@@ -38,15 +39,35 @@ void SfxPasswordDialog::ModifyHdl()
         bEnable = (bEnable && (m_xPassword2ED->get_text().getLength() >= mnMinLen));
     m_xOKBtn->set_sensitive(bEnable);
 
+    // if there's a confirm entry, the dialog is being used for setting a password
     if (m_xConfirm1ED->get_visible())
     {
         m_xPassword1StrengthBar->set_percentage(
             SvPasswordHelper::GetPasswordStrengthPercentage(aPassword1Text));
+        bool bPasswordMeetsPolicy = SvPasswordHelper::PasswordMeetsPolicy(
+            aPassword1Text, moPasswordPolicy);
+        m_xPassword1ED->set_message_type(bPasswordMeetsPolicy ? weld::EntryMessageType::Normal
+                                                              : weld::EntryMessageType::Error);
+        m_xPassword1PolicyLabel->set_visible(!bPasswordMeetsPolicy);
     }
+
+    // if there's a confirm entry, the dialog is being used for setting a password
     if (m_xConfirm2ED->get_visible())
     {
+        OUString aPassword2Text = m_xPassword2ED->get_text();
+
         m_xPassword2StrengthBar->set_percentage(
             SvPasswordHelper::GetPasswordStrengthPercentage(m_xPassword2ED->get_text()));
+
+        // second password is optional, ignore policy if it is empty
+        bool bPasswordMeetsPolicy
+            = aPassword2Text.isEmpty()
+                  ? true
+                  : SvPasswordHelper::PasswordMeetsPolicy(
+                      aPassword2Text, moPasswordPolicy);
+        m_xPassword2ED->set_message_type(bPasswordMeetsPolicy ? weld::EntryMessageType::Normal
+                                                              : weld::EntryMessageType::Error);
+        m_xPassword2PolicyLabel->set_visible(!bPasswordMeetsPolicy);
     }
 }
 
@@ -81,6 +102,19 @@ IMPL_LINK(SfxPasswordDialog, InsertTextHdl, OUString&, rTest, bool)
 
 IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, weld::Button&, void)
 {
+    if (m_xConfirm1ED->get_visible()
+        && !SvPasswordHelper::PasswordMeetsPolicy(GetPassword(), moPasswordPolicy))
+    {
+        m_xPassword1ED->grab_focus();
+        return;
+    }
+    if (m_xConfirm2ED->get_visible() && !GetPassword2().isEmpty()
+        && !SvPasswordHelper::PasswordMeetsPolicy(GetPassword2(), moPasswordPolicy))
+    {
+        m_xPassword2ED->grab_focus();
+        return;
+    }
+
     bool bConfirmFailed = bool( mnExtras & SfxShowExtras::CONFIRM ) &&
                           ( GetConfirm() != GetPassword() );
     if( ( mnExtras & SfxShowExtras::CONFIRM2 ) && ( m_xConfirm2ED->get_text() != GetPassword2() ) )
@@ -114,12 +148,14 @@ SfxPasswordDialog::SfxPasswordDialog(weld::Widget* pParent, const OUString* pGro
     , m_xPassword1FT(m_xBuilder->weld_label("pass1ft"))
     , m_xPassword1ED(m_xBuilder->weld_entry("pass1ed"))
     , m_xPassword1StrengthBar(m_xBuilder->weld_level_bar("pass1bar"))
+    , m_xPassword1PolicyLabel(m_xBuilder->weld_label("pass1policylabel"))
     , m_xConfirm1FT(m_xBuilder->weld_label("confirm1ft"))
     , m_xConfirm1ED(m_xBuilder->weld_entry("confirm1ed"))
     , m_xPassword2Box(m_xBuilder->weld_frame("password2frame"))
     , m_xPassword2FT(m_xBuilder->weld_label("pass2ft"))
     , m_xPassword2ED(m_xBuilder->weld_entry("pass2ed"))
     , m_xPassword2StrengthBar(m_xBuilder->weld_level_bar("pass2bar"))
+    , m_xPassword2PolicyLabel(m_xBuilder->weld_label("pass2policylabel"))
     , m_xConfirm2FT(m_xBuilder->weld_label("confirm2ft"))
     , m_xConfirm2ED(m_xBuilder->weld_entry("confirm2ed"))
     , m_xMinLengthFT(m_xBuilder->weld_label("minlenft"))
@@ -130,6 +166,7 @@ SfxPasswordDialog::SfxPasswordDialog(weld::Widget* pParent, const OUString* pGro
     , maEmptyPwdStr(SfxResId(STR_PASSWD_EMPTY))
     , mnMinLen(5)
     , mnExtras(SfxShowExtras::NONE)
+    , moPasswordPolicy(officecfg::Office::Common:: Security::Scripting::PasswordPolicy::get())
     , mbAsciiOnly(false)
 {
     Link<weld::Entry&,void> aLink = LINK(this, SfxPasswordDialog, EditModifyHdl);
@@ -141,6 +178,14 @@ SfxPasswordDialog::SfxPasswordDialog(weld::Widget* pParent, const OUString* pGro
     m_xConfirm1ED->connect_insert_text(aLink2);
     m_xConfirm2ED->connect_insert_text(aLink2);
     m_xOKBtn->connect_clicked(LINK(this, SfxPasswordDialog, OKHdl));
+
+    if(moPasswordPolicy)
+    {
+        m_xPassword1PolicyLabel->set_label(
+            officecfg::Office::Common::Security::Scripting::PasswordPolicyErrorMessage::get());
+        m_xPassword2PolicyLabel->set_label(
+            officecfg::Office::Common::Security::Scripting::PasswordPolicyErrorMessage::get());
+    }
 
     if (pGroupText)
         m_xPassword1Box->set_label(*pGroupText);

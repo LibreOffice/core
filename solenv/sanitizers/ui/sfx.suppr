@@ -51,3 +51,7 @@ sfx2/uiconfig/ui/versioncommentdialog.ui://GtkTextView[@id='textview'] no-labell
 sfx2/uiconfig/ui/linefragment.ui://GtkEntry[@id='duration'] no-labelled-by
 sfx2/uiconfig/ui/linefragment.ui://GtkEntry[@id='valueedit'] no-labelled-by
 sfx2/uiconfig/ui/linefragment.ui://GtkSpinButton[@id='time'] no-labelled-by
+sfx2/uiconfig/ui/password.ui://GtkLevelBar[@id='pass1bar'] no-labelled-by
+sfx2/uiconfig/ui/password.ui://GtkLabel[@id='pass1policylabel'] orphan-label
+sfx2/uiconfig/ui/password.ui://GtkLevelBar[@id='pass2bar'] no-labelled-by
+sfx2/uiconfig/ui/password.ui://GtkLabel[@id='pass2policylabel'] orphan-label
