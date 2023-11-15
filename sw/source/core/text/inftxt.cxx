@@ -634,7 +634,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     aDrawInf.SetUnderFnt( m_pUnderFnt );
 
     const tools::Long nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
-                             rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
+                             rPor.InNumberGrp() ) ? 0 : GetSpaceAdd(/*bShrink=*/true);
     if ( nSpaceAdd )
     {
         TextFrameIndex nCharCnt(0);

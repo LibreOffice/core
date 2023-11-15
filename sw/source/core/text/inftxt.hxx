@@ -443,8 +443,10 @@ public:
     void SetSpaceIdx( sal_uInt16 nNew ) { m_nSpaceIdx = nNew; }
     void IncSpaceIdx() { ++m_nSpaceIdx; }
     void RemoveFirstSpaceAdd() { m_pSpaceAdd->erase( m_pSpaceAdd->begin() ); }
-    tools::Long GetSpaceAdd() const
-        { return ( m_pSpaceAdd && m_nSpaceIdx < m_pSpaceAdd->size() )
+    tools::Long GetSpaceAdd( bool bShrink = false ) const
+        { return ( m_pSpaceAdd && m_nSpaceIdx < m_pSpaceAdd->size() &&
+                   // get shrink data only if asked explicitly, otherwise zero it
+                   ( bShrink || (*m_pSpaceAdd)[m_nSpaceIdx] < LONG_MAX/2 ) )
                    ? (*m_pSpaceAdd)[m_nSpaceIdx] : 0; }
 
     void SetpSpaceAdd( std::vector<tools::Long>* pNew ){ m_pSpaceAdd = pNew; }

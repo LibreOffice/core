@@ -63,9 +63,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNegativeVertOffset)
     CPPUNIT_ASSERT_LESS(pPara2->getFrameArea().Top(), rFlyRect.Bottom());
 }
 
-// FIXME: because breaking the lines at the right place, this test
-// became obsolete: proposed fix is to modify compatibilityMode to "14"
-// in the DOCX test file to use the old justification algorithm
+// FIXME: because breaking the lines at the right place, test document became obsolete
 #if 0
 CPPUNIT_TEST_FIXTURE(Test, testFloattableAvoidManipOfst)
 {

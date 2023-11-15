@@ -544,7 +544,11 @@ public:
         }
         else
         {
-            m_nSpace = nNew;
+            // negative space (shrinking) stored over LONG_MAX/2
+            if ( nNew < LONG_MAX/2 )
+                m_nSpace = nNew;
+            else
+                m_nSpace = LONG_MAX/2 - nNew;
             m_nCharacterSpacing = 0;
         }
 #ifdef DBG_UTIL
