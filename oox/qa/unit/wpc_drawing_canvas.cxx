@@ -214,7 +214,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf104671_Cloud)
     // The document has 'cloud' shape on a drawing canvas.
     loadFromURL(u"WPC_tdf104671_Cloud.docx");
 
-    // MS Office writes the 'cloud' shape without type to the VML fallback. Thus the VLM import uses
+    // MS Office writes the 'cloud' shape without type to the VML fallback. Thus the VML import uses
     // ClosedBezierShape with several closed polygons. That produces holes because of the even-odd
     // rule, and inner lines. The fix uses the mc:Choice alternative which provides the type for a
     // custom shape.
