@@ -201,6 +201,9 @@ private:
 
     SAL_DLLPRIVATE bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
 
+    // true if the document had macros (or similar) on load to trigger warning user
+    SAL_DLLPRIVATE bool  GetHadCheckedMacrosOnLoad() const;
+
 protected:
                                 SfxObjectShell(SfxObjectCreateMode);
                                 SfxObjectShell(SfxModelFlags);    // see sfxmodelfactory.hxx
@@ -424,8 +427,8 @@ public:
     void                        SetMacroCallsSeenWhileLoading();
     bool                        GetMacroCallsSeenWhileLoading() const;
 
-    // true if the document had macros (or similar) on load to trigger warning user
-    bool                        GetHadCheckedMacrosOnLoad() const;
+    // true if this type of link, from a document, is allowed by the user to be passed to uno:OpenDoc
+    static bool                 AllowedLinkProtocolFromDocument(const OUString& rUrl, SfxObjectShell* pObjShell, weld::Window* pDialogParent);
 
     const css::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
     bool                        SetModifyPasswordInfo( const css::uno::Sequence< css::beans::PropertyValue >& aInfo );

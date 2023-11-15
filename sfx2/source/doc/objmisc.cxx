@@ -933,7 +933,6 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
     CheckEncryption_Impl( xInteraction );
 
     // check macro security
-    pImpl->aMacroMode.checkMacrosOnLoading( xInteraction );
     const bool bHasMacros = pImpl->aMacroMode.hasMacros();
     pImpl->aMacroMode.checkMacrosOnLoading( xInteraction, bHasMacros );
     pImpl->m_bHadCheckedMacrosOnLoad = bHasMacros;
@@ -942,6 +941,33 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
 bool SfxObjectShell::GetHadCheckedMacrosOnLoad() const
 {
     return pImpl->m_bHadCheckedMacrosOnLoad;
+}
+
+bool SfxObjectShell::AllowedLinkProtocolFromDocument(const OUString& rUrl, SfxObjectShell* pObjShell, weld::Window* pDialogParent)
+{
+    if (!INetURLObject(rUrl).IsExoticProtocol())
+        return true;
+    // Default to ignoring exotic protocols
+    bool bAllow = false;
+    if (pObjShell)
+    {
+        // If the document had macros when loaded then follow the allowed macro-mode
+        if (pObjShell->GetHadCheckedMacrosOnLoad())
+            bAllow = pObjShell->AdjustMacroMode();
+        else // otherwise ask the user, defaulting to cancel
+        {
+            //Reuse URITools::onOpenURI warning string
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pDialogParent,
+                                                           VclMessageType::Warning, VclButtonsType::YesNo,
+                                                           SfxResId(STR_DANGEROUS_TO_OPEN)));
+            xQueryBox->set_primary_text(xQueryBox->get_primary_text().replaceFirst("$(ARG1)",
+                INetURLObject::decode(rUrl, INetURLObject::DecodeMechanism::Unambiguous)));
+            xQueryBox->set_default_response(RET_NO);
+            bAllow = xQueryBox->run() == RET_YES;
+        }
+    }
+    SAL_WARN_IF(!bAllow, "sfx.appl", "SfxObjectShell::AllowedLinkProtocolFromDocument ignoring: " << rUrl);
+    return bAllow;
 }
 
 void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )

@@ -472,15 +472,14 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter )
     return bRet;
 }
 
-void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
-              const OUString& rTargetFrameName )
+static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
+                    const OUString& rTargetFrameName)
 {
-    OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );
-    if( rURL.isEmpty() )
-        return ;
+    SwDocShell* pDShell = rView.GetDocShell();
+    OSL_ENSURE( pDShell, "No DocShell?!");
+    SfxViewFrame* pViewFrame = rView.GetViewFrame();
 
-    // The shell could be 0 also!!!!!
-    if ( dynamic_cast<const SwCursorShell*>( &rVSh) ==  nullptr )
+    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, pViewFrame->GetWindow().GetFrameWeld()))
         return;
 
     OUString sFileURL = rURL;
@@ -508,11 +507,6 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
         return;
     }
 
-    //A CursorShell is always a WrtShell
-    SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
-
-    SwDocShell* pDShell = rSh.GetView().GetDocShell();
-    OSL_ENSURE( pDShell, "No DocShell?!");
     OUString sTargetFrame(rTargetFrameName);
     if (sTargetFrame.isEmpty() && pDShell)
     {
@@ -527,7 +521,6 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     OUString sReferer;
     if( pDShell && pDShell->GetMedium() )
         sReferer = pDShell->GetMedium()->GetName();
-    SfxViewFrame* pViewFrame = rSh.GetView().GetViewFrame();
     SfxFrameItem aView( SID_DOCFRAME, pViewFrame );
     SfxStringItem aName( SID_FILE_NAME, sFileURL );
     SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
@@ -551,6 +544,23 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
 
     pViewFrame->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
+}
+
+void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
+              const OUString& rTargetFrameName )
+{
+    OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );
+    if( rURL.isEmpty() )
+        return ;
+
+    // The shell could be 0 also!!!!!
+    if ( dynamic_cast<const SwCursorShell*>( &rVSh) ==  nullptr )
+        return;
+
+    //A CursorShell is always a WrtShell
+    SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
+
+    ::LoadURL(rSh.GetView(), rURL, nFilter, rTargetFrameName);
 }
 
 void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,

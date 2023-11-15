@@ -27,9 +27,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/stritem.hxx>
@@ -838,34 +836,8 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
             aUrlName = aNewUrlName;
     }
 
-    if (INetURLObject(aUrlName).IsExoticProtocol())
-    {
-        // Default to ignoring exotic protocols
-        bool bAllow = false;
-        if (pObjShell)
-        {
-            // If the document had macros when loaded then follow the allowed macro-mode
-            if (pObjShell->GetHadCheckedMacrosOnLoad())
-                bAllow = pObjShell->AdjustMacroMode();
-            else // otherwise ask the user, defaulting to cancel
-            {
-                assert(pFrame && "if we have pObjShell we have pFrame");
-                //Reuse URITools::onOpenURI warning string
-                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pFrame->GetWindow().GetFrameWeld(),
-                                                               VclMessageType::Warning, VclButtonsType::YesNo,
-                                                               SfxResId(STR_DANGEROUS_TO_OPEN)));
-                xQueryBox->set_primary_text(xQueryBox->get_primary_text().replaceFirst("$(ARG1)",
-                    INetURLObject::decode(aUrlName, INetURLObject::DecodeMechanism::Unambiguous)));
-                xQueryBox->set_default_response(RET_NO);
-                bAllow = xQueryBox->run() == RET_YES;
-            }
-        }
-        if (!bAllow)
-        {
-            SAL_WARN("sc", "ScGlobal::OpenURL ignoring: " << aUrlName);
-            return;
-        }
-    }
+    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(aUrlName, pObjShell, pFrame ? pFrame->GetWindow().GetFrameWeld() : nullptr))
+        return;
 
     SfxStringItem aUrl( SID_FILE_NAME, aUrlName );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
