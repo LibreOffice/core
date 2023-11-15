@@ -45,9 +45,9 @@ public:
 };
 
 enum class SubPieType {
-    NONE,
-    LEFT,
-    RIGHT
+    NONE,   // solo pie or donut
+    LEFT,   // left pie in pie-of-pie
+    RIGHT   // right pie in pie-of-pie
 };
 
 
@@ -79,11 +79,12 @@ public:
 //=======================
 class PieDataSrc : public PieDataSrcBase
 {
+public:
     sal_Int32 getNPoints(const VDataSeries* pSeries,
                 enum SubPieType eType) const;
 
     double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
-            enum SubPieType eType) const;
+            [[maybe_unused]]enum SubPieType eType) const;
 
     virtual uno::Reference< beans::XPropertySet > getProps(
             const VDataSeries* pSeries, sal_Int32 nPtIdx,
@@ -157,6 +158,11 @@ private: //methods
             const sal_Int32 nPointCount,
             const bool bConcentricExplosion);
 
+    rtl::Reference<SvxShape> createBarDataPoint(
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
+            const uno::Reference<beans::XPropertySet>& xObjectProperties,
+            const ShapeParam& rParam,
+            double fBarSegBottom, double fBarSegTop);
     /** This method creates a text shape for a label of a data point.
      *
      *  @param xTextTarget
@@ -195,6 +201,7 @@ struct PieLabelInfo;
     bool                performLabelBestFitInnerPlacement( ShapeParam& rShapeParam
                                 , PieLabelInfo const & rPieLabelInfo );
 
+    // A standalone pie, one pie in a pie-of-pie, or one ring of a donut
     void                createOneRing([[maybe_unused]]enum SubPieType eType
                                 , double fSlotX
                                 , ShapeParam& aParam
@@ -204,10 +211,21 @@ struct PieLabelInfo;
                                 , const PieDataSrcBase *pDataSrc
                                 , sal_Int32 n3DRelativeHeight);
 
+    // A bar chart in a bar-of-pie
+    void                createOneBar(
+            enum SubPieType eType,
+            ShapeParam& aParam,
+            const rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget,
+            const rtl::Reference<SvxShapeGroup>& xTextTarget,
+            VDataSeries* pSeries,
+            const PieDataSrcBase *pDataSrc,
+            sal_Int32 n3DRelativeHeight);
+
 private: //member
     PiePositionHelper     m_aPosHelper;
     bool                  m_bUseRings;
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
+    std::vector< ExplicitScaleData > m_aCartesianScales; // for bar-of-pie
     ::css::chart2::PieChartSubType m_eSubType;
 
     struct PieLabelInfo

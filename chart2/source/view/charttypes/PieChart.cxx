@@ -227,6 +227,7 @@ PieChart::~PieChart()
 void PieChart::setScales( std::vector< ExplicitScaleData >&& rScales, bool /* bSwapXAndYAxis */ )
 {
     OSL_ENSURE(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    m_aCartesianScales = m_pPosHelper->getScales();
     m_aPosHelper.setScales( std::move(rScales), true );
 }
 
@@ -329,6 +330,50 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
             , fExplodedInnerRadius, fExplodedOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_aPosHelper.getUnitCartesianToScene() ) );
     }
+    PropertyMapper::setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+    return xShape;
+}
+
+rtl::Reference<SvxShape> PieChart::createBarDataPoint(
+        const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
+        const uno::Reference<beans::XPropertySet>& xObjectProperties,
+        const ShapeParam& rParam,
+        double fBarSegBottom, double fBarSegTop)
+{
+    drawing::Position3D aP0, aP1;
+
+    // Draw the bar for bar-of-pie small and to the right. Width and
+    // position are hard-coded for now.
+
+#if 0
+    aP0 = cartesianPosHelper.transformLogicToScene(0.75, fBarSegBottom,
+            rParam.mfLogicZ, false);
+    aP1 = cartesianPosHelper.transformLogicToScene(1.25, fBarSegTop,
+            rParam.mfLogicZ, false);
+#else
+    double x0 = m_aPosHelper.transformUnitCircleToScene(0, 0.75, 0).PositionX;
+    double x1 = m_aPosHelper.transformUnitCircleToScene(0, 1.25, 0).PositionX;
+    double y0 = m_aPosHelper.transformUnitCircleToScene(
+            90, fBarSegBottom, 0).PositionY;
+    double y1 = m_aPosHelper.transformUnitCircleToScene(
+            90, fBarSegTop, 0).PositionY;
+
+    aP0 = drawing::Position3D(x0, y0, rParam.mfLogicZ);
+    aP1 = drawing::Position3D(x1, y1, rParam.mfLogicZ);
+#endif
+
+    const css::awt::Point aPos(aP0.PositionX, aP1.PositionY);
+    const css::awt::Size aSz(fabs(aP0.PositionX - aP1.PositionX),
+            fabs(aP0.PositionY - aP1.PositionY));
+
+    const tNameSequence emptyNameSeq;
+    const tAnySequence emptyValSeq;
+    //create point
+    rtl::Reference<SvxShape> xShape = ShapeFactory::createRectangle(
+            xTarget,
+            aSz, aPos,
+            emptyNameSeq, emptyValSeq);
+
     PropertyMapper::setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     return xShape;
 }
@@ -880,6 +925,8 @@ void PieChart::createShapes()
             pDataSrc = &ofPieSrc;
             createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget,
                     xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
+            createOneBar(SubPieType::RIGHT, aParam, xSeriesTarget,
+                    xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
             break;
         case PieChartSubType_PIE:
             pDataSrc = &ofPieSrc;
@@ -925,6 +972,25 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
         double fY = pDataSrc->getData(pSeries, nPointIndex, eType);
         if (!std::isnan(fY) ) ringSum += fY;
     }
+
+    // determine the starting angle around the ring
+    auto sAngle = [&]()
+    {
+        if (eType == SubPieType::LEFT) {
+            // Left of-pie has the "composite" wedge (the one expanded in the right
+            // subgraph) facing to the right in the chart, to allow the expansion
+            // lines to meet it
+            double compositeVal = pDataSrc->getData(pSeries, nRingPtCnt - 1, eType);
+            return compositeVal * 360 / (ringSum * 2);
+        } else {
+            /// The angle degree offset is set by the same property of the
+            /// data series.
+            /// Counter-clockwise offset from the 3 o'clock position.
+            return static_cast<double>(pSeries->getStartingAngle());
+        }
+    };
+
+    m_aPosHelper.m_fAngleDegreeOffset = sAngle();
 
     double fLogicYForNextPoint = 0.0;
     ///iterate through all points to create shapes
@@ -1054,6 +1120,81 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
         }//next series in x slot (next y slot)
+    }//next category
+}
+
+void PieChart::createOneBar(
+        enum SubPieType eType,
+        ShapeParam& aParam,
+        const rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget,
+        const rtl::Reference<SvxShapeGroup>& xTextTarget,
+        VDataSeries* pSeries,
+        const PieDataSrcBase *pDataSrc,
+        sal_Int32 n3DRelativeHeight)
+{
+    bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
+
+    sal_Int32 nBarPtCnt = pDataSrc->getNPoints(pSeries, eType);
+
+    // Find sum of entries for this bar chart
+    double barSum = 0;
+    for (sal_Int32 nPointIndex = 0; nPointIndex < nBarPtCnt; nPointIndex++ ) {
+        double fY = pDataSrc->getData(pSeries, nPointIndex, eType);
+        if (!std::isnan(fY) ) barSum += fY;
+    }
+
+    double fBarBottom = 0.0;
+    double fBarTop = -0.5;  // make the bar go from -0.5 to 0.5
+    ///iterate through all points to create shapes
+    for(sal_Int32 nPointIndex = 0; nPointIndex < nBarPtCnt; nPointIndex++ )
+    {
+        aParam.mfDepth  = getTransformedDepth() * (n3DRelativeHeight / 100.0);
+
+        rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
+
+        ///collect data point information (logic coordinates, style ):
+        double fY = pDataSrc->getData(pSeries, nPointIndex, eType) / barSum;
+        if( std::isnan(fY) )
+            continue;
+        if(fY==0.0)//@todo: continue also if the resolution is too small
+            continue;
+        fBarBottom = fBarTop;
+        fBarTop += fY;
+
+        uno::Reference< beans::XPropertySet > xPointProperties =
+            pDataSrc->getProps(pSeries, nPointIndex, eType);
+
+        ///create data point
+        aParam.mfLogicZ = -1.0; // For 3D pie chart label position
+
+        rtl::Reference<SvxShape> xPointShape =
+            createBarDataPoint(xSeriesGroupShape_Shapes,
+                    xPointProperties, aParam,
+                    fBarBottom, fBarTop);
+
+        ///point color:
+        if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
+        {
+            xPointShape->setPropertyValue("FillColor",
+                uno::Any(m_xColorScheme->getColorByIndex( nPointIndex )));
+        }
+
+
+        if(bHasFillColorMapping)
+        {
+            double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
+            if(!std::isnan(nPropVal))
+            {
+                xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
+            }
+        }
+
+        ///create label
+        createTextLabelShape(xTextTarget, *pSeries, nPointIndex, aParam);
+
+        ShapeFactory::setShapeName( xPointShape,
+                ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(),
+                    nPointIndex ) );
     }//next category
 }
 
@@ -1859,7 +2000,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 // class PieDataSrc
 //=======================
 double PieDataSrc::getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
-        enum SubPieType /*eType*/) const
+       [[maybe_unused]] enum SubPieType eType) const
 {
     return fabs(pSeries->getYValue( nPtIdx ));
 }
@@ -1940,7 +2081,6 @@ uno::Reference< beans::XPropertySet > OfPieDataSrc::getProps(
         return pSeries->getPropertiesOfPoint(nPtIdx + n);
     }
 }
-
 
 } //namespace chart
 
