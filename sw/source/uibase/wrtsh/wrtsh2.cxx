@@ -615,17 +615,18 @@ void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
     if ((nFilter & LoadUrlFlags::NewView) && !comphelper::LibreOfficeKit::isActive())
         aTargetFrameName.SetValue( "_blank" );
 
-    const SfxPoolItem* aArr[] = {
+    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, rViewFrame.GetFrame().GetFrameInterface());
+
+    rViewFrame.GetDispatcher()->ExecuteList(SID_OPENDOC,
+            SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
+            {
                 &aName,
                 &aNewView, /*&aSilent,*/
                 &aReferer,
                 &aView, &aTargetFrameName,
-                &aBrowse,
-                nullptr
-    };
-
-    rViewFrame.GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
-            SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
+                &aBrowse
+            },
+            { &aDocFrame } );
 }
 
 void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
