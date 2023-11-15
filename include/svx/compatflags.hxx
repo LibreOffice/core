@@ -11,7 +11,7 @@
 enum class SdrCompatibilityFlag
 {
     AnchoredTextOverflowLegacy, ///< for tdf#99729
-    LegacySingleLineFontwork, ///< for tdf#148000
+    LegacyFontwork, ///< for tdf#148000 false == Fontwork works in PowerPoint compat mode
     ConnectorUseSnapRect, ///< for tdf#149756
     IgnoreBreakAfterMultilineField, ///< for tdf#148966
 };

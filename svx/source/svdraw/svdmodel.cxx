@@ -85,7 +85,7 @@ struct SdrModelImpl
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
     bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
-    bool mbLegacySingleLineFontwork;   // tdf#148000 compatibility flag
+    bool mbLegacyFontwork;             // tdf#148000 compatibility flag
     bool mbConnectorUseSnapRect;       // tdf#149756 compatibility flag
     bool mbIgnoreBreakAfterMultilineField; ///< tdf#148966 compatibility flag
     std::shared_ptr<model::Theme> mpTheme;
@@ -94,7 +94,7 @@ struct SdrModelImpl
         : mpUndoManager(nullptr)
         , mpUndoFactory(nullptr)
         , mbAnchoredTextOverflowLegacy(false)
-        , mbLegacySingleLineFontwork(false)
+        , mbLegacyFontwork(false)
         , mbConnectorUseSnapRect(false)
         , mbIgnoreBreakAfterMultilineField(false)
         , mpTheme(new model::Theme("Office"))
@@ -1718,8 +1718,8 @@ void SdrModel::SetCompatibilityFlag(SdrCompatibilityFlag eFlag, bool bEnabled)
         case SdrCompatibilityFlag::AnchoredTextOverflowLegacy:
             mpImpl->mbAnchoredTextOverflowLegacy = bEnabled;
             break;
-        case SdrCompatibilityFlag::LegacySingleLineFontwork:
-            mpImpl->mbLegacySingleLineFontwork = bEnabled;
+        case SdrCompatibilityFlag::LegacyFontwork:
+            mpImpl->mbLegacyFontwork = bEnabled;
             break;
         case SdrCompatibilityFlag::ConnectorUseSnapRect:
             mpImpl->mbConnectorUseSnapRect = bEnabled;
@@ -1736,8 +1736,8 @@ bool SdrModel::GetCompatibilityFlag(SdrCompatibilityFlag eFlag) const
     {
         case SdrCompatibilityFlag::AnchoredTextOverflowLegacy:
             return mpImpl->mbAnchoredTextOverflowLegacy;
-        case SdrCompatibilityFlag::LegacySingleLineFontwork:
-            return mpImpl->mbLegacySingleLineFontwork;
+        case SdrCompatibilityFlag::LegacyFontwork:
+            return mpImpl->mbLegacyFontwork;
         case SdrCompatibilityFlag::ConnectorUseSnapRect:
             return mpImpl->mbConnectorUseSnapRect;
         case SdrCompatibilityFlag::IgnoreBreakAfterMultilineField:
@@ -1801,9 +1801,9 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
     else if (pValue->Name == "LegacySingleLineFontwork")
     {
         bool bBool = false;
-        if (pValue->Value >>= bBool)
+        if ((pValue->Value >>= bBool) && mpImpl->mbLegacyFontwork != bBool)
         {
-            mpImpl->mbLegacySingleLineFontwork = bBool;
+            mpImpl->mbLegacyFontwork = bBool;
             // tdf#148000 hack: reset all CustomShape geometry as they may depend on this property
             // Ideally this ReadUserDataSequenceValue should be called before geometry creation
             // Once the calling order will be fixed, this hack will not be needed.
@@ -1839,7 +1839,7 @@ void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValu
     std::vector< std::pair< OUString, uno::Any > > aUserData
     {
         { "AnchoredTextOverflowLegacy", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy)) },
-        { "LegacySingleLineFontwork", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork)) },
+        { "LegacySingleLineFontwork", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork)) },
         { "ConnectorUseSnapRect", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect)) },
         { "IgnoreBreakAfterMultilineField", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)) }
     };

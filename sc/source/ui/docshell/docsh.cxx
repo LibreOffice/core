@@ -619,7 +619,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
         {
             pDrawLayer->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy,
                                              true); // for tdf#99729
-            pDrawLayer->SetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork,
+            pDrawLayer->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork,
                                              true); // for tdf#148000
         }
     }
