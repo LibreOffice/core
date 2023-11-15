@@ -337,6 +337,8 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     m_bShowPlaceHolderFields = rVOpt.m_bShowPlaceHolderFields;
     m_bIdle           = rVOpt.m_bIdle;
     m_nDefaultAnchor  = rVOpt.m_nDefaultAnchor;
+    m_nTocEntryLvl = rVOpt.m_nTocEntryLvl;
+    m_nIdxEntryLvl = rVOpt.m_nIdxEntryLvl;
     m_aColorConfig    = rVOpt.m_aColorConfig;
 
 #ifdef DBG_UTIL
