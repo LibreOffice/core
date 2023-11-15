@@ -384,7 +384,7 @@ void OOXMLFastContextHandler::startCharacterGroup()
         mpParserState->resolveCharacterProperties(*mpStream);
         if (mpParserState->isStartFootnote())
         {
-            mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uFtnSep), 1);
+            mpStream->utext(&uFtnSep, 1);
             mpParserState->setStartFootnote(false);
         }
     }
@@ -582,13 +582,13 @@ void OOXMLFastContextHandler::lockField()
 void OOXMLFastContextHandler::ftnednref()
 {
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uFtnEdnRef), 1);
+        mpStream->utext(&uFtnEdnRef, 1);
 }
 
 void OOXMLFastContextHandler::ftnednsep()
 {
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uFtnEdnSep), 1);
+        mpStream->utext(&uFtnEdnSep, 1);
 }
 
 void OOXMLFastContextHandler::ftnedncont()
@@ -600,13 +600,13 @@ void OOXMLFastContextHandler::ftnedncont()
 void OOXMLFastContextHandler::pgNum()
 {
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uPgNum), 1);
+        mpStream->utext(&uPgNum, 1);
 }
 
 void OOXMLFastContextHandler::tab()
 {
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uTab), 1);
+        mpStream->utext(&uTab, 1);
 }
 
 void OOXMLFastContextHandler::symbol()
@@ -618,19 +618,19 @@ void OOXMLFastContextHandler::symbol()
 void OOXMLFastContextHandler::cr()
 {
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uCR), 1);
+        mpStream->utext(&uCR, 1);
 }
 
 void OOXMLFastContextHandler::noBreakHyphen()
 {
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uNoBreakHyphen), 1);
+        mpStream->utext(&uNoBreakHyphen, 1);
 }
 
 void OOXMLFastContextHandler::softHyphen()
 {
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uSoftHyphen), 1);
+        mpStream->utext(&uSoftHyphen, 1);
 }
 
 void OOXMLFastContextHandler::handleLastParagraphInSection()
@@ -647,7 +647,7 @@ void OOXMLFastContextHandler::endOfParagraph()
     if (! mpParserState->isInCharacterGroup())
         startCharacterGroup();
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uCR), 1);
+        mpStream->utext(&uCR, 1);
 
     mpParserState->getDocument()->incrementProgress();
 }
@@ -712,9 +712,7 @@ void OOXMLFastContextHandler::text(const OUString & sText)
     {
         sNormalizedText = TrimXMLWhitespace(sNormalizedText).replaceAll("\t", " ");
     }
-    mpStream->utext(reinterpret_cast < const sal_uInt8 * >
-                    (sNormalizedText.getStr()),
-                    sNormalizedText.getLength());
+    mpStream->utext(sNormalizedText.getStr(), sNormalizedText.getLength());
 }
 
 void OOXMLFastContextHandler::positionOffset(const OUString& rText)
@@ -996,9 +994,7 @@ void OOXMLFastContextHandlerStream::sendProperty(Id nId)
     OOXMLPropertySetEntryToString aHandler(nId);
     getPropertySetAttrs()->resolve(aHandler);
     const OUString & sText = aHandler.getString();
-    mpStream->utext(reinterpret_cast < const sal_uInt8 * >
-                    (sText.getStr()),
-                    sText.getLength());
+    mpStream->utext(sText.getStr(), sText.getLength());
 }
 
 
@@ -1528,7 +1524,7 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
     startCharacterGroup();
 
     if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uCR), 1);
+        mpStream->utext(&uCR, 1);
 
     endCharacterGroup();
     endParagraphGroup();

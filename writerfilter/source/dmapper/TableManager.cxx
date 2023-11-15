@@ -215,13 +215,13 @@ void TableManager::tableExceptionProps(const TablePropertyMapPtr& pProps)
 #endif
 }
 
-void TableManager::utext(const sal_uInt8* data, std::size_t len)
+void TableManager::utext(const sal_Unicode* const data, std::size_t const len)
 {
     // optimization: cell/row end characters are the last characters in a run
 
     if (len > 0)
     {
-        sal_Unicode nChar = data[(len - 1) * 2] + (data[(len - 1) * 2 + 1] << 8);
+        sal_Unicode const nChar = data[len - 1];
         if (nChar == 0x7)
             handle0x7();
     }

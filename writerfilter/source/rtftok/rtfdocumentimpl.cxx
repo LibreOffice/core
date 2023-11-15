@@ -648,7 +648,7 @@ void RTFDocumentImpl::runProps()
 void RTFDocumentImpl::runBreak()
 {
     sal_Unicode const sBreak[] = { 0x0d };
-    Mapper().utext(reinterpret_cast<sal_uInt8 const*>(sBreak), 1);
+    Mapper().utext(sBreak, 1);
     m_bNeedCr = false;
 }
 
@@ -1614,7 +1614,7 @@ void RTFDocumentImpl::text(OUString& rString)
         runProps();
 
     if (!pCurrentBuffer)
-        Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
+        Mapper().utext(rString.getStr(), rString.getLength());
     else
     {
         auto pValue = new RTFValue(rString);
@@ -1763,8 +1763,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         else if (std::get<0>(aTuple) == BUFFER_UTEXT)
         {
             OUString const aString(std::get<1>(aTuple)->getString());
-            Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()),
-                           aString.getLength());
+            Mapper().utext(aString.getStr(), aString.getLength());
         }
         else if (std::get<0>(aTuple) == BUFFER_ENDRUN)
             Mapper().endCharacterGroup();
@@ -2570,7 +2569,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                                  : std::u16string_view(u"TC"));
             str = OUString::Concat(field) + " \"" + str.replaceAll("\"", "\\\"") + "\"";
             singleChar(cFieldStart);
-            Mapper().utext(reinterpret_cast<sal_uInt8 const*>(str.getStr()), str.getLength());
+            Mapper().utext(str.getStr(), str.getLength());
             singleChar(cFieldSep);
             // no result
             singleChar(cFieldEnd);

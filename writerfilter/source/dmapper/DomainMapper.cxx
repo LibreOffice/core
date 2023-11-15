@@ -2435,7 +2435,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
                 lcl_startCharacterGroup();
                 sal_Unicode const sBreak[] = { 0x0d };
-                lcl_utext(reinterpret_cast<sal_uInt8 const*>(sBreak), 1);
+                lcl_utext(sBreak, 1);
                 lcl_endCharacterGroup();
                 lcl_endParagraphGroup();
             }
@@ -3430,7 +3430,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             rContext->Insert(PROP_CHAR_FONT_NAME_ASIAN, aVal);
             rContext->Insert(PROP_CHAR_FONT_NAME_COMPLEX, aVal);
             rContext->Insert(PROP_CHAR_FONT_CHAR_SET, uno::Any(awt::CharSet::SYMBOL));
-            utext( reinterpret_cast < const sal_uInt8 * >( &(aSymbolData.cSymbol) ), 1 );
+            utext(&(aSymbolData.cSymbol), 1);
         }
     }
     break;
@@ -3626,7 +3626,7 @@ void DomainMapper::lcl_endSectionGroup()
         lcl_startParagraphGroup();
         lcl_startCharacterGroup();
         sal_Unicode const sBreak[] = { 0x0d };
-        lcl_utext(reinterpret_cast<sal_uInt8 const*>(sBreak), 1);
+        lcl_utext(sBreak, 1);
         lcl_endCharacterGroup();
         lcl_endParagraphGroup();
     }
@@ -4101,12 +4101,12 @@ void DomainMapper::ResetStyleProperties()
     }
 }
 
-void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
+void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
 {
     // All these fixed values are defined as static const sal_Unicode codepoints in the fast parser,
     // like uFtnEdnRef = 0x2, uFtnEdnSep = 0x3, ... and have a len of 1, if they aren't valid unicode.
 
-    OUString sText(reinterpret_cast<const sal_Unicode *>(data_), len);
+    OUString const sText(data_, len);
     const RubyInfo & aInfo = m_pImpl->GetRubyInfo();
     if (aInfo.nSprmId == NS_ooxml::LN_CT_Ruby_rt)
     {

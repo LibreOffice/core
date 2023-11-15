@@ -259,7 +259,7 @@ public:
        @param data    buffer containing the text
        @param len     number of characters in the text.
      */
-    virtual void utext(const sal_uInt8* data, size_t len) = 0;
+    virtual void utext(const sal_Unicode* data, size_t len) = 0;
 
     /**
      * Offset in EMUs for a shape.
