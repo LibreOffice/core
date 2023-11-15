@@ -127,7 +127,7 @@ private:
 
 typedef comphelper::WeakComponentImplHelper< css::presentation::XSlideShowController, css::container::XIndexAccess > SlideshowImplBase;
 
-class SlideshowImpl final : public SlideshowImplBase
+class SlideshowImpl final : public SlideshowImplBase, public SfxListener
 {
 friend class SlideShow;
 friend class SlideShowView;
@@ -182,6 +182,9 @@ public:
     virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
+
+    //  SfxListener
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     // will be called from the SlideShowListenerProxy when this event is fired from the XSlideShow
     void slideEnded(const bool bReverse);

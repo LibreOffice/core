@@ -59,6 +59,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/svxids.hrc>
+#include <svx/unoapi.hxx>
 #include <AnimationChildWindow.hxx>
 #include <notifydocumentevent.hxx>
 #include "slideshowimpl.hxx"
@@ -543,10 +544,19 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
         mnUserPaintColor = pOptions->GetPresentationPenColor();
         mdUserPaintStrokeWidth = pOptions->GetPresentationPenWidth();
     }
+
+    // to be able to react on various changes in the DrawModel, this class
+    // is now derived from SfxListener and registers itself at the DrawModel
+    if (nullptr != mpDoc)
+        StartListening(*mpDoc);
 }
 
 SlideshowImpl::~SlideshowImpl()
 {
+    // stop listening to DrawModel (see above)
+    if (nullptr != mpDoc)
+        EndListening(*mpDoc);
+
     SdModule *pModule = SD_MOD();
     //rhbz#806663 SlideshowImpl can outlive SdModule
     SdOptions* pOptions = pModule ?
@@ -3047,6 +3057,102 @@ css::uno::Type SAL_CALL SlideshowImpl::getElementType(  )
 sal_Bool SAL_CALL SlideshowImpl::hasElements(  )
 {
     return getSlideCount() != 0;
+}
+
+namespace
+{
+    class AsyncUpdateSlideshow_Impl
+    {
+    public:
+        struct AsyncUpdateSlideshowData
+        {
+            SlideshowImpl* pSlideshowImpl;
+            uno::Reference< css::drawing::XDrawPage > XCurrentSlide;
+        };
+
+        static void AsyncUpdateSlideshow(
+            SlideshowImpl* pSlideshowImpl,
+            uno::Reference< css::drawing::XDrawPage >& rXCurrentSlide)
+        {
+            AsyncUpdateSlideshowData* pNew(new AsyncUpdateSlideshowData);
+            pNew->pSlideshowImpl = pSlideshowImpl;
+            pNew->XCurrentSlide = rXCurrentSlide;
+            Application::PostUserEvent(LINK(nullptr, AsyncUpdateSlideshow_Impl, Update), pNew);
+            // coverity[leaked_storage] - pDisruptor takes care of its own destruction at idle time
+        }
+
+        DECL_STATIC_LINK(AsyncUpdateSlideshow_Impl, Update, void*, void);
+    };
+
+    IMPL_STATIC_LINK(AsyncUpdateSlideshow_Impl, Update, void*, pData, void)
+    {
+        AsyncUpdateSlideshowData* pSlideData(static_cast<AsyncUpdateSlideshowData*>(pData));
+        pSlideData->pSlideshowImpl->gotoSlide(pSlideData->XCurrentSlide);
+        delete pSlideData;
+    }
+}
+
+void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+{
+    if (SfxHintId::ThisIsAnSdrHint != rHint.GetId())
+        // nothing to do for non-SdrHints
+        return;
+
+    if (nullptr == mpDoc)
+        // better do nothing when no DrawModel (should not happen)
+        return;
+
+    const SdrHintKind eHintKind(static_cast<const SdrHint&>(rHint).GetKind());
+
+    if (SdrHintKind::ObjectChange == eHintKind)
+    {
+        // Object changed, object & involved page included in rHint.
+        uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
+        if (!XCurrentSlide.is())
+            return;
+
+        SdrPage* pCurrentSlide(GetSdrPageFromXDrawPage(XCurrentSlide));
+        if (nullptr == pCurrentSlide)
+            return;
+
+        const SdrPage* pHintPage(static_cast<const SdrHint&>(rHint).GetPage());
+        if (nullptr == pHintPage)
+            return;
+
+        bool bCurrentSlideIsInvolved(false);
+
+        if (pHintPage->IsMasterPage())
+        {
+            if (pCurrentSlide->TRG_HasMasterPage())
+            {
+                // current slide uses MasterPage on which the change happened
+                bCurrentSlideIsInvolved = (pHintPage == &pCurrentSlide->TRG_GetMasterPage());
+            }
+        }
+        else
+        {
+            // object on current slide was changed
+            bCurrentSlideIsInvolved = (pHintPage == pCurrentSlide);
+        }
+
+        if (!bCurrentSlideIsInvolved)
+            // nothing to do when current slide is not involved
+            return;
+
+        // Refresh current slide. Need to do that asynchronous, else e.g.
+        // text edit changes EditEngine/Outliner are not progressed far
+        // enough (ObjectChanged broadcast which we are in here seems
+        // to early for some cases)
+        AsyncUpdateSlideshow_Impl::AsyncUpdateSlideshow(this, XCurrentSlide);
+    }
+    else if (SdrHintKind::PageOrderChange == eHintKind)
+    {
+        // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
+        // probably needs refresh of AnimationSlideController in mpSlideController
+        gotoFirstSlide();
+    }
+
+    // maybe need to add reactions here to other Hint-Types
 }
 
 Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow()
