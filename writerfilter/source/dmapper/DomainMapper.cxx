@@ -4409,6 +4409,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                            (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
                             && !bSingleParagraphAfterRedline
                             && !bIsColumnBreak
+                            && !m_pImpl->GetIsLastSectionGroup() // testContSectionPageBreak
                             && !m_pImpl->GetParaHadField()
                             && (!m_pImpl->GetIsDummyParaAddedForTableInSectionPage())
                             && !m_pImpl->GetIsPreviousParagraphFramed()

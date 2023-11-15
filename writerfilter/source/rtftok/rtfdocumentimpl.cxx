@@ -3660,6 +3660,10 @@ RTFError RTFDocumentImpl::popState()
             dispatchSymbol(RTFKeyword::PAR);
         if (m_bNeedSect) // may be set by dispatchSymbol above!
             sectBreak(true);
+        else if (!m_pSuperstream)
+        {
+            Mapper().markLastSectionGroup(); // ensure it's set for \par below
+        }
         if (m_bNeedPar && !m_pSuperstream)
         {
             assert(!m_bNeedSect);
