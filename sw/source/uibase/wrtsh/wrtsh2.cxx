@@ -491,9 +491,9 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter )
 static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
                     const OUString& rTargetFrameName)
 {
-    SwDocShell* pDShell = rSh.GetView().GetDocShell();
+    SwDocShell* pDShell = rView.GetDocShell();
     OSL_ENSURE( pDShell, "No DocShell?!");
-    SfxViewFrame& rViewFrame = *rSh.GetView().GetViewFrame();
+    SfxViewFrame& rViewFrame = *rView.GetViewFrame();
 
     if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, rViewFrame.GetFrameWeld()))
         return;
