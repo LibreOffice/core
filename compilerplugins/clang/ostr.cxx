@@ -285,10 +285,6 @@ public:
             i->second.explicitConversions.insert(expr);
             return true;
         }
-        if (!utf16)
-        {
-            return true;
-        }
         if (expr->getNumArgs() != 2)
         {
             return true;
@@ -306,9 +302,8 @@ public:
         {
             return true;
         }
-        if (!compat::isOrdinary(e2))
+        if (!(compat::isOrdinary(e2) || e2->isUTF8()))
         {
-            assert(!e2->isUTF8()); //TODO
             return true;
         }
         auto const temp = isa<CXXTemporaryObjectExpr>(expr)
@@ -369,17 +364,19 @@ public:
                 Lexer::MeasureTokenLength(l3, compiler.getSourceManager(), compiler.getLangOpts()));
             l4 = l4.getLocWithOffset(
                 Lexer::MeasureTokenLength(l4, compiler.getSourceManager(), compiler.getLangOpts()));
-            if (replaceText(l1, delta(l1, l2), macroBegin ? "u\"\" " : "u")
-                && replaceText(l3, delta(l3, l4), macroEnd ? " \"\"_ustr" : "_ustr"))
+            if ((!utf16 || replaceText(l1, delta(l1, l2), macroBegin ? "u\"\" " : "u"))
+                && replaceText(l3, delta(l3, l4),
+                               utf16 ? (macroEnd ? " \"\"_ustr" : "_ustr")
+                                     : (macroEnd ? " \"\"_ostr" : "_ostr")))
             {
                 return true;
             }
         }
         report(DiagnosticsEngine::Warning,
-               "use a _ustr user-defined string literal instead of constructing an instance of %0 "
-               "from an ordinary string literal",
+               "use a %select{_ostr|_ustr}0 user-defined string literal instead of constructing an"
+               " instance of %1 from an ordinary string literal",
                expr->getExprLoc())
-            << expr->getType().getLocalUnqualifiedType() << expr->getSourceRange();
+            << utf16 << expr->getType().getLocalUnqualifiedType() << expr->getSourceRange();
         return true;
     }
 

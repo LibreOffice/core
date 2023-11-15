@@ -21,7 +21,9 @@ struct S
     OUString s;
 };
 
-void f(OUString const&);
+void takeOstring(OString const&);
+
+void takeOustring(OUString const&);
 
 void f(OUString const&, OUString const&);
 
@@ -35,30 +37,80 @@ void takeStdView(std::u16string_view);
 
 void f()
 {
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    OString s1o = "foo";
+    (void)s1o;
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    OString s2o = (("foo"));
+    (void)s2o;
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    OString s3o("foo");
+    (void)s3o;
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    OString s4o((("foo")));
+    (void)s4o;
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(OString("foo"));
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(((OString((("foo"))))));
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(OString("foo", rtl::libreoffice_internal::Dummy()));
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(((OString((("foo")), rtl::libreoffice_internal::Dummy()))));
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring("foo");
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring((("foo")));
+
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    OString s1o8 = u8"foo";
+    (void)s1o8;
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    OString s2o8 = ((u8"foo"));
+    (void)s2o8;
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    OString s3o8(u8"foo");
+    (void)s3o8;
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    OString s4o8(((u8"foo")));
+    (void)s4o8;
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(OString(u8"foo"));
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(((OString(((u8"foo"))))));
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(OString(u8"foo", rtl::libreoffice_internal::Dummy()));
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(((OString(((u8"foo")), rtl::libreoffice_internal::Dummy()))));
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(u8"foo");
+    // expected-error-re@+1 {{use a _ostr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OString' from an ordinary string literal [loplugin:ostr]}}
+    takeOstring(((u8"foo")));
+
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    OUString s1 = "foo";
-    (void)s1;
+    OUString s1u = "foo";
+    (void)s1u;
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    OUString s2 = (("foo"));
-    (void)s2;
+    OUString s2u = (("foo"));
+    (void)s2u;
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    OUString s3("foo");
-    (void)s3;
+    OUString s3u("foo");
+    (void)s3u;
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    OUString s4((("foo")));
-    (void)s4;
+    OUString s4u((("foo")));
+    (void)s4u;
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    f(OUString("foo"));
+    takeOustring(OUString("foo"));
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    f(((OUString((("foo"))))));
+    takeOustring(((OUString((("foo"))))));
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    f(OUString("foo", rtl::libreoffice_internal::Dummy()));
+    takeOustring(OUString("foo", rtl::libreoffice_internal::Dummy()));
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    f(((OUString((("foo")), rtl::libreoffice_internal::Dummy()))));
+    takeOustring(((OUString((("foo")), rtl::libreoffice_internal::Dummy()))));
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    f("foo");
+    takeOustring("foo");
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    f((("foo")));
+    takeOustring((("foo")));
 
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
     S s10 = { "foo" };
