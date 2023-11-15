@@ -270,7 +270,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     if (IsOwnStorageFormat(rMedium))
     {
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy, true); // for tdf#99729
-        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork, true); // for tdf#148000
+        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork, true); // for tdf#148000
     }
 
     bool       bRet = false;

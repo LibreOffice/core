@@ -482,7 +482,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
             {
                 pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy,
                                                  true); // legacy processing for tdf#99729
-                pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork,
+                pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork,
                                                  true); // legacy processing for tdf#148000
             }
         }

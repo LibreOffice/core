@@ -75,6 +75,7 @@ struct FWTextArea                       // representing multiple concluding para
 {
     std::vector< FWParagraphData >      vParagraphs;
     tools::Rectangle                           aBoundRect;
+    sal_Int32                           nHAlignMove = 0;
 };
 struct FWData                           // representing the whole text
 {
@@ -135,7 +136,7 @@ static bool InitializeFontWorkData(
                 {
                     // search line break.
                     if (!rSdrObjCustomShape.getSdrModelFromSdrObject().GetCompatibilityFlag(
-                            SdrCompatibilityFlag::LegacySingleLineFontwork))
+                            SdrCompatibilityFlag::LegacyFontwork))
                         nPos = aParaText[nPara].indexOf(sal_Unicode(u'\1'), nPrevPos);
                     else
                         nPos = -1; // tdf#148000: ignore line breaks in legacy fontworks
@@ -567,6 +568,7 @@ static bool GetFontWorkOutline(
             {
                 sal_Int32 nHorzDiff = 0;
                 sal_Int32 nVertDiff = static_cast<double>( rFWData.nSingleLineHeight ) * fFactor * ( rTextArea.vParagraphs.size() - 1 );
+                rTextArea.nHAlignMove = nVertDiff;
 
                 if ( eHorzAdjust == SDRTEXTHORZADJUST_CENTER )
                     nHorzDiff = ( rFWData.fHorizontalTextScaling * rTextArea.aBoundRect.GetWidth() - rParagraph.aBoundRect.GetWidth() ) / 2;
@@ -718,10 +720,12 @@ static void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
     }
 }
 
-static void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& rDistances, const double& fX, double& fx1, double& fy1 )
+//only 2 types used: 'const tools::Polygon&' and 'const std::vector<Point>&'
+template <class T>
+static void GetPoint( T rPoly, const std::vector< double >& rDistances, const double& fX, double& fx1, double& fy1 )
 {
     fy1 = fx1 = 0.0;
-    if ( rPoly.GetSize() <= 1 )
+    if (rPoly.size() <= 1)
         return;
 
     std::vector< double >::const_iterator aIter = std::lower_bound( rDistances.begin(), rDistances.end(), fX );
@@ -746,7 +750,8 @@ static void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& 
     fy1 = rPt2.Y() + fHeight;
 }
 
-static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWData& rFWData )
+static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d, FWData& rFWData,
+                                           SdrTextHorzAdjust eHorzAdjust, bool bPPFontwork)
 {
     sal_uInt16 nOutline2dIdx = 0;
     for( auto& rTextArea : rFWData.vTextAreas )
@@ -773,46 +778,242 @@ static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2
                 std::vector< double > vDistances;
                 vDistances.reserve( nPointCount );
                 CalcDistances( rOutlinePoly, vDistances );
+
                 if ( !vDistances.empty() )
                 {
-                    for( auto& rParagraph : rTextArea.vParagraphs )
+                    // horizontal aligment: how much we have to move text to the right.
+                    int nAdjust = -1;
+                    switch (eHorzAdjust)
                     {
-                        for ( auto& rCharacter : rParagraph.vCharacters )
+                        case SDRTEXTHORZADJUST_RIGHT:
+                            nAdjust = 2; // 2 half of the possible
+                            break;
+                        case SDRTEXTHORZADJUST_CENTER:
+                            nAdjust = 1; // 1 half of the possible
+                            break;
+                        case SDRTEXTHORZADJUST_BLOCK:
+                            nAdjust = -1; // don't know what it is, so dont even align
+                            break;
+                        case SDRTEXTHORZADJUST_LEFT:
+                            nAdjust = 0; // no need to move
+                            break;
+                    }
+
+                    if (bPPFontwork && rTextArea.vParagraphs.size() > 1 && nAdjust >= 0)
+                    {
+                        // If we have multiple lines of text to fit to the outline (curve)
+                        // then we have to be able to calculate outer versions of the outline
+                        // where we can fit the next lines of texts
+                        // those outer lines will be wider (or shorter) as the original outline
+                        // and probably will looks different as the original outline.
+                        //
+                        // for example if we have an outline like this:
+                        // <____>
+                        // then the middle part will have the same normals, so distances there,
+                        //  will not change for an outer outline
+                        // while the points near the edge will have different normals,
+                        //  distances around there will increase for an outer (wider) outline
+
+                        //Normal vectors for every rOutlinePoly point. 1024 long
+                        std::vector<Point> vNorm;
+                        //wider curve path points, for current paragraph (rOutlinePoly + vNorm*line)
+                        std::vector<Point> vCurOutline;
+                        //distances between points of this wider curve
+                        std::vector<double> vCurDistances;
+
+                        vCurDistances.reserve(nPointCount);
+                        vCurOutline.reserve(nPointCount);
+                        vNorm.reserve(nPointCount);
+
+                        // Calculate Normal vectors, and allocate curve datas
+                        sal_uInt16 i;
+                        for (i = 0; i < nPointCount; i++)
                         {
-                            for( tools::PolyPolygon& rPolyPoly : rCharacter.vOutlines )
+                            //Normal vector for a point will be calculated from its neightbour points
+                            //except if is in the start/end of the vector
+                            sal_uInt16 nPointIdx1 = i == 0 ? i : i - 1;
+                            sal_uInt16 nPointIdx2 = i == nPointCount - 1 ? i : i + 1;
+
+                            Point aPoint = rOutlinePoly.GetPoint(nPointIdx2)
+                                           - rOutlinePoly.GetPoint(nPointIdx1);
+
+                            double fLen = sqrt(aPoint.X() * aPoint.X() + aPoint.Y() * aPoint.Y());
+
+                            if (fLen > 0)
                             {
-                                tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
-                                double fx1 = aBoundRect.Left() - nLeft;
-                                double fx2 = aBoundRect.Right() - nLeft;
-                                double fy1, fy2;
-                                double fM1 = fx1 / static_cast<double>(nWidth);
-                                double fM2 = fx2 / static_cast<double>(nWidth);
+                                //Rotate by 90 degree, and divide by length, to get normal vector
+                                vNorm.emplace_back(aPoint.getY() * 1024 / fLen,
+                                                   -aPoint.getX() * 1024 / fLen);
+                            }
+                            else
+                            {
+                                vNorm.emplace_back(0, 0);
+                            }
+                            vCurOutline.emplace_back(Point());
+                            vCurDistances.push_back(0);
 
-                                GetPoint( rOutlinePoly, vDistances, fM1, fx1, fy1 );
-                                GetPoint( rOutlinePoly, vDistances, fM2, fx2, fy2 );
+                        }
 
-                                double fvx = fy2 - fy1;
-                                double fvy = - ( fx2 - fx1 );
-                                fx1 = fx1 + ( ( fx2 - fx1 ) * 0.5 );
-                                fy1 = fy1 + ( ( fy2 - fy1 ) * 0.5 );
+                        for( auto& rParagraph : rTextArea.vParagraphs )
+                        {
+                            //calculate the actual outline length, and its align adjustments
+                            double fAdjust;
+                            double fCurWidth;
 
-                                double fAngle = atan2( -fvx, -fvy );
-                                double fL = hypot( fvx, fvy );
-                                if (fL == 0.0)
+                            // distance between the original an the current curve
+                            double fCurvesDist = rTextArea.aBoundRect.GetHeight() / 2.0
+                                                 + rTextArea.aBoundRect.Top()
+                                                 - rParagraph.aBoundRect.Center().Y();
+                            // verical alignment adjust
+                            fCurvesDist -= rTextArea.nHAlignMove;
+
+                            for (i = 0; i < nPointCount; i++)
+                            {
+                                vCurOutline[i]
+                                    = rOutlinePoly.GetPoint(i) + vNorm[i] * fCurvesDist / 1024.0;
+                                if (i > 0)
                                 {
-                                    SAL_WARN("svx", "FitTextOutlinesToShapeOutlines div-by-zero, abandon fit");
-                                    break;
+                                    //calculate distances between points on the outer outline
+                                    const double fDx = vCurOutline[i].X() - vCurOutline[i - 1].X();
+                                    const double fDy = vCurOutline[i].Y() - vCurOutline[i - 1].Y();
+                                    vCurDistances[i] = sqrt(fDx * fDx + fDy * fDy);
                                 }
-                                fvx = fvx / fL;
-                                fvy = fvy / fL;
-                                fL = rTextArea.aBoundRect.GetHeight() / 2.0 + rTextArea.aBoundRect.Top() - rParagraph.aBoundRect.Center().Y();
-                                fvx *= fL;
-                                fvy *= fL;
-                                rPolyPoly.Rotate( Point( aBoundRect.Center().X(), rParagraph.aBoundRect.Center().Y() ), sin( fAngle ), cos( fAngle ) );
-                                rPolyPoly.Move( static_cast<sal_Int32>( ( fx1 + fvx )- aBoundRect.Center().X() ), static_cast<sal_Int32>( ( fy1 + fvy ) - rParagraph.aBoundRect.Center().Y() ) );
+                                else
+                                    vCurDistances[i] = 0;
+                            }
+                            std::partial_sum(vCurDistances.begin(), vCurDistances.end(),
+                                             vCurDistances.begin());
+                            fCurWidth = vCurDistances[vCurDistances.size() - 1];
+                            if (fCurWidth > 0.0)
+                            {
+                                for (auto& rDistance : vCurDistances)
+                                    rDistance /= fCurWidth;
+                            }
+
+                            // if the current outline is longer then the text to fit in,
+                            // then we have to divide the bonus space betweeen the
+                            // before-/after- text area.
+                            // fAdjust means how much space we put before the text.
+                            if (fCurWidth > rParagraph.aBoundRect.GetWidth())
+                            {
+                                fAdjust
+                                    = nAdjust * (fCurWidth - rParagraph.aBoundRect.GetWidth()) / 2;
+                            }
+                            else
+                                fAdjust = -1;   // we neet tho shrink the text to fit the curve
+
+                            for ( auto& rCharacter : rParagraph.vCharacters )
+                            {
+                                for (tools::PolyPolygon& rPolyPoly : rCharacter.vOutlines)
+                                {
+                                    tools::Rectangle aBoundRect(rPolyPoly.GetBoundRect());
+                                    double fx1 = aBoundRect.Left() - nLeft;
+                                    double fx2 = aBoundRect.Right() - nLeft;
+
+                                    double fParaRectWidth = rParagraph.aBoundRect.GetWidth();
+                                    // Undo Horizontal alignment, hacked into poly coords,
+                                    // so we can calculate it the right way
+                                    double fHA = (rFWData.fHorizontalTextScaling
+                                                      * rTextArea.aBoundRect.GetWidth()
+                                                  - rParagraph.aBoundRect.GetWidth())
+                                                 * nAdjust / 2;
+
+                                    fx1 -= fHA;
+                                    fx2 -= fHA;
+
+                                    double fy1, fy2;
+                                    double fM1 = fx1 / fParaRectWidth;
+                                    double fM2 = fx2 / fParaRectWidth;
+
+                                    // if fAdjust<0, then it means, the text was longer, as
+                                    // the current outline, so we will skip the text scaling, and
+                                    // the text horizontal alignment ajustment
+                                    // so the text will be rendered just as long as the cureve is.
+                                    if (fAdjust >= 0)
+                                    {
+                                        fM1 = (fM1 * fParaRectWidth + fAdjust) / fCurWidth;
+                                        fM2 = (fM2 * fParaRectWidth + fAdjust) / fCurWidth;
+                                    }
+                                    // 0 <= fM1,fM2 <= 1 should be true, but rounding errors can
+                                    // make a small mistake.
+                                    // make sure they are >0 becuase GetPoint() need that
+                                    if (fM1 < 0) fM1 = 0;
+                                    if (fM2 < 0) fM2 = 0;
+
+                                    GetPoint(vCurOutline, vCurDistances, fM1, fx1, fy1);
+                                    GetPoint(vCurOutline, vCurDistances, fM2, fx2, fy2);
+
+                                    double fvx = fy2 - fy1;
+                                    double fvy = - ( fx2 - fx1 );
+                                    fx1 = fx1 + ( ( fx2 - fx1 ) * 0.5 );
+                                    fy1 = fy1 + ( ( fy2 - fy1 ) * 0.5 );
+
+                                    double fAngle = atan2( -fvx, -fvy );
+                                    double fL = hypot( fvx, fvy );
+                                    if (fL == 0.0)
+                                    {
+                                        SAL_WARN("svx", "FitTextOutlinesToShapeOutlines div-by-zero, abandon fit");
+                                        break;
+                                    }
+                                    fvx = fvx / fL;
+                                    fvy = fvy / fL;
+                                    // Undo Vertical alignment hacked into poly coords
+                                    // We already calculated the right alignment into the curve
+                                    fL = rTextArea.nHAlignMove;
+                                    fvx *= fL;
+                                    fvy *= fL;
+                                    rPolyPoly.Rotate( Point( aBoundRect.Center().X(), rParagraph.aBoundRect.Center().Y() ), sin( fAngle ), cos( fAngle ) );
+                                    rPolyPoly.Move( static_cast<sal_Int32>( ( fx1 + fvx )- aBoundRect.Center().X() ), static_cast<sal_Int32>( ( fy1 + fvy ) - rParagraph.aBoundRect.Center().Y() ) );
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        // Fallback / old way to handle multiple lines:
+                        // Every text lines use the same original outline (curve),
+                        // it just scale character coordinates to fit to the right text line
+                        // (curve), resulting wider/thinner space between characters
+                        for (auto& rParagraph : rTextArea.vParagraphs)
+                        {
+                            for (auto& rCharacter : rParagraph.vCharacters)
+                            {
+                                for (tools::PolyPolygon& rPolyPoly : rCharacter.vOutlines)
+                                {
+                                    tools::Rectangle aBoundRect(rPolyPoly.GetBoundRect());
+                                    double fx1 = aBoundRect.Left() - nLeft;
+                                    double fx2 = aBoundRect.Right() - nLeft;
+                                    double fy1, fy2;
+                                    double fM1 = fx1 / static_cast<double>(nWidth);
+                                    double fM2 = fx2 / static_cast<double>(nWidth);
+
+                                    GetPoint(rOutlinePoly, vDistances, fM1, fx1, fy1);
+                                    GetPoint(rOutlinePoly, vDistances, fM2, fx2, fy2);
+
+                                    double fvx = fy2 - fy1;
+                                    double fvy = -(fx2 - fx1);
+                                    fx1 = fx1 + ((fx2 - fx1) * 0.5);
+                                    fy1 = fy1 + ((fy2 - fy1) * 0.5);
+
+                                    double fAngle = atan2(-fvx, -fvy);
+                                    double fL = hypot(fvx, fvy);
+                                    if (fL == 0.0)
+                                    {
+                                        SAL_WARN("svx", "FitTextOutlinesToShapeOutlines div-by-zero, abandon fit");
+                                        break;
+                                    }
+                                    fvx = fvx / fL;
+                                    fvy = fvy / fL;
+                                    fL = rTextArea.aBoundRect.GetHeight() / 2.0 + rTextArea.aBoundRect.Top() - rParagraph.aBoundRect.Center().Y();
+                                    fvx *= fL;
+                                    fvy *= fL;
+                                    rPolyPoly.Rotate( Point( aBoundRect.Center().X(), rParagraph.aBoundRect.Center().Y() ), sin( fAngle ), cos( fAngle ) );
+                                    rPolyPoly.Move( static_cast<sal_Int32>( ( fx1 + fvx )- aBoundRect.Center().X() ), static_cast<sal_Int32>( ( fy1 + fvy ) - rParagraph.aBoundRect.Center().Y() ) );
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -970,7 +1171,11 @@ rtl::Reference<SdrObject> EnhancedCustomShapeFontWork::CreateFontWork(
                 return nullptr;
             }
 
-            FitTextOutlinesToShapeOutlines( aOutlines2d, aFWData );
+            SdrTextHorzAdjust eHorzAdjust(
+                rSdrObjCustomShape.GetMergedItem(SDRATTR_TEXT_HORZADJUST).GetValue());
+            bool bPPFontwork = !rSdrObjCustomShape.getSdrModelFromSdrObject().GetCompatibilityFlag(
+                              SdrCompatibilityFlag::LegacyFontwork);
+            FitTextOutlinesToShapeOutlines( aOutlines2d, aFWData, eHorzAdjust, bPPFontwork );
 
             pRet = CreateSdrObjectFromParagraphOutlines(
                 aFWData,

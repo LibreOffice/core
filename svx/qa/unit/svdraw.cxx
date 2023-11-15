@@ -424,6 +424,45 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextEidth)
+{
+    std::vector<OUString> aFilenames
+        = { u"tdf148000_CurvedTextWidth.pptx", u"tdf148000_CurvedTextWidth_New.odp",
+            u"tdf148000_CurvedTextWidth_Legacy.odp" };
+
+    for (int i = 0; i < 3; i++)
+    {
+        loadFromURL(aFilenames[i]);
+
+        SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+        xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+        OString aBasePath
+            = "/primitive2D/objectinfo[4]/unhandled/unhandled/polypolygoncolor/polypolygon/";
+
+        // The text is: 7 line od "OOOOOOO"
+        // Take the x coord of the 4 "O" on the corners
+        sal_Int32 nX1 = getXPath(pXmlDoc, aBasePath + "polygon[1]/point[1]", "x").toInt32();
+        sal_Int32 nX2 = getXPath(pXmlDoc, aBasePath + "polygon[13]/point[1]", "x").toInt32();
+        sal_Int32 nX3 = getXPath(pXmlDoc, aBasePath + "polygon[6*14+1]/point[1]", "x").toInt32();
+        sal_Int32 nX4 = getXPath(pXmlDoc, aBasePath + "polygon[6*14+13]/point[1]", "x").toInt32();
+
+        if (i < 2)
+        {
+            // All the lines should be positioned similar (start/end is similar)
+            CPPUNIT_ASSERT_LESS(sal_Int32(150), abs(nX3 - nX1));
+            CPPUNIT_ASSERT_LESS(sal_Int32(150), abs(nX4 - nX2));
+        }
+        else
+        {
+            // In legacy mode, the outer lines become much wider
+            CPPUNIT_ASSERT_GREATER(sal_Int32(1500), nX3 - nX1);
+            CPPUNIT_ASSERT_GREATER(sal_Int32(1500), nX2 - nX4);
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
 {
     loadFromURL(u"tdf140321_metal.odp");

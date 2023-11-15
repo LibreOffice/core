@@ -769,7 +769,7 @@ void SdOOXMLExportTest3::testTdf125573_FontWorkScaleX()
     xShapeArchProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectArch;
     // BoundRect is DPI dependent, thus allow some range.
     // (Without fix Expected less than: 85 Actual  : 10432)
-    CPPUNIT_ASSERT_LESS(sal_Int32(85), std::abs(aBoundRectArch.Width - 13038));
+    CPPUNIT_ASSERT_LESS(sal_Int32(85), std::abs(aBoundRectArch.Width - 13145));
 
     // Error was, that text in shapes of category "Warp" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeWaveProps(getShapeFromPage(0, 1));

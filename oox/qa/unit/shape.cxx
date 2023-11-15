@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         // Without the fix in place width was 3639, but should be 4824 for 96dpi.
         tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(4824), aBoundRect.GetWidth(), 5);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(4784), aBoundRect.GetWidth(), 5);
     }
 
     drawing::TextVerticalAdjust eAdjust;
