@@ -70,7 +70,7 @@ void getOOXHandlePositionsHmm(const oox::drawingml::ShapePtr& pConnector,
 basegfx::B2DHomMatrix getConnectorTransformMatrix(const oox::drawingml::ShapePtr& pConnector);
 
 /**
- * Calulates the handle positions of a connector of type ConnectorType_STANDARD. Such connector
+ * Calculates the handle positions of a connector of type ConnectorType_STANDARD. Such connector
  * corresponds to the OOXML bentConnector shapes, aka "ElbowConnector". The calculation is based on
  * the actual polygon of the connector. The coordinates are always returned in Hmm, even for shapes
  * on a text document draw page.
