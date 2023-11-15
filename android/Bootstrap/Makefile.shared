@@ -100,7 +100,6 @@ liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
 		&& echo "    liboSharedResFolder = '$(LIBO_SHARE_RESOURCE_FOLDER)'" \
 		&& echo "    liboUREJavaFolder   = '$(LIBO_URE_SHARE_JAVA_FOLDER)'" \
 		&& echo "    liboShareJavaFolder = '$(LIBO_SHARE_JAVA_FOLDER)'" \
-		&& echo "    liboExampleDocument = '$(if $(exampleDocument),$(exampleDocument),$(SRC_ROOT)/android/default-document/example.odt)'" \
 		&& echo "    liboVersionMajor    = '$(LIBO_VERSION_MAJOR)'" \
 		&& echo "    liboVersionMinor    = '$(LIBO_VERSION_MINOR)'" \
 		&& echo "    liboGitFullCommit   = '$(shell cd $(SRCDIR) && git log -1 --format=%H)'" \

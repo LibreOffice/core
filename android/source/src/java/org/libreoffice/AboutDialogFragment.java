@@ -86,13 +86,6 @@ public class AboutDialogFragment extends DialogFragment {
                         loadFromAbout(R.raw.notice);
                         dialog.dismiss();
                     }
-                })
-                .setNeutralButton(R.string.about_moreinfo, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        loadFromAbout(R.raw.example);
-                        dialog.dismiss();
-                    }
                 });
 
         return builder.create();

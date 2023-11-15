@@ -13,7 +13,6 @@
 
     <string name="about_license">Show License</string>
     <string name="about_notice">Show Notice</string>
-    <string name="about_moreinfo">More Info</string>
 
     <string name="create_file">Create New File</string>
     <string name="new_textdocument">New Text Document</string>

@@ -197,9 +197,6 @@ task copyAppResources(type: Copy) {
         rename "LICENSE", "license.txt"
         rename "NOTICE", "notice.txt"
     }
-    from("${liboExampleDocument}") {
-        rename ".*", "example.odt"
-    }
 }
 
 task createFullConfig(type: Copy) {
