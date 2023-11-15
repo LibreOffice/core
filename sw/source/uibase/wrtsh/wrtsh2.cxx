@@ -513,6 +513,16 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     if ( dynamic_cast<const SwCursorShell*>( &rVSh) ==  nullptr )
         return;
 
+    //A CursorShell is always a WrtShell
+    SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
+
+    SwDocShell* pDShell = rSh.GetView().GetDocShell();
+    OSL_ENSURE( pDShell, "No DocShell?!");
+    SfxViewFrame& rViewFrame = *rSh.GetView().GetViewFrame();
+
+    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, rViewFrame.GetFrameWeld()))
+        return;
+
     // We are doing tiledRendering, let the client handles the URL loading,
     // unless we are jumping to a TOC mark.
     if (comphelper::LibreOfficeKit::isActive() && !rURL.startsWith("#"))
@@ -521,11 +531,6 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
         return;
     }
 
-    //A CursorShell is always a WrtShell
-    SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
-
-    SwDocShell* pDShell = rSh.GetView().GetDocShell();
-    OSL_ENSURE( pDShell, "No DocShell?!");
     OUString sTargetFrame(rTargetFrameName);
     if (sTargetFrame.isEmpty() && pDShell)
     {
@@ -540,8 +545,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     OUString sReferer;
     if( pDShell && pDShell->GetMedium() )
         sReferer = pDShell->GetMedium()->GetName();
-    SfxViewFrame* pViewFrame = rSh.GetView().GetViewFrame();
-    SfxFrameItem aView( SID_DOCFRAME, pViewFrame );
+    SfxFrameItem aView( SID_DOCFRAME, &rViewFrame );
     SfxStringItem aName( SID_FILE_NAME, rURL );
     SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
     SfxStringItem aReferer( SID_REFERER, sReferer );
@@ -562,7 +566,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
                 nullptr
     };
 
-    pViewFrame->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
+    rViewFrame.GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
 }
 
