@@ -499,12 +499,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
             if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
             {
-                SfxStringItem aUrl(SID_FILE_NAME, pURLField->GetURL());
-                SfxStringItem aTarget(SID_TARGETNAME, pURLField->GetTargetFrame());
-                SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, false);
-                SfxBoolItem aBrowsing(SID_BROWSE, true);
-                GetView().GetViewFrame().GetDispatcher()->ExecuteList(
-                    SID_OPENDOC, SfxCallMode::SYNCHRON, { &aUrl, &aTarget, &aNewView, &aBrowsing });
+                ::LoadURL(GetView(), pURLField->GetURL(), LoadUrlFlags::NONE,
+                          pURLField->GetTargetFrame());
             }
         }
         break;
