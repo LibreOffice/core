@@ -34,14 +34,14 @@ public:
 
     void SetOffset(Point aTopRightPixel);
 
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-
     virtual void ShowAll(bool bShow) override;
     virtual bool Contains(const Point& rDocPt) const override;
 
     virtual void SetReadonly(bool bReadonly) override;
+    weld::Button* GetButton() override;
 
 private:
+    DECL_LINK(ClickHdl, weld::Button&, void);
     void PaintButton();
 };
 

@@ -32,6 +32,7 @@ public:
 
     virtual const SwFrame* GetFrame() = 0;
     virtual SwEditWin*   GetEditWin() = 0;
+    virtual weld::Button* GetButton() { return nullptr; };
 };
 
 class SwFrameControl final
