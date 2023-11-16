@@ -53,8 +53,11 @@ UnfloatTableButton::UnfloatTableButton(SwEditWin* pEditWin, const SwFrame* pFram
 {
     m_xPushButton->set_accessible_name(m_sLabel);
     m_xVirDev = m_xPushButton->create_virtual_device();
+    m_xPushButton->connect_clicked(LINK(this, UnfloatTableButton, ClickHdl));
     SetVirDevFont();
 }
+
+weld::Button* UnfloatTableButton::GetButton() { return m_xPushButton.get(); }
 
 UnfloatTableButton::~UnfloatTableButton() { disposeOnce(); }
 
@@ -89,7 +92,7 @@ void UnfloatTableButton::SetOffset(Point aTopRightPixel)
     PaintButton();
 }
 
-void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
+IMPL_LINK_NOARG(UnfloatTableButton, ClickHdl, weld::Button&, void)
 {
     assert(GetFrame()->IsFlyFrame());
     // const_cast is needed because of bad design of ISwFrameControl and derived classes
