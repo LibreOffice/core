@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
+#include <com/sun/star/util/InvalidStateException.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -332,6 +333,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
 
             OUString sTooltip;
             OUString sType;
+            css::uno::Type aType = cppu::UnoType<void>::get();
             OUString sDynamicType = aNode.getValueTypeName();
             try
             {
@@ -339,45 +341,48 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                                                                         UNO_QUERY_THROW);
                 sTooltip
                     = xDocumentation->getDescriptionByHierarchicalName(sPath + "/" + sPropertyName);
-                sType = xDocumentation->getTypeByHierarchicalName(sFullPath);
+                aType = xDocumentation->getTypeByHierarchicalName(sFullPath);
             }
             catch (css::container::NoSuchElementException)
+            {
+            }
+            catch (css::util::InvalidStateException)
             {
             }
 
             OUStringBuffer sValue;
 
             // Fall back to dynamic type when this is empty
-            if (sType.isEmpty())
+            if (aType == cppu::UnoType<void>::get())
             {
                 if (sDynamicType == "boolean")
-                    sType = "xs:boolean";
+                    aType = cppu::UnoType<sal_Bool>::get();
                 else if (sDynamicType == "short")
-                    sType = "xs:short";
+                    aType = cppu::UnoType<sal_Int16>::get();
                 else if (sDynamicType == "long")
-                    sType = "xs:int";
+                    aType = cppu::UnoType<sal_Int32>::get();
                 else if (sDynamicType == "hyper")
-                    sType = "xs:long";
+                    aType = cppu::UnoType<sal_Int64>::get();
                 else if (sDynamicType == "double")
-                    sType = "xs:double";
+                    aType = cppu::UnoType<double>::get();
                 else if (sDynamicType == "string")
-                    sType = "xs:string";
+                    aType = cppu::UnoType<OUString>::get();
                 else if (sDynamicType == "[]byte")
-                    sType = "xs:hexBinary";
+                    aType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
                 else if (sDynamicType == "[]boolean")
-                    sType = "oor:boolean-list";
+                    aType = cppu::UnoType<css::uno::Sequence<sal_Bool>>::get();
                 else if (sDynamicType == "[]short")
-                    sType = "oor:short-list";
+                    aType = cppu::UnoType<css::uno::Sequence<sal_Int16>>::get();
                 else if (sDynamicType == "[]long")
-                    sType = "oor:int-list";
+                    aType = cppu::UnoType<css::uno::Sequence<sal_Int32>>::get();
                 else if (sDynamicType == "[]hyper")
-                    sType = "oor:long-list";
+                    aType = cppu::UnoType<css::uno::Sequence<sal_Int64>>::get();
                 else if (sDynamicType == "[]double")
-                    sType = "oor:double-list";
+                    aType = cppu::UnoType<css::uno::Sequence<double>>::get();
                 else if (sDynamicType == "[]string")
-                    sType = "oor:string-list";
+                    aType = cppu::UnoType<css::uno::Sequence<OUString>>::get();
                 else if (sDynamicType == "[][]byte")
-                    sType = "oor:hexBinary-list";
+                    aType = cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int8>>>::get();
             }
 
             if (it != m_modifiedPrefBoxEntries.end())
@@ -388,37 +393,37 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 {
                     // Skip, no value set
                 }
-                else if (sType == "xs:boolean")
+                else if (aType == cppu::UnoType<sal_Bool>::get())
                 {
                     sValue = OUString::boolean(aNode.get<bool>());
                     sType = "boolean";
                 }
-                else if (sType == "xs:short")
+                else if (aType == cppu::UnoType<sal_Int16>::get())
                 {
                     sValue = OUString::number(aNode.get<sal_Int16>());
                     sType = "short";
                 }
-                else if (sType == "xs:int")
+                else if (aType == cppu::UnoType<sal_Int32>::get())
                 {
                     sValue = OUString::number(aNode.get<sal_Int32>());
                     sType = "int";
                 }
-                else if (sType == "xs:long")
+                else if (aType == cppu::UnoType<sal_Int64>::get())
                 {
                     sValue = OUString::number(aNode.get<sal_Int64>());
                     sType = "long";
                 }
-                else if (sType == "xs:double")
+                else if (aType == cppu::UnoType<double>::get())
                 {
                     sValue = OUString::number(aNode.get<double>());
                     sType = "double";
                 }
-                else if (sType == "xs:string")
+                else if (aType == cppu::UnoType<OUString>::get())
                 {
                     sValue = aNode.get<OUString>();
                     sType = "string";
                 }
-                else if (sType == "xs:hexBinary")
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int8>>::get())
                 {
                     const uno::Sequence<sal_Int8> seq = aNode.get<uno::Sequence<sal_Int8>>();
                     for (sal_Int8 j : seq)
@@ -432,7 +437,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = "hexBinary";
                 }
-                else if (sType == "oor:boolean-list")
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Bool>>::get())
                 {
                     uno::Sequence<sal_Bool> seq = aNode.get<uno::Sequence<sal_Bool>>();
                     for (sal_Int32 j = 0; j != seq.getLength(); ++j)
@@ -445,7 +450,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = "boolean-list";
                 }
-                else if (sType == "oor:short-list")
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int16>>::get())
                 {
                     uno::Sequence<sal_Int16> seq = aNode.get<uno::Sequence<sal_Int16>>();
                     for (sal_Int32 j = 0; j != seq.getLength(); ++j)
@@ -458,7 +463,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = "short-list";
                 }
-                else if (sType == "oor:int-list")
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get())
                 {
                     uno::Sequence<sal_Int32> seq = aNode.get<uno::Sequence<sal_Int32>>();
                     for (sal_Int32 j = 0; j != seq.getLength(); ++j)
@@ -471,7 +476,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = "int-list";
                 }
-                else if (sType == "oor:long-list")
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int64>>::get())
                 {
                     uno::Sequence<sal_Int64> seq = aNode.get<uno::Sequence<sal_Int64>>();
                     for (sal_Int32 j = 0; j != seq.getLength(); ++j)
@@ -484,7 +489,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = "long-list";
                 }
-                else if (sType == "oor:double-list")
+                else if (aType == cppu::UnoType<css::uno::Sequence<double>>::get())
                 {
                     uno::Sequence<double> seq = aNode.get<uno::Sequence<double>>();
                     for (sal_Int32 j = 0; j != seq.getLength(); ++j)
@@ -497,12 +502,13 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = "double-list";
                 }
-                else if (sType == "oor:string-list")
+                else if (aType == cppu::UnoType<css::uno::Sequence<OUString>>::get())
                 {
                     sValue = lcl_StringListToString(aNode.get<uno::Sequence<OUString>>());
                     sType = "string-list";
                 }
-                else if (sType == "oor:hexBinary-list")
+                else if (aType
+                         == cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int8>>>::get())
                 {
                     const uno::Sequence<uno::Sequence<sal_Int8>> seq
                         = aNode.get<uno::Sequence<uno::Sequence<sal_Int8>>>();

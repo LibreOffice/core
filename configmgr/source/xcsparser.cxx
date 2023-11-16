@@ -313,7 +313,7 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
             while (desc.indexOf("  ") != -1)
                 desc = desc.replaceAll("  ", " ");
             top.node->setDescription(desc);
-            top.node->setType(typeName_);
+            top.node->setType(type_);
             if (elements_.empty()) {
                 switch (state_) {
                 case STATE_TEMPLATES:
@@ -489,9 +489,9 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "type")
         {
-            typeName_ = reader.getAttributeValue(true).convertFromUtf8();
             valueParser_.type_ = xmldata::parseType(
                 reader, reader.getAttributeValue(true));
+            type_ = valueParser_.type_;
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "localized")
         {

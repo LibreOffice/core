@@ -66,6 +66,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/ElementChange.hpp>
+#include <com/sun/star/util/InvalidStateException.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
@@ -455,7 +456,7 @@ OUString Access::getDescriptionByHierarchicalName(OUString const & aName)
     return child->getNode()->getDescription();
 }
 
-OUString Access::getTypeByHierarchicalName(OUString const & aName)
+css::uno::Type Access::getTypeByHierarchicalName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -465,7 +466,11 @@ OUString Access::getTypeByHierarchicalName(OUString const & aName)
         throw css::container::NoSuchElementException(
             aName, getXWeak());
     }
-    return child->getNode()->getType();
+    auto type = child->getNode()->getType();
+    if (type == TYPE_ERROR)
+        throw css::util::InvalidStateException(
+            aName, getXWeak());
+    return mapType(child->getNode()->getType());
 }
 
 sal_Bool Access::hasByHierarchicalName(OUString const & aName)

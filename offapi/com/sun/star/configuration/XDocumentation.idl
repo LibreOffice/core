@@ -36,9 +36,13 @@ interface XDocumentation {
 
         @throws NoSuchElementException
             if an element under aName does not exist.
+
+        @throws InvalidStateException
+            when the type of the object could not be resolved.
      */
-    string getTypeByHierarchicalName( [in] string aName )
-            raises( com::sun::star::container::NoSuchElementException );
+    type getTypeByHierarchicalName( [in] string aName )
+            raises( com::sun::star::container::NoSuchElementException,
+                    com::sun::star::util::InvalidStateException );
 };
 
 }; }; }; };

@@ -27,6 +27,8 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmlreader/span.hxx>
 
+#include "type.hxx"
+
 namespace configmgr {
 
 class NodeMap;
@@ -56,8 +58,8 @@ public:
     void setDescription(OUString const& description) { description_ = description; };
     OUString getDescription() { return description_; }
 
-    void setType(OUString const& type) { type_ = type; };
-    OUString getType() { return type_; }
+    void setType(Type const& type) { type_ = type; };
+    Type getType() { return type_; }
 
     rtl::Reference< Node > getMember(OUString const & name);
 
@@ -70,7 +72,7 @@ private:
     int layer_;
     int finalized_;
     OUString description_;
-    OUString type_;
+    Type type_ = TYPE_ERROR;
 };
 
 }
