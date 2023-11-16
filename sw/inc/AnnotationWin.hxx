@@ -29,7 +29,6 @@
 #include "postithelper.hxx"
 #include "swrect.hxx"
 #include "SidebarWindowsTypes.hxx"
-#include <optional>
 #include <annotationmark.hxx>
 
 class EditView;
@@ -211,7 +210,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         virtual void    LoseFocus() override;
         virtual void    GetFocus() override;
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
         void        SetSizePixel( const Size& rNewSize ) override;
 
@@ -277,7 +275,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         SwPostItField*       mpField;
 
         rtl::Reference<sw::sidebarwindows::SidebarWinAccessible> mxSidebarWinAccessible;
-        mutable std::optional<sal_Int32> moMetaHeight;
 };
 
 } // end of namespace sw::annotation

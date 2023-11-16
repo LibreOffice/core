@@ -1215,25 +1215,14 @@ int SwAnnotationWin::GetPrefScrollbarWidth() const
 
 sal_Int32 SwAnnotationWin::GetMetaHeight() const
 {
-    if (!moMetaHeight)
-    {
-        const int fields = GetNumFields();
+    const int fields = GetNumFields();
 
-        sal_Int32 nRequiredHeight = 0;
-        weld::Label* aLabels[3] = { mxMetadataAuthor.get(), mxMetadataDate.get(), mxMetadataResolved.get() };
-        for (int i = 0; i < fields; ++i)
-            nRequiredHeight += aLabels[i]->get_preferred_size().Height();
-        moMetaHeight = nRequiredHeight;
-    }
-    return *moMetaHeight;
-}
+    sal_Int32 nRequiredHeight = 0;
+    weld::Label* aLabels[3] = { mxMetadataAuthor.get(), mxMetadataDate.get(), mxMetadataResolved.get() };
+    for (int i = 0; i < fields; ++i)
+        nRequiredHeight += aLabels[i]->get_preferred_size().Height();
 
-void SwAnnotationWin::DataChanged(const DataChangedEvent& rDCEvt)
-{
-    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
-    {
-        moMetaHeight.reset();
-    }
+    return nRequiredHeight;
 }
 
 sal_Int32 SwAnnotationWin::GetNumFields() const
