@@ -943,13 +943,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         bMoveContents = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     }
 
-                    if (pTabViewShell->MergeCells( bApi, bMoveContents, bCenter ))
-                    {
-                        if (!bApi && bMoveContents)             // "yes" clicked in dialog
-                            rReq.AppendItem( SfxBoolItem( nSlot, bMoveContents ) );
-                        rBindings.Invalidate( nSlot );
-                        rReq.Done();
-                    }
+                    pTabViewShell->MergeCells( bApi, bMoveContents, bCenter, nSlot );
                 }
                 else
                 {
