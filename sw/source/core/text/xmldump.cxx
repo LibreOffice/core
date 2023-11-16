@@ -213,27 +213,6 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         SwSectionNode const*const pNode(pFrame->GetSection() ? pFrame->GetSection()->GetFormat()->GetSectionNode() : nullptr);
         (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), "%" SAL_PRIdINT32, pNode ? sal_Int32(pNode->GetIndex()) : -1);
     }
-    if ( IsTextFrame(  ) )
-    {
-        const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
-        const SwTextNode *pTextNode = pTextFrame->GetTextNodeFirst();
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(pTextNode->GetIndex()) );
-
-        OString aMode = "Horizontal";
-        if (IsVertLRBT())
-        {
-            aMode = "VertBTLR";
-        }
-        else if (IsVertLR())
-        {
-            aMode = "VertLR";
-        }
-        else if (IsVertical())
-        {
-            aMode = "Vertical";
-        }
-        (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("WritingMode"), BAD_CAST(aMode.getStr()));
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

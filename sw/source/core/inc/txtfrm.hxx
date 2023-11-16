@@ -809,6 +809,7 @@ public:
     static SwView* GetView();
 
     void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
+    void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 
 //use this to protect a SwTextFrame for a given scope from getting merged with

@@ -793,10 +793,33 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib,
     m_pMergedPara = CheckParaRedlineMerge(*this, *pNode, eMode);
 }
 
+void SwTextFrame::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
+{
+    SwContentFrame::dumpAsXmlAttributes(writer);
+
+    const SwTextNode *pTextNode = GetTextNodeFirst();
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(pTextNode->GetIndex()) );
+
+    OString aMode = "Horizontal";
+    if (IsVertLRBT())
+    {
+        aMode = "VertBTLR";
+    }
+    else if (IsVertLR())
+    {
+        aMode = "VertLR";
+    }
+    else if (IsVertical())
+    {
+        aMode = "Vertical";
+    }
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("WritingMode"), BAD_CAST(aMode.getStr()));
+}
+
 void SwTextFrame::dumpAsXml(xmlTextWriterPtr writer) const
 {
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("txt"));
-    SwFrame::dumpAsXmlAttributes( writer );
+    dumpAsXmlAttributes( writer );
     if ( HasFollow() )
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
