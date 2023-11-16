@@ -3967,9 +3967,9 @@ name:
 
 identifier:
   TOK_IDENTIFIER
-| TOK_GET { $$ = new OString("get"); }
-| TOK_PUBLISHED { $$ = new OString("published"); }
-| TOK_SET { $$ = new OString("set"); }
+| TOK_GET { $$ = new OString("get"_ostr); }
+| TOK_PUBLISHED { $$ = new OString("published"_ostr); }
+| TOK_SET { $$ = new OString("set"_ostr); }
 ;
 
 deprecated_opt:
