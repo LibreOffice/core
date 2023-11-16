@@ -23,6 +23,7 @@
 #include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -131,8 +132,50 @@ class SvtCompatibilityEntry
             setValue(rIdx, css::uno::Any(rValue));
         }
 
+        bool getPropertyReadOnly(const Index rIdx) const
+        {
+            if (static_cast<size_t>(rIdx) < getElementCount())
+            {
+                return m_aPropertyReadOnly.at(static_cast<int>(rIdx));
+            }
+            else
+            {
+                /* Wrong index. */
+                assert(false);
+                return false;
+            }
+        }
+
+        void setPropertyReadOnly(const Index rIdx, const bool bReadOnly)
+        {
+            if (static_cast<size_t>(rIdx) < getElementCount())
+            {
+                m_aPropertyReadOnly.insert({ static_cast<int>(rIdx), bReadOnly });
+            }
+            else
+            {
+                /* Wrong index. */
+                assert(false);
+            }
+        }
+
+        bool haveReadOnlyProperty() const
+        {
+            bool bRet = false;
+            for (const auto& pair : m_aPropertyReadOnly)
+            {
+                if (pair.second == true)
+                {
+                    bRet = true;
+                    break;
+                }
+            }
+            return bRet;
+        }
+
     private:
         std::vector<css::uno::Any> m_aPropertyValue;
+        std::map<int, bool> m_aPropertyReadOnly;
 };
 
 /*-************************************************************************************************************
@@ -182,6 +225,18 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions final : public utl::detail::Opt
             @onerror    We return an empty list.
         *//*-*****************************************************************************************************/
         std::vector< SvtCompatibilityEntry > GetList() const;
+
+        /*-****************************************************************************************************
+            @short      return property/option is readonly or not
+            @descr      Call it to get the readonly status of default entry of
+                        compatibility options.
+            @return     Return true if the compatibility option is true, otherwise false.
+
+            @onerror    We return false.
+        *//*-*****************************************************************************************************/
+        bool GetPropertyReadOnly( SvtCompatibilityEntry::Index rIdx ) const;
+        bool GetDefaultPropertyReadOnly( SvtCompatibilityEntry::Index rIdx ) const;
+        bool HaveDefaultReadOnlyProperty() const;
 
     private:
         std::shared_ptr<SvtCompatibilityOptions_Impl> m_pImpl;

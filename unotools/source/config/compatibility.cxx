@@ -123,6 +123,9 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         bool GetDefault( SvtCompatibilityEntry::Index rIdx ) const;
 
         const std::vector< SvtCompatibilityEntry > & GetOptions() const { return m_aOptions; }
+        bool GetOptionReadOnly( SvtCompatibilityEntry::Index rIdx ) const;
+        bool GetDefaultOptionReadOnly( SvtCompatibilityEntry::Index rIdx ) const;
+        bool HaveDefaultReadOnlyOption() const;
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
@@ -159,6 +162,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTN
     Sequence< OUString > lNodes;
     Sequence< OUString > lNames  = impl_GetPropertyNames( lNodes );
     Sequence< Any >      lValues = GetProperties( lNames );
+    Sequence< sal_Bool > lReadOnly = GetReadOnlyStates( lNames );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -178,6 +182,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTN
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
         {
             aItem.setValue( SvtCompatibilityEntry::Index(i), lValues[ nDestStep ] );
+            aItem.setPropertyReadOnly( SvtCompatibilityEntry::Index(i), lReadOnly[ nDestStep ] );
             nDestStep++;
         }
 
@@ -289,6 +294,40 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
     return lProperties;
 }
 
+bool SvtCompatibilityOptions_Impl::GetOptionReadOnly(SvtCompatibilityEntry::Index rIdx) const
+{
+    /* Are not set Name and Module */
+    assert(rIdx != SvtCompatibilityEntry::Index::Name && rIdx != SvtCompatibilityEntry::Index::Module);
+
+    bool bReadOnly = false;
+
+    sal_uInt32 nNewCount = m_aOptions.size();
+    for (sal_uInt32 nItem = 0; nItem < nNewCount; ++nItem)
+    {
+        SvtCompatibilityEntry aItem = m_aOptions[nItem];
+        if (aItem.getValue<OUString>(SvtCompatibilityEntry::Index::Name) == SvtCompatibilityEntry::USER_ENTRY_NAME)
+        {
+            bReadOnly = aItem.getPropertyReadOnly(rIdx);
+            break;
+        }
+    }
+
+    return bReadOnly;
+}
+
+bool SvtCompatibilityOptions_Impl::GetDefaultOptionReadOnly(SvtCompatibilityEntry::Index rIdx) const
+{
+    /* Are not set Name and Module */
+    assert(rIdx != SvtCompatibilityEntry::Index::Name && rIdx != SvtCompatibilityEntry::Index::Module);
+
+    return m_aDefOptions.getPropertyReadOnly(rIdx);
+}
+
+bool SvtCompatibilityOptions_Impl::HaveDefaultReadOnlyOption() const
+{
+    return m_aDefOptions.haveReadOnlyProperty();
+}
+
 namespace
 {
     std::weak_ptr<SvtCompatibilityOptions_Impl> theOptions;
@@ -344,6 +383,27 @@ std::vector< SvtCompatibilityEntry > SvtCompatibilityOptions::GetList() const
     MutexGuard aGuard( GetOwnStaticMutex() );
 
     return m_pImpl->GetOptions();
+}
+
+bool SvtCompatibilityOptions::GetPropertyReadOnly( SvtCompatibilityEntry::Index rIdx ) const
+{
+    MutexGuard aGuard(GetOwnStaticMutex());
+
+    return m_pImpl->GetOptionReadOnly(rIdx);
+}
+
+bool SvtCompatibilityOptions::GetDefaultPropertyReadOnly( SvtCompatibilityEntry::Index rIdx ) const
+{
+    MutexGuard aGuard(GetOwnStaticMutex());
+
+    return m_pImpl->GetDefaultOptionReadOnly(rIdx);
+}
+
+bool SvtCompatibilityOptions::HaveDefaultReadOnlyProperty() const
+{
+    MutexGuard aGuard(GetOwnStaticMutex());
+
+    return m_pImpl->HaveDefaultReadOnlyOption();
 }
 
 Mutex& SvtCompatibilityOptions::GetOwnStaticMutex()

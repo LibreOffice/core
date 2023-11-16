@@ -216,7 +216,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::NoExtLeading ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseLineSpacing ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddTableSpacing ),
-            rEntry.getValue<bool>(SvtCompatibilityEntry::Index::AddTableLineSpacing),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddTableLineSpacing),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseObjectPositioning ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseOurTextWrapping ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::ConsiderWrappingStyle ),
@@ -277,9 +277,11 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
 void SwCompatibilityOptPage::SetCurrentOptions( sal_uInt32 nOptions )
 {
     const int nCount = m_xOptionsLB->n_children();
+    const OUString aOptionsName = m_xFormattingLB->get_active_text();
     OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
     for (int i = 0; i < nCount; ++i)
     {
+        bool bReadOnly = false;
         bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
         TriState value = bChecked ? TRISTATE_TRUE : TRISTATE_FALSE;
         if (i == int(SvtCompatibilityEntry::Index::AddTableSpacing) - 2)
@@ -292,8 +294,22 @@ void SwCompatibilityOptPage::SetCurrentOptions( sal_uInt32 nOptions )
             }
         }
         m_xOptionsLB->set_toggle(i, value);
+
+        int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
+        if (aOptionsName.isEmpty() || aOptionsName == SvtCompatibilityEntry::DEFAULT_ENTRY_NAME)
+        {
+            bReadOnly = m_aConfigItem.GetDefaultPropertyReadOnly(SvtCompatibilityEntry::Index(nCoptIdx));
+        }
+        else
+        {
+            bReadOnly = m_aConfigItem.GetPropertyReadOnly(SvtCompatibilityEntry::Index(nCoptIdx));
+        }
+        m_xOptionsLB->set_sensitive(i, !bReadOnly);
+
         nOptions = nOptions >> 1;
     }
+
+    m_xDefaultPB->set_sensitive(!m_aConfigItem.HaveDefaultReadOnlyProperty());
 }
 
 sal_uInt32 SwCompatibilityOptPage::GetDocumentOptions() const
