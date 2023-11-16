@@ -57,11 +57,6 @@
           <desc>Relative file name to the bitmap for the icon in disabled state.</desc>
         </info>
       </prop>
-      <prop oor:name="SelectedFileName" oor:type="xs:string">
-        <info>
-          <desc>Relative file name to the bitmap for the icon in disabled state.</desc>
-        </info>
-      </prop>
       <prop oor:name="MaskFileName" oor:type="xs:string">
         <info>
           <desc>The file name of the mask bitmap. Use red for pixel outside of
