@@ -60,10 +60,8 @@ public:
     PieDataSrcBase() = default;
     virtual ~PieDataSrcBase() = default;
 
-    // Beginning and ending indices for given pie subtype
-    virtual sal_Int32 getBeginIndex(const VDataSeries* pSeries,
-                enum SubPieType eType) const = 0;
-    virtual sal_Int32 getEndIndex(const VDataSeries* pSeries,
+    // Number of data points for given pie subtype
+    virtual sal_Int32 getNPoints(const VDataSeries* pSeries,
                 enum SubPieType eType) const = 0;
 
     // Get the value for the given pie wedge, for the given subtype
@@ -82,9 +80,7 @@ public:
 class PieDataSrc : public PieDataSrcBase
 {
 public:
-    sal_Int32 getBeginIndex(const VDataSeries* pSeries,
-                enum SubPieType eType) const;
-    sal_Int32 getEndIndex(const VDataSeries* pSeries,
+    sal_Int32 getNPoints(const VDataSeries* pSeries,
                 enum SubPieType eType) const;
 
     double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
@@ -104,9 +100,7 @@ public:
     // Minimum sensible number of data points
     static sal_Int32 minPoints() { return 4; }
 
-    sal_Int32 getBeginIndex(const VDataSeries* pSeries,
-                enum SubPieType eType) const;
-    sal_Int32 getEndIndex(const VDataSeries* pSeries,
+    sal_Int32 getNPoints(const VDataSeries* pSeries,
                 enum SubPieType eType) const;
 
     double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
@@ -228,7 +222,21 @@ struct PieLabelInfo;
             sal_Int32 n3DRelativeHeight);
 
 private: //member
+    // Radius scalings for left and right of-pie subcharts
+    static constexpr double m_fLeftScale = 2.0/3;
+    static constexpr double m_fRightScale = 1.0/3;
+    // Shifts left/right for of-pie subcharts
+    static constexpr double m_fLeftShift = -0.75;
+    static constexpr double m_fRightShift = 0.75;
+    // Height of bar-of-pie bar
+    static constexpr double m_fFullBarHeight = 1.0;
+    // Bar-of-pie bar left side position
+    static constexpr double m_fBarLeft = 0.75;
+    // Bar-of-pie bar right side position
+    static constexpr double m_fBarRight = 1.25;
+
     PiePositionHelper     m_aPosHelper;
+
     bool                  m_bUseRings;
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
     std::vector< ExplicitScaleData > m_aCartesianScales; // for bar-of-pie
