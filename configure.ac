@@ -13680,12 +13680,14 @@ if test "$enable_wix" = "" -o "enable_wix" = "no"; then
     ENABLE_WIX=
 else
     AC_MSG_RESULT([yes])
-    if ! which candle  >/dev/null 2>&1; then
-      AC_MSG_ERROR([WiX requested but WiX toolset not found.])
+    # FIXME: this should do proper detection, but the path is currently
+    # hardcoded in msicreator/createmsi.py
+    if ! test -x "/cygdrive/c/Program Files (x86)/WiX Toolset v3.11/bin/candle"; then
+      AC_MSG_ERROR([WiX requested but WiX toolset v3.11 not found at the expected location])
     fi
     ENABLE_WIX=TRUE
 fi
-AC_SUBST(ENABLE_SILENT_MSI)
+AC_SUBST(ENABLE_WIX)
 
 AC_MSG_CHECKING([whether and how to use Xinerama])
 if test "$USING_X11" = TRUE; then

@@ -59,7 +59,7 @@ endif
 # delimiter is U+2027 Hyphenation point - files with colon in their name confuse the heck out of
 # make and cannot be used as targets or prerequisites. For passing to call_installer.sh it is
 # substituted by the : so that cut doesn't stumble over the delimiter
-ifeq (TRUE,$(LIBO_TEST_INSTALL))
+ifeq (TRUE,$(filter TRUE,$(LIBO_TEST_INSTALL) $(ENABLE_WIX))
 instsetoo_installer_targets = openoffice‧en-US‧‧‧archive‧nostrip
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 instsetoo_installer_targets += sdkoo‧en-US‧_SDK‧‧archive‧nostrip
@@ -129,8 +129,8 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: $(instsetoo_installer_targets)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
-ifeq (TRUE,$(LIBO_TEST_INSTALL))
 	$(if $(ENABLE_WIX),$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/msicreator/create_installer.py $(BUILDDIR) $(SRCDIR) $(LIBO_VERSION) $(PRODUCTNAME_WITHOUT_SPACES))
+ifeq (TRUE,$(LIBO_TEST_INSTALL))
 	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)/archive/install/en-US/LibreOffice*_archive.zip
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*/* $(TESTINSTALLDIR)/
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*
