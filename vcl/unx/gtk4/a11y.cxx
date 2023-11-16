@@ -54,6 +54,13 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
             case css::accessibility::AccessibleRole::NOTIFICATION:
                 eRole = GTK_ACCESSIBLE_ROLE_ALERT;
                 break;
+            case css::accessibility::AccessibleRole::BLOCK_QUOTE:
+#if GTK_CHECK_VERSION(4, 13, 4)
+                eRole = GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE;
+#else
+                eRole = GTK_ACCESSIBLE_ROLE_GROUP;
+#endif
+                break;
             case css::accessibility::AccessibleRole::CAPTION:
                 eRole = GTK_ACCESSIBLE_ROLE_CAPTION;
                 break;
@@ -140,7 +147,6 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
                 eRole = GTK_ACCESSIBLE_ROLE_WIDGET;
                 break;
             case css::accessibility::AccessibleRole::PARAGRAPH:
-            case css::accessibility::AccessibleRole::BLOCK_QUOTE:
 #if GTK_CHECK_VERSION(4, 13, 1)
                 eRole = GTK_ACCESSIBLE_ROLE_PARAGRAPH;
 #else
