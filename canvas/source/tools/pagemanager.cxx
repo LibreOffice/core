@@ -65,10 +65,7 @@ namespace canvas
     {
         // erase the reference to the given fragment from our
         // internal container.
-        FragmentContainer_t::iterator it(
-            std::remove(
-                maFragments.begin(),maFragments.end(),pFragment));
-        maFragments.erase(it,maFragments.end());
+        std::erase(maFragments, pFragment);
 
         // let the fragment itself know about it...
         // we need to pass 'this' as argument since the fragment
