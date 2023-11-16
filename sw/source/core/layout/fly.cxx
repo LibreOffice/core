@@ -1568,7 +1568,8 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 //                          Thus, <bNoCalcFollow> no longer used by <FormatWidthCols(..)>.
 void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 {
-    vcl::RenderContext* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
+    SwViewShell & rShell(*pLay->getRootFrame()->GetCurrShell());
+    vcl::RenderContext* pRenderContext = rShell.GetOut();
     SwSectionFrame* pSect;
     bool bCollect = false;
     if( pLay->IsSctFrame() )
@@ -1729,7 +1730,8 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                             }
                         }
 
-                        if ( !SwObjectFormatter::FormatObj( *pAnchoredObj, pAnchorFrame, pAnchorPageFrame ) )
+                        if (!SwObjectFormatter::FormatObj(*pAnchoredObj, pAnchorFrame, pAnchorPageFrame,
+                                rShell.Imp()->IsAction() ? &rShell.Imp()->GetLayAction() : nullptr))
                         {
                             bRestartLayoutProcess = true;
                             break;
