@@ -166,7 +166,7 @@
                   <object class="GtkImage">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes" context="hyperlinkdialog|RID_SVXSTR_HYPERDLG_HLINETTP_HELP">This is where you create a hyperlink to a Web page or FTP server connection.</property>
+                    <property name="tooltip_text" translatable="yes" context="hyperlinkdialog|RID_SVXSTR_HYPERDLG_HLINETTP_HELP">This is where you create a hyperlink to a Web page.</property>
                     <property name="icon_name">res/hlinettp.png</property>
                     <property name="icon_size">6</property>
                   </object>

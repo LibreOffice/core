@@ -574,7 +574,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="savegrflocal-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|savegrflocal">Mark this check box to automatically upload the embedded pictures to the Internet server when uploading using FTP. Use the Save As dialog to save the document and enter a complete FTP URL as the file name in the Internet.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|savegrflocal">Mark this check box to automatically upload the embedded pictures to the Internet server when uploading using a network protocol. Use the Save As dialog to save the document and enter a complete URL as the file name in the Internet.</property>
                       </object>
                     </child>
                   </object>

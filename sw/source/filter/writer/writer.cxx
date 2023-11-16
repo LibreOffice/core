@@ -269,12 +269,16 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
     bool bRet = false;
     INetURLObject aFileUrl( rFileNm ), aTargetUrl( *m_pOrigFileName );
 
-// this is our old without the Mail-Export
-    if( ! ( INetProtocol::File == aFileUrl.GetProtocol() &&
-            INetProtocol::File != aTargetUrl.GetProtocol() &&
-            INetProtocol::Ftp <= aTargetUrl.GetProtocol() &&
-            INetProtocol::VndSunStarWebdav >= aTargetUrl.GetProtocol() ) )
+    if (!(INetProtocol::File == aFileUrl.GetProtocol()
+            && (INetProtocol::Http == aTargetUrl.GetProtocol()
+                || INetProtocol::Https == aTargetUrl.GetProtocol()
+                || INetProtocol::VndSunStarWebdav == aTargetUrl.GetProtocol()
+                || INetProtocol::Smb == aTargetUrl.GetProtocol()
+                || INetProtocol::Sftp == aTargetUrl.GetProtocol()
+                || INetProtocol::Cmis == aTargetUrl.GetProtocol())))
+    {
         return bRet;
+    }
 
     // has the file been moved?
     std::map<OUString, OUString>::iterator it = m_pImpl->maFileNameMap.find( rFileNm );

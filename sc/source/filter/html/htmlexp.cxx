@@ -1339,11 +1339,16 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
     INetURLObject aFileUrl, aTargetUrl;
     aFileUrl.SetSmartURL( rFileNm );
     aTargetUrl.SetSmartURL( rTargetNm );
-    if( !(INetProtocol::File == aFileUrl.GetProtocol() &&
-        ( INetProtocol::File != aTargetUrl.GetProtocol() &&
-          INetProtocol::Ftp <= aTargetUrl.GetProtocol() &&
-          INetProtocol::Javascript >= aTargetUrl.GetProtocol()))  )
+    if (!(INetProtocol::File == aFileUrl.GetProtocol()
+            && (INetProtocol::Http == aTargetUrl.GetProtocol()
+                || INetProtocol::Https == aTargetUrl.GetProtocol()
+                || INetProtocol::VndSunStarWebdav == aTargetUrl.GetProtocol()
+                || INetProtocol::Smb == aTargetUrl.GetProtocol()
+                || INetProtocol::Sftp == aTargetUrl.GetProtocol()
+                || INetProtocol::Cmis == aTargetUrl.GetProtocol())))
+    {
         return;
+    }
 
     if( pFileNameMap )
     {

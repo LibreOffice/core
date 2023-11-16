@@ -4475,7 +4475,7 @@
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
               <desc>Specifies whether images are copied to the Internet server when
-              uploading via FTP.</desc>
+              uploading via a network protocol.</desc>
               <label>Copy local images to Internet</label>
             </info>
             <value>true</value>
