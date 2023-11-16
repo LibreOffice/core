@@ -76,6 +76,17 @@ public:
         return getTokenPerfectHash( pToken, nLength );
     }
 
+    /** Returns the name of the passed token identifier as OUString. */
+    OUString getUnicodeTokenName(sal_Int32 nToken) const
+    {
+        SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "oox", "Wrong nToken parameter");
+        OUString const ret((0 <= nToken && nToken < XML_TOKEN_COUNT)
+            ? rtl::OUString(reinterpret_cast<const char*>(maTokenNames[nToken].getConstArray()),
+                            maTokenNames[nToken].getLength(), RTL_TEXTENCODING_UTF8)
+            : OUString());
+        return ret;
+    }
+
 private:
     static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
     static const css::uno::Sequence< sal_Int8 > EMPTY_BYTE_SEQ;

@@ -38,15 +38,6 @@
 
 using namespace ::com::sun::star;
 
-OUString ConnectorHelper::getShapePresetTypeNameOUString(
-    const oox::drawingml::CustomShapePropertiesPtr& pCustomShapePropertiesPtr)
-{
-    return rtl::OUString(reinterpret_cast<const char*>(
-                             pCustomShapePropertiesPtr->getShapePresetTypeName().getConstArray()),
-                         pCustomShapePropertiesPtr->getShapePresetTypeName().getLength(),
-                         RTL_TEXTENCODING_UTF8);
-}
-
 // These shapes have no gluepoints defined in their mso_CustomShape struct, thus the gluepoint
 // adaption to default gluepoints will be done. Other shapes having no gluepoint defined in the
 // mso_CustomShape struct, have gluepoints in order top-left-bottom-right in OOXML. But the shapes
@@ -306,8 +297,8 @@ void ConnectorHelper::applyConnections(oox::drawingml::ShapePtr& rConnector,
                 // our default gluepoints are used. The order of the default gluepoints might differ
                 // from the order of the OOXML gluepoints. We try to change nGlueId so, that the
                 // connector attaches to a default gluepoint at the same side as it attaches in OOXML.
-                const OUString sShapeType = ConnectorHelper::getShapePresetTypeNameOUString(
-                    pItem->second->getCustomShapeProperties());
+                const OUString sShapeType
+                    = pItem->second->getCustomShapeProperties()->getShapePresetTypeName();
                 if (ConnectorHelper::hasClockwiseCxn(sShapeType))
                     nGlueId = (nGlueId + 1) % 4;
                 else

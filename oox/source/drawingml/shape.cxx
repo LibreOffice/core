@@ -1377,11 +1377,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     aGrabBag.realloc( length+1);
                     auto pGrabBag = aGrabBag.getArray();
                     pGrabBag[length].Name = "mso-orig-shape-type";
-                    uno::Sequence< sal_Int8 > const & aNameSeq =
-                        mpCustomShapePropertiesPtr->getShapePresetTypeName();
-                    OUString sShapePresetTypeName(reinterpret_cast< const char* >(
-                        aNameSeq.getConstArray()), aNameSeq.getLength(), RTL_TEXTENCODING_UTF8);
-                    pGrabBag[length].Value <<= sShapePresetTypeName;
+                    pGrabBag[length].Value <<= mpCustomShapePropertiesPtr->getShapePresetTypeName();
                     propertySet->setPropertyValue("FrameInteropGrabBag",uno::Any(aGrabBag));
                 }
                 //If the text box has links then save the link information so that
@@ -1766,12 +1762,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
         if (bIsConnectorShape)
         {
-            OUString sConnectorShapePresetTypeName(
-                reinterpret_cast<const char*>(
-                    mpCustomShapePropertiesPtr->getShapePresetTypeName().getConstArray()),
-                mpCustomShapePropertiesPtr->getShapePresetTypeName().getLength(),
-                RTL_TEXTENCODING_UTF8);
-            msConnectorName = sConnectorShapePresetTypeName;
+            msConnectorName = mpCustomShapePropertiesPtr->getShapePresetTypeName();
 
             auto aAdjustmentList = mpCustomShapePropertiesPtr->getAdjustmentGuideList();
             for (size_t i = 0; i < aAdjustmentList.size(); i++)

@@ -24,14 +24,6 @@
 
 namespace ConnectorHelper
 {
-/* ToDo: Other place? It uses getShapePresetTypeName() and that is only used in shape.cxx in
-   Shape::createAndInsert() for "mso-orig-shape-type" property in GrabBag and for msConnectorName.
-   In both cases it is immediately converted to OUString. So perhaps let
-   getShapePresetTypeName() return an OUString directly?
-*/
-rtl::OUString getShapePresetTypeNameOUString(
-    const oox::drawingml::CustomShapePropertiesPtr& pCustomShapePropertiesPtr);
-
 /**
  * Some preset shapes use the default connector site but in order right, bottom, left, top.
  * The function detects this.
