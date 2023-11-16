@@ -167,7 +167,8 @@ bool SwObjectFormatter::FormatObjsAtFrame( SwFrame& _rAnchorFrame,
 */
 bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
                                    SwFrame* _pAnchorFrame,
-                                   const SwPageFrame* _pPageFrame )
+                                   const SwPageFrame* _pPageFrame,
+                                   SwLayAction * pLayAction)
 {
     bool bSuccess( true );
 
@@ -181,7 +182,7 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
 
     // create corresponding object formatter
     std::unique_ptr<SwObjectFormatter> pObjFormatter =
-        SwObjectFormatter::CreateObjFormatter( rAnchorFrame, rPageFrame, nullptr/*_pLayAction*/ );
+        SwObjectFormatter::CreateObjFormatter(rAnchorFrame, rPageFrame, pLayAction);
 
     if ( pObjFormatter )
     {
