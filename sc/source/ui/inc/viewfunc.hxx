@@ -236,7 +236,8 @@ public:
     bool            TestMergeCells();
     bool            TestRemoveMerge();
 
-    bool            MergeCells( bool bApi, bool& rDoContents, bool bCenter );
+    void            MergeCells( bool bApi, bool bDoContents, bool bCenter,
+                                const sal_uInt16 nSlot );
     bool            RemoveMerge();
 
     SC_DLLPUBLIC void
