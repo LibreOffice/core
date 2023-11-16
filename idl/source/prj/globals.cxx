@@ -40,7 +40,7 @@ static SvStringHashEntry * INS( const OString& rName )
     GetIdlApp().pHashTable->Insert( rName, &nIdx );
     return GetIdlApp().pHashTable->Get( nIdx );
 }
-#define A_ENTRY( Name ) , MM_##Name( INS( #Name ) )
+#define A_ENTRY( Name ) , MM_##Name( INS( #Name ""_ostr ) )
 
 SvGlobalHashNames::SvGlobalHashNames()
     : MM_module( INS( "module" ) )
