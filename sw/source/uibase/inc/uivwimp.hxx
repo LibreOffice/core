@@ -110,6 +110,8 @@ class SwView_Impl
     bool                        m_bSelectObject;
     bool                        m_bEditingPositionSet;
 
+    void                        DisconnectTransferableDDE();
+
 public:
     /// Redline author that's specific to this view.
     OUString m_sRedlineAuthor;

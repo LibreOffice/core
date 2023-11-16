@@ -185,6 +185,8 @@ public:
 
     // remove the DDE-Link format promise
     void RemoveDDELinkFormat(vcl::Window& rWin);
+    // disconnect to not receive DataChanged listener notifications
+    void DisconnectDDE();
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
