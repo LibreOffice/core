@@ -1,15 +1,6 @@
 ---
 assumeFilename: ucb/source/core/ucb.cxx
 excludelist:
-    ucb/source/ucp/ftp/ftploaderthread.hxx:
-    # Wrapper for external lib
-    - curl.hxx
-    ucb/source/ucp/ftp/ftpurl.hxx:
-    # Wrapper for external lib
-    - curl.hxx
-    ucb/source/ucp/ftp/ftpcontentprovider.hxx:
-    # Wrapper for external lib
-    - curl.hxx
     ucb/source/core/ucb.cxx:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp
@@ -29,14 +20,6 @@ excludelist:
     # Needed for UnoType
     - com/sun/star/beans/XPropertySetInfo.hpp
     - com/sun/star/ucb/XCommandInfo.hpp
-    ucb/source/ucp/ftp/ftpcontent.cxx:
-    # Needed for UnoType
-    - com/sun/star/ucb/XCommandInfo.hpp
-    # Wrapper for external lib
-    - curl.hxx
-    ucb/source/ucp/ftp/ftploaderthread.cxx:
-    # Wrapper for external lib
-    - curl.hxx
     ucb/source/ucp/gio/gio_content.cxx:
     # Needed for UnoType
     - com/sun/star/beans/PropertyValue.hpp
