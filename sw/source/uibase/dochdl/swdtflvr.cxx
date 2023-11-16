@@ -283,11 +283,7 @@ SwTransferable::~SwTransferable()
     SolarMutexGuard aSolarGuard;
 
     // the DDELink still needs the WrtShell!
-    if( m_xDdeLink.is() )
-    {
-        static_cast<SwTransferDdeLink*>( m_xDdeLink.get() )->Disconnect( true );
-        m_xDdeLink.clear();
-    }
+    DisconnectDDE();
 
     m_pWrtShell = nullptr;
 
@@ -391,6 +387,15 @@ void SwTransferable::RemoveDDELinkFormat(vcl::Window& rWin)
 {
     RemoveFormat( SotClipboardFormatId::LINK );
     CopyToClipboard(&rWin);
+}
+
+void SwTransferable::DisconnectDDE()
+{
+    if( m_xDdeLink.is() )
+    {
+        static_cast<SwTransferDdeLink*>( m_xDdeLink.get() )->Disconnect( true );
+        m_xDdeLink.clear();
+    }
 }
 
 namespace

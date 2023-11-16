@@ -65,6 +65,7 @@ SwView_Impl::~SwView_Impl()
         m_xDispatchProviderInterceptor->Invalidate();
     mxXTextView->Invalidate();
     mxXTextView.clear();
+
     if( mxScanEvtLstnr.is() )
            mxScanEvtLstnr->ViewDestroyed();
     if( mxClipEvtLstnr.is() )
@@ -72,6 +73,8 @@ SwView_Impl::~SwView_Impl()
         mxClipEvtLstnr->AddRemoveListener( false );
         mxClipEvtLstnr->ViewDestroyed();
     }
+    DisconnectTransferableDDE();
+
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     m_xConfigItem.reset();
 #endif
@@ -212,6 +215,16 @@ void SwView_Impl::Invalidate()
         rtl::Reference<SwTransferable> pTransferable = xTransferable.get();
         if(pTransferable)
             pTransferable->Invalidate();
+    }
+}
+
+void SwView_Impl::DisconnectTransferableDDE()
+{
+    for (const auto& xTransferable: mxTransferables)
+    {
+        rtl::Reference<SwTransferable> pTransferable = xTransferable.get();
+        if(pTransferable)
+            pTransferable->DisconnectDDE();
     }
 }
 
