@@ -3923,65 +3923,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                         pContext->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
                         m_pImpl->clearDeferredBreak(COLUMN_BREAK);
                     }
-                    if (IsRTFImport() && pContext) {
-                        //reset paragraph style properties not repeated at the paragraph
-                        std::optional<PropertyMap::Property> paraStyleName = pContext->getProperty(PROP_PARA_STYLE_NAME);
-                        if (paraStyleName.has_value()) {
-                            OUString uStyleName;
-                            paraStyleName->second >>= uStyleName;
-                            StyleSheetEntryPtr pStyleSheet = m_pImpl->GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(uStyleName);
-                            if (pStyleSheet != nullptr)
-                            {
-                                std::vector< PropertyIds > stylePropertyIds = pStyleSheet->m_pProperties->GetPropertyIds();
-                                std::vector< PropertyIds >::iterator stylePropertyIdsIt = stylePropertyIds.begin();
-                                while (stylePropertyIdsIt != stylePropertyIds.end())
-                                {
-                                    PropertyIds ePropertyId = *stylePropertyIdsIt;
-                                    std::optional< PropertyMap::Property > styleProperty = pStyleSheet->m_pProperties->getProperty(ePropertyId);
-                                    std::optional< PropertyMap::Property > paragraphProperty = pContext->getProperty(ePropertyId);
-                                    if (paragraphProperty.has_value()) {
-                                        if (paragraphProperty->second == styleProperty->second &&
-                                            !isSPRMDeduplicateDenylist(ePropertyId, pContext))
-                                        {
-                                            pContext->Erase(ePropertyId);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        switch (ePropertyId)
-                                        {
-                                        case PROP_PARA_LEFT_MARGIN:
-                                            if (!pContext->getProperty(PROP_NUMBERING_RULES))
-                                            {
-                                                pContext->Insert(ePropertyId, uno::Any(0l));
-                                            }
-                                            break;
-                                        case PROP_PARA_RIGHT_MARGIN:
-                                            pContext->Insert(ePropertyId, uno::Any(0l));
-                                            break;
-                                        case PROP_PARA_LAST_LINE_ADJUST:
-                                        case PROP_PARA_ADJUST:
-                                            pContext->Insert(ePropertyId, uno::Any(style::ParagraphAdjust_LEFT));
-                                            break;
-                                        case PROP_PARA_TAB_STOPS:
-                                            pContext->Insert(ePropertyId, uno::Any(uno::Sequence< style::TabStop >()));
-                                            break;
-                                        case PROP_FILL_STYLE:
-                                            pContext->Insert(ePropertyId, uno::Any(drawing::FillStyle_NONE));
-                                            break;
-                                        case PROP_FILL_COLOR:
-                                            pContext->Insert(ePropertyId, uno::Any(sal_Int32(COL_TRANSPARENT)));
-                                            break;
-                                        case INVALID:
-                                        default:
-                                            break;
-                                        }
-                                    }
-                                    ++stylePropertyIdsIt;
-                                }
-                            }
-                        }
-                    }
+                    ResetStyleProperties();
                     finishParagraph();
                     return;
                 }
@@ -4101,6 +4043,71 @@ void DomainMapper::lcl_checkId(const sal_Int32 nId)
     }
 }
 
+void DomainMapper::ResetStyleProperties()
+{
+    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+    if (IsRTFImport() && pContext)
+    {
+        //reset paragraph style properties not repeated at the paragraph
+        std::optional<PropertyMap::Property> paraStyleName = pContext->getProperty(PROP_PARA_STYLE_NAME);
+        if (paraStyleName.has_value()) {
+            OUString uStyleName;
+            paraStyleName->second >>= uStyleName;
+            StyleSheetEntryPtr pStyleSheet = m_pImpl->GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(uStyleName);
+            if (pStyleSheet != nullptr)
+            {
+                std::vector< PropertyIds > stylePropertyIds = pStyleSheet->m_pProperties->GetPropertyIds();
+                std::vector< PropertyIds >::iterator stylePropertyIdsIt = stylePropertyIds.begin();
+                while (stylePropertyIdsIt != stylePropertyIds.end())
+                {
+                    PropertyIds ePropertyId = *stylePropertyIdsIt;
+                    std::optional< PropertyMap::Property > styleProperty = pStyleSheet->m_pProperties->getProperty(ePropertyId);
+                    std::optional< PropertyMap::Property > paragraphProperty = pContext->getProperty(ePropertyId);
+                    if (paragraphProperty.has_value()) {
+                        if (paragraphProperty->second == styleProperty->second &&
+                            !isSPRMDeduplicateDenylist(ePropertyId, pContext))
+                        {
+                            pContext->Erase(ePropertyId);
+                        }
+                    }
+                    else
+                    {
+                        switch (ePropertyId)
+                        {
+                        case PROP_PARA_LEFT_MARGIN:
+                            if (!pContext->getProperty(PROP_NUMBERING_RULES))
+                            {
+                                pContext->Insert(ePropertyId, uno::Any(0l));
+                            }
+                            break;
+                        case PROP_PARA_RIGHT_MARGIN:
+                            pContext->Insert(ePropertyId, uno::Any(0l));
+                            break;
+                        case PROP_PARA_LAST_LINE_ADJUST:
+                        case PROP_PARA_ADJUST:
+                            pContext->Insert(ePropertyId, uno::Any(style::ParagraphAdjust_LEFT));
+                            break;
+                        case PROP_PARA_TAB_STOPS:
+                            pContext->Insert(ePropertyId, uno::Any(uno::Sequence< style::TabStop >()));
+                            break;
+                        case PROP_FILL_STYLE:
+                            pContext->Insert(ePropertyId, uno::Any(drawing::FillStyle_NONE));
+                            break;
+                        case PROP_FILL_COLOR:
+                            pContext->Insert(ePropertyId, uno::Any(sal_Int32(COL_TRANSPARENT)));
+                            break;
+                        case INVALID:
+                        default:
+                            break;
+                        }
+                    }
+                    ++stylePropertyIdsIt;
+                }
+            }
+        }
+    }
+}
+
 void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 {
     // All these fixed values are defined as static const sal_Unicode codepoints in the fast parser,
@@ -4119,6 +4126,11 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
     if (len == 1)
     {
+        if (sText[0] == 0x0d)
+        {
+            ResetStyleProperties();
+        }
+
         // preload all footnotes in separated footnotes
         if (sText[0] == 0x5)
         {

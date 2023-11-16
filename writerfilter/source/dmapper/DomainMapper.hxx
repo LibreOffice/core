@@ -175,6 +175,7 @@ private:
     // Table
     virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) override;
 
+    void ResetStyleProperties();
     void finishParagraph(const bool bRemove = false, const bool bNoNumbering = false);
 
     static void handleUnderlineType(const Id nId, const ::tools::SvRef<PropertyMap>& rContext);
