@@ -172,6 +172,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128966)
     xmlXPathFreeObject(pXmlObj);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908)
+{
+    createSwDoc("tdf130088.docx");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Keep real width of the exceeding line portions to calculate shrinking
+    sal_Int32 nPortionWidth
+        = getXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[2]/SwLinePortion[2]",
+                   "width")
+              .toInt32();
+    // This was 5806 (not real portion width, but stripped to the line width)
+    CPPUNIT_ASSERT_GREATER(sal_Int32(5840), nPortionWidth);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");
