@@ -146,4 +146,30 @@ public:
     bool IsDecorative() const { return m_xDecorativeCB->get_active(); }
 };
 
+/** Generic dialog to edit lists */
+class SvxListDialog : public weld::GenericDialogController
+{
+private:
+    std::unique_ptr<weld::TreeView> m_xList;
+    std::unique_ptr<weld::Button> m_xAddBtn;
+    std::unique_ptr<weld::Button> m_xRemoveBtn;
+    std::unique_ptr<weld::Button> m_xEditBtn;
+
+    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(DblClickHdl_Impl, weld::TreeView&, bool);
+    DECL_LINK(AddHdl_Impl, weld::Button&, void);
+    DECL_LINK(RemoveHdl_Impl, weld::Button&, void);
+    DECL_LINK(EditHdl_Impl, weld::Button&, void);
+
+    void SelectionChanged();
+
+public:
+    explicit SvxListDialog(weld::Window* pParent);
+    virtual ~SvxListDialog() override;
+
+    std::vector<OUString> GetEntries() const;
+    void SetEntries(std::vector<OUString> const& rParams);
+    void EditEntry();
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

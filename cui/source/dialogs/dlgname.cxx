@@ -19,6 +19,8 @@
 
 #include <cui/dlgname.hxx>
 
+#include <comphelper/string.hxx>
+
 /*************************************************************************
 |*
 |* Dialog for editing a name
@@ -142,6 +144,113 @@ IMPL_LINK_NOARG(SvxObjectTitleDescDialog, DecorativeHdl, weld::Toggleable&, void
     m_xTitleFT->set_sensitive(bEnable);
     m_xEdtDescription->set_sensitive(bEnable);
     m_xDescriptionFT->set_sensitive(bEnable);
+}
+
+SvxListDialog::SvxListDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/listdialog.ui", "ListDialog")
+    , m_xList(m_xBuilder->weld_tree_view("assignlist"))
+    , m_xAddBtn(m_xBuilder->weld_button("addbtn"))
+    , m_xRemoveBtn(m_xBuilder->weld_button("removebtn"))
+    , m_xEditBtn(m_xBuilder->weld_button("editbtn"))
+{
+    m_xList->set_size_request(m_xList->get_approximate_digit_width() * 54,
+                              m_xList->get_height_rows(6));
+    m_xAddBtn->connect_clicked(LINK(this, SvxListDialog, AddHdl_Impl));
+    m_xRemoveBtn->connect_clicked(LINK(this, SvxListDialog, RemoveHdl_Impl));
+    m_xEditBtn->connect_clicked(LINK(this, SvxListDialog, EditHdl_Impl));
+    m_xList->connect_changed(LINK(this, SvxListDialog, SelectHdl_Impl));
+    m_xList->connect_row_activated(LINK(this, SvxListDialog, DblClickHdl_Impl));
+
+    SelectionChanged();
+}
+
+SvxListDialog::~SvxListDialog() {}
+
+IMPL_LINK_NOARG(SvxListDialog, AddHdl_Impl, weld::Button&, void)
+{
+    SvxNameDialog aNameDlg(m_xDialog.get(), "", "blabla");
+
+    if (!aNameDlg.run())
+        return;
+    OUString sNewText = comphelper::string::strip(aNameDlg.GetName(), ' ');
+    if (!sNewText.isEmpty())
+    {
+        m_xList->insert_text(-1, sNewText);
+        m_xList->select(-1);
+    }
+}
+
+IMPL_LINK_NOARG(SvxListDialog, EditHdl_Impl, weld::Button&, void) { EditEntry(); }
+
+IMPL_LINK_NOARG(SvxListDialog, SelectHdl_Impl, weld::TreeView&, void) { SelectionChanged(); }
+
+IMPL_LINK_NOARG(SvxListDialog, DblClickHdl_Impl, weld::TreeView&, bool)
+{
+    EditEntry();
+    return true;
+}
+
+IMPL_LINK_NOARG(SvxListDialog, RemoveHdl_Impl, weld::Button&, void)
+{
+    int nPos = m_xList->get_selected_index();
+    if (nPos == -1)
+        return;
+    m_xList->remove(nPos);
+    int nCount = m_xList->n_children();
+    if (nCount)
+    {
+        if (nPos >= nCount)
+            nPos = nCount - 1;
+        m_xList->select(nPos);
+    }
+    SelectionChanged();
+}
+
+void SvxListDialog::SelectionChanged()
+{
+    bool bEnable = m_xList->get_selected_index() != -1;
+    m_xRemoveBtn->set_sensitive(bEnable);
+    m_xEditBtn->set_sensitive(bEnable);
+}
+
+std::vector<OUString> SvxListDialog::GetEntries() const
+{
+    int nCount = m_xList->n_children();
+    std::vector<OUString> aList;
+    aList.reserve(nCount);
+    for (int i = 0; i < nCount; ++i)
+        aList.push_back(m_xList->get_text(i));
+    return aList;
+}
+
+void SvxListDialog::SetEntries(std::vector<OUString> const& rEntries)
+{
+    m_xList->clear();
+    for (auto const& sEntry : rEntries)
+    {
+        m_xList->append_text(sEntry);
+    }
+    SelectionChanged();
+}
+
+void SvxListDialog::EditEntry()
+{
+    int nPos = m_xList->get_selected_index();
+    if (nPos == -1)
+        return;
+
+    OUString sOldText(m_xList->get_selected_text());
+    SvxNameDialog aNameDlg(m_xDialog.get(), sOldText, "blabla");
+
+    if (!aNameDlg.run())
+        return;
+    OUString sNewText = comphelper::string::strip(aNameDlg.GetName(), ' ');
+    if (!sNewText.isEmpty() && sNewText != sOldText)
+    {
+        m_xList->remove(nPos);
+        m_xList->insert_text(nPos, sNewText);
+        m_xList->select(nPos);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

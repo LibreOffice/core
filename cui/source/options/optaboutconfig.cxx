@@ -245,6 +245,21 @@ void CuiAboutConfigTabPage::FillItemSet()
     }
 }
 
+namespace
+{
+OUString lcl_StringListToString(const uno::Sequence<OUString>& seq)
+{
+    OUStringBuffer sBuffer;
+    for (sal_Int32 i = 0; i != seq.getLength(); ++i)
+    {
+        if (i != 0)
+            sBuffer.append(",");
+        sBuffer.append(seq[i]);
+    }
+    return sBuffer.makeStringAndClear();
+}
+}
+
 void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                                       const weld::TreeIter* pParentEntry, int lineage,
                                       bool bLoadAll)
@@ -484,15 +499,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 }
                 else if (sType == "oor:string-list")
                 {
-                    uno::Sequence<OUString> seq = aNode.get<uno::Sequence<OUString>>();
-                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
-                    {
-                        if (j != 0)
-                        {
-                            sValue.append(",");
-                        }
-                        sValue.append(seq[j]);
-                    }
+                    sValue = lcl_StringListToString(aNode.get<uno::Sequence<OUString>>());
                     sType = "string-list";
                 }
                 else if (sType == "oor:hexBinary-list")
@@ -778,13 +785,13 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "string-list")
             {
-                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
-                aNameDialog.SetCheckNameHdl(LINK(this, CuiAboutConfigTabPage, ValidNameHdl));
-                if (aNameDialog.run() == RET_OK)
+                SvxListDialog aListDialog(m_pParent);
+                aListDialog.SetEntries(commaStringToSequence(sDialogValue));
+                if (aListDialog.run() == RET_OK)
                 {
-                    sDialogValue = aNameDialog.GetName();
-                    pProperty->Value
-                        <<= comphelper::containerToSequence(commaStringToSequence(sDialogValue));
+                    auto seq = comphelper::containerToSequence(aListDialog.GetEntries());
+                    sDialogValue = lcl_StringListToString(seq);
+                    pProperty->Value <<= seq;
                     bSaveChanges = true;
                 }
             }
