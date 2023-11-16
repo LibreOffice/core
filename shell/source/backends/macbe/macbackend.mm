@@ -48,12 +48,11 @@ namespace
 typedef enum {
     sHTTP,
     sHTTPS,
-    sFTP
 } ServiceType;
 
 /*
  * Returns current proxy settings for selected service type (HTTP or
- * FTP) as a C string (in the buffer specified by host and hostSize)
+ * HTTPS) as a C string (in the buffer specified by host and hostSize)
  * and a port number.
  */
 
@@ -85,10 +84,6 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
         case sHTTPS: proxiesEnable = kSCPropNetProxiesHTTPSEnable;
                      proxiesProxy = kSCPropNetProxiesHTTPSProxy;
                      proxiesPort = kSCPropNetProxiesHTTPSPort;
-            break;
-        default: proxiesEnable = kSCPropNetProxiesFTPEnable;
-                 proxiesProxy = kSCPropNetProxiesFTPProxy;
-                 proxiesPort = kSCPropNetProxiesFTPPort;
             break;
     }
     // Proxy enabled?
@@ -219,40 +214,6 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         else
         {
             SAL_WARN("shell", "Got nil or empty list of user document directories" );
-        }
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
-    } else if ( PropertyName == "ooInetFTPProxyName" )
-    {
-        char host[MAXHOSTNAMELEN];
-        UInt16 port;
-        bool retVal;
-
-        retVal = GetProxySetting(sFTP, host, 100, &port);
-
-        if (retVal)
-        {
-            auto const Server = OUString::createFromAscii( host );
-            if( Server.getLength() > 0 )
-            {
-                return css::uno::Any(
-                    css::beans::Optional< css::uno::Any >(
-                        true, uno::Any( Server ) ) );
-            }
-        }
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
-    } else if ( PropertyName == "ooInetFTPProxyPort" )
-    {
-        char host[MAXHOSTNAMELEN];
-        UInt16 port;
-        bool retVal;
-
-        retVal = GetProxySetting(sFTP, host, 100, &port);
-
-        if (retVal && port > 0)
-        {
-            return css::uno::Any(
-                css::beans::Optional< css::uno::Any >(
-                    true, uno::Any( sal_Int32(port) ) ) );
         }
         return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPProxyName" )

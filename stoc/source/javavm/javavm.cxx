@@ -175,21 +175,6 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     css::uno::Reference<css::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey("Settings/ooInetProxyType");
     if( proxyEnable.is() && 0 != proxyEnable->getLongValue())
     {
-        // read ftp proxy name
-        css::uno::Reference<css::registry::XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey("Settings/ooInetFTPProxyName");
-        if(ftpProxy_name.is() && !ftpProxy_name->getStringValue().isEmpty()) {
-            OUString ftpHost = "ftp.proxyHost=" + ftpProxy_name->getStringValue();
-
-            // read ftp proxy port
-            css::uno::Reference<css::registry::XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey("Settings/ooInetFTPProxyPort");
-            if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
-                OUString ftpPort = "ftp.proxyPort=" + OUString::number(ftpProxy_port->getLongValue());
-
-                pjvm->pushProp(ftpHost);
-                pjvm->pushProp(ftpPort);
-            }
-        }
-
         // read http proxy name
         css::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey("Settings/ooInetHTTPProxyName");
         if(httpProxy_name.is() && !httpProxy_name->getStringValue().isEmpty()) {
@@ -228,10 +213,8 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
             value = value.replace(';', '|');
 
             OUString httpNonProxyHosts = "http.nonProxyHosts=" + value;
-            OUString ftpNonProxyHosts = "ftp.nonProxyHosts=" + value;
 
             pjvm->pushProp(httpNonProxyHosts);
-            pjvm->pushProp(ftpNonProxyHosts);
         }
     }
     xConfRegistry_simple->close();
@@ -921,7 +904,6 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     OUString aAccessor;
     rEvent.Accessor >>= aAccessor;
     OUString aPropertyName;
-    OUString aPropertyName2;
     OUString aPropertyValue;
     bool bSecurityChanged = false;
     if ( aAccessor == "ooInetProxyType" )
@@ -956,22 +938,9 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         rEvent.Element >>= n;
         aPropertyValue = OUString::number(n);
     }
-    else if ( aAccessor == "ooInetFTPProxyName" )
-    {
-        aPropertyName = "ftp.proxyHost";
-        rEvent.Element >>= aPropertyValue;
-    }
-    else if ( aAccessor == "ooInetFTPProxyPort" )
-    {
-        aPropertyName = "ftp.proxyPort";
-        sal_Int32 n = 0;
-        rEvent.Element >>= n;
-        aPropertyValue = OUString::number(n);
-    }
     else if ( aAccessor == "ooInetNoProxy" )
     {
         aPropertyName = "http.nonProxyHosts";
-        aPropertyName2 = "ftp.nonProxyHosts";
         rEvent.Element >>= aPropertyValue;
         aPropertyValue = aPropertyValue.replace(';', '|');
     }
@@ -1042,7 +1011,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         // or if the port is set to 0
         aPropertyValue= aPropertyValue.trim();
         if( aPropertyValue.isEmpty() ||
-           ( ( aPropertyName == "ftp.proxyPort" || aPropertyName == "http.proxyPort" /*|| aPropertyName == "socksProxyPort"*/ ) && aPropertyValue == "0" )
+           ((aPropertyName == "http.proxyPort" /*|| aPropertyName == "socksProxyPort"*/) && aPropertyValue == "0")
           )
         {
             // call java.lang.System.getProperties
@@ -1056,15 +1025,6 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             jmethodID jmRemove= pJNIEnv->GetMethodID( jcProperties, "remove", "(Ljava/lang/Object;)Ljava/lang/Object;");
             if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID java.util.Properties.remove", nullptr);
             pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName);
-
-            // special case for ftp.nonProxyHosts and http.nonProxyHosts. The office only
-            // has a value for two java properties
-            if (!aPropertyName2.isEmpty())
-            {
-                jstring jsPropName2= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyName2.getStr()), aPropertyName2.getLength());
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName2);
-            }
         }
         else
         {
@@ -1073,18 +1033,6 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
             pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
             if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
-
-            // special case for ftp.nonProxyHosts and http.nonProxyHosts. The office only
-            // has a value for two java properties
-            if (!aPropertyName2.isEmpty())
-            {
-                jstring jsPropName2= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyName2.getStr()), aPropertyName2.getLength());
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                jsPropValue= pJNIEnv->NewString( reinterpret_cast<jchar const *>(aPropertyValue.getStr()), aPropertyValue.getLength());
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName2, jsPropValue);
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
-            }
         }
 
         // If the settings for Security and NetAccess changed then we have to notify the SandboxSecurity
@@ -1247,20 +1195,11 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
             JNIEnv * pJNIEnv = aAttachGuard.getEnvironment();
 
             // The Java Properties
-            OUString sFtpProxyHost("ftp.proxyHost");
-            OUString sFtpProxyPort("ftp.proxyPort");
-            OUString sFtpNonProxyHosts ("ftp.nonProxyHosts");
             OUString sHttpProxyHost("http.proxyHost");
             OUString sHttpProxyPort("http.proxyPort");
             OUString sHttpNonProxyHosts("http.nonProxyHosts");
 
             // create Java Properties as JNI strings
-            jstring jsFtpProxyHost= pJNIEnv->NewString( reinterpret_cast<jchar const *>(sFtpProxyHost.getStr()), sFtpProxyHost.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-            jstring jsFtpProxyPort= pJNIEnv->NewString( reinterpret_cast<jchar const *>(sFtpProxyPort.getStr()), sFtpProxyPort.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-            jstring jsFtpNonProxyHosts= pJNIEnv->NewString( reinterpret_cast<jchar const *>(sFtpNonProxyHosts.getStr()), sFtpNonProxyHosts.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
             jstring jsHttpProxyHost= pJNIEnv->NewString( reinterpret_cast<jchar const *>(sHttpProxyHost.getStr()), sHttpProxyHost.getLength());
             if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
             jstring jsHttpProxyPort= pJNIEnv->NewString( reinterpret_cast<jchar const *>(sHttpProxyPort.getStr()), sHttpProxyPort.getLength());
@@ -1296,28 +1235,7 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                     std::u16string_view propName= prop.subView( 0, index);
                     OUString propValue= prop.copy( index + 1);
 
-                    if( propName == sFtpProxyHost)
-                    {
-                        jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                        pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpProxyHost, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
-                    }
-                    else if( propName == sFtpProxyPort)
-                    {
-                        jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                        pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpProxyPort, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
-                    }
-                    else if( propName == sFtpNonProxyHosts)
-                    {
-                        jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
-                        pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpNonProxyHosts, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
-                    }
-                    else if( propName == sHttpProxyHost)
+                    if (propName == sHttpProxyHost)
                     {
                         jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
@@ -1345,9 +1263,6 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                 // call java.util.Properties.remove
                 jmethodID jmRemove= pJNIEnv->GetMethodID( jcProperties, "remove", "(Ljava/lang/Object;)Ljava/lang/Object;");
                 if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID java.util.Property.remove", nullptr);
-                pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpProxyHost);
-                pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpProxyPort);
-                pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpNonProxyHosts);
                 pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsHttpProxyHost);
                 pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsHttpProxyPort);
                 pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsHttpNonProxyHosts);

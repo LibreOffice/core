@@ -103,60 +103,6 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         osl_getFileURLFromSystemPath(sDocumentsDir.pData, &sDocumentsURL.pData);
         return css::beans::Optional<css::uno::Any>(true, uno::Any(sDocumentsURL));
     }
-    else if (id == u"ooInetFTPProxyName")
-    {
-        QString aFTPProxy;
-        switch (KProtocolManager::proxyType())
-        {
-            case KProtocolManager::ManualProxy: // Proxies are manually configured
-                aFTPProxy = KProtocolManager::proxyFor(QStringLiteral("FTP"));
-                break;
-            case KProtocolManager::PACProxy: // A proxy configuration URL has been given
-            case KProtocolManager::WPADProxy: // A proxy should be automatically discovered
-            case KProtocolManager::EnvVarProxy: // Proxy values set through environment variables
-                // In such cases, the proxy address is not stored in KDE, but determined dynamically.
-                // The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
-                // The best we can do here is to ask the current value for a given address.
-                aFTPProxy = KProtocolManager::proxyForUrl(
-                    QUrl(QStringLiteral("ftp://ftp.libreoffice.org")));
-                break;
-            default: // No proxy is used
-                break;
-        }
-        if (!aFTPProxy.isEmpty())
-        {
-            QUrl aProxy(aFTPProxy);
-            OUString sProxy = fromQStringToOUString(aProxy.host());
-            return css::beans::Optional<css::uno::Any>(true, uno::Any(sProxy));
-        }
-    }
-    else if (id == u"ooInetFTPProxyPort")
-    {
-        QString aFTPProxy;
-        switch (KProtocolManager::proxyType())
-        {
-            case KProtocolManager::ManualProxy: // Proxies are manually configured
-                aFTPProxy = KProtocolManager::proxyFor(QStringLiteral("FTP"));
-                break;
-            case KProtocolManager::PACProxy: // A proxy configuration URL has been given
-            case KProtocolManager::WPADProxy: // A proxy should be automatically discovered
-            case KProtocolManager::EnvVarProxy: // Proxy values set through environment variables
-                // In such cases, the proxy address is not stored in KDE, but determined dynamically.
-                // The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
-                // The best we can do here is to ask the current value for a given address.
-                aFTPProxy = KProtocolManager::proxyForUrl(
-                    QUrl(QStringLiteral("ftp://ftp.libreoffice.org")));
-                break;
-            default: // No proxy is used
-                break;
-        }
-        if (!aFTPProxy.isEmpty())
-        {
-            QUrl aProxy(aFTPProxy);
-            sal_Int32 nPort = aProxy.port();
-            return css::beans::Optional<css::uno::Any>(true, uno::Any(nPort));
-        }
-    }
     else if (id == u"ooInetHTTPProxyName")
     {
         QString aHTTPProxy;

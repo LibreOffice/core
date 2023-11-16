@@ -56,8 +56,6 @@ constexpr OUString HTTP_PROXY_NAME_KEY = u"ooInetHTTPProxyName"_ustr;
 constexpr OUString HTTP_PROXY_PORT_KEY = u"ooInetHTTPProxyPort"_ustr;
 constexpr OUString HTTPS_PROXY_NAME_KEY = u"ooInetHTTPSProxyName"_ustr;
 constexpr OUString HTTPS_PROXY_PORT_KEY = u"ooInetHTTPSProxyPort"_ustr;
-constexpr OUString FTP_PROXY_NAME_KEY = u"ooInetFTPProxyName"_ustr;
-constexpr OUString FTP_PROXY_PORT_KEY = u"ooInetFTPProxyPort"_ustr;
 
 
 namespace ucbhelper
@@ -129,7 +127,6 @@ class InternetProxyDecider_Impl :
     mutable osl::Mutex                       m_aMutex;
     InternetProxyServer                      m_aHttpProxy;
     InternetProxyServer                      m_aHttpsProxy;
-    InternetProxyServer                      m_aFtpProxy;
     const InternetProxyServer                m_aEmptyProxy;
     ProxyType                                m_nProxyType;
     uno::Reference< util::XChangesNotifier > m_xNotifier;
@@ -352,14 +349,6 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                     xNameAccess, HTTPS_PROXY_PORT_KEY, m_aHttpsProxy.nPort );
                 if ( m_aHttpsProxy.nPort == -1 )
                     m_aHttpsProxy.nPort = 443; // standard HTTPS port.
-
-                // *** FTP ***
-                getConfigStringValue(
-                    xNameAccess, FTP_PROXY_NAME_KEY, m_aFtpProxy.aName );
-
-                m_aFtpProxy.nPort = -1;
-                getConfigInt32Value(
-                    xNameAccess, FTP_PROXY_PORT_KEY, m_aFtpProxy.nPort );
             }
 
             // Register as listener for config changes.
@@ -685,12 +674,7 @@ InternetProxyServer InternetProxyDecider_Impl::getProxy(
             return m_aEmptyProxy;
     }
 
-    if ( rProtocol.toAsciiLowerCase() == "ftp" )
-    {
-        if ( !m_aFtpProxy.aName.isEmpty() && m_aFtpProxy.nPort >= 0 )
-            return m_aFtpProxy;
-    }
-    else if ( rProtocol.toAsciiLowerCase() == "https" )
+    if (rProtocol.toAsciiLowerCase() == "https")
     {
         if ( !m_aHttpsProxy.aName.isEmpty() )
             return m_aHttpsProxy;
@@ -773,22 +757,6 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
 
                 if ( m_aHttpsProxy.nPort == -1 )
                     m_aHttpsProxy.nPort = 443; // standard HTTPS port.
-            }
-            else if ( aKey == FTP_PROXY_NAME_KEY )
-            {
-                if ( !( rElem.Element >>= m_aFtpProxy.aName ) )
-                {
-                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                "Error getting config item value!" );
-                }
-            }
-            else if ( aKey == FTP_PROXY_PORT_KEY )
-            {
-                if ( !( rElem.Element >>= m_aFtpProxy.nPort ) )
-                {
-                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                "Error getting config item value!" );
-                }
             }
         }
     }

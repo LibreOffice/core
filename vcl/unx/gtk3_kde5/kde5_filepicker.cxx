@@ -42,9 +42,8 @@ KDE5FilePicker::KDE5FilePicker(QObject* parent)
     , _winId(0)
 {
     _dialog->setSupportedSchemes({
-        QStringLiteral("file"), QStringLiteral("ftp"), QStringLiteral("http"),
-        QStringLiteral("https"), QStringLiteral("webdav"), QStringLiteral("webdavs"),
-        QStringLiteral("smb"),
+        QStringLiteral("file"), QStringLiteral("http"), QStringLiteral("https"),
+        QStringLiteral("webdav"), QStringLiteral("webdavs"), QStringLiteral("smb"),
         QStringLiteral(""), // this makes removable devices shown
     });
 

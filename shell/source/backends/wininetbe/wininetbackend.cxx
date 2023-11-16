@@ -225,23 +225,18 @@ WinInetBackend::WinInetBackend()
                 ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, u"http" );
                 ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, u"https" );
 
-                ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, u"ftp" );
-
                 if( aTypeIndepProxy.Server.getLength() )
                 {
                     aHttpProxy.Server = aTypeIndepProxy.Server;
                     aHttpsProxy.Server  = aTypeIndepProxy.Server;
-                    aFtpProxy.Server  = aTypeIndepProxy.Server;
 
                     if( aTypeIndepProxy.Port.getLength() )
                     {
                         aHttpProxy.Port = aTypeIndepProxy.Port;
                         aHttpsProxy.Port  = aTypeIndepProxy.Port;
-                        aFtpProxy.Port  = aTypeIndepProxy.Port;
                     }
                     else
                     {
-                        aFtpProxy.Port  = aHttpProxy.Port;
                         aHttpsProxy.Port  = aHttpProxy.Port;
                     }
                 }
@@ -273,20 +268,6 @@ WinInetBackend::WinInetBackend()
                     valueHttpsProxyPort_.IsPresent = true;
                     valueHttpsProxyPort_.Value <<= aHttpsProxy.Port.toInt32();
                 }
-
-                // ftp proxy name
-                if( aFtpProxy.Server.getLength() > 0 )
-                {
-                    valueFtpProxyName_.IsPresent = true;
-                    valueFtpProxyName_.Value <<= aFtpProxy.Server;
-                }
-
-                // ftp proxy port
-                if( aFtpProxy.Port.getLength() > 0 )
-                {
-                    valueFtpProxyPort_.IsPresent = true;
-                    valueFtpProxyPort_.Value <<= aFtpProxy.Port.toInt32();
-                }
             }
         }
     }
@@ -307,13 +288,7 @@ void WinInetBackend::setPropertyValue(
 css::uno::Any WinInetBackend::getPropertyValue(
     OUString const & PropertyName)
 {
-    if ( PropertyName == "ooInetFTPProxyName" )
-    {
-        return css::uno::Any(valueFtpProxyName_);
-    } else if ( PropertyName == "ooInetFTPProxyPort" )
-    {
-        return css::uno::Any(valueFtpProxyPort_);
-    } else if ( PropertyName == "ooInetHTTPProxyName" )
+    if (PropertyName == "ooInetHTTPProxyName")
     {
         return css::uno::Any(valueHttpProxyName_);
     } else if ( PropertyName == "ooInetHTTPProxyPort" )

@@ -30,7 +30,7 @@ Comment=Launch applications to create text documents, spreadsheets, presentation
 StartupNotify=true
 X-GIO-NoFuse=true
 StartupWMClass=libreoffice-startcenter
-X-KDE-Protocols=file,http,ftp,webdav,webdavs
+X-KDE-Protocols=file,http,webdav,webdavs
 
 ##Define Actions
 Actions=Writer;Calc;Impress;Draw;Base;Math;

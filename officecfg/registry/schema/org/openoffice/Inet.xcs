@@ -61,6 +61,7 @@
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the name of the FTP proxy server.</desc>
+          <deprecated>Not used anymore</deprecated>
         </info>
         <value/>
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -69,6 +70,7 @@
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the port of the FTP proxy server.</desc>
+          <deprecated>Not used anymore</deprecated>
         </info>
         <constraints>
           <minInclusive oor:value="0">

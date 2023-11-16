@@ -1509,7 +1509,7 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                                 svl::Items<
                 //SID_OPTIONS_START - ..END
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
-                                SID_INET_NOPROXY, SID_INET_FTP_PROXY_PORT,
+                                SID_INET_NOPROXY, SID_INET_HTTP_PROXY_PORT,
                                 SID_SECURE_URL, SID_SECURE_URL> );
                 SfxApplication::GetOptions(*pRet);
         break;

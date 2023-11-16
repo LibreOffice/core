@@ -237,8 +237,6 @@ css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
          PropertyName == "ExternalMailer" ||
          PropertyName == "SourceViewFontHeight" ||
          PropertyName == "SourceViewFontName" ||
-         PropertyName == "ooInetFTPProxyName" ||
-         PropertyName == "ooInetFTPProxyPort" ||
          PropertyName == "ooInetHTTPProxyName" ||
          PropertyName == "ooInetHTTPProxyPort" ||
          PropertyName == "ooInetHTTPSProxyName" ||

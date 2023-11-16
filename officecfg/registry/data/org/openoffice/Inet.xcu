@@ -30,16 +30,6 @@
       <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetProxyType"/>
       <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetProxyType"/>
     </prop>
-    <prop oor:name="ooInetFTPProxyName">
-      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetFTPProxyName"/>
-      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetFTPProxyName"/>
-      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetFTPProxyName"/>
-    </prop>
-    <prop oor:name="ooInetFTPProxyPort">
-      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetFTPProxyPort"/>
-      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetFTPProxyPort"/>
-      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetFTPProxyPort"/>
-    </prop>
     <prop oor:name="ooInetHTTPProxyName">
       <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPProxyName"/>
       <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetHTTPProxyName"/>

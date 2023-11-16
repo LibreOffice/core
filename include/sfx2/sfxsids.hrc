@@ -562,8 +562,6 @@ class SvxZoomItem;
 
 #define SID_INET_HTTP_PROXY_NAME        TypedWhichId<SfxStringItem>(SID_OPTIONS_START + 38)
 #define SID_INET_HTTP_PROXY_PORT        TypedWhichId<SfxInt32Item>(SID_OPTIONS_START + 39)
-#define SID_INET_FTP_PROXY_NAME         TypedWhichId<SfxStringItem>(SID_OPTIONS_START + 40)
-#define SID_INET_FTP_PROXY_PORT         TypedWhichId<SfxInt32Item>(SID_OPTIONS_START + 41)
 
 // Automatic update of Styles - manage TabPage
 #define SID_ATTR_AUTO_STYLE_UPDATE      TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 65)

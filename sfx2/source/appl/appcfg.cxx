@@ -211,14 +211,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 bRet = toSet_withDefault<officecfg::Inet::Settings::ooInetHTTPProxyPort>(
                     rSet, SID_INET_HTTP_PROXY_PORT, 0);
                 break;
-            case SID_INET_FTP_PROXY_NAME:
-                bRet = toSet<officecfg::Inet::Settings::ooInetFTPProxyName>(
-                    rSet, SID_INET_FTP_PROXY_NAME);
-                break;
-            case SID_INET_FTP_PROXY_PORT:
-                bRet = toSet_withDefault<officecfg::Inet::Settings::ooInetFTPProxyPort>(
-                    rSet, SID_INET_FTP_PROXY_PORT, 0);
-                break;
             case SID_INET_NOPROXY:
                 bRet = toSet<officecfg::Inet::Settings::ooInetNoProxy>(rSet, SID_INET_NOPROXY);
                 break;
@@ -318,10 +310,6 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
         rSet, SID_INET_HTTP_PROXY_NAME, batch);
     toCfg_ifSet<officecfg::Inet::Settings::ooInetHTTPProxyPort>(
         rSet, SID_INET_HTTP_PROXY_PORT, batch);
-    toCfg_ifSet<officecfg::Inet::Settings::ooInetFTPProxyName>(
-        rSet, SID_INET_FTP_PROXY_NAME, batch);
-    toCfg_ifSet<officecfg::Inet::Settings::ooInetFTPProxyPort>(
-        rSet, SID_INET_FTP_PROXY_PORT, batch);
     toCfg_ifSet<officecfg::Inet::Settings::ooInetNoProxy>(rSet, SID_INET_NOPROXY, batch);
 
     // Secure-Referrer
