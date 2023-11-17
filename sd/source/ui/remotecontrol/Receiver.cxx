@@ -78,6 +78,12 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     {
     }
 
+    if (aCommand.empty())
+    {
+        SAL_WARN("sdremote", "Receiver::executeCommand: no command");
+        return;
+    }
+
     if ( aCommand[0] ==  "transition_next" )
     {
         if ( xSlideShowController.is() )
@@ -90,6 +96,11 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if ( aCommand[0] == "goto_slide" )
     {
+        if (aCommand.size() < 2)
+        {
+            SAL_WARN("sdremote", "Receiver::executeCommand: invalid goto_slide");
+            return;
+        }
         // FIXME: if 0 returned, then not a valid number
         sal_Int32 aSlide = aCommand[1].toInt32();
         if ( xSlideShowController.is() &&
@@ -122,6 +133,11 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if (aCommand[0] == "pointer_started" )
     {
+        if (aCommand.size() < 3)
+        {
+            SAL_WARN("sdremote", "Receiver::executeCommand: invalid pointer_started");
+            return;
+        }
         // std::cerr << "pointer_started" << std::endl;
         float x = aCommand[1].toFloat();
         float y = aCommand[2].toFloat();
@@ -176,6 +192,11 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if (aCommand[0] == "pointer_coordination" )
     {
+        if (aCommand.size() < 3)
+        {
+            SAL_WARN("sdremote", "Receiver::executeCommand: invalid pointer_coordination");
+            return;
+        }
         float x = aCommand[1].toFloat();
         float y = aCommand[2].toFloat();
 
