@@ -922,12 +922,58 @@ void PieChart::createShapes()
                     xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
             break;
         case PieChartSubType_BAR:
+        {
             pDataSrc = &ofPieSrc;
             createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget,
                     xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
             createOneBar(SubPieType::RIGHT, aParam, xSeriesTarget,
                     xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
+
+            // draw connecting lines
+            double xl0, xl1, yl0, yl1, x0, y0, x1, y1, y2, y3;
+
+            if (m_aPosHelper.m_fAngleDegreeOffset < 90.0) {
+                xl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale *
+                    cos(m_aPosHelper.m_fAngleDegreeOffset * M_PI / 180) +
+                    m_fLeftShift;
+                yl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale *
+                    sin(m_aPosHelper.m_fAngleDegreeOffset * M_PI / 180);
+            } else {
+                xl0 = m_fLeftShift;
+                yl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale;
+            }
+
+            xl1 = m_fBarLeft;
+            yl1 = m_fFullBarHeight / 2;
+
+            x0 = m_aPosHelper.transformUnitCircleToScene(0, xl0, 0).PositionX;
+            y0 = m_aPosHelper.transformUnitCircleToScene(90, yl0, 0).PositionY;
+            x1 = m_aPosHelper.transformUnitCircleToScene(0, xl1, 0).PositionX;
+            y1 = m_aPosHelper.transformUnitCircleToScene(90, yl1, 0).PositionY;
+            y2 = m_aPosHelper.transformUnitCircleToScene(90, -yl0, 0).PositionY;
+            y3 = m_aPosHelper.transformUnitCircleToScene(90, -yl1, 0).PositionY;
+
+            std::vector<std::vector<css::drawing::Position3D>> linePts;
+            linePts.resize(2);
+            linePts[0].push_back(css::drawing::Position3D(x0, y0, aParam.mfLogicZ));
+            linePts[0].push_back(css::drawing::Position3D(x1, y1, aParam.mfLogicZ));
+            linePts[1].push_back(css::drawing::Position3D(x0, y2, aParam.mfLogicZ));
+            linePts[1].push_back(css::drawing::Position3D(x1, y3, aParam.mfLogicZ));
+
+            VLineProperties aVLineProperties;   // default black
+
+            //create line
+            rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes =
+                getSeriesGroupShape(pSeries, xSeriesTarget);
+            rtl::Reference<SvxShape> xShape = ShapeFactory::createLine2D(
+                    xSeriesGroupShape_Shapes, linePts, &aVLineProperties);
+
+            // need to set properties?
+            //PropertyMapper::setMappedProperties( *xShape, xObjectProperties,
+            //        PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+
             break;
+        }
         case PieChartSubType_PIE:
             pDataSrc = &ofPieSrc;
             createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget,
