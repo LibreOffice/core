@@ -23,7 +23,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 class SwViewShell;
-class SwView;
 
 enum class LoadUrlFlags {
     NONE    = 0x00,
@@ -35,10 +34,6 @@ namespace o3tl {
 
 void LoadURL( SwViewShell& rSh, const OUString& rName,
               LoadUrlFlags nFilter, const OUString& rTargetFrameName );
-
-void LoadURL( SwView& rView, const OUString& rName,
-              LoadUrlFlags nFilter, const OUString& rTargetFrameName );
-
 
 #endif
 
