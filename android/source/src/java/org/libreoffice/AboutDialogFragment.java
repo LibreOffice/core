@@ -70,7 +70,7 @@ public class AboutDialogFragment extends DialogFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder .setIcon(R.drawable.lo_icon)
+        builder .setIcon(R.mipmap.ic_launcher)
                 .setTitle(R.string.app_name)
                 .setView(messageView)
                 .setNegativeButton(R.string.about_license, new DialogInterface.OnClickListener() {
