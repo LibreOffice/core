@@ -743,6 +743,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:UnfloatFrame" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Unfloat Frame Content</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertIndexesEntry" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Index Entry...</value>

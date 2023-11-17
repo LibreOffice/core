@@ -239,6 +239,7 @@ class SwUINumRuleItem;
 
 #define FN_INSERT_IDX_ENTRY_DLG (FN_INSERT + 35)    /* insert index entry */
 #define FN_INSERT_FRAME_INTERACT_NOCOL (FN_INSERT + 36) /*insert interactive non column frame*/
+#define FN_UNFLOAT_FRAME TypedWhichId<SfxUInt16Item>(FN_INSERT + 37) /* Unfloat Frame */
 
 #define FN_TOOL_ANCHOR_PAGE     (FN_INSERT + 50)    /* anchor Draw object to page */
 #define FN_TOOL_ANCHOR_PARAGRAPH (FN_INSERT + 51)   /* anchor Draw object to paragraph */

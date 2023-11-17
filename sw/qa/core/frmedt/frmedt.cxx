@@ -26,6 +26,8 @@
 #include <caption.hxx>
 #include <view.hxx>
 #include <formatflysplit.hxx>
+#include <itabenum.hxx>
+#include <frmmgr.hxx>
 
 /// Covers sw/source/core/frmedt/ fixes.
 class SwCoreFrmedtTest : public SwModelTestBase
@@ -194,6 +196,45 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyInsertCaption)
     SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
     SwFrameFormat* pFly = rFlys[0];
     CPPUNIT_ASSERT(!pFly->GetAttrSet().GetFlySplit().GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyUnfloat)
+{
+    // Given a document with a floating table:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFlyFormats.empty());
+    // Insert a table:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->GoPrevCell();
+    pWrtShell->Insert("A1");
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert("A2");
+    // Select cell:
+    pWrtShell->SelAll();
+    // Select table:
+    pWrtShell->SelAll();
+    // Wrap the table in a text frame:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+    CPPUNIT_ASSERT(!rFlyFormats.empty());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
+
+    // When marking that frame and unfloating it:
+    selectShape(1);
+    pWrtShell->UnfloatFlyFrame();
+
+    // Then make sure the frame is removed, but the table is still part of the document:
+    // Without the accompanying fix in place (empty SwFEShell::UnfloatFlyFrame()), this test would
+    // have failed, the frame was not removed.
+    CPPUNIT_ASSERT(rFlyFormats.empty());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

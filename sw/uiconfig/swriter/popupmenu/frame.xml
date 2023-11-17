@@ -50,5 +50,6 @@
   </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
+  <menu:menuitem menu:id=".uno:UnfloatFrame"/>
   <menu:menuitem menu:id=".uno:FrameDialog"/>
 </menu:menupopup>

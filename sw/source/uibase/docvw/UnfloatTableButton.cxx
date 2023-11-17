@@ -123,8 +123,6 @@ IMPL_LINK_NOARG(UnfloatTableButton, ClickHdl, weld::Button&, void)
     if (pTextFrame->GetTextNodeFirst() == nullptr)
         return;
 
-    SwNodeIndex aInsertPos((*pTextFrame->GetTextNodeFirst()));
-
     SwTableNode* pTableNode = pTableFrame->GetTable()->GetTableNode();
     if (pTableNode == nullptr)
         return;
@@ -173,18 +171,8 @@ IMPL_LINK_NOARG(UnfloatTableButton, ClickHdl, weld::Button&, void)
         }
     }
 
-    // Move the table outside of the text frame
-    SwNodeRange aRange(*pTableNode, SwNodeOffset(0), *pTableNode->EndOfSectionNode(),
-                       SwNodeOffset(1));
-    rDoc.getIDocumentContentOperations().MoveNodeRange(aRange, aInsertPos.GetNode(),
-                                                       SwMoveFlags::DEFAULT);
-
-    // Remove the floating table's frame
-    SwFlyFrameFormat* pFrameFormat = pFlyFrame->GetFormat();
-    if (pFrameFormat)
-    {
-        rDoc.getIDocumentLayoutAccess().DelLayoutFormat(pFrameFormat);
-    }
+    SwWrtShell& rWrtShell = GetEditWin()->GetView().GetWrtShell();
+    rWrtShell.UnfloatFlyFrame();
 
     rDoc.getIDocumentState().SetModified();
 

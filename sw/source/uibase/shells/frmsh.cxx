@@ -269,6 +269,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             GetView().UpdateWordCount(this, nSlot);
             break;
         }
+        case FN_UNFLOAT_FRAME:
+        {
+            rSh.UnfloatFlyFrame();
+            rReq.Done();
+            break;
+        }
         default: bMore = true;
     }
 

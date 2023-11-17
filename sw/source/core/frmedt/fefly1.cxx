@@ -273,6 +273,46 @@ void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
     SelFlyGrabCursor();
 }
 
+void SwFEShell::UnfloatFlyFrame()
+{
+    SwFlyFrame* pFly = GetSelectedFlyFrame();
+    if (!pFly)
+    {
+        return;
+    }
+
+    SwFrameFormat& rFlyFormat = pFly->GetFrameFormat();
+    const SwFormatContent& rContent = rFlyFormat.GetContent();
+    const SwNodeIndex* pFlyStart = rContent.GetContentIdx();
+    if (!pFlyStart)
+    {
+        return;
+    }
+
+    const SwEndNode* pFlyEnd = pFlyStart->GetNode().EndOfSectionNode();
+    if (!pFlyEnd)
+    {
+        return;
+    }
+
+    SwNodeRange aRange(pFlyStart->GetNode(), SwNodeOffset(1), *pFlyEnd, SwNodeOffset(0));
+    const SwFormatAnchor& rAnchor = rFlyFormat.GetAnchor();
+    SwNode* pAnchor = rAnchor.GetAnchorNode();
+    if (!pAnchor)
+    {
+        return;
+    }
+
+    // Move the content outside of the text frame.
+    SwNodeIndex aInsertPos(*pAnchor);
+    IDocumentContentOperations& rIDCO = rFlyFormat.GetDoc()->getIDocumentContentOperations();
+    rIDCO.MoveNodeRange(aRange, aInsertPos.GetNode(), SwMoveFlags::CREATEUNDOOBJ);
+
+    // Remove the fly frame frame.
+    IDocumentLayoutAccess& rIDLA = rFlyFormat.getIDocumentLayoutAccess();
+    rIDLA.DelLayoutFormat(&rFlyFormat);
+}
+
 // Get selected fly
 SwFlyFrame* SwFEShell::GetSelectedFlyFrame() const
 {

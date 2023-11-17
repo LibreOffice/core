@@ -3061,6 +3061,23 @@ SfxUInt16Item InsertFrame FN_INSERT_FRAME
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxUInt16Item UnfloatFrame FN_UNFLOAT_FRAME
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxUInt16Item InsertFrameInteract FN_INSERT_FRAME_INTERACT
 (SfxUInt16Item Columns SID_ATTR_COLUMNS, SfxUInt16Item Modifier SID_MODIFIER)
 [
