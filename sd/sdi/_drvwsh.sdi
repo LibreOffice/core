@@ -198,6 +198,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_SETLAYER
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_NAVIGATOR // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

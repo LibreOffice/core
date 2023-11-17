@@ -1022,6 +1022,20 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:SetLayer" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Set Layer</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Move to Layer...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Open a dialog to change the layer of the object</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:PageMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Normal</value>

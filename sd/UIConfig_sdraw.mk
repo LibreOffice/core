@@ -122,6 +122,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/notebookbar_online \
 	sd/uiconfig/sdraw/ui/paranumberingtab \
 	sd/uiconfig/sdraw/ui/queryunlinkimagedialog \
+	sd/uiconfig/sdraw/ui/selectlayerdialog \
 	sd/uiconfig/sdraw/ui/vectorize \
 ))
 

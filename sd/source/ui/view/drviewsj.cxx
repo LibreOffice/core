@@ -483,6 +483,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     // select no object
     else
     {
+        rSet.DisableItem(SID_SETLAYER);
         rSet.DisableItem( SID_ENTER_GROUP );
         rSet.DisableItem( SID_CUT );
         rSet.DisableItem( SID_COPY );

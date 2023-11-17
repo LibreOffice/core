@@ -245,6 +245,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/dlg/navigatr \
 	sd/source/ui/dlg/sdabstdlg \
 	sd/source/ui/dlg/sdtreelb \
+	sd/source/ui/dlg/SelectLayerDlg \
 	sd/source/ui/dlg/titledockwin \
 	sd/source/ui/dlg/unchss \
 	sd/source/ui/dlg/UndoThemeChange \

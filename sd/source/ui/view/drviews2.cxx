@@ -194,6 +194,7 @@
 #include <memory>
 
 #include <sfx2/newstyle.hxx>
+#include <SelectLayerDlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2729,6 +2730,38 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 );
             }
 
+            Cancel();
+            rReq.Ignore();
+            break;
+        }
+
+        case SID_SETLAYER:
+        {
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            const size_t nMarkCount = rMarkList.GetMarkCount();
+            if (nMarkCount >= 1 && mpLayerTabBar)
+            {
+                SdSelectLayerDlg aDlg(GetFrameWeld());
+
+                weld::TreeView& rTreeView = aDlg.GetTreeView();
+                auto nPageCount = mpLayerTabBar->GetPageCount();
+                for (auto i = 0; i < nPageCount; i++)
+                    rTreeView.append_text(LayerTabBar::convertToLocalizedName(
+                                        mpLayerTabBar->GetLayerName(mpLayerTabBar->GetPageId(i))));
+                rTreeView.select(0);
+
+                if (aDlg.run() == RET_OK && rTreeView.get_selected_index() != -1)
+                {
+                    SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+                    SdrLayerID aSdrLayerId = rLayerAdmin.GetLayerID(mpLayerTabBar->GetLayerName(
+                                        mpLayerTabBar->GetPageId(rTreeView.get_selected_index())));
+                    for (size_t i = 0; i < nMarkCount; ++i)
+                    {
+                        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                        pObj->SetLayer(aSdrLayerId);
+                    }
+                }
+            }
             Cancel();
             rReq.Ignore();
             break;

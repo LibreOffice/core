@@ -111,7 +111,7 @@
 #define SID_PAGEMODE                        (SID_SD_START+46)
 #define SID_LAYERMODE                       (SID_SD_START+47)
 #define SID_TOGGLELAYERVISIBILITY           (SID_SD_START+48)
-    // FREE
+#define SID_SETLAYER                        (SID_SD_START+49)
 #define SID_MASTERPAGE                      (SID_SD_START+50)
 // Navigation between slides
 #define SID_GO_TO_NEXT_PAGE                 (SID_SD_START+51)
