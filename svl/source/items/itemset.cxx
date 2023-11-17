@@ -1482,60 +1482,86 @@ bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
 
 bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
 {
-    // Values we can get quickly need to be the same
-    const bool bDifferentPools = (GetPool() != rCmp.GetPool());
-    if ( (bComparePool && GetParent() != rCmp.GetParent()) ||
-         (bComparePool && bDifferentPools) ||
-         Count() != rCmp.Count() )
-        return false;
-
-    // If we reach here and bDifferentPools==true that means bComparePool==false.
-
-    // Counting Ranges takes longer; they also need to be the same, however
-    const sal_uInt16 nCount1(TotalCount());
-    const sal_uInt16 nCount2(rCmp.TotalCount());
-    if ( nCount1 != nCount2 )
-        return false;
-
-    // Are the Ranges themselves unequal?
-    for (sal_Int32 i = 0; i < GetRanges().size(); ++i)
-    {
-        if (GetRanges()[i] != rCmp.GetRanges()[i])
-        {
-            // We must use the slow method then
-            SfxWhichIter aIter( *this );
-            for ( sal_uInt16 nWh = aIter.FirstWhich();
-                  nWh;
-                  nWh = aIter.NextWhich() )
-            {
-                // If the pointer of the shareable Items are unequal, the Items must match
-                const SfxPoolItem *pItem1 = nullptr, *pItem2 = nullptr;
-                if ( GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWh, false, &pItem1 ) !=
-                        rCmp.GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWh, false, &pItem2 ) ||
-                        !SfxPoolItem::areSame(pItem1, pItem2))
-                    return false;
-            }
-
-            return true;
-        }
-    }
-
-    // Are all pointers the same?
-    if (0 == memcmp( m_ppItems, rCmp.m_ppItems, nCount1 * sizeof(m_ppItems[0]) ))
+    // check if same incarnation
+    if (this == &rCmp)
         return true;
 
-    // We need to compare each one separately then
-    const SfxPoolItem **ppItem1 = m_ppItems;
-    const SfxPoolItem **ppItem2 = rCmp.m_ppItems;
-    for ( sal_uInt16 nPos = 0; nPos < nCount1; ++nPos )
-    {
-        // If the pointers of the shareable Items are not the same, the Items
-        // must match
-        if (!SfxPoolItem::areSame(*ppItem1, *ppItem2))
-            return false;
+    // check parents (if requested, also bComparePool)
+    if (bComparePool && GetParent() != rCmp.GetParent())
+        return false;
 
-        ++ppItem1;
-        ++ppItem2;
+    // check pools (if requested)
+    if (bComparePool && GetPool() != rCmp.GetPool())
+        return false;
+
+    // check count of set items
+    if (Count() != rCmp.Count())
+        return false;
+
+    // both have no items, done
+    if (0 == Count())
+        return true;
+
+    // check if ranges are equal
+    if (GetRanges() == rCmp.GetRanges())
+    {
+        // if yes, we can simplify: are all pointers the same?
+        if (0 == memcmp( m_ppItems, rCmp.m_ppItems, TotalCount() * sizeof(m_ppItems[0]) ))
+            return true;
+
+        // compare each one separately
+        const SfxPoolItem **ppItem1(m_ppItems);
+        const SfxPoolItem **ppItem2(rCmp.m_ppItems);
+
+        for (sal_uInt16 nPos(0); nPos < TotalCount(); nPos++)
+        {
+            // do full SfxPoolItem compare
+            if (!SfxPoolItem::areSame(*ppItem1, *ppItem2))
+                return false;
+            ++ppItem1;
+            ++ppItem2;
+        }
+
+        return true;
+    }
+
+    // Not same ranges, need to compare content. Only need to check if
+    // the content of one is inside the other due to already having
+    // compared Count() above.
+    // Iterate over local SfxItemSet by using locval ranges and offset,
+    // so we can access needed data at least for one SfxItemSet more
+    // direct. For the 2nd one we need the WhichID which we have by
+    // iterating over the ranges.
+    sal_uInt16 nOffset(0);
+    sal_uInt16 nNumberToGo(Count());
+
+    for (auto const & rRange : GetRanges())
+    {
+        for (sal_uInt16 nWhich(rRange.first); nWhich <= rRange.second; nWhich++, nOffset++)
+        {
+            const SfxPoolItem *pItem1(nullptr);
+            const SfxPoolItem *pItem2(nullptr);
+            const SfxItemState aStateA(GetItemState_ForOffset(nOffset, &pItem1));
+            const SfxItemState aStateB(rCmp.GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, &pItem2));
+
+            if (aStateA != aStateB)
+                return false;
+
+            // only compare items if SfxItemState::SET, else the item ptrs are not set
+            if (SfxItemState::SET == aStateA && !SfxPoolItem::areSame(pItem1, pItem2))
+                return false;
+
+            if (SfxItemState::DEFAULT != aStateA)
+                // if local item is not-nullptr we have compared one more, reduce NumberToGo
+                // NOTE: we could also use 'nullptr != *(begin() + nOffset)' here, but the
+                //       entry was already checked by GetItemState_ForOffset above
+                nNumberToGo--;
+
+            if (0 == nNumberToGo)
+                // if we have compared Count() number of items and are still here
+                // (all were equal), we can exit early
+                return true;
+        }
     }
 
     return true;

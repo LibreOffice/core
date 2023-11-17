@@ -294,10 +294,13 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
     {
         const ScPatternAttr* pPattern = GetPattern(nTempStartRow);
 
+        // changed to create pNewPattern only if needed, else use already
+        // existing pPattern. This shows by example how to avoid that special
+        // handling of ATTR_PATTERN/ScPatternAttr in SC and massive
+        // incarnations/desctructions of that Item (which contains an ItemSet)
         std::unique_ptr<ScPatternAttr> pNewPattern;
         if(pPattern)
         {
-            pNewPattern.reset( new ScPatternAttr(*pPattern) );
             SCROW nPatternStartRow;
             SCROW nPatternEndRow;
             GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
@@ -313,12 +316,14 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
                     aNewCondFormatData = rCondFormatData;
                     aNewCondFormatData.insert(nIndex);
                     ScCondFormatItem aItem( std::move(aNewCondFormatData) );
+                    pNewPattern.reset( new ScPatternAttr(*pPattern) );
                     pNewPattern->GetItemSet().Put( aItem );
                 }
             }
             else
             {
                 ScCondFormatItem aItem(nIndex);
+                pNewPattern.reset( new ScPatternAttr(*pPattern) );
                 pNewPattern->GetItemSet().Put( aItem );
             }
         }
@@ -330,7 +335,11 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
             nTempEndRow = nEndRow;
         }
 
-        SetPatternArea( nTempStartRow, nTempEndRow, std::move(pNewPattern), true );
+        if (pNewPattern)
+            SetPatternArea( nTempStartRow, nTempEndRow, std::move(pNewPattern), true );
+        else
+            SetPatternArea( nTempStartRow, nTempEndRow, pPattern, true );
+
         nTempStartRow = nTempEndRow + 1;
     }
     while(nTempEndRow < nEndRow);

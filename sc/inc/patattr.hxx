@@ -53,7 +53,6 @@ enum class ScAutoFontColorMode
 class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem
 {
     std::optional<OUString>  pName;
-    mutable std::optional<sal_uInt32> mxHashCode;
     mutable std::optional<bool> mxVisible;
     ScStyleSheet*              pStyle;
     sal_uInt64                 mnPAKey;
@@ -181,16 +180,13 @@ public:
     void                    SetPAKey(sal_uInt64 nKey);
     sal_uInt64              GetPAKey() const;
 
-    static std::optional<bool> FastEqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 );
-
     // TODO: tdf#135215: This is a band-aid to detect changes and invalidate the hash,
     // a proper way would be probably to override SfxItemSet::Changed(), but 6cb400f41df0dd10
     // hardcoded SfxSetItem to contain SfxItemSet.
-    SfxItemSet& GetItemSet() { mxHashCode.reset(); mxVisible.reset(); return SfxSetItem::GetItemSet(); }
+    SfxItemSet& GetItemSet() { mxVisible.reset(); return SfxSetItem::GetItemSet(); }
     using SfxSetItem::GetItemSet;
 
 private:
-    void                    CalcHashCode() const;
     bool                    CalcVisible() const;
 };
 

@@ -68,6 +68,8 @@
 #include <comphelper/lok.hxx>
 #include <tabvwsh.hxx>
 
+const WhichRangesContainer aScPatternAttrSchema(svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>);
+
 ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName )
     :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
         pName       ( rStyleName ),
@@ -75,6 +77,12 @@ ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName 
         mnPAKey(0)
 {
     setNewItemCallback();
+
+    // We need to ensure that ScPatternAttr is using the correct WhichRange,
+    // see comments in commit message. This does transfers the items with
+    // minimized overhead, too
+    if (GetItemSet().GetRanges() != aScPatternAttrSchema)
+        GetItemSet().SetRanges(aScPatternAttrSchema);
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet )
@@ -83,6 +91,12 @@ ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet )
         mnPAKey(0)
 {
     setNewItemCallback();
+
+    // We need to ensure that ScPatternAttr is using the correct WhichRange,
+    // see comments in commit message. This does transfers the items with
+    // minimized overhead, too
+    if (GetItemSet().GetRanges() != aScPatternAttrSchema)
+        GetItemSet().SetRanges(aScPatternAttrSchema);
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
@@ -125,49 +139,63 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 
 constexpr size_t compareSize = ATTR_PATTERN_END - ATTR_PATTERN_START + 1;
 
-std::optional<bool> ScPatternAttr::FastEqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
-{
-    // #i62090# The SfxItemSet in the SfxSetItem base class always has the same ranges
-    // (single range from ATTR_PATTERN_START to ATTR_PATTERN_END), and the items are pooled,
-    // so it's enough to compare just the pointers (Count just because it's even faster).
-
-    if ( rSet1.Count() != rSet2.Count() )
-        return { false };
-
-    // Actually test_tdf133629 from UITest_calc_tests9 somehow manages to have
-    // a different range (and I don't understand enough why), so better be safe and compare fully.
-    if( rSet1.TotalCount() != compareSize || rSet2.TotalCount() != compareSize )
-        return std::nullopt;
-
-    SfxPoolItem const ** pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
-    SfxPoolItem const ** pItems2 = rSet2.GetItems_Impl();
-
-    return { memcmp( pItems1, pItems2, compareSize * sizeof(pItems1[0]) ) == 0 };
-}
-
-static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
-{
-    std::optional<bool> equal = ScPatternAttr::FastEqualPatternSets( rSet1, rSet2 );
-    if(equal.has_value())
-        return *equal;
-    return rSet1 == rSet2;
-}
-
 bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
-    // #i62090# Use quick comparison between ScPatternAttr's ItemSets
+    // check if same incarnation
+    if (this == &rCmp)
+        return true;
 
+    // check SfxPoolItem base class
     if (!SfxPoolItem::operator==(rCmp) )
         return false;
-    if (!mxHashCode)
-        CalcHashCode();
-    auto const & rOther = static_cast<const ScPatternAttr&>(rCmp);
-    if (!rOther.mxHashCode)
-        rOther.CalcHashCode();
-    if (*mxHashCode != *rOther.mxHashCode)
+
+    // check everything except the SfxItemSet from base class SfxSetItem
+    const ScPatternAttr& rOther(static_cast<const ScPatternAttr&>(rCmp));
+    if (!StrCmp(GetStyleName(), rOther.GetStyleName()))
         return false;
-    return EqualPatternSets( GetItemSet(), rOther.GetItemSet() ) &&
-            StrCmp( GetStyleName(), rOther.GetStyleName() );
+
+    // here we need to compare the SfxItemSet. We *know* that these are
+    // all simple (one range, same range)
+    const SfxItemSet& rSet1(GetItemSet());
+    const SfxItemSet& rSet2(rOther.GetItemSet());
+
+    // the former method 'FastEqualPatternSets' mentioned:
+    //   "Actually test_tdf133629 from UITest_calc_tests9 somehow manages to have
+    //   a different range (and I don't understand enough why), so better be safe and compare fully."
+    // in that case the hash code above would already fail, too
+    if (rSet1.TotalCount() != compareSize || rSet2.TotalCount() != compareSize)
+    {
+        // assert this for now, should not happen. If it does, look for it and evtl.
+        // enable SfxItemSet::operator== below
+        assert(false);
+        return rSet1 == rSet2;
+    }
+
+    // check pools, do not accept different pools
+    if (rSet1.GetPool() != rSet2.GetPool())
+        return false;
+
+    // check count of set items, has to be equal
+    if (rSet1.Count() != rSet2.Count())
+        return false;
+
+    // compare each item separately
+    const SfxPoolItem **ppItem1(rSet1.GetItems_Impl());
+    const SfxPoolItem **ppItem2(rSet2.GetItems_Impl());
+
+    // are all pointers the same?
+    if (0 == memcmp(ppItem1, ppItem2, compareSize * sizeof(ppItem1[0])))
+        return true;
+
+    for (sal_uInt16 nPos(0); nPos < compareSize; nPos++)
+    {
+        if (!SfxPoolItem::areSame(*ppItem1, *ppItem2))
+            return false;
+        ++ppItem1;
+        ++ppItem2;
+    }
+
+    return true;
 }
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
@@ -971,7 +999,6 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
     if( !pEditSet )
         return;
     GetFromEditItemSet( GetItemSet(), *pEditSet );
-    mxHashCode.reset();
     mxVisible.reset();
 }
 
@@ -1015,7 +1042,6 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
                 if (SfxPoolItem::areSame( pThisItem, pOldItem ))
                 {
                     rThisSet.ClearItem( nSubWhich );
-                    mxHashCode.reset();
                     mxVisible.reset();
                 }
             }
@@ -1025,7 +1051,6 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
                 if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nSubWhich ) )
                 {
                     rThisSet.ClearItem( nSubWhich );
-                    mxHashCode.reset();
                     mxVisible.reset();
                 }
             }
@@ -1047,7 +1072,6 @@ void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
     SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
         rSet.ClearItem(pWhich[i]);
-    mxHashCode.reset();
     mxVisible.reset();
 }
 
@@ -1313,7 +1337,6 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         GetItemSet().SetParent(nullptr);
         pStyle = nullptr;
     }
-    mxHashCode.reset();
     mxVisible.reset();
 }
 
@@ -1340,7 +1363,6 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
     }
     else
         pStyle = nullptr;
-    mxHashCode.reset();
     mxVisible.reset();
 }
 
@@ -1353,7 +1375,6 @@ void ScPatternAttr::StyleToName()
         pName = pStyle->GetName();
         pStyle = nullptr;
         GetItemSet().SetParent( nullptr );
-        mxHashCode.reset();
         mxVisible.reset();
     }
 }
@@ -1487,29 +1508,6 @@ void ScPatternAttr::SetPAKey(sal_uInt64 nKey)
 sal_uInt64 ScPatternAttr::GetPAKey() const
 {
     return mnPAKey;
-}
-
-void ScPatternAttr::CalcHashCode() const
-{
-    auto const & rSet = GetItemSet();
-    // This is an unrolled hash function so the compiler/CPU can execute it in parallel,
-    // because we hit this hard when loading documents with lots of styles.
-    sal_uInt32 h1 = 0;
-    sal_uInt32 h2 = 0;
-    sal_uInt32 h3 = 0;
-    sal_uInt32 h4 = 0;
-    for (auto it = rSet.GetItems_Impl(), end = rSet.GetItems_Impl() + (compareSize / 4 * 4); it != end; )
-    {
-        h1 = 31 * h1 + reinterpret_cast<size_t>(*it);
-        ++it;
-        h2 = 31 * h2 + reinterpret_cast<size_t>(*it);
-        ++it;
-        h3 = 31 * h3 + reinterpret_cast<size_t>(*it);
-        ++it;
-        h4 = 31 * h4 + reinterpret_cast<size_t>(*it);
-        ++it;
-    }
-    mxHashCode = h1 + h2 + h3 + h4;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
