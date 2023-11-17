@@ -30,6 +30,7 @@
 #include <sfx2/basedlgs.hxx>
 
 #include <SwCapObjType.hxx>
+#include <SwCapConfigProp.hxx>
 
 class SwFieldMgr;
 class SwWrtShell;
@@ -157,25 +158,35 @@ private:
     SwCaptionPreview m_aPreview;
     std::unique_ptr<weld::TreeView> m_xCheckLB;
     std::unique_ptr<weld::ComboBox> m_xLbCaptionOrder;
+    std::unique_ptr<weld::Widget> m_xLbCaptionOrderImg;
 
     std::unique_ptr<weld::Widget> m_xSettingsGroup;
     std::unique_ptr<weld::ComboBox> m_xCategoryBox;
+    std::unique_ptr<weld::Widget> m_xCategoryBoxImg;
     std::unique_ptr<weld::Label> m_xFormatText;
     std::unique_ptr<weld::ComboBox> m_xFormatBox;
+    std::unique_ptr<weld::Widget> m_xFormatBoxImg;
     //#i61007# order of captions
     std::unique_ptr<weld::Label> m_xNumberingSeparatorFT;
     std::unique_ptr<weld::Entry> m_xNumberingSeparatorED;
+    std::unique_ptr<weld::Widget> m_xNumberingSeparatorImg;
     std::unique_ptr<weld::Label> m_xTextText;
     std::unique_ptr<weld::Entry> m_xTextEdit;
+    std::unique_ptr<weld::Widget> m_xTextEditImg;
     std::unique_ptr<weld::ComboBox> m_xPosBox;
+    std::unique_ptr<weld::Widget> m_xPosBoxImg;
 
     std::unique_ptr<weld::Widget> m_xNumCapt;
     std::unique_ptr<weld::ComboBox> m_xLbLevel;
+    std::unique_ptr<weld::Widget> m_xLbLevelImg;
     std::unique_ptr<weld::Entry> m_xEdDelim;
+    std::unique_ptr<weld::Widget> m_xEdDelimImg;
 
     std::unique_ptr<weld::Widget> m_xCategory;
     std::unique_ptr<weld::ComboBox> m_xCharStyleLB;
+    std::unique_ptr<weld::Widget> m_xCharStyleImg;
     std::unique_ptr<weld::CheckButton> m_xApplyBorderCB;
+    std::unique_ptr<weld::Widget> m_xApplyBorderImg;
     std::unique_ptr<weld::CustomWeld> m_xPreview;
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
