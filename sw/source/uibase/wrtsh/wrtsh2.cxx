@@ -553,26 +553,8 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter )
     return bRet;
 }
 
-void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
-              const OUString& rTargetFrameName )
-{
-    OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );
-    if( rURL.isEmpty() )
-        return ;
-
-    // The shell could be 0 also!!!!!
-    if ( dynamic_cast<const SwCursorShell*>( &rVSh) ==  nullptr )
-        return;
-
-    //A CursorShell is always a WrtShell
-    SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
-
-    ::LoadURL(rSh.GetView(), rURL, nFilter, rTargetFrameName);
-
-}
-
-void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
-              const OUString& rTargetFrameName)
+static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
+                    const OUString& rTargetFrameName)
 {
     SwDocShell* pDShell = rView.GetDocShell();
     OSL_ENSURE( pDShell, "No DocShell?!");
@@ -627,6 +609,23 @@ void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
                 &aBrowse
             },
             { &aDocFrame } );
+}
+
+void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
+              const OUString& rTargetFrameName )
+{
+    OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );
+    if( rURL.isEmpty() )
+        return ;
+
+    // The shell could be 0 also!!!!!
+    if ( dynamic_cast<const SwCursorShell*>( &rVSh) ==  nullptr )
+        return;
+
+    //A CursorShell is always a WrtShell
+    SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
+
+    ::LoadURL(rSh.GetView(), rURL, nFilter, rTargetFrameName);
 }
 
 void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
