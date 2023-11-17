@@ -66,7 +66,11 @@ const WhichRangesContainer SvxStdParagraphTabPage::pStdRanges(
     >);
 
 const WhichRangesContainer SvxParaAlignTabPage::pAlignRanges(
-    svl::Items<SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST>);  // 10027
+    svl::Items<
+    SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST, // 10027
+    // tdf#154543 - reset snap to grid to parent
+    SID_ATTR_PARA_SNAPTOGRID, SID_ATTR_PARA_SNAPTOGRID // 10945
+    >);
 
 const WhichRangesContainer SvxParaAlignTabPage::pSdrAlignRanges(
     svl::Items<
