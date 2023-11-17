@@ -268,6 +268,8 @@ public:
 
     void SelectFlyFrame( SwFlyFrame& rFrame );
 
+    void UnfloatFlyFrame();
+
     /// Is selected frame within another frame?
     const SwFrameFormat* IsFlyInFly();
 

@@ -371,6 +371,13 @@ interface BaseTextFrame
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_UNFLOAT_FRAME
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_BORDER // status()
     [
         ExecMethod = ExecFrameStyle ;
