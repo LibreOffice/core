@@ -175,7 +175,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
-            actionBar.setIcon(R.drawable.lo_icon);
+            actionBar.setIcon(R.mipmap.ic_launcher);
         }
 
         editFAB = findViewById(R.id.editFAB);
