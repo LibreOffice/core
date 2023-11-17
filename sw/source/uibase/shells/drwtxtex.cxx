@@ -545,7 +545,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             const SvxFieldData* pField = pOLV->GetFieldAtCursor();
             if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
             {
-                ::LoadURL(GetView(), pURLField->GetURL(), LoadUrlFlags::NONE,
+                ::LoadURL(GetShell(), pURLField->GetURL(), LoadUrlFlags::NONE,
                           pURLField->GetTargetFrame());
             }
         }
