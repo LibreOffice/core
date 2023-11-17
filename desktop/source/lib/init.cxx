@@ -126,6 +126,7 @@
 #include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
+#include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
@@ -7458,6 +7459,7 @@ static void preloadData()
     setLanguageToolConfig();
 
     // preload all available dictionaries
+    linguistic2::DictionaryList::create(comphelper::getProcessComponentContext());
     css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
         css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
     css::uno::Reference<linguistic2::XSpellChecker> xSpellChecker(xLngSvcMgr->getSpellChecker());
