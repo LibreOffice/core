@@ -21,24 +21,7 @@
   <info>
     <desc>Contains the various settings needed by the Scripting Framework and its runtimes.</desc>
   </info>
-  <templates>
-    <group oor:name="RuntimeNode">
-      <info>
-        <desc>Specifies the runtimes available to the Scripting Framework.</desc>
-      </info>
-      <prop oor:name="SupportedFileExtensions" oor:type="oor:string-list">
-        <info>
-          <desc>Lists the file extensions that are recognized by this runtime.</desc>
-        </info>
-      </prop>
-    </group>
-  </templates>
   <component>
-    <set oor:name="ScriptRuntimes" oor:node-type="RuntimeNode">
-      <info>
-        <desc>Lists the registered Scripting Framework runtimes.</desc>
-      </info>
-    </set>
     <group oor:name="Basic">
       <info>
 	<desc>Contains settings for the Basic interpreter.</desc>

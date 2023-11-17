@@ -223,7 +223,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/Math.xcu \
 	$(postprocess_XCU)/Office/Paths.xcu \
 	$(postprocess_XCU)/Office/ProtocolHandler.xcu \
-	$(postprocess_XCU)/Office/Scripting.xcu \
 	$(postprocess_XCU)/Office/Security.xcu \
 	$(postprocess_XCU)/Office/TableWizard.xcu \
 	$(postprocess_XCU)/Office/UI/BaseWindowState.xcu \
@@ -340,8 +339,6 @@ postprocess_FILES_math := \
 	$(postprocess_MOD)/org/openoffice/Setup-math.xcu
 
 postprocess_DEPS_pyuno := main
-postprocess_FILES_pyuno := \
-	$(postprocess_MOD)/org/openoffice/Office/Scripting-python.xcu
 
 ifeq ($(ENABLE_REPORTBUILDER),TRUE)
 postprocess_XCDS += reportbuilder.xcd

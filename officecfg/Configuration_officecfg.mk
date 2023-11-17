@@ -43,7 +43,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/Math.xcu \
 	org/openoffice/Office/ProtocolHandler.xcu \
 	org/openoffice/Office/Security.xcu \
-	org/openoffice/Office/Scripting.xcu \
 	org/openoffice/Office/Views.xcu \
 	org/openoffice/Office/Paths.xcu \
 	org/openoffice/Office/Histories.xcu \
@@ -90,7 +89,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Jobs-impress.xcu \
 	org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu \
 	org/openoffice/Office/ProtocolHandler-impress.xcu \
-	org/openoffice/Office/Scripting-python.xcu \
 	org/openoffice/Office/Common-cjk.xcu \
 	org/openoffice/Office/Common-ctl.xcu \
 	org/openoffice/Office/Common-ctlseqcheck.xcu \
