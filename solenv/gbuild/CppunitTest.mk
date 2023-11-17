@@ -27,7 +27,7 @@ gb_CppunitTest_coredumpctl_setup :=
 gb_CppunitTest_coredumpctl_run :=
 else
 gb_CppunitTest_coredumpctl_setup = \
-    export LIBO_TEST_UNIT=$$($(SYSTEMD_ESCAPE) "$1:$$(date -u +%Y%m%d%H%M%S):$$$$" | cut -b -249) &&
+    export LIBO_TEST_UNIT=$$($(SYSTEMD_ESCAPE) "$1:$$(date -u +%Y%m%d%H%M%S):$$$$$(if $2,:$2)" | cut -b -249) &&
 gb_CppunitTest_coredumpctl_run := $(SYSTEMD_RUN) --scope --user --unit="$$LIBO_TEST_UNIT"
 endif
 
@@ -135,10 +135,11 @@ else
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
-		$(call gb_CppunitTest_coredumpctl_setup,$@) \
 		( \
 		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do \
-			printf 'LO_TEST_LOCALE=%s\n' "$$l" && LO_TEST_LOCALE="$$l" ) \
+			printf 'LO_TEST_LOCALE=%s\n' "$$l" && ) \
+		$(call gb_CppunitTest_coredumpctl_setup,$@,$(if $(gb_CppunitTest_localized),$$l)) \
+		$(if $(gb_CppunitTest_localized),LO_TEST_LOCALE="$$l") \
 		$(if $(gb_CppunitTest__vcl_no_svp), \
 			$(filter-out SAL_USE_VCLPLUGIN=svp,$(gb_TEST_ENV_VARS)),$(gb_TEST_ENV_VARS)) \
 		$(EXTRA_ENV_VARS) \
