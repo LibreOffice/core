@@ -59,7 +59,7 @@ endif
 # delimiter is U+2027 Hyphenation point - files with colon in their name confuse the heck out of
 # make and cannot be used as targets or prerequisites. For passing to call_installer.sh it is
 # substituted by the : so that cut doesn't stumble over the delimiter
-ifeq (TRUE,$(filter TRUE,$(LIBO_TEST_INSTALL) $(ENABLE_WIX))
+ifeq (TRUE,$(filter TRUE,$(LIBO_TEST_INSTALL) $(ENABLE_WIX)))
 instsetoo_installer_targets = openoffice‧en-US‧‧‧archive‧nostrip
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 instsetoo_installer_targets += sdkoo‧en-US‧_SDK‧‧archive‧nostrip
