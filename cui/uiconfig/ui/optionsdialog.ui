@@ -149,10 +149,10 @@
                     <property name="can-focus">True</property>
                     <property name="valign">start</property>
                     <property name="truncate-multiline">True</property>
-                    <property name="placeholder-text">Type to search</property>
+                    <property name="placeholder-text" translatable="yes" context="optionsdialog|searchEntry">Type to search</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="searchEntry-atkobject">
-                        <property name="AtkObject::accessible-description">Type here to search in the list of options.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optionsdialog|extended_tip|searchEntry">Type here to search in the list of options.</property>
                       </object>
                     </child>
                   </object>
