@@ -39,65 +39,66 @@ class UIGraphics:
 class PackageGenerator:
 
     def __init__(self, jsonfile):
-        jsondata = json.load(open(jsonfile, 'rb'))
-        self.product_name = jsondata['product_name']
-        self.manufacturer = jsondata['manufacturer']
-        self.version = jsondata['version']
-        self.comments = jsondata['comments']
-        self.installdir = jsondata['installdir']
-        self.license_file = jsondata.get('license_file', None)
-        self.name = jsondata['name']
-        self.guid = jsondata.get('product_guid', '*')
-        self.upgrade_guid = jsondata['upgrade_guid']
-        self.basename = jsondata['name_base']
-        self.need_msvcrt = jsondata.get('need_msvcrt', False)
-        self.addremove_icon = jsondata.get('addremove_icon', None)
-        self.startmenu_shortcut = jsondata.get('startmenu_shortcut', None)
-        self.desktop_shortcut = jsondata.get('desktop_shortcut', None)
-        self.main_xml = self.basename + '.wxs'
-        self.main_o = self.basename + '.wixobj'
-        self.idnum = 0
-        self.graphics = UIGraphics()
-        if 'graphics' in jsondata:
-            if 'banner' in jsondata['graphics']:
-                self.graphics.banner = jsondata['graphics']['banner']
-            if 'background' in jsondata['graphics']:
-                self.graphics.background = jsondata['graphics']['background']
-        if 'arch' in jsondata:
-            self.arch = jsondata['arch']
-        else:
-            # rely on the environment variable since python architecture may not be the same as system architecture
-            if 'PROGRAMFILES(X86)' in os.environ:
-                self.arch = 64
+        with open(jsonfile, 'rb') as f:
+            jsondata = json.load(f)
+            self.product_name = jsondata['product_name']
+            self.manufacturer = jsondata['manufacturer']
+            self.version = jsondata['version']
+            self.comments = jsondata['comments']
+            self.installdir = jsondata['installdir']
+            self.license_file = jsondata.get('license_file', None)
+            self.name = jsondata['name']
+            self.guid = jsondata.get('product_guid', '*')
+            self.upgrade_guid = jsondata['upgrade_guid']
+            self.basename = jsondata['name_base']
+            self.need_msvcrt = jsondata.get('need_msvcrt', False)
+            self.addremove_icon = jsondata.get('addremove_icon', None)
+            self.startmenu_shortcut = jsondata.get('startmenu_shortcut', None)
+            self.desktop_shortcut = jsondata.get('desktop_shortcut', None)
+            self.main_xml = self.basename + '.wxs'
+            self.main_o = self.basename + '.wixobj'
+            self.idnum = 0
+            self.graphics = UIGraphics()
+            if 'graphics' in jsondata:
+                if 'banner' in jsondata['graphics']:
+                    self.graphics.banner = jsondata['graphics']['banner']
+                if 'background' in jsondata['graphics']:
+                    self.graphics.background = jsondata['graphics']['background']
+            if 'arch' in jsondata:
+                self.arch = jsondata['arch']
             else:
-                self.arch = 32 if '32' in platform.architecture()[0] else 64
-        self.final_output = '%s-%s-%d.msi' % (self.basename, self.version, self.arch)
-        if self.arch == 64:
-            self.progfile_dir = 'ProgramFiles64Folder'
-            if platform.system() == "Windows":
-                redist_glob = 'C:\\Program Files\\Microsoft Visual Studio\\*\\*\\VC\\Redist\\MSVC\\v*\\MergeModules\\Microsoft_VC*_CRT_x64.msm'
+                # rely on the environment variable since python architecture may not be the same as system architecture
+                if 'PROGRAMFILES(X86)' in os.environ:
+                    self.arch = 64
+                else:
+                    self.arch = 32 if '32' in platform.architecture()[0] else 64
+            self.final_output = '%s-%s-%d.msi' % (self.basename, self.version, self.arch)
+            if self.arch == 64:
+                self.progfile_dir = 'ProgramFiles64Folder'
+                if platform.system() == "Windows":
+                    redist_glob = 'C:\\Program Files\\Microsoft Visual Studio\\*\\*\\VC\\Redist\\MSVC\\v*\\MergeModules\\Microsoft_VC*_CRT_x64.msm'
+                else:
+                    redist_glob = '/usr/share/msicreator/Microsoft_VC141_CRT_x64.msm'
             else:
-                redist_glob = '/usr/share/msicreator/Microsoft_VC141_CRT_x64.msm'
-        else:
-            self.progfile_dir = 'ProgramFilesFolder'
-            if platform.system() == "Windows":
-                redist_glob = 'C:\\Program Files\\Microsoft Visual Studio\\*\\Community\\VC\\Redist\\MSVC\\*\\MergeModules\\Microsoft_VC*_CRT_x86.msm'
-            else:
-                redist_glob = '/usr/share/msicreator/Microsoft_VC141_CRT_x86.msm'
-        trials = glob(redist_glob)
-        if self.need_msvcrt:
-            if len(trials) > 1:
-                sys.exit('There are more than one redist dirs: ' +
-                         ', '.join(trials))
-            if len(trials) == 0:
-                sys.exit('No redist dirs were detected, install MSM redistributables with VS installer.')
-            self.redist_path = trials[0]
-        self.component_num = 0
-        self.registry_entries = jsondata.get('registry_entries', None)
-        self.major_upgrade = jsondata.get('major_upgrade', None)
-        self.parts = jsondata['parts']
-        self.feature_components = {}
-        self.feature_properties = {}
+                self.progfile_dir = 'ProgramFilesFolder'
+                if platform.system() == "Windows":
+                    redist_glob = 'C:\\Program Files\\Microsoft Visual Studio\\*\\Community\\VC\\Redist\\MSVC\\*\\MergeModules\\Microsoft_VC*_CRT_x86.msm'
+                else:
+                    redist_glob = '/usr/share/msicreator/Microsoft_VC141_CRT_x86.msm'
+            trials = glob(redist_glob)
+            if self.need_msvcrt:
+                if len(trials) > 1:
+                    sys.exit('There are more than one redist dirs: ' +
+                             ', '.join(trials))
+                if len(trials) == 0:
+                    sys.exit('No redist dirs were detected, install MSM redistributables with VS installer.')
+                self.redist_path = trials[0]
+            self.component_num = 0
+            self.registry_entries = jsondata.get('registry_entries', None)
+            self.major_upgrade = jsondata.get('major_upgrade', None)
+            self.parts = jsondata['parts']
+            self.feature_components = {}
+            self.feature_properties = {}
 
     def generate_files(self):
         self.root = ET.Element('Wix', {'xmlns': 'http://schemas.microsoft.com/wix/2006/wi'})
