@@ -619,13 +619,8 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
         return ;
 
     // The shell could be 0 also!!!!!
-    if ( dynamic_cast<const SwCursorShell*>( &rVSh) ==  nullptr )
-        return;
-
-    //A CursorShell is always a WrtShell
-    SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
-
-    ::LoadURL(rSh.GetView(), rURL, nFilter, rTargetFrameName);
+    if (auto pSh = dynamic_cast<SwWrtShell*>(&rVSh))
+        ::LoadURL(pSh->GetView(), rURL, nFilter, rTargetFrameName);
 }
 
 void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
