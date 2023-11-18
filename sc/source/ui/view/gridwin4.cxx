@@ -1411,10 +1411,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if (bPage && bInitialPageBreaks)
         SetupInitialPageBreaks(rDoc, nTab);
-
-    // redraw highlighting as well
-    ScAddress aCell = getViewData().GetCurPos();
-    getViewData().GetViewShell()->SetCursor(aCell.Col(), aCell.Row());
 }
 
 
