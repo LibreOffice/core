@@ -76,10 +76,7 @@ namespace canvas
         // be relocated to some other page or it will
         // currently be deleted. in either case, simply
         // remove the reference from our internal storage.
-        FragmentContainer_t::iterator it(
-            std::remove(
-                mpFragments.begin(),mpFragments.end(),pFragment));
-        mpFragments.erase(it,mpFragments.end());
+        std::erase(mpFragments, pFragment);
     }
 
     bool Page::insert( SurfaceRect& r )

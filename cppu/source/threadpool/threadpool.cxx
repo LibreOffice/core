@@ -62,7 +62,7 @@ namespace cppu_threadpool
     void DisposedCallerAdmin::destroy( void const * nDisposeId )
     {
         std::scoped_lock guard( m_mutex );
-        m_vector.erase(std::remove(m_vector.begin(), m_vector.end(), nDisposeId), m_vector.end());
+        std::erase(m_vector, nDisposeId);
     }
 
     bool DisposedCallerAdmin::isDisposed( void const * nDisposeId )

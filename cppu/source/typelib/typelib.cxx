@@ -293,8 +293,7 @@ extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
         // todo mt safe: guard is no solution, can not acquire while calling callback!
 //          OslGuard aGuard( rInit.getMutex() );
         CallbackEntry aEntry( pContext, pCallback );
-        rInit.maCallbacks.erase(std::remove(rInit.maCallbacks.begin(), rInit.maCallbacks.end(), aEntry),
-                                rInit.maCallbacks.end());
+        std::erase(rInit.maCallbacks, aEntry);
     }
 }
 
