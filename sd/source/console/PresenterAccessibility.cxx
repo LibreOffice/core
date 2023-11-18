@@ -970,11 +970,7 @@ void SAL_CALL PresenterAccessible::AccessibleObject::removeAccessibleEventListen
     {
         const osl::MutexGuard aGuard(m_aMutex);
 
-        auto const it(std::remove(maListeners.begin(), maListeners.end(), rxListener));
-        if (it != maListeners.end())
-        {
-            maListeners.erase(it);
-        }
+        std::erase(maListeners, rxListener);
     }
 }
 

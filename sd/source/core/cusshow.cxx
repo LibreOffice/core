@@ -80,7 +80,7 @@ void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
 {
     if( !pNewPage )
     {
-        maPages.erase(::std::remove(maPages.begin(), maPages.end(), pOldPage), maPages.end());
+        std::erase(maPages, pOldPage);
     }
     else
     {

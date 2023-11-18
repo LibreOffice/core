@@ -134,12 +134,9 @@ void ResourceFactoryManager::RemoveFactoryForReference(
 
     // Remove the pattern entries whose factories are identical to the given
     // factory.
-    maFactoryPatternList.erase(
-        std::remove_if(
-            maFactoryPatternList.begin(),
-            maFactoryPatternList.end(),
-            [&] (FactoryPatternList::value_type const& it) { return it.second == rxFactory; }),
-        maFactoryPatternList.end());
+    std::erase_if(
+            maFactoryPatternList,
+            [&] (FactoryPatternList::value_type const& it) { return it.second == rxFactory; });
 }
 
 Reference<XResourceFactory> ResourceFactoryManager::GetFactory (

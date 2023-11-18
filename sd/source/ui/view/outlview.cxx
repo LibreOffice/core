@@ -760,9 +760,8 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
     // list of selected title paragraphs
     mpOutlinerViews[0]->CreateSelectionList(maSelectedParas);
 
-    maSelectedParas.erase(std::remove_if(maSelectedParas.begin(), maSelectedParas.end(),
-        [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); }),
-        maSelectedParas.end());
+    std::erase_if(maSelectedParas,
+        [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); });
 
     // select the pages belonging to the paragraphs on level 0 to select
     sal_uInt16 nPos = 0;
@@ -1229,9 +1228,8 @@ void OutlineView::SetSelectedPages()
     std::vector<Paragraph*> aSelParas;
     mpOutlinerViews[0]->CreateSelectionList(aSelParas);
 
-    aSelParas.erase(std::remove_if(aSelParas.begin(), aSelParas.end(),
-        [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); }),
-        aSelParas.end());
+    std::erase_if(aSelParas,
+        [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); });
 
     // select the pages belonging to the paragraphs on level 0 to select
     sal_uInt16 nPos = 0;
