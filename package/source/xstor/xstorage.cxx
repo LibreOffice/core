@@ -1398,7 +1398,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsSt
             OpenSubStream( pDeletedElm );
 
         auto & rVec = m_aChildrenMap[aName];
-        rVec.erase(std::remove(rVec.begin(), rVec.end(), pDeletedElm), rVec.end());
+        std::erase(rVec, pDeletedElm);
         if (rVec.empty())
             m_aChildrenMap.erase(aName);
         m_aDeletedVector.push_back( pDeletedElm );
@@ -1493,7 +1493,7 @@ void OStorage_Impl::RemoveElement( OUString const & rName, SotElement_Impl* pEle
             if ( pElement->m_bIsInserted )
             {
                 delete pElement;
-                mapIt->second.erase(std::remove(mapIt->second.begin(), mapIt->second.end(), pElement), mapIt->second.end());
+                std::erase(mapIt->second, pElement);
                 if (mapIt->second.empty())
                     m_aChildrenMap.erase(mapIt);
             }
@@ -1868,11 +1868,10 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
     // the locking is done in the listener
 
     auto& rVec = m_aOpenSubComponentsVector;
-    rVec.erase(std::remove_if(rVec.begin(), rVec.end(),
+    std::erase_if(rVec,
         [&xChild](const uno::Reference<lang::XComponent>& xTmp) {
             return !xTmp.is() || xTmp == xChild;
-        }),
-        rVec.end());
+        });
 }
 
 void OStorage::BroadcastModifiedIfNecessary()
@@ -2860,7 +2859,7 @@ void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUStr
             for (auto it = rVec.begin(); it != rVec.end(); ++it)
                 if (pElement == *it)
                 {
-                    rVec.erase(std::remove(rVec.begin(), rVec.end(), pElement), rVec.end());
+                    std::erase(rVec, pElement);
                     if (rVec.empty())
                         m_pImpl->m_aChildrenMap.erase(mapIt);
                     break;

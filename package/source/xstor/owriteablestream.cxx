@@ -1292,7 +1292,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
 void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
-    m_aInputStreamsVector.erase(std::remove(m_aInputStreamsVector.begin(), m_aInputStreamsVector.end(), pStream ), m_aInputStreamsVector.end());
+    std::erase(m_aInputStreamsVector, pStream);
 }
 
 void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, uno::Reference< io::XStream >& xTargetStream )

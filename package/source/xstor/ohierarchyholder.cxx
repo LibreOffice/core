@@ -262,10 +262,9 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
             std::unique_lock aGuard(m_aMutex);
             uno::Reference< embed::XExtendedStorageStream > xStream(Source.Source, uno::UNO_QUERY);
 
-            m_aOpenStreams.erase(std::remove_if(m_aOpenStreams.begin(), m_aOpenStreams.end(),
+            std::erase_if(m_aOpenStreams,
                 [&xStream](const OWeakStorRefVector_Impl::value_type& rxStorage) {
-                return !rxStorage.get().is() || rxStorage.get() == xStream; }),
-                m_aOpenStreams.end());
+                return !rxStorage.get().is() || rxStorage.get() == xStream; });
         }
 
         TestForClosing();
