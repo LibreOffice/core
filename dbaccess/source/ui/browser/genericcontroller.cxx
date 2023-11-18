@@ -613,9 +613,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
 {
     if (_rURL.Complete.isEmpty())
     {
-        m_arrStatusListener.erase(std::remove_if(m_arrStatusListener.begin(), m_arrStatusListener.end(),
-            [&aListener](const DispatchTarget& rCurrent) { return rCurrent.xListener == aListener; }),
-            m_arrStatusListener.end());
+        std::erase_if(m_arrStatusListener, [&aListener](const DispatchTarget& rCurrent) { return rCurrent.xListener == aListener; });
     }
     else
     {
@@ -641,11 +639,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
 
     // now remove the listener from the deque
     std::unique_lock aGuard( m_aFeatureMutex );
-    m_aFeaturesToInvalidate.erase(
-        std::remove_if(   m_aFeaturesToInvalidate.begin(),
-                            m_aFeaturesToInvalidate.end(),
-                            FindFeatureListener(aListener))
-        ,m_aFeaturesToInvalidate.end());
+    std::erase_if( m_aFeaturesToInvalidate, FindFeatureListener(aListener));
 }
 
 void OGenericUnoController::releaseNumberForComponent()

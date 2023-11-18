@@ -2855,8 +2855,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // Serif" -> "Liberation Serif/Regular". If even one of the "substitutions" of a font is to
         // the same font, don't count that as a missing font.
 
-        aFontMappingUseData.erase
-            (std::remove_if(aFontMappingUseData.begin(), aFontMappingUseData.end(),
+        std::erase_if
+            (aFontMappingUseData,
                             [](OutputDevice::FontMappingUseItem x)
                             {
                                 // If the original font had an empty style and one of its
@@ -2875,15 +2875,14 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                                             return true;
 
                                 return false;
-                            }),
-             aFontMappingUseData.end());
+                            });
 
         // Filter out substitutions where a proprietary font has been substituted by a
         // metric-compatible one. Obviously this is just a heuristic and implemented only for some
         // well-known cases.
 
-        aFontMappingUseData.erase
-            (std::remove_if(aFontMappingUseData.begin(), aFontMappingUseData.end(),
+        std::erase_if
+            (aFontMappingUseData,
                             [](OutputDevice::FontMappingUseItem x)
                             {
                                 // Again, handle only cases where the original font does not include
@@ -2916,8 +2915,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                                         }
 
                                 return false;
-                            }),
-             aFontMappingUseData.end());
+                            });
 
         if (aFontMappingUseData.size() > 0)
         {
@@ -5113,8 +5111,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         aPropertyValuesVector.push_back(aValue);
 
         bool bDontSaveIfUnmodified = false;
-        aPropertyValuesVector.erase(std::remove_if(aPropertyValuesVector.begin(),
-                                                   aPropertyValuesVector.end(),
+        std::erase_if(aPropertyValuesVector,
                                                    [&bDontSaveIfUnmodified](const beans::PropertyValue& aItem){
                                                        if (aItem.Name == "DontSaveIfUnmodified")
                                                        {
@@ -5122,7 +5119,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                                                            return true;
                                                        }
                                                        return false;
-                                                   }), aPropertyValuesVector.end());
+                                                   });
 
         // skip saving and tell the result via UNO_COMMAND_RESULT
         if (bDontSaveIfUnmodified && (!pDocSh || !pDocSh->IsModified()))

@@ -989,7 +989,7 @@ void BackendImpl::removeFromUnoRc(
     const ::osl::MutexGuard guard( m_aMutex );
     unorc_verify_init( xCmdEnv );
     std::deque<OUString> & aRcItemList = getRcItemList(kind);
-    aRcItemList.erase(std::remove(aRcItemList.begin(), aRcItemList.end(), rcterm), aRcItemList.end());
+    std::erase(aRcItemList, rcterm);
     // write immediately:
     m_unorc_modified = true;
     unorc_flush( xCmdEnv );

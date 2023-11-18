@@ -868,12 +868,11 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const tools::Lo
 
 void ExtensionBox_Impl::cleanVecListenerAdded()
 {
-    m_vListenerAdded.erase(std::remove_if(m_vListenerAdded.begin(), m_vListenerAdded.end(),
+    std::erase_if(m_vListenerAdded,
         [](const uno::WeakReference<deployment::XPackage>& rxListener) {
             const uno::Reference<deployment::XPackage> hardRef(rxListener);
             return !hardRef.is();
-        }),
-        m_vListenerAdded.end());
+        });
 }
 
 void ExtensionBox_Impl::addEventListenerOnce(

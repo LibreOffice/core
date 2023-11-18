@@ -110,7 +110,7 @@ void ORelationTableView::ReSync()
             pTabWin.disposeAndClear();
             arrInvalidTables.push_back(pData->GetTableName());
 
-            rTabWinDataList.erase( std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
+            std::erase(rTabWinDataList, *aIter);
             continue;
         }
 
@@ -140,7 +140,7 @@ void ORelationTableView::ReSync()
             if (bInvalid)
             {
                 // no -> bad luck, the connection is gone
-                rTabConnDataList.erase( std::remove(rTabConnDataList.begin(), rTabConnDataList.end(), *aConIter), rTabConnDataList.end() );
+                std::erase(rTabConnDataList, *aConIter);
                 continue;
             }
         }

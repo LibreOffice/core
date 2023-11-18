@@ -131,8 +131,7 @@ void LOKClipboard::removeClipboardListener(
     const Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
-    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
-                       m_aListeners.end());
+    std::erase(m_aListeners, listener);
 }
 LOKTransferable::LOKTransferable(const OUString& sMimeType,
                                  const css::uno::Sequence<sal_Int8>& aSequence)
