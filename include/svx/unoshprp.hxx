@@ -403,7 +403,8 @@
     { u"EdgeEndConnection"_ustr,   OWN_ATTR_EDGE_END_OBJ,      cppu::UnoType<css::drawing::XShape>::get(),     css::beans::PropertyAttribute::MAYBEVOID,   0}, \
     { u"EdgeEndPoint"_ustr,        OWN_ATTR_EDGE_END_POS,      ::cppu::UnoType<css::awt::Point>::get(),     css::beans::PropertyAttribute::READONLY,    0}, \
 \
-    { UNO_NAME_POLYPOLYGONBEZIER, OWN_ATTR_EDGE_POLYPOLYGONBEZIER,    ::cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get(),       0,  0},
+    { UNO_NAME_POLYPOLYGONBEZIER, OWN_ATTR_EDGE_POLYPOLYGONBEZIER,    ::cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get(),       0,  0}, \
+    { UNO_NAME_EDGEOOXMLCURVE,    SDRATTR_EDGEOOXMLCURVE,     ::cppu::UnoType<bool>::get(), 0, 0},
 
 #define SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS \
     { UNO_NAME_MEASUREBELOWREFEDGE,       SDRATTR_MEASUREBELOWREFEDGE,        cppu::UnoType<bool>::get(),        0,  0}, \

@@ -245,11 +245,55 @@ void ConnectorHelper::getLOBentHandlePositionsHmm(const oox::drawingml::ShapePtr
     }
 }
 
-// This is similar to SlidePersist::createConnectorShapeConnection()
-void ConnectorHelper::applyConnections(oox::drawingml::ShapePtr& rConnector,
+void ConnectorHelper::getLOCurvedHandlePositionsHmm(
+    const oox::drawingml::ShapePtr& pConnector, std::vector<basegfx::B2DPoint>& rHandlePositions)
+{
+    // This method is intended for Edgekind css::drawing::ConnectorType_Curve for which OoXML
+    // compatible routing is enabled.
+    rHandlePositions.clear();
+
+    if (!pConnector)
+        return;
+    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
+    if (!xConnector.is())
+        return;
+
+    // Get the EdgeTrack polygon. We cannot use UNO "PolyPolygonBezier" because that includes
+    // the yet not known anchor position in Writer. Thus get the polygon directly from the object.
+    SdrEdgeObj* pEdgeObj = dynamic_cast<SdrEdgeObj*>(SdrObject::getSdrObjectFromXShape(xConnector));
+    if (!pEdgeObj)
+        return;
+    basegfx::B2DPolyPolygon aB2DPolyPolygon(pEdgeObj->GetEdgeTrackPath());
+    if (aB2DPolyPolygon.count() == 0)
+        return;
+
+    basegfx::B2DPolygon aEdgePolygon = aB2DPolyPolygon.getB2DPolygon(0);
+    if (aEdgePolygon.count() < 3 || !aEdgePolygon.areControlPointsUsed())
+        return;
+
+    // We need Hmm, the polygon might be e.g. in Twips, in Writer for example
+    MapUnit eMapUnit = pEdgeObj->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+    if (eMapUnit != MapUnit::Map100thMM)
+    {
+        const auto eFrom = MapToO3tlLength(eMapUnit);
+        if (eFrom == o3tl::Length::invalid)
+            return;
+        const double fConvert(o3tl::convert(1.0, eFrom, o3tl::Length::mm100));
+        aEdgePolygon.transform(basegfx::B2DHomMatrix(fConvert, 0.0, 0.0, 0.0, fConvert, 0.0));
+    }
+
+    // The OOXML compatible routing has the handles as polygon points, but not start or
+    // end point.
+    for (sal_uInt32 i = 1; i < aEdgePolygon.count() - 1; i++)
+    {
+        rHandlePositions.push_back(aEdgePolygon.getB2DPoint(i));
+    }
+}
+
+void ConnectorHelper::applyConnections(oox::drawingml::ShapePtr& pConnector,
                                        oox::drawingml::ShapeIdMap& rShapeMap)
 {
-    uno::Reference<drawing::XShape> xConnector(rConnector->getXShape());
+    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());
     if (!xConnector.is())
         return;
     uno::Reference<beans::XPropertySet> xPropSet(xConnector, uno::UNO_QUERY);
@@ -262,8 +306,13 @@ void ConnectorHelper::applyConnections(oox::drawingml::ShapePtr& rConnector,
     xPropSet->setPropertyValue("EdgeNode2HorzDist", uno::Any(sal_Int32(0)));
     xPropSet->setPropertyValue("EdgeNode2VertDist", uno::Any(sal_Int32(0)));
 
+    // A OOXML curvedConnector uses a routing method which is basically incompatible with the
+    // traditional way of LibreOffice. A compatible way was added and needs to be enabled before
+    // connections are set, so that the method is used in the default routing.
+    xPropSet->setPropertyValue("EdgeOOXMLCurve", uno::Any(true));
+
     oox::drawingml::ConnectorShapePropertiesList aConnectorShapeProperties
-        = rConnector->getConnectorShapeProperties();
+        = pConnector->getConnectorShapeProperties();
     // It contains maximal two items, each a struct with mbStartShape, maDestShapeId, mnDestGlueId
     for (const auto& aIt : aConnectorShapeProperties)
     {
@@ -337,6 +386,38 @@ void ConnectorHelper::applyBentHandleAdjustments(oox::drawingml::ShapePtr pConne
     ConnectorHelper::getOOXHandlePositionsHmm(pConnector, aOOXMLHandles);
     std::vector<basegfx::B2DPoint> aLODefaultHandles;
     ConnectorHelper::getLOBentHandlePositionsHmm(pConnector, aLODefaultHandles);
+
+    if (aOOXMLHandles.size() == aLODefaultHandles.size())
+    {
+        bool bUseYforHori
+            = basegfx::fTools::equalZero(getConnectorTransformMatrix(pConnector).get(0, 0));
+        for (size_t i = 0; i < aOOXMLHandles.size(); i++)
+        {
+            basegfx::B2DVector aDiff(aOOXMLHandles[i] - aLODefaultHandles[i]);
+            sal_Int32 nDiff;
+            if ((i == 1 && !bUseYforHori) || (i != 1 && bUseYforHori))
+                nDiff = basegfx::fround(aDiff.getY());
+            else
+                nDiff = basegfx::fround(aDiff.getX());
+            xPropSet->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
+                                       uno::Any(nDiff));
+        }
+    }
+}
+
+void ConnectorHelper::applyCurvedHandleAdjustments(oox::drawingml::ShapePtr pConnector)
+{
+    uno::Reference<drawing::XShape> xConnector(pConnector->getXShape(), uno::UNO_QUERY);
+    if (!xConnector.is())
+        return;
+    uno::Reference<beans::XPropertySet> xPropSet(xConnector, uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return;
+
+    std::vector<basegfx::B2DPoint> aOOXMLHandles;
+    ConnectorHelper::getOOXHandlePositionsHmm(pConnector, aOOXMLHandles);
+    std::vector<basegfx::B2DPoint> aLODefaultHandles;
+    ConnectorHelper::getLOCurvedHandlePositionsHmm(pConnector, aLODefaultHandles);
 
     if (aOOXMLHandles.size() == aLODefaultHandles.size())
     {

@@ -537,11 +537,14 @@ ShapeContextHandler::getShape()
                         {
                            ConnectorHelper::applyBentHandleAdjustments(rIt.second);
                         }
-                        // else use the default path of LibreOffice
-                        // curvedConnector2 and bentConnector2 do not have handles.
-                        // ToDo: OOXML defines a path for curveConnector3, curveConnector4 and
-                        // curveConnector5 that is basically incompatible with the way LibreOffice
-                        // creates the path.
+                        else if (rIt.second->getConnectorName() == u"curvedConnector3"_ustr
+                           || rIt.second->getConnectorName() == u"curvedConnector4"_ustr
+                           || rIt.second->getConnectorName() == u"curvedConnector5"_ustr)
+                        {
+                            ConnectorHelper::applyCurvedHandleAdjustments(rIt.second);
+                        }
+                        // else use the default path of LibreOffice.
+                        // curveConnector2 and bentConnector2 do not have handles.
                     }
                 }
                 xResult = pShape->getXShape();

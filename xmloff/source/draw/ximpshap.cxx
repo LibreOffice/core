@@ -1749,7 +1749,8 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
     mnEndGlueId(-1),
     mnDelta1(0),
     mnDelta2(0),
-    mnDelta3(0)
+    mnDelta3(0),
+    mbLikelyOOXMLCurve(true)
 {
 }
 
@@ -1774,6 +1775,50 @@ bool SvXMLImport::needFixPositionAfterZ() const
     return bWrongPositionAfterZ;
 }
 
+namespace
+{
+bool lcl_IsLikelyOOXMLCurve(const basegfx::B2DPolygon& rPolygon)
+{
+    sal_uInt32 nCount = rPolygon.count();
+    if (!rPolygon.areControlPointsUsed() or nCount < 2)
+        return false; // no curve at all
+
+    basegfx::B2DVector aStartVec(rPolygon.getNextControlPoint(0) - rPolygon.getB2DPoint(0));
+    basegfx::B2DVector aEndVec(rPolygon.getPrevControlPoint(nCount-1) - rPolygon.getB2DPoint(nCount - 1));
+    // LibreOffice uses one point less than OOXML for the same underlaying bentConnector or
+    // STANDARD connector, respectively. A deeper inspection is only needed in case of 2 resulting
+    // points. Those connector paths look like a quarter ellipse.
+    switch (nCount)
+    {
+        case 2:
+        {
+            // In case start and end direction are parallel, it cannot be OOXML because that case
+            // introduces a handle on the path and the curve has three points then.
+            if (basegfx::areParallel(aStartVec, aEndVec))
+                return false;
+            // OOXML sets the control point at 1/2, LibreOffice at 2/3 of width or height.
+            // A tolerance is used because +-1 deviations due to integer arithmetic in many places.
+            basegfx::B2DRange aRect(rPolygon.getB2DPoint(0), rPolygon.getB2DPoint(1));
+            if ((basegfx::fTools::equalZero(aStartVec.getX())
+                     && basegfx::fTools::equal(aStartVec.getLength() * 2.0, aRect.getHeight(), 2.0))
+                || (basegfx::fTools::equalZero(aStartVec.getY())
+                     && basegfx::fTools::equal(aStartVec.getLength() * 2.0, aRect.getWidth(), 2.0)))
+                return true;
+        }
+        break;
+        case 3:
+        case 5:
+            return basegfx::areParallel(aStartVec, aEndVec);
+        break;
+        case 4: // start and end direction are orthogonal
+            return basegfx::fTools::equalZero(aStartVec.scalar( aEndVec));
+        break;
+        default:
+            return false;
+    }
+    return false;
+}
+} // end namespace
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 bool SdXMLConnectorShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
@@ -1859,6 +1904,8 @@ bool SdXMLConnectorShapeContext::processAttribute( const sax_fastparser::FastAtt
                         aPolyPolygon,
                         aSourcePolyPolygon);
                     maPath <<= aSourcePolyPolygon;
+
+                    mbLikelyOOXMLCurve = lcl_IsLikelyOOXMLCurve(aPolyPolygon.getB2DPolygon(0));
                 }
             }
             break;
@@ -1921,13 +1968,16 @@ void SdXMLConnectorShapeContext::startFastElement (sal_Int32 nElement,
         }
     }
 
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+    if (xProps.is())
+        xProps->setPropertyValue("EdgeOOXMLCurve", Any(mbLikelyOOXMLCurve));
+
     // add connection ids
     if( !maStartShapeId.isEmpty() )
         GetImport().GetShapeImport()->addShapeConnection( mxShape, true, maStartShapeId, mnStartGlueId );
     if( !maEndShapeId.isEmpty() )
         GetImport().GetShapeImport()->addShapeConnection( mxShape, false, maEndShapeId, mnEndGlueId );
 
-    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
     if( xProps.is() )
     {
         xProps->setPropertyValue("StartPosition", Any(maStart));

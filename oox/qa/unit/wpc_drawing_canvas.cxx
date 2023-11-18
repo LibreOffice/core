@@ -17,6 +17,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -26,7 +27,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
-
 using namespace ::com::sun::star;
 
 namespace
@@ -305,6 +305,36 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158348_shape_text_in_table_cell)
     uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
     // The string had started with "Inside shape" without fix.
     CPPUNIT_ASSERT(xCellA1->getString().startsWith("Inside table"));
+}
+
+CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CurvedConnector2)
+{
+    // The document has two shapes connected with a curvedConnector2 on a drawing canvas.
+    // This connector is a single Bezier segment without handles.
+    loadFromURL(u"WPC_CurvedConnector2.docx");
+
+    // LO and OOXML differ in the position of the control points. LibreOffice uses 2/3 but OOXML
+    // uses 1/2 of width or height. The path by LO looks more round.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xInfo(xGroup->getByIndex(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInfo->supportsService("com.sun.star.drawing.ConnectorShape"));
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(3), uno::UNO_QUERY);
+    com::sun::star::drawing::ConnectorType eEdgeKind;
+    xShapeProps->getPropertyValue(UNO_NAME_EDGEKIND) >>= eEdgeKind;
+    CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_CURVE, eEdgeKind);
+
+    // Make sure the path is OOXML compatible
+    drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
+    xShapeProps->getPropertyValue("PolyPolygonBezier") >>= aPolyPolygonBezierCoords;
+    drawing::PointSequence aPolygon = aPolyPolygonBezierCoords.Coordinates[0];
+    // First control point. LO routing would generate point (4372|5584).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5149), aPolygon[1].Y);
+    // Second control point. LO routing would generate point (5887|6458).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6645), aPolygon[2].X);
 }
 }
 

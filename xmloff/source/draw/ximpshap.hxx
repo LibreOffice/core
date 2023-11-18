@@ -296,6 +296,11 @@ private:
 
     css::uno::Any maPath;
 
+    // Guess from the svg:d attribute whether the shape was rendered using OOXML definition. The
+    // default value is true to cover files exported to ODF by MS Office, which does not write a
+    // svg:d attribute. LibreOffice has always written a svg:d attribute.
+    bool mbLikelyOOXMLCurve;
+
 public:
 
     SdXMLConnectorShapeContext( SvXMLImport& rImport,

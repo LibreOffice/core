@@ -441,7 +441,11 @@ constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR
 constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST+0);    // 1248
 constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);       // 1248
 
-constexpr sal_uInt16 SDRATTR_END (SDRATTR_WRITINGMODE2_LAST);      // 1248
+constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_FIRST(SDRATTR_WRITINGMODE2_LAST+1);// 1249
+constexpr TypedWhichId<SfxBoolItem>       SDRATTR_EDGEOOXMLCURVE(SDRATTR_EDGEOOXMLCURVE_FIRST+0);   // 1249
+constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_LAST(SDRATTR_EDGEOOXMLCURVE);      // 1249
+
+constexpr sal_uInt16 SDRATTR_END (SDRATTR_EDGEOOXMLCURVE_LAST);      // 1249
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 

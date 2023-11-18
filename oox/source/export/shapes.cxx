@@ -1607,18 +1607,25 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
                                         ConnectorType eConnectorType,
                                         std::vector<std::pair<sal_Int32, sal_Int32>>& rAvList)
 {
+    Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
+    bool bIsOOXMLCurve(false);
+    xShapeProps->getPropertyValue("EdgeOOXMLCurve") >>= bIsOOXMLCurve;
     sal_Int32 nAdjCount = 0;
     if (eConnectorType == ConnectorType_CURVE)
     {
-        if (aPoly.GetSize() == 4)
+        if (bIsOOXMLCurve)
+        {
+            nAdjCount = (aPoly.GetSize() - 4) / 3;
+        }
+        else if (aPoly.GetSize() == 4)
         {
             if ((aPoly[0].X() == aPoly[1].X() && aPoly[2].X() == aPoly[3].X())
                 || (aPoly[0].Y() == aPoly[1].Y() && aPoly[2].Y() == aPoly[3].Y()))
             {
-                nAdjCount = 1; // curvedConnector3
+                nAdjCount = 1; // curvedConnector3, control vectors parallel
             }
             else
-                nAdjCount = 0; // curvedConnector2
+                nAdjCount = 0; // curvedConnector2, control vectors orthogonal
         }
         else if (aPoly.GetSize() > 4)
         {
@@ -1672,27 +1679,34 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
 
             if (eConnectorType == ConnectorType_CURVE)
             {
-                awt::Size aSize = xShape->getSize();
-                awt::Point aShapePosition = xShape->getPosition();
-                tools::Rectangle aBoundRect = aPoly.GetBoundRect();
-
-                if (bVertical)
+                if (bIsOOXMLCurve)
                 {
-                    if ((aBoundRect.GetSize().Height() - aSize.Height) == 1)
-                        aPt.setY(aPoly[i + 1].Y());
-                    else if (aStart.Y() > aPt.Y())
-                        aPt.setY(aShapePosition.Y);
-                    else
-                        aPt.setY(aShapePosition.Y + aSize.Height);
+                    aPt = aPoly[3 *  i];
                 }
                 else
                 {
-                    if ((aBoundRect.GetSize().Width() - aSize.Width) == 1)
-                        aPt.setX(aPoly[i + 1].X());
-                    else if (aStart.X() > aPt.X())
-                        aPt.setX(aShapePosition.X);
+                    awt::Size aSize = xShape->getSize();
+                    awt::Point aShapePosition = xShape->getPosition();
+                    tools::Rectangle aBoundRect = aPoly.GetBoundRect();
+
+                    if (bVertical)
+                    {
+                        if ((aBoundRect.GetSize().Height() - aSize.Height) == 1)
+                            aPt.setY(aPoly[i + 1].Y());
+                        else if (aStart.Y() > aPt.Y())
+                            aPt.setY(aShapePosition.Y);
+                        else
+                            aPt.setY(aShapePosition.Y + aSize.Height);
+                    }
                     else
-                        aPt.setX(aShapePosition.X + aSize.Width);
+                    {
+                        if ((aBoundRect.GetSize().Width() - aSize.Width) == 1)
+                            aPt.setX(aPoly[i + 1].X());
+                        else if (aStart.X() > aPt.X())
+                            aPt.setX(aShapePosition.X);
+                        else
+                            aPt.setX(aShapePosition.X + aSize.Width);
+                    }
                 }
             }
 

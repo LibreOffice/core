@@ -252,6 +252,11 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
             m_aEdgeInfo.ImpSetLineOffset(SdrEdgeLineCode::Obj2Line2, *m_pEdgeTrack, nVals[n]);
             n++;
         }
+
+        // Do not overwrite existing value with default. ImpSetAttrToEdgeInfo() is called several
+        // times with a set, that does not have SDRATTR_EDGEOOXMLCURVE item.
+        if (rSet.HasItem(SDRATTR_EDGEOOXMLCURVE))
+            m_aEdgeInfo.m_bUseOOXMLCurve = rSet.Get(SDRATTR_EDGEOOXMLCURVE).GetValue();
     }
     else if(eKind == SdrEdgeKind::ThreeLines)
     {
@@ -371,6 +376,9 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
     {
         GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE1DELTA);
     }
+
+    GetProperties().SetObjectItemDirect(
+        SfxBoolItem(SDRATTR_EDGEOOXMLCURVE, m_aEdgeInfo.m_bUseOOXMLCurve));
 }
 
 void SdrEdgeObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -1501,7 +1509,45 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         }
     }
     // make the connector a bezier curve, if appropriate
-    if (eKind==SdrEdgeKind::Bezier && nPointCount>2) {
+    if (eKind != SdrEdgeKind::Bezier || nPointCount <= 2)
+        return aXP1;
+
+    if (pInfo->m_bUseOOXMLCurve) // Routing method OOXML
+    {
+        // The additional points needed are located on the segments of the path of the
+        // corresponding bentConnector as calculated above.
+        auto SegmentPoint = [&aXP1](const sal_uInt16& nEnd, const double& fFactor) {
+            return Point(
+                aXP1[nEnd - 1].X() + FRound(fFactor * (aXP1[nEnd].X() - aXP1[nEnd - 1].X())),
+                aXP1[nEnd - 1].Y() + FRound(fFactor * (aXP1[nEnd].Y() - aXP1[nEnd - 1].Y())));
+        };
+
+        // We change the path going from end to start. Thus inserting points does not affect the index
+        // of the preciding points.
+        // The end point has index nPointCount-1 and is a normal point and kept.
+        // Insert new control point in the middle of last segments.
+        Point aControl = SegmentPoint(nPointCount - 1, 0.5);
+        // Insert happens before specified index.
+        aXP1.Insert(nPointCount - 1, aControl, PolyFlags::Control);
+        for (sal_uInt16 nSegment = nPointCount - 2; nSegment > 1; --nSegment)
+        {
+            // We need a normal point at center of segment and control points at 1/4 and 3/4 of
+            // segment. At center and 1/4 are new points, at 3/4 will be replacement for the end
+            // point of the segment.
+            aControl = SegmentPoint(nSegment, 0.25);
+            Point aNormal = SegmentPoint(nSegment, 0.5);
+            aXP1.SetFlags(nSegment, PolyFlags::Control);
+            aXP1[nSegment] = SegmentPoint(nSegment, 0.75);
+            aXP1.Insert(nSegment, aNormal, PolyFlags::Normal);
+            aXP1.Insert(nSegment, aControl, PolyFlags::Control);
+        }
+        // The first segments needs a control point in the middle. It is replacement for the
+        // second point.
+        aXP1.SetFlags(1, PolyFlags::Control);
+        aXP1[1] = SegmentPoint(1, 0.5);
+    }
+    else // Routing method LO
+    {
         Point* pPt1=&aXP1[0];
         Point* pPt2=&aXP1[1];
         Point* pPt3=&aXP1[nPointCount-2];
@@ -1796,35 +1842,48 @@ void SdrEdgeObj::AddToHdlList(SdrHdlList& rHdlList) const
             sal_uInt32 nO1(m_aEdgeInfo.m_nObj1Lines > 0 ? m_aEdgeInfo.m_nObj1Lines - 1 : 0);
             sal_uInt32 nO2(m_aEdgeInfo.m_nObj2Lines > 0 ? m_aEdgeInfo.m_nObj2Lines - 1 : 0);
             sal_uInt32 nM(m_aEdgeInfo.m_nMiddleLine != 0xFFFF ? 1 : 0);
+            bool bOOXMLCurve = m_aEdgeInfo.m_bUseOOXMLCurve && eKind == SdrEdgeKind::Bezier;
             for(sal_uInt32 i = 0; i < (nO1 + nO2 + nM); ++i)
             {
                 sal_Int32 nPt(0);
                 sal_uInt32 nNum = i;
                 std::unique_ptr<ImpEdgeHdl> pHdl(new ImpEdgeHdl(Point(),SdrHdlKind::Poly));
-                if (nNum<nO1) {
-                    nPt=nNum+1;
+                if (nNum<nO1)
+                {
+                    nPt = bOOXMLCurve ? (nNum + 1) * 3 : nNum + 1;
                     if (nNum==0) pHdl->SetLineCode(SdrEdgeLineCode::Obj1Line2);
                     if (nNum==1) pHdl->SetLineCode(SdrEdgeLineCode::Obj1Line3);
                 } else {
                     nNum=nNum-nO1;
-                    if (nNum<nO2) {
-                        nPt=nPointCount-3-nNum;
+                    if (nNum<nO2)
+                    {
+                        nPt = bOOXMLCurve ? nPointCount - 4 - nNum * 3 : nPointCount - 3 - nNum;
                         if (nNum==0) pHdl->SetLineCode(SdrEdgeLineCode::Obj2Line2);
                         if (nNum==1) pHdl->SetLineCode(SdrEdgeLineCode::Obj2Line3);
                     } else {
                         nNum=nNum-nO2;
                         if (nNum<nM) {
-                            nPt=m_aEdgeInfo.m_nMiddleLine;
+                            nPt = bOOXMLCurve ? m_aEdgeInfo.m_nMiddleLine * 3
+                                              : m_aEdgeInfo.m_nMiddleLine;
                             pHdl->SetLineCode(SdrEdgeLineCode::MiddleLine);
                         }
                     }
                 }
-                if (nPt>0) {
-                    Point aPos((*m_pEdgeTrack)[static_cast<sal_uInt16>(nPt)]);
-                    aPos+=(*m_pEdgeTrack)[static_cast<sal_uInt16>(nPt)+1];
-                    aPos.setX( aPos.X() / 2 );
-                    aPos.setY( aPos.Y() / 2 );
-                    pHdl->SetPos(aPos);
+                if (nPt>0)
+                {
+                    if (bOOXMLCurve)
+                    {
+                        Point aPos((*m_pEdgeTrack)[static_cast<sal_uInt16>(nPt)]);
+                        pHdl->SetPos(aPos);
+                    }
+                    else
+                    {
+                        Point aPos((*m_pEdgeTrack)[static_cast<sal_uInt16>(nPt)]);
+                        aPos+=(*m_pEdgeTrack)[static_cast<sal_uInt16>(nPt)+1];
+                        aPos.setX( aPos.X() / 2 );
+                        aPos.setY( aPos.Y() / 2 );
+                        pHdl->SetPos(aPos);
+                    }
                     pHdl->SetPointNum(i + 2);
                     rHdlList.AddHdl(std::move(pHdl));
                 }

@@ -194,6 +194,7 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[SDRATTR_EDGELINE1DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE1DELTA, 0);
     rPoolDefaults[SDRATTR_EDGELINE2DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE2DELTA, 0);
     rPoolDefaults[SDRATTR_EDGELINE3DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE3DELTA, 0);
+    rPoolDefaults[SDRATTR_EDGEOOXMLCURVE   -SDRATTR_START]=new SfxBoolItem(SDRATTR_EDGEOOXMLCURVE, false);
     rPoolDefaults[SDRATTR_MEASUREKIND             -SDRATTR_START]=new SdrMeasureKindItem;
     rPoolDefaults[SDRATTR_MEASURETEXTHPOS         -SDRATTR_START]=new SdrMeasureTextHPosItem;
     rPoolDefaults[SDRATTR_MEASURETEXTVPOS         -SDRATTR_START]=new SdrMeasureTextVPosItem;

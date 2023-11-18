@@ -91,13 +91,19 @@ public:
     sal_uInt16                  m_nObj2Lines;        // 1..3
     sal_uInt16                  m_nMiddleLine;       // 0xFFFF=none, otherwise point number of the beginning of the line
 
+    // The value determines how curved connectors are routed. With value 'true' it is routed
+    // compatible to OOXML, with value 'false' LO routing is used.
+    // The value is set/get via property SDRATTR_EDGEOOXMLCURVE.
+    bool m_bUseOOXMLCurve;
+
 public:
     SdrEdgeInfoRec()
     :   m_nAngle1(0),
         m_nAngle2(0),
         m_nObj1Lines(0),
         m_nObj2Lines(0),
-        m_nMiddleLine(0xFFFF)
+        m_nMiddleLine(0xFFFF),
+        m_bUseOOXMLCurve(false)
     {}
 
     Point& ImpGetLineOffsetPoint(SdrEdgeLineCode eLineCode);

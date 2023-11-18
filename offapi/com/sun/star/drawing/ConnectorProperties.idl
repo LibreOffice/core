@@ -51,6 +51,13 @@ published service ConnectorProperties
      */
     [property] long EdgeNode2VertDist;
 
+
+    /** If 'TRUE' a curved connector is routed compatible to OOXML.
+        The default value for new connectors is 'FALSE'.
+        The property is only evaluated in case EdgeKind CURVE.
+        @since LibreOffice 24.2
+    */
+    [property, optional] boolean EdgeOOXMLCurve;
 };
 
 

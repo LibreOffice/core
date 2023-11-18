@@ -56,7 +56,7 @@ void getOOXHandlePositionsHmm(const oox::drawingml::ShapePtr& pConnector,
   * rotation of the connector shape. This method collects these transformations into a
   * B2DHomMatrix.
 
-  * @param [in] pConnector is pointer to a oox::drawing::Shape.
+  * @param [in] pConnector is pointer to a oox::drawing::Shape that represents a connector shape.
   * @return a newly created B2DHomMatrix. It might be the unit matrix.
 */
 basegfx::B2DHomMatrix getConnectorTransformMatrix(const oox::drawingml::ShapePtr& pConnector);
@@ -69,20 +69,34 @@ basegfx::B2DHomMatrix getConnectorTransformMatrix(const oox::drawingml::ShapePtr
  * The vector rHandlePositions is cleaned and then filled with the actual handle positions. It
  * is empty if the geometry does not use handles.
 
- * @param [in] rXShape interface of a connector shape.
+ * @param [in] pConnector is pointer to a oox::drawing::Shape that represents a connector shape.
  * @param [in,out] rHandlePositions contains the calculated handle positions.
 */
 void getLOBentHandlePositionsHmm(const oox::drawingml::ShapePtr& pConnector,
                                  std::vector<basegfx::B2DPoint>& rHandlePositions);
 
 /**
+ * Calulates the handle positions of a connector of type ConnectorType_CURVE for which OOXML
+ * compatible routing is enabled. Such connector corresponds to the OOXML curvedConnector shapes. The
+ * calculation is based on the actual polygon of the connector. The coordinates are always returned
+ * in Hmm, even for shapes on a text document draw page.
+ * The vector rHandlePositions is cleaned and then filled with the actual handle positions. It
+ * is empty if the geometry does not use handles.
+
+ * @param [in] pConnector is pointer to a oox::drawing::Shape that represents a connector shape.
+ * @param [in,out] rHandlePositions contains the calculated handle positions.
+*/
+void getLOCurvedHandlePositionsHmm(const oox::drawingml::ShapePtr& pConnector,
+                                   std::vector<basegfx::B2DPoint>& rHandlePositions);
+
+/**
  * Sets the properties "StartShape", "EndShape", "StartGluePointIndex" and "EndGluePointIndex". Thus
  * it actually connects the shapes. Connecting generates the default connector path.
 
- * @param rConnector The connector shape
+ * @param pConnector is pointer to a oox::drawing::Shape that represents a connector shape.
  * @param [in] A flat map of target shape candidates, indexed by their msId.
 */
-void applyConnections(oox::drawingml::ShapePtr& rConnector, oox::drawingml::ShapeIdMap& rShapeMap);
+void applyConnections(oox::drawingml::ShapePtr& pConnector, oox::drawingml::ShapeIdMap& rShapeMap);
 
 /**
  * Calculates the difference between handle positions in OOXML and the default handle positions in
@@ -94,6 +108,17 @@ void applyConnections(oox::drawingml::ShapePtr& rConnector, oox::drawingml::Shap
  * @param pConnector refers to the shape whose handles are adapted.
 */
 void applyBentHandleAdjustments(oox::drawingml::ShapePtr pConnector);
+
+/**
+ * Calculates the difference between handle positions in OOXML and the default handle positions in
+ * LibreOffice. The difference is written to "EdgeLine1Delta", "EdgeLine2Delta" and "EdgeLine3Delta"
+ * properties. It uses the connector polygon.
+
+ * @pre The referenced connector has type ConnectorType_CURVE, OOXML compatible routing is enabled,
+        and the connector has the default connector path.
+ * @param pConnector refers to the shape whose handles are adapted.
+*/
+void applyCurvedHandleAdjustments(oox::drawingml::ShapePtr pConnector);
 
 } // end namespace ConnectorHelper
 

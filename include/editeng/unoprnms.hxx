@@ -56,6 +56,7 @@ inline constexpr OUString UNO_NAME_EDGENODE1HORZDIST = u"EdgeNode1HorzDist"_ustr
 inline constexpr OUString UNO_NAME_EDGENODE1VERTDIST = u"EdgeNode1VertDist"_ustr;
 inline constexpr OUString UNO_NAME_EDGENODE2HORZDIST = u"EdgeNode2HorzDist"_ustr;
 inline constexpr OUString UNO_NAME_EDGENODE2VERTDIST = u"EdgeNode2VertDist"_ustr;
+inline constexpr OUString UNO_NAME_EDGEOOXMLCURVE = u"EdgeOOXMLCurve"_ustr;
 
 inline constexpr OUString UNO_NAME_FILLBMP_OFFSET_X = u"FillBitmapOffsetX"_ustr;
 inline constexpr OUString UNO_NAME_FILLBMP_OFFSET_Y = u"FillBitmapOffsetY"_ustr;
