@@ -1233,7 +1233,7 @@ void SAL_CALL SfxBaseModel::disconnectController( const Reference< frame::XContr
         return;
 
     auto& vec = m_pData->m_seqControllers;
-    vec.erase(std::remove(vec.begin(), vec.end(), xController), vec.end());
+    std::erase(vec, xController);
 
     if ( xController == m_pData->m_xCurrent )
         m_pData->m_xCurrent.clear();

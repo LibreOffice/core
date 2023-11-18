@@ -665,10 +665,7 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr, const OUString& aUIName)
     }
 
     // Only keep tree roots in rArr, child elements can be accessed through the hierarchy
-    rArr.erase(
-        std::remove_if(rArr.begin(), rArr.end(),
-                       [](std::unique_ptr<StyleTree_Impl> const& pEntry) { return !pEntry; }),
-        rArr.end());
+    std::erase_if(rArr, [](std::unique_ptr<StyleTree_Impl> const& pEntry) { return !pEntry; });
 
     // tdf#91106 sort top level styles
     std::sort(rArr.begin(), rArr.end());
