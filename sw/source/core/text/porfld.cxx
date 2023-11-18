@@ -142,6 +142,7 @@ class SwFieldSlot
     OUString aText;
     TextFrameIndex nIdx;
     TextFrameIndex nLen;
+    sal_Unicode nOrigHookChar;
     SwTextFormatInfo *pInf;
     bool bOn;
 public:
@@ -155,6 +156,7 @@ SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pP
     : pOldText(nullptr)
     , nIdx(0)
     , nLen(0)
+    , nOrigHookChar(0)
     , pInf(nullptr)
 {
     bOn = pPor->GetExpText( *pNew, aText );
@@ -167,6 +169,7 @@ SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pP
     nIdx = pInf->GetIdx();
     nLen = pInf->GetLen();
     pOldText = &(pInf->GetText());
+    nOrigHookChar = pInf->GetHookChar();
     m_pOldCachedVclData = pInf->GetCachedVclData();
     pInf->SetLen(TextFrameIndex(aText.getLength()));
     pInf->SetCachedVclData(nullptr);
@@ -197,6 +200,13 @@ SwFieldSlot::~SwFieldSlot()
     {
         pInf->SetCachedVclData(m_pOldCachedVclData);
         pInf->SetText( *pOldText );
+        // ofz#64109 at last for ruby-text when we restore the original text to
+        // continue laying out the 'body' text of the ruby, then a tab or other
+        // 'hook char' in the text drawn above it shouldn't affect the 'body'
+        // While there are other cases, such as tdf#148360, where the tab in an
+        // inline expanded field, that should affect the body.
+        if (pInf->IsRuby())
+            pInf->SetHookChar(nOrigHookChar);
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );
         pInf->SetFakeLineStart( false );

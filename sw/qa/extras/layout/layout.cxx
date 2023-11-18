@@ -288,6 +288,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136588)
                 "effectively by modern-day small to ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testOfz64109)
+{
+    //just care it doesn't assert
+    createSwDoc(DATA_DIRECTORY, "ofz64109-1.fodt");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 {
     loadURL("private:factory/swriter", nullptr);
