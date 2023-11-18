@@ -126,13 +126,11 @@ private:
                 { return cp.first == rNewLayer; } ) )
             throw std::exception();
 
-        maViewLayers.erase(
-            std::remove_if(
-                maViewLayers.begin(),
-                maViewLayers.end(),
+        std::erase_if(
+                maViewLayers,
                 [&rNewLayer]
                 ( const ViewVector::value_type& cp )
-                { return cp.first == rNewLayer; } ) );
+                { return cp.first == rNewLayer; } );
         return true;
     }
     virtual void clearAllViewLayers() override

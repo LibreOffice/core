@@ -601,14 +601,10 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
     if( mpLayerManager )
         mpLayerManager->viewRemoved( rView );
 
-    const VectorOfVectorOfSlideBitmaps::iterator aEnd( maSlideBitmaps.end() );
-    maSlideBitmaps.erase(
-        std::remove_if( maSlideBitmaps.begin(),
-                        aEnd,
+    std::erase_if(maSlideBitmaps,
                         [&rView]
                         ( const VectorOfVectorOfSlideBitmaps::value_type& cp )
-                        { return rView == cp.first; } ),
-                        aEnd );
+                        { return rView == cp.first; } );
 }
 
 void SlideImpl::viewChanged( const UnoViewSharedPtr& rView )

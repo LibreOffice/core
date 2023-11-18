@@ -149,6 +149,8 @@ namespace slideshow::internal
                                         { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "MediaShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
+// TODO : needed for the moment since ANDROID doesn't know size_t return from std::erase_if
+#if defined ANDROID
             ViewMediaShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewMediaShapes.begin(),
@@ -165,6 +167,14 @@ namespace slideshow::internal
             maViewMediaShapes.erase( aIter, aEnd );
 
             return true;
+#else
+            size_t nb = std::erase_if(maViewMediaShapes,
+                                         [&rLayer]
+                                         ( const ViewMediaShapeSharedPtr& pShape )
+                                         { return rLayer == pShape->getViewLayer(); } );
+            // if nb == 0, it means view media shape seemingly was not added, failed
+            return (nb != 0);
+#endif
         }
 
 

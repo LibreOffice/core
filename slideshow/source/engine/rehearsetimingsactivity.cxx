@@ -349,12 +349,11 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
 
 void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
 {
-    maViews.erase(
-        std::remove_if( maViews.begin(), maViews.end(),
+    std::erase_if(
+        maViews,
             [&rView]
             ( const ViewsVecT::value_type& cp )
-            { return rView == cp.first; } ),
-        maViews.end() );
+            { return rView == cp.first; } );
 }
 
 void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )

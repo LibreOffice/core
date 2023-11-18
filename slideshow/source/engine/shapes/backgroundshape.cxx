@@ -187,6 +187,8 @@ namespace slideshow::internal
                                         { return pBgShape->getViewLayer() == rLayer; } ) < 2,
                         "BackgroundShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
+// TODO : needed for the moment since ANDROID doesn't know size_t return from std::erase_if
+#if defined ANDROID
             ViewBackgroundShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewShapes.begin(),
@@ -202,6 +204,14 @@ namespace slideshow::internal
             maViewShapes.erase( aIter, aEnd );
 
             return true;
+#else
+
+            size_t nb = std::erase_if(maViewShapes,
+                                         [&rLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                                         { return pBgShape->getViewLayer() == rLayer; } );
+            // if nb == 0, it means view shape seemingly was not added, failed
+            return (nb != 0);
+#endif
         }
 
         void BackgroundShape::clearAllViewLayers()

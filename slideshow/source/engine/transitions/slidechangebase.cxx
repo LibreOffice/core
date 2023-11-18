@@ -404,13 +404,9 @@ void SlideChangeBase::viewRemoved( const UnoViewSharedPtr& rView )
         return;
 
     // erase corresponding entry from maViewData
-    maViewData.erase(
-        std::remove_if(
-            maViewData.begin(),
-            maViewData.end(),
+    std::erase_if(maViewData,
             [rView]( const ViewEntry& rViewEntry )
-            { return rView == rViewEntry.getView(); } ),
-        maViewData.end() );
+            { return rView == rViewEntry.getView(); } );
 }
 
 void SlideChangeBase::viewChanged( const UnoViewSharedPtr& rView )

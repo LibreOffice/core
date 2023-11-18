@@ -89,9 +89,7 @@ namespace slideshow::internal
 
             virtual void viewRemoved( const UnoViewSharedPtr& rView ) override
             {
-                maViews.erase( ::std::remove( maViews.begin(),
-                                              maViews.end(),
-                                              rView ) );
+                std::erase(maViews, rView);
             }
 
             virtual void viewChanged( const UnoViewSharedPtr& /*rView*/ ) override

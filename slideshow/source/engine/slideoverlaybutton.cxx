@@ -124,10 +124,7 @@ void SlideOverlayButton::viewAdded(const UnoViewSharedPtr& rView)
 
 void SlideOverlayButton::viewRemoved(const UnoViewSharedPtr& rView)
 {
-    maViews.erase(
-        std::remove_if(maViews.begin(), maViews.end(),
-                       [&rView](const ViewsVecT::value_type& cp) { return rView == cp.first; }),
-        maViews.end());
+    std::erase_if(maViews, [&rView](const ViewsVecT::value_type& cp) { return rView == cp.first; });
 }
 
 void SlideOverlayButton::viewChanged(const UnoViewSharedPtr& rView)

@@ -184,6 +184,8 @@ namespace slideshow::internal
                                         { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "AppletShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
+// TODO : needed for the moment since ANDROID doesn't know size_t return from std::erase_if
+#if defined ANDROID
             ViewAppletShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewAppletShapes.begin(),
@@ -200,6 +202,14 @@ namespace slideshow::internal
             maViewAppletShapes.erase( aIter, aEnd );
 
             return true;
+#else
+            size_t nb = std::erase_if(maViewAppletShapes,
+                                         [&rLayer]
+                                         ( const ViewAppletShapeSharedPtr& pShape )
+                                         { return rLayer == pShape->getViewLayer(); } );
+            // if nb == 0, it means view layer seemingly was not added, failed
+            return (nb != 0);
+#endif
         }
 
 

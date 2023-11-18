@@ -299,6 +299,8 @@ public:
     {
         Guard aGuard(*this);
 
+// TODO : needed for the moment since ANDROID doesn't know size_t return from std::erase
+#if defined ANDROID
         const typename container_type::iterator aEnd( maListeners.end() );
         typename container_type::iterator       aIter;
         if( (aIter=std::remove(maListeners.begin(),
@@ -311,6 +313,11 @@ public:
         maListeners.erase( aIter, aEnd );
 
         return true;
+#else
+        size_t nb = std::erase(maListeners, rListener);
+        // if nb == 0, it means listener wasn't found
+        return (nb != 0);
+#endif
     }
 
     /// Removes all listeners in one go
