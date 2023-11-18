@@ -49,7 +49,7 @@ void BridgeFactory::removeBridge(
     osl::MutexGuard g(m_aMutex);
     if (n.isEmpty())
     {
-        unnamed_.erase(std::remove(unnamed_.begin(), unnamed_.end(), bridge), unnamed_.end());
+        std::erase(unnamed_, bridge);
     }
     else
     {

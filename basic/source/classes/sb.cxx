@@ -1074,7 +1074,7 @@ void StarBASIC::Remove( SbxVariable* pVar )
     {
         // #87540 Can be last reference!
         SbModuleRef xVar = pModule;
-        pModules.erase(std::remove(pModules.begin(), pModules.end(), xVar));
+        std::erase(pModules, xVar);
         pVar->SetParent( nullptr );
         EndListening( pVar->GetBroadcaster() );
     }

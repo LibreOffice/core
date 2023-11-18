@@ -1288,7 +1288,7 @@ void DlgEdForm::AddChild( DlgEdObj* pDlgEdObj )
 
 void DlgEdForm::RemoveChild( DlgEdObj* pDlgEdObj )
 {
-    pChildren.erase( std::remove( pChildren.begin() , pChildren.end() , pDlgEdObj ) );
+    std::erase(pChildren, pDlgEdObj);
 }
 
 void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
