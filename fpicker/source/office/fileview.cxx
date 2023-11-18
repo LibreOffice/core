@@ -1304,7 +1304,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( std::u16string_view rFilter )
 
 
     // do the filtering
-    maContent.erase(std::remove_if(maContent.begin(), maContent.end(),
+    std::erase_if(maContent,
         [&aFilters](const std::unique_ptr<SortingData_Impl>& rxContent) {
             if (rxContent->mbIsFolder)
                 return false;
@@ -1312,8 +1312,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( std::u16string_view rFilter )
             // 91872 - 11.09.2001 - frank.schoenheit@sun.com
             OUString sCompareString = rxContent->GetFileName(); // filter works on file name, not on title!
             return std::none_of(aFilters.begin(), aFilters.end(), FilterMatch(sCompareString));
-        }),
-        maContent.end());
+        });
 }
 
 IMPL_LINK_NOARG(SvtFileView_Impl, ChangedHdl, weld::TreeView&, void)

@@ -997,11 +997,10 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
     }
 
     // Erase items not in lList from the user path list.
-    rPath.lUserPaths.erase(std::remove_if(rPath.lUserPaths.begin(), rPath.lUserPaths.end(),
+    std::erase_if(rPath.lUserPaths,
         [&lList](const OUString& rItem) {
             return std::find(lList.begin(), lList.end(), rItem) == lList.end();
-        }),
-        rPath.lUserPaths.end());
+        });
 
     // Erase items in the user path list from lList.
     for (auto const& userPath : rPath.lUserPaths)

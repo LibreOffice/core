@@ -3009,7 +3009,7 @@ public:
 void CharAttribList::DeleteEmptyAttribs( SfxItemPool& rItemPool )
 {
     std::for_each(aAttribs.begin(), aAttribs.end(), RemoveEmptyAttrItem(rItemPool));
-    aAttribs.erase( std::remove_if(aAttribs.begin(), aAttribs.end(), [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsEmpty(); } ), aAttribs.end() );
+    std::erase_if(aAttribs, [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsEmpty(); } );
     bHasEmptyAttribs = false;
 }
 

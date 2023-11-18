@@ -443,9 +443,7 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
         }
         else if (sImplementationName == "com.sun.star.comp.ComponentDLLListener")
         {
-            m_xComponentDllListeners.erase(
-                    std::remove(m_xComponentDllListeners.begin(), m_xComponentDllListeners.end(), xListener),
-                    m_xComponentDllListeners.end());
+            std::erase(m_xComponentDllListeners, xListener);
             return;
         }
     }

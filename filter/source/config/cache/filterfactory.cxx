@@ -443,13 +443,11 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
     // remove all filters from this merged list, which does not fit the flag specification
     if (nIFlags != -1)
     {
-        auto pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nIFlags, true));
-        lMergedFilters.erase(pItToErase, lMergedFilters.end());
+        std::erase_if(lMergedFilters, stlcomp_removeIfMatchFlags(pCache, nIFlags, true));
     }
     if (nEFlags != -1)
     {
-        auto pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, false));
-        lMergedFilters.erase(pItToErase, lMergedFilters.end());
+        std::erase_if(lMergedFilters, stlcomp_removeIfMatchFlags(pCache, nEFlags, false));
     }
 
     // sort the default filter to the front of this list
