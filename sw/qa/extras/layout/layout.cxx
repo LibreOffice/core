@@ -216,6 +216,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     CheckRedlineFootnotesHidden();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testOfz64109)
+{
+    //just care it doesn't assert
+    createDoc("ofz64109-1.fodt");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 {
     loadURL("private:factory/swriter", nullptr);
