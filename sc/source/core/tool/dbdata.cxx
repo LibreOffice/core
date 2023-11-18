@@ -42,12 +42,6 @@
 #include <memory>
 #include <utility>
 
-using ::std::unique_ptr;
-using ::std::for_each;
-using ::std::find_if;
-using ::std::remove_if;
-using ::std::pair;
-
 bool ScDBData::less::operator() (const std::unique_ptr<ScDBData>& left, const std::unique_ptr<ScDBData>& right) const
 {
     return ScGlobal::GetTransliteration().compareString(left->GetUpperName(), right->GetUpperName()) < 0;
@@ -1260,7 +1254,7 @@ bool ScDBCollection::NamedDBs::insert(std::unique_ptr<ScDBData> pData)
     if (!pData->GetIndex())
         pData->SetIndex(mrParent.nEntryIndex++);
 
-    pair<DBsType::iterator, bool> r = m_DBs.insert(std::move(pData));
+    std::pair<DBsType::iterator, bool> r = m_DBs.insert(std::move(pData));
 
     if (r.second)
     {
