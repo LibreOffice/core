@@ -136,11 +136,9 @@ public:
 
     void removeTransformations(TransformationType eType)
     {
-        maTransformations.erase(std::remove_if(maTransformations.begin(), maTransformations.end(),
-                                               [eType](Transformation const& rTransform) {
-                                                   return rTransform.meType == eType;
-                                               }),
-                                maTransformations.end());
+        std::erase_if(maTransformations, [eType](Transformation const& rTransform) {
+            return rTransform.meType == eType;
+        });
     }
 
     void clearTransformations() { maTransformations.clear(); }
