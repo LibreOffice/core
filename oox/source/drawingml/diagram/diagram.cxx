@@ -90,13 +90,12 @@ static void removeUnneededGroupShapes(const ShapePtr& pShape)
 {
     std::vector<ShapePtr>& rChildren = pShape->getChildren();
 
-    rChildren.erase(std::remove_if(rChildren.begin(), rChildren.end(),
+    std::erase_if(rChildren,
                                    [](const ShapePtr& aChild) {
                                        return aChild->getServiceName()
                                                   == "com.sun.star.drawing.GroupShape"
                                               && aChild->getChildren().empty();
-                                   }),
-                    rChildren.end());
+                                   });
 
     for (const auto& pChild : rChildren)
     {
