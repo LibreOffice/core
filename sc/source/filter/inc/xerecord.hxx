@@ -395,9 +395,7 @@ public:
     void        InvalidateRecord( size_t nPos ) { maRecs[ nPos ] = nullptr; }
     void        RemoveInvalidatedRecords()
     {
-        maRecs.erase(
-            std::remove_if( maRecs.begin(), maRecs.end(), [](const RecordRefType& xRec) { return xRec == nullptr; } ),
-            maRecs.end());
+        std::erase_if(maRecs, [](const RecordRefType& xRec) { return xRec == nullptr; } );
     }
 
 private:

@@ -29,11 +29,10 @@ ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
 
 void ScDetOpList::DeleteOnTab( SCTAB nTab )
 {
-    aDetOpDataVector.erase(std::remove_if(aDetOpDataVector.begin(), aDetOpDataVector.end(),
+    std::erase_if(aDetOpDataVector,
         [&nTab](const ScDetOpData& rxDetOpData) {
             return rxDetOpData.GetPos().Tab() == nTab; // look for operations on the deleted sheet
-        }),
-        aDetOpDataVector.end());
+        });
 }
 
 void ScDetOpList::UpdateReference( const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,

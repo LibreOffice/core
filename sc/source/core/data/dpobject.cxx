@@ -3627,7 +3627,7 @@ bool ScDPCollection::GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDime
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
-    maTables.erase( std::remove_if(maTables.begin(), maTables.end(), MatchByTable(nTab)), maTables.end());
+    std::erase_if(maTables, MatchByTable(nTab));
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -3765,7 +3765,7 @@ void ScDPCollection::FreeTable(const ScDPObject* pDPObject)
         return pCurrent.get() == pDPObject;
     };
 
-    maTables.erase(std::remove_if(maTables.begin(), maTables.end(), funcRemoveCondition), maTables.end());
+    std::erase_if(maTables, funcRemoveCondition);
 }
 
 ScDPObject* ScDPCollection::InsertNewTable(std::unique_ptr<ScDPObject> pDPObj)

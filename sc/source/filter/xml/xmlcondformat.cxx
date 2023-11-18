@@ -54,9 +54,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
 
 IMPL_LINK(ScXMLConditionalFormatsContext, FormatDeletedHdl, ScConditionalFormat*, pFormat, void)
 {
-    mvCondFormatData.erase(std::remove_if(mvCondFormatData.begin(), mvCondFormatData.end(),
-                                          [pFormat](CondFormatData& r){ return r.mpFormat == pFormat; }),
-                           mvCondFormatData.end());
+    std::erase_if(mvCondFormatData, [pFormat](CondFormatData& r){ return r.mpFormat == pFormat; });
 }
 
 void SAL_CALL ScXMLConditionalFormatsContext::endFastElement( sal_Int32 /*nElement*/ )

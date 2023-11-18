@@ -1329,7 +1329,7 @@ const ScDBData* ScDBCollection::AnonDBs::findByRange(const ScRange& rRange) cons
 void ScDBCollection::AnonDBs::deleteOnTab(SCTAB nTab)
 {
     FindByTable func(nTab);
-    m_DBs.erase(std::remove_if(m_DBs.begin(), m_DBs.end(), func), m_DBs.end());
+    std::erase_if(m_DBs, func);
 }
 
 ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)

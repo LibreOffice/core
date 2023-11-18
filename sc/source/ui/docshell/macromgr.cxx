@@ -63,7 +63,7 @@ public:
     {
         for (auto& rEntry : maCells)
         {
-            rEntry.second.erase(std::remove(rEntry.second.begin(), rEntry.second.end(), pCell), rEntry.second.end() );
+            std::erase(rEntry.second, pCell);
         }
     }
 

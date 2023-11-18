@@ -1343,9 +1343,7 @@ void SAL_CALL ScTabViewObj::removeEnhancedMouseClickHandler( const uno::Referenc
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = aMouseClickHandlers.size();
-    aMouseClickHandlers.erase(
-        std::remove(aMouseClickHandlers.begin(), aMouseClickHandlers.end(), aListener),
-        aMouseClickHandlers.end());
+    std::erase(aMouseClickHandlers, aListener);
     if (aMouseClickHandlers.empty() && (nCount > 0)) // only if last listener removed
         EndMouseListening();
 }
@@ -1366,9 +1364,7 @@ void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference<
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = aActivationListeners.size();
-    aActivationListeners.erase(
-        std::remove(aActivationListeners.begin(), aActivationListeners.end(), aListener),
-        aActivationListeners.end());
+    std::erase(aActivationListeners, aListener);
     if (aActivationListeners.empty() && (nCount > 0)) // only if last listener removed
         EndActivationListening();
 }

@@ -302,7 +302,7 @@ void ScDPSaveDimension::AddMember(std::unique_ptr<ScDPSaveMember> pMember)
     }
     else
     {
-        maMemberList.erase(std::remove(maMemberList.begin(), maMemberList.end(), aExisting->second.get()), maMemberList.end());
+        std::erase(maMemberList, aExisting->second.get());
         aExisting->second = std::move(pMember);
     }
     maMemberList.push_back( tmp );
@@ -471,7 +471,7 @@ void ScDPSaveDimension::SetMemberPosition( const OUString& rName, sal_Int32 nNew
 {
     ScDPSaveMember* pMember = GetMemberByName( rName ); // make sure it exists and is in the hash
 
-    maMemberList.erase(std::remove( maMemberList.begin(), maMemberList.end(), pMember), maMemberList.end() );
+    std::erase(maMemberList, pMember);
 
     maMemberList.insert( maMemberList.begin() + nNewPos, pMember );
 }

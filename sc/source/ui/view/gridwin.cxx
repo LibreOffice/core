@@ -1542,7 +1542,7 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
     if (pData && !pData->IsIgnoreBlank())
     {
         auto lambda = [](const ScTypedStrData& rStr) { return rStr.GetString().isEmpty(); };
-        aStrings.erase(std::remove_if(aStrings.begin(), aStrings.end(), lambda), aStrings.end());
+        std::erase_if(aStrings, lambda);
     }
 
     if (aStrings.empty())
