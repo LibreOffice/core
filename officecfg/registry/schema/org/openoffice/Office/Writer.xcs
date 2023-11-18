@@ -3823,32 +3823,6 @@
         </prop>
       </group>
     </group>
-    <group oor:name="Compatibility">
-      <info>
-        <desc>Contains various compatibility settings.</desc>
-      </info>
-      <group oor:name="MS_Word">
-        <info>
-          <desc>Contains settings for MS Word compatibility.</desc>
-        </info>
-        <prop oor:name="AddBetween" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
-          <info>
-            <desc>Specifies whether spacing between paragraphs and tables are added to ensure the compatibility to MS Word documents.</desc>
-            <label>Add spacing between paragraphs and tables</label>
-          </info>
-          <value>false</value>
-        </prop>
-        <prop oor:name="AddToStart" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
-          <info>
-            <desc>Specifies whether paragraph and table spacing are added to the start of pages to ensure compatibility with MS Word documents.</desc>
-            <label>Add paragraph and table spacing to start of pages</label>
-          </info>
-          <value>false</value>
-        </prop>
-      </group>
-    </group>
     <group oor:name="AutoFunction">
       <info>
         <desc>Contains settings for 'Auto Text', and 'Auto Correct/AutoFormat'.</desc>
