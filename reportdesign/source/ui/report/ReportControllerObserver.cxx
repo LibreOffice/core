@@ -166,8 +166,7 @@ void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSe
     try
     {
         uno::Reference<container::XChild> xChild(_xSection);
-        m_aSections.erase(::std::remove(m_aSections.begin(), m_aSections.end(),
-            xChild), m_aSections.end());
+        std::erase(m_aSections, xChild);
         uno::Reference< uno::XInterface >  xInt(_xSection);
         RemoveElement(xInt);
     }

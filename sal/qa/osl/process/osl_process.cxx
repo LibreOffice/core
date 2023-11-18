@@ -116,13 +116,11 @@ private:
         std::sort(env_container.begin(), env_container.end());
         if (RUNNING_ON_VALGRIND)
         {
-            env_container.erase(
-                std::remove_if(
-                    env_container.begin(), env_container.end(),
+            std::erase_if(
+                    env_container,
                     [](OString const & s) {
                         return s.startsWith("LD_PRELOAD=")
-                            || s.startsWith("VALGRIND_LIB="); }),
-                env_container.end());
+                            || s.startsWith("VALGRIND_LIB="); });
         }
     }
 }
@@ -245,9 +243,7 @@ public:
 
         //remove the environment variables that we have changed
         //in the child environment from the read parent environment
-        parent_env.erase(
-            std::remove_if(parent_env.begin(), parent_env.end(), exclude(different_env_vars)),
-            parent_env.end());
+        std::erase_if(parent_env, exclude(different_env_vars));
 
         for (auto& env : parent_env)
             std::cout << "stripped parent env: " << env << "\n";

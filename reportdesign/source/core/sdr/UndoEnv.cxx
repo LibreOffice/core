@@ -498,8 +498,7 @@ void OXUndoEnvironment::RemoveSection(const Reference< report::XSection > & _xSe
     try
     {
         uno::Reference<container::XChild> xChild(_xSection);
-        m_pImpl->m_aSections.erase(::std::remove(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),
-            xChild), m_pImpl->m_aSections.end());
+        std::erase(m_pImpl->m_aSections, xChild);
         Reference< XInterface >  xInt(_xSection);
         RemoveElement(xInt);
     }
