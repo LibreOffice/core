@@ -1547,10 +1547,10 @@ namespace emfio
 
                         WriteSvtGraphicFill( aMemStm, aFill );
 
-                        mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
+                        mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN"_ostr, 0,
                                                                 static_cast<const sal_uInt8*>(aMemStm.GetData()),
                                                                 aMemStm.TellEnd() ) );
-                        mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
+                        mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END"_ostr ) );
                     }
 
                 }
@@ -2515,14 +2515,14 @@ namespace emfio
         // on windows where the function parameters are probably resolved in reverse order
         mem.Flush();
 
-        mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, static_cast<const sal_uInt8*>(mem.GetData()), mem.GetEndOfData() ) );
+        mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO"_ostr, 0, static_cast<const sal_uInt8*>(mem.GetData()), mem.GetEndOfData() ) );
         mpGDIMetaFile->UseCanvas( true );
     }
 
     void MtfTools::PassEMFPlus( void const * pBuffer, sal_uInt32 nLength )
     {
         EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %04x\n",(unsigned int) nLength));
-        mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
+        mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS"_ostr, 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
     }
 }
 
