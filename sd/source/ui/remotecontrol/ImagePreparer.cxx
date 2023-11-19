@@ -181,7 +181,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     OUStringBuffer aRet;
 
     if ( !xController->isRunning() )
-        return "";
+        return ""_ostr;
 
     uno::Reference<css::drawing::XDrawPage> aNotesPage;
     uno::Reference< drawing::XDrawPage > xSourceDoc(
@@ -192,7 +192,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     if (xPresentationPage.is())
         aNotesPage = xPresentationPage->getNotesPage();
     else
-        return "";
+        return ""_ostr;
 
     static constexpr OUString sNotesShapeName (
         u"com.sun.star.presentation.NotesShape"_ustr );

@@ -406,10 +406,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetTextSelection)
     ESelection aWordSelection(0, 0, 0, 5);
     rEditView.SetSelection(aWordSelection);
     // Did we indeed manage to copy the selected text?
-    CPPUNIT_ASSERT_EQUAL(OString("Shape"), apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
+    CPPUNIT_ASSERT_EQUAL("Shape"_ostr, apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/plain;charset=utf-8"_ostr));
 
     // Make sure returned RTF is not empty.
-    CPPUNIT_ASSERT(!apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/rtf").isEmpty());
+    CPPUNIT_ASSERT(!apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/rtf"_ostr).isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetGraphicSelection)
@@ -730,9 +730,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
 
     // Remember the original cell widths.
     xmlDocUniquePtr pXmlDoc = parseXmlDump();
-    OString aPrefix = "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl/TableLayouter/columns/";
-    sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
-    sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
+    OString aPrefix = "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl/TableLayouter/columns/"_ostr;
+    sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size"_ostr).toInt32();
+    sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size"_ostr).toInt32();
     pXmlDoc = nullptr;
 
     // Resize the left column, decrease its width by 1 cm.
@@ -742,9 +742,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
 
     // Remember the resized column widths.
     pXmlDoc = parseXmlDump();
-    sal_Int32 nResizedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
+    sal_Int32 nResizedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size"_ostr).toInt32();
     CPPUNIT_ASSERT(nResizedColumn1 < nExpectedColumn1);
-    sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
+    sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size"_ostr).toInt32();
     CPPUNIT_ASSERT(nResizedColumn2 > nExpectedColumn2);
     pXmlDoc = nullptr;
 
@@ -753,10 +753,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
 
     // Check the undo result.
     pXmlDoc = parseXmlDump();
-    sal_Int32 nActualColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
+    sal_Int32 nActualColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size"_ostr).toInt32();
     // Expected was 7049, actual was 6048, i.e. the first column width after undo was 1cm smaller than expected.
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn1, nActualColumn1);
-    sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
+    sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
     pXmlDoc = nullptr;
 }
@@ -1569,8 +1569,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
         getXPath(
             pXmlDoc,
             "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
-                "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem",
-            "value"));
+                "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem"_ostr,
+            "value"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
@@ -1638,8 +1638,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf105502)
     // Assert that the selected A1 has now a larger font than the unselected
     // A2.
     xmlDocUniquePtr pXmlDoc = parseXmlDump();
-    sal_Int32 nA1Height = getXPath(pXmlDoc, "//Cell[1]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/SfxItemSet/SvxFontHeightItem[1]", "height").toInt32();
-    sal_Int32 nA2Height = getXPath(pXmlDoc, "//Cell[3]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/attribs[1]/SvxFontHeightItem", "height").toInt32();
+    sal_Int32 nA1Height = getXPath(pXmlDoc, "//Cell[1]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/SfxItemSet/SvxFontHeightItem[1]"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nA2Height = getXPath(pXmlDoc, "//Cell[3]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/attribs[1]/SvxFontHeightItem"_ostr, "height"_ostr).toInt32();
     // This failed when FuText::ChangeFontSize() never did "continue" in the
     // text loop, instead of doing so depending on what IsInSelection() returns.
     CPPUNIT_ASSERT(nA1Height > nA2Height);
@@ -2163,7 +2163,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testIMESupport)
                                                              SfxCallMode::SYNCHRON, { &aInputString });
 
     // sequence of chinese IME compositions when 'nihao' is typed in an IME
-    const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
+    const std::vector<OString> aUtf8Inputs{ "年"_ostr, "你"_ostr, "你好"_ostr, "你哈"_ostr, "你好"_ostr, "你好"_ostr };
     std::vector<OUString> aInputs;
     std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
                    std::back_inserter(aInputs), [](OString aInput) {
@@ -2398,11 +2398,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = SfxLokHelper::getView();
     ViewCallback aView1;
-    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pXImpressDocument->getViewRenderState());
     // Create a second view
     SfxLokHelper::createView();
     ViewCallback aView2;
-    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pXImpressDocument->getViewRenderState());
     // Set to dark scheme
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -2412,10 +2412,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
         );
         dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
     }
-    CPPUNIT_ASSERT_EQUAL(OString(";Dark"), pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Dark"_ostr, pXImpressDocument->getViewRenderState());
     // Switch back to the first view, and check that the options string is the same
     SfxLokHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pXImpressDocument->getViewRenderState());
 }
 
 // Helper function to get a tile to a bitmap and check the pixel color

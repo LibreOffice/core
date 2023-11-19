@@ -42,9 +42,9 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf104722)
     // Without the fix in place, this would have failed with
     // - Expected: 2093
     // - Actual  : -10276
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", "2093");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]"_ostr, "x"_ostr, "2093");
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", "9273");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]"_ostr, "y"_ostr, "9273");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
@@ -54,11 +54,15 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
     // Without the fix, the test fails with:
     // - Expected: 21165
     // - Actual  : 4218
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "x", "21165");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "y", "3866");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]"_ostr, "x"_ostr,
+                "21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]"_ostr, "y"_ostr,
+                "3866");
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "x", "21165");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "y", "5956");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]"_ostr, "x"_ostr,
+                "21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]"_ostr, "y"_ostr,
+                "5956");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146876)
@@ -72,8 +76,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146876)
         {
             const OString xPath = "/metafile/push[1]/push[1]/push[" + OString::number(i)
                                   + "]/polyline/point[" + OString::number(j) + "]";
-            const sal_Int32 nX = getXPath(pXmlDoc, xPath, "x").toInt32();
-            const sal_Int32 nY = getXPath(pXmlDoc, xPath, "y").toInt32();
+            const sal_Int32 nX = getXPath(pXmlDoc, xPath, "x"_ostr).toInt32();
+            const sal_Int32 nY = getXPath(pXmlDoc, xPath, "y"_ostr).toInt32();
 
             // Without the fix in place, this test would have failed with
             // - Expected greater or equal than: 5000
@@ -94,8 +98,10 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf136949)
     // Without the fix in place, this test would have failed with
     // - Expected: 13687
     // - Actual  : 2832
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[1]", "x", "13687");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[2]", "x", "24759");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[1]"_ostr, "x"_ostr,
+                "13687");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[2]"_ostr, "x"_ostr,
+                "24759");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
@@ -105,8 +111,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
     // Without the fix in place, this test would have failed with
     // - Expected: 7792
     // - Actual  : 12068
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "x", "4520");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "y", "7792");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray"_ostr, "x"_ostr, "4520");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray"_ostr, "y"_ostr, "7792");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
@@ -194,10 +200,10 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
         const auto & [ sentence, index, length, x, y ] = strings[i];
         OString sXPath = "/metafile/push[1]/push[1]/textarray[" + OString::number(i + 1) + "]";
         assertXPathContent(pXmlDoc, sXPath + "/text", sText[sentence]);
-        assertXPath(pXmlDoc, sXPath, "index", OUString::number(index));
-        assertXPath(pXmlDoc, sXPath, "length", OUString::number(length));
-        assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
-        assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
+        assertXPath(pXmlDoc, sXPath, "index"_ostr, OUString::number(index));
+        assertXPath(pXmlDoc, sXPath, "length"_ostr, OUString::number(length));
+        assertXPath(pXmlDoc, sXPath, "x"_ostr, OUString::number(x));
+        assertXPath(pXmlDoc, sXPath, "y"_ostr, OUString::number(y));
     }
 }
 
@@ -231,25 +237,25 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
 
     xmlDocUniquePtr pXmlDoc = load("odg/tb-rl-textbox.odg");
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/font", SAL_N_ELEMENTS(strings));
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", SAL_N_ELEMENTS(strings));
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/font"_ostr, SAL_N_ELEMENTS(strings));
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray"_ostr, SAL_N_ELEMENTS(strings));
     for (size_t i = 0; i < SAL_N_ELEMENTS(strings); ++i)
     {
         const auto & [ sentence, index, length, x, y ] = strings[i];
         OString sXPath = "/metafile/push[1]/push[1]/font[" + OString::number(i + 1) + "]";
-        assertXPath(pXmlDoc, sXPath, "orientation", "-900");
-        assertXPath(pXmlDoc, sXPath, "vertical", "true");
+        assertXPath(pXmlDoc, sXPath, "orientation"_ostr, "-900");
+        assertXPath(pXmlDoc, sXPath, "vertical"_ostr, "true");
         sXPath = "/metafile/push[1]/push[1]/textarray[" + OString::number(i + 1) + "]";
         assertXPathContent(pXmlDoc, sXPath + "/text", sText[sentence]);
-        assertXPath(pXmlDoc, sXPath, "index", OUString::number(index));
-        assertXPath(pXmlDoc, sXPath, "length", OUString::number(length));
+        assertXPath(pXmlDoc, sXPath, "index"_ostr, OUString::number(index));
+        assertXPath(pXmlDoc, sXPath, "length"_ostr, OUString::number(length));
 
         // Without the fix in place, this would have failed with
         // - Expected: 5346
         // - Actual  : 503924
         // - In <>, attribute 'x' of '/metafile/push[1]/push[1]/textarray[1]' incorrect value.
-        assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
-        assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
+        assertXPath(pXmlDoc, sXPath, "x"_ostr, OUString::number(x));
+        assertXPath(pXmlDoc, sXPath, "y"_ostr, OUString::number(y));
     }
 }
 
@@ -257,15 +263,15 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
 {
     xmlDocUniquePtr pXmlDoc = load("pptx/tdf146731.pptx");
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[3]/polyline[1]", "width", "187");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[4]/polyline[1]", "width", "187");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]", "width", "187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[3]/polyline[1]"_ostr, "width"_ostr, "187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[4]/polyline[1]"_ostr, "width"_ostr, "187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]"_ostr, "width"_ostr, "187");
 
     // Without the fix in place, this test would have failed with
     // - Expected: 30
     // - Actual  : 187
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[6]/polyline[1]", "width", "30");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline[1]", "width", "187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[6]/polyline[1]"_ostr, "width"_ostr, "30");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline[1]"_ostr, "width"_ostr, "187");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843_InsideHBorders)
@@ -277,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843_InsideHBorders)
     //- Actual  : 36
     // We shouldn't see two vertical borders inside the table on ui.
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push", 34);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push"_ostr, 34);
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testBnc480256)
@@ -289,7 +295,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testBnc480256)
     //- Actual  : #ffffff
     // We should see the red vertical border inside the table.
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[8]/linecolor[1]", "color", "#ff0000");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[8]/linecolor[1]"_ostr, "color"_ostr,
+                "#ff0000");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
@@ -306,11 +313,13 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
 
     xmlDocUniquePtr pXmlDoc = load("odg/FitToFrameText.odg");
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", "0");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", "406");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "first", "110");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]"_ostr, "x"_ostr, "0");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]"_ostr, "y"_ostr, "406");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray"_ostr, "first"_ostr,
+                "110");
 #ifndef _WIN32 // Windows seems to differ in text layouting, so ignore for now
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "last", "6981");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray"_ostr, "last"_ostr,
+                "6981");
 #endif
 }
 
@@ -323,7 +332,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
         // - Expected: 5952
         // - Actual  : 7814
         // i.e. Line break after multiline field should have been ignored.
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", "5952");
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]"_ostr, "y"_ostr, "5952");
     }
     {
         xmlDocUniquePtr pXmlDoc = load("odp/tdf148966-withflag.odp");
@@ -332,11 +341,11 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
         // - Actual  : 7814
         // i.e. When IgnoreBreakAfterMultilineField flag is set, line break
         // after multiline field should have been ignored.
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", "5952");
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]"_ostr, "y"_ostr, "5952");
     }
     {
         xmlDocUniquePtr pXmlDoc = load("odp/tdf148966-withoutflag.odp");
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", "7814");
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]"_ostr, "y"_ostr, "7814");
     }
 }
 
@@ -350,8 +359,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTableVerticalText)
     // - In <>, attribute 'orientation' of '//font[1]' incorrect value.
     // i.e. table cell text that was supposed to be vertical (rotated 90
     // degrees) was not vertical.
-    assertXPath(pXmlDoc, "//font[1]", "orientation", "-900");
-    assertXPath(pXmlDoc, "//font[2]", "orientation", "900");
+    assertXPath(pXmlDoc, "//font[1]"_ostr, "orientation"_ostr, "-900");
+    assertXPath(pXmlDoc, "//font[2]"_ostr, "orientation"_ostr, "900");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf112594)
@@ -365,9 +374,9 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf112594)
     // - Expected: 4
     // - Actual  : 3
     // - In <>, attribute 'length' of '/metafile/push[1]/push[1]/textarray[3]' incorrect value.
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "index", "0");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "length", "4");
-    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]/text",
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]"_ostr, "index"_ostr, "0");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]"_ostr, "length"_ostr, "4");
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]/text"_ostr,
                        u"11\u202f\u1824"_ustr);
 }
 

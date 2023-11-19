@@ -88,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
 
     // Verify that this color is not lost:
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/theme/theme1.xml");
-    assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr", "val",
+    assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr"_ostr, "val"_ostr,
                 "222222"); // expected color 22-22-22
 
     // Check the theme after loading again
@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
     // - Actual  : 0
     // - In <>, XPath '//p:cMediaNode/p:cTn' number of nodes is incorrect
     // i.e. the media node was lost on export, the video no longer looped.
-    assertXPath(pXmlDoc, "//p:cMediaNode/p:cTn", "repeatCount", "indefinite");
+    assertXPath(pXmlDoc, "//p:cMediaNode/p:cTn"_ostr, "repeatCount"_ostr, "indefinite");
 }
 }
 

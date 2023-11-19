@@ -55,7 +55,7 @@ void SdModule::InitInterface_Impl()
 
 // Ctor
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule("sd", {pFact1, pFact2}),
+:   SfxModule("sd"_ostr, {pFact1, pFact2}),
     pTransferClip(nullptr),
     pTransferDrag(nullptr),
     pTransferSelection(nullptr),

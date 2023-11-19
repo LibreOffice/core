@@ -454,7 +454,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         if (comphelper::LibreOfficeKit::isActive())
             GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                       ".uno:SlideMasterPage=true");
+                                                       ".uno:SlideMasterPage=true"_ostr);
         if (!mpActualPage)
         {
             // as long as there is no mpActualPage, take first

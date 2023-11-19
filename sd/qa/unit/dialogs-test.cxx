@@ -209,28 +209,28 @@ const SfxItemSet& SdDialogsTest::getEmptyFillStyleSfxItemSet()
 void SdDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
 {
     // fill map of known dialogs
-    rKnownDialogs["modules/sdraw/ui/breakdialog.ui"] = 0;
-    rKnownDialogs["modules/sdraw/ui/copydlg.ui"] = 1;
-    rKnownDialogs["modules/simpress/ui/customslideshows.ui"] = 2;
-    rKnownDialogs["modules/sdraw/ui/drawchardialog.ui"] = 3;
-    rKnownDialogs["modules/sdraw/ui/drawpagedialog.ui"] = 4;
-    rKnownDialogs["modules/simpress/ui/dlgfield.ui"] = 5;
-    rKnownDialogs["modules/sdraw/ui/dlgsnap.ui"] = 6;
-    rKnownDialogs["modules/sdraw/ui/insertlayer.ui"] = 7;
-    rKnownDialogs["modules/sdraw/ui/insertslidesdialog.ui"] = 8;
-    rKnownDialogs["modules/sdraw/ui/crossfadedialog.ui"] = 9;
-    rKnownDialogs["modules/sdraw/ui/bulletsandnumbering.ui"] = 10;
-    rKnownDialogs["modules/sdraw/ui/drawparadialog.ui"] = 11;
-    rKnownDialogs["modules/simpress/ui/presentationdialog.ui"] = 12;
-    rKnownDialogs["modules/simpress/ui/remotedialog.ui"] = 13;
-    rKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"] = 14;
-    rKnownDialogs["modules/simpress/ui/slidedesigndialog.ui"] = 15;
-    rKnownDialogs["modules/simpress/ui/templatedialog.ui"] = 16;
-    rKnownDialogs["modules/simpress/ui/interactiondialog.ui"] = 17;
-    rKnownDialogs["modules/sdraw/ui/vectorize.ui"] = 18;
-    rKnownDialogs["modules/simpress/ui/photoalbum.ui"] = 19;
-    rKnownDialogs["modules/simpress/ui/masterlayoutdlg.ui"] = 20;
-    rKnownDialogs["modules/simpress/ui/headerfooterdialog.ui"] = 21;
+    rKnownDialogs["modules/sdraw/ui/breakdialog.ui"_ostr] = 0;
+    rKnownDialogs["modules/sdraw/ui/copydlg.ui"_ostr] = 1;
+    rKnownDialogs["modules/simpress/ui/customslideshows.ui"_ostr] = 2;
+    rKnownDialogs["modules/sdraw/ui/drawchardialog.ui"_ostr] = 3;
+    rKnownDialogs["modules/sdraw/ui/drawpagedialog.ui"_ostr] = 4;
+    rKnownDialogs["modules/simpress/ui/dlgfield.ui"_ostr] = 5;
+    rKnownDialogs["modules/sdraw/ui/dlgsnap.ui"_ostr] = 6;
+    rKnownDialogs["modules/sdraw/ui/insertlayer.ui"_ostr] = 7;
+    rKnownDialogs["modules/sdraw/ui/insertslidesdialog.ui"_ostr] = 8;
+    rKnownDialogs["modules/sdraw/ui/crossfadedialog.ui"_ostr] = 9;
+    rKnownDialogs["modules/sdraw/ui/bulletsandnumbering.ui"_ostr] = 10;
+    rKnownDialogs["modules/sdraw/ui/drawparadialog.ui"_ostr] = 11;
+    rKnownDialogs["modules/simpress/ui/presentationdialog.ui"_ostr] = 12;
+    rKnownDialogs["modules/simpress/ui/remotedialog.ui"_ostr] = 13;
+    rKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"_ostr] = 14;
+    rKnownDialogs["modules/simpress/ui/slidedesigndialog.ui"_ostr] = 15;
+    rKnownDialogs["modules/simpress/ui/templatedialog.ui"_ostr] = 16;
+    rKnownDialogs["modules/simpress/ui/interactiondialog.ui"_ostr] = 17;
+    rKnownDialogs["modules/sdraw/ui/vectorize.ui"_ostr] = 18;
+    rKnownDialogs["modules/simpress/ui/photoalbum.ui"_ostr] = 19;
+    rKnownDialogs["modules/simpress/ui/masterlayoutdlg.ui"_ostr] = 20;
+    rKnownDialogs["modules/simpress/ui/headerfooterdialog.ui"_ostr] = 21;
 }
 
 VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)

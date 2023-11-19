@@ -1883,7 +1883,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     // visual shape properties
     mpFS->startElementNS(XML_p, XML_spPr);
     WriteShapeTransformation(xShape, XML_a);
-    WritePresetShape("rect");
+    WritePresetShape("rect"_ostr);
     if (xProps.is())
     {
         WriteBlipFill(xProps, "Graphic");

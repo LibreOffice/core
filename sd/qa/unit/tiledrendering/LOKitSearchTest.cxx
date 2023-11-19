@@ -205,9 +205,9 @@ void LOKitSearchTest::testSearchAll()
     lcl_search("match", /*bFindAll=*/true);
 
     // This was empty: find-all did not highlight the first match.
-    CPPUNIT_ASSERT_EQUAL(OString("match"),
+    CPPUNIT_ASSERT_EQUAL("match"_ostr,
                          apitest::helper::transferable::getTextSelection(
-                             pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
+                             pXImpressDocument->getSelection(), "text/plain;charset=utf-8"_ostr));
 
     // We're on the first slide, search for something on the second slide and make sure we get a SET_PART.
     mpCallbackRecorder->m_nPart = 0;
@@ -253,9 +253,9 @@ void LOKitSearchTest::testSearchAllFollowedBySearch()
 
     // This used to give wrong result: 'search' after 'search all' still
     // returned 'third'
-    CPPUNIT_ASSERT_EQUAL(OString("match"),
+    CPPUNIT_ASSERT_EQUAL("match"_ostr,
                          apitest::helper::transferable::getTextSelection(
-                             pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
+                             pXImpressDocument->getSelection(), "text/plain;charset=utf-8"_ostr));
 }
 
 void LOKitSearchTest::testDontSearchInMasterPages()
@@ -336,7 +336,7 @@ void LOKitSearchTest::testSearchInPDF()
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(OString("3763, 1331, 1432, 483"),
+    CPPUNIT_ASSERT_EQUAL("3763, 1331, 1432, 483"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
                          mpCallbackRecorder->m_aSelection[0]);
@@ -348,7 +348,7 @@ void LOKitSearchTest::testSearchInPDF()
     CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(OString("3763, 1331, 1432, 483"),
+    CPPUNIT_ASSERT_EQUAL("3763, 1331, 1432, 483"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
                          mpCallbackRecorder->m_aSelection[0]);
@@ -433,7 +433,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("9463, 3382, 1099, 499"),
+    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him"
@@ -446,7 +446,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("5592, 5038, 1100, 499"),
+    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him"
@@ -459,7 +459,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("9463, 1308, 1099, 499"),
+    CPPUNIT_ASSERT_EQUAL("9463, 1308, 1099, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him"
@@ -472,7 +472,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("5592, 2964, 1100, 499"),
+    CPPUNIT_ASSERT_EQUAL("5592, 2964, 1100, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him" - back to start
@@ -485,7 +485,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("9463, 3382, 1099, 499"),
+    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 }
 
@@ -536,7 +536,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("5592, 5038, 1100, 499"),
+    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him"
@@ -549,7 +549,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("9463, 3382, 1099, 499"),
+    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him"
@@ -562,7 +562,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("5592, 2964, 1100, 499"),
+    CPPUNIT_ASSERT_EQUAL("5592, 2964, 1100, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him"
@@ -575,7 +575,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("9463, 1308, 1099, 499"),
+    CPPUNIT_ASSERT_EQUAL("9463, 1308, 1099, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him" - back to start
@@ -588,7 +588,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("5592, 5038, 1100, 499"),
+    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 }
 
@@ -653,7 +653,7 @@ void LOKitSearchTest::testSearchIn2MixedObjects()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(OString("3546, 3174, 738, 402"),
+    CPPUNIT_ASSERT_EQUAL("3546, 3174, 738, 402"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search next
@@ -666,7 +666,7 @@ void LOKitSearchTest::testSearchIn2MixedObjects()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(OString("8412, 6385, 519, 174"),
+    CPPUNIT_ASSERT_EQUAL("8412, 6385, 519, 174"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search next again - we should get the first object again
@@ -679,7 +679,7 @@ void LOKitSearchTest::testSearchIn2MixedObjects()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(OString("3546, 3174, 738, 402"),
+    CPPUNIT_ASSERT_EQUAL("3546, 3174, 738, 402"_ostr,
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 }
 

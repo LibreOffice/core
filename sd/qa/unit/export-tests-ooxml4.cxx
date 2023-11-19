@@ -43,49 +43,57 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSmartArtPreserve)
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr");
+    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr"_ostr);
     assertXPath(pXmlDoc,
-                "//p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/dgm:relIds");
-    assertXPath(pXmlDoc,
-                "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:extLst/p:ext",
-                "uri", "{D42A27DB-BD31-4B8C-83A1-F6EECF244321}");
+                "//p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/dgm:relIds"_ostr);
+    assertXPath(
+        pXmlDoc,
+        "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:extLst/p:ext"_ostr,
+        "uri"_ostr, "{D42A27DB-BD31-4B8C-83A1-F6EECF244321}");
     assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/"
-                         "p:extLst/p:ext/p14:modId");
+                         "p:extLst/p:ext/p14:modId"_ostr);
 
     xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/_rels/slide1.xml.rels");
     assertXPath(
         pXmlDocRels,
-        "(/rels:Relationships/rels:Relationship[@Target='../diagrams/layout1.xml'])[1]", "Type",
+        "(/rels:Relationships/rels:Relationship[@Target='../diagrams/layout1.xml'])[1]"_ostr,
+        "Type"_ostr,
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramLayout");
-    assertXPath(
-        pXmlDocRels, "(/rels:Relationships/rels:Relationship[@Target='../diagrams/data1.xml'])[1]",
-        "Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData");
+    assertXPath(pXmlDocRels,
+                "(/rels:Relationships/rels:Relationship[@Target='../diagrams/data1.xml'])[1]"_ostr,
+                "Type"_ostr,
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData");
     assertXPath(
         pXmlDocRels,
-        "(/rels:Relationships/rels:Relationship[@Target='../diagrams/colors1.xml'])[1]", "Type",
+        "(/rels:Relationships/rels:Relationship[@Target='../diagrams/colors1.xml'])[1]"_ostr,
+        "Type"_ostr,
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramColors");
     assertXPath(
         pXmlDocRels,
-        "(/rels:Relationships/rels:Relationship[@Target='../diagrams/quickStyle1.xml'])[1]", "Type",
+        "(/rels:Relationships/rels:Relationship[@Target='../diagrams/quickStyle1.xml'])[1]"_ostr,
+        "Type"_ostr,
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramQuickStyle");
 
     xmlDocUniquePtr pXmlContentType = parseExport("[Content_Types].xml");
-    assertXPath(pXmlContentType,
-                "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/layout1.xml']",
-                "ContentType",
-                "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml");
-    assertXPath(pXmlContentType,
-                "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/data1.xml']",
-                "ContentType",
-                "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml");
-    assertXPath(pXmlContentType,
-                "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/colors1.xml']",
-                "ContentType",
-                "application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml");
     assertXPath(
         pXmlContentType,
-        "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/quickStyle1.xml']",
-        "ContentType", "application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml");
+        "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/layout1.xml']"_ostr,
+        "ContentType"_ostr,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml");
+    assertXPath(pXmlContentType,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/data1.xml']"_ostr,
+                "ContentType"_ostr,
+                "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml");
+    assertXPath(
+        pXmlContentType,
+        "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/colors1.xml']"_ostr,
+        "ContentType"_ostr,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml");
+    assertXPath(
+        pXmlContentType,
+        "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/quickStyle1.xml']"_ostr,
+        "ContentType"_ostr,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346)
@@ -365,7 +373,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf128213)
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
-    assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm", "rot");
+    assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm"_ostr,
+                           "rot"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf79082)
@@ -375,36 +384,39 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf79082)
 
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]", "pos",
-                "360000");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]"_ostr,
+                "pos"_ostr, "360000");
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]", "algn", "l");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]"_ostr,
+                "algn"_ostr, "l");
 
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]", "pos",
-                "756000");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]"_ostr,
+                "pos"_ostr, "756000");
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]", "algn", "l");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]"_ostr,
+                "algn"_ostr, "l");
 
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]", "pos",
-                "1440000");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]"_ostr,
+                "pos"_ostr, "1440000");
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]", "algn",
-                "ctr");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]"_ostr,
+                "algn"_ostr, "ctr");
 
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]", "pos",
-                "1800000");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]"_ostr,
+                "pos"_ostr, "1800000");
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]", "algn", "r");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]"_ostr,
+                "algn"_ostr, "r");
 
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]", "pos",
-                "3240000");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]"_ostr,
+                "pos"_ostr, "3240000");
     assertXPath(pXmlDocContent,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]", "algn",
-                "dec");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]"_ostr,
+                "algn"_ostr, "dec");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf129372)
@@ -517,14 +529,15 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf132201EffectOrder)
     createSdImpressDoc("pptx/effectOrder.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
-    assertXPathChildren(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst", 2);
+    assertXPathChildren(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst"_ostr,
+                        2);
     // The relative order of effects is important: glow must be before shadow
-    CPPUNIT_ASSERT_EQUAL(0, getXPathPosition(pXmlDocContent,
-                                             "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst",
-                                             "glow"));
-    CPPUNIT_ASSERT_EQUAL(1, getXPathPosition(pXmlDocContent,
-                                             "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst",
-                                             "outerShdw"));
+    CPPUNIT_ASSERT_EQUAL(
+        0, getXPathPosition(pXmlDocContent,
+                            "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst"_ostr, "glow"));
+    CPPUNIT_ASSERT_EQUAL(
+        1, getXPathPosition(pXmlDocContent,
+                            "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst"_ostr, "outerShdw"));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeSoftEdgeEffect)
@@ -556,19 +569,19 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf119223)
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeCustomShape']");
+    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeCustomShape']"_ostr);
 
-    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomePicture']");
+    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomePicture']"_ostr);
 
-    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeFormula']");
+    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeFormula']"_ostr);
 
-    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeLine']");
+    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeLine']"_ostr);
 
-    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeTextbox']");
+    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeTextbox']"_ostr);
 
-    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeTable']");
+    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeTable']"_ostr);
 
-    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeGroup']");
+    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeGroup']"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf128213ShapeRot)
@@ -578,10 +591,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf128213ShapeRot)
 
     xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");
 
-    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d");
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d"_ostr);
     assertXPath(pXmlDocRels,
-                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", "rev",
-                "5400000");
+                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot"_ostr,
+                "rev"_ostr, "5400000");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125560_textDeflate)
@@ -594,8 +607,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125560_textDeflate)
     xmlDocUniquePtr pXmlDocRels = parseExport("content.xml");
     assertXPath(pXmlDocRels,
                 "/office:document-content/office:body/office:presentation/draw:page/"
-                "draw:custom-shape/draw:enhanced-geometry",
-                "type", "mso-spt161");
+                "draw:custom-shape/draw:enhanced-geometry"_ostr,
+                "type"_ostr, "mso-spt161");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125560_textInflateTop)
@@ -608,8 +621,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125560_textInflateTop)
     xmlDocUniquePtr pXmlDocRels = parseExport("content.xml");
     assertXPath(pXmlDocRels,
                 "/office:document-content/office:body/office:presentation/draw:page/"
-                "draw:custom-shape/draw:enhanced-geometry",
-                "type", "mso-spt164");
+                "draw:custom-shape/draw:enhanced-geometry"_ostr,
+                "type"_ostr, "mso-spt164");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf142235_TestPlaceholderTextAlignment)
@@ -623,8 +636,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf142235_TestPlaceholderTextAlignm
 
     // Without the fix in place many of these asserts failed, because alignment was bad.
 
-    assertXPath(pXml1, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr", "anchor", "t");
-    assertXPath(pXml2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr", "anchor", "t");
+    assertXPath(pXml1, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "t");
+    assertXPath(pXml2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "t");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf96061_textHighlight)
@@ -700,12 +713,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf143315)
     // - Actual  : 216000
     // - In <file:///tmp/lu161922zcvd.tmp>, XPath '/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr' unexpected 'marL' attribute
 
-    assertXPathNoAttribute(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr", "marL");
-    assertXPathNoAttribute(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr", "indent");
-    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buClr", 0);
-    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buSzPct", 0);
-    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buFont", 0);
-    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buChar", 0);
+    assertXPathNoAttribute(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr"_ostr,
+                           "marL"_ostr);
+    assertXPathNoAttribute(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr"_ostr,
+                           "indent"_ostr);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buClr"_ostr, 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buSzPct"_ostr, 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buFont"_ostr, 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buChar"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf147121)
@@ -727,7 +742,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf147121)
     // Parse the export
     xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
     const auto nFontSizeAfter
-        = getXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:br[1]/a:rPr", "sz").toFloat();
+        = getXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:br[1]/a:rPr"_ostr, "sz"_ostr)
+              .toFloat();
 
     // The font size was not saved before now it must be equal with the saved one.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font size", nFontSizeBefore, nFontSizeAfter);
@@ -876,7 +892,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf149551_tbrl90)
     // Test, that it is exported to vert="vert"
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//a:bodyPr", "vert", "vert");
+    assertXPath(pXmlDoc, "//a:bodyPr"_ostr, "vert"_ostr, "vert");
 
     // Test, that the shape has writing mode TB_RL90 after read from pptx
     uno::Reference<beans::XPropertySet> xShapeProps2(getShapeFromPage(0, 0));
@@ -889,7 +905,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf149551_tbrl90)
     pXmlDoc = parseExport("content.xml");
     assertXPath(
         pXmlDoc,
-        "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='tb-rl90']");
+        "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='tb-rl90']"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf149551_btlr)
@@ -908,7 +924,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf149551_btlr)
     // Test, that it is exported to vert="vert270"
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//a:bodyPr", "vert", "vert270");
+    assertXPath(pXmlDoc, "//a:bodyPr"_ostr, "vert"_ostr, "vert270");
 
     // Test, that the shape has writing mode BT_LR after read from pptx
     uno::Reference<beans::XPropertySet> xShapeProps2(getShapeFromPage(0, 0));
@@ -921,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf149551_btlr)
     pXmlDoc = parseExport("content.xml");
     assertXPath(
         pXmlDoc,
-        "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='bt-lr']");
+        "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='bt-lr']"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf94122_autoColor)
@@ -945,21 +961,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf94122_autoColor)
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1,
-                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr", "val",
-                "000000");
+                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr,
+                "val"_ostr, "000000");
 
     xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide2.xml");
     assertXPath(pXmlDocContent2,
-                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr", "val",
-                "ffffff");
+                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr,
+                "val"_ostr, "ffffff");
 
     xmlDocUniquePtr pXmlDocContent3 = parseExport("ppt/slides/slide3.xml");
     assertXPath(pXmlDocContent3,
-                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
-                "val", "ffffff");
+                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr,
+                "val"_ostr, "ffffff");
     assertXPath(pXmlDocContent3,
-                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
-                "val", "000000");
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr,
+                "val"_ostr, "000000");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf124333)
@@ -989,8 +1005,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAutofittedTextboxIndent)
     // (the behaviour changed).
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr", "marL",
-                "1080000");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr"_ostr,
+                "marL"_ostr, "1080000");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf151622_oleIcon)
@@ -1005,7 +1021,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf151622_oleIcon)
     // - Expression: prop
     // - In ..., XPath '//p:oleObj' no attribute 'showAsIcon' exist
     // i.e. show as icon option wasn't exported.
-    assertXPath(pXml, "//p:oleObj", "showAsIcon", "1");
+    assertXPath(pXml, "//p:oleObj"_ostr, "showAsIcon"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf152436)
@@ -1030,7 +1046,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testLinkedOLE)
     // - Actual  : 0
     // - In<>, XPath '//p:oleObj' number of nodes is incorrect
     // i.e. the linked ole object wasn't exported.
-    assertXPath(pXml, "//p:oleObj", 1);
+    assertXPath(pXml, "//p:oleObj"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf102261_testParaTabStopDefaultDistance)
@@ -1062,9 +1078,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTableCellVerticalPropertyRoundtrip)
 
     xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
 
-    assertXPath(pXml, "(//a:tcPr)[1]", "vert", "vert");
-    assertXPath(pXml, "(//a:tcPr)[2]", "vert", "vert270");
-    assertXPath(pXml, "(//a:tcPr)[3]", "vert", "wordArtVert");
+    assertXPath(pXml, "(//a:tcPr)[1]"_ostr, "vert"_ostr, "vert");
+    assertXPath(pXml, "(//a:tcPr)[2]"_ostr, "vert"_ostr, "vert270");
+    assertXPath(pXml, "(//a:tcPr)[3]"_ostr, "vert"_ostr, "wordArtVert");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
