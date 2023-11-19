@@ -227,7 +227,6 @@ PieChart::~PieChart()
 void PieChart::setScales( std::vector< ExplicitScaleData >&& rScales, bool /* bSwapXAndYAxis */ )
 {
     OSL_ENSURE(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
-    m_aCartesianScales = m_pPosHelper->getScales();
     m_aPosHelper.setScales( std::move(rScales), true );
 }
 
@@ -1104,17 +1103,23 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
                         xPointProperties, aParam, nRingPtCnt,
                         bConcentricExplosion);
 
+            // Handle coloring of the composite wedge
+            sal_Int32 nEnd = pDataSrc->getNPoints(pSeries, eType);
+            const sal_Int32 nPropIdx = (
+                    eType == SubPieType::LEFT && nPointIndex == nEnd - 1 ?
+                    pSeries->getTotalPointCount() :
+                    nPointIndex);
             ///point color:
             if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
             {
                 xPointShape->setPropertyValue("FillColor",
-                    uno::Any(m_xColorScheme->getColorByIndex( nPointIndex )));
+                    uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
             }
 
 
             if(bHasFillColorMapping)
             {
-                double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
+                double nPropVal = pSeries->getValueByProperty(nPropIdx, "FillColor");
                 if(!std::isnan(nPropVal))
                 {
                     xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
@@ -2106,16 +2111,16 @@ uno::Reference< beans::XPropertySet > OfPieDataSrc::getProps(
             const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const
 {
-    const sal_Int32 n = pSeries->getTotalPointCount() - 3;
+    const sal_Int32 nPts = pSeries->getTotalPointCount();
+    const sal_Int32 n = nPts - 3;
     if (eType == SubPieType::LEFT) {
         // nPtIdx should be in [0, n]
         if (nPtIdx < n) {
             return pSeries->getPropertiesOfPoint( nPtIdx );
         } else {
-            assert(nPtIdx == n);
             // The aggregated wedge
-            // Not sure what to do here, but this isn't right. TODO
-            return pSeries->getPropertiesOfPoint(n);
+            assert(nPtIdx == n);
+            return pSeries->getPropertiesOfPoint(nPts);
         }
     } else {
         assert(eType == SubPieType::RIGHT);
