@@ -30,12 +30,12 @@ CppUnit::assertion_traits<std::u16string_view>::toString(std::u16string_view con
 namespace
 {
 OString ostringEmpty() { return {}; } // avoid loplugin:stringview
-OString ostringDoof() { return "doof"; } // avoid loplugin:stringview
-OString ostringFoo() { return "foo"; } // avoid loplugin:stringview
-OString ostringFoobars() { return "foobars"; } // avoid loplugin:stringview
-OString ostringFood() { return "food"; } // avoid loplugin:stringview
-OString ostringOof() { return "oof"; } // avoid loplugin:stringview
-OString ostringSraboof() { return "sraboof"; } // avoid loplugin:stringview
+OString ostringDoof() { return "doof"_ostr; } // avoid loplugin:stringview
+OString ostringFoo() { return "foo"_ostr; } // avoid loplugin:stringview
+OString ostringFoobars() { return "foobars"_ostr; } // avoid loplugin:stringview
+OString ostringFood() { return "food"_ostr; } // avoid loplugin:stringview
+OString ostringOof() { return "oof"_ostr; } // avoid loplugin:stringview
+OString ostringSraboof() { return "sraboof"_ostr; } // avoid loplugin:stringview
 OUString oustringEmpty() { return {}; } // avoid loplugin:stringview
 OUString oustringDoof() { return "doof"; } // avoid loplugin:stringview
 OUString oustringFoo() { return "foo"; } // avoid loplugin:stringview
