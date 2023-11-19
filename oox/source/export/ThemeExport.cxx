@@ -573,15 +573,15 @@ OString convertFlipMode(model::FlipMode eFlipMode)
     switch (eFlipMode)
     {
         case model::FlipMode::X:
-            return "x";
+            return "x"_ostr;
         case model::FlipMode::Y:
-            return "y";
+            return "y"_ostr;
         case model::FlipMode::XY:
-            return "xy";
+            return "xy"_ostr;
         case model::FlipMode::None:
-            return "none";
+            return "none"_ostr;
     }
-    return "none";
+    return "none"_ostr;
 }
 
 OString convertRectangleAlignment(model::RectangleAlignment eFlipMode)
@@ -589,23 +589,23 @@ OString convertRectangleAlignment(model::RectangleAlignment eFlipMode)
     switch (eFlipMode)
     {
         case model::RectangleAlignment::TopLeft:
-            return "tl";
+            return "tl"_ostr;
         case model::RectangleAlignment::Top:
-            return "t";
+            return "t"_ostr;
         case model::RectangleAlignment::TopRight:
-            return "tr";
+            return "tr"_ostr;
         case model::RectangleAlignment::Left:
-            return "l";
+            return "l"_ostr;
         case model::RectangleAlignment::Center:
-            return "ctr";
+            return "ctr"_ostr;
         case model::RectangleAlignment::Right:
-            return "r";
+            return "r"_ostr;
         case model::RectangleAlignment::BottomLeft:
-            return "bl";
+            return "bl"_ostr;
         case model::RectangleAlignment::Bottom:
-            return "b";
+            return "b"_ostr;
         case model::RectangleAlignment::BottomRight:
-            return "br";
+            return "br"_ostr;
         case model::RectangleAlignment::Unset:
             break;
     }

@@ -37,14 +37,14 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
     // to group instead of being relative to anchor. That was missing for polyline and
     // connector.
     // Polyline: Without fix it would have failed with expected: 0, actual: 1800360
-    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[1]/wps:spPr/a:xfrm/a:off", "x", "0");
+    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[1]/wps:spPr/a:xfrm/a:off"_ostr, "x"_ostr, "0");
     // ... failed with expected: 509400, actual: 1229400
-    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[1]/wps:spPr/a:xfrm/a:off", "y", "509400");
+    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[1]/wps:spPr/a:xfrm/a:off"_ostr, "y"_ostr, "509400");
 
     // Connector: Without fix it would have failed with expected: 763200, actual: 2563560
-    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[3]/wps:spPr/a:xfrm/a:off", "x", "763200");
+    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[3]/wps:spPr/a:xfrm/a:off"_ostr, "x"_ostr, "763200");
     // ... failed with expected: 0, actual: 720000
-    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[3]/wps:spPr/a:xfrm/a:off", "y", "0");
+    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[3]/wps:spPr/a:xfrm/a:off"_ostr, "y"_ostr, "0");
     // Polyline and connector were shifted 1800360EMU right, 720000EMU down.
 }
 
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
     // DrawingML::WriteShapeTransformation(), but was missing.
     // Without fix it would have failed with expected: 469440, actual: 92160
     // The shape was about 1cm shifted up and partly outside its group.
-    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[1]/wps:spPr/a:xfrm/a:off", "y", "469440");
+    assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[1]/wps:spPr/a:xfrm/a:off"_ostr, "y"_ostr, "469440");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
@@ -84,11 +84,11 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     // Then make sure that the group shape, the group shape's child size and the child shape's size
     // match:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:ext", "cx", "5328360");
+    assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:ext"_ostr, "cx"_ostr, "5328360");
     // Without the accompanying fix in place, this test would have failed, the <a:chExt> element was
     // not written.
-    assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:chExt", "cx", "5328360");
-    assertXPath(pXmlDoc, "//wps:spPr/a:xfrm/a:ext", "cx", "5328360");
+    assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:chExt"_ostr, "cx"_ostr, "5328360");
+    assertXPath(pXmlDoc, "//wps:spPr/a:xfrm/a:ext"_ostr, "cx"_ostr, "5328360");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
@@ -110,174 +110,174 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
     // Right arrow
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "rightArrow");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "rightArrow");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 50000");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 50000");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 46321");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 46321");
 
     // Left arrow
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "leftArrow");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "leftArrow");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 50000");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 50000");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 52939");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 52939");
 
     // Down arrow
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "downArrow");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "downArrow");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 50000");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 50000");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 59399");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 59399");
 
     // Up arrow
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "upArrow");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "upArrow");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 50000");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 50000");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 63885");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 63885");
 
     // Left-right arrow
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "leftRightArrow");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "leftRightArrow");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 50000");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 50000");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 53522");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 53522");
 
     // Up-down arrow
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "upDownArrow");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "upDownArrow");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 50000");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 50000");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 62743");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 62743");
 
     // Right arrow callout
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "rightArrowCallout");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "rightArrowCallout");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 25002");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 25002");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 25000");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 25000");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
-                "fmla", "val 25052");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]"_ostr,
+                "fmla"_ostr, "val 25052");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
-                "fmla", "val 66667");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]"_ostr,
+                "fmla"_ostr, "val 66667");
 
     // Left arrow callout
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "leftArrowCallout");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "leftArrowCallout");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 25002");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 25002");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 25000");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 25000");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
-                "fmla", "val 25057");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]"_ostr,
+                "fmla"_ostr, "val 25057");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
-                "fmla", "val 66673");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]"_ostr,
+                "fmla"_ostr, "val 66673");
 
     // Down arrow callout
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "downArrowCallout");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "downArrowCallout");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 29415");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 29415");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 29413");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 29413");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
-                "fmla", "val 16667");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]"_ostr,
+                "fmla"_ostr, "val 16667");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
-                "fmla", "val 66667");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]"_ostr,
+                "fmla"_ostr, "val 66667");
 
     // Up arrow callout
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "upArrowCallout");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+                "prst"_ostr, "upArrowCallout");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
-                "fmla", "val 31033");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]"_ostr,
+                "fmla"_ostr, "val 31033");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
-                "fmla", "val 31030");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]"_ostr,
+                "fmla"_ostr, "val 31030");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
-                "fmla", "val 16667");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]"_ostr,
+                "fmla"_ostr, "val 16667");
     assertXPath(pXmlDoc,
                 "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
-                "fmla", "val 66660");
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]"_ostr,
+                "fmla"_ostr, "val 66660");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
@@ -291,18 +291,18 @@ CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // Then make sure the revolution is exported without a problem:
     // First shape textbox:
-    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:scene3d/a:camera/a:rot"_ostr, "rev"_ostr, "5400000");
 
     // Second shape rectangle:
-    assertXPath(pXmlDoc, "//p:sp[2]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "18300000");
+    assertXPath(pXmlDoc, "//p:sp[2]/p:spPr/a:scene3d/a:camera/a:rot"_ostr, "rev"_ostr, "18300000");
 
     // Make sure Shape3DProperties don't leak under txBody
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
     // - Actual  : 1
     // - In <>, XPath '//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot' number of nodes is incorrect
-    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
-    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot"_ostr, 0);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
@@ -320,10 +320,12 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
     // - Actual  : 0
     // - XPath '//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr' number of nodes is incorrect
     // i.e. the <a:schemeClr> element was not written.
-    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
-                "accent1");
-    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod", 0);
-    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff", 0);
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr"_ostr,
+                "val"_ostr, "accent1");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod"_ostr,
+                0);
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff"_ostr,
+                0);
 
     // Second shape: lighter color:
     // Without the accompanying fix in place, this test would have failed with:
@@ -331,19 +333,20 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
     // - Actual  : 0
     // - XPath '//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr' number of nodes is incorrect
     // i.e. the effects case did not write scheme colors.
-    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
-                "accent1");
-    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod", "val",
-                "40000");
-    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff", "val",
-                "60000");
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr"_ostr,
+                "val"_ostr, "accent1");
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod"_ostr,
+                "val"_ostr, "40000");
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff"_ostr,
+                "val"_ostr, "60000");
 
     // Third shape, darker color:
-    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
-                "accent1");
-    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod", "val",
-                "75000");
-    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff", 0);
+    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr"_ostr,
+                "val"_ostr, "accent1");
+    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod"_ostr,
+                "val"_ostr, "75000");
+    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff"_ostr,
+                0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testThemeColor_ShapeFill)
@@ -358,8 +361,9 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColor_ShapeFill)
     // Note that this was already working from PPTX files via grab-bags,
     //so this test intentionally uses an ODP file as input.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr", "val", "accent6");
-    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr/a:lumMod", "val", "75000");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr"_ostr, "val"_ostr, "accent6");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr/a:lumMod"_ostr, "val"_ostr,
+                "75000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSize)
@@ -376,9 +380,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSi
     // - Expected: 500
     // - Actual  : 1800
     // i.e. the endParaRPr 'size' wasn't exported correctly
-    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[1]/a:endParaRPr", "sz", "500");
-    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[2]/a:endParaRPr", "sz", "500");
-    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[3]/a:endParaRPr", "sz", "500");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[1]/a:endParaRPr"_ostr, "sz"_ostr, "500");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[2]/a:endParaRPr"_ostr, "sz"_ostr, "500");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[3]/a:endParaRPr"_ostr, "sz"_ostr, "500");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
@@ -392,10 +396,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // Then make sure the pathLst has two child elements,
     // Without the accompanying fix in place, only one element a:path was exported.
-    assertXPathChildren(pXmlDoc, "//a:pathLst", 2);
+    assertXPathChildren(pXmlDoc, "//a:pathLst"_ostr, 2);
     // and make sure first path with no stroke, second with no fill
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "stroke", "0");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "fill", "none");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "stroke"_ostr, "0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]"_ostr, "fill"_ostr, "none");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandA)
@@ -410,13 +414,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandA)
     // Then make sure the path has a child element arcTo. Prior to the fix that part of the curve was
     // not exported at all. In odp it is a command A. Such does not exist in OOXML and is therefore
     // exported as a:lnTo followed by a:arcTo
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo", 2);
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo"_ostr, 2);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, 1);
     // And assert its attribute values
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "wR", "7200");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "hR", "5400");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "stAng", "7719588");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "swAng", "-5799266");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, "wR"_ostr, "7200");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, "hR"_ostr, "5400");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, "stAng"_ostr, "7719588");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, "swAng"_ostr, "-5799266");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandT)
@@ -430,22 +434,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandT)
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 216 216"
-    assertXPath(pXmlDoc, "//a:pathLst/a:path", "w", "216");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path", "h", "216");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path"_ostr, "w"_ostr, "216");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path"_ostr, "h"_ostr, "216");
     // Command T is exported as lnTo followed by arcTo.
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo", 1);
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo", 1);
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", 1);
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:close", 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo"_ostr, 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo"_ostr, 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:close"_ostr, 1);
     // And assert its values
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "x", "108");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "y", "162");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo/a:pt", "x", "138");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo/a:pt", "y", "110");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "wR", "108");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "hR", "54");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "stAng", "18000000");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "swAng", "18000000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt"_ostr, "x"_ostr, "108");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt"_ostr, "y"_ostr, "162");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo/a:pt"_ostr, "x"_ostr, "138");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo/a:pt"_ostr, "y"_ostr, "110");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, "wR"_ostr, "108");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, "hR"_ostr, "54");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, "stAng"_ostr, "18000000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo"_ostr, "swAng"_ostr, "18000000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandXY)
@@ -459,27 +463,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandXY)
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 10 10"
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "10");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "w"_ostr, "10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "h"_ostr, "10");
     // Shape has M 0 5 Y 5 0 10 5 5 10 F Y 0 5 N M 10 10 X 0 0
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:moveTo/a:pt", "x", "0");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:moveTo/a:pt", "y", "5");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[1]", "wR", "5");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[1]", "hR", "5");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[1]", "stAng", "10800000");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[1]", "swAng", "5400000");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[2]", "stAng", "16200000");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[2]", "swAng", "5400000");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[3]", "stAng", "0");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[3]", "swAng", "5400000");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[4]", "stAng", "0");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[4]", "swAng", "-5400000");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:moveTo/a:pt", "x", "10");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:moveTo/a:pt", "y", "10");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "wR", "10");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "hR", "10");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "stAng", "5400000");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "swAng", "5400000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:moveTo/a:pt"_ostr, "x"_ostr, "0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:moveTo/a:pt"_ostr, "y"_ostr, "5");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[1]"_ostr, "wR"_ostr, "5");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[1]"_ostr, "hR"_ostr, "5");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[1]"_ostr, "stAng"_ostr, "10800000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[1]"_ostr, "swAng"_ostr, "5400000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[2]"_ostr, "stAng"_ostr, "16200000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[2]"_ostr, "swAng"_ostr, "5400000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[3]"_ostr, "stAng"_ostr, "0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[3]"_ostr, "swAng"_ostr, "5400000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[4]"_ostr, "stAng"_ostr, "0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]/a:arcTo[4]"_ostr, "swAng"_ostr, "-5400000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:moveTo/a:pt"_ostr, "x"_ostr, "10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:moveTo/a:pt"_ostr, "y"_ostr, "10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo"_ostr, "wR"_ostr, "10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo"_ostr, "hR"_ostr, "10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo"_ostr, "stAng"_ostr, "5400000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo"_ostr, "swAng"_ostr, "5400000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandHIJK)
@@ -493,15 +497,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandHIJK)
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 80 80"
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "80");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "80");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "w"_ostr, "80");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "h"_ostr, "80");
     // File uses from back to front J (lighten), I (lightenLess), normal fill, K (darkenLess),
     // H (darken). New feature, old versions did not export these at all.
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "fill", "lighten");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "fill", "lightenLess");
-    assertXPathNoAttribute(pXmlDoc, "//a:pathLst/a:path[3]", "fill");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]", "fill", "darkenLess");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[5]", "fill", "darken");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "fill"_ostr, "lighten");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]"_ostr, "fill"_ostr, "lightenLess");
+    assertXPathNoAttribute(pXmlDoc, "//a:pathLst/a:path[3]"_ostr, "fill"_ostr);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]"_ostr, "fill"_ostr, "darkenLess");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[5]"_ostr, "fill"_ostr, "darken");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
@@ -515,14 +519,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // File should have four subpaths with increasing path size
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "10");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "10");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "w", "20");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "h", "20");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]", "w", "40");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]", "h", "40");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]", "w", "80");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]", "h", "80");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "w"_ostr, "10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "h"_ostr, "10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]"_ostr, "w"_ostr, "20");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]"_ostr, "h"_ostr, "20");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]"_ostr, "w"_ostr, "40");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]"_ostr, "h"_ostr, "40");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]"_ostr, "w"_ostr, "80");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]"_ostr, "h"_ostr, "80");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf100391TextAreaRect)
@@ -534,13 +538,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100391TextAreaRect)
 
     // Verify the markup. Without fix the values were l="l", t="t", r="r", b="b"
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//a:custGeom/a:rect", "l", "textAreaLeft");
-    assertXPath(pXmlDoc, "//a:custGeom/a:rect", "t", "textAreaTop");
-    assertXPath(pXmlDoc, "//a:custGeom/a:rect", "r", "textAreaRight");
-    assertXPath(pXmlDoc, "//a:custGeom/a:rect", "b", "textAreaBottom");
+    assertXPath(pXmlDoc, "//a:custGeom/a:rect"_ostr, "l"_ostr, "textAreaLeft");
+    assertXPath(pXmlDoc, "//a:custGeom/a:rect"_ostr, "t"_ostr, "textAreaTop");
+    assertXPath(pXmlDoc, "//a:custGeom/a:rect"_ostr, "r"_ostr, "textAreaRight");
+    assertXPath(pXmlDoc, "//a:custGeom/a:rect"_ostr, "b"_ostr, "textAreaBottom");
     // The values are calculated in guides, for example
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[1]", "name", "textAreaLeft");
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[1]", "fmla", "*/ 1440000 w 2880000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[1]"_ostr, "name"_ostr, "textAreaLeft");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[1]"_ostr, "fmla"_ostr, "*/ 1440000 w 2880000");
     // The test reflects the state of Apr 2022. It needs to be adapted when export of handles and
     // guides is implemented.
 }
@@ -560,12 +564,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // File should have six subpaths, one with stroke and five with fill
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "stroke", "0");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "fill", "darkenLess");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]", "fill", "darken");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]", "fill", "darken");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[5]", "fill", "lightenLess");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[6]", "fill", "lighten");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]"_ostr, "stroke"_ostr, "0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]"_ostr, "fill"_ostr, "darkenLess");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]"_ostr, "fill"_ostr, "darken");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]"_ostr, "fill"_ostr, "darken");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[5]"_ostr, "fill"_ostr, "lightenLess");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[6]"_ostr, "fill"_ostr, "lighten");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
@@ -581,10 +585,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
     // Verify the markup:
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // First child of a:path should be a moveTo in all four shapes.
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[3]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo"_ostr);
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo"_ostr);
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[3]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo"_ostr);
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchXY)
@@ -601,21 +605,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchXY)
 
     // x-position of last segment should be same as path width. It was 21600 without fix.
     sal_Int32 nWidth
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w"_ostr)
               .toInt32();
     sal_Int32 nPosX
         = getXPathContent(
-              pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt/@x")
+              pXmlDoc,
+              "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt/@x"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nWidth, nPosX);
 
     // y-position of last segment should be same as path height. It was 21600 without fix.
     sal_Int32 nHeight
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h"_ostr)
               .toInt32();
     sal_Int32 nPosY
         = getXPathContent(
-              pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt/@y")
+              pXmlDoc,
+              "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt/@y"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHeight, nPosY);
 
@@ -637,23 +643,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandQ)
 
     // x-position of second quadBezTo control should be same as path width. It was 21600 without fix.
     sal_Int32 nWidth
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w"_ostr)
               .toInt32();
     sal_Int32 nPosX
         = getXPathContent(
               pXmlDoc,
-              "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[2]/a:pt/@x")
+              "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[2]/a:pt/@x"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nWidth, nPosX);
 
     // y-position of third quadBezTo control should be same as path height. It was 21600 without fix.
     sal_Int32 nHeight
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h"_ostr)
               .toInt32();
     sal_Int32 nPosY
         = getXPathContent(
               pXmlDoc,
-              "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[3]/a:pt/@y")
+              "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[3]/a:pt/@y"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHeight, nPosY);
 
@@ -676,23 +682,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandVW)
 
     // wR of first ArcTo in first shape should be same as path width/2. It was 10800 without fix.
     sal_Int32 nHalfWidth
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w"_ostr)
               .toInt32()
           / 2;
     sal_Int32 nWR
-        = getXPathContent(pXmlDoc,
-                          "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]/@wR")
+        = getXPathContent(
+              pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]/@wR"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nHalfWidth, nWR);
 
     // hR of first ArcTo in second shape should be same as path height /2. It was 10800 without fix.
     sal_Int32 nHalfHeight
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h"_ostr)
               .toInt32()
           / 2;
     sal_Int32 nHR
-        = getXPathContent(pXmlDoc,
-                          "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]/@hR")
+        = getXPathContent(
+              pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]/@hR"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHalfHeight, nHR);
 }
@@ -710,11 +716,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551VertPadding)
     for (sal_Int32 i = 1; i <= 2; i++)
     {
         OString sElement = "//p:spTree/p:sp[" + OString::number(i) + "]/p:txBody/a:bodyPr";
-        assertXPath(pXmlDoc, sElement, "lIns", "720000");
-        assertXPath(pXmlDoc, sElement, "tIns", "360000");
-        assertXPath(pXmlDoc, sElement, "rIns", "0");
-        assertXPath(pXmlDoc, sElement, "bIns", "0");
-        assertXPathNoAttribute(pXmlDoc, sElement, "rot");
+        assertXPath(pXmlDoc, sElement, "lIns"_ostr, "720000");
+        assertXPath(pXmlDoc, sElement, "tIns"_ostr, "360000");
+        assertXPath(pXmlDoc, sElement, "rIns"_ostr, "0");
+        assertXPath(pXmlDoc, sElement, "bIns"_ostr, "0");
+        assertXPathNoAttribute(pXmlDoc, sElement, "rot"_ostr);
     }
 }
 
@@ -729,8 +735,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
 
     // Verify the markup. The values must be the same as in the original file.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr", "upright", "1");
-    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr", "rot");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr"_ostr, "upright"_ostr, "1");
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr"_ostr, "rot"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
@@ -743,23 +749,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
     // easier then.
     // As of Sep 2022 LibreOffice does not write the default anchorCtr="0"
     // Right
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:txBody/a:bodyPr", "anchor", "t");
-    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[1]/p:txBody/a:bodyPr", "anchorCtr");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "t");
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[1]/p:txBody/a:bodyPr"_ostr, "anchorCtr"_ostr);
     // Center
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:txBody/a:bodyPr", "anchor", "ctr");
-    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[2]/p:txBody/a:bodyPr", "anchorCtr");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "ctr");
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[2]/p:txBody/a:bodyPr"_ostr, "anchorCtr"_ostr);
     // Left
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[3]/p:txBody/a:bodyPr", "anchor", "b");
-    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[3]/p:txBody/a:bodyPr", "anchorCtr");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[3]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "b");
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[3]/p:txBody/a:bodyPr"_ostr, "anchorCtr"_ostr);
     // RightMiddle
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:txBody/a:bodyPr", "anchor", "t");
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:txBody/a:bodyPr", "anchorCtr", "1");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "t");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:txBody/a:bodyPr"_ostr, "anchorCtr"_ostr, "1");
     // CenterMiddle
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[5]/p:txBody/a:bodyPr", "anchor", "ctr");
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[5]/p:txBody/a:bodyPr", "anchorCtr", "1");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[5]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "ctr");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[5]/p:txBody/a:bodyPr"_ostr, "anchorCtr"_ostr, "1");
     // LeftMiddle
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[6]/p:txBody/a:bodyPr", "anchor", "b");
-    assertXPath(pXmlDoc, "//p:spTree/p:sp[6]/p:txBody/a:bodyPr", "anchorCtr", "1");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[6]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "b");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[6]/p:txBody/a:bodyPr"_ostr, "anchorCtr"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkBitmapFill)
@@ -777,19 +783,19 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkBitmapFill)
     // Make sure it is exported to VML and has no txbxContent but a textpath element. Without fix it
     // was exported as DML 'abc transform', but that is not able to use bitmap fill in Word.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//mc:alternateContent", 0);
-    assertXPath(pXmlDoc, "//v:shape/v:textbox/v:txbxContent", 0);
-    assertXPath(pXmlDoc, "//v:shape/v:textpath", 1);
+    assertXPath(pXmlDoc, "//mc:alternateContent"_ostr, 0);
+    assertXPath(pXmlDoc, "//v:shape/v:textbox/v:txbxContent"_ostr, 0);
+    assertXPath(pXmlDoc, "//v:shape/v:textpath"_ostr, 1);
 
     // Without fix the bitmap was referenced by v:imagedata element. But that produces a picture
     // in Word not a WordArt shape. Instead a v:fill has to be used.
-    assertXPath(pXmlDoc, "//v:shape/v:imagedata", 0);
-    assertXPath(pXmlDoc, "//v:shape/v:fill", 1);
-    assertXPath(pXmlDoc, "//v:shape/v:fill[@r:id]", 1);
+    assertXPath(pXmlDoc, "//v:shape/v:imagedata"_ostr, 0);
+    assertXPath(pXmlDoc, "//v:shape/v:fill"_ostr, 1);
+    assertXPath(pXmlDoc, "//v:shape/v:fill[@r:id]"_ostr, 1);
 
     // The fill is set to 'stretched' in LO, that is type="frame" in VML. That was not implemented
     // in VML export.
-    assertXPath(pXmlDoc, "//v:shape/v:fill", "type", "frame");
+    assertXPath(pXmlDoc, "//v:shape/v:fill"_ostr, "type"_ostr, "frame");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkFontProperties)
@@ -810,19 +816,19 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkFontProperties)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     OUString sStyle;
     // bold
-    sStyle = getXPath(pXmlDoc, "(//v:shape)[1]/v:textpath", "style");
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[1]/v:textpath"_ostr, "style"_ostr);
     CPPUNIT_ASSERT(sStyle.indexOf("font-weight:bold") > -1);
     // italic
-    sStyle = getXPath(pXmlDoc, "(//v:shape)[2]/v:textpath", "style");
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[2]/v:textpath"_ostr, "style"_ostr);
     CPPUNIT_ASSERT(sStyle.indexOf("font-style:italic") > -1);
     // character spacing 'very loose', 150 * 655, see escherex.cxx
-    sStyle = getXPath(pXmlDoc, "(//v:shape)[3]/v:textpath", "style");
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[3]/v:textpath"_ostr, "style"_ostr);
     CPPUNIT_ASSERT(sStyle.indexOf("v-text-spacing:98250f") > -1);
     // character spacing 'tight', 90 * 655, see escherex.cxx
-    sStyle = getXPath(pXmlDoc, "(//v:shape)[4]/v:textpath", "style");
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[4]/v:textpath"_ostr, "style"_ostr);
     CPPUNIT_ASSERT(sStyle.indexOf("v-text-spacing:58950f") > -1);
     // same letter heights
-    sStyle = getXPath(pXmlDoc, "(//v:shape)[5]/v:textpath", "style");
+    sStyle = getXPath(pXmlDoc, "(//v:shape)[5]/v:textpath"_ostr, "style"_ostr);
     CPPUNIT_ASSERT(sStyle.indexOf("v-same-letter-heights:t") > -1);
 }
 
@@ -846,11 +852,11 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkSlantUp)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Make sure a <v:path> element exists and has an o:connecttype attribute
-    assertXPath(pXmlDoc, "//v:shapetype/v:path", 1);
-    assertXPath(pXmlDoc, "//v:shapetype/v:path[@o:connecttype]", 1);
+    assertXPath(pXmlDoc, "//v:shapetype/v:path"_ostr, 1);
+    assertXPath(pXmlDoc, "//v:shapetype/v:path[@o:connecttype]"_ostr, 1);
 
     // Make sure the handle position is written without reference to a formula
-    OUString sPosition = getXPath(pXmlDoc, "//v:h", "position");
+    OUString sPosition = getXPath(pXmlDoc, "//v:h"_ostr, "position"_ostr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sPosition.indexOf("@"));
     CPPUNIT_ASSERT_EQUAL(OUString("topLeft,#0"), sPosition);
 }
@@ -872,9 +878,9 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkArchUp)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Make sure there is no <v:rect> element
-    assertXPath(pXmlDoc, "//v:rect", 0);
+    assertXPath(pXmlDoc, "//v:rect"_ostr, 0);
     // ..., but a <v:shapetype> element with <v:textpath> subelement
-    assertXPath(pXmlDoc, "//v:shapetype/v:textpath", 1);
+    assertXPath(pXmlDoc, "//v:shapetype/v:textpath"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testVMLAdjustmentExport)
@@ -894,9 +900,9 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLAdjustmentExport)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Make sure an "adj" attribute exists
-    assertXPath(pXmlDoc, "//v:shape[@adj]", 1);
+    assertXPath(pXmlDoc, "//v:shape[@adj]"_ostr, 1);
     // ... and has the correct values
-    OUString sAdjustments = getXPath(pXmlDoc, "//v:shape", "adj");
+    OUString sAdjustments = getXPath(pXmlDoc, "//v:shape"_ostr, "adj"_ostr);
     sal_Int32 nTokenStart = 0;
     OUString sAngle = sAdjustments.getToken(0, ',', nTokenStart);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(-7341733), sAngle.toInt32(), 2);
@@ -923,19 +929,20 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDirectColor)
     static constexpr OString sElement = "//w:txbxContent/w:p/w:r/w:rPr/"_ostr;
 
     // Make sure the fallback in <w:color> has correct value.
-    assertXPath(pXmlDoc, sElement + "w:color", "val", "2E8B57");
+    assertXPath(pXmlDoc, sElement + "w:color", "val"_ostr, "2E8B57");
 
     // ... and <w14:textOutline> exists and has correct values.
     assertXPath(pXmlDoc, sElement + "w14:textOutline", 1);
-    assertXPath(pXmlDoc, sElement + "w14:textOutline/w14:solidFill/w14:srgbClr", "val", "ff7f50");
-    assertXPath(pXmlDoc, sElement + "w14:textOutline/w14:solidFill/w14:srgbClr/w14:alpha", "val",
-                "20000");
+    assertXPath(pXmlDoc, sElement + "w14:textOutline/w14:solidFill/w14:srgbClr", "val"_ostr,
+                "ff7f50");
+    assertXPath(pXmlDoc, sElement + "w14:textOutline/w14:solidFill/w14:srgbClr/w14:alpha",
+                "val"_ostr, "20000");
     assertXPath(pXmlDoc, sElement + "w14:textOutline/w14:round", 1);
 
     // ... and w14:textFill exists and has correct values.
     assertXPath(pXmlDoc, sElement + "w14:textFill", 1);
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:srgbClr", "val", "2e8b57");
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:srgbClr/w14:alpha", "val",
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:srgbClr", "val"_ostr, "2e8b57");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:srgbClr/w14:alpha", "val"_ostr,
                 "60000");
 }
 
@@ -959,33 +966,33 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
     // shape with 'darker'
     OString sElement = "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
                        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
-                       "w:rPr/";
+                       "w:rPr/"_ostr;
 
     // Make sure the fallback in <w:color> has correct values
-    assertXPath(pXmlDoc, sElement + "w:color", "val", "948A54");
-    assertXPath(pXmlDoc, sElement + "w:color", "themeColor", "light2");
-    assertXPath(pXmlDoc, sElement + "w:color", "themeShade", "80");
+    assertXPath(pXmlDoc, sElement + "w:color", "val"_ostr, "948A54");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeColor"_ostr, "light2");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeShade"_ostr, "80");
 
     // ... and w14:textFill exists and has correct values.
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr", "val", "bg2");
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumMod", "val",
-                "50000");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr", "val"_ostr, "bg2");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumMod",
+                "val"_ostr, "50000");
 
     // shape with 'lighter'
     sElement = "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/"
                "a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/";
 
     // Make sure the fallback in <w:color> has correct values
-    assertXPath(pXmlDoc, sElement + "w:color", "val", "558ED5");
-    assertXPath(pXmlDoc, sElement + "w:color", "themeColor", "dark2");
-    assertXPath(pXmlDoc, sElement + "w:color", "themeTint", "99");
+    assertXPath(pXmlDoc, sElement + "w:color", "val"_ostr, "558ED5");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeColor"_ostr, "dark2");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeTint"_ostr, "99");
 
     // ... and w14:textFill exists and has correct values.
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr", "val", "tx2");
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumMod", "val",
-                "60000");
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumOff", "val",
-                "40000");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr", "val"_ostr, "tx2");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumMod",
+                "val"_ostr, "60000");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumOff",
+                "val"_ostr, "40000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
@@ -1005,7 +1012,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPathAttrs(pXmlDoc,
                      "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-                     "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr",
+                     "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr"_ostr,
                      { { "lIns", "0" }, { "rIns", "0" }, { "tIns", "0" }, { "bIns", "0" } });
 }
 
@@ -1030,30 +1037,30 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkLinGradientRGBColor)
     // path to shape text run properties
     OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
                        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
-                       "w:rPr/";
+                       "w:rPr/"_ostr;
 
     // Make sure w14:textFill and w14:gradFill elements exist with child elements
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
     // 330deg gradient rotation = 120deg color transition direction
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "ang", "7200000");
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "scaled", "0");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "ang"_ostr, "7200000");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "scaled"_ostr, "0");
 
     // Make sure the color stops have correct position and color
     // The 'intensity' property in the UI has a different algorithm than the 'lumMod' attribute in
     // OOXML. Therefore it cannot be exported as 'lumMod' but need to be incorporated into the color.
     sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val", "cccc00");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr/w14:alpha", "val", "30000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val"_ostr, "cccc00");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr/w14:alpha", "val"_ostr, "30000");
 
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "25000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val", "cccc00");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr/w14:alpha", "val", "30000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos"_ostr, "25000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val"_ostr, "cccc00");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr/w14:alpha", "val"_ostr, "30000");
 
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "100000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val", "4682b4");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr/w14:alpha", "val", "30000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos"_ostr, "100000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val"_ostr, "4682b4");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr/w14:alpha", "val"_ostr, "30000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkAxialGradientTransparency)
@@ -1077,33 +1084,33 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkAxialGradientTransparency)
     // path to shape text run properties
     OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
                        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
-                       "w:rPr/";
+                       "w:rPr/"_ostr;
 
     // Make sure w14:textFill and w14:gradFill elements exist with child elements
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
     // 160deg gradient rotation = 290deg (360deg-160deg+90deg) color transition direction
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "ang", "17400000");
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "scaled", "0");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "ang"_ostr, "17400000");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "scaled"_ostr, "0");
 
     // Make sure the color stops have correct position and color
     sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
     // gradient is in transparency, color is always the same.
     for (char ch = '1'; ch <= '3'; ++ch)
     {
-        assertXPath(pXmlDoc, sElement + "w14:gs[" + OStringChar(ch) + "]/w14:schemeClr", "val",
+        assertXPath(pXmlDoc, sElement + "w14:gs[" + OStringChar(ch) + "]/w14:schemeClr", "val"_ostr,
                     "accent3");
         assertXPath(pXmlDoc, sElement + "w14:gs[" + OStringChar(ch) + "]/w14:schemeClr/w14:lumMod",
-                    "val", "75000");
+                    "val"_ostr, "75000");
     }
     // transparency values are not exactly like in UI because converting through rgb-color.
     // border 40% in UI means 20% on each side.
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "20000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:alpha", "val", "89800");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "50000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:alpha", "val", "4710");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "80000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:alpha", "val", "89800");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos"_ostr, "20000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:alpha", "val"_ostr, "89800");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos"_ostr, "50000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:alpha", "val"_ostr, "4710");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos"_ostr, "80000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:alpha", "val"_ostr, "89800");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkRadialGradient)
@@ -1127,24 +1134,24 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRadialGradient)
     // path to shape text run properties
     OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
                        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
-                       "w:rPr/";
+                       "w:rPr/"_ostr;
 
     // Make sure w14:textFill and w14:gradFill elements exist with child elements
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path", "circle");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path"_ostr, "circle");
     assertXPathAttrs(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path/w14:fillToRect",
                      { { "l", "75000" }, { "t", "20000" }, { "r", "25000" }, { "b", "80000" } });
 
     // Make sure the color stops have correct position and color
     // The first stop is duplicated to force Word to render the gradient same as LO.
     sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val", "ff0000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val", "ff0000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "90000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val", "40e0d0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val"_ostr, "ff0000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val"_ostr, "ff0000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos"_ostr, "90000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val"_ostr, "40e0d0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkEllipticalGradient)
@@ -1168,26 +1175,26 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkEllipticalGradient)
     // path to shape text run properties
     OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
                        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
-                       "w:rPr/";
+                       "w:rPr/"_ostr;
 
     // Make sure w14:textFill and w14:gradFill elements exist with child elements
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path", "circle");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path"_ostr, "circle");
     assertXPathAttrs(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path/w14:fillToRect",
                      { { "l", "50000" }, { "t", "50000" }, { "r", "50000" }, { "b", "50000" } });
 
     // Make sure the color stops have correct position and color
     // transparency values are not exactly like in UI because converting through rgb-color.
     sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val", "00008b");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val"_ostr, "00008b");
     // stop is duplicated to force Word to same rendering as LO does.
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val", "00008b");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "50000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val", "00008b");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr/w14:alpha", "val", "69800");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val"_ostr, "00008b");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos"_ostr, "50000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val"_ostr, "00008b");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr/w14:alpha", "val"_ostr, "69800");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
@@ -1211,12 +1218,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
     // path to shape text run properties
     OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
                        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
-                       "w:rPr/";
+                       "w:rPr/"_ostr;
 
     // Make sure w14:textFill and w14:gradFill elements exist with child elements
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path", "rect");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path"_ostr, "rect");
     assertXPathAttrs(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path/w14:fillToRect",
                      { { "l", "100000" }, { "t", "50000" }, { "r", "0" }, { "b", "50000" } });
 
@@ -1224,12 +1231,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
     // The 'intensity' property in the UI has a different algorithm than the 'lumMod' attribute in
     // OOXML. Therefore it cannot be exported as 'lumMod' but need to be incorporated into the color.
     sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val", "e6e663");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val", "e6e663");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "100000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val", "1d4860");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val"_ostr, "e6e663");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val"_ostr, "e6e663");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos"_ostr, "100000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val"_ostr, "1d4860");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
@@ -1253,34 +1260,34 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
     // path to shape text run properties
     OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
                        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
-                       "w:rPr/";
+                       "w:rPr/"_ostr;
 
     // Make sure w14:textFill and w14:gradFill elements exist with child elements
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
     assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
-    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path", "rect");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path"_ostr, "rect");
     assertXPathAttrs(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path/w14:fillToRect",
                      { { "l", "50000" }, { "t", "50000" }, { "r", "50000" }, { "b", "50000" } });
 
     // Make sure the color stops have correct position and color
     // transparency values are not exactly like in UI because converting through rgb-color.
     sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr", "val", "accent4");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:lumMod", "val", "40000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:lumOff", "val", "60000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:alpha", "val", "4710");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr", "val"_ostr, "accent4");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:lumMod", "val"_ostr, "40000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:lumOff", "val"_ostr, "60000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:alpha", "val"_ostr, "4710");
     // The first stop is duplicated to force Word to render the gradient same as LO.
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "0");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr", "val", "accent4");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:lumMod", "val", "40000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:lumOff", "val", "60000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:alpha", "val", "4710");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "90000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr", "val", "accent4");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:lumMod", "val", "40000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:lumOff", "val", "60000");
-    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:alpha", "val", "69800");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr", "val"_ostr, "accent4");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:lumMod", "val"_ostr, "40000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:lumOff", "val"_ostr, "60000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:alpha", "val"_ostr, "4710");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos"_ostr, "90000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr", "val"_ostr, "accent4");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:lumMod", "val"_ostr, "40000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:lumOff", "val"_ostr, "60000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:alpha", "val"_ostr, "69800");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
@@ -1295,18 +1302,18 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
 
     // Make sure a:alpha is written for line color and for fill color.
     // Make sure fill color is a schemeClr.
-    OString sElement = "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/";
-    assertXPath(pXmlDoc, sElement + "a:ln/a:solidFill/a:srgbClr/a:alpha", "val", "25000");
-    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr", "val", "accent1");
-    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumMod", "val", "60000");
-    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumOff", "val", "40000");
-    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val", "35000");
+    OString sElement = "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/"_ostr;
+    assertXPath(pXmlDoc, sElement + "a:ln/a:solidFill/a:srgbClr/a:alpha", "val"_ostr, "25000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr", "val"_ostr, "accent1");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumMod", "val"_ostr, "60000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumOff", "val"_ostr, "40000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val"_ostr, "35000");
 
     // Make sure a:alpha is written for characters and fill color is a schemeClr.
     sElement = "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/";
-    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr", "val", "accent4");
-    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumMod", "val", "75000");
-    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val", "20000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr", "val"_ostr, "accent4");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumMod", "val"_ostr, "75000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val"_ostr, "20000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testThemeFontTypeface)
@@ -1320,9 +1327,9 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeFontTypeface)
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/theme/theme1.xml");
 
     // Make sure typeface is written.
-    OString sElement = "/a:theme/a:themeElements/a:fontScheme/";
-    assertXPath(pXmlDoc, sElement + "a:majorFont/a:ea", "typeface", "");
-    assertXPath(pXmlDoc, sElement + "a:minorFont/a:ea", "typeface", "");
+    OString sElement = "/a:theme/a:themeElements/a:fontScheme/"_ostr;
+    assertXPath(pXmlDoc, sElement + "a:majorFont/a:ea", "typeface"_ostr, "");
+    assertXPath(pXmlDoc, sElement + "a:minorFont/a:ea", "typeface"_ostr, "");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
@@ -1335,8 +1342,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
 
     // Verify the markup. Both wR and hR must be positive.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "wR", "6750");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "hR", "6750");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]"_ostr, "wR"_ostr, "6750");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]"_ostr, "hR"_ostr, "6750");
 }
 }
 

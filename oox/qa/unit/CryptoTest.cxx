@@ -74,7 +74,7 @@ CryptoTest::~CryptoTest()
 void CryptoTest::testCryptoHash()
 {
     // Check examples from Wikipedia (https://en.wikipedia.org/wiki/HMAC)
-    OString aContentString("The quick brown fox jumps over the lazy dog");
+    OString aContentString("The quick brown fox jumps over the lazy dog"_ostr);
     std::vector<sal_uInt8> aContent(aContentString.getStr(),
                                     aContentString.getStr() + aContentString.getLength());
     std::vector<sal_uInt8> aKey = { 'k', 'e', 'y' };
@@ -145,7 +145,7 @@ void CryptoTest::testStandard2007()
     SvMemoryStream aUnencryptedInput;
     SvMemoryStream aEncryptedStream;
 
-    OString aTestString = "1234567890ABCDEFG";
+    OString aTestString = "1234567890ABCDEFG"_ostr;
 
     aUnencryptedInput.WriteBytes(aTestString.getStr(), aTestString.getLength() + 1);
     aUnencryptedInput.Seek(STREAM_SEEK_TO_BEGIN);
@@ -418,7 +418,7 @@ void CryptoTest::testAgileEncryptingAndDecrypting()
     SvMemoryStream aEncryptionInfo;
     SvMemoryStream aEncryptedStream;
 
-    OString aTestString = "1234567890ABCDEFGH";
+    OString aTestString = "1234567890ABCDEFGH"_ostr;
 
     {
         oox::crypto::AgileEngine aEngine;

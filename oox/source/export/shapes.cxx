@@ -1214,7 +1214,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
     WriteShapeTransformation( xShape, XML_a );
 
     if (CircleKind_FULL == eCircleKind)
-        WritePresetShape("ellipse");
+        WritePresetShape("ellipse"_ostr);
     else
     {
         sal_Int32 nStartAngleIntern(9000);
@@ -1238,16 +1238,16 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
         switch (eCircleKind)
         {
             case CircleKind_ARC :
-                WritePresetShape("arc", aAvList);
+                WritePresetShape("arc"_ostr, aAvList);
             break;
             case CircleKind_SECTION :
-                WritePresetShape("pie", aAvList);
+                WritePresetShape("pie"_ostr, aAvList);
             break;
             case CircleKind_CUT :
-                WritePresetShape("chord", aAvList);
+                WritePresetShape("chord"_ostr, aAvList);
             break;
         default :
-            WritePresetShape("ellipse");
+            WritePresetShape("ellipse"_ostr);
         }
     }
     if( xProps.is() )
@@ -1468,7 +1468,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         xShapeProps->getPropertyValue("IsMirrored") >>= bFlipH;
     }
     WriteShapeTransformation( xShape, XML_a, bFlipH, false, false, false, true );
-    WritePresetShape( "rect" );
+    WritePresetShape( "rect"_ostr );
     // graphic object can come with the frame (bnc#654525)
     WriteOutline( xShapeProps );
 
@@ -1944,7 +1944,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, true);
-    WritePresetShape( "line" );
+    WritePresetShape( "line"_ostr );
     if( xShapeProps.is() )
         WriteOutline( xShapeProps );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
@@ -2532,7 +2532,7 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteShapeTransformation( xShape, XML_a );
-    WritePresetShape( "rect" );
+    WritePresetShape( "rect"_ostr );
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, UNO_QUERY);
     if (!IsFontworkShape(xShapeProps)) // Fontwork needs fill and outline in run properties instead.
     {
@@ -2577,7 +2577,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->endElementNS(mnXmlNamespace, XML_nvSpPr);
     mpFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteShapeTransformation(xShape, XML_a);
-    WritePresetShape("rect");
+    WritePresetShape("rect"_ostr);
     mpFS->endElementNS(mnXmlNamespace, XML_spPr);
     mpFS->startElementNS(mnXmlNamespace, XML_txBody);
     mpFS->startElementNS(XML_a, XML_bodyPr);

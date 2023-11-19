@@ -32,16 +32,16 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradient)
     // And make sure a multi-color gradient fill is exported.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // linear gradient with 30deg angle
-    assertXPath(pXmlDoc, "//a:r/a:rPr/a:gradFill/a:lin", "ang", "3600000");
+    assertXPath(pXmlDoc, "//a:r/a:rPr/a:gradFill/a:lin"_ostr, "ang"_ostr, "3600000");
     // three color stops, no transparency
     static constexpr OString sPath = "//a:r/a:rPr/a:gradFill/a:gsLst/"_ostr;
     assertXPath(pXmlDoc, sPath + "a:gs", 3);
-    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos", "0");
-    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val", "ff1493");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos", "30000");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val", "ffff00");
-    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos", "100000");
-    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val", "00ffff");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val"_ostr, "ff1493");
+    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos"_ostr, "30000");
+    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val"_ostr, "ffff00");
+    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos"_ostr, "100000");
+    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val"_ostr, "00ffff");
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
@@ -55,16 +55,16 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
     // And make sure a multi-color gradient fill is exported.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // linear gradient with 30deg angle
-    assertXPath(pXmlDoc, "//w14:lin", "ang", "3600000");
+    assertXPath(pXmlDoc, "//w14:lin"_ostr, "ang"_ostr, "3600000");
     // three color stops, no transparency
     static constexpr OString sPath = "//w14:gradFill/w14:gsLst/"_ostr;
     assertXPath(pXmlDoc, sPath + "w14:gs", 3);
-    assertXPath(pXmlDoc, sPath + "w14:gs[1]", "pos", "0");
-    assertXPath(pXmlDoc, sPath + "w14:gs[1]/w14:srgbClr", "val", "ff1493");
-    assertXPath(pXmlDoc, sPath + "w14:gs[2]", "pos", "30000");
-    assertXPath(pXmlDoc, sPath + "w14:gs[2]/w14:srgbClr", "val", "ffff00");
-    assertXPath(pXmlDoc, sPath + "w14:gs[3]", "pos", "100000");
-    assertXPath(pXmlDoc, sPath + "w14:gs[3]/w14:srgbClr", "val", "00ffff");
+    assertXPath(pXmlDoc, sPath + "w14:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sPath + "w14:gs[1]/w14:srgbClr", "val"_ostr, "ff1493");
+    assertXPath(pXmlDoc, sPath + "w14:gs[2]", "pos"_ostr, "30000");
+    assertXPath(pXmlDoc, sPath + "w14:gs[2]/w14:srgbClr", "val"_ostr, "ffff00");
+    assertXPath(pXmlDoc, sPath + "w14:gs[3]", "pos"_ostr, "100000");
+    assertXPath(pXmlDoc, sPath + "w14:gs[3]/w14:srgbClr", "val"_ostr, "00ffff");
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
@@ -97,9 +97,9 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
     assertXPath(pXmlDoc, sPath + "a:gs[@pos='50000']", 2);
     assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000']", 2);
     // Without fix the color was 808080.
-    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][1]/a:srgbClr", "val", "55aaaa");
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][1]/a:srgbClr", "val"_ostr, "55aaaa");
     // Without fix the color was 40bfbf, producing a gradient in the last segment.
-    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][2]/a:srgbClr", "val", "00ffff");
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][2]/a:srgbClr", "val"_ostr, "00ffff");
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testAxialColorLinearTrans)
@@ -117,14 +117,14 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testAxialColorLinearTrans)
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     static constexpr OString sPath = "//a:gradFill/a:gsLst/"_ostr;
     assertXPath(pXmlDoc, sPath + "a:gs", 3);
-    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos", "0");
-    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val", "00ffff");
-    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr/a:alpha", "val", "20000");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos", "50000");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val", "ff0000");
-    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr/a:alpha", "val", "60396");
-    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos", "100000");
-    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val", "00ffff");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos"_ostr, "0");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val"_ostr, "00ffff");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr/a:alpha", "val"_ostr, "20000");
+    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos"_ostr, "50000");
+    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val"_ostr, "ff0000");
+    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr/a:alpha", "val"_ostr, "60396");
+    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos"_ostr, "100000");
+    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val"_ostr, "00ffff");
     // no <a:alpha> element for default val="100000"
     assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr/a:alpha", 0);
 }
