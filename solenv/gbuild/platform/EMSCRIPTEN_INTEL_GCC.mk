@@ -22,10 +22,9 @@ gb_EMSCRIPTEN_SHELL_HTML_FILE = \
 gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
 # avoid -s SAFE_HEAP=1 - c.f. gh#8584 this breaks source maps
 gb_EMSCRIPTEN_CPPFLAGS := -pthread -s USE_PTHREADS=1 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE
-gb_EMSCRIPTEN_LDFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS)
 
 # Initial memory size and worker thread pool
-gb_EMSCRIPTEN_LDFLAGS += -s TOTAL_MEMORY=1GB -s PTHREAD_POOL_SIZE=4
+gb_EMSCRIPTEN_LDFLAGS := -s TOTAL_MEMORY=1GB -s PTHREAD_POOL_SIZE=4
 
 # To keep the link time (and memory) down, prevent all rewriting options from wasm-emscripten-finalize
 # See emscripten.py, finalize_wasm, modify_wasm = True

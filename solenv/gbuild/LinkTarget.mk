@@ -2272,7 +2272,7 @@ endif
 
 endef
 
-# call gb_LinkTarget_add_prejs,linktarget,js_file
+# call gb_LinkTarget_add_shellhtml,linktarget,js_file
 define gb_LinkTarget_add_shellhtml
 ifeq (EMSCRIPTEN,$(OS))
 $(call gb_LinkTarget_get_target,$(1)) : T_SHELLHTML += $(2)

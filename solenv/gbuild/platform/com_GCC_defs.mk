@@ -111,6 +111,8 @@ gb_CXXFLAGS_Wundef = -Wno-undef
 
 gb_CXXFLAGS_include := -include$(gb_SPACE)
 
+gb_LinkTarget_LDFLAGS := $(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong)
+
 ifeq ($(strip $(gb_GCOV)),YES)
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
@@ -156,8 +158,6 @@ gb_VISIBILITY_FLAGS := -fvisibility=hidden
 endif
 gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
 gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)
-
-gb_LinkTarget_LDFLAGS += $(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong)
 
 ifneq ($(gb_ENABLE_PCH),)
 ifeq ($(COM_IS_CLANG),TRUE)
