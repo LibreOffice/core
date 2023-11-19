@@ -228,7 +228,7 @@ void SvtMiscOptions_Impl::AddListenerLink( const Link<LinkParamNone*,void>& rLin
 
 void SvtMiscOptions_Impl::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
-    aList.erase(std::remove(aList.begin(), aList.end(), rLink), aList.end());
+    std::erase(aList, rLink);
 }
 
 void SvtMiscOptions_Impl::CallListeners()
