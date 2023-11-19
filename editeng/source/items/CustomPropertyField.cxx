@@ -45,7 +45,7 @@ bool CustomPropertyField::operator==(const SvxFieldData& rOther) const
 
 MetaAction* CustomPropertyField::createBeginComment() const
 {
-    return new MetaCommentAction("FIELD_SEQ_BEGIN");
+    return new MetaCommentAction("FIELD_SEQ_BEGIN"_ostr);
 }
 
 OUString CustomPropertyField::GetFormatted(uno::Reference<document::XDocumentProperties> const & xDocumentProperties)

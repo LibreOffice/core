@@ -266,12 +266,12 @@ bool SvxFieldData::operator==( const SvxFieldData& rFld ) const
 
 MetaAction* SvxFieldData::createBeginComment() const
 {
-    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN"_ostr );
 }
 
 MetaAction* SvxFieldData::createEndComment()
 {
-    return new MetaCommentAction( "FIELD_SEQ_END" );
+    return new MetaCommentAction( "FIELD_SEQ_END"_ostr );
 }
 
 
@@ -428,7 +428,7 @@ OUString SvxDateField::GetFormatted( Date const & aDate, SvxDateFormat eFormat, 
 
 MetaAction* SvxDateField::createBeginComment() const
 {
-    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN"_ostr );
 }
 
 SvxURLField::SvxURLField()
@@ -466,7 +466,7 @@ bool SvxURLField::operator==( const SvxFieldData& rOther ) const
 MetaAction* SvxURLField::createBeginComment() const
 {
     // #i46618# Adding target URL to metafile comment
-    return new MetaCommentAction( "FIELD_SEQ_BEGIN",
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN"_ostr,
                                   0,
                                   reinterpret_cast<const sal_uInt8*>(aURL.getStr()),
                                   2*aURL.getLength() );
@@ -490,7 +490,7 @@ bool SvxPageTitleField::operator==( const SvxFieldData& rCmp ) const
 
 MetaAction* SvxPageTitleField::createBeginComment() const
 {
-    return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageTitleField" );
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageTitleField"_ostr );
 }
 
 //
@@ -513,7 +513,7 @@ bool SvxPageField::operator==( const SvxFieldData& rCmp ) const
 
 MetaAction* SvxPageField::createBeginComment() const
 {
-    return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageField" );
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageField"_ostr );
 }
 
 
@@ -543,7 +543,7 @@ bool SvxTimeField::operator==( const SvxFieldData& rCmp ) const
 
 MetaAction* SvxTimeField::createBeginComment() const
 {
-    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN"_ostr );
 }
 
 SvxFileField::SvxFileField() {}
@@ -691,7 +691,7 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
 
 MetaAction* SvxExtTimeField::createBeginComment() const
 {
-    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN"_ostr );
 }
 
 

@@ -439,12 +439,12 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         {
             // Another shell wants to know about our existing selection.
             if (mpViewShell != mpOtherShell)
-                mpViewShell->NotifyOtherView(mpOtherShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
+                mpViewShell->NotifyOtherView(mpOtherShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, sRectangle);
         }
         else
         {
             mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle);
-            mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
+            mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, sRectangle);
         }
 
         pOutWin->GetOutDev()->Pop();
