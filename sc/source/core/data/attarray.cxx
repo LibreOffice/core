@@ -297,7 +297,7 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
         // changed to create pNewPattern only if needed, else use already
         // existing pPattern. This shows by example how to avoid that special
         // handling of ATTR_PATTERN/ScPatternAttr in SC and massive
-        // incarnations/desctructions of that Item (which contains an ItemSet)
+        // incarnations/destructions of that Item (which contains an ItemSet)
         std::unique_ptr<ScPatternAttr> pNewPattern;
         if(pPattern)
         {
