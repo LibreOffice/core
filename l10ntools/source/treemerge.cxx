@@ -44,7 +44,7 @@ namespace
                     xmlGetProp(pCurrent, reinterpret_cast<const xmlChar*>("title"));
 
                 common::writePoEntry(
-                    "Treex", rPOStream, pSource->name, helper::xmlStrToOString( pNodeName ),
+                    "Treex"_ostr, rPOStream, pSource->name, helper::xmlStrToOString( pNodeName ),
                     helper::xmlStrToOString( pID ), OString(), OString(), helper::xmlStrToOString( pText ));
 
                 xmlFree( pID );
@@ -114,8 +114,8 @@ namespace
                         xmlNodeListGetString(pXhpFile, pXhpNode->children, 1);
                     OString sNewTitle =
                         helper::xmlStrToOString( sTitle ).
-                            replaceAll("$[officename]","%PRODUCTNAME").
-                                replaceAll("$[officeversion]","%PRODUCTVERSION");
+                            replaceAll("$[officename]"_ostr,"%PRODUCTNAME"_ostr).
+                                replaceAll("$[officeversion]"_ostr,"%PRODUCTVERSION"_ostr);
                     xmlChar *xmlString = xmlEncodeSpecialChars(nullptr,
                         reinterpret_cast<const xmlChar*>( sNewTitle.getStr() ));
                     xmlNodeSetContent( pReturn, xmlString);

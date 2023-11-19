@@ -70,7 +70,7 @@ ResData::ResData( OString _sGId )
     :
     sGId(std::move( _sGId ))
 {
-    sGId = sGId.replaceAll("\r", OString());
+    sGId = sGId.replaceAll("\r"_ostr, OString());
 }
 
 ResData::ResData( OString _sGId, OString _sFilename)
@@ -78,7 +78,7 @@ ResData::ResData( OString _sGId, OString _sFilename)
     sGId(std::move( _sGId )),
     sFilename(std::move( _sFilename ))
 {
-    sGId = sGId.replaceAll("\r", OString());
+    sGId = sGId.replaceAll("\r"_ostr, OString());
 }
 
 
@@ -102,7 +102,7 @@ namespace
     {
         //DOUBLE VERTICAL LINE instead of || because the translations make their
         //way into action_names under gtk3 where || is illegal
-        return u8"\u2016";
+        return u8"\u2016"_ostr;
     }
 }
 
@@ -219,10 +219,10 @@ MergeDataFile::MergeDataFile(
             if( bFirstLang && bWithQtz &&
                 sEnableReleaseBuild != "TRUE" )
             {
-                aLanguageSet.insert("qtz");
+                aLanguageSet.insert("qtz"_ostr);
                 InsertEntry(
                     aActPo.getResourceType(), aActPo.getGroupId(),
-                    aActPo.getLocalId(), "qtz",
+                    aActPo.getLocalId(), "qtz"_ostr,
                     sExText, sExQHText,
                     sExTitle, aActPo.getSourceFile(),
                     false, bCaseSensitive );

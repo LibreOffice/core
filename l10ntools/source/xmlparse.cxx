@@ -306,22 +306,22 @@ XMLFile::XMLFile( OString _sFileName ) // the file name, empty if created from m
     : XMLParentNode( nullptr )
     , m_sFileName(std::move( _sFileName ))
 {
-    m_aNodes_localize.emplace( OString("bookmark") , true );
-    m_aNodes_localize.emplace( OString("variable") , true );
-    m_aNodes_localize.emplace( OString("paragraph") , true );
-    m_aNodes_localize.emplace( OString("h1") , true );
-    m_aNodes_localize.emplace( OString("h2") , true );
-    m_aNodes_localize.emplace( OString("h3") , true );
-    m_aNodes_localize.emplace( OString("h4") , true );
-    m_aNodes_localize.emplace( OString("h5") , true );
-    m_aNodes_localize.emplace( OString("h6") , true );
-    m_aNodes_localize.emplace( OString("note") , true );
-    m_aNodes_localize.emplace( OString("tip") , true );
-    m_aNodes_localize.emplace( OString("warning") , true );
-    m_aNodes_localize.emplace( OString("alt") , true );
-    m_aNodes_localize.emplace( OString("caption") , true );
-    m_aNodes_localize.emplace( OString("title") , true );
-    m_aNodes_localize.emplace( OString("link") , true );
+    m_aNodes_localize.emplace( "bookmark"_ostr , true );
+    m_aNodes_localize.emplace( "variable"_ostr , true );
+    m_aNodes_localize.emplace( "paragraph"_ostr , true );
+    m_aNodes_localize.emplace( "h1"_ostr , true );
+    m_aNodes_localize.emplace( "h2"_ostr , true );
+    m_aNodes_localize.emplace( "h3"_ostr , true );
+    m_aNodes_localize.emplace( "h4"_ostr , true );
+    m_aNodes_localize.emplace( "h5"_ostr , true );
+    m_aNodes_localize.emplace( "h6"_ostr , true );
+    m_aNodes_localize.emplace( "note"_ostr , true );
+    m_aNodes_localize.emplace( "tip"_ostr , true );
+    m_aNodes_localize.emplace( "warning"_ostr , true );
+    m_aNodes_localize.emplace( "alt"_ostr , true );
+    m_aNodes_localize.emplace( "caption"_ostr , true );
+    m_aNodes_localize.emplace( "title"_ostr , true );
+    m_aNodes_localize.emplace( "link"_ostr , true );
 }
 
 void XMLFile::Extract()
@@ -332,7 +332,7 @@ void XMLFile::Extract()
 
 void XMLFile::InsertL10NElement( XMLElement* pElement )
 {
-    OString sId, sLanguage("en-US");
+    OString sId, sLanguage("en-US"_ostr);
     LangHashMap* pElem;
 
     if( pElement->GetAttributeList() != nullptr )

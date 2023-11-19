@@ -116,7 +116,7 @@ void LngParser::CreatePO( const OString &rPOFile )
         else {
             WritePO( aPOStream , Text , sSource , sID );
         }
-        Text.erase("x-comment");
+        Text.erase("x-comment"_ostr);
     }
     aPOStream.close();
 }
@@ -126,8 +126,8 @@ void LngParser::WritePO(PoOfstream &aPOStream,
     const OString &rID)
 {
     common::writePoEntry(
-        "Ulfex", aPOStream, rActFileName, "LngText",
-        rID, OString(), rText_inout.count("x-comment") ? rText_inout["x-comment"] : OString(), rText_inout["en-US"]);
+        "Ulfex"_ostr, aPOStream, rActFileName, "LngText",
+        rID, OString(), rText_inout.count("x-comment"_ostr) ? rText_inout["x-comment"_ostr] : OString(), rText_inout["en-US"_ostr]);
 }
 
 bool LngParser::isNextGroup(OString &sGroup_out, std::string_view sLine_in)
@@ -220,7 +220,7 @@ void LngParser::Merge(
                                 mvLines[ nPos ] = sLang
                                     + " = \""
                                     // escape quotes, unescape double escaped quotes fdo#56648
-                                    + sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"")
+                                    + sNewText.replaceAll("\""_ostr,"\\\""_ostr).replaceAll("\\\\\""_ostr,"\\\""_ostr)
                                     + "\"";
                                 Text[ sLang ] = sNewText;
                             }
@@ -255,7 +255,7 @@ void LngParser::Merge(
                         const OString sLine { sCur
                             + " = \""
                             // escape quotes, unescape double escaped quotes fdo#56648
-                            + sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"")
+                            + sNewText.replaceAll("\""_ostr,"\\\""_ostr).replaceAll("\\\\\""_ostr,"\\\""_ostr)
                             + "\"" };
 
                         nLastLangPos++;

@@ -30,7 +30,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     common::HandledArgs aArgs;
     if (!common::handleArguments(argc, argv, aArgs))
     {
-        common::writeUsage("ulfex", "*.ulf");
+        common::writeUsage("ulfex"_ostr, "*.ulf"_ostr);
         return 1;
     }
 

@@ -148,7 +148,7 @@ void PropParser::Extract( const OString& rPOFile )
             OString sText = lcl_ConvertToUTF8( OString(o3tl::trim(sLine.subView( nEqualSign + 1 ))) );
 
             common::writePoEntry(
-                "Propex", aPOStream, m_sSource, "property",
+                "Propex"_ostr, aPOStream, m_sSource, "property",
                 OString(sID), OString(), OString(), sText);
         }
     }

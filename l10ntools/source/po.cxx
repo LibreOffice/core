@@ -83,7 +83,7 @@ namespace
     OString lcl_GenMsgString(std::string_view rString)
     {
         if ( rString.empty() )
-            return "\"\"";
+            return "\"\""_ostr;
 
         OString sResult =
             "\"" +
@@ -131,7 +131,7 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
     if ( !m_sExtractCom.isEmpty() )
         rOFStream
             << "#. "
-            << m_sExtractCom.toString().replaceAll("\n","\n#. ") << std::endl;
+            << m_sExtractCom.toString().replaceAll("\n"_ostr,"\n#. "_ostr) << std::endl;
     for(const auto& rReference : m_sReferences)
         rOFStream << "#: " << rReference << std::endl;
     if ( m_bFuzzy )

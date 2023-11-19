@@ -66,7 +66,7 @@ extern bool GetOutputFile( int argc, char* argv[])
     else
     {
         // command line is not valid
-        common::writeUsage("xrmex","*.xrm/*.xml");
+        common::writeUsage("xrmex"_ostr,"*.xrm/*.xml"_ostr);
         return false;
     }
 }
@@ -167,8 +167,8 @@ void XRMResParser::Execute( int nToken, char * pToken )
 
         case XRM_TEXT_END: {
                 sCurrentCloseTag = rToken;
-                sResourceType = OString ( "readmeitem" );
-                sLangAttribute = OString ( "xml:lang" );
+                sResourceType = "readmeitem"_ostr;
+                sLangAttribute = "xml:lang"_ostr;
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
@@ -190,7 +190,7 @@ void XRMResParser::Execute( int nToken, char * pToken )
 
         case DESC_TEXT_START:{
                 if (bDisplayName) {
-                    sGID = OString("dispname");
+                    sGID = "dispname"_ostr;
                     bText = true;
                     sCurrentText = OString();
                     sCurrentOpenTag = rToken;
@@ -202,8 +202,8 @@ void XRMResParser::Execute( int nToken, char * pToken )
         case DESC_TEXT_END: {
                 if (bDisplayName) {
                     sCurrentCloseTag = rToken;
-                    sResourceType = OString ( "description" );
-                    sLangAttribute = OString ( "lang" );
+                    sResourceType = "description"_ostr;
+                    sLangAttribute = "lang"_ostr;
                     WorkOnText( sCurrentOpenTag, sCurrentText );
                     Output( sCurrentText );
                     EndOfText( sCurrentOpenTag, sCurrentCloseTag );
@@ -226,9 +226,9 @@ void XRMResParser::Execute( int nToken, char * pToken )
 
         case DESC_EXTENSION_DESCRIPTION_SRC: {
                 if (bExtensionDescription) {
-                    sGID = OString("extdesc");
-                    sResourceType = OString ( "description" );
-                    sLangAttribute = OString ( "lang" );
+                    sGID = "extdesc"_ostr;
+                    sResourceType = "description"_ostr;
+                    sLangAttribute = "lang"_ostr;
                     sCurrentOpenTag = rToken;
                     sCurrentText  = OString();
                     Output( rToken );
@@ -297,7 +297,7 @@ void XRMResExport::WorkOnDesc(
     const OString &rOpenTag,
     OString &rText )
 {
-    const OString sDescFileName{ sInputFileName.replaceAll("description.xml", OString())
+    const OString sDescFileName{ sInputFileName.replaceAll("description.xml"_ostr, OString())
         + GetAttribute( rOpenTag, "xlink:href" ) };
     std::ifstream file (sDescFileName.getStr(), std::ios::in|std::ios::binary|std::ios::ate);
     if (file.is_open()) {
@@ -332,11 +332,11 @@ void XRMResExport::EndOfText(
 {
     if ( pResData )
     {
-        OString sAct = pResData->sText["en-US"];
+        OString sAct = pResData->sText["en-US"_ostr];
 
         if( !sAct.isEmpty() )
             common::writePoEntry(
-                "Xrmex", pOutputStream, sPath, sResourceType,
+                "Xrmex"_ostr, pOutputStream, sPath, sResourceType,
                 pResData->sGId, OString(), OString(), sAct );
     }
     pResData.reset();
@@ -396,10 +396,10 @@ void XRMResMerge::WorkOnDesc(
                     sAdditionalLine = sAdditionalLine.replaceFirst(
                         sSearch, sReplace);
 
-                    sSearch = OString("xlink:href=\"");
+                    sSearch = "xlink:href=\""_ostr;
                     sReplace = sSearch;
 
-                    const OString sLocDescFilename = sDescFilename.replaceFirst( "en-US", sCur);
+                    const OString sLocDescFilename = sDescFilename.replaceFirst( "en-US"_ostr, sCur);
 
                     sSearch += sDescFilename;
                     sReplace += sLocDescFilename;

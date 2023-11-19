@@ -108,17 +108,17 @@ bool HelpParser::CreatePO(
         auto posm = aXMLStrHM->find(pos);
         LangHashMap* pElem = posm->second;
 
-        XMLElement* pXMLElement = (*pElem)[ "en-US" ];
+        XMLElement* pXMLElement = (*pElem)[ "en-US"_ostr ];
 
         if( pXMLElement != nullptr )
         {
             OString data(
                 pXMLElement->ToOString().
-                    replaceAll("\n",OString()).
-                    replaceAll("\t",OString()).trim());
+                    replaceAll("\n"_ostr,OString()).
+                    replaceAll("\t"_ostr,OString()).trim());
 
             common::writePoEntry(
-                "Helpex", aPoOutput, sHelpFile, rGsi1,
+                "Helpex"_ostr, aPoOutput, sHelpFile, rGsi1,
                 posm->first, OString(), OString(), data);
 
             pXMLElement=nullptr;
@@ -158,7 +158,7 @@ void HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
     file->Extract();
 
     XMLHashMap* aXMLStrHM = file->GetStrings();
-    static ResData s_ResData("","");
+    static ResData s_ResData(""_ostr,""_ostr);
     s_ResData.sResTyp   = "help";
 
     std::vector<OString> order = file->getOrder();
@@ -190,7 +190,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     if( sCur.equalsIgnoreAsciiCase("en-US") )
         return;
 
-    pXMLElement = (*aLangHM)[ "en-US" ];
+    pXMLElement = (*aLangHM)[ "en-US"_ostr ];
     if( pXMLElement == nullptr )
     {
         printf("Error: Can't find en-US entry\n");
@@ -202,10 +202,10 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     OString sSourceText(
     pXMLElement->ToOString().
         replaceAll(
-            "\n",
+            "\n"_ostr,
             OString()).
         replaceAll(
-            "\t",
+            "\t"_ostr,
             OString()));
     // re-add spaces to the beginning of translated string,
     // important for indentation of Basic code examples

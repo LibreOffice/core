@@ -17,7 +17,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     common::HandledArgs aArgs;
     if( !common::handleArguments(argc, argv, aArgs) )
     {
-        common::writeUsage("propex","*.properties");
+        common::writeUsage("propex"_ostr,"*.properties"_ostr);
         return 1;
     }
 

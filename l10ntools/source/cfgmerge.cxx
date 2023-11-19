@@ -52,7 +52,7 @@ FILE * init(int argc, char ** argv) {
     common::HandledArgs aArgs;
     if ( !common::handleArguments(argc, argv, aArgs) )
     {
-        common::writeUsage("cfgex","*.xcu");
+        common::writeUsage("cfgex"_ostr,"*.xcu"_ostr);
         std::exit(EXIT_FAILURE);
     }
     global::inputPathname = aArgs.m_sInputFile;
@@ -365,10 +365,10 @@ void CfgExport::WorkOnResourceEnd()
     if ( !bLocalize )
         return;
 
-    if ( pStackData->sText["en-US"].isEmpty() )
+    if ( pStackData->sText["en-US"_ostr].isEmpty() )
         return;
 
-    OString sXComment = pStackData->sText[OString("x-comment")];
+    OString sXComment = pStackData->sText["x-comment"_ostr];
     OString sLocalId = pStackData->sIdentifier;
     OString sGroupId;
     if ( aStack.size() == 1 ) {
@@ -380,11 +380,11 @@ void CfgExport::WorkOnResourceEnd()
     }
 
 
-    OString sText = pStackData->sText[ "en-US" ];
+    OString sText = pStackData->sText[ "en-US"_ostr ];
     sText = helper::UnQuotHTML( sText );
 
     common::writePoEntry(
-        "Cfgex", pOutputStream, sPath, pStackData->sResTyp,
+        "Cfgex"_ostr, pOutputStream, sPath, pStackData->sResTyp,
         sGroupId, sLocalId, sXComment, sText);
 }
 
