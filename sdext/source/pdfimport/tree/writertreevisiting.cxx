@@ -977,7 +977,7 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uni
         {
             PropertyMap props;
             FillDashStyleProps(props, rGC.DashArray, scale);
-            StyleContainer::Style style("draw:stroke-dash", std::move(props));
+            StyleContainer::Style style("draw:stroke-dash"_ostr, std::move(props));
 
             aGCProps[ "draw:stroke" ] = "dash";
             aGCProps[ "draw:stroke-dash" ] =
@@ -1006,8 +1006,8 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uni
         aGCProps[ "draw:fill" ] = "none";
     }
 
-    StyleContainer::Style aStyle( "style:style", std::move(aProps) );
-    StyleContainer::Style aSubStyle( "style:graphic-properties", std::move(aGCProps) );
+    StyleContainer::Style aStyle( "style:style"_ostr, std::move(aProps) );
+    StyleContainer::Style aSubStyle( "style:graphic-properties"_ostr, std::move(aGCProps) );
     aStyle.SubStyles.push_back( &aSubStyle );
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
@@ -1067,8 +1067,8 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext( elem.GCId );
     aFontProps[ "fo:color" ] = getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
 
-    StyleContainer::Style aStyle( "style:style", std::move(aProps) );
-    StyleContainer::Style aSubStyle( "style:text-properties", std::move(aFontProps) );
+    StyleContainer::Style aStyle( "style:style"_ostr, std::move(aProps) );
+    StyleContainer::Style aSubStyle( "style:text-properties"_ostr, std::move(aFontProps) );
     aStyle.SubStyles.push_back( &aSubStyle );
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
 }
@@ -1131,8 +1131,8 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< std::un
     {
         PropertyMap aProps;
         aProps[ "style:family" ] = "paragraph";
-        StyleContainer::Style aStyle( "style:style", std::move(aProps) );
-        StyleContainer::Style aSubStyle( "style:paragraph-properties", std::move(aParaProps) );
+        StyleContainer::Style aStyle( "style:style"_ostr, std::move(aProps) );
+        StyleContainer::Style aSubStyle( "style:paragraph-properties"_ostr, std::move(aParaProps) );
         aStyle.SubStyles.push_back( &aSubStyle );
         elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
     }
@@ -1160,8 +1160,8 @@ void WriterXmlFinalizer::visit( FrameElement& elem, const std::list< std::unique
     aGCProps[ "fo:padding-right" ]               = "0cm";
     aGCProps[ "fo:padding-bottom" ]              = "0cm";
 
-    StyleContainer::Style aStyle( "style:style", std::move(aProps) );
-    StyleContainer::Style aSubStyle( "style:graphic-properties", std::move(aGCProps) );
+    StyleContainer::Style aStyle( "style:style"_ostr, std::move(aProps) );
+    StyleContainer::Style aSubStyle( "style:graphic-properties"_ostr, std::move(aGCProps) );
     aStyle.SubStyles.push_back( &aSubStyle );
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
@@ -1191,7 +1191,7 @@ void WriterXmlFinalizer::setFirstOnPage( ParagraphElement&    rElem,
         rElem.StyleId = rStyles.setProperties( rElem.StyleId, std::move(aProps) );
     else
     {
-        StyleContainer::Style aStyle( "style:style", std::move(aProps) );
+        StyleContainer::Style aStyle( "style:style"_ostr, std::move(aProps) );
         rElem.StyleId = rStyles.getStyleId( aStyle );
     }
 }
@@ -1296,17 +1296,17 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_
     aPageLayoutProps[ "fo:margin-right" ]   = unitMMString( right_margin );
     aPageLayoutProps[ "style:writing-mode" ]= "lr-tb";
 
-    StyleContainer::Style aStyle( "style:page-layout", std::move(aPageProps));
-    StyleContainer::Style aSubStyle( "style:page-layout-properties", std::move(aPageLayoutProps));
+    StyleContainer::Style aStyle( "style:page-layout"_ostr, std::move(aPageProps));
+    StyleContainer::Style aSubStyle( "style:page-layout-properties"_ostr, std::move(aPageLayoutProps));
     aStyle.SubStyles.push_back(&aSubStyle);
     sal_Int32 nPageStyle = m_rStyleContainer.impl_getStyleId( aStyle, false );
 
     // create master page
     OUString aMasterPageLayoutName = m_rStyleContainer.getStyleName( nPageStyle );
     aPageProps[ "style:page-layout-name" ] = aMasterPageLayoutName;
-    StyleContainer::Style aMPStyle( "style:master-page", std::move(aPageProps) );
-    StyleContainer::Style aHeaderStyle( "style:header", PropertyMap() );
-    StyleContainer::Style aFooterStyle( "style:footer", PropertyMap() );
+    StyleContainer::Style aMPStyle( "style:master-page"_ostr, std::move(aPageProps) );
+    StyleContainer::Style aHeaderStyle( "style:header"_ostr, PropertyMap() );
+    StyleContainer::Style aFooterStyle( "style:footer"_ostr, PropertyMap() );
     if( elem.HeaderElement )
     {
         elem.HeaderElement->visitedBy( *this, std::list<std::unique_ptr<Element>>::iterator() );

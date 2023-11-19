@@ -578,7 +578,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                 if( pTrailer && pTrailer->m_pDict )
                 {
                     // search document checksum entry
-                    auto chk = pTrailer->m_pDict->m_aMap.find( "DocChecksum" );
+                    auto chk = pTrailer->m_pDict->m_aMap.find( "DocChecksum"_ostr );
                     if( chk == pTrailer->m_pDict->m_aMap.end() )
                     {
                         SAL_INFO( "sdext.pdfimport", "no DocChecksum entry" );
@@ -592,7 +592,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                     }
 
                     // search for AdditionalStreams entry
-                    auto add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
+                    auto add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams"_ostr );
                     if( add_stream == pTrailer->m_pDict->m_aMap.end() )
                     {
                         SAL_INFO( "sdext.pdfimport", "no AdditionalStreams entry" );

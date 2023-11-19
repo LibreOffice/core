@@ -624,7 +624,7 @@ unsigned int PDFStream::getDictLength( const PDFContainer* pContainer ) const
         return 0;
     // find /Length entry, can either be a direct or indirect number object
     std::unordered_map<OString,PDFEntry*>::const_iterator it =
-        m_pDict->m_aMap.find( "Length" );
+        m_pDict->m_aMap.find( "Length"_ostr );
     if( it == m_pDict->m_aMap.end() )
         return 0;
     PDFNumber* pNum = dynamic_cast<PDFNumber*>(it->second);
@@ -673,7 +673,7 @@ bool PDFObject::getDeflatedStream( std::unique_ptr<char[]>& rpStream, unsigned i
         }
         // is there a filter entry ?
         std::unordered_map<OString,PDFEntry*>::const_iterator it =
-            m_pStream->m_pDict->m_aMap.find( "Filter" );
+            m_pStream->m_pDict->m_aMap.find( "Filter"_ostr );
         if( it != m_pStream->m_pDict->m_aMap.end() )
         {
             PDFName* pFilter = dynamic_cast<PDFName*>(it->second);
@@ -842,13 +842,13 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 std::unique_ptr<PDFObject> pClone(static_cast<PDFObject*>(clone()));
                 // set length in the dictionary to new stream length
                 std::unique_ptr<PDFNumber> pNewLen(new PDFNumber( double(nOutBytes) ));
-                pClone->m_pStream->m_pDict->insertValue( "Length", std::move(pNewLen) );
+                pClone->m_pStream->m_pDict->insertValue( "Length"_ostr, std::move(pNewLen) );
 
                 if( bDeflate && rWriteContext.m_bDeflate )
                 {
                     // delete flatedecode filter
                     std::unordered_map<OString,PDFEntry*>::const_iterator it =
-                    pClone->m_pStream->m_pDict->m_aMap.find( "Filter" );
+                    pClone->m_pStream->m_pDict->m_aMap.find( "Filter"_ostr );
                     if( it != pClone->m_pStream->m_pDict->m_aMap.end() )
                     {
                         PDFName* pFilter = dynamic_cast<PDFName*>(it->second);
@@ -1288,7 +1288,7 @@ PDFFileImplData* PDFFile::impl_getData() const
         if( pTrailer && pTrailer->m_pDict )
         {
             // search doc id
-            PDFDict::Map::iterator doc_id = pTrailer->m_pDict->m_aMap.find( "ID" );
+            PDFDict::Map::iterator doc_id = pTrailer->m_pDict->m_aMap.find( "ID"_ostr );
             if( doc_id != pTrailer->m_pDict->m_aMap.end() )
             {
                 PDFArray* pArr = dynamic_cast<PDFArray*>(doc_id->second);
@@ -1307,7 +1307,7 @@ PDFFileImplData* PDFFile::impl_getData() const
             }
             // search Encrypt entry
             PDFDict::Map::iterator enc =
-                pTrailer->m_pDict->m_aMap.find( "Encrypt" );
+                pTrailer->m_pDict->m_aMap.find( "Encrypt"_ostr );
             if( enc != pTrailer->m_pDict->m_aMap.end() )
             {
                 PDFDict* pDict = dynamic_cast<PDFDict*>(enc->second);
@@ -1323,13 +1323,13 @@ PDFFileImplData* PDFFile::impl_getData() const
                 }
                 if( pDict )
                 {
-                    PDFDict::Map::iterator filter = pDict->m_aMap.find( "Filter" );
-                    PDFDict::Map::iterator version = pDict->m_aMap.find( "V" );
-                    PDFDict::Map::iterator len = pDict->m_aMap.find( "Length" );
-                    PDFDict::Map::iterator o_ent = pDict->m_aMap.find( "O" );
-                    PDFDict::Map::iterator u_ent = pDict->m_aMap.find( "U" );
-                    PDFDict::Map::iterator r_ent = pDict->m_aMap.find( "R" );
-                    PDFDict::Map::iterator p_ent = pDict->m_aMap.find( "P" );
+                    PDFDict::Map::iterator filter = pDict->m_aMap.find( "Filter"_ostr );
+                    PDFDict::Map::iterator version = pDict->m_aMap.find( "V"_ostr );
+                    PDFDict::Map::iterator len = pDict->m_aMap.find( "Length"_ostr );
+                    PDFDict::Map::iterator o_ent = pDict->m_aMap.find( "O"_ostr );
+                    PDFDict::Map::iterator u_ent = pDict->m_aMap.find( "U"_ostr );
+                    PDFDict::Map::iterator r_ent = pDict->m_aMap.find( "R"_ostr );
+                    PDFDict::Map::iterator p_ent = pDict->m_aMap.find( "P"_ostr );
                     if( filter != pDict->m_aMap.end() )
                     {
                         m_pData->m_bIsEncrypted = true;
