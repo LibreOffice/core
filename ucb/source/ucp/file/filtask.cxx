@@ -507,7 +507,7 @@ TaskManager::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
     if( it == m_aContent.end() )
         return;
 
-    it->second.notifier.erase(std::remove(it->second.notifier.begin(), it->second.notifier.end(), pNotifier), it->second.notifier.end());
+    std::erase(it->second.notifier, pNotifier);
 
     if( it->second.notifier.empty() )
         m_aContent.erase( it );
