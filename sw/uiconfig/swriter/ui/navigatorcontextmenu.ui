@@ -254,6 +254,22 @@
       </object>
     </child>
     <child>
+      <object class="GtkCheckMenuItem" id="protectsection">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_PROTECT_SECTION">Protect Section</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="hidesection">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_HIDE_SECTION">Hide Section</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="600">
         <property name="visible">True</property>
         <property name="can-focus">False</property>

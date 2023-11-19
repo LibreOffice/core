@@ -260,6 +260,11 @@ bool SwURLFieldContent::IsProtect() const
     return m_pINetAttr->IsProtect();
 }
 
+bool SwRegionContent::IsProtect() const
+{
+    return m_pSectionFormat->GetSection()->IsProtect();
+}
+
 SwGraphicContent::~SwGraphicContent()
 {
 }
@@ -810,7 +815,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                             m_bAlphabeticSort ? 0 : getYPos(pNodeIndex->GetNode()),
                                                                 pFormat));
 
-                    if(!pFormat->IsVisible())
+                    if (!pFormat->IsVisible() || pSection->IsHidden())
                         pCnt->SetInvisible();
                     m_pMember->insert(std::move(pCnt));
                 }
@@ -1718,6 +1723,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     bool bRemoveSortEntry = true;
 
+    bool bRemoveProtectSection = true;
+    bool bRemoveHideSection = true;
+
     if (xEntry)
     {
         const SwContentType* pType;
@@ -1811,7 +1819,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     && m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
             const bool bEditable = pType->IsEditable() &&
                     ((bVisible && !bProtected) || ContentTypeId::REGION == nContentType);
-            const bool bDeletable = pType->IsDeletable() && bVisible && !bProtected && !bProtectBM;
+            const bool bDeletable = pType->IsDeletable()
+                    && ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
             const bool bRenamable = bEditable && !bReadonly &&
                     (ContentTypeId::TABLE == nContentType ||
                      ContentTypeId::FRAME == nContentType ||
@@ -1913,8 +1922,17 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 }
                 else if(ContentTypeId::REGION == nContentType)
                 {
-                    bRemoveSelectEntry = false;
                     bRemoveEditEntry = false;
+                    bRemoveProtectSection = false;
+                    bRemoveHideSection = false;
+                    SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
+                    assert(dynamic_cast<SwRegionContent*>(static_cast<SwTypeNumber*>(pCnt)));
+                    const SwSectionFormat* pSectionFormat
+                            = static_cast<SwRegionContent*>(pCnt)->GetSectionFormat();
+                    bool bHidden = pSectionFormat->GetSection()->IsHidden();
+                    bRemoveSelectEntry = bHidden || !bVisible;
+                    xPop->set_active("protectsection", bProtected);
+                    xPop->set_active("hidesection", bHidden);
                 }
                 else if (bEditable)
                     bRemoveEditEntry = false;
@@ -2106,6 +2124,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove("endnotetracking");
     if (bRemoveSortEntry)
         xPop->remove("sort");
+    if (bRemoveProtectSection)
+        xPop->remove("protectsection");
+    if (bRemoveHideSection)
+        xPop->remove("hidesection");
 
     bool bSetSensitiveCollapseAllCategories = false;
     if (!m_bIsRoot && xEntry)
@@ -4811,7 +4833,21 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
     if (!m_xTreeView->get_selected(xFirst.get()))
         return; // this shouldn't happen, but better to be safe than ...
 
-    if (rSelectedPopupEntry == "sort")
+    if (rSelectedPopupEntry == "protectsection" || rSelectedPopupEntry == "hidesection")
+    {
+        SwRegionContent* pCnt = weld::fromId<SwRegionContent*>(m_xTreeView->get_id(*xFirst));
+        assert(dynamic_cast<SwRegionContent*>(static_cast<SwTypeNumber*>(pCnt)));
+        const SwSectionFormat* pSectionFormat = pCnt->GetSectionFormat();
+        SwSection* pSection = pSectionFormat->GetSection();
+        SwSectionData aSectionData(*pSection);
+        if (rSelectedPopupEntry == "protectsection")
+            aSectionData.SetProtectFlag(!pSection->IsProtect());
+        else
+            aSectionData.SetHidden(!pSection->IsHidden());
+        m_pActiveShell->UpdateSection(m_pActiveShell->GetSectionFormatPos(*pSectionFormat),
+                                      aSectionData);
+    }
+    else if (rSelectedPopupEntry == "sort")
     {
         SwContentType* pCntType;
         const OUString& rId(m_xTreeView->get_id(*xFirst));

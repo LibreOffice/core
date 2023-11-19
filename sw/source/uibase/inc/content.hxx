@@ -72,6 +72,8 @@ class SwRegionContent final : public SwContent
                         m_nRegionLevel(nLevel), m_pSectionFormat(pSectionFormat){}
     sal_uInt8   GetRegionLevel() const {return m_nRegionLevel;}
     const SwSectionFormat* GetSectionFormat() const {return m_pSectionFormat;}
+
+    bool IsProtect() const override;
 };
 
 class SwURLFieldContent final : public SwContent
