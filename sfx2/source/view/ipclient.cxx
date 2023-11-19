@@ -384,7 +384,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
     if ( comphelper::LibreOfficeKit::isActive() )
     {
         if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() ) {
-            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE EXIT" );
+            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE EXIT"_ostr );
         }
     }
 }

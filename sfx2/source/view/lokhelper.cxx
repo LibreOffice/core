@@ -604,8 +604,8 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     {
         if (!rItem.first.isEmpty() && !rItem.second.isEmpty())
         {
-            auto aFirst = rItem.first.replaceAll("\"", "\\\"");
-            auto aSecond = rItem.second.replaceAll("\"", "\\\"");
+            auto aFirst = rItem.first.replaceAll("\""_ostr, "\\\""_ostr);
+            auto aSecond = rItem.second.replaceAll("\""_ostr, "\\\""_ostr);
             aPayload.append(", \"" + aFirst + "\": \"" + aSecond + "\"");
         }
     }
@@ -665,7 +665,7 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
         // or not?
         if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
         {
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pDoc, bInvalidateAll);
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, bInvalidateAll);
             bInvalidateAll = false; // we direct invalidations to all views anyway.
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -681,7 +681,7 @@ void SfxLokHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, in
     while (pViewShell)
     {
         if (pViewShell->getPart() == nPart)
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pDoc, false);
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, false);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
@@ -691,7 +691,7 @@ OString SfxLokHelper::makeVisCursorInvalidation(int nViewId, const OString& rRec
 {
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
-        OString sHyperlink = rHyperlink.isEmpty() ? "{}" : rHyperlink;
+        OString sHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
         return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
             "\", \"rectangle\": \"" + rRectangle +
             "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +

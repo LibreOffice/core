@@ -190,7 +190,7 @@ void SfxClipboardChangeListener::ChangedContents()
     if (comphelper::LibreOfficeKit::isActive())
     {
         // In the future we might send the payload as well.
-        SfxLokHelper::notifyAllViews(LOK_CALLBACK_CLIPBOARD_CHANGED, "");
+        SfxLokHelper::notifyAllViews(LOK_CALLBACK_CLIPBOARD_CHANGED, ""_ostr);
     }
 }
 

@@ -677,7 +677,7 @@ IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClose
     if (pEvt->DialogResult == RET_OK && m_xFilterProperties)
     {
         if ( comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() )
-            SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "PENDING" );
+            SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "PENDING"_ostr );
 
         const uno::Sequence< beans::PropertyValue > aPropsFromDialog = m_xFilterProperties->getPropertyValues();
         for ( const auto& rProp : aPropsFromDialog )
@@ -687,7 +687,7 @@ IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClose
     }
     else if ( comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() )
     {
-        SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "ABORT" );
+        SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "ABORT"_ostr );
     }
 }
 

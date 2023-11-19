@@ -3265,7 +3265,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                                 m_pData->m_pObjectShell.get() ) );
 
         if ( comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() )
-            SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "ERROR" );
+            SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "ERROR"_ostr );
 
         std::stringstream aErrCode;
         aErrCode << nErrCode;
