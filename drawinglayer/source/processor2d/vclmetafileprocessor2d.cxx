@@ -299,7 +299,7 @@ void VclMetafileProcessor2D::impStartSvtGraphicFill(SvtGraphicFill const* pSvtGr
 
         WriteSvtGraphicFill(aMemStm, *pSvtGraphicFill);
         mpMetaFile->AddAction(new MetaCommentAction(
-            "XPATHFILL_SEQ_BEGIN", 0, static_cast<const sal_uInt8*>(aMemStm.GetData()),
+            "XPATHFILL_SEQ_BEGIN"_ostr, 0, static_cast<const sal_uInt8*>(aMemStm.GetData()),
             aMemStm.TellEnd()));
         mnSvtGraphicFillCount++;
     }
@@ -310,7 +310,7 @@ void VclMetafileProcessor2D::impEndSvtGraphicFill(SvtGraphicFill const* pSvtGrap
     if (pSvtGraphicFill && mnSvtGraphicFillCount)
     {
         mnSvtGraphicFillCount--;
-        mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_END"));
+        mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_END"_ostr));
     }
 }
 
@@ -483,7 +483,7 @@ void VclMetafileProcessor2D::impStartSvtGraphicStroke(SvtGraphicStroke const* pS
 
         WriteSvtGraphicStroke(aMemStm, *pSvtGraphicStroke);
         mpMetaFile->AddAction(new MetaCommentAction(
-            "XPATHSTROKE_SEQ_BEGIN", 0, static_cast<const sal_uInt8*>(aMemStm.GetData()),
+            "XPATHSTROKE_SEQ_BEGIN"_ostr, 0, static_cast<const sal_uInt8*>(aMemStm.GetData()),
             aMemStm.TellEnd()));
         mnSvtGraphicStrokeCount++;
     }
@@ -494,7 +494,7 @@ void VclMetafileProcessor2D::impEndSvtGraphicStroke(SvtGraphicStroke const* pSvt
     if (pSvtGraphicStroke && mnSvtGraphicStrokeCount)
     {
         mnSvtGraphicStrokeCount--;
-        mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_END"));
+        mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_END"_ostr));
     }
 }
 
@@ -1276,7 +1276,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
         }
         case drawinglayer::primitive2d::FIELD_TYPE_PAGE:
         {
-            mpMetaFile->AddAction(new MetaCommentAction("FIELD_SEQ_BEGIN;PageField"));
+            mpMetaFile->AddAction(new MetaCommentAction("FIELD_SEQ_BEGIN;PageField"_ostr));
             break;
         }
         case drawinglayer::primitive2d::FIELD_TYPE_URL:
@@ -1300,7 +1300,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
     process(rContent);
 
     // for the end comment the type is not relevant yet, they are all the same. Just add.
-    mpMetaFile->AddAction(new MetaCommentAction("FIELD_SEQ_END"));
+    mpMetaFile->AddAction(new MetaCommentAction("FIELD_SEQ_END"_ostr));
 
     if (!(mpPDFExtOutDevData
           && drawinglayer::primitive2d::FIELD_TYPE_URL == rFieldPrimitive.getType()))
@@ -1325,7 +1325,7 @@ void VclMetafileProcessor2D::processTextHierarchyLinePrimitive2D(
 {
     // process recursively and add MetaFile comment
     process(rLinePrimitive);
-    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_EOL"));
+    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_EOL"_ostr));
 }
 
 void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
@@ -1342,7 +1342,7 @@ void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
     process(rBulletPrimitive);
     // in Outliner::PaintBullet(), a MetafileComment for bullets is added, too. The
     // "XTEXT_EOC" is used, use here, too.
-    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_EOC"));
+    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_EOC"_ostr));
 
     if (mbInListItem)
     {
@@ -1454,7 +1454,7 @@ void VclMetafileProcessor2D::processTextHierarchyBlockPrimitive2D(
     const primitive2d::TextHierarchyBlockPrimitive2D& rBlockPrimitive)
 {
     // add MetaFile comment, process recursively and add MetaFile comment
-    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_PAINTSHAPE_BEGIN"));
+    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_PAINTSHAPE_BEGIN"_ostr));
     process(rBlockPrimitive);
 
     if (mnCurrentOutlineLevel >= 0)
@@ -1466,7 +1466,7 @@ void VclMetafileProcessor2D::processTextHierarchyBlockPrimitive2D(
         }
     }
 
-    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_PAINTSHAPE_END"));
+    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_PAINTSHAPE_END"_ostr));
 }
 
 void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
@@ -2081,7 +2081,7 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
             // use it while all others will work on the created decomposition of the
             // gradient for compatibility - which are single-color filled polygons
             pMetaFile->AddAction(new MetaCommentAction(
-                "BGRAD_SEQ_BEGIN", 0, static_cast<const sal_uInt8*>(aMemStm.GetData()),
+                "BGRAD_SEQ_BEGIN"_ostr, 0, static_cast<const sal_uInt8*>(aMemStm.GetData()),
                 aMemStm.TellEnd()));
 
             // create MetaActionType::GRADIENTEX
@@ -2107,7 +2107,7 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
         if (nullptr != pMetaFile && pMetaFile->getSVG())
         {
             // close the BGRAD_SEQ_* actions range
-            pMetaFile->AddAction(new MetaCommentAction("BGRAD_SEQ_END"));
+            pMetaFile->AddAction(new MetaCommentAction("BGRAD_SEQ_END"_ostr));
         }
 
         return;
