@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testNumberingIdentifi
                 {
                     aFail.emplace_back(
                         "Numbering: " + OString::number(i) + " \"" + aID.toUtf8() + "\""
-                        + (aID.isEmpty() ? ""
+                        + (aID.isEmpty() ? ""_ostr
                                          : OString(" duplicate of " + OString::number(aMap[aID])))
                         + "\n");
                 }
@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testNumberingIdentifi
 
     if (!aFail.empty())
     {
-        OString aMsg("Not unique numbering identifiers:\n");
+        OString aMsg("Not unique numbering identifiers:\n"_ostr);
         for (auto const& r : aFail)
             aMsg += r;
         CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), false);
