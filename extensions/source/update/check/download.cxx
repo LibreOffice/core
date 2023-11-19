@@ -293,7 +293,7 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
         // Only report errors when not stopped
         else
         {
-            OString aMessage("Unknown error");
+            OString aMessage("Unknown error"_ostr);
 
             const char * error_message = curl_easy_strerror(cc);
             if( nullptr != error_message )

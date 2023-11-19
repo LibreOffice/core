@@ -1283,8 +1283,8 @@ bool SaneDlg::LoadState()
     if( ! aConfig.HasGroup( "SANE" ) )
         return false;
 
-    aConfig.SetGroup( "SANE" );
-    OString aString = aConfig.ReadKey( "SO_LastSaneDevice" );
+    aConfig.SetGroup( "SANE"_ostr );
+    OString aString = aConfig.ReadKey( "SO_LastSaneDevice"_ostr );
     for( i = 0; i < Sane::CountDevices() && aString != OUStringToOString(Sane::GetName(i), osl_getThreadTextEncoding()); i++ ) ;
     if( i == Sane::CountDevices() )
         return false;
@@ -1356,8 +1356,8 @@ void SaneDlg::SaveState()
 
     Config aConfig( aFileName );
     aConfig.DeleteGroup( "SANE" );
-    aConfig.SetGroup( "SANE" );
-    aConfig.WriteKey( "SO_LastSANEDevice",
+    aConfig.SetGroup( "SANE"_ostr );
+    aConfig.WriteKey( "SO_LastSANEDevice"_ostr,
         OUStringToOString(mxDeviceBox->get_active_text(), RTL_TEXTENCODING_UTF8) );
 
     static char const* pSaveOptions[] = {

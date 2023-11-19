@@ -1407,7 +1407,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
     rc = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     if ( rc != osl::FileBase::E_None ) return false;
 
-    OString aLineBuf("[InternetShortcut]\r\n");
+    OString aLineBuf("[InternetShortcut]\r\n"_ostr);
     sal_uInt64 nWritten = 0;
 
     OUString aURL( rURL );
