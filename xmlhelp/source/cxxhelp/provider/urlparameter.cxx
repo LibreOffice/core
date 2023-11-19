@@ -770,11 +770,11 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             parString[last++] = "'css'";
 
             parString[last++] = "vendorname";
-            parString[last++] = OString("''");
+            parString[last++] = "''"_ostr;
             parString[last++] = "vendorversion";
-            parString[last++] = OString("''");
+            parString[last++] = "''"_ostr;
             parString[last++] = "vendorshort";
-            parString[last++] = OString("''");
+            parString[last++] = "''"_ostr;
         }
 
         // Do we need to add extension path?
