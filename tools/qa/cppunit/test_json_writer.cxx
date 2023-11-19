@@ -45,8 +45,8 @@ void JsonWriterTest::test1()
 
     OString result(aJson.finishAndGetAsOString());
 
-    CPPUNIT_ASSERT_EQUAL(OString("{ \"node\": { \"oustring\": \"val1\", "
-                                 "\"charptr\": \"val3\", \"int\": 12}}"),
+    CPPUNIT_ASSERT_EQUAL("{ \"node\": { \"oustring\": \"val1\", "
+                         "\"charptr\": \"val3\", \"int\": 12}}"_ostr,
                          result);
 }
 
@@ -71,9 +71,9 @@ void JsonWriterTest::test2()
 
     OString result(aJson.finishAndGetAsOString());
 
-    CPPUNIT_ASSERT_EQUAL(OString("{ \"node\": { \"field1\": \"val1\", \"field2\": \"val2\", "
-                                 "\"node\": { \"field3\": \"val3\", \"node\": { \"field4\": "
-                                 "\"val4\", \"field5\": \"val5\"}}}}"),
+    CPPUNIT_ASSERT_EQUAL("{ \"node\": { \"field1\": \"val1\", \"field2\": \"val2\", "
+                         "\"node\": { \"field3\": \"val3\", \"node\": { \"field4\": "
+                         "\"val4\", \"field5\": \"val5\"}}}}"_ostr,
                          result);
 }
 
@@ -88,7 +88,7 @@ void JsonWriterTest::testArray()
 
     OString aResult(aJson.finishAndGetAsOString());
 
-    CPPUNIT_ASSERT_EQUAL(OString("{ \"items\": [ \"foo\", \"bar\"]}"), aResult);
+    CPPUNIT_ASSERT_EQUAL("{ \"items\": [ \"foo\", \"bar\"]}"_ostr, aResult);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JsonWriterTest);

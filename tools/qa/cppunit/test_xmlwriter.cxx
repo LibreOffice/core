@@ -45,7 +45,7 @@ void XmlWriterTest::testSimpleRoot()
 
     aMemoryStream.Seek(0);
     OString aString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
-    CPPUNIT_ASSERT_EQUAL(OString("<test/>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<test/>"_ostr, aString);
 }
 
 void XmlWriterTest::testSpecialChars()
@@ -55,13 +55,13 @@ void XmlWriterTest::testSpecialChars()
     tools::XmlWriter aWriter(&aMemoryStream);
     aWriter.startDocument(0, false);
     aWriter.startElement("test");
-    aWriter.content("<>");
+    aWriter.content("<>"_ostr);
     aWriter.endElement();
     aWriter.endDocument();
 
     aMemoryStream.Seek(0);
     OString aString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
-    CPPUNIT_ASSERT_EQUAL(OString("<test>&lt;&gt;</test>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<test>&lt;&gt;</test>"_ostr, aString);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(XmlWriterTest);

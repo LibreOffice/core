@@ -140,10 +140,10 @@ namespace
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, StreamMode::READ);
 
         OString aOne = read_uInt8s_ToOString(aMemStream, 3);
-        CPPUNIT_ASSERT_EQUAL(OString("foo"), aOne);
+        CPPUNIT_ASSERT_EQUAL("foo"_ostr, aOne);
 
         OString aTwo = read_uInt8s_ToOString(aMemStream, 3);
-        CPPUNIT_ASSERT_EQUAL(OString("bar"), aTwo);
+        CPPUNIT_ASSERT_EQUAL("bar"_ostr, aTwo);
 
         OString aThree = read_uInt8s_ToOString(aMemStream, 3);
         CPPUNIT_ASSERT(aThree.isEmpty());
@@ -160,7 +160,7 @@ namespace
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, StreamMode::READ);
 
         OString aOne = read_zeroTerminated_uInt8s_ToOString(aMemStream);
-        CPPUNIT_ASSERT_EQUAL(OString("foobar"), aOne);
+        CPPUNIT_ASSERT_EQUAL("foobar"_ostr, aOne);
         CPPUNIT_ASSERT(!aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
         CPPUNIT_ASSERT(aMemStream.eof());
@@ -168,7 +168,7 @@ namespace
         aMemStream.Seek(0);
         foo[3] = 0;
         OString aTwo = read_zeroTerminated_uInt8s_ToOString(aMemStream);
-        CPPUNIT_ASSERT_EQUAL(OString("foo"), aTwo);
+        CPPUNIT_ASSERT_EQUAL("foo"_ostr, aTwo);
         CPPUNIT_ASSERT(aMemStream.good());
     }
 
@@ -178,7 +178,7 @@ namespace
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, StreamMode::READ);
 
         OString aFoo = read_uInt8_lenPrefixed_uInt8s_ToOString(aMemStream);
-        CPPUNIT_ASSERT_EQUAL(OString("foo"), aFoo);
+        CPPUNIT_ASSERT_EQUAL("foo"_ostr, aFoo);
         CPPUNIT_ASSERT(aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
         CPPUNIT_ASSERT(!aMemStream.eof());
@@ -186,7 +186,7 @@ namespace
         aMemStream.Seek(0);
         foo[0] = 10;
         aFoo = read_uInt8_lenPrefixed_uInt8s_ToOString(aMemStream);
-        CPPUNIT_ASSERT_EQUAL(OString("foobar"), aFoo);
+        CPPUNIT_ASSERT_EQUAL("foobar"_ostr, aFoo);
         CPPUNIT_ASSERT(!aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
         CPPUNIT_ASSERT(aMemStream.eof());
@@ -196,7 +196,7 @@ namespace
         foo[0] = 0;
         foo[1] = 3;
         aFoo = read_uInt16_lenPrefixed_uInt8s_ToOString(aMemStream);
-        CPPUNIT_ASSERT_EQUAL(OString("oob"), aFoo);
+        CPPUNIT_ASSERT_EQUAL("oob"_ostr, aFoo);
         CPPUNIT_ASSERT(aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
         CPPUNIT_ASSERT(!aMemStream.eof());
@@ -212,12 +212,12 @@ namespace
 
         bRet = aMemStream.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);
-        CPPUNIT_ASSERT_EQUAL(OString("foo"), aFoo);
+        CPPUNIT_ASSERT_EQUAL("foo"_ostr, aFoo);
         CPPUNIT_ASSERT(aMemStream.good());
 
         bRet = aMemStream.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);
-        CPPUNIT_ASSERT_EQUAL(OString("bar"), aFoo);
+        CPPUNIT_ASSERT_EQUAL("bar"_ostr, aFoo);
         CPPUNIT_ASSERT(aMemStream.good());
 
         bRet = aMemStream.ReadLine(aFoo);
@@ -271,7 +271,7 @@ namespace
         SvMemoryStream aMemStreamB(bar, SAL_N_ELEMENTS(bar)-1, StreamMode::READ);
         bRet = aMemStreamB.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);
-        CPPUNIT_ASSERT_EQUAL(OString("foo"), aFoo);
+        CPPUNIT_ASSERT_EQUAL("foo"_ostr, aFoo);
         CPPUNIT_ASSERT(!aMemStreamB.eof()); //<-- diff A
 
         std::istringstream issB(bar, std::istringstream::in);

@@ -41,8 +41,8 @@ void XmlWalkerTest::testReadXML()
     tools::XmlWalker aWalker;
     SvFileStream aFileStream(aXmlFilePath, StreamMode::READ);
     CPPUNIT_ASSERT(aWalker.open(&aFileStream));
-    CPPUNIT_ASSERT_EQUAL(OString("root"), aWalker.name());
-    CPPUNIT_ASSERT_EQUAL(OString("Hello World"), aWalker.attribute("root-attr"));
+    CPPUNIT_ASSERT_EQUAL("root"_ostr, aWalker.name());
+    CPPUNIT_ASSERT_EQUAL("Hello World"_ostr, aWalker.attribute("root-attr"_ostr));
 
     int nNumberOfChildNodes = 0;
 
@@ -54,21 +54,21 @@ void XmlWalkerTest::testReadXML()
             nNumberOfChildNodes++;
 
             CPPUNIT_ASSERT_EQUAL(OString(OString::number(nNumberOfChildNodes)),
-                                 aWalker.attribute("number"));
+                                 aWalker.attribute("number"_ostr));
 
             if (nNumberOfChildNodes == 1) // only the first node has the attribute
-                CPPUNIT_ASSERT_EQUAL(OString("123"), aWalker.attribute("attribute"));
+                CPPUNIT_ASSERT_EQUAL("123"_ostr, aWalker.attribute("attribute"_ostr));
             else
-                CPPUNIT_ASSERT_EQUAL(OString(), aWalker.attribute("attribute"));
+                CPPUNIT_ASSERT_EQUAL(OString(), aWalker.attribute("attribute"_ostr));
 
             aWalker.children();
             while (aWalker.isValid())
             {
                 if (aWalker.name() == "grandchild")
                 {
-                    CPPUNIT_ASSERT_EQUAL(OString("ABC"), aWalker.attribute("attribute1"));
-                    CPPUNIT_ASSERT_EQUAL(OString("CDE"), aWalker.attribute("attribute2"));
-                    CPPUNIT_ASSERT_EQUAL(OString("Content"), aWalker.content());
+                    CPPUNIT_ASSERT_EQUAL("ABC"_ostr, aWalker.attribute("attribute1"_ostr));
+                    CPPUNIT_ASSERT_EQUAL("CDE"_ostr, aWalker.attribute("attribute2"_ostr));
+                    CPPUNIT_ASSERT_EQUAL("Content"_ostr, aWalker.content());
                 }
                 aWalker.next();
             }
@@ -76,8 +76,8 @@ void XmlWalkerTest::testReadXML()
         }
         else if (aWalker.name() == "with-namespace")
         {
-            CPPUNIT_ASSERT_EQUAL(OString("adobe:ns:meta/"), aWalker.namespaceHref());
-            CPPUNIT_ASSERT_EQUAL(OString("xx"), aWalker.namespacePrefix());
+            CPPUNIT_ASSERT_EQUAL("adobe:ns:meta/"_ostr, aWalker.namespaceHref());
+            CPPUNIT_ASSERT_EQUAL("xx"_ostr, aWalker.namespacePrefix());
         }
         aWalker.next();
     }

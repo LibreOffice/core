@@ -76,13 +76,13 @@ namespace
         CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
         CPPUNIT_ASSERT_EQUAL(
             INetContentTypeParameterList::size_type(2), parameters.size());
-        auto i = parameters.find("parm1");
+        auto i = parameters.find("parm1"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
         CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sCharset);
         CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sLanguage);
         CPPUNIT_ASSERT_EQUAL(OUString("Value1"), i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
-        i = parameters.find("parm2");
+        i = parameters.find("parm2"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
         CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sCharset);
         CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sLanguage);
@@ -114,10 +114,10 @@ namespace
         CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
         CPPUNIT_ASSERT_EQUAL(
             INetContentTypeParameterList::size_type(1), parameters.size());
-        auto i = parameters.find("parm1");
+        auto i = parameters.find("parm1"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
-        CPPUNIT_ASSERT_EQUAL(OString("us-ascii"), i->second.m_sCharset);
-        CPPUNIT_ASSERT_EQUAL(OString("en"), i->second.m_sLanguage);
+        CPPUNIT_ASSERT_EQUAL("us-ascii"_ostr, i->second.m_sCharset);
+        CPPUNIT_ASSERT_EQUAL("en"_ostr, i->second.m_sLanguage);
         CPPUNIT_ASSERT_EQUAL(OUString("5% of 10 = 0.5"), i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
 
@@ -141,23 +141,23 @@ namespace
         CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
         CPPUNIT_ASSERT_EQUAL(
             INetContentTypeParameterList::size_type(3), parameters.size());
-        i = parameters.find("parm1");
+        i = parameters.find("parm1"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
-        CPPUNIT_ASSERT_EQUAL(OString("us-ascii"), i->second.m_sCharset);
-        CPPUNIT_ASSERT_EQUAL(OString("en"), i->second.m_sLanguage);
+        CPPUNIT_ASSERT_EQUAL("us-ascii"_ostr, i->second.m_sCharset);
+        CPPUNIT_ASSERT_EQUAL("en"_ostr, i->second.m_sLanguage);
         CPPUNIT_ASSERT_EQUAL(OUString("value1"), i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
-        i = parameters.find("parm2");
+        i = parameters.find("parm2"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
-        CPPUNIT_ASSERT_EQUAL(OString("windows-1250"), i->second.m_sCharset);
-        CPPUNIT_ASSERT_EQUAL(OString("en-gb"), i->second.m_sLanguage);
+        CPPUNIT_ASSERT_EQUAL("windows-1250"_ostr, i->second.m_sCharset);
+        CPPUNIT_ASSERT_EQUAL("en-gb"_ostr, i->second.m_sLanguage);
         // Euro currency sign, windows-1250 x80 is converted to unicode u20AC:
         CPPUNIT_ASSERT_EQUAL(u"value2 \u20AC"_ustr, i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
-        i = parameters.find("parm3");
+        i = parameters.find("parm3"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
-        CPPUNIT_ASSERT_EQUAL(OString("unknown"), i->second.m_sCharset);
-        CPPUNIT_ASSERT_EQUAL(OString("en"), i->second.m_sLanguage);
+        CPPUNIT_ASSERT_EQUAL("unknown"_ostr, i->second.m_sCharset);
+        CPPUNIT_ASSERT_EQUAL("en"_ostr, i->second.m_sLanguage);
         // Conversion fails for unknown charsets:
         CPPUNIT_ASSERT(!i->second.m_bConverted);
     }

@@ -69,7 +69,7 @@ void ZCodecTest::testGzCompressDecompress()
     ZCodec aCodec;
     aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, true);
     // Set compression metadata for compressing a GZ file
-    aCodec.SetCompressionMetadata("dummy.txt", 0, nInitialStreamCRC32);
+    aCodec.SetCompressionMetadata("dummy.txt"_ostr, 0, nInitialStreamCRC32);
     aCodec.Compress(*pInitialStream, pCompressedStream);
     auto nCompressedSize
         = aCodec.EndCompression(); // returns compressed size or -1 if compression failed

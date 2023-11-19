@@ -21,7 +21,7 @@ public:
     {
         sal_uInt8 pArray[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
         Guid aGuid(pArray);
-        CPPUNIT_ASSERT_EQUAL(OString("{01020304-0506-0708-090A-0B0C0D0E0F10}"), aGuid.getString());
+        CPPUNIT_ASSERT_EQUAL("{01020304-0506-0708-090A-0B0C0D0E0F10}"_ostr, aGuid.getString());
     }
 
     void testCreate()
