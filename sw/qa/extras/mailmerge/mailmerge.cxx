@@ -409,8 +409,8 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, lineColor );
     // And check that the resulting file has the proper default.
     xmlDocUniquePtr pXmlDoc = parseMailMergeExport( "styles.xml" );
-    CPPUNIT_ASSERT_EQUAL( OUString( "graphic" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]", "family"));
-    CPPUNIT_ASSERT_EQUAL( OUString( "#000000" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties", "stroke-color"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "graphic" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]"_ostr, "family"_ostr));
+    CPPUNIT_ASSERT_EQUAL( OUString( "#000000" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties"_ostr, "stroke-color"_ostr));
 }
 
 DECLARE_FILE_MAILMERGE_TEST(testSimpleMailMerge, "simple-mail-merge.odt", "10-testing-addresses.ods", "testing-addresses")
@@ -476,11 +476,11 @@ DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-test
         CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), getRun( getParagraph( 5 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( firstname, getRun( getParagraph( 6 ), 1 )->getString());
         // Also verify the layout.
-        CPPUNIT_ASSERT_EQUAL( lastname, parseDump("/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
-        CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), parseDump("/root/page[1]/body/txt[1]", ""));
-        CPPUNIT_ASSERT_EQUAL( OUString(), parseDump("/root/page[1]/body/txt[4]", ""));
-        CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), parseDump("/root/page[2]/body/txt[1]", ""));
-        CPPUNIT_ASSERT_EQUAL( firstname, parseDump("/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+        CPPUNIT_ASSERT_EQUAL( lastname, parseDump("/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+        CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), parseDump("/root/page[1]/body/txt[1]"_ostr, ""_ostr));
+        CPPUNIT_ASSERT_EQUAL( OUString(), parseDump("/root/page[1]/body/txt[4]"_ostr, ""_ostr));
+        CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), parseDump("/root/page[2]/body/txt[1]"_ostr, ""_ostr));
+        CPPUNIT_ASSERT_EQUAL( firstname, parseDump("/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
     }
 }
 
@@ -592,21 +592,21 @@ DECLARE_SHELL_MAILMERGE_TEST(testBookmarkCondition, "bookmarkcondition.fodt", "b
                        xmlBufferLength(mpXmlBuffer)));
 
     // check that conditions on sections and bookmarks are evaluated the same
-    assertXPath(pLayout, "/root/page", 7);
-    assertXPath(pLayout, "/root/page[1]/body/section", 1);
-    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In den Bergen war es anstrengend."_ustr);
-    assertXPath(pLayout, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war anstrengend . "_ustr);
-    assertXPath(pLayout, "/root/page[3]/body/section", 1);
-    assertXPath(pLayout, "/root/page[3]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Barcelona war es schön."_ustr);
-    assertXPath(pLayout, "/root/page[3]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war schön . "_ustr);
-    assertXPath(pLayout, "/root/page[5]/body/section", 1);
-    assertXPath(pLayout, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", "In Paris war es erlebnisreich.");
-    assertXPath(pLayout, "/root/page[5]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war erlebnisreich . "_ustr);
-    assertXPath(pLayout, "/root/page[7]/body/section", 3);
-    assertXPath(pLayout, "/root/page[7]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In den Bergen war es anstrengend."_ustr);
-    assertXPath(pLayout, "/root/page[7]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Barcelona war es schön."_ustr);
-    assertXPath(pLayout, "/root/page[7]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Paris war es erlebnisreich."_ustr);
-    assertXPath(pLayout, "/root/page[7]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war anstrengend schön erlebnisreich . "_ustr);
+    assertXPath(pLayout, "/root/page"_ostr, 7);
+    assertXPath(pLayout, "/root/page[1]/body/section"_ostr, 1);
+    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
+    assertXPath(pLayout, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war anstrengend . "_ustr);
+    assertXPath(pLayout, "/root/page[3]/body/section"_ostr, 1);
+    assertXPath(pLayout, "/root/page[3]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
+    assertXPath(pLayout, "/root/page[3]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war schön . "_ustr);
+    assertXPath(pLayout, "/root/page[5]/body/section"_ostr, 1);
+    assertXPath(pLayout, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, "In Paris war es erlebnisreich.");
+    assertXPath(pLayout, "/root/page[5]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war erlebnisreich . "_ustr);
+    assertXPath(pLayout, "/root/page[7]/body/section"_ostr, 3);
+    assertXPath(pLayout, "/root/page[7]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
+    assertXPath(pLayout, "/root/page[7]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
+    assertXPath(pLayout, "/root/page[7]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Paris war es erlebnisreich."_ustr);
+    assertXPath(pLayout, "/root/page[7]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war anstrengend schön erlebnisreich . "_ustr);
 }
 
 DECLARE_SHELL_MAILMERGE_TEST_SELECTION(testTdf95292, "linked-labels.odt", "10-testing-addresses.ods", "testing-addresses", 5)

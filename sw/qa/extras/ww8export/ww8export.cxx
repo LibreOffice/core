@@ -195,12 +195,12 @@ xray ThisComponent.DrawPage.getByIndex(0).BoundRect
 DECLARE_WW8EXPORT_TEST(testTdf75539_relativeWidth, "tdf75539_relativeWidth.doc")
 {
     //divide everything by 10 to give a margin of error for rounding etc.
-    sal_Int32 pageWidth = parseDump("/root/page[1]/body/infos/bounds", "width").toInt32()/10;
+    sal_Int32 pageWidth = parseDump("/root/page[1]/body/infos/bounds"_ostr, "width"_ostr).toInt32()/10;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page width", sal_Int32(9354/10), pageWidth);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("100% width line", pageWidth,   parseDump("/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion", "width").toInt32()/10);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("50% width line", pageWidth/2,  parseDump("/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion", "width").toInt32()/10);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("25% width line", pageWidth/4,  parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion", "width").toInt32()/10);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("10% width line", pageWidth/10, parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion", "width").toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("100% width line", pageWidth,   parseDump("/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, "width"_ostr).toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("50% width line", pageWidth/2,  parseDump("/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, "width"_ostr).toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("25% width line", pageWidth/4,  parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, "width"_ostr).toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("10% width line", pageWidth/10, parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, "width"_ostr).toInt32()/10);
 }
 
 DECLARE_WW8EXPORT_TEST(testN757905, "n757905.doc")
@@ -210,7 +210,7 @@ DECLARE_WW8EXPORT_TEST(testN757905, "n757905.doc")
     // paragraph height. When in Word-compat mode, we should take the max of
     // the two, not just the height of the fly.
 
-    OUString aHeight = parseDump("/root/page/body/txt/infos/bounds", "height");
+    OUString aHeight = parseDump("/root/page/body/txt/infos/bounds"_ostr, "height"_ostr);
     CPPUNIT_ASSERT(sal_Int32(31) < aHeight.toInt32());
 }
 
@@ -259,7 +259,7 @@ DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 {
-    OUString aText = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand");
+    OUString aText = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr);
     // This was 1.1.
     CPPUNIT_ASSERT_EQUAL(OUString("2.1"), aText);
 }
@@ -267,7 +267,7 @@ DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
 {
     // Similar to fdo#36868, numbering portions had wrong values.
-    OUString aText = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand");
+    OUString aText = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr);
     // PortionType::Number was completely missing.
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
 }
@@ -543,7 +543,7 @@ DECLARE_WW8EXPORT_TEST(testBnc787942, "bnc787942.doc")
 {
     // The frame ended up on the second page instead of first.
     // this is on page 1 in Word
-    parseDump("/root/page[1]/body/txt[4]/anchored");
+    parseDump("/root/page[1]/body/txt[4]/anchored"_ostr);
 
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
@@ -568,10 +568,10 @@ DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
 DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 {
     // The problem was that the text was not displayed.
-    CPPUNIT_ASSERT ( !parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand").isEmpty() );
-    CPPUNIT_ASSERT_EQUAL( OUString("Topic 1"), parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand") );
+    CPPUNIT_ASSERT ( !parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr).isEmpty() );
+    CPPUNIT_ASSERT_EQUAL( OUString("Topic 1"), parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr) );
     // all crossreference bookmarks should have a target.  Shouldn't be any "Reference source not found" in the xml
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), parseDump("/root/page/body/txt[24]/SwParaPortion/SwLineLayout/SwFieldPortion[2]","expand").indexOf("Reference source not found"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), parseDump("/root/page/body/txt[24]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,"expand"_ostr).indexOf("Reference source not found"));
 }
 #endif
 
@@ -683,8 +683,8 @@ DECLARE_WW8EXPORT_TEST(testTdf112535, "tdf112535.doc")
 DECLARE_WW8EXPORT_TEST(testTdf106291, "tdf106291.doc")
 {
     // Table cell was merged vertically instead of horizontally -> had incorrect dimensions
-    OUString cellWidth = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds", "width");
-    OUString cellHeight = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds", "height");
+    OUString cellWidth = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds"_ostr, "width"_ostr);
+    OUString cellHeight = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds"_ostr, "height"_ostr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8650), cellWidth.toInt32());
     CPPUNIT_ASSERT(cellHeight.toInt32() > 200); // height might depend on font size
 }
@@ -894,18 +894,18 @@ DECLARE_WW8EXPORT_TEST(testFirstHeaderFooter, "first-header-footer.doc")
 
     // The document has 6 pages. Note that we don't test if 4 or just 2 page
     // styles are created, the point is that layout should be correct.
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header"),  parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer"),  parseDump("/root/page[1]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header"),   parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer"),   parseDump("/root/page[2]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header"),  parseDump("/root/page[3]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer"),  parseDump("/root/page[3]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header2"), parseDump("/root/page[4]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer 2"), parseDump("/root/page[4]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header 2"), parseDump("/root/page[5]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"), parseDump("/root/page[5]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),  parseDump("/root/page[6]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page header"),  parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page footer"),  parseDump("/root/page[1]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page header"),   parseDump("/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer"),   parseDump("/root/page[2]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header"),  parseDump("/root/page[3]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer"),  parseDump("/root/page[3]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page header2"), parseDump("/root/page[4]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page footer 2"), parseDump("/root/page[4]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header 2"), parseDump("/root/page[5]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"), parseDump("/root/page[5]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),  parseDump("/root/page[6]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"_ostr));
 }
 
 DECLARE_WW8EXPORT_TEST(testZoom, "zoom.doc")
@@ -930,16 +930,16 @@ DECLARE_WW8EXPORT_TEST(testZoomType, "zoomtype.doc")
 
 DECLARE_WW8EXPORT_TEST(test56513, "fdo56513.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("This is the header of the first section"),  parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header of the second section"),   parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header of the second section"),  parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the header of the first section"),  parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header of the second section"),   parseDump("/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header of the second section"),  parseDump("/root/page[3]/header/txt/text()"_ostr));
 }
 
 DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals and Results (Page 1)*"),  parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Assessment (Page 2)****"),   parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals: Next Year (Page 3)*******"),  parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals and Results (Page 1)*"),  parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Assessment (Page 2)****"),   parseDump("/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals: Next Year (Page 3)*******"),  parseDump("/root/page[3]/header/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo42144)
@@ -1448,8 +1448,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableKeep)
     loadAndReload("tdf91083.odt");
     CPPUNIT_ASSERT_EQUAL(7, getPages());
     //emulate table "keep with next" -do not split table
-    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[3]/body/tab[1]/row[2]/cell[1]/txt[1]") );
-    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[6]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[3]/body/tab[1]/row[2]/cell[1]/txt[1]"_ostr) );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[6]/body/tab[1]/row[2]/cell[1]/txt[1]"_ostr) );
 }
 #endif
 
@@ -1458,13 +1458,13 @@ CPPUNIT_TEST_FIXTURE(Test, tesTdf91083_tableKeep2)
     loadAndReload("tdf91083_tableKeep2.odt");
     //emulate table "keep with next" - split large row in order to keep with previous paragraph
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table doesn't split, so it starts on page 2",
-                                 OUString("0"), parseDump("count(//page[1]//tab)") );
+                                 OUString("0"), parseDump("count(//page[1]//tab)"_ostr) );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page 2 starts with a paragraph/title, not a table",
-                                 OUString("KeepWithNext"), parseDump("//page[2]/body/txt[1]") );
+                                 OUString("KeepWithNext"), parseDump("//page[2]/body/txt[1]"_ostr) );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sticks with previous paragraph, so it starts on page 2",
-                                 OUString("1"), parseDump("count(//page[2]//tab)") );
+                                 OUString("1"), parseDump("count(//page[2]//tab)"_ostr) );
     CPPUNIT_ASSERT_MESSAGE("Row itself splits, not the table at a row boundary",
-                                 "Cell 2" != parseDump("//page[3]//tab//row[2]/cell[1]/txt[1]") );
+                                 "Cell 2" != parseDump("//page[3]//tab//row[2]/cell[1]/txt[1]"_ostr) );
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tesTdf91083_tableKeep3)
@@ -1473,15 +1473,15 @@ CPPUNIT_TEST_FIXTURE(Test, tesTdf91083_tableKeep3)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     //emulate table "keep with next" - split single row table in order to keep with previous paragraph
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table doesn't split, so it starts on page 2",
-                                 OUString("0"), parseDump("count(//page[1]//tab)") );
+                                 OUString("0"), parseDump("count(//page[1]//tab)"_ostr) );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sticks with previous paragraph, so it starts on page 2",
-                                 OUString("1"), parseDump("count(//page[2]//tab)") );
+                                 OUString("1"), parseDump("count(//page[2]//tab)"_ostr) );
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc")
 {
     // textboxes without borders were losing their spacing items in round-tripping
-    CPPUNIT_ASSERT( 0 < parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds", "left").toInt32() );
+    CPPUNIT_ASSERT( 0 < parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds"_ostr, "left"_ostr).toInt32() );
 
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox background color", Color(0xD8, 0xD8, 0xD8), getProperty<Color>(xShape, "BackColor"));

@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedDOCXExport)
     // - Expected: 2
     // - Actual  : 1
     // i.e. the inner floating table was lost.
-    assertXPath(pXmlDoc, "//w:tblpPr", 2);
+    assertXPath(pXmlDoc, "//w:tblpPr"_ostr, 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedCellStartDOCXExport)
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedCellStartDOCXExport)
     // - Expected: 1
     // - Actual  : 0
     // i.e. the inner <w:tbl> was between the two <w:tr>, not inside the C1 cell.
-    assertXPath(pXmlDoc, "//w:tc/w:tbl/w:tblPr/w:tblpPr", 1);
+    assertXPath(pXmlDoc, "//w:tc/w:tbl/w:tblPr/w:tblpPr"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
@@ -168,13 +168,13 @@ DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")
     // This failed, the right edge of the shape was outside the page
     // boundaries.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nPageLeft = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "left").toInt32();
-    sal_Int32 nPageWidth = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "width").toInt32();
+    sal_Int32 nPageLeft = getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nPageWidth = getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "width"_ostr).toInt32();
     sal_Int32 nShapeLeft
-        = getXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/SwAnchoredDrawObject/bounds", "left")
+        = getXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "left"_ostr)
               .toInt32();
     sal_Int32 nShapeWidth
-        = getXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/SwAnchoredDrawObject/bounds", "width")
+        = getXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "width"_ostr)
               .toInt32();
     // Make sure the shape is within the page bounds.
     CPPUNIT_ASSERT_GREATEREQUAL(nShapeLeft + nShapeWidth, nPageLeft + nPageWidth);
@@ -213,11 +213,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEsc)
     loadAndSave("test_tdf120412.docx");
     xmlDocUniquePtr pXmlDoc =parseExport("word/document.xml");
     // don't lose the run with superscript formatting
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r"_ostr, 2);
     // Superscript should be raised by 100% (11pt). Was 110% (12pt)
     // calculated using docDefault with fontsize 10pt (note only w:szCs defined as 11pt, not w:sz)
     // instead of inherited normal paraStyle fontsize 11pt (related to tdf#99602)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:position","val", "22");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:position"_ostr,"val"_ostr, "22");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMceWpg, "mce-wpg.docx")
@@ -370,8 +370,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73389)
     // The recent fix uses fixed width again, according to the fixed width cells.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","type","dxa");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","1611");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW"_ostr,"type"_ostr,"dxa");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW"_ostr,"w"_ostr,"1611");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
@@ -379,11 +379,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
     loadAndSave("fdo73389.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "0");
     // This was 200
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:spacing", "after", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[3]/w:p/w:pPr/w:spacing", "after", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[3]/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134569_nestedTable)
@@ -399,13 +399,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
     // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW", "type", "dxa");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW"_ostr, "type"_ostr, "dxa");
     // This was 7349: sum of the cell widths in first row, but the table width is determined by a longer row later.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW", "w", "9048");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW"_ostr, "w"_ostr, "9048");
     // This was 1224: too narrow first cell in first row
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcW", "w", "4291");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcW"_ostr, "w"_ostr, "4291");
     // This was 3674: too wide last cell in first row
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcW", "w", "1695");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcW"_ostr, "w"_ostr, "1695");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
@@ -579,7 +579,7 @@ DECLARE_OOXMLEXPORT_TEST(testLargeTwips, "large-twips.docx" )
 {
     // cp#1000043: MSO seems to ignore large twips values, we didn't, which resulted in different
     // layout of broken documents (text not visible in this specific document).
-    OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds", "width" );
+    OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds"_ostr, "width"_ostr );
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
@@ -587,7 +587,7 @@ DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twip
 {
     // Slightly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
     // while MSO seems to ignore that as well.
-    OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds", "width" );
+    OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds"_ostr, "width"_ostr );
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
@@ -601,8 +601,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx")
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableColumns> xTableColumns = xTextTable->getColumns();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 5 ), xTableColumns->getCount());
-    OUString height3 = parseDump("/root/page/body/tab/row[1]/cell[4]/infos/bounds", "height" );
-    OUString height4 = parseDump("/root/page/body/tab/row[1]/cell[5]/infos/bounds", "height" );
+    OUString height3 = parseDump("/root/page/body/tab/row[1]/cell[4]/infos/bounds"_ostr, "height"_ostr );
+    OUString height4 = parseDump("/root/page/body/tab/row[1]/cell[5]/infos/bounds"_ostr, "height"_ostr );
     CPPUNIT_ASSERT_EQUAL( height3, height4 );
 }
 
@@ -638,9 +638,9 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableColumns> xTableColumns = xTextTable->getColumns();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 3 ), xTableColumns->getCount());
-    OUString textA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/txt/text()" );
-    OUString leftA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/infos/bounds", "left" );
-    OUString leftB2 = parseDump("/root/page/body/tab/row[2]/cell[2]/infos/bounds", "left" );
+    OUString textA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/txt/text()"_ostr );
+    OUString leftA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/infos/bounds"_ostr, "left"_ostr );
+    OUString leftB2 = parseDump("/root/page/body/tab/row[2]/cell[2]/infos/bounds"_ostr, "left"_ostr );
     CPPUNIT_ASSERT_EQUAL( OUString( "A3" ), textA3 );
     CPPUNIT_ASSERT( leftA3.toInt32() > leftB2.toInt32());
 }
@@ -650,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116194)
     loadAndSave("tdf116194.docx");
     // The problem was that the importer lost consecutive tables with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl"_ostr, 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
@@ -658,7 +658,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
     loadAndSave("tdf134606.docx");
     // The problem was that the importer lost the nested table structure with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl"_ostr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx")

@@ -100,11 +100,11 @@ DECLARE_RTFEXPORT_TEST(testTdf88811, "tdf88811.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
 {
     // Ensure that header text exists on each page (especially on second page)
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[3]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[4]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[5]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[3]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[4]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[5]/header/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(5, getPages()); // Word has 5
 }
 
@@ -555,13 +555,13 @@ DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     // Count shapes on first page
-    assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject", 79);
+    assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject"_ostr, 79);
 
     // Second page
-    assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject", 120);
+    assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject"_ostr, 120);
 
     // Third page
-    assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject", 86);
+    assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject"_ostr, 86);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128320)
@@ -681,8 +681,9 @@ DECLARE_RTFEXPORT_TEST(testTdf118047, "tdf118047.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 
     // Same for header, it should not derive props from "Normal" style
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), parseDump("/root/page[1]/header/txt/text()"));
-    sal_Int32 nHeight = parseDump("/root/page[1]/header/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), parseDump("/root/page[1]/header/txt/text()"_ostr));
+    sal_Int32 nHeight
+        = parseDump("/root/page[1]/header/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("Header is too large", 1000 > nHeight);
 }
 

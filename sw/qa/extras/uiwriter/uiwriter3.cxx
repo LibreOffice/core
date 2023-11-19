@@ -356,80 +356,90 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
     // the fields in cell are: variable-get variable-set variable-get
     assertXPath(
         pXmlDoc,
-        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion",
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
         3);
     assertXPath(
         pXmlDoc,
-        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-        "expand", "0");
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+        "expand"_ostr, "0");
     assertXPath(
         pXmlDoc,
-        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
-        "expand", "1");
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+        "expand"_ostr, "1");
     assertXPath(
         pXmlDoc,
-        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
-        "expand", "1");
-    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "0");
-    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "1");
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
+        "expand"_ostr, "1");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "0");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "1");
     // here the header had shown the wrong value
     assertXPath(
         pXmlDoc,
-        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-        "expand", "1");
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+        "expand"_ostr, "1");
     assertXPath(
         pXmlDoc,
-        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
-        "expand", "2");
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+        "expand"_ostr, "2");
     assertXPath(
         pXmlDoc,
-        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
-        "expand", "2");
-    assertXPath(pXmlDoc, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "1");
-    assertXPath(pXmlDoc, "/root/page[2]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "2");
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
+        "expand"_ostr, "2");
+    assertXPath(pXmlDoc,
+                "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "1");
+    assertXPath(pXmlDoc,
+                "/root/page[2]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "2");
 
     assertXPath(
         pXmlDoc,
-        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-        "expand", "2");
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+        "expand"_ostr, "2");
     assertXPath(
         pXmlDoc,
-        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
-        "expand", "3");
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+        "expand"_ostr, "3");
     assertXPath(
         pXmlDoc,
-        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
-        "expand", "3");
-    assertXPath(pXmlDoc, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "2");
-    assertXPath(pXmlDoc, "/root/page[3]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "3");
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
+        "expand"_ostr, "3");
+    assertXPath(pXmlDoc,
+                "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "2");
+    assertXPath(pXmlDoc,
+                "/root/page[3]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "3");
 
     assertXPath(
         pXmlDoc,
-        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-        "expand", "3");
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+        "expand"_ostr, "3");
     assertXPath(
         pXmlDoc,
-        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
-        "expand", "4");
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+        "expand"_ostr, "4");
     assertXPath(
         pXmlDoc,
-        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
-        "expand", "4");
-    assertXPath(pXmlDoc, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "3");
-    assertXPath(pXmlDoc, "/root/page[4]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "4");
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
+        "expand"_ostr, "4");
+    assertXPath(pXmlDoc,
+                "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "3");
+    assertXPath(pXmlDoc,
+                "/root/page[4]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "4");
 
-    assertXPath(pXmlDoc, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "4");
-    assertXPath(pXmlDoc, "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "4");
+    assertXPath(pXmlDoc,
+                "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "4");
+    assertXPath(pXmlDoc,
+                "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "4");
 
     discardDumpedLayout();
     // update and check again
@@ -440,80 +450,90 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
     // the fields in cell are: variable-get variable-set variable-get
     assertXPath(
         pXmlDoc,
-        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion",
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
         3);
     assertXPath(
         pXmlDoc,
-        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-        "expand", "0");
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+        "expand"_ostr, "0");
     assertXPath(
         pXmlDoc,
-        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
-        "expand", "1");
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+        "expand"_ostr, "1");
     assertXPath(
         pXmlDoc,
-        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
-        "expand", "1");
-    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "0");
-    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "1");
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
+        "expand"_ostr, "1");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "0");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "1");
     // here the header had shown the wrong value
     assertXPath(
         pXmlDoc,
-        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-        "expand", "1");
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+        "expand"_ostr, "1");
     assertXPath(
         pXmlDoc,
-        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
-        "expand", "2");
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+        "expand"_ostr, "2");
     assertXPath(
         pXmlDoc,
-        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
-        "expand", "2");
-    assertXPath(pXmlDoc, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "1");
-    assertXPath(pXmlDoc, "/root/page[2]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "2");
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
+        "expand"_ostr, "2");
+    assertXPath(pXmlDoc,
+                "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "1");
+    assertXPath(pXmlDoc,
+                "/root/page[2]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "2");
 
     assertXPath(
         pXmlDoc,
-        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-        "expand", "2");
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+        "expand"_ostr, "2");
     assertXPath(
         pXmlDoc,
-        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
-        "expand", "3");
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+        "expand"_ostr, "3");
     assertXPath(
         pXmlDoc,
-        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
-        "expand", "3");
-    assertXPath(pXmlDoc, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "2");
-    assertXPath(pXmlDoc, "/root/page[3]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "3");
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
+        "expand"_ostr, "3");
+    assertXPath(pXmlDoc,
+                "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "2");
+    assertXPath(pXmlDoc,
+                "/root/page[3]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "3");
 
     assertXPath(
         pXmlDoc,
-        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-        "expand", "3");
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+        "expand"_ostr, "3");
     assertXPath(
         pXmlDoc,
-        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
-        "expand", "4");
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+        "expand"_ostr, "4");
     assertXPath(
         pXmlDoc,
-        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
-        "expand", "4");
-    assertXPath(pXmlDoc, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "3");
-    assertXPath(pXmlDoc, "/root/page[4]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "4");
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
+        "expand"_ostr, "4");
+    assertXPath(pXmlDoc,
+                "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "3");
+    assertXPath(pXmlDoc,
+                "/root/page[4]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "4");
 
-    assertXPath(pXmlDoc, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "4");
-    assertXPath(pXmlDoc, "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
-                "expand", "4");
+    assertXPath(pXmlDoc,
+                "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "4");
+    assertXPath(pXmlDoc,
+                "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                "expand"_ostr, "4");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
@@ -530,29 +550,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
         const auto nFlyLeft = getXPath(pLayoutXML1,
                                        "/root/page/body/txt[2]/anchored/fly["
                                            + OString::number(nFly) + "]/infos/bounds",
-                                       "left")
+                                       "left"_ostr)
                                   .toInt64();
         const auto nFlyRight = getXPath(pLayoutXML1,
                                         "/root/page/body/txt[2]/anchored/fly["
                                             + OString::number(nFly) + "]/infos/bounds",
-                                        "width")
+                                        "width"_ostr)
                                    .toInt64();
         const auto nFlyTop = getXPath(pLayoutXML1,
                                       "/root/page/body/txt[2]/anchored/fly[" + OString::number(nFly)
                                           + "]/infos/bounds",
-                                      "top")
+                                      "top"_ostr)
                                  .toInt64();
         const auto nFlyBottom = getXPath(pLayoutXML1,
                                          "/root/page/body/txt[2]/anchored/fly["
                                              + OString::number(nFly) + "]/infos/bounds",
-                                         "height")
+                                         "height"_ostr)
                                     .toInt64();
 
         const auto sDrawRect = getXPath(
             pLayoutXML1,
             "/root/page/body/txt[2]/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject["
                 + OString::number(nFly) + "]",
-            "aOutRect");
+            "aOutRect"_ostr);
 
         const auto nComaPos1 = sDrawRect.indexOf(',', 0);
         const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
@@ -589,29 +609,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
         const auto nFlyLeft = getXPath(pLayoutXML2,
                                        "/root/page/body/txt[6]/anchored/fly["
                                            + OString::number(nFly) + "]/infos/bounds",
-                                       "left")
+                                       "left"_ostr)
                                   .toInt64();
         const auto nFlyRight = getXPath(pLayoutXML2,
                                         "/root/page/body/txt[6]/anchored/fly["
                                             + OString::number(nFly) + "]/infos/bounds",
-                                        "width")
+                                        "width"_ostr)
                                    .toInt64();
         const auto nFlyTop = getXPath(pLayoutXML2,
                                       "/root/page/body/txt[6]/anchored/fly[" + OString::number(nFly)
                                           + "]/infos/bounds",
-                                      "top")
+                                      "top"_ostr)
                                  .toInt64();
         const auto nFlyBottom = getXPath(pLayoutXML2,
                                          "/root/page/body/txt[6]/anchored/fly["
                                              + OString::number(nFly) + "]/infos/bounds",
-                                         "height")
+                                         "height"_ostr)
                                     .toInt64();
 
         const auto sDrawRect = getXPath(
             pLayoutXML2,
             "/root/page/body/txt[6]/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject["
                 + OString::number(nFly) + "]",
-            "aOutRect");
+            "aOutRect"_ostr);
 
         const auto nComaPos1 = sDrawRect.indexOf(',', 0);
         const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
@@ -1865,30 +1885,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
 
     // Check if the texbox fallen apart due to the tabs
     const double nLeftSideOfShape1
-        = getXPath(pExportDump, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "left")
+        = getXPath(pExportDump, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "left"_ostr)
               .toDouble();
     const double nLeftSideOfTxBx1
-        = getXPath(pExportDump, "/root/page/body/txt/anchored/fly/infos/bounds", "left").toDouble();
+        = getXPath(pExportDump, "/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "left"_ostr)
+              .toDouble();
 
     CPPUNIT_ASSERT(nLeftSideOfShape1 < nLeftSideOfTxBx1);
 
     // Another test is for the tdf#138598: Check footer textbox
     const double nLeftSideOfShape2
-        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/SwAnchoredDrawObject/bounds",
-                   "left")
+        = getXPath(pExportDump,
+                   "/root/page[2]/footer/txt/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "left"_ostr)
               .toDouble();
     const double nLeftSideOfTxBx2
-        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/fly/infos/bounds", "left")
+        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/fly/infos/bounds"_ostr,
+                   "left"_ostr)
               .toDouble();
 
     CPPUNIT_ASSERT(nLeftSideOfShape2 < nLeftSideOfTxBx2);
 
     const double nTopSideOfShape2
-        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/SwAnchoredDrawObject/bounds",
-                   "top")
+        = getXPath(pExportDump,
+                   "/root/page[2]/footer/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr)
               .toDouble();
     const double nTopSideOfTxBx2
-        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/fly/infos/bounds", "top")
+        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/fly/infos/bounds"_ostr,
+                   "top"_ostr)
               .toDouble();
 
     CPPUNIT_ASSERT(nTopSideOfShape2 < nTopSideOfTxBx2);
@@ -1948,11 +1973,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
     CPPUNIT_ASSERT(pExportDump);
 
     const sal_Int32 nShpTop
-        = getXPath(pExportDump, "/root/page/body/txt[4]/anchored/SwAnchoredDrawObject/bounds",
-                   "top")
+        = getXPath(pExportDump, "/root/page/body/txt[4]/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "top"_ostr)
               .toInt32();
     const sal_Int32 nFrmTop
-        = getXPath(pExportDump, "/root/page/body/txt[4]/anchored/fly/infos/bounds", "top")
+        = getXPath(pExportDump, "/root/page/body/txt[4]/anchored/fly/infos/bounds"_ostr, "top"_ostr)
               .toInt32();
 
     // Without the fix in place, the frame has less value for Top than

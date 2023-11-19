@@ -298,7 +298,7 @@ void FrameInit()
     SwRootFrame::s_pVout = new SwLayVout();
     SwCache *pNew = new SwCache( 100
 #ifdef DBG_UTIL
-    , "static SwBorderAttrs::pCache"
+    , "static SwBorderAttrs::pCache"_ostr
 #endif
     );
     SwFrame::SetCache( pNew );

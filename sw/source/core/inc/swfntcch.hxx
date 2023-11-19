@@ -33,7 +33,7 @@ public:
 
     SwFontCache() : SwCache(50
 #ifdef DBG_UTIL
-    , "Global AttributeSet/Font-Cache pSwFontCache"
+    , "Global AttributeSet/Font-Cache pSwFontCache"_ostr
 #endif
     ) {}
 

@@ -169,7 +169,7 @@ DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderT
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    sal_Int32 nRowHeight = getXPath(pXmlDoc, "//header/tab/row[1]/infos/bounds", "height").toInt32();
+    sal_Int32 nRowHeight = getXPath(pXmlDoc, "//header/tab/row[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
     // The fly is supposed to be no-wrap, so the text should come underneath it, not wrap-through,
     // thus making the row much higher. Before, height was 706. Now it is 1067.
     CPPUNIT_ASSERT_MESSAGE("Text must wrap under green box", nRowHeight > 1000);
@@ -679,9 +679,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94009_zeroPgMargin)
 
 DECLARE_WW8EXPORT_TEST(testTdf108518_CRnumformatting, "tdf108518_CRnumformatting.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("6.2.3."), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("6.2.3."), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr));
     //Without this fix in place, it would become 200 (and non-bold).
-    CPPUNIT_ASSERT_EQUAL(OUString("220"), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont", "height"));
+    CPPUNIT_ASSERT_EQUAL(OUString("220"), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr, "height"_ostr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf120711_joinedParagraphWithChangeTracking, "tdf120711.doc")
@@ -856,7 +856,7 @@ DECLARE_WW8EXPORT_TEST(testPresetDash, "tdf127166_prstDash_Word97.doc")
     const auto& pLayout = parseLayoutDump();
     // Ensure that there is no tabstop in the first paragraph (despite chapter numbering's setting)
     // This is a pre-emptive test to ensure something visibly correct is not broken.
-    assertXPath(pLayout, "//body/txt[1]//SwFixPortion", 0);
+    assertXPath(pLayout, "//body/txt[1]//SwFixPortion"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)

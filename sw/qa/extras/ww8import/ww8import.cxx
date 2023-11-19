@@ -59,7 +59,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBnc875715)
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionColumns)
 {
     createSwDoc("floating-table-section-columns.doc");
-    OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds", "width");
+    OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds"_ostr, "width"_ostr);
     // table width was restricted by a column
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
 }
@@ -117,9 +117,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106799)
         for (sal_Int32 nCell : { 0, 1, 2, 3 })
         {
             OString cellXPath("/root/page/body/tab/row/cell/tab/row[" + OString::number(nRow+1) + "]/cell[" + OString::number(nCell+1) + "]/");
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(cellXPath.getStr(), nCellWidths[nRow][nCell], parseDump(cellXPath + "infos/bounds", "width").toInt32());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(cellXPath.getStr(), nCellWidths[nRow][nCell], parseDump(cellXPath + "infos/bounds", "width"_ostr).toInt32());
             if (nCellTxtLns[nRow][nCell] != 0)
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(cellXPath.getStr(), nCellTxtLns[nRow][nCell], parseDump(cellXPath + "txt/SwParaPortion/SwLineLayout", "length").toInt32());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(cellXPath.getStr(), nCellTxtLns[nRow][nCell], parseDump(cellXPath + "txt/SwParaPortion/SwLineLayout", "length"_ostr).toInt32());
         }
 }
 

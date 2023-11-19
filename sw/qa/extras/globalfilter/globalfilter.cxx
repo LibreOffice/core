@@ -983,18 +983,18 @@ void Test::testODF13()
 
         // check XML
         xmlDocUniquePtr pContentXml = parseExport("content.xml");
-        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@style:contextual-spacing='true']");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
+        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@style:contextual-spacing='true']"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end"_ostr, 0);
         xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first");
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first");
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first"_ostr);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first"_ostr, 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first"_ostr);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first"_ostr, 0);
 
         // check model
         verifyText13("1.3 reload");
@@ -1016,18 +1016,18 @@ void Test::testODF13()
 
         // check XML
         xmlDocUniquePtr pContentXml = parseExport("content.xml");
-        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@loext:contextual-spacing='true']");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
+        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@loext:contextual-spacing='true']"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end"_ostr, 0);
         xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first");
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first");
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first"_ostr);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first"_ostr, 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first"_ostr);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first"_ostr, 0);
 
         // reload
         mxComponent->dispose();
@@ -1048,18 +1048,18 @@ void Test::testODF13()
 
         // check XML
         xmlDocUniquePtr pContentXml = parseExport("content.xml");
-        assertXPathNoAttribute(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties", "contextual-spacing");
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
+        assertXPathNoAttribute(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties"_ostr, "contextual-spacing"_ostr);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end"_ostr, 0);
         xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first"_ostr, 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first"_ostr, 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first"_ostr, 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first"_ostr, 0);
     }
 }
 
@@ -1318,7 +1318,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
 
-    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
     CPPUNIT_ASSERT(pContents);
     vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
     CPPUNIT_ASSERT(pStream);
@@ -1406,17 +1406,17 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
         auto pObject0 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
         if (!pObject0)
             continue;
-        auto pType0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject0->Lookup("Type"));
+        auto pType0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject0->Lookup("Type"_ostr));
         if (!pType0 || pType0->GetValue() != "StructElem")
         {
             continue;
         }
-        auto pS0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject0->Lookup("S"));
+        auto pS0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject0->Lookup("S"_ostr));
         if (!pS0 || pS0->GetValue() != "Document")
         {
             continue;
         }
-        auto pKids0 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject0->Lookup("K"));
+        auto pKids0 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject0->Lookup("K"_ostr));
         CPPUNIT_ASSERT(pKids0);
 
         for (const auto& pKid0 : pKids0->GetElements())
@@ -1425,16 +1425,16 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
             CPPUNIT_ASSERT(pRefKid0);
             auto pObject1 = pRefKid0->LookupObject();
             CPPUNIT_ASSERT(pObject1);
-            auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"));
+            auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
             CPPUNIT_ASSERT(pType1);
 
             if (pType1 && pType1->GetValue() == "StructElem")
             {
-                auto pS1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("S"));
+                auto pS1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("S"_ostr));
                 if (pS1 && pS1->GetValue() == "L")
                 {
                     ++nL;
-                    auto pKids1 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1->Lookup("K"));
+                    auto pKids1 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids1);
                     // this is purely structural so there should be 1 child
                     CPPUNIT_ASSERT_EQUAL(size_t(1), pKids1->GetElements().size());
@@ -1443,14 +1443,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid11);
                     auto pObject11 = pRefKid11->LookupObject();
                     CPPUNIT_ASSERT(pObject11);
-                    auto pType11 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11->Lookup("Type"));
+                    auto pType11 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType11);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType11->GetValue());
-                    auto pS11 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType11->GetValue());
+                    auto pS11 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS11);
-                    CPPUNIT_ASSERT_EQUAL(OString("LI"), pS11->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("LI"_ostr, pS11->GetValue());
                     // LI has 2 children: Lbl and LBody
-                    auto pKids11 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11->Lookup("K"));
+                    auto pKids11 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids11);
                     CPPUNIT_ASSERT_EQUAL(size_t(2), pKids11->GetElements().size());
 
@@ -1458,14 +1458,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid111);
                     auto pObject111 = pRefKid111->LookupObject();
                     CPPUNIT_ASSERT(pObject111);
-                    auto pType111 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject111->Lookup("Type"));
+                    auto pType111 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject111->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType111);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType111->GetValue());
-                    auto pS111 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject111->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType111->GetValue());
+                    auto pS111 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject111->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS111);
-                    CPPUNIT_ASSERT_EQUAL(OString("Lbl"), pS111->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("Lbl"_ostr, pS111->GetValue());
                     // Lbl has 2 children: the first 2 mcids (in order)
-                    auto pKids111 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject111->Lookup("K"));
+                    auto pKids111 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject111->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids111);
                     CPPUNIT_ASSERT_EQUAL(size_t(2), pKids111->GetElements().size());
 
@@ -1480,14 +1480,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid112);
                     auto pObject112 = pRefKid112->LookupObject();
                     CPPUNIT_ASSERT(pObject112);
-                    auto pType112 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112->Lookup("Type"));
+                    auto pType112 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType112);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112->GetValue());
-                    auto pS112 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType112->GetValue());
+                    auto pS112 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS112);
-                    CPPUNIT_ASSERT_EQUAL(OString("LBody"), pS112->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("LBody"_ostr, pS112->GetValue());
                     // LBody has 2 children: paragraph and nested L (in order)
-                    auto pKids112 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112->Lookup("K"));
+                    auto pKids112 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids112);
                     CPPUNIT_ASSERT_EQUAL(size_t(2), pKids112->GetElements().size());
 
@@ -1495,24 +1495,24 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid1121);
                     auto pObject1121 = pRefKid1121->LookupObject();
                     CPPUNIT_ASSERT(pObject1121);
-                    auto pType1121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1121->Lookup("Type"));
+                    auto pType1121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1121->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType1121);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1121->GetValue());
-                    auto pS1121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1121->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType1121->GetValue());
+                    auto pS1121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1121->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS1121);
-                    CPPUNIT_ASSERT_EQUAL(OString("Standard"), pS1121->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("Standard"_ostr, pS1121->GetValue());
 
                     auto pRefKid1122 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids112->GetElements()[1]);
                     CPPUNIT_ASSERT(pRefKid1122);
                     auto pObject1122 = pRefKid1122->LookupObject();
                     CPPUNIT_ASSERT(pObject1122);
-                    auto pType1122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122->Lookup("Type"));
+                    auto pType1122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType1122);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1122->GetValue());
-                    auto pS1122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType1122->GetValue());
+                    auto pS1122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS1122);
-                    CPPUNIT_ASSERT_EQUAL(OString("L"), pS1122->GetValue());
-                    auto pKids1122 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1122->Lookup("K"));
+                    CPPUNIT_ASSERT_EQUAL("L"_ostr, pS1122->GetValue());
+                    auto pKids1122 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1122->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids1122);
                     // this is purely structural so there should be 1 child
                     CPPUNIT_ASSERT_EQUAL(size_t(1), pKids1122->GetElements().size());
@@ -1521,14 +1521,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid11221);
                     auto pObject11221 = pRefKid11221->LookupObject();
                     CPPUNIT_ASSERT(pObject11221);
-                    auto pType11221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221->Lookup("Type"));
+                    auto pType11221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType11221);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType11221->GetValue());
-                    auto pS11221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType11221->GetValue());
+                    auto pS11221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS11221);
-                    CPPUNIT_ASSERT_EQUAL(OString("LI"), pS11221->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("LI"_ostr, pS11221->GetValue());
                     // LI has 2 children: Lbl and LBody
-                    auto pKids11221 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11221->Lookup("K"));
+                    auto pKids11221 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11221->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids11221);
                     CPPUNIT_ASSERT_EQUAL(size_t(2), pKids11221->GetElements().size());
 
@@ -1536,14 +1536,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid112211);
                     auto pObject112211 = pRefKid112211->LookupObject();
                     CPPUNIT_ASSERT(pObject112211);
-                    auto pType112211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112211->Lookup("Type"));
+                    auto pType112211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112211->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType112211);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112211->GetValue());
-                    auto pS112211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112211->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType112211->GetValue());
+                    auto pS112211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112211->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS112211);
-                    CPPUNIT_ASSERT_EQUAL(OString("Lbl"), pS112211->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("Lbl"_ostr, pS112211->GetValue());
                     // Lbl has 2 children: the first 2 mcids (in order)
-                    auto pKids112211 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112211->Lookup("K"));
+                    auto pKids112211 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112211->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids112211);
                     CPPUNIT_ASSERT_EQUAL(size_t(2), pKids112211->GetElements().size());
 
@@ -1558,14 +1558,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid112212);
                     auto pObject112212 = pRefKid112212->LookupObject();
                     CPPUNIT_ASSERT(pObject112212);
-                    auto pType112212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212->Lookup("Type"));
+                    auto pType112212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType112212);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112212->GetValue());
-                    auto pS112212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType112212->GetValue());
+                    auto pS112212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS112212);
-                    CPPUNIT_ASSERT_EQUAL(OString("LBody"), pS112212->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("LBody"_ostr, pS112212->GetValue());
                     // LBody has 2 children: paragraph and nested L (in order)
-                    auto pKids112212 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212->Lookup("K"));
+                    auto pKids112212 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids112212);
                     CPPUNIT_ASSERT_EQUAL(size_t(2), pKids112212->GetElements().size());
 
@@ -1573,24 +1573,24 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid1122121);
                     auto pObject1122121 = pRefKid1122121->LookupObject();
                     CPPUNIT_ASSERT(pObject1122121);
-                    auto pType1122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122121->Lookup("Type"));
+                    auto pType1122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122121->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType1122121);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1122121->GetValue());
-                    auto pS1122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122121->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType1122121->GetValue());
+                    auto pS1122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122121->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS1122121);
-                    CPPUNIT_ASSERT_EQUAL(OString("Standard"), pS1122121->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("Standard"_ostr, pS1122121->GetValue());
 
                     auto pRefKid1122122 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids112212->GetElements()[1]);
                     CPPUNIT_ASSERT(pRefKid1122122);
                     auto pObject1122122 = pRefKid1122122->LookupObject();
                     CPPUNIT_ASSERT(pObject1122122);
-                    auto pType1122122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122->Lookup("Type"));
+                    auto pType1122122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType1122122);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1122122->GetValue());
-                    auto pS1122122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType1122122->GetValue());
+                    auto pS1122122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS1122122);
-                    CPPUNIT_ASSERT_EQUAL(OString("L"), pS1122122->GetValue());
-                    auto pKids1122122 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1122122->Lookup("K"));
+                    CPPUNIT_ASSERT_EQUAL("L"_ostr, pS1122122->GetValue());
+                    auto pKids1122122 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1122122->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids1122122);
                     // this is purely structural so there should be 1 child
                     CPPUNIT_ASSERT_EQUAL(size_t(1), pKids1122122->GetElements().size());
@@ -1599,14 +1599,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid11221221);
                     auto pObject11221221 = pRefKid11221221->LookupObject();
                     CPPUNIT_ASSERT(pObject11221221);
-                    auto pType11221221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221221->Lookup("Type"));
+                    auto pType11221221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221221->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType11221221);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType11221221->GetValue());
-                    auto pS11221221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221221->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType11221221->GetValue());
+                    auto pS11221221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221221->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS11221221);
-                    CPPUNIT_ASSERT_EQUAL(OString("LI"), pS11221221->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("LI"_ostr, pS11221221->GetValue());
                     // LI has 2 children: Lbl and LBody
-                    auto pKids11221221 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11221221->Lookup("K"));
+                    auto pKids11221221 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11221221->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids11221221);
                     CPPUNIT_ASSERT_EQUAL(size_t(2), pKids11221221->GetElements().size());
 
@@ -1614,14 +1614,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid112212211);
                     auto pObject112212211 = pRefKid112212211->LookupObject();
                     CPPUNIT_ASSERT(pObject112212211);
-                    auto pType112212211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212211->Lookup("Type"));
+                    auto pType112212211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212211->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType112212211);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112212211->GetValue());
-                    auto pS112212211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212211->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType112212211->GetValue());
+                    auto pS112212211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212211->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS112212211);
-                    CPPUNIT_ASSERT_EQUAL(OString("Lbl"), pS112212211->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("Lbl"_ostr, pS112212211->GetValue());
                     // Lbl has 2 children: the first 2 mcids (in order)
-                    auto pKids112212211 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212211->Lookup("K"));
+                    auto pKids112212211 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212211->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids112212211);
                     CPPUNIT_ASSERT_EQUAL(size_t(2), pKids112212211->GetElements().size());
 
@@ -1636,14 +1636,14 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid112212212);
                     auto pObject112212212 = pRefKid112212212->LookupObject();
                     CPPUNIT_ASSERT(pObject112212212);
-                    auto pType112212212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212212->Lookup("Type"));
+                    auto pType112212212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212212->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType112212212);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112212212->GetValue());
-                    auto pS112212212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212212->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType112212212->GetValue());
+                    auto pS112212212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212212->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS112212212);
-                    CPPUNIT_ASSERT_EQUAL(OString("LBody"), pS112212212->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("LBody"_ostr, pS112212212->GetValue());
                     // inner LBody has 1 children: paragraph
-                    auto pKids112212212 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212212->Lookup("K"));
+                    auto pKids112212212 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212212->Lookup("K"_ostr));
                     CPPUNIT_ASSERT(pKids112212212);
                     CPPUNIT_ASSERT_EQUAL(size_t(1), pKids112212212->GetElements().size());
 
@@ -1651,12 +1651,12 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     CPPUNIT_ASSERT(pRefKid1122122121);
                     auto pObject1122122121 = pRefKid1122122121->LookupObject();
                     CPPUNIT_ASSERT(pObject1122122121);
-                    auto pType1122122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122121->Lookup("Type"));
+                    auto pType1122122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122121->Lookup("Type"_ostr));
                     CPPUNIT_ASSERT(pType1122122121);
-                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1122122121->GetValue());
-                    auto pS1122122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122121->Lookup("S"));
+                    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType1122122121->GetValue());
+                    auto pS1122122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122121->Lookup("S"_ostr));
                     CPPUNIT_ASSERT(pS1122122121);
-                    CPPUNIT_ASSERT_EQUAL(OString("Standard"), pS1122122121->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("Standard"_ostr, pS1122122121->GetValue());
                 }
             }
         }
@@ -1713,7 +1713,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
 
-    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
     CPPUNIT_ASSERT(pContents);
     vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
     CPPUNIT_ASSERT(pStream);

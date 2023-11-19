@@ -1235,7 +1235,7 @@ void SwFEShell::EndTextEdit()
         pView->SdrEndTextEdit();
 
     if (comphelper::LibreOfficeKit::isActive())
-        SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY");
+        SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 
     EndAllAction();
 }

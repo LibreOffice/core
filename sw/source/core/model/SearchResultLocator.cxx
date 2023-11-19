@@ -158,9 +158,9 @@ bool SearchResultLocator::tryParseXML(const char* pPayload,
     {
         if (aWalker.name() == "paragraph")
         {
-            OString sType = aWalker.attribute("node_type");
-            OString sIndex = aWalker.attribute("index");
-            OString sObjectName = aWalker.attribute("object_name");
+            OString sType = aWalker.attribute("node_type"_ostr);
+            OString sIndex = aWalker.attribute("index"_ostr);
+            OString sObjectName = aWalker.attribute("object_name"_ostr);
 
             if (!sType.isEmpty() && !sIndex.isEmpty())
             {

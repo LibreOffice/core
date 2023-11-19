@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvmImageExport)
     // - Actual  : 2
     // - XPath '//reqif-xhtml:object' number of nodes is incorrect
     // i.e. we wrote both GIF and PNG, not just PNG for SVM images.
-    assertXPath(pXmlDoc, "//reqif-xhtml:object", "type", "image/png");
+    assertXPath(pXmlDoc, "//reqif-xhtml:object"_ostr, "type"_ostr, "image/png");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableCellFloatValueType)
@@ -156,8 +156,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCellFloatValueType)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//reqif-xhtml:td' unexpected 'sdval' attribute
     // i.e. sdval was written in XHTML mode.
-    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:td", "sdval");
-    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:td", "sdnum");
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:td"_ostr, "sdval"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:td"_ostr, "sdnum"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableRowSpanInAllCells)
@@ -189,8 +189,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableRowSpanInAllCells)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//tr[1]/td[1]' unexpected 'rowspan' attribute
     // i.e. a combination of rowspan + empty <tr> was emitted.
-    assertXPathNoAttribute(pHtmlDoc, "//tr[1]/td[1]", "rowspan");
-    assertXPath(pHtmlDoc, "//tr", 1);
+    assertXPathNoAttribute(pHtmlDoc, "//tr[1]/td[1]"_ostr, "rowspan"_ostr);
+    assertXPath(pHtmlDoc, "//tr"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSExport)
@@ -217,8 +217,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSExport)
     // - Expected: 0
     // - Actual  : 1
     // i.e <center> was used to position the table, not CSS.
-    assertXPath(pXmlDoc, "//reqif-xhtml:center", 0);
-    assertXPath(pXmlDoc, "//reqif-xhtml:table", "style", "margin-left: auto; margin-right: auto");
+    assertXPath(pXmlDoc, "//reqif-xhtml:center"_ostr, 0);
+    assertXPath(pXmlDoc, "//reqif-xhtml:table"_ostr, "style"_ostr,
+                "margin-left: auto; margin-right: auto");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSImport)

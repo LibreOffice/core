@@ -619,15 +619,15 @@ OString DocxAttributeOutput::convertToOOXMLVertOrient(sal_Int16 nOrient)
     {
         case text::VertOrientation::CENTER:
         case text::VertOrientation::LINE_CENTER:
-            return "center";
+            return "center"_ostr;
         case text::VertOrientation::BOTTOM:
-            return "bottom";
+            return "bottom"_ostr;
         case text::VertOrientation::LINE_BOTTOM:
-            return "outside";
+            return "outside"_ostr;
         case text::VertOrientation::TOP:
-            return "top";
+            return "top"_ostr;
         case text::VertOrientation::LINE_TOP:
-            return "inside";
+            return "inside"_ostr;
         default:
             return OString();
     }
@@ -640,14 +640,14 @@ OString DocxAttributeOutput::convertToOOXMLHoriOrient(sal_Int16 nOrient, bool bI
         case text::HoriOrientation::LEFT:
             return bIsPosToggle ? "inside" : "left";
         case text::HoriOrientation::INSIDE:
-            return "inside";
+            return "inside"_ostr;
         case text::HoriOrientation::RIGHT:
             return bIsPosToggle ? "outside" : "right";
         case text::HoriOrientation::OUTSIDE:
-            return "outside";
+            return "outside"_ostr;
         case text::HoriOrientation::CENTER:
         case text::HoriOrientation::FULL:
-            return "center";
+            return "center"_ostr;
         default:
             return OString();
     }
@@ -658,13 +658,13 @@ OString DocxAttributeOutput::convertToOOXMLVertOrientRel(sal_Int16 nOrientRel)
     switch (nOrientRel)
     {
         case text::RelOrientation::PAGE_PRINT_AREA:
-            return "margin";
+            return "margin"_ostr;
         case text::RelOrientation::PAGE_FRAME:
-            return "page";
+            return "page"_ostr;
         case text::RelOrientation::FRAME:
         case text::RelOrientation::TEXT_LINE:
         default:
-            return "text";
+            return "text"_ostr;
     }
 }
 
@@ -673,14 +673,14 @@ OString DocxAttributeOutput::convertToOOXMLHoriOrientRel(sal_Int16 nOrientRel)
     switch (nOrientRel)
     {
         case text::RelOrientation::PAGE_PRINT_AREA:
-            return "margin";
+            return "margin"_ostr;
         case text::RelOrientation::PAGE_FRAME:
-            return "page";
+            return "page"_ostr;
         case text::RelOrientation::CHAR:
         case text::RelOrientation::PAGE_RIGHT:
         case text::RelOrientation::FRAME:
         default:
-            return "text";
+            return "text"_ostr;
     }
 }
 
@@ -5694,7 +5694,7 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
     // VML shape definition
     m_rExport.VMLExporter().SetSkipwzName(true);
     m_rExport.VMLExporter().SetHashMarkForType(true);
-    m_rExport.VMLExporter().OverrideShapeIDGen(true, "control_shape_");
+    m_rExport.VMLExporter().OverrideShapeIDGen(true, "control_shape_"_ostr);
     OString sShapeId;
     if(bAnchoredInline)
     {
@@ -5922,68 +5922,68 @@ void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, co
         switch (rBox.GetLeft()->GetBorderLineStyle())
         {
             case SvxBorderLineStyle::SOLID:
-                sLineType = OString("Single");
-                sDashType = OString("Solid");
+                sLineType = "Single"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::DASHED:
-                sLineType = OString("Single");
-                sDashType = OString("Dash");
+                sLineType = "Single"_ostr;
+                sDashType = "Dash"_ostr;
                 break;
             case SvxBorderLineStyle::DASH_DOT:
-                sLineType = OString("Single");
-                sDashType = OString("DashDot");
+                sLineType = "Single"_ostr;
+                sDashType = "DashDot"_ostr;
                 break;
             case SvxBorderLineStyle::DASH_DOT_DOT:
-                sLineType = OString("Single");
-                sDashType = OString("ShortDashDotDot");
+                sLineType = "Single"_ostr;
+                sDashType = "ShortDashDotDot"_ostr;
                 break;
             case SvxBorderLineStyle::DOTTED:
-                sLineType = OString("Single");
-                sDashType = OString("Dot");
+                sLineType = "Single"_ostr;
+                sDashType = "Dot"_ostr;
                 break;
             case SvxBorderLineStyle::DOUBLE:
-                sLineType = OString("ThinThin");
-                sDashType = OString("Solid");
+                sLineType = "ThinThin"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::DOUBLE_THIN:
-                sLineType = OString("ThinThin");
-                sDashType = OString("Solid");
+                sLineType = "ThinThin"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::EMBOSSED:
-                sLineType = OString("Single");
-                sDashType = OString("Solid");
+                sLineType = "Single"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::ENGRAVED:
-                sLineType = OString("Single");
-                sDashType = OString("Solid");
+                sLineType = "Single"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::FINE_DASHED:
-                sLineType = OString("Single");
-                sDashType = OString("Dot");
+                sLineType = "Single"_ostr;
+                sDashType = "Dot"_ostr;
                 break;
             case SvxBorderLineStyle::INSET:
-                sLineType = OString("Single");
-                sDashType = OString("Solid");
+                sLineType = "Single"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::OUTSET:
-                sLineType = OString("Single");
-                sDashType = OString("Solid");
+                sLineType = "Single"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
             case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
             case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
-                sLineType = OString("ThickThin");
-                sDashType = OString("Solid");
+                sLineType = "ThickThin"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::THINTHICK_LARGEGAP:
             case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
             case SvxBorderLineStyle::THINTHICK_SMALLGAP:
-                sLineType = OString("ThinThick");
-                sDashType = OString("Solid");
+                sLineType = "ThinThick"_ostr;
+                sDashType = "Solid"_ostr;
                 break;
             case SvxBorderLineStyle::NONE:
-                sLineType = OString("");
-                sDashType = OString("");
+                sLineType = ""_ostr;
+                sDashType = ""_ostr;
                 break;
             default:
                 SAL_WARN("sw.ww8", "Unknown line type on OOXML ELE export!");
@@ -6066,7 +6066,7 @@ OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const 
         //Get the relative horizontal positions for the anchors
         OString aHAnch
             = bIsPageAnchor
-                  ? OString("page")
+                  ? "page"_ostr
                   : convertToOOXMLHoriOrientRel(rFormat.GetHoriOrient().GetRelationOrient());
         //Get the relative vertical positions for the anchors
         OString aVAnch = convertToOOXMLVertOrientRel(rFormat.GetVertOrient().GetRelationOrient());
@@ -6122,22 +6122,22 @@ void DocxAttributeOutput::ExportOLESurround(const SwFormatSurround& rWrap)
     switch (rWrap.GetSurround())
     {
         case text::WrapTextMode::WrapTextMode_NONE:
-            sSurround = OString("topAndBottom");
+            sSurround = "topAndBottom"_ostr;
             break;
         case text::WrapTextMode::WrapTextMode_PARALLEL:
-            sSurround = bIsContour ? OString("tight") : OString("square");
+            sSurround = bIsContour ? "tight"_ostr : "square"_ostr;
             break;
         case text::WrapTextMode::WrapTextMode_DYNAMIC:
-            sSide = OString("largest");
-            sSurround = bIsContour ? OString("tight") : OString("square");
+            sSide = "largest"_ostr;
+            sSurround = bIsContour ? "tight"_ostr : "square"_ostr;
             break;
         case text::WrapTextMode::WrapTextMode_LEFT:
-            sSide = OString("left");
-            sSurround = bIsContour ? OString("tight") : OString("square");
+            sSide = "left"_ostr;
+            sSurround = bIsContour ? "tight"_ostr : "square"_ostr;
             break;
         case text::WrapTextMode::WrapTextMode_RIGHT:
-            sSide = OString("right");
-            sSurround = bIsContour ? OString("tight") : OString("square");
+            sSide = "right"_ostr;
+            sSurround = bIsContour ? "tight"_ostr : "square"_ostr;
             break;
         default:
             SAL_WARN("sw.ww8", "Unknown surround type on OOXML export!");
@@ -7106,7 +7106,7 @@ void DocxAttributeOutput::SectionBiDi( bool bBiDi )
 }
 
 // Converting Numbering Format Code to string
-static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemSet* pOutSet, OString& rFormat, const OString& sDefault = "" )
+static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemSet* pOutSet, OString& rFormat, const OString& sDefault = ""_ostr )
 {
     OString aType = sDefault;
 
@@ -7433,23 +7433,23 @@ OString DocxAttributeOutput::TransHighlightColor( sal_uInt8 nIco )
 {
     switch (nIco)
     {
-        case 0: return "none"; break;
-        case 1: return "black"; break;
-        case 2: return "blue"; break;
-        case 3: return "cyan"; break;
-        case 4: return "green"; break;
-        case 5: return "magenta"; break;
-        case 6: return "red"; break;
-        case 7: return "yellow"; break;
-        case 8: return "white"; break;
-        case 9: return "darkBlue"; break;
-        case 10: return "darkCyan"; break;
-        case 11: return "darkGreen"; break;
-        case 12: return "darkMagenta"; break;
-        case 13: return "darkRed"; break;
-        case 14: return "darkYellow"; break;
-        case 15: return "darkGray"; break;
-        case 16: return "lightGray"; break;
+        case 0: return "none"_ostr; break;
+        case 1: return "black"_ostr; break;
+        case 2: return "blue"_ostr; break;
+        case 3: return "cyan"_ostr; break;
+        case 4: return "green"_ostr; break;
+        case 5: return "magenta"_ostr; break;
+        case 6: return "red"_ostr; break;
+        case 7: return "yellow"_ostr; break;
+        case 8: return "white"_ostr; break;
+        case 9: return "darkBlue"_ostr; break;
+        case 10: return "darkCyan"_ostr; break;
+        case 11: return "darkGreen"_ostr; break;
+        case 12: return "darkMagenta"_ostr; break;
+        case 13: return "darkRed"_ostr; break;
+        case 14: return "darkYellow"_ostr; break;
+        case 15: return "darkGray"_ostr; break;
+        case 16: return "lightGray"_ostr; break;
         default: return OString(); break;
     }
 }
@@ -7613,7 +7613,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
 
     // format
     OString aCustomFormat;
-    OString aFormat(lcl_ConvertNumberingType(nNumberingType, pOutSet, aCustomFormat, "decimal"));
+    OString aFormat(lcl_ConvertNumberingType(nNumberingType, pOutSet, aCustomFormat, "decimal"_ostr));
 
     {
         if (aCustomFormat.isEmpty())
@@ -7837,16 +7837,16 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 
     if ( !nEsc )
     {
-        sIss = OString( "baseline" );
+        sIss = "baseline"_ostr;
         nEsc = 0;
         nProp = 100;
     }
     else if ( DFLT_ESC_PROP == nProp || nProp < 1 || nProp > 100 )
     {
         if ( DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc )
-            sIss = OString( "subscript" );
+            sIss = "subscript"_ostr;
         else if ( DFLT_ESC_SUPER == nEsc || DFLT_ESC_AUTO_SUPER == nEsc )
-            sIss = OString( "superscript" );
+            sIss = "superscript"_ostr;
     }
     else if ( DFLT_ESC_AUTO_SUPER == nEsc )
     {
@@ -9909,23 +9909,23 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
     {
         default:
         case SvxFrameDirection::Horizontal_LR_TB:
-            sTextFlow = OString( "lrTb" );
+            sTextFlow = "lrTb"_ostr;
             break;
         case SvxFrameDirection::Horizontal_RL_TB:
-            sTextFlow = OString( "lrTb" );
+            sTextFlow = "lrTb"_ostr;
             bBiDi = true;
             break;
         case SvxFrameDirection::Vertical_LR_TB: // ~ vert="mongolianVert"
-            sTextFlow = OString("tbLrV");
+            sTextFlow = "tbLrV"_ostr;
             break;
         case SvxFrameDirection::Vertical_RL_TB: // ~ vert="eaVert"
-            sTextFlow = OString( "tbRl" );
+            sTextFlow = "tbRl"_ostr;
             break;
         case SvxFrameDirection::Vertical_LR_BT: // ~ vert="vert270"
-            sTextFlow = OString("btLr");
+            sTextFlow = "btLr"_ostr;
             break;
         case SvxFrameDirection::Vertical_RL_TB90: // ~ vert="vert"
-            sTextFlow = OString("tbRlV");
+            sTextFlow = "tbRlV"_ostr;
             break;
     }
 

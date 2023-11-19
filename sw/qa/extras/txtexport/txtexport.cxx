@@ -82,7 +82,7 @@ DECLARE_TXTEXPORT_TEST(testTdf120574_utf8bom, "UTF8BOMCRLF.txt")
 {
     std::vector<char> aMemStream = readMemoryStream<char>();
     OString aData(std::string_view(aMemStream.data(), aMemStream.size()));
-    CPPUNIT_ASSERT_EQUAL(OString(u8"\uFEFFフー\r\nバー\r\n"), aData);
+    CPPUNIT_ASSERT_EQUAL(u8"\uFEFFフー\r\nバー\r\n"_ostr, aData);
 }
 
 DECLARE_TXTEXPORT_TEST(testTdf120574_utf16lebom, "UTF16LEBOMCRLF.txt")
@@ -96,7 +96,7 @@ DECLARE_TXTEXPORT_TEST(testTdf142669_utf8, "UTF8CRLF.txt")
 {
     std::vector<char> aMemStream = readMemoryStream<char>();
     OString aData(std::string_view(aMemStream.data(), aMemStream.size()));
-    CPPUNIT_ASSERT_EQUAL(OString(u8"フー\r\nバー\r\n"), aData);
+    CPPUNIT_ASSERT_EQUAL(u8"フー\r\nバー\r\n"_ostr, aData);
 }
 
 DECLARE_TXTEXPORT_TEST(testTdf142669_utf16le, "UTF16LECRLF.txt")
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testClearingBreakExport)
     // - Expected: foo\nbar
     // - Actual  : foobar
     // i.e. the clearing break was not downgraded to a plain line break.
-    CPPUNIT_ASSERT_EQUAL(OString("foo\nbar" SAL_NEWLINE_STRING), aActual);
+    CPPUNIT_ASSERT_EQUAL("foo\nbar" SAL_NEWLINE_STRING ""_ostr, aActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

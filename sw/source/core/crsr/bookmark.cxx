@@ -1030,7 +1030,7 @@ namespace sw::mark
     void DropDownFieldmark::SendLOKHideMessage(const SfxViewShell* pViewShell)
     {
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON,
-            "{\"action\": \"hide\", \"type\": \"drop-down\"}");
+            "{\"action\": \"hide\", \"type\": \"drop-down\"}"_ostr);
     }
 
     DateFieldmark::DateFieldmark(const SwPaM& rPaM)

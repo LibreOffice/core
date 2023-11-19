@@ -918,18 +918,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92586)
 CPPUNIT_TEST_FIXTURE(Test, testTdf103025)
 {
     createSwDoc("tdf103025.odt");
-    CPPUNIT_ASSERT_EQUAL(OUString("2014-01"), parseDump("/root/page[1]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
-    CPPUNIT_ASSERT_EQUAL(OUString("2014-01"), parseDump("/root/page[2]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
-    CPPUNIT_ASSERT_EQUAL(OUString("2014-02"), parseDump("/root/page[3]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
-    CPPUNIT_ASSERT_EQUAL(OUString("2014-03"), parseDump("/root/page[4]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
-    CPPUNIT_ASSERT_EQUAL(OUString("2014-03"), parseDump("/root/page[5]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-01"), parseDump("/root/page[1]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-01"), parseDump("/root/page[2]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-02"), parseDump("/root/page[3]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-03"), parseDump("/root/page[4]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-03"), parseDump("/root/page[5]/header/tab[2]/row[2]/cell[3]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf76322_columnBreakInHeader)
 {
     createSwDoc("tdf76322_columnBreakInHeader.docx");
 // column breaks were ignored. First line should start in column 2
-    CPPUNIT_ASSERT_EQUAL( OUString("Test1"), parseDump("/root/page[1]/header/section/column[2]/body/txt/text()") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Test1"), parseDump("/root/page[1]/header/section/column[2]/body/txt/text()"_ostr) );
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf76349_1columnBreak)
@@ -958,16 +958,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf75221)
     // When "Don't add space between paragraphs of the same style" setting set,
     // spacing between same-style paragraphs must be equal to their line spacing.
     // It used to be 0.
-    OUString top = parseDump("/root/page/body/txt[2]/infos/prtBounds", "top");
+    OUString top = parseDump("/root/page/body/txt[2]/infos/prtBounds"_ostr, "top"_ostr);
     CPPUNIT_ASSERT(top.toInt32() > 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf101729)
 {
     createSwDoc("tdf101729.odt");
-    sal_Int32 l = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds", "left").toInt32();
-    sal_Int32 w = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32();
-    sal_Int32 x = parseDump("/root/page/body/tab/row/cell[1]/txt/infos/bounds", "left").toInt32();
+    sal_Int32 l = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 w = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds"_ostr, "width"_ostr).toInt32();
+    sal_Int32 x = parseDump("/root/page/body/tab/row/cell[1]/txt/infos/bounds"_ostr, "left"_ostr).toInt32();
     // Make sure the text does not go outside and verify it is centered roughly
     CPPUNIT_ASSERT( l + w / 4 < x  );
     CPPUNIT_ASSERT( x < l + 3 * w / 4);
@@ -1031,14 +1031,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109080_loext_ns)
     // Test we can import <loext:header-first> and <loext:footer-first>
 
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header"),
-        parseDump("/root/page[1]/header/txt/text()"));
+        parseDump("/root/page[1]/header/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header"),
-        parseDump("/root/page[2]/header/txt/text()"));
+        parseDump("/root/page[2]/header/txt/text()"_ostr));
 
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page footer"),
-        parseDump("/root/page[1]/footer/txt/text()"));
+        parseDump("/root/page[1]/footer/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page footer"),
-        parseDump("/root/page[2]/footer/txt/text()"));
+        parseDump("/root/page[2]/footer/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109080_style_ns)
@@ -1048,14 +1048,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109080_style_ns)
     // (produced by LibreOffice 4.0 - 5.x)
 
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header"),
-        parseDump("/root/page[1]/header/txt/text()"));
+        parseDump("/root/page[1]/header/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header"),
-        parseDump("/root/page[2]/header/txt/text()"));
+        parseDump("/root/page[2]/header/txt/text()"_ostr));
 
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page footer"),
-        parseDump("/root/page[1]/footer/txt/text()"));
+        parseDump("/root/page[1]/footer/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page footer"),
-        parseDump("/root/page[2]/footer/txt/text()"));
+        parseDump("/root/page[2]/footer/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109228)
@@ -1073,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94882)
     //  due to the page number being even)
     OUString headertext = parseDump(
         "/root/page[starts-with(body/txt/text(),'The paragraph style on this')]"
-        "/header/txt/text()"
+        "/header/txt/text()"_ostr
     );
     // This header should be the first page header
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header"), headertext);
@@ -1086,7 +1086,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBlankBeforeFirstPage)
     // blank page inserted before it to make it a left page
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 1 pages output",
-        OUString("1"), parseDump("count(/root/page)")
+        OUString("1"), parseDump("count(/root/page)"_ostr)
     );
 }
 
@@ -1100,15 +1100,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108482)
 {
     createSwDoc("tdf108482.odt");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The table on second page must have two rows",
-        OUString("2"), parseDump("count(/root/page[2]/body/tab/row)")
+        OUString("2"), parseDump("count(/root/page[2]/body/tab/row)"_ostr)
     );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The second page table's first row must be the repeated headline",
-        OUString("Header"), parseDump("/root/page[2]/body/tab/row[1]/cell/txt")
+        OUString("Header"), parseDump("/root/page[2]/body/tab/row[1]/cell/txt"_ostr)
     );
     // The first (repeated headline) row with vertical text orientation must have non-zero height
     // (in my tests, it was 1135)
     CPPUNIT_ASSERT_GREATER(
-        sal_Int32(1000), parseDump("/root/page[2]/body/tab/row[1]/infos/bounds", "height").toInt32()
+        sal_Int32(1000), parseDump("/root/page[2]/body/tab/row[1]/infos/bounds"_ostr, "height"_ostr).toInt32()
     );
 }
 
@@ -1117,7 +1117,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116195)
     createSwDoc("tdf116195.odt");
     // The image was set to zero height due to a regression
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(12960), parseDump("/root/page/anchored/fly/notxt/infos/bounds", "height").toInt32()
+        sal_Int32(12960), parseDump("/root/page/anchored/fly/notxt/infos/bounds"_ostr, "height"_ostr).toInt32()
     );
 }
 
@@ -1310,7 +1310,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVerticallyMergedCellBorder)
     xmlDocUniquePtr pXmlSettings = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - In <...>, XPath '//table:covered-table-cell' no attribute 'style-name' exist
-    assertXPath(pXmlSettings, "//table:covered-table-cell", "style-name", "Table1.A2");
+    assertXPath(pXmlSettings, "//table:covered-table-cell"_ostr, "style-name"_ostr, "Table1.A2");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPageAnchorZIndexFirstPage)
@@ -1528,8 +1528,8 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyTrailingSpans)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    auto height1 = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds", "height").toInt32();
-    auto height2 = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height").toInt32();
+    auto height1 = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    auto height2 = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(height1, height2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(184, height2, 1); // allow a bit of room for rounding just in case
 }

@@ -40,7 +40,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableBorder)
     // border:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point"_ostr);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     int nHorizontalBorders = 0;
     // Count the horizontal borders:
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRTLBorderMerge)
     // Then make sure the 5 columns all have left and right vertical borders:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point"_ostr);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     int nVerticalBorders = 0;
     // Count the vertical borders:
@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableMergedBorder)
     // Then make sure that the master table has a bottom border with the correct widths:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point"_ostr);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     std::set<int> aHorizontalBorderStarts;
     std::set<int> aHorizontalBorderEnds;

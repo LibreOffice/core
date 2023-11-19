@@ -110,7 +110,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
     //Without the fix in place, it would have failed with
     //- Expected: 2.
     //- Actual  : 4.
-    CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']","expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,"expand"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInNumbering.docx")
@@ -133,7 +133,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153042_largeTab, "tdf153042_largeTab.docx")
 
     const auto& pLayout = parseLayoutDump();
     // Ensure a large tabstop is used in the pseudo-numbering (numbering::NONE followed by tabstop)
-    assertXPath(pLayout, "//SwFixPortion", "width", "1701");
+    assertXPath(pLayout, "//SwFixPortion"_ostr, "width"_ostr, "1701");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
@@ -149,7 +149,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
 
     const auto& pLayout = parseLayoutDump();
     // Ensure a miniscule tab is used in the pseudo-numbering (numbering::NONE followed by tabstop)
-    assertXPath(pLayout, "//SwFixPortion", "width", "10");
+    assertXPath(pLayout, "//SwFixPortion"_ostr, "width"_ostr, "10");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154751_dualStrikethrough, "tdf154751_dualStrikethrough.docx")
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // The two column breaks were lost on import. (I wouldn't complain if they were at 3,5)
-    assertXPath(pXmlDoc, "//w:br", 2);
+    assertXPath(pXmlDoc, "//w:br"_ostr, 2);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx")
@@ -207,15 +207,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105035_framePrB, "tdf105035_framePrB.docx")
     // and the frames must not overlap - even though their vertical positions are identical.
     const auto& pLayout = parseLayoutDump();
     sal_Int32 n1stFlyBottom
-        = getXPath(pLayout, "//page[1]//anchored/fly[1]/infos/bounds", "bottom").toInt32();
+        = getXPath(pLayout, "//page[1]//anchored/fly[1]/infos/bounds"_ostr, "bottom"_ostr).toInt32();
     sal_Int32 n2ndFlyTop
-        = getXPath(pLayout, "//page[1]//anchored/fly[2]/infos/bounds", "top").toInt32();
+        = getXPath(pLayout, "//page[1]//anchored/fly[2]/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_GREATER(n1stFlyBottom, n2ndFlyTop); //Top is greater than bottom
 
     // Impossible layout TODO: the textboxes are in the wrong order.
     OUString sTextBox1("Preparation of Papers for IEEE TRANSACTIONS and JOURNALS (November 2012)");
     CPPUNIT_ASSERT_MESSAGE("DID YOU FIX ME? Wow - I didn't think this would be possible!",
-        !getXPathContent(pLayout, "//page[1]//anchored/fly[1]/txt").startsWith(sTextBox1));
+        !getXPathContent(pLayout, "//page[1]//anchored/fly[1]/txt"_ostr).startsWith(sTextBox1));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf105035_framePrC, "tdf105035_framePrC.docx")
@@ -224,9 +224,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105035_framePrC, "tdf105035_framePrC.docx")
     // and the frames DO overlap this time.
     const auto& pLayout = parseLayoutDump();
     sal_Int32 n1stFlyTop
-        = getXPath(pLayout, "//page[1]//anchored/fly[1]/infos/bounds", "top").toInt32();
+        = getXPath(pLayout, "//page[1]//anchored/fly[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
     sal_Int32 n2ndFlyTop
-        = getXPath(pLayout, "//page[1]//anchored/fly[2]/infos/bounds", "top").toInt32();
+        = getXPath(pLayout, "//page[1]//anchored/fly[2]/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(n1stFlyTop, n2ndFlyTop); //both frames start at the same position
 }
 
@@ -277,11 +277,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
 
     // exported: framed paragraphs without a background should now have a red background
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//w:body/w:p[1]/w:pPr/w:shd", "fill", "800000");
-    assertXPath(pXmlDoc, "//w:body/w:p[2]/w:pPr/w:shd", "fill", "548DD4"); // was blue already, no change
-    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:shd", "fill", "800000");
-    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr", "yAlign", "center");
-    assertXPathNoAttribute(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr", "y");
+    assertXPath(pXmlDoc, "//w:body/w:p[1]/w:pPr/w:shd"_ostr, "fill"_ostr, "800000");
+    assertXPath(pXmlDoc, "//w:body/w:p[2]/w:pPr/w:shd"_ostr, "fill"_ostr, "548DD4"); // was blue already, no change
+    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:shd"_ostr, "fill"_ostr, "800000");
+    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr"_ostr, "yAlign"_ostr, "center");
+    assertXPathNoAttribute(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr"_ostr, "y"_ostr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrWrapSpacing, "tdf154703_framePrWrapSpacing.docx")
@@ -292,7 +292,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrWrapSpacing, "tdf154703_framePrWra
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // before the fix, this was half of the correct value.
-    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr", "hSpace", "2552");
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr"_ostr, "hSpace"_ostr, "2552");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrTextDirection, "tdf154703_framePrTextDirection.docx")
@@ -302,28 +302,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrTextDirection, "tdf154703_framePrT
         return;
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:textDirection", "val", "tbRl");
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:textDirection"_ostr, "val"_ostr, "tbRl");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();
     // An anchored TO character image anchors before the page break.
-    assertXPath(pLayout, "//page[1]//anchored", 1);
+    assertXPath(pLayout, "//page[1]//anchored"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak2, "tdf153613_anchoredAfterPgBreak2.docx")
 {
     const auto& pLayout = parseLayoutDump();
     // An anchored TO character image, followed by more characters moves to the following page
-    assertXPath(pLayout, "//page[2]//anchored", 1);
+    assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak3, "tdf153613_anchoredAfterPgBreak3.docx")
 {
     const auto& pLayout = parseLayoutDump();
     // An anchored TO character image, with setting splitPgBreakAndParaMark moves to the following page
-    assertXPath(pLayout, "//page[2]//anchored", 1);
+    assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak6, "tdf153613_anchoredAfterPgBreak6.docx")
@@ -334,15 +334,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak6, "tdf153613_anchore
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
     const auto& pLayout = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(OUString("y"), getXPathContent(pLayout, "//page[2]/body/txt[1]"));
-    assertXPath(pLayout, "//page[1]//anchored", 1); // DID YOU FIX ME? This should be page[2]
+    CPPUNIT_ASSERT_EQUAL(OUString("y"), getXPathContent(pLayout, "//page[2]/body/txt[1]"_ostr));
+    assertXPath(pLayout, "//page[1]//anchored"_ostr, 1); // DID YOU FIX ME? This should be page[2]
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak, "tdf153613_inlineAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();
     // An inline AS character image moves to the following page when after the page break.
-    assertXPath(pLayout, "//page[2]//anchored", 1);
+    assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak2, "tdf153613_inlineAfterPgBreak2.docx")
@@ -353,8 +353,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak2, "tdf153613_inlineAft
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
     const auto& pLayout = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(OUString("x"), getXPathContent(pLayout, "//page[1]/body/txt[2]"));
-    assertXPath(pLayout, "//page[2]//anchored", 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), getXPathContent(pLayout, "//page[1]/body/txt[2]"_ostr));
+    assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak, "tdf153613_textboxAfterPgBreak.docx")
@@ -362,7 +362,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak, "tdf153613_textboxAf
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
     const auto& pLayout = parseLayoutDump();
-    assertXPathContent(pLayout, "//page[2]/body/txt", "There should be no prior carriage return.");
+    assertXPathContent(pLayout, "//page[2]/body/txt"_ostr, "There should be no prior carriage return.");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak2, "tdf153613_textboxAfterPgBreak2.docx")
@@ -371,7 +371,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak2, "tdf153613_textboxA
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 
     const auto& pLayout = parseLayoutDump();
-    assertXPathContent(pLayout, "//page[2]/body/txt", "There should be no prior carriage return.");
+    assertXPathContent(pLayout, "//page[2]/body/txt"_ostr, "There should be no prior carriage return.");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBreak.docx")
@@ -509,11 +509,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
 
     xmlDocUniquePtr pStylesXml = parseExport("word/styles.xml");
     // user specified: do not include in line numbering
-    assertXPath(pStylesXml, "//w:style[@w:styleId='Normal']/w:pPr/w:suppressLineNumbers", 1);
+    assertXPath(pStylesXml, "//w:style[@w:styleId='Normal']/w:pPr/w:suppressLineNumbers"_ostr, 1);
     // even though it matches the parent style, these should always avoid showing line numbering
-    assertXPath(pStylesXml, "//w:style[@w:styleId='Footer']/w:pPr/w:suppressLineNumbers", 1);
+    assertXPath(pStylesXml, "//w:style[@w:styleId='Footer']/w:pPr/w:suppressLineNumbers"_ostr, 1);
     assertXPath(pStylesXml,
-                "//w:style[@w:styleId='0NUMBERED']/w:pPr/w:suppressLineNumbers", "val", "0");
+                "//w:style[@w:styleId='0NUMBERED']/w:pPr/w:suppressLineNumbers"_ostr, "val"_ostr, "0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf157598)
@@ -525,7 +525,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157598)
     // Without the fix in place, this test would have failed with
     // - Expected: 0
     // - Actual  : 1
-    assertXPath(pStylesXml, "//w:style[@w:styleId='Normal']/w:rPr/w:rtl", 0);
+    assertXPath(pStylesXml, "//w:style[@w:styleId='Normal']/w:rPr/w:rtl"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf76022_textboxWrap)
@@ -568,7 +568,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
     // Without fix the orientation was vert="vert".
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//wps:bodyPr", "vert", "mongolianVert");
+    assertXPath(pXmlDoc, "//wps:bodyPr"_ostr, "vert"_ostr, "mongolianVert");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf151912, "tdf151912.docx")
@@ -579,7 +579,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151912, "tdf151912.docx")
     if (!isExported())
         return;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//w:sdt//w:sdtPr/w:id", "val", "1802566103");
+    assertXPath(pXmlDoc, "//w:sdt//w:sdtPr/w:id"_ostr, "val"_ostr, "1802566103");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
@@ -587,11 +587,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
     const auto& pLayout = parseLayoutDump();
 
     // Ensure we load field value from external XML correctly (it was "HERUNTERLADEN")
-    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]", "Placeholder -> *ABC*");
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]"_ostr, "Placeholder -> *ABC*");
 
     // This SDT has no storage id, it is not an error, but content can be taken from any suitable XML
     // There 2 variants possible, both are acceptable
-    OUString sFieldResult = getXPathContent(pLayout, "/root/page[1]/body/txt[2]");
+    OUString sFieldResult = getXPathContent(pLayout, "/root/page[1]/body/txt[2]"_ostr);
     CPPUNIT_ASSERT(sFieldResult == "Placeholder -> *HERUNTERLADEN*" || sFieldResult == "Placeholder -> *ABC*");
 }
 
@@ -624,7 +624,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberPortionFormatFromODT)
     // - Actual  : 0
     // - XPath '//w:pPr/w:rPr/w:sz' number of nodes is incorrect
     // i.e. <w:sz> was missing under <w:pPr>'s <w:rPr>.
-    assertXPath(pXmlDoc, "//w:pPr/w:rPr/w:sz", "val", "48");
+    assertXPath(pXmlDoc, "//w:pPr/w:rPr/w:sz"_ostr, "val"_ostr, "48");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleCharPosition)
@@ -642,7 +642,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleCharPosition)
     // - Actual  : 0
     // - XPath '/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:position' number of nodes is incorrect
     // i.e. we wrote <w:vertAlign w:val="subscript"> instead of <w:position>.
-    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:position", "val", "-1");
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:position"_ostr, "val"_ostr, "-1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
@@ -659,7 +659,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
     // and Word displays no text at all.
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPathAttrs(pXmlDoc, "//wps:bodyPr", { { "tIns", "179640" }, { "bIns", "360000" } });
+    assertXPathAttrs(pXmlDoc, "//wps:bodyPr"_ostr, { { "tIns", "179640" }, { "bIns", "360000" } });
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak)
@@ -690,7 +690,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDuplicatedId)
     // - Expected: 2
     // - Actual  : 4
     // i.e. grab-bags introduced 2 unwanted duplicates.
-    assertXPath(pXmlDoc, "//w:sdt", 2);
+    assertXPath(pXmlDoc, "//w:sdt"_ostr, 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testImageCropping)
@@ -717,9 +717,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
 
     // Then make sure that fldChar with type 'end' goes prior to the at-char anchored fly.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    const int nRunsBeforeFldCharEnd = countXPathNodes(pXmlDoc, "//w:fldChar[@w:fldCharType='end']/preceding::w:r");
+    const int nRunsBeforeFldCharEnd = countXPathNodes(pXmlDoc, "//w:fldChar[@w:fldCharType='end']/preceding::w:r"_ostr);
     CPPUNIT_ASSERT(nRunsBeforeFldCharEnd);
-    const int nRunsBeforeAlternateContent = countXPathNodes(pXmlDoc, "//mc:AlternateContent/preceding::w:r");
+    const int nRunsBeforeAlternateContent = countXPathNodes(pXmlDoc, "//mc:AlternateContent/preceding::w:r"_ostr);
     CPPUNIT_ASSERT(nRunsBeforeAlternateContent);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected greater than: 6
@@ -727,9 +727,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
     CPPUNIT_ASSERT_GREATER(nRunsBeforeFldCharEnd, nRunsBeforeAlternateContent);
     // Make sure we only have one paragraph in body, and only three field characters overall,
     // located directly in runs of this paragraph
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:fldChar", 3);
-    assertXPath(pXmlDoc, "//w:fldChar", 3); // no field characters elsewhere
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:fldChar"_ostr, 3);
+    assertXPath(pXmlDoc, "//w:fldChar"_ostr, 3); // no field characters elsewhere
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
@@ -776,7 +776,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
     loadAndReload("tdf153104.docx");
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    OUString numId = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId", "val");
+    OUString numId = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId"_ostr, "val"_ostr);
 
     xmlDocUniquePtr pXmlNum = parseExport("word/numbering.xml");
     OString numPath = "/w:numbering/w:num[@w:numId='"
@@ -789,8 +789,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
     // - Expected: 1
     // - Actual  : 0
     // - In <>, XPath '/w:numbering/w:num[@w:numId='3']/w:lvlOverride[@w:ilvl='0']/w:startOverride' number of nodes is incorrect
-    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='0']/w:startOverride", "val", "10");
-    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='1']/w:startOverride", "val", "1");
+    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='0']/w:startOverride", "val"_ostr, "10");
+    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='1']/w:startOverride", "val"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
@@ -798,7 +798,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
     loadAndReload("tdf153128.docx");
     calcLayout();
     sal_Int32 nFirstLineHeight
-        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion", "height")
+        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr, "height"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_GREATER(sal_Int32(0), nFirstLineHeight);
 
@@ -816,7 +816,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
     // (maybe this is wrong, because Word does not do this).
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc,
-                "/w:document/w:body/w:p/w:pPr/w:pPrChange/w:pPr/w:pStyle[@w:val='UnknownStyle']");
+                "/w:document/w:body/w:p/w:pPr/w:pPrChange/w:pPr/w:pStyle[@w:val='UnknownStyle']"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
@@ -828,7 +828,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
     // - Actual  : 0
     // - In <>, XPath '//w:hyperlink' number of nodes is incorrect
     // i.e. a HYPERLINK field was exported instead of the hyperlink XML element.
-    assertXPath(pXmlDoc, "//w:hyperlink", "tgtFrame", "_self");
+    assertXPath(pXmlDoc, "//w:hyperlink"_ostr, "tgtFrame"_ostr, "_self");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
@@ -840,8 +840,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
     // Without the fix this was styleId='FigureIndex1' and name was "Figure Index 1"
     // This led to style settings being reset when ToF was updated in Word
     // TOF's paragraph style should be exported as "Table of Figures" as that's the default Word style name
-    assertXPath(pXmlStyles, "/w:styles/w:style[12]", "styleId", "TableofFigures");
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name", "val", "Table of Figures");
+    assertXPath(pXmlStyles, "/w:styles/w:style[12]"_ostr, "styleId"_ostr, "TableofFigures");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name"_ostr, "val"_ostr, "Table of Figures");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124472_hyperlink, "tdf124472.docx")
@@ -867,13 +867,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155736, "tdf155736_PageNumbers_footer.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/footer");
-    assertXPath(pXmlDoc, "/root/page[2]/footer");
+    assertXPath(pXmlDoc, "/root/page[1]/footer"_ostr);
+    assertXPath(pXmlDoc, "/root/page[2]/footer"_ostr);
     //Without the fix in place, it would have failed with
     //- Expected: Page * of *
     //- Actual  : Page of
-    CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[1]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[2]/footer/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[1]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[2]/footer/txt/text()"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")

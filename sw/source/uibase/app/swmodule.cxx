@@ -128,7 +128,7 @@ using namespace ::com::sun::star::uno;
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
-    : SfxModule("sw", {pWebFact, pFact, pGlobalFact}),
+    : SfxModule("sw"_ostr, {pWebFact, pFact, pGlobalFact}),
     m_pView(nullptr),
     m_bAuthorInitialised(false),
     m_bEmbeddedLoadSave( false ),

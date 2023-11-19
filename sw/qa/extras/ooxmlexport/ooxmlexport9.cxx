@@ -70,8 +70,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDocm)
     // name of the import filter was checked.
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
     assertXPath(pXmlDoc,
-                "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
-                "ContentType",
+                "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']"_ostr,
+                "ContentType"_ostr,
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
 }
 
@@ -80,23 +80,23 @@ CPPUNIT_TEST_FIXTURE(Test, testDefaultContentTypes)
     loadAndSave("fdo55381.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
     assertXPath(pXmlDoc,
-                "/ContentType:Types/ContentType:Default[@Extension='xml']",
-                "ContentType",
+                "/ContentType:Types/ContentType:Default[@Extension='xml']"_ostr,
+                "ContentType"_ostr,
                 "application/xml");
 
     assertXPath(pXmlDoc,
-                "/ContentType:Types/ContentType:Default[@Extension='rels']",
-                "ContentType",
+                "/ContentType:Types/ContentType:Default[@Extension='rels']"_ostr,
+                "ContentType"_ostr,
                 "application/vnd.openxmlformats-package.relationships+xml");
 
     assertXPath(pXmlDoc,
-                "/ContentType:Types/ContentType:Default[@Extension='png']",
-                "ContentType",
+                "/ContentType:Types/ContentType:Default[@Extension='png']"_ostr,
+                "ContentType"_ostr,
                 "image/png");
 
     assertXPath(pXmlDoc,
-                "/ContentType:Types/ContentType:Default[@Extension='jpeg']",
-                "ContentType",
+                "/ContentType:Types/ContentType:Default[@Extension='jpeg']"_ostr,
+                "ContentType"_ostr,
                 "image/jpeg");
 }
 
@@ -109,8 +109,8 @@ DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
     {
         xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
         assertXPath(pXmlDoc,
-                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
-                    "ContentType",
+                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']"_ostr,
+                    "ContentType"_ostr,
                     "application/vnd.ms-word.document.macroEnabled.main+xml");
     }
 }
@@ -207,36 +207,36 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132802)
 {
     loadAndSave("tdf132802.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "after", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "after", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing"_ostr, "after"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing"_ostr, "after"_ostr, "0");
     // This was 0 (list auto spacing is not zero before tables)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:spacing", "after", "280");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[1]/w:pPr/w:spacing", "after", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:spacing"_ostr, "after"_ostr, "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[1]/w:pPr/w:spacing"_ostr, "after"_ostr, "0");
     // This was 0 (list auto spacing is not zero at the end of table cells)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[2]/w:pPr/w:spacing", "after", "280");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[1]/w:pPr/w:spacing", "after", "280");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p[1]/w:pPr/w:spacing", "after", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[2]/w:pPr/w:spacing"_ostr, "after"_ostr, "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[1]/w:pPr/w:spacing"_ostr, "after"_ostr, "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p[1]/w:pPr/w:spacing"_ostr, "after"_ostr, "280");
     // This was 0 (list auto spacing is not zero at list end)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "after", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing"_ostr, "after"_ostr, "280");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132807)
 {
     loadAndSave("tdf132807.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "before", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing"_ostr, "before"_ostr, "280");
     // This was 240 (list auto spacing is zero in lists)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:spacing", "before", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[1]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[1]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
     // This was 240 (list auto spacing is zero in lists)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[2]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[2]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[1]/w:pPr/w:spacing", "before", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[2]/w:pPr/w:spacing", "before", "280");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p[1]/w:pPr/w:spacing", "before", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:spacing", "before", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[1]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[2]/w:pPr/w:spacing"_ostr, "before"_ostr, "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p[1]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:spacing"_ostr, "before"_ostr, "280");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133052)
@@ -244,13 +244,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133052)
     loadAndSave("tdf133052.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // These were 240 (top auto spacing of list subitems are zero)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
     // in tables, too
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[2]/w:pPr/w:spacing", "before", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[3]/w:pPr/w:spacing", "before", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[4]/w:pPr/w:spacing", "before", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[5]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[2]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[3]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[4]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[5]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134648)
@@ -259,11 +259,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134648)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // list item with direct top auto spacing
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "after", "240");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "beforeAutospacing", "1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing"_ostr, "after"_ostr, "240");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing"_ostr, "beforeAutospacing"_ostr, "1");
 
     // This was spacing w:after=200, but bottom auto spacing of first list subitem is zero
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing"_ostr, 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf129575_directBefore, "tdf129575-directBefore.docx")
@@ -335,90 +335,90 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118812)
     loadAndSave("tdf118812_tableStyles-comprehensive.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // cell A1
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "line");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleDefaults");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:pStyle"_ostr, "val"_ostr, "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing"_ostr, "lineRule"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing"_ostr, "line"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing"_ostr, "before"_ostr, "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[1]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[1]/w:rPr/w:sz"_ostr, "val"_ostr, "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle"_ostr, "val"_ostr, "CharSubStyleDefaults");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:sz"_ostr, "val"_ostr, "16");
     // cell A2
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "line");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "ParaSubStyleDefaultsChar");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:rStyle", "val", "CharSubStyleNormal");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:pStyle"_ostr, "val"_ostr, "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing"_ostr, "lineRule"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing"_ostr, "line"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing"_ostr, "before"_ostr, "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[1]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[1]/w:rPr/w:sz"_ostr, "val"_ostr, "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle"_ostr, "val"_ostr, "ParaSubStyleDefaultsChar");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:sz"_ostr, "val"_ostr, "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:rStyle"_ostr, "val"_ostr, "CharSubStyleNormal");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:sz"_ostr, "val"_ostr, "16");
     // cell A3
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:pStyle", "val", "ParaSubStyleNormal");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "line");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "after", "280");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[1]/w:rPr/w:sz", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleNormal");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:sz", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:pStyle"_ostr, "val"_ostr, "ParaSubStyleNormal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing"_ostr, "lineRule"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing"_ostr, "line"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing"_ostr, "before"_ostr, "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[1]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[1]/w:rPr/w:sz"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle"_ostr, "val"_ostr, "CharSubStyleNormal");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:sz"_ostr, 0);
     // cell A4
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:pStyle", "val", "ParaSubStyleDefaults");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "line");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "after", "200");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[1]/w:rPr/w:sz", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleDefaults");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:sz", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:pStyle"_ostr, "val"_ostr, "ParaSubStyleDefaults");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing"_ostr, "lineRule"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing"_ostr, "line"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing"_ostr, "before"_ostr, "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "200");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[1]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[1]/w:rPr/w:sz"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle"_ostr, "val"_ostr, "CharSubStyleDefaults");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:sz"_ostr, 0);
     // cell A5
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "line");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:rPr", "color");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:rPr", "sz");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:color", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:color", "val", "AAAA00"); // all text in color
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:pStyle"_ostr, "val"_ostr, "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing"_ostr, "lineRule"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing"_ostr, "line"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:rPr"_ostr, "color"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:rPr"_ostr, "sz"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing"_ostr, "before"_ostr, "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:color"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:color"_ostr, "val"_ostr, "AAAA00"); // all text in color
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:sz"_ostr, "val"_ostr, "16");
     // cell A6
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "line");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:rPr", "color");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:rPr/w:sz", "val", "16");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color", "val", "AAAA00");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:pStyle"_ostr, "val"_ostr, "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing"_ostr, "lineRule"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing"_ostr, "line"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:rPr"_ostr, "color"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:rPr/w:sz"_ostr, "val"_ostr, "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing"_ostr, "before"_ostr, "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[1]/w:rPr/w:color"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[1]/w:rPr/w:sz"_ostr, "val"_ostr, "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color"_ostr, "val"_ostr, "AAAA00");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:sz"_ostr, "val"_ostr, "16");
 
     // tdf#131070 keep paragraph style based right indentation with indentation of direct numbering
     // cell A7 - This was <w:ind w:start="1440" w:hanging="0"/>
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[7]/w:tc/w:p/w:pPr/w:ind", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[7]/w:tc/w:p/w:pPr/w:ind"_ostr, 0);
     // cell A8
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind", "start", "714");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind", "end", "1701");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind", "hanging", "357");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind"_ostr, "start"_ostr, "714");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind"_ostr, "end"_ostr, "1701");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind"_ostr, "hanging"_ostr, "357");
     // cell A9
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind", "end", "1440");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind"_ostr, "end"_ostr, "1440");
     // This was 1440
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind", "start", "720");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind"_ostr, "start"_ostr, "720");
     // This was 0
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind", "hanging", "360");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind"_ostr, "hanging"_ostr, "360");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107626)
@@ -427,7 +427,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107626)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 2 (missing trailing cell in merged cell range)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc", 3);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc"_ostr, 3);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
@@ -449,9 +449,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79272_strictDxa, "tdf79272_strictDxa.docx")
          return;
     xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     // Validation test: order of elements was wrong. Order was: insideH, end, insideV.
-    int nEnd = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders", "end");
-    int nInsideH = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders", "insideH");
-    int nInsideV = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders", "insideV");
+    int nEnd = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders"_ostr, "end");
+    int nInsideH = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders"_ostr, "insideH");
+    int nInsideV = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders"_ostr, "insideV");
     CPPUNIT_ASSERT(nEnd < nInsideH);
     CPPUNIT_ASSERT(nInsideH < nInsideV);
 }
@@ -788,7 +788,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109310_endnoteStyleForMSO)
     loadAndSave("tdf109310_endnoteStyleForMSO.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/endnotes.xml");
     // Check w:rStyle element has w:val attribute - note that w: is not specified for attribute
-    assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle", "val",
+    assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle"_ostr, "val"_ostr,
                 "EndnoteCharacters");
 }
 
@@ -798,15 +798,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103389)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // No geometry was exported for the second canvas
     // Check both canvases' geometry
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom", "prst", "rect");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom", "prst", "rect");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom"_ostr, "prst"_ostr, "rect");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom"_ostr, "prst"_ostr, "rect");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf84678, "tdf84678.docx")
 {
     // This was 0, left margin inside a shape+text wasn't imported from DOCX.
     // 360000 EMU, but layout uses twips.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(567), parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds", "left").toInt32());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(567), parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds"_ostr, "left"_ostr).toInt32());
 
 }
 
@@ -891,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103982)
 {
     loadAndReload("tdf103982.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor", "distB").toInt32();
+    sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor"_ostr, "distB"_ostr).toInt32();
     // This was -260350, which is not a valid value for an unsigned type.
     CPPUNIT_ASSERT(nDistB >= 0);
 
@@ -906,7 +906,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104115)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This found 0 nodes: the custom geometry was not written for the Bezier
     // curve -> Word refused to open the document.
-    assertXPath(pXmlDoc, "//a:custGeom", 1);
+    assertXPath(pXmlDoc, "//a:custGeom"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
@@ -930,7 +930,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99227)
     // and before commit ebf767eeb2a169ba533e1b2ffccf16f41d95df35, the drawing was silently lost.
     xmlDocUniquePtr pXmlDoc = parseExport("word/footnotes.xml");
 
-    assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
+    assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.docx")
@@ -944,9 +944,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.docx")
 
     //For MSO compatibility, the textbox should be at the top of the cell, not at the bottom - despite VertOrientation::BOTTOM
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nFlyTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt/anchored/fly/infos/bounds", "top").toInt32();
+    sal_Int32 nFlyTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("FlyTop should be 2865, not 5649", nFlyTop < sal_Int32(3000));
-    sal_Int32 nTextTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt[1]/infos/bounds", "top").toInt32();
+    sal_Int32 nTextTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("TextTop should be 3856", nTextTop > 3000);
 }
 
@@ -1105,7 +1105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106001_2)
     // In test ODT CharScaleWidth = 900, this was not changed upon OOXML export to stay in [1..600], now it's clamped to 600
     // Note: we disregard what's set in pPr / rPr and only care about r / rPr
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:rPr/w:w","val","600");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:rPr/w:w"_ostr,"val"_ostr,"600");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99074, "tdf99074.docx")
@@ -1180,7 +1180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106492)
     loadAndSave("tdf106492.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 4: an additional sectPr was added to the document.
-    assertXPath(pXmlDoc, "//w:sectPr", 3);
+    assertXPath(pXmlDoc, "//w:sectPr"_ostr, 3);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
@@ -1204,7 +1204,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107889)
     auto verify = [this]() {
         // This was 1, multi-page table was imported as a non-split fly.
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        assertXPath(pXmlDoc, "//tab", 2);
+        assertXPath(pXmlDoc, "//tab"_ostr, 2);
     };
     createSwDoc("tdf107889.docx");
     verify();
@@ -1229,7 +1229,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107684)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     // This was 1, <w:outlineLvl> was duplicated for Heading1.
-    assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
+    assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107618)
@@ -1397,15 +1397,15 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // For inline controls use w:object as parent element and pictureFrame shapetype
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object/v:shapetype", "spt", "75");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object/v:shapetype"_ostr, "spt"_ostr, "75");
     // For floating controls use w:pict as parent element and hostControl shapetype
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shapetype", "spt", "201");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shapetype"_ostr, "spt"_ostr, "201");
 
      // Have different shape ids
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape", "id") !=
-        getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shape", "id"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape"_ostr, "id"_ostr) !=
+        getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shape"_ostr, "id"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
@@ -1433,7 +1433,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf111964)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Unicode spaces that are not XML whitespace must not be trimmed
     static constexpr OUStringLiteral sWSReference = u"\u2002\u2002\u2002\u2002\u2002";
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:t", sWSReference);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:t"_ostr, sWSReference);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
@@ -1512,8 +1512,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf112169)
 
     //tdf76683 - Cannot be negative number - use firstLine instead of hanging
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
-    assertXPathNoAttribute(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind", "hanging");
-    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind", "firstLine","360");
+    assertXPathNoAttribute(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind"_ostr, "hanging"_ostr);
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind"_ostr, "firstLine"_ostr,"360");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103090)
@@ -1523,13 +1523,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103090)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Get bookmark name
-    OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:bookmarkStart", "name");
+    OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:bookmarkStart"_ostr, "name"_ostr);
 
     // Ensure that name has no spaces
     CPPUNIT_ASSERT(bookmarkName.indexOf(" ") < 0);
 
     // Get PAGEREF field
-    OUString fieldName = getXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText");
+    OUString fieldName = getXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText"_ostr);
 
     // Ensure that PAGEREF field refers exactly our bookmark
     OUString expectedFieldName = " PAGEREF " + bookmarkName + " \\h ";
@@ -1542,10 +1542,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107111)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Ensure that hyperlink and its properties are in place.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr"_ostr, 1);
 
     // Ensure that hyperlink properties do not contain <w:webHidden/>.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr/w:webHidden", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr/w:webHidden"_ostr, 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
@@ -1624,7 +1624,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf137593)
 
     // zero auto spacing, if the first paragraph contains text boxes
     // This was 280.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:tc/w:p[1]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:tc/w:p[1]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115557)
@@ -1633,7 +1633,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115557)
     // A chart anchored to a footnote multiplied during import
     xmlDocUniquePtr pXmlDoc = parseExport("word/footnotes.xml");
 
-    assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
+    assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAlignmentRelativeFromTopMarginDML)
@@ -1644,27 +1644,27 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignmentRelativeFromTopMarginDML)
 
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
-                "wp:anchor/wp:positionV",
-                "relativeFrom", "topMargin");
+                "wp:anchor/wp:positionV"_ostr,
+                "relativeFrom"_ostr, "topMargin");
     assertXPathContent(pXmlDoc,
                        "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
-                       "wp:anchor/wp:positionV/wp:align",
+                       "wp:anchor/wp:positionV/wp:align"_ostr,
                        "top");
     assertXPath(pXmlDoc,
         "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/"
-        "wp:anchor/wp:positionV",
-        "relativeFrom", "topMargin");
+        "wp:anchor/wp:positionV"_ostr,
+        "relativeFrom"_ostr, "topMargin");
     assertXPathContent(pXmlDoc,
                        "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/"
-                       "wp:anchor/wp:positionV/wp:align",
+                       "wp:anchor/wp:positionV/wp:align"_ostr,
                        "bottom");
     assertXPath(pXmlDoc,
         "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
-        "wp:anchor/wp:positionV",
-        "relativeFrom", "topMargin");
+        "wp:anchor/wp:positionV"_ostr,
+        "relativeFrom"_ostr, "topMargin");
     assertXPathContent(pXmlDoc,
                        "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
-                       "wp:anchor/wp:positionV/wp:align",
+                       "wp:anchor/wp:positionV/wp:align"_ostr,
                        "center");
 }
 
@@ -1676,27 +1676,27 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignmentRelativeFromTopMarginVML)
 
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
-                "wp:anchor/wp:positionV",
-                "relativeFrom", "topMargin");
+                "wp:anchor/wp:positionV"_ostr,
+                "relativeFrom"_ostr, "topMargin");
     assertXPathContent(pXmlDoc,
                        "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
-                       "wp:anchor/wp:positionV/wp:align",
+                       "wp:anchor/wp:positionV/wp:align"_ostr,
                        "top");
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/"
-                "wp:anchor/wp:positionV",
-                "relativeFrom", "topMargin");
+                "wp:anchor/wp:positionV"_ostr,
+                "relativeFrom"_ostr, "topMargin");
     assertXPathContent(pXmlDoc,
                        "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/"
-                       "wp:anchor/wp:positionV/wp:align",
+                       "wp:anchor/wp:positionV/wp:align"_ostr,
                        "bottom");
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
-                "wp:anchor/wp:positionV",
-                "relativeFrom", "topMargin");
+                "wp:anchor/wp:positionV"_ostr,
+                "relativeFrom"_ostr, "topMargin");
     assertXPathContent(pXmlDoc,
                        "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
-                       "wp:anchor/wp:positionV/wp:align",
+                       "wp:anchor/wp:positionV/wp:align"_ostr,
                        "center");
 }
 
@@ -1712,8 +1712,8 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlShapeWithTextbox)
     // the wrong value was "rect" instead of "wedgeRectCallout"
     assertXPath(pXmlDoc,
         "/w:document/w:body/w:p/w:r/"
-        "mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-        "prst", "wedgeRectCallout");
+        "mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
+        "prst"_ostr, "wedgeRectCallout");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLayoutFlowAltAlone)
@@ -1723,7 +1723,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutFlowAltAlone)
     // FIXME: now the DML part is checked, but we should check VML part in Fallback (too)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/"
-        "a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "vert", "vert270");
+        "a:graphic/a:graphicData/wps:wsp/wps:bodyPr"_ostr, "vert"_ostr, "vert270");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

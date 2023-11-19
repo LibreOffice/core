@@ -114,7 +114,7 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
     boost::property_tree::ptree aTree;
     aTree.put("searchString", pSearchItem->GetSearchString().toUtf8().getStr());
     aTree.put("highlightAll", bHighlightAll);
-    lcl_addContainerToJson(aTree, "searchResultSelection", aMatches);
+    lcl_addContainerToJson(aTree, "searchResultSelection"_ostr, aMatches);
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);

@@ -64,8 +64,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
     // is not exported with preset but with custom geometry.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDocument);
-    assertXPath(pXmlDocument, "//a:prstGeom", 0);
-    assertXPath(pXmlDocument, "//a:custGeom", 1);
+    assertXPath(pXmlDocument, "//a:prstGeom"_ostr, 0);
+    assertXPath(pXmlDocument, "//a:custGeom"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
@@ -77,10 +77,10 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
     // written and no wrap polygon. Make sure we write wrapTight and a wrapPolygon.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDocument);
-    assertXPath(pXmlDocument, "//wp:wrapTight", 1);
-    assertXPath(pXmlDocument, "//wp:wrapPolygon", 1);
-    assertXPath(pXmlDocument, "//wp:start", 1);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDocument, "//wp:lineTo");
+    assertXPath(pXmlDocument, "//wp:wrapTight"_ostr, 1);
+    assertXPath(pXmlDocument, "//wp:wrapPolygon"_ostr, 1);
+    assertXPath(pXmlDocument, "//wp:start"_ostr, 1);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDocument, "//wp:lineTo"_ostr);
     CPPUNIT_ASSERT_GREATER(sal_Int32(2),
                            static_cast<sal_Int32>(xmlXPathNodeSetGetLength(pXmlObj->nodesetval)));
     xmlXPathFreeObject(pXmlObj);
@@ -95,11 +95,11 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
     // no wrap polygon. Now we write 'through' and use wrap polygon 0|0, 21600|21600, 0|0.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDocument);
-    assertXPath(pXmlDocument, "//wp:wrapThrough", 1);
-    assertXPath(pXmlDocument, "//wp:lineTo", 2);
-    sal_Int32 nYCoord = getXPath(pXmlDocument, "(//wp:lineTo)[1]", "y").toInt32();
+    assertXPath(pXmlDocument, "//wp:wrapThrough"_ostr, 1);
+    assertXPath(pXmlDocument, "//wp:lineTo"_ostr, 2);
+    sal_Int32 nYCoord = getXPath(pXmlDocument, "(//wp:lineTo)[1]"_ostr, "y"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), nYCoord);
-    sal_Int32 nXCoord = getXPath(pXmlDocument, "(//wp:lineTo)[2]", "x").toInt32();
+    sal_Int32 nXCoord = getXPath(pXmlDocument, "(//wp:lineTo)[2]"_ostr, "x"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nXCoord);
 }
 
@@ -116,11 +116,11 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
     // Expected coordinates are 0|10800, 8936|8936, 10800|0, 12664|8936, 21600|10800, 12664|12664,
     // 10800|21600, 8936|12664, 0|10800. Assert forth point, which comes from equations. Allow some
     // tolerance.
-    sal_Int32 nXCoord = getXPath(pXmlDocument, "(//wp:lineTo)[3]", "x").toInt32();
+    sal_Int32 nXCoord = getXPath(pXmlDocument, "(//wp:lineTo)[3]"_ostr, "x"_ostr).toInt32();
     // Without fix it would fail with expected 12664, actual 3
     CPPUNIT_ASSERT_DOUBLES_EQUAL(12664, nXCoord, 10);
     // Without fix it would fail with expected 8936, actual 4
-    sal_Int32 nYCoord = getXPath(pXmlDocument, "(//wp:lineTo)[3]", "y").toInt32();
+    sal_Int32 nYCoord = getXPath(pXmlDocument, "(//wp:lineTo)[3]"_ostr, "y"_ostr).toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8936, nYCoord, 10);
 }
 
@@ -132,8 +132,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameWrapTextMode)
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDocument);
     // Without the fix the value "largest" was written to file in both cases.
-    assertXPath(pXmlDocument, "(//wp:wrapSquare)[1]", "wrapText", "right");
-    assertXPath(pXmlDocument, "(//wp:wrapSquare)[2]", "wrapText", "left");
+    assertXPath(pXmlDocument, "(//wp:wrapSquare)[1]"_ostr, "wrapText"_ostr, "right");
+    assertXPath(pXmlDocument, "(//wp:wrapSquare)[2]"_ostr, "wrapText"_ostr, "left");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
@@ -216,8 +216,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
     loadAndSave("151384Hyperlink.odt");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "Hyperlink");
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Hyperlink']/w:name", "val", "Hyperlink");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle"_ostr, "val"_ostr, "Hyperlink");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Hyperlink']/w:name"_ostr, "val"_ostr, "Hyperlink");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
@@ -443,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
     // - Expected: 1
     // - Actual  : 0
     // i.e. <w:gutterAtTop> was lost.
-    assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop", 1);
+    assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
@@ -489,10 +489,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf69635)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: "left"
     // - Actual  : "right"
-    assertXPathContent(pXmlHeader1, "/w:hdr/w:p/w:r/w:t", "left");
+    assertXPathContent(pXmlHeader1, "/w:hdr/w:p/w:r/w:t"_ostr, "left");
 
     // Make sure "left" appears as a hidden header
-    assertXPath(pXmlSettings, "/w:settings/w:evenAndOddHeaders", 0);
+    assertXPath(pXmlSettings, "/w:settings/w:evenAndOddHeaders"_ostr, 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148671, "tdf148671.docx")
@@ -504,7 +504,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148671, "tdf148671.docx")
         return;
     // Preserve tag on SDT blocks. (Before the fix, these were all lost)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", 3);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag"_ostr, 3);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
@@ -564,7 +564,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 
     // Before the fix, the imported shading was converted into a red highlight.
     xmlDocUniquePtr pXmlStyles = parseExport("word/numbering.xml");
-    assertXPath(pXmlStyles, "/w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:shd", "fill", "ED4C05");
+    assertXPath(pXmlStyles, "/w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:shd"_ostr, "fill"_ostr, "ED4C05");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
@@ -610,37 +610,37 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142404_tabOverSpacingC15)
     // The original 3-page ODT saved as DOCX would fit on one page in MS Word 2010, but 3 in Word 2013.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("too big for two pages", 3, getPages());
     // The tab goes over the paragraph margin
-    CPPUNIT_ASSERT_EQUAL(OUString("A left tab positioned at"), parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "portion"));
-    sal_Int32 nTextLen = parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(OUString("*"), parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]", "portion"));
-    sal_Int32 nTabLen = parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("A left tab positioned at"), parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
+    sal_Int32 nTextLen = parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "width"_ostr).toInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("*"), parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "portion"_ostr));
+    sal_Int32 nTabLen = parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("Large left tab", nTextLen < nTabLen);
     // Not 1 line high (Word 2010 DOCX), or 3 lines high (LO DOCX) or 5 lines high (ODT), but 4 lines high
-    sal_Int32 nHeight = parseDump("//page[1]/body/txt[2]/infos/bounds", "height").toInt32();
+    sal_Int32 nHeight = parseDump("//page[1]/body/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("4 lines high", 1100 < nHeight);
     CPPUNIT_ASSERT_MESSAGE("4 lines high", nHeight < 1300);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("TabOverflow does what?"), parseDump("//page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "portion"));
+    CPPUNIT_ASSERT_EQUAL(OUString("TabOverflow does what?"), parseDump("//page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
     // Not 1 line high (Word 2010 DOCX), or 4 lines high (prev LO DOCX) or 8 lines high (ODT).
     // but two lines high. (3 in Word 2016 because it pulls down "what?" to the second line - weird)
-    nHeight = parseDump("//page[1]/body/txt[7]/infos/bounds", "height").toInt32();
+    nHeight = parseDump("//page[1]/body/txt[7]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("2 lines high (but 3 in Word)", 242*2.5, nHeight, 242);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("A centered tab positioned at"), parseDump("//page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "portion"));
-    sal_Int32 nLineWidth = parseDump("//page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("A centered tab positioned at"), parseDump("//page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
+    sal_Int32 nLineWidth = parseDump("//page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Big tab: full paragraph area used", 737, nLineWidth, 100);
 
     // Pages 2/3 are TabOverMargin - in this particular case tabs should not go over margin.
-    CPPUNIT_ASSERT_EQUAL(OUString("A right tab positioned at"), parseDump("//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "portion"));
-    sal_Int32 nParaWidth = parseDump("//page[2]/body/txt[6]/infos/prtBounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("A right tab positioned at"), parseDump("//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
+    sal_Int32 nParaWidth = parseDump("//page[2]/body/txt[6]/infos/prtBounds"_ostr, "width"_ostr).toInt32();
     // the clearest non-first-line visual example is this second tab in the right-tab paragraph.
-    nLineWidth = parseDump("//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[4]", "width").toInt32();
+    nLineWidth = parseDump("//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[4]"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Full paragraph area used", nLineWidth, nParaWidth);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("TabOverflow does what?"), parseDump("//page[3]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "portion"));
+    CPPUNIT_ASSERT_EQUAL(OUString("TabOverflow does what?"), parseDump("//page[3]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
     // Not 1 line high (Word 2010 DOCX and ODT), or 4 lines high (prev LO DOCX),
     // but 8 lines high.
-    nHeight = parseDump("//page[3]/body/txt[2]/infos/bounds", "height").toInt32();
+    nHeight = parseDump("//page[3]/body/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("8 lines high", 242*8, nHeight, 121);
 }
 
@@ -668,9 +668,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // DML
-    assertXPath(pXmlDoc, "//w:drawing/wp:anchor/wp:docPr/a:hlinkClick", 1);
+    assertXPath(pXmlDoc, "//w:drawing/wp:anchor/wp:docPr/a:hlinkClick"_ostr, 1);
     // VML
-    assertXPath(pXmlDoc, "//w:pict/v:rect", "href", "https://libreoffice.org/");
+    assertXPath(pXmlDoc, "//w:pict/v:rect"_ostr, "href"_ostr, "https://libreoffice.org/");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
@@ -685,13 +685,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 0
-    assertXPath(pXmlDoc, "//w:ins", 5);
+    assertXPath(pXmlDoc, "//w:ins"_ostr, 5);
     // This was 0
-    assertXPath(pXmlDoc, "//w:del", 2);
+    assertXPath(pXmlDoc, "//w:del"_ostr, 2);
     // no date (anonymized change)
     // This failed, date was exported as w:date="1970-01-01T00:00:00Z" before fixing tdf#147760
-    assertXPathNoAttribute(pXmlDoc, "//w:del[1]", "date");
-    assertXPathNoAttribute(pXmlDoc, "//w:del[2]", "date");
+    assertXPathNoAttribute(pXmlDoc, "//w:del[1]"_ostr, "date"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "//w:del[2]"_ostr, "date"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf139580)
@@ -717,7 +717,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFooterMarginLost)
     // - Expected: 709
     // - Actual  : 0
     // i.e. import + export lost the footer margin value.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "footer", "709");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar"_ostr, "footer"_ostr, "709");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEffectExtentLineWidth)
@@ -756,7 +756,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Without the accompanying fix in place, this test would have failed as the XML element was
     // missing.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:rtlGutter", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:rtlGutter"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140572_docDefault_superscript)
@@ -908,11 +908,11 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
     xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
     CPPUNIT_ASSERT(pXmlComm);
     CPPUNIT_ASSERT(pXmlCommExt);
-    OUString sParentId = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[1]", "paraId");
-    OUString sChildId = getXPath(pXmlComm, "/w:comments/w:comment[2]/w:p[1]", "paraId");
-    OUString sChildIdEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "paraId");
+    OUString sParentId = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[1]"_ostr, "paraId"_ostr);
+    OUString sChildId = getXPath(pXmlComm, "/w:comments/w:comment[2]/w:p[1]"_ostr, "paraId"_ostr);
+    OUString sChildIdEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx"_ostr, "paraId"_ostr);
     OUString sChildParentId = getXPath(pXmlCommExt,
-        "/w15:commentsEx/w15:commentEx", "paraIdParent");
+        "/w15:commentsEx/w15:commentEx"_ostr, "paraIdParent"_ostr);
     // Make sure exported extended paraId matches the one in comments.xml
     CPPUNIT_ASSERT_EQUAL(sChildId, sChildIdEx);
     // Make sure the paraIdParent matches the id of its parent
@@ -923,14 +923,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDone)
 {
     loadAndSave("CommentDone.docx");
     xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
-    assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p", 2);
-    OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
+    assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p"_ostr, 2);
+    OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]"_ostr, "paraId"_ostr);
     xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
-    assertXPath(pXmlCommExt, "/w15:commentsEx", "Ignorable", "w15");
-    assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", 1);
-    OUString idLastParaEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "paraId");
+    assertXPath(pXmlCommExt, "/w15:commentsEx"_ostr, "Ignorable"_ostr, "w15");
+    assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx"_ostr, 1);
+    OUString idLastParaEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx"_ostr, "paraId"_ostr);
     CPPUNIT_ASSERT_EQUAL(idLastPara, idLastParaEx);
-    assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "done", "1");
+    assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx"_ostr, "done"_ostr, "1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableWidth, "frame_size_export.docx")
@@ -999,8 +999,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/"
-                "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
-                "rotWithShape", "0");
+                "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
+                "rotWithShape"_ostr, "0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
@@ -1011,17 +1011,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
     // Ensure that all docvars from input are written back and with correct values.
     // Order of document variables is not checked. So this can fail at some time if order is changed.
     assertXPath(pSettingsDoc,
-                "/w:settings/w:docVars/w:docVar[1]", "name", u"LocalChars\u00C1\u0072\u0076\u00ED\u007A\u0074\u0075\u0072\u006F\u0054\u00FC\u006B\u00F6\u0072\u0066\u00FA\u0072\u00F3\u0067\u00E9\u0070"_ustr);
+                "/w:settings/w:docVars/w:docVar[1]"_ostr, "name"_ostr, u"LocalChars\u00C1\u0072\u0076\u00ED\u007A\u0074\u0075\u0072\u006F\u0054\u00FC\u006B\u00F6\u0072\u0066\u00FA\u0072\u00F3\u0067\u00E9\u0070"_ustr);
     assertXPath(pSettingsDoc,
-                "/w:settings/w:docVars/w:docVar[1]", "val", u"Correct value (\u00E1\u0072\u0076\u00ED\u007A\u0074\u0075\u0072\u006F\u0020\u0074\u00FC\u006B\u00F6\u0072\u0066\u00FA\u0072\u00F3\u0067\u00E9\u0070)"_ustr);
+                "/w:settings/w:docVars/w:docVar[1]"_ostr, "val"_ostr, u"Correct value (\u00E1\u0072\u0076\u00ED\u007A\u0074\u0075\u0072\u006F\u0020\u0074\u00FC\u006B\u00F6\u0072\u0066\u00FA\u0072\u00F3\u0067\u00E9\u0070)"_ustr);
     assertXPath(pSettingsDoc,
-                "/w:settings/w:docVars/w:docVar[2]", "name", "DocVar1");
+                "/w:settings/w:docVars/w:docVar[2]"_ostr, "name"_ostr, "DocVar1");
     assertXPath(pSettingsDoc,
-                "/w:settings/w:docVars/w:docVar[2]", "val", "DocVar1 Value");
+                "/w:settings/w:docVars/w:docVar[2]"_ostr, "val"_ostr, "DocVar1 Value");
     assertXPath(pSettingsDoc,
-                "/w:settings/w:docVars/w:docVar[3]", "name", "DocVar3");
+                "/w:settings/w:docVars/w:docVar[3]"_ostr, "name"_ostr, "DocVar3");
     assertXPath(pSettingsDoc,
-                "/w:settings/w:docVars/w:docVar[3]", "val", "DocVar3 Value");
+                "/w:settings/w:docVars/w:docVar[3]"_ostr, "val"_ostr, "DocVar3 Value");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
@@ -1029,7 +1029,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
     loadAndSave("tdf139549.docx");
     // Document contains a VML textbox, the position of the textbox was incorrect.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    OUString aStyle = getXPath(pXmlDoc, "//w:pict/v:shape", "style");
+    OUString aStyle = getXPath(pXmlDoc, "//w:pict/v:shape"_ostr, "style"_ostr);
     /* original is: "position:absolute;margin-left:138.5pt;margin-top:40.1pt;width:183pt;
                      height:68pt;z-index:251675648;mso-position-horizontal:absolute;
                      mso-position-horizontal-relative:page;mso-position-vertical:absolute;
@@ -1073,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
     CPPUNIT_ASSERT(pXmlStyles);
     // Without the fix this was "TOA Heading" which belongs to the "Table of Authorities" index in Word
     // TOC's heading style should be exported as "TOC Heading" as that's the default Word style name
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOCHeading']/w:name", "val", "TOC Heading");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOCHeading']/w:name"_ostr, "val"_ostr, "TOC Heading");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152153)

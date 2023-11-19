@@ -63,65 +63,65 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomProperties)
     // Extended file properties - specific to Office package,
     // eg. docx - Number of Pages, pptx - Number of Slides
     xmlDocUniquePtr pXmlDoc = parseExport("docProps/app.xml");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Paragraphs", "1");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Paragraphs"_ostr, "1");
     //assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Lines", "1");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Pages", "1");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Words", "3");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Characters", "22");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:CharactersWithSpaces", "24");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Company", "hhhhkompany");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Manager", "ffffmenadzer;iiiiisecondmanager");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:HyperlinkBase", "gggghiperlink");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Pages"_ostr, "1");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Words"_ostr, "3");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Characters"_ostr, "22");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:CharactersWithSpaces"_ostr, "24");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Company"_ostr, "hhhhkompany");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Manager"_ostr, "ffffmenadzer;iiiiisecondmanager");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:HyperlinkBase"_ostr, "gggghiperlink");
     //assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:DocSecurity", "2");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:AppVersion", "15.0000");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:AppVersion"_ostr, "15.0000");
 
     // Custom file properties - defined by user
     xmlDocUniquePtr pCustomXml = parseExport("docProps/custom.xml");
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property", 9);
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[1]",
-                "name", "testDateProperty");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[1]/vt:filetime",
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property"_ostr, 9);
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[1]"_ostr,
+                "name"_ostr, "testDateProperty");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[1]/vt:filetime"_ostr,
                        "1982-04-19T10:00:00Z");
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[3]",
-                "name", "testNegativeNumberProperty");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[3]/vt:r8",
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[3]"_ostr,
+                "name"_ostr, "testNegativeNumberProperty");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[3]/vt:r8"_ostr,
                        "-100");
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[4]",
-                "name", "testNumberProperty");
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[4]"_ostr,
+                "name"_ostr, "testNumberProperty");
     //assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[4]/vt:i4",
     //                   "256");
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[5]",
-                "name", "testRealNumberProperty");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[5]/vt:r8",
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[5]"_ostr,
+                "name"_ostr, "testRealNumberProperty");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[5]/vt:r8"_ostr,
                        "-128.1");
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[6]",
-                "name", "testScientificNumber");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[6]/vt:r8",
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[6]"_ostr,
+                "name"_ostr, "testScientificNumber");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[6]/vt:r8"_ostr,
                        "1.23456789E+023");
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[7]",
-                "name", "testTextProperty");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[7]/vt:lpwstr",
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[7]"_ostr,
+                "name"_ostr, "testTextProperty");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[7]/vt:lpwstr"_ostr,
                        "testPropertyValue");
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[8]",
-                "name", "testYesNoProperty");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[8]/vt:bool",
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[8]"_ostr,
+                "name"_ostr, "testYesNoProperty");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[8]/vt:bool"_ostr,
                        "1");
     // Hidden Custom File Property. With Final set, MS Office notifies recipients that the document is final, and sets the document to read-only.
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[9]",
-                "name", "_MarkAsFinal");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[9]/vt:bool",
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[9]"_ostr,
+                "name"_ostr, "_MarkAsFinal");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[9]/vt:bool"_ostr,
                        "1");
 
     // Core file properties - common for all packages (eg. creation date, modify date)
     pXmlDoc = parseExport("docProps/core.xml");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:creator", "Bartosz Kosiorek;secondauthor");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:description", "cccckomentarzglowny");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:lastPrinted", "2020-10-15T07:42:00Z");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/dcterms:created", "2020-10-14T16:23:00Z");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:category", "eeeetokategoria");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:version", "xxxxversion");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:contentStatus", "ddddstatusnieznany");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:identifier", "zzzzidentifier");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:creator"_ostr, "Bartosz Kosiorek;secondauthor");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:description"_ostr, "cccckomentarzglowny");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:lastPrinted"_ostr, "2020-10-15T07:42:00Z");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/dcterms:created"_ostr, "2020-10-14T16:23:00Z");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:category"_ostr, "eeeetokategoria");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:version"_ostr, "xxxxversion");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:contentStatus"_ostr, "ddddstatusnieznany");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:identifier"_ostr, "zzzzidentifier");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testUTF8CustomProperties, "tdf127864.docx")
@@ -163,14 +163,14 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     validate(maTempFile.GetFileName(), test::OOXML);
     xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     // Order was: rsid, next.
-    int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
-    int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
+    int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]"_ostr, "next");
+    int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]"_ostr, "rsid");
     CPPUNIT_ASSERT(nNext < nRsid);
 
     pXmlDoc = parseExport("docProps/app.xml");
     // One paragraph in the document.
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Paragraphs", "1");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Company", "Example Ltd");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Paragraphs"_ostr, "1");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Company"_ostr, "Example Ltd");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
@@ -404,7 +404,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTable)
     // Make sure we write qFormat for well-known style names.
     xmlDocUniquePtr pXmlDocCT = parseExport("word/styles.xml");
     CPPUNIT_ASSERT(pXmlDocCT);
-    assertXPath(pXmlDocCT, "//w:style[@w:styleId='Normal']/w:qFormat", 1);
+    assertXPath(pXmlDocCT, "//w:style[@w:styleId='Normal']/w:qFormat"_ostr, 1);
 }
 
 namespace {
@@ -497,19 +497,19 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo51550)
     if (!pXmlDocCT)
        return; // initial import
 
-    assertXPath(pXmlDocCT, "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/oleObject1.xlsx']", "ContentType", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    assertXPath(pXmlDocCT, "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/oleObject1.xlsx']"_ostr, "ContentType"_ostr, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
     // check the rels too
     xmlDocUniquePtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
     assertXPath(pXmlDocRels,
-        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsx']",
-        "Type",
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsx']"_ostr,
+        "Type"_ostr,
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     // check the content too
     xmlDocUniquePtr pXmlDocContent = parseExport("word/document.xml");
     assertXPath(pXmlDocContent,
-        "/w:document/w:body/w:p/w:r/w:object/o:OLEObject",
-        "ProgID",
+        "/w:document/w:body/w:p/w:r/w:object/o:OLEObject"_ostr,
+        "ProgID"_ostr,
         "Excel.Sheet.12");
 }
 
@@ -615,7 +615,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCellBtlr)
      */
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection", "val", "btLr");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection"_ostr, "val"_ostr, "btLr");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableStylerPrSz, "table-style-rPr-sz.docx")
@@ -691,7 +691,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
     if (isExported())
     {
         xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
-        assertXPath(pXmlSettings, "/w:settings/w:revisionView", 0);
+        assertXPath(pXmlSettings, "/w:settings/w:revisionView"_ostr, 0);
     }
 }
 
@@ -889,7 +889,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66543, "fdo66543.docx")
 
     // ensure unnecessary suppressLineNumbers entry is not created.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//w:p[1]/w:pPr/w:suppressLineNumbers", 0);
+    assertXPath(pXmlDoc, "//w:p[1]/w:pPr/w:suppressLineNumbers"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testN822175)
@@ -980,26 +980,26 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBorderSpacingExportCase2)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Assert the XPath expression - page borders
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders", "offsetFrom", "page");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders"_ostr, "offsetFrom"_ostr, "page");
 
     // Assert the XPath expression - 'left' border
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:left", "space", "24");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:left"_ostr, "space"_ostr, "24");
 
     // Assert the XPath expression - 'right' border
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:right", "space", "24");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:right"_ostr, "space"_ostr, "24");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo66145, "fdo66145.docx")
 {
     // The Writer ignored the 'First Is Shared' flag
     CPPUNIT_ASSERT_EQUAL(OUString("This is the FIRST page header."),
-        parseDump("/root/page[1]/header/txt/text()"));
+        parseDump("/root/page[1]/header/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(
         OUString("This is the header for the REST OF THE FILE."),
-        parseDump("/root/page[2]/header/txt/text()"));
+        parseDump("/root/page[2]/header/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(
         OUString("This is the header for the REST OF THE FILE."),
-        parseDump("/root/page[3]/header/txt/text()"));
+        parseDump("/root/page[3]/header/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGrabBag)
@@ -1007,7 +1007,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGrabBag)
     loadAndSave("grabbag.docx");
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents"_ostr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
@@ -1195,9 +1195,9 @@ CPPUNIT_TEST_FIXTURE(Test, NoFillAttrInImagedata)
     //source file has v:fill and no v:imagedata. Same should be in the file written by LO.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:fill", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:fill", "type", "tile");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:fill"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:fill"_ostr, "type"_ostr, "tile");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")

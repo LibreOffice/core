@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteSections)
         "value": "ZOTERO_BIBL"
     }
 }
-)json");
+)json"_ostr);
     aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, ".uno:DeleteSections", aArgs);
 

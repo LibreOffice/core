@@ -396,8 +396,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112211_2)
     // Spacing between the bullet and the actual text was too large.
     // This is now around 269, large old value was 629.
     int nWidth = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/"
-                           "child::*[@type='PortionType::TabLeft']",
-                           "width")
+                           "child::*[@type='PortionType::TabLeft']"_ostr,
+                           "width"_ostr)
                      .toInt32();
     CPPUNIT_ASSERT_LESS(300, nWidth);
 }
@@ -439,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52052)
     createSwDoc("fdo52052.rtf");
     // Make sure the textframe containing the text "third" appears on the 3rd page.
     CPPUNIT_ASSERT_EQUAL(OUString("third"),
-                         parseDump("/root/page[3]/body/txt/anchored/fly/txt/text()"));
+                         parseDump("/root/page[3]/body/txt/anchored/fly/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInk)
@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116265)
 
     const auto& pLayout = parseLayoutDump();
     // Ensure that there is a tabstop in the pseudo-numbering (numbering::NONE followed by tabstop)
-    assertXPath(pLayout, "//SwFixPortion", 1);
+    assertXPath(pLayout, "//SwFixPortion"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo66565)
@@ -1479,7 +1479,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
 
     const auto& pLayout = parseLayoutDump();
     // Ensure that there is a tabstop in the pseudo-numbering (numbering::NONE followed by tabstop)
-    assertXPath(pLayout, "//SwFixPortion", 1);
+    assertXPath(pLayout, "//SwFixPortion"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117403)

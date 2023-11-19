@@ -28,9 +28,9 @@ DECLARE_FODFEXPORT_TEST(testTdf113696, "tdf113696.odt")
     if (xmlDocUniquePtr pXmlDoc = parseExportedFile())
     {
         assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                             "draw:image[@draw:mime-type='image/x-vclgraphic']");
+                             "draw:image[@draw:mime-type='image/x-vclgraphic']"_ostr);
         assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                             "draw:image[@draw:mime-type='image/png']");
+                             "draw:image[@draw:mime-type='image/png']"_ostr);
     }
 }
 
@@ -43,9 +43,9 @@ DECLARE_FODFEXPORT_TEST(testTdf113696WriterImage, "tdf113696-writerimage.odt")
     if (xmlDocUniquePtr pXmlDoc = parseExportedFile())
     {
         assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                             "draw:image[@draw:mime-type='image/x-vclgraphic']");
+                             "draw:image[@draw:mime-type='image/x-vclgraphic']"_ostr);
         assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                             "draw:image[@draw:mime-type='image/png']");
+                             "draw:image[@draw:mime-type='image/png']"_ostr);
     }
 }
 

@@ -150,8 +150,8 @@ DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", US
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
-                "relative.docx");
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
+                "Target"_ostr, "relative.docx");
 }
 
 DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", USE_ABSOLUTE,
@@ -159,7 +159,8 @@ DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", US
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
-    OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
+    OUString sTarget
+        = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr);
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
@@ -169,7 +170,8 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToRelativeExport, "absolute-link.docx", US
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target", "test.docx");
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr,
+                "test.docx");
 }
 
 DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", USE_ABSOLUTE,
@@ -177,7 +179,8 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", US
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
-    OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
+    OUString sTarget
+        = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr);
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("test.docx"));
 }
@@ -186,24 +189,24 @@ DECLARE_LINKS_EXPORT_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, 
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
-                "test.docx");
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
+                "Target"_ostr, "test.docx");
 }
 
 DECLARE_LINKS_EXPORT_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     // in the original file: Target="file:///C:\TEMP\test.docx" => invalid file URI
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
-                "file:///C:/TEMP/test.docx");
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
+                "Target"_ostr, "file:///C:/TEMP/test.docx");
 }
 
 DECLARE_LINKS_EXPORT_TEST(testTdf126768_export, "tdf126768.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     // in the original file: "file:///C:\\TEMP\\test.docx" => invalid file URI
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
-                "file:///C:/TEMP/test.docx");
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
+                "Target"_ostr, "file:///C:/TEMP/test.docx");
 }
 
 DECLARE_LINKS_EXPORT_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_ABSOLUTE,
@@ -211,7 +214,8 @@ DECLARE_LINKS_EXPORT_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
+                "Target"_ostr,
                 INetURLObject::decode(u"file:///C:/TEMP/%C3%A9kezet.docx",
                                       INetURLObject::DecodeMechanism::ToIUri,
                                       RTL_TEXTENCODING_UTF8));

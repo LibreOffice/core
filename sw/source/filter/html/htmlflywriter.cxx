@@ -1059,7 +1059,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
     if (!pSurroundString.empty())
     {
-        aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak);
+        aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pSurroundString);
         aHtml.end();
     }
@@ -1282,7 +1282,7 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
 
         if( !aMapURL.isEmpty() || !aName.isEmpty() || !aTarget.isEmpty() || bEvents )
         {
-            rHtml.start(OOO_STRING_SVTOOLS_HTML_anchor);
+            rHtml.start(OOO_STRING_SVTOOLS_HTML_anchor ""_ostr);
 
             // Output "href" element if a link or macro exists
             if( !aMapURL.isEmpty() || bEvents )
@@ -1364,12 +1364,12 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
 
         if( pColBorderLine )
         {
-            rHtml.start(OOO_STRING_SVTOOLS_HTML_font);
+            rHtml.start(OOO_STRING_SVTOOLS_HTML_font ""_ostr);
             HtmlWriterHelper::applyColor(rHtml, OOO_STRING_SVTOOLS_HTML_O_color, pColBorderLine->GetColor());
         }
     }
 
-    OString aTag(OOO_STRING_SVTOOLS_HTML_image);
+    OString aTag(OOO_STRING_SVTOOLS_HTML_image ""_ostr);
     if (bReplacement)
         // Write replacement graphic of OLE object as <object>.
         aTag = OOO_STRING_SVTOOLS_HTML_object;
@@ -1391,7 +1391,7 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
     else
     {
         OString sBuffer(OUStringToOString(aGraphicURL, RTL_TEXTENCODING_UTF8));
-        OString aAttribute(OOO_STRING_SVTOOLS_HTML_O_src);
+        OString aAttribute(OOO_STRING_SVTOOLS_HTML_O_src ""_ostr);
         if (bReplacement)
             aAttribute = OOO_STRING_SVTOOLS_HTML_O_data;
         rHtml.attribute(aAttribute, sBuffer);

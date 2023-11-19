@@ -152,13 +152,16 @@ DECLARE_OOXMLEXPORT_TEST(testBnc891663, "bnc891663.docx")
 {
     // The image should be inside a cell, so the text in the following cell should be below it.
     int imageTop
-        = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds", "top")
+        = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds"_ostr,
+                    "top"_ostr)
               .toInt32();
     int imageHeight
-        = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds", "height")
+        = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds"_ostr,
+                    "height"_ostr)
               .toInt32();
     int textNextRowTop
-        = parseDump("/root/page/body/tab/row[2]/cell[1]/txt[1]/infos/bounds", "top").toInt32();
+        = parseDump("/root/page/body/tab/row[2]/cell[1]/txt[1]/infos/bounds"_ostr, "top"_ostr)
+              .toInt32();
     CPPUNIT_ASSERT(textNextRowTop >= imageTop + imageHeight);
 }
 
@@ -409,20 +412,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95377, "tdf95377.docx")
     //default style has numbering enabled.  Styles inherit numbering unless specifically disabled
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc,
-                "//body/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']",
+                "//body/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,
                 3); //first three paragraphs have numbering
-    assertXPath(pXmlDoc,
-                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']",
-                "expand", "a.");
-    assertXPath(pXmlDoc,
-                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']",
-                "expand", "b.");
-    assertXPath(pXmlDoc,
-                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']",
-                "expand", "c.");
     assertXPath(
         pXmlDoc,
-        "/root/page/body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']",
+        "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,
+        "expand"_ostr, "a.");
+    assertXPath(
+        pXmlDoc,
+        "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,
+        "expand"_ostr, "b.");
+    assertXPath(
+        pXmlDoc,
+        "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,
+        "expand"_ostr, "c.");
+    assertXPath(
+        pXmlDoc,
+        "/root/page/body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,
         0); //last paragraph style disables numbering
 }
 
@@ -661,8 +667,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableMarginAdjustment)
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type", "dxa");
-    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "w", "0");
+    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]"_ostr, "type"_ostr, "dxa");
+    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]"_ostr, "w"_ostr, "0");
 
     // tdf#143982: automatic tables should export as something better than just left-and-size
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTable, "RelativeWidth"));
@@ -674,10 +680,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119760_tableInTablePosition, "tdf119760_tableInT
     {
         xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-        assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type",
-                    "dxa");
-        assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]//w:tblPr[1]/w:tblInd[1]", "w",
-                    "0");
+        assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tblPr[1]/w:tblInd[1]"_ostr,
+                    "type"_ostr, "dxa");
+        assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]//w:tblPr[1]/w:tblInd[1]"_ostr,
+                    "w"_ostr, "0");
     }
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -746,8 +752,8 @@ CPPUNIT_TEST_FIXTURE(Test, TestPuzzleExport)
     auto pMetaXml = dumpAndParse(aDumper, *pMeta);
     CPPUNIT_ASSERT(pMetaXml);
     // After parsing check that node...
-    auto pXNode
-        = getXPathNode(pMetaXml, "/metafile/push/push/push/push[4]/push/push/polypolygon/polygon");
+    auto pXNode = getXPathNode(
+        pMetaXml, "/metafile/push/push/push/push[4]/push/push/polypolygon/polygon"_ostr);
     CPPUNIT_ASSERT(pXNode);
     auto pNode = pXNode->nodesetval->nodeTab[0];
     CPPUNIT_ASSERT(pNode);
@@ -847,7 +853,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77236_MissingSolidFill)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(
         pXmlDoc,
-        "//mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill",
+        "//mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill"_ostr,
         1);
 }
 
@@ -898,10 +904,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133363)
     loadAndSave("tdf133363.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // tdf#133363: remove extra auto space between first and second list elements
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[2]/w:pPr/w:spacing", "before",
-                "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[3]/w:pPr/w:spacing", "after",
-                "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[2]/w:pPr/w:spacing"_ostr,
+                "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[3]/w:pPr/w:spacing"_ostr,
+                "after"_ostr, "0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138093, "tdf138093.docx")
@@ -909,7 +915,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138093, "tdf138093.docx")
     if (isExported())
     {
         xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-        assertXPath(pXmlDoc, "//w:sdt", 3);
+        assertXPath(pXmlDoc, "//w:sdt"_ostr, 3);
         uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                         uno::UNO_QUERY);
@@ -962,7 +968,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131722, "tdf131722.docx")
     if (isExported())
     {
         xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-        assertXPath(pXmlDoc, "//w:sdt", 4);
+        assertXPath(pXmlDoc, "//w:sdt"_ostr, 4);
         uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                         uno::UNO_QUERY);
@@ -1051,14 +1057,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_isLvl_RoundTrip)
     CPPUNIT_ASSERT_EQUAL(OUString("Sect 2.01"), getProperty<OUString>(xPara, "ListLabelString"));
 
     xmlDocUniquePtr pXml = parseExport("word/numbering.xml");
-    assertXPath(pXml, "/w:numbering/w:abstractNum"); // Only one list
+    assertXPath(pXml, "/w:numbering/w:abstractNum"_ostr); // Only one list
     // The second list level must keep the isLgl element
-    assertXPath(pXml, "/w:numbering/w:abstractNum/w:lvl[2]/w:isLgl");
+    assertXPath(pXml, "/w:numbering/w:abstractNum/w:lvl[2]/w:isLgl"_ostr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf156372, "tdf156372.doc")
 {
-    sal_Int32 nHeight = parseDump("//page[1]/header/tab/row[1]/infos/bounds", "height").toInt32();
+    sal_Int32 nHeight
+        = parseDump("//page[1]/header/tab/row[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
     // Without a fix in place, this would fail with
     // - Expected: 847
     // - Actual  : 1327

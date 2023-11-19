@@ -143,12 +143,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108524)
     createSwDoc("tdf108524.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // In total we expect two cells containing a section.
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section"_ostr, 2);
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section"_ostr, 1);
     // This was 0, section wasn't split, instead it was only on the first page
     // and it was cut off.
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesInSectionInTable)
@@ -159,12 +159,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesInSectionInTable)
     createSwDoc("lines-in-section-in-table.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // In total we expect two cells containing a section.
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section"_ostr, 2);
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section"_ostr, 1);
     // This was 0, section wasn't split, instead it was only on the first page
     // and it was cut off.
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesMoveBackwardsInSectionInTable)
@@ -174,14 +174,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesMoveBackwardsInSectionInTable)
     createSwDoc("lines-in-section-in-table.odt");
     SwDoc* pDoc = getSwDoc();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page", 2);
-    SwNodeOffset nPara4Node(
-        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex")
-            .toUInt32());
+    assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+    SwNodeOffset nPara4Node(getXPath(pXmlDoc,
+                                     "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]"_ostr,
+                                     "txtNodeIndex"_ostr)
+                                .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetNodes()[nPara4Node]->GetTextNode()->GetText());
-    SwNodeOffset nPara5Node(
-        getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[1]/section/txt[1]", "txtNodeIndex")
-            .toUInt32());
+    SwNodeOffset nPara5Node(getXPath(pXmlDoc,
+                                     "/root/page[2]/body/tab/row/cell[1]/section/txt[1]"_ostr,
+                                     "txtNodeIndex"_ostr)
+                                .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetNodes()[nPara5Node]->GetTextNode()->GetText());
 
     // Remove paragraph "4".
@@ -196,7 +198,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesMoveBackwardsInSectionInTable)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     SwNodeOffset nPage1LastNode(
-        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex")
+        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]"_ostr,
+                 "txtNodeIndex"_ostr)
             .toUInt32());
     // This was "3", paragraph "4" was deleted, but "5" was not moved backwards from page 2.
     CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
@@ -210,11 +213,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTableInSection)
     createSwDoc("table-in-sect.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // In total we expect 4 cells.
-    assertXPath(pXmlDoc, "/root/page/body/section/tab/row/cell", 4);
+    assertXPath(pXmlDoc, "/root/page/body/section/tab/row/cell"_ostr, 4);
 
     // Assert that on both pages the section contains 2 cells.
-    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell", 2);
-    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell"_ostr, 2);
 #endif
 }
 
@@ -226,8 +229,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTableInNestedSection)
     createSwDoc("rhbz739252-3.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Make sure the table is inside a section and spans over 2 pages.
-    assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
-    assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
+    assertXPath(pXmlDoc, "//page[1]//section/tab"_ostr, 1);
+    assertXPath(pXmlDoc, "//page[2]//section/tab"_ostr, 1);
 #endif
 }
 
@@ -237,12 +240,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112741)
     createSwDoc("tdf112741.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 5 pages.
-    assertXPath(pXmlDoc, "//page", 4);
-    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell/section", 1);
-    assertXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "//page"_ostr, 4);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell/section"_ostr, 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row/cell/section"_ostr, 1);
     // This failed, 3rd page contained no sections.
-    assertXPath(pXmlDoc, "//page[3]/body/tab/row/cell/tab/row/cell/section", 1);
-    assertXPath(pXmlDoc, "//page[4]/body/tab/row/cell/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "//page[3]/body/tab/row/cell/tab/row/cell/section"_ostr, 1);
+    assertXPath(pXmlDoc, "//page[4]/body/tab/row/cell/tab/row/cell/section"_ostr, 1);
 #endif
 }
 
@@ -261,11 +264,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113287)
 #if HAVE_MORE_FONTS
     createSwDoc("tdf113287.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//page", 2);
+    assertXPath(pXmlDoc, "//page"_ostr, 2);
     sal_uInt32 nCellTop
-        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/infos/bounds", "top").toUInt32();
+        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/infos/bounds"_ostr, "top"_ostr)
+              .toUInt32();
     sal_uInt32 nSectionTop
-        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/section/infos/bounds", "top")
+        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/section/infos/bounds"_ostr, "top"_ostr)
               .toUInt32();
     // Make sure section frame is inside the cell frame.
     // Expected greater than 4593, was only 3714.
@@ -285,9 +289,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113445)
     calcLayout();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//page", 2);
-    sal_uInt32 nPage1Left = getXPath(pXmlDoc, "//page[1]/infos/bounds", "left").toUInt32();
-    sal_uInt32 nPage2Left = getXPath(pXmlDoc, "//page[2]/infos/bounds", "left").toUInt32();
+    assertXPath(pXmlDoc, "//page"_ostr, 2);
+    sal_uInt32 nPage1Left
+        = getXPath(pXmlDoc, "//page[1]/infos/bounds"_ostr, "left"_ostr).toUInt32();
+    sal_uInt32 nPage2Left
+        = getXPath(pXmlDoc, "//page[2]/infos/bounds"_ostr, "left"_ostr).toUInt32();
     // Make sure that page 2 is on the right hand side of page 1, not below it.
     CPPUNIT_ASSERT_GREATER(nPage1Left, nPage2Left);
 
@@ -300,19 +306,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113445)
 
     // Make sure that Table2:C5 and Table2:D5 has its section frame inside the cell frame.
     sal_uInt32 nCell3Top
-        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[3]/infos/bounds", "top")
+        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[3]/infos/bounds"_ostr,
+                   "top"_ostr)
               .toUInt32();
     sal_uInt32 nSection3Top
-        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[3]/section/infos/bounds",
-                   "top")
+        = getXPath(pXmlDoc,
+                   "//page[2]/body/tab/row/cell/tab/row[4]/cell[3]/section/infos/bounds"_ostr,
+                   "top"_ostr)
               .toUInt32();
     CPPUNIT_ASSERT_GREATER(nCell3Top, nSection3Top);
     sal_uInt32 nCell4Top
-        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[4]/infos/bounds", "top")
+        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[4]/infos/bounds"_ostr,
+                   "top"_ostr)
               .toUInt32();
     sal_uInt32 nSection4Top
-        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[4]/section/infos/bounds",
-                   "top")
+        = getXPath(pXmlDoc,
+                   "//page[2]/body/tab/row/cell/tab/row[4]/cell[4]/section/infos/bounds"_ostr,
+                   "top"_ostr)
               .toUInt32();
     CPPUNIT_ASSERT_GREATER(nCell4Top, nSection4Top);
     // Also check if the two cells in the same row have the same top position.
@@ -327,16 +337,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113686)
     createSwDoc("tdf113686.fodt");
     SwDoc* pDoc = getSwDoc();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page", 2);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 2);
     SwNodeOffset nPage1LastNode(
-        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/txt[last()]",
-                 "txtNodeIndex")
+        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/txt[last()]"_ostr,
+                 "txtNodeIndex"_ostr)
             .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Table2:A1-P10"),
                          pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
-    SwNodeOffset nPage2FirstNode(
-        getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[1]/section/txt[1]", "txtNodeIndex")
-            .toUInt32());
+    SwNodeOffset nPage2FirstNode(getXPath(pXmlDoc,
+                                          "/root/page[2]/body/tab/row/cell[1]/section/txt[1]"_ostr,
+                                          "txtNodeIndex"_ostr)
+                                     .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Table1:A1"),
                          pDoc->GetNodes()[nPage2FirstNode]->GetTextNode()->GetText());
 
@@ -353,7 +364,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113686)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was still 2, content from 2nd page was not moved.
-    assertXPath(pXmlDoc, "/root/page", 1);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 1);
 #endif
 }
 
@@ -383,15 +394,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable2)
     createSwDoc("split-section-in-nested-table.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_uInt32 nSection1
-        = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
+        = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section"_ostr, "id"_ostr)
+              .toUInt32();
     sal_uInt32 nSection1Follow
-        = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "follow")
+        = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section"_ostr, "follow"_ostr)
               .toUInt32();
     // This failed, the section wasn't split inside a nested table.
     sal_uInt32 nSection2
-        = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
+        = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section"_ostr, "id"_ostr)
+              .toUInt32();
     sal_uInt32 nSection2Precede
-        = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section", "precede")
+        = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section"_ostr,
+                   "precede"_ostr)
               .toUInt32();
 
     // Make sure that the first's follow and the second's precede is correct.
@@ -419,13 +433,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable3)
     calcLayout();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_uInt32 nTable1 = getXPath(pXmlDoc, "//page[1]//body/tab", "id").toUInt32();
-    sal_uInt32 nTable1Follow = getXPath(pXmlDoc, "//page[1]//body/tab", "follow").toUInt32();
-    sal_uInt32 nTable2 = getXPath(pXmlDoc, "//page[2]//body/tab", "id").toUInt32();
-    sal_uInt32 nTable2Precede = getXPath(pXmlDoc, "//page[2]//body/tab", "precede").toUInt32();
-    sal_uInt32 nTable2Follow = getXPath(pXmlDoc, "//page[2]//body/tab", "follow").toUInt32();
-    sal_uInt32 nTable3 = getXPath(pXmlDoc, "//page[3]//body/tab", "id").toUInt32();
-    sal_uInt32 nTable3Precede = getXPath(pXmlDoc, "//page[3]//body/tab", "precede").toUInt32();
+    sal_uInt32 nTable1 = getXPath(pXmlDoc, "//page[1]//body/tab"_ostr, "id"_ostr).toUInt32();
+    sal_uInt32 nTable1Follow
+        = getXPath(pXmlDoc, "//page[1]//body/tab"_ostr, "follow"_ostr).toUInt32();
+    sal_uInt32 nTable2 = getXPath(pXmlDoc, "//page[2]//body/tab"_ostr, "id"_ostr).toUInt32();
+    sal_uInt32 nTable2Precede
+        = getXPath(pXmlDoc, "//page[2]//body/tab"_ostr, "precede"_ostr).toUInt32();
+    sal_uInt32 nTable2Follow
+        = getXPath(pXmlDoc, "//page[2]//body/tab"_ostr, "follow"_ostr).toUInt32();
+    sal_uInt32 nTable3 = getXPath(pXmlDoc, "//page[3]//body/tab"_ostr, "id"_ostr).toUInt32();
+    sal_uInt32 nTable3Precede
+        = getXPath(pXmlDoc, "//page[3]//body/tab"_ostr, "precede"_ostr).toUInt32();
 
     // Make sure the outer table frames are linked together properly.
     CPPUNIT_ASSERT_EQUAL(nTable2, nTable1Follow);
@@ -441,16 +459,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable4)
     createSwDoc("tdf113520.fodt");
     SwDoc* pDoc = getSwDoc();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page", 3);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 3);
     SwNodeOffset nPage1LastNode(
-        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[last()]",
-                 "txtNodeIndex")
+        getXPath(pXmlDoc,
+                 "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[last()]"_ostr,
+                 "txtNodeIndex"_ostr)
             .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Section1:P10"),
                          pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
     SwNodeOffset nPage3FirstNode(
-        getXPath(pXmlDoc, "/root/page[3]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[1]",
-                 "txtNodeIndex")
+        getXPath(pXmlDoc, "/root/page[3]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[1]"_ostr,
+                 "txtNodeIndex"_ostr)
             .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Section1:P23"),
                          pDoc->GetNodes()[nPage3FirstNode]->GetTextNode()->GetText());
@@ -469,13 +488,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable4)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 3, page 2 was emptied, but it wasn't removed.
-    assertXPath(pXmlDoc, "/root/page", 2);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 2);
 
     // Make sure the outer table frames are linked together properly.
-    sal_uInt32 nTable1 = getXPath(pXmlDoc, "//page[1]//body/tab", "id").toUInt32();
-    sal_uInt32 nTable1Follow = getXPath(pXmlDoc, "//page[1]//body/tab", "follow").toUInt32();
-    sal_uInt32 nTable2 = getXPath(pXmlDoc, "//page[2]//body/tab", "id").toUInt32();
-    sal_uInt32 nTable2Precede = getXPath(pXmlDoc, "//page[2]//body/tab", "precede").toUInt32();
+    sal_uInt32 nTable1 = getXPath(pXmlDoc, "//page[1]//body/tab"_ostr, "id"_ostr).toUInt32();
+    sal_uInt32 nTable1Follow
+        = getXPath(pXmlDoc, "//page[1]//body/tab"_ostr, "follow"_ostr).toUInt32();
+    sal_uInt32 nTable2 = getXPath(pXmlDoc, "//page[2]//body/tab"_ostr, "id"_ostr).toUInt32();
+    sal_uInt32 nTable2Precede
+        = getXPath(pXmlDoc, "//page[2]//body/tab"_ostr, "precede"_ostr).toUInt32();
     CPPUNIT_ASSERT_EQUAL(nTable2, nTable1Follow);
     CPPUNIT_ASSERT_EQUAL(nTable1, nTable2Precede);
 #endif
@@ -488,10 +509,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112160)
     createSwDoc("tdf112160.fodt");
     SwDoc* pDoc = getSwDoc();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    SwNodeOffset nA2CellNode(getXPath(pXmlDoc,
-                                      "/root/page[1]/body/tab/row[2]/cell[1]/section/txt[last()]",
-                                      "txtNodeIndex")
-                                 .toUInt32());
+    SwNodeOffset nA2CellNode(
+        getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/section/txt[last()]"_ostr,
+                 "txtNodeIndex"_ostr)
+            .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Table1.A2"),
                          pDoc->GetNodes()[nA2CellNode]->GetTextNode()->GetText());
 
@@ -506,8 +527,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112160)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     sal_uInt32 nD2CellNode
-        = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[last()]/section/txt[last()]",
-                   "txtNodeIndex")
+        = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[last()]/section/txt[last()]"_ostr,
+                   "txtNodeIndex"_ostr)
               .toUInt32();
     // This was Table1.C2, Table1.D2 was moved to the next page, unexpected.
     CPPUNIT_ASSERT_EQUAL(OUString("Table1.D2"),
@@ -636,7 +657,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112448)
 
     // check actual number of line breaks in the paragraph
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout", 2);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout"_ostr, 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113790)
@@ -1159,9 +1180,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157492_TrackedMovingRow)
     xCellC1->setString("C1");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[1]/txt", "A1");
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[2]/txt", "B1");
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[3]/txt", "C1");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[1]/txt"_ostr, "A1");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[2]/txt"_ostr, "B1");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[3]/txt"_ostr, "C1");
 
     // enable redlining
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
@@ -1289,10 +1310,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155846_MovingColumn)
     xCellA4->setString("A4");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[1]/txt", "A1");
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[2]/cell[1]/txt", "A2");
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[3]/cell[1]/txt", "A3");
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[4]/cell[1]/txt", "A4");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[1]/txt"_ostr, "A1");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[2]/cell[1]/txt"_ostr, "A2");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[3]/cell[1]/txt"_ostr, "A3");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[4]/cell[1]/txt"_ostr, "A4");
 
     // enable redlining
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
@@ -1511,7 +1532,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testHtmlCopyImages)
     CPPUNIT_ASSERT(pHtmlDoc);
 
     // This failed, image was lost during HTML copy.
-    OUString aImage = getXPath(pHtmlDoc, "/html/body/p/img", "src");
+    OUString aImage = getXPath(pHtmlDoc, "/html/body/p/img"_ostr, "src"_ostr);
     // Also make sure that the image is not embedded (e.g. Word doesn't handle
     // embedded images).
     CPPUNIT_ASSERT(aImage.startsWith("file:///"));
@@ -1567,8 +1588,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
 #if HAVE_MORE_FONTS && !defined(MACOSX)
     createSwDoc("testFontEmbedding.odt");
 
-    OString aContentBaseXpath("/office:document-content/office:font-face-decls");
-    OString aSettingsBaseXpath("/office:document-settings/office:settings/config:config-item-set");
+    OString aContentBaseXpath("/office:document-content/office:font-face-decls"_ostr);
+    OString aSettingsBaseXpath(
+        "/office:document-settings/office:settings/config:config-item-set"_ostr);
 
     xmlDocUniquePtr pXmlDoc;
 
@@ -2037,7 +2059,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
         sCommentText = OString(rComment.get<std::string>("text"));
     }
     // This was false (lost comment with spelling replacement)
-    CPPUNIT_ASSERT_EQUAL(OString("with comment"), sCommentText);
+    CPPUNIT_ASSERT_EQUAL("with comment"_ostr, sCommentText);
 }
 #endif
 
@@ -2812,7 +2834,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testNestedGroupTextBoxCopyCrash)
 
     auto pLayout = parseLayoutDump();
     // There must be 2 textboxes!
-    assertXPath(pLayout, "/root/page/body/txt/anchored/fly[2]");
+    assertXPath(pLayout, "/root/page/body/txt/anchored/fly[2]"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCrashOnExit)

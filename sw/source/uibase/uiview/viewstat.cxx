@@ -228,7 +228,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
                 if (nWhich == SID_ATTR_PAGE_ORIENTATION && comphelper::LibreOfficeKit::isActive())
                 {
-                    OString aPayload = ".uno:Orientation=";
+                    OString aPayload = ".uno:Orientation="_ostr;
                     if (rDesc.GetLandscape())
                     {
                         aPayload += "IsLandscape";
@@ -441,7 +441,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    OString aPayload(".uno:TrackedChangeIndex=");
+                    OString aPayload(".uno:TrackedChangeIndex="_ostr);
                     SwRedlineTable::size_type nRedline = 0;
                     if (pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), &nRedline))
                         aPayload += OString::number(nRedline);

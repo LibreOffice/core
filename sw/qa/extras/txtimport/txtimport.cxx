@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf112191)
     bool bSuccess = sw::XTextRangeToSwPaM(aPaM, xPara);
     CPPUNIT_ASSERT(bSuccess);
 
-    assertExportedRange("First bullet", aPaM);
+    assertExportedRange("First bullet"_ostr, aPaM);
 
     // but when we extend to the next paragraph - now there are bullets
     xPara = getParagraph(6);

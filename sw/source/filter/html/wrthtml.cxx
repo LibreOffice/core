@@ -1326,7 +1326,7 @@ void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
         OOO_STRING_SVTOOLS_HTML_O_type
         "=\""
         OOO_STRING_SVTOOLS_HTML_IT_checkbox
-        "\"");
+        "\""_ostr);
 
     if (pCheckBox->IsChecked())
     {

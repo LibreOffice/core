@@ -26,8 +26,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveAsDotX)
 
     // Ensure that document has correct content type
     assertXPath(pXmlDocCT,
-                "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
-                "ContentType",
+                "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']"_ostr,
+                "ContentType"_ostr,
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml");
 }
 

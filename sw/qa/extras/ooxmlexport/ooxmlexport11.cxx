@@ -162,20 +162,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 {
     loadAndSave("tdf121456_tabsOffset.odt");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", "Inhaltsverzeichnis");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", " TOC \\f \\o \"1-9\" \\h");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Table of Contents");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t"_ostr, "Inhaltsverzeichnis");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText"_ostr, " TOC \\f \\o \"1-9\" \\h");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery"_ostr, "val"_ostr, "Table of Contents");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129525)
 {
     loadAndSave("tdf129525.rtf");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t", "Overview");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", "3");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r[1]/w:t", "More detailed description");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r[2]/w:t", "4");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t"_ostr, "Overview");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t"_ostr, "3");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r[1]/w:t"_ostr, "More detailed description");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r[2]/w:t"_ostr, "4");
 }
 
 // Related issue tdf#121561: w:sdt/w:sdtContent around TOC
@@ -203,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitleDocx)
     CPPUNIT_ASSERT_EQUAL(OUString("Inhaltsverzeichnis"), getProperty<OUString>(xTOCIndex, "Title"));
 
     // ensure TOC end-field mark is placed inside TOC section
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[16]/w:r/w:fldChar", "fldCharType", "end");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[16]/w:r/w:fldChar"_ostr, "fldCharType"_ostr, "end");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx")
@@ -248,9 +248,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76683_negativeTwipsMeasure)
 {
     loadAndSave("tdf76683_negativeTwipsMeasure.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col", 2);
-    sal_uInt32 nColumn1 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", "w").toUInt32();
-    sal_uInt32 nColumn2 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[2]", "w").toUInt32();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col"_ostr, 2);
+    sal_uInt32 nColumn1 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]"_ostr, "w"_ostr).toUInt32();
+    sal_uInt32 nColumn2 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[2]"_ostr, "w"_ostr).toUInt32();
     CPPUNIT_ASSERT( nColumn1 > nColumn2 );
 }
 
@@ -265,17 +265,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112694, "tdf112694.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf113849_evenAndOddHeaders)
 {
     loadAndReload("tdf113849_evenAndOddHeaders.odt");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", OUString("L. J. Kendall"), parseDump("/root/page[2]/header/txt"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer2 text", OUString("*"), parseDump("/root/page[2]/footer/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", OUString("L. J. Kendall"), parseDump("/root/page[2]/header/txt"_ostr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer2 text", OUString("*"), parseDump("/root/page[2]/footer/txt"_ostr));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header3 text", OUString("Shadow Hunt"), parseDump("/root/page[3]/header/txt"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer3 text", OUString("*"), parseDump("/root/page[3]/footer/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header3 text", OUString("Shadow Hunt"), parseDump("/root/page[3]/header/txt"_ostr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer3 text", OUString("*"), parseDump("/root/page[3]/footer/txt"_ostr));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header4 text", OUString("L. J. Kendall"), parseDump("/root/page[4]/header/txt"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer4 text", OUString("*"), parseDump("/root/page[4]/footer/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header4 text", OUString("L. J. Kendall"), parseDump("/root/page[4]/header/txt"_ostr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer4 text", OUString("*"), parseDump("/root/page[4]/footer/txt"_ostr));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer5 text", OUString(""), parseDump("/root/page[5]/footer/txt"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer6 text", OUString(""), parseDump("/root/page[6]/footer/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer5 text", OUString(""), parseDump("/root/page[5]/footer/txt"_ostr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer6 text", OUString(""), parseDump("/root/page[6]/footer/txt"_ostr));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages", 6, getPages() );
 }
@@ -382,8 +382,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSplitOnSectionBorder)
 
     // Test document has only two paragraphs. After splitting, it should contain
     // three of them.
-    assertXPath(pXmlDoc, "//w:sectPr", 2);
-    assertXPath(pXmlDoc, "//w:p", 3);
+    assertXPath(pXmlDoc, "//w:sectPr"_ostr, 2);
+    assertXPath(pXmlDoc, "//w:p"_ostr, 3);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
@@ -391,7 +391,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
     loadAndSave("tdf44832_section_new_header.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.docx")
@@ -453,13 +453,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
     // The horizontal positioning of the star shape affected the positioning of
     // the triangle one, so the triangle was outside the page frame.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nPageLeft = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "left").toInt32();
-    sal_Int32 nPageWidth = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "width").toInt32();
+    sal_Int32 nPageLeft = getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nPageWidth = getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "width"_ostr).toInt32();
     sal_Int32 nShapeLeft
-        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "left")
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "left"_ostr)
               .toInt32();
     sal_Int32 nShapeWidth
-        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "width")
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "width"_ostr)
               .toInt32();
     // Make sure the second triangle shape is within the page bounds (with ~1px tolerance).
     CPPUNIT_ASSERT_GREATEREQUAL(nShapeLeft + nShapeWidth, nPageLeft + nPageWidth + 21);
@@ -563,21 +563,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf137655)
     loadAndSave("tdf137655.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // These were 280.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", "0");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:p[1]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:p[1]/w:pPr/w:spacing"_ostr, "before"_ostr, "0");
 
     //tdf#142542: ensure that the original beforeAutospacing = 0 is not changed.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "beforeAutospacing", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing"_ostr, "beforeAutospacing"_ostr, "0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120511_eatenSection, "tdf120511_eatenSection.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nHeight = getXPath(pXmlDoc, "/root/page[1]/infos/prtBounds", "height").toInt32();
-    sal_Int32 nWidth  = getXPath(pXmlDoc, "/root/page[1]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nHeight = getXPath(pXmlDoc, "/root/page[1]/infos/prtBounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nWidth  = getXPath(pXmlDoc, "/root/page[1]/infos/prtBounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE( "Page1 is portrait", nWidth < nHeight );
-    nHeight = getXPath(pXmlDoc, "/root/page[2]/infos/prtBounds", "height").toInt32();
-    nWidth  = getXPath(pXmlDoc, "/root/page[2]/infos/prtBounds", "width").toInt32();
+    nHeight = getXPath(pXmlDoc, "/root/page[2]/infos/prtBounds"_ostr, "height"_ostr).toInt32();
+    nWidth  = getXPath(pXmlDoc, "/root/page[2]/infos/prtBounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE( "Page2 is landscape", nWidth > nHeight );
 }
 
@@ -608,7 +608,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreak_after)
     loadAndReload("pageBreak_after.odt");
     // The problem was that the page breakAfter put the empty page BEFORE the table
     xmlDocUniquePtr pDump = parseLayoutDump();
-    assertXPath(pDump, "/root/page[1]/body/tab", 1);
+    assertXPath(pDump, "/root/page[1]/body/tab"_ostr, 1);
     // There should be two pages actually - a blank page after a page break.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix?? Table should be on page one of two", 1, getPages());
 }
@@ -724,8 +724,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82177_tblBorders, "tdf82177_tblBorders.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf119760_positionCellBorder, "tdf119760_positionCellBorder.docx")
 {
     //inconsistent in Word even. 2016 positions on last row, 2003 positions on first cell.
-    sal_Int32 nRowLeft = parseDump("/root/page/body/tab[4]/row[1]/infos/bounds", "left").toInt32();
-    sal_Int32 nTextLeft  = parseDump("/root/page/body/tab[4]/row[1]/cell[1]/txt/infos/bounds", "left").toInt32();
+    sal_Int32 nRowLeft = parseDump("/root/page/body/tab[4]/row[1]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nTextLeft  = parseDump("/root/page/body/tab[4]/row[1]/cell[1]/txt/infos/bounds"_ostr, "left"_ostr).toInt32();
     CPPUNIT_ASSERT( nRowLeft < nTextLeft );
 }
 
@@ -753,7 +753,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116985, "tdf116985.docx")
     // spacing to text on the left/right side.  So ideal width would be 4032,
     // was 3431. Allow one pixel tolerance, though.
     sal_Int32 nWidth
-        = parseDump("/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "width").toInt32();
+        = parseDump("/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT(nWidth > 4000);
 }
 

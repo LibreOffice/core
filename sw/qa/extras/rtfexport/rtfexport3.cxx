@@ -188,14 +188,15 @@ DECLARE_RTFEXPORT_TEST(testTdf115180, "tdf115180.docx")
     // On export to RTF, column separator positions were written without taking base width
     // into account and then arrived huge, ~64000, which resulted in wrong table and cell widths
 
-    sal_Int32 rowWidth = parseDump("/root/page/body/tab/row/infos/bounds", "width").toInt32();
+    sal_Int32 rowWidth
+        = parseDump("/root/page/body/tab/row/infos/bounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row width", sal_Int32(9360), rowWidth);
     sal_Int32 cell1Width
-        = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32();
+        = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("First cell width", cell1Width >= 9140);
     CPPUNIT_ASSERT_MESSAGE("First cell width", cell1Width <= 9142);
     sal_Int32 cell2Width
-        = parseDump("/root/page/body/tab/row/cell[2]/infos/bounds", "width").toInt32();
+        = parseDump("/root/page/body/tab/row/cell[2]/infos/bounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("Second cell width", cell2Width >= 218);
     CPPUNIT_ASSERT_MESSAGE("Second cell width", cell2Width <= 220);
 }

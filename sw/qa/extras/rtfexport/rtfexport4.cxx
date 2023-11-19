@@ -565,8 +565,8 @@ DECLARE_RTFEXPORT_TEST(testTdf116358, "tdf116358.rtf")
 
     // Entire table should go to page 2, no remains on first page
     xmlDocUniquePtr pDump = parseLayoutDump();
-    assertXPath(pDump, "/root/page[1]/body/tab", 0);
-    assertXPath(pDump, "/root/page[2]/body/tab", 1);
+    assertXPath(pDump, "/root/page[1]/body/tab"_ostr, 0);
+    assertXPath(pDump, "/root/page[2]/body/tab"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
@@ -779,33 +779,39 @@ DECLARE_RTFEXPORT_TEST(testTdf103956, "tdf103956.rtf")
     // table & cell widths are more than default minimal value of 41.
     CPPUNIT_ASSERT_MESSAGE(
         "Table #1 is too narrow!",
-        82 < parseDump("/root/page/body/tab[1]/row/infos/bounds", "width").toInt32());
+        82 < parseDump("/root/page/body/tab[1]/row/infos/bounds"_ostr, "width"_ostr).toInt32());
     CPPUNIT_ASSERT_MESSAGE(
         "Table #1 cell#1 is too narrow!",
-        41 < parseDump("/root/page/body/tab[1]/row/cell[1]/infos/bounds", "width").toInt32());
+        41 < parseDump("/root/page/body/tab[1]/row/cell[1]/infos/bounds"_ostr, "width"_ostr)
+                 .toInt32());
     CPPUNIT_ASSERT_MESSAGE(
         "Table #1 cell#2 is too narrow!",
-        41 < parseDump("/root/page/body/tab[1]/row/cell[2]/infos/bounds", "width").toInt32());
+        41 < parseDump("/root/page/body/tab[1]/row/cell[2]/infos/bounds"_ostr, "width"_ostr)
+                 .toInt32());
 
     CPPUNIT_ASSERT_MESSAGE(
         "Table #2 is too narrow!",
-        82 < parseDump("/root/page/body/tab[2]/row/infos/bounds", "width").toInt32());
+        82 < parseDump("/root/page/body/tab[2]/row/infos/bounds"_ostr, "width"_ostr).toInt32());
     CPPUNIT_ASSERT_MESSAGE(
         "Table #2 cell#1 is too narrow!",
-        41 < parseDump("/root/page/body/tab[2]/row/cell[1]/infos/bounds", "width").toInt32());
+        41 < parseDump("/root/page/body/tab[2]/row/cell[1]/infos/bounds"_ostr, "width"_ostr)
+                 .toInt32());
     CPPUNIT_ASSERT_MESSAGE(
         "Table #2 cell#2 is too narrow!",
-        41 < parseDump("/root/page/body/tab[2]/row/cell[2]/infos/bounds", "width").toInt32());
+        41 < parseDump("/root/page/body/tab[2]/row/cell[2]/infos/bounds"_ostr, "width"_ostr)
+                 .toInt32());
 
     CPPUNIT_ASSERT_MESSAGE(
         "Table #3 is too narrow!",
-        82 < parseDump("/root/page/body/tab[3]/row/infos/bounds", "width").toInt32());
+        82 < parseDump("/root/page/body/tab[3]/row/infos/bounds"_ostr, "width"_ostr).toInt32());
     CPPUNIT_ASSERT_MESSAGE(
         "Table #3 cell#1 is too narrow!",
-        41 < parseDump("/root/page/body/tab[3]/row/cell[1]/infos/bounds", "width").toInt32());
+        41 < parseDump("/root/page/body/tab[3]/row/cell[1]/infos/bounds"_ostr, "width"_ostr)
+                 .toInt32());
     CPPUNIT_ASSERT_MESSAGE(
         "Table #3 cell#2 is too narrow!",
-        41 < parseDump("/root/page/body/tab[3]/row/cell[2]/infos/bounds", "width").toInt32());
+        41 < parseDump("/root/page/body/tab[3]/row/cell[2]/infos/bounds"_ostr, "width"_ostr)
+                 .toInt32());
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf148515, "tdf148515.rtf")

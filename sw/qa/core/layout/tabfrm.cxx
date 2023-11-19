@@ -32,7 +32,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTablePrintAreaLeft)
     createSwDoc("table-print-area-left.docx");
 
     // When laying out that document & parsing the left margin of the table:
-    SwTwips nTablePrintLeft = parseDump("//tab/infos/prtBounds", "left").toInt32();
+    SwTwips nTablePrintLeft = parseDump("//tab/infos/prtBounds"_ostr, "left"_ostr).toInt32();
 
     // Then make sure it has ~no left margin:
     // Without the accompanying fix in place, this test would have failed with:

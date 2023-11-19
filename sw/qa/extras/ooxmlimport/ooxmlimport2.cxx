@@ -257,7 +257,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114212)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1428
     // - Actual  : 387
-    OUString aTop = parseDump("//anchored/fly[1]/infos/bounds", "top");
+    OUString aTop = parseDump("//anchored/fly[1]/infos/bounds"_ostr, "top"_ostr);
     CPPUNIT_ASSERT_EQUAL(OUString("1428"), aTop);
 }
 
@@ -406,8 +406,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
 
     // Make sure that "Shape 1 text" (anchored in the header) has the same left margin as the body
     // text.
-    OUString aShapeTextLeft = parseDump("/root/page/header/txt/anchored/fly/infos/bounds", "left");
-    OUString aBodyTextLeft = parseDump("/root/page/body/txt/infos/bounds", "left");
+    OUString aShapeTextLeft
+        = parseDump("/root/page/header/txt/anchored/fly/infos/bounds"_ostr, "left"_ostr);
+    OUString aBodyTextLeft = parseDump("/root/page/body/txt/infos/bounds"_ostr, "left"_ostr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1701
     // - Actual  : 1815
@@ -423,7 +424,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
     // Actual: ffffffff', i.e. the numbering portion was black, not red.
     CPPUNIT_ASSERT_EQUAL(
         OUString("00ff0000"),
-        parseDump("//SwFieldPortion[@type='PortionType::Number']/SwFont", "color"));
+        parseDump("//SwFieldPortion[@type='PortionType::Number']/SwFont"_ostr, "color"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test120551)
@@ -538,7 +539,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127778)
     // - Expected: 0
     // - Actual  : 1
     // i.e. the 2nd page had an unexpected header.
-    assertXPath(pLayout, "//page[2]/header", 0);
+    assertXPath(pLayout, "//page[2]/header"_ostr, 0);
 }
 
 // related tdf#43017
@@ -652,7 +653,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104167)
 CPPUNIT_TEST_FIXTURE(Test, testTdf113946)
 {
     createSwDoc("tdf113946.docx");
-    OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
+    OUString aTop
+        = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr);
     // tdf#106792 Checked loading of tdf113946.docx. Before the change, the expected
     // value of this test was "1696". Opening the file shows a single short line anchored
     // at the doc start. Only diff is that in 'old' version it is slightly rotated, in 'new'

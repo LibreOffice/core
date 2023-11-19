@@ -50,11 +50,11 @@ public:
 
 DECLARE_WW8EXPORT_TEST(testTdf99120, "tdf99120.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("Section 1, odd."),  parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Section 1, even."),  parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Section 1, odd."),  parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Section 1, even."),  parseDump("/root/page[2]/header/txt/text()"_ostr));
     // This failed: the header was empty on the 3rd page, as the first page header was shown.
-    CPPUNIT_ASSERT_EQUAL(OUString("Section 2, odd."),  parseDump("/root/page[3]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Section 2, odd."),  parseDump("/root/page[3]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
@@ -129,15 +129,15 @@ DECLARE_WW8EXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
 
     //For MSO compatibility, the image should be at the top of the cell, not at the bottom - despite VertOrientation::BOTTOM
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nFlyTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt/anchored/fly/infos/bounds", "top").toInt32();
+    sal_Int32 nFlyTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("FlyTop should be 3820, not 6623", nFlyTop < 4000);
-    sal_Int32 nTextTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt[1]/infos/bounds", "top").toInt32();
+    sal_Int32 nTextTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("TextTop should be 5388", nTextTop > 4000);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNumbering.doc")
 {
-    CPPUNIT_ASSERT_EQUAL( OUString("2."), parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand") );
+    CPPUNIT_ASSERT_EQUAL( OUString("2."), parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr) );
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
@@ -1099,12 +1099,12 @@ DECLARE_WW8EXPORT_TEST(testTdf117885, "tdf117885.doc")
 
     /* Get the vertical position of the paragraph containing the text "Start" */
     sal_Int32 nParaA_Top = getXPath(pXmlDoc,
-        "/root/page/body/column[1]/body/txt[text()='Start']/infos/bounds", "top"
+        "/root/page/body/column[1]/body/txt[text()='Start']/infos/bounds"_ostr, "top"_ostr
         ).toInt32();
 
     /* Get the vertical position of the paragraph containing the text "Top B" */
     sal_Int32 nParaB_Top = getXPath(pXmlDoc,
-        "/root/page/body/column[2]/body/txt[text()='Top B']/infos/bounds", "top"
+        "/root/page/body/column[2]/body/txt[text()='Top B']/infos/bounds"_ostr, "top"_ostr
         ).toInt32();
 
     /* These two paragraphs are supposed to be at the top of the left

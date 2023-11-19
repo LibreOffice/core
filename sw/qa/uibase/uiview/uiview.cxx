@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
     // Then export as well:
     save("writer8");
     xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
-    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='KeepRatio']", "true");
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='KeepRatio']"_ostr, "true");
 }
 
 namespace

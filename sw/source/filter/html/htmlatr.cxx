@@ -773,7 +773,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
     {
         HtmlWriter html(rWrt.Strm(), rWrt.maNamespace);
         html.prettyPrint(rWrt.m_bPrettyPrint);
-        html.start(OOO_STRING_SVTOOLS_HTML_li);
+        html.start(OOO_STRING_SVTOOLS_HTML_li ""_ostr);
         if (!bNumbered)
         {
             // Handles list headers (<text:list-header> ODF element)
@@ -2068,7 +2068,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
         HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
         aHtml.prettyPrint(rWrt.m_bPrettyPrint);
-        aHtml.start(OOO_STRING_SVTOOLS_HTML_horzrule);
+        aHtml.start(OOO_STRING_SVTOOLS_HTML_horzrule ""_ostr);
 
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
         if( !pItemSet )
@@ -2521,7 +2521,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
                         HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
                         aHtml.prettyPrint(rWrt.m_bPrettyPrint);
-                        aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
+                        aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
                     }
                     else if (c == CH_TXT_ATR_FORMELEMENT)
                     {
@@ -2600,11 +2600,11 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         {
             HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
             aHtml.prettyPrint(rWrt.m_bPrettyPrint);
-            aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
+            aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
             const SvxULSpaceItem& rULSpace = pNd->GetSwAttrSet().Get(RES_UL_SPACE);
             if (rULSpace.GetLower() > 0 && !bEndOfCell)
             {
-                aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
+                aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
             }
             rWrt.SetLFPossible(true);
         }
@@ -2627,7 +2627,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
         HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
         aHtml.prettyPrint(rWrt.m_bPrettyPrint);
-        aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak);
+        aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pString);
         aHtml.end();
 

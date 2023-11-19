@@ -262,7 +262,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             break;
         case LOK_CALLBACK_STATE_CHANGED:
             {
-                OString aTrackedChangeIndexPrefix(".uno:TrackedChangeIndex=");
+                OString aTrackedChangeIndexPrefix(".uno:TrackedChangeIndex="_ostr);
                 if (aPayload.startsWith(aTrackedChangeIndexPrefix))
                 {
                     OString sIndex = aPayload.copy(aTrackedChangeIndexPrefix.getLength());
@@ -381,7 +381,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelection)
 {
     SwXTextDocument* pXTextDocument = createDoc("shape-with-text.fodt");
     // No crash, just empty output for unexpected mime type.
-    CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "foo/bar"));
+    CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "foo/bar"_ostr));
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the first word.
@@ -390,10 +390,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelection)
     pWrtShell->SelWrd();
 
     // Make sure that we selected text from the body text.
-    CPPUNIT_ASSERT_EQUAL(OString("Hello"), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"));
+    CPPUNIT_ASSERT_EQUAL("Hello"_ostr, apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"_ostr));
 
     // Make sure we produce something for HTML.
-    CPPUNIT_ASSERT(!apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html").isEmpty());
+    CPPUNIT_ASSERT(!apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html"_ostr).isEmpty());
 
     // Now select some shape text and check again.
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -404,7 +404,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelection)
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     ESelection aWordSelection(0, 0, 0, 5);
     rEditView.SetSelection(aWordSelection);
-    CPPUNIT_ASSERT_EQUAL(OString("Shape"), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"));
+    CPPUNIT_ASSERT_EQUAL("Shape"_ostr, apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionLineLimit)
@@ -420,11 +420,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionLineLimit)
     // Create a selection.
     pWrtShell->SelAll();
 
-    OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8");
+    OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"_ostr);
 
     CPPUNIT_ASSERT_EQUAL(OString(sOriginalText), sPlainText.trim());
 
-    OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html");
+    OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html"_ostr);
 
     int nStart = sHtmlText.indexOf(u8"Estonian");
 
@@ -460,11 +460,11 @@ Heading on second page");
     // Create a selection.
     pWrtShell->SelAll();
 
-    OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8");
+    OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"_ostr);
 
     CPPUNIT_ASSERT_EQUAL(OString(sOriginalText), sPlainText.trim());
 
-    OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html");
+    OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html"_ostr);
 
     int nStart = sHtmlText.indexOf(u8"Heading");
 
@@ -1688,7 +1688,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         aViewOptions.SetOnlineSpell(true);
         pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
     }
-    CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("PS;Default"_ostr, pXTextDocument->getViewRenderState());
 
     // Create a second view
     SfxLokHelper::createView();
@@ -1701,11 +1701,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         aViewOptions.SetOnlineSpell(true);
         pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
     }
-    CPPUNIT_ASSERT_EQUAL(OString("S;Default"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXTextDocument->getViewRenderState());
 
     // Switch back to the first view, and check that the options string is the same
     SfxLokHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("PS;Default"_ostr, pXTextDocument->getViewRenderState());
 
     // Switch back to the second view, and change to dark mode
     SfxLokHelper::setView(nSecondViewId);
@@ -1720,10 +1720,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         );
         comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
     }
-    CPPUNIT_ASSERT_EQUAL(OString("S;Dark"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXTextDocument->getViewRenderState());
     // Switch back to the first view, and check that the options string is the same
     SfxLokHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("PS;Default"_ostr, pXTextDocument->getViewRenderState());
 }
 
 // Helper function to get a tile to a bitmap and check the pixel color
@@ -1984,7 +1984,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
     // - Expected: 1418, 1418, 0, 0
     // - Actual  : 1418, 1418, 1024, 1024
     // i.e. the anchor position was a non-empty rectangle.
-    CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 0"), aAnchorPos);
+    CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 0"_ostr, aAnchorPos);
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
@@ -2417,7 +2417,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMESupport)
     SwWrtShell* pWrtShell = pView->GetWrtShellPtr();
 
     // sequence of chinese IME compositions when 'nihao' is typed in an IME
-    const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
+    const std::vector<OString> aUtf8Inputs{ "年"_ostr, "你"_ostr, "你好"_ostr, "你哈"_ostr, "你好"_ostr, "你好"_ostr };
     std::vector<OUString> aInputs;
     std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
             std::back_inserter(aInputs), [](OString aInput) {
@@ -3193,8 +3193,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHyperlink)
             MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(OString("hyperlink"), m_sHyperlinkText);
-    CPPUNIT_ASSERT_EQUAL(OString("http://example.com/"), m_sHyperlinkLink);
+    CPPUNIT_ASSERT_EQUAL("hyperlink"_ostr, m_sHyperlinkText);
+    CPPUNIT_ASSERT_EQUAL("http://example.com/"_ostr, m_sHyperlinkLink);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFieldmark)
@@ -3233,13 +3233,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
         boost::property_tree::read_json(aStream, aTree);
 
         OString sAction( aTree.get_child("action").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+        CPPUNIT_ASSERT_EQUAL("show"_ostr, sAction);
 
         OString sType( aTree.get_child("type").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
+        CPPUNIT_ASSERT_EQUAL("drop-down"_ostr, sType);
 
         OString sTextArea( aTree.get_child("textArea").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("1538, 1418, 1026, 275"), sTextArea);
+        CPPUNIT_ASSERT_EQUAL("1538, 1418, 1026, 275"_ostr, sTextArea);
 
         boost::property_tree::ptree aItems = aTree.get_child("params").get_child("items");
         CPPUNIT_ASSERT_EQUAL(size_t(6), aItems.size());
@@ -3250,13 +3250,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
             aItemList.append(item.second.get_value<std::string>().c_str()
                 + OString::Concat(";"));
         }
-        CPPUNIT_ASSERT_EQUAL(OString("2019/2020;2020/2021;2021/2022;2022/2023;2023/2024;2024/2025;"), aItemList.toString());
+        CPPUNIT_ASSERT_EQUAL("2019/2020;2020/2021;2021/2022;2022/2023;2023/2024;2024/2025;"_ostr, aItemList.toString());
 
         OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("1"), sSelected);
+        CPPUNIT_ASSERT_EQUAL("1"_ostr, sSelected);
 
         OString sPlaceholder( aTree.get_child("params").get_child("placeholderText").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("No Item specified"), sPlaceholder);
+        CPPUNIT_ASSERT_EQUAL("No Item specified"_ostr, sPlaceholder);
     }
 
     // Move the cursor back so the button becomes hidden.
@@ -3269,10 +3269,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
         boost::property_tree::read_json(aStream, aTree);
 
         OString sAction( aTree.get_child("action").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("hide"), sAction);
+        CPPUNIT_ASSERT_EQUAL("hide"_ostr, sAction);
 
         OString sType( aTree.get_child("type").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
+        CPPUNIT_ASSERT_EQUAL("drop-down"_ostr, sType);
     }
 }
 
@@ -3307,7 +3307,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
         boost::property_tree::read_json(aStream, aTree);
 
         OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("1"), sSelected);
+        CPPUNIT_ASSERT_EQUAL("1"_ostr, sSelected);
     }
     m_aFormFieldButton = "";
 
@@ -3329,7 +3329,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
         boost::property_tree::read_json(aStream, aTree);
 
         OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("3"), sSelected);
+        CPPUNIT_ASSERT_EQUAL("3"_ostr, sSelected);
     }
 }
 
@@ -3364,7 +3364,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoSelectio
         boost::property_tree::read_json(aStream, aTree);
 
         OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("-1"), sSelected);
+        CPPUNIT_ASSERT_EQUAL("-1"_ostr, sSelected);
     }
 }
 
@@ -3453,7 +3453,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoItem)
         CPPUNIT_ASSERT_EQUAL(size_t(0), aItems.size());
 
         OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("-1"), sSelected);
+        CPPUNIT_ASSERT_EQUAL("-1"_ostr, sSelected);
     }
 }
 
@@ -3508,7 +3508,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTableCommentRemoveCallback)
 
     //check for comment remove callback
     OString sAction(aView.m_aComment.get_child("action").get_value<std::string>());
-    CPPUNIT_ASSERT_EQUAL(OString("Remove"), sAction);
+    CPPUNIT_ASSERT_EQUAL("Remove"_ostr, sAction);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellOnlineRenderParameter)
@@ -3730,14 +3730,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlinePortions)
     // Then make sure that the portion list is updated, so "bar" can be marked as deleted without
     // marking " after" as well:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", "foo");
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion", "ins");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr, "portion"_ostr, "foo");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr, "portion"_ostr, "ins");
     // Without the accompanying fix in place, this test would have failed width:
     // - Expected: bar
     // - Actual  : bar after
     // i.e. the portion list was outdated, even " after" was marked as deleted.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[3]", "portion", "bar");
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[4]", "portion", " after");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr, "portion"_ostr, "bar");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr, "portion"_ostr, " after");
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
@@ -3770,14 +3770,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         OString sAction( aTree.get_child("action").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+        CPPUNIT_ASSERT_EQUAL("show"_ostr, sAction);
         OString sRectangles( aTree.get_child("rectangles").get_value<std::string>() );
         CPPUNIT_ASSERT(!sRectangles.isEmpty());
         // Without the accompanying fix in place, this test would have failed width:
         // uncaught exception of type std::exception (or derived).
         // - No such node (alias)
         OString sAlias( aTree.get_child("alias").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("my alias"), sAlias);
+        CPPUNIT_ASSERT_EQUAL("my alias"_ostr, sAlias);
     }
 
     // And when leaving that content control:
@@ -3788,7 +3788,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     OString sAction( aTree.get_child("action").get_value<std::string>() );
-    CPPUNIT_ASSERT_EQUAL(OString("hide"), sAction);
+    CPPUNIT_ASSERT_EQUAL("hide"_ostr, sAction);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControl)
@@ -3838,7 +3838,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControl)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         OString sAction( aTree.get_child("action").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+        CPPUNIT_ASSERT_EQUAL("show"_ostr, sAction);
         OString sRectangles( aTree.get_child("rectangles").get_value<std::string>() );
         CPPUNIT_ASSERT(!sRectangles.isEmpty());
         boost::optional<boost::property_tree::ptree&> oItems = aTree.get_child_optional("items");
@@ -3913,7 +3913,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPictureContentControl)
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     OString sAction( aTree.get_child("action").get_value<std::string>() );
-    CPPUNIT_ASSERT_EQUAL(OString("change-picture"), sAction);
+    CPPUNIT_ASSERT_EQUAL("change-picture"_ostr, sAction);
 
     // And when replacing the image:
     std::map<OUString, OUString> aArguments;
@@ -3965,7 +3965,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControl)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         OString sAction( aTree.get_child("action").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+        CPPUNIT_ASSERT_EQUAL("show"_ostr, sAction);
         OString sRectangles( aTree.get_child("rectangles").get_value<std::string>() );
         CPPUNIT_ASSERT(!sRectangles.isEmpty());
         boost::optional<boost::property_tree::ptree&> oDate = aTree.get_child_optional("date");
@@ -4023,7 +4023,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]"_ostr, "expand"_ostr, sAuthor);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
@@ -4039,7 +4039,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
     Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]"_ostr, "expand"_ostr, sAuthor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

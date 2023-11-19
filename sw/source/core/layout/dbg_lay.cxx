@@ -528,12 +528,12 @@ static OString lcl_RowInfo(const SwRowFrame* pFrame)
 {
     // dummy, needs actual functionality...
     if (pFrame == nullptr)
-        return "";
+        return ""_ostr;
     const SwTableLine* pTabLine = pFrame->GetTabLine();
     if (pTabLine == nullptr)
-        return "";
+        return ""_ostr;
 
-    return "RowInfo";
+    return "RowInfo"_ostr;
 }
 
 static OUString lcl_CellText(const SwCellFrame* pFrame)

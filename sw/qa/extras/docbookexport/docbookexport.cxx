@@ -24,7 +24,7 @@ DECLARE_DOCBOOKEXPORT_TEST(testsimple, "simple.docx")
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPathContent(pDoc, "/article/para", "aaaa");
+    assertXPathContent(pDoc, "/article/para"_ostr, "aaaa");
 }
 
 /* the test actually should crash with this file */

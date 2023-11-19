@@ -800,7 +800,7 @@ void SwTextFrame::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
     const SwTextNode *pTextNode = GetTextNodeFirst();
     (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(pTextNode->GetIndex()) );
 
-    OString aMode = "Horizontal";
+    OString aMode = "Horizontal"_ostr;
     if (IsVertLRBT())
     {
         aMode = "VertBTLR";

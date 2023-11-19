@@ -749,7 +749,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testImportRTF)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
 
     // Insert the RTF at the cursor position.
-    OString aData = "{\\rtf1 Hello world!\\par}";
+    OString aData = "{\\rtf1 Hello world!\\par}"_ostr;
     SvMemoryStream aStream(const_cast<char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCursor());
     Reader* pRTFReader = SwReaderWriter::GetRtfReader();
@@ -1589,10 +1589,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
 
     // The first polyline in the document has a number of points to draw arcs,
     // the last one jumps back to the start, so we call "end" the last but one.
-    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "(//polyline)[1]/point[last()-1]", "x").toInt32();
+    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "(//polyline)[1]/point[last()-1]"_ostr, "x"_ostr).toInt32();
     // The second polyline has a different start point, but the arc it draws
     // should end at the ~same position as the first polyline.
-    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "(//polyline)[2]/point[last()]", "x").toInt32();
+    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "(//polyline)[2]/point[last()]"_ostr, "x"_ostr).toInt32();
 
     // nFirstEnd was 6023 and nSecondEnd was 6648, now they should be much closer, e.g. nFirstEnd = 6550, nSecondEnd = 6548
     OString aMsg = "nFirstEnd is " + OString::number(nFirstEnd) + ", nSecondEnd is " + OString::number(nSecondEnd);
@@ -1652,7 +1652,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000115)
     // This was 1: the long paragraph in the B1 cell did flow over to the
     // second page, so there was only one paragraph in the second cell of the
     // second page.
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt"_ostr, 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
@@ -1690,7 +1690,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90003)
     CPPUNIT_ASSERT(pXmlDoc);
     // This was 1: an unexpected fly portion was created, resulting in too
     // large x position for the empty paragraph marker.
-    assertXPath(pXmlDoc, "//SwFixPortion[@type='PortionType::Fly']", 0);
+    assertXPath(pXmlDoc, "//SwFixPortion[@type='PortionType::Fly']"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)

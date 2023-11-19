@@ -62,15 +62,15 @@ OString ExportPaMToHTML(SwPaM* pCursor)
         }
         aResult
             = OString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
-        aResult = aResult.replaceAll("<p", "<span");
-        aResult = aResult.replaceAll("</p>", "</span>");
+        aResult = aResult.replaceAll("<p"_ostr, "<span"_ostr);
+        aResult = aResult.replaceAll("</p>"_ostr, "</span>"_ostr);
 
         // HTML has for that <br> and <p> also does new line
-        aResult = aResult.replaceAll("<ul>", "");
-        aResult = aResult.replaceAll("</ul>", "");
-        aResult = aResult.replaceAll("<ol>", "");
-        aResult = aResult.replaceAll("</ol>", "");
-        aResult = aResult.replaceAll("\n", "").trim();
+        aResult = aResult.replaceAll("<ul>"_ostr, ""_ostr);
+        aResult = aResult.replaceAll("</ul>"_ostr, ""_ostr);
+        aResult = aResult.replaceAll("<ol>"_ostr, ""_ostr);
+        aResult = aResult.replaceAll("</ol>"_ostr, ""_ostr);
+        aResult = aResult.replaceAll("\n"_ostr, ""_ostr).trim();
         return aResult;
     }
     return {};

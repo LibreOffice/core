@@ -580,7 +580,7 @@ bool SwHTMLParser::InsertEmbed()
             auto it = m_aAllowedRTFOLEMimeTypes.find(aType);
             if (m_aAllowedRTFOLEMimeTypes.empty() || it != m_aAllowedRTFOLEMimeTypes.end())
             {
-                OString aMagic("{\\object");
+                OString aMagic("{\\object"_ostr);
                 OString aHeader(read_uInt8s_ToOString(aFileStream, aMagic.getLength()));
                 aFileStream.Seek(0);
                 if (aHeader == aMagic)

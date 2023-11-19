@@ -623,22 +623,22 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_blockquote)
             {
                 rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_blockquote);
+                rToken = OOO_STRING_SVTOOLS_HTML_blockquote ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_citation)
             {
                 rRefPoolId = RES_POOLCHR_HTML_CITATION;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_citation);
+                rToken = OOO_STRING_SVTOOLS_HTML_citation ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_code)
             {
                 rRefPoolId = RES_POOLCHR_HTML_CODE;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_code);
+                rToken = OOO_STRING_SVTOOLS_HTML_code ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_definstance)
             {
                 rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_definstance);
+                rToken = OOO_STRING_SVTOOLS_HTML_definstance ""_ostr;
             }
             else if (!bChrFormat && (aNm == OOO_STRING_SVTOOLS_HTML_dd ||
                                   aNm == OOO_STRING_SVTOOLS_HTML_dt))
@@ -656,19 +656,19 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                     else if (nDefListLvl & HTML_DLCOLL_DD)
                     {
                         rRefPoolId = RES_POOLCOLL_HTML_DD;
-                        rToken = OString(OOO_STRING_SVTOOLS_HTML_dd);
+                        rToken = OOO_STRING_SVTOOLS_HTML_dd ""_ostr;
                     }
                     else
                     {
                         rRefPoolId = RES_POOLCOLL_HTML_DT;
-                        rToken = OString(OOO_STRING_SVTOOLS_HTML_dt);
+                        rToken = OOO_STRING_SVTOOLS_HTML_dt ""_ostr;
                     }
                 }
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_emphasis)
             {
                 rRefPoolId = RES_POOLCHR_HTML_EMPHASIS;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_emphasis);
+                rToken = OOO_STRING_SVTOOLS_HTML_emphasis ""_ostr;
             }
             else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_horzrule)
             {
@@ -678,44 +678,44 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_keyboard)
             {
                 rRefPoolId = RES_POOLCHR_HTML_KEYBOARD;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_keyboard);
+                rToken = OOO_STRING_SVTOOLS_HTML_keyboard ""_ostr;
             }
             else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_listing)
             {
                 // Export Listings as PRE or PRE-derived template
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
+                rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
                 rRefPoolId = RES_POOLCOLL_HTML_PRE;
                 nDeep = CSS1_FMT_CMPREF;
             }
             else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_preformtxt)
             {
                 rRefPoolId = RES_POOLCOLL_HTML_PRE;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
+                rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_sample)
             {
                 rRefPoolId = RES_POOLCHR_HTML_SAMPLE;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_sample);
+                rToken = OOO_STRING_SVTOOLS_HTML_sample ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_strong)
             {
                 rRefPoolId = RES_POOLCHR_HTML_STRONG;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_strong);
+                rToken = OOO_STRING_SVTOOLS_HTML_strong ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_teletype)
             {
                 rRefPoolId = RES_POOLCHR_HTML_TELETYPE;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_teletype);
+                rToken = OOO_STRING_SVTOOLS_HTML_teletype ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_variable)
             {
                 rRefPoolId = RES_POOLCHR_HTML_VARIABLE;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_variable);
+                rToken = OOO_STRING_SVTOOLS_HTML_variable ""_ostr;
             }
             else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_xmp)
             {
                 // export XMP as PRE (but not the template as Style)
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
+                rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
                 rRefPoolId = RES_POOLCOLL_HTML_PRE;
                 nDeep = CSS1_FMT_CMPREF;
             }
@@ -736,41 +736,41 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 bStop = (nDeep==0);
                 break;
             case RES_POOLCOLL_TEXT:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);
+                rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                 break;
             case RES_POOLCOLL_HEADLINE1:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_head1);
+                rToken = OOO_STRING_SVTOOLS_HTML_head1 ""_ostr;
                 break;
             case RES_POOLCOLL_HEADLINE2:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_head2);
+                rToken = OOO_STRING_SVTOOLS_HTML_head2 ""_ostr;
                 break;
             case RES_POOLCOLL_HEADLINE3:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_head3);
+                rToken = OOO_STRING_SVTOOLS_HTML_head3 ""_ostr;
                 break;
             case RES_POOLCOLL_HEADLINE4:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_head4);
+                rToken = OOO_STRING_SVTOOLS_HTML_head4 ""_ostr;
                 break;
             case RES_POOLCOLL_HEADLINE5:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_head5);
+                rToken = OOO_STRING_SVTOOLS_HTML_head5 ""_ostr;
                 break;
             case RES_POOLCOLL_HEADLINE6:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_head6);
+                rToken = OOO_STRING_SVTOOLS_HTML_head6 ""_ostr;
                 break;
             case RES_POOLCOLL_SEND_ADDRESS:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_address);
+                rToken = OOO_STRING_SVTOOLS_HTML_address ""_ostr;
                 break;
             case RES_POOLCOLL_HTML_BLOCKQUOTE:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_blockquote);
+                rToken = OOO_STRING_SVTOOLS_HTML_blockquote ""_ostr;
                 break;
             case RES_POOLCOLL_HTML_PRE:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
+                rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
                 break;
 
             case RES_POOLCOLL_HTML_DD:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_dd);
+                rToken = OOO_STRING_SVTOOLS_HTML_dd ""_ostr;
                 break;
             case RES_POOLCOLL_HTML_DT:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_dt);
+                rToken = OOO_STRING_SVTOOLS_HTML_dt ""_ostr;
                 break;
 
             case RES_POOLCOLL_TABLE:
@@ -789,7 +789,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                              OOO_STRING_SVTOOLS_HTML_parabreak;
                 }
                 else
-                    rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);
+                    rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                 break;
             case RES_POOLCOLL_HTML_HR:
                 // do not export HR !
@@ -798,7 +798,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             case RES_POOLCOLL_FOOTNOTE:
                 if( !nDeep )
                 {
-                    rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);
+                    rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                     rClass = OOO_STRING_SVTOOLS_HTML_sdfootnote;
                     rRefPoolId = RES_POOLCOLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
@@ -807,7 +807,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             case RES_POOLCOLL_ENDNOTE:
                 if( !nDeep )
                 {
-                    rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);
+                    rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                     rClass = OOO_STRING_SVTOOLS_HTML_sdendnote;
                     rRefPoolId = RES_POOLCOLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
@@ -816,44 +816,44 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
 
             // character templates
             case RES_POOLCHR_HTML_EMPHASIS:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_emphasis);
+                rToken = OOO_STRING_SVTOOLS_HTML_emphasis ""_ostr;
                 break;
             case RES_POOLCHR_HTML_CITATION:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_citation);
+                rToken = OOO_STRING_SVTOOLS_HTML_citation ""_ostr;
                 break;
             case RES_POOLCHR_HTML_STRONG:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_strong);
+                rToken = OOO_STRING_SVTOOLS_HTML_strong ""_ostr;
                 break;
             case RES_POOLCHR_HTML_CODE:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_code);
+                rToken = OOO_STRING_SVTOOLS_HTML_code ""_ostr;
                 break;
             case RES_POOLCHR_HTML_SAMPLE:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_sample);
+                rToken = OOO_STRING_SVTOOLS_HTML_sample ""_ostr;
                 break;
             case RES_POOLCHR_HTML_KEYBOARD:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_keyboard);
+                rToken = OOO_STRING_SVTOOLS_HTML_keyboard ""_ostr;
                 break;
             case RES_POOLCHR_HTML_VARIABLE:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_variable);
+                rToken = OOO_STRING_SVTOOLS_HTML_variable ""_ostr;
                 break;
             case RES_POOLCHR_HTML_DEFINSTANCE:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_definstance);
+                rToken = OOO_STRING_SVTOOLS_HTML_definstance ""_ostr;
                 break;
             case RES_POOLCHR_HTML_TELETYPE:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_teletype);
+                rToken = OOO_STRING_SVTOOLS_HTML_teletype ""_ostr;
                 break;
 
             case RES_POOLCHR_INET_NORMAL:
                 if( pPseudo )
                 {
-                    rToken = OString(OOO_STRING_SVTOOLS_HTML_anchor);
+                    rToken = OOO_STRING_SVTOOLS_HTML_anchor ""_ostr;
                     *pPseudo = OStringToOUString( sCSS1_link, RTL_TEXTENCODING_ASCII_US );
                 }
                 break;
             case RES_POOLCHR_INET_VISIT:
                 if( pPseudo )
                 {
-                    rToken = OString(OOO_STRING_SVTOOLS_HTML_anchor);
+                    rToken = OOO_STRING_SVTOOLS_HTML_anchor ""_ostr;
                     *pPseudo = OStringToOUString( sCSS1_visited, RTL_TEXTENCODING_ASCII_US );
                 }
                 break;

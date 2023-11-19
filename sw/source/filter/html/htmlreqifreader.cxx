@@ -240,7 +240,7 @@ OString InsertOLE1HeaderFromOle10NativeStream(const tools::SvRef<SotStorage>& xS
     // FormatID: constant means the ClassName field is present.
     rOle1.WriteUInt32(0x00000005);
     // ClassName: null terminated pascal string.
-    OString aPresentationClassName("METAFILEPICT");
+    OString aPresentationClassName("METAFILEPICT"_ostr);
     rOle1.WriteUInt32(aPresentationClassName.getLength() + 1);
     rOle1.WriteOString(aPresentationClassName);
     rOle1.WriteChar(0);
@@ -319,7 +319,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
     // FormatID: constant means the ClassName field is present.
     rOle1.WriteUInt32(0x00000005);
     // ClassName: null terminated pascal string.
-    OString aPresentationClassName("METAFILEPICT");
+    OString aPresentationClassName("METAFILEPICT"_ostr);
     rOle1.WriteUInt32(aPresentationClassName.getLength() + 1);
     rOle1.WriteOString(aPresentationClassName);
     rOle1.WriteChar(0);
@@ -514,7 +514,7 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
 
     // Start objclass.
     rRtf.WriteOString("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_OBJCLASS " ");
-    OString aClassName("PBrush");
+    OString aClassName("PBrush"_ostr);
     rRtf.WriteOString(aClassName);
     // End objclass.
     rRtf.WriteOString("}");
@@ -587,7 +587,7 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
     // FormatID: constant means the ClassName field is present.
     aOle1.WriteUInt32(0x00000005);
     // ClassName: null terminated pascal string.
-    OString aPresentationClassName("METAFILEPICT");
+    OString aPresentationClassName("METAFILEPICT"_ostr);
     aOle1.WriteUInt32(aPresentationClassName.getLength() + 1);
     aOle1.WriteOString(aPresentationClassName);
     aOle1.WriteChar(0);

@@ -1964,12 +1964,12 @@ void lcl_TextFrameShadow(std::vector<std::pair<OString, OString>>& rFlyPropertie
     if (aShadowItem.GetLocation() == SvxShadowLocation::NONE)
         return;
 
-    rFlyProperties.push_back(std::make_pair<OString, OString>("fShadow", OString::number(1)));
+    rFlyProperties.push_back(std::make_pair<OString, OString>("fShadow"_ostr, OString::number(1)));
 
     const Color& rColor = aShadowItem.GetColor();
     // We in fact need RGB to BGR, but the transformation is symmetric.
     rFlyProperties.push_back(std::make_pair<OString, OString>(
-        "shadowColor", OString::number(wwUtility::RGBToBGR(rColor))));
+        "shadowColor"_ostr, OString::number(wwUtility::RGBToBGR(rColor))));
 
     // Twips -> points -> EMUs -- hacky, the intermediate step hides rounding errors on roundtrip.
     OString aShadowWidth = OString::number(sal_Int32(aShadowItem.GetWidth() / 20) * 12700);
@@ -2013,7 +2013,7 @@ void lcl_TextFrameRelativeSize(std::vector<std::pair<OString, OString>>& rFlyPro
     if (nWidthPercent && nWidthPercent != SwFormatFrameSize::SYNCED)
     {
         rFlyProperties.push_back(
-            std::make_pair<OString, OString>("pctHoriz", OString::number(nWidthPercent * 10)));
+            std::make_pair<OString, OString>("pctHoriz"_ostr, OString::number(nWidthPercent * 10)));
 
         OString aRelation;
         switch (rSize.GetWidthPercentRelation())
@@ -2032,7 +2032,7 @@ void lcl_TextFrameRelativeSize(std::vector<std::pair<OString, OString>>& rFlyPro
         return;
 
     rFlyProperties.push_back(
-        std::make_pair<OString, OString>("pctVert", OString::number(nHeightPercent * 10)));
+        std::make_pair<OString, OString>("pctVert"_ostr, OString::number(nHeightPercent * 10)));
 
     OString aRelation;
     switch (rSize.GetHeightPercentRelation())
@@ -2190,7 +2190,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
             // Shape properties.
             m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-                "shapeType", OString::number(ESCHER_ShpInst_TextBox)));
+                "shapeType"_ostr, OString::number(ESCHER_ShpInst_TextBox)));
 
             // When a frame has some low height, but automatically expanded due
             // to lots of contents, this size contains the real size.
@@ -3410,11 +3410,13 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
     {
         // Wrap: top and bottom spacing, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dxWrapDistLeft", OString::number(o3tl::convert(rLRSpace.GetLeft(), o3tl::Length::twip,
-                                                            o3tl::Length::emu))));
+            "dxWrapDistLeft"_ostr,
+            OString::number(
+                o3tl::convert(rLRSpace.GetLeft(), o3tl::Length::twip, o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dxWrapDistRight", OString::number(o3tl::convert(
-                                   rLRSpace.GetRight(), o3tl::Length::twip, o3tl::Length::emu))));
+            "dxWrapDistRight"_ostr,
+            OString::number(
+                o3tl::convert(rLRSpace.GetRight(), o3tl::Length::twip, o3tl::Length::emu))));
     }
 }
 
@@ -3509,11 +3511,13 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
     {
         // Wrap: top and bottom spacing, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dyWrapDistTop", OString::number(o3tl::convert(rULSpace.GetUpper(), o3tl::Length::twip,
-                                                           o3tl::Length::emu))));
+            "dyWrapDistTop"_ostr,
+            OString::number(
+                o3tl::convert(rULSpace.GetUpper(), o3tl::Length::twip, o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dyWrapDistBottom", OString::number(o3tl::convert(
-                                    rULSpace.GetLower(), o3tl::Length::twip, o3tl::Length::emu))));
+            "dyWrapDistBottom"_ostr,
+            OString::number(
+                o3tl::convert(rULSpace.GetLower(), o3tl::Length::twip, o3tl::Length::emu))));
     }
 }
 
@@ -3575,11 +3579,11 @@ void RtfAttributeOutput::FormatVertOrientation(const SwFormatVertOrient& rFlyVer
     {
         case text::RelOrientation::PAGE_FRAME:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posrelv", OString::number(1)));
+                std::make_pair<OString, OString>("posrelv"_ostr, OString::number(1)));
             break;
         default:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posrelv", OString::number(2)));
+                std::make_pair<OString, OString>("posrelv"_ostr, OString::number(2)));
             m_rExport.Strm()
                 .WriteOString(OOO_STRING_SVTOOLS_RTF_SHPBYPARA)
                 .WriteOString(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
@@ -3591,17 +3595,17 @@ void RtfAttributeOutput::FormatVertOrientation(const SwFormatVertOrient& rFlyVer
         case text::VertOrientation::TOP:
         case text::VertOrientation::LINE_TOP:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posv", OString::number(1)));
+                std::make_pair<OString, OString>("posv"_ostr, OString::number(1)));
             break;
         case text::VertOrientation::BOTTOM:
         case text::VertOrientation::LINE_BOTTOM:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posv", OString::number(3)));
+                std::make_pair<OString, OString>("posv"_ostr, OString::number(3)));
             break;
         case text::VertOrientation::CENTER:
         case text::VertOrientation::LINE_CENTER:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posv", OString::number(2)));
+                std::make_pair<OString, OString>("posv"_ostr, OString::number(2)));
             break;
         default:
             break;
@@ -3625,11 +3629,11 @@ void RtfAttributeOutput::FormatHorizOrientation(const SwFormatHoriOrient& rFlyHo
     {
         case text::RelOrientation::PAGE_FRAME:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posrelh", OString::number(1)));
+                std::make_pair<OString, OString>("posrelh"_ostr, OString::number(1)));
             break;
         default:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posrelh", OString::number(2)));
+                std::make_pair<OString, OString>("posrelh"_ostr, OString::number(2)));
             m_rExport.Strm()
                 .WriteOString(OOO_STRING_SVTOOLS_RTF_SHPBXCOLUMN)
                 .WriteOString(OOO_STRING_SVTOOLS_RTF_SHPBXIGNORE);
@@ -3640,15 +3644,15 @@ void RtfAttributeOutput::FormatHorizOrientation(const SwFormatHoriOrient& rFlyHo
     {
         case text::HoriOrientation::LEFT:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posh", OString::number(1)));
+                std::make_pair<OString, OString>("posh"_ostr, OString::number(1)));
             break;
         case text::HoriOrientation::CENTER:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posh", OString::number(2)));
+                std::make_pair<OString, OString>("posh"_ostr, OString::number(2)));
             break;
         case text::HoriOrientation::RIGHT:
             m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("posh", OString::number(3)));
+                std::make_pair<OString, OString>("posh"_ostr, OString::number(3)));
             break;
         default:
             break;
@@ -3693,7 +3697,7 @@ void RtfAttributeOutput::FormatBackground(const SvxBrushItem& rBrush)
         const Color& rColor = rBrush.GetColor();
         // We in fact need RGB to BGR, but the transformation is symmetric.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillColor", OString::number(wwUtility::RGBToBGR(rColor))));
+            "fillColor"_ostr, OString::number(wwUtility::RGBToBGR(rColor))));
     }
     else if (!rBrush.GetColor().IsTransparent())
     {
@@ -3713,7 +3717,7 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
         return;
 
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-        "fillType", OString::number(7))); // Shade using the fillAngle
+        "fillType"_ostr, OString::number(7))); // Shade using the fillAngle
 
     const basegfx::BGradient& rGradient(rFillGradient.GetGradientValue());
     const basegfx::BColorStops& rColorStops(rGradient.GetColorStops());
@@ -3729,14 +3733,14 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
     // exchanged here fillColor/fillBackColor to get the correct order
     const Color aStartColor(rColorStops.front().getStopColor());
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-        "fillColor", OString::number(wwUtility::RGBToBGR(aStartColor))));
+        "fillColor"_ostr, OString::number(wwUtility::RGBToBGR(aStartColor))));
 
     if (rColorStops.size() < 3)
     {
         // two-color version, use back as 2nd color
         const Color aEndColor(rColorStops.back().getStopColor());
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillBackColor", OString::number(wwUtility::RGBToBGR(aEndColor))));
+            "fillBackColor"_ostr, OString::number(wwUtility::RGBToBGR(aEndColor))));
     }
     else
     {
@@ -3745,9 +3749,9 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
         // The 2nd color is the in-between color, use it
         const Color aEndColor(rColorStops[1].getStopColor());
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillBackColor", OString::number(wwUtility::RGBToBGR(aEndColor))));
+            "fillBackColor"_ostr, OString::number(wwUtility::RGBToBGR(aEndColor))));
         m_aFlyProperties.push_back(
-            std::make_pair<OString, OString>("fillFocus", OString::number(50)));
+            std::make_pair<OString, OString>("fillFocus"_ostr, OString::number(50)));
     }
 }
 
@@ -3765,17 +3769,21 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
     {
         // Borders: spacing to contents, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dxTextLeft", OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::LEFT),
-                                                        o3tl::Length::twip, o3tl::Length::emu))));
+            "dxTextLeft"_ostr,
+            OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::LEFT),
+                                          o3tl::Length::twip, o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dyTextTop", OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::TOP),
-                                                       o3tl::Length::twip, o3tl::Length::emu))));
+            "dyTextTop"_ostr,
+            OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::TOP), o3tl::Length::twip,
+                                          o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dxTextRight", OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::RIGHT),
-                                                         o3tl::Length::twip, o3tl::Length::emu))));
+            "dxTextRight"_ostr,
+            OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::RIGHT),
+                                          o3tl::Length::twip, o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dyTextBottom", OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::BOTTOM),
-                                                          o3tl::Length::twip, o3tl::Length::emu))));
+            "dyTextBottom"_ostr,
+            OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::BOTTOM),
+                                          o3tl::Length::twip, o3tl::Length::emu))));
 
         const editeng::SvxBorderLine* pLeft = rBox.GetLine(SvxBoxItemLine::LEFT);
         const editeng::SvxBorderLine* pRight = rBox.GetLine(SvxBoxItemLine::RIGHT);
@@ -3785,7 +3793,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
         if (!pLeft && !pRight && !pBottom && !pTop)
         {
             // fLine has default 'true', so need to write it out in case of no border.
-            m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine", "0"));
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine"_ostr, "0"_ostr));
             return;
         }
 
@@ -3805,20 +3813,20 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
 
         if (!pBorder)
         {
-            m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine", "0"));
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine"_ostr, "0"_ostr));
             return;
         }
 
         const Color& rColor = pBorder->GetColor();
         // We in fact need RGB to BGR, but the transformation is symmetric.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "lineColor", OString::number(wwUtility::RGBToBGR(rColor))));
+            "lineColor"_ostr, OString::number(wwUtility::RGBToBGR(rColor))));
 
         double const fConverted(
             editeng::ConvertBorderWidthToWord(pBorder->GetBorderLineStyle(), pBorder->GetWidth()));
         sal_Int32 nWidth = o3tl::convert(fConverted, o3tl::Length::twip, o3tl::Length::emu);
         m_aFlyProperties.push_back(
-            std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
+            std::make_pair<OString, OString>("lineWidth"_ostr, OString::number(nWidth)));
 
         return;
     }
@@ -3932,12 +3940,14 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
         if (nDir == SvxFrameDirection::Vertical_RL_TB)
         {
             // Top to bottom non-ASCII font
-            m_aFlyProperties.push_back(std::make_pair<OString, OString>("txflTextFlow", "3"));
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("txflTextFlow"_ostr, "3"_ostr));
         }
         else if (rDirection.GetValue() == SvxFrameDirection::Vertical_LR_BT)
         {
             // Bottom to top non-ASCII font
-            m_aFlyProperties.push_back(std::make_pair<OString, OString>("txflTextFlow", "2"));
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("txflTextFlow"_ostr, "2"_ostr));
         }
         return;
     }
@@ -4501,7 +4511,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
                         aVerticies.append(";(" + OString::number(aPoly[i].X()) + ","
                                           + OString::number(aPoly[i].Y()) + ")");
                     aFlyProperties.push_back(std::make_pair<OString, OString>(
-                        "pWrapPolygonVertices",
+                        "pWrapPolygonVertices"_ostr,
                         "8;" + OString::number(aPoly.GetSize()) + aVerticies));
                 }
             }
@@ -4509,7 +4519,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
 
         // Below text, behind document, opaque: they all refer to the same thing.
         if (!pFlyFrameFormat->GetOpaque().GetValue())
-            aFlyProperties.push_back(std::make_pair<OString, OString>("fBehindDocument", "1"));
+            aFlyProperties.push_back(
+                std::make_pair<OString, OString>("fBehindDocument"_ostr, "1"_ostr));
 
         if (pAttrSet)
         {

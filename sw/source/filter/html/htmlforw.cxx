@@ -163,7 +163,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
             }
         }
 
-        OString sOut = " ";
+        OString sOut = " "_ostr;
         if( pOpt && (EXTENDED_STYPE != eScriptType ||
                      rDesc.AddListenerParam.isEmpty()) )
             sOut += pOpt;

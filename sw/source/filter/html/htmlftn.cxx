@@ -250,7 +250,7 @@ SwHTMLWriter& OutHTML_SwFormatLineBreak(SwHTMLWriter& rWrt, const SfxPoolItem& r
     const auto& rLineBreak = static_cast<const SwFormatLineBreak&>(rHt);
 
     HtmlWriter aWriter(rWrt.Strm(), rWrt.maNamespace);
-    aWriter.start(OOO_STRING_SVTOOLS_HTML_linebreak);
+    aWriter.start(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
     switch (rLineBreak.GetValue())
     {
         case SwLineBreakClear::NONE:
