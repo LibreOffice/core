@@ -561,7 +561,7 @@ static PyObject *checkType( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
     {
-        OString buf = "pyuno.checkType : expecting one uno.Type argument";
+        OString buf = "pyuno.checkType : expecting one uno.Type argument"_ostr;
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
         return nullptr;
     }
@@ -584,7 +584,7 @@ static PyObject *checkEnum( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
     {
-        OString buf = "pyuno.checkType : expecting one uno.Type argument";
+        OString buf = "pyuno.checkType : expecting one uno.Type argument"_ostr;
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
         return nullptr;
     }
@@ -764,7 +764,7 @@ static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
     }
     else
     {
-        OString buf = "uno.invoke expects object, name, (arg1, arg2, ... )\n";
+        OString buf = "uno.invoke expects object, name, (arg1, arg2, ... )\n"_ostr;
         PyErr_SetString(PyExc_RuntimeError, buf.getStr());
     }
     return ret;
@@ -816,7 +816,7 @@ static PyObject *setCurrentContext(
         }
         else
         {
-            OString buf = "uno.setCurrentContext expects exactly one argument (the current Context)\n";
+            OString buf = "uno.setCurrentContext expects exactly one argument (the current Context)\n"_ostr;
             PyErr_SetString(
                 PyExc_RuntimeError, buf.getStr() );
         }
