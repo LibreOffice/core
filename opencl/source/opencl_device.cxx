@@ -500,7 +500,7 @@ ds_device const & getDeviceSelection(
         /* Setup */
         std::unique_ptr<ds_profile> aProfile;
         ds_status status;
-        status = initDSProfile(aProfile, "LibreOffice v1");
+        status = initDSProfile(aProfile, "LibreOffice v1"_ostr);
 
         if (status != DS_SUCCESS)
         {
