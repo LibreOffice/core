@@ -47,7 +47,7 @@ void Test::testBad() {
     CPPUNIT_ASSERT(!INetContentTypes::parse(in, t, s, &ps));
     CPPUNIT_ASSERT(t.isEmpty());
     CPPUNIT_ASSERT(s.isEmpty());
-    CPPUNIT_ASSERT(bool(ps.end() == ps.find("foo")));
+    CPPUNIT_ASSERT(bool(ps.end() == ps.find("foo"_ostr)));
 }
 
 void Test::testFull() {
@@ -61,7 +61,7 @@ void Test::testFull() {
     CPPUNIT_ASSERT(INetContentTypes::parse(in, t, s, &ps));
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), t);
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), s);
-    auto iter = ps.find("baz");
+    auto iter = ps.find("baz"_ostr);
     CPPUNIT_ASSERT(iter != ps.end());
     CPPUNIT_ASSERT_EQUAL(OUString("boz"), iter->second.m_sValue);
 }
@@ -77,7 +77,7 @@ void Test::testFollow() {
     CPPUNIT_ASSERT(!INetContentTypes::parse(in, t, s));
     CPPUNIT_ASSERT(t.isEmpty());
     CPPUNIT_ASSERT(s.isEmpty());
-    CPPUNIT_ASSERT(bool(ps.end() == ps.find("baz")));
+    CPPUNIT_ASSERT(bool(ps.end() == ps.find("baz"_ostr)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
