@@ -269,18 +269,18 @@ public:
 
     void decode_001()
         {
-            test_encode_and_decode(0,0,"");
-            test_encode_and_decode(0,0,"hallo");
-            test_encode_and_decode(1,0,"B2Aahg5B");
-            test_encode_and_decode(1,2,"Longer text string");
+            test_encode_and_decode(0,0,""_ostr);
+            test_encode_and_decode(0,0,"hallo"_ostr);
+            test_encode_and_decode(1,0,"B2Aahg5B"_ostr);
+            test_encode_and_decode(1,2,"Longer text string"_ostr);
         }
 
     void decode_002()
         {
-            test_encode(0,0,"");
-            test_encode(0,0,"hallo");
-            test_encode(1,0,"B2Aahg5B");
-            test_encode(1,2,"Longer text string");
+            test_encode(0,0,""_ostr);
+            test_encode(0,0,"hallo"_ostr);
+            test_encode(1,0,"B2Aahg5B"_ostr);
+            test_encode(1,2,"Longer text string"_ostr);
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,

@@ -457,9 +457,9 @@ namespace rtl_OStringBuffer
         void setUp() override
         {
             arrOUS[0] = OString( kTestStr1 );
-            arrOUS[1] = OString( "1" );
+            arrOUS[1] = "1"_ostr;
             arrOUS[2] = OString( );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( "\0", 1 );
             arrOUS[5] = OString( kTestStr2 );
 
@@ -582,9 +582,9 @@ namespace rtl_OStringBuffer
         void setUp() override
         {
             arrOUS[0] = OString( kTestStr1 );
-            arrOUS[1] = OString( "1" );
+            arrOUS[1] = "1"_ostr;
             arrOUS[2] = OString( );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( "\0", 1 );
             arrOUS[5] = OString( kTestStr2 );
 
@@ -943,9 +943,9 @@ namespace rtl_OStringBuffer
         void setUp() override
         {
             arrOUS[0] = OString( kTestStr1 );
-            arrOUS[1] = OString( "1" );
+            arrOUS[1] = "1"_ostr;
             arrOUS[2] = OString( );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( "\0", 1 );
             arrOUS[5] = OString( kTestStr2 );
 
@@ -1679,7 +1679,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
 
         }
@@ -2167,7 +2167,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
 
         }
@@ -2647,7 +2647,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
 
         }
@@ -3126,7 +3126,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
 
         }
@@ -3405,7 +3405,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
 
         }
@@ -3682,7 +3682,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
 
         }
@@ -3694,7 +3694,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3717,7 +3717,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3740,7 +3740,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3763,7 +3763,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3786,7 +3786,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3809,7 +3809,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3832,7 +3832,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3855,7 +3855,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3878,7 +3878,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3901,7 +3901,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3924,7 +3924,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3947,7 +3947,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3970,7 +3970,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -3993,7 +3993,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4016,7 +4016,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4039,7 +4039,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4062,7 +4062,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4085,7 +4085,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4108,7 +4108,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4131,7 +4131,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4154,7 +4154,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4177,7 +4177,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4200,7 +4200,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4223,7 +4223,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4246,7 +4246,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4269,7 +4269,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4292,7 +4292,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4315,7 +4315,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4338,7 +4338,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4361,7 +4361,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4384,7 +4384,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4407,7 +4407,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4430,7 +4430,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4453,7 +4453,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4476,7 +4476,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4499,7 +4499,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4522,7 +4522,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4545,7 +4545,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4568,7 +4568,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4591,7 +4591,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4614,7 +4614,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4637,7 +4637,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4660,7 +4660,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4683,7 +4683,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4706,7 +4706,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4729,7 +4729,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4752,7 +4752,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4775,7 +4775,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4798,7 +4798,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4821,7 +4821,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4844,7 +4844,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4867,7 +4867,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4890,7 +4890,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4913,7 +4913,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4936,7 +4936,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4959,7 +4959,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -4982,7 +4982,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5005,7 +5005,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5028,7 +5028,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5051,7 +5051,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5074,7 +5074,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5097,7 +5097,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5120,7 +5120,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5143,7 +5143,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5166,7 +5166,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5189,7 +5189,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5212,7 +5212,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5235,7 +5235,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5258,7 +5258,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5281,7 +5281,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5304,7 +5304,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5327,7 +5327,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5350,7 +5350,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5373,7 +5373,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5396,7 +5396,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5419,7 +5419,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5442,7 +5442,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5465,7 +5465,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5488,7 +5488,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5511,7 +5511,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5534,7 +5534,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5557,7 +5557,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5580,7 +5580,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5603,7 +5603,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5626,7 +5626,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5649,7 +5649,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5672,7 +5672,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5695,7 +5695,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5718,7 +5718,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5741,7 +5741,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5764,7 +5764,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5787,7 +5787,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5810,7 +5810,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5833,7 +5833,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5856,7 +5856,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5879,7 +5879,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5902,7 +5902,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5925,7 +5925,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5948,7 +5948,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -5971,7 +5971,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6062,7 +6062,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -6073,7 +6073,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6096,7 +6096,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111111111111111111111111111" );
+            expVal += "1111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6119,7 +6119,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6142,7 +6142,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17777777777" );
+            expVal += "17777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6165,7 +6165,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6188,7 +6188,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "2147483647" );
+            expVal += "2147483647"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6211,7 +6211,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6234,7 +6234,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffff" );
+            expVal += "7fffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6257,7 +6257,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6280,7 +6280,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "zik0zj" );
+            expVal += "zik0zj"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6303,7 +6303,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6326,7 +6326,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111111111111111111111111111" );
+            expVal += "1111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6349,7 +6349,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6372,7 +6372,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17777777777" );
+            expVal += "17777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6395,7 +6395,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6418,7 +6418,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "2147483647" );
+            expVal += "2147483647"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6441,7 +6441,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6464,7 +6464,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffff" );
+            expVal += "7fffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6487,7 +6487,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6510,7 +6510,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "zik0zj" );
+            expVal += "zik0zj"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6533,7 +6533,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6556,7 +6556,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111111111111111111111111111" );
+            expVal += "1111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6579,7 +6579,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6602,7 +6602,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17777777777" );
+            expVal += "17777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6625,7 +6625,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6648,7 +6648,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "2147483647" );
+            expVal += "2147483647"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6671,7 +6671,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6694,7 +6694,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffff" );
+            expVal += "7fffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6717,7 +6717,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6740,7 +6740,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "zik0zj" );
+            expVal += "zik0zj"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6763,7 +6763,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6786,7 +6786,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111111111111111111111111111" );
+            expVal += "1111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6809,7 +6809,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6832,7 +6832,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17777777777" );
+            expVal += "17777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6855,7 +6855,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6878,7 +6878,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "2147483647" );
+            expVal += "2147483647"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6901,7 +6901,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6924,7 +6924,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffff" );
+            expVal += "7fffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6947,7 +6947,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6970,7 +6970,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "zik0zj" );
+            expVal += "zik0zj"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -6993,7 +6993,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7016,7 +7016,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111111111111111111111111111" );
+            expVal += "1111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7039,7 +7039,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7062,7 +7062,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17777777777" );
+            expVal += "17777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7085,7 +7085,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7108,7 +7108,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "2147483647" );
+            expVal += "2147483647"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7131,7 +7131,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7154,7 +7154,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffff" );
+            expVal += "7fffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7177,7 +7177,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7200,7 +7200,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = kSInt32Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "zik0zj" );
+            expVal += "zik0zj"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7266,7 +7266,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -7277,7 +7277,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7300,8 +7300,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7324,8 +7324,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7348,8 +7348,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7372,7 +7372,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7395,8 +7395,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7419,8 +7419,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7443,8 +7443,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7467,7 +7467,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7490,8 +7490,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7514,8 +7514,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7538,8 +7538,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7562,7 +7562,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7585,8 +7585,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7609,8 +7609,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7633,8 +7633,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7657,7 +7657,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7680,8 +7680,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7704,8 +7704,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7728,8 +7728,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7752,7 +7752,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7775,8 +7775,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7799,8 +7799,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7823,8 +7823,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7847,7 +7847,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7870,8 +7870,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7894,8 +7894,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7918,8 +7918,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7942,7 +7942,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7965,8 +7965,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -7989,8 +7989,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8013,8 +8013,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8037,7 +8037,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8060,8 +8060,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8084,8 +8084,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8108,8 +8108,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8132,7 +8132,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8155,8 +8155,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8179,8 +8179,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8203,8 +8203,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8227,7 +8227,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8250,8 +8250,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8274,8 +8274,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8298,8 +8298,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8322,7 +8322,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8345,8 +8345,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8369,8 +8369,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8393,8 +8393,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8417,7 +8417,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8440,8 +8440,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8464,8 +8464,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8488,8 +8488,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8512,7 +8512,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8535,8 +8535,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8559,8 +8559,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8583,8 +8583,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8607,7 +8607,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8630,8 +8630,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8654,8 +8654,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8678,8 +8678,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8702,7 +8702,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8725,8 +8725,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8749,8 +8749,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8773,8 +8773,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8797,7 +8797,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8820,8 +8820,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8844,8 +8844,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8868,8 +8868,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8892,7 +8892,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8915,8 +8915,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8939,8 +8939,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8963,8 +8963,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -8987,7 +8987,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9010,8 +9010,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9034,8 +9034,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9058,8 +9058,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9082,7 +9082,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9105,8 +9105,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9129,8 +9129,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9153,8 +9153,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9177,7 +9177,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9200,8 +9200,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9224,8 +9224,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9248,8 +9248,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9272,7 +9272,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9295,8 +9295,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9319,8 +9319,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9343,8 +9343,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9367,7 +9367,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9390,8 +9390,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9414,8 +9414,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9438,8 +9438,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9462,7 +9462,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9485,8 +9485,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9509,8 +9509,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9533,8 +9533,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9557,7 +9557,7 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9580,8 +9580,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9603,8 +9603,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9626,8 +9626,8 @@ namespace rtl_OStringBuffer
             sal_Int32              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -9706,7 +9706,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -10373,7 +10373,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -10384,7 +10384,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10407,7 +10407,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10430,7 +10430,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10453,7 +10453,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10476,7 +10476,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10499,7 +10499,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10522,7 +10522,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10545,7 +10545,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10568,7 +10568,7 @@ namespace rtl_OStringBuffer
             sal_Int64             input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10591,7 +10591,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10614,7 +10614,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10637,7 +10637,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10660,7 +10660,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10683,7 +10683,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10706,7 +10706,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10729,7 +10729,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10752,7 +10752,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10775,7 +10775,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10798,7 +10798,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10821,7 +10821,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10844,7 +10844,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10867,7 +10867,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10890,7 +10890,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10913,7 +10913,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10936,7 +10936,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10959,7 +10959,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -10982,7 +10982,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11005,7 +11005,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11028,7 +11028,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11051,7 +11051,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11074,7 +11074,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11097,7 +11097,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11120,7 +11120,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11143,7 +11143,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11166,7 +11166,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11189,7 +11189,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11212,7 +11212,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11235,7 +11235,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11258,7 +11258,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11281,7 +11281,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11304,7 +11304,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11327,7 +11327,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11350,7 +11350,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11373,7 +11373,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11396,7 +11396,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11419,7 +11419,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11442,7 +11442,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11465,7 +11465,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11488,7 +11488,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11511,7 +11511,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11534,7 +11534,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11557,7 +11557,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11580,7 +11580,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11603,7 +11603,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11626,7 +11626,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11649,7 +11649,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11672,7 +11672,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11695,7 +11695,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11718,7 +11718,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11741,7 +11741,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11764,7 +11764,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11787,7 +11787,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11810,7 +11810,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11833,7 +11833,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11856,7 +11856,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11879,7 +11879,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11902,7 +11902,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11925,7 +11925,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11948,7 +11948,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11971,7 +11971,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -11994,7 +11994,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12017,7 +12017,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12040,7 +12040,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12063,7 +12063,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12086,7 +12086,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12109,7 +12109,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12132,7 +12132,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12155,7 +12155,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12178,7 +12178,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12201,7 +12201,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12224,7 +12224,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12247,7 +12247,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "100" );
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12270,7 +12270,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1000" );
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12293,7 +12293,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111" );
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12316,7 +12316,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12339,7 +12339,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12362,7 +12362,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "10" );
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12385,7 +12385,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "17" );
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12408,7 +12408,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12431,7 +12431,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12454,7 +12454,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12477,7 +12477,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "15" );
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12500,7 +12500,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12523,7 +12523,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12546,7 +12546,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12569,7 +12569,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "f" );
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12592,7 +12592,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12615,7 +12615,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "4" );
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12638,7 +12638,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "8" );
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12661,7 +12661,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = 35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "z" );
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12752,7 +12752,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -12763,7 +12763,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12786,7 +12786,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            expVal += "111111111111111111111111111111111111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12809,7 +12809,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12832,7 +12832,7 @@ namespace rtl_OStringBuffer
             sal_Int64             input = kSInt64Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "777777777777777777777" );
+            expVal += "777777777777777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12855,7 +12855,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12878,7 +12878,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "9223372036854775807" );
+            expVal += "9223372036854775807"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12901,7 +12901,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12924,7 +12924,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffffffffffff" );
+            expVal += "7fffffffffffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12947,7 +12947,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12970,7 +12970,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "1y2p0ij32e8e7" );
+            expVal += "1y2p0ij32e8e7"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -12993,7 +12993,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13016,7 +13016,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            expVal += "111111111111111111111111111111111111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13039,7 +13039,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13062,7 +13062,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "777777777777777777777" );
+            expVal += "777777777777777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13085,7 +13085,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13108,7 +13108,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "9223372036854775807" );
+            expVal += "9223372036854775807"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13131,7 +13131,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13154,7 +13154,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffffffffffff" );
+            expVal += "7fffffffffffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13177,7 +13177,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13200,7 +13200,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "1y2p0ij32e8e7" );
+            expVal += "1y2p0ij32e8e7"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13223,7 +13223,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13246,7 +13246,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            expVal += "111111111111111111111111111111111111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13269,7 +13269,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13292,7 +13292,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "777777777777777777777" );
+            expVal += "777777777777777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13315,7 +13315,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13338,7 +13338,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "9223372036854775807" );
+            expVal += "9223372036854775807"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13361,7 +13361,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13384,7 +13384,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffffffffffff" );
+            expVal += "7fffffffffffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13407,7 +13407,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13430,7 +13430,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "1y2p0ij32e8e7" );
+            expVal += "1y2p0ij32e8e7"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13453,7 +13453,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13476,7 +13476,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            expVal += "111111111111111111111111111111111111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13499,7 +13499,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13522,7 +13522,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "777777777777777777777" );
+            expVal += "777777777777777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13545,7 +13545,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13568,7 +13568,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "9223372036854775807" );
+            expVal += "9223372036854775807"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13591,7 +13591,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13614,7 +13614,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffffffffffff" );
+            expVal += "7fffffffffffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13637,7 +13637,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13660,7 +13660,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "1y2p0ij32e8e7" );
+            expVal += "1y2p0ij32e8e7"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13683,7 +13683,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "1111111" );
+            expVal += "1111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13706,7 +13706,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 2;
 
-            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            expVal += "111111111111111111111111111111111111111111111111111111111111111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13729,7 +13729,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "177" );
+            expVal += "177"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13752,7 +13752,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 8;
 
-            expVal += OString( "777777777777777777777" );
+            expVal += "777777777777777777777"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13775,7 +13775,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "127" );
+            expVal += "127"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13798,7 +13798,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 10;
 
-            expVal += OString( "9223372036854775807" );
+            expVal += "9223372036854775807"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13821,7 +13821,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7f" );
+            expVal += "7f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13844,7 +13844,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 16;
 
-            expVal += OString( "7fffffffffffffff" );
+            expVal += "7fffffffffffffff"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13867,7 +13867,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt8Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "3j" );
+            expVal += "3j"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13890,7 +13890,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = kSInt64Max;
             sal_Int16              radix = 36;
 
-            expVal += OString( "1y2p0ij32e8e7" );
+            expVal += "1y2p0ij32e8e7"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13956,7 +13956,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -13967,7 +13967,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -13990,8 +13990,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14014,8 +14014,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14038,8 +14038,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14062,7 +14062,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14085,8 +14085,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14109,8 +14109,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14133,8 +14133,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14157,7 +14157,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14180,8 +14180,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14204,8 +14204,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14228,8 +14228,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14252,7 +14252,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14275,8 +14275,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14299,8 +14299,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14323,8 +14323,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14347,7 +14347,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14370,8 +14370,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14394,8 +14394,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14418,8 +14418,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14442,7 +14442,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14465,8 +14465,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14489,8 +14489,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14513,8 +14513,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14537,7 +14537,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14560,8 +14560,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14584,8 +14584,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14608,8 +14608,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14632,7 +14632,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14655,8 +14655,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14679,8 +14679,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14703,8 +14703,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14727,7 +14727,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14750,8 +14750,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14774,8 +14774,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14798,8 +14798,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14822,7 +14822,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14845,8 +14845,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14869,8 +14869,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14893,8 +14893,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14917,7 +14917,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14940,8 +14940,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14964,8 +14964,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -14988,8 +14988,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15012,7 +15012,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15035,8 +15035,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15059,8 +15059,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15083,8 +15083,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15107,7 +15107,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15130,8 +15130,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15154,8 +15154,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15178,8 +15178,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15202,7 +15202,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15225,8 +15225,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15249,8 +15249,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15273,8 +15273,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15297,7 +15297,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15320,8 +15320,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15344,8 +15344,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15368,8 +15368,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15392,7 +15392,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15415,8 +15415,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15439,8 +15439,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15463,8 +15463,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15487,7 +15487,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15510,8 +15510,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15534,8 +15534,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15558,8 +15558,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15582,7 +15582,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15605,8 +15605,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15629,8 +15629,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15653,8 +15653,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15677,7 +15677,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15700,8 +15700,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15724,8 +15724,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15748,8 +15748,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15772,7 +15772,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15795,8 +15795,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15819,8 +15819,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15843,8 +15843,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15867,7 +15867,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 2;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15890,8 +15890,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "100" );
+            expVal += "-"_ostr;
+            expVal += "100"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15914,8 +15914,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1000" );
+            expVal += "-"_ostr;
+            expVal += "1000"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15938,8 +15938,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 2;
 
-            expVal += OString( "-" );
-            expVal += OString( "1111" );
+            expVal += "-"_ostr;
+            expVal += "1111"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15962,7 +15962,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 8;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -15985,8 +15985,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16009,8 +16009,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "10" );
+            expVal += "-"_ostr;
+            expVal += "10"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16033,8 +16033,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 8;
 
-            expVal += OString( "-" );
-            expVal += OString( "17" );
+            expVal += "-"_ostr;
+            expVal += "17"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16057,7 +16057,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 10;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16080,8 +16080,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16104,8 +16104,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16128,8 +16128,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 10;
 
-            expVal += OString( "-" );
-            expVal += OString( "15" );
+            expVal += "-"_ostr;
+            expVal += "15"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16152,7 +16152,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 16;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16175,8 +16175,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16199,8 +16199,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16223,8 +16223,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -15;
             sal_Int16              radix = 16;
 
-            expVal += OString( "-" );
-            expVal += OString( "f" );
+            expVal += "-"_ostr;
+            expVal += "f"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16247,7 +16247,7 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -0;
             sal_Int16              radix = 36;
 
-            expVal += OString( "0" );
+            expVal += "0"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16270,8 +16270,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -4;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "4" );
+            expVal += "-"_ostr;
+            expVal += "4"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16294,8 +16294,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -8;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "8" );
+            expVal += "-"_ostr;
+            expVal += "8"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16318,8 +16318,8 @@ namespace rtl_OStringBuffer
             sal_Int64              input = -35;
             sal_Int16              radix = 36;
 
-            expVal += OString( "-" );
-            expVal += OString( "z" );
+            expVal += "-"_ostr;
+            expVal += "z"_ostr;
             aStrBuf.append( input, radix );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -16399,7 +16399,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -17071,7 +17071,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -17641,7 +17641,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -18220,7 +18220,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 
@@ -18274,7 +18274,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = OString( kTestStr7 );
             arrOUS[1] = OString(  );
             arrOUS[2] = OString( kTestStr25 );
-            arrOUS[3] = OString( "" );
+            arrOUS[3] = ""_ostr;
             arrOUS[4] = OString( kTestStr28 );
         }
 

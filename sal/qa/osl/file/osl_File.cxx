@@ -486,51 +486,51 @@ namespace osl_FileBase
     void getAbsoluteFileURL::getAbsoluteFileURL_001_1()
     {
         OUString suAssume = aUserDirectoryURL + "/relative/file1";
-        check_getAbsoluteFileURL(aUserDirectoryURL, "relative/file1",osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUserDirectoryURL, "relative/file1"_ostr,osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_001_2()
     {
         OUString suAssume = aUserDirectoryURL + "/relative/file2";
-        check_getAbsoluteFileURL(aUserDirectoryURL, "relative/./file2",osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUserDirectoryURL, "relative/./file2"_ostr,osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_001_3()
     {
         OUString suAssume = aUserDirectoryURL + "/file3";
-        check_getAbsoluteFileURL(aUserDirectoryURL, "relative/../file3",osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUserDirectoryURL, "relative/../file3"_ostr,osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_001_4()
     {
         OUString suAssume = aUserDirectoryURL + "/file4";
-        check_getAbsoluteFileURL(aUserDirectoryURL, "././relative/../file4",osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUserDirectoryURL, "././relative/../file4"_ostr,osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_001_5()
     {
         OUString suAssume;
         suAssume = aUserDirectoryURL + "/relative/";
-        check_getAbsoluteFileURL(aUserDirectoryURL, "././relative/.",osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUserDirectoryURL, "././relative/."_ostr,osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_001_6()
     {
         OUString suAssume = aUserDirectoryURL + "/.relative";
-        check_getAbsoluteFileURL(aUserDirectoryURL, "./.relative",osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUserDirectoryURL, "./.relative"_ostr,osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_001_7()
     {
         OUString suAssume;
         suAssume = aUserDirectoryURL + "/.a/";
-        check_getAbsoluteFileURL(aUserDirectoryURL, "./.a/mydir/..",osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUserDirectoryURL, "./.a/mydir/.."_ostr,osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_001_8()
     {
         OUString suAssume = aUserDirectoryURL + "/tmp/ok";
-        check_getAbsoluteFileURL(aUserDirectoryURL, "tmp//ok",osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUserDirectoryURL, "tmp//ok"_ostr,osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_002()
@@ -572,7 +572,7 @@ namespace osl_FileBase
         createTestDirectory(aUStrBase);
 
         OUString suAssume = aUserDirectoryURL + "/mytestfile";
-        check_getAbsoluteFileURL(aUStrBase, "../../mytestfile" , osl::FileBase::E_None, suAssume);
+        check_getAbsoluteFileURL(aUStrBase, "../../mytestfile"_ostr , osl::FileBase::E_None, suAssume);
         deleteTestDirectory(aUStrBase);
         deleteTestDirectory(aUStrUpBase);
     }
@@ -790,16 +790,16 @@ namespace osl_FileBase
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_1()
     {
-        OString sURL("");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL(""_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_2()
     {
-        OString sURL("/");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "\\");
+        OString sURL("/"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "\\"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_21()
@@ -819,107 +819,107 @@ namespace osl_FileBase
 
            In other words, %2F ("/") is NOT the same as /.
         */
-        OString sURL("%2F");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("%2F"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_22()
     {
-        OString sURL("file:///tmp%2Fmydir");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("file:///tmp%2Fmydir"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_3()
     {
-        OString sURL("a");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "a");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "a");
+        OString sURL("a"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "a"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "a"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_31()
     {
-        OString sURL("tmpname");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "tmpname");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "tmpname");
+        OString sURL("tmpname"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "tmpname"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "tmpname"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_4()
     {
-        OString sURL("file://");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("file://"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, ""_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_41()
     {
-        OString sURL("file://localhost/tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("file://localhost/tmp"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, ""_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_5()
     {
-        OString sURL("file:///tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("file:///tmp"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_51()
     {
-        OString sURL("file://c:/tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("file://c:/tmp"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_52()
     {
-        OString sURL("file:///c:/tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp");
+        OString sURL("file:///c:/tmp"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_53()
     {
-        OString sURL("file:///c|/tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c|/tmp");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp");
+        OString sURL("file:///c|/tmp"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c|/tmp"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_6()
     {
-        OString sURL("file:///tmp/first");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/first");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("file:///tmp/first"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/first"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_61()
     {
-        OString sURL("file:///c:/tmp/first");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/first");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\first");
+        OString sURL("file:///c:/tmp/first"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/first"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\first"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_7()
     {
-        OString sURL("file:///tmp/../second");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/../second");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("file:///tmp/../second"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/../second"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_71()
     {
-        OString sURL("file:///c:/tmp/../second");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/../second");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\..\\second");
+        OString sURL("file:///c:/tmp/../second"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/../second"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\..\\second"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_8()
     {
-        OString sURL("../tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "../tmp");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "..\\tmp");
+        OString sURL("../tmp"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "../tmp"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "..\\tmp"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_81()
@@ -936,23 +936,23 @@ namespace osl_FileBase
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_9()
     {
-        OString sURL("file:///tmp/first%20second");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/first second");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("file:///tmp/first%20second"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/first second"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_91()
     {
-        OString sURL("file:///c:/tmp/first%20second");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/first second");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\first second");
+        OString sURL("file:///c:/tmp/first%20second"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c:/tmp/first second"_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp\\first second"_ostr);
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_92()
     {
-        OString sURL("ca@#;+.,$///78no%01ni..name");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
+        OString sURL("ca@#;+.,$///78no%01ni..name"_ostr);
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
+        checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     // normal legal case
@@ -1003,48 +1003,48 @@ namespace osl_FileBase
 
     void SystemPath_FileURL::getFileURLFromSystemPath_001()
     {
-        OString sSysPath("~/tmp");
+        OString sSysPath("~/tmp"_ostr);
         char* home_path;
         home_path = getenv("HOME");
         OString expResult(home_path ? home_path : "");
         expResult = "file://"+ expResult + "/tmp";
         checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, expResult);
-        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "~/tmp");
+        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "~/tmp"_ostr);
     }
 
     void SystemPath_FileURL::getFileURLFromSystemPath_002()
     {
-        OString sSysPath("c:/tmp");
-        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "c:/tmp");
-        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///c:/tmp");
+        OString sSysPath("c:/tmp"_ostr);
+        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "c:/tmp"_ostr);
+        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///c:/tmp"_ostr);
     }
 
     void SystemPath_FileURL::getFileURLFromSystemPath_003()
     {
-        OString sSysPath("file:///temp");
-        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
-        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
+        OString sSysPath("file:///temp"_ostr);
+        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, ""_ostr);
+        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getFileURLFromSystemPath_004()
     {
-        OString sSysPath("//tmp//first start");
-        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///tmp/first%20start");
-        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
+        OString sSysPath("//tmp//first start"_ostr);
+        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///tmp/first%20start"_ostr);
+        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getFileURLFromSystemPath_004_1()
     {
-        OString sSysPath("/tmp///first start");
-        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///tmp/first%20start");
-        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
+        OString sSysPath("/tmp///first start"_ostr);
+        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///tmp/first%20start"_ostr);
+        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     void SystemPath_FileURL::getFileURLFromSystemPath_005()
     {
-        OString sSysPath("");
-        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
-        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
+        OString sSysPath(""_ostr);
+        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, ""_ostr);
+        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, ""_ostr);
     }
 
     // testing the method

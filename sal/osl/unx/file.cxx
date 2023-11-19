@@ -110,7 +110,7 @@ struct FileHandle_Impl
     rtl_String*  m_memstreambuf; /*< used for in-memory streams */
 #endif
 
-    explicit FileHandle_Impl(int fd, Kind kind = KIND_FD, OString path = "<anon>");
+    explicit FileHandle_Impl(int fd, Kind kind = KIND_FD, OString path = "<anon>"_ostr);
     ~FileHandle_Impl();
 
     static size_t getpagesize();

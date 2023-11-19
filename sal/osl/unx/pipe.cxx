@@ -136,7 +136,7 @@ getBootstrapSocketPath()
     {
         return OUStringToOString(pValue, RTL_TEXTENCODING_UTF8);
     }
-    return "";
+    return ""_ostr;
 }
 
 static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Options,

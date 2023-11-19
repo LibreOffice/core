@@ -171,7 +171,7 @@ void test::oustring::StringConcat::checkAppend()
 void test::oustring::StringConcat::checkInvalid()
 {
     CPPUNIT_ASSERT( !INVALID_CONCAT( OUString() + OUString()));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OString( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + "b"_ostr));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<const char*>("b") ));
     char d[] = "b";

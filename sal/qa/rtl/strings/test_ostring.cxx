@@ -37,26 +37,26 @@ void Test::testStartsWithIgnoreAsciiCase() {
     }
     {
         OString r;
-        CPPUNIT_ASSERT(OString("foo").startsWithIgnoreAsciiCase(std::string_view(), &r));
-        CPPUNIT_ASSERT_EQUAL(OString("foo"), r);
+        CPPUNIT_ASSERT("foo"_ostr.startsWithIgnoreAsciiCase(std::string_view(), &r));
+        CPPUNIT_ASSERT_EQUAL("foo"_ostr, r);
     }
     {
         OString r;
         CPPUNIT_ASSERT(
-            OString("foo").startsWithIgnoreAsciiCase("F", &r));
-        CPPUNIT_ASSERT_EQUAL(OString("oo"), r);
+            "foo"_ostr.startsWithIgnoreAsciiCase("F", &r));
+        CPPUNIT_ASSERT_EQUAL("oo"_ostr, r);
     }
     {
-        OString r("other");
+        OString r("other"_ostr);
         CPPUNIT_ASSERT(
-            !OString("foo").startsWithIgnoreAsciiCase("bar", &r));
-        CPPUNIT_ASSERT_EQUAL(OString("other"), r);
+            !"foo"_ostr.startsWithIgnoreAsciiCase("bar", &r));
+        CPPUNIT_ASSERT_EQUAL("other"_ostr, r);
     }
     {
-        OString r("other");
+        OString r("other"_ostr);
         CPPUNIT_ASSERT(
-            !OString("foo").startsWithIgnoreAsciiCase("foobar", &r));
-        CPPUNIT_ASSERT_EQUAL(OString("other"), r);
+            !"foo"_ostr.startsWithIgnoreAsciiCase("foobar", &r));
+        CPPUNIT_ASSERT_EQUAL("other"_ostr, r);
     }
 
     {
@@ -66,26 +66,26 @@ void Test::testStartsWithIgnoreAsciiCase() {
     }
     {
         OString r;
-        CPPUNIT_ASSERT(OString("foo").startsWithIgnoreAsciiCase("", &r));
-        CPPUNIT_ASSERT_EQUAL(OString("foo"), r);
+        CPPUNIT_ASSERT("foo"_ostr.startsWithIgnoreAsciiCase("", &r));
+        CPPUNIT_ASSERT_EQUAL("foo"_ostr, r);
     }
     {
         OString r;
         CPPUNIT_ASSERT(
-            OString("foo").startsWithIgnoreAsciiCase("F", &r));
-        CPPUNIT_ASSERT_EQUAL(OString("oo"), r);
+            "foo"_ostr.startsWithIgnoreAsciiCase("F", &r));
+        CPPUNIT_ASSERT_EQUAL("oo"_ostr, r);
     }
     {
-        OString r("other");
+        OString r("other"_ostr);
         CPPUNIT_ASSERT(
-            !OString("foo").startsWithIgnoreAsciiCase("bar", &r));
-        CPPUNIT_ASSERT_EQUAL(OString("other"), r);
+            !"foo"_ostr.startsWithIgnoreAsciiCase("bar", &r));
+        CPPUNIT_ASSERT_EQUAL("other"_ostr, r);
     }
     {
-        OString r("other");
+        OString r("other"_ostr);
         CPPUNIT_ASSERT(
-            !OString("foo").startsWithIgnoreAsciiCase("foobar", &r));
-        CPPUNIT_ASSERT_EQUAL(OString("other"), r);
+            !"foo"_ostr.startsWithIgnoreAsciiCase("foobar", &r));
+        CPPUNIT_ASSERT_EQUAL("other"_ostr, r);
     }
 }
 
@@ -109,7 +109,7 @@ void Test::testCompareTo()
 
 void Test::testUtf8StringLiterals()
 {
-    OString sIn(u8"ßa");
+    OString sIn(u8"ßa"_ostr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), sIn.getLength());
     CPPUNIT_ASSERT_EQUAL(195, int(static_cast<unsigned char>(sIn[0])));
     CPPUNIT_ASSERT_EQUAL(159, int(static_cast<unsigned char>(sIn[1])));

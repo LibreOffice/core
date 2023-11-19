@@ -370,9 +370,9 @@ public:
 
         std::vector<OString> different_child_env_vars
         {
-            ENV1,
-            ENV2,
-            ENV4
+            ENV1 ""_ostr,
+            ENV2 ""_ostr,
+            ENV4 ""_ostr
         };
 
         CPPUNIT_ASSERT_MESSAGE

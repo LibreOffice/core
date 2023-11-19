@@ -799,7 +799,7 @@ namespace rtl_ustr
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000_2()
             {
                 OUString aStr1("Line must be equal.");
-                OString sStr2 =                                 "Line is shorter.";
+                OString sStr2 =                                 "Line is shorter."_ostr;
                 rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr(), 0);
                 // should not GPF
             }
@@ -815,7 +815,7 @@ namespace rtl_ustr
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_002()
             {
                 OUString suStr1("Line must be equal.");
-                OString sStr2 =                                  "Line must be equal.";
+                OString sStr2 =                                  "Line must be equal."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( suStr1.getStr(), suStr1.getLength(), sStr2.getStr(), sStr2.getLength());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
@@ -824,7 +824,7 @@ namespace rtl_ustr
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_003()
             {
                 OUString suStr1("Line must differ.");
-                OString sStr2 =                                  "Line must be differ and longer.";
+                OString sStr2 =                                  "Line must be differ and longer."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( suStr1.getStr(), suStr1.getLength(), sStr2.getStr(), sStr2.getLength());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -861,7 +861,7 @@ namespace rtl_ustr
         void ascii_compareIgnoreAsciiCase_WithLength_000_2()
             {
                 OUString aStr1("Line must be equal.");
-                OString sStr2 =                                 "Line is shorter.";
+                OString sStr2 =                                 "Line is shorter."_ostr;
                 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr());
                 // should not GPF
             }
@@ -877,7 +877,7 @@ namespace rtl_ustr
         void ascii_compareIgnoreAsciiCase_WithLength_002()
             {
                 OUString suStr1("Line must be equal.");
-                OString sStr2 =                                  "Line must be equal.";
+                OString sStr2 =                                  "Line must be equal."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( suStr1.getStr(), suStr1.getLength(), sStr2.getStr());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
@@ -886,7 +886,7 @@ namespace rtl_ustr
         void ascii_compareIgnoreAsciiCase_WithLength_003()
             {
                 OUString suStr1("Line must differ.");
-                OString sStr2 =                                  "Line must be differ and longer.";
+                OString sStr2 =                                  "Line must be differ and longer."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( suStr1.getStr(), suStr1.getLength(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -920,7 +920,7 @@ namespace rtl_ustr
         void ascii_compare_002()
             {
                 OUString suStr1("Line must be equal.");
-                OString sStr2 =                                  "Line must be equal.";
+                OString sStr2 =                                  "Line must be equal."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compare( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
@@ -929,7 +929,7 @@ namespace rtl_ustr
         void ascii_compare_003()
             {
                 OUString suStr1("Line must differ.");
-                OString sStr2 = "Line foo bar, ok, differ.";
+                OString sStr2 = "Line foo bar, ok, differ."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compare( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
@@ -960,7 +960,7 @@ namespace rtl_ustr
         void ascii_compareIgnoreAsciiCase_002()
             {
                 OUString suStr1("Line must be equal.");
-                OString sStr2 =                                  "Line must be equal.";
+                OString sStr2 =                                  "Line must be equal."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
@@ -969,7 +969,7 @@ namespace rtl_ustr
         void ascii_compareIgnoreAsciiCase_002_1()
             {
                 OUString suStr1("Line must be equal, when ignore case.");
-                OString sStr2 =                                 "LINE MUST BE EQUAL, WHEN IGNORE CASE.";
+                OString sStr2 =                                 "LINE MUST BE EQUAL, WHEN IGNORE CASE."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal (if case insensitive).", sal_Int32(0), nValue);
@@ -978,7 +978,7 @@ namespace rtl_ustr
         void ascii_compareIgnoreAsciiCase_003()
             {
                 OUString suStr1("Line must differ.");
-                OString sStr2 = "Line foo bar, ok, differ.";
+                OString sStr2 = "Line foo bar, ok, differ."_ostr;
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);

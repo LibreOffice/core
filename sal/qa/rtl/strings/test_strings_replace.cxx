@@ -64,49 +64,49 @@ private:
 
 void Test::stringReplaceFirst() {
     CPPUNIT_ASSERT_EQUAL(
-        OString("otherbarfoo"),
-        OString("foobarfoo").replaceFirst("foo", "other"));
+        "otherbarfoo"_ostr,
+        "foobarfoo"_ostr.replaceFirst("foo"_ostr, "other"_ostr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OString("foobarfoo"),
-        OString("foobarfoo").replaceFirst("bars", "other"));
+        "foobarfoo"_ostr,
+        "foobarfoo"_ostr.replaceFirst("bars"_ostr, "other"_ostr));
 
     {
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL(
-            OString("otherbarfoo"),
-            OString("foobarfoo").replaceFirst("foo", "other", &n));
+            "otherbarfoo"_ostr,
+            "foobarfoo"_ostr.replaceFirst("foo"_ostr, "other"_ostr, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
     }
 
     {
         sal_Int32 n = 1;
         CPPUNIT_ASSERT_EQUAL(
-            OString("foobarother"),
-            OString("foobarfoo").replaceFirst("foo", "other", &n));
+            "foobarother"_ostr,
+            "foobarfoo"_ostr.replaceFirst("foo"_ostr, "other"_ostr, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
     }
 
     {
         sal_Int32 n = 4;
         CPPUNIT_ASSERT_EQUAL(
-            OString("foobarfoo"),
-            OString("foobarfoo").replaceFirst("bar", "other", &n));
+            "foobarfoo"_ostr,
+            "foobarfoo"_ostr.replaceFirst("bar"_ostr, "other"_ostr, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
 }
 
 void Test::stringReplaceAll() {
     CPPUNIT_ASSERT_EQUAL(
-        OString("otherbarother"),
-        OString("foobarfoo").replaceAll("foo", "other"));
+        "otherbarother"_ostr,
+        "foobarfoo"_ostr.replaceAll("foo"_ostr, "other"_ostr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OString("foobarfoo"),
-        OString("foobarfoo").replaceAll("bars", "other"));
+        "foobarfoo"_ostr,
+        "foobarfoo"_ostr.replaceAll("bars"_ostr, "other"_ostr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OString("xxa"), OString("xaa").replaceAll("xa", "xx"));
+        "xxa"_ostr, "xaa"_ostr.replaceAll("xa"_ostr, "xx"_ostr));
 }
 
 void Test::ustringReplaceFirst() {
