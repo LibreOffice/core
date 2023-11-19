@@ -37,7 +37,7 @@ void PoolItemTest::testPool()
     SfxItemInfo const aItems[] =
     {
         // _nSID, _bNeedsPoolRegistration, _bShareable
-        { 4, false, true },
+        { 4, true,  true },
         { 3, true,  false /* test NeedsPoolRegistration */ },
         { 2, false, false },
         { 1, true,  false /* test NeedsPoolRegistration */}

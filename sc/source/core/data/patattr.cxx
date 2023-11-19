@@ -76,7 +76,7 @@ ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName 
         pStyle      ( nullptr ),
         mnPAKey(0)
 {
-    setNewItemCallback();
+    setExceptionalSCItem();
 
     // We need to ensure that ScPatternAttr is using the correct WhichRange,
     // see comments in commit message. This does transfers the items with
@@ -90,7 +90,7 @@ ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet )
         pStyle      ( nullptr ),
         mnPAKey(0)
 {
-    setNewItemCallback();
+    setExceptionalSCItem();
 
     // We need to ensure that ScPatternAttr is using the correct WhichRange,
     // see comments in commit message. This does transfers the items with
@@ -104,7 +104,7 @@ ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
         pStyle      ( nullptr ),
         mnPAKey(0)
 {
-    setNewItemCallback();
+    setExceptionalSCItem();
 }
 
 ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
@@ -113,7 +113,7 @@ ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
         pStyle      ( rPatternAttr.pStyle ),
         mnPAKey(rPatternAttr.mnPAKey)
 {
-    setNewItemCallback();
+    setExceptionalSCItem();
 }
 
 ScPatternAttr* ScPatternAttr::Clone( SfxItemPool *pPool ) const

@@ -74,7 +74,7 @@ class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
     friend class SfxAllItemSet;
 
     // allow ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool, bool);
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool);
     friend void implCleanupItemEntry(SfxItemPool&, SfxPoolItem const*);
 
     // unit testing
@@ -230,16 +230,8 @@ public:
     static bool                     IsSlot(sal_uInt16 nId) {
                                         return nId && nId > SFX_WHICH_MAX; }
 
-    // this method tries to register an Item at this Pool. If this
-    // is done depends on the SfxItemInfo-flag _bNeedsPoolRegistration
-    // which needs to be set for Items that are accessed using
-    // GetItemSurrogates, else the Item will not be returned/accessed
-    void tryRegisterSfxPoolItem(const SfxPoolItem& rItem, bool bPoolDirect);
-
-    // this method will register the Item at this Pool, no matter what.
-    // It is needed for all calls that directly register Items at the
-    // Pool, so the DirectPutItemInPool-methods
-    void doRegisterSfxPoolItem(const SfxPoolItem& rItem);
+    // This method will try to register the Item at this Pool.
+    void registerSfxPoolItem(const SfxPoolItem& rItem);
 
     // this method will unregister an Item from this Pool
     void unregisterSfxPoolItem(const SfxPoolItem& rItem);

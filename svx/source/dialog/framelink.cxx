@@ -178,6 +178,10 @@ Style& Style::MirrorSelf()
 
 bool Style::operator==( const Style& rOther) const
 {
+    if (this == &rOther)
+        // ptr compare (same instance)
+        return true;
+
     return (Prim() == rOther.Prim()
         && Dist() == rOther.Dist()
         && Secn() == rOther.Secn()

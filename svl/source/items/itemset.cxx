@@ -128,7 +128,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
-SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership, bool bPoolDirect)
+SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership)
 {
     if (nullptr == pSource)
         // SfxItemState::UNKNOWN aka current default (nullptr)
@@ -140,7 +140,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         // just use pSource which equals INVALID_POOL_ITEM
         return pSource;
 
-    if (pSource->isNewItemCallback() && rPool.GetMasterPool()->newItem_UseDirect(*pSource))
+    if (pSource->isExceptionalSCItem() && rPool.GetMasterPool()->newItem_UseDirect(*pSource))
         // exceptional handling for *some* items, see SC
         // (do not copy item: use directly, it is a pool default)
         return pSource;
@@ -240,22 +240,14 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         return pSource;
     }
 
-    // classic mode: try finding already existing item
-    // NOTE: bPoolDirect currently required due to DirectPutItemInPool and the
-    //   self-handled Item ScPatternAttr/ATTR_PATTERN in SC, else e.g.
-    //   testIteratorsDefPattern will fail in line 1306
+    // g_bItemClassicMode: try finding already existing item
     // NOTE: the UnitTest testIteratorsDefPattern claims that that Item "can be
     //   edited by the user" which explains why it breaks so many rules for Items,
     //   it behaves like an alien. That Item in the SC Pool claims to be a
     //   'StaticDefault' and gets changed (..?)
-    // NOTE: despite 1st thinking that this can be limited to ScPatternAttr/
-    //   ATTR_PATTERN it also has to be applied to the range
-    //   [ATTR_PATTERN_START, ATTR_PATTERN_END] *used* by ATTR_PATTERN, plus
-    //   it, so it's [100 .. 155] and [156] in SC. For now, just use bPoolDirect.
-    //   This needs to be cleaned-up somehow anyways
 
     // only do this if classic mode or required (calls from Pool::Direct*)
-    while(g_bItemClassicMode || bPoolDirect)
+    while(g_bItemClassicMode || pSource->isExceptionalSCItem())
     {
         if (!pTargetPool->Shareable_Impl(nIndex))
             // not shareable, so no need to search for identical item
@@ -308,29 +300,31 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
 
     // Unfortunately e,g, SC does 'special' things for some new Items,
     // so we need to give the opportunity for this. To limit this to
-    // the needed cases, use m_bNewItemCallback flag at item
-    if (pSource->isNewItemCallback())
+    // the needed cases, use m_bExceptionalSCItem flag at item
+    if (pSource->isExceptionalSCItem())
         pMasterPool->newItem_Callback(*pSource);
 
     // try to register @Pool (only needed if not yet registered)
     if (!pSource->isRegisteredAtPool())
     {
-        if (!bPoolDirect) // re-use bPoolDirect
+        bool bRegisterAtPool(pSource->isExceptionalSCItem());
+
+        if (!bRegisterAtPool)
         {
             if (g_bItemClassicMode)
             {
                 // in classic mode register only/all shareable items
-                bPoolDirect = pTargetPool->Shareable_Impl(nIndex);
+                bRegisterAtPool = pTargetPool->Shareable_Impl(nIndex);
             }
             else
             {
                 // in new mode register only/all items marked as need to be registered
-                bPoolDirect = pTargetPool->NeedsPoolRegistration_Impl(nIndex);
+                bRegisterAtPool = pTargetPool->NeedsPoolRegistration_Impl(nIndex);
             }
         }
 
-        if (bPoolDirect)
-            pTargetPool->doRegisterSfxPoolItem(*pSource);
+        if (bRegisterAtPool)
+            pTargetPool->registerSfxPoolItem(*pSource);
     }
 
     return pSource;
@@ -346,7 +340,7 @@ void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource)
         // nothing to do for invalid item entries
         return;
 
-    if (pSource->isNewItemCallback() && rPool.GetMasterPool()->newItem_UseDirect(*pSource))
+    if (pSource->isExceptionalSCItem() && rPool.GetMasterPool()->newItem_UseDirect(*pSource))
         // exceptional handling for *some* items, see SC
         // do not delete Item, it is a pool default
         return;
@@ -421,7 +415,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
 
     for (const auto& rSource : rASet)
     {
-        *ppDst = implCreateItemEntry(*GetPool(), rSource, 0, false, false);
+        *ppDst = implCreateItemEntry(*GetPool(), rSource, 0, false);
         ppDst++;
     }
 
@@ -702,7 +696,7 @@ const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, sal_uInt16 nWhi
     }
 
     // prepare new entry
-    SfxPoolItem const* pNew(implCreateItemEntry(*GetPool(), &rItem, nWhich, bPassingOwnership, false));
+    SfxPoolItem const* pNew(implCreateItemEntry(*GetPool(), &rItem, nWhich, bPassingOwnership));
 
     // Notification-Callback
     if(m_aCallback)
@@ -1311,7 +1305,7 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
 
         else if ( pFnd2 && bIgnoreDefaults )
             // Decision table: default, set, doesn't matter, sal_True
-            *ppFnd1 = implCreateItemEntry(*GetPool(), pFnd2, 0, false, false);
+            *ppFnd1 = implCreateItemEntry(*GetPool(), pFnd2, 0, false);
             // *ppFnd1 = &GetPool()->Put( *pFnd2 );
 
         if ( *ppFnd1 )

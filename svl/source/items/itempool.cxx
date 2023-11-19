@@ -801,8 +801,19 @@ const SfxPoolItem& SfxItemPool::DirectPutItemInPoolImpl(const SfxPoolItem& rItem
     nRemainingDirectlyPooledSfxPoolItemCount++;
 #endif
 
+    // CAUTION: Do not register the problematic pool default
+    if (rItem.isExceptionalSCItem() && GetMasterPool()->newItem_UseDirect(rItem))
+        return rItem;
+
     // make sure to use 'master'-pool, that's the one used by SfxItemSets
-    return *implCreateItemEntry(*GetMasterPool(), &rItem, nWhich, bPassingOwnership, true);
+    const SfxPoolItem* pRetval(implCreateItemEntry(*GetMasterPool(), &rItem, nWhich, bPassingOwnership));
+
+    // For the moment, as long as DirectPutItemInPoolImpl is used, make sure that
+    // the changes in implCreateItemEntry do not change anything, that would
+    // risc memory leaks by not (ab)using the garbage collector aspect of the pool.
+    registerSfxPoolItem(*pRetval);
+
+    return *pRetval;
 }
 
 void SfxItemPool::DirectRemoveItemFromPool(const SfxPoolItem& rItem)
@@ -1058,55 +1069,7 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
     return pItemInfos[nWhich - pImpl->mnStart]._nSID;
 }
 
-void SfxItemPool::tryRegisterSfxPoolItem(const SfxPoolItem& rItem, bool bPoolDirect)
-{
-    assert(rItem.Which() != 0);
-
-    if (IsSlot(rItem.Which()))
-        // do not register SlotItems
-        return;
-
-    if (rItem.isRegisteredAtPool())
-        // already registered, done (should not happen)
-        return;
-
-    if (!IsInRange(rItem.Which()))
-    {
-        // get to the right pool
-        if (pImpl->mpSecondary)
-        {
-            pImpl->mpSecondary->tryRegisterSfxPoolItem(rItem, bPoolDirect);
-            return;
-        }
-
-        return;
-    }
-
-    // get index (must exist due to checks above)
-    const sal_uInt16 nIndex(rItem.Which() - pImpl->mnStart);
-    bool bRegisterItem(bPoolDirect);
-
-    if (!bRegisterItem)
-    {
-        if (g_bItemClassicMode)
-        {
-            // classic mode: register in general *all* items
-            // ...but only shareable ones: for non-shareable registering for re-use
-            // makes no sense
-            bRegisterItem = Shareable_Impl(nIndex);
-        }
-        else
-        {
-            // experimental mode: only register items that are defined to be registered
-            bRegisterItem = NeedsPoolRegistration_Impl(nIndex);
-        }
-    }
-
-    if (bRegisterItem)
-        doRegisterSfxPoolItem(rItem);
-}
-
-void SfxItemPool::doRegisterSfxPoolItem(const SfxPoolItem& rItem)
+void SfxItemPool::registerSfxPoolItem(const SfxPoolItem& rItem)
 {
     assert(rItem.Which() != 0);
 
@@ -1117,6 +1080,18 @@ void SfxItemPool::doRegisterSfxPoolItem(const SfxPoolItem& rItem)
     if (rItem.isRegisteredAtPool())
         // already registered, done
         return;
+
+    if (!IsInRange(rItem.Which()))
+    {
+        // get to the right pool
+        if (pImpl->mpSecondary)
+        {
+            pImpl->mpSecondary->registerSfxPoolItem(rItem);
+            return;
+        }
+
+        return;
+    }
 
     if (nullptr == ppRegisteredSfxPoolItems)
         // on-demand allocate array of registeredSfxPoolItems and init to nullptr

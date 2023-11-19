@@ -37,7 +37,7 @@ SVL_DLLPUBLIC size_t getUsedSfxItemSetCount();
 #endif
 
 // ItemSet/ItemPool helpers
-SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership, bool bPoolDirect);
+SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership);
 void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource);
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
@@ -46,7 +46,7 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     friend class SfxWhichIter;
 
     // allow ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool, bool);
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool);
     friend void implCleanupItemEntry(SfxItemPool&, SfxPoolItem const*);
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items

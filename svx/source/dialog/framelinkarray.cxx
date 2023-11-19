@@ -24,14 +24,12 @@
 #include <set>
 #include <unordered_set>
 #include <algorithm>
-#include <svl/itempool.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-// #include <basegfx/numeric/ftools.hxx>
 
 //#define OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
 #ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
@@ -43,7 +41,7 @@ namespace svx::frame {
 
 namespace {
 
-class Cell final : public SfxPoolItem
+class Cell final
 {
 private:
     Style               maLeft;
@@ -72,8 +70,7 @@ public:
     explicit Cell();
     explicit Cell(const Cell&) = default;
 
-    virtual bool operator==( const SfxPoolItem& ) const override;
-    virtual Cell* Clone( SfxItemPool *pPool = nullptr ) const override;
+    bool operator==( const Cell& ) const;
 
     void SetStyleLeft(const Style& rStyle) { maLeft = rStyle; }
     void SetStyleRight(const Style& rStyle) { maRight = rStyle; }
@@ -201,7 +198,6 @@ basegfx::B2DHomMatrix Cell::CreateCoordinateSystemMergedCell(
 }
 
 Cell::Cell() :
-    SfxPoolItem(10),
     mnAddLeft( 0 ),
     mnAddRight( 0 ),
     mnAddTop( 0 ),
@@ -213,16 +209,12 @@ Cell::Cell() :
 {
 }
 
-Cell* Cell::Clone(SfxItemPool* /*pPool*/) const
+bool Cell::operator==(const Cell& rOther) const
 {
-    return new Cell(*this);
-}
+    if (this == &rOther)
+        // ptr compare (same instance)
+        return true;
 
-bool Cell::operator==(const SfxPoolItem& rItem) const
-{
-    if (!SfxPoolItem::operator==(rItem))
-        return false;
-    const Cell& rOther = static_cast<const Cell&>(rItem);
     return maLeft == rOther.maLeft
         && maRight == rOther.maRight
         && maTop == rOther.maTop
@@ -259,31 +251,12 @@ static void lclRecalcCoordVec( std::vector<sal_Int32>& rCoords, const std::vecto
     }
 }
 
-static void lclSetMergedRange( SfxItemPool& rPool, CellVec& rCells, sal_Int32 nWidth, sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow )
-{
-    for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
-    {
-        for( sal_Int32 nRow = nFirstRow; nRow <= nLastRow; ++nRow )
-        {
-            const Cell* pCell = rCells[ nRow * nWidth + nCol ];
-            Cell aTempCell(*pCell);
-            aTempCell.mbOverlapX = nCol > nFirstCol;
-            aTempCell.mbOverlapY = nRow > nFirstRow;
-            rCells[ nRow * nWidth + nCol ] = &rPool.DirectPutItemInPool(aTempCell);
-        }
-    }
-    Cell aTempCell(*rCells[ nFirstRow * nWidth + nFirstCol ]);
-    rCells[ nFirstRow * nWidth + nFirstCol ] = &rPool.DirectPutItemInPool(aTempCell);
-}
-
-
 const Style OBJ_STYLE_NONE;
 const Cell OBJ_CELL_NONE;
 
 struct ArrayImpl
 {
-    // used to reduce the memory consumption of cells
-    rtl::Reference<SfxItemPool> mxPool;
+    std::unordered_set<Cell*> maRegisteredCells;
     CellVec             maCells;
     std::vector<sal_Int32>   maWidths;
     std::vector<sal_Int32>   maHeights;
@@ -300,6 +273,7 @@ struct ArrayImpl
     bool                mbMayHaveCellRotation;
 
     explicit            ArrayImpl( sal_Int32 nWidth, sal_Int32 nHeight );
+    ~ArrayImpl();
 
     bool         IsValidPos( sal_Int32 nCol, sal_Int32 nRow ) const
                             { return (nCol < mnWidth) && (nRow < mnHeight); }
@@ -334,15 +308,29 @@ struct ArrayImpl
     sal_Int32           GetRowPosition( sal_Int32 nRow ) const;
 
     bool                HasCellRotation() const;
+
+    Cell* createOrFind(const Cell& rCell);
 };
 
-const SfxItemInfo maItemInfos[]
+static void lclSetMergedRange( ArrayImpl& rImpl, CellVec& rCells, sal_Int32 nWidth, sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow )
 {
-    // _nSID, _bNeedsPoolRegistration, _bShareable
-    {0, false, true }
-};
+    for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
+    {
+        for( sal_Int32 nRow = nFirstRow; nRow <= nLastRow; ++nRow )
+        {
+            const Cell* pCell = rCells[ nRow * nWidth + nCol ];
+            Cell aTempCell(*pCell);
+            aTempCell.mbOverlapX = nCol > nFirstCol;
+            aTempCell.mbOverlapY = nRow > nFirstRow;
+            rCells[ nRow * nWidth + nCol ] = rImpl.createOrFind(aTempCell);
+        }
+    }
+    Cell aTempCell(*rCells[ nFirstRow * nWidth + nFirstCol ]);
+    rCells[ nFirstRow * nWidth + nFirstCol ] = rImpl.createOrFind(aTempCell);
+}
+
 ArrayImpl::ArrayImpl( sal_Int32 nWidth, sal_Int32 nHeight ) :
-    mxPool(new SfxItemPool("Mine", 10, 10, maItemInfos)),
+    maRegisteredCells(),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFirstClipCol( 0 ),
@@ -353,13 +341,30 @@ ArrayImpl::ArrayImpl( sal_Int32 nWidth, sal_Int32 nHeight ) :
     mbYCoordsDirty( false ),
     mbMayHaveCellRotation( false )
 {
-    const Cell* pDefaultCell = &mxPool->DirectPutItemInPool(Cell());
+    const Cell* pDefaultCell = createOrFind(Cell());
     // default-construct all vectors
     maCells.resize( mnWidth * mnHeight, pDefaultCell );
     maWidths.resize( mnWidth, 0 );
     maHeights.resize( mnHeight, 0 );
     maXCoords.resize( mnWidth + 1, 0 );
     maYCoords.resize( mnHeight + 1, 0 );
+}
+
+ArrayImpl::~ArrayImpl()
+{
+    for (auto* pCell : maRegisteredCells)
+        delete pCell;
+}
+
+Cell* ArrayImpl::createOrFind(const Cell& rCell)
+{
+    for (auto* pCell : maRegisteredCells)
+        if (*pCell == rCell)
+            return pCell;
+
+    Cell* pRetval(new Cell(rCell));
+    maRegisteredCells.insert(pRetval);
+    return pRetval;
 }
 
 const Cell& ArrayImpl::GetCell( sal_Int32 nCol, sal_Int32 nRow ) const
@@ -370,7 +375,7 @@ const Cell& ArrayImpl::GetCell( sal_Int32 nCol, sal_Int32 nRow ) const
 void ArrayImpl::PutCell( sal_Int32 nCol, sal_Int32 nRow, const Cell & rCell )
 {
     if (IsValidPos( nCol, nRow ))
-        maCells[ GetIndex( nCol, nRow ) ] = &mxPool->DirectPutItemInPool(rCell);
+        maCells[ GetIndex( nCol, nRow ) ] = createOrFind(rCell);
 }
 
 sal_Int32 ArrayImpl::GetMergedFirstCol( sal_Int32 nCol, sal_Int32 nRow ) const
@@ -599,6 +604,8 @@ void Array::SetCellStyleLeft( sal_Int32 nCol, sal_Int32 nRow, const Style& rStyl
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetCellStyleLeft" );
     Cell aTempCell(CELL(nCol, nRow));
+    if (aTempCell.GetStyleLeft() == rStyle)
+        return;
     aTempCell.SetStyleLeft(rStyle);
     PUTCELL( nCol, nRow, aTempCell );
 }
@@ -607,6 +614,8 @@ void Array::SetCellStyleRight( sal_Int32 nCol, sal_Int32 nRow, const Style& rSty
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetCellStyleRight" );
     Cell aTempCell(CELL(nCol, nRow));
+    if (aTempCell.GetStyleRight() == rStyle)
+        return;
     aTempCell.SetStyleRight(rStyle);
     PUTCELL( nCol, nRow, aTempCell );
 }
@@ -615,6 +624,8 @@ void Array::SetCellStyleTop( sal_Int32 nCol, sal_Int32 nRow, const Style& rStyle
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetCellStyleTop" );
     Cell aTempCell(CELL(nCol, nRow));
+    if (aTempCell.GetStyleTop() == rStyle)
+        return;
     aTempCell.SetStyleTop(rStyle);
     PUTCELL( nCol, nRow, aTempCell );
 }
@@ -623,6 +634,8 @@ void Array::SetCellStyleBottom( sal_Int32 nCol, sal_Int32 nRow, const Style& rSt
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetCellStyleBottom" );
     Cell aTempCell(CELL(nCol, nRow));
+    if (aTempCell.GetStyleBottom() == rStyle)
+        return;
     aTempCell.SetStyleBottom(rStyle);
     PUTCELL( nCol, nRow, aTempCell );
 }
@@ -631,6 +644,8 @@ void Array::SetCellStyleTLBR( sal_Int32 nCol, sal_Int32 nRow, const Style& rStyl
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetCellStyleTLBR" );
     Cell aTempCell(CELL(nCol, nRow));
+    if (aTempCell.GetStyleTLBR() == rStyle)
+        return;
     aTempCell.SetStyleTLBR(rStyle);
     PUTCELL( nCol, nRow, aTempCell );
 }
@@ -639,6 +654,8 @@ void Array::SetCellStyleBLTR( sal_Int32 nCol, sal_Int32 nRow, const Style& rStyl
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetCellStyleBLTR" );
     Cell aTempCell(CELL(nCol, nRow));
+    if (aTempCell.GetStyleBLTR() == rStyle)
+        return;
     aTempCell.SetStyleBLTR(rStyle);
     PUTCELL( nCol, nRow, aTempCell );
 }
@@ -647,6 +664,8 @@ void Array::SetCellStyleDiag( sal_Int32 nCol, sal_Int32 nRow, const Style& rTLBR
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetCellStyleDiag" );
     Cell aTempCell(CELL(nCol, nRow));
+    if (aTempCell.GetStyleTLBR() == rTLBR && aTempCell.GetStyleBLTR() == rBLTR)
+        return;
     aTempCell.SetStyleTLBR(rTLBR);
     aTempCell.SetStyleBLTR(rBLTR);
     PUTCELL( nCol, nRow, aTempCell );
@@ -684,6 +703,8 @@ void Array::SetCellRotation(sal_Int32 nCol, sal_Int32 nRow, SvxRotateMode eRotMo
 {
     DBG_FRAME_CHECK_COLROW(nCol, nRow, "SetCellRotation");
     Cell aTempCell(CELL(nCol, nRow));
+    if (aTempCell.meRotMode == eRotMode && aTempCell.mfOrientation == fOrientation)
+        return;
     aTempCell.meRotMode = eRotMode;
     aTempCell.mfOrientation = fOrientation;
     PUTCELL( nCol, nRow, aTempCell );
@@ -852,7 +873,7 @@ void Array::SetMergedRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 
     }
 #endif
     if( mxImpl->IsValidPos( nFirstCol, nFirstRow ) && mxImpl->IsValidPos( nLastCol, nLastRow ) )
-        lclSetMergedRange( *mxImpl->mxPool, mxImpl->maCells, mxImpl->mnWidth, nFirstCol, nFirstRow, nLastCol, nLastRow );
+        lclSetMergedRange( *mxImpl, mxImpl->maCells, mxImpl->mnWidth, nFirstCol, nFirstRow, nLastCol, nLastRow );
 }
 
 void Array::SetAddMergedLeftSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nAddSize )
@@ -862,6 +883,8 @@ void Array::SetAddMergedLeftSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nAdd
     for( MergedCellIterator aIt( *this, nCol, nRow ); aIt.Is(); ++aIt )
     {
         Cell aTempCell(CELL(aIt.Col(), aIt.Row()));
+        if (aTempCell.mnAddLeft == nAddSize)
+            return;
         aTempCell.mnAddLeft = nAddSize;
         PUTCELL( nCol, nRow, aTempCell );
     }
@@ -874,6 +897,8 @@ void Array::SetAddMergedRightSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nAd
     for( MergedCellIterator aIt( *this, nCol, nRow ); aIt.Is(); ++aIt )
     {
         Cell aTempCell(CELL(aIt.Col(), aIt.Row()));
+        if (aTempCell.mnAddRight == nAddSize)
+            return;
         aTempCell.mnAddRight = nAddSize;
         PUTCELL( nCol, nRow, aTempCell );
     }
@@ -886,6 +911,8 @@ void Array::SetAddMergedTopSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nAddS
     for( MergedCellIterator aIt( *this, nCol, nRow ); aIt.Is(); ++aIt )
     {
         Cell aTempCell(CELL(aIt.Col(), aIt.Row()));
+        if (aTempCell.mnAddTop == nAddSize)
+            return;
         aTempCell.mnAddTop = nAddSize;
         PUTCELL( nCol, nRow, aTempCell );
     }
@@ -898,6 +925,8 @@ void Array::SetAddMergedBottomSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nA
     for( MergedCellIterator aIt( *this, nCol, nRow ); aIt.Is(); ++aIt )
     {
         Cell aTempCell(CELL(aIt.Col(), aIt.Row()));
+        if (aTempCell.mnAddBottom == nAddSize)
+            return;
         aTempCell.mnAddBottom = nAddSize;
         PUTCELL( nCol, nRow, aTempCell );
     }
@@ -1063,7 +1092,7 @@ void Array::MirrorSelfX()
         {
             Cell aTempCell(CELL(mxImpl->GetMirrorCol( nCol ), nRow));
             aTempCell.MirrorSelfX();
-            aNewCells.push_back( &mxImpl->mxPool->DirectPutItemInPool(aTempCell) );
+            aNewCells.push_back( mxImpl->createOrFind(aTempCell) );
         }
     }
     mxImpl->maCells.swap( aNewCells );
