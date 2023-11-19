@@ -1675,10 +1675,7 @@ public:
     {
         auto & rTable = const_cast<SwDoc*>(this)->mvUnoCursorTable;
         // In most cases we'll remove most of the elements.
-        rTable.erase( std::remove_if(rTable.begin(),
-                                     rTable.end(),
-                                     [] (std::weak_ptr<SwUnoCursor> const & x) { return x.expired(); }),
-                      rTable.end());
+        std::erase_if(rTable, [] (std::weak_ptr<SwUnoCursor> const & x) { return x.expired(); });
     }
 
     /**

@@ -541,7 +541,7 @@ void SwViewShell::InvalidateAll(std::vector<LockPaintReason>& rReasons)
     {
         // https://github.com/CollaboraOnline/online/issues/6379
         // ditch OuterResize as a reason to invalidate all in the online case
-        rReasons.erase(std::remove(rReasons.begin(), rReasons.end(), LockPaintReason::OuterResize), rReasons.end());
+        std::erase(rReasons, LockPaintReason::OuterResize);
     }
 
     if (!rReasons.empty())

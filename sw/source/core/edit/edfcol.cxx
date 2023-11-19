@@ -1190,11 +1190,9 @@ static void lcl_ApplyParagraphClassification(SwDoc* pDoc,
     // need to insert in reverse order.
     std::reverse(aResults.begin(), aResults.end());
     // Ignore "PARAGRAPH" types
-    aResults.erase(std::remove_if(aResults.begin(),
-                                  aResults.end(),
+    std::erase_if(aResults,
                                   [](const svx::ClassificationResult& rResult)-> bool
-                                            { return rResult.meType == svx::ClassificationType::PARAGRAPH; }),
-                                  aResults.end());
+                                            { return rResult.meType == svx::ClassificationType::PARAGRAPH; });
 
     sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
     std::vector<OUString> aFieldNames;

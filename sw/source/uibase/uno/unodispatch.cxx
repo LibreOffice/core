@@ -300,10 +300,9 @@ void SwXDispatch::addStatusListener(
 void SwXDispatch::removeStatusListener(
     const uno::Reference< frame::XStatusListener >& xControl, const util::URL&  )
 {
-    m_aStatusListenerVector.erase(
-        std::remove_if(m_aStatusListenerVector.begin(), m_aStatusListenerVector.end(),
-            [&](const StatusStruct_Impl& status) { return status.xListener.get() == xControl.get(); }),
-        m_aStatusListenerVector.end());
+    std::erase_if(
+            m_aStatusListenerVector,
+            [&](const StatusStruct_Impl& status) { return status.xListener.get() == xControl.get(); });
     if(m_aStatusListenerVector.empty() && m_pView)
     {
         uno::Reference<view::XSelectionSupplier> xSupplier = m_pView->GetUNOObject();

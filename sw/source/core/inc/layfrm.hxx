@@ -178,10 +178,7 @@ public:
 
     void ClearVertPosOrientFrameFor(SwAnchoredObject *pObj)
     {
-        m_VertPosOrientFramesFor.erase(
-            std::remove(m_VertPosOrientFramesFor.begin(),
-                m_VertPosOrientFramesFor.end(), pObj),
-            m_VertPosOrientFramesFor.end());
+        std::erase(m_VertPosOrientFramesFor, pObj);
     }
     void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };

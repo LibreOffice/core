@@ -830,9 +830,7 @@ void SwContentControlManager::Insert(SwTextContentControl* pTextContentControl)
 
 void SwContentControlManager::Erase(SwTextContentControl* pTextContentControl)
 {
-    m_aContentControls.erase(
-        std::remove(m_aContentControls.begin(), m_aContentControls.end(), pTextContentControl),
-        m_aContentControls.end());
+    std::erase(m_aContentControls, pTextContentControl);
 }
 
 SwTextContentControl* SwContentControlManager::Get(size_t nIndex)

@@ -655,8 +655,7 @@ namespace sw
                 }
             }
 
-            aRunChanges.erase(std::remove_if(aRunChanges.begin(),
-                aRunChanges.end(), myImplHelpers::IfBeforeStart(0/*nTextStart*/)), aRunChanges.end());
+            std::erase_if(aRunChanges, myImplHelpers::IfBeforeStart(0/*nTextStart*/));
 
             return aRunChanges;
         }

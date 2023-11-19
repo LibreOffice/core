@@ -221,10 +221,10 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
     osl_atomic_increment(&rTransferable.m_refCount);
     {
         // Remove previously added, but no longer existing weak references.
-        mxTransferables.erase(std::remove_if(mxTransferables.begin(), mxTransferables.end(),
+        std::erase_if(mxTransferables,
             [](const unotools::WeakReference<SwTransferable>& rTunnel) {
                 return !rTunnel.get();
-            }), mxTransferables.end());
+            });
 
         mxTransferables.emplace_back(&rTransferable);
     }

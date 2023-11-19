@@ -1523,7 +1523,7 @@ namespace
 
         virtual void SAL_CALL removeDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener) override
         {
-            m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener), m_aListeners.end());
+            std::erase(m_aListeners, xListener);
         }
 
         virtual sal_Bool SAL_CALL isActive() override

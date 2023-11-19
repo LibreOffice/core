@@ -1472,7 +1472,7 @@ class FieldDocWatchingStack : public SfxListener
             if (!bAllInvalidated && m_rFilter(pField))
             {
                 EndListening(const_cast<SwFormatField&>(*pField));
-                m_aFormatFields.erase(std::remove(m_aFormatFields.begin(), m_aFormatFields.end(), pField), m_aFormatFields.end());
+                std::erase(m_aFormatFields, pField);
             }
         }
         else if (pHint->Which() == SwFormatFieldHintWhich::INSERTED)

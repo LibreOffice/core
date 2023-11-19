@@ -832,10 +832,7 @@ std::vector< uno::Reference<text::XTextField> >
 MetaFieldManager::getMetaFields()
 {
     // erase deleted fields
-    const MetaFieldList_t::iterator iter(
-        std::remove_if(m_MetaFields.begin(), m_MetaFields.end(),
-            [] (std::weak_ptr<MetaField> const& rField) { return rField.expired(); }));
-    m_MetaFields.erase(iter, m_MetaFields.end());
+    std::erase_if(m_MetaFields, [] (std::weak_ptr<MetaField> const& rField) { return rField.expired(); });
     // filter out fields in UNDO
     MetaFieldList_t filtered(m_MetaFields.size());
     const MetaFieldList_t::iterator iter2(

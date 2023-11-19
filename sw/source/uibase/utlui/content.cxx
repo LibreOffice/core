@@ -2219,8 +2219,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                     m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
 
                     // remove any parent candidates equal to or higher than this node
-                    aParentCandidates.erase(std::remove_if(aParentCandidates.begin(), aParentCandidates.end(),
-                                                          std::not_fn(lambda)), aParentCandidates.end());
+                    std::erase_if(aParentCandidates, std::not_fn(lambda));
 
                     // add this node as a parent candidate for any following nodes at a higher outline level
                     aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));

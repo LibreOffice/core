@@ -1055,7 +1055,7 @@ void SwHTMLParser::DeregisterHTMLTable(HTMLTable* pOld)
 {
     if (pOld->m_xBox1)
         m_aOrphanedTableBoxes.emplace_back(std::move(pOld->m_xBox1));
-    m_aTables.erase(std::remove(m_aTables.begin(), m_aTables.end(), pOld));
+    std::erase(m_aTables, pOld);
 }
 
 SwDoc* SwHTMLParser::GetDoc() const

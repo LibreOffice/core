@@ -1424,11 +1424,11 @@ void SwChartDataProvider::AddDataSequence( const SwTable &rTable, rtl::Reference
 void SwChartDataProvider::RemoveDataSequence( const SwTable &rTable, rtl::Reference< SwChartDataSequence > const &rxDataSequence )
 {
     Vec_DataSequenceRef_t& rVec = m_aDataSequences[ &rTable ];
-    rVec.erase( std::remove_if(rVec.begin(), rVec.end(),
+    std::erase_if(rVec,
         [&rxDataSequence](const unotools::WeakReference < SwChartDataSequence >& i)
         {
             return i.get() == rxDataSequence;
-        }), rVec.end());
+        });
 }
 
 void SwChartDataProvider::InvalidateTable( const SwTable *pTable, bool bImmediate )
