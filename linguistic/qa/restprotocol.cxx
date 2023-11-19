@@ -83,7 +83,7 @@ public:
             "{\"check-positions\":[{\"offset\":15,\"length\":6,\"errorcode\":4711,\"type\":"
             "\"orth\","
             "\"severity\":1,\"proposals\":[\"Entwurf\",\"Entw\u00fcrfe\"]},"
-            "{\"offset\":22,\"length\":3,\"errorcode\":8221,\"type\":\"orth\",\"severity\":1}]}");
+            "{\"offset\":22,\"length\":3,\"errorcode\":8221,\"type\":\"orth\",\"severity\":1}]}"_ostr);
 
         m_aStreamSocket.write(aResponse.getStr(), aResponse.getLength());
         m_aStreamSocket.close();
@@ -93,7 +93,7 @@ public:
     {
         OString aResponse("HTTP/1.1 404 Not Found\r\n"
                           "Connection: Closed\r\n"
-                          "\r\n");
+                          "\r\n"_ostr);
 
         m_aStreamSocket.write(aResponse.getStr(), aResponse.getLength());
         m_aStreamSocket.close();
