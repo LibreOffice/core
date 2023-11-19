@@ -354,7 +354,7 @@ void GalleryTheme::implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const SolarMutexGuard aGuard;
 
-    maItemVector.erase(std::remove(maItemVector.begin(), maItemVector.end(), &rItem), maItemVector.end());
+    std::erase(maItemVector, &rItem);
 }
 
 }

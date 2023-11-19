@@ -1946,14 +1946,13 @@ void SubsetMap::ApplyCharMap( const FontCharMapRef& rxFontCharMap )
         return;
 
     // remove subsets that are not matched in any range
-    maSubsets.erase(std::remove_if(maSubsets.begin(), maSubsets.end(),
+    std::erase_if(maSubsets,
         [&rxFontCharMap](const Subset& rSubset) {
             sal_uInt32 cMin = rSubset.GetRangeMin();
             sal_uInt32 cMax = rSubset.GetRangeMax();
             int nCount = rxFontCharMap->CountCharsInRange( cMin, cMax );
             return nCount <= 0;
-        }),
-        maSubsets.end());
+        });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

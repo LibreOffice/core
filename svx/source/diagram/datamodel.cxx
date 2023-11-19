@@ -125,18 +125,16 @@ bool DiagramData::removeNode(const OUString& rNodeId)
                 aIdsToRemove.insert(aCxn.msPresId);
 
     // remove connections
-    maConnections.erase(std::remove_if(maConnections.begin(), maConnections.end(),
+    std::erase_if(maConnections,
                                        [aIdsToRemove](const Connection& rCxn) {
                                            return aIdsToRemove.count(rCxn.msSourceId) || aIdsToRemove.count(rCxn.msDestId);
-                                       }),
-                        maConnections.end());
+                                       });
 
     // remove data and presentation nodes
-    maPoints.erase(std::remove_if(maPoints.begin(), maPoints.end(),
+    std::erase_if(maPoints,
                                   [aIdsToRemove](const Point& rPoint) {
                                       return aIdsToRemove.count(rPoint.msModelId);
-                                  }),
-                   maPoints.end());
+                                  });
 
     // TODO: fix source/dest order
     return true;
@@ -221,9 +219,7 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
         }
 
     // HACK: empty items shouldn't appear there
-    aChildren.erase(std::remove_if(aChildren.begin(), aChildren.end(),
-                                   [](const std::pair<OUString, OUString>& aItem) { return aItem.first.isEmpty(); }),
-                    aChildren.end());
+    std::erase_if(aChildren, [](const std::pair<OUString, OUString>& aItem) { return aItem.first.isEmpty(); });
 
     return aChildren;
 }

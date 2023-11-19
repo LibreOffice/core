@@ -154,7 +154,7 @@ namespace sdr::animation
         {
             if(!mvEvents.empty())
             {
-                mvEvents.erase(std::remove(mvEvents.begin(), mvEvents.end(), pOld), mvEvents.end());
+                std::erase(mvEvents, pOld);
                 checkTimeout();
             }
         }

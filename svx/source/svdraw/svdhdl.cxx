@@ -2239,9 +2239,7 @@ std::unique_ptr<SdrHdl> SdrHdlList::RemoveHdl(size_t nNum)
 
 void SdrHdlList::RemoveAllByKind(SdrHdlKind eKind)
 {
-    maList.erase(std::remove_if(maList.begin(), maList.end(),
-        [&eKind](std::unique_ptr<SdrHdl>& rItem) { return rItem->GetKind() == eKind; }),
-        maList.end());
+    std::erase_if(maList, [&eKind](std::unique_ptr<SdrHdl>& rItem) { return rItem->GetKind() == eKind; });
 }
 
 void SdrHdlList::Clear()

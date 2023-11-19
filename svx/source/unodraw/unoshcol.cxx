@@ -150,7 +150,7 @@ void SAL_CALL SvxShapeCollection::add( const Reference< drawing::XShape >& xShap
 void SAL_CALL SvxShapeCollection::remove( const uno::Reference< drawing::XShape >& xShape )
 {
     std::unique_lock g(m_aMutex);
-    maShapeContainer.erase(std::remove(maShapeContainer.begin(), maShapeContainer.end(), xShape), maShapeContainer.end());
+    std::erase(maShapeContainer, xShape);
 }
 
 
