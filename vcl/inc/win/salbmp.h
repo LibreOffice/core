@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALBMP_H
-#define INCLUDED_VCL_INC_WIN_SALBMP_H
+#pragma once
 
 #include <tools/gen.hxx>
 #include <win/wincomp.hxx>
@@ -92,7 +91,5 @@ public:
 
     virtual const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const override;
 };
-
-#endif // INCLUDED_VCL_INC_WIN_SALBMP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
