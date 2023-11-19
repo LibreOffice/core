@@ -766,7 +766,7 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
             const ScPatternAttr* pPat1 = rFirst.cellInfo(nX).pPatternAttr;
             const ScPatternAttr* pPat2 = rOther.cellInfo(nX).pPatternAttr;
             if ( !pPat1 || !pPat2 ||
-                    !SfxPoolItem::areSame(&pPat1->GetItem(ATTR_PROTECTION), &pPat2->GetItem(ATTR_PROTECTION) ) )
+                    !SfxPoolItem::areSame(pPat1->GetItem(ATTR_PROTECTION), pPat2->GetItem(ATTR_PROTECTION) ) )
                 return false;
         }
     }

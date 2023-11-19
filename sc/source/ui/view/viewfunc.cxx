@@ -1065,7 +1065,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     bool bFrame =    (pDialogSet->GetItemState( ATTR_BORDER ) != SfxItemState::DEFAULT)
                   || (pDialogSet->GetItemState( ATTR_BORDER_INNER ) != SfxItemState::DEFAULT);
 
-    if (SfxPoolItem::areSame(&rNewOuter, &rOldOuter) && SfxPoolItem::areSame(&rNewInner, &rOldInner))
+    if (SfxPoolItem::areSame(rNewOuter, rOldOuter) && SfxPoolItem::areSame(rNewInner, rOldInner))
         bFrame = false;
 
     //  this should be intercepted by the pool: ?!??!??

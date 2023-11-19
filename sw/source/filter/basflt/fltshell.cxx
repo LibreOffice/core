@@ -915,7 +915,7 @@ void SwFltAnchorListener::Notify(const SfxHint& rHint)
 bool SwFltRedline::operator==(const SfxPoolItem& rItem) const
 {
     return SfxPoolItem::operator==(rItem) &&
-        SfxPoolItem::areSame(this, &rItem);
+        SfxPoolItem::areSame(*this, rItem);
 }
 
 SwFltRedline* SwFltRedline::Clone( SfxItemPool* ) const

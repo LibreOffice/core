@@ -645,7 +645,7 @@ SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
 
 SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)
 {
-    if (SfxPoolItem::areSame(this, &rCpy))
+    if (SfxPoolItem::areSame(*this, rCpy))
         return *this;
 
     if (rCpy.GetPageDesc())
@@ -859,7 +859,7 @@ SwFormatCol::~SwFormatCol() {}
 
 SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
 {
-    if (!SfxPoolItem::areSame(this, &rCpy))
+    if (!SfxPoolItem::areSame(*this, rCpy))
     {
         m_eLineStyle  = rCpy.m_eLineStyle;
         m_nLineWidth  = rCpy.m_nLineWidth;
@@ -1644,7 +1644,7 @@ sal_Int32 SwFormatAnchor::GetAnchorContentOffset() const
 
 SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
 {
-    if (!SfxPoolItem::areSame(this, &rAnchor))
+    if (!SfxPoolItem::areSame(*this, rAnchor))
     {
         m_eAnchorId  = rAnchor.m_eAnchorId;
         m_nPageNumber   = rAnchor.m_nPageNumber;
