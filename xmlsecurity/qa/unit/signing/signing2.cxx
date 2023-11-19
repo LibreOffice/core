@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
 
     // Make sure the signature is still there
-    assertXPath(pXmlDoc, "//dsig:Signature", "Id",
+    assertXPath(pXmlDoc, "//dsig:Signature"_ostr, "Id"_ostr,
                 "ID_00a7002f009000bc00ce00f7004400460080002f002e00e400e0003700df00e8");
 }
 
