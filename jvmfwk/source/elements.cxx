@@ -55,14 +55,14 @@ static OString getElement(OString const & docPath,
     if (doc == nullptr)
         throw FrameworkException(
             JFW_E_ERROR,
-            "[Java framework] Error in function getElement (elements.cxx)");
+            "[Java framework] Error in function getElement (elements.cxx)"_ostr);
 
     jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
     if (xmlXPathRegisterNs(context, reinterpret_cast<xmlChar const *>("jf"),
         reinterpret_cast<xmlChar const *>(NS_JAVA_FRAMEWORK)) == -1)
         throw FrameworkException(
             JFW_E_ERROR,
-            "[Java framework] Error in function getElement (elements.cxx)");
+            "[Java framework] Error in function getElement (elements.cxx)"_ostr);
 
     CXPathObjectPtr pathObj = xmlXPathEvalExpression(pathExpression, context);
     OString sValue;
@@ -70,7 +70,7 @@ static OString getElement(OString const & docPath,
     {
         throw FrameworkException(
             JFW_E_ERROR,
-            "[Java framework] Error in function getElement (elements.cxx)");
+            "[Java framework] Error in function getElement (elements.cxx)"_ostr);
     }
     sValue = reinterpret_cast<char*>(pathObj->nodesetval->nodeTab[0]->content);
     return sValue;
@@ -85,7 +85,7 @@ OString getElementUpdated()
 void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 {
     OString sExcMsg("[Java framework] Error in function createSettingsStructure "
-                         "(elements.cxx).");
+                         "(elements.cxx)."_ostr);
     xmlNode * root = xmlDocGetRootElement(document);
     if (root == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -171,7 +171,7 @@ NodeJava::NodeJava(Layer layer):
     if (getMode() == JFW_MODE_DIRECT)
         throw FrameworkException(
             JFW_E_DIRECT_MODE,
-            "[Java framework] Trying to access settings files in direct mode.");
+            "[Java framework] Trying to access settings files in direct mode."_ostr);
 }
 
 
@@ -190,7 +190,7 @@ void NodeJava::load()
         if (s == FILE_INVALID)
             throw FrameworkException(
                 JFW_E_ERROR,
-                "[Java framework] Invalid file for shared Java settings.");
+                "[Java framework] Invalid file for shared Java settings."_ostr);
         else if (s == FILE_DOES_NOT_EXIST)
             //Writing shared data is not supported yet.
             return;
@@ -352,7 +352,7 @@ bool NodeJava::prepareSettingsDocument() const
 {
     OString sExcMsg(
         "[Java framework] Error in function prepareSettingsDocument"
-        " (elements.cxx).");
+        " (elements.cxx)."_ostr);
     if (!createSettingsDocument())
     {
         return false;
@@ -376,7 +376,7 @@ bool NodeJava::prepareSettingsDocument() const
 void NodeJava::write() const
 {
     OString sExcMsg("[Java framework] Error in function NodeJava::writeSettings "
-                         "(elements.cxx).");
+                         "(elements.cxx)."_ostr);
     CXmlDocPtr docUser;
     CXPathContextPtr contextUser;
     CXPathObjectPtr pathObj;
@@ -628,7 +628,7 @@ bool NodeJava::createSettingsDocument() const
     }
     //make sure there is a user directory
     OString sExcMsg("[Java framework] Error in function createSettingsDocument "
-                         "(elements.cxx).");
+                         "(elements.cxx)."_ostr);
     // check if javasettings.xml already exist
     if (FILE_OK == checkSettingsFileStatus(sURL))
         return true;
@@ -681,7 +681,7 @@ CNodeJavaInfo::CNodeJavaInfo() :
 void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
 {
     OString sExcMsg("[Java framework] Error in function NodeJavaInfo::loadFromNode "
-                         "(elements.cxx).");
+                         "(elements.cxx)."_ostr);
 
     OSL_ASSERT(pJavaInfo && pDoc);
     if (pJavaInfo->children == nullptr)

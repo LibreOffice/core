@@ -150,7 +150,7 @@ OUString getLibraryLocation()
             reinterpret_cast< oslGenericFunction >(getLibraryLocation),
             libraryFileUrl))
         throw FrameworkException(JFW_E_ERROR,
-                    "[Java framework] Error in function getLibraryLocation (fwkutil.cxx).");
+                    "[Java framework] Error in function getLibraryLocation (fwkutil.cxx)."_ostr);
 
     return getDirFromFile(libraryFileUrl);
 }

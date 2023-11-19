@@ -62,7 +62,7 @@ OString getVendorSettingsPath(OUString const & sURL)
         & sSystemPathSettings.pData) != osl_File_E_None)
         throw FrameworkException(
             JFW_E_ERROR,
-            "[Java framework] Error in function getVendorSettingsPath (fwkbase.cxx) ");
+            "[Java framework] Error in function getVendorSettingsPath (fwkbase.cxx) "_ostr);
     OString osSystemPathSettings = OUStringToOString(sSystemPathSettings, PathEncoding());
     return osSystemPathSettings;
 }
@@ -97,7 +97,7 @@ VendorSettings::VendorSettings()
     if (sSettingsPath.isEmpty())
     {
         OString sMsg("[Java framework] A vendor settings file was not specified."
-               "Check the bootstrap parameter " UNO_JAVA_JFW_VENDOR_SETTINGS ".");
+               "Check the bootstrap parameter " UNO_JAVA_JFW_VENDOR_SETTINGS "."_ostr);
         SAL_WARN( "jfw", sMsg );
         throw FrameworkException(JFW_E_CONFIGURATION, sMsg);
     }
@@ -117,7 +117,7 @@ VendorSettings::VendorSettings()
         reinterpret_cast<xmlChar const *>(NS_JAVA_FRAMEWORK));
     if (res == -1)
         throw FrameworkException(JFW_E_ERROR,
-                "[Java framework] Error in constructor VendorSettings::VendorSettings() (fwkbase.cxx)");
+                "[Java framework] Error in constructor VendorSettings::VendorSettings() (fwkbase.cxx)"_ostr);
 }
 
 VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) const
@@ -288,7 +288,7 @@ OUString BootParams::getVendorSettings()
                 throw FrameworkException(
                     JFW_E_CONFIGURATION,
                     "[Java framework] Invalid value for bootstrap variable: "
-                             UNO_JAVA_JFW_VENDOR_SETTINGS);
+                             UNO_JAVA_JFW_VENDOR_SETTINGS ""_ostr);
             sVendor = sAbsoluteUrl;
             s = checkFileURL(sVendor);
             if (s == jfw::FILE_INVALID || s == jfw::FILE_DOES_NOT_EXIST)
@@ -296,7 +296,7 @@ OUString BootParams::getVendorSettings()
                 throw FrameworkException(
                     JFW_E_CONFIGURATION,
                     "[Java framework] Invalid value for bootstrap variable: "
-                                 UNO_JAVA_JFW_VENDOR_SETTINGS);
+                                 UNO_JAVA_JFW_VENDOR_SETTINGS ""_ostr);
             }
         }
         SAL_INFO(
@@ -322,7 +322,7 @@ OUString BootParams::getJREHome()
             UNO_JAVA_JFW_JREHOME" and "
             UNO_JAVA_JFW_ENV_JREHOME" are set. However only one of them can be set."
             "Check bootstrap parameters: environment variables, command line "
-            "arguments, rc/ini files for executable and java framework library.");
+            "arguments, rc/ini files for executable and java framework library."_ostr);
     }
     else if (bEnvJRE)
     {
@@ -333,7 +333,7 @@ OUString BootParams::getJREHome()
                 JFW_E_CONFIGURATION,
                 "[Java framework] Both bootstrap parameter "
                 UNO_JAVA_JFW_ENV_JREHOME" is set, but the environment variable "
-                "JAVA_HOME is not set.");
+                "JAVA_HOME is not set."_ostr);
         }
         std::string_view osJRE(pJRE);
         OUString usJRE = OStringToOUString(osJRE, osl_getThreadTextEncoding());
@@ -341,7 +341,7 @@ OUString BootParams::getJREHome()
             throw FrameworkException(
                 JFW_E_ERROR,
                 "[Java framework] Error in function BootParams::getJREHome() "
-                "(fwkbase.cxx).");
+                "(fwkbase.cxx)."_ostr);
         SAL_INFO(
             "jfw.level2",
             "Using bootstrap parameter " UNO_JAVA_JFW_ENV_JREHOME
@@ -353,7 +353,7 @@ OUString BootParams::getJREHome()
             JFW_E_CONFIGURATION,
             "[Java framework] The bootstrap parameter "
             UNO_JAVA_JFW_ENV_JREHOME" or " UNO_JAVA_JFW_JREHOME
-            " must be set in direct mode.");
+            " must be set in direct mode."_ostr);
     }
 
     SAL_INFO_IF(
@@ -466,7 +466,7 @@ OString makeClassPathOption(std::u16string_view sUserClassPath)
 
     sPaths = OUStringToOString(sBufCP, PathEncoding());
     if (sPaths.isEmpty()) {
-        return "";
+        return ""_ostr;
     }
 
     OString sOptionClassPath = "-Djava.class.path=" + sPaths;
@@ -492,7 +492,7 @@ OString getSettingsPath( const OUString & sURL)
         & sPath.pData) != osl_File_E_None)
         throw FrameworkException(
             JFW_E_ERROR,
-            "[Java framework] Error in function ::getSettingsPath (fwkbase.cxx).");
+            "[Java framework] Error in function ::getSettingsPath (fwkbase.cxx)."_ostr);
     return OUStringToOString(sPath, PathEncoding());
 }
 

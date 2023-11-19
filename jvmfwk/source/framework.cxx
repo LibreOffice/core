@@ -512,7 +512,7 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
                     "[Java framework] The JRE specified by the bootstrap "
                     "variable UNO_JAVA_JFW_JREHOME  or  UNO_JAVA_JFW_ENV_JREHOME "
                     " could not be recognized. Check the values and make sure that you "
-                    "use a plug-in library that can recognize that JRE.");
+                    "use a plug-in library that can recognize that JRE."_ostr);
 
             return JFW_E_NONE;
         }
