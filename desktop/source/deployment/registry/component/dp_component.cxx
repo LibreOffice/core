@@ -654,7 +654,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             {
                 // xxx todo: probe and evaluate component xml description
 
-                auto const iter = params.find(OString("platform"));
+                auto const iter = params.find("platform"_ostr);
                 bool bPlatformFits(iter == params.end());
                 OUString aPlatform;
                 if (!bPlatformFits) // platform is specified, we have to check
@@ -665,7 +665,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 // If the package is being removed, do not care whether
                 // platform fits. We won't be using it anyway.
                 if (bPlatformFits || bRemoved) {
-                    auto const iterType = params.find(OString("type"));
+                    auto const iterType = params.find("type"_ostr);
                     if (iterType != params.end())
                     {
                         OUString const & value = iterType->second.m_sValue;
@@ -697,7 +697,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             }
             else if (subType.equalsIgnoreAsciiCase("vnd.sun.star.uno-components"))
             {
-                auto const iter = params.find(OString("platform"));
+                auto const iter = params.find("platform"_ostr);
                 if (iter == params.end() || platform_fits(iter->second.m_sValue)) {
                     return new BackendImpl::ComponentsPackageImpl(
                         this, url, name, m_xComponentsTypeInfo, bRemoved,
@@ -706,7 +706,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             }
             else if (subType.equalsIgnoreAsciiCase( "vnd.sun.star.uno-typelibrary"))
             {
-                auto const iter = params.find(OString("type"));
+                auto const iter = params.find("type"_ostr);
                 if (iter != params.end()) {
                     OUString const & value = iter->second.m_sValue;
                     if (value.equalsIgnoreAsciiCase("RDB"))

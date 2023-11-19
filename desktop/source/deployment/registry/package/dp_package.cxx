@@ -1383,7 +1383,7 @@ void BackendImpl::PackageImpl::scanBundle(
             continue;
 
         {
-            auto const iter = params.find("platform");
+            auto const iter = params.find("platform"_ostr);
             if (iter != params.end() && !platform_fits(iter->second.m_sValue))
                 continue;
         }
@@ -1394,7 +1394,7 @@ void BackendImpl::PackageImpl::scanBundle(
             subType.equalsIgnoreAsciiCase( "vnd.sun.star.package-bundle-description"))
         {
             // check locale:
-            auto const iter = params.find("locale");
+            auto const iter = params.find("locale"_ostr);
             if (iter == params.end())
             {
                 if (descrFile.isEmpty())

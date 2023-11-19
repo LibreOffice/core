@@ -76,7 +76,7 @@ OString readStringFromPipe(osl::StreamPipe const & pipe) {
         sal_Int32 n = pipe.recv(buf, std::size(buf));
         if (n <= 0) {
             SAL_INFO("desktop.app", "read empty string");
-            return "";
+            return ""_ostr;
         }
         bool end = false;
         if (buf[n - 1] == '\0') {

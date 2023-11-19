@@ -104,7 +104,7 @@ void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const
         ::rtl::Bootstrap::expandMacros(url);
         ::ucbhelper::Content ucbStamp(url, xCmdEnv, xContext);
         dp_misc::erase_path( url, xCmdEnv );
-        OString stamp("1" );
+        OString stamp("1"_ostr );
         Reference<css::io::XInputStream> xData(
             ::xmlscript::createInputStream(
                     reinterpret_cast<sal_Int8 const *>(stamp.getStr()),

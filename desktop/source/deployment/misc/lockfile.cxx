@@ -67,7 +67,7 @@ static OString impl_getHostname()
         aHost = OString( pHostName );
     }
     else
-        aHost = OString("UNKNOWN");
+        aHost = "UNKNOWN"_ostr;
 #endif
 
     return aHost;
@@ -153,13 +153,13 @@ namespace desktop {
         // to assume that it is a stale lockfile which can be overwritten
         OUString aLockname = m_aLockname;
         Config aConfig(aLockname);
-        aConfig.SetGroup(LOCKFILE_GROUP);
-        OString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY );
+        aConfig.SetGroup(LOCKFILE_GROUP ""_ostr);
+        OString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY ""_ostr );
         if (!aIPCserver.equalsIgnoreAsciiCase("true"))
             return false;
 
-        OString aHost = aConfig.ReadKey( LOCKFILE_HOSTKEY );
-        OString aUser = aConfig.ReadKey( LOCKFILE_USERKEY );
+        OString aHost = aConfig.ReadKey( LOCKFILE_HOSTKEY ""_ostr );
+        OString aUser = aConfig.ReadKey( LOCKFILE_USERKEY ""_ostr );
 
         // lockfile from same host?
         OString myHost( impl_getHostname() );
@@ -179,7 +179,7 @@ namespace desktop {
     {
         OUString aLockname = m_aLockname;
         Config aConfig(aLockname);
-        aConfig.SetGroup(LOCKFILE_GROUP);
+        aConfig.SetGroup(LOCKFILE_GROUP ""_ostr);
 
         // get information
         OString aHost( impl_getHostname() );
@@ -191,13 +191,13 @@ namespace desktop {
         OString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
 
         // write information
-        aConfig.WriteKey( LOCKFILE_USERKEY,  aUser );
-        aConfig.WriteKey( LOCKFILE_HOSTKEY,  aHost );
-        aConfig.WriteKey( LOCKFILE_STAMPKEY, aStamp );
-        aConfig.WriteKey( LOCKFILE_TIMEKEY,  aTime );
+        aConfig.WriteKey( LOCKFILE_USERKEY ""_ostr,  aUser );
+        aConfig.WriteKey( LOCKFILE_HOSTKEY ""_ostr,  aHost );
+        aConfig.WriteKey( LOCKFILE_STAMPKEY ""_ostr, aStamp );
+        aConfig.WriteKey( LOCKFILE_TIMEKEY ""_ostr,  aTime );
         aConfig.WriteKey(
-            LOCKFILE_IPCKEY,
-            m_bIPCserver ? OString("true") : OString("false") );
+            LOCKFILE_IPCKEY ""_ostr,
+            m_bIPCserver ? "true"_ostr : "false"_ostr );
         aConfig.Flush( );
     }
 

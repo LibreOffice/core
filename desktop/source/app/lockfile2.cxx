@@ -31,10 +31,10 @@ bool Lockfile_execWarning( Lockfile const * that )
     // read information from lock
     OUString aLockname = that->m_aLockname;
     Config aConfig(aLockname);
-    aConfig.SetGroup( LOCKFILE_GROUP );
-    OString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
-    OString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
-    OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
+    aConfig.SetGroup( LOCKFILE_GROUP ""_ostr );
+    OString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY ""_ostr );
+    OString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY ""_ostr );
+    OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY ""_ostr );
 
     // display warning and return response
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,

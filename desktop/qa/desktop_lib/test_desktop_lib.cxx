@@ -461,7 +461,7 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_STATE_CHANGED:
     {
         OString aPayload(pPayload);
-        OString aPrefix(".uno:ModifiedStatus=");
+        OString aPrefix(".uno:ModifiedStatus="_ostr);
         if (aPayload.startsWith(aPrefix))
         {
             m_bModified = aPayload.copy(aPrefix.getLength()).toBoolean();
@@ -687,7 +687,7 @@ void DesktopLOKTest::testSaveAsJsonOptions()
     LibLODocument_Impl* pDocument = loadDoc("3page.odg");
 
     // When exporting that document to PDF, skipping the first page:
-    OString aOptions("{\"PageRange\":{\"type\":\"string\",\"value\":\"2-\"}}");
+    OString aOptions("{\"PageRange\":{\"type\":\"string\",\"value\":\"2-\"}}"_ostr);
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "pdf", aOptions.getStr()));
 
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
@@ -713,14 +713,14 @@ void DesktopLOKTest::testSaveAsCalc()
 void DesktopLOKTest::testPasteWriter()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    OString aText("hello");
+    OString aText("hello"_ostr);
 
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
-    CPPUNIT_ASSERT_EQUAL(OString("hello"), OString(pText));
+    CPPUNIT_ASSERT_EQUAL("hello"_ostr, OString(pText));
     free(pText);
 
     // textt/plain should be rejected.
@@ -731,7 +731,7 @@ void DesktopLOKTest::testPasteWriter()
     // Overwrite doc contents with a HTML paste.
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    OString aComment("foo <!-- bar --> baz");
+    OString aComment("foo <!-- bar --> baz"_ostr);
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aComment.getStr(), aComment.getLength()));
 
     // Check if we have a comment.
@@ -862,7 +862,7 @@ void DesktopLOKTest::testRowColumnHeaders()
         if (bFirstHeader)
         {
             CPPUNIT_ASSERT(nSize <= nY);
-            CPPUNIT_ASSERT_EQUAL(OString("10"), aText);
+            CPPUNIT_ASSERT_EQUAL("10"_ostr, aText);
             bFirstHeader = false;
         }
         else
@@ -890,7 +890,7 @@ void DesktopLOKTest::testRowColumnHeaders()
         if (bFirstHeader)
         {
             CPPUNIT_ASSERT(nSize <= nX);
-            CPPUNIT_ASSERT_EQUAL(OString("3"), aText);
+            CPPUNIT_ASSERT_EQUAL("3"_ostr, aText);
             bFirstHeader = false;
         }
         else
@@ -962,7 +962,7 @@ void DesktopLOKTest::testCellCursor()
 
     OString aRectangle(aTree.get<std::string>("commandValues"));
     // cell cursor geometry + col + row
-    CPPUNIT_ASSERT_EQUAL(OString("0, 0, 1274, 254, 0, 0"), aRectangle);
+    CPPUNIT_ASSERT_EQUAL("0, 0, 1274, 254, 0, 0"_ostr, aRectangle);
 }
 
 void DesktopLOKTest::testCommandResult()
@@ -1081,7 +1081,7 @@ void DesktopLOKTest::testSheetOperations()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(6, pDocument->pClass->getParts(pDocument));
 
-    std::vector<OString> aExpected = { "FirstSheet", "Renamed", "Sheet3", "Sheet4", "Sheet5", "LastSheet" };
+    std::vector<OString> aExpected = { "FirstSheet"_ostr, "Renamed"_ostr, "Sheet3"_ostr, "Sheet4"_ostr, "Sheet5"_ostr, "LastSheet"_ostr };
     for (int i = 0; i < 6; ++i)
     {
         char* pPartName = pDocument->pClass->getPartName(pDocument, i);
@@ -1686,37 +1686,37 @@ void DesktopLOKTest::testNotificationCompression()
     std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
     handler->setViewId(SfxLokHelper::getView());
 
-    handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // 0
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Superseded.
-    handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // Should be dropped.
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"); // 1
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // Superseded.
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 2
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 3
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 4
-    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // 5
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"); // Superseded.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"); // Superseded.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Superseded.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 7
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"); // 8
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"); // 9
-    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15, 25, 15, 10"); // 10
-    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // 11
-    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15, 25, 15, 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // 12
-    handler->queue(LOK_CALLBACK_SET_PART, "1"); // 13
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:AssignLayout=20"); // Superseded
-    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // Should be dropped.
-    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_SET_PART, "1"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:AssignLayout=1"); // 14
+    handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""_ostr); // 0
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Superseded.
+    handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // 1
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""_ostr); // Superseded.
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""_ostr); // 2
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"_ostr); // 3
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""_ostr); // 4
+    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"_ostr); // 5
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // Superseded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // Superseded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Superseded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""_ostr); // 7
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // 8
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // 9
+    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15, 25, 15, 10"_ostr); // 10
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""_ostr); // 11
+    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"_ostr); // 12
+    handler->queue(LOK_CALLBACK_SET_PART, "1"_ostr); // 13
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:AssignLayout=20"_ostr); // Superseded
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_SET_PART, "1"_ostr); // Should be dropped.
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:AssignLayout=1"_ostr); // 14
 
     Scheduler::ProcessEventsToIdle();
 
@@ -1782,11 +1782,11 @@ void DesktopLOKTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-100, -50, 500, 650, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "100, 100, 200, 200, 0, 0");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-100, -50, 500, 650, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "100, 100, 200, 200, 0, 0"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -1803,11 +1803,11 @@ void DesktopLOKTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"); // Different part
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, 2, 0"); // Invalid
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-121, -121, 200, 200, 0, 0"); // Inside first
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 1, 0"); // Invalid
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"_ostr); // Different part
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, 2, 0"_ostr); // Invalid
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-121, -121, 200, 200, 0, 0"_ostr); // Inside first
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 1, 0"_ostr); // Invalid
 
         Scheduler::ProcessEventsToIdle();
 
@@ -1827,14 +1827,14 @@ void DesktopLOKTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"); // 0
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"); // 1: Different part
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, -1, 0"); // Invalid
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-121, -121, 200, 200, -1, 0"); // 0: All parts
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, -1, 0"); // Invalid
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-100, -100, 1200, 1200, -1, 0"); // 0: All parts
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 3, 0"); // Overlapped
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "1000, 1000, 1239, 1239, 2, 0"); // 1: Unique region
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr); // 0
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"_ostr); // 1: Different part
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, -1, 0"_ostr); // Invalid
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-121, -121, 200, 200, -1, 0"_ostr); // 0: All parts
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, -1, 0"_ostr); // Invalid
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-100, -100, 1200, 1200, -1, 0"_ostr); // 0: All parts
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 3, 0"_ostr); // Overlapped
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "1000, 1000, 1239, 1239, 2, 0"_ostr); // 1: Unique region
 
         Scheduler::ProcessEventsToIdle();
 
@@ -1854,14 +1854,14 @@ void DesktopLOKTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 0, 0"); // 0
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 100, 100, 1, 0"); // 1: Different part
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, -1, 0"); // Invalid
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "150, 150, 50, 50, -1, 0"); // 2: All-parts
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, -1, 0"); // Invalid
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "150, 150, 40, 40, 3, 0"); // Overlapped w/ 2
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 4, 0"); // 3: Unique
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "1000, 1000, 1239, 1239, 1, 0"); // 4: Unique
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 0, 0"_ostr); // 0
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 100, 100, 1, 0"_ostr); // 1: Different part
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, -1, 0"_ostr); // Invalid
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "150, 150, 50, 50, -1, 0"_ostr); // 2: All-parts
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, -1, 0"_ostr); // Invalid
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "150, 150, 40, 40, 3, 0"_ostr); // Overlapped w/ 2
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 4, 0"_ostr); // 3: Unique
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "1000, 1000, 1239, 1239, 1, 0"_ostr); // 4: Unique
 
         Scheduler::ProcessEventsToIdle();
 
@@ -1890,11 +1890,11 @@ void DesktopLOKTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "EMPTY, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 240, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-121, -121, 300, 300, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 0, 0");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "EMPTY, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 240, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-121, -121, 300, 300, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 0, 0"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -1915,8 +1915,8 @@ void DesktopLOKTest::testPartInInvalidation()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -1931,8 +1931,8 @@ void DesktopLOKTest::testPartInInvalidation()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "40, 10, 20, 10");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "40, 10, 20, 10"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -1951,8 +1951,8 @@ void DesktopLOKTest::testPartInInvalidation()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 0, 0");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 0, 0"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -1970,8 +1970,8 @@ void DesktopLOKTest::testPartInInvalidation()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0, 0");
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 1, 0");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 1, 0"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2067,7 +2067,7 @@ void DesktopLOKTest::testInput()
     Scheduler::ProcessEventsToIdle();
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
-    CPPUNIT_ASSERT_EQUAL(OString("far beyond lovely "), OString(pText));
+    CPPUNIT_ASSERT_EQUAL("far beyond lovely "_ostr, OString(pText));
     free(pText);
 }
 
@@ -2533,7 +2533,7 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     ViewCallback aView2(pDocument);
 
     // Add a new comment
-    OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Additional comment\" }, \"Author\": { \"type\": \"string\", \"value\": \"LOK User1\" } }");
+    OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Additional comment\" }, \"Author\": { \"type\": \"string\", \"value\": \"LOK User1\" } }"_ostr);
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
@@ -2980,7 +2980,7 @@ void DesktopLOKTest::testTextSelectionHandles()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
 
-    OString aText("hello");
+    OString aText("hello"_ostr);
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
     // select the inserted text
@@ -2989,8 +2989,8 @@ void DesktopLOKTest::testTextSelectionHandles()
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
     free(pText);
-    CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 275"), m_aTextSelectionStart);
-    CPPUNIT_ASSERT_EQUAL(OString("1898, 1418, 0, 275"), m_aTextSelectionEnd);
+    CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 275"_ostr, m_aTextSelectionStart);
+    CPPUNIT_ASSERT_EQUAL("1898, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
 
     // deselect & check
     m_aTextSelectionStart = "";
@@ -3010,8 +3010,8 @@ void DesktopLOKTest::testTextSelectionHandles()
     pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
     free(pText);
-    CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 275"), m_aTextSelectionStart);
-    CPPUNIT_ASSERT_EQUAL(OString("1898, 1418, 0, 275"), m_aTextSelectionEnd);
+    CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 275"_ostr, m_aTextSelectionStart);
+    CPPUNIT_ASSERT_EQUAL("1898, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
 }
 
 void DesktopLOKTest::testDialogPaste()
@@ -3122,7 +3122,7 @@ void DesktopLOKTest::testCalcSaveAs()
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 0, KEY_LEFT);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(OString("X"), aView.m_aCellFormula);
+    CPPUNIT_ASSERT_EQUAL("X"_ostr, aView.m_aCellFormula);
 }
 
 void DesktopLOKTest::testSpellcheckerMultiView()
@@ -3367,7 +3367,7 @@ void DesktopLOKTest::testRenderSearchResult_WriterNode()
     OString aPayload =
     "<indexing>"
         "<paragraph node_type=\"writer\" index=\"19\">ABC</paragraph>"
-    "</indexing>";
+    "</indexing>"_ostr;
 
     int nWidth = 0;
     int nHeight = 0;
@@ -3412,7 +3412,7 @@ void DesktopLOKTest::testRenderSearchResult_CommonNode()
     OString aPayload =
     "<indexing>"
         "<paragraph node_type=\"common\" index=\"0\" object_name=\"Shape 1\" />"
-    "</indexing>";
+    "</indexing>"_ostr;
 
     int nWidth = 0;
     int nHeight = 0;

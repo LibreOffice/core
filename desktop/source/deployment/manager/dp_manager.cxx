@@ -981,7 +981,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
         INetContentTypeParameterList params;
         if (INetContentTypes::parse( data.mediaType, type, subType, &params ))
         {
-            auto const iter = params.find(OString("platform"));
+            auto const iter = params.find("platform"_ostr);
             if (iter != params.end() && !platform_fits(iter->second.m_sValue))
                 throw lang::IllegalArgumentException(
                     DpResId(RID_STR_NO_SUCH_PACKAGE) + id,

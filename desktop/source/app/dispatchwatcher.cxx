@@ -267,7 +267,7 @@ void batchPrint( std::u16string_view rPrinterName, const Reference< XPrintable >
     OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
 
     std::cout << "print " << aSource8 << " -> " << aTargetURL8;
-    std::cout << " using " << (aPrinterName.isEmpty() ? "<default_printer>" : OUStringToOString( aPrinterName, osl_getThreadTextEncoding() ));
+    std::cout << " using " << (aPrinterName.isEmpty() ? "<default_printer>"_ostr : OUStringToOString( aPrinterName, osl_getThreadTextEncoding() ));
     std::cout << std::endl;
 
     // create the custom printer, if given

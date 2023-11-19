@@ -66,10 +66,10 @@ namespace desktop {
         OString toString() const
         {
             if (m_nPart >= -1)
-                return (isInfinite() ? "EMPTY" : m_aRectangle.toString())
+                return (isInfinite() ? "EMPTY"_ostr : m_aRectangle.toString())
                     + ", " + OString::number(m_nPart) + ", " + OString::number(m_nMode);
             else
-                return (isInfinite() ? "EMPTY" : m_aRectangle.toString());
+                return (isInfinite() ? "EMPTY"_ostr : m_aRectangle.toString());
         }
 
         /// Infinite Rectangle is both sides are
