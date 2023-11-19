@@ -157,7 +157,7 @@ utl::ConfigManager::addConfigItem(utl::ConfigItem & item) {
 }
 
 void utl::ConfigManager::removeConfigItem(utl::ConfigItem & item) {
-    items_.erase(std::remove(items_.begin(), items_.end(), &item), items_.end());
+    std::erase(items_, &item);
 }
 
 void utl::ConfigManager::registerConfigItem(utl::ConfigItem * item) {

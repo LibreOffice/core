@@ -180,7 +180,7 @@ namespace utl
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         Listeners& rListeners = getListenerAdminData().aListeners;
-        rListeners.erase(std::remove(rListeners.begin(), rListeners.end(), _pListener), rListeners.end());
+        std::erase(rListeners, _pListener);
     }
 
 } // namespace utl
