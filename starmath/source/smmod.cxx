@@ -118,7 +118,7 @@ void SmModule::InitInterface_Impl()
 }
 
 SmModule::SmModule(SfxObjectFactory* pObjFact)
-    : SfxModule("sm", {pObjFact})
+    : SfxModule("sm"_ostr, {pObjFact})
 {
     SetName("StarMath");
 
