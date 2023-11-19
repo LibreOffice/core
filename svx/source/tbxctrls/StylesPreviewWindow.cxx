@@ -564,7 +564,7 @@ static OString extractPngString(const BitmapEx& rBitmap)
         return aBuffer.makeStringAndClear();
     }
 
-    return "";
+    return ""_ostr;
 }
 
 // 0: json writer, 1: TreeIter, 2: property. returns true if supported

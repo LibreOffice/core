@@ -814,7 +814,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         }
 
         // hide the text selection too
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
     }
 
     {
@@ -889,7 +889,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     if (aSel >>= aValue)
                     {
                         OString aObjectCID(aValue.getStr(), aValue.getLength(), osl_getThreadTextEncoding());
-                        const std::vector<OString> aProps{"Draggable", "Resizable", "Rotatable"};
+                        const std::vector<OString> aProps{"Draggable"_ostr, "Resizable"_ostr, "Rotatable"_ostr};
                         for (const auto& rProp: aProps)
                         {
                             sal_Int32 nPos = aObjectCID.indexOf(rProp);
@@ -963,7 +963,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
                                                 Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
                                                 Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                                                OString sPolygonElem("<polygon points=\\\"");
+                                                OString sPolygonElem("<polygon points=\\\""_ostr);
                                                 for (sal_uInt32 nIndex = 0; nIndex < nPolySize; ++nIndex)
                                                 {
                                                     const basegfx::B2DPoint aB2Point = aPolygon.getB2DPoint(nIndex);
@@ -1123,7 +1123,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             sSelectionText = "EMPTY";
             sSelectionTextView = "EMPTY";
             if (!pOtherShell)
-                pViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", OString());
+                pViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, OString());
         }
 
         if (bTableSelection)
@@ -1141,7 +1141,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         }
         else if (!getSdrModelFromSdrView().IsWriter())
         {
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, "{}");
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, "{}"_ostr);
         }
 
         if (pOtherShell)

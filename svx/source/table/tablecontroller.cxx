@@ -2397,10 +2397,10 @@ void SvxTableController::destroySelectionOverlay()
         // Clear the LOK text selection so far provided by this table.
         if(SfxViewShell* pViewShell = SfxViewShell::Current())
         {
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY");
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, "EMPTY");
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, "EMPTY");
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, "EMPTY"_ostr);
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, "EMPTY"_ostr);
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY"_ostr);
         }
     }
 }

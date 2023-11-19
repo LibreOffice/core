@@ -1177,7 +1177,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
     saveAndReload("draw8");
 
     // Expected values of point 4 of the shape polygon
-    const OString sTestCase[] = { "FlipH", "FlipV", "FlipHV" };
+    const OString sTestCase[] = { "FlipH"_ostr, "FlipV"_ostr, "FlipHV"_ostr };
     const double fX[] = { 14981.0, 3849.0, 15214.0 };
     const double fY[] = { 9366.0, 16464.0, 23463.0 };
 

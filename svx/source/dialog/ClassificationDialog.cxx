@@ -335,7 +335,7 @@ void ClassificationDialog::readRecentlyUsed()
 
                     // Convert string to classification type, but continue only if
                     // conversion was successful.
-                    if (stringToClassificationType(aWalker.attribute("type"), eType))
+                    if (stringToClassificationType(aWalker.attribute("type"_ostr), eType))
                     {
                         aWalker.children();
 

@@ -864,11 +864,11 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                     pMtf->SetPrefMapMode( aLocalMapMode );
 
                     pMtf->AddAction( new MetaCommentAction(
-                                         "XTEXT_SCROLLRECT", 0,
+                                         "XTEXT_SCROLLRECT"_ostr, 0,
                                          reinterpret_cast<sal_uInt8 const*>(&aScrollRectangle),
                                          sizeof( tools::Rectangle ) ) );
                     pMtf->AddAction( new MetaCommentAction(
-                                         "XTEXT_PAINTRECT", 0,
+                                         "XTEXT_PAINTRECT"_ostr, 0,
                                          reinterpret_cast<sal_uInt8 const*>(&aPaintRectangle),
                                          sizeof( tools::Rectangle ) ) );
 
