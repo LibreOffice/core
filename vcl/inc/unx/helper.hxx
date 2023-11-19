@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_HELPER_HXX
-#define INCLUDED_VCL_INC_UNX_HELPER_HXX
+#pragma once
 
 #include <vector>
 
@@ -47,8 +46,5 @@ enum class whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 OUString getOfficePath( whichOfficePath ePath );
 
 } // namespace
-
-
-#endif // INCLUDED_VCL_INC_UNX_HELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

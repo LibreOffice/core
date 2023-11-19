@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_SALUNX_H
-#define INCLUDED_VCL_INC_UNX_SALUNX_H
+#pragma once
 
 #include <tools/long.hxx>
 
@@ -26,7 +25,5 @@ inline tools::Long Divide(tools::Long nDividend, tools::Long nDivisor)
 {
     return (nDividend + nDivisor / 2) / nDivisor;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

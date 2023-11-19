@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKSYS_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKSYS_HXX
+
+#pragma once
 
 #include <unx/gensys.h>
 #include <gtk/gtk.h>
@@ -43,7 +43,5 @@ public:
     GdkScreen *getScreenMonitorFromIdx (int nIdx, gint &nMonitor);
 #endif
 };
-
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKSYS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

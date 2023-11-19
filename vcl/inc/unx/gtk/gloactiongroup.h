@@ -8,8 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GLOACTIONGROUP_H
-#define INCLUDED_VCL_INC_UNX_GTK_GLOACTIONGROUP_H
+#pragma once
 
 #include <glib-object.h>
 #include <glib.h>
@@ -72,7 +71,5 @@ void                g_lo_action_group_remove                (GLOActionGroup     
 void                g_lo_action_group_clear                 (GLOActionGroup     *group);
 
 G_END_DECLS
-
-#endif // INCLUDED_VCL_INC_UNX_GTK_GLOACTIONGROUP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

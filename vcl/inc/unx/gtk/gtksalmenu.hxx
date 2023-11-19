@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX
+#pragma once
 
 #include <config_dbus.h>
 #include <config_gio.h>
@@ -155,7 +154,5 @@ public:
     sal_uInt16          mnId;               // Item ID
     bool                mbVisible;          // Item visibility.
 };
-
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
