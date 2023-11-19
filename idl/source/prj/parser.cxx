@@ -370,7 +370,7 @@ bool SvIdlParser::ReadSlot(SvMetaSlot& rSlot)
             rSlot.SetRef( pKnownSlot );
             // names may differ, because explicitly given
             if ( pKnownSlot->GetName() != rSlot.GetName() )
-                throw SvParseException( rInStm, "Illegal definition!" );
+                throw SvParseException( rInStm, "Illegal definition!"_ostr );
         }
     }
 
@@ -396,19 +396,19 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
     if( ReadIfBoolAttribute(rSlot.aRecordPerItem, SvHash_RecordPerItem()) )
     {
         if (rSlot.aRecordPerSet.IsSet() || rSlot.aNoRecord.IsSet())
-            throw SvParseException(rInStm, "conflicting attributes");
+            throw SvParseException(rInStm, "conflicting attributes"_ostr);
         rSlot.SetRecordPerItem( rSlot.aRecordPerItem );
     }
     if( ReadIfBoolAttribute(rSlot.aRecordPerSet, SvHash_RecordPerSet() ) )
     {
         if (rSlot.aRecordPerItem.IsSet() || rSlot.aNoRecord.IsSet())
-            throw SvParseException(rInStm, "conflicting attributes");
+            throw SvParseException(rInStm, "conflicting attributes"_ostr);
         rSlot.SetRecordPerSet( rSlot.aRecordPerSet );
     }
     if( ReadIfBoolAttribute(rSlot.aNoRecord, SvHash_NoRecord() ) )
     {
         if (rSlot.aRecordPerItem.IsSet() || rSlot.aRecordPerSet.IsSet())
-            throw SvParseException(rInStm, "conflicting attributes");
+            throw SvParseException(rInStm, "conflicting attributes"_ostr);
         rSlot.SetNoRecord( rSlot.aNoRecord );
     }
 
@@ -461,7 +461,7 @@ SvMetaClass * SvIdlParser::ReadKnownClass()
     OString aName(ReadIdentifier());
     SvMetaClass* pClass = rBase.FindKnownClass( aName );
     if( !pClass )
-        throw SvParseException( rInStm, "unknown class" );
+        throw SvParseException( rInStm, "unknown class"_ostr );
     return pClass;
 }
 
@@ -473,7 +473,7 @@ SvMetaType * SvIdlParser::ReadKnownType()
         if( aType->GetName() == aName )
             return aType;
     }
-    throw SvParseException( rInStm, "wrong typedef: ");
+    throw SvParseException( rInStm, "wrong typedef: "_ostr);
 }
 
 bool SvIdlParser::ReadIfBoolAttribute( SvBOOL& rBool, SvStringHashEntry const * pName )
@@ -487,7 +487,7 @@ bool SvIdlParser::ReadIfBoolAttribute( SvBOOL& rBool, SvStringHashEntry const * 
         {
             rTok = rInStm.GetToken();
             if( !rTok.IsBool() )
-                throw SvParseException(rInStm, "xxx");
+                throw SvParseException(rInStm, "xxx"_ostr);
             rBool = rTok.GetBool();
             rInStm.GetToken_Next();
         }
@@ -510,7 +510,7 @@ void SvIdlParser::ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntr
         {
             rTok = rInStm.GetToken();
             if( !rTok.IsIdentifier() )
-                throw SvParseException(rInStm, "expected identifier");
+                throw SvParseException(rInStm, "expected identifier"_ostr);
             rIdentifier.setString(rTok.GetString());
             rInStm.GetToken_Next();
         }
@@ -522,7 +522,7 @@ void SvIdlParser::ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntr
 void SvIdlParser::ReadDelimiter()
 {
     if( !ReadIfDelimiter() )
-        throw SvParseException(rInStm, "expected delimiter");
+        throw SvParseException(rInStm, "expected delimiter"_ostr);
 }
 
 bool SvIdlParser::ReadIfDelimiter()
@@ -541,7 +541,7 @@ OString SvIdlParser::ReadIdentifier()
 {
     SvToken& rTok = rInStm.GetToken();
     if( !rTok.IsIdentifier() )
-        throw SvParseException("expected identifier", rTok);
+        throw SvParseException("expected identifier"_ostr, rTok);
     rInStm.GetToken_Next();
     return rTok.GetString();
 }
@@ -550,7 +550,7 @@ OString SvIdlParser::ReadString()
 {
     SvToken& rTok = rInStm.GetToken();
     if( !rTok.IsString() )
-        throw SvParseException("expected string", rTok);
+        throw SvParseException("expected string"_ostr, rTok);
     rInStm.GetToken_Next();
     return rTok.GetString();
 }

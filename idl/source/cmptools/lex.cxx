@@ -72,8 +72,8 @@ SvToken & SvToken::operator = ( const SvToken & rObj )
 
 void SvTokenStream::InitCtor()
 {
-    aStrTrue = OString("TRUE");
-    aStrFalse = OString("FALSE");
+    aStrTrue = "TRUE"_ostr;
+    aStrFalse = "FALSE"_ostr;
     nLine       = nColumn = 0;
     nBufPos     = 0;
     nMaxPos     = 0;

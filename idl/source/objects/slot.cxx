@@ -207,7 +207,7 @@ bool SvMetaSlot::Test( SvTokenStream & rInStm )
             pType = pType->GetReturnType();
         if( !pType->IsItem() )
         {
-            throw SvParseException( rInStm, "this attribute is not a slot" );
+            throw SvParseException( rInStm, "this attribute is not a slot"_ostr );
         }
     }
 

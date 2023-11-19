@@ -34,7 +34,7 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry const * pName, SvTokenStream & rInStm 
         {
             rTok = rInStm.GetToken();
             if( !rTok.IsBool() )
-                throw SvParseException(rInStm, "xxx");
+                throw SvParseException(rInStm, "xxx"_ostr);
             *this = rTok.GetBool();
             rInStm.GetToken_Next();
         }

@@ -88,7 +88,7 @@ SvRefMemberList<SvMetaType *>& SvIdlDataBase::GetTypeList()
 void SvIdlDataBase::SetError( const OString& rError, SvToken const & rTok )
 {
     if( rTok.GetLine() > 10000 )
-        aError.SetText( "line count overflow" );
+        aError.SetText( "line count overflow"_ostr );
 
     if( aError.nLine < rTok.GetLine()
       || (aError.nLine == rTok.GetLine() && aError.nColumn < rTok.GetColumn()) )
@@ -161,7 +161,7 @@ bool SvIdlDataBase::ReadIdFile( std::string_view rOFileName )
                 rTok = aTokStm.GetToken_Next();
                 OString aDefName;
                 if( !rTok.IsIdentifier() )
-                    throw SvParseException( "unexpected token after define", rTok );
+                    throw SvParseException( "unexpected token after define"_ostr, rTok );
                 aDefName = rTok.GetString();
 
                 sal_uInt32 nVal = 0;
@@ -173,24 +173,24 @@ bool SvIdlDataBase::ReadIdFile( std::string_view rOFileName )
                     {
                         rTok = aTokStm.GetToken_Next();
                         if( !rTok.IsChar() || rTok.GetChar() != '<')
-                            throw SvParseException( "expected '<'", rTok );
+                            throw SvParseException( "expected '<'"_ostr, rTok );
                         rTok = aTokStm.GetToken_Next();
                         if (rTok.IsChar() && rTok.GetChar() == ':')
                         {
                             // add support for "::avmedia::MediaItem" namespaced identifier
                             rTok = aTokStm.GetToken_Next();
                             if( !rTok.IsChar() || rTok.GetChar() != ':')
-                                throw SvParseException( "expected ':'", rTok );
+                                throw SvParseException( "expected ':'"_ostr, rTok );
                             // the lexer reads "avmedia::MediaItem" as an identifier
                             rTok = aTokStm.GetToken_Next();
                             if( !rTok.IsIdentifier() )
-                                throw SvParseException( "expected identifier", rTok );
+                                throw SvParseException( "expected identifier"_ostr, rTok );
                         }
                         else if( !rTok.IsIdentifier() )
-                                throw SvParseException( "expected identifier", rTok );
+                                throw SvParseException( "expected identifier"_ostr, rTok );
                         rTok = aTokStm.GetToken_Next();
                         if( !rTok.IsChar() || rTok.GetChar() != '>')
-                            throw SvParseException( "expected '<'", rTok );
+                            throw SvParseException( "expected '<'"_ostr, rTok );
                         rTok = aTokStm.GetToken_Next();
                     }
                     else if( rTok.IsIdentifier() )
@@ -249,7 +249,7 @@ bool SvIdlDataBase::ReadIdFile( std::string_view rOFileName )
                     }
                     if( rTok.IsEof() )
                     {
-                        throw SvParseException("unexpected eof in #include", rTok);
+                        throw SvParseException("unexpected eof in #include"_ostr, rTok);
                     }
                 }
                 OString aName(aNameBuf.makeStringAndClear());

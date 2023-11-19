@@ -52,7 +52,7 @@ bool SvMetaAttribute::Test( SvTokenStream & rInStm )
 {
     if( GetType()->IsItem() && !GetSlotId().IsSet() )
     {
-        throw SvParseException( rInStm, "slot without id declared" );
+        throw SvParseException( rInStm, "slot without id declared"_ostr );
     }
     return true;
 }
@@ -300,7 +300,7 @@ bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
 }
 
 SvMetaTypeString::SvMetaTypeString()
-    : SvMetaType( "String" )
+    : SvMetaType( "String"_ostr )
 {
 }
 
@@ -313,7 +313,7 @@ SvMetaTypeEnum::SvMetaTypeEnum()
 }
 
 SvMetaTypevoid::SvMetaTypevoid()
-    : SvMetaType( "void" )
+    : SvMetaType( "void"_ostr )
 {
 }
 
