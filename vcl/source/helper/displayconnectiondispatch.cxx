@@ -74,7 +74,7 @@ void SAL_CALL DisplayConnectionDispatch::removeEventHandler( const Any& /*window
 {
     std::scoped_lock aGuard( m_aMutex );
 
-    m_aHandlers.erase( std::remove(m_aHandlers.begin(), m_aHandlers.end(), handler), m_aHandlers.end() );
+    std::erase(m_aHandlers, handler);
 }
 
 void SAL_CALL DisplayConnectionDispatch::addErrorHandler( const css::uno::Reference< XEventHandler >& )

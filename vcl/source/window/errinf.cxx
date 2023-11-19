@@ -105,8 +105,7 @@ ErrorHandler::ErrorHandler()
 ErrorHandler::~ErrorHandler()
 {
     auto &rErrorHandlers = GetErrorRegistry().errorHandlers;
-    rErrorHandlers.erase( ::std::remove(rErrorHandlers.begin(), rErrorHandlers.end(), this),
-                          rErrorHandlers.end());
+    std::erase(rErrorHandlers, this);
 }
 
 bool ErrorHandler::GetErrorString(const ErrCodeMsg& nErrCode, OUString& rErrStr)
@@ -207,7 +206,7 @@ ErrorContext::ErrorContext(weld::Window *pWinP)
 ErrorContext::~ErrorContext()
 {
     auto &rContexts = GetErrorRegistry().contexts;
-    rContexts.erase( ::std::remove(rContexts.begin(), rContexts.end(), this), rContexts.end());
+    std::erase(rContexts, this);
 }
 
 ErrorContext *ErrorContext::GetContext()

@@ -751,7 +751,7 @@ void Application::RemoveKeyListener( const Link<VclWindowEvent&,bool>& rKeyListe
 {
     ImplSVData* pSVData = ImplGetSVData();
     auto & rVec = pSVData->maAppData.maKeyListeners;
-    rVec.erase( std::remove(rVec.begin(), rVec.end(), rKeyListener ), rVec.end() );
+    std::erase(rVec, rKeyListener);
 }
 
 bool Application::HandleKey( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )

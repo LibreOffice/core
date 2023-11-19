@@ -164,9 +164,7 @@ void WinOpenGLContext::destroyCurrentContext()
 {
     if (m_aGLWin.hRC)
     {
-        std::vector<HGLRC>::iterator itr = std::remove(g_vShareList.begin(), g_vShareList.end(), m_aGLWin.hRC);
-        if (itr != g_vShareList.end())
-            g_vShareList.erase(itr);
+        std::erase(g_vShareList, m_aGLWin.hRC);
 
         if (wglGetCurrentContext() != nullptr)
         {

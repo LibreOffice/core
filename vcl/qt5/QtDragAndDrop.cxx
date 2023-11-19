@@ -171,8 +171,7 @@ void QtDropTarget::removeDropTargetListener(
 {
     ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
 
-    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener),
-                       m_aListeners.end());
+    std::erase(m_aListeners, xListener);
 }
 
 sal_Bool QtDropTarget::isActive() { return m_bActive; }

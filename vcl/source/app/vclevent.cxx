@@ -67,7 +67,7 @@ void VclEventListeners::addListener( const Link<VclSimpleEvent&,void>& rListener
 
 void VclEventListeners::removeListener( const Link<VclSimpleEvent&,void>& rListener )
 {
-    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener ), m_aListeners.end() );
+    std::erase(m_aListeners, rListener);
     m_updated = true;
 }
 

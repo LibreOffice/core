@@ -222,12 +222,9 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
 
 void Animation::Stop(const OutputDevice* pOut, tools::Long nRendererId)
 {
-    maRenderers.erase(
-        std::remove_if(maRenderers.begin(), maRenderers.end(),
-                       [=](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
-                           return pRenderer->matches(pOut, nRendererId);
-                       }),
-        maRenderers.end());
+    std::erase_if(maRenderers, [=](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
+        return pRenderer->matches(pOut, nRendererId);
+    });
 
     if (maRenderers.empty())
     {
@@ -351,9 +348,7 @@ void Animation::RenderNextFrameInAllRenderers()
      * area of output lies out of display area of window.
      * Mark state is set from view itself.
      */
-    auto removeStart = std::remove_if(maRenderers.begin(), maRenderers.end(),
-                                      [](const auto& pRenderer) { return pRenderer->isMarked(); });
-    maRenderers.erase(removeStart, maRenderers.cend());
+    std::erase_if(maRenderers, [](const auto& pRenderer) { return pRenderer->isMarked(); });
 
     // stop or restart timer
     if (maRenderers.empty())
@@ -365,9 +360,7 @@ void Animation::RenderNextFrameInAllRenderers()
 void Animation::PruneMarkedRenderers()
 {
     // delete all unmarked views
-    auto removeStart = std::remove_if(maRenderers.begin(), maRenderers.end(),
-                                      [](const auto& pRenderer) { return !pRenderer->isMarked(); });
-    maRenderers.erase(removeStart, maRenderers.cend());
+    std::erase_if(maRenderers, [](const auto& pRenderer) { return !pRenderer->isMarked(); });
 
     // reset marked state
     std::for_each(maRenderers.cbegin(), maRenderers.cend(),

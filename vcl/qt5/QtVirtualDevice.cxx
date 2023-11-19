@@ -39,9 +39,7 @@ SalGraphics* QtVirtualDevice::AcquireGraphics()
 
 void QtVirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
 {
-    m_aGraphics.erase(
-        std::remove(m_aGraphics.begin(), m_aGraphics.end(), dynamic_cast<QtGraphics*>(pGraphics)),
-        m_aGraphics.end());
+    std::erase(m_aGraphics, dynamic_cast<QtGraphics*>(pGraphics));
     delete pGraphics;
 }
 

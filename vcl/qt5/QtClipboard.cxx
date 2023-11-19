@@ -216,8 +216,7 @@ void QtClipboard::removeClipboardListener(
     const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
-                       m_aListeners.end());
+    std::erase(m_aListeners, listener);
 }
 
 bool QtClipboard::isSupported(const QClipboard::Mode aMode)

@@ -314,7 +314,7 @@ void Window::RemoveEventListener( const Link<VclWindowEvent&,void>& rEventListen
     if (mpWindowImpl)
     {
         auto& rListeners = mpWindowImpl->maEventListeners;
-        rListeners.erase( std::remove(rListeners.begin(), rListeners.end(), rEventListener ), rListeners.end() );
+        std::erase(rListeners, rEventListener);
         if (mpWindowImpl->mnEventListenersIteratingCount)
             mpWindowImpl->maEventListenersDeleted.insert(rEventListener);
     }
@@ -330,7 +330,7 @@ void Window::RemoveChildEventListener( const Link<VclWindowEvent&,void>& rEventL
     if (mpWindowImpl)
     {
         auto& rListeners = mpWindowImpl->maChildEventListeners;
-        rListeners.erase( std::remove(rListeners.begin(), rListeners.end(), rEventListener ), rListeners.end() );
+        std::erase(rListeners, rEventListener);
         if (mpWindowImpl->mnChildEventListenersIteratingCount)
             mpWindowImpl->maChildEventListenersDeleted.insert(rEventListener);
     }

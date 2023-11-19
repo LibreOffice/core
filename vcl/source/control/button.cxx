@@ -2419,8 +2419,7 @@ void RadioButton::dispose()
 {
     if (m_xGroup)
     {
-        m_xGroup->erase(std::remove(m_xGroup->begin(), m_xGroup->end(), VclPtr<RadioButton>(this)),
-                        m_xGroup->end());
+        std::erase(*m_xGroup, VclPtr<RadioButton>(this));
         m_xGroup.reset();
     }
     Button::dispose();

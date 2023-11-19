@@ -414,9 +414,7 @@ void X11OpenGLContext::destroyCurrentContext()
     if(!m_aGLWin.ctx)
         return;
 
-    std::vector<GLXContext>::iterator itr = std::remove( g_vShareList.begin(), g_vShareList.end(), m_aGLWin.ctx );
-    if (itr != g_vShareList.end())
-        g_vShareList.erase(itr);
+    std::erase(g_vShareList, m_aGLWin.ctx);
 
     glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
     g_bAnyCurrent = false;

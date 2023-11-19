@@ -190,7 +190,7 @@ void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardLis
 void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
 {
     MutexGuard aGuard( m_xSelectionManager->getMutex() );
-    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end() );
+    std::erase(m_aListeners, listener);
 }
 
 Reference< XTransferable > X11Clipboard::getTransferable()

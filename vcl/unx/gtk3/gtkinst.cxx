@@ -1578,7 +1578,7 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
 {
     osl::Guard aGuard( m_aMutex );
 
-    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
+    std::erase(m_aListeners, listener);
 }
 
 Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& arguments)
@@ -1678,7 +1678,7 @@ void GtkInstDropTarget::removeDropTargetListener( const Reference< css::datatran
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
-    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener), m_aListeners.end());
+    std::erase(m_aListeners, xListener);
 }
 
 void GtkInstDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)

@@ -126,10 +126,9 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int3
 
 void TextCharAttribList::DeleteEmptyAttribs()
 {
-    maAttribs.erase(
-        std::remove_if( maAttribs.begin(), maAttribs.end(),
-            [] (const std::unique_ptr<TextCharAttrib>& rAttrib) { return rAttrib->IsEmpty(); } ),
-        maAttribs.end() );
+    std::erase_if(
+        maAttribs,
+            [] (const std::unique_ptr<TextCharAttrib>& rAttrib) { return rAttrib->IsEmpty(); } );
     mbHasEmptyAttribs = false;
 }
 

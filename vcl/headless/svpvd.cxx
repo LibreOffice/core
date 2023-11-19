@@ -60,7 +60,7 @@ SalGraphics* SvpSalVirtualDevice::AcquireGraphics()
 
 void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 {
-    m_aGraphics.erase(std::remove(m_aGraphics.begin(), m_aGraphics.end(), dynamic_cast<SvpSalGraphics*>(pGraphics)), m_aGraphics.end());
+    std::erase(m_aGraphics, dynamic_cast<SvpSalGraphics*>(pGraphics));
     delete pGraphics;
 }
 

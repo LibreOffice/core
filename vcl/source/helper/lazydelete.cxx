@@ -29,7 +29,7 @@ DeleteOnDeinitBase::~DeleteOnDeinitBase()
     if (!pSVData)
         return;
     auto& rList = pSVData->maDeinitDeleteList;
-    rList.erase(std::remove(rList.begin(), rList.end(), this), rList.end());
+    std::erase(rList, this);
 }
 
 void DeleteOnDeinitBase::addDeinitContainer(DeleteOnDeinitBase* i_pContainer)

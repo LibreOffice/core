@@ -44,7 +44,7 @@ class DeletionNotifier
     { m_aListeners.push_back( pListener ); }
 
     void removeDel( DeletionListener* pListener )
-    { m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), pListener), m_aListeners.end()); }
+    { std::erase(m_aListeners, pListener); }
 };
 
 class DeletionListener

@@ -180,7 +180,7 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
 {
     std::unique_lock aGuard(m_aMutex);
 
-    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
+    std::erase(m_aListeners, listener);
 }
 
 

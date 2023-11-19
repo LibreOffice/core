@@ -82,7 +82,7 @@ SvpSalFrame::~SvpSalFrame()
     for( auto& rChild : Children )
         rChild->SetParent( m_pParent );
     if( m_pParent )
-        m_pParent->m_aChildren.erase(std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end());
+        std::erase(m_pParent->m_aChildren, this);
 
     if( s_pFocusFrame == this )
     {
@@ -168,7 +168,7 @@ SalGraphics* SvpSalFrame::AcquireGraphics()
 void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
     SvpSalGraphics* pSvpGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
-    m_aGraphics.erase(std::remove(m_aGraphics.begin(), m_aGraphics.end(), pSvpGraphics), m_aGraphics.end());
+    std::erase(m_aGraphics, pSvpGraphics);
     delete pSvpGraphics;
 }
 
@@ -475,7 +475,7 @@ void SvpSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
 void SvpSalFrame::SetParent( SalFrame* pNewParent )
 {
     if( m_pParent )
-        m_pParent->m_aChildren.erase(std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end());
+        std::erase(m_pParent->m_aChildren, this);
     m_pParent = static_cast<SvpSalFrame*>(pNewParent);
 }
 
