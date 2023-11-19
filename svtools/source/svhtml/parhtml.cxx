@@ -2165,7 +2165,7 @@ rtl_TextEncoding HTMLParser::GetEncodingByMIME( const OUString& rMime )
     INetContentTypeParameterList aParameters;
     if (INetContentTypes::parse(rMime, sType, sSubType, &aParameters))
     {
-        auto const iter = aParameters.find("charset");
+        auto const iter = aParameters.find("charset"_ostr);
         if (iter != aParameters.end())
         {
             const INetContentTypeParameter * pCharset = &iter->second;

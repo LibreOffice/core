@@ -37,11 +37,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSingleElement)
 
         HtmlWriter aHtml(aStream);
         aHtml.prettyPrint(false);
-        aHtml.start("abc");
+        aHtml.start("abc"_ostr);
         aHtml.end();
 
         OString aString = extractFromStream(aStream);
-        CPPUNIT_ASSERT_EQUAL(OString("<abc/>"), aString);
+        CPPUNIT_ASSERT_EQUAL("<abc/>"_ostr, aString);
     }
 
     {
@@ -49,11 +49,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSingleElement)
 
         HtmlWriter aHtml(aStream);
         aHtml.prettyPrint(false);
-        aHtml.single("abc");
+        aHtml.single("abc"_ostr);
 
         OString aString = extractFromStream(aStream);
 
-        CPPUNIT_ASSERT_EQUAL(OString("<abc/>"), aString);
+        CPPUNIT_ASSERT_EQUAL("<abc/>"_ostr, aString);
     }
 }
 
@@ -64,13 +64,13 @@ CPPUNIT_TEST_FIXTURE(Test, testSingleElementWithAttributes)
 
         HtmlWriter aHtml(aStream);
         aHtml.prettyPrint(false);
-        aHtml.start("abc");
+        aHtml.start("abc"_ostr);
         aHtml.attribute("x", "y");
         aHtml.end();
 
         OString aString = extractFromStream(aStream);
 
-        CPPUNIT_ASSERT_EQUAL(OString("<abc x=\"y\"/>"), aString);
+        CPPUNIT_ASSERT_EQUAL("<abc x=\"y\"/>"_ostr, aString);
     }
 
     {
@@ -78,14 +78,14 @@ CPPUNIT_TEST_FIXTURE(Test, testSingleElementWithAttributes)
 
         HtmlWriter aHtml(aStream);
         aHtml.prettyPrint(false);
-        aHtml.start("abc");
+        aHtml.start("abc"_ostr);
         aHtml.attribute("x", "y");
         aHtml.attribute("q", "w");
         aHtml.end();
 
         OString aString = extractFromStream(aStream);
 
-        CPPUNIT_ASSERT_EQUAL(OString("<abc x=\"y\" q=\"w\"/>"), aString);
+        CPPUNIT_ASSERT_EQUAL("<abc x=\"y\" q=\"w\"/>"_ostr, aString);
     }
 }
 
@@ -95,12 +95,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSingleElementWithContent)
 
     HtmlWriter aHtml(aStream);
     aHtml.prettyPrint(false);
-    aHtml.start("abc");
+    aHtml.start("abc"_ostr);
     aHtml.end();
 
     OString aString = extractFromStream(aStream);
 
-    CPPUNIT_ASSERT_EQUAL(OString("<abc/>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<abc/>"_ostr, aString);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSingleElementWithContentAndAttributes)
@@ -109,14 +109,14 @@ CPPUNIT_TEST_FIXTURE(Test, testSingleElementWithContentAndAttributes)
 
     HtmlWriter aHtml(aStream);
     aHtml.prettyPrint(false);
-    aHtml.start("abc");
+    aHtml.start("abc"_ostr);
     aHtml.attribute("x", "y");
     aHtml.attribute("q", "w");
     aHtml.end();
 
     OString aString = extractFromStream(aStream);
 
-    CPPUNIT_ASSERT_EQUAL(OString("<abc x=\"y\" q=\"w\"/>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<abc x=\"y\" q=\"w\"/>"_ostr, aString);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNested)
@@ -125,14 +125,14 @@ CPPUNIT_TEST_FIXTURE(Test, testNested)
 
     HtmlWriter aHtml(aStream);
     aHtml.prettyPrint(false);
-    aHtml.start("abc");
-    aHtml.start("xyz");
+    aHtml.start("abc"_ostr);
+    aHtml.start("xyz"_ostr);
     aHtml.end();
     aHtml.end();
 
     OString aString = extractFromStream(aStream);
 
-    CPPUNIT_ASSERT_EQUAL(OString("<abc><xyz/></abc>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<abc><xyz/></abc>"_ostr, aString);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNamespace)
@@ -141,12 +141,12 @@ CPPUNIT_TEST_FIXTURE(Test, testNamespace)
 
     HtmlWriter aHtml(aStream, "reqif-xhtml");
     aHtml.prettyPrint(false);
-    aHtml.single("br");
+    aHtml.single("br"_ostr);
 
     OString aString = extractFromStream(aStream);
 
     // This was <br/>, namespace request was ignored.
-    CPPUNIT_ASSERT_EQUAL(OString("<reqif-xhtml:br/>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<reqif-xhtml:br/>"_ostr, aString);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAttributeValues)
@@ -155,7 +155,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAttributeValues)
 
     HtmlWriter aHtml(aStream);
     aHtml.prettyPrint(false);
-    aHtml.start("abc");
+    aHtml.start("abc"_ostr);
     aHtml.attribute("one", "one");
     aHtml.attribute("two", u"two");
     aHtml.attribute("three", sal_Int32(12));
@@ -163,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAttributeValues)
 
     OString aString = extractFromStream(aStream);
 
-    CPPUNIT_ASSERT_EQUAL(OString("<abc one=\"one\" two=\"two\" three=\"12\"/>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<abc one=\"one\" two=\"two\" three=\"12\"/>"_ostr, aString);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCharacters)
@@ -172,13 +172,13 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacters)
 
     HtmlWriter aHtml(aStream);
     aHtml.prettyPrint(false);
-    aHtml.start("abc");
+    aHtml.start("abc"_ostr);
     aHtml.characters("hello");
     aHtml.end();
 
     OString aString = extractFromStream(aStream);
 
-    CPPUNIT_ASSERT_EQUAL(OString("<abc>hello</abc>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<abc>hello</abc>"_ostr, aString);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExactElementEnd)
@@ -187,15 +187,15 @@ CPPUNIT_TEST_FIXTURE(Test, testExactElementEnd)
 
     HtmlWriter aHtml(aStream);
     aHtml.prettyPrint(false);
-    aHtml.start("start");
-    aHtml.start("a");
-    CPPUNIT_ASSERT(aHtml.end("a"));
-    aHtml.start("b");
-    CPPUNIT_ASSERT(!aHtml.end("c"));
-    CPPUNIT_ASSERT(aHtml.end("start"));
+    aHtml.start("start"_ostr);
+    aHtml.start("a"_ostr);
+    CPPUNIT_ASSERT(aHtml.end("a"_ostr));
+    aHtml.start("b"_ostr);
+    CPPUNIT_ASSERT(!aHtml.end("c"_ostr));
+    CPPUNIT_ASSERT(aHtml.end("start"_ostr));
 
     OString aString = extractFromStream(aStream);
-    CPPUNIT_ASSERT_EQUAL(OString("<start><a/><b/></start>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<start><a/><b/></start>"_ostr, aString);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAttributeValueEncode)
@@ -206,7 +206,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAttributeValueEncode)
     aHtml.prettyPrint(false);
 
     // When writing an attribute with a value that needs encoding:
-    aHtml.start("element");
+    aHtml.start("element"_ostr);
     aHtml.attribute("attribute", "a&b");
     aHtml.end();
 
@@ -216,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAttributeValueEncode)
     // - Expected: <element attribute="a&amp;b"/>
     // - Actual  : <element attribute="a&b"/>
     // i.e. attribute value was not encoded in HTML, but it was in e.g. XML.
-    CPPUNIT_ASSERT_EQUAL(OString("<element attribute=\"a&amp;b\"/>"), aString);
+    CPPUNIT_ASSERT_EQUAL("<element attribute=\"a&amp;b\"/>"_ostr, aString);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

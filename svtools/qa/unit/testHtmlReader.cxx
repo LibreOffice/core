@@ -53,7 +53,7 @@ class Test : public CppUnit::TestFixture
 CPPUNIT_TEST_FIXTURE(Test, testTdf114428)
 {
     SvMemoryStream aStream;
-    OString aDocument("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<html>hello</html>");
+    OString aDocument("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<html>hello</html>"_ostr);
     aStream.WriteBytes(aDocument.getStr(), aDocument.getLength());
     aStream.Seek(0);
 
@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114428)
 CPPUNIT_TEST_FIXTURE(Test, testLineBreak)
 {
     SvMemoryStream aStream;
-    OString aDocument("aaa<br></br>bbb");
+    OString aDocument("aaa<br></br>bbb"_ostr);
     aStream.WriteBytes(aDocument.getStr(), aDocument.getLength());
     aStream.Seek(0);
 
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCdata)
 {
     // Given a document with CDATA:
     SvMemoryStream aStream;
-    OString aDocument("A<![CDATA[B &uuml; &lt;]]>C");
+    OString aDocument("A<![CDATA[B &uuml; &lt;]]>C"_ostr);
     aStream.WriteBytes(aDocument.getStr(), aDocument.getLength());
     aStream.Seek(0);
 
