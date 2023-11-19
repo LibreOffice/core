@@ -1071,7 +1071,6 @@ $(call gb_LinkTarget_get_target,$(1)) : T_CXX :=
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(USE_LD)
 $(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(gb_LTOFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_PREJS :=
-$(call gb_LinkTarget_get_target,$(1)) : T_SHELLHTML :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifeq (depcache:,$(filter depcache,$(.FEATURES)):$(gb_PARTIAL_BUILD))
@@ -2267,15 +2266,6 @@ gb_LinkTarget__set_plugin_for_nodep = $(call gb_LinkTarget__set_plugin_for,$(1),
 define gb_LinkTarget_add_prejs
 ifeq (EMSCRIPTEN,$(OS))
 $(call gb_LinkTarget_get_target,$(1)) : T_PREJS += $(2)
-$(call gb_LinkTarget_get_target,$(1)) : $(2)
-endif
-
-endef
-
-# call gb_LinkTarget_add_shellhtml,linktarget,js_file
-define gb_LinkTarget_add_shellhtml
-ifeq (EMSCRIPTEN,$(OS))
-$(call gb_LinkTarget_get_target,$(1)) : T_SHELLHTML += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : $(2)
 endif
 
