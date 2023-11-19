@@ -521,10 +521,10 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
     // Remove existing signature overrides.
     uno::Sequence<beans::StringPair>& rOverrides = pContentTypeInfo[1];
     auto aOverrides = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rOverrides);
-    aOverrides.erase(std::remove_if(aOverrides.begin(), aOverrides.end(), [](const beans::StringPair& rPair)
+    std::erase_if(aOverrides, [](const beans::StringPair& rPair)
     {
         return rPair.First.startsWith("/_xmlsignatures/sig");
-    }), aOverrides.end());
+    });
 
     // Add our signature overrides.
     for (int i = 1; i <= nSignatureCount; ++i)
