@@ -422,7 +422,7 @@ void printMethods(std::ostream & o,
         }
     }
 
-    static OString sd("_");
+    static OString sd("_"_ostr);
     bool body = !delegate.isEmpty();
     bool defaultbody = delegate == sd;
 
@@ -752,7 +752,7 @@ void generateDocumentation(std::ostream & o,
                 o << "; " << (options.all ? "all" : "direct") << " methods:\n";
                 codemaker::GeneratedTypeSet generated;
                 printMethods(
-                    o, options, manager, nucleus, generated, delegate, "");
+                    o, options, manager, nucleus, generated, delegate, ""_ostr);
             }
             break;
 

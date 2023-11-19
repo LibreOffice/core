@@ -679,7 +679,7 @@ static OString generateClassDefinition(std::ostream& o,
     codemaker::GeneratedTypeSet generated;
     for (const auto& rIface : interfaces)
     {
-        printMethods(o, options, manager, rIface, generated, "", "", "    ",
+        printMethods(o, options, manager, rIface, generated, ""_ostr, ""_ostr, "    "_ostr,
                      true, propertyhelper);
     }
 
@@ -864,8 +864,8 @@ static void generateMethodBodies(std::ostream& o,
             generateXServiceInfoBodies(o, name, comphelpernamespace);
             generated.add(u2b(rIface));
         } else {
-            printMethods(o, options, manager, rIface, generated, "_",
-                         name, "", true, propertyhelper);
+            printMethods(o, options, manager, rIface, generated, "_"_ostr,
+                         name, ""_ostr, true, propertyhelper);
         }
     }
 }
@@ -971,7 +971,7 @@ void generateSkeleton(ProgramOptions const & options,
     OString compFileName;
     OString tmpFileName;
     std::ostream* pofs = nullptr;
-    bool standardout = getOutputStream(options, ".cxx",
+    bool standardout = getOutputStream(options, ".cxx"_ostr,
                                        &pofs, compFileName, tmpFileName);
 
     try {
@@ -1129,7 +1129,7 @@ void generateCalcAddin(ProgramOptions const & options,
     OString compFileName;
     OString tmpFileName;
     std::ostream* pofs = nullptr;
-    bool standardout = getOutputStream(options, ".cxx",
+    bool standardout = getOutputStream(options, ".cxx"_ostr,
                                        &pofs, compFileName, tmpFileName);
 
     try {

@@ -509,9 +509,9 @@ static void generateMethodBodies(std::ostream& o,
                     generated.add(u2b(type));
 
                     // special handling of XLocalizable -> parent of XAddIn
-                    if (!generated.contains("com.sun.star.lang.XLocalizable")) {
+                    if (!generated.contains("com.sun.star.lang.XLocalizable"_ostr)) {
                         generateXLocalizableBodies(o);
-                        generated.add("com.sun.star.lang.XLocalizable");
+                        generated.add("com.sun.star.lang.XLocalizable"_ostr);
                     }
                     continue;
                 } else if (type == "com.sun.star.lang.XLocalizable") {
@@ -539,7 +539,7 @@ static void generateMethodBodies(std::ostream& o,
                     continue;
                 }
             }
-            printMethods(o, options, manager, type, generated, "_",
+            printMethods(o, options, manager, type, generated, "_"_ostr,
                          indentation, true, usepropertymixin);
         }
     }
@@ -776,7 +776,7 @@ static void generateClassDefinition(std::ostream& o,
         o << "\n    public " << classname << "( XComponentContext context )\n"
             "    {\n        m_xContext = context;\n";
         if (propertyhelper == "_") {
-            registerProperties(o, properties, "        ");
+            registerProperties(o, properties, "        "_ostr);
         } else {
             if (propertyhelper.getLength() > 1) {
                 o << propcomment
@@ -793,7 +793,7 @@ static void generateClassDefinition(std::ostream& o,
         generateCompFunctions(o, classname);
 
     generateMethodBodies(o, options, manager, interfaces,
-                         "    ", propertyhelper.getLength() > 1);
+                         "    "_ostr, propertyhelper.getLength() > 1);
 
     // end of class definition
     o << "}\n";
@@ -869,7 +869,7 @@ void generateSkeleton(ProgramOptions const & options,
     OString compFileName;
     OString tmpFileName;
     std::ostream* pofs = nullptr;
-    bool standardout = getOutputStream(options, ".java",
+    bool standardout = getOutputStream(options, ".java"_ostr,
                                        &pofs, compFileName, tmpFileName);
 
     try {

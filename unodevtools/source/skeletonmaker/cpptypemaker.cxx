@@ -415,7 +415,7 @@ void printMethods(std::ostream & o,
         return;
     }
 
-    static OString sd("_");
+    static OString sd("_"_ostr);
     bool body = !delegate.isEmpty();
     bool defaultbody = delegate == sd;
 
@@ -452,9 +452,9 @@ void printMethods(std::ostream & o,
             generated.add(u2b(name));
 
             // special handling of XLocalizable -> parent of XAddIn
-            if (!generated.contains("com.sun.star.lang.XLocalizable")) {
+            if (!generated.contains("com.sun.star.lang.XLocalizable"_ostr)) {
                 generateXLocalizable(o, classname);
-                generated.add("com.sun.star.lang.XLocalizable");
+                generated.add("com.sun.star.lang.XLocalizable"_ostr);
             }
             return;
         } else if (name == "com.sun.star.lang.XLocalizable") {
@@ -853,7 +853,7 @@ void generateDocumentation(std::ostream & o,
                 codemaker::GeneratedTypeSet generated;
                 printMethods(
                     o, options, manager, nucleus, generated, delegate,
-                    options.implname, "");
+                    options.implname, ""_ostr);
             }
             break;
 
