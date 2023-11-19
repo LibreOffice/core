@@ -1136,7 +1136,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     if( rEntity.maNamespaceCount.empty() )
     {
         rEntity.maNamespaceCount.push(0);
-        DefineNamespace( "xml", "http://www.w3.org/XML/1998/namespace");
+        DefineNamespace( "xml"_ostr, "http://www.w3.org/XML/1998/namespace");
     }
     else
     {
@@ -1204,7 +1204,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
                 NormalizeURI( sNamespace );
                 nNamespaceToken = GetNamespaceToken( sNamespace );
                 if( rEntity.mxNamespaceHandler.is() )
-                    rEvent.mxDeclAttributes->addUnknown( "", OString( XML_CAST( namespaces[ i + 1 ] ) ) );
+                    rEvent.mxDeclAttributes->addUnknown( ""_ostr, OString( XML_CAST( namespaces[ i + 1 ] ) ) );
             }
         }
 

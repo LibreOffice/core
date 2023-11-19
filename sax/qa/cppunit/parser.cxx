@@ -83,10 +83,10 @@ uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInpu
 
 void ParserTest::parse()
 {
-    maInput.aInputStream = createStream("<a>...<b />..</a>");
+    maInput.aInputStream = createStream("<a>...<b />..</a>"_ostr);
     mxParser->parseStream( maInput );
 
-    maInput.aInputStream = createStream("<b></a>");
+    maInput.aInputStream = createStream("<b></a>"_ostr);
     CPPUNIT_ASSERT_THROW( mxParser->parseStream( maInput ), css::xml::sax::SAXParseException );
 }
 
