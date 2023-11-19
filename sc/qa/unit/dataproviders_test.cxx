@@ -158,9 +158,9 @@ void ScDataProvidersTest::testXMLImport()
 
     ScOrcusImportXMLParam::RangeLink aRangeLink;
     aRangeLink.maPos = ScAddress(0, 0, 0);
-    aRangeLink.maFieldPaths.push_back("/bookstore/book/title");
-    aRangeLink.maFieldPaths.push_back("/bookstore/book/author");
-    aRangeLink.maRowGroups.push_back("/bookstore/book");
+    aRangeLink.maFieldPaths.push_back("/bookstore/book/title"_ostr);
+    aRangeLink.maFieldPaths.push_back("/bookstore/book/author"_ostr);
+    aRangeLink.maRowGroups.push_back("/bookstore/book"_ostr);
     aParam.maRangeLinks.push_back(aRangeLink);
 
     OUString aFileURL = createFileURL(u"xml/test1.xml");

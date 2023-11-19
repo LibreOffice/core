@@ -1848,9 +1848,9 @@ void ScTabViewShell::LOKSendFormulabarUpdate(EditView* pActiveView,
 void ScTabViewShell::SendFormulabarUpdate::Send()
 {
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
-    (*pData)["action_type"] = "setText";
-    (*pData)["text"] = m_aText;
-    (*pData)["selection"] = m_aSelection;
+    (*pData)["action_type"_ostr] = "setText";
+    (*pData)["text"_ostr] = m_aText;
+    (*pData)["selection"_ostr] = m_aSelection;
     OUString sWindowId = OUString::number(m_nShellId) + "formulabar";
     jsdialog::SendAction(sWindowId, "sc_input_window", std::move(pData));
 }

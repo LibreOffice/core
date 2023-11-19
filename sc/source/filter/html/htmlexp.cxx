@@ -1136,7 +1136,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     {
         //create the comment indicator
         OString aStr = OOO_STRING_SVTOOLS_HTML_anchor " "
-            OOO_STRING_SVTOOLS_HTML_O_class "=\"comment-indicator\"";
+            OOO_STRING_SVTOOLS_HTML_O_class "=\"comment-indicator\""_ostr;
         TAG_ON(aStr);
         TAG_OFF(OOO_STRING_SVTOOLS_HTML_anchor);
         OUT_LF();

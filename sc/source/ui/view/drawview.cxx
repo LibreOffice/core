@@ -584,7 +584,7 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
     if (comphelper::LibreOfficeKit::isActive())
-        SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY");
+        SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 
     SfxFrame& rFrame = pViewSh->GetViewFrame().GetFrame();
     uno::Reference< frame::XController > xController = rFrame.GetController();

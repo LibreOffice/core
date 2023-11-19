@@ -579,11 +579,13 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableExportXLSX)
     xmlDocUniquePtr pTable = parseExport("xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items", "count",
-                "4");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item", 4);
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item[3]",
-                "h", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items"_ostr,
+                "count"_ostr, "4");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item"_ostr,
+                4);
+    assertXPath(pTable,
+                "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item[3]"_ostr,
+                "h"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableExportXLSXSingleDataField)
@@ -594,15 +596,15 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableExportXLSXSingleData
     xmlDocUniquePtr pTable = parseExport("xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "ref", "A3:B6");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstDataRow", "1");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstDataCol", "1");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields", "count", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "ref"_ostr, "A3:B6");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstHeaderRow"_ostr, "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstDataRow"_ostr, "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstDataCol"_ostr, "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields"_ostr, "count"_ostr, "1");
 
     // There should not be any colFields tag, before the fix there used to be a singleton with
     // <field x="-2"/> as child node.
-    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields", 0);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableExportXLSXMultipleDataFields)
@@ -613,19 +615,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableExportXLSXMultipleDa
     xmlDocUniquePtr pTable = parseExport("xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "ref", "A1:C6");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstDataRow", "2");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstDataCol", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "ref"_ostr, "A1:C6");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstHeaderRow"_ostr, "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstDataRow"_ostr, "2");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstDataCol"_ostr, "1");
 
-    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields", "count", "2");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields"_ostr, "count"_ostr, "2");
 
     // There should be a single colFields tag with sole child node
     // <field x="-2"/>.
-    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields", 1);
-    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields", "count", "1");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields/x:field", 1);
-    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields/x:field", "x", "-2");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields"_ostr, 1);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields"_ostr, "count"_ostr, "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields/x:field"_ostr, 1);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields/x:field"_ostr, "x"_ostr, "-2");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotCacheExportXLSX)
@@ -643,235 +645,267 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotCacheExportXLSX)
     xmlDocUniquePtr pCacheDef = parseExport("xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pCacheDef);
 
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 6);
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField"_ostr, 6);
 
     // Four strings and one empty field
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]", "name",
-                "mixed strings and empty");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                "containsBlank", "1");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "containsMixedTypes");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "containsSemiMixedTypes");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "containsNonDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "containsDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "containsString");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "minDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "maxDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "containsNumber");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "containsInteger");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "minValue");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "maxValue");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                "count", "5");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]"_ostr,
+                "name"_ostr, "mixed strings and empty");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+                "containsBlank"_ostr, "1");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "containsMixedTypes"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "containsSemiMixedTypes"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "containsNonDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "containsDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "containsString"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "minDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "maxDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "containsNumber"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "containsInteger"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "minValue"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "maxValue"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+                "count"_ostr, "5");
 
     // Two integers and one empty field
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name",
-                "mixed empty fields and integers");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "containsBlank", "1");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                           "containsMixedTypes");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                           "containsSemiMixedTypes");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                           "containsNonDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                           "containsDate");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "containsString", "0");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                           "minDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                           "maxDate");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "containsNumber", "1");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "containsInteger", "1");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "minValue", "111");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "maxValue", "222");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]"_ostr,
+                "name"_ostr, "mixed empty fields and integers");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "containsBlank"_ostr, "1");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+        "containsMixedTypes"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+        "containsSemiMixedTypes"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+        "containsNonDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+        "containsDate"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "containsString"_ostr, "0");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+        "minDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+        "maxDate"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "containsNumber"_ostr, "1");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "containsInteger"_ostr, "1");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "minValue"_ostr, "111");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "maxValue"_ostr, "222");
     // We list items on round-trip, Excel not, but Excel accepts that; We need list all items, because we are using it as reference in pivotCacheRecords1.xml
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "count", "3");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "count"_ostr, "3");
 
     // Five integers
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]", "name",
-                "all fields are integers");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                           "containsBlank");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                           "containsMixedTypes");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                "containsSemiMixedTypes", "0");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                           "containsNonDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                           "containsDate");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                "containsString", "0");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                           "minDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                           "maxDate");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                "containsNumber", "1");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                "containsInteger", "1");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                "minValue", "1111");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                "maxValue", "5555");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]"_ostr,
+                "name"_ostr, "all fields are integers");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+        "containsBlank"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+        "containsMixedTypes"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+                "containsSemiMixedTypes"_ostr, "0");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+        "containsNonDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+        "containsDate"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+                "containsString"_ostr, "0");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+        "minDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+        "maxDate"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+                "containsNumber"_ostr, "1");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+                "containsInteger"_ostr, "1");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+                "minValue"_ostr, "1111");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+                "maxValue"_ostr, "5555");
     // We list items on round-trip, Excel not, but Excel accepts that; We need list all items, because we are using it as reference in pivotCacheRecords1.xml
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
-                "count", "5");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems"_ostr,
+                "count"_ostr, "5");
 
     // Three integers and one string
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name",
-                "mixed strings and integers");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                           "containsBlank");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                "containsMixedTypes", "1");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                           "containsSemiMixedTypes");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                           "containsNonDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                           "containsDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                           "containsString");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                           "minDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                           "maxDate");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                "containsNumber", "1");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                "containsInteger", "1");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                "minValue", "1234");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                "maxValue", "5678");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]"_ostr,
+                "name"_ostr, "mixed strings and integers");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+        "containsBlank"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+                "containsMixedTypes"_ostr, "1");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+        "containsSemiMixedTypes"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+        "containsNonDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+        "containsDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+        "containsString"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+        "minDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+        "maxDate"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+                "containsNumber"_ostr, "1");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+                "containsInteger"_ostr, "1");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+                "minValue"_ostr, "1234");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+                "maxValue"_ostr, "5678");
     // We list items on round-trip, Excel not, but Excel accepts that; We need list all items, because we are using it as reference in pivotCacheRecords1.xml
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems",
-                "count", "4");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems"_ostr,
+                "count"_ostr, "4");
 
     // Four dates without blanks
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name",
-                "date and time with duplicated entries");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                           "containsBlank");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                           "containsMixedTypes");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                "containsSemiMixedTypes", "0");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                "containsNonDate", "0");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                "containsDate", "1");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                "containsString", "0");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                "minDate", "1899-12-31T00:00:00");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                "maxDate", "2009-07-06T10:53:02");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                           "containsNumber");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                           "containsInteger");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                           "minValue");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                           "maxValue");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]"_ostr,
+                "name"_ostr, "date and time with duplicated entries");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+        "containsBlank"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+        "containsMixedTypes"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+                "containsSemiMixedTypes"_ostr, "0");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+                "containsNonDate"_ostr, "0");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+                "containsDate"_ostr, "1");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+                "containsString"_ostr, "0");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+                "minDate"_ostr, "1899-12-31T00:00:00");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+                "maxDate"_ostr, "2009-07-06T10:53:02");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+        "containsNumber"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+        "containsInteger"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+        "minValue"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+        "maxValue"_ostr);
     // We list items on round-trip, Excel not, but Excel accepts that; We need list all items, because we are using it as reference in pivotCacheRecords1.xml
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
-                "count", "4");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems"_ostr,
+                "count"_ostr, "4");
 
     // Only blanks
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "name",
-                "blank");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                "containsBlank", "1");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "containsMixedTypes");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]"_ostr,
+                "name"_ostr, "blank");
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+                "containsBlank"_ostr, "1");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "containsMixedTypes"_ostr);
     // Despite what documentation says, in case there's only blank values in field (no strings), containsSemiMixedTypes is true (default - not written)
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "containsSemiMixedTypes");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "containsDate");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                "containsString", "0");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "minDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "maxDate");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "containsNumber");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "containsInteger");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "minValue");
-    assertXPathNoAttribute(pCacheDef,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                           "maxValue");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                "count", "1");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "containsSemiMixedTypes"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "containsDate"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+                "containsString"_ostr, "0");
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "minDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "maxDate"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "containsNumber"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "containsInteger"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "minValue"_ostr);
+    assertXPathNoAttribute(
+        pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+        "maxValue"_ostr);
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems"_ostr,
+                "count"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
@@ -1729,15 +1763,15 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableFirstHeaderRowXLSX)
     save("Calc Office Open XML");
     xmlDocUniquePtr pTable = parseExport("xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstHeaderRow"_ostr, "1");
 
     pTable = parseExport("xl/pivotTables/pivotTable2.xml");
     CPPUNIT_ASSERT(pTable);
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstHeaderRow"_ostr, "1");
 
     pTable = parseExport("xl/pivotTables/pivotTable3.xml");
     CPPUNIT_ASSERT(pTable);
-    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location"_ostr, "firstHeaderRow"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDoubleFieldFilterXLSX)
@@ -2160,11 +2194,12 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableOutlineModeXLSX)
     CPPUNIT_ASSERT(pTable);
 
     // Next to the outline flags, compact flags also should be set (true is the default)
-    assertXPath(pTable, "/x:pivotTableDefinition", "outline", "1");
-    assertXPath(pTable, "/x:pivotTableDefinition", "outlineData", "1");
-    assertXPath(pTable, "/x:pivotTableDefinition", "compact", "0");
-    assertXPath(pTable, "/x:pivotTableDefinition", "compactData", "0");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "compact", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition"_ostr, "outline"_ostr, "1");
+    assertXPath(pTable, "/x:pivotTableDefinition"_ostr, "outlineData"_ostr, "1");
+    assertXPath(pTable, "/x:pivotTableDefinition"_ostr, "compact"_ostr, "0");
+    assertXPath(pTable, "/x:pivotTableDefinition"_ostr, "compactData"_ostr, "0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]"_ostr,
+                "compact"_ostr, "0");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDuplicatedMemberFilterXLSX)
@@ -2176,10 +2211,10 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDuplicatedMemberFilt
     CPPUNIT_ASSERT(pTable);
 
     // Check whether page field has the right number of items
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[5]", "axis",
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[5]"_ostr, "axis"_ostr,
                 "axisPage");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[5]/x:items", "count",
-                "21");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[5]/x:items"_ostr,
+                "count"_ostr, "21");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTabularModeXLSX)
@@ -2191,12 +2226,14 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTabularModeXLSX)
     CPPUNIT_ASSERT(pTable);
 
     // In tabular mode both outline and compact flag should be false
-    assertXPath(pTable, "/x:pivotTableDefinition", "outline", "0");
-    assertXPath(pTable, "/x:pivotTableDefinition", "outlineData", "0");
-    assertXPath(pTable, "/x:pivotTableDefinition", "compact", "0");
-    assertXPath(pTable, "/x:pivotTableDefinition", "compactData", "0");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "compact", "0");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "outline", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition"_ostr, "outline"_ostr, "0");
+    assertXPath(pTable, "/x:pivotTableDefinition"_ostr, "outlineData"_ostr, "0");
+    assertXPath(pTable, "/x:pivotTableDefinition"_ostr, "compact"_ostr, "0");
+    assertXPath(pTable, "/x:pivotTableDefinition"_ostr, "compactData"_ostr, "0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]"_ostr,
+                "compact"_ostr, "0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]"_ostr,
+                "outline"_ostr, "0");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDuplicateFields)
@@ -2207,17 +2244,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDuplicateFields)
     xmlDocUniquePtr pCacheDef = parseExport("xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pCacheDef);
 
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields", "count", "6");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]", "name", "ID");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", "Name");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]", "name",
-                "Score");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name",
-                "Method");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name",
-                "method2");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "name",
-                "Method3");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields"_ostr, "count"_ostr, "6");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]"_ostr,
+                "name"_ostr, "ID");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]"_ostr,
+                "name"_ostr, "Name");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]"_ostr,
+                "name"_ostr, "Score");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]"_ostr,
+                "name"_ostr, "Method");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]"_ostr,
+                "name"_ostr, "method2");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]"_ostr,
+                "name"_ostr, "Method3");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf112106)
@@ -2255,8 +2294,9 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123923)
     xmlDocUniquePtr pTable = parseExport("xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pTable);
 
-    assertXPath(pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems/x:e",
-                "v", "#REF!");
+    assertXPath(pTable,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems/x:e"_ostr,
+                "v"_ostr, "#REF!");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123939)
@@ -2269,17 +2309,17 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123939)
     xmlDocUniquePtr pTable = parseExport("xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pTable);
 
-    assertXPathNoAttribute(pTable,
-                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                           "containsMixedTypes");
+    assertXPathNoAttribute(
+        pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+        "containsMixedTypes"_ostr);
 
     // But we must emit containsMixedTypes="1" for a mix of errors and non-string types!
 
     pTable = parseExport("xl/pivotCache/pivotCacheDefinition2.xml");
     CPPUNIT_ASSERT(pTable);
 
-    assertXPath(pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
-                "containsMixedTypes", "1");
+    assertXPath(pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems"_ostr,
+                "containsMixedTypes"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124651)
@@ -2292,7 +2332,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124651)
     // We have to export name attribute, even though it's optional according to ECMA-376 standard,
     // because Excel (at least 2016) seems to require it.
     // tdf#124881: this shouldn't be an empty string
-    assertXPath(pDoc, "/x:pivotTableDefinition/x:dataFields/x:dataField", "name", "Sum - num");
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:dataFields/x:dataField"_ostr, "name"_ostr,
+                "Sum - num");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124736)
@@ -2304,33 +2345,34 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124736)
     xmlDocUniquePtr pTable = parseExport("xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pTable);
 
-    assertXPath(pTable,
-                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems",
-                "count", "45");
+    assertXPath(
+        pTable,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems"_ostr,
+        "count"_ostr, "45");
     // Group items must start with "<05/16/1958", then years sorted ascending, then ">06/11/2009"
     // They used to have years in the beginning, then "<05/16/1958", then ">06/11/2009".
     // The "<" and ">" date strings are locale-dependent, so test depends on en_US locale
     assertXPath(
         pTable,
-        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s[1]",
-        "v", "<05/16/1958");
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s[1]"_ostr,
+        "v"_ostr, "<05/16/1958");
     for (int i = 2; i <= 44; ++i)
         assertXPath(
             pTable,
             "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s["
                 + OString::number(i) + "]",
-            "v", OUString::number(1963 + i));
+            "v"_ostr, OUString::number(1963 + i));
     assertXPath(
         pTable,
-        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s[45]",
-        "v", ">06/11/2009");
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s[45]"_ostr,
+        "v"_ostr, ">06/11/2009");
 
     // Now check that table references these in correct order (document-dependent, so this is how
     // it should be in this specific testdoc which shows "<" and ">" values in the end)
     pTable = parseExport("xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items", "count",
-                "46");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items"_ostr,
+                "count"_ostr, "46");
     const int vals[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15,
                          16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
                          31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 0,  44 };
@@ -2339,10 +2381,11 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124736)
         assertXPath(pTable,
                     "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items/x:item["
                         + OString::number(i + 1) + "]",
-                    "x", OUString::number(vals[i]));
+                    "x"_ostr, OUString::number(vals[i]));
     }
-    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items/x:item[46]",
-                "t", "default");
+    assertXPath(pTable,
+                "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items/x:item[46]"_ostr,
+                "t"_ostr, "default");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124772NumFmt)
@@ -2355,15 +2398,15 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124772NumFmt)
     CPPUNIT_ASSERT(pTable);
 
     // This asserts that numFmtId attribute is present
-    const OUString sXclNumFmt
-        = getXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField", "numFmtId");
+    const OUString sXclNumFmt = getXPath(
+        pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField"_ostr, "numFmtId"_ostr);
 
     pTable = parseExport("xl/styles.xml");
     CPPUNIT_ASSERT(pTable);
 
     // Check that we refer to correct format
     assertXPath(pTable, "/x:styleSheet/x:numFmts/x:numFmt[@numFmtId='" + sXclNumFmt.toUtf8() + "']",
-                "formatCode", "\\$#,##0");
+                "formatCode"_ostr, "\\$#,##0");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124810)
@@ -2377,13 +2420,18 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124810)
         CPPUNIT_ASSERT(pTable);
 
         // All attributes must have been roundtripped correctly (testdoc uses some non-default values)
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "name",
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr, "name"_ostr,
                     "PivotStyleDark1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowHeaders", "1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColHeaders", "1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowStripes", "1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes", "0");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn", "0");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showRowHeaders"_ostr, "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showColHeaders"_ostr, "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showRowStripes"_ostr, "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showColStripes"_ostr, "0");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showLastColumn"_ostr, "0");
     }
 
     {
@@ -2397,13 +2445,18 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124810)
         CPPUNIT_ASSERT(pTable);
 
         // The default style for pivot tables in Excel 2007 through 2016 is PivotStyleLight16
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "name",
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr, "name"_ostr,
                     "PivotStyleLight16");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowHeaders", "1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColHeaders", "1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowStripes", "0");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes", "0");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn", "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showRowHeaders"_ostr, "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showColHeaders"_ostr, "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showRowStripes"_ostr, "0");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showColStripes"_ostr, "0");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo"_ostr,
+                    "showLastColumn"_ostr, "1");
     }
 }
 
@@ -2416,9 +2469,9 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124883)
     CPPUNIT_ASSERT(pTable);
 
     // The field names must be kept just as they appear in original XLSX
-    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField[1]", "name",
+    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField[1]"_ostr, "name"_ostr,
                 "Sum of Value");
-    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField[2]", "name",
+    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField[2]"_ostr, "name"_ostr,
                 "Count of Value2");
 }
 
@@ -2429,8 +2482,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf125046)
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "longText", "1");
+    assertXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "longText"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf125055)
@@ -2446,26 +2499,32 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf125055)
     // "2017-07-10T09:11:02.99999..." into "2017-07-10T09:11:02", creating two identical strings
     // Only compare times here: see comment to ScPivotTableFiltersTest::testPivotCacheExportXLSX
     // "TODO Date generator in tests are one day higher, than during standard xlsx export"
-    OUString sISODateTime = getXPath(
-        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "minDate");
+    OUString sISODateTime
+        = getXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                   "minDate"_ostr);
     CPPUNIT_ASSERT_EQUAL(OUString("T09:11:02"), sISODateTime.copy(10));
-    sISODateTime = getXPath(
-        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "maxDate");
+    sISODateTime
+        = getXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                   "maxDate"_ostr);
     CPPUNIT_ASSERT_EQUAL(OUString("T09:11:03"), sISODateTime.copy(10));
-    assertXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
-                "count", "3");
-    assertXPathChildren(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
+    assertXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
+                "count"_ostr, "3");
+    assertXPathChildren(pDoc,
+                        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr,
                         3); // 2 different values + empty
     sISODateTime = getXPath(
-        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems/x:d[1]", "v");
+        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems/x:d[1]"_ostr,
+        "v"_ostr);
     CPPUNIT_ASSERT_EQUAL(OUString("T09:11:02"), sISODateTime.copy(10));
     sISODateTime = getXPath(
-        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems/x:d[2]", "v");
+        pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems/x:d[2]"_ostr,
+        "v"_ostr);
     CPPUNIT_ASSERT_EQUAL(OUString("T09:11:03"), sISODateTime.copy(10));
     // Trailing empty
     CPPUNIT_ASSERT_EQUAL(
-        2, getXPathPosition(
-               pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "m"));
+        2,
+        getXPathPosition(
+            pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems"_ostr, "m"));
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf125086)
@@ -2475,9 +2534,11 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf125086)
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "axis", "axisRow");
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]"_ostr, "axis"_ostr,
+                "axisRow");
     // "dataField" attribute was not written for this "axisRow" field
-    assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "dataField", "1");
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]"_ostr,
+                "dataField"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf73845)

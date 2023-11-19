@@ -1045,7 +1045,7 @@ OString ScDocument::dumpSheetGeomData(SCTAB nTab, bool bColumns, SheetGeomType e
 {
     ScTable* pTab = FetchTable(nTab);
     if (!pTab)
-        return "";
+        return ""_ostr;
 
     return pTab->dumpSheetGeomData(bColumns, eGeomType);
 }

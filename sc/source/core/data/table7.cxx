@@ -510,7 +510,7 @@ OString ScTable::dumpSheetGeomData(bool bColumns, SheetGeomType eGeomType)
             ;
     }
 
-    return "";
+    return ""_ostr;
 }
 
 OString ScTable::dumpColumnRowSizes(bool bColumns)
@@ -576,7 +576,7 @@ OString ScTable::dumpHiddenFiltered(bool bColumns, bool bHidden)
 OString ScTable::dumpColumnRowGroups(bool bColumns) const
 {
     if (!pOutlineTable)
-        return "";
+        return ""_ostr;
 
     if (bColumns)
         return pOutlineTable->GetColArray().dumpAsString();

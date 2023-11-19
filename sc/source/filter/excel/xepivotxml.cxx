@@ -673,20 +673,20 @@ OString GetSubtotalFuncName(ScGeneralFunction eFunc)
 {
     switch (eFunc)
     {
-        case ScGeneralFunction::SUM:       return "sum";
-        case ScGeneralFunction::COUNT:     return "count";
-        case ScGeneralFunction::AVERAGE:   return "avg";
-        case ScGeneralFunction::MAX:       return "max";
-        case ScGeneralFunction::MIN:       return "min";
-        case ScGeneralFunction::PRODUCT:   return "product";
-        case ScGeneralFunction::COUNTNUMS: return "countA";
-        case ScGeneralFunction::STDEV:     return "stdDev";
-        case ScGeneralFunction::STDEVP:    return "stdDevP";
-        case ScGeneralFunction::VAR:       return "var";
-        case ScGeneralFunction::VARP:      return "varP";
+        case ScGeneralFunction::SUM:       return "sum"_ostr;
+        case ScGeneralFunction::COUNT:     return "count"_ostr;
+        case ScGeneralFunction::AVERAGE:   return "avg"_ostr;
+        case ScGeneralFunction::MAX:       return "max"_ostr;
+        case ScGeneralFunction::MIN:       return "min"_ostr;
+        case ScGeneralFunction::PRODUCT:   return "product"_ostr;
+        case ScGeneralFunction::COUNTNUMS: return "countA"_ostr;
+        case ScGeneralFunction::STDEV:     return "stdDev"_ostr;
+        case ScGeneralFunction::STDEVP:    return "stdDevP"_ostr;
+        case ScGeneralFunction::VAR:       return "var"_ostr;
+        case ScGeneralFunction::VARP:      return "varP"_ostr;
         default:;
     }
-    return "default";
+    return "default"_ostr;
 }
 
 sal_Int32 GetSubtotalAttrToken(ScGeneralFunction eFunc)

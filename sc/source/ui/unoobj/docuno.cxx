@@ -992,8 +992,8 @@ void ScModelObj::resetSelection()
         pViewShell->Unmark();
 
     // and hide the cell and text selection
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
-    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "");
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
+    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
 }
 
 void ScModelObj::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
@@ -1082,11 +1082,11 @@ OString ScModelObj::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes,
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
-        return "";
+        return ""_ostr;
 
     ScTabView* pTabView = pViewData->GetView();
     if (!pTabView)
-        return "";
+        return ""_ostr;
 
     return pTabView->getSheetGeometryData(bColumns, bRows, bSizes, bHidden, bFiltered, bGroups);
 }

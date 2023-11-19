@@ -162,8 +162,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
 
     // Check if it is selected
-    OString aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
-    OString aExpected("1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n");
+    OString aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
+    OString aExpected("1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n"_ostr);
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select the 10th row with shift modifier
@@ -172,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
 
     // Check if all the rows from 5th to 10th get selected
-    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
+    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
     aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\n3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\n4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\n5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\n6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\n";
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
-    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
+    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
     CPPUNIT_ASSERT_EQUAL(OString(), aResult);
 
     // TODO check that we really selected what we wanted here
@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
-    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
+    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
     CPPUNIT_ASSERT_EQUAL(OString(), aResult);
 
     // TODO check that we really selected what we wanted here
@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
 
     //  only row 5 should remain selected
-    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
+    aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
     aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n";
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 }
@@ -277,7 +277,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEmptyColumnSelection)
     dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs);
 
     // should be an empty string
-    CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"));
+    CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr));
 }
 
 namespace
@@ -1574,7 +1574,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testIMESupport)
 
     pView->SetCursor(0, 0);
     // sequence of chinese IME compositions when 'nihao' is typed in an IME
-    const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
+    const std::vector<OString> aUtf8Inputs{ "年"_ostr, "你"_ostr, "你好"_ostr, "你哈"_ostr, "你好"_ostr, "你好"_ostr };
     std::vector<OUString> aInputs;
     std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
                    std::back_inserter(aInputs), [](OString aInput) {
@@ -2024,9 +2024,9 @@ struct SheetDimData
         };
 
         const SpanListWithKey aPairList[] = {
-            { "sizes",    aSizes    },
-            { "hidden",   aHidden   },
-            { "filtered", aFiltered }
+            { "sizes"_ostr,    aSizes    },
+            { "hidden"_ostr,   aHidden   },
+            { "filtered"_ostr, aFiltered }
         };
 
         for (const auto& rEntry : aPairList)
@@ -2082,7 +2082,7 @@ public:
         std::stringstream aStream((std::string(rJSON)));
         boost::property_tree::read_json(aStream, aTree);
 
-        CPPUNIT_ASSERT_EQUAL(OString(".uno:SheetGeometryData"), OString(aTree.get<std::string>("commandName")));
+        CPPUNIT_ASSERT_EQUAL(".uno:SheetGeometryData"_ostr, OString(aTree.get<std::string>("commandName")));
 
         aCols.testPropertyTree(aTree.get_child("columns"), true);
         aRows.testPropertyTree(aTree.get_child("rows"), false);
@@ -2317,7 +2317,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteCellMultilineContent)
     Scheduler::ProcessEventsToIdle();
 
     // check if the row header has been invalidated and if the involved row is of the expected height
-    CPPUNIT_ASSERT_EQUAL(OString("row"), aView1.m_sInvalidateHeader);
+    CPPUNIT_ASSERT_EQUAL("row"_ostr, aView1.m_sInvalidateHeader);
     sal_uInt16 nRow2Height = rDoc.GetRowHeight(static_cast<SCROW>(0), static_cast<SCTAB>(0), false);
     CPPUNIT_ASSERT_EQUAL(nRow1Height, nRow2Height);
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
@@ -2375,7 +2375,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sCopyContent, pDoc->GetString(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OString("rows sizes"), aView.m_sInvalidateSheetGeometry);
+    CPPUNIT_ASSERT_EQUAL("rows sizes"_ostr, aView.m_sInvalidateSheetGeometry);
 
     // create new source text in A2
     OUString sCopyContent2("Very long text to copy 2");
@@ -2405,7 +2405,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
 
     // SG invalidations for all
     CPPUNIT_ASSERT_EQUAL(sCopyContent2, pDoc->GetString(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OString("all"), aView.m_sInvalidateSheetGeometry);
+    CPPUNIT_ASSERT_EQUAL("all"_ostr, aView.m_sInvalidateSheetGeometry);
 
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
@@ -2437,7 +2437,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
     }
 
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
+    CPPUNIT_ASSERT_EQUAL("rows"_ostr, aView.m_sInvalidateSheetGeometry);
 
     aView.m_sInvalidateSheetGeometry = "";
     // sort descending
@@ -2455,7 +2455,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
     CPPUNIT_ASSERT_EQUAL(double(2), pDoc->GetValue(ScAddress(1, 2, 0)));
 
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
+    CPPUNIT_ASSERT_EQUAL("rows"_ostr, aView.m_sInvalidateSheetGeometry);
 }
 
 namespace
@@ -3071,11 +3071,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     int nFirstViewId = SfxLokHelper::getView();
     ViewCallback aView1;
 
-    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
     // Create a second view
     SfxLokHelper::createView();
     ViewCallback aView2;
-    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
     // Set second view to dark scheme
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -3085,11 +3085,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
         );
         dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
     }
-    CPPUNIT_ASSERT_EQUAL(OString(";Dark"), pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Dark"_ostr, pModelObj->getViewRenderState());
 
     // Switch back to first view and make sure it's the same
     SfxLokHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

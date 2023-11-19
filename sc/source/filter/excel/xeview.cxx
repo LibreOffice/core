@@ -412,7 +412,7 @@ static OString lcl_GetZoom( sal_uInt16 nZoom )
 {
     if( nZoom )
         return OString::number( nZoom );
-    return "100";
+    return "100"_ostr;
 }
 
 void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )

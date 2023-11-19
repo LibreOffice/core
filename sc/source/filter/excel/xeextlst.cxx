@@ -188,7 +188,7 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::s
             break;
     }
 
-    return "";
+    return ""_ostr;
 }
 
 }
@@ -555,28 +555,28 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
 XclExpExtCalcPr::XclExpExtCalcPr( const XclExpRoot& rRoot, formula::FormulaGrammar::AddressConvention eConv ):
     XclExpExt( rRoot )
 {
-    maURI = OString("{7626C862-2A13-11E5-B345-FEFF819CDC9F}");
+    maURI = "{7626C862-2A13-11E5-B345-FEFF819CDC9F}"_ostr;
 
     switch (eConv)
     {
         case formula::FormulaGrammar::CONV_OOO:
-            maSyntax = OString("CalcA1");
+            maSyntax = "CalcA1"_ostr;
             break;
         case formula::FormulaGrammar::CONV_XL_A1:
-            maSyntax = OString("ExcelA1");
+            maSyntax = "ExcelA1"_ostr;
             break;
         case formula::FormulaGrammar::CONV_XL_R1C1:
-            maSyntax = OString("ExcelR1C1");
+            maSyntax = "ExcelR1C1"_ostr;
             break;
         case formula::FormulaGrammar::CONV_A1_XL_A1:
-            maSyntax = OString("CalcA1ExcelA1");
+            maSyntax = "CalcA1ExcelA1"_ostr;
             break;
         case formula::FormulaGrammar::CONV_UNSPECIFIED:
         case formula::FormulaGrammar::CONV_ODF:
         case formula::FormulaGrammar::CONV_XL_OOX:
         case formula::FormulaGrammar::CONV_LOTUS_A1:
         case formula::FormulaGrammar::CONV_LAST:
-            maSyntax = OString("Unspecified");
+            maSyntax = "Unspecified"_ostr;
             break;
     }
 }
@@ -596,7 +596,7 @@ void XclExpExtCalcPr::SaveXml( XclExpXmlStream& rStrm )
 XclExpExtCondFormat::XclExpExtCondFormat( const XclExpRoot& rRoot ):
     XclExpExt( rRoot )
 {
-    maURI = OString("{78C0D931-6437-407d-A8EE-F0AAD7539E65}");
+    maURI = "{78C0D931-6437-407d-A8EE-F0AAD7539E65}"_ostr;
 }
 
 void XclExpExtCondFormat::SaveXml( XclExpXmlStream& rStrm )

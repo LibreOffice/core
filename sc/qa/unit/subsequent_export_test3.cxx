@@ -567,60 +567,60 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf133487)
     // shape in background has lowest index
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[1]/table:table-cell[1]/draw:custom-shape",
-                "z-index", "0");
+                "table:table-row[1]/table:table-cell[1]/draw:custom-shape"_ostr,
+                "z-index"_ostr, "0");
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
                 "table:table-row[1]/table:table-cell[1]/draw:custom-shape"
-                "/attribute::table:table-background",
+                "/attribute::table:table-background"_ostr,
                 1);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[1]/table:table-cell[1]/draw:custom-shape",
-                "table-background", "true");
+                "table:table-row[1]/table:table-cell[1]/draw:custom-shape"_ostr,
+                "table-background"_ostr, "true");
     // shape in foreground, previously index 1
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[1]/table:table-cell[2]/draw:custom-shape",
-                "z-index", "2");
+                "table:table-row[1]/table:table-cell[2]/draw:custom-shape"_ostr,
+                "z-index"_ostr, "2");
     // attribute is only written for value "true"
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
                 "table:table-row[1]/table:table-cell[2]/draw:custom-shape"
-                "/attribute::table:table-background",
+                "/attribute::table:table-background"_ostr,
                 0);
     // shape in foreground, previously index 0
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[3]/table:table-cell[1]/draw:custom-shape",
-                "z-index", "1");
+                "table:table-row[3]/table:table-cell[1]/draw:custom-shape"_ostr,
+                "z-index"_ostr, "1");
     // attribute is only written for value "true"
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
                 "table:table-row[3]/table:table-cell[1]/draw:custom-shape"
-                "/attribute::table:table-background",
+                "/attribute::table:table-background"_ostr,
                 0);
     // shape in foreground, previously index 4
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:shapes/draw:custom-shape",
-                "z-index", "3");
+                "table:shapes/draw:custom-shape"_ostr,
+                "z-index"_ostr, "3");
     // attribute is only written for value "true"
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
                 "table:shapes/draw:custom-shape"
-                "/attribute::table:table-background",
+                "/attribute::table:table-background"_ostr,
                 0);
     // form control, previously index 3
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:shapes/draw:control",
-                "z-index", "4");
+                "table:shapes/draw:control"_ostr,
+                "z-index"_ostr, "4");
     // attribute is only written for value "true"
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
                 "table:shapes/draw:control"
-                "/attribute::table:table-background",
+                "/attribute::table:table-background"_ostr,
                 0);
 }
 
@@ -921,7 +921,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorODSToXLSX)
     CPPUNIT_ASSERT(pSheet);
 
     // there shouldn't be any defined names during export of FLOOR and CEILING functions to .xlsx
-    assertXPath(pSheet, "/x:workbook/x:definedNames", 0);
+    assertXPath(pSheet, "/x:workbook/x:definedNames"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorXLS) { testCeilingFloor("MS Excel 97"); }
@@ -940,8 +940,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testCustomXml)
     CPPUNIT_ASSERT(pRelsDoc);
 
     // Check there is a relation to itemProps1.xml.
-    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship", 1);
-    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship"_ostr, 1);
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr, "Target"_ostr,
                 "itemProps1.xml");
 
     std::unique_ptr<SvStream> pStream = parseExportStream(maTempFile.GetURL(), "ddp/ddpfile.xen");
@@ -968,8 +968,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testRelativePathsODS)
     CPPUNIT_ASSERT(pDoc);
     OUString aURL = getXPath(pDoc,
                              "/office:document-content/office:body/office:spreadsheet/table:table/"
-                             "table:table-row[2]/table:table-cell[2]/text:p/text:a",
-                             "href");
+                             "table:table-row[2]/table:table-cell[2]/text:p/text:a"_ostr,
+                             "href"_ostr);
 #ifdef _WIN32
     // if the exported document is not on the same drive then the linked document,
     // there is no way to get a relative URL for the link, because ../X:/ is undefined.
@@ -1312,7 +1312,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTextBoxHyperlinkXLSX)
 
     assertXPath(
         pDoc,
-        "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:nvSpPr[1]/xdr:cNvPr[1]/a:hlinkClick[1]",
+        "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:nvSpPr[1]/xdr:cNvPr[1]/a:hlinkClick[1]"_ostr,
         1);
 }
 
@@ -1324,7 +1324,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testFontSizeXLSX)
     xmlDocUniquePtr pDoc = parseExport("xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDoc);
     OUString fontSize = getXPath(
-        pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr", "sz");
+        pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr"_ostr,
+        "sz"_ostr);
     // make sure that the font size is 18
     CPPUNIT_ASSERT_EQUAL(OUString("1800"), fontSize);
 }
@@ -1340,8 +1341,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetCharacterKerningSpaceXLSX)
     CPPUNIT_ASSERT(pDoc);
 
     OUString CharKerningSpace = getXPath(
-        pDoc, "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]",
-        "spc");
+        pDoc,
+        "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]"_ostr,
+        "spc"_ostr);
 
     // make sure that the CharKerning is 1997.
     CPPUNIT_ASSERT_EQUAL(OUString("1997"), CharKerningSpace);
@@ -1356,8 +1358,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetCondensedCharacterSpaceXLSX)
     CPPUNIT_ASSERT(pDoc);
 
     OUString CondensedCharSpace = getXPath(
-        pDoc, "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]",
-        "spc");
+        pDoc,
+        "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]"_ostr,
+        "spc"_ostr);
 
     // make sure that the CondensedCharSpace is -1002.
     CPPUNIT_ASSERT_EQUAL(OUString("-1002"), CondensedCharSpace);
@@ -1371,27 +1374,32 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTextUnderlineColorXLSX)
     xmlDocUniquePtr pDoc = parseExport("xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDoc);
     // Make sure the underline type is double line
-    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr",
-                "u", "dbl");
+    assertXPath(pDoc,
+                "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr"_ostr,
+                "u"_ostr, "dbl");
 
-    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr",
-                "b", "1");
+    assertXPath(pDoc,
+                "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr"_ostr,
+                "b"_ostr, "1");
     // Make sure that the underline color is RED
     assertXPath(pDoc,
                 "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/"
-                "a:solidFill/a:srgbClr",
-                "val", "ff0000");
+                "a:solidFill/a:srgbClr"_ostr,
+                "val"_ostr, "ff0000");
 
     // Make sure the underline type is drawn with heavy line
-    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr",
-                "u", "heavy");
+    assertXPath(pDoc,
+                "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr"_ostr,
+                "u"_ostr, "heavy");
     // tdf#104219 Make sure that uFill is not existing and uFillTx is set.
     // It mean that color is automatic, should be the same color as the text.
     assertXPath(
-        pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill", 0);
-    assertXPath(pDoc,
-                "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFillTx",
-                1);
+        pDoc,
+        "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill"_ostr, 0);
+    assertXPath(
+        pDoc,
+        "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFillTx"_ostr,
+        1);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetRunParagraphPropertyXLSX)
@@ -1402,7 +1410,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetRunParagraphPropertyXLSX)
     xmlDocUniquePtr pDoc = parseExport("xl/sharedStrings.xml");
     CPPUNIT_ASSERT(pDoc);
 
-    OUString aColor = getXPath(pDoc, "/x:sst/x:si/x:r[1]/x:rPr[1]/x:color", "rgb");
+    OUString aColor = getXPath(pDoc, "/x:sst/x:si/x:r[1]/x:rPr[1]/x:color"_ostr, "rgb"_ostr);
     CPPUNIT_ASSERT_EQUAL(OUString("FFFF0000"), aColor);
 }
 
@@ -1413,7 +1421,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPreserveTextWhitespaceXLSX)
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/sharedStrings.xml");
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:sst/x:si/x:t", "space", "preserve");
+    assertXPath(pDoc, "/x:sst/x:si/x:t"_ostr, "space"_ostr, "preserve");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testPreserveTextWhitespace2XLSX)
@@ -1423,8 +1431,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPreserveTextWhitespace2XLSX)
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/sharedStrings.xml");
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:sst/x:si[1]/x:t", "space", "preserve");
-    assertXPath(pDoc, "/x:sst/x:si[2]/x:t", "space", "preserve");
+    assertXPath(pDoc, "/x:sst/x:si[1]/x:t"_ostr, "space"_ostr, "preserve");
+    assertXPath(pDoc, "/x:sst/x:si[2]/x:t"_ostr, "space"_ostr, "preserve");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testHiddenShapeXLS)
@@ -1459,8 +1467,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testHiddenShapeXLSX)
     save("Calc Office Open XML");
     xmlDocUniquePtr pDocXml = parseExport("xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDocXml);
-    assertXPath(pDocXml, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden",
-                "1");
+    assertXPath(pDocXml, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr"_ostr,
+                "hidden"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testShapeAutofitXLSX)
@@ -1472,9 +1480,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testShapeAutofitXLSX)
     CPPUNIT_ASSERT(pDoc);
 
     // TextAutoGrowHeight --> "Fit height to text" / "Resize shape to fit text" --> true
-    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp/xdr:txBody/a:bodyPr/a:spAutoFit", 1);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp/xdr:txBody/a:bodyPr/a:spAutoFit"_ostr,
+                1);
     // TextAutoGrowHeight --> "Fit height to text" / "Resize shape to fit text" --> false
-    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp/xdr:txBody/a:bodyPr/a:noAutofit", 1);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp/xdr:txBody/a:bodyPr/a:noAutofit"_ostr,
+                1);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testHyperlinkXLSX)
@@ -1484,7 +1494,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testHyperlinkXLSX)
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/drawings/_rels/drawing1.xml.rels");
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target", "#Sheet2!A1");
+    assertXPath(pDoc, "/rels:Relationships/rels:Relationship"_ostr, "Target"_ostr, "#Sheet2!A1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
@@ -1663,7 +1673,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatRangeListXLSX)
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "F4 F10");
+    assertXPath(pDoc, "//x:conditionalFormatting"_ostr, "sqref"_ostr, "F4 F10");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatContainsTextXLSX)
@@ -1672,7 +1682,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatContainsTextXLSX)
     save("Calc Office Open XML");
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
-    assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula",
+    assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula"_ostr,
                        "NOT(ISERROR(SEARCH(\"test\",A1)))");
 }
 
@@ -1693,9 +1703,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatPriorityCheckXLSX)
     for (size_t nIdx = 1; nIdx <= 2; ++nIdx)
     {
         OString aIdx = OString::number(nIdx);
-        OUString aCellAddr = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]", "sqref");
+        OUString aCellAddr
+            = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]", "sqref"_ostr);
         OUString aPriority
-            = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]/x:cfRule", "priority");
+            = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]/x:cfRule", "priority"_ostr);
         CPPUNIT_ASSERT_MESSAGE("conditionalFormatting sqref must be either A1 or A3",
                                aCellAddr == "A1" || aCellAddr == "A3");
         if (aCellAddr == "A1")
@@ -1709,7 +1720,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatPriorityCheckXLSX)
             = getXPath(pDoc,
                        "//x:extLst/x:ext[1]/x14:conditionalFormattings/x14:conditionalFormatting["
                            + aIdx + "]/x14:cfRule",
-                       "priority");
+                       "priority"_ostr);
         CPPUNIT_ASSERT_MESSAGE("x14:conditionalFormatting sqref must be either A1 or A3",
                                aCellAddr == "A1" || aCellAddr == "A3");
         if (aCellAddr == "A1")
@@ -1730,7 +1741,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatOriginXLSX)
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
     // tdf#124953 : The range-list is B3:C6 F1:G2, origin address in the formula should be B1, not B3.
-    OUString aFormula = getXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula");
+    OUString aFormula = getXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula"_ostr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong origin address in formula",
                                  OUString("NOT(ISERROR(SEARCH(\"BAC\",B1)))"), aFormula);
 }
@@ -1859,7 +1870,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf113646)
     xmlDocUniquePtr pSheet = parseExport("xl/styles.xml");
     CPPUNIT_ASSERT(pSheet);
 
-    assertXPath(pSheet, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz", "val", "36");
+    assertXPath(pSheet, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz"_ostr, "val"_ostr, "36");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testDateStandardfilterXLSX)
@@ -1871,12 +1882,15 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testDateStandardfilterXLSX)
     xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//x:autoFilter", "ref", "A1:B6");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", "03");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", "12");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2011");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]",
-                "dateTimeGrouping", "day");
+    assertXPath(pDoc, "//x:autoFilter"_ostr, "ref"_ostr, "A1:B6");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]"_ostr, "day"_ostr,
+                "03");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]"_ostr,
+                "month"_ostr, "12");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]"_ostr,
+                "year"_ostr, "2011");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]"_ostr,
+                "dateTimeGrouping"_ostr, "day");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testNumberFormatODS)

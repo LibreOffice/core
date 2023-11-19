@@ -111,21 +111,21 @@ void ScScreenshotTest::initialize()
 void ScScreenshotTest::registerKnownDialogsByID(mapType& rKnownDialogs)
 {
     // fill map of known dialogs
-    rKnownDialogs["modules/scalc/ui/insertsheet.ui"] = 0;
-    rKnownDialogs["modules/scalc/ui/deletecells.ui"] = 1;
-    rKnownDialogs["modules/scalc/ui/pastespecial.ui"] = 2;
-    rKnownDialogs["modules/scalc/ui/changesourcedialog.ui"] = 3;
-    rKnownDialogs["modules/scalc/ui/selectdatasource.ui"] = 4;
-    rKnownDialogs["modules/scalc/ui/selectsource.ui"] = 5;
-    rKnownDialogs["modules/scalc/ui/deletecontents.ui"] = 6;
-    rKnownDialogs["modules/scalc/ui/createnamesdialog.ui"] = 7;
-    rKnownDialogs["modules/scalc/ui/inputstringdialog.ui"] = 8;
-    rKnownDialogs["modules/scalc/ui/tabcolordialog.ui"] = 9;
-    rKnownDialogs["modules/scalc/ui/textimportoptions.ui"] = 10;
-    rKnownDialogs["modules/scalc/ui/dataform.ui"] = 11;
-    rKnownDialogs["modules/scalc/ui/movecopysheet.ui"] = 12;
-    rKnownDialogs["modules/scalc/ui/textimportcsv.ui"] = 13;
-    rKnownDialogs["modules/scalc/ui/formatcellsdialog.ui"] = 14;
+    rKnownDialogs["modules/scalc/ui/insertsheet.ui"_ostr] = 0;
+    rKnownDialogs["modules/scalc/ui/deletecells.ui"_ostr] = 1;
+    rKnownDialogs["modules/scalc/ui/pastespecial.ui"_ostr] = 2;
+    rKnownDialogs["modules/scalc/ui/changesourcedialog.ui"_ostr] = 3;
+    rKnownDialogs["modules/scalc/ui/selectdatasource.ui"_ostr] = 4;
+    rKnownDialogs["modules/scalc/ui/selectsource.ui"_ostr] = 5;
+    rKnownDialogs["modules/scalc/ui/deletecontents.ui"_ostr] = 6;
+    rKnownDialogs["modules/scalc/ui/createnamesdialog.ui"_ostr] = 7;
+    rKnownDialogs["modules/scalc/ui/inputstringdialog.ui"_ostr] = 8;
+    rKnownDialogs["modules/scalc/ui/tabcolordialog.ui"_ostr] = 9;
+    rKnownDialogs["modules/scalc/ui/textimportoptions.ui"_ostr] = 10;
+    rKnownDialogs["modules/scalc/ui/dataform.ui"_ostr] = 11;
+    rKnownDialogs["modules/scalc/ui/movecopysheet.ui"_ostr] = 12;
+    rKnownDialogs["modules/scalc/ui/textimportcsv.ui"_ostr] = 13;
+    rKnownDialogs["modules/scalc/ui/formatcellsdialog.ui"_ostr] = 14;
 }
 
 VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)

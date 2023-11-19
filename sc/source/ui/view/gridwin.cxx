@@ -5998,7 +5998,7 @@ OString ScGridWindow::getCellCursor() const
     // we can use that to determine whether we would want to be showing
     // one (client-side) for tiled rendering too.
     if (!mpOOCursors)
-        return "EMPTY";
+        return "EMPTY"_ostr;
 
     if (comphelper::LibreOfficeKit::isCompatFlagSet(
             comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
@@ -6018,8 +6018,8 @@ void ScGridWindow::notifyKitCellCursor() const
     GetSelectionRects(aRects);
     if (aRects.empty() || !mrViewData.IsActive())
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
-        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY");
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
+        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
     }
 }
 
@@ -6030,7 +6030,7 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
     if (pViewShell->GetDocId() != pForShell->GetDocId())
         return;
 
-    OString aCursor("EMPTY");
+    OString aCursor("EMPTY"_ostr);
     if (mpOOCursors) // cf. getCellCursor above
     {
         auto pForTabView = dynamic_cast<const ScTabViewShell *>(pForShell);
@@ -6156,8 +6156,8 @@ void ScGridWindow::UpdateAllOverlays()
 void ScGridWindow::DeleteCursorOverlay()
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
-    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY");
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY"_ostr);
+    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
     mpOOCursors.reset();
 }
 
@@ -6301,7 +6301,7 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
 
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     pViewShell->UpdateInputHandler();
-    OString sBoundingBoxString = "EMPTY";
+    OString sBoundingBoxString = "EMPTY"_ostr;
     if (!aBoundingBox.IsEmpty())
         sBoundingBoxString = aBoundingBox.toString();
     OString aRectListString = rectanglesToString(rLogicRects);
@@ -6371,7 +6371,7 @@ void ScGridWindow::updateOtherKitSelections() const
 
         if (it == pViewShell)
         {
-            OString sBoundingBoxString = "EMPTY";
+            OString sBoundingBoxString = "EMPTY"_ostr;
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 
@@ -6395,7 +6395,7 @@ void updateLibreOfficeKitAutoFill(const ScViewData& rViewData, tools::Rectangle 
     double nPPTX = rViewData.GetPPTX();
     double nPPTY = rViewData.GetPPTY();
 
-    OString sRectangleString = "EMPTY";
+    OString sRectangleString = "EMPTY"_ostr;
     if (!rRectangle.IsEmpty())
     {
         // selection start handle
@@ -6665,9 +6665,9 @@ void ScGridWindow::UpdateSelectionOverlay()
     else
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY");
-        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY");
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY"_ostr);
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
+        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
 
         ScInputHandler* pViewHdl = SC_MOD()->GetInputHdl(pViewShell);
         if (!pViewHdl || !pViewHdl->IsEditMode())
@@ -6987,7 +6987,7 @@ void ScGridWindow::UpdateDragRectOverlay()
                 aRectsString = rectanglesToString(convertPixelToLogical(pViewShell->GetViewData(), aRectangles, aBoundingBox));
             }
 
-            OString sBoundingBoxString = "EMPTY";
+            OString sBoundingBoxString = "EMPTY"_ostr;
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 

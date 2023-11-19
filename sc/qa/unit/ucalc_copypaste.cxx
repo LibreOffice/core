@@ -1885,7 +1885,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
 
             m_pDoc->CopyFromClip(aDestRange, aDestMark, aFlags, pPasteRefUndoDoc.get(), &aClipDoc,
                                  true, bAsLink, bIncludedFiltered, bSkipEmpty);
-            printValuesAndFormulasInRange(m_pDoc, aDestRange, "Dest sheet");
+            printValuesAndFormulasInRange(m_pDoc, aDestRange, "Dest sheet"_ostr);
         }
 
         if (bCut)
@@ -7484,11 +7484,11 @@ void TestCopyPaste::executeReferencedCutRangesRow(const bool bTransposed, const 
         m_pDoc->CopyFromClip(aDestRange, aDestMark, aFlags, pPasteRefUndoDoc.get(),
                              pTransClip.get(), true, false, true, false);
         printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                      "Relative references after copy");
+                                      "Relative references after copy"_ostr);
 
         m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, pPasteRefUndoDoc.get());
         printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                      "Relative references after UpdateTranspose");
+                                      "Relative references after UpdateTranspose"_ostr);
         pTransClip.reset();
     }
     else
@@ -8447,11 +8447,11 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
         m_pDoc->CopyFromClip(aDestRange, aDestMark, aFlags, pPasteRefUndoDoc.get(),
                              pTransClip.get(), true, false, true, false);
         printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                      "Relative references after copy");
+                                      "Relative references after copy"_ostr);
 
         m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, pPasteRefUndoDoc.get());
         printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
-                                      "Relative references after UpdateTranspose");
+                                      "Relative references after UpdateTranspose"_ostr);
         pTransClip.reset();
     }
     else

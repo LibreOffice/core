@@ -2141,7 +2141,7 @@ void ScTabView::OnLibreOfficeKitTabChanged()
 
     SfxLokHelper::forEachOtherView(pThisViewShell, lTabSwitch);
 
-    pThisViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, "all");
+    pThisViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, "all"_ostr);
 
     if (pThisViewShell->GetInputHandler())
         pThisViewShell->GetInputHandler()->UpdateLokReferenceMarks();

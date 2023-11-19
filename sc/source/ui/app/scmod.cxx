@@ -116,7 +116,7 @@ void ScModule::InitInterface_Impl()
 }
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    SfxModule("sc", {pFact}),
+    SfxModule("sc"_ostr, {pFact}),
     m_aIdleTimer("sc ScModule IdleTimer"),
     m_pDragData(new ScDragData),
     m_pSelTransfer( nullptr ),

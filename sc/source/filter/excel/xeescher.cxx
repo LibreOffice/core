@@ -1207,7 +1207,7 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     VmlFormControlExporter aFormControlExporter(rStrm.GetCurrentStream(), GetObjType(), aAreaFrom,
                                                 aAreaTo, msCtrlName, sCellLink, msLabel, GetMacroName());
     aFormControlExporter.SetSkipwzName(true);  // use XML_id for legacyid, not XML_ID
-    aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s");
+    aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s"_ostr);
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
                                       /*eVOri=*/-1, /*eHRel=*/-1, /*eVRel=*/-1,
                                       /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true, mnShapeId);

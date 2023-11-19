@@ -139,12 +139,12 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
         CPPUNIT_ASSERT(pXmlDoc);
         assertXPath(pXmlDoc,
                     "/office:document-content/office:body/office:spreadsheet/table:table/"
-                    "table:table-row[1]/table:table-cell[1]",
-                    "formula", "of:=SUM([.2:.2])");
+                    "table:table-row[1]/table:table-cell[1]"_ostr,
+                    "formula"_ostr, "of:=SUM([.2:.2])");
         assertXPath(pXmlDoc,
                     "/office:document-content/office:body/office:spreadsheet/table:table/"
-                    "table:table-row[1]/table:table-cell[2]",
-                    "formula", "of:=SUM([.C:.C])");
+                    "table:table-row[1]/table:table-cell[2]"_ostr,
+                    "formula"_ostr, "of:=SUM([.C:.C])");
     }
 }
 
@@ -161,8 +161,10 @@ void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), pDoc->GetFormula(1, 0, 0));
         xmlDocUniquePtr pXmlDoc = parseExport("xl/worksheets/sheet1.xml");
         CPPUNIT_ASSERT(pXmlDoc);
-        assertXPathContent(pXmlDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f", "SUM(2:2)");
-        assertXPathContent(pXmlDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f", "SUM(C:C)");
+        assertXPathContent(pXmlDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f"_ostr,
+                           "SUM(2:2)");
+        assertXPathContent(pXmlDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f"_ostr,
+                           "SUM(C:C)");
     }
 }
 

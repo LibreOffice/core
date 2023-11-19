@@ -1026,7 +1026,7 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::s
         break;
     }
 
-    return "";
+    return ""_ostr;
 }
 
 }
@@ -1214,25 +1214,25 @@ OString getColorScaleType( const ScColorScaleEntry& rEntry, bool bFirst )
     switch(rEntry.GetType())
     {
         case COLORSCALE_MIN:
-            return "min";
+            return "min"_ostr;
         case COLORSCALE_MAX:
-            return "max";
+            return "max"_ostr;
         case COLORSCALE_PERCENT:
-            return "percent";
+            return "percent"_ostr;
         case COLORSCALE_FORMULA:
-            return "formula";
+            return "formula"_ostr;
         case COLORSCALE_AUTO:
             if(bFirst)
-                return "min";
+                return "min"_ostr;
             else
-                return "max";
+                return "max"_ostr;
         case COLORSCALE_PERCENTILE:
-            return "percentile";
+            return "percentile"_ostr;
         default:
             break;
     }
 
-    return "num";
+    return "num"_ostr;
 }
 
 }

@@ -51,7 +51,7 @@ void checkSparklines(ScDocument& rDocument)
     {
         auto pSparkline = rDocument.GetSparkline(ScAddress(0, 1, 0)); // A2
         CPPUNIT_ASSERT(pSparkline);
-        CPPUNIT_ASSERT_EQUAL(OString("{1C5C5DE0-3C09-4CB3-A3EC-9E763301EC82}"),
+        CPPUNIT_ASSERT_EQUAL("{1C5C5DE0-3C09-4CB3-A3EC-9E763301EC82}"_ostr,
                              pSparkline->getSparklineGroup()->getID().getString());
 
         auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
@@ -170,42 +170,45 @@ void SparklineImportExportTest::testSparklinesExportODS()
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // We have 3 sparkline groups = 3 tables that contain sparklines
-    assertXPath(pXmlDoc, "//table:table/calcext:sparkline-groups", 3);
+    assertXPath(pXmlDoc, "//table:table/calcext:sparkline-groups"_ostr, 3);
 
     // Check the number of sparkline groups in table[1]
-    assertXPath(pXmlDoc, "//table:table[1]/calcext:sparkline-groups/calcext:sparkline-group", 2);
+    assertXPath(pXmlDoc, "//table:table[1]/calcext:sparkline-groups/calcext:sparkline-group"_ostr,
+                2);
     // Check the number of sparkline groups in table[2]
-    assertXPath(pXmlDoc, "//table:table[2]/calcext:sparkline-groups/calcext:sparkline-group", 2);
+    assertXPath(pXmlDoc, "//table:table[2]/calcext:sparkline-groups/calcext:sparkline-group"_ostr,
+                2);
     // Check the number of sparkline groups in table[3]
-    assertXPath(pXmlDoc, "//table:table[3]/calcext:sparkline-groups/calcext:sparkline-group", 3);
+    assertXPath(pXmlDoc, "//table:table[3]/calcext:sparkline-groups/calcext:sparkline-group"_ostr,
+                3);
 
     // Check table[1] - sparkline-group[1]
     OString aSparklineGroupPath
-        = "//table:table[1]/calcext:sparkline-groups/calcext:sparkline-group[1]";
-    assertXPath(pXmlDoc, aSparklineGroupPath, "type", "line");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "line-width", "1pt");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "display-empty-cells-as", "gap");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "markers", "true");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "high", "true");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "low", "true");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "first", "true");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "last", "true");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "negative", "true");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "display-x-axis", "true");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "min-axis-type", "individual");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "max-axis-type", "individual");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "color-series", "#376092");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "color-negative", "#00b050");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "color-axis", "#000000");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "color-markers", "#000000");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "color-first", "#7030a0");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "color-last", "#ff0000");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "color-high", "#92d050");
-    assertXPath(pXmlDoc, aSparklineGroupPath, "color-low", "#00b0f0");
+        = "//table:table[1]/calcext:sparkline-groups/calcext:sparkline-group[1]"_ostr;
+    assertXPath(pXmlDoc, aSparklineGroupPath, "type"_ostr, "line");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "line-width"_ostr, "1pt");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "display-empty-cells-as"_ostr, "gap");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "markers"_ostr, "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "high"_ostr, "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "low"_ostr, "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "first"_ostr, "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "last"_ostr, "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "negative"_ostr, "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "display-x-axis"_ostr, "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "min-axis-type"_ostr, "individual");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "max-axis-type"_ostr, "individual");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-series"_ostr, "#376092");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-negative"_ostr, "#00b050");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-axis"_ostr, "#000000");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-markers"_ostr, "#000000");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-first"_ostr, "#7030a0");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-last"_ostr, "#ff0000");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-high"_ostr, "#92d050");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-low"_ostr, "#00b0f0");
 
     assertXPath(pXmlDoc, aSparklineGroupPath + "/calcext:sparklines/calcext:sparkline", 1);
     assertXPath(pXmlDoc, aSparklineGroupPath + "/calcext:sparklines/calcext:sparkline[1]",
-                "cell-address", "Sheet1.A2");
+                "cell-address"_ostr, "Sheet1.A2");
 }
 
 void SparklineImportExportTest::testSparklinesRoundtripODS()
@@ -236,10 +239,10 @@ void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
     xmlDocUniquePtr pXmlDoc = parseExport("xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/x:worksheet", 1);
-    assertXPath(pXmlDoc, "/x:worksheet/x:extLst/x:ext/x14:sparklineGroups", 0);
-    assertXPath(pXmlDoc, "/x:worksheet/x:extLst/x:ext", 0);
-    assertXPath(pXmlDoc, "/x:worksheet/x:extLst", 0);
+    assertXPath(pXmlDoc, "/x:worksheet"_ostr, 1);
+    assertXPath(pXmlDoc, "/x:worksheet/x:extLst/x:ext/x14:sparklineGroups"_ostr, 0);
+    assertXPath(pXmlDoc, "/x:worksheet/x:extLst/x:ext"_ostr, 0);
+    assertXPath(pXmlDoc, "/x:worksheet/x:extLst"_ostr, 0);
 }
 
 namespace
@@ -248,7 +251,7 @@ void checkSparklineThemeColors(ScDocument& rDocument)
 {
     auto pSparkline = rDocument.GetSparkline(ScAddress(0, 1, 0)); // A2
     CPPUNIT_ASSERT(pSparkline);
-    CPPUNIT_ASSERT_EQUAL(OString("{1C5C5DE0-3C09-4CB3-A3EC-9E763301EC82}"),
+    CPPUNIT_ASSERT_EQUAL("{1C5C5DE0-3C09-4CB3-A3EC-9E763301EC82}"_ostr,
                          pSparkline->getSparklineGroup()->getID().getString());
 
     auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
