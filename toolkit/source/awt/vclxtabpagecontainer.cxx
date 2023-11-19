@@ -199,7 +199,7 @@ void SAL_CALL VCLXTabPageContainer::elementRemoved( const css::container::Contai
         Reference< awt::XControl > xControl(xTabPage,UNO_QUERY );
         Reference< awt::tab::XTabPageModel > xP( xControl->getModel(), UNO_QUERY );
         pTabCtrl->RemovePage(xP->getTabPageID());
-        m_aTabPages.erase(::std::remove(m_aTabPages.begin(),m_aTabPages.end(),xTabPage));
+        std::erase(m_aTabPages,xTabPage);
     }
 }
 void SAL_CALL VCLXTabPageContainer::elementReplaced( const css::container::ContainerEvent& /*Event*/ )
