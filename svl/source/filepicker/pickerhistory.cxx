@@ -50,10 +50,7 @@ namespace svt
                 return;
 
             // first, check which of the objects we hold in s_aHistory can be removed
-            _rHistory.erase(std::remove_if(_rHistory.begin(),
-                              _rHistory.end(),
-                              [](const css::uno::WeakReference< XInterface > & x) { return !x.get().is(); }),
-                            _rHistory.end());
+            std::erase_if(_rHistory, [](const css::uno::WeakReference< XInterface > & x) { return !x.get().is(); });
 
             // then push_back the picker
             _rHistory.emplace_back( _rxPicker );

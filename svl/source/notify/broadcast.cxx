@@ -87,9 +87,7 @@ void SvtBroadcaster::Normalize() const
     // clear empty slots first, because then we often have to do very little sorting
     if (mnEmptySlots)
     {
-        maListeners.erase(
-            std::remove_if(maListeners.begin(), maListeners.end(), [] (SvtListener* p) { return isDeletedPtr(p); }),
-            maListeners.end());
+        std::erase_if(maListeners, [] (SvtListener* p) { return isDeletedPtr(p); });
         mnEmptySlots = 0;
     }
 

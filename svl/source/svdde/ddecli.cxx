@@ -256,8 +256,7 @@ DdeTransaction::~DdeTransaction()
     }
 
     delete pName;
-    rDde.aTransactions.erase(std::remove(rDde.aTransactions.begin(),
-                                         rDde.aTransactions.end(),this));
+    std::erase(rDde.aTransactions,this);
 }
 
 void DdeTransaction::Execute()
