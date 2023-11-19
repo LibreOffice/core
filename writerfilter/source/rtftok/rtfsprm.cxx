@@ -103,9 +103,7 @@ void RTFSprms::set(Id nKeyword, const RTFValue::Pointer_t& pValue, RTFOverwrite 
     {
         case RTFOverwrite::YES_PREPEND:
         {
-            m_pSprms->erase(
-                std::remove_if(m_pSprms->begin(), m_pSprms->end(), RTFSprms_compare{ nKeyword }),
-                m_pSprms->end());
+            std::erase_if(*m_pSprms, RTFSprms_compare{ nKeyword });
             m_pSprms->emplace(m_pSprms->cbegin(), nKeyword, pValue);
             break;
         }
