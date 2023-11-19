@@ -1046,9 +1046,7 @@ void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
             layers[nLayer].nMax = i;
         }
     }
-    layers.erase(std::remove_if(layers.begin(), layers.end(),
-                    [](Layer const& rLayer) { return rLayer.shapes.empty(); }),
-        layers.end());
+    std::erase_if(layers, [](Layer const& rLayer) { return rLayer.shapes.empty(); });
     bool isSorted(true);
     for (size_t i = 1; i < layers.size(); ++i)
     {
