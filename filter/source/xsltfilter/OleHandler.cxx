@@ -82,13 +82,13 @@ namespace XSLT
     {
         if (!m_storage || !m_storage->hasByName(streamName))
         {
-            return "Not Found:";// + streamName;
+            return "Not Found:"_ostr;// + streamName;
         }
 
         Reference<XInputStream> subStream(m_storage->getByName(streamName), UNO_QUERY);
         if (!subStream.is())
         {
-            return "Not Found:";// + streamName;
+            return "Not Found:"_ostr;// + streamName;
         }
         //The first four byte are the length of the uncompressed data
         Sequence<sal_Int8> aLength(4);
@@ -98,7 +98,7 @@ namespace XSLT
         int readbytes = subStream->readBytes(aLength, 4);
         if (4 != readbytes)
         {
-            return "Can not read the length.";
+            return "Can not read the length."_ostr;
         }
         sal_Int32 const oleLength = (static_cast<sal_uInt8>(aLength[0]) <<  0U)
                                   | (static_cast<sal_uInt8>(aLength[1]) <<  8U)
@@ -106,14 +106,14 @@ namespace XSLT
                                   | (static_cast<sal_uInt8>(aLength[3]) << 24U);
         if (oleLength < 0)
         {
-            return "invalid oleLength";
+            return "invalid oleLength"_ostr;
         }
         Sequence<sal_Int8> content(oleLength);
         //Read all bytes. The compressed length should be less than the uncompressed length
         readbytes = subStream->readBytes(content, oleLength);
         if (oleLength < readbytes)
         {
-            return "oleLength";// +oleLength + readBytes;
+            return "oleLength"_ostr;// +oleLength + readBytes;
         }
 
         // Decompress the bytes

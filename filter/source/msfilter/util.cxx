@@ -1019,7 +1019,7 @@ OString GetOOXMLPresetGeometry( std::u16string_view rShapeType )
         { u"ooxml-rect", "rect" },
     };
     auto i(aCustomShapeTypeTranslationHashMap.find(rShapeType));
-    return i == aCustomShapeTypeTranslationHashMap.end() ? "rect" : i->second;
+    return i == aCustomShapeTypeTranslationHashMap.end() ? "rect"_ostr : i->second;
 }
 
 MSO_SPT GETVMLShapeType(std::u16string_view aType)
