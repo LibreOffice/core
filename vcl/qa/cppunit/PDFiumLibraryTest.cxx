@@ -396,7 +396,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT(pAnnotation);
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Polygon, pAnnotation->getSubType());
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
-        CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey("Vertices"));
+        CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey("Vertices"_ostr));
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(OUString("Polygon Text"), aContentsString);
         auto const& aVertices = pAnnotation->getVertices();

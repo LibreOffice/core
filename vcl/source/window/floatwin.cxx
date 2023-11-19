@@ -658,7 +658,7 @@ void FloatingWindow::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
         const tools::Rectangle aRect(Point(0,0), Size(GetSizePixel().Width()+1, GetSizePixel().Height()+1));
         std::vector<vcl::LOKPayloadItem> aPayload
         {
-            std::make_pair(OString("rectangle"), aRect.toString())
+            std::make_pair("rectangle"_ostr, aRect.toString())
         };
         const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);

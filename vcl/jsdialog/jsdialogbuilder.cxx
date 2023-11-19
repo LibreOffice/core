@@ -300,12 +300,13 @@ void JSDialogNotifyIdle::Invoke()
                 break;
 
             case jsdialog::MessageType::Popup:
-                send(*generatePopupMessage(rMessage.m_pWindow, (*rMessage.m_pData)[PARENT_ID],
-                                           (*rMessage.m_pData)[CLOSE_ID]));
+                send(*generatePopupMessage(rMessage.m_pWindow,
+                                           (*rMessage.m_pData)[PARENT_ID ""_ostr],
+                                           (*rMessage.m_pData)[CLOSE_ID ""_ostr]));
                 break;
 
             case jsdialog::MessageType::PopupClose:
-                send(*generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID]));
+                send(*generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID ""_ostr]));
                 break;
         }
     }
@@ -371,8 +372,8 @@ void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, 
         return;
 
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
-    (*pData)[PARENT_ID] = sParentId;
-    (*pData)[CLOSE_ID] = sCloseId;
+    (*pData)[PARENT_ID ""_ostr] = sParentId;
+    (*pData)[CLOSE_ID ""_ostr] = sCloseId;
     mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, pWindow, std::move(pData));
     mpIdleNotify->Start();
 }
@@ -383,7 +384,7 @@ void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
         return;
 
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
-    (*pData)[WINDOW_ID] = OUString::number(nWindowId);
+    (*pData)[WINDOW_ID ""_ostr] = OUString::number(nWindowId);
     mpIdleNotify->sendMessage(jsdialog::MessageType::PopupClose, nullptr, std::move(pData));
     flush();
 }
@@ -1655,8 +1656,8 @@ void JSComboBox::set_entry_text(const OUString& rText)
     SalInstanceComboBoxWithEdit::set_entry_text(rText);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE] = "setText";
-    (*pMap)["text"] = rText;
+    (*pMap)[ACTION_TYPE ""_ostr] = "setText";
+    (*pMap)["text"_ostr] = rText;
     sendAction(std::move(pMap));
 }
 
@@ -1668,8 +1669,8 @@ void JSComboBox::set_active(int pos)
     SalInstanceComboBoxWithEdit::set_active(pos);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE] = "select";
-    (*pMap)["position"] = OUString::number(pos);
+    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)["position"_ostr] = OUString::number(pos);
     sendAction(std::move(pMap));
 }
 
@@ -1703,9 +1704,9 @@ void JSComboBox::render_entry(int pos, int dpix, int dpiy)
         ::comphelper::Base64::encode(aBuffer, aSeq);
 
         std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-        (*pMap)[ACTION_TYPE] = "rendered_combobox_entry";
-        (*pMap)["pos"] = OUString::number(pos);
-        (*pMap)["image"] = aBuffer;
+        (*pMap)[ACTION_TYPE ""_ostr] = "rendered_combobox_entry";
+        (*pMap)["pos"_ostr] = OUString::number(pos);
+        (*pMap)["image"_ostr] = aBuffer;
         sendAction(std::move(pMap));
     }
 }
@@ -1758,8 +1759,8 @@ void JSSpinButton::set_value(sal_Int64 value)
     SalInstanceSpinButton::set_value(value);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE] = "setText";
-    (*pMap)["text"] = OUString::number(m_rFormatter.GetValue());
+    (*pMap)[ACTION_TYPE ""_ostr] = "setText";
+    (*pMap)["text"_ostr] = OUString::number(m_rFormatter.GetValue());
     sendAction(std::move(pMap));
 }
 
@@ -2059,8 +2060,8 @@ void JSTreeView::select(int pos)
     enable_notify_events();
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE] = "select";
-    (*pMap)["position"] = OUString::number(pos);
+    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)["position"_ostr] = OUString::number(pos);
     sendAction(std::move(pMap));
 }
 
@@ -2224,8 +2225,8 @@ void JSIconView::select(int pos)
     SalInstanceIconView::select(pos);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE] = "select";
-    (*pMap)["position"] = OUString::number(pos);
+    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)["position"_ostr] = OUString::number(pos);
     sendAction(std::move(pMap));
 }
 

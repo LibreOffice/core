@@ -223,7 +223,7 @@ public:
     virtual OString getSheetGeometryData(bool /*bColumns*/, bool /*bRows*/, bool /*bSizes*/,
                                          bool /*bHidden*/, bool /*bFiltered*/, bool /*bGroups*/)
     {
-        return "";
+        return ""_ostr;
     }
 
     /**

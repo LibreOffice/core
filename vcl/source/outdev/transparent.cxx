@@ -1845,9 +1845,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                                                          Point(), aBandBmp.GetSizePixel(),
                                                                          aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY);
 
-                                    rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) );
+                                    rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN"_ostr ) );
                                     rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
-                                    rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_END" ) );
+                                    rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_END"_ostr ) );
 
                                     aPaintVDev->mbMap = true;
                                     mbMap = bOldMap;

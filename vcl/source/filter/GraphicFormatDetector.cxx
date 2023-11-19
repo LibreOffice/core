@@ -1119,7 +1119,8 @@ bool GraphicFormatDetector::checkEPS()
         maMetadata.mnFormat = GraphicFileFormat::EPS;
         return true;
     }
-    else if (checkArrayForMatchingStrings(pFirstBytesAsCharArray, 30, { "%!PS-Adobe", " EPS" }))
+    else if (checkArrayForMatchingStrings(pFirstBytesAsCharArray, 30,
+                                          { "%!PS-Adobe"_ostr, " EPS"_ostr }))
     {
         maMetadata.mnFormat = GraphicFileFormat::EPS;
         return true;
@@ -1228,7 +1229,7 @@ bool GraphicFormatDetector::checkRAS()
 bool GraphicFormatDetector::checkXPM()
 {
     const char* pFirstBytesAsCharArray = reinterpret_cast<char*>(maFirstBytes.data());
-    if (matchArrayWithString(pFirstBytesAsCharArray, 256, "/* XPM */"))
+    if (matchArrayWithString(pFirstBytesAsCharArray, 256, "/* XPM */"_ostr))
     {
         maMetadata.mnFormat = GraphicFileFormat::XPM;
         return true;
@@ -1247,7 +1248,7 @@ bool GraphicFormatDetector::checkXBM()
 
     const char* pBufferAsCharArray = reinterpret_cast<char*>(pBuffer.get());
 
-    if (checkArrayForMatchingStrings(pBufferAsCharArray, nSize, { "#define", "_width" }))
+    if (checkArrayForMatchingStrings(pBufferAsCharArray, nSize, { "#define"_ostr, "_width"_ostr }))
     {
         maMetadata.mnFormat = GraphicFileFormat::XBM;
         return true;
@@ -1272,14 +1273,15 @@ bool GraphicFormatDetector::checkSVG()
     // #119176# SVG files which have no xml header at all have shown up this is optional
     // check for "xml" then "version" then "DOCTYPE" and "svg" tags
     if (checkArrayForMatchingStrings(pCheckArrayAsCharArray, nCheckSize,
-                                     { "<?xml", "version", "DOCTYPE", "svg" }))
+                                     { "<?xml"_ostr, "version"_ostr, "DOCTYPE"_ostr, "svg"_ostr }))
     {
         bIsSvg = true;
     }
 
     // check for svg element in 1st 256 bytes
     // search for '<svg'
-    if (!bIsSvg && checkArrayForMatchingStrings(pCheckArrayAsCharArray, nCheckSize, { "<svg" }))
+    if (!bIsSvg
+        && checkArrayForMatchingStrings(pCheckArrayAsCharArray, nCheckSize, { "<svg"_ostr }))
     {
         bIsSvg = true;
     }
@@ -1306,7 +1308,7 @@ bool GraphicFormatDetector::checkSVG()
         }
 
         // search for '<svg'
-        if (checkArrayForMatchingStrings(pCheckArrayAsCharArray, nCheckSize, { "<svg" }))
+        if (checkArrayForMatchingStrings(pCheckArrayAsCharArray, nCheckSize, { "<svg"_ostr }))
         {
             bIsSvg = true;
         }

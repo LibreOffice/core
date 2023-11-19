@@ -410,30 +410,30 @@ void GraphicFormatDetectorTest::testMatchArray()
     int nCheckSize = aString.size();
 
     // Check beginning of the input string
-    pMatchPointer = vcl::matchArrayWithString(pCompleteStringPointer, nCheckSize, "<?xml");
+    pMatchPointer = vcl::matchArrayWithString(pCompleteStringPointer, nCheckSize, "<?xml"_ostr);
     CPPUNIT_ASSERT(pMatchPointer != nullptr);
     CPPUNIT_ASSERT_EQUAL(0, int(pMatchPointer - pCompleteStringPointer));
     CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "<?xml"));
 
     // Check middle of the input string
-    pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "version");
+    pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "version"_ostr);
     CPPUNIT_ASSERT(pMatchPointer != nullptr);
     CPPUNIT_ASSERT_EQUAL(6, int(pMatchPointer - pCompleteStringPointer));
     CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "version"));
 
-    pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "<svg");
+    pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "<svg"_ostr);
     CPPUNIT_ASSERT(pMatchPointer != nullptr);
     CPPUNIT_ASSERT_EQUAL(38, int(pMatchPointer - pCompleteStringPointer));
     CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "<svg"));
 
     // Check end of the input string
-    pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "/svg>");
+    pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "/svg>"_ostr);
     CPPUNIT_ASSERT(pMatchPointer != nullptr);
     CPPUNIT_ASSERT_EQUAL(119, int(pMatchPointer - pCompleteStringPointer));
     CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "/svg>"));
 
     // Check that non-existing search string
-    pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "none");
+    pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "none"_ostr);
     CPPUNIT_ASSERT(pMatchPointer == nullptr);
 }
 
@@ -448,54 +448,61 @@ void GraphicFormatDetectorTest::testCheckArrayForMatchingStrings()
     bool bResult;
 
     // check beginning string
-    bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize, { "<?xml" });
+    bResult
+        = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize, { "<?xml"_ostr });
     CPPUNIT_ASSERT_EQUAL(true, bResult);
 
     // check ending string
-    bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize, { "/svg>" });
+    bResult
+        = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize, { "/svg>"_ostr });
     CPPUNIT_ASSERT_EQUAL(true, bResult);
 
     // check middle string
-    bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize, { "version" });
+    bResult
+        = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize, { "version"_ostr });
     CPPUNIT_ASSERT_EQUAL(true, bResult);
 
     // check beginning and then ending string
     bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize,
-                                                { "<?xml", "/svg>" });
+                                                { "<?xml"_ostr, "/svg>"_ostr });
     CPPUNIT_ASSERT_EQUAL(true, bResult);
 
     // check ending and then beginning string
     bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize,
-                                                { "/svg>", "<?xml" });
+                                                { "/svg>"_ostr, "<?xml"_ostr });
     CPPUNIT_ASSERT_EQUAL(false, bResult);
 
     // check middle strings
     bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize,
-                                                { "version", "<svg" });
+                                                { "version"_ostr, "<svg"_ostr });
     CPPUNIT_ASSERT_EQUAL(true, bResult);
 
     // check beginning, middle and ending strings
-    bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize,
-                                                { "<?xml", "version", "<svg", "/svg>" });
+    bResult = vcl::checkArrayForMatchingStrings(
+        pCompleteStringPointer, nCheckSize,
+        { "<?xml"_ostr, "version"_ostr, "<svg"_ostr, "/svg>"_ostr });
     CPPUNIT_ASSERT_EQUAL(true, bResult);
 
     // check non-existing
-    bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize, { "none" });
+    bResult
+        = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize, { "none"_ostr });
     CPPUNIT_ASSERT_EQUAL(false, bResult);
 
     // check non-existing on the beginning
-    bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize,
-                                                { "none", "version", "<svg", "/svg>" });
+    bResult = vcl::checkArrayForMatchingStrings(
+        pCompleteStringPointer, nCheckSize,
+        { "none"_ostr, "version"_ostr, "<svg"_ostr, "/svg>"_ostr });
     CPPUNIT_ASSERT_EQUAL(false, bResult);
 
     // check non-existing on the end
-    bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize,
-                                                { "<?xml", "version", "<svg", "none" });
+    bResult = vcl::checkArrayForMatchingStrings(
+        pCompleteStringPointer, nCheckSize,
+        { "<?xml"_ostr, "version"_ostr, "<svg"_ostr, "none"_ostr });
     CPPUNIT_ASSERT_EQUAL(false, bResult);
 
     // check non-existing after the end
     bResult = vcl::checkArrayForMatchingStrings(pCompleteStringPointer, nCheckSize,
-                                                { "<?xml", "/svg>", "none" });
+                                                { "<?xml"_ostr, "/svg>"_ostr, "none"_ostr });
     CPPUNIT_ASSERT_EQUAL(false, bResult);
 }
 

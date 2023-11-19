@@ -107,7 +107,7 @@ sal_uInt32 PDFDocument::GetNextSignature()
     sal_uInt32 nRet = 0;
     for (const auto& pSignature : GetSignatureWidgets())
     {
-        auto pT = dynamic_cast<PDFLiteralStringElement*>(pSignature->Lookup("T"));
+        auto pT = dynamic_cast<PDFLiteralStringElement*>(pSignature->Lookup("T"_ostr));
         if (!pT)
             continue;
 
@@ -212,7 +212,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
         }
 
         // Calculate the bounding box.
-        PDFElement* pMediaBox = pPage->Lookup("MediaBox");
+        PDFElement* pMediaBox = pPage->Lookup("MediaBox"_ostr);
         auto pMediaBoxArray = dynamic_cast<PDFArrayElement*>(pMediaBox);
         if (!pMediaBoxArray || pMediaBoxArray->GetElements().size() < 4)
         {
@@ -236,7 +236,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
         }
         rSignatureRectangle.setHeight(pHeight->GetValue());
 
-        if (PDFObjectElement* pContentStream = pPage->LookupObject("Contents"))
+        if (PDFObjectElement* pContentStream = pPage->LookupObject("Contents"_ostr))
         {
             aContentStreams.push_back(pContentStream);
         }
@@ -352,7 +352,7 @@ sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_
 
 bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnotId)
 {
-    PDFElement* pAnnots = rFirstPage.Lookup("Annots");
+    PDFElement* pAnnots = rFirstPage.Lookup("Annots"_ostr);
     auto pAnnotsReference = dynamic_cast<PDFReferenceElement*>(pAnnots);
     if (pAnnotsReference)
     {
@@ -428,8 +428,8 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
             PDFDictionaryElement* pDictionary = rFirstPage.GetDictionary();
 
             // Offset right before the end of the Annots array.
-            sal_uInt64 nAnnotsEndOffset = pDictionary->GetKeyOffset("Annots")
-                                          + pDictionary->GetKeyValueLength("Annots") - 1;
+            sal_uInt64 nAnnotsEndOffset = pDictionary->GetKeyOffset("Annots"_ostr)
+                                          + pDictionary->GetKeyValueLength("Annots"_ostr) - 1;
             // Length of beginning of the dictionary -> Annots end.
             sal_uInt64 nAnnotsBeforeEndLength = nAnnotsEndOffset - rFirstPage.GetDictionaryOffset();
             m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData())
@@ -456,7 +456,7 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
 bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& pRoot)
 {
     if (m_pXRefStream)
-        pRoot = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Root"));
+        pRoot = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Root"_ostr));
     else
     {
         if (!m_pTrailer)
@@ -464,7 +464,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
             SAL_WARN("vcl.filter", "PDFDocument::Sign: found no trailer");
             return false;
         }
-        pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
+        pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"_ostr));
     }
     if (!pRoot)
     {
@@ -483,7 +483,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         SAL_WARN("vcl.filter", "PDFDocument::Sign: invalid catalog obj id");
         return false;
     }
-    PDFElement* pAcroForm = pCatalog->Lookup("AcroForm");
+    PDFElement* pAcroForm = pCatalog->Lookup("AcroForm"_ostr);
     auto pAcroFormReference = dynamic_cast<PDFReferenceElement*>(pAcroForm);
     if (pAcroFormReference)
     {
@@ -505,7 +505,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         // If this is nullptr, then the AcroForm object is not in an object stream.
         SvMemoryStream* pStreamBuffer = pAcroFormObject->GetStreamBuffer();
 
-        if (!pAcroFormObject->Lookup("Fields"))
+        if (!pAcroFormObject->Lookup("Fields"_ostr))
         {
             SAL_WARN("vcl.filter",
                      "PDFDocument::Sign: AcroForm object without required Fields key");
@@ -520,8 +520,8 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         }
 
         // Offset right before the end of the Fields array.
-        sal_uInt64 nFieldsEndOffset = pAcroFormDictionary->GetKeyOffset("Fields")
-                                      + pAcroFormDictionary->GetKeyValueLength("Fields")
+        sal_uInt64 nFieldsEndOffset = pAcroFormDictionary->GetKeyOffset("Fields"_ostr)
+                                      + pAcroFormDictionary->GetKeyValueLength("Fields"_ostr)
                                       - strlen("]");
 
         // Length of beginning of the object dictionary -> Fields end.
@@ -585,7 +585,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         else
         {
             // AcroForm key is already there, insert our reference at the Fields end.
-            auto it = pAcroFormDictionary->GetItems().find("Fields");
+            auto it = pAcroFormDictionary->GetItems().find("Fields"_ostr);
             if (it == pAcroFormDictionary->GetItems().end())
             {
                 SAL_WARN("vcl.filter", "PDFDocument::Sign: AcroForm without required Fields key");
@@ -600,8 +600,9 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
             }
 
             // Offset right before the end of the Fields array.
-            sal_uInt64 nFieldsEndOffset = pAcroFormDictionary->GetKeyOffset("Fields")
-                                          + pAcroFormDictionary->GetKeyValueLength("Fields") - 1;
+            sal_uInt64 nFieldsEndOffset = pAcroFormDictionary->GetKeyOffset("Fields"_ostr)
+                                          + pAcroFormDictionary->GetKeyValueLength("Fields"_ostr)
+                                          - 1;
             // Length of beginning of the Catalog dictionary -> Fields end.
             sal_uInt64 nFieldsBeforeEndLength = nFieldsEndOffset - pCatalog->GetDictionaryOffset();
             m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData())
@@ -705,7 +706,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
             " 0 obj\n<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode");
 
         // ID.
-        auto pID = dynamic_cast<PDFArrayElement*>(m_pXRefStream->Lookup("ID"));
+        auto pID = dynamic_cast<PDFArrayElement*>(m_pXRefStream->Lookup("ID"_ostr));
         if (pID)
         {
             const std::vector<PDFElement*>& rElements = pID->GetElements();
@@ -736,7 +737,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         m_aEditBuffer.WriteOString("] ");
 
         // Info.
-        auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Info"));
+        auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Info"_ostr));
         if (pInfo)
         {
             m_aEditBuffer.WriteOString("/Info ");
@@ -816,7 +817,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         m_aEditBuffer.WriteOString(" ");
         m_aEditBuffer.WriteNumberAsString(pRoot->GetGenerationValue());
         m_aEditBuffer.WriteOString(" R\n");
-        auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Info"));
+        auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Info"_ostr));
         if (pInfo)
         {
             m_aEditBuffer.WriteOString("/Info ");
@@ -825,7 +826,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
             m_aEditBuffer.WriteNumberAsString(pInfo->GetGenerationValue());
             m_aEditBuffer.WriteOString(" R\n");
         }
-        auto pID = dynamic_cast<PDFArrayElement*>(m_pTrailer->Lookup("ID"));
+        auto pID = dynamic_cast<PDFArrayElement*>(m_pTrailer->Lookup("ID"_ostr));
         if (pID)
         {
             const std::vector<PDFElement*>& rElements = pID->GetElements();
@@ -1210,7 +1211,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                             if (!pObj)
                                 continue;
 
-                            PDFElement* pLookup = pObj->Lookup("Length");
+                            PDFElement* pLookup = pObj->Lookup("Length"_ostr);
                             auto pReference = dynamic_cast<PDFReferenceElement*>(pLookup);
                             if (pReference)
                             {
@@ -1406,14 +1407,14 @@ bool PDFDocument::Read(SvStream& rStream)
         PDFNumberElement* pPrev = nullptr;
         if (m_pTrailer)
         {
-            pPrev = dynamic_cast<PDFNumberElement*>(m_pTrailer->Lookup("Prev"));
+            pPrev = dynamic_cast<PDFNumberElement*>(m_pTrailer->Lookup("Prev"_ostr));
 
             // Remember the offset of this trailer in the correct order. It's
             // possible that newer trailers don't have a larger offset.
             m_aTrailerOffsets.push_back(m_pTrailer->GetLocation());
         }
         else if (m_pXRefStream)
-            pPrev = dynamic_cast<PDFNumberElement*>(m_pXRefStream->Lookup("Prev"));
+            pPrev = dynamic_cast<PDFNumberElement*>(m_pXRefStream->Lookup("Prev"_ostr));
         if (pPrev)
             nStartXRef = pPrev->GetValue();
 
@@ -1467,7 +1468,7 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
     rStream.Seek(nBeforePeek);
     if (nSize != aBuf.size())
         aBuf.resize(nSize);
-    OString aPrefix("startxref");
+    OString aPrefix("startxref"_ostr);
     // Find the last startxref at the end of the document.
     auto itLastValid = aBuf.end();
     auto it = aBuf.begin();
@@ -1534,7 +1535,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
     // So that the Prev key can be looked up later.
     m_pXRefStream = pObject;
 
-    PDFElement* pLookup = pObject->Lookup("Length");
+    PDFElement* pLookup = pObject->Lookup("Length"_ostr);
     auto pNumber = dynamic_cast<PDFNumberElement*>(pLookup);
     if (!pNumber)
     {
@@ -1564,7 +1565,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
     std::vector<char> aBuf(nLength);
     rStream.ReadBytes(aBuf.data(), aBuf.size());
 
-    auto pFilter = dynamic_cast<PDFNameElement*>(pObject->Lookup("Filter"));
+    auto pFilter = dynamic_cast<PDFNameElement*>(pObject->Lookup("Filter"_ostr));
     if (!pFilter)
     {
         SAL_WARN("vcl.filter", "PDFDocument::ReadXRefStream: no Filter found");
@@ -1580,14 +1581,15 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
 
     int nColumns = 1;
     int nPredictor = 1;
-    if (auto pDecodeParams = dynamic_cast<PDFDictionaryElement*>(pObject->Lookup("DecodeParms")))
+    if (auto pDecodeParams
+        = dynamic_cast<PDFDictionaryElement*>(pObject->Lookup("DecodeParms"_ostr)))
     {
         const std::map<OString, PDFElement*>& rItems = pDecodeParams->GetItems();
-        auto it = rItems.find("Columns");
+        auto it = rItems.find("Columns"_ostr);
         if (it != rItems.end())
             if (auto pColumns = dynamic_cast<PDFNumberElement*>(it->second))
                 nColumns = pColumns->GetValue();
-        it = rItems.find("Predictor");
+        it = rItems.find("Predictor"_ostr);
         if (it != rItems.end())
             if (auto pPredictor = dynamic_cast<PDFNumberElement*>(it->second))
                 nPredictor = pPredictor->GetValue();
@@ -1605,12 +1607,12 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
     }
 
     // Look up the first and the last entry we need to read.
-    auto pIndex = dynamic_cast<PDFArrayElement*>(pObject->Lookup("Index"));
+    auto pIndex = dynamic_cast<PDFArrayElement*>(pObject->Lookup("Index"_ostr));
     std::vector<size_t> aFirstObjects;
     std::vector<size_t> aNumberOfObjects;
     if (!pIndex)
     {
-        auto pSize = dynamic_cast<PDFNumberElement*>(pObject->Lookup("Size"));
+        auto pSize = dynamic_cast<PDFNumberElement*>(pObject->Lookup("Size"_ostr));
         if (pSize)
         {
             aFirstObjects.push_back(0);
@@ -1655,7 +1657,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
 
     // Look up the format of a single entry.
     const int nWSize = 3;
-    auto pW = dynamic_cast<PDFArrayElement*>(pObject->Lookup("W"));
+    auto pW = dynamic_cast<PDFArrayElement*>(pObject->Lookup("W"_ostr));
     if (!pW || pW->GetElements().size() < nWSize)
     {
         SAL_WARN("vcl.filter", "PDFDocument::ReadXRefStream: W not found or has < 3 elements");
@@ -1912,7 +1914,7 @@ const std::vector<std::unique_ptr<PDFElement>>& PDFDocument::GetElements() const
 /// Visits the page tree recursively, looking for page objects.
 static void visitPages(PDFObjectElement* pPages, std::vector<PDFObjectElement*>& rRet)
 {
-    auto pKidsRef = pPages->Lookup("Kids");
+    auto pKidsRef = pPages->Lookup("Kids"_ostr);
     auto pKids = dynamic_cast<PDFArrayElement*>(pKidsRef);
     if (!pKids)
     {
@@ -1957,7 +1959,7 @@ static void visitPages(PDFObjectElement* pPages, std::vector<PDFObjectElement*>&
             continue;
         }
 
-        auto pName = dynamic_cast<PDFNameElement*>(pKidObject->Lookup("Type"));
+        auto pName = dynamic_cast<PDFNameElement*>(pKidObject->Lookup("Type"_ostr));
         if (pName && pName->GetValue() == "Pages")
             // Pages inside pages: recurse.
             visitPages(pKidObject, rRet);
@@ -1984,9 +1986,9 @@ PDFObjectElement* PDFDocument::GetCatalog()
     }
 
     if (pTrailer)
-        pRoot = dynamic_cast<PDFReferenceElement*>(pTrailer->Lookup("Root"));
+        pRoot = dynamic_cast<PDFReferenceElement*>(pTrailer->Lookup("Root"_ostr));
     else if (m_pXRefStream)
-        pRoot = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Root"));
+        pRoot = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Root"_ostr));
 
     if (!pRoot)
     {
@@ -2008,7 +2010,7 @@ std::vector<PDFObjectElement*> PDFDocument::GetPages()
         return aRet;
     }
 
-    PDFObjectElement* pPages = pCatalog->LookupObject("Pages");
+    PDFObjectElement* pPages = pCatalog->LookupObject("Pages"_ostr);
     if (!pPages)
     {
         SAL_WARN("vcl.filter", "PDFDocument::GetPages: catalog (obj " << pCatalog->GetObjectValue()
@@ -2034,7 +2036,7 @@ std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
         if (!pPage)
             continue;
 
-        PDFElement* pAnnotsElement = pPage->Lookup("Annots");
+        PDFElement* pAnnotsElement = pPage->Lookup("Annots"_ostr);
         auto pAnnots = dynamic_cast<PDFArrayElement*>(pAnnotsElement);
         if (!pAnnots)
         {
@@ -2063,7 +2065,7 @@ std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
             if (!pAnnotObject)
                 continue;
 
-            auto pFT = dynamic_cast<PDFNameElement*>(pAnnotObject->Lookup("FT"));
+            auto pFT = dynamic_cast<PDFNameElement*>(pAnnotObject->Lookup("FT"_ostr));
             if (!pFT || pFT->GetValue() != "Sig")
                 continue;
 
@@ -2499,7 +2501,7 @@ void PDFObjectElement::ParseStoredObjects()
         return;
     }
 
-    auto pType = dynamic_cast<PDFNameElement*>(Lookup("Type"));
+    auto pType = dynamic_cast<PDFNameElement*>(Lookup("Type"_ostr));
     if (!pType || pType->GetValue() != "ObjStm")
     {
         if (!pType)
@@ -2510,7 +2512,7 @@ void PDFObjectElement::ParseStoredObjects()
         return;
     }
 
-    auto pFilter = dynamic_cast<PDFNameElement*>(Lookup("Filter"));
+    auto pFilter = dynamic_cast<PDFNameElement*>(Lookup("Filter"_ostr));
     if (!pFilter || pFilter->GetValue() != "FlateDecode")
     {
         if (!pFilter)
@@ -2521,14 +2523,14 @@ void PDFObjectElement::ParseStoredObjects()
         return;
     }
 
-    auto pFirst = dynamic_cast<PDFNumberElement*>(Lookup("First"));
+    auto pFirst = dynamic_cast<PDFNumberElement*>(Lookup("First"_ostr));
     if (!pFirst)
     {
         SAL_WARN("vcl.filter", "PDFObjectElement::ParseStoredObjects: no First");
         return;
     }
 
-    auto pN = dynamic_cast<PDFNumberElement*>(Lookup("N"));
+    auto pN = dynamic_cast<PDFNumberElement*>(Lookup("N"_ostr));
     if (!pN)
     {
         SAL_WARN("vcl.filter", "PDFObjectElement::ParseStoredObjects: no N");
@@ -2536,7 +2538,7 @@ void PDFObjectElement::ParseStoredObjects()
     }
     size_t nN = pN->GetValue();
 
-    auto pLength = dynamic_cast<PDFNumberElement*>(Lookup("Length"));
+    auto pLength = dynamic_cast<PDFNumberElement*>(Lookup("Length"_ostr));
     if (!pLength)
     {
         SAL_WARN("vcl.filter", "PDFObjectElement::ParseStoredObjects: no length");

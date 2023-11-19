@@ -67,7 +67,7 @@ bool readSetting(OString const& rInputString, OString& rOutputString)
 OString getValueOrAny(OString const& rInputString)
 {
     if (rInputString.isEmpty())
-        return "any";
+        return "any"_ostr;
     return rInputString;
 }
 
@@ -202,34 +202,34 @@ void WidgetDefinitionReader::readDrawingDefinition(
         if (rWalker.name() == "rect")
         {
             Color aStrokeColor;
-            readColor(rWalker.attribute("stroke"), aStrokeColor);
+            readColor(rWalker.attribute("stroke"_ostr), aStrokeColor);
             Color aFillColor;
-            readColor(rWalker.attribute("fill"), aFillColor);
-            OString sStrokeWidth = rWalker.attribute("stroke-width");
+            readColor(rWalker.attribute("fill"_ostr), aFillColor);
+            OString sStrokeWidth = rWalker.attribute("stroke-width"_ostr);
             sal_Int32 nStrokeWidth = -1;
             if (!sStrokeWidth.isEmpty())
                 nStrokeWidth = sStrokeWidth.toInt32();
 
             sal_Int32 nRx = -1;
-            OString sRx = rWalker.attribute("rx");
+            OString sRx = rWalker.attribute("rx"_ostr);
             if (!sRx.isEmpty())
                 nRx = sRx.toInt32();
 
             sal_Int32 nRy = -1;
-            OString sRy = rWalker.attribute("ry");
+            OString sRy = rWalker.attribute("ry"_ostr);
             if (!sRy.isEmpty())
                 nRy = sRy.toInt32();
 
-            OString sX1 = rWalker.attribute("x1");
+            OString sX1 = rWalker.attribute("x1"_ostr);
             float fX1 = sX1.isEmpty() ? 0.0 : sX1.toFloat();
 
-            OString sY1 = rWalker.attribute("y1");
+            OString sY1 = rWalker.attribute("y1"_ostr);
             float fY1 = sY1.isEmpty() ? 0.0 : sY1.toFloat();
 
-            OString sX2 = rWalker.attribute("x2");
+            OString sX2 = rWalker.attribute("x2"_ostr);
             float fX2 = sX2.isEmpty() ? 1.0 : sX2.toFloat();
 
-            OString sY2 = rWalker.attribute("y2");
+            OString sY2 = rWalker.attribute("y2"_ostr);
             float fY2 = sY2.isEmpty() ? 1.0 : sY2.toFloat();
 
             rpState->addDrawRectangle(aStrokeColor, nStrokeWidth, aFillColor, fX1, fY1, fX2, fY2,
@@ -238,36 +238,36 @@ void WidgetDefinitionReader::readDrawingDefinition(
         else if (rWalker.name() == "line")
         {
             Color aStrokeColor;
-            readColor(rWalker.attribute("stroke"), aStrokeColor);
+            readColor(rWalker.attribute("stroke"_ostr), aStrokeColor);
 
-            OString sStrokeWidth = rWalker.attribute("stroke-width");
+            OString sStrokeWidth = rWalker.attribute("stroke-width"_ostr);
             sal_Int32 nStrokeWidth = -1;
             if (!sStrokeWidth.isEmpty())
                 nStrokeWidth = sStrokeWidth.toInt32();
 
-            OString sX1 = rWalker.attribute("x1");
+            OString sX1 = rWalker.attribute("x1"_ostr);
             float fX1 = sX1.isEmpty() ? -1.0 : sX1.toFloat();
 
-            OString sY1 = rWalker.attribute("y1");
+            OString sY1 = rWalker.attribute("y1"_ostr);
             float fY1 = sY1.isEmpty() ? -1.0 : sY1.toFloat();
 
-            OString sX2 = rWalker.attribute("x2");
+            OString sX2 = rWalker.attribute("x2"_ostr);
             float fX2 = sX2.isEmpty() ? -1.0 : sX2.toFloat();
 
-            OString sY2 = rWalker.attribute("y2");
+            OString sY2 = rWalker.attribute("y2"_ostr);
             float fY2 = sY2.isEmpty() ? -1.0 : sY2.toFloat();
 
             rpState->addDrawLine(aStrokeColor, nStrokeWidth, fX1, fY1, fX2, fY2);
         }
         else if (rWalker.name() == "image")
         {
-            OString sSource = rWalker.attribute("source");
+            OString sSource = rWalker.attribute("source"_ostr);
             rpState->addDrawImage(m_rResourcePath
                                   + OStringToOUString(sSource, RTL_TEXTENCODING_UTF8));
         }
         else if (rWalker.name() == "external")
         {
-            OString sSource = rWalker.attribute("source");
+            OString sSource = rWalker.attribute("source"_ostr);
             rpState->addDrawExternal(m_rResourcePath
                                      + OStringToOUString(sSource, RTL_TEXTENCODING_UTF8));
         }
@@ -284,40 +284,40 @@ void WidgetDefinitionReader::readDefinition(tools::XmlWalker& rWalker,
     {
         if (rWalker.name() == "part")
         {
-            OString sPart = rWalker.attribute("value");
+            OString sPart = rWalker.attribute("value"_ostr);
             ControlPart ePart = xmlStringToControlPart(sPart);
 
             std::shared_ptr<WidgetDefinitionPart> pPart = std::make_shared<WidgetDefinitionPart>();
 
-            OString sWidth = rWalker.attribute("width");
+            OString sWidth = rWalker.attribute("width"_ostr);
             if (!sWidth.isEmpty())
             {
                 sal_Int32 nWidth = sWidth.isEmpty() ? 0 : sWidth.toInt32();
                 pPart->mnWidth = nWidth;
             }
 
-            OString sHeight = rWalker.attribute("height");
+            OString sHeight = rWalker.attribute("height"_ostr);
             if (!sHeight.isEmpty())
             {
                 sal_Int32 nHeight = sHeight.isEmpty() ? 0 : sHeight.toInt32();
                 pPart->mnHeight = nHeight;
             }
 
-            OString sMarginHeight = rWalker.attribute("margin-height");
+            OString sMarginHeight = rWalker.attribute("margin-height"_ostr);
             if (!sMarginHeight.isEmpty())
             {
                 sal_Int32 nMarginHeight = sMarginHeight.isEmpty() ? 0 : sMarginHeight.toInt32();
                 pPart->mnMarginHeight = nMarginHeight;
             }
 
-            OString sMarginWidth = rWalker.attribute("margin-width");
+            OString sMarginWidth = rWalker.attribute("margin-width"_ostr);
             if (!sMarginWidth.isEmpty())
             {
                 sal_Int32 nMarginWidth = sMarginWidth.isEmpty() ? 0 : sMarginWidth.toInt32();
                 pPart->mnMarginWidth = nMarginWidth;
             }
 
-            OString sOrientation = rWalker.attribute("orientation");
+            OString sOrientation = rWalker.attribute("orientation"_ostr);
             if (!sOrientation.isEmpty())
             {
                 pPart->msOrientation = sOrientation;
@@ -339,14 +339,14 @@ void WidgetDefinitionReader::readPart(tools::XmlWalker& rWalker,
     {
         if (rWalker.name() == "state")
         {
-            OString sEnabled = getValueOrAny(rWalker.attribute("enabled"));
-            OString sFocused = getValueOrAny(rWalker.attribute("focused"));
-            OString sPressed = getValueOrAny(rWalker.attribute("pressed"));
-            OString sRollover = getValueOrAny(rWalker.attribute("rollover"));
-            OString sDefault = getValueOrAny(rWalker.attribute("default"));
-            OString sSelected = getValueOrAny(rWalker.attribute("selected"));
-            OString sButtonValue = getValueOrAny(rWalker.attribute("button-value"));
-            OString sExtra = getValueOrAny(rWalker.attribute("extra"));
+            OString sEnabled = getValueOrAny(rWalker.attribute("enabled"_ostr));
+            OString sFocused = getValueOrAny(rWalker.attribute("focused"_ostr));
+            OString sPressed = getValueOrAny(rWalker.attribute("pressed"_ostr));
+            OString sRollover = getValueOrAny(rWalker.attribute("rollover"_ostr));
+            OString sDefault = getValueOrAny(rWalker.attribute("default"_ostr));
+            OString sSelected = getValueOrAny(rWalker.attribute("selected"_ostr));
+            OString sButtonValue = getValueOrAny(rWalker.attribute("button-value"_ostr));
+            OString sExtra = getValueOrAny(rWalker.attribute("extra"_ostr));
 
             std::shared_ptr<WidgetDefinitionState> pState = std::make_shared<WidgetDefinitionState>(
                 sEnabled, sFocused, sPressed, sRollover, sDefault, sSelected, sButtonValue, sExtra);
@@ -459,7 +459,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
                 auto pair = aStyleColorMap.find(aWalker.name());
                 if (pair != aStyleColorMap.end())
                 {
-                    readColor(aWalker.attribute("value"), *pair->second);
+                    readColor(aWalker.attribute("value"_ostr), *pair->second);
                 }
                 aWalker.next();
             }
@@ -473,7 +473,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
                 auto pair = aSettingMap.find(aWalker.name());
                 if (pair != aSettingMap.end())
                 {
-                    readSetting(aWalker.attribute("value"), *pair->second);
+                    readSetting(aWalker.attribute("value"_ostr), *pair->second);
                 }
                 aWalker.next();
             }

@@ -229,7 +229,7 @@ void psp::normPath( OString& rPath )
     // double slashes and slash at end are probably
     // removed by realpath anyway, but since this runs
     // on many different platforms let's play it safe
-    OString aPath = rPath.replaceAll("//", "/");
+    OString aPath = rPath.replaceAll("//"_ostr, "/"_ostr);
 
     if( aPath.endsWith("/") )
         aPath = aPath.copy(0, aPath.getLength()-1);

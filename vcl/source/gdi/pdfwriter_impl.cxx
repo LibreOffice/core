@@ -439,7 +439,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
                 OString::number( static_cast<const PDFWriter::RadioButtonWidget&>(i_rControl).RadioGroup );
         }
         else
-            aPartialName = OString( "Widget" );
+            aPartialName = "Widget"_ostr;
     }
 
     if( ! m_aContext.AllowDuplicateFieldNames )
@@ -4185,7 +4185,7 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
 
     pop();
 
-    rButton.m_aAppearances[ "N" ][ "Standard" ] = new SvMemoryStream();
+    rButton.m_aAppearances[ "N"_ostr ][ "Standard"_ostr ] = new SvMemoryStream();
 
     /* seems like a bad hack but at least works in both AR5 and 6:
        we draw the button ourselves and tell AR
@@ -4293,7 +4293,7 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
     endRedirect();
     pop();
 
-    rEdit.m_aAppearances[ "N" ][ "Standard" ] = pEditStream;
+    rEdit.m_aAppearances[ "N"_ostr ][ "Standard"_ostr ] = pEditStream;
 
     rEdit.m_aDAString = aDA.makeStringAndClear();
 }
@@ -4321,7 +4321,7 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     endRedirect();
     pop();
 
-    rBox.m_aAppearances[ "N" ][ "Standard" ] = pListBoxStream;
+    rBox.m_aAppearances[ "N"_ostr ][ "Standard"_ostr ] = pListBoxStream;
 
     // prepare DA string
     OStringBuffer aDA( 256 );
@@ -4462,14 +4462,14 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     aDA.append( "> Tj\nET\nQ\nEMC\n" );
     writeBuffer( aDA );
     endRedirect();
-    rBox.m_aAppearances[ "N" ][ "Yes" ] = pCheckStream;
+    rBox.m_aAppearances[ "N"_ostr ][ "Yes"_ostr ] = pCheckStream;
 
     // write 'unchecked' appearance stream
     SvMemoryStream* pUncheckStream = new SvMemoryStream( 256, 256 );
     beginRedirect( pUncheckStream, aCheckRect );
     writeBuffer( "/Tx BMC\nEMC\n" );
     endRedirect();
-    rBox.m_aAppearances[ "N" ][ "Off" ] = pUncheckStream;
+    rBox.m_aAppearances[ "N"_ostr ][ "Off"_ostr ] = pUncheckStream;
 }
 
 void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const PDFWriter::RadioButtonWidget& rWidget )
@@ -4559,13 +4559,13 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     endRedirect();
 
     pop();
-    rBox.m_aAppearances[ "N" ][ "Yes" ] = pCheckStream;
+    rBox.m_aAppearances[ "N"_ostr ][ "Yes"_ostr ] = pCheckStream;
 
     SvMemoryStream* pUncheckStream = new SvMemoryStream( 256, 256 );
     beginRedirect( pUncheckStream, aCheckRect );
     writeBuffer( "/Tx BMC\nEMC\n" );
     endRedirect();
-    rBox.m_aAppearances[ "N" ][ "Off" ] = pUncheckStream;
+    rBox.m_aAppearances[ "N"_ostr ][ "Off"_ostr ] = pUncheckStream;
 }
 
 bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDict )
@@ -4684,10 +4684,10 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         {
             if ( !rWidget.m_aOnValue.isEmpty() )
             {
-                auto app_it = rWidget.m_aAppearances.find( "N" );
+                auto app_it = rWidget.m_aAppearances.find( "N"_ostr );
                 if( app_it != rWidget.m_aAppearances.end() )
                 {
-                    auto stream_it = app_it->second.find( "Yes" );
+                    auto stream_it = app_it->second.find( "Yes"_ostr );
                     if( stream_it != app_it->second.end() )
                     {
                         SvMemoryStream* pStream = stream_it->second;
@@ -4703,10 +4703,10 @@ bool PDFWriterImpl::emitWidgetAnnotations()
 
             if ( !rWidget.m_aOffValue.isEmpty() )
             {
-                auto app_it = rWidget.m_aAppearances.find( "N" );
+                auto app_it = rWidget.m_aAppearances.find( "N"_ostr );
                 if( app_it != rWidget.m_aAppearances.end() )
                 {
-                    auto stream_it = app_it->second.find( "Off" );
+                    auto stream_it = app_it->second.find( "Off"_ostr );
                     if( stream_it != app_it->second.end() )
                     {
                         SvMemoryStream* pStream = stream_it->second;
@@ -9125,7 +9125,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         }
 
         double aOrigin[2] = { 0.0, 0.0 };
-        if (auto* pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("MediaBox")))
+        if (auto* pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("MediaBox"_ostr)))
         {
             const auto& rElements = pArray->GetElements();
             if (rElements.size() >= 4)
@@ -9140,9 +9140,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         }
 
         std::vector<filter::PDFObjectElement*> aContentStreams;
-        if (filter::PDFObjectElement* pContentStream = pPage->LookupObject("Contents"))
+        if (filter::PDFObjectElement* pContentStream = pPage->LookupObject("Contents"_ostr))
             aContentStreams.push_back(pContentStream);
-        else if (auto pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Contents")))
+        else if (auto pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Contents"_ostr)))
         {
             for (const auto pElement : pArray->GetElements())
             {
@@ -9166,7 +9166,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
 
         // Merge link annotations from pPage to our page.
         std::vector<filter::PDFObjectElement*> aAnnots;
-        if (auto pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Annots")))
+        if (auto pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Annots"_ostr)))
         {
             for (const auto pElement : pArray->GetElements())
             {
@@ -9182,13 +9182,13 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
                     continue;
                 }
 
-                auto pType = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Type"));
+                auto pType = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
                 if (!pType || pType->GetValue() != "Annot")
                 {
                     continue;
                 }
 
-                auto pSubtype = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Subtype"));
+                auto pSubtype = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
                 if (!pSubtype || pSubtype->GetValue() != "Link")
                 {
                     continue;
@@ -9224,7 +9224,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         tools::Long nWidth = aSize.Width();
         tools::Long nHeight = aSize.Height();
         basegfx::B2DRange aBBox(0, 0, aSize.Width(),  aSize.Height());
-        if (auto pRotate = dynamic_cast<filter::PDFNumberElement*>(pPage->Lookup("Rotate")))
+        if (auto pRotate = dynamic_cast<filter::PDFNumberElement*>(pPage->Lookup("Rotate"_ostr)))
         {
             // The original page was rotated, then construct a transformation matrix which does the
             // same with our form object.
@@ -10729,7 +10729,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
              ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
              )
     {
-        OString aLine = "/Artifact ";
+        OString aLine = "/Artifact "_ostr;
         writeBuffer( aLine );
         // emit property list if requested
         OStringBuffer buf;
@@ -11055,7 +11055,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
     std::vector< sal_Int32 > aNewChildren;
 
     // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
-    OString aAliasName("Div");
+    OString aAliasName("Div"_ostr);
     addRoleMap(aAliasName, PDFWriter::Division);
 
     while( rEle.m_aKids.size() > ncMaxPDFArraySize )
@@ -11635,10 +11635,10 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
             PDFWidget& rKid = m_aWidgets[nKidIndex];
             if ( !rKid.m_aOnValue.isEmpty() )
             {
-                auto app_it = rKid.m_aAppearances.find( "N" );
+                auto app_it = rKid.m_aAppearances.find( "N"_ostr );
                 if( app_it != rKid.m_aAppearances.end() )
                 {
-                    auto stream_it = app_it->second.find( "Yes" );
+                    auto stream_it = app_it->second.find( "Yes"_ostr );
                     if( stream_it != app_it->second.end() )
                     {
                         SvMemoryStream* pStream = stream_it->second;
@@ -11654,10 +11654,10 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
 
             if ( !rKid.m_aOffValue.isEmpty() )
             {
-                auto app_it = rKid.m_aAppearances.find( "N" );
+                auto app_it = rKid.m_aAppearances.find( "N"_ostr );
                 if( app_it != rKid.m_aAppearances.end() )
                 {
-                    auto stream_it = app_it->second.find( "Off" );
+                    auto stream_it = app_it->second.find( "Off"_ostr );
                     if( stream_it != app_it->second.end() )
                     {
                         SvMemoryStream* pStream = stream_it->second;
@@ -11896,7 +11896,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aValue = OUString::number( m_nSignatureObject );
         rNewWidget.m_aValue += " 0 R";
         // let's add a fake appearance
-        rNewWidget.m_aAppearances[ "N" ][ "Standard" ] = new SvMemoryStream();
+        rNewWidget.m_aAppearances[ "N"_ostr ][ "Standard"_ostr ] = new SvMemoryStream();
     }
 #endif
 

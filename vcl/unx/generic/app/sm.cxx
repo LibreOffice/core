@@ -159,9 +159,9 @@ SalSession * SessionManagerClient::m_pSession = nullptr;
 std::unique_ptr< ICEConnectionObserver >
 SessionManagerClient::m_xICEConnectionObserver;
 SmcConn SessionManagerClient::m_pSmcConnection = nullptr;
-OString SessionManagerClient::m_aClientID = "";
-OString SessionManagerClient::m_aTimeID = "";
-OString SessionManagerClient::m_aClientTimeID = "";
+OString SessionManagerClient::m_aClientID = ""_ostr;
+OString SessionManagerClient::m_aTimeID = ""_ostr;
+OString SessionManagerClient::m_aClientTimeID = ""_ostr;
 bool SessionManagerClient::m_bDocSaveDone = false; // HACK
 
 extern "C" {
@@ -228,7 +228,7 @@ static void BuildSmPropertyList()
     OString aRestartOption = "--session=" + SessionManagerClient::getSessionID();
     pSmProps[ eRestartCommand ].vals[1].length    = aRestartOption.getLength()+1;
     pSmProps[ eRestartCommand ].vals[1].value = strdup(aRestartOption.getStr());
-    OString aRestartOptionNoLogo("--nologo");
+    OString aRestartOptionNoLogo("--nologo"_ostr);
     pSmProps[ eRestartCommand ].vals[2].length    = aRestartOptionNoLogo.getLength()+1;
     pSmProps[ eRestartCommand ].vals[2].value = strdup(aRestartOptionNoLogo.getStr());
 

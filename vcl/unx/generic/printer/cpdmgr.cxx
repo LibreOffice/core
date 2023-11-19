@@ -624,20 +624,20 @@ void CPDManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner,
             if (!sPayLoad.isEmpty()) {
                 OString aKey = OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US );
                 OString aValue = OUStringToOString( sPayLoad, RTL_TEXTENCODING_ASCII_US );
-                if (aKey.equals("Duplex")) {
-                    aKey = OString("sides");
-                } else if (aKey.equals("Resolution")) {
-                    aKey = OString("printer-resolution");
-                } else if (aKey.equals("PageSize")) {
-                    aKey = OString("media");
+                if (aKey.equals("Duplex"_ostr)) {
+                    aKey = "sides"_ostr;
+                } else if (aKey.equals("Resolution"_ostr)) {
+                    aKey = "printer-resolution"_ostr;
+                } else if (aKey.equals("PageSize"_ostr)) {
+                    aKey = "media"_ostr;
                 }
-                if (aKey.equals("sides")) {
-                    if (aValue.equals("None")) {
-                        aValue = OString("one-sided");
-                    } else if (aValue.equals("DuplexNoTumble")) {
-                        aValue = OString("two-sided-long-edge");
-                    } else if (aValue.equals("DuplexTumble")) {
-                        aValue = OString("two-sided-short-edge");
+                if (aKey.equals("sides"_ostr)) {
+                    if (aValue.equals("None"_ostr)) {
+                        aValue = "one-sided"_ostr;
+                    } else if (aValue.equals("DuplexNoTumble"_ostr)) {
+                        aValue = "two-sided-long-edge"_ostr;
+                    } else if (aValue.equals("DuplexTumble"_ostr)) {
+                        aValue = "two-sided-short-edge"_ostr;
                     }
                 }
                 g_variant_builder_add(builder, "(ss)", aKey.getStr(), aValue.getStr());

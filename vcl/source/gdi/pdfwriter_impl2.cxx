@@ -604,7 +604,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                             if( pA->GetComment() == "XPATHSTROKE_SEQ_BEGIN" )
                             {
-                                sSeqEnd = OString("XPATHSTROKE_SEQ_END");
+                                sSeqEnd = "XPATHSTROKE_SEQ_END"_ostr;
                                 SvtGraphicStroke aStroke;
                                 ReadSvtGraphicStroke( aMemStm, aStroke );
 
@@ -689,7 +689,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             }
                             else if ( pA->GetComment() == "XPATHFILL_SEQ_BEGIN" )
                             {
-                                sSeqEnd = OString("XPATHFILL_SEQ_END");
+                                sSeqEnd = "XPATHFILL_SEQ_END"_ostr;
                                 SvtGraphicFill aFill;
                                 ReadSvtGraphicFill( aMemStm, aFill );
 

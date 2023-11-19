@@ -47,7 +47,7 @@ void WidgetDefinitionReaderTest::testReadSettings()
         vcl::WidgetDefinitionReader aReader(getFullUrl(u"definitionSettings1.xml"),
                                             getFullUrl(u""));
         CPPUNIT_ASSERT(aReader.read(aDefinition));
-        CPPUNIT_ASSERT_EQUAL(OString(""), aDefinition.mpSettings->msCenteredTabs);
+        CPPUNIT_ASSERT_EQUAL(""_ostr, aDefinition.mpSettings->msCenteredTabs);
     }
 
     {
@@ -55,7 +55,7 @@ void WidgetDefinitionReaderTest::testReadSettings()
         vcl::WidgetDefinitionReader aReader(getFullUrl(u"definitionSettings2.xml"),
                                             getFullUrl(u""));
         CPPUNIT_ASSERT(aReader.read(aDefinition));
-        CPPUNIT_ASSERT_EQUAL(OString("true"), aDefinition.mpSettings->msCenteredTabs);
+        CPPUNIT_ASSERT_EQUAL("true"_ostr, aDefinition.mpSettings->msCenteredTabs);
     }
 
     {
@@ -63,16 +63,14 @@ void WidgetDefinitionReaderTest::testReadSettings()
         vcl::WidgetDefinitionReader aReader(getFullUrl(u"definitionSettings3.xml"),
                                             getFullUrl(u""));
         CPPUNIT_ASSERT(aReader.read(aDefinition));
-        CPPUNIT_ASSERT_EQUAL(OString("true"), aDefinition.mpSettings->msNoActiveTabTextRaise);
-        CPPUNIT_ASSERT_EQUAL(OString("false"), aDefinition.mpSettings->msCenteredTabs);
-        CPPUNIT_ASSERT_EQUAL(OString("0"), aDefinition.mpSettings->msListBoxEntryMargin);
-        CPPUNIT_ASSERT_EQUAL(OString("10"), aDefinition.mpSettings->msDefaultFontSize);
-        CPPUNIT_ASSERT_EQUAL(OString("16"), aDefinition.mpSettings->msTitleHeight);
-        CPPUNIT_ASSERT_EQUAL(OString("12"), aDefinition.mpSettings->msFloatTitleHeight);
-        CPPUNIT_ASSERT_EQUAL(OString("15"),
-                             aDefinition.mpSettings->msListBoxPreviewDefaultLogicWidth);
-        CPPUNIT_ASSERT_EQUAL(OString("7"),
-                             aDefinition.mpSettings->msListBoxPreviewDefaultLogicHeight);
+        CPPUNIT_ASSERT_EQUAL("true"_ostr, aDefinition.mpSettings->msNoActiveTabTextRaise);
+        CPPUNIT_ASSERT_EQUAL("false"_ostr, aDefinition.mpSettings->msCenteredTabs);
+        CPPUNIT_ASSERT_EQUAL("0"_ostr, aDefinition.mpSettings->msListBoxEntryMargin);
+        CPPUNIT_ASSERT_EQUAL("10"_ostr, aDefinition.mpSettings->msDefaultFontSize);
+        CPPUNIT_ASSERT_EQUAL("16"_ostr, aDefinition.mpSettings->msTitleHeight);
+        CPPUNIT_ASSERT_EQUAL("12"_ostr, aDefinition.mpSettings->msFloatTitleHeight);
+        CPPUNIT_ASSERT_EQUAL("15"_ostr, aDefinition.mpSettings->msListBoxPreviewDefaultLogicWidth);
+        CPPUNIT_ASSERT_EQUAL("7"_ostr, aDefinition.mpSettings->msListBoxPreviewDefaultLogicHeight);
     }
 }
 

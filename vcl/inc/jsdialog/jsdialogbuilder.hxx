@@ -396,7 +396,7 @@ public:
         {
             std::unique_ptr<jsdialog::ActionDataMap> pMap
                 = std::make_unique<jsdialog::ActionDataMap>();
-            (*pMap)[ACTION_TYPE] = "show";
+            (*pMap)[ACTION_TYPE ""_ostr] = "show";
             sendAction(std::move(pMap));
         }
     }
@@ -409,7 +409,7 @@ public:
         {
             std::unique_ptr<jsdialog::ActionDataMap> pMap
                 = std::make_unique<jsdialog::ActionDataMap>();
-            (*pMap)[ACTION_TYPE] = "hide";
+            (*pMap)[ACTION_TYPE ""_ostr] = "hide";
             sendAction(std::move(pMap));
         }
     }
@@ -448,7 +448,7 @@ public:
     {
         BaseInstanceClass::grab_focus();
         std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-        (*pMap)[ACTION_TYPE] = "grab_focus";
+        (*pMap)[ACTION_TYPE ""_ostr] = "grab_focus";
         sendAction(std::move(pMap));
     }
 

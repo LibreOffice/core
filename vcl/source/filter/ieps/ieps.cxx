@@ -427,7 +427,7 @@ static bool RenderAsBMP(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
 static void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 nOrigPos, sal_uInt32 nPSSize,
                                 sal_uInt32 nPosWMF, sal_uInt32 nSizeWMF, sal_uInt32 nPosTIFF, sal_uInt32 nSizeTIFF )
 {
-    OString aComment("EPSReplacementGraphic");
+    OString aComment("EPSReplacementGraphic"_ostr);
     if ( nSizeWMF || nSizeTIFF )
     {
         std::vector<sal_uInt8> aWMFBuf;

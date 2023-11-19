@@ -193,12 +193,12 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
     }
     else
     {
-        mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
+        mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN"_ostr ) );
         mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
 
         ClipAndDrawGradientMetafile ( rGradient, rPolyPoly );
 
-        mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
+        mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END"_ostr ) );
     }
 }
 

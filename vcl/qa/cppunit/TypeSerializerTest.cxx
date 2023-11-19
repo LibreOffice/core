@@ -336,7 +336,7 @@ void TypeSerializerTest::testGraphic_GDIMetaFile()
         char aIdCharArray[7] = { 0, 0, 0, 0, 0, 0, 0 };
         aMemoryStream.ReadBytes(aIdCharArray, 6);
         OString sID(aIdCharArray);
-        CPPUNIT_ASSERT_EQUAL(OString("VCLMTF"), sID);
+        CPPUNIT_ASSERT_EQUAL("VCLMTF"_ostr, sID);
 
         // Read it back
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);

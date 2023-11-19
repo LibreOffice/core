@@ -181,7 +181,8 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
     // Get the rKind subset of the resource dictionary.
     std::map<OString, filter::PDFElement*> aItems;
     filter::PDFObjectElement* pKindObject = nullptr;
-    if (auto pResources = dynamic_cast<filter::PDFDictionaryElement*>(rPage.Lookup("Resources")))
+    if (auto pResources
+        = dynamic_cast<filter::PDFDictionaryElement*>(rPage.Lookup("Resources"_ostr)))
     {
         // Resources is a direct dictionary.
         filter::PDFElement* pLookup = pResources->LookupElement(rKind);
@@ -203,7 +204,7 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
             aItems = pReferenced->GetDictionaryItems();
         }
     }
-    else if (filter::PDFObjectElement* pPageResources = rPage.LookupObject("Resources"))
+    else if (filter::PDFObjectElement* pPageResources = rPage.LookupObject("Resources"_ostr))
     {
         // Resources is an indirect object.
         filter::PDFElement* pValue = pPageResources->Lookup(rKind);
@@ -278,7 +279,8 @@ void PDFObjectCopier::copyPageResources(filter::PDFObjectElement* pPage, OString
 {
     rLine.append(" /Resources <<");
     static const std::initializer_list<OString> aKeys
-        = { "ColorSpace", "ExtGState", "Font", "XObject", "Shading", "Pattern" };
+        = { "ColorSpace"_ostr, "ExtGState"_ostr, "Font"_ostr,
+            "XObject"_ostr,    "Shading"_ostr,   "Pattern"_ostr };
     for (const auto& rKey : aKeys)
     {
         rLine.append(copyExternalResources(*pPage, rKey, rCopiedResources));
@@ -300,8 +302,8 @@ sal_Int32 PDFObjectCopier::copyPageStreams(std::vector<filter::PDFObjectElement*
 
         SvMemoryStream& rPageStream = pPageStream->GetMemory();
 
-        auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"));
-        auto pFilterArray = dynamic_cast<filter::PDFArrayElement*>(pContent->Lookup("Filter"));
+        auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"_ostr));
+        auto pFilterArray = dynamic_cast<filter::PDFArrayElement*>(pContent->Lookup("Filter"_ostr));
         if (!pFilter && pFilterArray)
         {
             auto& aElements = pFilterArray->GetElements();

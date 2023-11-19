@@ -34,25 +34,25 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseBasicPDF)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
-    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources"_ostr);
     CPPUNIT_ASSERT(pResources);
 
-    vcl::filter::PDFObjectElement* pTest = pResources->LookupObject("Test");
+    vcl::filter::PDFObjectElement* pTest = pResources->LookupObject("Test"_ostr);
     CPPUNIT_ASSERT(pTest);
 
-    vcl::filter::PDFObjectElement* pTestArray1 = pTest->LookupObject("TestArray1");
+    vcl::filter::PDFObjectElement* pTestArray1 = pTest->LookupObject("TestArray1"_ostr);
     CPPUNIT_ASSERT(pTestArray1);
     {
         CPPUNIT_ASSERT_EQUAL(size_t(5), pTestArray1->GetArray()->GetElements().size());
     }
 
-    vcl::filter::PDFObjectElement* pTestArray2 = pTest->LookupObject("TestArray2");
+    vcl::filter::PDFObjectElement* pTestArray2 = pTest->LookupObject("TestArray2"_ostr);
     CPPUNIT_ASSERT(pTestArray2);
     {
         CPPUNIT_ASSERT_EQUAL(size_t(2), pTestArray2->GetArray()->GetElements().size());
     }
 
-    vcl::filter::PDFObjectElement* pTestDictionary = pTest->LookupObject("TestDictionary");
+    vcl::filter::PDFObjectElement* pTestDictionary = pTest->LookupObject("TestDictionary"_ostr);
     {
         sal_uInt64 nOffset = pTestDictionary->GetDictionaryOffset();
         sal_uInt64 nLength = pTestDictionary->GetDictionaryLength();
@@ -63,8 +63,8 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseBasicPDF)
         OString aString(aBuffer.data());
 
         CPPUNIT_ASSERT_EQUAL(
-            OString("/TestReference 7 0 R/TestNumber "
-                    "123/TestName/SomeName/TestDictionary<</Key/Value>>/TestArray[1 2 3]"),
+            "/TestReference 7 0 R/TestNumber "
+            "123/TestName/SomeName/TestDictionary<</Key/Value>>/TestArray[1 2 3]"_ostr,
             aString);
     }
 
@@ -73,85 +73,90 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseBasicPDF)
         auto const& rItems = pTestDictionary->GetDictionaryItems();
         CPPUNIT_ASSERT_EQUAL(size_t(5), rItems.size());
         auto* pReference = dynamic_cast<vcl::filter::PDFReferenceElement*>(
-            pTestDictionary->Lookup("TestReference"));
+            pTestDictionary->Lookup("TestReference"_ostr));
         CPPUNIT_ASSERT(pReference);
         CPPUNIT_ASSERT_EQUAL(7, pReference->GetObjectValue());
 
-        auto* pNumber
-            = dynamic_cast<vcl::filter::PDFNumberElement*>(pTestDictionary->Lookup("TestNumber"));
+        auto* pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(
+            pTestDictionary->Lookup("TestNumber"_ostr));
         CPPUNIT_ASSERT(pNumber);
         CPPUNIT_ASSERT_EQUAL(123.0, pNumber->GetValue());
 
         auto* pName
-            = dynamic_cast<vcl::filter::PDFNameElement*>(pTestDictionary->Lookup("TestName"));
+            = dynamic_cast<vcl::filter::PDFNameElement*>(pTestDictionary->Lookup("TestName"_ostr));
         CPPUNIT_ASSERT(pName);
-        CPPUNIT_ASSERT_EQUAL(OString("SomeName"), pName->GetValue());
+        CPPUNIT_ASSERT_EQUAL("SomeName"_ostr, pName->GetValue());
 
         auto* pDictionary = dynamic_cast<vcl::filter::PDFDictionaryElement*>(
-            pTestDictionary->Lookup("TestDictionary"));
+            pTestDictionary->Lookup("TestDictionary"_ostr));
         CPPUNIT_ASSERT(pDictionary);
 
-        auto* pArray
-            = dynamic_cast<vcl::filter::PDFArrayElement*>(pTestDictionary->Lookup("TestArray"));
+        auto* pArray = dynamic_cast<vcl::filter::PDFArrayElement*>(
+            pTestDictionary->Lookup("TestArray"_ostr));
         CPPUNIT_ASSERT(pArray);
 
         // Check offsets and lengths
         {
-            sal_uInt64 nOffset = pTestDictionary->GetDictionary()->GetKeyOffset("TestReference");
+            sal_uInt64 nOffset
+                = pTestDictionary->GetDictionary()->GetKeyOffset("TestReference"_ostr);
             sal_uInt64 nLength
-                = pTestDictionary->GetDictionary()->GetKeyValueLength("TestReference");
+                = pTestDictionary->GetDictionary()->GetKeyValueLength("TestReference"_ostr);
 
             aStream.Seek(nOffset);
             std::vector<char> aBuffer(nLength + 1, 0);
             aStream.ReadBytes(aBuffer.data(), nLength);
             OString aString(aBuffer.data());
 
-            CPPUNIT_ASSERT_EQUAL(OString("TestReference 7 0 R"), aString);
+            CPPUNIT_ASSERT_EQUAL("TestReference 7 0 R"_ostr, aString);
         }
         {
-            sal_uInt64 nOffset = pTestDictionary->GetDictionary()->GetKeyOffset("TestNumber");
-            sal_uInt64 nLength = pTestDictionary->GetDictionary()->GetKeyValueLength("TestNumber");
-
-            aStream.Seek(nOffset);
-            std::vector<char> aBuffer(nLength + 1, 0);
-            aStream.ReadBytes(aBuffer.data(), nLength);
-            OString aString(aBuffer.data());
-
-            CPPUNIT_ASSERT_EQUAL(OString("TestNumber 123"), aString);
-        }
-        {
-            sal_uInt64 nOffset = pTestDictionary->GetDictionary()->GetKeyOffset("TestName");
-            sal_uInt64 nLength = pTestDictionary->GetDictionary()->GetKeyValueLength("TestName");
-
-            aStream.Seek(nOffset);
-            std::vector<char> aBuffer(nLength + 1, 0);
-            aStream.ReadBytes(aBuffer.data(), nLength);
-            OString aString(aBuffer.data());
-
-            CPPUNIT_ASSERT_EQUAL(OString("TestName/SomeName"), aString);
-        }
-        {
-            sal_uInt64 nOffset = pTestDictionary->GetDictionary()->GetKeyOffset("TestDictionary");
+            sal_uInt64 nOffset = pTestDictionary->GetDictionary()->GetKeyOffset("TestNumber"_ostr);
             sal_uInt64 nLength
-                = pTestDictionary->GetDictionary()->GetKeyValueLength("TestDictionary");
+                = pTestDictionary->GetDictionary()->GetKeyValueLength("TestNumber"_ostr);
 
             aStream.Seek(nOffset);
             std::vector<char> aBuffer(nLength + 1, 0);
             aStream.ReadBytes(aBuffer.data(), nLength);
             OString aString(aBuffer.data());
 
-            CPPUNIT_ASSERT_EQUAL(OString("TestDictionary<</Key/Value>>"), aString);
+            CPPUNIT_ASSERT_EQUAL("TestNumber 123"_ostr, aString);
         }
         {
-            sal_uInt64 nOffset = pTestDictionary->GetDictionary()->GetKeyOffset("TestArray");
-            sal_uInt64 nLength = pTestDictionary->GetDictionary()->GetKeyValueLength("TestArray");
+            sal_uInt64 nOffset = pTestDictionary->GetDictionary()->GetKeyOffset("TestName"_ostr);
+            sal_uInt64 nLength
+                = pTestDictionary->GetDictionary()->GetKeyValueLength("TestName"_ostr);
 
             aStream.Seek(nOffset);
             std::vector<char> aBuffer(nLength + 1, 0);
             aStream.ReadBytes(aBuffer.data(), nLength);
             OString aString(aBuffer.data());
 
-            CPPUNIT_ASSERT_EQUAL(OString("TestArray[1 2 3]"), aString);
+            CPPUNIT_ASSERT_EQUAL("TestName/SomeName"_ostr, aString);
+        }
+        {
+            sal_uInt64 nOffset
+                = pTestDictionary->GetDictionary()->GetKeyOffset("TestDictionary"_ostr);
+            sal_uInt64 nLength
+                = pTestDictionary->GetDictionary()->GetKeyValueLength("TestDictionary"_ostr);
+
+            aStream.Seek(nOffset);
+            std::vector<char> aBuffer(nLength + 1, 0);
+            aStream.ReadBytes(aBuffer.data(), nLength);
+            OString aString(aBuffer.data());
+
+            CPPUNIT_ASSERT_EQUAL("TestDictionary<</Key/Value>>"_ostr, aString);
+        }
+        {
+            sal_uInt64 nOffset = pTestDictionary->GetDictionary()->GetKeyOffset("TestArray"_ostr);
+            sal_uInt64 nLength
+                = pTestDictionary->GetDictionary()->GetKeyValueLength("TestArray"_ostr);
+
+            aStream.Seek(nOffset);
+            std::vector<char> aBuffer(nLength + 1, 0);
+            aStream.ReadBytes(aBuffer.data(), nLength);
+            OString aString(aBuffer.data());
+
+            CPPUNIT_ASSERT_EQUAL("TestArray[1 2 3]"_ostr, aString);
         }
     }
 }
@@ -273,7 +278,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseDictionaryWithName)
     {
         addObjectElement(aElements, aDocument, 1, 0);
         addDictionaryElement(aElements);
-        addNameElement(aElements, "Test");
+        addNameElement(aElements, "Test"_ostr);
         addNumberElement(aElements, 30.0);
         addEndDictionaryElement(aElements);
         addEndObjectElement(aElements);
@@ -288,7 +293,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseDictionaryWithName)
     CPPUNIT_ASSERT(pObject->GetDictionary());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pObject->GetDictionary()->GetItems().size());
     auto& rItems = pObject->GetDictionary()->GetItems();
-    auto pNumberElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rItems.at("Test"));
+    auto pNumberElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rItems.at("Test"_ostr));
     CPPUNIT_ASSERT(pNumberElement);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, pNumberElement->GetValue(), 1e-4);
 }
@@ -301,21 +306,21 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseDictionaryNested)
         addObjectElement(aElements, aDocument, 1, 0);
         addDictionaryElement(aElements);
 
-        addNameElement(aElements, "Nested1");
+        addNameElement(aElements, "Nested1"_ostr);
         addDictionaryElement(aElements);
         {
-            addNameElement(aElements, "Nested2");
+            addNameElement(aElements, "Nested2"_ostr);
             addDictionaryElement(aElements);
             {
-                addNameElement(aElements, "SomeOtherKey");
-                addNameElement(aElements, "SomeOtherValue");
+                addNameElement(aElements, "SomeOtherKey"_ostr);
+                addNameElement(aElements, "SomeOtherValue"_ostr);
             }
             addEndDictionaryElement(aElements);
         }
         addEndDictionaryElement(aElements);
 
-        addNameElement(aElements, "SomeOtherKey");
-        addNameElement(aElements, "SomeOtherValue");
+        addNameElement(aElements, "SomeOtherKey"_ostr);
+        addNameElement(aElements, "SomeOtherValue"_ostr);
 
         addEndObjectElement(aElements);
     }
@@ -328,8 +333,8 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseDictionaryNested)
 
     CPPUNIT_ASSERT(pObject->GetDictionary());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pObject->GetDictionary()->GetItems().size());
-    CPPUNIT_ASSERT(pObject->Lookup("Nested1"));
-    CPPUNIT_ASSERT(pObject->Lookup("SomeOtherKey"));
+    CPPUNIT_ASSERT(pObject->Lookup("Nested1"_ostr));
+    CPPUNIT_ASSERT(pObject->Lookup("SomeOtherKey"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseEmptyArray)
@@ -361,7 +366,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayWithSimpleElements)
     {
         auto pObjectPtr = addObjectElement(aElements, aDocument, 1, 0);
         addArrayElement(aElements, pObjectPtr);
-        addNameElement(aElements, "Test");
+        addNameElement(aElements, "Test"_ostr);
         addNumberElement(aElements, 30.0);
         addEndArrayElement(aElements);
         addEndObjectElement(aElements);
@@ -434,23 +439,23 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayNestedWithNames)
         auto pObjectPtr = addObjectElement(aElements, aDocument, 1, 0);
         addArrayElement(aElements, pObjectPtr);
         {
-            addNameElement(aElements, "Inner1");
-            addNameElement(aElements, "Inner2");
+            addNameElement(aElements, "Inner1"_ostr);
+            addNameElement(aElements, "Inner2"_ostr);
 
             addArrayElement(aElements, pObjectPtr);
             {
-                addNameElement(aElements, "Inner31");
+                addNameElement(aElements, "Inner31"_ostr);
             }
             addEndArrayElement(aElements);
 
             addArrayElement(aElements, pObjectPtr);
             {
-                addNameElement(aElements, "Inner41");
-                addNameElement(aElements, "Inner42");
+                addNameElement(aElements, "Inner41"_ostr);
+                addNameElement(aElements, "Inner42"_ostr);
                 addArrayElement(aElements, pObjectPtr);
                 {
-                    addNameElement(aElements, "Inner431");
-                    addNameElement(aElements, "Inner432");
+                    addNameElement(aElements, "Inner431"_ostr);
+                    addNameElement(aElements, "Inner432"_ostr);
                 }
                 addEndArrayElement(aElements);
             }
@@ -458,10 +463,10 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayNestedWithNames)
 
             addArrayElement(aElements, pObjectPtr);
             {
-                addNameElement(aElements, "Inner51");
+                addNameElement(aElements, "Inner51"_ostr);
                 addArrayElement(aElements, pObjectPtr);
                 {
-                    addNameElement(aElements, "Inner521");
+                    addNameElement(aElements, "Inner521"_ostr);
                 }
                 addEndArrayElement(aElements);
             }
@@ -485,11 +490,11 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayNestedWithNames)
 
         auto pName1 = dynamic_cast<vcl::filter::PDFNameElement*>(pRootArray->GetElement(0));
         CPPUNIT_ASSERT(pName1);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner1"), pName1->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner1"_ostr, pName1->GetValue());
 
         auto pName2 = dynamic_cast<vcl::filter::PDFNameElement*>(pRootArray->GetElement(1));
         CPPUNIT_ASSERT(pName2);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner2"), pName2->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner2"_ostr, pName2->GetValue());
 
         auto pArray3 = dynamic_cast<vcl::filter::PDFArrayElement*>(pRootArray->GetElement(2));
         CPPUNIT_ASSERT(pArray3);
@@ -497,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayNestedWithNames)
 
         auto pInner31 = dynamic_cast<vcl::filter::PDFNameElement*>(pArray3->GetElement(0));
         CPPUNIT_ASSERT(pInner31);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner31"), pInner31->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner31"_ostr, pInner31->GetValue());
 
         auto pArray4 = dynamic_cast<vcl::filter::PDFArrayElement*>(pRootArray->GetElement(3));
         CPPUNIT_ASSERT(pArray4);
@@ -505,11 +510,11 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayNestedWithNames)
 
         auto pInner41 = dynamic_cast<vcl::filter::PDFNameElement*>(pArray4->GetElement(0));
         CPPUNIT_ASSERT(pInner41);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner41"), pInner41->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner41"_ostr, pInner41->GetValue());
 
         auto pInner42 = dynamic_cast<vcl::filter::PDFNameElement*>(pArray4->GetElement(1));
         CPPUNIT_ASSERT(pInner42);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner42"), pInner42->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner42"_ostr, pInner42->GetValue());
 
         auto pArray43 = dynamic_cast<vcl::filter::PDFArrayElement*>(pArray4->GetElement(2));
         CPPUNIT_ASSERT(pArray43);
@@ -517,11 +522,11 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayNestedWithNames)
 
         auto pInner431 = dynamic_cast<vcl::filter::PDFNameElement*>(pArray43->GetElement(0));
         CPPUNIT_ASSERT(pInner431);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner431"), pInner431->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner431"_ostr, pInner431->GetValue());
 
         auto pInner432 = dynamic_cast<vcl::filter::PDFNameElement*>(pArray43->GetElement(1));
         CPPUNIT_ASSERT(pInner432);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner432"), pInner432->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner432"_ostr, pInner432->GetValue());
 
         auto pArray5 = dynamic_cast<vcl::filter::PDFArrayElement*>(pRootArray->GetElement(4));
         CPPUNIT_ASSERT(pArray5);
@@ -529,7 +534,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayNestedWithNames)
 
         auto pInner51 = dynamic_cast<vcl::filter::PDFNameElement*>(pArray5->GetElement(0));
         CPPUNIT_ASSERT(pInner51);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner51"), pInner51->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner51"_ostr, pInner51->GetValue());
 
         auto pArray52 = dynamic_cast<vcl::filter::PDFArrayElement*>(pArray5->GetElement(1));
         CPPUNIT_ASSERT(pArray52);
@@ -537,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseArrayNestedWithNames)
 
         auto pInner521 = dynamic_cast<vcl::filter::PDFNameElement*>(pArray52->GetElement(0));
         CPPUNIT_ASSERT(pInner521);
-        CPPUNIT_ASSERT_EQUAL(OString("Inner521"), pInner521->GetValue());
+        CPPUNIT_ASSERT_EQUAL("Inner521"_ostr, pInner521->GetValue());
     }
 }
 
@@ -549,7 +554,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseTrailer)
     {
         addTrailerObjectElement(aElements, aDocument);
         addDictionaryElement(aElements);
-        addNameElement(aElements, "Size");
+        addNameElement(aElements, "Size"_ostr);
         addNumberElement(aElements, 11.0);
         addEndDictionaryElement(aElements);
     }
@@ -573,7 +578,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseTrailerWithReference)
     {
         addTrailerObjectElement(aElements, aDocument);
         addDictionaryElement(aElements);
-        addNameElement(aElements, "Reference");
+        addNameElement(aElements, "Reference"_ostr);
         auto pNumberElement1 = addNumberElement(aElements, 11.0);
         auto pNumberElement2 = addNumberElement(aElements, 0.0);
         addReferenceElement(aElements, aDocument, pNumberElement1, pNumberElement2);
@@ -588,7 +593,7 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseTrailerWithReference)
 
         CPPUNIT_ASSERT(pTrailer->GetDictionary());
         CPPUNIT_ASSERT_EQUAL(size_t(1), pTrailer->GetDictionary()->GetItems().size());
-        auto pElement = pTrailer->Lookup("Reference");
+        auto pElement = pTrailer->Lookup("Reference"_ostr);
         CPPUNIT_ASSERT(pElement);
         auto pReference = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
         CPPUNIT_ASSERT(pReference);

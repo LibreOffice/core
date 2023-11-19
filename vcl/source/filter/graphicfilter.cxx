@@ -1808,7 +1808,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
         aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true );
         // the inner modify time/filename doesn't really matter in this context because
         // compressed graphic formats are meant to be opened as is - not to be extracted
-        aCodec.SetCompressionMetadata( "inner", 0, nUncompressedCRC32 );
+        aCodec.SetCompressionMetadata( "inner"_ostr, 0, nUncompressedCRC32 );
         aCodec.Compress( rCompressableStm, rOStm );
         tools::Long nCompressedLength = aCodec.EndCompression();
         if ( rOStm.GetError() || nCompressedLength <= 0 )

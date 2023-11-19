@@ -245,7 +245,7 @@ void ImageMap::ImpReadCERNLine( std::string_view rLine  )
 {
     OString aStr( comphelper::string::stripStart(rLine, ' ') );
     aStr = comphelper::string::stripStart(aStr, '\t');
-    aStr = aStr.replaceAll(";", "");
+    aStr = aStr.replaceAll(";"_ostr, ""_ostr);
     aStr = aStr.toAsciiLowerCase();
 
     const char* pStr = aStr.getStr();
@@ -378,7 +378,7 @@ void ImageMap::ImpReadNCSALine( std::string_view rLine )
 {
     OString aStr( comphelper::string::stripStart(rLine, ' ') );
     aStr = comphelper::string::stripStart(aStr, '\t');
-    aStr = aStr.replaceAll(";", "");
+    aStr = aStr.replaceAll(";"_ostr, ""_ostr);
     aStr = aStr.toAsciiLowerCase();
 
     const char* pStr = aStr.getStr();

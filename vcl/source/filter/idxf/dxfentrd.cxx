@@ -26,8 +26,8 @@
 //--------------------------DXFBasicEntity--------------------------------------
 
 DXFBasicEntity::DXFBasicEntity(DXFEntityType eThisType)
-    : m_sLayer("0")
-    , m_sLineType("BYLAYER")
+    : m_sLayer("0"_ostr)
+    , m_sLineType("BYLAYER"_ostr)
 {
     eType=eThisType;
     pSucc=nullptr;
@@ -192,7 +192,7 @@ void DXFSolidEntity::EvaluateGroup(DXFGroupReader & rDGR)
 
 DXFTextEntity::DXFTextEntity()
     : DXFBasicEntity(DXF_TEXT)
-    , m_sStyle("STANDARD")
+    , m_sStyle("STANDARD"_ostr)
 {
     fHeight=1.0;
     fRotAngle=0.0;
@@ -289,7 +289,7 @@ void DXFInsertEntity::EvaluateGroup(DXFGroupReader & rDGR)
 
 DXFAttDefEntity::DXFAttDefEntity()
     : DXFBasicEntity(DXF_ATTDEF)
-    , m_sStyle("STANDARD")
+    , m_sStyle("STANDARD"_ostr)
 {
     fHeight=1.0;
     nAttrFlags=0;
@@ -332,7 +332,7 @@ void DXFAttDefEntity::EvaluateGroup(DXFGroupReader & rDGR)
 
 DXFAttribEntity::DXFAttribEntity()
     : DXFBasicEntity(DXF_ATTRIB)
-    , m_sStyle("STANDARD")
+    , m_sStyle("STANDARD"_ostr)
 {
     fHeight=1.0;
     nAttrFlags=0;

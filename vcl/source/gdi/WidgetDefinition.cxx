@@ -70,7 +70,7 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
             bAdd = false;
         }
 
-        OString sExtra = "any";
+        OString sExtra = "any"_ostr;
 
         switch (eType)
         {

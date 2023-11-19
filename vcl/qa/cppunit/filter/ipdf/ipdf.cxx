@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testDictArrayDict)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT(!aPages.empty());
     vcl::filter::PDFObjectElement* pPage = aPages[0];
-    auto pKey = dynamic_cast<vcl::filter::PDFArrayElement*>(pPage->Lookup("Key"));
+    auto pKey = dynamic_cast<vcl::filter::PDFArrayElement*>(pPage->Lookup("Key"_ostr));
 
     // Without the accompanying fix in place, this test would have failed, because the value of Key
     // was a dictionary element, not an array element.
@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testMixedArrayWithNumbers)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT(!aPages.empty());
     vcl::filter::PDFObjectElement* pPage = aPages[0];
-    auto pTest = dynamic_cast<vcl::filter::PDFArrayElement*>(pPage->Lookup("Test"));
+    auto pTest = dynamic_cast<vcl::filter::PDFArrayElement*>(pPage->Lookup("Test"_ostr));
     std::vector<vcl::filter::PDFElement*> aElements = pTest->GetElements();
 
     // Without the accompanying fix in place, this test would have failed with

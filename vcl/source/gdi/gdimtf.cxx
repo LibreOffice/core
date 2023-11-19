@@ -1141,7 +1141,7 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
                                 aStroke.getPath( aPath );
                                 aStroke.setPath( ImplGetRotatedPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
                                 WriteSvtGraphicStroke( aDest, aStroke );
-                                aMtf.AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_BEGIN", 0,
+                                aMtf.AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_BEGIN"_ostr, 0,
                                                     static_cast<const sal_uInt8*>( aDest.GetData()), aDest.Tell() ) );
                             }
                             else
@@ -1152,7 +1152,7 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
                                 aFill.getPath( aPath );
                                 aFill.setPath( ImplGetRotatedPolyPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
                                 WriteSvtGraphicFill( aDest, aFill );
-                                aMtf.AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
+                                aMtf.AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN"_ostr, 0,
                                                     static_cast<const sal_uInt8*>( aDest.GetData()), aDest.Tell() ) );
                             }
                         }

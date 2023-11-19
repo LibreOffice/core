@@ -275,7 +275,7 @@ static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
         return aBuffer.makeStringAndClear();
     }
 
-    return "";
+    return ""_ostr;
 }
 
 void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry)

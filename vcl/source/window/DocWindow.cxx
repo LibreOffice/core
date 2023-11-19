@@ -25,7 +25,7 @@ void DocWindow::SetPointer(PointerStyle nPointer)
 
     PointerStyle aPointer = GetPointer();
     // We don't map all possible pointers hence we need a default
-    OString aPointerString = "default";
+    OString aPointerString = "default"_ostr;
     auto aIt = vcl::gaLOKPointerMap.find(aPointer);
     if (aIt != vcl::gaLOKPointerMap.end())
     {

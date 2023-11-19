@@ -242,12 +242,12 @@ OString MyWin::processCommand( const OString& rCommand )
 
 IMPL_LINK_NOARG( MyWin, ListHdl, Button*, void)
 {
-    parseList( processCommand( "list" ) );
+    parseList( processCommand( "list"_ostr ) );
 }
 
 IMPL_STATIC_LINK_NOARG( MyWin, QuitHdl, Button*, void)
 {
-    processCommand( "quit" );
+    processCommand( "quit"_ostr );
 }
 
 IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)

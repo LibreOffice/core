@@ -276,62 +276,62 @@ OString convertLineStyleToString(const MetaActionType nActionType)
 {
     switch (nActionType)
     {
-        case MetaActionType::NONE:                  return "null";
-        case MetaActionType::PIXEL:                 return "pixel";
-        case MetaActionType::POINT:                 return "point";
-        case MetaActionType::LINE:                  return "line";
-        case MetaActionType::RECT:                  return "rect";
-        case MetaActionType::ROUNDRECT:             return "roundrect";
-        case MetaActionType::ELLIPSE:               return "ellipse";
-        case MetaActionType::ARC:                   return "arc";
-        case MetaActionType::PIE:                   return "pie";
-        case MetaActionType::CHORD:                 return "chord";
-        case MetaActionType::POLYLINE:              return "polyline";
-        case MetaActionType::POLYGON:               return "polygon";
-        case MetaActionType::POLYPOLYGON:           return "polypolygon";
-        case MetaActionType::TEXT:                  return "text";
-        case MetaActionType::TEXTARRAY:             return "textarray";
-        case MetaActionType::STRETCHTEXT:           return "stretchtext";
-        case MetaActionType::TEXTRECT:              return "textrect";
-        case MetaActionType::TEXTLINE:              return "textline";
-        case MetaActionType::BMP:                   return "bmp";
-        case MetaActionType::BMPSCALE:              return "bmpscale";
-        case MetaActionType::BMPSCALEPART:          return "bmpscalepart";
-        case MetaActionType::BMPEX:                 return "bmpex";
-        case MetaActionType::BMPEXSCALE:            return "bmpexscale";
-        case MetaActionType::BMPEXSCALEPART:        return "bmpexscalepart";
-        case MetaActionType::MASK:                  return "mask";
-        case MetaActionType::MASKSCALE:             return "maskscale";
-        case MetaActionType::MASKSCALEPART:         return "maskscalepart";
-        case MetaActionType::GRADIENT:              return "gradient";
-        case MetaActionType::GRADIENTEX:            return "gradientex";
-        case MetaActionType::HATCH:                 return "hatch";
-        case MetaActionType::WALLPAPER:             return "wallpaper";
-        case MetaActionType::CLIPREGION:            return "clipregion";
-        case MetaActionType::ISECTRECTCLIPREGION:   return "sectrectclipregion";
-        case MetaActionType::ISECTREGIONCLIPREGION: return "sectregionclipregion";
-        case MetaActionType::MOVECLIPREGION:        return "moveclipregion";
-        case MetaActionType::LINECOLOR:             return "linecolor";
-        case MetaActionType::FILLCOLOR:             return "fillcolor";
-        case MetaActionType::TEXTCOLOR:             return "textcolor";
-        case MetaActionType::TEXTFILLCOLOR:         return "textfillcolor";
-        case MetaActionType::TEXTLINECOLOR:         return "textlinecolor";
-        case MetaActionType::OVERLINECOLOR:         return "overlinecolor";
-        case MetaActionType::TEXTALIGN:             return "textalign";
-        case MetaActionType::MAPMODE:               return "mapmode";
-        case MetaActionType::FONT:                  return "font";
-        case MetaActionType::PUSH:                  return "push";
-        case MetaActionType::POP:                   return "pop";
-        case MetaActionType::RASTEROP:              return "rasterop";
-        case MetaActionType::Transparent:           return "transparent";
-        case MetaActionType::FLOATTRANSPARENT:      return "floattransparent";
-        case MetaActionType::EPS:                   return "eps";
-        case MetaActionType::REFPOINT:              return "refpoint";
-        case MetaActionType::COMMENT:               return "comment";
-        case MetaActionType::LAYOUTMODE:            return "layoutmode";
-        case MetaActionType::TEXTLANGUAGE:          return "textlanguage";
+        case MetaActionType::NONE:                  return "null"_ostr;
+        case MetaActionType::PIXEL:                 return "pixel"_ostr;
+        case MetaActionType::POINT:                 return "point"_ostr;
+        case MetaActionType::LINE:                  return "line"_ostr;
+        case MetaActionType::RECT:                  return "rect"_ostr;
+        case MetaActionType::ROUNDRECT:             return "roundrect"_ostr;
+        case MetaActionType::ELLIPSE:               return "ellipse"_ostr;
+        case MetaActionType::ARC:                   return "arc"_ostr;
+        case MetaActionType::PIE:                   return "pie"_ostr;
+        case MetaActionType::CHORD:                 return "chord"_ostr;
+        case MetaActionType::POLYLINE:              return "polyline"_ostr;
+        case MetaActionType::POLYGON:               return "polygon"_ostr;
+        case MetaActionType::POLYPOLYGON:           return "polypolygon"_ostr;
+        case MetaActionType::TEXT:                  return "text"_ostr;
+        case MetaActionType::TEXTARRAY:             return "textarray"_ostr;
+        case MetaActionType::STRETCHTEXT:           return "stretchtext"_ostr;
+        case MetaActionType::TEXTRECT:              return "textrect"_ostr;
+        case MetaActionType::TEXTLINE:              return "textline"_ostr;
+        case MetaActionType::BMP:                   return "bmp"_ostr;
+        case MetaActionType::BMPSCALE:              return "bmpscale"_ostr;
+        case MetaActionType::BMPSCALEPART:          return "bmpscalepart"_ostr;
+        case MetaActionType::BMPEX:                 return "bmpex"_ostr;
+        case MetaActionType::BMPEXSCALE:            return "bmpexscale"_ostr;
+        case MetaActionType::BMPEXSCALEPART:        return "bmpexscalepart"_ostr;
+        case MetaActionType::MASK:                  return "mask"_ostr;
+        case MetaActionType::MASKSCALE:             return "maskscale"_ostr;
+        case MetaActionType::MASKSCALEPART:         return "maskscalepart"_ostr;
+        case MetaActionType::GRADIENT:              return "gradient"_ostr;
+        case MetaActionType::GRADIENTEX:            return "gradientex"_ostr;
+        case MetaActionType::HATCH:                 return "hatch"_ostr;
+        case MetaActionType::WALLPAPER:             return "wallpaper"_ostr;
+        case MetaActionType::CLIPREGION:            return "clipregion"_ostr;
+        case MetaActionType::ISECTRECTCLIPREGION:   return "sectrectclipregion"_ostr;
+        case MetaActionType::ISECTREGIONCLIPREGION: return "sectregionclipregion"_ostr;
+        case MetaActionType::MOVECLIPREGION:        return "moveclipregion"_ostr;
+        case MetaActionType::LINECOLOR:             return "linecolor"_ostr;
+        case MetaActionType::FILLCOLOR:             return "fillcolor"_ostr;
+        case MetaActionType::TEXTCOLOR:             return "textcolor"_ostr;
+        case MetaActionType::TEXTFILLCOLOR:         return "textfillcolor"_ostr;
+        case MetaActionType::TEXTLINECOLOR:         return "textlinecolor"_ostr;
+        case MetaActionType::OVERLINECOLOR:         return "overlinecolor"_ostr;
+        case MetaActionType::TEXTALIGN:             return "textalign"_ostr;
+        case MetaActionType::MAPMODE:               return "mapmode"_ostr;
+        case MetaActionType::FONT:                  return "font"_ostr;
+        case MetaActionType::PUSH:                  return "push"_ostr;
+        case MetaActionType::POP:                   return "pop"_ostr;
+        case MetaActionType::RASTEROP:              return "rasterop"_ostr;
+        case MetaActionType::Transparent:           return "transparent"_ostr;
+        case MetaActionType::FLOATTRANSPARENT:      return "floattransparent"_ostr;
+        case MetaActionType::EPS:                   return "eps"_ostr;
+        case MetaActionType::REFPOINT:              return "refpoint"_ostr;
+        case MetaActionType::COMMENT:               return "comment"_ostr;
+        case MetaActionType::LAYOUTMODE:            return "layoutmode"_ostr;
+        case MetaActionType::TEXTLANGUAGE:          return "textlanguage"_ostr;
     }
-    return "";
+    return ""_ostr;
 }
 
 OUString convertBitmapExTransparentType(BitmapEx const & rBitmapEx)
@@ -539,11 +539,11 @@ void writeRectangle(tools::XmlWriter& rWriter, tools::Rectangle const& rRectangl
     rWriter.attribute("left", rRectangle.Left());
     rWriter.attribute("top", rRectangle.Top());
     if (rRectangle.IsWidthEmpty())
-        rWriter.attribute("right", OString("empty"));
+        rWriter.attribute("right", "empty"_ostr);
     else
         rWriter.attribute("right", rRectangle.Right());
     if (rRectangle.IsHeightEmpty())
-        rWriter.attribute("bottom", OString("empty"));
+        rWriter.attribute("bottom", "empty"_ostr);
     else
         rWriter.attribute("bottom", rRectangle.Bottom());
 }
@@ -1557,7 +1557,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             default:
             {
                 rWriter.startElement(sCurrentElementTag);
-                rWriter.attribute("note", OString("not implemented in xml dump"));
+                rWriter.attribute("note", "not implemented in xml dump"_ostr);
                 rWriter.endElement();
             }
             break;

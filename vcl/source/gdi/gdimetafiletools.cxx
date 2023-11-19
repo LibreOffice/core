@@ -238,7 +238,7 @@ namespace
         WriteSvtGraphicStroke( aMemStm, rStroke );
         rTarget.AddAction(
             new MetaCommentAction(
-                "XPATHSTROKE_SEQ_BEGIN",
+                "XPATHSTROKE_SEQ_BEGIN"_ostr,
                 0,
                 static_cast< const sal_uInt8* >(aMemStm.GetData()),
                 aMemStm.TellEnd()));
@@ -251,7 +251,7 @@ namespace
         WriteSvtGraphicFill( aMemStm, rFilling );
         rTarget.AddAction(
             new MetaCommentAction(
-                "XPATHFILL_SEQ_BEGIN",
+                "XPATHFILL_SEQ_BEGIN"_ostr,
                 0,
                 static_cast< const sal_uInt8* >(aMemStm.GetData()),
                 aMemStm.TellEnd()));

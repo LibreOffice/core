@@ -211,15 +211,15 @@ void PrinterInfoManager::initialize()
 #endif
             aConfig.SetGroup( GLOBAL_DEFAULTS_GROUP );
 
-            OString aValue( aConfig.ReadKey( "Copies" ) );
+            OString aValue( aConfig.ReadKey( "Copies"_ostr ) );
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_nCopies = aValue.toInt32();
 
-            aValue = aConfig.ReadKey( "Orientation" );
+            aValue = aConfig.ReadKey( "Orientation"_ostr );
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_eOrientation = aValue.equalsIgnoreAsciiCase("Landscape") ? orientation::Landscape : orientation::Portrait;
 
-            aValue = aConfig.ReadKey( "MarginAdjust" );
+            aValue = aConfig.ReadKey( "MarginAdjust"_ostr );
             if (!aValue.isEmpty())
             {
                 sal_Int32 nIdx {0};
@@ -229,11 +229,11 @@ void PrinterInfoManager::initialize()
                 m_aGlobalDefaults.m_nBottomMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
             }
 
-            aValue = aConfig.ReadKey( "ColorDepth", "24" );
+            aValue = aConfig.ReadKey( "ColorDepth"_ostr, "24"_ostr );
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_nColorDepth = aValue.toInt32();
 
-            aValue = aConfig.ReadKey( "ColorDevice" );
+            aValue = aConfig.ReadKey( "ColorDevice"_ostr );
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_nColorDevice = aValue.toInt32();
 
@@ -296,7 +296,7 @@ void PrinterInfoManager::initialize()
         for( int nGroup = 0; nGroup < aConfig.GetGroupCount(); nGroup++ )
         {
             aConfig.SetGroup( aConfig.GetGroupName( nGroup ) );
-            OString aValue = aConfig.ReadKey( "Printer" );
+            OString aValue = aConfig.ReadKey( "Printer"_ostr );
             if (!aValue.isEmpty())
             {
                 OUString aPrinterName;
@@ -353,7 +353,7 @@ void PrinterInfoManager::initialize()
                         }
                     }
 
-                    aValue = aConfig.ReadKey( "Command" );
+                    aValue = aConfig.ReadKey( "Command"_ostr );
                     // no printer without a command
                     if (aValue.isEmpty())
                     {
@@ -370,32 +370,32 @@ void PrinterInfoManager::initialize()
                     aPrinter.m_aInfo.m_aCommand = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
                 }
 
-                aValue = aConfig.ReadKey( "QuickCommand" );
+                aValue = aConfig.ReadKey( "QuickCommand"_ostr );
                 aPrinter.m_aInfo.m_aQuickCommand = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
-                aValue = aConfig.ReadKey( "Features" );
+                aValue = aConfig.ReadKey( "Features"_ostr );
                 aPrinter.m_aInfo.m_aFeatures = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 // override the settings in m_aGlobalDefaults if keys exist
-                aValue = aConfig.ReadKey( "DefaultPrinter" );
+                aValue = aConfig.ReadKey( "DefaultPrinter"_ostr );
                 if (aValue != "0" && !aValue.equalsIgnoreAsciiCase("false"))
                     aDefaultPrinter = aPrinterName;
 
-                aValue = aConfig.ReadKey( "Location" );
+                aValue = aConfig.ReadKey( "Location"_ostr );
                 aPrinter.m_aInfo.m_aLocation = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
-                aValue = aConfig.ReadKey( "Comment" );
+                aValue = aConfig.ReadKey( "Comment"_ostr );
                 aPrinter.m_aInfo.m_aComment = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
-                aValue = aConfig.ReadKey( "Copies" );
+                aValue = aConfig.ReadKey( "Copies"_ostr );
                 if (!aValue.isEmpty())
                     aPrinter.m_aInfo.m_nCopies = aValue.toInt32();
 
-                aValue = aConfig.ReadKey( "Orientation" );
+                aValue = aConfig.ReadKey( "Orientation"_ostr );
                 if (!aValue.isEmpty())
                     aPrinter.m_aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCase("Landscape") ? orientation::Landscape : orientation::Portrait;
 
-                aValue = aConfig.ReadKey( "MarginAdjust" );
+                aValue = aConfig.ReadKey( "MarginAdjust"_ostr );
                 if (!aValue.isEmpty())
                 {
                     sal_Int32 nIdx {0};
@@ -405,11 +405,11 @@ void PrinterInfoManager::initialize()
                     aPrinter.m_aInfo.m_nBottomMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
                 }
 
-                aValue = aConfig.ReadKey( "ColorDepth" );
+                aValue = aConfig.ReadKey( "ColorDepth"_ostr );
                 if (!aValue.isEmpty())
                     aPrinter.m_aInfo.m_nColorDepth = aValue.toInt32();
 
-                aValue = aConfig.ReadKey( "ColorDevice" );
+                aValue = aConfig.ReadKey( "ColorDevice"_ostr );
                 if (!aValue.isEmpty())
                     aPrinter.m_aInfo.m_nColorDevice = aValue.toInt32();
 
