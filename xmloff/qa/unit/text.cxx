@@ -209,8 +209,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
     // Without the accompanying fix in place, this failed with:
     // - XPath '/office:document-styles/office:styles/style:style[@style:name='mystyle']' no attribute 'list-level' exist
     // i.e. a custom NumberingLevel was lost on save.
-    assertXPath(pXmlDoc, "/office:document-styles/office:styles/style:style[@style:name='mystyle']",
-                "list-level", "2");
+    assertXPath(pXmlDoc,
+                "/office:document-styles/office:styles/style:style[@style:name='mystyle']"_ostr,
+                "list-level"_ostr, "2");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContinueNumberingWord)
@@ -248,7 +249,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     // Without the accompanying fix in place, this failed with:
     // - XPath '//text:list' unexpected 'id' attribute
     // i.e. xml:id="..." was written unconditionally, even when no other list needed it.
-    assertXPathNoAttribute(pXmlDoc, "//text:list", "id");
+    assertXPathNoAttribute(pXmlDoc, "//text:list"_ostr, "id"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId2)
@@ -313,11 +314,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId2)
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the fix in place, this would fail,
     // i.e. xml:id="..." was omitted, even though it was needed for the next item.
-    OUString id
-        = getXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:list[3]", "id");
+    OUString id = getXPath(
+        pXmlDoc, "/office:document-content/office:body/office:text/text:list[3]"_ostr, "id"_ostr);
     CPPUNIT_ASSERT(!id.isEmpty());
-    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:list[4]",
-                "continue-list", id);
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:list[4]"_ostr,
+                "continue-list"_ostr, id);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdState)
@@ -349,8 +350,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdState)
     // Without the accompanying fix in place, this test would have failed,
     // i.e. para 1 didn't write an xml:id="..." but para 3 referred to it using continue-list="...",
     // which is inconsistent.
-    OUString id
-        = getXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:list[1]", "id");
+    OUString id = getXPath(
+        pXmlDoc, "/office:document-content/office:body/office:text/text:list[1]"_ostr, "id"_ostr);
     CPPUNIT_ASSERT(!id.isEmpty());
 }
 
@@ -407,12 +408,12 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdOnRestart)
     // Then make sure that no xml:id="..." attribute is written, even in restarted case:
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "//text:list", 3);
-    assertXPathNoAttribute(pXmlDoc, "//text:list[1]", "id");
-    assertXPathNoAttribute(pXmlDoc, "//text:list[2]", "id");
-    assertXPathNoAttribute(pXmlDoc, "//text:list[3]", "id");
-    assertXPathNoAttribute(pXmlDoc, "//text:list[3]", "continue-list");
-    assertXPath(pXmlDoc, "//text:list[3]", "continue-numbering", "true");
+    assertXPath(pXmlDoc, "//text:list"_ostr, 3);
+    assertXPathNoAttribute(pXmlDoc, "//text:list[1]"_ostr, "id"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "//text:list[2]"_ostr, "id"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "//text:list[3]"_ostr, "id"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "//text:list[3]"_ostr, "continue-list"_ostr);
+    assertXPath(pXmlDoc, "//text:list[3]"_ostr, "continue-numbering"_ostr, "true");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
@@ -439,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     // Without the accompanying fix in place, this failed with:
     // - XPath '//text:line-break' number of nodes is incorrect
     // i.e. the clearing break was lost on export.
-    assertXPath(pXmlDoc, "//text:line-break", "clear", "all");
+    assertXPath(pXmlDoc, "//text:line-break"_ostr, "clear"_ostr, "all");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakImport)
@@ -508,7 +509,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
     // - Actual  : 0.0161in (0.04 cm)
     // i.e. the fallback width value wasn't the expected half of the body frame width, but a smaller
     // value.
-    assertXPath(pXmlDoc, "//draw:frame", "width", "3.1492in");
+    assertXPath(pXmlDoc, "//draw:frame"_ostr, "width"_ostr, "3.1492in");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
@@ -538,7 +539,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
     // - Expected: 0.7874in
     // - Actual  : 0in
     // i.e. the exported size was 0, not 2000 mm100 in inches.
-    assertXPath(pXmlDoc, "//draw:frame", "width", "0.7874in");
+    assertXPath(pXmlDoc, "//draw:frame"_ostr, "width"_ostr, "0.7874in");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
@@ -566,7 +567,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
     // Without the accompanying fix in place, this failed with:
     // - XPath '//loext:content-control' number of nodes is incorrect
     // i.e. the content control was lost on export.
-    assertXPath(pXmlDoc, "//loext:content-control", "showing-place-holder", "true");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "showing-place-holder"_ostr, "true");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlImport)
@@ -625,10 +626,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    assertXPath(pXmlDoc, "//loext:content-control", "checkbox", "true");
-    assertXPath(pXmlDoc, "//loext:content-control", "checked", "true");
-    assertXPath(pXmlDoc, "//loext:content-control", "checked-state", u"☒"_ustr);
-    assertXPath(pXmlDoc, "//loext:content-control", "unchecked-state", u"☐"_ustr);
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "checkbox"_ostr, "true");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "checked"_ostr, "true");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "checked-state"_ostr, u"☒"_ustr);
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "unchecked-state"_ostr, u"☐"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlImport)
@@ -712,18 +713,21 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    assertXPath(pXmlDoc, "//loext:content-control", "dropdown", "true");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "dropdown"_ostr, "true");
     // Without the accompanying fix in place, this failed with:
     // - Expected: 1
     // - Actual  : 0
     // - XPath '//loext:content-control/loext:list-item[1]' number of nodes is incorrect
     // i.e. the list items were lost on export.
-    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[1]", "display-text", "red");
-    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[1]", "value", "R");
-    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[2]", "display-text", "green");
-    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[2]", "value", "G");
-    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[3]", "display-text", "blue");
-    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[3]", "value", "B");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[1]"_ostr, "display-text"_ostr,
+                "red");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[1]"_ostr, "value"_ostr, "R");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[2]"_ostr, "display-text"_ostr,
+                "green");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[2]"_ostr, "value"_ostr, "G");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[3]"_ostr, "display-text"_ostr,
+                "blue");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[3]"_ostr, "value"_ostr, "B");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlImport)
@@ -799,7 +803,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'picture' exist
-    assertXPath(pXmlDoc, "//loext:content-control", "picture", "true");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "picture"_ostr, "true");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlImport)
@@ -857,10 +861,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'date' exist
-    assertXPath(pXmlDoc, "//loext:content-control", "date", "true");
-    assertXPath(pXmlDoc, "//loext:content-control", "date-format", "YYYY-MM-DD");
-    assertXPath(pXmlDoc, "//loext:content-control", "date-rfc-language-tag", "en-US");
-    assertXPath(pXmlDoc, "//loext:content-control", "current-date", "2022-05-25T00:00:00Z");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "date"_ostr, "true");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "date-format"_ostr, "YYYY-MM-DD");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "date-rfc-language-tag"_ostr, "en-US");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "current-date"_ostr,
+                "2022-05-25T00:00:00Z");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlImport)
@@ -924,7 +929,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'plain-text' exist
     // i.e. the plain text content control was turned into a rich text one on export.
-    assertXPath(pXmlDoc, "//loext:content-control", "plain-text", "true");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "plain-text"_ostr, "true");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlImport)
@@ -979,7 +984,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'combobox' exist
     // i.e. the combo box content control was turned into a drop-down one on export.
-    assertXPath(pXmlDoc, "//loext:content-control", "combobox", "true");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "combobox"_ostr, "true");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
@@ -1012,11 +1017,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     // - Expression: prop
     // - XPath '//loext:content-control' no attribute 'alias' exist
     // i.e. alias was lost on export.
-    assertXPath(pXmlDoc, "//loext:content-control", "alias", "my alias");
-    assertXPath(pXmlDoc, "//loext:content-control", "tag", "my tag");
-    assertXPath(pXmlDoc, "//loext:content-control", "id", "-2147483648");
-    assertXPath(pXmlDoc, "//loext:content-control", "tab-index", "3");
-    assertXPath(pXmlDoc, "//loext:content-control", "lock", "unlocked");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "alias"_ostr, "my alias");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "tag"_ostr, "my tag");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "id"_ostr, "-2147483648");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "tab-index"_ostr, "3");
+    assertXPath(pXmlDoc, "//loext:content-control"_ostr, "lock"_ostr, "unlocked");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlImport)
@@ -1121,7 +1126,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthRedline)
     // - Expected: 6.1728in
     // - Actual  : 0in
     // i.e. the deleted image had zero size, which is incorrect.
-    assertXPath(pXmlDoc, "//draw:frame[@draw:name='Image45']", "width", "6.1728in");
+    assertXPath(pXmlDoc, "//draw:frame[@draw:name='Image45']"_ostr, "width"_ostr, "6.1728in");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
@@ -1156,14 +1161,14 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
 
     // Check if the 12 colors are written in the XML:
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
-    OString aThemePath = "//office:styles/loext:theme/loext:theme-colors/loext:color";
+    OString aThemePath = "//office:styles/loext:theme/loext:theme-colors/loext:color"_ostr;
     assertXPath(pXmlDoc, aThemePath, 12);
-    assertXPath(pXmlDoc, aThemePath + "[1]", "name", "dark1");
-    assertXPath(pXmlDoc, aThemePath + "[1]", "color", "#101010");
-    assertXPath(pXmlDoc, aThemePath + "[2]", "name", "light1");
-    assertXPath(pXmlDoc, aThemePath + "[2]", "color", "#202020");
-    assertXPath(pXmlDoc, aThemePath + "[12]", "name", "followed-hyperlink");
-    assertXPath(pXmlDoc, aThemePath + "[12]", "color", "#c0c0c0");
+    assertXPath(pXmlDoc, aThemePath + "[1]", "name"_ostr, "dark1");
+    assertXPath(pXmlDoc, aThemePath + "[1]", "color"_ostr, "#101010");
+    assertXPath(pXmlDoc, aThemePath + "[2]", "name"_ostr, "light1");
+    assertXPath(pXmlDoc, aThemePath + "[2]", "color"_ostr, "#202020");
+    assertXPath(pXmlDoc, aThemePath + "[12]", "name"_ostr, "followed-hyperlink");
+    assertXPath(pXmlDoc, aThemePath + "[12]", "color"_ostr, "#c0c0c0");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableExport)
@@ -1197,7 +1202,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableExport)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//draw:frame' no attribute 'may-break-between-pages' exist
     // i.e. no floating table was exported.
-    assertXPath(pXmlDoc, "//draw:frame", "may-break-between-pages", "true");
+    assertXPath(pXmlDoc, "//draw:frame"_ostr, "may-break-between-pages"_ostr, "true");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableImport)
@@ -1250,10 +1255,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParagraphScopedTabDistance)
 
     // Then make sure we write the tab-stop-distance
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    assertXPath(pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties",
-                "tab-stop-distance", "10cm");
+    assertXPath(pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties"_ostr,
+                "tab-stop-distance"_ostr, "10cm");
 
-    assertXPath(pXmlDoc, "//text:p[@text:style-name='P1']");
+    assertXPath(pXmlDoc, "//text:p[@text:style-name='P1']"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testNestedSpans)
