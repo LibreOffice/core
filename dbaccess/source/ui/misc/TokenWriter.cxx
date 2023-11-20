@@ -684,7 +684,7 @@ void OHTMLImportExport::WriteTables()
             " "
             OOO_STRING_SVTOOLS_HTML_frame
             "="
-            OOO_STRING_SVTOOLS_HTML_TF_void;
+            OOO_STRING_SVTOOLS_HTML_TF_void ""_ostr;
 
     Sequence< OUString> aNames;
     Reference<XNameAccess> xColumns;
