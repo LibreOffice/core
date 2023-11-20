@@ -271,7 +271,7 @@ class DemoRenderer
         {
             rendering::RenderState maOldRenderState = maRenderState; // push
 
-            drawTitle( OString( "Rectangles" ) );
+            drawTitle( "Rectangles"_ostr );
 
             drawRect( tools::Rectangle( 20, 30, 70, 60 ), maColorRed, 8 );
             // color mediumseagreen, stipple fill, outline black
@@ -287,7 +287,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width(), 0.0 );
 
-            drawTitle( OString( "Ellipses" ) );
+            drawTitle( "Ellipses"_ostr );
 
             const basegfx::B2DPoint aCenter( maBox.Width()*.5,
                                              maBox.Height()*.5 );
@@ -318,11 +318,11 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, 0.0 );
 
-            drawTitle( OString( "Text" ) );
+            drawTitle( "Text"_ostr );
 
             translate( 0.0,
                        maBox.Height() * .5 );
-            drawTitle( OString( "This is lame" ) );
+            drawTitle( "This is lame"_ostr );
 
             maRenderState = maOldRenderState; // pop
         }
@@ -332,7 +332,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( 0.0, maBox.Height() );
 
-            drawTitle( OString( "Images" ) );
+            drawTitle( "Images"_ostr );
 
             uno::Reference< rendering::XBitmap > xBitmap(mxCanvas, uno::UNO_QUERY);
 
@@ -365,7 +365,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width(), maBox.Height() );
 
-            drawTitle( OString( "Lines" ) );
+            drawTitle( "Lines"_ostr );
 
             drawPolishDiamond( 70.0, 80.0 );
             drawHilbert( 140.0, 140.0 );
@@ -378,7 +378,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, maBox.Height() );
 
-            drawTitle( OString( "Curves" ) );
+            drawTitle( "Curves"_ostr );
 
             translate( maBox.Width() * .5, maBox.Height() * .5 );
 
@@ -426,7 +426,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( 0.0, maBox.Height() * 2.0 );
 
-            drawTitle( OString( "Arcs" ) );
+            drawTitle( "Arcs"_ostr );
 
 
             //begin hacks
@@ -504,7 +504,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 1.0, maBox.Height() * 2.0 );
 
-            drawTitle( OString( "Polygons" ) );
+            drawTitle( "Polygons"_ostr );
 
             int sides= 3;
             for (int i= 1; i <= 4; i++)
@@ -521,7 +521,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, maBox.Height() * 2.0 );
 
-            drawTitle( OString( "Widgets" ) );
+            drawTitle( "Widgets"_ostr );
 
             maRenderState = maOldRenderState; // pop
         }
