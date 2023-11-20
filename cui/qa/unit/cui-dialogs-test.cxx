@@ -57,8 +57,8 @@ void CuiDialogsTest::initialize()
 void CuiDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
 {
     // fill map of known dialogs
-    rKnownDialogs["cui/ui/formatcellsdialog.ui"] = 0;
-    rKnownDialogs["cui/ui/textdialog.ui"] = 1;
+    rKnownDialogs["cui/ui/formatcellsdialog.ui"_ostr] = 0;
+    rKnownDialogs["cui/ui/textdialog.ui"_ostr] = 1;
 }
 
 VclPtr<VclAbstractDialog> CuiDialogsTest::createDialogByID(sal_uInt32 nID)
