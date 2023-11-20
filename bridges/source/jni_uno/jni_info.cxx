@@ -297,7 +297,7 @@ JNI_compound_type_info::JNI_compound_type_info(
                     && reinterpret_cast< typelib_StructTypeDescription * >(
                         td)->pParameterizedTypes[nPos])
                 {
-                    sig = OString( "Ljava/lang/Object;" );
+                    sig = "Ljava/lang/Object;"_ostr;
                 } else {
                     OStringBuffer sig_buf( 32 );
                     JNI_info::append_sig( &sig_buf, td->ppTypeRefs[ nPos ] );
