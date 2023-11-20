@@ -71,7 +71,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         }
                         else
                         {
-                            OString tmp("'-O', please check");
+                            OString tmp("'-O', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i+1] + "'";
@@ -85,7 +85,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         s = av[i] + 2;
                     }
 
-                    m_options["-O"] = OString(s);
+                    m_options["-O"_ostr] = OString(s);
                     break;
                 case 'n':
                     if (av[i][2] != 'D' || av[i][3] != '\0')
@@ -94,7 +94,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    m_options["-nD"] = OString();
+                    m_options["-nD"_ostr] = OString();
                     break;
                 case 'T':
                     if (av[i][2] == '\0')
@@ -106,7 +106,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         }
                         else
                         {
-                            OString tmp("'-T', please check");
+                            OString tmp("'-T', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i+1] + "'";
@@ -120,20 +120,20 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         s = av[i] + 2;
                     }
 
-                    if (m_options.count("-T") > 0)
+                    if (m_options.count("-T"_ostr) > 0)
                     {
-                        OString tmp = m_options["-T"] + ";" + s;
-                        m_options["-T"] = tmp;
+                        OString tmp = m_options["-T"_ostr] + ";" + s;
+                        m_options["-T"_ostr] = tmp;
                     }
                     else
                     {
-                        m_options["-T"] = OString(s);
+                        m_options["-T"_ostr] = OString(s);
                     }
                     break;
                 case 'L':
                     if (av[i][2] != '\0')
                     {
-                        OString tmp("'-L', please check");
+                        OString tmp("'-L', please check"_ostr);
                         if (i <= ac - 1)
                         {
                             tmp += OString::Concat(" your input '") + av[i] + "'";
@@ -142,18 +142,18 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    if (isValid("-C") || isValid("-CS"))
+                    if (isValid("-C"_ostr) || isValid("-CS"_ostr))
                     {
-                        throw IllegalArgument("'-L' could not be combined with '-C' or '-CS' option");
+                        throw IllegalArgument("'-L' could not be combined with '-C' or '-CS' option"_ostr);
                     }
-                    m_options["-L"] = OString();
+                    m_options["-L"_ostr] = OString();
                     break;
                 case 'C':
                     if (av[i][2] == 'S')
                     {
                         if (av[i][3] != '\0')
                         {
-                            OString tmp("'-CS', please check");
+                            OString tmp("'-CS', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i] + "'";
@@ -162,16 +162,16 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             throw IllegalArgument(tmp);
                         }
 
-                        if (isValid("-L") || isValid("-C"))
+                        if (isValid("-L"_ostr) || isValid("-C"_ostr))
                         {
-                            throw IllegalArgument("'-CS' could not be combined with '-L' or '-C' option");
+                            throw IllegalArgument("'-CS' could not be combined with '-L' or '-C' option"_ostr);
                         }
-                        m_options["-CS"] = OString();
+                        m_options["-CS"_ostr] = OString();
                         break;
                     }
                     else if (av[i][2] != '\0')
                     {
-                        OString tmp("'-C', please check");
+                        OString tmp("'-C', please check"_ostr);
                         if (i <= ac - 1)
                         {
                             tmp += OString::Concat(" your input '") + av[i] + "'";
@@ -180,18 +180,18 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    if (isValid("-L") || isValid("-CS"))
+                    if (isValid("-L"_ostr) || isValid("-CS"_ostr))
                     {
-                        throw IllegalArgument("'-C' could not be combined with '-L' or '-CS' option");
+                        throw IllegalArgument("'-C' could not be combined with '-L' or '-CS' option"_ostr);
                     }
-                    m_options["-C"] = OString();
+                    m_options["-C"_ostr] = OString();
                     break;
                 case 'G':
                     if (av[i][2] == 'c')
                     {
                         if (av[i][3] != '\0')
                         {
-                            OString tmp("'-Gc', please check");
+                            OString tmp("'-Gc', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i] + "'";
@@ -200,12 +200,12 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             throw IllegalArgument(tmp);
                         }
 
-                        m_options["-Gc"] = OString();
+                        m_options["-Gc"_ostr] = OString();
                         break;
                     }
                     else if (av[i][2] != '\0')
                     {
-                        OString tmp("'-G', please check");
+                        OString tmp("'-G', please check"_ostr);
                         if (i <= ac - 1)
                         {
                             tmp += OString::Concat(" your input '") + av[i] + "'";
@@ -214,12 +214,12 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    m_options["-G"] = OString();
+                    m_options["-G"_ostr] = OString();
                     break;
                 case 'W': // generate embind javascript bindings for LOWA
                     if (av[i][2] != '\0')
                     {
-                        OString tmp("'-W', please check");
+                        OString tmp("'-W', please check"_ostr);
                         if (i <= ac - 1)
                         {
                             tmp += OString::Concat(" your input '") + av[i] + "'";
@@ -228,11 +228,11 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    if (!isValid("-C") && !isValid("-CS") && !isValid("-L"))
+                    if (!isValid("-C"_ostr) && !isValid("-CS"_ostr) && !isValid("-L"_ostr))
                     {
-                        throw IllegalArgument("'-W' requires '-C' or '-CS' or '-L' option");
+                        throw IllegalArgument("'-W' requires '-C' or '-CS' or '-L' option"_ostr);
                     }
-                    m_options["-W"] = OString();
+                    m_options["-W"_ostr] = OString();
                     break;
                 case 'X': // support for eXtra type rdbs
                 {
@@ -245,7 +245,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         }
                         else
                         {
-                            OString tmp("'-X', please check");
+                            OString tmp("'-X', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i+1] + "'";

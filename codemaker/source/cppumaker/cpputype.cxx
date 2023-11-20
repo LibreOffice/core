@@ -157,9 +157,9 @@ OString getFileExtension(FileType eFileType)
     switch(eFileType)
     {
         default:
-        case FileType::HDL: return ".hdl";
-        case FileType::HPP: return ".hpp";
-        case FileType::EMBIND_CXX: return "_embind.cxx";
+        case FileType::HDL: return ".hdl"_ostr;
+        case FileType::HPP: return ".hpp"_ostr;
+        case FileType::EMBIND_CXX: return "_embind.cxx"_ostr;
     }
 }
 
@@ -324,7 +324,7 @@ void CppuType::dumpFiles(OUString const & uri, CppuOptions const & options)
 {
     dumpFile(uri, name_, FileType::HDL, options);
     dumpFile(uri, name_, FileType::HPP, options);
-    if(options.isValid("-W"))
+    if(options.isValid("-W"_ostr))
         dumpFile(uri, name_, FileType::EMBIND_CXX, options);
 }
 
@@ -420,13 +420,13 @@ void CppuType::dump(CppuOptions const & options)
         // functions; since the introduction of cppu::UnoType this no longer is
         // meaningful (getCppuType is just a forward to cppu::UnoType::get now),
         // and -CS is handled the same way as -C now:
-        if (options.isValid("-L"))
+        if (options.isValid("-L"_ostr))
             m_cppuTypeLeak = true;
-        if (options.isValid("-C") || options.isValid("-CS"))
+        if (options.isValid("-C"_ostr) || options.isValid("-CS"_ostr))
             m_cppuTypeDynamic = false;
     }
     dumpFiles(
-        options.isValid("-O") ? b2u(options.getOption("-O")) : "", options);
+        options.isValid("-O"_ostr) ? b2u(options.getOption("-O"_ostr)) : "", options);
 }
 
 void CppuType::dumpFile(
@@ -440,7 +440,7 @@ void CppuType::dumpFile(
         throw CannotDumpException(OUString::Concat("empty target URI for entity ") + name);
     }
     bool exists = fileExists(u2b(fileUri));
-    if (exists && options.isValid("-G")) {
+    if (exists && options.isValid("-G"_ostr)) {
         return;
     }
     FileStream out;
@@ -476,13 +476,13 @@ void CppuType::dumpFile(
     }
     out.close();
     (void)makeValidTypeFile(
-               u2b(fileUri), u2b(tmpUri), exists && options.isValid("-Gc"));
+               u2b(fileUri), u2b(tmpUri), exists && options.isValid("-Gc"_ostr));
 }
 
 void CppuType::dumpDependedTypes(
     codemaker::GeneratedTypeSet & generated, CppuOptions const & options) const
 {
-    if (!options.isValid("-nD")) {
+    if (!options.isValid("-nD"_ostr)) {
         codemaker::cppumaker::Dependencies::Map const & map
             = m_dependencies.getMap();
         for (const auto& entry : map) {
@@ -1664,7 +1664,7 @@ void InterfaceType::addComprehensiveGetCppuTypeIncludes(
     includes.addCppuUnotypeHxx();
     includes.addRtlInstanceHxx(); // using rtl::StaticWithInit
     includes.addOslMutexHxx();
-    includes.add("com.sun.star.uno.RuntimeException");
+    includes.add("com.sun.star.uno.RuntimeException"_ostr);
 }
 
 void InterfaceType::dumpCppuAttributes(FileStream & out, sal_uInt32 & index)
@@ -3741,7 +3741,7 @@ private:
 
     virtual void dumpFiles(OUString const & uri, CppuOptions const & options) override {
         dumpFile(uri, name_, FileType::HPP, options);
-        if(options.isValid("-W"))
+        if(options.isValid("-W"_ostr))
             dumpFile(uri, name_, FileType::EMBIND_CXX, options);
     }
 };
@@ -3805,12 +3805,12 @@ void ServiceType::dumpHppFile(
         includes.addReference();
         includes.addRtlUstringH();
         includes.addRtlUstringHxx();
-        includes.add("com.sun.star.uno.DeploymentException");
-        includes.add("com.sun.star.uno.XComponentContext");
+        includes.add("com.sun.star.uno.DeploymentException"_ostr);
+        includes.add("com.sun.star.uno.XComponentContext"_ostr);
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons : entity_->getConstructors()) {
             if (cons.defaultConstructor) {
-                includes.add("com.sun.star.uno.Exception");
-                includes.add("com.sun.star.uno.RuntimeException");
+                includes.add("com.sun.star.uno.Exception"_ostr);
+                includes.add("com.sun.star.uno.RuntimeException"_ostr);
             } else {
                 if (!hasRestParameter(cons)) {
                     includes.addAny();
@@ -3831,8 +3831,8 @@ void ServiceType::dumpHppFile(
                     tree.add(u2b(ex), m_typeMgr);
                 }
                 if (!tree.getRoot().present) {
-                    includes.add("com.sun.star.uno.Exception");
-                    includes.add("com.sun.star.uno.RuntimeException");
+                    includes.add("com.sun.star.uno.Exception"_ostr);
+                    includes.add("com.sun.star.uno.RuntimeException"_ostr);
                     includeExceptions(includes, &tree.getRoot());
                 }
             }
@@ -3874,7 +3874,7 @@ void ServiceType::dumpHppFile(
                 o << indent() << "static ::css::uno::Reference< "
                   << scopedBaseName << " > "
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      "create", "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
+                      "create"_ostr, "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
                       &cppName)
                   << ("(::css::uno::Reference< ::css::uno::XComponentContext > const &"
                       " the_context) {\n");
@@ -4144,8 +4144,8 @@ void SingletonType::dumpHppFile(
     o << "\n";
     //TODO: Decide whether the types added to includes should rather be added to
     // m_dependencies (and thus be generated during dumpDependedTypes):
-    includes.add("com.sun.star.uno.DeploymentException");
-    includes.add("com.sun.star.uno.XComponentContext");
+    includes.add("com.sun.star.uno.DeploymentException"_ostr);
+    includes.add("com.sun.star.uno.XComponentContext"_ostr);
     includes.addCassert();
     includes.addAny();
     includes.addReference();
@@ -4173,7 +4173,7 @@ void SingletonType::dumpHppFile(
     o << indent() << "static ::css::uno::Reference< "
       << scopedBaseName << " > "
       << codemaker::cpp::translateUnoToCppIdentifier(
-          "get", "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal, &cppName)
+          "get"_ostr, "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal, &cppName)
       << ("(::css::uno::Reference<"
           " ::css::uno::XComponentContext > const & the_context)"
           " {\n");

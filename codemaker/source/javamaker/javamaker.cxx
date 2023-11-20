@@ -55,8 +55,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             typeMgr->loadProvider(convertToFileUrl(i), true);
         }
         codemaker::GeneratedTypeSet generated;
-        if (options.isValid("-T")) {
-            OUString names(b2u(options.getOption("-T")));
+        if (options.isValid("-T"_ostr)) {
+            OUString names(b2u(options.getOption("-T"_ostr)));
             for (sal_Int32 i = 0; i != -1;) {
                 std::u16string_view name(o3tl::getToken(names, 0, ';', i));
                 if (!name.empty()) {

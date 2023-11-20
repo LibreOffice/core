@@ -68,7 +68,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             s = av[i];
                         } else
                         {
-                            OString tmp("'-O', please check");
+                            OString tmp("'-O', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i+1] + "'";
@@ -81,7 +81,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         s = av[i] + 2;
                     }
 
-                    m_options["-O"] = OString(s);
+                    m_options["-O"_ostr] = OString(s);
                     break;
                 case 'n':
                     if (av[i][2] != 'D' || av[i][3] != '\0')
@@ -90,7 +90,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    m_options["-nD"] = OString();
+                    m_options["-nD"_ostr] = OString();
                     break;
                 case 'T':
                     if (av[i][2] == '\0')
@@ -101,7 +101,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             s = av[i];
                         } else
                         {
-                            OString tmp("'-T', please check");
+                            OString tmp("'-T', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i+1] + "'";
@@ -114,13 +114,13 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         s = av[i] + 2;
                     }
 
-                    if (m_options.count("-T") > 0)
+                    if (m_options.count("-T"_ostr) > 0)
                     {
-                        OString tmp = m_options["-T"] + ";" + s;
-                        m_options["-T"] = tmp;
+                        OString tmp = m_options["-T"_ostr] + ";" + s;
+                        m_options["-T"_ostr] = tmp;
                     } else
                     {
-                        m_options["-T"] = OString(s);
+                        m_options["-T"_ostr] = OString(s);
                     }
                     break;
                 case 'G':
@@ -128,7 +128,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                     {
                         if (av[i][3] != '\0')
                         {
-                            OString tmp("'-Gc', please check");
+                            OString tmp("'-Gc', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i] + "'";
@@ -137,11 +137,11 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             throw IllegalArgument(tmp);
                         }
 
-                        m_options["-Gc"] = OString();
+                        m_options["-Gc"_ostr] = OString();
                         break;
                     } else if (av[i][2] != '\0')
                     {
-                        OString tmp("'-G', please check");
+                        OString tmp("'-G', please check"_ostr);
                         if (i <= ac - 1)
                         {
                             tmp += OString::Concat(" your input '") + av[i] + "'";
@@ -150,7 +150,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    m_options["-G"] = OString();
+                    m_options["-G"_ostr] = OString();
                     break;
                 case 'X': // support for eXtra type rdbs
                 {
@@ -162,7 +162,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             s = av[i];
                         } else
                         {
-                            OString tmp("'-X', please check");
+                            OString tmp("'-X', please check"_ostr);
                             if (i <= ac - 1)
                             {
                                 tmp += OString::Concat(" your input '") + av[i+1] + "'";

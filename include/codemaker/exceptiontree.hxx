@@ -78,7 +78,7 @@ private:
  */
 class ExceptionTree {
 public:
-    ExceptionTree(): m_root("com.sun.star.uno.Exception") {}
+    ExceptionTree(): m_root("com.sun.star.uno.Exception"_ostr) {}
 
     /**
        Builds the exception hierarchy, by adding one exception type at a time.

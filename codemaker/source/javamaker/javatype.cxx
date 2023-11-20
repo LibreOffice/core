@@ -487,7 +487,7 @@ sal_uInt16 TypeInfo::generateCode(
 {
     switch (m_kind) {
     case KIND_MEMBER:
-        code.instrNew("com/sun/star/lib/uno/typeinfo/MemberTypeInfo");
+        code.instrNew("com/sun/star/lib/uno/typeinfo/MemberTypeInfo"_ostr);
         code.instrDup();
         code.loadStringConstant(m_name);
         code.loadIntegerConstant(m_index);
@@ -496,24 +496,24 @@ sal_uInt16 TypeInfo::generateCode(
             generatePolymorphicUnoTypeCode(code, dependencies);
             code.loadIntegerConstant(m_typeParameterIndex);
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo", "<init>",
-                "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V");
+                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V"_ostr);
             return 8;
         } else if (m_typeParameterIndex >= 0) {
             code.instrAconstNull();
             code.loadIntegerConstant(m_typeParameterIndex);
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo", "<init>",
-                "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V");
+                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V"_ostr);
             return 6;
         } else {
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo", "<init>",
-                "(Ljava/lang/String;II)V");
+                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;II)V"_ostr);
             return 4;
         }
     case KIND_ATTRIBUTE:
-        code.instrNew("com/sun/star/lib/uno/typeinfo/AttributeTypeInfo");
+        code.instrNew("com/sun/star/lib/uno/typeinfo/AttributeTypeInfo"_ostr);
         code.instrDup();
         code.loadStringConstant(m_name);
         code.loadIntegerConstant(m_index);
@@ -521,17 +521,17 @@ sal_uInt16 TypeInfo::generateCode(
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo", "<init>",
-                "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V");
+                "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V"_ostr);
             return 8;
         } else {
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo", "<init>",
-                "(Ljava/lang/String;II)V");
+                "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;II)V"_ostr);
             return 4;
         }
     case KIND_METHOD:
-        code.instrNew("com/sun/star/lib/uno/typeinfo/MethodTypeInfo");
+        code.instrNew("com/sun/star/lib/uno/typeinfo/MethodTypeInfo"_ostr);
         code.instrDup();
         code.loadStringConstant(m_name);
         code.loadIntegerConstant(m_index);
@@ -539,17 +539,17 @@ sal_uInt16 TypeInfo::generateCode(
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/MethodTypeInfo", "<init>",
-                "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V");
+                "com/sun/star/lib/uno/typeinfo/MethodTypeInfo"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V"_ostr);
             return 8;
         } else {
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/MethodTypeInfo", "<init>",
-                "(Ljava/lang/String;II)V");
+                "com/sun/star/lib/uno/typeinfo/MethodTypeInfo"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;II)V"_ostr);
             return 4;
         }
     case KIND_PARAMETER:
-        code.instrNew("com/sun/star/lib/uno/typeinfo/ParameterTypeInfo");
+        code.instrNew("com/sun/star/lib/uno/typeinfo/ParameterTypeInfo"_ostr);
         code.instrDup();
         code.loadStringConstant(m_name);
         code.loadStringConstant(m_methodName);
@@ -558,14 +558,14 @@ sal_uInt16 TypeInfo::generateCode(
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo", "<init>",
+                "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo"_ostr, "<init>"_ostr,
                 ("(Ljava/lang/String;Ljava/lang/String;II"
-                 "Lcom/sun/star/uno/Type;)V"));
+                 "Lcom/sun/star/uno/Type;)V"_ostr));
             return 9;
         } else {
             code.instrInvokespecial(
-                "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo", "<init>",
-                "(Ljava/lang/String;Ljava/lang/String;II)V");
+                "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;Ljava/lang/String;II)V"_ostr);
             return 5;
         }
     default:
@@ -579,23 +579,23 @@ void TypeInfo::generatePolymorphicUnoTypeCode(
 {
     assert(dependencies != nullptr);
     assert(m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE);
-    code.instrNew("com/sun/star/uno/Type");
+    code.instrNew("com/sun/star/uno/Type"_ostr);
     code.instrDup();
     code.loadStringConstant(
         codemaker::convertString(m_polymorphicUnoType.name));
     if (m_polymorphicUnoType.kind == PolymorphicUnoType::KIND_STRUCT) {
         code.instrGetstatic(
-            "com/sun/star/uno/TypeClass", "STRUCT",
-            "Lcom/sun/star/uno/TypeClass;");
+            "com/sun/star/uno/TypeClass"_ostr, "STRUCT"_ostr,
+            "Lcom/sun/star/uno/TypeClass;"_ostr);
     } else {
         code.instrGetstatic(
-            "com/sun/star/uno/TypeClass", "SEQUENCE",
-            "Lcom/sun/star/uno/TypeClass;");
+            "com/sun/star/uno/TypeClass"_ostr, "SEQUENCE"_ostr,
+            "Lcom/sun/star/uno/TypeClass;"_ostr);
     }
     dependencies->insert("com.sun.star.uno.TypeClass");
     code.instrInvokespecial(
-        "com/sun/star/uno/Type", "<init>",
-        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+        "com/sun/star/uno/Type"_ostr, "<init>"_ostr,
+        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
 }
 
 void writeClassFile(
@@ -603,16 +603,16 @@ void writeClassFile(
     ClassFile const & classFile)
 {
     OString path;
-    if (options.isValid("-O")) {
-        path = options.getOption("-O");
+    if (options.isValid("-O"_ostr)) {
+        path = options.getOption("-O"_ostr);
     }
-    OString filename(createFileNameFromType(path, type, ".class"));
+    OString filename(createFileNameFromType(path, type, ".class"_ostr));
     bool bCheck = false;
     if (fileExists(filename)) {
-        if (options.isValid("-G")) {
+        if (options.isValid("-G"_ostr)) {
             return;
         }
-        bCheck = options.isValid("-Gc");
+        bCheck = options.isValid("-Gc"_ostr);
     }
     FileStream tempfile;
     tempfile.createTempFile(getTempDir(filename));
@@ -657,11 +657,11 @@ void addTypeInfo(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
             | ClassFile::ACC_FINAL),
-        "UNOTYPEINFO", "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;",
-        0, "");
+        "UNOTYPEINFO"_ostr, "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;"_ostr,
+        0, ""_ostr);
     std::unique_ptr< ClassFile::Code > code(classFile->newCode());
     code->loadIntegerConstant(static_cast< sal_Int32 >(typeInfos));
-    code->instrAnewarray("com/sun/star/lib/uno/typeinfo/TypeInfo");
+    code->instrAnewarray("com/sun/star/lib/uno/typeinfo/TypeInfo"_ostr);
     sal_Int32 index = 0;
     sal_uInt16 stack = 0;
     for (const TypeInfo& ti : typeInfo)
@@ -672,8 +672,8 @@ void addTypeInfo(
         code->instrAastore();
     }
     code->instrPutstatic(
-        className, "UNOTYPEINFO",
-        "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;");
+        className, "UNOTYPEINFO"_ostr,
+        "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;"_ostr);
     code->instrReturn();
     if (stack > SAL_MAX_UINT16 - 4) {
         throw CannotDumpException(
@@ -683,7 +683,7 @@ void addTypeInfo(
     classFile->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
-        "<clinit>", "()V", code.get(), std::vector< OString >(), "");
+        "<clinit>"_ostr, "()V"_ostr, code.get(), std::vector< OString >(), ""_ostr);
 }
 
 void handleEnumType(
@@ -697,7 +697,7 @@ void handleEnumType(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
-            className, "com/sun/star/uno/Enum", ""));
+            className, "com/sun/star/uno/Enum"_ostr, ""_ostr));
     OString classDescriptor("L" + className + ";");
     for (const unoidl::EnumTypeEntity::Member& member : entity->getMembers())
     {
@@ -711,19 +711,19 @@ void handleEnumType(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
                 | ClassFile::ACC_FINAL),
-            fieldName + "_value", "I",
-            cf->addIntegerInfo(member.value), "");
+            fieldName + "_value", "I"_ostr,
+            cf->addIntegerInfo(member.value), ""_ostr);
     }
     std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     code->loadLocalInteger(1);
-    code->instrInvokespecial("com/sun/star/uno/Enum", "<init>", "(I)V");
+    code->instrInvokespecial("com/sun/star/uno/Enum"_ostr, "<init>"_ostr, "(I)V"_ostr);
     code->instrReturn();
     code->setMaxStackAndLocals(2, 2);
     cf->addMethod(
         ClassFile::ACC_PRIVATE,
-        "<init>", "(I)V", code.get(),
-        std::vector< OString >(), "");
+        "<init>"_ostr, "(I)V"_ostr, code.get(),
+        std::vector< OString >(), ""_ostr);
     code = cf->newCode();
     code->instrGetstatic(
         className,
@@ -734,8 +734,8 @@ void handleEnumType(
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
-        "getDefault", "()" + classDescriptor,
-        code.get(), std::vector< OString >(), "");
+        "getDefault"_ostr, "()" + classDescriptor,
+        code.get(), std::vector< OString >(), ""_ostr);
     code = cf->newCode();
     code->loadLocalInteger(0);
     std::map< sal_Int32, OString > map;
@@ -796,15 +796,15 @@ void handleEnumType(
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
-        "fromInt", "(I)" + classDescriptor, code.get(),
-        std::vector< OString >(), "");
+        "fromInt"_ostr, "(I)" + classDescriptor, code.get(),
+        std::vector< OString >(), ""_ostr);
     code = cf->newCode();
     for (const unoidl::EnumTypeEntity::Member& member : entity->getMembers())
     {
         code->instrNew(className);
         code->instrDup();
         code->loadIntegerConstant(member.value);
-        code->instrInvokespecial(className, "<init>", "(I)V");
+        code->instrInvokespecial(className, "<init>"_ostr, "(I)V"_ostr);
         code->instrPutstatic(
             className, codemaker::convertString(member.name), classDescriptor);
     }
@@ -813,7 +813,7 @@ void handleEnumType(
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
-        "<clinit>", "()V", code.get(), std::vector< OString >(), "");
+        "<clinit>"_ostr, "()V"_ostr, code.get(), std::vector< OString >(), ""_ostr);
     writeClassFile(options, className, *cf);
 }
 
@@ -883,19 +883,19 @@ sal_uInt16 addFieldInit(
         case codemaker::UnoType::Sort::String:
             code->loadLocalReference(0);
             code->loadStringConstant(OString());
-            code->instrPutfield(className, name, "Ljava/lang/String;");
+            code->instrPutfield(className, name, "Ljava/lang/String;"_ostr);
             return 2;
         case codemaker::UnoType::Sort::Type:
             code->loadLocalReference(0);
             code->instrGetstatic(
-                "com/sun/star/uno/Type", "VOID", "Lcom/sun/star/uno/Type;");
-            code->instrPutfield(className, name, "Lcom/sun/star/uno/Type;");
+                "com/sun/star/uno/Type"_ostr, "VOID"_ostr, "Lcom/sun/star/uno/Type;"_ostr);
+            code->instrPutfield(className, name, "Lcom/sun/star/uno/Type;"_ostr);
             return 2;
         case codemaker::UnoType::Sort::Any:
             code->loadLocalReference(0);
             code->instrGetstatic(
-                "com/sun/star/uno/Any", "VOID", "Lcom/sun/star/uno/Any;");
-            code->instrPutfield(className, name, "Ljava/lang/Object;");
+                "com/sun/star/uno/Any"_ostr, "VOID"_ostr, "Lcom/sun/star/uno/Any;"_ostr);
+            code->instrPutfield(className, name, "Ljava/lang/Object;"_ostr);
             return 2;
         case codemaker::UnoType::Sort::Enum:
             {
@@ -923,7 +923,7 @@ sal_uInt16 addFieldInit(
                 code->instrDup();
                 code->instrInvokespecial(
                     codemaker::convertString(nucleus).replace('.', '/'),
-                    "<init>", "()V");
+                    "<init>"_ostr, "()V"_ostr);
                 OStringBuffer desc(128);
                 translateUnoTypeToDescriptor(
                     manager, sort, nucleus, 0, args, false, false, dependencies,
@@ -993,11 +993,11 @@ sal_uInt16 addLoadLocal(
             switch (sort) {
             case codemaker::UnoType::Sort::Boolean:
                 if (any) {
-                    code->instrNew("java/lang/Boolean");
+                    code->instrNew("java/lang/Boolean"_ostr);
                     code->instrDup();
                     code->loadLocalInteger(*index);
                     code->instrInvokespecial(
-                        "java/lang/Boolean", "<init>", "(Z)V");
+                        "java/lang/Boolean"_ostr, "<init>"_ostr, "(Z)V"_ostr);
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1007,11 +1007,11 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Byte:
                 if (any) {
-                    code->instrNew("java/lang/Byte");
+                    code->instrNew("java/lang/Byte"_ostr);
                     code->instrDup();
                     code->loadLocalInteger(*index);
                     code->instrInvokespecial(
-                        "java/lang/Byte", "<init>", "(B)V");
+                        "java/lang/Byte"_ostr, "<init>"_ostr, "(B)V"_ostr);
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1021,11 +1021,11 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Short:
                 if (any) {
-                    code->instrNew("java/lang/Short");
+                    code->instrNew("java/lang/Short"_ostr);
                     code->instrDup();
                     code->loadLocalInteger(*index);
                     code->instrInvokespecial(
-                        "java/lang/Short", "<init>", "(S)V");
+                        "java/lang/Short"_ostr, "<init>"_ostr, "(S)V"_ostr);
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1035,19 +1035,19 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::UnsignedShort:
                 if (any) {
-                    code->instrNew("com/sun/star/uno/Any");
+                    code->instrNew("com/sun/star/uno/Any"_ostr);
                     code->instrDup();
                     code->instrGetstatic(
-                        "com/sun/star/uno/Type", "UNSIGNED_SHORT",
-                        "Lcom/sun/star/uno/Type;");
-                    code->instrNew("java/lang/Short");
+                        "com/sun/star/uno/Type"_ostr, "UNSIGNED_SHORT"_ostr,
+                        "Lcom/sun/star/uno/Type;"_ostr);
+                    code->instrNew("java/lang/Short"_ostr);
                     code->instrDup();
                     code->loadLocalInteger(*index);
                     code->instrInvokespecial(
-                        "java/lang/Short", "<init>", "(S)V");
+                        "java/lang/Short"_ostr, "<init>"_ostr, "(S)V"_ostr);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any", "<init>",
-                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 6;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1057,11 +1057,11 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Long:
                 if (any) {
-                    code->instrNew("java/lang/Integer");
+                    code->instrNew("java/lang/Integer"_ostr);
                     code->instrDup();
                     code->loadLocalInteger(*index);
                     code->instrInvokespecial(
-                        "java/lang/Integer", "<init>", "(I)V");
+                        "java/lang/Integer"_ostr, "<init>"_ostr, "(I)V"_ostr);
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1071,19 +1071,19 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::UnsignedLong:
                 if (any) {
-                    code->instrNew("com/sun/star/uno/Any");
+                    code->instrNew("com/sun/star/uno/Any"_ostr);
                     code->instrDup();
                     code->instrGetstatic(
-                        "com/sun/star/uno/Type", "UNSIGNED_LONG",
-                        "Lcom/sun/star/uno/Type;");
-                    code->instrNew("java/lang/Integer");
+                        "com/sun/star/uno/Type"_ostr, "UNSIGNED_LONG"_ostr,
+                        "Lcom/sun/star/uno/Type;"_ostr);
+                    code->instrNew("java/lang/Integer"_ostr);
                     code->instrDup();
                     code->loadLocalInteger(*index);
                     code->instrInvokespecial(
-                        "java/lang/Integer", "<init>", "(I)V");
+                        "java/lang/Integer"_ostr, "<init>"_ostr, "(I)V"_ostr);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any", "<init>",
-                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 6;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1093,11 +1093,11 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Hyper:
                 if (any) {
-                    code->instrNew("java/lang/Long");
+                    code->instrNew("java/lang/Long"_ostr);
                     code->instrDup();
                     code->loadLocalLong(*index);
                     code->instrInvokespecial(
-                        "java/lang/Long", "<init>", "(J)V");
+                        "java/lang/Long"_ostr, "<init>"_ostr, "(J)V"_ostr);
                     stack = 4;
                 } else {
                     code->loadLocalLong(*index);
@@ -1107,19 +1107,19 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::UnsignedHyper:
                 if (any) {
-                    code->instrNew("com/sun/star/uno/Any");
+                    code->instrNew("com/sun/star/uno/Any"_ostr);
                     code->instrDup();
                     code->instrGetstatic(
-                        "com/sun/star/uno/Type", "UNSIGNED_HYPER",
-                        "Lcom/sun/star/uno/Type;");
-                    code->instrNew("java/lang/Long");
+                        "com/sun/star/uno/Type"_ostr, "UNSIGNED_HYPER"_ostr,
+                        "Lcom/sun/star/uno/Type;"_ostr);
+                    code->instrNew("java/lang/Long"_ostr);
                     code->instrDup();
                     code->loadLocalLong(*index);
                     code->instrInvokespecial(
-                        "java/lang/Long", "<init>", "(J)V");
+                        "java/lang/Long"_ostr, "<init>"_ostr, "(J)V"_ostr);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any", "<init>",
-                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 7;
                 } else {
                     code->loadLocalLong(*index);
@@ -1129,11 +1129,11 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Float:
                 if (any) {
-                    code->instrNew("java/lang/Float");
+                    code->instrNew("java/lang/Float"_ostr);
                     code->instrDup();
                     code->loadLocalFloat(*index);
                     code->instrInvokespecial(
-                        "java/lang/Float", "<init>", "(F)V");
+                        "java/lang/Float"_ostr, "<init>"_ostr, "(F)V"_ostr);
                     stack = 3;
                 } else {
                     code->loadLocalFloat(*index);
@@ -1143,11 +1143,11 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Double:
                 if (any) {
-                    code->instrNew("java/lang/Double");
+                    code->instrNew("java/lang/Double"_ostr);
                     code->instrDup();
                     code->loadLocalDouble(*index);
                     code->instrInvokespecial(
-                        "java/lang/Double", "<init>", "(D)V");
+                        "java/lang/Double"_ostr, "<init>"_ostr, "(D)V"_ostr);
                     stack = 4;
                 } else {
                     code->loadLocalDouble(*index);
@@ -1157,11 +1157,11 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Char:
                 if (any) {
-                    code->instrNew("java/lang/Character");
+                    code->instrNew("java/lang/Character"_ostr);
                     code->instrDup();
                     code->loadLocalInteger(*index);
                     code->instrInvokespecial(
-                        "java/lang/Character", "<init>", "(C)V");
+                        "java/lang/Character"_ostr, "<init>"_ostr, "(C)V"_ostr);
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1184,24 +1184,24 @@ sal_uInt16 addLoadLocal(
             case codemaker::UnoType::Sort::PlainStruct:
             case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
                 if (any) {
-                    code->instrNew("com/sun/star/uno/Any");
+                    code->instrNew("com/sun/star/uno/Any"_ostr);
                     code->instrDup();
-                    code->instrNew("com/sun/star/uno/Type");
+                    code->instrNew("com/sun/star/uno/Type"_ostr);
                     code->instrDup();
                     code->loadStringConstant(
                         codemaker::convertString(
                             createUnoName(manager, nucleus, rank, args)));
                     code->instrGetstatic(
-                        "com/sun/star/uno/TypeClass", "STRUCT",
-                        "Lcom/sun/star/uno/TypeClass;");
+                        "com/sun/star/uno/TypeClass"_ostr, "STRUCT"_ostr,
+                        "Lcom/sun/star/uno/TypeClass;"_ostr);
                     dependencies->insert("com.sun.star.uno.TypeClass");
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Type", "<init>",
-                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+                        "com/sun/star/uno/Type"_ostr, "<init>"_ostr,
+                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
                     code->loadLocalReference(*index);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any", "<init>",
-                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 6;
                 } else {
                     code->loadLocalReference(*index);
@@ -1211,22 +1211,22 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Interface:
                 if (any && nucleus != "com.sun.star.uno.XInterface") {
-                    code->instrNew("com/sun/star/uno/Any");
+                    code->instrNew("com/sun/star/uno/Any"_ostr);
                     code->instrDup();
-                    code->instrNew("com/sun/star/uno/Type");
+                    code->instrNew("com/sun/star/uno/Type"_ostr);
                     code->instrDup();
                     code->loadStringConstant(codemaker::convertString(nucleus));
                     code->instrGetstatic(
-                        "com/sun/star/uno/TypeClass", "INTERFACE",
-                        "Lcom/sun/star/uno/TypeClass;");
+                        "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
+                        "Lcom/sun/star/uno/TypeClass;"_ostr);
                     dependencies->insert("com.sun.star.uno.TypeClass");
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Type", "<init>",
-                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+                        "com/sun/star/uno/Type"_ostr, "<init>"_ostr,
+                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
                     code->loadLocalReference(*index);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any", "<init>",
-                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 6;
                 } else {
                     code->loadLocalReference(*index);
@@ -1282,19 +1282,19 @@ sal_uInt16 addLoadLocal(
                 }
             }
             if (bWrap) {
-                code->instrNew("com/sun/star/uno/Any");
+                code->instrNew("com/sun/star/uno/Any"_ostr);
                 code->instrDup();
-                code->instrNew("com/sun/star/uno/Type");
+                code->instrNew("com/sun/star/uno/Type"_ostr);
                 code->instrDup();
                 code->loadStringConstant(
                     codemaker::convertString(
                         createUnoName(manager, nucleus, rank, args)));
                 code->instrInvokespecial(
-                    "com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;)V");
+                    "com/sun/star/uno/Type"_ostr, "<init>"_ostr, "(Ljava/lang/String;)V"_ostr);
                 code->loadLocalReference(*index);
                 code->instrInvokespecial(
-                    "com/sun/star/uno/Any", "<init>",
-                    "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                    "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                    "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                 stack = 5;
             } else {
                 code->loadLocalReference(*index);
@@ -1383,7 +1383,7 @@ void handlePlainStructType(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
-            className, superClass, ""));
+            className, superClass, ""_ostr));
     std::vector< TypeInfo > typeInfo;
     sal_Int32 index = 0;
     for (const unoidl::PlainStructTypeEntity::Member& member : entity->getDirectMembers())
@@ -1394,7 +1394,7 @@ void handlePlainStructType(
     }
     std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
-    code->instrInvokespecial(superClass, "<init>", "()V");
+    code->instrInvokespecial(superClass, "<init>"_ostr, "()V"_ostr);
     sal_uInt16 stack = 0;
     for (const unoidl::PlainStructTypeEntity::Member& member : entity->getDirectMembers())
     {
@@ -1407,8 +1407,8 @@ void handlePlainStructType(
     code->instrReturn();
     code->setMaxStackAndLocals(stack + 1, 1);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
-        std::vector< OString >(), "");
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, "()V"_ostr, code.get(),
+        std::vector< OString >(), ""_ostr);
     MethodDescriptor desc(manager, dependencies, u"void", nullptr, nullptr);
     code = cf->newCode();
     code->loadLocalReference(0);
@@ -1418,7 +1418,7 @@ void handlePlainStructType(
             manager, dependencies, &desc, code.get(), entity->getDirectBase(),
             &index2);
     }
-    code->instrInvokespecial(superClass, "<init>", desc.getDescriptor());
+    code->instrInvokespecial(superClass, "<init>"_ostr, desc.getDescriptor());
     sal_uInt16 maxSize = index2;
     for (const unoidl::PlainStructTypeEntity::Member& member : entity->getDirectMembers())
     {
@@ -1431,7 +1431,7 @@ void handlePlainStructType(
     code->instrReturn();
     code->setMaxStackAndLocals(maxSize, index2);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", desc.getDescriptor(), code.get(),
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, desc.getDescriptor(), code.get(),
         std::vector< OString >(), desc.getSignature());
     addTypeInfo(className, typeInfo, dependencies, cf.get());
     writeClassFile(options, className, *cf);
@@ -1463,7 +1463,7 @@ void handlePolyStructType(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
-            className, "java/lang/Object", sig.makeStringAndClear()));
+            className, "java/lang/Object"_ostr, sig.makeStringAndClear()));
     std::vector< TypeInfo > typeInfo;
     index = 0;
     for (const unoidl::PolymorphicStructTypeTemplateEntity::Member& member : entity->getMembers())
@@ -1485,7 +1485,7 @@ void handlePolyStructType(
     }
     std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
-    code->instrInvokespecial("java/lang/Object", "<init>", "()V");
+    code->instrInvokespecial("java/lang/Object"_ostr, "<init>"_ostr, "()V"_ostr);
     sal_uInt16 stack = 0;
     for (const unoidl::PolymorphicStructTypeTemplateEntity::Member& member : entity->getMembers())
     {
@@ -1498,14 +1498,14 @@ void handlePolyStructType(
     code->instrReturn();
     code->setMaxStackAndLocals(stack + 1, 1);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
-        std::vector< OString >(), "");
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, "()V"_ostr, code.get(),
+        std::vector< OString >(), ""_ostr);
     MethodDescriptor desc(manager, dependencies, u"void", nullptr, nullptr);
     code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
     code->instrInvokespecial(
-        "java/lang/Object", "<init>", desc.getDescriptor());
+        "java/lang/Object"_ostr, "<init>"_ostr, desc.getDescriptor());
     sal_uInt16 maxSize = index2;
     for (const unoidl::PolymorphicStructTypeTemplateEntity::Member& member : entity->getMembers())
     {
@@ -1518,7 +1518,7 @@ void handlePolyStructType(
     code->instrReturn();
     code->setMaxStackAndLocals(maxSize, index2);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", desc.getDescriptor(), code.get(),
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, desc.getDescriptor(), code.get(),
         std::vector< OString >(), desc.getSignature());
     addTypeInfo(className, typeInfo, dependencies, cf.get());
     writeClassFile(options, className, *cf);
@@ -1587,7 +1587,7 @@ void handleExceptionType(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
-            className, superClass, ""));
+            className, superClass, ""_ostr));
     std::vector< TypeInfo > typeInfo;
     sal_Int32 index = 0;
     if (baseRuntimeException) {
@@ -1609,7 +1609,7 @@ void handleExceptionType(
     // create default constructor
     std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
-    code->instrInvokespecial(superClass, "<init>", "()V");
+    code->instrInvokespecial(superClass, "<init>"_ostr, "()V"_ostr);
     sal_uInt16 stack = 0;
     if (baseRuntimeException) {
         stack = std::max(
@@ -1633,15 +1633,15 @@ void handleExceptionType(
     code->instrReturn();
     code->setMaxStackAndLocals(stack + 1, 1);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
-        std::vector< OString >(), "");
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, "()V"_ostr, code.get(),
+        std::vector< OString >(), ""_ostr);
 
 
     // create (Throwable Cause) constructor
     code = cf->newCode();
     code->loadLocalReference(0);
     code->loadLocalReference(1);
-    code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/Throwable;)V");
+    code->instrInvokespecial(superClass, "<init>"_ostr, "(Ljava/lang/Throwable;)V"_ostr);
     stack = 0;
     if (baseRuntimeException) {
         stack = std::max(
@@ -1665,8 +1665,8 @@ void handleExceptionType(
     code->instrReturn();
     code->setMaxStackAndLocals(stack + 2, 2);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/Throwable;)V", code.get(),
-        std::vector< OString >(), "");
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, "(Ljava/lang/Throwable;)V"_ostr, code.get(),
+        std::vector< OString >(), ""_ostr);
 
     // create (Throwable Cause, String Message) constructor
     code = cf->newCode();
@@ -1674,11 +1674,11 @@ void handleExceptionType(
     if (baseException || baseRuntimeException) {
         code->loadLocalReference(2);
         code->loadLocalReference(1);
-        code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;Ljava/lang/Throwable;)V");
+        code->instrInvokespecial(superClass, "<init>"_ostr, "(Ljava/lang/String;Ljava/lang/Throwable;)V"_ostr);
     } else {
         code->loadLocalReference(1);
         code->loadLocalReference(2);
-        code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/Throwable;Ljava/lang/String;)V");
+        code->instrInvokespecial(superClass, "<init>"_ostr, "(Ljava/lang/Throwable;Ljava/lang/String;)V"_ostr);
     }
     stack = 0;
     if (baseRuntimeException) {
@@ -1703,14 +1703,14 @@ void handleExceptionType(
     code->instrReturn();
     code->setMaxStackAndLocals(stack + 3, 3);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/Throwable;Ljava/lang/String;)V", code.get(),
-        std::vector< OString >(), "");
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, "(Ljava/lang/Throwable;Ljava/lang/String;)V"_ostr, code.get(),
+        std::vector< OString >(), ""_ostr);
 
     // create (String Message) constructor
     code = cf->newCode();
     code->loadLocalReference(0);
     code->loadLocalReference(1);
-    code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;)V");
+    code->instrInvokespecial(superClass, "<init>"_ostr, "(Ljava/lang/String;)V"_ostr);
     stack = 0;
     if (baseRuntimeException) {
         stack = std::max(
@@ -1734,8 +1734,8 @@ void handleExceptionType(
     code->instrReturn();
     code->setMaxStackAndLocals(stack + 2, 2);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/String;)V", code.get(),
-        std::vector< OString >(), "");
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, "(Ljava/lang/String;)V"_ostr, code.get(),
+        std::vector< OString >(), ""_ostr);
 
 
     // create (String Message, Object Context, T1 m1, ..., Tn mn) constructor
@@ -1750,14 +1750,14 @@ void handleExceptionType(
             manager, dependencies, &desc1, code.get(), entity->getDirectBase(),
             &index2);
     }
-    code->instrInvokespecial(superClass, "<init>", desc1.getDescriptor());
+    code->instrInvokespecial(superClass, "<init>"_ostr, desc1.getDescriptor());
     sal_uInt16 maxSize = index2;
     if (baseRuntimeException) {
         maxSize = std::max(
             maxSize,
             addDirectArgument(
                 manager, dependencies, &desc1, code.get(), &index2, className,
-                "Context", false, "com.sun.star.uno.XInterface"));
+                "Context"_ostr, false, "com.sun.star.uno.XInterface"));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1775,7 +1775,7 @@ void handleExceptionType(
     code->instrReturn();
     code->setMaxStackAndLocals(maxSize, index2);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", desc1.getDescriptor(), code.get(),
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, desc1.getDescriptor(), code.get(),
         std::vector< OString >(), desc1.getSignature());
 
     // create (Throwable Cause, String Message, Object Context, T1 m1, ..., Tn mn) constructor
@@ -1789,14 +1789,14 @@ void handleExceptionType(
     if (baseException || baseRuntimeException) {
         code->loadLocalReference(2);
         code->loadLocalReference(1);
-        code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;Ljava/lang/Throwable;)V");
+        code->instrInvokespecial(superClass, "<init>"_ostr, "(Ljava/lang/String;Ljava/lang/Throwable;)V"_ostr);
     } else {
         code->loadLocalReference(1);
         code->loadLocalReference(2);
         addExceptionBaseArguments(
             manager, dependencies, &desc2, code.get(), entity->getDirectBase(),
             &index3);
-        code->instrInvokespecial(superClass, "<init>", OString::Concat("(Ljava/lang/Throwable;") + desc2.getDescriptor().subView(1));
+        code->instrInvokespecial(superClass, "<init>"_ostr, OString::Concat("(Ljava/lang/Throwable;") + desc2.getDescriptor().subView(1));
     }
     sal_uInt16 maxSize2 = index3;
     if (baseRuntimeException) {
@@ -1804,7 +1804,7 @@ void handleExceptionType(
             maxSize2,
             addDirectArgument(
                 manager, dependencies, &desc2, code.get(), &index3, className,
-                "Context", false, "com.sun.star.uno.XInterface"));
+                "Context"_ostr, false, "com.sun.star.uno.XInterface"));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1822,7 +1822,7 @@ void handleExceptionType(
     code->instrReturn();
     code->setMaxStackAndLocals(maxSize2, index3);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", OString::Concat("(Ljava/lang/Throwable;") + desc2.getDescriptor().subView(1), code.get(),
+        ClassFile::ACC_PUBLIC, "<init>"_ostr, OString::Concat("(Ljava/lang/Throwable;") + desc2.getDescriptor().subView(1), code.get(),
         std::vector< OString >(), desc2.getSignature());
 
     addTypeInfo(className, typeInfo, dependencies, cf.get());
@@ -1861,7 +1861,7 @@ void handleInterfaceType(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_INTERFACE
                 | ClassFile::ACC_ABSTRACT),
-            className, "java/lang/Object", ""));
+            className, "java/lang/Object"_ostr, ""_ostr));
     for (const unoidl::AnnotatedReference& ar : entity->getDirectMandatoryBases())
     {
         dependencies->insert(ar.name);
@@ -1871,7 +1871,7 @@ void handleInterfaceType(
     // java.util.EventListener ("A tagging interface that all event listener
     // interfaces must extend"):
     if (className == "com/sun/star/lang/XEventListener") {
-        cf->addInterface("java/util/EventListener");
+        cf->addInterface("java/util/EventListener"_ostr);
     }
     std::vector< TypeInfo > typeInfo;
     if (className != "com/sun/star/uno/XInterface") {
@@ -2004,7 +2004,7 @@ void handleConstantGroup(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_INTERFACE
                 | ClassFile::ACC_ABSTRACT),
-            className, "java/lang/Object", ""));
+            className, "java/lang/Object"_ostr, ""_ostr));
     for (const unoidl::ConstantGroupEntity::Member& member : entity->getMembers())
     {
         OUString type;
@@ -2098,8 +2098,8 @@ void addConstructor(
     code->loadLocalReference(0);
     // stack: context
     code->instrInvokeinterface(
-        "com/sun/star/uno/XComponentContext", "getServiceManager",
-        "()Lcom/sun/star/lang/XMultiComponentFactory;", 1);
+        "com/sun/star/uno/XComponentContext"_ostr, "getServiceManager"_ostr,
+        "()Lcom/sun/star/lang/XMultiComponentFactory;"_ostr, 1);
     // stack: factory
     code->loadStringConstant(unoName);
     // stack: factory serviceName
@@ -2116,10 +2116,10 @@ void addConstructor(
         // stack: factory serviceName context
         tryStart = code->getPosition();
         code->instrInvokeinterface(
-            "com/sun/star/lang/XMultiComponentFactory",
-            "createInstanceWithContext",
+            "com/sun/star/lang/XMultiComponentFactory"_ostr,
+            "createInstanceWithContext"_ostr,
             ("(Ljava/lang/String;Lcom/sun/star/uno/XComponentContext;)"
-             "Ljava/lang/Object;"),
+             "Ljava/lang/Object;"_ostr),
             3);
         tryEnd = code->getPosition();
         // stack: instance
@@ -2137,7 +2137,7 @@ void addConstructor(
         } else {
             code->loadIntegerConstant(constructor.parameters.size());
             // stack: factory serviceName N
-            code->instrAnewarray("java/lang/Object");
+            code->instrAnewarray("java/lang/Object"_ostr);
             // stack: factory serviceName args
             stack = 0;
             sal_Int32 n = 0;
@@ -2164,10 +2164,10 @@ void addConstructor(
         // stack: factory serviceName args context
         tryStart = code->getPosition();
         code->instrInvokeinterface(
-            "com/sun/star/lang/XMultiComponentFactory",
-            "createInstanceWithArgumentsAndContext",
+            "com/sun/star/lang/XMultiComponentFactory"_ostr,
+            "createInstanceWithArgumentsAndContext"_ostr,
             ("(Ljava/lang/String;[Ljava/lang/Object;"
-             "Lcom/sun/star/uno/XComponentContext;)Ljava/lang/Object;"),
+             "Lcom/sun/star/uno/XComponentContext;)Ljava/lang/Object;"_ostr),
             4);
         tryEnd = code->getPosition();
         // stack: instance
@@ -2177,9 +2177,9 @@ void addConstructor(
     code->loadLocalReference(0);
     // stack: instance context
     code->instrInvokestatic(
-        className, "$castInstance",
+        className, "$castInstance"_ostr,
         ("(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
-         "Ljava/lang/Object;"));
+         "Ljava/lang/Object;"_ostr));
     // stack: instance
     code->instrCheckcast(
         codemaker::convertString(returnType).replace('.', '/'));
@@ -2189,12 +2189,12 @@ void addConstructor(
         ClassFile::Code::Position pos1 = code->getPosition();
         // stack: e
         code->instrInvokevirtual(
-            "java/lang/Throwable", "toString", "()Ljava/lang/String;");
+            "java/lang/Throwable"_ostr, "toString"_ostr, "()Ljava/lang/String;"_ostr);
         // stack: str
         localIndex = std::max< sal_uInt16 >(localIndex, 2);
         code->storeLocalReference(1);
         // stack: -
-        code->instrNew("com/sun/star/uno/DeploymentException");
+        code->instrNew("com/sun/star/uno/DeploymentException"_ostr);
         // stack: ex
         code->instrDup();
         // stack: ex ex
@@ -2205,21 +2205,21 @@ void addConstructor(
         code->loadLocalReference(1);
         // stack: ex ex "..." str
         code->instrInvokevirtual(
-            "java/lang/String", "concat",
-            "(Ljava/lang/String;)Ljava/lang/String;");
+            "java/lang/String"_ostr, "concat"_ostr,
+            "(Ljava/lang/String;)Ljava/lang/String;"_ostr);
         // stack: ex ex "..."
         code->loadLocalReference(0);
         // stack: ex ex "..." context
         code->instrInvokespecial(
-            "com/sun/star/uno/DeploymentException", "<init>",
-            "(Ljava/lang/String;Ljava/lang/Object;)V");
+            "com/sun/star/uno/DeploymentException"_ostr, "<init>"_ostr,
+            "(Ljava/lang/String;Ljava/lang/Object;)V"_ostr);
         // stack: ex
         ClassFile::Code::Position pos2 = code->getPosition();
         code->instrAthrow();
         addExceptionHandlers(
             &tree.getRoot(), tryStart, tryEnd, pos2, code.get());
         code->addException(
-            tryStart, tryEnd, pos1, "com/sun/star/uno/Exception");
+            tryStart, tryEnd, pos1, "com/sun/star/uno/Exception"_ostr);
         dependencies->insert("com.sun.star.uno.Exception");
         stack = std::max< sal_uInt16 >(stack, 4);
     }
@@ -2228,7 +2228,7 @@ void addConstructor(
         access,
         codemaker::java::translateUnoToJavaIdentifier(
             (constructor.defaultConstructor
-             ? OString("create") : codemaker::convertString(constructor.name)),
+             ? "create"_ostr : codemaker::convertString(constructor.name)),
             "method"),
         desc.getDescriptor(), code.get(), exc, desc.getSignature());
 }
@@ -2249,7 +2249,7 @@ void handleService(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
-            className, "java/lang/Object", ""));
+            className, "java/lang/Object"_ostr, ""_ostr));
     if (!entity->getConstructors().empty()) {
         OString realJavaBaseName(
             codemaker::convertString(entity->getBase()));
@@ -2268,26 +2268,26 @@ void handleService(
         // Synthetic castInstance method:
         {
             std::unique_ptr< ClassFile::Code > code(cf->newCode());
-            code->instrNew("com/sun/star/uno/Type");
+            code->instrNew("com/sun/star/uno/Type"_ostr);
             // stack: type
             code->instrDup();
             // stack: type type
             code->loadStringConstant(realJavaBaseName);
             // stack: type type "..."
             code->instrGetstatic(
-                "com/sun/star/uno/TypeClass", "INTERFACE",
-                "Lcom/sun/star/uno/TypeClass;");
+                "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
+                "Lcom/sun/star/uno/TypeClass;"_ostr);
             // stack: type type "..." INTERFACE
             code->instrInvokespecial(
-                "com/sun/star/uno/Type", "<init>",
-                "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+                "com/sun/star/uno/Type"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
             // stack: type
             code->loadLocalReference(0);
             // stack: type instance
             code->instrInvokestatic(
-                "com/sun/star/uno/UnoRuntime", "queryInterface",
+                "com/sun/star/uno/UnoRuntime"_ostr, "queryInterface"_ostr,
                 ("(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                 "Ljava/lang/Object;"));
+                 "Ljava/lang/Object;"_ostr));
             // stack: instance
             code->instrDup();
             // stack: instance instance
@@ -2297,7 +2297,7 @@ void handleService(
             code->branchHere(branch);
             code->instrPop();
             // stack: -
-            code->instrNew("com/sun/star/uno/DeploymentException");
+            code->instrNew("com/sun/star/uno/DeploymentException"_ostr);
             // stack: ex
             code->instrDup();
             // stack: ex ex
@@ -2308,8 +2308,8 @@ void handleService(
             code->loadLocalReference(1);
             // stack: ex ex "..." context
             code->instrInvokespecial(
-                "com/sun/star/uno/DeploymentException", "<init>",
-                "(Ljava/lang/String;Ljava/lang/Object;)V");
+                "com/sun/star/uno/DeploymentException"_ostr, "<init>"_ostr,
+                "(Ljava/lang/String;Ljava/lang/Object;)V"_ostr);
             // stack: ex
             code->instrAthrow();
             code->setMaxStackAndLocals(4, 2);
@@ -2317,10 +2317,10 @@ void handleService(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
                     | ClassFile::ACC_SYNTHETIC),
-                "$castInstance",
+                "$castInstance"_ostr,
                 ("(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
-                 "Ljava/lang/Object;"),
-                code.get(), std::vector< OString >(), "");
+                 "Ljava/lang/Object;"_ostr),
+                code.get(), std::vector< OString >(), ""_ostr);
         }
     }
     writeClassFile(options, className, *cf);
@@ -2348,7 +2348,7 @@ void handleSingleton(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
-            className, "java/lang/Object", ""));
+            className, "java/lang/Object"_ostr, ""_ostr));
     MethodDescriptor desc(manager, dependencies, entity->getBase(), nullptr, nullptr);
     desc.addParameter(u"com.sun.star.uno.XComponentContext", false, false, nullptr);
     std::unique_ptr< ClassFile::Code > code(cf->newCode());
@@ -2357,55 +2357,55 @@ void handleSingleton(
     code->loadStringConstant("/singletons/" + unoName);
     // stack: context "..."
     code->instrInvokeinterface(
-        "com/sun/star/uno/XComponentContext", "getValueByName",
-        "(Ljava/lang/String;)Ljava/lang/Object;", 2);
+        "com/sun/star/uno/XComponentContext"_ostr, "getValueByName"_ostr,
+        "(Ljava/lang/String;)Ljava/lang/Object;"_ostr, 2);
     // stack: value
     code->instrDup();
     // stack: value value
-    code->instrInstanceof("com/sun/star/uno/Any");
+    code->instrInstanceof("com/sun/star/uno/Any"_ostr);
     // stack: value 0/1
     ClassFile::Code::Branch branch1 = code->instrIfeq();
     // stack: value
-    code->instrCheckcast("com/sun/star/uno/Any");
+    code->instrCheckcast("com/sun/star/uno/Any"_ostr);
     // stack: value
     code->instrDup();
     // stack: value value
     code->instrInvokevirtual(
-        "com/sun/star/uno/Any", "getType", "()Lcom/sun/star/uno/Type;");
+        "com/sun/star/uno/Any"_ostr, "getType"_ostr, "()Lcom/sun/star/uno/Type;"_ostr);
     // stack: value type
     code->instrInvokevirtual(
-        "com/sun/star/uno/Type", "getTypeClass",
-        "()Lcom/sun/star/uno/TypeClass;");
+        "com/sun/star/uno/Type"_ostr, "getTypeClass"_ostr,
+        "()Lcom/sun/star/uno/TypeClass;"_ostr);
     // stack: value typeClass
     code->instrGetstatic(
-        "com/sun/star/uno/TypeClass", "INTERFACE",
-        "Lcom/sun/star/uno/TypeClass;");
+        "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
+        "Lcom/sun/star/uno/TypeClass;"_ostr);
     // stack: value typeClass INTERFACE
     ClassFile::Code::Branch branch2 = code->instrIfAcmpne();
     // stack: value
     code->instrInvokevirtual(
-        "com/sun/star/uno/Any", "getObject", "()Ljava/lang/Object;");
+        "com/sun/star/uno/Any"_ostr, "getObject"_ostr, "()Ljava/lang/Object;"_ostr);
     // stack: value
     code->branchHere(branch1);
-    code->instrNew("com/sun/star/uno/Type");
+    code->instrNew("com/sun/star/uno/Type"_ostr);
     // stack: value type
     code->instrDup();
     // stack: value type type
     code->loadStringConstant(realJavaBaseName);
     // stack: value type type "..."
     code->instrGetstatic(
-        "com/sun/star/uno/TypeClass", "INTERFACE",
-        "Lcom/sun/star/uno/TypeClass;");
+        "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
+        "Lcom/sun/star/uno/TypeClass;"_ostr);
     // stack: value type type "..." INTERFACE
     code->instrInvokespecial(
-        "com/sun/star/uno/Type", "<init>",
-        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+        "com/sun/star/uno/Type"_ostr, "<init>"_ostr,
+        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
     // stack: value type
     code->instrSwap();
     // stack: type value
     code->instrInvokestatic(
-        "com/sun/star/uno/UnoRuntime", "queryInterface",
-        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)Ljava/lang/Object;");
+        "com/sun/star/uno/UnoRuntime"_ostr, "queryInterface"_ostr,
+        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)Ljava/lang/Object;"_ostr);
     // stack: instance
     code->instrDup();
     // stack: instance instance
@@ -2418,7 +2418,7 @@ void handleSingleton(
     code->branchHere(branch3);
     code->instrPop();
     // stack: -
-    code->instrNew("com/sun/star/uno/DeploymentException");
+    code->instrNew("com/sun/star/uno/DeploymentException"_ostr);
     // stack: ex
     code->instrDup();
     // stack: ex ex
@@ -2429,15 +2429,15 @@ void handleSingleton(
     code->loadLocalReference(0);
     // stack: ex ex "..." context
     code->instrInvokespecial(
-        "com/sun/star/uno/DeploymentException", "<init>",
-        "(Ljava/lang/String;Ljava/lang/Object;)V");
+        "com/sun/star/uno/DeploymentException"_ostr, "<init>"_ostr,
+        "(Ljava/lang/String;Ljava/lang/Object;)V"_ostr);
     // stack: ex
     code->instrAthrow();
     code->setMaxStackAndLocals(5, 1);
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
-        "get", desc.getDescriptor(), code.get(), std::vector< OString >(),
+        "get"_ostr, desc.getDescriptor(), code.get(), std::vector< OString >(),
         desc.getSignature());
     writeClassFile(options, className, *cf);
 }
@@ -2529,7 +2529,7 @@ void produce(
         throw CannotDumpException(
             "unexpected entity \"" + name + "\" in call to produce");
     }
-    if (!options.isValid("-nD")) {
+    if (!options.isValid("-nD"_ostr)) {
         for (const OUString& d : deps) {
             produce(d, manager, generated, options);
         }

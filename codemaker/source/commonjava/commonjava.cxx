@@ -42,21 +42,21 @@ OString translateUnoToJavaType(
     OStringBuffer buf(128);
     if (sort <= codemaker::UnoType::Sort::Any) {
         OString const javaTypes[static_cast<int>(codemaker::UnoType::Sort::Any) + 1][2] = {
-            { "void", "java/lang/Void" },
-            { "boolean", "java/lang/Boolean" },
-            { "byte", "java/lang/Byte" },
-            { "short", "java/lang/Short" },
-            { "short", "java/lang/Short" },
-            { "int",  "java/lang/Integer" },
-            { "int",  "java/lang/Integer" },
-            { "long", "java/lang/Long" },
-            { "long", "java/lang/Long" },
-            { "float", "java/lang/Float" },
-            { "double", "java/lang/Double" },
-            { "char", "java/lang/Character" },
-            { "java/lang/String", "java/lang/String" },
-            { "com/sun/star/uno/Type", "com/sun/star/uno/Type" },
-            { "java/lang/Object", "java/lang/Object" } };
+            { "void"_ostr, "java/lang/Void"_ostr },
+            { "boolean"_ostr, "java/lang/Boolean"_ostr },
+            { "byte"_ostr, "java/lang/Byte"_ostr },
+            { "short"_ostr, "java/lang/Short"_ostr },
+            { "short"_ostr, "java/lang/Short"_ostr },
+            { "int"_ostr,  "java/lang/Integer"_ostr },
+            { "int"_ostr,  "java/lang/Integer"_ostr },
+            { "long"_ostr, "java/lang/Long"_ostr },
+            { "long"_ostr, "java/lang/Long"_ostr },
+            { "float"_ostr, "java/lang/Float"_ostr },
+            { "double"_ostr, "java/lang/Double"_ostr },
+            { "char"_ostr, "java/lang/Character"_ostr },
+            { "java/lang/String"_ostr, "java/lang/String"_ostr },
+            { "com/sun/star/uno/Type"_ostr, "com/sun/star/uno/Type"_ostr },
+            { "java/lang/Object"_ostr, "java/lang/Object"_ostr } };
         buf.append(javaTypes[static_cast<int>(sort)][referenceType]);
     } else {
         if (nucleus == "com/sun/star/uno/XInterface") {

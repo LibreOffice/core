@@ -33,7 +33,7 @@ const OString& Options::getOption(const OString& option) const
     OptionMap::const_iterator i(m_options.find(option));
     if (i == m_options.end())
     {
-        throw IllegalArgument("Option is not valid or currently not set.");
+        throw IllegalArgument("Option is not valid or currently not set."_ostr);
     }
     return i->second;
 }

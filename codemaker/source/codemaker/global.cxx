@@ -59,7 +59,7 @@ OString getTempDir(const OString& sFileName)
     if ((index=sFileName.lastIndexOf('\\')) > 0)
         return sFileName.copy(0, index);
 #endif
-    return ".";
+    return "."_ostr;
 }
 
 OString createFileNameFromType( const OString& destination,
@@ -272,7 +272,7 @@ bool FileStream::isValid() const
 
 void FileStream::createTempFile(const OString& sPath)
 {
-    OString sTmp(".");
+    OString sTmp("."_ostr);
     OUString sTmpPath;
     OUString sTmpName;
 
