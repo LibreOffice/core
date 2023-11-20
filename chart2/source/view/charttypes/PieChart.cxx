@@ -996,6 +996,11 @@ void PieChart::createShapes()
             sal_Int32 nEnd = pDataSrc->getNPoints(pSeries, SubPieType::LEFT);
             double compFrac = pDataSrc->getData(pSeries, nEnd - 1,
                     SubPieType::LEFT) / aParam.mfLogicYSum;
+            // The following isn't quite right. The tangent points on the left
+            // pie are only at pi/2 and -pi/2 for composite wedges over 1/2 the
+            // total if left and right pies are the same diameter. And the
+            // threshold of 1/2 isn't quite right either. So there
+            // really should be a more sophisticated approach here. TODO
             if (compFrac < 0.5) {
                 // Translated, per below
                 xl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale *
