@@ -28,6 +28,7 @@
 #include <formatflysplit.hxx>
 #include <itabenum.hxx>
 #include <frmmgr.hxx>
+#include <UndoManager.hxx>
 
 /// Covers sw/source/core/frmedt/ fixes.
 class SwCoreFrmedtTest : public SwModelTestBase
@@ -203,6 +204,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyUnfloat)
     // Given a document with a floating table:
     createSwDoc();
     SwDoc* pDoc = getSwDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc->GetUndoManager().IsUndoEnabled());
+    pDoc->GetUndoManager().EnableUndo(false);
     SwFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFlyFormats.empty());
     // Insert a table:
@@ -225,6 +228,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyUnfloat)
     pWrtShell->EndAllAction();
     CPPUNIT_ASSERT(!rFlyFormats.empty());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
+    pDoc->GetUndoManager().EnableUndo(true);
 
     // When marking that frame and unfloating it:
     selectShape(1);
@@ -234,6 +238,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyUnfloat)
     // Without the accompanying fix in place (empty SwFEShell::UnfloatFlyFrame()), this test would
     // have failed, the frame was not removed.
     CPPUNIT_ASSERT(rFlyFormats.empty());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
+
+    // When undoing the conversion to inline:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetUndoManager().GetUndoActionCount());
+    pDoc->GetUndoManager().Undo();
+
+    // Then the undo stack had 2 undo actions and undo-all crashed.
+    CPPUNIT_ASSERT(!rFlyFormats.empty());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
 }
 
