@@ -32,13 +32,20 @@ class SwMailConfigPage final : public SfxTabPage
     std::unique_ptr<SwMailMergeConfigItem>  m_pConfigItem;
 
     std::unique_ptr<weld::Entry> m_xDisplayNameED;
+    std::unique_ptr<weld::Widget> m_xDisplayNameImg;
     std::unique_ptr<weld::Entry> m_xAddressED;
+    std::unique_ptr<weld::Widget> m_xAddressImg;
     std::unique_ptr<weld::CheckButton> m_xReplyToCB;
+    std::unique_ptr<weld::Widget> m_xReplyToCBImg;
     std::unique_ptr<weld::Label> m_xReplyToFT;
     std::unique_ptr<weld::Entry> m_xReplyToED;
+    std::unique_ptr<weld::Widget> m_xReplyToImg;
     std::unique_ptr<weld::Entry> m_xServerED;
+    std::unique_ptr<weld::Widget> m_xServerImg;
     std::unique_ptr<weld::SpinButton> m_xPortNF;
+    std::unique_ptr<weld::Widget> m_xPortImg;
     std::unique_ptr<weld::CheckButton> m_xSecureCB;
+    std::unique_ptr<weld::Widget> m_xSecureImg;
     std::unique_ptr<weld::Button> m_xServerAuthenticationPB;
     std::unique_ptr<weld::Button> m_xTestPB;
 
