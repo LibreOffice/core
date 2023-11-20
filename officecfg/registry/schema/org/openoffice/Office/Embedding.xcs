@@ -121,11 +121,6 @@
         <desc>Contains conversion table from MimeType to ClassID. MimeType is used as a name for entry.</desc>
       </info>
     </group>
-    <group oor:name="UserFactories" oor:extensible="true">
-      <info>
-        <desc>List of additional factories that can be used to create embedded object.</desc>
-      </info>
-    </group>
     <set oor:name="ObjectNames" oor:node-type="ObjectName">
       <info>
         <desc>List of object names to be used in GUI and ClassIDs.</desc>
