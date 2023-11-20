@@ -83,7 +83,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxMasterPageCache;
     std::unique_ptr<weld::CheckButton> m_xCbxCopy;
     std::unique_ptr<weld::CheckButton> m_xCbxMarkedHitMovesAlways;
-    std::unique_ptr<weld::Frame> m_xPresentationFrame;
 
     std::unique_ptr<weld::ComboBox> m_xLbMetric;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldTabstop;

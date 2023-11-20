@@ -203,7 +203,6 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , m_xCbxMasterPageCache(m_xBuilder->weld_check_button("backgroundback"))
     , m_xCbxCopy(m_xBuilder->weld_check_button("copywhenmove"))
     , m_xCbxMarkedHitMovesAlways(m_xBuilder->weld_check_button("objalwymov"))
-    , m_xPresentationFrame(m_xBuilder->weld_frame("presentationframe"))
     , m_xLbMetric(m_xBuilder->weld_combo_box("units"))
     , m_xMtrFldTabstop(m_xBuilder->weld_metric_spin_button("metricFields", FieldUnit::MM))
     , m_xCbxCompatibility(m_xBuilder->weld_check_button("cbCompatibility"))
@@ -524,7 +523,6 @@ void SdTpOptionsMisc::SetDrawMode()
     m_xCbxCompatibility->hide();
     m_xNewDocLb->hide();
     m_xCbScale->show();
-    m_xPresentationFrame->hide();
     m_xMtrFldInfo1->hide();
     m_xMtrFldInfo2->hide();
     m_xWidthLb->hide();
