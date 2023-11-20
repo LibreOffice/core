@@ -485,7 +485,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         if ( pReqArgs->GetItemState( nWhich, true, &pAttr ) == SfxItemState::SET )
                             aNewSet.Put( *pAttr );
 
-                    pTabViewShell->ApplyAttributes( &aNewSet, &aEmptySet );
+                    pTabViewShell->ApplyAttributes( aNewSet, aEmptySet );
 
                     rReq.Done();
                 }

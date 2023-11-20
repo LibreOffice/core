@@ -507,7 +507,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     SfxItemPool* pDocPool = GetViewData().GetDocument().GetPool();
                     SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aNewSet( *pDocPool );
                     aNewSet.Put( *pItem );
-                    pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet );
+                    pTabViewShell->ApplyAttributes( aNewSet, rOldSet );
                 }
             }
             break;
@@ -1179,7 +1179,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     }
 
                     aOldSet.Put( rBorderAttr );
-                    pTabViewShell->ApplyAttributes( &aNewSet, &aOldSet );
+                    pTabViewShell->ApplyAttributes( aNewSet, aOldSet );
                 }
                 break;
 
@@ -1198,7 +1198,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                             aItem.SetLine(pNewAttrs->Get(ATTR_BORDER_TLBR).GetLine());
                             aNewSet.Put(aItem);
                             rReq.AppendItem(aItem);
-                            pTabViewShell->ApplyAttributes(&aNewSet, &aOldSet);
+                            pTabViewShell->ApplyAttributes(aNewSet, aOldSet);
                         }
                     }
                     else // if( nSlot == SID_ATTR_BORDER_DIAG_BLTR )
@@ -1209,7 +1209,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                             aItem.SetLine(pNewAttrs->Get(ATTR_BORDER_BLTR).GetLine());
                             aNewSet.Put(aItem);
                             rReq.AppendItem(aItem);
-                            pTabViewShell->ApplyAttributes(&aNewSet, &aOldSet);
+                            pTabViewShell->ApplyAttributes(aNewSet, aOldSet);
                         }
                     }
 

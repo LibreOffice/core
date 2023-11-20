@@ -993,8 +993,8 @@ void ScViewFunc::GetSelectionFrame(
 //
 //  complete set ( ATTR_STARTINDEX, ATTR_ENDINDEX )
 
-void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
-                                  const SfxItemSet* pOldSet,
+void ScViewFunc::ApplyAttributes( const SfxItemSet& rDialogSet,
+                                  const SfxItemSet& rOldSet,
                                   bool bAdjustBlockHeight)
 {
     // not editable because of matrix only? attribute OK nonetheless
@@ -1005,16 +1005,16 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         return;
     }
 
-    ScPatternAttr aOldAttrs(( SfxItemSet(*pOldSet) ));
-    ScPatternAttr aNewAttrs(( SfxItemSet(*pDialogSet) ));
+    ScPatternAttr aOldAttrs(( SfxItemSet(rOldSet) ));
+    ScPatternAttr aNewAttrs(( SfxItemSet(rDialogSet) ));
     aNewAttrs.DeleteUnchanged( &aOldAttrs );
 
-    if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SfxItemState::SET )
+    if ( rDialogSet.GetItemState( ATTR_VALUE_FORMAT ) == SfxItemState::SET )
     {   // don't reset to default SYSTEM GENERAL if not intended
         sal_uInt32 nOldFormat =
-            pOldSet->Get( ATTR_VALUE_FORMAT ).GetValue();
+            rOldSet.Get( ATTR_VALUE_FORMAT ).GetValue();
         sal_uInt32 nNewFormat =
-            pDialogSet->Get( ATTR_VALUE_FORMAT ).GetValue();
+            rDialogSet.Get( ATTR_VALUE_FORMAT ).GetValue();
         if ( nNewFormat != nOldFormat )
         {
             SvNumberFormatter* pFormatter =
@@ -1039,14 +1039,14 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         }
     }
 
-    if (pDialogSet->HasItem(ATTR_FONT_LANGUAGE))
+    if (rDialogSet.HasItem(ATTR_FONT_LANGUAGE))
         // font language has changed.  Redo the online spelling.
         ResetAutoSpell();
 
-    const SvxBoxItem&     rOldOuter = pOldSet->Get(ATTR_BORDER);
-    const SvxBoxItem&     rNewOuter = pDialogSet->Get(ATTR_BORDER);
-    const SvxBoxInfoItem& rOldInner = pOldSet->Get(ATTR_BORDER_INNER);
-    const SvxBoxInfoItem& rNewInner = pDialogSet->Get(ATTR_BORDER_INNER);
+    const SvxBoxItem&     rOldOuter = rOldSet.Get(ATTR_BORDER);
+    const SvxBoxItem&     rNewOuter = rDialogSet.Get(ATTR_BORDER);
+    const SvxBoxInfoItem& rOldInner = rOldSet.Get(ATTR_BORDER_INNER);
+    const SvxBoxInfoItem& rNewInner = rDialogSet.Get(ATTR_BORDER_INNER);
     SfxItemSet&           rNewSet   = aNewAttrs.GetItemSet();
     SfxItemPool*          pNewPool  = rNewSet.GetPool();
 
@@ -1062,8 +1062,8 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
      *
      */
 
-    bool bFrame =    (pDialogSet->GetItemState( ATTR_BORDER ) != SfxItemState::DEFAULT)
-                  || (pDialogSet->GetItemState( ATTR_BORDER_INNER ) != SfxItemState::DEFAULT);
+    bool bFrame =    (rDialogSet.GetItemState( ATTR_BORDER ) != SfxItemState::DEFAULT)
+                  || (rDialogSet.GetItemState( ATTR_BORDER_INNER ) != SfxItemState::DEFAULT);
 
     if (SfxPoolItem::areSame(rNewOuter, rOldOuter) && SfxPoolItem::areSame(rNewInner, rOldInner))
         bFrame = false;

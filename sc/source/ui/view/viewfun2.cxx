@@ -3434,7 +3434,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
             aNewSet.Put( aBLTRItem );
         }
 
-        ApplyAttributes( &aNewSet, &aOldSet );
+        ApplyAttributes( aNewSet, aOldSet );
     }
     else // if ( eItemState == SfxItemState::DONTCARE )
     {

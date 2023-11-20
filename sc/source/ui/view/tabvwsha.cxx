@@ -622,7 +622,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
                 UpdateNumberFormatter(*pItem);
             }
 
-            ApplyAttributes(pOutSet, pOldSet.get());
+            ApplyAttributes(*pOutSet, *pOldSet);
 
             pRequest->Done(*pOutSet);
         }

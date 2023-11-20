@@ -172,7 +172,7 @@ public:
     bool            InsertName( const OUString& rName, const OUString& rSymbol,
                                 const OUString& rType );
 
-    void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet, bool bAdjustBlockHeight = true );
+    void            ApplyAttributes( const SfxItemSet& rDialogSet, const SfxItemSet& rOldSet, bool bAdjustBlockHeight = true );
     void            ApplyAttr( const SfxPoolItem& rAttrItem, bool bAdjustBlockHeight = true );
 
     void            ApplySelectionPattern( const ScPatternAttr& rAttr,
