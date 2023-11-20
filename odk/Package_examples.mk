@@ -178,6 +178,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/FirstSteps/FirstUnoContact/java/build.xml \
     DevelopersGuide/FirstSteps/FirstUnoContact/basic/FirstUnoContact.bas \
     DevelopersGuide/FirstSteps/FirstUnoContact/python/FirstUnoContact.py \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/cxx/FirstLoadComponent.cxx \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/cxx/Makefile \
     DevelopersGuide/FirstSteps/FirstLoadComponent/java/FirstLoadComponent.java \
     DevelopersGuide/FirstSteps/FirstLoadComponent/java/Makefile \
     DevelopersGuide/FirstSteps/FirstLoadComponent/basic/FirstLoadComponent.bas \

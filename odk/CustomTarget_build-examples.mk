@@ -11,6 +11,7 @@ my_example_dirs = \
     CLI/CSharp/Spreadsheet \
     CLI/VB.NET/WriterDemo \
     DevelopersGuide/FirstSteps/FirstUnoContact/cxx \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/cxx \
     DevelopersGuide/BasicAndDialogs/ToolkitControls \
     DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp \
     DevelopersGuide/Components/CppComponent \
