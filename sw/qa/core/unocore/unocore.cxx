@@ -1025,6 +1025,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf149555)
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER 2"), xHeaderText->getString());
 }
 
+// just care that it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf108272Crash)
+{
+    createSwDoc("tdf108272-1-minimal.docx");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

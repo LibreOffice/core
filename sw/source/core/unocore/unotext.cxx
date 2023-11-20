@@ -1579,6 +1579,7 @@ SwXText::convertToTextFrame(
             (pStartStartNode != GetStartNode()))
         {
             // if not - remove the additional paragraphs and throw
+            oAnchorCheckPam.reset(); // clear SwIndex before deleting nodes
             if (bParaBeforeInserted)
             {
                 SwCursor aDelete(*pStartPam->GetPoint(), nullptr);
