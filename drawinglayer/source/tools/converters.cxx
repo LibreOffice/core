@@ -268,7 +268,22 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
         // Now that vcl supports bitmaps with an alpha channel, only apply
         // this correction to bitmaps without an alpha channel.
         if (pContent->GetBitCount() < 32)
+        {
             aRetval.RemoveBlendedStartColor(COL_BLACK, aAlpha);
+        }
+        else
+        {
+            // tdf#157558 invert and remove blended white color
+            // Before commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
+            // RemoveBlendedStartColor(COL_BLACK, aAlpha) would darken
+            // the bitmap when running a slideshow, printing, or exporting
+            // to PDF. To get the same effect, the alpha mask must be
+            // inverted, RemoveBlendedStartColor(COL_WHITE, aAlpha)
+            // called, and the alpha mask uninverted.
+            aAlpha.Invert();
+            aRetval.RemoveBlendedStartColor(COL_WHITE, aAlpha);
+            aAlpha.Invert();
+        }
         // return combined result
         return BitmapEx(aRetval, aAlpha);
     }
