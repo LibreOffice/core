@@ -703,7 +703,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     OString aClassNameStr(OUStringToOString(aClassName, RTL_TEXTENCODING_ASCII_US));
     rStrm.WriteOString( "Object( " )
          .WriteOString( OString::number(reinterpret_cast<sal_IntPtr>(this)) ).WriteOString( "=='" )
-         .WriteOString( aNameStr.isEmpty() ? "<unnamed>" : aNameStr ).WriteOString( "', " )
+         .WriteOString( aNameStr.isEmpty() ? "<unnamed>"_ostr : aNameStr ).WriteOString( "', " )
          .WriteOString( "of class '" ).WriteOString( aClassNameStr ).WriteOString( "', " )
          .WriteOString( "counts " )
          .WriteOString( OString::number(GetRefCount()) )
@@ -713,7 +713,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
         OString aParentNameStr(OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
         rStrm.WriteOString( "in parent " )
              .WriteOString( OString::number(reinterpret_cast<sal_IntPtr>(GetParent())) )
-             .WriteOString( "=='" ).WriteOString( aParentNameStr.isEmpty() ? "<unnamed>" : aParentNameStr ).WriteOString( "'" );
+             .WriteOString( "=='" ).WriteOString( aParentNameStr.isEmpty() ? "<unnamed>"_ostr : aParentNameStr ).WriteOString( "'" );
     }
     else
     {
