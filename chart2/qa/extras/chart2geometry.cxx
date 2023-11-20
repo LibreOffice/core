@@ -142,12 +142,12 @@ void Chart2GeometryTest::testTdf135184RoundLineCap3()
 
     static constexpr OString sDash("/c:spPr/a:ln/a:prstDash"_ostr);
     // chart area
-    assertXPath(pXmlDoc, "/c:chartSpace" + sDash, "val", "dashDot");
+    assertXPath(pXmlDoc, "/c:chartSpace" + sDash, "val"_ostr, "dashDot");
     // data series line
     static constexpr OString sStart("/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser"_ostr);
-    assertXPath(pXmlDoc, sStart + sDash, "val", "dash");
+    assertXPath(pXmlDoc, sStart + sDash, "val"_ostr, "dash");
     // regression-curve (trendline)
-    assertXPath(pXmlDoc, sStart + "/c:trendline" + sDash, "val", "sysDot");
+    assertXPath(pXmlDoc, sStart + "/c:trendline" + sDash, "val"_ostr, "sysDot");
 }
 
 void Chart2GeometryTest::testTdf135184RoundLineCap4()
@@ -160,10 +160,10 @@ void Chart2GeometryTest::testTdf135184RoundLineCap4()
 
     static constexpr OString sChartStart("/c:chartSpace/c:chart"_ostr);
     static constexpr OString sDash("/c:spPr/a:ln/a:prstDash"_ostr);
-    assertXPath(pXmlDoc, sChartStart + "/c:legend" + sDash, "val", "sysDot");
+    assertXPath(pXmlDoc, sChartStart + "/c:legend" + sDash, "val"_ostr, "sysDot");
     const OString sSeries(sChartStart + "/c:plotArea/c:pieChart/c:ser/c:dPt[3]");
-    assertXPath(pXmlDoc, sSeries + sDash, "val", "dash");
-    assertXPath(pXmlDoc, sChartStart + "/c:title" + sDash, "val", "dashDot");
+    assertXPath(pXmlDoc, sSeries + sDash, "val"_ostr, "dash");
+    assertXPath(pXmlDoc, sChartStart + "/c:title" + sDash, "val"_ostr, "dashDot");
 }
 
 void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
@@ -183,10 +183,10 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    OString sPathStart("//c:chartSpace/c:spPr/a:gradFill");
+    OString sPathStart("//c:chartSpace/c:spPr/a:gradFill"_ostr);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "30000");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "30000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val"_ostr, "30000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val"_ostr, "30000");
 }
 
 void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
@@ -210,7 +210,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName = getXPathContent(
         pXmlDoc,
-        "//office:document-content/office:body/office:chart/chart:chart/@chart:style-name");
+        "//office:document-content/office:body/office:chart/chart:chart/@chart:style-name"_ostr);
     const OString sStylePath(
         "//office:document-content/office:automatic-styles/style:style[@style:name='"
         + OU2O(sOUChartStyleName) + "']");
@@ -244,10 +244,10 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_export()
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    OString sPathStart("//c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
+    OString sPathStart("//c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill"_ostr);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2); //linear
     // MS Office has opacity, so 100% transparency is val="0"
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "0");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val"_ostr, "0");
     // no element for 0% transparent
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", 0);
 }
@@ -264,7 +264,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName
         = getXPathContent(pXmlDoc, "//office:document-content/office:body/office:chart/chart:chart/"
-                                   "chart:plot-area/chart:wall/@chart:style-name");
+                                   "chart:plot-area/chart:wall/@chart:style-name"_ostr);
     const OString sStylePath(
         "//office:document-content/office:automatic-styles/style:style[@style:name='"
         + OU2O(sOUChartStyleName) + "']");
@@ -296,22 +296,22 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    OString sPathStart("//c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill");
+    OString sPathStart("//c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill"_ostr);
 
     // MCGR: three entries due to axial being mirrored+expanded to linear
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 3);
 
     // MCGR: start entry, no transparence, pos zero
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]", "pos"_ostr, "0");
 
     // MCGR: middle entry, 100% transparence, pos 0.5
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "0");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos", "50000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val"_ostr, "0");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos"_ostr, "50000");
 
     // MCGR: end entry, no transparence, pos 1.0
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]/a:srgbClr/a:alpha", 0);
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]", "pos", "100000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]", "pos"_ostr, "100000");
 }
 
 void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
@@ -326,7 +326,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName
         = getXPathContent(pXmlDoc, "//office:document-content/office:body/office:chart/chart:chart/"
-                                   "chart:legend/@chart:style-name");
+                                   "chart:legend/@chart:style-name"_ostr);
     const OString sStylePath(
         "//office:document-content/office:automatic-styles/style:style[@style:name='"
         + OU2O(sOUChartStyleName) + "']");
@@ -448,7 +448,7 @@ void Chart2GeometryTest::testTdf135366LabelExport()
     // Find label style
     const OUString sOULabelStyleName = getXPathContent(
         pXmlDoc, "//office:document-content/office:body/office:chart/chart:chart/chart:plot-area"
-                 "/chart:series/chart:data-point[1]/chart:data-label/@chart:style-name");
+                 "/chart:series/chart:data-point[1]/chart:data-label/@chart:style-name"_ostr);
 
     // Verify content of graphic properties of label style
     const OString sStylePath(
