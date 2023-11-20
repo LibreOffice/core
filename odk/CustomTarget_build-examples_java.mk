@@ -19,7 +19,9 @@ my_example_dirs_java = \
     DevelopersGuide/Config \
     DevelopersGuide/Database \
     DevelopersGuide/Drawing \
-    DevelopersGuide/FirstSteps \
+    DevelopersGuide/FirstSteps/FirstUnoContact/java \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/java \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/java \
     DevelopersGuide/Forms \
     DevelopersGuide/GUI \
     DevelopersGuide/OfficeBean \

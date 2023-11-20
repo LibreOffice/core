@@ -19,8 +19,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     CLI/CSharp/Spreadsheet/ViewSample.cs \
     CLI/VB.NET/WriterDemo/Makefile \
     CLI/VB.NET/WriterDemo/WriterDemo.vb \
-    DevelopersGuide/FirstSteps/cxx/FirstUnoContact.cxx \
-    DevelopersGuide/FirstSteps/cxx/Makefile \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs/CreatingDialogs.odt \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs/Makefile \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs/SampleDialog.java \
@@ -173,11 +171,21 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/Extensions/DialogWithHelp/help/en/com.foocorp.foo-ext/page1.xhp \
     DevelopersGuide/Extensions/DialogWithHelp/help/en/com.foocorp.foo-ext/page2.xhp \
     DevelopersGuide/Extensions/DialogWithHelp/help/en/com.foocorp.foo-ext/subfolder/anotherpage.xhp \
-    DevelopersGuide/FirstSteps/FirstLoadComponent.java \
-    DevelopersGuide/FirstSteps/FirstUnoContact.java \
-    DevelopersGuide/FirstSteps/HelloTextTableShape.java \
-    DevelopersGuide/FirstSteps/Makefile \
-    DevelopersGuide/FirstSteps/build_FirstUnoContact.xml \
+    DevelopersGuide/FirstSteps/FirstUnoContact/cxx/FirstUnoContact.cxx \
+    DevelopersGuide/FirstSteps/FirstUnoContact/cxx/Makefile \
+    DevelopersGuide/FirstSteps/FirstUnoContact/java/FirstUnoContact.java \
+    DevelopersGuide/FirstSteps/FirstUnoContact/java/Makefile \
+    DevelopersGuide/FirstSteps/FirstUnoContact/java/build.xml \
+    DevelopersGuide/FirstSteps/FirstUnoContact/basic/FirstUnoContact.bas \
+    DevelopersGuide/FirstSteps/FirstUnoContact/python/FirstUnoContact.py \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/java/FirstLoadComponent.java \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/java/Makefile \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/basic/FirstLoadComponent.bas \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/python/FirstLoadComponent.py \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/java/HelloTextTableShape.java \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/java/Makefile \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/basic/HelloTextTableShape.bas \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/python/HelloTextTableShape.py \
     DevelopersGuide/Forms/BooleanValidator.java \
     DevelopersGuide/Forms/ButtonOperator.java \
     DevelopersGuide/Forms/ComponentTreeTraversal.java \

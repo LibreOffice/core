@@ -32,69 +32,61 @@
 #     
 #**************************************************************************
 
-# Builds the FirstUnoContact example of the SDK.
+# Builds the FirstSteps examples of the Developers Guide.
 
-PRJ=../../../..
+PRJ=../../../../..
 SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
 
 # Define non-platform/compiler specific settings
+EXAMPLE_NAME=FirstUnoContact
+OUT_APP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
+
 APP_NAME=FirstUnoContact
+APP_JAR=$(OUT_APP_CLASS)/$(APP_NAME).jar
 
-OUT_APP_INC = $(OUT_INC)/$(APP_NAME)
-OUT_APP_GEN = $(OUT_MISC)/$(APP_NAME)
-OUT_APP_OBJ=$(OUT_OBJ)/$(APP_NAME)
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
+		$(PATH_SEPARATOR)$(OUT_APP_CLASS))
 
-CXXFILES = FirstUnoContact.cxx
-
-OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
 
 # Targets
 .PHONY: ALL
 ALL : \
-	FirstUnoContact
+	$(EXAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_APP_OBJ)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
+$(OUT_APP_CLASS)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_APP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_APP_CLASS) $<
 
-$(OUT_BIN)/_$(APP_NAME)$(EXE_EXT) : $(OUT_APP_OBJ)/$(APP_NAME).$(OBJ_EXT)
+$(OUT_APP_CLASS)/%.mf :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(MKDIR) $(subst /,$(PS),$(OUT_APP_GEN))
-ifeq "$(OS)" "WIN"
-	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_APP_GEN)/$(basename $(@F)).map \
-	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB)
-else
-	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
-	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STDC++LIB)
-ifeq "$(OS)" "MACOSX"
-	$(INSTALL_NAME_URELIBS_BIN)  $@
-endif
-endif
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
 
-$(OUT_BIN)/$(APP_NAME)$(EXE_EXT) : $(OUT_BIN)/_$(APP_NAME)$(EXE_EXT)
+$(OUT_APP_CLASS)/%.jar : $(OUT_APP_CLASS)/%.mf $(OUT_APP_CLASS)/%.class
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) $(subst /,$(PS),$(BIN_DIR)/unoapploader$(EXE_EXT)) $(subst /,$(PS),$@)
-# workaround for touch problem under Windows with full qualified paths
-	make -t $@
+	+cd $(subst /,$(PS),$(OUT_APP_CLASS)) && $(SDK_JAR) cvfm $(@F) $*.mf $*.class
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
 
-FirstUnoContact : $(OUT_BIN)/$(APP_NAME)$(EXE_EXT)
+$(APP_JAR) : $(OUT_APP_CLASS)/$(APP_NAME).mf $(OUT_APP_CLASS)/$(APP_NAME).class
+
+$(EXAMPLE_NAME) : $(APP_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo $(MAKE) FirstUnoContact.run
-	@echo --------------------------------------------------------------------------------	
+	@echo $(MAKE) -f Example_Java.mk $(APP_NAME).run
+	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_BIN)/FirstUnoContact$(EXE_EXT)
-	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
+%.run: $(OUT_APP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_INC))
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_GEN))
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_OBJ))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/*SimpleBootstrap*))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_CLASS))

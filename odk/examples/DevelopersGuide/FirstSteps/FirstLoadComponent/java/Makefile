@@ -34,22 +34,18 @@
 
 # Builds the FirstSteps examples of the Developers Guide.
 
-PRJ=../../..
+PRJ=../../../../..
 SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
 
 # Define non-platform/compiler specific settings
-EXAMPLE_NAME=FirstStepsExamples
+EXAMPLE_NAME=FirstLoadComponent
 OUT_APP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
-APP1_NAME=FirstUnoContact
-APP1_JAR=$(OUT_APP_CLASS)/$(APP1_NAME).jar
-APP2_NAME=FirstLoadComponent
-APP2_JAR=$(OUT_APP_CLASS)/$(APP2_NAME).jar
-APP3_NAME=HelloTextTableShape
-APP3_JAR=$(OUT_APP_CLASS)/$(APP3_NAME).jar
+APP_NAME=FirstLoadComponent
+APP_JAR=$(OUT_APP_CLASS)/$(APP_NAME).jar
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_APP_CLASS))
@@ -79,17 +75,13 @@ $(OUT_APP_CLASS)/%.jar : $(OUT_APP_CLASS)/%.mf $(OUT_APP_CLASS)/%.class
 	+cd $(subst /,$(PS),$(OUT_APP_CLASS)) && $(SDK_JAR) cvfm $(@F) $*.mf $*.class
 	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
 
-$(APP1_JAR) : $(OUT_APP_CLASS)/$(APP1_NAME).mf $(OUT_APP_CLASS)/$(APP1_NAME).class
-$(APP2_JAR) : $(OUT_APP_CLASS)/$(APP2_NAME).mf $(OUT_APP_CLASS)/$(APP2_NAME).class
-$(APP3_JAR) : $(OUT_APP_CLASS)/$(APP3_NAME).mf $(OUT_APP_CLASS)/$(APP3_NAME).class
+$(APP_JAR) : $(OUT_APP_CLASS)/$(APP_NAME).mf $(OUT_APP_CLASS)/$(APP_NAME).class
 
-$(EXAMPLE_NAME) : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR)
+$(EXAMPLE_NAME) : $(APP_JAR)
 	@echo --------------------------------------------------------------------------------
-	@echo Please use one of the following commands to execute the examples!
+	@echo Please use the following command to execute the example!
 	@echo -
-	@echo $(MAKE) $(APP1_NAME).run
-	@echo $(MAKE) $(APP2_NAME).run
-	@echo $(MAKE) $(APP3_NAME).run
+	@echo $(MAKE) -f Example_Java.mk $(APP_NAME).run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_APP_CLASS)/%.jar
