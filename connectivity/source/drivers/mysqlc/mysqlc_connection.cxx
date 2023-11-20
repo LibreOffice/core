@@ -73,7 +73,7 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
     mysql_library_init(0, nullptr, nullptr);
     mysql_init(&m_mysql);
 
-    OString charset_name{ "utf8mb4" };
+    OString charset_name{ "utf8mb4"_ostr };
     mysql_options(&m_mysql, MYSQL_SET_CHARSET_NAME, charset_name.getStr());
 
     sal_Int32 nIndex;
@@ -192,9 +192,8 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
                            *this, OUString(), 0, Any());
     }
 
-    lcl_executeUpdate(&m_mysql,
-                      OString{ "SET session sql_mode='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO'" });
-    lcl_executeUpdate(&m_mysql, OString{ "SET NAMES utf8mb4" });
+    lcl_executeUpdate(&m_mysql, "SET session sql_mode='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO'"_ostr);
+    lcl_executeUpdate(&m_mysql, "SET NAMES utf8mb4"_ostr);
 }
 
 OUString OConnection::getImplementationName()

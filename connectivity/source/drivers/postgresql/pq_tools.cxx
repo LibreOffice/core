@@ -530,7 +530,7 @@ void tokenizeSQL( const OString & sql, std::vector< OString > &vec  )
                 {
                     if( i - start )
                         vec.push_back( OString( &sql.getStr()[start], i - start ) );
-                    vec.push_back( OString( "." ) );
+                    vec.push_back( "."_ostr );
                     start = i + 1;
                 }
             }

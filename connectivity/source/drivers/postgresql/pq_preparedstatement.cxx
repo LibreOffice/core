@@ -390,7 +390,7 @@ void PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 )
     MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    m_vars[parameterIndex-1] = OString( "NULL" );
+    m_vars[parameterIndex-1] = "NULL"_ostr;
 }
 
 void PreparedStatement::setObjectNull(
@@ -399,7 +399,7 @@ void PreparedStatement::setObjectNull(
     MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    m_vars[parameterIndex-1] = OString( "NULL" );
+    m_vars[parameterIndex-1] = "NULL"_ostr;
 }
 
 
@@ -409,9 +409,9 @@ void PreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
     checkClosed();
     checkColumnIndex( parameterIndex );
     if( x )
-        m_vars[parameterIndex-1] = OString( "'t'" );
+        m_vars[parameterIndex-1] = "'t'"_ostr;
     else
-        m_vars[parameterIndex-1] = OString( "'f'" );
+        m_vars[parameterIndex-1] = "'f'"_ostr;
 }
 
 void PreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x )
