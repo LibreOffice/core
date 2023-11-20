@@ -1504,6 +1504,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 OutlinerView* pOLV = GetTextEditOutlinerView();
                 MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
+                SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(*xStm);
 
                 if (pOLV)
                 {
@@ -1513,7 +1514,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if (aRect.Contains(aPos) || (!bDrag && IsTextEdit()))
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
-                        SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(*xStm);
                         pOLV->Read(*pHtmlStream, EETextFormat::Html, mpDocSh->GetHeaderAttributes());
                         bReturn = true;
                     }
@@ -1521,7 +1521,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if (!bReturn)
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    bReturn = SdrView::Paste(*xStm, EETextFormat::Html, maDropPos, pPage, nPasteOptions);
+                    bReturn = SdrView::Paste(*pHtmlStream, EETextFormat::Html, maDropPos, pPage, nPasteOptions);
             }
         }
     }
