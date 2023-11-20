@@ -214,7 +214,7 @@ private:
 };
 
 OString getRoot() {
-    return "/org/libreoffice/registry";
+    return "/org/libreoffice/registry"_ostr;
 }
 
 bool decode(OUString * string, bool slash) {
