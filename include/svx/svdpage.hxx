@@ -292,12 +292,12 @@ private:
 /// for the snap-to-grid in Writer
 class SdrPageGridFrame
 {
-    tools::Rectangle aPaper;
-    tools::Rectangle aUserArea;
+    tools::Rectangle m_aPaper;
+    tools::Rectangle m_aUserArea;
 public:
-    SdrPageGridFrame(const tools::Rectangle& rPaper, const tools::Rectangle& rUser): aPaper(rPaper), aUserArea(rUser) {}
-    const tools::Rectangle& GetPaperRect() const                  { return aPaper; }
-    const tools::Rectangle& GetUserArea() const                   { return aUserArea; }
+    SdrPageGridFrame(const tools::Rectangle& rPaper, const tools::Rectangle& rUser): m_aPaper(rPaper), m_aUserArea(rUser) {}
+    const tools::Rectangle& GetPaperRect() const                  { return m_aPaper; }
+    const tools::Rectangle& GetUserArea() const                   { return m_aUserArea; }
 };
 
 class SVXCORE_DLLPUBLIC SdrPageGridFrameList final
