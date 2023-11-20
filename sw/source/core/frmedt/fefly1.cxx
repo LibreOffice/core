@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <comphelper/types.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/scopeguard.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtornt.hxx>
@@ -275,6 +276,10 @@ void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
 
 void SwFEShell::UnfloatFlyFrame()
 {
+    GetIDocumentUndoRedo().StartUndo(SwUndoId::DELLAYFMT, nullptr);
+    comphelper::ScopeGuard g([this]
+                             { GetIDocumentUndoRedo().EndUndo(SwUndoId::DELLAYFMT, nullptr); });
+
     SwFlyFrame* pFly = GetSelectedFlyFrame();
     if (!pFly)
     {
@@ -295,7 +300,21 @@ void SwFEShell::UnfloatFlyFrame()
         return;
     }
 
-    SwNodeRange aRange(pFlyStart->GetNode(), SwNodeOffset(1), *pFlyEnd, SwNodeOffset(0));
+    // Create an empty paragraph after the table, so the frame's SwNodes section is non-empty after
+    // MoveNodeRange(). Undo would ensure it's non-empty and then node offsets won't match.
+    IDocumentContentOperations& rIDCO = GetDoc()->getIDocumentContentOperations();
+    {
+        SwNodeIndex aInsertIndex(*pFlyEnd);
+        --aInsertIndex;
+        SwPosition aInsertPos(aInsertIndex);
+        StartAllAction();
+        rIDCO.AppendTextNode(aInsertPos);
+        // Make sure that a layout frame is created for the node, so the fly frame is not deleted,
+        // during MoveNodeRange(), either.
+        EndAllAction();
+    }
+
+    SwNodeRange aRange(pFlyStart->GetNode(), SwNodeOffset(1), *pFlyEnd, SwNodeOffset(-1));
     const SwFormatAnchor& rAnchor = rFlyFormat.GetAnchor();
     SwNode* pAnchor = rAnchor.GetAnchorNode();
     if (!pAnchor)
@@ -305,7 +324,6 @@ void SwFEShell::UnfloatFlyFrame()
 
     // Move the content outside of the text frame.
     SwNodeIndex aInsertPos(*pAnchor);
-    IDocumentContentOperations& rIDCO = rFlyFormat.GetDoc()->getIDocumentContentOperations();
     rIDCO.MoveNodeRange(aRange, aInsertPos.GetNode(), SwMoveFlags::CREATEUNDOOBJ);
 
     // Remove the fly frame frame.
