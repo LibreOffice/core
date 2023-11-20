@@ -40,6 +40,15 @@ enum class SwFrameSize
                     (can be exceeded but not be less). */
 };
 
+/**
+ * Describes the size of a Writer frame, for example a table, table row, table cell, TextFrame,
+ * page, etc.
+ *
+ * The height and width can be either relative or absolute, see SwFrameSize.
+ *
+ * If the size is relative, then the "relation" decides what 100% means, e.g. it may be relative to
+ * the page size of the parent frame size.
+ */
 class SW_DLLPUBLIC SwFormatFrameSize final : public SvxSizeItem
 {
     SwFrameSize m_eFrameHeightType;
