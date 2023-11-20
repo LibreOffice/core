@@ -6134,14 +6134,6 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="VerticalCallOut" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: setup -->
-          <info>
-            <desc>Specifies whether vertical call out objects are available
-            (true) or not (false).</desc>
-          </info>
-          <value>false</value>
-        </prop>
       </group>
       <group oor:name="CTL">
         <info>

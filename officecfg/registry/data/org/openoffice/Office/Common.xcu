@@ -69,9 +69,6 @@
       <prop oor:name="VerticalText">
         <value>true</value>
       </prop>
-      <prop oor:name="VerticalCallOut">
-        <value>true</value>
-      </prop>
       <prop oor:name="Ruby">
         <value>true</value>
       </prop>
