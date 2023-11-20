@@ -103,7 +103,7 @@ class MakePropertyValueTest : public CppUnit::TestFixture
         ]
     }
 }
-)json");
+)json"_ostr);
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aRet.size());
         beans::PropertyValue aFirst = aRet[0];
         CPPUNIT_ASSERT_EQUAL(OUString("FieldType"), aFirst.Name);

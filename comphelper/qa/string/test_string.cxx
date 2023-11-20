@@ -88,14 +88,14 @@ void TestString::testIsdigitAsciiString()
 
 void TestString::testStripStart()
 {
-    OString aIn("abc");
+    OString aIn("abc"_ostr);
     OString aOut;
 
     aOut = ::comphelper::string::stripStart(aIn, 'b');
-    CPPUNIT_ASSERT_EQUAL(OString("abc"), aOut);
+    CPPUNIT_ASSERT_EQUAL("abc"_ostr, aOut);
 
     aOut = ::comphelper::string::stripStart(aIn, 'a');
-    CPPUNIT_ASSERT_EQUAL(OString("bc"), aOut);
+    CPPUNIT_ASSERT_EQUAL("bc"_ostr, aOut);
 
     aIn = "aaa";
     aOut = ::comphelper::string::stripStart(aIn, 'a');
@@ -103,19 +103,19 @@ void TestString::testStripStart()
 
     aIn = "aba";
     aOut = ::comphelper::string::stripStart(aIn, 'a');
-    CPPUNIT_ASSERT_EQUAL(OString("ba"), aOut);
+    CPPUNIT_ASSERT_EQUAL("ba"_ostr, aOut);
 }
 
 void TestString::testStripEnd()
 {
-    OString aIn("abc");
+    OString aIn("abc"_ostr);
     OString aOut;
 
     aOut = ::comphelper::string::stripEnd(aIn, 'b');
-    CPPUNIT_ASSERT_EQUAL(OString("abc"), aOut);
+    CPPUNIT_ASSERT_EQUAL("abc"_ostr, aOut);
 
     aOut = ::comphelper::string::stripEnd(aIn, 'c');
-    CPPUNIT_ASSERT_EQUAL(OString("ab"), aOut);
+    CPPUNIT_ASSERT_EQUAL("ab"_ostr, aOut);
 
     aIn = "aaa";
     aOut = ::comphelper::string::stripEnd(aIn, 'a');
@@ -123,19 +123,19 @@ void TestString::testStripEnd()
 
     aIn = "aba";
     aOut = ::comphelper::string::stripEnd(aIn, 'a');
-    CPPUNIT_ASSERT_EQUAL(OString("ab"), aOut);
+    CPPUNIT_ASSERT_EQUAL("ab"_ostr, aOut);
 }
 
 void TestString::testStrip()
 {
-    OString aIn("abc");
+    OString aIn("abc"_ostr);
     OString aOut;
 
     aOut = ::comphelper::string::strip(aIn, 'b');
-    CPPUNIT_ASSERT_EQUAL(OString("abc"), aOut);
+    CPPUNIT_ASSERT_EQUAL("abc"_ostr, aOut);
 
     aOut = ::comphelper::string::strip(aIn, 'c');
-    CPPUNIT_ASSERT_EQUAL(OString("ab"), aOut);
+    CPPUNIT_ASSERT_EQUAL("ab"_ostr, aOut);
 
     aIn = "aaa";
     aOut = ::comphelper::string::strip(aIn, 'a');
@@ -143,25 +143,25 @@ void TestString::testStrip()
 
     aIn = "aba";
     aOut = ::comphelper::string::strip(aIn, 'a');
-    CPPUNIT_ASSERT_EQUAL(OString("b"), aOut);
+    CPPUNIT_ASSERT_EQUAL("b"_ostr, aOut);
 }
 
 void TestString::testToken()
 {
-    OString aIn("10.11.12");
+    OString aIn("10.11.12"_ostr);
     OString aOut;
 
     aOut = aIn.getToken(-1, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
     aOut = aIn.getToken(0, '.');
-    CPPUNIT_ASSERT_EQUAL(OString("10"), aOut);
+    CPPUNIT_ASSERT_EQUAL("10"_ostr, aOut);
 
     aOut = aIn.getToken(1, '.');
-    CPPUNIT_ASSERT_EQUAL(OString("11"), aOut);
+    CPPUNIT_ASSERT_EQUAL("11"_ostr, aOut);
 
     aOut = aIn.getToken(2, '.');
-    CPPUNIT_ASSERT_EQUAL(OString("12"), aOut);
+    CPPUNIT_ASSERT_EQUAL("12"_ostr, aOut);
 
     aOut = aIn.getToken(3, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
@@ -169,7 +169,7 @@ void TestString::testToken()
 
 void TestString::testTokenCount()
 {
-    OString aIn("10.11.12");
+    OString aIn("10.11.12"_ostr);
     sal_Int32 nOut;
 
     nOut = ::comphelper::string::getTokenCount(aIn, '.');
