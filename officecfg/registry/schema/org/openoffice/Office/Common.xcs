@@ -3374,8 +3374,7 @@
         </info>
         <prop oor:name="AddFeatureURL" oor:type="xs:string" oor:nillable="false">
           <info>
-            <desc>Contains a string specifying the URL to be browsed for
-            additional features (e.g. extensions)</desc>
+            <deprecated>Not used anymore</deprecated>
           </info>
           <value/>
         </prop>

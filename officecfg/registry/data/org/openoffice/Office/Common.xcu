@@ -33,9 +33,6 @@
   </node>
   <node oor:name="Help">
     <node oor:name="StartCenter">
-      <prop oor:name="AddFeatureURL" oor:type="xs:string">
-        <value>${STARTCENTER_ADDFEATURE_URL}</value>
-      </prop>
       <prop oor:name="InfoURL" oor:type="xs:string">
         <value>${STARTCENTER_INFO_URL}</value>
       </prop>
