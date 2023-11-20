@@ -23,6 +23,8 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <svtools/colorcfg.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -48,7 +50,13 @@ const ::chart::tPropertyValueMap& StaticPageBackgroundDefaults()
             ::chart::FillProperties::AddDefaultsToMap( aTmp );
 
             // override other defaults
-            ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( aTmp, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff );
+            Color aDocColor = COL_WHITE;
+            if (SfxViewShell::Current()) {
+                aDocColor = SfxViewShell::Current()->GetColorConfigColor(svtools::DOCCOLOR);
+            } else {
+                SAL_WARN("chart2", "SfxViewShell::Current() returned nullptr");
+            }
+            ::chart::PropertyHelper::setPropertyValue( aTmp, ::chart::FillProperties::PROP_FILL_COLOR, aDocColor );
             ::chart::PropertyHelper::setPropertyValue( aTmp, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
             return aTmp;
         }();
