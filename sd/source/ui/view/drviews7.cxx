@@ -153,6 +153,7 @@ static ::std::unique_ptr<SvxClipboardFormatItem> GetSupportedClipboardFormats (
                 case SotClipboardFormatId::NETSCAPE_BOOKMARK:
                 case SotClipboardFormatId::STRING:
                 case SotClipboardFormatId::HTML:
+                case SotClipboardFormatId::HTML_SIMPLE:
                 case SotClipboardFormatId::RTF:
                 case SotClipboardFormatId::RICHTEXT:
                 case SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT:
