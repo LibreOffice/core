@@ -534,12 +534,17 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
     tools::Rectangle aBoundRect;
     for (i = n1; i <= n2; ++i)
     {
+        sal_UCS4 charValue = GetCharFromIndex(i);
+
+        if (charValue == 0)
+            continue;
+
+        OUString aCharStr(&charValue, 1);
+
         Point pix = MapIndexToPixel(i);
         int x = pix.X();
         int y = pix.Y();
 
-        sal_UCS4 nChar = mxFontCharMap->GetCharFromIndex(i);
-        OUString aCharStr(&nChar, 1);
         int nTextWidth = rRenderContext.GetTextWidth(aCharStr);
         int tx = x + (nX - nTextWidth + 1) / 2;
         int ty = y + (nY - nTextHeight + 1) / 2;
@@ -672,6 +677,10 @@ sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
     return getSelectedChar();
 }
 
+sal_UCS4 SvxShowCharSet::GetCharFromIndex(int index) const
+{
+    return mxFontCharMap->GetCharFromIndex(index);
+}
 
 void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 {

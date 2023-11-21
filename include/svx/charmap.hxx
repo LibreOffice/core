@@ -66,6 +66,7 @@ public:
 
     void                    SelectCharacter( sal_UCS4 cNew );
     virtual sal_UCS4        GetSelectCharacter() const;
+    virtual sal_UCS4        GetCharFromIndex(int index) const;
     void                    createContextMenu(const Point& rPosition);
 
     void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { aDoubleClkHdl = rLink; }
@@ -148,7 +149,7 @@ protected:
 
 protected:
     virtual bool KeyInput(const KeyEvent&) override;
-    virtual void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
+    void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
     void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;

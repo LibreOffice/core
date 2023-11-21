@@ -140,157 +140,17 @@ void SvxSearchCharSet::SelectCharacter( const Subset* sub )
     Invalidate();
 }
 
+sal_UCS4 SvxSearchCharSet::GetCharFromIndex(int index) const
+{
+    std::unordered_map<sal_Int32, sal_UCS4>::const_iterator got = m_aItemList.find(index);
+    return (got != m_aItemList.end()) ? got->second : 0;
+}
+
 void SvxSearchCharSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     InitSettings(rRenderContext);
     RecalculateFont(rRenderContext);
     DrawChars_Impl(rRenderContext, FirstInView(), LastInView());
-}
-
-void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2)
-{
-    if (n1 > LastInView() || n2 < FirstInView())
-        return;
-
-    Size aOutputSize(GetOutputSizePixel());
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Color aWindowTextColor(rStyleSettings.GetFieldTextColor());
-    Color aHighlightColor(rStyleSettings.GetHighlightColor());
-    Color aHighlightTextColor(rStyleSettings.GetHighlightTextColor());
-    Color aFaceColor(rStyleSettings.GetFaceColor());
-    Color aLightColor(rStyleSettings.GetLightColor());
-    Color aShadowColor(rStyleSettings.GetShadowColor());
-
-    int i;
-    rRenderContext.SetLineColor(aShadowColor);
-    for (i = 1; i < COLUMN_COUNT; ++i)
-    {
-        rRenderContext.DrawLine(Point(nX * i + m_nXGap, 0),
-                          Point(nX * i + m_nXGap, aOutputSize.Height()));
-    }
-    for (i = 1; i < ROW_COUNT; ++i)
-    {
-        rRenderContext.DrawLine(Point(0, nY * i + m_nYGap),
-                                Point(aOutputSize.Width(), nY * i + m_nYGap));
-    }
-
-    int nTextHeight = rRenderContext.GetTextHeight();
-    tools::Rectangle aBoundRect;
-    for (i = n1; i <= n2; ++i)
-    {
-        Point pix = MapIndexToPixel(i);
-        int x = pix.X();
-        int y = pix.Y();
-
-        OUStringBuffer buf;
-        std::unordered_map<sal_Int32, sal_UCS4>::const_iterator got = m_aItemList.find (i);
-        sal_UCS4 sName;
-
-        if(got == m_aItemList.end())
-            continue;
-        else
-            sName = got->second;
-
-        buf.appendUtf32(sName);
-        OUString aCharStr(buf.makeStringAndClear());
-        int nTextWidth = rRenderContext.GetTextWidth(aCharStr);
-        int tx = x + (nX - nTextWidth + 1) / 2;
-        int ty = y + (nY - nTextHeight + 1) / 2;
-        Point aPointTxTy(tx, ty);
-
-        // adjust position before it gets out of bounds
-        if (rRenderContext.GetTextBoundRect(aBoundRect, aCharStr) && !aBoundRect.IsEmpty())
-        {
-            // zero advance width => use ink width to center glyph
-            if (!nTextWidth)
-            {
-                aPointTxTy.setX( x - aBoundRect.Left() + (nX - aBoundRect.GetWidth() + 1) / 2 );
-            }
-
-            aBoundRect += aPointTxTy;
-
-            // shift back vertically if needed
-            int nYLDelta = aBoundRect.Top() - y;
-            int nYHDelta = (y + nY) - aBoundRect.Bottom();
-            if (nYLDelta <= 0)
-                aPointTxTy.AdjustY( -(nYLDelta - 1) );
-            else if (nYHDelta <= 0)
-                aPointTxTy.AdjustY(nYHDelta - 1 );
-
-            // shift back horizontally if needed
-            int nXLDelta = aBoundRect.Left() - x;
-            int nXHDelta = (x + nX) - aBoundRect.Right();
-            if (nXLDelta <= 0)
-                aPointTxTy.AdjustX( -(nXLDelta - 1) );
-            else if (nXHDelta <= 0)
-                aPointTxTy.AdjustX(nXHDelta - 1 );
-        }
-
-        // tdf#109214 - highlight the favorite characters
-        if (isFavChar(aCharStr, mxVirDev->GetFont().GetFamilyName()))
-        {
-            const Color aLineCol = rRenderContext.GetLineColor();
-            rRenderContext.SetLineColor(aHighlightColor);
-            rRenderContext.SetFillColor(COL_TRANSPARENT);
-            // Outer border
-            rRenderContext.DrawRect(tools::Rectangle(Point(x - 1, y - 1), Size(nX + 3, nY + 3)), 1, 1);
-            // Inner border
-            rRenderContext.DrawRect(tools::Rectangle(Point(x, y), Size(nX + 1, nY + 1)), 1, 1);
-            rRenderContext.SetLineColor(aLineCol);
-        }
-
-        Color aTextCol = rRenderContext.GetTextColor();
-        if (i != nSelectedIndex)
-        {
-            rRenderContext.SetTextColor(aWindowTextColor);
-            rRenderContext.DrawText(aPointTxTy, aCharStr);
-        }
-        else
-        {
-            Color aLineCol = rRenderContext.GetLineColor();
-            Color aFillCol = rRenderContext.GetFillColor();
-            rRenderContext.SetLineColor();
-            Point aPointUL(x + 1, y + 1);
-            if (HasFocus())
-            {
-                rRenderContext.SetFillColor(aHighlightColor);
-                rRenderContext.DrawRect(getGridRectangle(aPointUL, aOutputSize));
-
-                rRenderContext.SetTextColor(aHighlightTextColor);
-                rRenderContext.DrawText(aPointTxTy, aCharStr);
-            }
-            else
-            {
-                rRenderContext.SetFillColor(aFaceColor);
-                rRenderContext.DrawRect(getGridRectangle(aPointUL, aOutputSize));
-
-                rRenderContext.SetLineColor(aLightColor);
-                rRenderContext.DrawLine(aPointUL, Point(x + nX - 1, y + 1));
-                rRenderContext.DrawLine(aPointUL, Point(x + 1, y + nY - 1));
-
-                rRenderContext.SetLineColor(aShadowColor);
-                rRenderContext.DrawLine(Point(x + 1, y + nY - 1), Point(x + nX - 1, y + nY - 1));
-                rRenderContext.DrawLine(Point(x + nX - 1, y + nY - 1), Point(x + nX - 1, y + 1));
-
-                rRenderContext.DrawText(aPointTxTy, aCharStr);
-            }
-            rRenderContext.SetLineColor(aLineCol);
-            rRenderContext.SetFillColor(aFillCol);
-        }
-        rRenderContext.SetTextColor(aTextCol);
-    }
-
-    // tdf#141319 - mark empty/unused cells
-    if (n2 - n1 < ROW_COUNT * COLUMN_COUNT)
-    {
-        rRenderContext.SetFillColor(rStyleSettings.GetDisableColor());
-        for (i = n2 - n1 + 1; i < ROW_COUNT * COLUMN_COUNT; i++)
-        {
-            rRenderContext.DrawRect(
-                tools::Rectangle(MapIndexToPixel(i + n1), Size(nX + 2, nY + 2)));
-        }
-    }
 }
 
 sal_UCS4 SvxSearchCharSet::GetSelectCharacter() const

@@ -44,6 +44,7 @@ public:
 
     void                                SelectCharacter( const Subset* sub);
     virtual sal_UCS4                    GetSelectCharacter() const override;
+    virtual sal_UCS4                    GetCharFromIndex(int index) const override;
 
     virtual svx::SvxShowCharSetItem*    ImplGetItem( int _nPos ) override;
     virtual int                         LastInView() const override;
@@ -59,7 +60,6 @@ private:
     //to uniquely identify each appended element
     std::unordered_map<sal_Int32, sal_UCS4> m_aItemList;
 private:
-    virtual void DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
 };
