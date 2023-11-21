@@ -368,15 +368,15 @@ public:
     // call all objects between nStart and TmpEnd; store nStart as TmpEnd
     bool TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool ToFirst = true );
 
-    void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
+    void AddPoolItem(const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
               SwNodeOffset nNodeIdx );
-    void Add( SwTextAttr* pTextHt, SwNodeOffset nNodeIdx, bool bNewAttr );
-    void Add( SwFormatColl*, SwNodeOffset nNodeIdx, SwNodeType nWhichNd );
-    void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
+    void AddTextAttr(SwTextAttr* pTextHt, SwNodeOffset nNodeIdx, bool bNewAttr);
+    void AddColl(SwFormatColl*, SwNodeOffset nNodeIdx, SwNodeType nWhichNd);
+    void AddIMark(const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos);
     void AddChangeFlyAnchor(sw::SpzFrameFormat& rFormat);
     void AddDeleteFly( SwFrameFormat&, sal_uInt16& rSetPos );
-    void Add( const SwTextFootnote& );
-    void Add( const SfxItemSet & rSet, const SwCharFormat & rCharFormat);
+    void AddFootnote( const SwTextFootnote& );
+    void AddCharFormat(const SfxItemSet & rSet, const SwCharFormat & rCharFormat);
 
     sal_uInt16 Count() const { return m_SwpHstry.size(); }
     sal_uInt16 GetTmpEnd() const { return m_SwpHstry.size() - m_nEndDiff; }

@@ -1026,7 +1026,7 @@ SwHistory::~SwHistory()
 {
 }
 
-void SwHistory::Add(
+void SwHistory::AddPoolItem(
     const SfxPoolItem* pOldValue,
     const SfxPoolItem* pNewValue,
     SwNodeOffset nNodeIdx)
@@ -1063,7 +1063,8 @@ void SwHistory::Add(
 }
 
 // FIXME: refactor the following "Add" methods (DRY)?
-void SwHistory::Add( SwTextAttr* pHint, SwNodeOffset nNodeIdx, bool bNewAttr )
+void SwHistory::AddTextAttr(SwTextAttr *const pHint,
+        SwNodeOffset const nNodeIdx, bool const bNewAttr)
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
@@ -1105,7 +1106,8 @@ void SwHistory::Add( SwTextAttr* pHint, SwNodeOffset nNodeIdx, bool bNewAttr )
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
-void SwHistory::Add( SwFormatColl* pColl, SwNodeOffset nNodeIdx, SwNodeType nWhichNd )
+void SwHistory::AddColl(SwFormatColl *const pColl, SwNodeOffset const nNodeIdx,
+        SwNodeType const nWhichNd)
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
@@ -1114,7 +1116,8 @@ void SwHistory::Add( SwFormatColl* pColl, SwNodeOffset nNodeIdx, SwNodeType nWhi
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
-void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOtherPos)
+void SwHistory::AddIMark(const ::sw::mark::IMark& rBkmk,
+        bool const bSavePos, bool const bSaveOtherPos)
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
@@ -1186,14 +1189,14 @@ void SwHistory::AddDeleteFly(SwFrameFormat& rFormat, sal_uInt16& rSetPos)
     }
 }
 
-void SwHistory::Add( const SwTextFootnote& rFootnote )
+void SwHistory::AddFootnote(const SwTextFootnote& rFootnote)
 {
     std::unique_ptr<SwHistoryHint> pHt(new SwHistorySetFootnote( rFootnote ));
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
 // #i27615#
-void SwHistory::Add(const SfxItemSet & rSet, const SwCharFormat & rFormat)
+void SwHistory::AddCharFormat(const SfxItemSet & rSet, const SwCharFormat & rFormat)
 {
     std::unique_ptr<SwHistoryHint> pHt(new SwHistoryChangeCharFormat(rSet, rFormat.GetName()));
     m_SwpHstry.push_back( std::move(pHt) );
@@ -1273,7 +1276,7 @@ void SwHistory::CopyFormatAttr(
     {
         if(!IsInvalidItem(pItem))
         {
-            Add(pItem, pItem, nNodeIdx);
+            AddPoolItem(pItem, pItem, nNodeIdx);
         }
 
         pItem = aIter.NextItem();
@@ -1341,12 +1344,12 @@ void SwHistory::CopyAttr(
         {
             if ( nEnd > nAttrStt )
             {
-                Add( pHt, nNodeIdx, false );
+                AddTextAttr(pHt, nNodeIdx, false);
             }
         }
         else if ( pEndIdx && nStart < *pEndIdx )
         {
-            Add( pHt, nNodeIdx, false );
+            AddTextAttr(pHt, nNodeIdx, false);
         }
     }
 }
@@ -1389,7 +1392,7 @@ void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
     {
         if(RES_UPDATE_ATTR == pLegacyHint->m_pNew->Which())
         {
-            m_pHistory->Add(pLegacyHint->m_pOld, pLegacyHint->m_pNew, m_nNodeIndex);
+            m_pHistory->AddPoolItem(pLegacyHint->m_pOld, pLegacyHint->m_pNew, m_nNodeIndex);
         }
         else
         {
@@ -1424,7 +1427,7 @@ void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
 
 void SwRegHistory::AddHint( SwTextAttr* pHt, const bool bNew )
 {
-    m_pHistory->Add( pHt, m_nNodeIndex, bNew );
+    m_pHistory->AddTextAttr(pHt, m_nNodeIndex, bNew);
 }
 
 bool SwRegHistory::InsertItems( const SfxItemSet& rSet,

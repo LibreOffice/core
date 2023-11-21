@@ -384,7 +384,7 @@ SwTableToTextSave::SwTableToTextSave( SwDoc& rDoc, SwNodeOffset nNd, SwNodeOffse
     {
         m_pHstry.reset( new SwHistory );
 
-        m_pHstry->Add( pNd->GetTextColl(), nNd, SwNodeType::Text );
+        m_pHstry->AddColl(pNd->GetTextColl(), nNd, SwNodeType::Text);
         if ( pNd->GetpSwpHints() )
         {
             m_pHstry->CopyAttr( pNd->GetpSwpHints(), nNd, 0,
@@ -2036,7 +2036,7 @@ void SwUndoTableMerge::SaveCollection( const SwTableBox& rBox )
     if( !pCNd )
         pCNd = aIdx.GetNodes().GoNext( &aIdx );
 
-    m_pHistory->Add( pCNd->GetFormatColl(), aIdx.GetIndex(), pCNd->GetNodeType());
+    m_pHistory->AddColl(pCNd->GetFormatColl(), aIdx.GetIndex(), pCNd->GetNodeType());
     if( pCNd->HasSwAttrSet() )
         m_pHistory->CopyFormatAttr( *pCNd->GetpSwAttrSet(), aIdx.GetIndex() );
 }

@@ -50,7 +50,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
 
     if( pTextNd )
     {
-        m_pHistory->Add( pTextNd->GetTextColl(), m_nSttNode, SwNodeType::Text );
+        m_pHistory->AddColl(pTextNd->GetTextColl(), m_nSttNode, SwNodeType::Text);
         if ( pTextNd->GetpSwpHints() )
         {
             m_pHistory->CopyAttr( pTextNd->GetpSwpHints(), m_nSttNode,
@@ -61,7 +61,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     }
     if( pEndTextNd && pEndTextNd != pTextNd )
     {
-        m_pHistory->Add( pEndTextNd->GetTextColl(), m_nEndNode, SwNodeType::Text );
+        m_pHistory->AddColl(pEndTextNd->GetTextColl(), m_nEndNode, SwNodeType::Text);
         if ( pEndTextNd->GetpSwpHints() )
         {
             m_pHistory->CopyAttr( pEndTextNd->GetpSwpHints(), m_nEndNode,
@@ -74,7 +74,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     pTextNd = rMvPos.GetNode().GetTextNode();
     if (nullptr != pTextNd)
     {
-        m_pHistory->Add( pTextNd->GetTextColl(), m_nMoveDestNode, SwNodeType::Text );
+        m_pHistory->AddColl(pTextNd->GetTextColl(), m_nMoveDestNode, SwNodeType::Text);
         if ( pTextNd->GetpSwpHints() )
         {
             m_pHistory->CopyAttr( pTextNd->GetpSwpHints(), m_nMoveDestNode,

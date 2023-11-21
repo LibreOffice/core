@@ -613,7 +613,7 @@ SwUndoReplace::Impl::Impl(
     {
         if( pNd->HasSwAttrSet() )
             m_pHistory->CopyFormatAttr( *pNd->GetpSwAttrSet(), nNewPos );
-        m_pHistory->Add( pNd->GetTextColl(), nNewPos, SwNodeType::Text );
+        m_pHistory->AddColl(pNd->GetTextColl(), nNewPos, SwNodeType::Text);
 
         SwTextNode* pNext = pEnd->GetNode().GetTextNode();
         SwNodeOffset nTmp = pNext->GetIndex();
@@ -621,7 +621,7 @@ SwUndoReplace::Impl::Impl(
                             pNext->GetText().getLength(), true );
         if( pNext->HasSwAttrSet() )
             m_pHistory->CopyFormatAttr( *pNext->GetpSwAttrSet(), nTmp );
-        m_pHistory->Add( pNext->GetTextColl(),nTmp, SwNodeType::Text );
+        m_pHistory->AddColl(pNext->GetTextColl(),nTmp, SwNodeType::Text);
         // METADATA: store
         m_pMetadataUndoStart = pNd  ->CreateUndo();
         m_pMetadataUndoEnd   = pNext->CreateUndo();

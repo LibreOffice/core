@@ -132,7 +132,7 @@ void SwTableBoxFormula::ToSplitMergeBoxNmWithHistory(SwTableFormulaUpdate& rUpda
     {
         // external rendering
         aCopy.PtrToBoxNm(&pNd->FindTableNode()->GetTable());
-        pHistory->Add(
+        pHistory->AddPoolItem(
             &aCopy,
             &aCopy,
             pNd->FindTableBoxStartNode()->GetIndex());

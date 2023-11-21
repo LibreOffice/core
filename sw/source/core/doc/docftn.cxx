@@ -471,7 +471,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                 bChg = true;
                 if ( pUndo )
                 {
-                    pUndo->GetHistory().Add( *pTextFootnote );
+                    pUndo->GetHistory().AddFootnote(*pTextFootnote);
                 }
 
                 pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rNumStr);
@@ -505,7 +505,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                 bChg = true;
                 if ( pUndo )
                 {
-                    pUndo->GetHistory().Add( *pTextFootnote );
+                    pUndo->GetHistory().AddFootnote(*pTextFootnote);
                 }
 
                 pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rNumStr);

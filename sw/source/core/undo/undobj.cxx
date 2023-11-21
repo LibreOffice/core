@@ -950,7 +950,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     pTextNd->GetTextAttrForCharAt( nFootnoteSttIdx );
                 assert(pFootnoteHint);
                 SwContentIndex aIdx( pTextNd, nFootnoteSttIdx );
-                m_pHistory->Add( pFootnoteHint, pTextNd->GetIndex(), false );
+                m_pHistory->AddTextAttr(pFootnoteHint, pTextNd->GetIndex(), false);
                 pTextNd->EraseText( aIdx, 1 );
             }
 
@@ -975,7 +975,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     pTextNd->GetTextAttrForCharAt( nFootnoteSttIdx );
                 assert(pFootnoteHint);
                 SwContentIndex aIdx( pTextNd, nFootnoteSttIdx );
-                m_pHistory->Add( pFootnoteHint, pTextNd->GetIndex(), false );
+                m_pHistory->AddTextAttr(pFootnoteHint, pTextNd->GetIndex(), false);
                 pTextNd->EraseText( aIdx, 1 );
             }
         }
@@ -1013,7 +1013,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         SwTextAttr* const pFlyHint = pTextNd->GetTextAttrForCharAt(
                             pAPos->GetContentIndex());
                         assert(pFlyHint);
-                        m_pHistory->Add( pFlyHint, SwNodeOffset(0), false );
+                        m_pHistory->AddTextAttr(pFlyHint, SwNodeOffset(0), false);
                         // reset n so that no Format is skipped
                         n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                     }
@@ -1229,7 +1229,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
             {
                 if( !m_pHistory )
                     m_pHistory.reset( new SwHistory );
-                m_pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
+                m_pHistory->AddIMark(*pBkmk, bSavePos, bSaveOtherPos);
             }
             if ( bSavePos
                  && ( bSaveOtherPos

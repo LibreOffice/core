@@ -266,8 +266,8 @@ SwUndoDelete::SwUndoDelete(
     if( pSttTextNd && pEndTextNd && pSttTextNd != pEndTextNd )
     {
         // two different TextNodes, thus save also the TextFormatCollection
-        m_pHistory->Add( pSttTextNd->GetTextColl(),pStt->GetNodeIndex(), SwNodeType::Text );
-        m_pHistory->Add( pEndTextNd->GetTextColl(),pEnd->GetNodeIndex(), SwNodeType::Text );
+        m_pHistory->AddColl(pSttTextNd->GetTextColl(), pStt->GetNodeIndex(), SwNodeType::Text);
+        m_pHistory->AddColl(pEndTextNd->GetTextColl(), pEnd->GetNodeIndex(), SwNodeType::Text);
 
         if( !m_bJoinNext )        // Selection from bottom to top
         {

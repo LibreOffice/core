@@ -1520,7 +1520,7 @@ namespace //local functions originally from docfmt.cxx
                 if (pCharFormat)
                 {
                     if (pHistory)
-                        pHistory->Add(pCharFormat->GetAttrSet(), *pCharFormat);
+                        pHistory->AddCharFormat(pCharFormat->GetAttrSet(), *pCharFormat);
 
                     if ( pCharSet )
                         pCharFormat->SetFormatAttr(*pCharSet);

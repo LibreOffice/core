@@ -2946,7 +2946,7 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
 void SwCollectTableLineBoxes::AddToUndoHistory( const SwContentNode& rNd )
 {
     if( m_pHistory )
-        m_pHistory->Add( rNd.GetFormatColl(), rNd.GetIndex(), SwNodeType::Text );
+        m_pHistory->AddColl(rNd.GetFormatColl(), rNd.GetIndex(), SwNodeType::Text);
 }
 
 void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )
