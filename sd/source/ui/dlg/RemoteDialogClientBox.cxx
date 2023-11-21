@@ -104,7 +104,7 @@ void ClientBox::populateEntries()
 #ifdef ENABLE_SDREMOTE
     RemoteServer::ensureDiscoverable();
 
-    std::vector< std::shared_ptr< ClientInfo > > aClients( RemoteServer::getClients() );
+    std::vector<std::shared_ptr<ClientInfo>> const aClients(IPRemoteServer::getClients());
 
     for ( const auto& rxClient : aClients )
     {
@@ -117,7 +117,7 @@ void ClientBox::populateEntries()
 IMPL_LINK_NOARG(ClientBoxEntry, DeauthoriseHdl, weld::Button&, void)
 {
 #ifdef ENABLE_SDREMOTE
-    RemoteServer::deauthoriseClient(m_xClientInfo);
+    IPRemoteServer::deauthoriseClient(m_xClientInfo);
 #endif
     m_pClientBox->populateEntries();
 }

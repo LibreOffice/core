@@ -47,22 +47,13 @@ namespace sd
 
     struct ClientInfoInternal;
 
-    class RemoteServer final : public salhelper::Thread
+    class RemoteServer final
     {
         public:
-            // Internal setup
-            static void setup();
-
             // For slideshowimpl to inform us.
             static void presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController );
             static void presentationStopped();
-
-            // For the control dialog
-            SD_DLLPUBLIC static std::vector< std::shared_ptr< ClientInfo > > getClients();
-            SD_DLLPUBLIC static bool connectClient( const std::shared_ptr< ClientInfo >& pClient,
-                                                    std::u16string_view aPin );
-            SD_DLLPUBLIC static void deauthoriseClient( const std::shared_ptr< ClientInfo >& pClient );
 
             /// ensure that discoverability (eg. for Bluetooth) is enabled
             SD_DLLPUBLIC static void ensureDiscoverable();
@@ -71,18 +62,36 @@ namespace sd
 
             // For the communicator
             static void removeCommunicator( Communicator const * pCommunicator );
-        private:
-            RemoteServer();
-            virtual ~RemoteServer() override;
-            static RemoteServer *spServer;
+        //private:
+            // these are public because 3 classes and a function need access
             static ::osl::Mutex sDataMutex;
             static ::std::vector<Communicator*> sCommunicators;
-            osl::AcceptorSocket mSocket;
+    };
 
-            ::std::vector< std::shared_ptr< ClientInfoInternal > > mAvailableClients;
+    class IPRemoteServer final : public salhelper::Thread
+    {
+        public:
+            // Internal setup
+            static void setup();
+
+            // For the control dialog
+            SD_DLLPUBLIC static std::vector<std::shared_ptr<ClientInfo>> getClients();
+            SD_DLLPUBLIC static bool connectClient(const std::shared_ptr<ClientInfo>& pClient,
+                                                   std::u16string_view aPin);
+            SD_DLLPUBLIC static void deauthoriseClient(const std::shared_ptr<ClientInfo>& pClient);
 
             void execute() override;
             void handleAcceptedConnection( BufferedStreamSocket *pSocket ) ;
+
+        private:
+            IPRemoteServer();
+            virtual ~IPRemoteServer() override;
+
+            osl::AcceptorSocket mSocket;
+            ::std::vector<std::shared_ptr<ClientInfoInternal>> mAvailableClients;
+
+            friend class RemoteServer;
+            static IPRemoteServer *spServer;
     };
 }
 

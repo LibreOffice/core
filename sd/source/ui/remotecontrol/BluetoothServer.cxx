@@ -52,6 +52,9 @@
 #endif
 
 #include "Communicator.hxx"
+#include <RemoteServer.hxx>
+
+#include <osl/mutex.hxx>
 
 using namespace sd;
 
@@ -572,6 +575,7 @@ void incomingCallback( void *userRefCon,
 
 void BluetoothServer::addCommunicator( Communicator* pCommunicator )
 {
+    ::osl::MutexGuard aGuard(RemoteServer::sDataMutex);
     mpCommunicators->push_back( pCommunicator );
 }
 
@@ -922,7 +926,10 @@ static DBusHandlerResult ProfileMessageFunction
 
                     SAL_INFO( "sdremote.bluetooth", "connection accepted " << nDescriptor);
                     Communicator* pCommunicator = new Communicator( std::make_unique<BufferedStreamSocket>( nDescriptor ) );
-                    pCommunicators->push_back( pCommunicator );
+                    {
+                        ::osl::MutexGuard aGuard(RemoteServer::sDataMutex);
+                        pCommunicators->push_back( pCommunicator );
+                    }
                     pCommunicator->launch();
                 }
 
@@ -1149,6 +1156,7 @@ void BluetoothServer::doRestoreDiscoverable()
 // re-bind to the same port number it appears.
 void BluetoothServer::cleanupCommunicators()
 {
+    ::osl::MutexGuard aGuard(RemoteServer::sDataMutex);
     for (auto& rpCommunicator : *mpCommunicators)
         rpCommunicator->forceClose();
     // the hope is that all the threads then terminate cleanly and
@@ -1286,7 +1294,10 @@ void SAL_CALL BluetoothServer::run()
             } else {
                 SAL_INFO( "sdremote.bluetooth", "connection accepted " << nClient );
                 Communicator* pCommunicator = new Communicator( std::make_unique<BufferedStreamSocket>( nClient ) );
-                mpCommunicators->push_back( pCommunicator );
+                {
+                    ::osl::MutexGuard aGuard(RemoteServer::sDataMutex);
+                    mpCommunicators->push_back( pCommunicator );
+                }
                 pCommunicator->launch();
             }
         }
@@ -1383,7 +1394,10 @@ void SAL_CALL BluetoothServer::run()
             return;
         } else {
             Communicator* pCommunicator = new Communicator( std::make_unique<BufferedStreamSocket>( socket) );
-            mpCommunicators->push_back( pCommunicator );
+            {
+                ::osl::MutexGuard aGuard(RemoteServer::sDataMutex);
+                mpCommunicators->push_back( pCommunicator );
+            }
             pCommunicator->launch();
         }
     }
