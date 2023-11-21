@@ -278,6 +278,7 @@ public:
 class SwShdwCursorOptionsTabPage final : public SfxTabPage
 {
     SwWrtShell *    m_pWrtShell;
+    bool            m_bHTMLMode;
 
     //nonprinting characters
     std::unique_ptr<weld::CheckButton> m_xParaCB;

@@ -1560,6 +1560,7 @@ void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
 SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/optformataidspage.ui", "OptFormatAidsPage", &rSet)
     , m_pWrtShell(nullptr)
+    , m_bHTMLMode(false)
     , m_xParaCB(m_xBuilder->weld_check_button("paragraph"))
     , m_xParaImg(m_xBuilder->weld_widget("lockparagraph"))
     , m_xSHyphCB(m_xBuilder->weld_check_button("hyphens"))
@@ -1606,6 +1607,8 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     const SfxUInt16Item* pHtmlModeItem = rSet.GetItemIfSet(SID_HTML_MODE, false);
     if(!pHtmlModeItem || !(pHtmlModeItem->GetValue() & HTMLMODE_ON))
         return;
+
+    m_bHTMLMode = true;
 
     m_xTabCB->hide();
     m_xTabLabel->hide();
@@ -1721,18 +1724,23 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
         eMode = pItem->GetMode();
         bIsOn = pItem->IsOn();
     }
-    m_xOnOffCB->set_active( bIsOn );
-    m_xOnOffCB->set_sensitive(!officecfg::Office::Writer::Cursor::DirectCursor::UseDirectCursor::isReadOnly());
-    m_xOnOffImg->set_visible(officecfg::Office::Writer::Cursor::DirectCursor::UseDirectCursor::isReadOnly());
 
+    bool bReadOnly = officecfg::Office::Writer::Cursor::DirectCursor::UseDirectCursor::isReadOnly();
+    m_xOnOffCB->set_active( bIsOn );
+    m_xOnOffCB->set_sensitive(!bReadOnly);
+    m_xOnOffImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::Cursor::DirectCursor::Insert::isReadOnly();
     m_xDirectCursorFillMode->set_active( static_cast<int>(eMode) );
-    m_xDirectCursorFillMode->set_sensitive(!officecfg::Office::Writer::Cursor::DirectCursor::Insert::isReadOnly());
-    m_xDirectCursorFillModeImg->set_visible(officecfg::Office::Writer::Cursor::DirectCursor::Insert::isReadOnly());
+    m_xDirectCursorFillMode->set_sensitive(!bReadOnly);
+    m_xDirectCursorFillModeImg->set_visible(bReadOnly);
 
     if (m_pWrtShell) {
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Layout::Other::IsAlignMathObjectsToBaseline::isReadOnly() :
+            officecfg::Office::WriterWeb::Layout::Other::IsAlignMathObjectsToBaseline::isReadOnly();
         m_xMathBaselineAlignmentCB->set_active( m_pWrtShell->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) );
-        m_xMathBaselineAlignmentCB->set_sensitive(!officecfg::Office::Writer::Layout::Other::IsAlignMathObjectsToBaseline::isReadOnly());
-        m_xMathBaselineAlignmentImg->set_visible(officecfg::Office::Writer::Layout::Other::IsAlignMathObjectsToBaseline::isReadOnly());
+        m_xMathBaselineAlignmentCB->set_sensitive(!bReadOnly);
+        m_xMathBaselineAlignmentImg->set_visible(bReadOnly);
         m_xMathBaselineAlignmentCB->save_state();
     } else {
         m_xMathBaselineAlignmentCB->hide();
@@ -1740,14 +1748,16 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
 
     if( const SfxBoolItem* pItem = rSet->GetItemIfSet( FN_PARAM_CRSR_IN_PROTECTED, false ) )
         m_xCursorInProtCB->set_active(pItem->GetValue());
-    m_xCursorInProtCB->set_sensitive(!officecfg::Office::Writer::Cursor::Option::ProtectedArea::isReadOnly());
-    m_xCursorInProtImg->set_visible(officecfg::Office::Writer::Cursor::Option::ProtectedArea::isReadOnly());
+    bReadOnly = officecfg::Office::Writer::Cursor::Option::ProtectedArea::isReadOnly();
+    m_xCursorInProtCB->set_sensitive(!bReadOnly);
+    m_xCursorInProtImg->set_visible(bReadOnly);
     m_xCursorInProtCB->save_state();
 
     const SwDocDisplayItem* pDocDisplayAttr = rSet->GetItemIfSet( FN_PARAM_DOCDISP, false );
     if(pDocDisplayAttr)
     {
-        bool bReadOnly = officecfg::Office::Writer::Content::NonprintingCharacter::ParagraphEnd::isReadOnly();
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Content::NonprintingCharacter::ParagraphEnd::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::NonprintingCharacter::ParagraphEnd::isReadOnly();
         m_xParaCB->set_active( pDocDisplayAttr->m_bParagraphEnd );
         m_xParaCB->set_sensitive(!bReadOnly);
         m_xParaImg->set_visible(bReadOnly);
@@ -1757,17 +1767,20 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
         m_xTabCB->set_sensitive(!bReadOnly);
         m_xTabImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Content::NonprintingCharacter::Space::isReadOnly();
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Content::NonprintingCharacter::Space::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::NonprintingCharacter::Space::isReadOnly();
         m_xSpacesCB->set_active( pDocDisplayAttr->m_bSpace );
         m_xSpacesCB->set_sensitive(!bReadOnly);
         m_xSpacesImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Content::NonprintingCharacter::ProtectedSpace::isReadOnly();
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Content::NonprintingCharacter::ProtectedSpace::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::NonprintingCharacter::ProtectedSpace::isReadOnly();
         m_xHSpacesCB->set_active( pDocDisplayAttr->m_bNonbreakingSpace );
         m_xHSpacesCB->set_sensitive(!bReadOnly);
         m_xHSpacesImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Content::NonprintingCharacter::OptionalHyphen::isReadOnly();
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Content::NonprintingCharacter::OptionalHyphen::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::NonprintingCharacter::OptionalHyphen::isReadOnly();
         m_xSHyphCB->set_active( pDocDisplayAttr->m_bSoftHyphen );
         m_xSHyphCB->set_sensitive(!bReadOnly);
         m_xSHyphImg->set_visible(bReadOnly);
@@ -1782,7 +1795,8 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
         m_xBookmarkCB->set_sensitive(!bReadOnly);
         m_xBookmarkImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Content::NonprintingCharacter::Break::isReadOnly();
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Content::NonprintingCharacter::Break::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::NonprintingCharacter::Break::isReadOnly();
         m_xBreakCB->set_active( pDocDisplayAttr->m_bManualBreak );
         m_xBreakCB->set_sensitive(!bReadOnly);
         m_xBreakImg->set_visible(bReadOnly);
