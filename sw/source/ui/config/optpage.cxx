@@ -1468,6 +1468,11 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 
 void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
 {
+    if (const SfxUInt16Item* pItem = rSet->GetItemIfSet(SID_HTML_MODE, false))
+    {
+        m_bHTMLMode = 0 != (pItem->GetValue() & HTMLMODE_ON);
+    }
+
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
@@ -1479,31 +1484,35 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
         ::SetFieldUnit( *m_xColInsertMF, eFieldUnit );
     }
 
+    bool bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Shift::Row::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Shift::Row::isReadOnly();
     m_xRowMoveMF->set_value(m_xRowMoveMF->normalize(pModOpt->GetTableHMove()), FieldUnit::TWIP);
-    m_xRowMoveMF->set_sensitive(!officecfg::Office::Writer::Table::Shift::Row::isReadOnly());
-    m_xRowMoveImg->set_visible(officecfg::Office::Writer::Table::Shift::Row::isReadOnly());
+    m_xRowMoveMF->set_sensitive(!bReadOnly);
+    m_xRowMoveImg->set_visible(bReadOnly);
 
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Shift::Column::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Shift::Column::isReadOnly();
     m_xColMoveMF->set_value(m_xColMoveMF->normalize(pModOpt->GetTableVMove()), FieldUnit::TWIP);
-    m_xColMoveMF->set_sensitive(!officecfg::Office::Writer::Table::Shift::Column::isReadOnly());
-    m_xColMoveImg->set_visible(officecfg::Office::Writer::Table::Shift::Column::isReadOnly());
+    m_xColMoveMF->set_sensitive(!bReadOnly);
+    m_xColMoveImg->set_visible(bReadOnly);
 
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Insert::Row::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Insert::Row::isReadOnly();
     m_xRowInsertMF->set_value(m_xRowInsertMF->normalize(pModOpt->GetTableHInsert()), FieldUnit::TWIP);
-    m_xRowInsertMF->set_sensitive(!officecfg::Office::Writer::Table::Insert::Row::isReadOnly());
-    m_xRowInsertImg->set_visible(officecfg::Office::Writer::Table::Insert::Row::isReadOnly());
+    m_xRowInsertMF->set_sensitive(!bReadOnly);
+    m_xRowInsertImg->set_visible(bReadOnly);
 
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Insert::Column::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Insert::Column::isReadOnly();
     m_xColInsertMF->set_value(m_xColInsertMF->normalize(pModOpt->GetTableVInsert()), FieldUnit::TWIP);
-    m_xColInsertMF->set_sensitive(!officecfg::Office::Writer::Table::Insert::Column::isReadOnly());
-    m_xColInsertImg->set_visible(officecfg::Office::Writer::Table::Insert::Column::isReadOnly());
+    m_xColInsertMF->set_sensitive(!bReadOnly);
+    m_xColInsertImg->set_visible(bReadOnly);
 
     switch(pModOpt->GetTableMode())
     {
         case TableChgMode::FixedWidthChangeAbs:   m_xFixRB->set_active(true);     break;
         case TableChgMode::FixedWidthChangeProp:  m_xFixPropRB->set_active(true); break;
         case TableChgMode::VarWidthChangeAbs:     m_xVarRB->set_active(true); break;
-    }
-    if(const SfxUInt16Item* pItem = rSet->GetItemIfSet(SID_HTML_MODE, false))
-    {
-        m_bHTMLMode = 0 != (pItem->GetValue() & HTMLMODE_ON);
     }
 
     // hide certain controls for html
@@ -1513,7 +1522,9 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
         m_xDontSplitCB->hide();
     }
 
-    if (officecfg::Office::Writer::Table::Change::Effect::isReadOnly())
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Change::Effect::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Change::Effect::isReadOnly();
+    if (bReadOnly)
     {
         m_xFixRB->set_sensitive(false);
         m_xFixPropRB->set_sensitive(false);
@@ -1524,33 +1535,45 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(m_bHTMLMode);
     const SwInsertTableFlags nInsTableFlags = aInsOpts.mnInsMode;
 
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Insert::Table::Header::isReadOnly() :
+        officecfg::Office::WriterWeb::Insert::Table::Header::isReadOnly();
     m_xHeaderCB->set_active(bool(nInsTableFlags & SwInsertTableFlags::Headline));
-    m_xHeaderCB->set_sensitive(!officecfg::Office::Writer::Insert::Table::Header::isReadOnly());
-    m_xHeaderImg->set_visible(officecfg::Office::Writer::Insert::Table::Header::isReadOnly());
+    m_xHeaderCB->set_sensitive(!bReadOnly);
+    m_xHeaderImg->set_visible(bReadOnly);
 
+    bReadOnly = officecfg::Office::Writer::Insert::Table::RepeatHeader::isReadOnly();
     m_xRepeatHeaderCB->set_active((!m_bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
-    m_xRepeatHeaderCB->set_sensitive(!officecfg::Office::Writer::Insert::Table::RepeatHeader::isReadOnly());
-    m_xRepeatHeaderImg->set_visible(officecfg::Office::Writer::Insert::Table::RepeatHeader::isReadOnly());
+    m_xRepeatHeaderCB->set_sensitive(!bReadOnly);
+    m_xRepeatHeaderImg->set_visible(bReadOnly);
 
+    bReadOnly = officecfg::Office::Writer::Insert::Table::Split::isReadOnly();
     m_xDontSplitCB->set_active(!(nInsTableFlags & SwInsertTableFlags::SplitLayout));
-    m_xDontSplitCB->set_sensitive(!officecfg::Office::Writer::Insert::Table::Split::isReadOnly());
-    m_xDontSplitImg->set_visible(officecfg::Office::Writer::Insert::Table::Split::isReadOnly());
+    m_xDontSplitCB->set_sensitive(!bReadOnly);
+    m_xDontSplitImg->set_visible(bReadOnly);
 
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Insert::Table::Border::isReadOnly() :
+        officecfg::Office::WriterWeb::Insert::Table::Border::isReadOnly();
     m_xBorderCB->set_active(bool(nInsTableFlags & SwInsertTableFlags::DefaultBorder));
-    m_xBorderCB->set_sensitive(!officecfg::Office::Writer::Insert::Table::Border::isReadOnly());
-    m_xBorderImg->set_visible(officecfg::Office::Writer::Insert::Table::Border::isReadOnly());
+    m_xBorderCB->set_sensitive(!bReadOnly);
+    m_xBorderImg->set_visible(bReadOnly);
 
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Input::NumberRecognition::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Input::NumberRecognition::isReadOnly();
     m_xNumFormattingCB->set_active(pModOpt->IsInsTableFormatNum(m_bHTMLMode));
-    m_xNumFormattingCB->set_sensitive(!officecfg::Office::Writer::Table::Input::NumberRecognition::isReadOnly());
-    m_xNumFormattingImg->set_visible(officecfg::Office::Writer::Table::Input::NumberRecognition::isReadOnly());
+    m_xNumFormattingCB->set_sensitive(!bReadOnly);
+    m_xNumFormattingImg->set_visible(bReadOnly);
 
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Input::NumberFormatRecognition::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Input::NumberFormatRecognition::isReadOnly();
     m_xNumFormatFormattingCB->set_active(pModOpt->IsInsTableChangeNumFormat(m_bHTMLMode));
-    m_xNumFormatFormattingCB->set_sensitive(!officecfg::Office::Writer::Table::Input::NumberFormatRecognition::isReadOnly());
-    m_xNumFormatFormattingImg->set_visible(officecfg::Office::Writer::Table::Input::NumberFormatRecognition::isReadOnly());
+    m_xNumFormatFormattingCB->set_sensitive(!bReadOnly);
+    m_xNumFormatFormattingImg->set_visible(bReadOnly);
 
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Input::Alignment::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Input::Alignment::isReadOnly();
     m_xNumAlignmentCB->set_active(pModOpt->IsInsTableAlignNum(m_bHTMLMode));
-    m_xNumAlignmentCB->set_sensitive(!officecfg::Office::Writer::Table::Input::Alignment::isReadOnly());
-    m_xNumAlignmentImg->set_visible(officecfg::Office::Writer::Table::Input::Alignment::isReadOnly());
+    m_xNumAlignmentCB->set_sensitive(!bReadOnly);
+    m_xNumAlignmentImg->set_visible(bReadOnly);
 
     m_xHeaderCB->save_state();
     m_xRepeatHeaderCB->save_state();
@@ -1569,12 +1592,16 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
 
 IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, weld::Toggleable&, void)
 {
-    m_xNumFormatFormattingCB->set_sensitive(m_xNumFormattingCB->get_active() &&
-        !officecfg::Office::Writer::Table::Input::NumberFormatRecognition::isReadOnly());
-    m_xNumAlignmentCB->set_sensitive(m_xNumFormattingCB->get_active() &&
-        !officecfg::Office::Writer::Table::Input::Alignment::isReadOnly());
-    m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active() &&
-        !officecfg::Office::Writer::Insert::Table::RepeatHeader::isReadOnly());
+    bool bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Input::NumberFormatRecognition::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Input::NumberFormatRecognition::isReadOnly();
+    m_xNumFormatFormattingCB->set_sensitive(m_xNumFormattingCB->get_active() && !bReadOnly);
+
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Table::Input::Alignment::isReadOnly() :
+        officecfg::Office::WriterWeb::Table::Input::Alignment::isReadOnly();
+    m_xNumAlignmentCB->set_sensitive(m_xNumFormattingCB->get_active() && !bReadOnly);
+
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Insert::Table::RepeatHeader::isReadOnly() : false;
+    m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active() && !bReadOnly);
 }
 
 void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
