@@ -97,4 +97,4 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_OBJ))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/*SimpleBootstrap*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/*FirstUnoContact*))

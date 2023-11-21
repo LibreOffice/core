@@ -81,7 +81,7 @@ $(EXAMPLE_NAME) : $(APP_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo $(MAKE) -f Example_Java.mk $(APP_NAME).run
+	@echo $(MAKE) $(APP_NAME).run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_APP_CLASS)/%.jar
