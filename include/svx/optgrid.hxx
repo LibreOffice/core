@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_OPTGRID_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/svxdllapi.h>
 
 namespace weld { class CheckButton; }
@@ -104,6 +105,7 @@ public:
 
 private:
     bool                bAttrModified;
+    bool                m_bHTMLMode;
 
     std::unique_ptr<weld::CheckButton> m_xCbxUseGridsnap;
     std::unique_ptr<weld::Widget> m_xCbxUseGridsnapImg;

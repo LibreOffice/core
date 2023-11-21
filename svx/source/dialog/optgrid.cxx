@@ -20,6 +20,7 @@
 #include <svl/intitem.hxx>
 #include <svtools/unitconv.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <officecfg/Office/WriterWeb.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/optgrid.hxx>
@@ -91,6 +92,7 @@ bool  SvxGridItem::GetPresentation
 SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "svx/ui/optgridpage.ui", "OptGridPage", &rCoreSet)
     , bAttrModified(false)
+    , m_bHTMLMode(false)
     , m_xCbxUseGridsnap(m_xBuilder->weld_check_button("usegridsnap"))
     , m_xCbxUseGridsnapImg(m_xBuilder->weld_widget("lockusegridsnap"))
     , m_xCbxGridVisible(m_xBuilder->weld_check_button("gridvisible"))
@@ -132,6 +134,10 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
     SetFieldUnit( *m_xMtrFldDrawY, eFUnit, true );
     lcl_SetMinMax(*m_xMtrFldDrawY, nMin, nMax);
 
+    if (const SfxUInt16Item* pItem = rCoreSet.GetItemIfSet(SID_HTML_MODE, false))
+    {
+        m_bHTMLMode = 0 != (pItem->GetValue() & HTMLMODE_ON);
+    }
 
     m_xCbxRotate->connect_toggled(LINK(this, SvxGridTabPage, ClickRotateHdl_Impl));
     Link<weld::Toggleable&,void> aLink = LINK(this, SvxGridTabPage, ChangeGridsnapHdl_Impl);
@@ -213,36 +219,50 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 
     if( (pGridAttr = rSet->GetItemIfSet( SID_ATTR_GRID_OPTIONS , false )) )
     {
+        bool bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Option::SnapToGrid::isReadOnly() :
+            officecfg::Office::WriterWeb::Grid::Option::SnapToGrid::isReadOnly();
         m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
-        m_xCbxUseGridsnap->set_sensitive(!officecfg::Office::Writer::Grid::Option::SnapToGrid::isReadOnly());
-        m_xCbxUseGridsnapImg->set_visible(officecfg::Office::Writer::Grid::Option::SnapToGrid::isReadOnly());
+        m_xCbxUseGridsnap->set_sensitive(!bReadOnly);
+        m_xCbxUseGridsnapImg->set_visible(bReadOnly);
 
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Option::Synchronize::isReadOnly() :
+            officecfg::Office::WriterWeb::Grid::Option::Synchronize::isReadOnly();
         m_xCbxSynchronize->set_active(pGridAttr->bSynchronize);
-        m_xCbxSynchronize->set_sensitive(!officecfg::Office::Writer::Grid::Option::Synchronize::isReadOnly());
-        m_xCbxSynchronizeImg->set_visible(officecfg::Office::Writer::Grid::Option::Synchronize::isReadOnly());
+        m_xCbxSynchronize->set_sensitive(!bReadOnly);
+        m_xCbxSynchronizeImg->set_visible(bReadOnly);
 
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Option::VisibleGrid::isReadOnly() :
+            officecfg::Office::WriterWeb::Grid::Option::VisibleGrid::isReadOnly();
         m_xCbxGridVisible->set_active(pGridAttr->bGridVisible);
-        m_xCbxGridVisible->set_sensitive(!officecfg::Office::Writer::Grid::Option::VisibleGrid::isReadOnly());
-        m_xCbxGridVisibleImg->set_visible(officecfg::Office::Writer::Grid::Option::VisibleGrid::isReadOnly());
+        m_xCbxGridVisible->set_sensitive(!bReadOnly);
+        m_xCbxGridVisibleImg->set_visible(bReadOnly);
 
         MapUnit eUnit = rSet->GetPool()->GetMetric( SID_ATTR_GRID_OPTIONS );
         SetMetricValue( *m_xMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( *m_xMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 
-        m_xMtrFldDrawX->set_sensitive(!officecfg::Office::Writer::Grid::Resolution::XAxis::isReadOnly());
-        m_xMtrFldDrawXImg->set_visible(officecfg::Office::Writer::Grid::Resolution::XAxis::isReadOnly());
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Resolution::XAxis::isReadOnly() :
+            officecfg::Office::WriterWeb::Grid::Resolution::XAxis::isReadOnly();
+        m_xMtrFldDrawX->set_sensitive(!bReadOnly);
+        m_xMtrFldDrawXImg->set_visible(bReadOnly);
 
-        m_xMtrFldDrawY->set_sensitive(!officecfg::Office::Writer::Grid::Resolution::YAxis::isReadOnly());
-        m_xMtrFldDrawYImg->set_visible(officecfg::Office::Writer::Grid::Resolution::YAxis::isReadOnly());
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Resolution::YAxis::isReadOnly() :
+            officecfg::Office::WriterWeb::Grid::Resolution::YAxis::isReadOnly();
+        m_xMtrFldDrawY->set_sensitive(!bReadOnly);
+        m_xMtrFldDrawYImg->set_visible(bReadOnly);
 
         m_xNumFldDivisionX->set_value(pGridAttr->nFldDivisionX + 1);
         m_xNumFldDivisionY->set_value(pGridAttr->nFldDivisionY + 1);
 
-        m_xNumFldDivisionX->set_sensitive(!officecfg::Office::Writer::Grid::Subdivision::XAxis::isReadOnly());
-        m_xNumFldDivisionXImg->set_visible(officecfg::Office::Writer::Grid::Subdivision::XAxis::isReadOnly());
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Subdivision::XAxis::isReadOnly() :
+            officecfg::Office::WriterWeb::Grid::Subdivision::XAxis::isReadOnly();
+        m_xNumFldDivisionX->set_sensitive(!bReadOnly);
+        m_xNumFldDivisionXImg->set_visible(bReadOnly);
 
-        m_xNumFldDivisionY->set_sensitive(!officecfg::Office::Writer::Grid::Subdivision::YAxis::isReadOnly());
-        m_xNumFldDivisionYImg->set_visible(officecfg::Office::Writer::Grid::Subdivision::YAxis::isReadOnly());
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Subdivision::YAxis::isReadOnly() :
+            officecfg::Office::WriterWeb::Grid::Subdivision::YAxis::isReadOnly();
+        m_xNumFldDivisionY->set_sensitive(!bReadOnly);
+        m_xNumFldDivisionYImg->set_visible(bReadOnly);
     }
 
     ChangeGridsnapHdl_Impl(*m_xCbxUseGridsnap);
