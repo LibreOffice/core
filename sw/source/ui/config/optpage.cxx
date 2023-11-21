@@ -52,6 +52,7 @@
 #include <editeng/svxenum.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <officecfg/Office/WriterWeb.hxx>
 #include <sal/macros.h>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/printer.hxx>
@@ -108,6 +109,7 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xSettingsLabel(m_xBuilder->weld_label("settingslabel"))
     , m_xMetricLabel(m_xBuilder->weld_label("measureunitlabel"))
     , m_xMetricLB(m_xBuilder->weld_combo_box("measureunit"))
+    , m_xMetricImg(m_xBuilder->weld_widget("lockmeasureunit"))
     , m_xShowInlineTooltips(m_xBuilder->weld_check_button("changestooltip"))
     , m_xShowInlineTooltipsImg(m_xBuilder->weld_widget("lockchangestooltip"))
     , m_xShowOutlineContentVisibilityButton(m_xBuilder->weld_check_button("outlinecontentvisibilitybutton"))
@@ -203,35 +205,42 @@ static void lcl_SelectMetricLB(weld::ComboBox& rMetric, TypedWhichId<SfxUInt16It
 void SwContentOptPage::Reset(const SfxItemSet* rSet)
 {
     bool bReadOnly = false;
+    bool bWebOptionsPage = m_xSettingsFrame->is_visible();
     const SwElemItem* pElemAttr = rSet->GetItemIfSet( FN_PARAM_ELEM , false );
     if(pElemAttr)
     {
-        bReadOnly = officecfg::Office::Writer::Content::Display::Table::isReadOnly();
+        bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Content::Display::Table::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::Display::Table::isReadOnly();
         m_xTableCB->set_active(pElemAttr->m_bTable);
         m_xTableCB->set_sensitive(!bReadOnly);
         m_xTableImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Content::Display::GraphicObject::isReadOnly();
+        bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Content::Display::GraphicObject::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::Display::GraphicObject::isReadOnly();
         m_xGrfCB->set_active(pElemAttr->m_bGraphic);
         m_xGrfCB->set_sensitive(!bReadOnly);
         m_xGrfImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Content::Display::DrawingControl::isReadOnly();
+        bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Content::Display::DrawingControl::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::Display::DrawingControl::isReadOnly();
         m_xDrwCB->set_active(pElemAttr->m_bDrawing);
         m_xDrwCB->set_sensitive(!bReadOnly);
         m_xDrwImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Content::Display::Note::isReadOnly();
+        bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Content::Display::Note::isReadOnly() :
+            officecfg::Office::WriterWeb::Content::Display::Note::isReadOnly();
         m_xPostItCB->set_active(pElemAttr->m_bNotes);
         m_xPostItCB->set_sensitive(!bReadOnly);
         m_xPostItCB->set_visible(pElemAttr->m_bNotes);
 
-        bReadOnly = officecfg::Office::Writer::Layout::Line::Guide::isReadOnly();
+        bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Layout::Line::Guide::isReadOnly() :
+            officecfg::Office::WriterWeb::Layout::Line::Guide::isReadOnly();
         m_xCrossCB->set_active(pElemAttr->m_bCrosshair);
         m_xCrossCB->set_sensitive(!bReadOnly);
         m_xCrossImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Layout::Window::VerticalRuler::isReadOnly();
+        bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Layout::Window::VerticalRuler::isReadOnly() :
+            officecfg::Office::WriterWeb::Layout::Window::VerticalRuler::isReadOnly();
         m_xVRulerCBox->set_active(pElemAttr->m_bVertRuler);
         m_xVRulerCBox->set_sensitive(!bReadOnly);
         m_xVRulerImg->set_visible(bReadOnly);
@@ -241,7 +250,8 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_xVRulerRightCBox->set_sensitive(!bReadOnly);
         m_xVRulerRightImg->set_visible(bReadOnly);
 
-        bReadOnly = officecfg::Office::Writer::Layout::Window::SmoothScroll::isReadOnly();
+        bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Layout::Window::SmoothScroll::isReadOnly() :
+            officecfg::Office::WriterWeb::Layout::Window::SmoothScroll::isReadOnly();
         m_xSmoothCBox->set_active(pElemAttr->m_bSmoothScroll);
         m_xSmoothCBox->set_sensitive(!bReadOnly);
         m_xSmoothImg->set_visible(bReadOnly);
@@ -277,14 +287,22 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_xFieldHiddenParaImg->set_visible(bReadOnly);
     }
 
-    bReadOnly = officecfg::Office::Writer::Layout::Window::HorizontalRulerUnit::isReadOnly();
+    bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Layout::Window::HorizontalRulerUnit::isReadOnly() :
+        officecfg::Office::WriterWeb::Layout::Window::HorizontalRulerUnit::isReadOnly();
     m_xHMetric->set_sensitive(!bReadOnly);
     m_xHMetricImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Writer::Layout::Window::VerticalRulerUnit::isReadOnly();
+    bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Layout::Window::VerticalRulerUnit::isReadOnly() :
+        officecfg::Office::WriterWeb::Layout::Window::VerticalRulerUnit::isReadOnly();
     m_xVMetric->set_sensitive(!bReadOnly);
 
     m_xMetricLB->set_active(-1);
+    if (bWebOptionsPage)
+    {
+        bReadOnly = officecfg::Office::WriterWeb::Layout::Other::MeasureUnit::isReadOnly();
+        m_xMetricLB->set_sensitive(!bReadOnly);
+        m_xMetricImg->set_visible(bReadOnly);
+    }
     lcl_SelectMetricLB(*m_xMetricLB, SID_ATTR_METRIC, *rSet);
     lcl_SelectMetricLB(*m_xHMetric, FN_HSCROLL_METRIC, *rSet);
     lcl_SelectMetricLB(*m_xVMetric, FN_VSCROLL_METRIC, *rSet);
