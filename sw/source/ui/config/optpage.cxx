@@ -415,6 +415,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(weld::Container* pPage, weld::DialogCon
     , m_sNone(SwResId(SW_STR_NONE))
     , m_bAttrModified(false)
     , m_bPreview(false)
+    , m_bHTMLMode(false)
     , m_xGrfCB(m_xBuilder->weld_check_button("graphics"))
     , m_xGrfImg(m_xBuilder->weld_widget("lockgraphics"))
     , m_xCtrlFieldCB(m_xBuilder->weld_check_button("formcontrols"))
@@ -473,6 +474,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(weld::Container* pPage, weld::DialogCon
     const SfxUInt16Item* pItem = rCoreSet.GetItemIfSet(SID_HTML_MODE, false );
     if(pItem && pItem->GetValue() & HTMLMODE_ON)
     {
+        m_bHTMLMode = true;
         m_xLeftPageCB->hide();
         m_xRightPageCB->hide();
         m_xPrintHiddenTextCB->hide();
@@ -577,56 +579,76 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
 void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
 {
     const   SfxItemSet&         rSet = GetItemSet();
+    bool bReadOnly = false;
 
     if( const SwAddPrinterItem* pAddPrinterAttr = rSet.GetItemIfSet( FN_PARAM_ADDPRINTER , false ) )
     {
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Content::Graphic::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Content::Graphic::isReadOnly();
         m_xGrfCB->set_active(pAddPrinterAttr->m_bPrintGraphic || pAddPrinterAttr->m_bPrintDraw);
-        m_xGrfCB->set_sensitive(!officecfg::Office::Writer::Print::Content::Graphic::isReadOnly());
-        m_xGrfImg->set_visible(officecfg::Office::Writer::Print::Content::Graphic::isReadOnly());
+        m_xGrfCB->set_sensitive(!bReadOnly);
+        m_xGrfImg->set_visible(bReadOnly);
 
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Content::Control::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Content::Control::isReadOnly();
         m_xCtrlFieldCB->set_active(       pAddPrinterAttr->m_bPrintControl);
-        m_xCtrlFieldCB->set_sensitive(!officecfg::Office::Writer::Print::Content::Control::isReadOnly());
-        m_xCtrlFieldImg->set_visible(officecfg::Office::Writer::Print::Content::Control::isReadOnly());
+        m_xCtrlFieldCB->set_sensitive(!bReadOnly);
+        m_xCtrlFieldImg->set_visible(bReadOnly);
 
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Content::Background::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Content::Background::isReadOnly();
         m_xBackgroundCB->set_active(    pAddPrinterAttr->m_bPrintPageBackground);
-        m_xBackgroundCB->set_sensitive(!officecfg::Office::Writer::Print::Content::Background::isReadOnly());
-        m_xBackgroundImg->set_visible(officecfg::Office::Writer::Print::Content::Background::isReadOnly());
+        m_xBackgroundCB->set_sensitive(!bReadOnly);
+        m_xBackgroundImg->set_visible(bReadOnly);
 
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Content::PrintBlack::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Content::PrintBlack::isReadOnly();
         m_xBlackFontCB->set_active(     pAddPrinterAttr->m_bPrintBlackFont);
-        m_xBlackFontCB->set_sensitive(!officecfg::Office::Writer::Print::Content::PrintBlack::isReadOnly());
-        m_xBlackFontImg->set_visible(officecfg::Office::Writer::Print::Content::PrintBlack::isReadOnly());
+        m_xBlackFontCB->set_sensitive(!bReadOnly);
+        m_xBlackFontImg->set_visible(bReadOnly);
 
+        bReadOnly = officecfg::Office::Writer::Print::Content::PrintHiddenText::isReadOnly();
         m_xPrintHiddenTextCB->set_active( pAddPrinterAttr->m_bPrintHiddenText);
-        m_xPrintHiddenTextCB->set_sensitive(!officecfg::Office::Writer::Print::Content::PrintHiddenText::isReadOnly());
-        m_xPrintHiddenTextImg->set_visible(officecfg::Office::Writer::Print::Content::PrintHiddenText::isReadOnly());
+        m_xPrintHiddenTextCB->set_sensitive(!bReadOnly);
+        m_xPrintHiddenTextImg->set_visible(bReadOnly);
 
+        bReadOnly = officecfg::Office::Writer::Print::Content::PrintPlaceholders::isReadOnly();
         m_xPrintTextPlaceholderCB->set_active(pAddPrinterAttr->m_bPrintTextPlaceholder);
-        m_xPrintTextPlaceholderCB->set_sensitive(!officecfg::Office::Writer::Print::Content::PrintPlaceholders::isReadOnly());
-        m_xPrintTextPlaceholderImg->set_visible(officecfg::Office::Writer::Print::Content::PrintPlaceholders::isReadOnly());
+        m_xPrintTextPlaceholderCB->set_sensitive(!bReadOnly);
+        m_xPrintTextPlaceholderImg->set_visible(bReadOnly);
 
+        bReadOnly = officecfg::Office::Writer::Print::Page::LeftPage::isReadOnly();
         m_xLeftPageCB->set_active(      pAddPrinterAttr->m_bPrintLeftPages);
-        m_xLeftPageCB->set_sensitive(!officecfg::Office::Writer::Print::Page::LeftPage::isReadOnly());
-        m_xLeftPageImg->set_visible(officecfg::Office::Writer::Print::Page::LeftPage::isReadOnly());
+        m_xLeftPageCB->set_sensitive(!bReadOnly);
+        m_xLeftPageImg->set_visible(bReadOnly);
 
+        bReadOnly = officecfg::Office::Writer::Print::Page::RightPage::isReadOnly();
         m_xRightPageCB->set_active(     pAddPrinterAttr->m_bPrintRightPages);
-        m_xRightPageCB->set_sensitive(!officecfg::Office::Writer::Print::Page::RightPage::isReadOnly());
-        m_xRightPageImg->set_visible(officecfg::Office::Writer::Print::Page::RightPage::isReadOnly());
+        m_xRightPageCB->set_sensitive(!bReadOnly);
+        m_xRightPageImg->set_visible(bReadOnly);
 
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Papertray::FromPrinterSetup::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Papertray::FromPrinterSetup::isReadOnly();
         m_xPaperFromSetupCB->set_active(pAddPrinterAttr->m_bPaperFromSetup);
-        m_xPaperFromSetupCB->set_sensitive(!officecfg::Office::Writer::Print::Papertray::FromPrinterSetup::isReadOnly());
-        m_xPaperFromSetupImg->set_visible(officecfg::Office::Writer::Print::Papertray::FromPrinterSetup::isReadOnly());
+        m_xPaperFromSetupCB->set_sensitive(!bReadOnly);
+        m_xPaperFromSetupImg->set_visible(bReadOnly);
 
+        bReadOnly = officecfg::Office::Writer::Print::EmptyPages::isReadOnly();
         m_xPrintEmptyPagesCB->set_active(pAddPrinterAttr->m_bPrintEmptyPages);
-        m_xPrintEmptyPagesCB->set_sensitive(!officecfg::Office::Writer::Print::EmptyPages::isReadOnly());
-        m_xPrintEmptyPagesImg->set_visible(officecfg::Office::Writer::Print::EmptyPages::isReadOnly());
+        m_xPrintEmptyPagesCB->set_sensitive(!bReadOnly);
+        m_xPrintEmptyPagesImg->set_visible(bReadOnly);
 
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Page::Brochure::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Page::Brochure::isReadOnly();
         m_xProspectCB->set_active(      pAddPrinterAttr->m_bPrintProspect);
-        m_xProspectCB->set_sensitive(!officecfg::Office::Writer::Print::Page::Brochure::isReadOnly());
-        m_xProspectImg->set_visible(officecfg::Office::Writer::Print::Page::Brochure::isReadOnly());
+        m_xProspectCB->set_sensitive(!bReadOnly);
+        m_xProspectImg->set_visible(bReadOnly);
 
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Page::BrochureRightToLeft::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Page::BrochureRightToLeft::isReadOnly();
         m_xProspectCB_RTL->set_active(      pAddPrinterAttr->m_bPrintProspectRTL);
-        m_xProspectCB_RTL->set_sensitive(!officecfg::Office::Writer::Print::Page::BrochureRightToLeft::isReadOnly());
-        m_xProspectImg_RTL->set_visible(officecfg::Office::Writer::Print::Page::BrochureRightToLeft::isReadOnly());
+        m_xProspectCB_RTL->set_sensitive(!bReadOnly);
+        m_xProspectImg_RTL->set_visible(bReadOnly);
 
         m_xNoRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::NONE ) ;
         m_xOnlyRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::Only ) ;
@@ -634,13 +656,14 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         m_xEndPageRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndPage ) ;
         m_xInMarginsRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::InMargins ) ;
 
-        bool bNotesReadOnly = officecfg::Office::Writer::Print::Content::Note::isReadOnly();
-        m_xNoRB->set_sensitive(!bNotesReadOnly);
-        m_xOnlyRB->set_sensitive(!bNotesReadOnly);
-        m_xEndRB->set_sensitive(!bNotesReadOnly);
-        m_xEndPageRB->set_sensitive(!bNotesReadOnly);
-        m_xInMarginsRB->set_sensitive(!bNotesReadOnly);
-        m_xMarginsImg->set_visible(bNotesReadOnly);
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Content::Note::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Content::Note::isReadOnly();
+        m_xNoRB->set_sensitive(!bReadOnly);
+        m_xOnlyRB->set_sensitive(!bReadOnly);
+        m_xEndRB->set_sensitive(!bReadOnly);
+        m_xEndPageRB->set_sensitive(!bReadOnly);
+        m_xInMarginsRB->set_sensitive(!bReadOnly);
+        m_xMarginsImg->set_visible(bReadOnly);
 
         auto nFound = m_xFaxLB->find_text(pAddPrinterAttr->m_sFaxName);
         if (nFound != -1)
@@ -648,12 +671,16 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         else if (m_xFaxLB->get_count())
             m_xFaxLB->set_active(0);
 
-        m_xFaxLB->set_sensitive(!officecfg::Office::Writer::Print::Output::Fax::isReadOnly());
-        m_xFaxImg->set_visible(officecfg::Office::Writer::Print::Output::Fax::isReadOnly());
+        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Output::Fax::isReadOnly() :
+            officecfg::Office::WriterWeb::Print::Output::Fax::isReadOnly();
+        m_xFaxLB->set_sensitive(!bReadOnly);
+        m_xFaxImg->set_visible(bReadOnly);
     }
+    bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Page::BrochureRightToLeft::isReadOnly() :
+        officecfg::Office::WriterWeb::Print::Page::BrochureRightToLeft::isReadOnly();
     if (m_xProspectCB->get_active())
     {
-        m_xProspectCB_RTL->set_sensitive(!officecfg::Office::Writer::Print::Page::BrochureRightToLeft::isReadOnly());
+        m_xProspectCB_RTL->set_sensitive(!bReadOnly);
         m_xNoRB->set_sensitive( false );
         m_xOnlyRB->set_sensitive( false );
         m_xEndRB->set_sensitive( false );
@@ -662,7 +689,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
     else
         m_xProspectCB_RTL->set_sensitive( false );
 
-    m_xProspectImg_RTL->set_visible(officecfg::Office::Writer::Print::Page::BrochureRightToLeft::isReadOnly());
+    m_xProspectImg_RTL->set_visible(bReadOnly);
 }
 
 IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl, weld::Toggleable&, void)

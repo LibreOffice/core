@@ -95,6 +95,7 @@ class SwAddPrinterTabPage final : public SfxTabPage
     OUString m_sNone;
     bool m_bAttrModified;
     bool m_bPreview;
+    bool m_bHTMLMode;
 
     std::unique_ptr<weld::CheckButton>  m_xGrfCB;
     std::unique_ptr<weld::Widget>  m_xGrfImg;
