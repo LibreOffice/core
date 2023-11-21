@@ -33,6 +33,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/urlfieldhelper.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Security.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
@@ -1010,8 +1011,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 #ifndef ENABLE_SDREMOTE
         bDisableSdremoteForGood = true;
 #endif
-        bDisableSdremoteForGood |= ! ( /*officecfg::Office::Common::Misc::ExperimentalMode::get() &&*/
-                                       officecfg::Office::Impress::Misc::Start::EnableSdremote::get() );
+        bDisableSdremoteForGood |= !(officecfg::Office::Impress::Misc::Start::EnableSdremote::get()
+                                     && officecfg::Office::Security::Net::AllowInsecureImpressRemoteWiFi::get()
+                                       );
 
         // This dialog is only useful for TCP/IP remote control
         // which is unusual, under-tested and a security issue.

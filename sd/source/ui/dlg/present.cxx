@@ -18,6 +18,7 @@
  */
 
 #include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Security.hxx>
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -70,6 +71,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xFtNavigationButtonsSize(m_xBuilder->weld_label("navbar_btn_size_label"))
     , m_xFrameEnableRemote(m_xBuilder->weld_frame("frameremote"))
     , m_xCbxEnableRemote(m_xBuilder->weld_check_button("enableremote"))
+    , m_xCbxEnableRemoteInsecure(m_xBuilder->weld_check_button("enableremoteinsecure"))
     , m_xLbConsole(m_xBuilder->weld_combo_box("console_cb"))
     , m_xFtMonitor(m_xBuilder->weld_label("presdisplay_label"))
     , m_xLBMonitor(m_xBuilder->weld_combo_box("presdisplay_cb"))
@@ -166,7 +168,11 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
         m_xLbConsole->set_active(PresenterConsoleMode::Windowed);
 
 #ifdef ENABLE_SDREMOTE
+    m_xCbxEnableRemote->connect_toggled( LINK(this, SdStartPresentationDlg, ChangeRemoteHdl) );
     m_xCbxEnableRemote->set_active(officecfg::Office::Impress::Misc::Start::EnableSdremote::get());
+    ChangeRemoteHdl(*m_xCbxEnableRemote);
+    m_xCbxEnableRemoteInsecure->set_active(m_xCbxEnableRemote->get_active()
+        && officecfg::Office::Security::Net::AllowInsecureImpressRemoteWiFi::get());
 #else
     m_xFrameEnableRemote->hide();
 #endif
@@ -204,7 +210,8 @@ short SdStartPresentationDlg::run()
             m_xLbNavigationButtonsSize->get_active(), batch);
 
 #ifdef ENABLE_SDREMOTE
-    officecfg::Office::Impress::Misc::Start::EnableSdremote::set(m_xCbxEnableRemote->get_active(), batch);
+        officecfg::Office::Impress::Misc::Start::EnableSdremote::set(m_xCbxEnableRemote->get_active(), batch);
+        officecfg::Office::Security::Net::AllowInsecureImpressRemoteWiFi::set(m_xCbxEnableRemoteInsecure->get_active(), batch);
 #endif
         batch->commit();
     }
@@ -337,6 +344,11 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
     nPos = m_xLbCustomshow->get_active();
     if (nPos != -1)
         pCustomShowList->Seek( nPos );
+}
+
+IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRemoteHdl, weld::Toggleable&, void)
+{
+    m_xCbxEnableRemoteInsecure->set_sensitive(m_xCbxEnableRemote->get_active());
 }
 
 /**

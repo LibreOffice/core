@@ -777,7 +777,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
+                  <!-- n-columns=2 n-rows=2 -->
                   <object class="GtkGrid" id="grid10">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -814,6 +814,21 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="enableremoteinsecure">
+                        <property name="label" translatable="yes" context="presentationdialog|enableremoteinsecure">Enable insecure WiFi connections</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="presentationdialog|enableremoteinsecure|tooltip_text">In addition to Bluetooth connections, enable insecure and unencrypted connections via IP on all network interfaces. Not recommended in public settings.</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                   </object>

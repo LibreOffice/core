@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Security.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -191,8 +192,8 @@ void IPRemoteServer::setup()
 void RemoteServer::presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController )
 {
-    if (!IPRemoteServer::spServer)
-        return;
+    // note this can be invoked even when there is no IPRemoteServer instance
+    // but there are communicators belonging to a BluetoothServer
     MutexGuard aGuard( sDataMutex );
     for ( const auto& rpCommunicator : sCommunicators )
     {
@@ -201,8 +202,6 @@ void RemoteServer::presentationStarted( const css::uno::Reference<
 }
 void RemoteServer::presentationStopped()
 {
-    if (!IPRemoteServer::spServer)
-        return;
     MutexGuard aGuard( sDataMutex );
     for ( const auto& rpCommunicator : sCommunicators )
     {
@@ -212,8 +211,6 @@ void RemoteServer::presentationStopped()
 
 void RemoteServer::removeCommunicator( Communicator const * mCommunicator )
 {
-    if (!IPRemoteServer::spServer)
-        return;
     MutexGuard aGuard( sDataMutex );
     auto aIt = std::find(sCommunicators.begin(), sCommunicators.end(), mCommunicator);
     if (aIt != sCommunicators.end())
@@ -352,7 +349,15 @@ void SdDLL::RegisterRemotes()
     sd::BluetoothServer::setup( &RemoteServer::sCommunicators );
 #endif
 
+    if (!officecfg::Office::Security::Net::AllowInsecureImpressRemoteWiFi::get())
+    {
+        SAL_WARN("desktop", "Impress remote WiFi is disabled by configuration");
+        return;
+    }
+
+    // this is the IP/WiFi server
     sd::IPRemoteServer::setup();
+    // assumption is that BluetoothServer doesn't need DiscoveryService
     sd::DiscoveryService::setup();
 }
 

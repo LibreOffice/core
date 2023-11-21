@@ -48,6 +48,12 @@
       <info>
         <desc>Specifies security aspects of network connections.</desc>
       </info>
+      <prop oor:name="AllowInsecureImpressRemoteWiFi" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Allow using the Impress Remote via WiFi or other local IP network. The server will listen on all local interfaces, and the protocol lacks encryption (the PIN is transmitted in clear text).</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="AllowInsecureProtocols" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Allow using insecure and/or unencrypted protocols such as HTTP, SMTP, FTP.</desc>
