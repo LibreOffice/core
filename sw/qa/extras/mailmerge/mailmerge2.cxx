@@ -85,7 +85,6 @@ public:
     {
         maMMTest2Filename = filename;
         header();
-        preTest(filename);
 
         utl::TempFileNamed aTempDir(nullptr, true);
         aTempDir.EnableKillingFile();
