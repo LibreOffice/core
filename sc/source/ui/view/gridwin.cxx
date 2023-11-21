@@ -6719,11 +6719,13 @@ void ScGridWindow::UpdateHighlightOverlay()
                 }
             }
 
-            const Color aHighlight = SC_MOD()->GetColorConfig().GetColorValue(svtools::APPBACKGROUND ).nColor;
+            const Color aBackgroundColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            Color aHighlightColor = Application::GetSettings().GetStyleSettings().GetAccentColor();
+            aHighlightColor.Merge(aBackgroundColor, 100);
 
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Transparent,
-                aHighlight,
+                aHighlightColor,
                 std::move(aRanges),
                 false));
 
