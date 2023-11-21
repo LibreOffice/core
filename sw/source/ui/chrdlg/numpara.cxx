@@ -34,7 +34,11 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/viewsh.hxx>
 
-const WhichRangesContainer SwParagraphNumTabPage::s_aPageRg(svl::Items<FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT>);
+// tdf#115871 - reset outline and list options to parent settings
+const WhichRangesContainer SwParagraphNumTabPage::s_aPageRg(
+    svl::Items<RES_LINENUMBER, RES_LINENUMBER, SID_ATTR_PARA_NUMRULE, SID_ATTR_PARA_NUMRULE,
+               SID_ATTR_PARA_OUTLINE_LEVEL, SID_ATTR_PARA_OUTLINE_LEVEL, FN_NUMBER_NEWSTART,
+               FN_NUMBER_NEWSTART_AT>);
 
 SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/numparapage.ui", "NumParaPage", &rAttr)
