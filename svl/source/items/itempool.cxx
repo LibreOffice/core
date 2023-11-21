@@ -40,8 +40,6 @@ static size_t nRemainingDirectlyPooledSfxPoolItemCount(0);
 size_t getAllDirectlyPooledSfxPoolItemCount() { return nAllDirectlyPooledSfxPoolItemCount; }
 size_t getRemainingDirectlyPooledSfxPoolItemCount() { return nRemainingDirectlyPooledSfxPoolItemCount; }
 #endif
-// NOTE: Only needed for one Item in SC, see note in itemset.cxx
-static bool g_bItemClassicMode(getenv("ITEM_CLASSIC_MODE"));
 
 // WhichIDs that need to set _bNeedsPoolRegistration in SfxItemInfo
 // to true to allow a register of all items of that type/with that WhichID
