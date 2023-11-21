@@ -182,7 +182,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     if (nFormat == SotClipboardFormatId::STRING)
                         pOutView->Paste();
                     else
-                        pOutView->PasteSpecial();
+                        pOutView->PasteSpecial(nFormat);
                 }
             }
             break;
@@ -527,6 +527,8 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
                         aFormats.AddClipbrdFormat( SotClipboardFormatId::RTF );
                     if ( aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
                         aFormats.AddClipbrdFormat( SotClipboardFormatId::RICHTEXT );
+                    if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))
+                        aFormats.AddClipbrdFormat(SotClipboardFormatId::HTML_SIMPLE);
 
                     rSet.Put( aFormats );
                 }

@@ -1108,7 +1108,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest const &rReq)
                 if (nFormat == SotClipboardFormatId::STRING)
                     pOLV->Paste();
                 else
-                    pOLV->PasteSpecial();
+                    pOLV->PasteSpecial(nFormat);
             }
 
             break;
@@ -1133,7 +1133,8 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &GetView().GetEditWin() ) );
     const bool bPaste = aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ||
                         aDataHelper.HasFormat( SotClipboardFormatId::RTF ) ||
-                        aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT );
+                        aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) ||
+                        aDataHelper.HasFormat( SotClipboardFormatId::HTML_SIMPLE);
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -1166,6 +1167,8 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
                     aFormats.AddClipbrdFormat( SotClipboardFormatId::RTF );
                 if ( aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
                     aFormats.AddClipbrdFormat( SotClipboardFormatId::RICHTEXT );
+                if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))
+                    aFormats.AddClipbrdFormat(SotClipboardFormatId::HTML_SIMPLE);
 
                 rSet.Put( aFormats );
             }
