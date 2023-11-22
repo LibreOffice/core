@@ -61,4 +61,6 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_txtexport,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_txtexport))
 
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_txtexport,abort))
+
 # vim: set noet sw=4 ts=4:

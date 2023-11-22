@@ -69,4 +69,6 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_xhtmlexport, \
     svx \
 ))
 
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_xhtmlexport,abort))
+
 # vim: set noet sw=4 ts=4:
