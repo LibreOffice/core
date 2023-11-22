@@ -149,6 +149,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtBlockText)
     xContentControlProps->getPropertyValue("Alias") >>= aAlias;
     CPPUNIT_ASSERT_EQUAL(OUString("myalias"), aAlias);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFdo78333)
+{
+    // just care that it doesn't crash/assert
+    loadFromURL(u"fdo78333-1-minimized.docx");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
