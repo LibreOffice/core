@@ -795,7 +795,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                             nAdjust = 1; // 1 half of the possible
                             break;
                         case SDRTEXTHORZADJUST_BLOCK:
-                            nAdjust = -1; // don't know what it is, so dont even align
+                            nAdjust = -1; // don't know what it is, so don't even align
                             break;
                         case SDRTEXTHORZADJUST_LEFT:
                             nAdjust = 0; // no need to move
