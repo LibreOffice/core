@@ -196,6 +196,26 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
     return pRet;
 }
 
+// Update ImplGetSVData()->mpWinData->mbIsLiveResize and return the old value
+static bool updateWinDataInLiveResize(bool bInLiveResize)
+{
+    bool bRet = false;
+
+    ImplSVData* pSVData = ImplGetSVData();
+    assert( pSVData );
+    if ( pSVData )
+    {
+        bRet = pSVData->mpWinData->mbIsLiveResize;
+        if ( bRet != bInLiveResize )
+        {
+            pSVData->mpWinData->mbIsLiveResize = bInLiveResize;
+            Scheduler::Wakeup();
+        }
+    }
+
+    return bRet;
+}
+
 @interface NSResponder (SalFrameWindow)
 -(BOOL)accessibilityIsIgnored;
 @end
@@ -204,7 +224,6 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
     mDraggingDestinationHandler = nil;
-    mbInLiveResize = NO;
     mbInWindowDidResize = NO;
     mpLiveResizeTimer = nil;
     mpFrame = pFrame;
@@ -387,22 +406,9 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
 
         bool bInLiveResize = [self inLiveResize];
-        ImplSVData* pSVData = ImplGetSVData();
-        assert( pSVData );
-        if ( pSVData )
+        bool bOldInLiveResize = updateWinDataInLiveResize(bInLiveResize);
+        if ( bInLiveResize || bOldInLiveResize )
         {
-            const bool bWasLiveResize = pSVData->mpWinData->mbIsLiveResize;
-            if ( bWasLiveResize != bInLiveResize )
-            {
-                pSVData->mpWinData->mbIsLiveResize = bInLiveResize;
-                Scheduler::Wakeup();
-            }
-        }
-
-        if ( bInLiveResize || mbInLiveResize )
-        {
-            mbInLiveResize = bInLiveResize;
-
 #if HAVE_FEATURE_SKIA
             // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
             // The window will clear its background so when Skia/Metal is
@@ -441,7 +447,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
             [self setMinSize:aMinSize];
             [self setMaxSize:aMaxSize];
 
-            if ( mbInLiveResize )
+            if ( bInLiveResize )
             {
                 // tdf#152703 Force repaint after live resizing ends
                 // Repost this notification so that this selector will be called
@@ -2510,6 +2516,16 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
 -(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder
 {
     return [self accessibilityChildren];
+}
+
+-(void)viewWillStartLiveResize
+{
+    updateWinDataInLiveResize(true);
+}
+
+-(void)viewDidEndLiveResize
+{
+    updateWinDataInLiveResize(false);
 }
 
 @end

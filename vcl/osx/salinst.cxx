@@ -607,7 +607,9 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 
             [NSApp updateWindows];
 
-            if ( !bHandleAllCurrentEvents || !pEvent || now < [pEvent timestamp] )
+            // Related: tdf#155092 keep LibreOffice state closely synched to
+            // the dispatched native event state during live resize.
+            if ( !bHandleAllCurrentEvents || !pEvent || now < [pEvent timestamp] || ImplGetSVData()->mpWinData->mbIsLiveResize )
                 break;
             // noelgrandin: I see sporadic hangs on the macos jenkins boxes, and the backtrace
             // points to the this loop - let us see if breaking out of here after too many
@@ -630,14 +632,16 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         {
             SolarMutexReleaser aReleaser;
 
-            // attempt to fix macos jenkins hangs - part 3
+            // Related: tdf#155092 don't block during a live resize.
+            // Also, attempt to fix macos jenkins hangs - part 3
             // oox::xls::WorkbookFragment::finalizeImport() calls
             // AquaSalInstance::DoYield() with bWait set to true. But
             // since unit tests generally have no expected user generated
             // events, we can end up blocking and waiting forever so
             // don't block and wait when running unit tests.
+            NSDate *pDate = ( ImplGetSVData()->mpWinData->mbIsLiveResize || SalInstance::IsRunningUnitTest() ) ? [NSDate distantPast] : [NSDate distantFuture];
             pEvent = [NSApp nextEventMatchingMask: NSEventMaskAny
-                            untilDate: SalInstance::IsRunningUnitTest() ? [NSDate distantPast] : [NSDate distantFuture]
+                            untilDate: pDate
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
             if( pEvent )

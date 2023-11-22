@@ -28,7 +28,6 @@ enum class SalEvent;
 {
     AquaSalFrame*       mpFrame;
     id mDraggingDestinationHandler;
-    BOOL                mbInLiveResize;
     BOOL                mbInWindowDidResize;
     NSTimer*            mpLiveResizeTimer;
 }
@@ -261,6 +260,9 @@ enum class SalEvent;
 -(NSArray *)accessibilitySelectedChildren;
 -(NSArray *)accessibilityChildren;
 -(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder;
+
+-(void)viewWillStartLiveResize;
+-(void)viewDidEndLiveResize;
 
 @end
 
