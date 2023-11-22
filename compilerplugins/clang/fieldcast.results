@@ -88,9 +88,6 @@ editeng/source/editeng/impedit.hxx:506
 extensions/source/update/check/updatecheck.hxx:164
     UpdateCheck m_pThread WorkerThread *
     (anonymous namespace)::UpdateCheckThread
-framework/inc/services/layoutmanager.hxx:253
-    framework::LayoutManager m_xMenuBar css::uno::Reference<css::ui::XUIElement>
-    framework::MenuBarWrapper
 framework/inc/services/layoutmanager.hxx:256
     framework::LayoutManager m_xProgressBarBackup css::uno::Reference<css::ui::XUIElement>
     framework::ProgressBarWrapper

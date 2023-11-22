@@ -42,9 +42,10 @@
 #include <vcl/timer.hxx>
 
 class MenuBar;
+
 namespace framework
 {
-
+    class MenuBarWrapper;
     class ToolbarLayoutManager;
     class GlobalSettings;
     namespace detail
@@ -250,7 +251,7 @@ namespace framework
             css::awt::Rectangle                                            m_aDockingArea;
             css::uno::Reference< css::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
             rtl::Reference< MenuBarManager >                               m_xInplaceMenuBar;
-            css::uno::Reference< css::ui::XUIElement >                     m_xMenuBar;
+            rtl::Reference< MenuBarWrapper >                               m_xMenuBar;
             UIElement                                                      m_aStatusBarElement;
             UIElement                                                      m_aProgressBarElement;
             css::uno::Reference< css::ui::XUIElement >                     m_xProgressBarBackup;
