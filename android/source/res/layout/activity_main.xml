@@ -42,7 +42,7 @@
                 <EditText
                     android:id="@+id/calc_address"
                     android:layout_width="@dimen/calc_address_bar_width"
-                    android:layout_height="@dimen/calc_toolbar_height"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:inputType="textNoSuggestions"
                     android:imeOptions="actionDone|actionGo"
@@ -51,7 +51,7 @@
                 <EditText
                     android:id="@+id/calc_formula"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/calc_toolbar_height"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:inputType="text"
                     android:imeOptions="actionDone|actionGo"
