@@ -828,7 +828,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                         vCurOutline.reserve(nPointCount);
                         vNorm.reserve(nPointCount);
 
-                        // Calculate Normal vectors, and allocate curve datas
+                        // Calculate Normal vectors, and allocate curve data
                         sal_uInt16 i;
                         for (i = 0; i < nPointCount; i++)
                         {
