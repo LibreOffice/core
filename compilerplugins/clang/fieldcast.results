@@ -565,9 +565,6 @@ sw/source/ui/dialog/swdlgfact.hxx:562
 sw/source/uibase/inc/fldmgr.hxx:103
     SwFieldMgr m_pCurField SwField *
     SwPageNumberField
-sw/source/uibase/inc/swdtflvr.hxx:81
-    SwTransferable m_xDdeLink tools::SvRef<sfx2::SvBaseLink>
-    (anonymous namespace)::SwTransferDdeLink
 sw/source/uibase/inc/swuiccoll.hxx:35
     SwCondCollPage m_pFormat SwFormat *
     SwConditionTextFormatColl

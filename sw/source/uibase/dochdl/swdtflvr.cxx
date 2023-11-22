@@ -173,8 +173,6 @@ void collectUIInformation(const OUString& rAction, const OUString& aParameters)
 
 }
 
-namespace {
-
 class SwTransferDdeLink : public ::sfx2::SvBaseLink
 {
     OUString m_sName;
@@ -203,8 +201,6 @@ public:
 
     void Disconnect( bool bRemoveDataAdvise );
 };
-
-}
 
 /// Tracks the boundaries of pasted content and notifies listeners.
 class SwPasteContext
@@ -393,7 +389,7 @@ void SwTransferable::DisconnectDDE()
 {
     if( m_xDdeLink.is() )
     {
-        static_cast<SwTransferDdeLink*>( m_xDdeLink.get() )->Disconnect( true );
+        m_xDdeLink->Disconnect( true );
         m_xDdeLink.clear();
     }
 }

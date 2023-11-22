@@ -73,12 +73,14 @@ enum class PasteTableType
         PASTE_TABLE    // paste table as nested table
 };
 
+class SwTransferDdeLink;
+
 class SW_DLLPUBLIC SwTransferable final : public TransferableHelper
 {
     friend class SwView_Impl;
     SfxObjectShellLock              m_aDocShellRef;
     TransferableObjectDescriptor    m_aObjDesc;
-    tools::SvRef<sfx2::SvBaseLink>  m_xDdeLink;
+    tools::SvRef<SwTransferDdeLink>  m_xDdeLink;
 
     SwWrtShell      *m_pWrtShell;
     /* #96392# Added pCreatorView to distinguish SwFrameShell from
