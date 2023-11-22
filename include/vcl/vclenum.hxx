@@ -270,6 +270,15 @@ enum class ToolBoxButtonSize
     Size32,
 };
 
+// available button sizes for navigation bar
+enum class NavbarButtonSize
+{
+    Auto,
+    Small,
+    Large,
+    XLarge,
+};
+
 namespace vcl
 {
     // The exact sizes of the icons in each size grouping are not necessarily

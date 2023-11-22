@@ -1828,7 +1828,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             return false;
 
         mpNavigationMenu = SlideOverlayButton::create(
-            xBitmap, { 80, 10 },
+            xBitmap, { xBitmap->getSize().Width + 48, 10 },
             [this](basegfx::B2DPoint pos) {
                 maListenerContainer.forEach(
                     [pos](const uno::Reference<presentation::XSlideShowListener>& xListener) {
@@ -1852,7 +1852,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             return false;
 
         mpNavigationNext = SlideOverlayButton::create(
-            xBitmap, { 140, 10 }, [this](basegfx::B2DPoint) { notifySlideEnded(false); },
+            xBitmap, { 2 * xBitmap->getSize().Width + 76, 10 }, [this](basegfx::B2DPoint) { notifySlideEnded(false); },
             maScreenUpdater, maEventMultiplexer, maViewContainer);
 
         return true;

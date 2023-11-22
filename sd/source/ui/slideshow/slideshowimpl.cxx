@@ -1091,7 +1091,37 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             }
             if (officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::get())
             {
-                BitmapEx prevSlideBm(BMP_PREV_SLIDE);
+                NavbarButtonSize btnScale = static_cast<NavbarButtonSize>(officecfg::Office::Impress::Layout::Display::NavigationBtnScale::get());
+                OUString prevSlidePath = "";
+                OUString nextSlidePath = "";
+                OUString menuPath = "";
+                switch (btnScale)
+                {
+                    case NavbarButtonSize::Large:
+                    {
+                        prevSlidePath = BMP_PREV_SLIDE_LARGE;
+                        nextSlidePath = BMP_NEXT_SLIDE_LARGE;
+                        menuPath = BMP_MENU_SLIDE_LARGE;
+                        break;
+                    }
+                    case NavbarButtonSize::XLarge:
+                    {
+                        prevSlidePath = BMP_PREV_SLIDE_EXTRALARGE;
+                        nextSlidePath = BMP_NEXT_SLIDE_EXTRALARGE;
+                        menuPath = BMP_MENU_SLIDE_EXTRALARGE;
+                        break;
+                    }
+                    case NavbarButtonSize::Auto:
+                    case NavbarButtonSize::Small:
+                    default:
+                    {
+                        prevSlidePath = BMP_PREV_SLIDE_SMALL;
+                        nextSlidePath = BMP_NEXT_SLIDE_SMALL;
+                        menuPath = BMP_MENU_SLIDE_SMALL;
+                        break;
+                    }
+                }
+                BitmapEx prevSlideBm(prevSlidePath);
                 const Reference<rendering::XBitmap> xPrevSBitmap(
                     vcl::unotools::xBitmapFromBitmapEx(prevSlideBm));
                 if (xPrevSBitmap.is())
@@ -1100,7 +1130,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                                                              Any(xPrevSBitmap),
                                                              beans::PropertyState_DIRECT_VALUE));
                 }
-                BitmapEx menuSlideBm(BMP_MENU_SLIDE);
+                BitmapEx menuSlideBm(menuPath);
                 const Reference<rendering::XBitmap> xMenuSBitmap(
                     vcl::unotools::xBitmapFromBitmapEx(menuSlideBm));
                 if (xMenuSBitmap.is())
@@ -1109,7 +1139,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                                                              Any(xMenuSBitmap),
                                                              beans::PropertyState_DIRECT_VALUE));
                 }
-                BitmapEx nextSlideBm(BMP_NEXT_SLIDE);
+                BitmapEx nextSlideBm(nextSlidePath);
                 const Reference<rendering::XBitmap> xNextSBitmap(
                     vcl::unotools::xBitmapFromBitmapEx(nextSlideBm));
                 if (xNextSBitmap.is())

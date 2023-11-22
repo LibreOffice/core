@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="64"
+   viewBox="0 0 40.96 40.96"
+   width="64"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="nextslide_large.svg"
+   inkscape:version="1.2.2 (unknown)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="7.375"
+     inkscape:cx="0.74576271"
+     inkscape:cy="26.915254"
+     inkscape:window-width="1440"
+     inkscape:window-height="828"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     d="M 20.48,0 A 20.480002,20.48 0 0 0 0,20.48 20.480002,20.48 0 0 0 20.48,40.96 20.480002,20.48 0 0 0 40.96,20.48 20.480002,20.48 0 0 0 20.48,0 Z m 0,5.4613332 A 15.018668,15.018667 0 0 1 35.498668,20.48 15.018668,15.018667 0 0 1 20.48,35.498667 15.018668,15.018667 0 0 1 5.4613332,20.48 15.018668,15.018667 0 0 1 20.48,5.4613332 Z m -6.8,2.728 A 1.363638,1.3636379 0 0 0 12.984,8.3626667 1.363638,1.3636379 0 0 0 12.288,9.554667 v 1.368 a 1.363638,1.3636379 0 0 0 0.08,0.458666 L 15.618666,20.48 12.368,29.581333 a 1.363638,1.3636379 0 0 0 -0.08,0.458666 v 1.36 a 1.363638,1.3636379 0 0 0 2.074668,1.162668 L 32.114667,21.642666 a 1.363638,1.3636379 0 0 0 0.0026,-2.325334 L 14.367893,8.392 A 1.363638,1.3636379 0 0 0 13.679894,8.1893332 Z"
+     fill="#fafafa"
+     stroke-linecap="square"
+     stroke-opacity="0.566502"
+     stroke-width="1.36534"
+     id="path2" />
+  <path
+     d="m 20.48,1.28 c -10.6038675,0 -19.2,8.5961325 -19.2,19.2 0,10.603867 8.5961325,19.2 19.2,19.2 10.603867,0 19.2,-8.596133 19.2,-19.2 0,-10.6038675 -8.596133,-19.2 -19.2,-19.2 z m 0,2.742857 c 9.089027,0 16.45714,7.368113 16.45714,16.457143 0,9.08903 -7.368113,16.457143 -16.45714,16.457143 C 11.39097,36.937143 4.022857,29.56903 4.022857,20.48 4.022857,11.39097 11.39097,4.022857 20.48,4.022857 Z m -6.857143,5.4857136 v 1.3714284 l 3.428572,9.600001 -3.428572,9.6 v 1.371428 L 31.451428,20.48 Z"
+     fill="#3a3a38"
+     stroke-width="1.37142"
+     id="path4" />
+</svg>

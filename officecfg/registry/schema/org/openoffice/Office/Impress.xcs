@@ -142,6 +142,36 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="NavigationBtnScale" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Impress - View - [Section] Navigation -->
+          <info>
+            <desc>Specifies which size of the icons is used for the
+            navigation bar.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>automatic (small) icons</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>small icons</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>large icons</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>extralarge icons</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
       </group>
       <group oor:name="Other">
         <info>

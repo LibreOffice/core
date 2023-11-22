@@ -55,6 +55,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxChangePage;
     std::unique_ptr<weld::CheckButton> m_xCbxAlwaysOnTop;
     std::unique_ptr<weld::CheckButton> m_xCbxShowNavigationButton;
+    std::unique_ptr<weld::ComboBox>    m_xLbNavigationButtonsSize;
+    std::unique_ptr<weld::Label>       m_xFtNavigationButtonsSize;
     std::unique_ptr<weld::Frame> m_xFrameEnableRemote;
     std::unique_ptr<weld::CheckButton> m_xCbxEnableRemote;
 

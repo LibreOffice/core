@@ -66,6 +66,8 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xCbxChangePage(m_xBuilder->weld_check_button("changeslidesbyclick"))
     , m_xCbxAlwaysOnTop(m_xBuilder->weld_check_button("alwaysontop"))
     , m_xCbxShowNavigationButton(m_xBuilder->weld_check_button("shownavigationbutton"))
+    , m_xLbNavigationButtonsSize(m_xBuilder->weld_combo_box("navigation_buttons_size_cb"))
+    , m_xFtNavigationButtonsSize(m_xBuilder->weld_label("navbar_btn_size_label"))
     , m_xFrameEnableRemote(m_xBuilder->weld_frame("frameremote"))
     , m_xCbxEnableRemote(m_xBuilder->weld_check_button("enableremote"))
     , m_xLbConsole(m_xBuilder->weld_combo_box("console_cb"))
@@ -89,6 +91,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     m_xRbtStandard->connect_toggled( aLink );
     m_xRbtWindow->connect_toggled( aLink );
     m_xRbtAuto->connect_toggled( aLink );
+    m_xCbxShowNavigationButton->connect_toggled( aLink );
 
     m_xTmfPause->connect_value_changed( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
 
@@ -127,7 +130,16 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     m_xCbxAnimationAllowed->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_ANIMATION_ALLOWED ) ).GetValue() );
     m_xCbxChangePage->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_CHANGE_PAGE ) ).GetValue() );
     m_xCbxAlwaysOnTop->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_ALWAYS_ON_TOP ) ).GetValue() );
-    m_xCbxShowNavigationButton->set_active(officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::get());
+
+    const sal_Int32 nActiveNavigationBtnScale = officecfg::Office::Impress::Layout::Display::NavigationBtnScale::get();
+    const bool bShowNavbar = officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::get();
+    m_xCbxShowNavigationButton->set_active( bShowNavbar );
+    if (nActiveNavigationBtnScale != -1)
+    {
+        m_xLbNavigationButtonsSize->set_active(nActiveNavigationBtnScale);
+    }
+    m_xLbNavigationButtonsSize->set_sensitive( bShowNavbar );
+    m_xFtNavigationButtonsSize->set_sensitive( bShowNavbar );
 
     const bool  bEndless = static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_ENDLESS ) ).GetValue();
     const bool  bWindow = !static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
@@ -188,6 +200,9 @@ short SdStartPresentationDlg::run()
         }
         officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::set(
             m_xCbxShowNavigationButton->get_active(), batch);
+        officecfg::Office::Impress::Layout::Display::NavigationBtnScale::set(
+            m_xLbNavigationButtonsSize->get_active(), batch);
+
 #ifdef ENABLE_SDREMOTE
     officecfg::Office::Impress::Misc::Start::EnableSdremote::set(m_xCbxEnableRemote->get_active(), batch);
 #endif
@@ -347,6 +362,10 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::Toggle
     const bool bDisplay = !bWindow && ( mnMonitors > 1 );
     m_xFtMonitor->set_sensitive( bDisplay );
     m_xLBMonitor->set_sensitive( bDisplay );
+
+    const bool bShowNavbar = m_xCbxShowNavigationButton->get_active();
+    m_xLbNavigationButtonsSize->set_sensitive( bShowNavbar );
+    m_xFtNavigationButtonsSize->set_sensitive( bShowNavbar );
 
     if( bWindow )
     {

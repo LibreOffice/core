@@ -208,9 +208,17 @@ inline constexpr OUString BMP_MENU_PREV = u"cmd/sc_prevrecord.png"_ustr;
 inline constexpr OUString BMP_MENU_FIRST = u"cmd/sc_firstrecord.png"_ustr;
 inline constexpr OUString BMP_MENU_LAST = u"cmd/sc_lastrecord.png"_ustr;
 
-inline constexpr OUString BMP_PREV_SLIDE = u"sd/res/prevslide.png"_ustr;
-inline constexpr OUString BMP_NEXT_SLIDE = u"sd/res/nextslide.png"_ustr;
-inline constexpr OUString BMP_MENU_SLIDE = u"sd/res/slideshowmenu.png"_ustr;
+inline constexpr OUString BMP_PREV_SLIDE_SMALL = u"sd/res/prevslide_small.png"_ustr;
+inline constexpr OUString BMP_NEXT_SLIDE_SMALL = u"sd/res/nextslide_small.png"_ustr;
+inline constexpr OUString BMP_MENU_SLIDE_SMALL = u"sd/res/slideshowmenu_small.png"_ustr;
+
+inline constexpr OUString BMP_PREV_SLIDE_LARGE = u"sd/res/prevslide_large.png"_ustr;
+inline constexpr OUString BMP_NEXT_SLIDE_LARGE = u"sd/res/nextslide_large.png"_ustr;
+inline constexpr OUString BMP_MENU_SLIDE_LARGE = u"sd/res/slideshowmenu_large.png"_ustr;
+
+inline constexpr OUString BMP_PREV_SLIDE_EXTRALARGE = u"sd/res/prevslide_extralarge.png"_ustr;
+inline constexpr OUString BMP_NEXT_SLIDE_EXTRALARGE = u"sd/res/nextslide_extralarge.png"_ustr;
+inline constexpr OUString BMP_MENU_SLIDE_EXTRALARGE = u"sd/res/slideshowmenu_extralarge.png"_ustr;
 
 inline constexpr OUString SFX_BMP_CLOSE_DOC = u"sfx2/res/closedoc.png"_ustr;
 
