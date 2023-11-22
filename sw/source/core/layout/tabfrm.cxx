@@ -2739,6 +2739,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         aRectFnSet.GetTopMargin(*this) +
                          lcl_GetHeightOfRows( GetLower(), nMinNumOfLines ) );
 
+                bool bHadFollowFlowLineBeforeSplit = false;
                 // Some more checks if we want to call the split algorithm or not:
                 // The repeating lines / keeping lines still fit into the upper or
                 // if we do not have an (in)direct Prev, we split anyway.
@@ -2754,6 +2755,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         if (!nThrowAwayValidLayoutLimit)
                             continue;
                         const bool bInitialLoopEndCondition(isFrameAreaDefinitionValid());
+                        bHadFollowFlowLineBeforeSplit = true;
                         RemoveFollowFlowLine();
                         const bool bFinalLoopEndCondition(isFrameAreaDefinitionValid());
 
@@ -2790,7 +2792,15 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // If splitting the table was successful or not,
                     // we do not want to have 'empty' follow tables.
                     if ( GetFollow() && !GetFollow()->GetFirstNonHeadlineRow() )
-                        Join();
+                    {
+                        // For split flys, if we just removed the follow flow line before split,
+                        // then avoid the join in the error + rowsplit case, so split can be called
+                        // again, this time without a rowsplit.
+                        if (!bFlySplit || !bHadFollowFlowLineBeforeSplit || !bSplitError || !bTryToSplit)
+                        {
+                            Join();
+                        }
+                    }
 
                     // We want to restore the situation before the failed
                     // split operation as good as possible. Therefore we
@@ -2808,6 +2818,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         continue;
                     }
 
+                    // If split failed, then next time try without
+                    // allowing to split the table rows.
                     bTryToSplit = !bSplitError;
 
                     //To avoid oscillations the Follow must become valid now
