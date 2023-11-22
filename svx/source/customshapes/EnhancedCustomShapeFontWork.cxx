@@ -784,7 +784,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
 
                 if ( !vDistances.empty() )
                 {
-                    // horizontal aligment: how much we have to move text to the right.
+                    // horizontal alignment: how much we have to move text to the right.
                     int nAdjust = -1;
                     switch (eHorzAdjust)
                     {
