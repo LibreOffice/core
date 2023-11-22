@@ -34,6 +34,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/templatedlg.hxx>
+#include <svl/stritem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/useroptions.hxx>
@@ -48,6 +49,7 @@
 #include "pres.hxx"
 #include "optsitem.hxx"
 #include "ViewShell.hxx"
+#include "Window.hxx"
 #include "sdattr.hxx"
 #include "sdpage.hxx"
 #include "DrawDocShell.hxx"
@@ -208,26 +210,32 @@ void SdModule::Execute(SfxRequest& rReq)
         {
             bool bIntercept = false;
             ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-            if (pDocShell)
+            ::sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
+            if (pViewShell)
             {
-                ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-                if (pViewShell)
+                if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) )
                 {
-                    if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) )
+                    // Prevent documents from opening while the slide
+                    // show is running, except when this request comes
+                    // from a shape interaction.
+                    if (rReq.GetArgs() == nullptr)
                     {
-                        // Prevent documents from opening while the slide
-                        // show is running, except when this request comes
-                        // from a shape interaction.
-                        if (rReq.GetArgs() == nullptr)
-                        {
-                            bIntercept = true;
-                        }
+                        bIntercept = true;
                     }
                 }
             }
 
             if (!bIntercept)
             {
+                if (const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME))
+                {
+                    if (!pViewShell || !SfxObjectShell::AllowedLinkProtocolFromDocument(pURLItem->GetValue(),
+                                                                                        pViewShell->GetObjectShell(),
+                                                                                        pViewShell->GetActiveWindow()))
+                    {
+                        return;
+                    }
+                }
                 SfxGetpApp()->ExecuteSlot(rReq, SfxGetpApp()->GetInterface());
             }
             else
