@@ -88,9 +88,6 @@ editeng/source/editeng/impedit.hxx:506
 extensions/source/update/check/updatecheck.hxx:164
     UpdateCheck m_pThread WorkerThread *
     (anonymous namespace)::UpdateCheckThread
-forms/source/xforms/binding.hxx:97
-    xforms::Binding mxModel css::uno::Reference<css::xforms::XModel>
-    xforms::Model
 framework/inc/services/layoutmanager.hxx:253
     framework::LayoutManager m_xMenuBar css::uno::Reference<css::ui::XUIElement>
     framework::MenuBarWrapper

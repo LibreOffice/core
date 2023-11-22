@@ -35,6 +35,7 @@
 #include "boolexpression.hxx"
 #include "mip.hxx"
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <vector>
 
 // forward declaractions
@@ -94,7 +95,7 @@ public:
 private:
 
     /// the Model to which this Binding belongs; may be NULL
-    css::uno::Reference<css::xforms::XModel> mxModel;
+    rtl::Reference<Model> mxModel;
 
     /// binding-ID. A document-wide unique ID for this binding element.
     OUString msBindingID;
@@ -162,8 +163,9 @@ public:
     // property methods: get/set value
 
 
-    css::uno::Reference<css::xforms::XModel> getModel() const { return mxModel;}   /// get XForms model
-    void _setModel( const css::uno::Reference<css::xforms::XModel>& ); /// set XForms model (only called by Model)
+    /// get the model implementation
+    css::uno::Reference<css::xforms::XModel> getModel() const;   /// get XForms model
+    void _setModel( const rtl::Reference<Model>& ); /// set XForms model (only called by Model)
 
 
     OUString getModelID() const;   /// get ID of XForms model
@@ -269,9 +271,6 @@ private:
     /// determine whether object is live
     /// live: has model, and model has been initialized
     bool isLive() const;
-
-    /// get the model implementation
-    xforms::Model* getModelImpl() const;
 
     /// get MIP evaluation contexts
     /// (only valid if control has already been bound)

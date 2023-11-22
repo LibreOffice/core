@@ -64,14 +64,14 @@ protected:
     {
         auto pBinding = comphelper::getFromUnoTunnel<Binding>( t );
         OSL_ENSURE( pBinding != nullptr, "invalid item?" );
-        pBinding->_setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
+        pBinding->_setModel( mpModel );
     }
 
     virtual void _remove( const T& t ) override
     {
         auto pBinding = comphelper::getFromUnoTunnel<Binding>( t );
         OSL_ENSURE( pBinding != nullptr, "invalid item?" );
-        pBinding->_setModel( css::uno::Reference<css::xforms::XModel>() );
+        pBinding->_setModel( nullptr );
     }
 };
 

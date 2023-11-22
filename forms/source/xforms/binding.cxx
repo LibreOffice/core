@@ -121,7 +121,7 @@ Binding::~Binding()
     _setModel(nullptr);
 }
 
-void Binding::_setModel( const css::uno::Reference<css::xforms::XModel>& xModel )
+void Binding::_setModel( const rtl::Reference<Model>& xModel )
 {
     PropertyChangeNotifier aNotifyModelChange( *this, HANDLE_Model );
     PropertyChangeNotifier aNotifyModelIDChange( *this, HANDLE_ModelID );
@@ -142,8 +142,7 @@ void Binding::_setModel( const css::uno::Reference<css::xforms::XModel>& xModel 
 
 OUString Binding::getModelID() const
 {
-    Model* pModel = getModelImpl();
-    return ( pModel == nullptr ) ? OUString() : pModel->getID();
+    return ( mxModel == nullptr ) ? OUString() : mxModel->getID();
 }
 
 
@@ -231,7 +230,7 @@ bool Binding::isUseful() const
     // 3) we are bound to some control
     //    (this can be assumed if some listeners are set)
     bool bUseful =
-        getModelImpl() == nullptr
+        mxModel == nullptr
 //        || msBindingID.getLength() > 0
         || ! msTypeName.isEmpty()
         || ! maReadonly.isEmptyExpression()
@@ -285,15 +284,15 @@ OUString Binding::explainInvalid()
 
 EvaluationContext Binding::getEvaluationContext() const
 {
-    OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
-    EvaluationContext aContext = getModelImpl()->getEvaluationContext();
+    OSL_ENSURE( mxModel != nullptr, "need model impl" );
+    EvaluationContext aContext = mxModel->getEvaluationContext();
     aContext.mxNamespaces = getBindingNamespaces();
     return aContext;
 }
 
 ::std::vector<EvaluationContext> Binding::getMIPEvaluationContexts()
 {
-    OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
+    OSL_ENSURE( mxModel != nullptr, "need model impl" );
 
     // bind (in case we were not bound before)
     bind();
@@ -425,9 +424,8 @@ bool Binding::getExternalData() const
 
     try
     {
-        Reference< XPropertySet > xModelProps( mxModel, UNO_QUERY_THROW );
         OSL_VERIFY(
-            xModelProps->getPropertyValue( "ExternalData" ) >>= bExternalData );
+            mxModel->getPropertyValue( "ExternalData" ) >>= bExternalData );
     }
     catch( const Exception& )
     {
@@ -445,14 +443,9 @@ void Binding::checkLive()
 
 bool Binding::isLive() const
 {
-    const Model* pModel = getModelImpl();
-    return pModel && pModel->isInitialized();
+    return mxModel && mxModel->isInitialized();
 }
 
-Model* Binding::getModelImpl() const
-{
-    return dynamic_cast<Model*>( mxModel.get() );
-}
 
 static void lcl_addListenerToNode( const Reference<XNode>& xNode,
                                    const Reference<XEventListener>& xListener )
@@ -494,7 +487,7 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
 
 ::std::vector<EvaluationContext> Binding::_getMIPEvaluationContexts() const
 {
-    OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
+    OSL_ENSURE( mxModel != nullptr, "need model impl" );
 
     // iterate over nodes of bind expression and create
     // EvaluationContext for each
@@ -505,7 +498,7 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
         OSL_ENSURE( node.is(), "no node?" );
 
         // create proper evaluation context for this MIP
-        aVector.emplace_back( node, getModel(), getBindingNamespaces() );
+        aVector.emplace_back( node, mxModel, getBindingNamespaces() );
     }
     return aVector;
 }
@@ -562,9 +555,8 @@ void Binding::bind( bool bForceRebind )
     }
 
     // 3) remove old MIPs defined by this binding
-    Model* pModel = getModelImpl();
-    OSL_ENSURE( pModel != nullptr, "need model" );
-    pModel->removeMIPs( this );
+    OSL_ENSURE( mxModel != nullptr, "need model" );
+    mxModel->removeMIPs( this );
 
     // 4) calculate all MIPs
     ::std::vector<EvaluationContext> aMIPContexts = _getMIPEvaluationContexts();
@@ -580,7 +572,7 @@ void Binding::bind( bool bForceRebind )
             {
                 mbInCalculate = true;
                 maCalculate.evaluate( rContext );
-                pModel->setSimpleContent( rContext.mxContextNode,
+                mxModel->setSimpleContent( rContext.mxContextNode,
                                           maCalculate.getString() );
                 mbInCalculate = false;
             }
@@ -594,7 +586,7 @@ void Binding::bind( bool bForceRebind )
         // type is static; does not need updating
 
         // evaluate the locally defined MIPs, and push them to the model
-        pModel->addMIP( this, rContext.mxContextNode, getLocalMIP() );
+        mxModel->addMIP( this, rContext.mxContextNode, getLocalMIP() );
     }
 }
 
@@ -637,7 +629,7 @@ void Binding::valueModified()
 
     // query MIP used by our first node (also note validity)
     Reference<XNode> xNode = maBindingExpression.getNode();
-    maMIP = getModelImpl()->queryMIP( xNode );
+    maMIP = mxModel->queryMIP( xNode );
 
     // distribute MIPs _used_ by this binding
     if( xNode.is() )
@@ -738,11 +730,11 @@ MIP Binding::getLocalMIP() const
 
 css::uno::Reference<css::xsd::XDataType> Binding::getDataType() const
 {
-    OSL_ENSURE( getModel().is(), "need model" );
-    OSL_ENSURE( getModel()->getDataTypeRepository().is(), "need types" );
+    OSL_ENSURE( mxModel.is(), "need model" );
+    OSL_ENSURE( mxModel->getDataTypeRepository().is(), "need types" );
 
     Reference<XDataTypeRepository> xRepository =
-        getModel()->getDataTypeRepository();
+        mxModel->getDataTypeRepository();
     OUString sTypeName = maMIP.getTypeName();
 
     return ( xRepository.is() && xRepository->hasByName( sTypeName ) )
@@ -768,9 +760,8 @@ OUString Binding::explainInvalid_DataType()
 void Binding::clear()
 {
     // remove MIPs contributed by this binding
-    Model* pModel = getModelImpl();
-    if( pModel != nullptr )
-        pModel->removeMIPs( this );
+    if( mxModel != nullptr )
+        mxModel->removeMIPs( this );
 
     // remove all references
     for (auto const& eventNode : maEventNodes)
@@ -859,9 +850,8 @@ css::uno::Reference<css::container::XNameContainer> Binding::_getNamespaces() co
     lcl_copyNamespaces( mxNamespaces, xNamespaces, true );
 
     // merge model's with binding's own namespaces
-    Model* pModel = getModelImpl();
-    if( pModel != nullptr )
-        lcl_copyNamespaces( pModel->getNamespaces(), xNamespaces, false );
+    if( mxModel != nullptr )
+        lcl_copyNamespaces( mxModel->getNamespaces(), xNamespaces, false );
 
     return xNamespaces;
 }
@@ -871,11 +861,10 @@ css::uno::Reference<css::container::XNameContainer> Binding::_getNamespaces() co
 void Binding::_setNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces,
                               bool bBinding )
 {
-    Model* pModel = getModelImpl();
-    css::uno::Reference<css::container::XNameContainer> xModelNamespaces = ( pModel != nullptr )
-                                            ? pModel->getNamespaces()
+    css::uno::Reference<css::container::XNameContainer> xModelNamespaces = ( mxModel != nullptr )
+                                            ? mxModel->getNamespaces()
                                             : nullptr;
-    OSL_ENSURE( ( pModel != nullptr ) == xModelNamespaces.is(), "no model nmsp?");
+    OSL_ENSURE( ( mxModel != nullptr ) == xModelNamespaces.is(), "no model nmsp?");
 
     // remove deleted namespaces
     lcl_removeOtherNamespaces( rNamespaces, mxNamespaces );
@@ -924,10 +913,10 @@ void Binding::_setNamespaces( const css::uno::Reference<css::container::XNameCon
 
 void Binding::_checkBindingID()
 {
-    if( !getModel().is() )
+    if( !mxModel.is() )
         return;
 
-    Reference<XNameAccess> xBindings( getModel()->getBindings(), UNO_QUERY_THROW );
+    Reference<XNameAccess> xBindings( mxModel->getBindings(), UNO_QUERY_THROW );
     if( !msBindingID.isEmpty() )
         return;
 
@@ -995,7 +984,7 @@ void Binding::setValue( const css::uno::Any& aValue )
         throw InvalidBindingStateException("no suitable node found", static_cast<XValueBinding*>(this));
 
     OUString sValue = Convert::get().toXSD( aValue );
-    bool bSuccess = getModelImpl()->setSimpleContent( xNode, sValue );
+    bool bSuccess = mxModel->setSimpleContent( xNode, sValue );
     if( ! bSuccess )
         throw InvalidBindingStateException("can't set value", static_cast<XValueBinding*>(this));
 
@@ -1178,9 +1167,8 @@ css::uno::Reference<css::util::XCloneable> SAL_CALL Binding::createClone()
 {
     Reference< XPropertySet > xClone;
 
-    Model* pModel = getModelImpl();
-    if ( pModel )
-        xClone = pModel->cloneBinding( this );
+    if ( mxModel )
+        xClone = mxModel->cloneBinding( this );
     else
     {
         xClone = new Binding;
@@ -1189,6 +1177,10 @@ css::uno::Reference<css::util::XCloneable> SAL_CALL Binding::createClone()
     return css::uno::Reference<css::util::XCloneable>( xClone, UNO_QUERY );
 }
 
+css::uno::Reference<css::xforms::XModel> Binding::getModel() const
+{
+    return mxModel;
+}
 
 // property set implementations
 
