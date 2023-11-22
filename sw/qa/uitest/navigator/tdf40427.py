@@ -19,6 +19,20 @@ class tdf40427(UITestCase):
         if name == get_state_as_dict(xItem)['Text']:
             return xItem
 
+  def expand_all(self, xTreeItem):
+    count = len(xTreeItem.getChildren())
+    for i in xTreeItem.getChildren():
+        xTreeItem.getChild(i).executeAction("EXPAND", ())
+        count += self.expand_all(xTreeItem.getChild(i))
+    return count
+
+  def get_names(self, xTreeItem):
+    names = []
+    for i in xTreeItem.getChildren():
+        names.append(get_state_as_dict(xTreeItem.getChild(str(i)))['Text'])
+        names += self.get_names(xTreeItem.getChild(i))
+    return names
+
   def test_tdf40427(self):
     with self.ui_test.load_file(get_url_for_data_file("tdf40427_SectionPositions.odt")) as document:
         xMainWindow = self.xUITest.getTopFocusWindow()
@@ -53,6 +67,7 @@ class tdf40427(UITestCase):
         xSections = self.get_item(xContentTree, 'Sections')
         self.assertEqual('Sections', get_state_as_dict(xSections)['Text'])
         xSections.executeAction("EXPAND", ())
+        totalSectionsCount = self.expand_all(xSections)
 
         refSectionNames = [
           'SectionZ',
@@ -69,11 +84,10 @@ class tdf40427(UITestCase):
           'SectionB', # High on screen, but late in list because it's on second page
           'SectionC',
         ]
-        self.assertEqual(len(refSectionNames), len(xSections.getChildren()))
+        self.assertEqual(len(refSectionNames), totalSectionsCount)
 
-        actSectionNames = []
-        for i in range(len(refSectionNames)):
-          actSectionNames.append(get_state_as_dict(xSections.getChild(str(i)))['Text'])
+        actSectionNames = self.get_names(xSections)
+
         # Without the fix in place, this would fail with
         #   AssertionError: Lists differ: ['SectionZ', 'SectionY', 'SectionT3', 'SectionT1', 'SectionT2'[100 chars]onC'] != ['SectionZ', 'SectionB', 'SectionF3', 'SectionFinF3', 'Section[100 chars]onA']
         self.assertEqual(refSectionNames, actSectionNames)

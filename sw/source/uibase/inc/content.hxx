@@ -212,8 +212,8 @@ public:
                                 Invalidate();
                             }
 
-        bool GetSortType() const {return m_bAlphabeticSort;}
-        void SetSortType(bool bAlphabetic) {m_bAlphabeticSort = bAlphabetic;}
+        bool IsAlphabeticSort() const {return m_bAlphabeticSort;}
+        void SetAlphabeticSort(bool bAlphabetic) {m_bAlphabeticSort = bAlphabetic;}
 
         void                Invalidate(); // only nMemberCount is read again
 

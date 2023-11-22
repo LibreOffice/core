@@ -217,6 +217,11 @@ namespace
                 rPos = *pPos;
         }
     }
+
+    bool lcl_IsLowerRegionContent(const weld::TreeIter& rEntry, const weld::TreeView& rTreeView, sal_uInt8 nLevel)
+    {
+        return weld::fromId<const SwRegionContent*>(rTreeView.get_id(rEntry))->GetRegionLevel() < nLevel;
+    }
 }
 
 // Content, contains names and reference at the content type.
@@ -1727,7 +1732,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             && nContentType != ContentTypeId::POSTIT)
         {
             bRemoveSortEntry = false;
-            xPop->set_active("sort", pType->GetSortType());
+            xPop->set_active("sort", pType->IsAlphabeticSort());
         }
 
         OUString aIdent;
@@ -2130,26 +2135,19 @@ void SwContentTree::InsertContent(const weld::TreeIter& rParent)
     assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
     SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent));
     bool bGraphic = pCntType->GetType() == ContentTypeId::GRAPHIC;
-    bool bRegion = pCntType->GetType() == ContentTypeId::REGION;
     std::unique_ptr<weld::TreeIter> xChild = m_xTreeView->make_iterator();
     const size_t nCount = pCntType->GetMemberCount();
     for(size_t i = 0; i < nCount; ++i)
     {
         const SwContent* pCnt = pCntType->GetMember(i);
-        if (pCnt)
-        {
-            OUString sEntry = pCnt->GetName();
-            if (sEntry.isEmpty())
-                sEntry = m_sSpace;
-            OUString sId(weld::toId(pCnt));
-            insert(&rParent, sEntry, sId, false, xChild.get());
-            m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
-            if (bGraphic && !static_cast<const SwGraphicContent*>(pCnt)->GetLink().isEmpty())
-                m_xTreeView->set_image(*xChild, RID_BMP_NAVI_GRAPHIC_LINK);
-            else if (bRegion)
-                m_xTreeView->set_extra_row_indent(*xChild,
-                                    static_cast<const SwRegionContent*>(pCnt)->GetRegionLevel());
-        }
+        OUString sEntry = pCnt->GetName();
+        if (sEntry.isEmpty())
+            sEntry = m_sSpace;
+        OUString sId(weld::toId(pCnt));
+        insert(&rParent, sEntry, sId, false, xChild.get());
+        m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+        if (bGraphic && !static_cast<const SwGraphicContent*>(pCnt)->GetLink().isEmpty())
+            m_xTreeView->set_image(*xChild, RID_BMP_NAVI_GRAPHIC_LINK);
     }
 }
 
@@ -2226,6 +2224,72 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                 }
             }
         }
+        else if (pCntType->GetType() == ContentTypeId::REGION)
+        {
+            if (pCntType->IsAlphabeticSort())
+            {
+                for(size_t i = 0; i < nCount; ++i)
+                {
+                    const SwRegionContent* pCnt =
+                            static_cast<const SwRegionContent*>(pCntType->GetMember(i));
+
+                    OUString sEntry = pCnt->GetName();
+                    OUString sId(weld::toId(pCnt));
+
+                    const auto nLevel = pCnt->GetRegionLevel();
+                    insert(&rParent, sEntry, sId, false, xChild.get());
+
+                    m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+                    m_xTreeView->set_extra_row_indent(*xChild, nLevel);
+
+                    bool bHidden = pCnt->GetSectionFormat()->GetSection()->IsHidden();
+                    if (pCnt->IsProtect())
+                        m_xTreeView->set_image(*xChild, bHidden ? RID_BMP_PROT_HIDE : RID_BMP_PROT_NO_HIDE);
+                    else
+                        m_xTreeView->set_image(*xChild, bHidden ? RID_BMP_HIDE : RID_BMP_NO_HIDE);
+                }
+            }
+            else
+            {
+                std::vector<std::unique_ptr<weld::TreeIter>> aParentCandidates;
+                for(size_t i = 0; i < nCount; ++i)
+                {
+                    const SwRegionContent* pCnt =
+                            static_cast<const SwRegionContent*>(pCntType->GetMember(i));
+
+                    OUString sEntry = pCnt->GetName();
+                    OUString sId(weld::toId(pCnt));
+
+                    const auto nLevel = pCnt->GetRegionLevel();
+                    auto lambda = [nLevel, this](const std::unique_ptr<weld::TreeIter>& xEntry)
+                    {
+                        return lcl_IsLowerRegionContent(*xEntry, *m_xTreeView, nLevel);
+                    };
+
+                    // if there is a preceding region node candidate with a lower region level use
+                    // that as a parent, otherwise use the root node
+                    auto aFind = std::find_if(aParentCandidates.rbegin(), aParentCandidates.rend(), lambda);
+                    if (aFind != aParentCandidates.rend())
+                        insert(aFind->get(), sEntry, sId, false, xChild.get());
+                    else
+                        insert(&rParent, sEntry, sId, false, xChild.get());
+                    m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+
+                    bool bHidden = pCnt->GetSectionFormat()->GetSection()->IsHidden();
+                    if (pCnt->IsProtect())
+                        m_xTreeView->set_image(*xChild, bHidden ? RID_BMP_PROT_HIDE : RID_BMP_PROT_NO_HIDE);
+                    else
+                        m_xTreeView->set_image(*xChild, bHidden ? RID_BMP_HIDE : RID_BMP_NO_HIDE);
+
+                    // remove any parent candidates equal to or higher than this node
+                    aParentCandidates.erase(std::remove_if(aParentCandidates.begin(), aParentCandidates.end(),
+                                                           std::not_fn(lambda)), aParentCandidates.end());
+
+                    // add this node as a parent candidate for any following nodes at a higher region level
+                    aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));
+                }
+            }
+        }
         else
             InsertContent(rParent);
 
@@ -2283,15 +2347,14 @@ void SwContentTree::Expand(const weld::TreeIter& rParent, std::vector<std::uniqu
     if (!(m_xTreeView->iter_has_child(rParent) || m_xTreeView->get_children_on_demand(rParent)))
         return;
 
-    if (!m_bIsRoot
-        || (lcl_IsContentType(rParent, *m_xTreeView) &&
-            weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent))->GetType() == ContentTypeId::OUTLINE)
-        || (m_nRootType == ContentTypeId::OUTLINE))
+    if (m_nRootType == ContentTypeId::UNKNOWN || m_nRootType == ContentTypeId::OUTLINE ||
+            m_nRootType == ContentTypeId::REGION)
     {
         if (lcl_IsContentType(rParent, *m_xTreeView))
         {
-            SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent));
-            const sal_Int32 nOr = 1 << static_cast<int>(pCntType->GetType()); //linear -> Bitposition
+            ContentTypeId eContentTypeId =
+                    weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent))->GetType();
+            const sal_Int32 nOr = 1 << static_cast<int>(eContentTypeId); //linear -> Bitposition
             if (State::HIDDEN != m_eState)
             {
                 m_nActiveBlock |= nOr;
@@ -2299,7 +2362,7 @@ void SwContentTree::Expand(const weld::TreeIter& rParent, std::vector<std::uniqu
             }
             else
                 m_nHiddenBlock |= nOr;
-            if (pCntType->GetType() == ContentTypeId::OUTLINE)
+            if (eContentTypeId == ContentTypeId::OUTLINE)
             {
                 std::map< void*, bool > aCurrOutLineNodeMap;
 
@@ -2335,17 +2398,59 @@ void SwContentTree::Expand(const weld::TreeIter& rParent, std::vector<std::uniqu
                 mOutLineNodeMap = aCurrOutLineNodeMap;
                 return;
             }
+            if (eContentTypeId == ContentTypeId::REGION)
+            {
+                std::map<const void*, bool> aCurrentRegionNodeExpandMap;
+
+                bool bParentHasChild = RequestingChildren(rParent);
+                if (pNodesToExpand)
+                    pNodesToExpand->emplace_back(m_xTreeView->make_iterator(&rParent));
+                if (bParentHasChild)
+                {
+                    std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rParent));
+                    bool bChild = m_xTreeView->iter_next(*xChild);
+                    while (bChild && lcl_IsContent(*xChild, *m_xTreeView))
+                    {
+                        if (m_xTreeView->iter_has_child(*xChild))
+                        {
+                            assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xChild))));
+                            const void* key = static_cast<const void*>(
+                                        weld::fromId<SwRegionContent*>(m_xTreeView->get_id(*xChild))
+                                        ->GetSectionFormat());
+                            aCurrentRegionNodeExpandMap.emplace(key, false);
+                            if (m_aRegionNodeExpandMap.contains(key) && m_aRegionNodeExpandMap[key])
+                            {
+                                aCurrentRegionNodeExpandMap[key] = true;
+                                RequestingChildren(*xChild);
+                                if (pNodesToExpand)
+                                    pNodesToExpand->emplace_back(m_xTreeView->make_iterator(xChild.get()));
+                                m_xTreeView->set_children_on_demand(*xChild, false);
+                            }
+                        }
+                        bChild = m_xTreeView->iter_next(*xChild);
+                    }
+                }
+                m_aRegionNodeExpandMap = aCurrentRegionNodeExpandMap;
+                return;
+            }
         }
-        else
+        else // content entry
         {
-            if (lcl_IsContent(rParent, *m_xTreeView))
+            ContentTypeId eContentTypeId =
+                    weld::fromId<SwContent*>(m_xTreeView->get_id(rParent))->GetParent()->GetType();
+            if (eContentTypeId == ContentTypeId::OUTLINE)
             {
                 SwWrtShell* pShell = GetWrtShell();
-                // paranoid assert now that outline type is checked
                 assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
                 auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rParent))->GetOutlinePos();
                 void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
                 mOutLineNodeMap[key] = true;
+            }
+            else if(eContentTypeId == ContentTypeId::REGION)
+            {
+                assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
+                const void* key = static_cast<const void*>(weld::fromId<SwRegionContent*>(m_xTreeView->get_id(rParent))->GetSectionFormat());
+                m_aRegionNodeExpandMap[key] = true;
             }
         }
     }
@@ -2382,8 +2487,9 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
             }
             return false; // return false to notify caller not to do collapse
         }
-        SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent));
-        const sal_Int32 nAnd = ~(1 << static_cast<int>(pCntType->GetType()));
+        ContentTypeId eContentTypeId =
+                weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent))->GetType();
+        const sal_Int32 nAnd = ~(1 << static_cast<int>(eContentTypeId));
         if (State::HIDDEN != m_eState)
         {
             m_nActiveBlock &= nAnd;
@@ -2392,13 +2498,24 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
         else
             m_nHiddenBlock &= nAnd;
     }
-    else if (lcl_IsContent(rParent, *m_xTreeView))
+    else // content entry
     {
         SwWrtShell* pShell = GetWrtShell();
-        assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
-        auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rParent))->GetOutlinePos();
-        void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
-        mOutLineNodeMap[key] = false;
+        ContentTypeId eContentTypeId =
+                weld::fromId<SwContent*>(m_xTreeView->get_id(rParent))->GetParent()->GetType();
+        if (eContentTypeId == ContentTypeId::OUTLINE)
+        {
+            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
+            auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rParent))->GetOutlinePos();
+            void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
+            mOutLineNodeMap[key] = false;
+        }
+        else if(eContentTypeId == ContentTypeId::REGION)
+        {
+            assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
+            const void* key = static_cast<const void*>(weld::fromId<SwRegionContent*>(m_xTreeView->get_id(rParent))->GetSectionFormat());
+            m_aRegionNodeExpandMap[key] = false;
+        }
     }
 
     return true;
@@ -2690,7 +2807,8 @@ void SwContentTree::Display( bool bActive )
             if(!rpRootContentT)
                 rpRootContentT.reset(new SwContentType(pShell, m_nRootType, m_nOutlineLevel ));
             OUString aImage(GetImageIdForContentTypeId(m_nRootType));
-            bool bChOnDemand = m_nRootType == ContentTypeId::OUTLINE;
+            bool bChOnDemand(m_nRootType == ContentTypeId::OUTLINE ||
+                             m_nRootType == ContentTypeId::REGION);
             OUString sId(weld::toId(rpRootContentT.get()));
             insert(nullptr, rpRootContentT->GetName(), sId, bChOnDemand, xEntry.get());
             m_xTreeView->set_image(*xEntry, aImage);
@@ -4701,7 +4819,7 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
             pCntType = weld::fromId<SwContentType*>(rId);
         else
             pCntType = const_cast<SwContentType*>(weld::fromId<SwContent*>(rId)->GetParent());
-        pCntType->SetSortType(!pCntType->GetSortType());
+        pCntType->SetAlphabeticSort(!pCntType->IsAlphabeticSort());
         pCntType->FillMemberList();
         Display(true);
         return;
