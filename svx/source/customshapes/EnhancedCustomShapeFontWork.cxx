@@ -931,7 +931,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                                     // if fAdjust<0, then it means, the text was longer, as
                                     // the current outline, so we will skip the text scaling, and
                                     // the text horizontal alignment adjustment
-                                    // so the text will be rendered just as long as the cureve is.
+                                    // so the text will be rendered just as long as the curve is.
                                     if (fAdjust >= 0)
                                     {
                                         fM1 = (fM1 * fParaRectWidth + fAdjust) / fCurWidth;
