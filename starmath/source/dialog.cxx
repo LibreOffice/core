@@ -42,6 +42,7 @@
 #include <strings.hrc>
 #include <helpids.h>
 #include <cfgitem.hxx>
+#include <officecfg/Office/Math.hxx>
 #include <smmod.hxx>
 #include <symbol.hxx>
 #include <view.hxx>
@@ -179,17 +180,26 @@ IMPL_LINK_NOARG(SmPrintOptionsTabPage, SizeButtonClickHdl, weld::Toggleable&, vo
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rOptions)
     : SfxTabPage(pPage, pController, "modules/smath/ui/smathsettings.ui", "SmathSettings", &rOptions)
     , m_xTitle(m_xBuilder->weld_check_button("title"))
+    , m_xTitleImg(m_xBuilder->weld_widget("locktitle"))
     , m_xText(m_xBuilder->weld_check_button("text"))
+    , m_xTextImg(m_xBuilder->weld_widget("locktext"))
     , m_xFrame(m_xBuilder->weld_check_button("frame"))
+    , m_xFrameImg(m_xBuilder->weld_widget("lockframe"))
     , m_xSizeNormal(m_xBuilder->weld_radio_button("sizenormal"))
     , m_xSizeScaled(m_xBuilder->weld_radio_button("sizescaled"))
     , m_xSizeZoomed(m_xBuilder->weld_radio_button("sizezoomed"))
+    , m_xLockPrintImg(m_xBuilder->weld_widget("lockprintformat"))
     , m_xZoom(m_xBuilder->weld_metric_spin_button("zoom", FieldUnit::PERCENT))
     , m_xEnableInlineEdit(m_xBuilder->weld_check_button("enableinlineedit"))
+    , m_xEnableInlineEditImg(m_xBuilder->weld_widget("lockenableinlineedit"))
     , m_xNoRightSpaces(m_xBuilder->weld_check_button("norightspaces"))
+    , m_xNoRightSpacesImg(m_xBuilder->weld_widget("locknorightspaces"))
     , m_xSaveOnlyUsedSymbols(m_xBuilder->weld_check_button("saveonlyusedsymbols"))
+    , m_xSaveOnlyUsedSymbolsImg(m_xBuilder->weld_widget("locksaveonlyusedsymbols"))
     , m_xAutoCloseBrackets(m_xBuilder->weld_check_button("autoclosebrackets"))
+    , m_xAutoCloseBracketsImg(m_xBuilder->weld_widget("lockautoclosebrackets"))
     , m_xSmZoom(m_xBuilder->weld_metric_spin_button("smzoom", FieldUnit::PERCENT))
+    , m_xSmZoomImg(m_xBuilder->weld_widget("locksmzoom"))
 {
     m_xSizeNormal->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
     m_xSizeScaled->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
@@ -271,21 +281,58 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
     m_xSizeNormal->set_active(ePrintSize == PRINT_SIZE_NORMAL);
     m_xSizeScaled->set_active(ePrintSize == PRINT_SIZE_SCALED);
     m_xSizeZoomed->set_active(ePrintSize == PRINT_SIZE_ZOOMED);
+    bool bReadOnly = officecfg::Office::Math::Print::Size::isReadOnly();
+    if (bReadOnly)
+    {
+        m_xSizeNormal->set_sensitive(false);
+        m_xSizeScaled->set_sensitive(false);
+        m_xSizeZoomed->set_sensitive(false);
+        m_xLockPrintImg->set_visible(true);
+    }
 
-    m_xZoom->set_sensitive(m_xSizeZoomed->get_active());
-
+    bReadOnly = officecfg::Office::Math::Print::ZoomFactor::isReadOnly();
     m_xZoom->set_value(rSet->Get(SID_PRINTZOOM).GetValue(), FieldUnit::PERCENT);
+    m_xZoom->set_sensitive(m_xSizeZoomed->get_active() && !bReadOnly);
 
-    m_xSmZoom->set_sensitive(true);
+    bReadOnly = officecfg::Office::Math::Misc::SmEditWindowZoomFactor::isReadOnly();
     m_xSmZoom->set_value(rSet->Get(SID_SMEDITWINDOWZOOM).GetValue(), FieldUnit::PERCENT);
+    m_xSmZoom->set_sensitive(!bReadOnly);
+    m_xSmZoomImg->set_visible(bReadOnly);
 
+    bReadOnly = officecfg::Office::Math::Print::Title::isReadOnly();
     m_xTitle->set_active(rSet->Get(SID_PRINTTITLE).GetValue());
+    m_xTitle->set_sensitive(!bReadOnly);
+    m_xTitleImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Math::Print::FormulaText::isReadOnly();
     m_xText->set_active(rSet->Get(GetWhich(SID_PRINTTEXT)).GetValue());
+    m_xText->set_sensitive(!bReadOnly);
+    m_xTextImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Math::Print::Frame::isReadOnly();
     m_xFrame->set_active(rSet->Get(GetWhich(SID_PRINTFRAME)).GetValue());
+    m_xFrame->set_sensitive(!bReadOnly);
+    m_xFrameImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Math::Misc::InlineEditEnable::isReadOnly();
     m_xEnableInlineEdit->set_active(rSet->Get(SID_INLINE_EDIT_ENABLE).GetValue());
+    m_xEnableInlineEdit->set_sensitive(!bReadOnly);
+    m_xEnableInlineEditImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Math::Misc::IgnoreSpacesRight::isReadOnly();
     m_xNoRightSpaces->set_active(rSet->Get(SID_NO_RIGHT_SPACES).GetValue());
+    m_xNoRightSpaces->set_sensitive(!bReadOnly);
+    m_xNoRightSpacesImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::isReadOnly();
     m_xSaveOnlyUsedSymbols->set_active(rSet->Get(SID_SAVE_ONLY_USED_SYMBOLS).GetValue());
+    m_xSaveOnlyUsedSymbols->set_sensitive(!bReadOnly);
+    m_xSaveOnlyUsedSymbolsImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Math::Misc::AutoCloseBrackets::isReadOnly();
     m_xAutoCloseBrackets->set_active(rSet->Get(SID_AUTO_CLOSE_BRACKETS).GetValue());
+    m_xAutoCloseBrackets->set_sensitive(!bReadOnly);
+    m_xAutoCloseBracketsImg->set_visible(bReadOnly);
 }
 
 std::unique_ptr<SfxTabPage> SmPrintOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
