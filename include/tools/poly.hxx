@@ -114,7 +114,7 @@ public:
 
     void                SetSize( sal_uInt16 nNewSize );
     sal_uInt16          GetSize() const;
-    sal_uInt16          size() const { return GetSize(); } //for vector compability
+    sal_uInt16          size() const { return GetSize(); } //for vector compatibility
 
     void                Clear();
 
