@@ -521,7 +521,7 @@
       <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="21cm" style:print-orientation="landscape"/>
     </style:page-layout>
     <style:style style:name="Mdp1" style:family="drawing-page">
-      <style:drawing-page-properties draw:background-size="border" draw:fill="bitmap" draw:fill-image-name="Bitmap_20_1" style:repeat="stretch"/>
+      <style:drawing-page-properties draw:background-size="border" draw:fill="none"/>
     </style:style>
     <style:style style:name="Mdp2" style:family="drawing-page">
       <style:drawing-page-properties draw:background-size="border" draw:fill="bitmap" draw:fill-color="#99cccc" draw:fill-image-name="background" draw:fill-image-width="0cm" draw:fill-image-height="0cm" style:repeat="stretch"/>
@@ -719,6 +719,11 @@
       </draw:frame>
     </style:handout-master>
     <style:master-page style:name="Nature_5f_Illustration" style:display-name="Nature_Illustration" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP1" draw:layer="backgroundobjects" svg:width="28cm" svg:height="21cm" svg:x="0cm" svg:y="0cm">
+        <draw:image xlink:href="Pictures/100000000000042100000319892187DC121460D8.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad">
+          <text:p/>
+        </draw:image>
+      </draw:frame>
       <draw:frame presentation:style-name="Nature_5f_Illustration-title" draw:layer="backgroundobjects" svg:width="24.799cm" svg:height="4.963cm" svg:x="0.8cm" svg:y="4.8cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
