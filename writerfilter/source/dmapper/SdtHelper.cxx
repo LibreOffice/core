@@ -604,6 +604,7 @@ void SdtHelper::clear()
     m_nId = 0;
     m_nTabIndex = 0;
     m_aLock.clear();
+    m_xFieldStartRange.clear();
 }
 
 void SdtHelper::SetPlaceholderDocPart(const OUString& rPlaceholderDocPart)
