@@ -2875,8 +2875,8 @@
         <draw:text-box/>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Title-title" draw:layer="backgroundobjects" svg:width="19.798cm" svg:height="11.136cm" svg:x="0.6cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Title-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Title-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Title-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -2967,8 +2967,8 @@
         </draw:text-box>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Title_20_of_20_Content-title" draw:layer="backgroundobjects" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Title_20_of_20_Content-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Title_20_of_20_Content-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Title_20_of_20_Content-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3083,8 +3083,8 @@
         </draw:image>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Topic_20_Title_20_1-title" draw:layer="backgroundobjects" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Topic_20_Title_20_1-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Topic_20_Title_20_1-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Topic_20_Title_20_1-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3221,8 +3221,8 @@
         </draw:path>
       </draw:g>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Content_20_-title" draw:layer="backgroundobjects" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Content_20_-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Content_20_-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Content_20_-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr9" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3407,8 +3407,8 @@
         </draw:path>
       </draw:g>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Sample_20_Article-title" draw:layer="backgroundobjects" svg:width="19.798cm" svg:height="11.136cm" svg:x="0.6cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Sample_20_Article-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Sample_20_Article-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Sample_20_Article-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr13" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3568,8 +3568,8 @@
         </draw:image>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Topic_20_Title_20_2-title" draw:layer="backgroundobjects" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Topic_20_Title_20_2-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Topic_20_Title_20_2-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Topic_20_Title_20_2-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr16" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3697,8 +3697,8 @@
         </draw:text-box>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Insert_20_Picture-title" draw:layer="backgroundobjects" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Insert_20_Picture-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Insert_20_Picture-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Insert_20_Picture-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr19" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3827,8 +3827,8 @@
         </draw:text-box>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Insert_20_Picture_20_1-title" draw:layer="backgroundobjects" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Insert_20_Picture_20_1-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Insert_20_Picture_20_1-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Insert_20_Picture_20_1-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr22" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3928,8 +3928,8 @@
         </draw:text-box>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="List_20_Content-title" draw:layer="backgroundobjects" svg:width="19.798cm" svg:height="11.136cm" svg:x="0.6cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="List_20_Content-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="List_20_Content-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="List_20_Content-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr25" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -4041,8 +4041,8 @@
         </draw:image>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Topic_20_title_20_3-title" draw:layer="backgroundobjects" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Topic_20_title_20_3-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Topic_20_title_20_3-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Topic_20_title_20_3-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr27" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -4139,8 +4139,8 @@
         </draw:text-box>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Greetings-title" draw:layer="backgroundobjects" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Greetings-notes" draw:layer="backgroundobjects" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Greetings-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Greetings-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr30" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">

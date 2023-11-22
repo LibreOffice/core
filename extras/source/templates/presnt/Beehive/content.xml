@@ -52,12 +52,13 @@
                   <draw:text-box/>
                   </draw:frame>
               <presentation:notes draw:style-name="dp2">
-                  <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="15cm" svg:height="11cm" svg:x="3cm" svg:y="2.25cm" draw:page-number="1" presentation:class="page"/>
-                  <draw:frame presentation:style-name="pr3" draw:text-style-name="P3" draw:layer="layout" svg:width="17cm" svg:height="13cm" svg:x="2cm" svg:y="14cm" presentation:class="notes" presentation:placeholder="true">
+                  <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="1" presentation:class="page"/>
+                  <draw:frame presentation:style-name="pr3" draw:text-style-name="P3" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
                       <draw:text-box/>
                       </draw:frame>
                   </presentation:notes>
-              </draw:page><draw:page draw:name="page2" draw:style-name="dp1" draw:master-page-name="Beehive1" presentation:presentation-page-layout-name="AL2T1">
+              </draw:page>
+        <draw:page draw:name="page2" draw:style-name="dp1" draw:master-page-name="Beehive1" presentation:presentation-page-layout-name="AL2T1">
               <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
               <draw:frame presentation:style-name="pr4" draw:text-style-name="P1" draw:layer="layout" svg:width="25cm" svg:height="2.50cm" svg:x="1.5cm" svg:y="0.5cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
                   <draw:text-box/>
@@ -66,11 +67,13 @@
                   <draw:text-box/>
                   </draw:frame>
                   <presentation:notes draw:style-name="dp2">
-                      <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="15cm" svg:height="11cm" svg:x="3cm" svg:y="2.25cm" draw:page-number="2" presentation:class="page"/>
-                      <draw:frame presentation:style-name="pr6" draw:text-style-name="P3" draw:layer="layout" svg:width="17cm" svg:height="13cm" svg:x="2cm" svg:y="14cm" presentation:class="notes" presentation:placeholder="true">
+                      <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="2" presentation:class="page"/>
+                      <draw:frame presentation:style-name="pr6" draw:text-style-name="P3" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
                       <draw:text-box/>
-                      </draw:frame></presentation:notes>
-              </draw:page><presentation:settings presentation:mouse-visible="false"/>
+                      </draw:frame>
+                  </presentation:notes>
+              </draw:page>
+              <presentation:settings presentation:mouse-visible="false"/>
           </office:presentation>
       </office:body>
   </office:document-content>

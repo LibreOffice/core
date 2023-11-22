@@ -37,7 +37,7 @@
           <draw:text-box/>
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
-          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="12.75cm" svg:height="9.56cm" svg:x="4.125cm" svg:y="2.5cm" draw:page-number="1" presentation:class="page"/>
+          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="1" presentation:class="page"/>
           <draw:frame presentation:style-name="pr3" draw:text-style-name="P1" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>

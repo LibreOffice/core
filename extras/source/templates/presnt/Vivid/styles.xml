@@ -779,7 +779,7 @@
       <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
     </style:page-layout>
     <style:page-layout style:name="PM2">
-      <style:page-layout-properties fo:margin-top="1cm" fo:margin-bottom="1cm" fo:margin-left="1cm" fo:margin-right="1cm" fo:page-width="21cm" fo:page-height="29.7cm" style:print-orientation="portrait"/>
+      <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="21cm" fo:page-height="29.7cm" style:print-orientation="portrait"/>
     </style:page-layout>
     <style:style style:name="Mdp1" style:family="drawing-page">
       <style:drawing-page-properties draw:background-size="border" draw:fill="none" style:repeat="stretch"/>
@@ -1017,7 +1017,7 @@
         <draw:text-box>
           <text:p text:style-name="MP3">
             <text:span text:style-name="MT1">
-              <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+              <text:page-number/>
             </text:span>
             <text:span text:style-name="MT1">
               <text:s/>
@@ -1053,7 +1053,7 @@
       <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1.25cm" svg:x="20cm" svg:y="14.25cm" presentation:class="page-number">
         <draw:text-box>
           <text:p text:style-name="MP8">
-            <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+            <text:page-number/>
             <text:s/>
           </text:p>
         </draw:text-box>
@@ -1065,11 +1065,11 @@
         <draw:text-box/>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM2">
-        <draw:page-thumbnail presentation:style-name="Vivid-title" draw:layer="backgroundobjects" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Vivid-notes" draw:layer="backgroundobjects" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Vivid-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Vivid-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="1cm" presentation:class="header">
+        <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p text:style-name="MP1">
               <text:span text:style-name="MT1">
@@ -1081,7 +1081,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="1cm" presentation:class="date-time">
+        <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
@@ -1093,7 +1093,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="27.315cm" presentation:class="footer">
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p text:style-name="MP1">
               <text:span text:style-name="MT1">
@@ -1105,11 +1105,11 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="27.315cm" presentation:class="page-number">
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
-                <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+                <text:page-number/>
               </text:span>
               <text:span text:style-name="MT1">
                 <text:s/>
@@ -1149,17 +1149,17 @@
       <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1.25cm" svg:x="20cm" svg:y="14.25cm" presentation:class="page-number">
         <draw:text-box>
           <text:p text:style-name="MP8">
-            <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+            <text:page-number/>
             <text:s/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM2">
-        <draw:page-thumbnail presentation:style-name="Vivid1-title" draw:layer="backgroundobjects" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Vivid1-notes" draw:layer="backgroundobjects" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Vivid1-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Vivid1-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="1cm" presentation:class="header">
+        <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p text:style-name="MP1">
               <text:span text:style-name="MT1">
@@ -1171,7 +1171,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="1cm" presentation:class="date-time">
+        <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
@@ -1183,7 +1183,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="27.315cm" presentation:class="footer">
+        <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p text:style-name="MP1">
               <text:span text:style-name="MT1">
@@ -1195,11 +1195,11 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="27.315cm" presentation:class="page-number">
+        <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
-                <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+                <text:page-number/>
               </text:span>
               <text:span text:style-name="MT1">
                 <text:s/>
@@ -1239,7 +1239,7 @@
       <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="5.25cm" svg:height="1.25cm" svg:x="21.25cm" svg:y="14.25cm" presentation:class="page-number">
         <draw:text-box>
           <text:p text:style-name="MP8">
-            <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+            <text:page-number/>
             <text:s/>
           </text:p>
         </draw:text-box>
@@ -1249,11 +1249,11 @@
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <presentation:notes style:page-layout-name="PM2">
-        <draw:page-thumbnail presentation:style-name="Vivid2-title" draw:layer="backgroundobjects" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Vivid2-notes" draw:layer="backgroundobjects" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Vivid2-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Vivid2-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="1cm" presentation:class="header">
+        <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p text:style-name="MP1">
               <text:span text:style-name="MT1">
@@ -1265,7 +1265,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="1cm" presentation:class="date-time">
+        <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
@@ -1277,7 +1277,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr9" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="1cm" svg:y="27.315cm" presentation:class="footer">
+        <draw:frame presentation:style-name="Mpr9" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p text:style-name="MP1">
               <text:span text:style-name="MT1">
@@ -1289,11 +1289,11 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr9" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="8.245cm" svg:height="1.384cm" svg:x="11.754cm" svg:y="27.315cm" presentation:class="page-number">
+        <draw:frame presentation:style-name="Mpr9" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
-                <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+                <text:page-number/>
               </text:span>
               <text:span text:style-name="MT1">
                 <text:s/>

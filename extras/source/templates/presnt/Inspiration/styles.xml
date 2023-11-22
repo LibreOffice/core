@@ -718,7 +718,7 @@
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Inspiration-title" draw:layer="backgroundobjects" svg:width="12.75cm" svg:height="9.56cm" svg:x="4.125cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:page-thumbnail presentation:style-name="Inspiration-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
         <draw:frame presentation:style-name="Inspiration-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>

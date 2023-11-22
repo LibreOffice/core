@@ -81,8 +81,8 @@
           <draw:text-box/>
         </draw:frame>
         <presentation:notes draw:style-name="dp2" presentation:use-date-time-name="dtd1">
-          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" draw:page-number="1" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr3" draw:text-style-name="P3" draw:layer="layout" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="1" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr3" draw:text-style-name="P3" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -96,8 +96,8 @@
           <draw:text-box/>
         </draw:frame>
         <presentation:notes draw:style-name="dp2" presentation:use-date-time-name="dtd1">
-          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" draw:page-number="2" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr6" draw:text-style-name="P4" draw:layer="layout" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="2" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr6" draw:text-style-name="P4" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -108,8 +108,8 @@
           <draw:text-box/>
         </draw:frame>
         <presentation:notes draw:style-name="dp2" presentation:use-date-time-name="dtd1">
-          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="12.292cm" svg:height="10.386cm" svg:x="4.352cm" svg:y="3.104cm" draw:page-number="3" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr8" draw:text-style-name="P4" draw:layer="layout" svg:width="15.199cm" svg:height="12.464cm" svg:x="2.9cm" svg:y="14.157cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="3" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr8" draw:text-style-name="P4" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>

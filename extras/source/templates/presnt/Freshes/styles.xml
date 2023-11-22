@@ -2746,8 +2746,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Title-title" draw:layer="backgroundobjects" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Title-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Title-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Title-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -2829,8 +2829,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="One_20_Bullet-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="One_20_Bullet-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="One_20_Bullet-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="One_20_Bullet-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -2913,8 +2913,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Two_20_Bullets-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Two_20_Bullets-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Two_20_Bullets-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Two_20_Bullets-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -2997,8 +2997,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Three_20_Bullets-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Three_20_Bullets-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Three_20_Bullets-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Three_20_Bullets-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr11" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3086,8 +3086,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Four_20_Bullets-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Four_20_Bullets-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Four_20_Bullets-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Four_20_Bullets-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr14" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3169,8 +3169,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Blue_2f_White_20_Chart-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Blue_2f_White_20_Chart-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Blue_2f_White_20_Chart-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Blue_2f_White_20_Chart-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr17" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3254,8 +3254,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Table-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Table-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Table-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Table-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr20" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3337,8 +3337,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="White_2f_Blue_20_Chart-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="White_2f_Blue_20_Chart-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="White_2f_Blue_20_Chart-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="White_2f_Blue_20_Chart-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr23" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3420,8 +3420,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Right_20_Bar-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Right_20_Bar-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Right_20_Bar-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Right_20_Bar-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr26" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3505,8 +3505,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Diagram-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Diagram-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Diagram-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Diagram-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr29" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -3588,8 +3588,8 @@
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:page-thumbnail presentation:style-name="Left_20_Bar-title" draw:layer="backgroundobjects" svg:width="18.621cm" svg:height="10.476cm" svg:x="1.484cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Left_20_Bar-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Left_20_Bar-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Left_20_Bar-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr32" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
