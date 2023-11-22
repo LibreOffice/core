@@ -909,7 +909,7 @@
       <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
     </style:page-layout>
     <style:style style:name="Mdp1" style:family="drawing-page">
-      <style:drawing-page-properties draw:background-size="border" draw:fill="bitmap" draw:fill-image-name="Blueprint_5f_Plans-first-bg-wide" style:repeat="stretch"/>
+      <style:drawing-page-properties draw:background-size="border" draw:fill="none"/>
     </style:style>
     <style:style style:name="Mdp2" style:family="drawing-page">
       <style:drawing-page-properties draw:background-size="border" draw:fill="bitmap" draw:fill-image-name="Blueprint_5f_Plans-second-bg-wide" style:repeat="stretch"/>
@@ -1177,6 +1177,11 @@
       <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="8.999cm" svg:height="5.061cm" svg:x="11cm" svg:y="20.894cm"/>
     </style:handout-master>
     <style:master-page style:name="Blueprint_20_Plans" style:display-name="Blueprint Plans" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP1" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
+        <draw:image xlink:href="Pictures/1000020100000500000002D03918081590A75FCF.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad">
+          <text:p/>
+        </draw:image>
+      </draw:frame>
       <draw:frame presentation:style-name="Blueprint_20_Plans-title" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="3.6cm" svg:x="1.4cm" svg:y="2.25cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
