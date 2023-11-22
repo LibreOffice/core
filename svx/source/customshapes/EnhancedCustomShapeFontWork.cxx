@@ -832,8 +832,8 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                         sal_uInt16 i;
                         for (i = 0; i < nPointCount; i++)
                         {
-                            //Normal vector for a point will be calculated from its neightbour points
-                            //except if is in the start/end of the vector
+                            //Normal vector for a point will be calculated from its neighbour points
+                            //except if it is in the start/end of the vector
                             sal_uInt16 nPointIdx1 = i == 0 ? i : i - 1;
                             sal_uInt16 nPointIdx2 = i == nPointCount - 1 ? i : i + 1;
 
