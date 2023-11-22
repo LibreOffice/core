@@ -46,7 +46,8 @@
                     android:layout_weight="0"
                     android:inputType="textNoSuggestions"
                     android:imeOptions="actionDone|actionGo"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/calc_formula"
@@ -55,7 +56,8 @@
                     android:layout_weight="1"
                     android:inputType="text"
                     android:imeOptions="actionDone|actionGo"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:importantForAutofill="no" />
 
             </LinearLayout>
 
