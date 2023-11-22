@@ -350,7 +350,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         {
             if (!SwTextNode::IsIgnoredCharFormatForNumbering(nWhich, /*bIsCharStyle=*/true)
                 && !pCleanedSet->HasItem(nWhich)
-                && !(pFormat && pFormat->HasItem(nWhich)) )
+                && !(pFormat && pFormat->HasItem(nWhich))
+                && rStyleAttrs.GetItemState(nWhich) > SfxItemState::DEFAULT)
             {
                 // Copy from parent sets only allowed items which will not overwrite
                 // values explicitly defined in current set (pCleanedSet) or in pFormat
