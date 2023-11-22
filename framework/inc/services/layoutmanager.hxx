@@ -46,6 +46,7 @@ class MenuBar;
 namespace framework
 {
     class MenuBarWrapper;
+    class ProgressBarWrapper;
     class ToolbarLayoutManager;
     class GlobalSettings;
     namespace detail
@@ -254,7 +255,7 @@ namespace framework
             rtl::Reference< MenuBarWrapper >                               m_xMenuBar;
             UIElement                                                      m_aStatusBarElement;
             UIElement                                                      m_aProgressBarElement;
-            css::uno::Reference< css::ui::XUIElement >                     m_xProgressBarBackup;
+            rtl::Reference< ProgressBarWrapper >                           m_xProgressBarBackup;
             css::uno::Reference< css::frame::XModuleManager2 >             m_xModuleManager;
             css::uno::Reference< css::ui::XUIElementFactoryManager >       m_xUIElementFactoryManager;
             css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowState;

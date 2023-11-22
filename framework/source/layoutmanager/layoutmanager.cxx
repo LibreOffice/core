@@ -868,7 +868,7 @@ void LayoutManager::implts_createProgressBar()
 {
     Reference< XUIElement > xStatusBar;
     Reference< XUIElement > xProgressBar;
-    Reference< XUIElement > xProgressBarBackup;
+    rtl::Reference< ProgressBarWrapper > xProgressBarBackup;
     Reference< awt::XWindow > xContainerWindow;
 
     SolarMutexResettableGuard aWriteLock;
@@ -879,10 +879,10 @@ void LayoutManager::implts_createProgressBar()
     xContainerWindow = m_xContainerWindow;
     aWriteLock.clear();
 
-    bool                bRecycled = xProgressBarBackup.is();
+    bool bRecycled = xProgressBarBackup.is();
     rtl::Reference<ProgressBarWrapper> pWrapper;
     if ( bRecycled )
-        pWrapper = static_cast<ProgressBarWrapper*>(xProgressBarBackup.get());
+        pWrapper = xProgressBarBackup.get();
     else if ( xProgressBar.is() )
         pWrapper = static_cast<ProgressBarWrapper*>(xProgressBar.get());
     else
@@ -931,17 +931,13 @@ void LayoutManager::implts_backupProgressBarWrapper()
     // safe a backup copy of the current progress!
     // This copy will be used automatically inside createProgressBar() which is called
     // implicitly from implts_doLayout() .-)
-    m_xProgressBarBackup = m_aProgressBarElement.m_xUIElement;
+    m_xProgressBarBackup = static_cast<ProgressBarWrapper*>(m_aProgressBarElement.m_xUIElement.get());
 
     // remove the relation between this old progress bar and our old status bar.
     // Otherwise we work on disposed items ...
     // The internal used ProgressBarWrapper can handle a NULL reference.
     if ( m_xProgressBarBackup.is() )
-    {
-        ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(m_xProgressBarBackup.get());
-        if ( pWrapper )
-            pWrapper->setStatusBar( Reference< awt::XWindow >() );
-    }
+        m_xProgressBarBackup->setStatusBar( Reference< awt::XWindow >() );
 
     // prevent us from dispose() the m_aProgressBarElement.m_xUIElement inside implts_reset()
     m_aProgressBarElement.m_xUIElement.clear();
