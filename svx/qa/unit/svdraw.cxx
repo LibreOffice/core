@@ -427,7 +427,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextEidth)
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextWidth)
 {
     std::vector<OUString> aFilenames
         = { u"tdf148000_CurvedTextWidth.pptx"_ustr, u"tdf148000_CurvedTextWidth_New.odp"_ustr,
