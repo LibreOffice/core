@@ -669,6 +669,25 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=TIMEVALUE([.K9])" office:value-type="float" office:value="0.354166666666667" calcext:value-type="float">
+      <text:p>0.354166666666667</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0.354166666666667" calcext:value-type="float">
+      <text:p>0.354166666666667</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce14" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=TIMEVALUE(K9)" calcext:value-type="string">
+      <text:p>=TIMEVALUE(K9)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>01/09/2019 08:30:00</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce15"/>
      <table:table-cell table:number-columns-repeated="11"/>
