@@ -960,6 +960,54 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFile(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_isEndOfFile(
         oslFileHandle Handle, sal_Bool *pIsEOF );
 
+/** Resets the list of paths and associated permissions for osl
+
+    @param[in] pustrFileURLs
+    Contains a ':' delimited list of control strings and paths.
+    Control segments are a short path that refers to the following
+    segments and contain either:
+
+    r: read-only paths follow (the default)
+    w: read & write paths follow
+    x: executable paths follow
+
+    Any real paths (ie. having resolved all symlinks)
+    accessed outside of these paths will cause an
+    osl_File_E_ACCESS error in the relevant method calls.
+
+    This method is Unix specific.
+
+    @see osl_isForbiddenPath
+
+    @since LibreOffice 7.7
+*/
+SAL_DLLPUBLIC void SAL_CALL osl_setAllowedPaths(
+    rtl_uString *pustrFileURLs
+    );
+
+/**
+   Determine if the passed in path is not contained inside
+   the allowed paths, or if no allowed paths are set it
+   will not forbid any access.
+
+   @param[in] pustrFileURL
+   A URL (or path) that we want to check if it is forbidden
+   to access.
+
+   @param[in] nFlags
+   Flags to determine what type of access is requested,
+   osl_File_OpenFlag_Read | Write, or 0x80 for 'execute'.
+
+   This method is Unix specific.
+
+   @see osl_setAllowedPaths
+
+   @since LibreOffice 7.7
+ */
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isForbiddenPath(
+    rtl_uString *pustrFileURL, int nFlags
+    );
+
 /** Write a number of bytes to a file.
 
     Writes a number of bytes to a file.

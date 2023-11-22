@@ -20,10 +20,12 @@
 #include "system.hxx"
 #include "readwrite_helper.hxx"
 #include "file_url.hxx"
+#include "file_impl.hxx"
 #include "unixerrnostring.hxx"
 
 #include <osl/diagnose.h>
 #include <osl/profile.h>
+#include <osl/file.h>
 #include <sal/log.hxx>
 
 #include <fcntl.h>
@@ -936,6 +938,9 @@ static osl_TFile* openFileImpl(const char* pszFilename, oslProfileOption Profile
     int        Flags;
     osl_TFile* pFile = static_cast<osl_TFile*>(calloc(1, sizeof(osl_TFile)));
     bool       bWriteable = false;
+
+    if ( isForbidden( pszFilename, osl_File_OpenFlag_Write ) )
+        return nullptr;
 
     if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ) )
     {
