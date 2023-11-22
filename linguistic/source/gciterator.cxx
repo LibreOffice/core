@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
@@ -409,39 +410,54 @@ void GrammarCheckingIterator::ProcessResult(
                 uno::Sequence< text::TextMarkupDescriptor > aDescriptors( nErrors + 1 );
                 text::TextMarkupDescriptor * pDescriptors = aDescriptors.getArray();
 
+                uno::Reference< linguistic2::XDictionary > xIgnoreAll = ::GetIgnoreAllList();
+                sal_Int32 ignoredCount = 0;
+
                 // at pos 0 .. nErrors-1 -> all grammar errors
                 for (const linguistic2::SingleProofreadingError &rError : rRes.aErrors)
                 {
-                    text::TextMarkupDescriptor &rDesc = *pDescriptors++;
+                    OUString word(rRes.aText.subView(rError.nErrorStart, rError.nErrorLength));
+                    bool ignored = xIgnoreAll->getEntry(word).is();
 
-                    rDesc.nType   = rError.nErrorType;
-                    rDesc.nOffset = rError.nErrorStart;
-                    rDesc.nLength = rError.nErrorLength;
-
-                    // the proofreader may return SPELLING but right now our core
-                    // does only handle PROOFREADING if the result is from the proofreader...
-                    // (later on we may wish to color spelling errors found by the proofreader
-                    // differently for example. But no special handling right now.
-                    if (rDesc.nType == text::TextMarkupType::SPELLCHECK)
-                        rDesc.nType = text::TextMarkupType::PROOFREADING;
-
-                    uno::Reference< container::XStringKeyMap > xKeyMap(
-                        new LngXStringKeyMap());
-                    for( const beans::PropertyValue& rProperty : rError.aProperties )
+                    if (!ignored)
                     {
-                        if ( rProperty.Name == "LineColor" )
+                        text::TextMarkupDescriptor &rDesc = *pDescriptors++;
+
+                        rDesc.nType   = rError.nErrorType;
+                        rDesc.nOffset = rError.nErrorStart;
+                        rDesc.nLength = rError.nErrorLength;
+
+                        // the proofreader may return SPELLING but right now our core
+                        // does only handle PROOFREADING if the result is from the proofreader...
+                        // (later on we may wish to color spelling errors found by the proofreader
+                        // differently for example. But no special handling right now.
+                        if (rDesc.nType == text::TextMarkupType::SPELLCHECK)
+                            rDesc.nType = text::TextMarkupType::PROOFREADING;
+
+                        uno::Reference< container::XStringKeyMap > xKeyMap(new LngXStringKeyMap());
+                        for( const beans::PropertyValue& rProperty : rError.aProperties )
                         {
-                            xKeyMap->insertValue(rProperty.Name,
-                                                 rProperty.Value);
-                            rDesc.xMarkupInfoContainer = xKeyMap;
-                        }
-                        else if ( rProperty.Name == "LineType" )
-                        {
-                            xKeyMap->insertValue(rProperty.Name,
-                                                 rProperty.Value);
-                            rDesc.xMarkupInfoContainer = xKeyMap;
+                            if ( rProperty.Name == "LineColor" )
+                            {
+                                xKeyMap->insertValue(rProperty.Name, rProperty.Value);
+                                rDesc.xMarkupInfoContainer = xKeyMap;
+                            }
+                            else if ( rProperty.Name == "LineType" )
+                            {
+                                xKeyMap->insertValue(rProperty.Name, rProperty.Value);
+                                rDesc.xMarkupInfoContainer = xKeyMap;
+                            }
                         }
                     }
+                    else
+                        ignoredCount++;
+                }
+
+                if (ignoredCount != 0)
+                {
+                    aDescriptors.realloc(aDescriptors.getLength() - ignoredCount);
+                    pDescriptors = aDescriptors.getArray();
+                    pDescriptors += aDescriptors.getLength() - 1;
                 }
 
                 // at pos nErrors -> sentence markup
