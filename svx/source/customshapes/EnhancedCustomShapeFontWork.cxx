@@ -903,7 +903,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                                     = nAdjust * (fCurWidth - rParagraph.aBoundRect.GetWidth()) / 2;
                             }
                             else
-                                fAdjust = -1;   // we neet tho shrink the text to fit the curve
+                                fAdjust = -1;   // we need to shrink the text to fit the curve
 
                             for ( auto& rCharacter : rParagraph.vCharacters )
                             {
