@@ -163,6 +163,7 @@ public:
 
     bool operator==( const Style& rOther) const;
     bool operator<( const Style& rOther) const;
+    size_t hashCode() const;
 };
 
 inline bool operator>( const Style& rL, const Style& rR ) { return rR.operator<(rL); }

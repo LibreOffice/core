@@ -23,6 +23,7 @@
 #include <svx/framelink.hxx>
 
 #include <editeng/borderline.hxx>
+#include <o3tl/hash_combine.hxx>
 
 
 using namespace ::com::sun::star;
@@ -192,6 +193,22 @@ bool Style::operator==( const Style& rOther) const
         && UseGapColor() == rOther.UseGapColor()
         && Type() == rOther.Type());
 }
+
+size_t Style::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, Prim());
+    o3tl::hash_combine(seed, Dist());
+    o3tl::hash_combine(seed, Secn());
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(GetColorPrim()));
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(GetColorSecn()));
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(GetColorGap()));
+    o3tl::hash_combine(seed, GetRefMode());
+    o3tl::hash_combine(seed, UseGapColor());
+    o3tl::hash_combine(seed, Type());
+    return seed;
+}
+
 
 namespace
 {
