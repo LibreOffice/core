@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -40,6 +41,7 @@ namespace com::sun::star::util { class XNumberFormatter; }
 namespace weld { class Menu; }
 
 class CursorWrapper;
+class GridFieldValueListener;
 
 bool CompareBookmark(const css::uno::Any& aLeft, const css::uno::Any& aRight);
 
@@ -252,7 +254,7 @@ private:
     css::uno::Reference< css::sdb::XRowsChangeListener>
                                                     m_xRowSetListener; // get notification when rows were changed
 
-    void*                                           m_pFieldListeners;
+    std::map<sal_uInt16, GridFieldValueListener*>   m_aFieldListeners;
         // property listeners for field values
 
     std::unique_ptr<DisposeListenerGridBridge>      m_pCursorDisposeListener;

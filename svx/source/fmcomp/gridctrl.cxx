@@ -60,7 +60,6 @@
 
 #include <algorithm>
 #include <cstdlib>
-#include <map>
 #include <memory>
 
 using namespace ::dbtools;
@@ -120,9 +119,6 @@ private:
         }
     }
 };
-
-class GridFieldValueListener;
-typedef std::map<sal_uInt16, GridFieldValueListener*> ColumnFieldValueListeners;
 
 class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
 {
@@ -693,7 +689,6 @@ DbGridControl::DbGridControl(
             ,m_aBar(VclPtr<NavigationBar>::Create(this))
             ,m_nAsynAdjustEvent(nullptr)
             ,m_pDataSourcePropListener(nullptr)
-            ,m_pFieldListeners(nullptr)
             ,m_pGridListener(nullptr)
             ,m_nSeekPos(-1)
             ,m_nTotalCount(-1)
@@ -755,7 +750,7 @@ void DbGridControl::dispose()
 
     m_bWantDestruction = true;
     osl::MutexGuard aGuard(m_aDestructionSafety);
-    if (m_pFieldListeners)
+    if (!m_aFieldListeners.empty())
         DisconnectFromFields();
     m_pCursorDisposeListener.reset();
 
@@ -3205,15 +3200,11 @@ IMPL_LINK(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat, void)
 
 void DbGridControl::BeginCursorAction()
 {
-    if (m_pFieldListeners)
+    for (const auto& rListener : m_aFieldListeners)
     {
-        ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
-        for (const auto& rListener : *pListeners)
-        {
-            GridFieldValueListener* pCurrent = rListener.second;
-            if (pCurrent)
-                pCurrent->suspend();
-        }
+        GridFieldValueListener* pCurrent = rListener.second;
+        if (pCurrent)
+            pCurrent->suspend();
     }
 
     if (m_pDataSourcePropListener)
@@ -3222,15 +3213,11 @@ void DbGridControl::BeginCursorAction()
 
 void DbGridControl::EndCursorAction()
 {
-    if (m_pFieldListeners)
+    for (const auto& rListener : m_aFieldListeners)
     {
-        ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
-        for (const auto& rListener : *pListeners)
-        {
-            GridFieldValueListener* pCurrent = rListener.second;
-            if (pCurrent)
-                pCurrent->resume();
-        }
+        GridFieldValueListener* pCurrent = rListener.second;
+        if (pCurrent)
+            pCurrent->resume();
     }
 
     if (m_pDataSourcePropListener)
@@ -3239,14 +3226,7 @@ void DbGridControl::EndCursorAction()
 
 void DbGridControl::ConnectToFields()
 {
-    ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
-    DBG_ASSERT(!pListeners || pListeners->empty(), "DbGridControl::ConnectToFields : please call DisconnectFromFields first !");
-
-    if (!pListeners)
-    {
-        pListeners = new ColumnFieldValueListeners;
-        m_pFieldListeners = pListeners;
-    }
+    DBG_ASSERT(m_aFieldListeners.empty(), "DbGridControl::ConnectToFields : please call DisconnectFromFields first !");
 
     for (auto const & pCurrent : m_aColumns)
     {
@@ -3259,7 +3239,7 @@ void DbGridControl::ConnectToFields()
             continue;
 
         // column is visible and bound here
-        GridFieldValueListener*& rpListener = (*pListeners)[pCurrent->GetId()];
+        GridFieldValueListener*& rpListener = m_aFieldListeners[pCurrent->GetId()];
         DBG_ASSERT(!rpListener, "DbGridControl::ConnectToFields : already a listener for this column ?!");
         rpListener = new GridFieldValueListener(*this, xField, pCurrent->GetId());
     }
@@ -3267,19 +3247,15 @@ void DbGridControl::ConnectToFields()
 
 void DbGridControl::DisconnectFromFields()
 {
-    if (!m_pFieldListeners)
+    if (m_aFieldListeners.empty())
         return;
 
-    ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
-    while (!pListeners->empty())
+    while (!m_aFieldListeners.empty())
     {
-        sal_Int32 nOldSize = pListeners->size();
-        pListeners->begin()->second->dispose();
-        DBG_ASSERT(nOldSize > static_cast<sal_Int32>(pListeners->size()), "DbGridControl::DisconnectFromFields : dispose on a listener should result in a removal from my list !");
+        sal_Int32 nOldSize = m_aFieldListeners.size();
+        m_aFieldListeners.begin()->second->dispose();
+        DBG_ASSERT(nOldSize > static_cast<sal_Int32>(m_aFieldListeners.size()), "DbGridControl::DisconnectFromFields : dispose on a listener should result in a removal from my list !");
     }
-
-    delete pListeners;
-    m_pFieldListeners = nullptr;
 }
 
 void DbGridControl::FieldValueChanged(sal_uInt16 _nId)
@@ -3313,15 +3289,8 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId)
 
 void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
 {
-    ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
-    if (!pListeners)
-    {
-        OSL_FAIL("DbGridControl::FieldListenerDisposing : invalid call (have no listener array) !");
-        return;
-    }
-
-    ColumnFieldValueListeners::const_iterator aPos = pListeners->find(_nId);
-    if (aPos == pListeners->end())
+    auto aPos = m_aFieldListeners.find(_nId);
+    if (aPos == m_aFieldListeners.end())
     {
         OSL_FAIL("DbGridControl::FieldListenerDisposing : invalid call (did not find the listener) !");
         return;
@@ -3329,7 +3298,7 @@ void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
 
     delete aPos->second;
 
-    pListeners->erase(aPos);
+    m_aFieldListeners.erase(aPos);
 }
 
 void DbGridControl::disposing(sal_uInt16 _nId)

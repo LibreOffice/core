@@ -88,9 +88,6 @@ editeng/source/editeng/impedit.hxx:506
 extensions/source/update/check/updatecheck.hxx:164
     UpdateCheck m_pThread WorkerThread *
     (anonymous namespace)::UpdateCheckThread
-framework/inc/uielement/uielement.hxx:89
-    framework::UIElement m_xUIElement css::uno::Reference<css::ui::XUIElement>
-    framework::AddonsToolBarWrapper
 i18npool/inc/calendarImpl.hxx:103
     i18npool::CalendarImpl xCalendar css::uno::Reference<css::i18n::XCalendar4>
     i18npool::Calendar_gregorian
@@ -178,9 +175,6 @@ include/svx/AccessibleShape.hxx:391
 include/svx/fmsrcimp.hxx:161
     FmSearchEngine m_xSearchCursor CursorWrapper
     com::sun::star::uno::Reference
-include/svx/gridctrl.hxx:255
-    DbGridControl m_pFieldListeners void *
-    std::map
 include/svx/svdhdl.hxx:136
     SdrHdl m_pObj SdrObject *
     SdrEdgeObj
