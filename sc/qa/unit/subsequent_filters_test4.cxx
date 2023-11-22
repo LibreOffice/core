@@ -1946,6 +1946,25 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf142905)
     CPPUNIT_ASSERT_EQUAL(OUString("     3M   "), pDoc->GetString(2, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf125580)
+{
+    createScDoc("ods/tdf125580.ods");
+    ScDocument* pDoc = getScDoc();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 11/22/23 04:30 PM
+    // - Actual  : 11/22/23 04:29 PM
+    // - At row 19
+    for (SCROW i = 0; i <= 40; ++i)
+    {
+        OString sMessage = "At row " + OString::number(i + 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), pDoc->GetString(0, i, 0),
+                                     pDoc->GetString(1, i, 0));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowImportCellStyleIssue)
 {
     // Test checks that the correct cell style is imported for the first 6 rows and then the rest of the rows.
