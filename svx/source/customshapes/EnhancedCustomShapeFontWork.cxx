@@ -863,7 +863,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                             double fAdjust;
                             double fCurWidth;
 
-                            // distance between the original an the current curve
+                            // distance between the original and the current curve
                             double fCurvesDist = rTextArea.aBoundRect.GetHeight() / 2.0
                                                  + rTextArea.aBoundRect.Top()
                                                  - rParagraph.aBoundRect.Center().Y();
