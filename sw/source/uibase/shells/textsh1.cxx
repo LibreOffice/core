@@ -2022,8 +2022,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     SwPaM *pPaM = rWrtSh.GetCursor();
                     if (pPaM)
                         SwEditShell::IgnoreGrammarErrorAt( *pPaM );
-                    if (xDictionary.is())
+                    if (xDictionary.is() && pPaM)
                     {
+                        linguistic::AddEntryToDic( xDictionary, pPaM->GetText(), false, OUString() );
                         // refresh the layout of all paragraphs (workaround to launch a dictionary event)
                         xDictionary->setActive(false);
                         xDictionary->setActive(true);
