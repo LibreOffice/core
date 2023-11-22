@@ -939,7 +939,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                                     }
                                     // 0 <= fM1,fM2 <= 1 should be true, but rounding errors can
                                     // make a small mistake.
-                                    // make sure they are >0 becuase GetPoint() need that
+                                    // make sure they are >0 because GetPoint() need that
                                     if (fM1 < 0) fM1 = 0;
                                     if (fM2 < 0) fM2 = 0;
 
