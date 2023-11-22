@@ -1313,6 +1313,124 @@ namespace osl_FileBase
     CPPUNIT_REGISTRY_ADD_TO_DEFAULT("osl_osl::FileBase");
 }
 
+#if (defined UNX)
+
+namespace osl_Forbidden
+{
+
+    class Forbidden : public CppUnit::TestFixture
+    {
+        OUString maScratchBad;
+        OUString maScratchGood;
+    public:
+        void setUp() override
+        {
+            // create a directory to play in
+            createTestDirectory(aTmpName3);
+            OUString aBadURL = aTmpName3 + "/bad";
+            OUString aGoodURL = aTmpName3 + "/good";
+            createTestDirectory(aBadURL);
+            createTestDirectory(aGoodURL);
+            File::getSystemPathFromFileURL(aBadURL, maScratchBad);
+            File::getSystemPathFromFileURL(aGoodURL, maScratchGood);
+        }
+
+        void tearDown() override
+        {
+            osl_setAllowedPaths(nullptr);
+            OUString aBadURL = aTmpName3 + "/bad";
+            OUString aGoodURL = aTmpName3 + "/good";
+            deleteTestDirectory(aBadURL);
+            deleteTestDirectory(aGoodURL);
+            deleteTestDirectory(aTmpName3);
+        }
+
+        void forbidden()
+        {
+            File::setAllowedPaths(maScratchGood);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
+                                         true, File::isForbidden(maScratchBad, osl_File_OpenFlag_Read));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read from good should be allowed",
+                                         false, File::isForbidden(maScratchGood, osl_File_OpenFlag_Read));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("write to good should be forbidden",
+                                         true, File::isForbidden(maScratchGood, osl_File_OpenFlag_Write));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create in good should be forbidden",
+                                         true, File::isForbidden(maScratchGood, osl_File_OpenFlag_Create));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("exec from good should be forbidden",
+                                         true, File::isForbidden(maScratchGood, 0x80));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("write to non-existent should be forbidden",
+                                         true, File::isForbidden(maScratchBad + "/notthere", osl_File_OpenFlag_Write));
+
+            File::setAllowedPaths("w:" + maScratchGood + ":x:" + maScratchBad);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
+                                         true, File::isForbidden(maScratchBad, osl_File_OpenFlag_Read));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read from good should be allowed", // w implies 'r'
+                                         false, File::isForbidden(maScratchGood, osl_File_OpenFlag_Read));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("write to good should be allowed",
+                                         false, File::isForbidden(maScratchGood, osl_File_OpenFlag_Write));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("exec from good should be forbidden",
+                                         true, File::isForbidden(maScratchGood, 0x80));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("exec from bad should be allowed",
+                                         false, File::isForbidden(maScratchBad, 0x80));
+        }
+
+        void open()
+        {
+            File::setAllowedPaths(maScratchGood);
+            File testFile(maScratchBad + "/open");
+            auto nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("disabled path allowed", osl::FileBase::E_ACCES, nError1);
+            deleteTestFile(testFile.getURL());
+        }
+
+        void copy()
+        {
+            File::setAllowedPaths("w:" + maScratchGood);
+            File testGood(maScratchGood + "/good");
+            File testGoodTo(maScratchGood + "/good_to");
+            File testBad(maScratchBad + "/bad");
+
+            auto nError1 = testGood.open(osl_File_OpenFlag_Create);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
+
+            auto nErrorCopy = File::copy(maScratchGood + "/good", maScratchGood + "/good_to");
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nErrorCopy);
+
+            auto nErrorCopyBad = File::copy(maScratchGood + "/good_to", maScratchBad + "/bad");
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_ACCES, nErrorCopyBad);
+
+            deleteTestFile(maScratchGood + "/good_to");
+            deleteTestFile(maScratchGood + "/good");
+        }
+
+        void nextTests()
+        {
+            // more entry points to test
+#if 0
+            auto nError1 = File::move(aTmpName4, aCanURL1);
+            auto nError2 = File::remove(aTmpName4);
+            auto nError3 = File::setAttributes(aTmpName6, osl_File_Attribute_ReadOnly);
+            bool bOk = osl_getSystemTime(pTV_current);
+            CPPUNIT_ASSERT(bOk);
+            auto nError4 = File::setTime(aTmpName6, *pTV_current, *pTV_current, *pTV_current);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(errorToStr(nError2).getStr(), osl::FileBase::E_None, nError2);
+#endif
+        }
+
+        CPPUNIT_TEST_SUITE(Forbidden);
+        CPPUNIT_TEST(forbidden);
+//        CPPUNIT_TEST(open);
+//        CPPUNIT_TEST(copy);
+//        CPPUNIT_TEST(nextTests);
+        CPPUNIT_TEST_SUITE_END();
+    };
+
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Forbidden::Forbidden, "osl_Forbidden");
+
+    CPPUNIT_REGISTRY_ADD_TO_DEFAULT("osl_Forbidden");
+}
+#endif
+
 namespace osl_FileStatus
 {
     //  testing the method

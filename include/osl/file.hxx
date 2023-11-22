@@ -312,6 +312,58 @@ public:
 
         return static_cast< RC >( osl_createTempFile(pustr_dir_url, pHandle, ppustr_tmp_file_url) );
     }
+
+
+    /** Resets the list of paths and associated permissions for osl
+
+        @param[in] rPaths
+        Contains a ':' delimited list of control strings and paths.
+        Control segments are a short path that refers to the following
+        segments and contain either:
+
+        r: read-only paths follow (the default)
+        w: read & write paths follow
+        x: executable paths follow
+
+        Any real paths (ie. having resolved all symlinks)
+        accessed outside of these paths will cause an
+        osl_File_E_ACCESS error in the relevant method calls.
+
+        This method is Unix specific.
+
+        @see osl_isForbiddenPath
+
+        @since LibreOffice 7.7
+    */
+
+    static void setAllowedPaths(const OUString &rPaths)
+    {
+        osl_setAllowedPaths(rPaths.pData);
+    }
+
+    /**
+       Determine if the passed in path is not contained inside
+       the allowed paths, or if no allowed paths are set it
+       will not forbid any access.
+
+       @param[in] pustrFileURL
+       A URL (or path) that we want to check if it is forbidden
+       to access.
+
+       @param[in] nFlags
+       Flags to determine what type of access is requested,
+       osl_File_OpenFlag_Read | Write, or 0x80 for 'execute'.
+
+       This method is Unix specific.
+
+       @see osl_setAllowedPaths
+
+       @since LibreOffice 7.7
+    */
+    static bool isForbidden(const OUString &rPath, int nFlags)
+    {
+        return osl_isForbiddenPath(rPath.pData, nFlags);
+    }
 };
 
 

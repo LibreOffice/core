@@ -274,6 +274,9 @@ static oslFileError osl_psz_setFileAttributes( const char* pszFilePath, sal_uInt
 
     OSL_ENSURE(!(osl_File_Attribute_Hidden & uAttributes), "osl_File_Attribute_Hidden doesn't work under Unix");
 
+    if (isForbidden(pszFilePath, osl_File_OpenFlag_Write))
+        return osl_File_E_ACCES;
+
     if (uAttributes & osl_File_Attribute_OwnRead)
         nNewMode |= S_IRUSR;
 
@@ -338,6 +341,9 @@ static oslFileError osl_psz_setFileTime (
 #ifdef DEBUG_OSL_FILE
     struct tm* pTM=0;
 #endif
+
+    if (isForbidden(pszFilePath, osl_File_OpenFlag_Write))
+        return osl_File_E_ACCES;
 
     nRet = lstat_c(pszFilePath,&aFileStat);
 

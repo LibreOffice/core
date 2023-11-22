@@ -143,6 +143,9 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
     osl_systemPathRemoveSeparator(path.pData);
 
+    if (isForbidden(path.getStr(), osl_File_OpenFlag_Read))
+        return osl_File_E_ACCES;
+
 #ifdef MACOSX
     {
         auto const n = std::max(int(path.getLength() + 1), int(PATH_MAX));
@@ -343,6 +346,9 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirector
 
     osl_systemPathRemoveSeparator(strSystemPath.pData);
 
+    if (isForbidden(strSystemPath, osl_File_OpenFlag_Read))
+        return osl_File_E_ACCES;
+
     if (osl::access(strSystemPath, F_OK) == -1)
     {
         osl_error = oslTranslateFileError(errno);
@@ -426,6 +432,9 @@ oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
 
 oslFileError osl_psz_createDirectory(char const * pszPath, sal_uInt32 flags)
 {
+    if (isForbidden(pszPath, osl_File_OpenFlag_Create))
+        return osl_File_E_ACCES;
+
     int nRet=0;
     int mode
         = (((flags & osl_File_OpenFlag_Read) == 0
@@ -455,6 +464,9 @@ oslFileError osl_psz_createDirectory(char const * pszPath, sal_uInt32 flags)
 
 static oslFileError osl_psz_removeDirectory( const char* pszPath )
 {
+    if (isForbidden(pszPath, osl_File_OpenFlag_Write))
+        return osl_File_E_ACCES;
+
     int nRet = rmdir(pszPath);
 
     if ( nRet < 0 )
@@ -547,6 +559,9 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
     osl::systemPathRemoveSeparator(sys_path);
 
+    if (isForbidden(sys_path.getStr(), osl_File_OpenFlag_Create))
+        return osl_File_E_ACCES;
+
     return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);
 }
 
@@ -579,6 +594,10 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     if( eRet != osl_File_E_None )
         return eRet;
 
+    if (isForbidden(srcPath, osl_File_OpenFlag_Read) ||
+        isForbidden(destPath, osl_File_OpenFlag_Create))
+        return osl_File_E_ACCES;
+
 #ifdef MACOSX
     if ( macxp_resolveAlias( srcPath, PATH_MAX ) != 0 || macxp_resolveAlias( destPath, PATH_MAX ) != 0 )
       return oslTranslateFileError( errno );
@@ -592,6 +611,10 @@ oslFileError SAL_CALL osl_replaceFile(rtl_uString* ustrFileURL, rtl_uString* ust
     int nGid = -1;
     char destPath[PATH_MAX];
     oslFileError eRet = FileURLToPath(destPath, PATH_MAX, ustrDestURL);
+
+    if (isForbidden(destPath, osl_File_OpenFlag_Create))
+        return osl_File_E_ACCES;
+
     if (eRet == osl_File_E_None)
     {
         struct stat aFileStat;
@@ -668,6 +691,9 @@ oslFileError SAL_CALL osl_removeFile(rtl_uString* ustrFileURL)
       return oslTranslateFileError(errno);
 #endif/* MACOSX */
 
+    if (isForbidden(path, osl_File_OpenFlag_Write))
+        return osl_File_E_ACCES;
+
     return osl_unlinkFile(path);
 }
 
@@ -723,6 +749,10 @@ static oslFileError osl_unlinkFile(const char* pszPath)
 
 static oslFileError osl_psz_moveFile(const char* pszPath, const char* pszDestPath)
 {
+    if (isForbidden(pszPath, osl_File_OpenFlag_Read) ||
+        isForbidden(pszDestPath, osl_File_OpenFlag_Create))
+        return osl_File_E_ACCES;
+
     int nRet = rename(pszPath,pszDestPath);
 
     if (nRet < 0)
@@ -749,6 +779,10 @@ static oslFileError osl_psz_copyFile( const char* pszPath, const char* pszDestPa
     oslFileError tErr=osl_File_E_invalidError;
     size_t nSourceSize=0;
     bool DestFileExists=true;
+
+    if (isForbidden(pszPath, osl_File_OpenFlag_Read) ||
+        isForbidden(pszDestPath, osl_File_OpenFlag_Create))
+        return osl_File_E_ACCES;
 
     /* mfe: does the source file really exists? */
     nRet = lstat_c(pszPath,&aFileStat);

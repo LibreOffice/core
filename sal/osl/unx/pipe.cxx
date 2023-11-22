@@ -29,6 +29,7 @@
 
 #include "sockimpl.hxx"
 #include "secimpl.hxx"
+#include "file_impl.hxx"
 #include "unixerrnostring.hxx"
 
 #include <cassert>
@@ -205,6 +206,9 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
     memset(&addr, 0, sizeof(addr));
 
     SAL_INFO("sal.osl.pipe", "new pipe on fd " << pPipe->m_Socket << " '" << name << "'");
+
+    if (isForbidden(name.getStr(), osl_File_OpenFlag_Create))
+        return nullptr;
 
     addr.sun_family = AF_UNIX;
     // coverity[fixed_size_dest : FALSE] - safe, see check above

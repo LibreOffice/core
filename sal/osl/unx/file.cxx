@@ -825,6 +825,125 @@ static bool osl_file_queryLocking(sal_uInt32 uFlags)
     return false;
 }
 
+static bool abortOnForbidden = false;
+static std::vector<OString> allowedPathsRead;
+static std::vector<OString> allowedPathsReadWrite;
+static std::vector<OString> allowedPathsExecute;
+
+SAL_DLLPUBLIC void osl_setAllowedPaths(
+        rtl_uString *pustrFilePaths
+    )
+{
+    allowedPathsRead.clear();
+    allowedPathsReadWrite.clear();
+    allowedPathsExecute.clear();
+
+    if (!pustrFilePaths)
+        return;
+
+    char eType = 'r';
+    sal_Int32 nIndex = 0;
+    OUString aPaths(pustrFilePaths);
+    do
+    {
+        OString aPath = rtl::OUStringToOString(
+            aPaths.getToken(0, ':', nIndex),
+            RTL_TEXTENCODING_UTF8);
+
+        if (aPath.getLength() == 0)
+            continue;
+
+        if (aPath.getLength() == 1)
+        {
+            eType = aPath[0];
+            continue;
+        }
+
+        char resolvedPath[PATH_MAX];
+        if (realpath(aPath.getStr(), resolvedPath))
+        {
+            OString aPushPath = OString(resolvedPath, strlen(resolvedPath));
+            if (eType == 'r')
+                allowedPathsRead.push_back(aPushPath);
+            else if (eType == 'w')
+            {
+                allowedPathsRead.push_back(aPushPath);
+                allowedPathsReadWrite.push_back(aPushPath);
+            }
+            else if (eType == 'x')
+                allowedPathsExecute.push_back(aPushPath);
+        }
+    }
+    while (nIndex != -1);
+
+    abortOnForbidden = !!getenv("SAL_ABORT_ON_FORBIDDEN");
+}
+
+bool isForbidden(const OString &filePath, int nFlags)
+{
+    // avoid realpath cost unless configured
+    if (allowedPathsRead.size() == 0)
+        return false;
+
+    char resolvedPath[PATH_MAX];
+    if (!realpath(filePath.getStr(), resolvedPath))
+    {
+        // write calls path a non-existent path that realpath will
+        // fail to resolve. Thankfully our I/O APIs don't allow
+        // symlink creation to race here.
+        sal_Int32 n = filePath.lastIndexOf('/');
+        OString folderPath;
+        if (n < 1)
+            folderPath = ".";
+        else
+            folderPath = filePath.copy(0, n);
+        if (!realpath(folderPath.getStr(), resolvedPath) ||
+            strlen(resolvedPath) + filePath.getLength() - n + 1 >= PATH_MAX)
+            return true; // too bad
+        else
+            strcat(resolvedPath, filePath.getStr() + n);
+    }
+
+    const std::vector<OString> *pCheckPaths = &allowedPathsRead;
+    if (nFlags & osl_File_OpenFlag_Write ||
+        nFlags & osl_File_OpenFlag_Create)
+        pCheckPaths = &allowedPathsReadWrite;
+    else if (nFlags & 0x80)
+        pCheckPaths = &allowedPathsExecute;
+
+    bool allowed = false;
+    for (const auto &it : *pCheckPaths) {
+        if (!strncmp(resolvedPath, it.getStr(), it.getLength()))
+        {
+            allowed = true;
+            break;
+        }
+    }
+
+    if (!allowed)
+        SAL_WARN("sal.osl", "access outside sandbox to " <<
+                 ((nFlags & osl_File_OpenFlag_Write ||
+                   nFlags & osl_File_OpenFlag_Create) ? "w" :
+                  (nFlags & 0x80) ? "x" : "r") << ":" <<
+                 filePath << " which is really " << resolvedPath <<
+                 (allowed ? " allowed " : " forbidden") <<
+                 " check list: " << pCheckPaths->size());
+
+    if (abortOnForbidden && !allowed)
+        abort(); // a bit abrupt - but don't try to escape.
+
+    return !allowed;
+}
+
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isForbiddenPath(
+    rtl_uString *pustrFileURL, int nFlags
+    )
+{
+    return isForbidden(
+        rtl::OUStringToOString(OUString(pustrFileURL),
+                               RTL_TEXTENCODING_UTF8), nFlags);
+}
+
 #ifdef HAVE_O_EXLOCK
 #define OPEN_WRITE_FLAGS ( O_RDWR | O_EXLOCK | O_NONBLOCK )
 #define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR | O_EXLOCK | O_NONBLOCK )
@@ -1031,6 +1150,10 @@ oslFileError openFilePath(const OString& filePath, oslFileHandle* pHandle,
 
     // set close-on-exec by default
     flags |= O_CLOEXEC;
+
+    // Sandboxing hook
+    if (isForbidden( filePath, uFlags ))
+        return osl_File_E_ACCES;
 
     /* open the file */
     int fd = open_c( filePath, flags, mode );
@@ -1649,5 +1772,6 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
 
     return pImpl->setSize(uSize);
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
