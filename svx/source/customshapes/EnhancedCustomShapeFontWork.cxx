@@ -867,7 +867,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                             double fCurvesDist = rTextArea.aBoundRect.GetHeight() / 2.0
                                                  + rTextArea.aBoundRect.Top()
                                                  - rParagraph.aBoundRect.Center().Y();
-                            // verical alignment adjust
+                            // vertical alignment adjust
                             fCurvesDist -= rTextArea.nHAlignMove;
 
                             for (i = 0; i < nPointCount; i++)
