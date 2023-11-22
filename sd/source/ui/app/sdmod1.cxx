@@ -223,7 +223,7 @@ void SdModule::Execute(SfxRequest& rReq)
             }
             else
             {
-                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(rReq.GetFrameWeld(),
                                                                VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_CANT_PERFORM_IN_LIVEMODE)));
 
                 xErrorBox->run();
