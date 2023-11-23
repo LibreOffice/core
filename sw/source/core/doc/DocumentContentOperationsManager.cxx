@@ -4496,7 +4496,8 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
         pEnd->GetNode(),
         nullptr,
         pStt->GetContentIndex(),
-        pEnd->GetContentIndex());
+        pEnd->GetContentIndex(),
+        bool(flags & SwDeleteFlags::ArtificialSelection));
 
     SwNodeIndex aSttIdx( pStt->GetNode() );
     SwContentNode * pCNd = aSttIdx.GetNode().GetContentNode();

@@ -228,7 +228,8 @@ class IDocumentMarkAccess
             const SwNode& rEnd,
             std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, // Ugly: SaveBookmark is core-internal
             std::optional<sal_Int32> oStartContentIdx,
-            std::optional<sal_Int32> oEndContentIdx) =0;
+            std::optional<sal_Int32> oEndContentIdx,
+            bool isReplace) = 0;
 
         /** Deletes a mark.
 

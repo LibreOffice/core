@@ -1097,7 +1097,8 @@ namespace sw::mark
             const SwNode& rEnd,
             std::vector<SaveBookmark>* pSaveBkmk,
             std::optional<sal_Int32> oStartContentIdx,
-            std::optional<sal_Int32> oEndContentIdx )
+            std::optional<sal_Int32> oEndContentIdx,
+            bool const isReplace)
     {
         std::vector<const_iterator_t> vMarksToDelete;
         bool bIsSortingNeeded = false;
@@ -1116,7 +1117,8 @@ namespace sw::mark
             ::sw::mark::MarkBase *const pMark = *ppMark;
             bool bIsPosInRange(false);
             bool bIsOtherPosInRange(false);
-            bool const bDeleteMark = isDeleteMark(pMark, false, rStt, rEnd, oStartContentIdx, oEndContentIdx, bIsPosInRange, bIsOtherPosInRange);
+            bool const bDeleteMark = isDeleteMark(pMark, isReplace, rStt, rEnd,
+                oStartContentIdx, oEndContentIdx, bIsPosInRange, bIsOtherPosInRange);
 
             if ( bIsPosInRange
                  && ( bIsOtherPosInRange
@@ -2013,7 +2015,8 @@ void DelBookmarks(
     const SwNode& rEnd,
     std::vector<SaveBookmark> * pSaveBkmk,
     std::optional<sal_Int32> oStartContentIdx,
-    std::optional<sal_Int32> oEndContentIdx)
+    std::optional<sal_Int32> oEndContentIdx,
+    bool const isReplace)
 {
     // illegal range ??
     if(rStt.GetIndex() > rEnd.GetIndex()
@@ -2023,7 +2026,8 @@ void DelBookmarks(
 
     rDoc.getIDocumentMarkAccess()->deleteMarks(rStt, rEnd, pSaveBkmk,
         oStartContentIdx,
-        oEndContentIdx);
+        oEndContentIdx,
+        isReplace);
 
     // Copy all Redlines which are in the move area into an array
     // which holds all position information as offset.

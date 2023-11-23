@@ -67,7 +67,8 @@ namespace sw::mark {
                                     const SwNode& rEnd,
                                     std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk,
                                     std::optional<sal_Int32> oStartContentIdx,
-                                    std::optional<sal_Int32> oEndContentIdx) override;
+                                    std::optional<sal_Int32> oEndContentIdx,
+                                    bool isReplace) override;
 
             // deleters
             virtual std::unique_ptr<ILazyDeleter>
