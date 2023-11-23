@@ -95,7 +95,8 @@ void DelBookmarks(SwNode& rStt,
     const SwNode& rEnd,
     std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =nullptr,
     std::optional<sal_Int32> oStartContentIdx = std::nullopt,
-    std::optional<sal_Int32> oEndContentIdx = std::nullopt);
+    std::optional<sal_Int32> oEndContentIdx = std::nullopt,
+    bool isReplace = false);
 
 /** data structure to temporarily hold fly anchor positions relative to some
  *  location. */
