@@ -10,13 +10,13 @@
     <property name="label-xalign">0</property>
     <property name="shadow-type">none</property>
     <child>
-      <object class="GtkBox" id="box1">
+      <!-- n-columns=2 n-rows=4 -->
+      <object class="GtkGrid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="margin-start">12</property>
         <property name="margin-top">6</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="row-spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="ruler">
             <property name="label" translatable="yes" context="sdviewpage|ruler">_Rulers visible</property>
@@ -32,9 +32,8 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
@@ -52,9 +51,8 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
@@ -72,9 +70,8 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -92,9 +89,60 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockruler">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockdragstripes">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockhandlesbezier">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockmoveoutline">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
       </object>

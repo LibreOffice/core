@@ -110,9 +110,13 @@ std::unique_ptr<SfxTabPage> SdTpOptionsSnap::Create( weld::Container* pPage, wel
 SdTpOptionsContents::SdTpOptionsContents(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "modules/simpress/ui/sdviewpage.ui", "SdViewPage", &rInAttrs)
     , m_xCbxRuler(m_xBuilder->weld_check_button("ruler"))
+    , m_xCbxRulerImg(m_xBuilder->weld_widget("lockruler"))
     , m_xCbxDragStripes(m_xBuilder->weld_check_button("dragstripes"))
+    , m_xCbxDragStripesImg(m_xBuilder->weld_widget("lockdragstripes"))
     , m_xCbxHandlesBezier(m_xBuilder->weld_check_button("handlesbezier"))
+    , m_xCbxHandlesBezierImg(m_xBuilder->weld_widget("lockhandlesbezier"))
     , m_xCbxMoveOutline(m_xBuilder->weld_check_button("moveoutline"))
+    , m_xCbxMoveOutlineImg(m_xBuilder->weld_widget("lockmoveoutline"))
 {
 }
 
@@ -172,6 +176,22 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_xCbxMoveOutline->set_active( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
     m_xCbxDragStripes->set_active( aLayoutItem.GetOptionsLayout().IsDragStripes() );
     m_xCbxHandlesBezier->set_active( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
+
+    bool bReadOnly = officecfg::Office::Impress::Layout::Display::Ruler::isReadOnly();
+    m_xCbxRuler->set_sensitive(!bReadOnly);
+    m_xCbxRulerImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Layout::Display::Contour::isReadOnly();
+    m_xCbxMoveOutline->set_sensitive(!bReadOnly);
+    m_xCbxMoveOutlineImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Layout::Display::Guide::isReadOnly();
+    m_xCbxDragStripes->set_sensitive(!bReadOnly);
+    m_xCbxDragStripesImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Layout::Display::Bezier::isReadOnly();
+    m_xCbxHandlesBezier->set_sensitive(!bReadOnly);
+    m_xCbxHandlesBezierImg->set_visible(bReadOnly);
 
     m_xCbxRuler->save_state();
     m_xCbxMoveOutline->save_state();

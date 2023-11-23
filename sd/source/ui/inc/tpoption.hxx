@@ -43,9 +43,13 @@ class SdTpOptionsContents final : public SfxTabPage
 {
 private:
     std::unique_ptr<weld::CheckButton> m_xCbxRuler;
+    std::unique_ptr<weld::Widget> m_xCbxRulerImg;
     std::unique_ptr<weld::CheckButton> m_xCbxDragStripes;
+    std::unique_ptr<weld::Widget> m_xCbxDragStripesImg;
     std::unique_ptr<weld::CheckButton> m_xCbxHandlesBezier;
+    std::unique_ptr<weld::Widget> m_xCbxHandlesBezierImg;
     std::unique_ptr<weld::CheckButton> m_xCbxMoveOutline;
+    std::unique_ptr<weld::Widget> m_xCbxMoveOutlineImg;
 
 public:
     SdTpOptionsContents(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
