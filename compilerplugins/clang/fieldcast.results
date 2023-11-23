@@ -298,9 +298,6 @@ sc/source/filter/excel/xeformula.cxx:60
 sc/source/filter/inc/eeimport.hxx:43
     ScEEImport mpParser std::unique_ptr<ScEEParser>
     ScHTMLParser
-sc/source/filter/xml/xmlimprt.hxx:156
-    ScXMLImport xSheetCellRanges css::uno::Reference<css::sheet::XSheetCellRangeContainer>
-    ScCellRangesObj
 sc/source/ui/inc/AccessibleContextBase.hxx:232
     ScAccessibleContextBase mxParent css::uno::Reference<css::accessibility::XAccessible>
     ScAccessibleSpreadsheet

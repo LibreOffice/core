@@ -982,7 +982,7 @@ void ScXMLImport::SetStyleToRanges()
 
     if (!sPrevStyleName.isEmpty())
     {
-        uno::Reference <beans::XPropertySet> xProperties (xSheetCellRanges, uno::UNO_QUERY);
+        uno::Reference <beans::XPropertySet> xProperties (mxSheetCellRanges);
         if (xProperties.is())
         {
             XMLTableStylesContext *pStyles(static_cast<XMLTableStylesContext *>(GetAutoStyles()));
@@ -1006,7 +1006,7 @@ void ScXMLImport::SetStyleToRanges()
                 }
 
                 // store first cell of first range for each style, once per sheet
-                uno::Sequence<table::CellRangeAddress> aAddresses(xSheetCellRanges->getRangeAddresses());
+                uno::Sequence<table::CellRangeAddress> aAddresses(mxSheetCellRanges->getRangeAddresses());
                 pStyle->ApplyCondFormat(aAddresses);
                 if ( aAddresses.hasElements() )
                 {
@@ -1035,11 +1035,10 @@ void ScXMLImport::SetStyleToRanges()
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
-            xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(
-            xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"),
-            uno::UNO_QUERY));
+            mxSheetCellRanges = &dynamic_cast<ScCellRangesObj&>(
+                *xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"));
     }
-    OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
+    OSL_ENSURE(mxSheetCellRanges.is(), "didn't get SheetCellRanges");
 }
 
 void ScXMLImport::SetStyleToRanges(const ScRangeList& rRanges, const OUString* pStyleName,
@@ -1076,15 +1075,15 @@ void ScXMLImport::SetStyleToRanges(const ScRangeList& rRanges, const OUString* p
             sPrevCurrency.clear();
     }
 
-    if (!xSheetCellRanges.is() && GetModel().is())
+    if (!mxSheetCellRanges.is() && GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
-            xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY));
-        OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
+            mxSheetCellRanges = &dynamic_cast<ScCellRangesObj&>(*xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"));
+        OSL_ENSURE(mxSheetCellRanges.is(), "didn't get SheetCellRanges");
 
     }
-    static_cast<ScCellRangesObj*>(xSheetCellRanges.get())->SetNewRanges(rRanges);
+    mxSheetCellRanges->SetNewRanges(rRanges);
 }
 
 bool ScXMLImport::SetNullDateOnUnitConverter()

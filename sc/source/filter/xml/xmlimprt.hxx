@@ -110,6 +110,7 @@ struct ScMyImportValidation
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 class ScMyStylesImportHelper;
 class ScXMLEditAttributeMap;
+class ScCellRangesObj;
 
 class ScXMLImport: public SvXMLImport
 {
@@ -153,7 +154,7 @@ class ScXMLImport: public SvXMLImport
     css::uno::Reference <css::util::XNumberFormats> xNumberFormats;
     css::uno::Reference <css::util::XNumberFormatTypes> xNumberFormatTypes;
 
-    css::uno::Reference <css::sheet::XSheetCellRangeContainer> xSheetCellRanges;
+    rtl::Reference<ScCellRangesObj> mxSheetCellRanges; // css::sheet::XSheetCellRangeContainer
 
     OUString           sPrevStyleName;
     OUString           sPrevCurrency;
