@@ -75,6 +75,7 @@ public:
         { return const_cast<SwTableBoxFormula*>(this)->GetTableBox(); }
 
     void TryBoxNmToPtr();
+    void TryRelBoxNm();
     void ToSplitMergeBoxNmWithHistory(SwTableFormulaUpdate& rUpdate, SwHistory* pHistory);
     void ChangeState()
     {
