@@ -32,6 +32,7 @@
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 
@@ -137,7 +138,7 @@ void Table::applyAutoFilters()
     try
     {
         // get the range ( maybe we should cache the xDatabaseRange from finalizeImport )
-        PropertySet aDocProps( getDocument() );
+        PropertySet aDocProps(( Reference< css::beans::XPropertySet >(getDocument()) ));
         Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
         Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
         maAutoFilters.finalizeImport( xDatabaseRange, maModel.maRange.aStart.Tab() );

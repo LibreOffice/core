@@ -38,6 +38,7 @@
 #include <biffhelper.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 

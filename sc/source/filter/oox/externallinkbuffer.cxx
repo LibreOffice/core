@@ -43,6 +43,7 @@
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 
@@ -203,7 +204,7 @@ bool ExternalName::getDdeLinkData( OUString& orDdeServer, OUString& orDdeTopic, 
         // try to create a DDE link and to set the imported link results
         if( !mbDdeLinkCreated ) try
         {
-            PropertySet aDocProps( getDocument() );
+            PropertySet aDocProps(( Reference< css::beans::XPropertySet >(getDocument()) ));
             Reference< XDDELinks > xDdeLinks( aDocProps.getAnyProperty( PROP_DDELinks ), UNO_QUERY_THROW );
             mxDdeLink = xDdeLinks->addDDELink( mrParentLink.getClassName(), mrParentLink.getTargetUrl(), maModel.maName, css::sheet::DDELinkMode_DEFAULT );
             mbDdeLinkCreated = true;    // ignore if setting results fails
@@ -526,7 +527,7 @@ void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUStr
     // create the external document link API object that will contain the sheet caches
     if( meLinkType == ExternalLinkType::External ) try
     {
-        PropertySet aDocProps( getDocument() );
+        PropertySet aDocProps(( Reference< css::beans::XPropertySet >(getDocument()) ));
         Reference< XExternalDocLinks > xDocLinks( aDocProps.getAnyProperty( PROP_ExternalDocLinks ), UNO_QUERY_THROW );
         mxDocLink = xDocLinks->addDocLink( maTargetUrl );
     }

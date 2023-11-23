@@ -149,7 +149,7 @@ public:
     ScDocumentImport& getDocImport();
 
     /** Returns a reference to the source/target spreadsheet document model. */
-    const Reference< XSpreadsheetDocument >& getDocument() const { return mxDoc; }
+    const rtl::Reference< ScModelObj >& getDocument() const { return mxDoc; }
     /** Returns the cell or page styles container from the Calc document. */
     Reference< XNameContainer > getStyleFamily( bool bPageStyles ) const;
     /** Returns the specified cell or page style from the Calc document. */
@@ -261,7 +261,7 @@ private:
     OUString            maPageStyles;           /// Style family name for page styles.
     OUString            maCellStyleServ;        /// Service name for a cell style.
     OUString            maPageStyleServ;        /// Service name for a page style.
-    Reference< XSpreadsheetDocument > mxDoc;    /// Document model.
+    rtl::Reference< ScModelObj > mxDoc;         /// Document model (XSpreadsheetDocument)
     FilterBase&         mrBaseFilter;           /// Base filter object.
     ExcelFilter&        mrExcelFilter;          /// Base object for registration of this structure.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
@@ -339,8 +339,7 @@ Reference< XNameContainer > WorkbookGlobals::getStyleFamily( bool bPageStyles ) 
     Reference< XNameContainer > xStylesNC;
     try
     {
-        Reference< XStyleFamiliesSupplier > xFamiliesSup( mxDoc, UNO_QUERY_THROW );
-        Reference< XNameAccess > xFamiliesNA( xFamiliesSup->getStyleFamilies(), UNO_SET_THROW );
+        Reference< XNameAccess > xFamiliesNA( mxDoc->getStyleFamilies(), UNO_SET_THROW );
         xStylesNC.set( xFamiliesNA->getByName( bPageStyles ? maPageStyles : maCellStyles ), UNO_QUERY );
     }
     catch( Exception& )
@@ -456,7 +455,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
     if( bValidRange && !orName.isEmpty() ) try
     {
         // find an unused name
-        PropertySet aDocProps( mxDoc );
+        PropertySet aDocProps(( Reference< css::beans::XPropertySet >(mxDoc) ));
         Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
         orName = ContainerHelper::getUnusedName( xDatabaseRanges, orName, '_' );
         // create the database range
@@ -547,23 +546,16 @@ void WorkbookGlobals::initialize()
     meTextEnc = osl_getThreadTextEncoding();
 
     // the spreadsheet document
-    mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
-    OSL_ENSURE( mxDoc.is(), "WorkbookGlobals::initialize - no spreadsheet document" );
+    mxDoc = &dynamic_cast<ScModelObj&>(*mrBaseFilter.getModel());
 
-    if (mxDoc)
-    {
-        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(mxDoc);
-        if (pModel)
-            mpDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
-        if (mpDocShell)
-            mpDoc = &mpDocShell->GetDocument();
-    }
+    mpDocShell = static_cast<ScDocShell*>(mxDoc->GetEmbeddedObject());
+    if (mpDocShell)
+        mpDoc = &mpDocShell->GetDocument();
 
     if (!mpDoc)
         throw RuntimeException("Workbookhelper::getScDocument(): Failed to access ScDocument from model");
 
-    Reference< XDocumentPropertiesSupplier > xPropSupplier( mxDoc, UNO_QUERY);
-    Reference< XDocumentProperties > xDocProps = xPropSupplier->getDocumentProperties();
+    Reference< XDocumentProperties > xDocProps = mxDoc->getDocumentProperties();
     const OUString aGenerator( xDocProps->getGenerator());
 
     if (aGenerator.startsWithIgnoreAsciiCase("Microsoft"))
@@ -759,7 +751,7 @@ void WorkbookHelper::finalizeWorkbookImport()
     }
 
     // set selected sheet and positionleft/positiontop for OLE objects
-    Reference<XViewDataSupplier> xViewDataSupplier(getDocument(), UNO_QUERY);
+    rtl::Reference<ScModelObj> xViewDataSupplier(getDocument());
     if (!xViewDataSupplier.is())
         return;
 
@@ -841,7 +833,7 @@ ScEditEngineDefaulter& WorkbookHelper::getEditEngine() const
     return mrBookGlob.getEditEngine();
 }
 
-const Reference< XSpreadsheetDocument > & WorkbookHelper::getDocument() const
+const rtl::Reference< ScModelObj > & WorkbookHelper::getDocument() const
 {
     return mrBookGlob.getDocument();
 }

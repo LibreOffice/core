@@ -46,6 +46,7 @@
 #include <scitems.hxx>
 #include <document.hxx>
 #include <ftools.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 
@@ -1868,7 +1869,7 @@ NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
 {
     try
     {
-        Reference< XNumberFormatsSupplier > xNumFmtsSupp( rHelper.getDocument(), UNO_QUERY_THROW );
+        Reference< XNumberFormatsSupplier > xNumFmtsSupp( static_cast<cppu::OWeakObject*>(rHelper.getDocument().get()), UNO_QUERY_THROW );
         mxNumFmts = xNumFmtsSupp->getNumberFormats();
     }
     catch( Exception& )

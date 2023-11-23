@@ -50,6 +50,7 @@
 #include <formulabuffer.hxx>
 #include <numformat.hxx>
 #include <sax/tools/converter.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 
@@ -155,7 +156,7 @@ void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const css::util:
     // set number format
     try
     {
-        Reference< XNumberFormatsSupplier > xNumFmtsSupp( getDocument(), UNO_QUERY_THROW );
+        Reference< XNumberFormatsSupplier > xNumFmtsSupp( static_cast<cppu::OWeakObject*>(getDocument().get()), UNO_QUERY_THROW );
         Reference< XNumberFormatTypes > xNumFmtTypes( xNumFmtsSupp->getNumberFormats(), UNO_QUERY_THROW );
         sal_Int32 nIndex = xNumFmtTypes->getStandardFormat( nStdFmt, Locale() );
         PropertySet aPropSet( getCell( rModel.maCellAddr ) );

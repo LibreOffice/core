@@ -42,6 +42,7 @@
 #include <workbooksettings.hxx>
 #include <worksheetbuffer.hxx>
 #include <vcl/svapp.hxx>
+#include <docuno.hxx>
 
 namespace com::sun::star::container { class XNameContainer; }
 
@@ -600,8 +601,7 @@ void ViewSettings::finalizeImport()
         aPropMap.setProperty( PROP_IsOutlineSymbolsSet, rxActiveSheetView->mbShowOutline);
 
         xContainer->insertByIndex( 0, Any( aPropMap.makePropertyValueSequence() ) );
-        Reference< XViewDataSupplier > xViewDataSuppl( getDocument(), UNO_QUERY_THROW );
-        xViewDataSuppl->setViewData( xContainer );
+        getDocument()->setViewData( xContainer );
     }
     catch( Exception& )
     {

@@ -33,6 +33,7 @@
 #include <oox/token/properties.hxx>
 #include <stylesbuffer.hxx>
 #include <biffhelper.hxx>
+#include <docuno.hxx>
 
 namespace com::sun::star::awt { struct FontDescriptor; }
 
@@ -110,7 +111,7 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
 
 void UnitConverter::finalizeImport()
 {
-    PropertySet aDocProps( getDocument() );
+    PropertySet aDocProps(( Reference< css::beans::XPropertySet >(getDocument()) ));
     Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
     if( !xDevice.is() )
         return;

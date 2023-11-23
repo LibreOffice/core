@@ -32,6 +32,7 @@
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 

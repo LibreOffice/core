@@ -37,6 +37,7 @@
 #include <oox/token/tokens.hxx>
 #include <unitconverter.hxx>
 #include <biffhelper.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 
@@ -188,7 +189,7 @@ void WorkbookSettings::importCalcPr( SequenceInputStream& rStrm )
 void WorkbookSettings::finalizeImport()
 {
     // default settings
-    PropertySet aPropSet( getDocument() );
+    PropertySet aPropSet(( Reference< css::beans::XPropertySet >(getDocument()) ));
     aPropSet.setProperty( PROP_IgnoreCase,          true );     // always in Excel
     aPropSet.setProperty( PROP_RegularExpressions,  false );    // not supported in Excel
     aPropSet.setProperty( PROP_Wildcards,           true );     // always in Excel
@@ -240,14 +241,14 @@ void WorkbookSettings::finalizeImport()
     aPropSet.setProperty( PROP_CalcAsShown,        !maCalcSettings.mbFullPrecision );
     aPropSet.setProperty( PROP_LookUpLabels,       false );
 
-    Reference< XNumberFormatsSupplier > xNumFmtsSupp( getDocument(), UNO_QUERY );
+    Reference< XNumberFormatsSupplier > xNumFmtsSupp( static_cast<cppu::OWeakObject*>(getDocument().get()), UNO_QUERY );
     if( xNumFmtsSupp.is() )
     {
         PropertySet aNumFmtProp( xNumFmtsSupp->getNumberFormatSettings() );
         aNumFmtProp.setProperty( PROP_NullDate, aNullDate );
     }
 
-    Reference< XCalculatable > xCalculatable( getDocument(), UNO_QUERY );
+    rtl::Reference< ScModelObj > xCalculatable( getDocument() );
     if( xCalculatable.is() )
         xCalculatable->enableAutomaticCalculation( (maCalcSettings.mnCalcMode == XML_auto) || (maCalcSettings.mnCalcMode == XML_autoNoTable) );
 

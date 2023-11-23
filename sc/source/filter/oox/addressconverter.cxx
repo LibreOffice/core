@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 

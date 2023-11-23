@@ -124,12 +124,11 @@ public:
                     OUString sSheetName;
                     if( rDoc.GetName( i, sSheetName ) )
                     {
-                        uno::Reference< frame::XModel > xModel( mpDocShell->GetModel() );
-                        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
+                        rtl::Reference< ScModelObj > xSpreadDoc( mpDocShell->GetModel() );
                         uno::Reference<sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), uno::UNO_SET_THROW );
                         uno::Reference< container::XIndexAccess > xIndexAccess( xSheets, uno::UNO_QUERY_THROW );
                         uno::Reference< sheet::XSpreadsheet > xSheet( xIndexAccess->getByIndex( i ), uno::UNO_QUERY_THROW );
-                        uno::Sequence< uno::Any > aArgs{ maWorkbook, uno::Any(xModel), uno::Any(sSheetName) };
+                        uno::Sequence< uno::Any > aArgs{ maWorkbook, uno::Any(uno::Reference< frame::XModel >(xSpreadDoc)), uno::Any(sSheetName) };
                         // use the convenience function
                         maCachedObject <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
                         break;

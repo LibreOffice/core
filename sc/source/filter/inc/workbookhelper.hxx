@@ -26,7 +26,7 @@
 #include <o3tl/hash_combine.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <address.hxx>
-
+#include <rtl/ref.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 namespace oox::drawingml::chart { class ChartConverter; }
@@ -58,6 +58,7 @@ class ScDocumentImport;
 class ScEditEngineDefaulter;
 class ScDBData;
 class ScRangeData;
+class ScModelObj;
 
 namespace oox::xls {
 
@@ -188,9 +189,8 @@ public:
     const ScDocumentImport& getDocImport() const;
 
     ScEditEngineDefaulter& getEditEngine() const;
-    /** Returns a reference to the source/target spreadsheet document model. */
-    const css::uno::Reference< css::sheet::XSpreadsheetDocument >&
-                        getDocument() const;
+    /** Returns a reference to the source/target spreadsheet document model (XSpreadsheetDocument). */
+    const rtl::Reference< ScModelObj >& getDocument() const;
 
     /** Returns a reference to the specified spreadsheet in the document model. */
     css::uno::Reference< css::sheet::XSpreadsheet >

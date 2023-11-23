@@ -86,6 +86,7 @@
 #include <patattr.hxx>
 #include <stlsheet.hxx>
 #include <biffhelper.hxx>
+#include <docuno.hxx>
 
 namespace oox::xls {
 
@@ -804,7 +805,7 @@ void Font::finalizeImport()
     }
     else
     {
-        PropertySet aDocProps( getDocument() );
+        PropertySet aDocProps(( Reference< css::beans::XPropertySet >(getDocument()) ));
         Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
         if( !xDevice.is() )
             return;
