@@ -106,6 +106,8 @@ Private _UpdatableFields	As Variant		&apos; Array of updatable field names
 Private _DefaultValues		As Variant		&apos; Array of field default values // _Fields
 Private _AutoValue			As Long			&apos; Index of AutoValue field. None = -1
 
+Private _DatasetIndex		As Long			&apos; Index of the dataset in the _Datasets array of the parent database
+
 REM ============================================================ MODULE CONSTANTS
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
@@ -127,6 +129,7 @@ Private Sub Class_Initialize()
 	_UpdatableFields = Array()
 	_DefaultValues = Array()
 	_AutoValue = -1
+	_DatasetIndex = -1
 End Sub		&apos;	SFDatabases.SF_Dataset Constructor
 
 REM -----------------------------------------------------------------------------
@@ -280,6 +283,7 @@ Try:
 			.close()
 			.dispose()
 		End With
+		If _DatasetIndex &gt;= 0 Then Set _ParentDatabase._Datasets(_DatasetIndex) = Nothing
 		Dispose()
 		bClose = True
 	End If
@@ -1350,8 +1354,11 @@ Try:
 			If Len(sUpdatableFields) &lt;= 1 Then _UpdatableFields = Array() Else _UpdatableFields = Split(Mid(sUpdatableFields, 2), &quot;,&quot;)
 		End With
 	End With
+	
+	&apos;	Insert the instance in the _Datasets array of the parent database
+	_DatasetIndex = _ParentDatabase._AddToDatasets([Me])
 
-	bDataset = True
+	bDataset = ( _DatasetIndex &gt;= 0 )
 
 Finally:
 	_Initialize = bDataset

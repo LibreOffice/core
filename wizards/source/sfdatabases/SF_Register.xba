@@ -121,6 +121,8 @@ Try:
 		If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo CatchConnect
 		Set ._Connection = ._DataSource.getConnection(vUser, vPassword)
 		If IsNull(._Connection) Then GoTo CatchConnect
+		._User = vUser
+		._Password = vPassword
 		._ReadOnly = vReadOnly
 		Set ._MetaData = ._Connection.MetaData
 		._URL = ._MetaData.URL

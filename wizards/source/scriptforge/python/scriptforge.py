@@ -1794,6 +1794,9 @@ class SFDatabases:
         def CloseDatabase(self):
             return self.ExecMethod(self.vbMethod, 'CloseDatabase')
 
+        def Commit(self):
+            return self.ExecMethod(self.vbMethod, 'Commit')
+
         def CreateDataset(self, sqlcommand, directsql = False, filter = '', orderby = ''):
             return self.ExecMethod(self.vbMethod, 'CreateDataset', sqlcommand, directsql, filter, orderby)
 
@@ -1831,8 +1834,14 @@ class SFDatabases:
         def OpenTable(self, tablename):
             return self.ExecMethod(self.vbMethod, 'OpenTable', tablename)
 
+        def Rollback(self):
+            return self.ExecMethod(self.vbMethod, 'Rollback')
+
         def RunSql(self, sqlcommand, directsql = False):
             return self.ExecMethod(self.vbMethod, 'RunSql', sqlcommand, directsql)
+
+        def SetTransactionMode(self, transactionmode = 0):
+            return self.ExecMethod(self.vbMethod, 'SetTransactionMode', transactionmode)
 
     # #########################################################################
     # SF_Dataset CLASS
