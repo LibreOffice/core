@@ -1517,7 +1517,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157132)
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
@@ -1532,6 +1532,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157132)
     // - Actual  : 2
     CPPUNIT_ASSERT_EQUAL(OUString("6"), xCellA4->getString());
     uno::Reference<text::XTextRange> xCellA5(xTextTable->getCellByName("A5"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("7"), xCellA5->getString());
+
+    xTextTable.set(xTables->getByIndex(1), uno::UNO_QUERY);
+
+    xCellA2.set(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+
+    // tdf#158336: Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : ** Expression is faulty **
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), xCellA2->getString());
+    xCellA3.set(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xCellA3->getString());
+    xCellA4.set(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), xCellA4->getString());
+    xCellA5.set(xTextTable->getCellByName("A5"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("7"), xCellA5->getString());
 }
 
