@@ -416,7 +416,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     public void saveFileToOriginalSource() {
-        if (isReadOnlyMode() || mTempFile == null || mDocumentUri == null || !mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
+        if (mTempFile == null || mDocumentUri == null || !mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
             return;
 
         boolean copyOK = false;
