@@ -276,9 +276,9 @@ void SwLinePortion::Move(SwTextPaintInfo & rInf) const
     bool bCounterDir = ( ! bFrameDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
                        (   bFrameDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
 
-    if ( InSpaceGrp() && rInf.GetSpaceAdd() )
+    if ( InSpaceGrp() && rInf.GetSpaceAdd(/*bShrink=*/true) )
     {
-        SwTwips nTmp = PrtWidth() + CalcSpacing( rInf.GetSpaceAdd(), rInf );
+        SwTwips nTmp = PrtWidth() + CalcSpacing( rInf.GetSpaceAdd(/*bShrink=*/true), rInf );
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -nTmp : nTmp ) );
         else if ( bCounterDir )

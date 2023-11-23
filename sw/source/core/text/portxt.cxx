@@ -668,7 +668,8 @@ tools::Long SwTextPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeI
         }
     }
 
-    return sal_Int32(nCnt) * nSpaceAdd / SPACING_PRECISION_FACTOR;
+    return sal_Int32(nCnt) * (nSpaceAdd > LONG_MAX/2 ? LONG_MAX/2 - nSpaceAdd : nSpaceAdd)
+             / SPACING_PRECISION_FACTOR;
 }
 
 void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const

@@ -201,6 +201,42 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908)
     CPPUNIT_ASSERT_GREATER(sal_Int32(5840), nPortionWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
+{
+    createSwDoc("tdf130088.docx");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // shrink line 2
+    assertXPath(
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+        "viverra odio. Donec auctor molestie sem, sit amet tristique lectus hendrerit sed. ");
+
+    // shrink line 7
+    assertXPath(
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[7]", "portion",
+        // This was "...diam ", not "...diam tempor "
+        "laoreet vel leo nec, volutpat facilisis eros. Donec consequat arcu ut diam tempor ");
+
+    // shrink line 2 of paragraph 2
+    assertXPath(
+        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[2]", "portion",
+        // This was "...Cras ", not "...Cras sodales "
+        "Donec auctor molestie sem, sit amet tristique lectus hendrerit sed. Cras sodales ");
+
+    // shrink line 2 of paragraph 4
+    assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[2]", "portion",
+                // This was "...et ", not "...et magnis "
+                "consequat arcu ut diam tempor luctus. Cum sociis natoque penatibus et magnis ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");
