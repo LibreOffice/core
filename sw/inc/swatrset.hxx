@@ -82,6 +82,7 @@ class SwFormatEditInReadonly;
 class SwFormatLayoutSplit;
 class SwFormatRowSplit;
 class SwFormatFlySplit;
+class SwFormatWrapTextAtFlyStart;
 class SwFormatChain;
 class SwFormatFootnoteAtTextEnd;
 class SwFormatEndAtTextEnd;
@@ -264,6 +265,7 @@ public:
     inline const SwFormatLayoutSplit     &GetLayoutSplit( bool = true ) const;
     inline const SwFormatRowSplit          &GetRowSplit( bool = true ) const;
     inline const SwFormatFlySplit          &GetFlySplit( bool = true ) const;
+    inline const SwFormatWrapTextAtFlyStart &GetWrapTextAtFlyStart( bool = true ) const;
     inline const SwFormatChain             &GetChain( bool = true ) const;
     inline const SwFormatLineNumber      &GetLineNumber( bool = true ) const;
     inline const SwFormatFootnoteAtTextEnd     &GetFootnoteAtTextEnd( bool = true ) const;

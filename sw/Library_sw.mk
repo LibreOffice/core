@@ -139,6 +139,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/attr/fmtwrapinfluenceonobjpos \
     sw/source/core/attr/format \
     sw/source/core/attr/formatflysplit \
+    sw/source/core/attr/formatwraptextatflystart \
     sw/source/core/attr/hints \
     sw/source/core/attr/swatrset \
     sw/source/core/bastyp/SwSmartTagMgr \

@@ -106,6 +106,7 @@
 #include <fmtrfmrk.hxx>
 #include <fmtrowsplt.hxx>
 #include <formatflysplit.hxx>
+#include <formatwraptextatflystart.hxx>
 #include <fmtruby.hxx>
 #include <fmtsrnd.hxx>
 #include <fmturl.hxx>
@@ -407,6 +408,7 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_BACKGROUND_FULL_SIZE
     { 0, true },                           // RES_RTL_GUTTER
     { 0, true },                           // RES_DECORATIVE
+    { 0, true },                           // RES_WRAP_TEXT_AT_FLY_START
 
     { 0, true },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, true },          // RES_GRFATR_CROPGRF
@@ -419,7 +421,6 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_GRFATR_GAMMA,
     { 0, true },                           // RES_GRFATR_INVERT,
     { 0, true },                           // RES_GRFATR_TRANSPARENCY,
-    { 0, true },                           // RES_GRFATR_DUMMY3,
     { 0, true },                           // RES_GRFATR_DUMMY4,
     { 0, true },                           // RES_GRFATR_DUMMY5,
     { 0, true },                           // RES_GRFATR_DUMMY6,
@@ -612,6 +613,7 @@ void InitCore()
     aAttrTab[ RES_BACKGROUND_FULL_SIZE - POOLATTR_BEGIN ] = new SfxBoolItem(RES_BACKGROUND_FULL_SIZE, true);
     aAttrTab[ RES_RTL_GUTTER - POOLATTR_BEGIN ] = new SfxBoolItem(RES_RTL_GUTTER, false);
     aAttrTab[ RES_DECORATIVE - POOLATTR_BEGIN ] = new SfxBoolItem(RES_DECORATIVE, false);
+    aAttrTab[ RES_WRAP_TEXT_AT_FLY_START - POOLATTR_BEGIN ] = new SwFormatWrapTextAtFlyStart;
 
     aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] =      new SwMirrorGrf;
     aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] =        new SwCropGrf;
@@ -627,7 +629,6 @@ void InitCore()
     aAttrTab[ RES_GRFATR_DRAWMODE - POOLATTR_BEGIN ] =      new SwDrawModeGrf;
 
 // GraphicAttr - Dummies
-    aAttrTab[ RES_GRFATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY3 );
     aAttrTab[ RES_GRFATR_DUMMY4 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY4 );
     aAttrTab[ RES_GRFATR_DUMMY5 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY5 );
 

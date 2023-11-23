@@ -15,6 +15,7 @@
 #include <frmmgr.hxx>
 #include <frameformats.hxx>
 #include <formatflysplit.hxx>
+#include <formatwraptextatflystart.hxx>
 
 namespace
 {
@@ -72,6 +73,26 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatFlySplit)
     pDoc->SetFlyFrameAttr(*pFly, aSet);
 
     CPPUNIT_ASSERT(pFly->GetAttrSet().GetFlySplit().GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatWrapTextAtFlyStart)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    SwDoc* pDoc = getSwDoc();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    CPPUNIT_ASSERT(!pFly->GetAttrSet().GetWrapTextAtFlyStart().GetValue());
+
+    SfxItemSet aSet(pFly->GetAttrSet());
+    SwFormatWrapTextAtFlyStart aItem(true);
+    aSet.Put(aItem);
+    pDoc->SetFlyFrameAttr(*pFly, aSet);
+
+    CPPUNIT_ASSERT(pFly->GetAttrSet().GetWrapTextAtFlyStart().GetValue());
 }
 }
 
