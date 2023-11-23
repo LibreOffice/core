@@ -599,44 +599,37 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     std::unique_ptr<SwPaM> pPam;
     ::sw::mark::IMark* pMark = nullptr;
 
+    // now the situation is that m_bSavePos and m_bSaveOtherPos don't determine
+    // whether the mark was deleted
+    if (auto const iter = pMarkAccess->findMark(m_aName); iter != pMarkAccess->getAllMarksEnd())
+    {
+        pMark = *iter;
+    }
     if(m_bSavePos)
     {
         SwContentNode* const pContentNd = rNds[m_nNode]->GetContentNode();
-        OSL_ENSURE(pContentNd,
-            "<SwHistoryBookmark::SetInDoc(..)>"
-            " - wrong node for a mark");
-
-        // #111660# don't crash when nNode1 doesn't point to content node.
-        if(pContentNd)
-            pPam.reset(new SwPaM(*pContentNd, m_nContent));
+        assert(pContentNd);
+        pPam.reset(new SwPaM(*pContentNd, m_nContent));
     }
     else
     {
-        pMark = *pMarkAccess->findMark(m_aName);
+        assert(pMark);
         pPam.reset(new SwPaM(pMark->GetMarkPos()));
     }
+    assert(pPam);
 
     if(m_bSaveOtherPos)
     {
         SwContentNode* const pContentNd = rNds[m_nOtherNode]->GetContentNode();
-        OSL_ENSURE(pContentNd,
-            "<SwHistoryBookmark::SetInDoc(..)>"
-            " - wrong node for a mark");
-
-        if (pPam != nullptr && pContentNd)
-        {
-            pPam->SetMark();
-            pPam->GetMark()->nNode = m_nOtherNode;
-            pPam->GetMark()->nContent.Assign(pContentNd, m_nOtherContent);
-        }
+        assert(pContentNd);
+        pPam->SetMark();
+        pPam->GetMark()->nNode = m_nOtherNode;
+        pPam->GetMark()->nContent.Assign(pContentNd, m_nOtherContent);
     }
     else if(m_bHadOtherPos)
     {
-        if(!pMark)
-            pMark = *pMarkAccess->findMark(m_aName);
-        OSL_ENSURE(pMark->IsExpanded(),
-            "<SwHistoryBookmark::SetInDoc(..)>"
-            " - missing pos on old mark");
+        assert(pMark);
+        assert(pMark->IsExpanded());
         pPam->SetMark();
         *pPam->GetMark() = pMark->GetOtherMarkPos();
     }

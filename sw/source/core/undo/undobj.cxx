@@ -1061,6 +1061,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 // #i81002#
                 bool bSavePos = false;
                 bool bSaveOtherPos = false;
+                bool bDelete = false;
                 const ::sw::mark::IMark *const pBkmk = pMarkAccess->getAllMarksBegin()[n];
                 auto const type(IDocumentMarkAccess::GetType(*pBkmk));
 
@@ -1077,6 +1078,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     {
                         bSaveOtherPos = true;
                     }
+                    bDelete = bSavePos && bSaveOtherPos;
                 }
                 else
                 {
@@ -1117,8 +1119,16 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         {
                             if( bMaybe )
                                 bSavePos = true;
-                            bSaveOtherPos = true;
+                            bDelete = true;
                         }
+                        if (bDelete || pBkmk->GetOtherMarkPos() == *pEnd)
+                        {
+                            bSaveOtherPos = true; // tdf#148389 always undo if at end
+                        }
+                    }
+                    if (!bSavePos && bMaybe && pBkmk->IsExpanded() && *pStt == pBkmk->GetMarkPos())
+                    {
+                        bSavePos = true; // tdf#148389 always undo if at start
                     }
 
                     if ( !bSavePos && !bSaveOtherPos
@@ -1157,6 +1167,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         {
                             bSavePos = true;
                             bSaveOtherPos = pBkmk->IsExpanded(); //tdf#90138, only save the other pos if there is one
+                            bDelete = true;
                         }
                     }
                 }
@@ -1170,8 +1181,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         m_pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
                     }
                     if ( bSavePos
-                         && ( bSaveOtherPos
-                              || !pBkmk->IsExpanded() ) )
+                         && (bDelete || !pBkmk->IsExpanded()))
                     {
                         pMarkAccess->deleteMark(pMarkAccess->getAllMarksBegin()+n, false);
                         n--;

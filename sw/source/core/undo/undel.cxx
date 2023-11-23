@@ -547,6 +547,7 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         if( m_bGroup && !m_bBackSp ) return false;
         m_bBackSp = true;
     }
+    // note: compare m_nSttContent here because the text isn't there any more!
     else if( pStt->nContent == m_nSttContent )
     {
         if( m_bGroup && m_bBackSp ) return false;
@@ -573,6 +574,30 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     if (IsFlySelectedByCursor(*pDoc, *pStt, *pEnd))
     {
         return false;
+    }
+
+    if ((m_DeleteFlags & SwDeleteFlags::ArtificialSelection) && m_pHistory)
+    {
+        IDocumentMarkAccess const& rIDMA(*pDoc->getIDocumentMarkAccess());
+        for (auto i = m_pHistory->Count(); 0 < i; )
+        {
+            --i;
+            SwHistoryHint const*const pHistory((*m_pHistory)[i]);
+            if (pHistory->Which() == HSTRY_BOOKMARK)
+            {
+                SwHistoryBookmark const*const pHistoryBM(
+                        static_cast<SwHistoryBookmark const*>(pHistory));
+                auto const ppMark(rIDMA.findMark(pHistoryBM->GetName()));
+                if (ppMark != rIDMA.getAllMarksEnd()
+                    && (m_bBackSp
+                            ? ((**ppMark).GetMarkPos() == *pStt)
+                            : ((**ppMark).IsExpanded()
+                                && (**ppMark).GetOtherMarkPos() == *pEnd)))
+                {   // prevent grouping that would delete this mark on Redo()
+                    return false;
+                }
+            }
+        }
     }
 
     {
@@ -1304,7 +1329,6 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.getIDocumentContentOperations().DelFullPara( rPam );
     }
     else
-        // FIXME: this ends up calling DeleteBookmarks() on the entire rPam which deletes too many!
         rDoc.getIDocumentContentOperations().DeleteAndJoin(rPam, m_DeleteFlags);
 }
 

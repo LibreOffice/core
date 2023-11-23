@@ -229,7 +229,8 @@ class IDocumentMarkAccess
             const SwNodeIndex& rEnd,
             std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, // Ugly: SaveBookmark is core-internal
             const SwIndex* pSttIdx,
-            const SwIndex* pEndIdx) =0;
+            const SwIndex* pEndIdx,
+            bool isReplace) = 0;
 
         /** Deletes a mark.
 

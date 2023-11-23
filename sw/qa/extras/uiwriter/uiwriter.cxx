@@ -1865,6 +1865,150 @@ void SwUiWriterTest::testBookmarkUndo()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf148389_Left)
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->Insert("foo bar baz");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+
+    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), "Mark",
+        IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->DelLeft();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->DelLeft();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->DelLeft();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->DelLeft();
+    // historically it wasn't deleted if empty, not sure if it should be
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    // the problem was that the end position was not restored
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    // this undo is no longer grouped, to prevent Redo deleting bookmark
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pMark->GetOtherMarkPos().nContent.GetIndex());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf148389_Right)
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->Insert("foo bar baz");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+
+    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), "Mark",
+        IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->DelRight();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->DelRight();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->DelRight();
+    // historically it wasn't deleted if empty, not sure if it should be
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    // the problem was that the start position was not restored
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    // this undo is no longer grouped, to prevent Redo deleting bookmark
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    // this undo is no longer grouped, to prevent Redo deleting bookmark
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pMark->GetOtherMarkPos().nContent.GetIndex());
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    // Undo re-creates the mark...
+    pMark = *pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMark->GetMarkPos().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pMark->GetOtherMarkPos().nContent.GetIndex());
+}
+
 static void lcl_setWeight(SwWrtShell* pWrtShell, FontWeight aWeight)
 {
     SvxWeightItem aWeightItem(aWeight, EE_CHAR_WEIGHT);

@@ -4925,7 +4925,7 @@ void SwHTMLParser::ClearFootnotesMarksInRange(const SwNodeIndex& rMkNdIdx, const
 
     //ofz#9733 drop bookmarks in this range
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    pMarkAccess->deleteMarks(rMkNdIdx, SwNodeIndex(rPtNdIdx, 1), nullptr, nullptr, nullptr);
+    pMarkAccess->deleteMarks(rMkNdIdx, SwNodeIndex(rPtNdIdx, 1), nullptr, nullptr, nullptr, false);
 
     SwFrameFormats& rTable = *pDoc->GetSpzFrameFormats();
     for ( auto i = rTable.size(); i; )
