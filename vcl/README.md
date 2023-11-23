@@ -32,14 +32,21 @@ VCL provides a graphical toolkit similar to gtk+, Qt, SWING etc.
 	+ Windows backend
 
 + qt5/
-	+ Qt5 (under construction)
+	+ Qt5
+
++ qt6/
+	+ Qt6
 
 + unx/
 	+ X11 backend and its sub-platforms
 		+ gtk3/
 			+ GTK3 support
+		+ gtk4/
+			+ GTK4 support (experimental)
 		+ kf5/
 			+ KF5 support (based on qt5 VCL plugin mentioned above)
+		+ kf6
+			+ KF6 support (based on qt6 VCL plugin mentioned above)
 		+ gtk3_kde5/
 			+ GTK3 support with KDE5 file pickers (alternative to native kf5 one)
 		+ generic/
