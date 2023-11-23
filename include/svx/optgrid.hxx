@@ -104,8 +104,16 @@ public:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
+    enum ModuleMode
+    {
+        WRITER_MODE = 0,
+        CALC_MODE = 1,
+        IMPRESS_MODE = 2,
+        DRAW_MODE = 3,
+        HTML_MODE = 4
+    };
     bool                bAttrModified;
-    bool                m_bHTMLMode;
+    ModuleMode          m_Emode;
 
     std::unique_ptr<weld::CheckButton> m_xCbxUseGridsnap;
     std::unique_ptr<weld::Widget> m_xCbxUseGridsnapImg;
@@ -125,15 +133,24 @@ protected:
     //these controls are used in draw and impress
     std::unique_ptr<weld::Widget> m_xSnapFrames;
     std::unique_ptr<weld::CheckButton> m_xCbxSnapHelplines;
+    std::unique_ptr<weld::Widget> m_xCbxSnapHelplinesImg;
     std::unique_ptr<weld::CheckButton> m_xCbxSnapBorder;
+    std::unique_ptr<weld::Widget> m_xCbxSnapBorderImg;
     std::unique_ptr<weld::CheckButton> m_xCbxSnapFrame;
+    std::unique_ptr<weld::Widget> m_xCbxSnapFrameImg;
     std::unique_ptr<weld::CheckButton> m_xCbxSnapPoints;
+    std::unique_ptr<weld::Widget> m_xCbxSnapPointsImg;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldSnapArea;
+    std::unique_ptr<weld::Widget> m_xMtrFldSnapAreaImg;
     std::unique_ptr<weld::CheckButton> m_xCbxOrtho;
+    std::unique_ptr<weld::Widget> m_xCbxOrthoImg;
     std::unique_ptr<weld::CheckButton> m_xCbxBigOrtho;
+    std::unique_ptr<weld::Widget> m_xCbxBigOrthoImg;
     std::unique_ptr<weld::CheckButton> m_xCbxRotate;
+    std::unique_ptr<weld::Widget> m_xCbxRotateImg;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldBezAngle;
+    std::unique_ptr<weld::Widget> m_xMtrFldBezAngleImg;
 
     DECL_LINK(ClickRotateHdl_Impl, weld::Toggleable&, void);
 private:

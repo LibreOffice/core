@@ -19,8 +19,12 @@
 
 #include <svl/intitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <officecfg/Office/WriterWeb.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/optgrid.hxx>
@@ -37,6 +41,14 @@ static void lcl_GetMinMax(weld::MetricSpinButton const& rField, sal_Int64& nMin,
 static void lcl_SetMinMax(weld::MetricSpinButton& rField, sal_Int64 nMin, sal_Int64 nMax)
 {
     rField.set_range(rField.normalize(nMin), rField.normalize(nMax), FieldUnit::TWIP);
+}
+
+static bool lcl_IsMetricSystem()
+{
+    SvtSysLocale aSysLocale;
+    MeasurementSystem eSys = aSysLocale.GetLocaleData().getMeasurementSystemEnum();
+
+    return (eSys == MeasurementSystem::Metric);
 }
 
 SvxOptionsGrid::SvxOptionsGrid() :
@@ -92,7 +104,7 @@ bool  SvxGridItem::GetPresentation
 SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "svx/ui/optgridpage.ui", "OptGridPage", &rCoreSet)
     , bAttrModified(false)
-    , m_bHTMLMode(false)
+    , m_Emode(WRITER_MODE)
     , m_xCbxUseGridsnap(m_xBuilder->weld_check_button("usegridsnap"))
     , m_xCbxUseGridsnapImg(m_xBuilder->weld_widget("lockusegridsnap"))
     , m_xCbxGridVisible(m_xBuilder->weld_check_button("gridvisible"))
@@ -109,15 +121,24 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xCbxSynchronizeImg(m_xBuilder->weld_widget("locksynchronize"))
     , m_xSnapFrames(m_xBuilder->weld_widget("snapframes"))
     , m_xCbxSnapHelplines(m_xBuilder->weld_check_button("snaphelplines"))
+    , m_xCbxSnapHelplinesImg(m_xBuilder->weld_widget("locksnaphelplines"))
     , m_xCbxSnapBorder(m_xBuilder->weld_check_button("snapborder"))
+    , m_xCbxSnapBorderImg(m_xBuilder->weld_widget("locksnapborder"))
     , m_xCbxSnapFrame(m_xBuilder->weld_check_button("snapframe"))
+    , m_xCbxSnapFrameImg(m_xBuilder->weld_widget("locksnapframe"))
     , m_xCbxSnapPoints(m_xBuilder->weld_check_button("snappoints"))
+    , m_xCbxSnapPointsImg(m_xBuilder->weld_widget("locksnappoints"))
     , m_xMtrFldSnapArea(m_xBuilder->weld_metric_spin_button("mtrfldsnaparea", FieldUnit::PIXEL))
+    , m_xMtrFldSnapAreaImg(m_xBuilder->weld_widget("lockmtrfldsnaparea"))
     , m_xCbxOrtho(m_xBuilder->weld_check_button("ortho"))
+    , m_xCbxOrthoImg(m_xBuilder->weld_widget("lockortho"))
     , m_xCbxBigOrtho(m_xBuilder->weld_check_button("bigortho"))
+    , m_xCbxBigOrthoImg(m_xBuilder->weld_widget("lockbigortho"))
     , m_xCbxRotate(m_xBuilder->weld_check_button("rotate"))
+    , m_xCbxRotateImg(m_xBuilder->weld_widget("lockrotate"))
     , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button("mtrfldangle", FieldUnit::DEGREE))
     , m_xMtrFldBezAngle(m_xBuilder->weld_metric_spin_button("mtrfldbezangle", FieldUnit::DEGREE))
+    , m_xMtrFldBezAngleImg(m_xBuilder->weld_widget("lockmtrfldbezangle"))
 {
     // This page requires exchange Support
     SetExchangeSupport();
@@ -136,7 +157,20 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
 
     if (const SfxUInt16Item* pItem = rCoreSet.GetItemIfSet(SID_HTML_MODE, false))
     {
-        m_bHTMLMode = 0 != (pItem->GetValue() & HTMLMODE_ON);
+        if (0 != (pItem->GetValue() & HTMLMODE_ON))
+            m_Emode = HTML_MODE;
+    }
+    else
+    {
+        SvtModuleOptions aMOpt;
+        if (aMOpt.IsImpress())
+            m_Emode = IMPRESS_MODE;
+        else if (aMOpt.IsDraw())
+            m_Emode = DRAW_MODE;
+        else if (aMOpt.IsCalc())
+            m_Emode = CALC_MODE;
+        else
+            m_Emode = WRITER_MODE;
     }
 
     m_xCbxRotate->connect_toggled(LINK(this, SvxGridTabPage, ClickRotateHdl_Impl));
@@ -219,20 +253,39 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 
     if( (pGridAttr = rSet->GetItemIfSet( SID_ATTR_GRID_OPTIONS , false )) )
     {
-        bool bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Option::SnapToGrid::isReadOnly() :
-            officecfg::Office::WriterWeb::Grid::Option::SnapToGrid::isReadOnly();
+        bool bReadOnly = false;
+        switch (m_Emode)
+        {
+            case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Option::SnapToGrid::isReadOnly(); break;
+            case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Option::SnapToGrid::isReadOnly(); break;
+            case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Option::SnapToGrid::isReadOnly(); break;
+            default: //TODO Calc/Draw
+                break;
+        }
         m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
         m_xCbxUseGridsnap->set_sensitive(!bReadOnly);
         m_xCbxUseGridsnapImg->set_visible(bReadOnly);
 
-        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Option::Synchronize::isReadOnly() :
-            officecfg::Office::WriterWeb::Grid::Option::Synchronize::isReadOnly();
+        switch (m_Emode)
+        {
+            case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Option::Synchronize::isReadOnly(); break;
+            case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Option::Synchronize::isReadOnly(); break;
+            case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Option::Synchronize::isReadOnly(); break;
+            default: //TODO Calc/Draw
+                break;
+        }
         m_xCbxSynchronize->set_active(pGridAttr->bSynchronize);
         m_xCbxSynchronize->set_sensitive(!bReadOnly);
         m_xCbxSynchronizeImg->set_visible(bReadOnly);
 
-        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Option::VisibleGrid::isReadOnly() :
-            officecfg::Office::WriterWeb::Grid::Option::VisibleGrid::isReadOnly();
+        switch (m_Emode)
+        {
+            case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Option::VisibleGrid::isReadOnly(); break;
+            case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Option::VisibleGrid::isReadOnly(); break;
+            case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Option::VisibleGrid::isReadOnly(); break;
+            default: //TODO Calc/Draw
+                break;
+        }
         m_xCbxGridVisible->set_active(pGridAttr->bGridVisible);
         m_xCbxGridVisible->set_sensitive(!bReadOnly);
         m_xCbxGridVisibleImg->set_visible(bReadOnly);
@@ -241,26 +294,64 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
         SetMetricValue( *m_xMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( *m_xMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 
-        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Resolution::XAxis::isReadOnly() :
-            officecfg::Office::WriterWeb::Grid::Resolution::XAxis::isReadOnly();
+        switch (m_Emode)
+        {
+            case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Resolution::XAxis::isReadOnly(); break;
+            case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Resolution::XAxis::isReadOnly(); break;
+            case IMPRESS_MODE:
+            {
+                if (lcl_IsMetricSystem())
+                    bReadOnly = officecfg::Office::Impress::Grid::Resolution::XAxis::Metric::isReadOnly();
+                else
+                    bReadOnly = officecfg::Office::Impress::Grid::Resolution::XAxis::NonMetric::isReadOnly();
+            }
+            break;
+            default: //TODO Calc/Draw
+                break;
+        }
         m_xMtrFldDrawX->set_sensitive(!bReadOnly);
         m_xMtrFldDrawXImg->set_visible(bReadOnly);
 
-        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Resolution::YAxis::isReadOnly() :
-            officecfg::Office::WriterWeb::Grid::Resolution::YAxis::isReadOnly();
+        switch (m_Emode)
+        {
+            case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Resolution::YAxis::isReadOnly(); break;
+            case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Resolution::YAxis::isReadOnly(); break;
+            case IMPRESS_MODE:
+            {
+                if (lcl_IsMetricSystem())
+                    bReadOnly = officecfg::Office::Impress::Grid::Resolution::YAxis::Metric::isReadOnly();
+                else
+                    bReadOnly = officecfg::Office::Impress::Grid::Resolution::YAxis::NonMetric::isReadOnly();
+            }
+            break;
+            default: //TODO Calc/Draw
+                break;
+        }
         m_xMtrFldDrawY->set_sensitive(!bReadOnly);
         m_xMtrFldDrawYImg->set_visible(bReadOnly);
 
         m_xNumFldDivisionX->set_value(pGridAttr->nFldDivisionX + 1);
         m_xNumFldDivisionY->set_value(pGridAttr->nFldDivisionY + 1);
 
-        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Subdivision::XAxis::isReadOnly() :
-            officecfg::Office::WriterWeb::Grid::Subdivision::XAxis::isReadOnly();
+        switch (m_Emode)
+        {
+            case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Subdivision::XAxis::isReadOnly(); break;
+            case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Subdivision::XAxis::isReadOnly(); break;
+            case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Subdivision::XAxis::isReadOnly(); break;
+            default: //TODO Calc/Draw
+                break;
+        }
         m_xNumFldDivisionX->set_sensitive(!bReadOnly);
         m_xNumFldDivisionXImg->set_visible(bReadOnly);
 
-        bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Grid::Subdivision::YAxis::isReadOnly() :
-            officecfg::Office::WriterWeb::Grid::Subdivision::YAxis::isReadOnly();
+        switch (m_Emode)
+        {
+            case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Subdivision::YAxis::isReadOnly(); break;
+            case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Subdivision::YAxis::isReadOnly(); break;
+            case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Subdivision::YAxis::isReadOnly(); break;
+            default: //TODO Calc/Draw
+                break;
+        }
         m_xNumFldDivisionY->set_sensitive(!bReadOnly);
         m_xNumFldDivisionYImg->set_visible(bReadOnly);
     }
@@ -330,7 +421,7 @@ IMPL_LINK(SvxGridTabPage, ChangeDrawHdl_Impl, weld::MetricSpinButton&, rField, v
 IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xCbxRotate->get_active())
-        m_xMtrFldAngle->set_sensitive(true);
+        m_xMtrFldAngle->set_sensitive(!officecfg::Office::Impress::Snap::Position::RotatingValue::isReadOnly());
     else
         m_xMtrFldAngle->set_sensitive(false);
 }
