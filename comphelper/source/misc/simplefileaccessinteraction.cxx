@@ -29,9 +29,10 @@ const sal_Int32 HANDLE_CERTIFICATEREQUEST = 3;
 /// Will handle com::sun::star::ucb::AuthenticationRequest
 const sal_Int32 HANDLE_AUTHENTICATIONREQUEST = 4;
 
-static std::span<const ::ucbhelper::InterceptedInteraction::InterceptedRequest> getInterceptions()
+SimpleFileAccessInteraction::SimpleFileAccessInteraction(
+    const css::uno::Reference<css::task::XInteractionHandler>& xHandler)
 {
-    static const ::ucbhelper::InterceptedInteraction::InterceptedRequest lInterceptions[]{
+    std::vector<::ucbhelper::InterceptedInteraction::InterceptedRequest> lInterceptions{
         { //intercept standard IO error exception (local file and WebDAV)
           css::uno::Any(css::ucb::InteractiveIOException()),
           cppu::UnoType<css::task::XInteractionAbort>::get(), HANDLE_INTERACTIVEIOEXCEPTION },
@@ -51,14 +52,9 @@ static std::span<const ::ucbhelper::InterceptedInteraction::InterceptedRequest> 
           css::uno::Any(css::ucb::AuthenticationRequest()),
           cppu::UnoType<css::task::XInteractionApprove>::get(), HANDLE_AUTHENTICATIONREQUEST }
     };
-    return lInterceptions;
-}
 
-SimpleFileAccessInteraction::SimpleFileAccessInteraction(
-    const css::uno::Reference<css::task::XInteractionHandler>& xHandler)
-    : InterceptedInteraction(getInterceptions())
-{
     setInterceptedHandler(xHandler);
+    setInterceptions(std::move(lInterceptions));
 }
 
 SimpleFileAccessInteraction::~SimpleFileAccessInteraction() {}

@@ -459,6 +459,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         if ( bReadOnly )
                (*this)[MediaDescriptor::PROP_READONLY] <<= bReadOnly;
 
+        xInteraction->resetInterceptions();
         xInteraction->resetErrorStates();
         try
         {

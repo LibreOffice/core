@@ -78,6 +78,16 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             sal_Int32 Handle;
 
 
+            /** @short  default ctor.
+
+                @descr  Such constructed object can't be used really.
+                        Might it will crash if it's used!
+                        Don't forget to initialize all(!) members...
+             */
+            InterceptedRequest()
+            {
+                Handle     = INVALID_HANDLE;
+            }
             InterceptedRequest(css::uno::Any Request_, css::uno::Type Continuation_, sal_Int32 Handle_)
                 : Request(std::move(Request_)), Continuation(std::move(Continuation_)), Handle(Handle_)
             {
@@ -120,22 +130,16 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
 
         /** @short  these list contains the requests, which should be intercepted.
          */
-        std::span< const InterceptedRequest > m_lInterceptions;
+        ::std::vector< InterceptedRequest > m_lInterceptions;
 
 
     // native interface
     public:
 
-        /** @short  initialise with a list of intercepted interactions.
 
-            @attention  If the interface method handle() will be overwritten by
-                        a derived class, the functionality behind these static list
-                        can't be used.
-
-            @param  lInterceptions
-                    the list of intercepted requests.
+        /** @short  initialize a new instance with default values.
          */
-        InterceptedInteraction(std::span< const InterceptedRequest > m_lInterceptions);
+        InterceptedInteraction();
 
 
         /** @short  initialize a new instance with the interaction handler,
@@ -150,6 +154,18 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
                     be intercepted here.
          */
         void setInterceptedHandler(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler);
+
+
+        /** @short  set a new list of intercepted interactions.
+
+            @attention  If the interface method handle() will be overwritten by
+                        a derived class, the functionality behind these static list
+                        can't be used.
+
+            @param  lInterceptions
+                    the list of intercepted requests.
+         */
+        void setInterceptions(::std::vector< InterceptedRequest >&& lInterceptions);
 
 
         /** @short  extract a requested continuation from the list of available ones.
