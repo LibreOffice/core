@@ -392,7 +392,7 @@ DdeService::~DdeService()
     DdeInstData* pInst = ImpGetInstData();
     assert(pInst);
     if ( pInst->pServicesSvr )
-        pInst->pServicesSvr->erase(std::remove(pInst->pServicesSvr->begin(), pInst->pServicesSvr->end(), this), pInst->pServicesSvr->end());
+        std::erase(*pInst->pServicesSvr, this);
 
     delete pSysTopic;
     delete pName;
@@ -608,8 +608,7 @@ DdeItem::DdeItem( const DdeItem& r)
 DdeItem::~DdeItem()
 {
     if( pMyTopic )
-        pMyTopic->aItems.erase(std::remove(pMyTopic->aItems.begin(),
-                                           pMyTopic->aItems.end(),this));
+        std::erase(pMyTopic->aItems, this);
     delete pName;
     delete pImpData;
 }
