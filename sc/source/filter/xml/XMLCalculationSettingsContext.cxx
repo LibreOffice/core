@@ -25,7 +25,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <sax/tools/converter.hxx>
-
+#include <docuno.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -110,11 +110,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCalculationSetting
 
 void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    if (!GetScImport().GetModel().is())
-        return;
-
-    uno::Reference <beans::XPropertySet> xPropertySet (GetScImport().GetModel(), uno::UNO_QUERY);
-    if (!xPropertySet.is())
+    ScModelObj* xPropertySet(GetScImport().GetScModel());
+    if (!xPropertySet)
         return;
 
     xPropertySet->setPropertyValue( SC_UNO_CALCASSHOWN, uno::Any(bCalcAsShown) );

@@ -183,7 +183,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
 
                 if ( nSheet != pStyle->GetLastSheet() )
                 {
-                    ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
+                    ScSheetSaveData* pSheetData = rXMLImport.GetScModel()->GetSheetSaveData();
                     pSheetData->AddRowStyle( sStyleName, ScAddress( 0, static_cast<SCROW>(nFirstRow), nSheet ) );
                     pStyle->SetLastSheet(nSheet);
                 }

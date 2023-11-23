@@ -546,9 +546,9 @@ void XMLTableStyleContext::FillPropertySet(
 
 void XMLTableStyleContext::SetDefaults()
 {
-    if ((GetFamily() == XmlStyleFamily::TABLE_CELL) && GetImport().GetModel().is())
+    if ((GetFamily() == XmlStyleFamily::TABLE_CELL) && GetScImport().GetScModel())
     {
-        uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetImport().GetModel(), uno::UNO_QUERY);
+        rtl::Reference<ScModelObj> xMultiServiceFactory(GetScImport().GetScModel());
         if (xMultiServiceFactory.is())
         {
             uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.sheet.Defaults"), uno::UNO_QUERY);
@@ -799,41 +799,37 @@ uno::Reference < XNameContainer >
         }
         if( !xStyles.is() && !sName.isEmpty() && GetScImport().GetModel().is() )
         {
-            uno::Reference< XStyleFamiliesSupplier > xFamiliesSupp(
-                                            GetScImport().GetModel(), UNO_QUERY );
-            if (xFamiliesSupp.is())
-            {
-                uno::Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
+            ScModelObj* xFamiliesSupp( GetScImport().GetScModel() );
+            uno::Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
 
-                try
-                {
-                    xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
-                }
-                catch ( uno::Exception& )
-                {
-                    // #i97680# Named table/column/row styles aren't supported, getByName will throw an exception.
-                    // For better interoperability, these styles should then be handled as automatic styles.
-                    // For now, NULL is returned (and the style is ignored).
-                }
-                switch( nFamily )
-                {
-                case XmlStyleFamily::TABLE_TABLE:
-                    const_cast<XMLTableStylesContext *>(this)->xTableStyles.set(xStyles);
-                    break;
-                case XmlStyleFamily::TABLE_CELL:
-                    const_cast<XMLTableStylesContext *>(this)->xCellStyles.set(xStyles);
-                    break;
-                case XmlStyleFamily::TABLE_COLUMN:
-                    const_cast<XMLTableStylesContext *>(this)->xColumnStyles.set(xStyles);
-                    break;
-                case XmlStyleFamily::TABLE_ROW:
-                    const_cast<XMLTableStylesContext *>(this)->xRowStyles.set(xStyles);
-                    break;
-                case XmlStyleFamily::SD_GRAPHICS_ID:
-                    const_cast<XMLTableStylesContext *>(this)->xGraphicStyles.set(xStyles);
-                    break;
-                default: break;
-                }
+            try
+            {
+                xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
+            }
+            catch ( uno::Exception& )
+            {
+                // #i97680# Named table/column/row styles aren't supported, getByName will throw an exception.
+                // For better interoperability, these styles should then be handled as automatic styles.
+                // For now, NULL is returned (and the style is ignored).
+            }
+            switch( nFamily )
+            {
+            case XmlStyleFamily::TABLE_TABLE:
+                const_cast<XMLTableStylesContext *>(this)->xTableStyles.set(xStyles);
+                break;
+            case XmlStyleFamily::TABLE_CELL:
+                const_cast<XMLTableStylesContext *>(this)->xCellStyles.set(xStyles);
+                break;
+            case XmlStyleFamily::TABLE_COLUMN:
+                const_cast<XMLTableStylesContext *>(this)->xColumnStyles.set(xStyles);
+                break;
+            case XmlStyleFamily::TABLE_ROW:
+                const_cast<XMLTableStylesContext *>(this)->xRowStyles.set(xStyles);
+                break;
+            case XmlStyleFamily::SD_GRAPHICS_ID:
+                const_cast<XMLTableStylesContext *>(this)->xGraphicStyles.set(xStyles);
+                break;
+            default: break;
             }
         }
     }
@@ -1038,7 +1034,7 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
         {
             ESelection aSel = pCellImp->GetSelection();
 
-            ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(GetImport().GetModel())->GetSheetSaveData();
+            ScSheetSaveData* pSheetData = GetScImport().GetScModel()->GetSheetSaveData();
             pSheetData->AddTextStyle( GetName(), aPos, aSel );
 
             nLastSheet = aPos.Tab();

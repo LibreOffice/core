@@ -153,7 +153,7 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
         {
             pStyle->FillPropertySet(xProperties);
 
-            ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(rImport.GetModel())->GetSheetSaveData();
+            ScSheetSaveData* pSheetData = rImport.GetScModel()->GetSheetSaveData();
             pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, maCurrentCellPos.Tab() ) );
         }
     }

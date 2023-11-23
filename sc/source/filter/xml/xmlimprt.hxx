@@ -50,6 +50,7 @@ class ScEditEngineDefaulter;
 class ScDocumentImport;
 class ScMyImpDetectiveOpArray;
 class SdrPage;
+class ScModelObj;
 
 namespace sc {
 struct ImportPostProcessData;
@@ -205,6 +206,8 @@ public:
 
     ScDocument*          GetDocument()           { return pDoc; }
     const ScDocument*    GetDocument() const     { return pDoc; }
+
+    ScModelObj* GetScModel() const;
 
     ScMyTables& GetTables() { return aTables; }
 

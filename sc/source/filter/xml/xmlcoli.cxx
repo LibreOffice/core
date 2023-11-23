@@ -112,7 +112,7 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
 
                             if ( nSheet != pStyle->GetLastSheet() )
                             {
-                                ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
+                                ScSheetSaveData* pSheetData = rXMLImport.GetScModel()->GetSheetSaveData();
                                 pSheetData->AddColumnStyle( sStyleName, ScAddress( static_cast<SCCOL>(nCurrentColumn), 0, nSheet ) );
                                 pStyle->SetLastSheet(nSheet);
                             }
