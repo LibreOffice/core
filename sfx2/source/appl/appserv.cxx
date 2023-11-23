@@ -256,6 +256,13 @@ namespace
         return xFrame;
     }
 
+    Reference<XFrame> GetDocFrame(const SfxRequest& rReq)
+    {
+        const SfxFrameItem* pFrameItem = rReq.GetArg<SfxFrameItem>(SID_DOCFRAME);
+        SfxFrame* pFrame = pFrameItem ? pFrameItem->GetFrame() : nullptr;
+        return pFrame ? pFrame->GetFrameInterface() : nullptr;
+    }
+
     class LicenseDialog : public weld::GenericDialogController
     {
     public:
@@ -309,6 +316,8 @@ weld::Window* SfxRequest::GetFrameWeld() const
     }
 
     Reference<XFrame> xFrame(GetRequestFrame(*this));
+    if (!xFrame)
+        xFrame = GetDocFrame(*this);
     if (!xFrame)
     {
         SAL_WARN("sfx.appl", "no parent for dialogs");

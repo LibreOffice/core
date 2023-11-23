@@ -597,8 +597,6 @@ static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
     if ((nFilter & LoadUrlFlags::NewView) && !comphelper::LibreOfficeKit::isActive())
         aTargetFrameName.SetValue( "_blank" );
 
-    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, rViewFrame.GetFrame().GetFrameInterface());
-
     rViewFrame.GetDispatcher()->ExecuteList(SID_OPENDOC,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
             {
@@ -607,8 +605,7 @@ static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
                 &aReferer,
                 &aView, &aTargetFrameName,
                 &aBrowse
-            },
-            { &aDocFrame } );
+            });
 }
 
 void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
