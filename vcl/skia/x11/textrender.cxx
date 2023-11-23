@@ -81,8 +81,10 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
         font.setSubpixel(true);
 
         SkFontHinting eHinting = font.getHinting();
+        static bool bAllowDefaultHinting = getenv("SAL_ALLOW_DEFAULT_HINTING") != nullptr;
         bool bAllowedHintStyle
-            = eHinting == SkFontHinting::kNone || eHinting == SkFontHinting::kSlight;
+            = bAllowDefaultHinting
+              || (eHinting == SkFontHinting::kNone || eHinting == SkFontHinting::kSlight);
         if (!bAllowedHintStyle)
             font.setHinting(SkFontHinting::kSlight);
     }

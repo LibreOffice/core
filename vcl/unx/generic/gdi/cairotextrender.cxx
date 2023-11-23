@@ -418,12 +418,13 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
+    static bool bAllowDefaultHinting = getenv("SAL_ALLOW_DEFAULT_HINTING") != nullptr;
 
     const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions();
     if (pFontOptions || bDisableAA || bSubpixelPositioning)
     {
         cairo_hint_style_t eHintStyle = pFontOptions ? cairo_font_options_get_hint_style(pFontOptions) : CAIRO_HINT_STYLE_DEFAULT;
-        bool bAllowedHintStyle = !bSubpixelPositioning || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
+        bool bAllowedHintStyle = !bSubpixelPositioning || bAllowDefaultHinting || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
 
         if (bDisableAA || !bAllowedHintStyle || bSubpixelPositioning)
         {

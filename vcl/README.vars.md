@@ -15,6 +15,8 @@ These are the general environment variables used in the VCL:
 * `SAL_NON_APPLICATION_FONT_USE` - control use of non-bundled fonts, values are `deny` or `abort`;
   for now only works on platforms using fontconfig (i.e., on Linux, but neither on macOS nor on
   Windows); also see gb_CppunitTest_set_non_application_font_use for using it in unit tests
+* `SAL_ALLOW_DEFAULT_HINTING` - use default font hinting for the platform. Enables medium/full hinting 
+  style which is otherwise reverted to (s)light.
 
 * `LO_COLLECT_UIINFO` - enable the uitesting logging, value is expected to be a relative file name that
 will be used to write the log under `instdir/uitest/`.

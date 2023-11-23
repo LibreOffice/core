@@ -160,8 +160,9 @@ std::unique_ptr<GenericSalLayout> QtGraphics::GetTextLayout(int nFallbackLevel)
 static QRawFont GetRawFont(const QFont& rFont, bool bWithoutHintingInTextDirection)
 {
     QFont::HintingPreference eHinting = rFont.hintingPreference();
+    static bool bAllowDefaultHinting = getenv("SAL_ALLOW_DEFAULT_HINTING") != nullptr;
     bool bAllowedHintStyle
-        = !bWithoutHintingInTextDirection
+        = !bWithoutHintingInTextDirection || bAllowDefaultHinting
           || (eHinting == QFont::PreferNoHinting || eHinting == QFont::PreferVerticalHinting);
     if (bWithoutHintingInTextDirection && !bAllowedHintStyle)
     {
