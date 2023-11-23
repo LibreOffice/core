@@ -21,6 +21,7 @@
 
 #include "pivotcachebuffer.hxx"
 #include "stylesbuffer.hxx"
+#include <rtl/ref.hxx>
 
 namespace com::sun::star {
     namespace sheet { class XDataPilotDescriptor; }
@@ -28,6 +29,7 @@ namespace com::sun::star {
 }
 
 class ScDPObject;
+class ScDataPilotDescriptorBase;
 
 namespace oox::xls {
 
@@ -378,7 +380,7 @@ private:
     PTDefinitionModel     maDefModel;         /// Global pivot table settings.
     PTLocationModel       maLocationModel;    /// Location settings of the pivot table.
     PivotCache*           mpPivotCache;       /// The pivot cache this table is based on.
-    css::uno::Reference< css::sheet::XDataPilotDescriptor >
+    rtl::Reference< ScDataPilotDescriptorBase > // css::sheet::XDataPilotDescriptor
                           mxDPDescriptor;     /// Descriptor of the DataPilot object.
     std::map<OUString, css::uno::Any> maInteropGrabBag;
 

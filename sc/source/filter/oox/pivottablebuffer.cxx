@@ -1247,7 +1247,7 @@ void PivotTable::finalizeImport()
         // create a new data pilot descriptor based on the source data
         Reference< XDataPilotTablesSupplier > xDPTablesSupp( getSheetFromDoc( maLocationModel.maRange.aStart.Tab() ), UNO_QUERY_THROW );
         Reference< XDataPilotTables > xDPTables( xDPTablesSupp->getDataPilotTables(), UNO_SET_THROW );
-        mxDPDescriptor.set( xDPTables->createDataPilotDescriptor(), UNO_SET_THROW );
+        mxDPDescriptor = static_cast<ScDataPilotDescriptorBase*>( xDPTables->createDataPilotDescriptor().get() );
         ScRange aRange = mpPivotCache->getSourceRange();
         CellRangeAddress aCellRangeAddress( aRange.aStart.Tab(),
                                             aRange.aStart.Col(), aRange.aStart.Row(),
@@ -1255,17 +1255,12 @@ void PivotTable::finalizeImport()
         mxDPDescriptor->setSourceRange( aCellRangeAddress );
         mxDPDescriptor->setTag( maDefModel.maTag );
 
-        // TODO: This is a hack. Eventually we need to convert the whole thing to the internal API.
-        auto pImpl = dynamic_cast<ScDataPilotDescriptorBase*>(mxDPDescriptor.get());
-        if (!pImpl)
-            return;
-
-        mpDPObject = pImpl->GetDPObject();
+        mpDPObject = mxDPDescriptor->GetDPObject();
         if (!mpDPObject)
             return;
 
         // global data pilot properties
-        PropertySet aDescProp( mxDPDescriptor );
+        PropertySet aDescProp(( css::uno::Reference< css::beans::XPropertySet >(mxDPDescriptor) ));
         aDescProp.setProperty( PROP_ColumnGrand, maDefModel.mbColGrandTotals );
         aDescProp.setProperty( PROP_RowGrand, maDefModel.mbRowGrandTotals );
         aDescProp.setProperty( PROP_ShowFilterButton, false );
@@ -1411,8 +1406,8 @@ Reference< XDataPilotField > PivotTable::getDataLayoutField() const
     Reference< XDataPilotField > xDPField;
     try
     {
-        Reference< XDataPilotDataLayoutFieldSupplier > xDPDataFieldSupp( mxDPDescriptor, UNO_QUERY_THROW );
-        xDPField = xDPDataFieldSupp->getDataLayoutField();
+        if (mxDPDescriptor)
+            xDPField = mxDPDescriptor->getDataLayoutField();
     }
     catch( Exception& )
     {
