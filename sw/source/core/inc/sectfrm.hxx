@@ -156,6 +156,7 @@ public:
     bool IsBalancedSection() const;
 
     virtual void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
+    void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 
     bool IsFootnoteAtEnd() const { return m_bFootnoteAtEnd; }
     bool IsEndnAtEnd() const { return m_bEndnAtEnd;   }

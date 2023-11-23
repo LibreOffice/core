@@ -2962,7 +2962,7 @@ bool SwSectionFrame::IsBalancedSection() const
 void SwSectionFrame::dumpAsXml(xmlTextWriterPtr writer) const
 {
     (void)xmlTextWriterStartElement(writer, BAD_CAST("section"));
-    SwFrame::dumpAsXmlAttributes( writer );
+    dumpAsXmlAttributes( writer );
     if ( HasFollow() )
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
@@ -2975,6 +2975,14 @@ void SwSectionFrame::dumpAsXml(xmlTextWriterPtr writer) const
     dumpChildrenAsXml(writer);
 
     (void)xmlTextWriterEndElement(writer);
+}
+
+void SwSectionFrame::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
+{
+    SwLayoutFrame::dumpAsXmlAttributes(writer);
+
+    SwSectionNode const*const pNode(GetSection() ? GetSection()->GetFormat()->GetSectionNode() : nullptr);
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), "%" SAL_PRIdINT32, pNode ? sal_Int32(pNode->GetIndex()) : -1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

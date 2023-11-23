@@ -207,12 +207,6 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         if (pFF->GetFollow())
             (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("follow"), "%" SAL_PRIuUINT32, pFF->GetFollow()->GetFrameId() );
     }
-    if (IsSctFrame())
-    {
-        SwSectionFrame const*const pFrame(static_cast<SwSectionFrame const*>(this));
-        SwSectionNode const*const pNode(pFrame->GetSection() ? pFrame->GetSection()->GetFormat()->GetSectionNode() : nullptr);
-        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), "%" SAL_PRIdINT32, pNode ? sal_Int32(pNode->GetIndex()) : -1);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
