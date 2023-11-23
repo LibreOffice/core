@@ -2963,6 +2963,12 @@ void ScTable::GetFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEn
     sc::ColumnBlockConstPosition aBlockPos;
     aCol[nCol].InitBlockPosition(aBlockPos);
     aCol[nCol].GetFilterEntries(aBlockPos, nRow1, nRow2, rFilterEntries, bFiltering, false /*bFilteredRow*/);
+
+    SCROW nLastRow = aBlockPos.miCellPos->position;
+    if (nLastRow < nRow2)
+    {
+        aCol[nCol].GetBackColorFilterEntries(nLastRow, nRow2, rFilterEntries);
+    }
 }
 
 void ScTable::GetFilteredFilterEntries(
