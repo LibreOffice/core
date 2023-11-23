@@ -75,19 +75,28 @@ private:
     MapUnit             ePoolUnit;
 
     std::unique_ptr<weld::CheckButton> m_xCbxQuickEdit;
+    std::unique_ptr<weld::Widget> m_xCbxQuickEditImg;
     std::unique_ptr<weld::CheckButton> m_xCbxPickThrough;
+    std::unique_ptr<weld::Widget> m_xCbxPickThroughImg;
 
     std::unique_ptr<weld::Frame> m_xNewDocumentFrame;
     std::unique_ptr<weld::CheckButton> m_xCbxStartWithTemplate;
+    std::unique_ptr<weld::Widget> m_xCbxStartWithTemplateImg;
 
     std::unique_ptr<weld::CheckButton> m_xCbxMasterPageCache;
+    std::unique_ptr<weld::Widget> m_xCbxMasterPageCacheImg;
     std::unique_ptr<weld::CheckButton> m_xCbxCopy;
+    std::unique_ptr<weld::Widget> m_xCbxCopyImg;
     std::unique_ptr<weld::CheckButton> m_xCbxMarkedHitMovesAlways;
+    std::unique_ptr<weld::Widget> m_xCbxMarkedHitMovesAlwaysImg;
 
     std::unique_ptr<weld::ComboBox> m_xLbMetric;
+    std::unique_ptr<weld::Widget> m_xLbMetricImg;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldTabstop;
+    std::unique_ptr<weld::Widget> m_xMtrFldTabstopImg;
 
     std::unique_ptr<weld::CheckButton> m_xCbxCompatibility;
+    std::unique_ptr<weld::Widget> m_xCbxCompatibilityImg;
 
     //Scale
     std::unique_ptr<weld::Frame> m_xScaleFrame;

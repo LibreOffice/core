@@ -23,6 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Exception.hpp>
+#include <officecfg/Office/Impress.hxx>
 #include <sfx2/module.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strarray.hxx>
@@ -197,15 +198,24 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , nWidth(0)
     , nHeight(0)
     , m_xCbxQuickEdit(m_xBuilder->weld_check_button("qickedit"))
+    , m_xCbxQuickEditImg(m_xBuilder->weld_widget("lockqickedit"))
     , m_xCbxPickThrough(m_xBuilder->weld_check_button("textselected"))
+    , m_xCbxPickThroughImg(m_xBuilder->weld_widget("locktextselected"))
     , m_xNewDocumentFrame(m_xBuilder->weld_frame("newdocumentframe"))
     , m_xCbxStartWithTemplate(m_xBuilder->weld_check_button("startwithwizard"))
+    , m_xCbxStartWithTemplateImg(m_xBuilder->weld_widget("lockstartwithwizard"))
     , m_xCbxMasterPageCache(m_xBuilder->weld_check_button("backgroundback"))
+    , m_xCbxMasterPageCacheImg(m_xBuilder->weld_widget("lockbackgroundback"))
     , m_xCbxCopy(m_xBuilder->weld_check_button("copywhenmove"))
+    , m_xCbxCopyImg(m_xBuilder->weld_widget("lockcopywhenmove"))
     , m_xCbxMarkedHitMovesAlways(m_xBuilder->weld_check_button("objalwymov"))
+    , m_xCbxMarkedHitMovesAlwaysImg(m_xBuilder->weld_widget("lockobjalwymov"))
     , m_xLbMetric(m_xBuilder->weld_combo_box("units"))
+    , m_xLbMetricImg(m_xBuilder->weld_widget("lockunits"))
     , m_xMtrFldTabstop(m_xBuilder->weld_metric_spin_button("metricFields", FieldUnit::MM))
+    , m_xMtrFldTabstopImg(m_xBuilder->weld_widget("locktabstop"))
     , m_xCbxCompatibility(m_xBuilder->weld_check_button("cbCompatibility"))
+    , m_xCbxCompatibilityImg(m_xBuilder->weld_widget("lockcbCompatibility"))
     , m_xScaleFrame(m_xBuilder->weld_frame("scaleframe"))
     , m_xCbScale(m_xBuilder->weld_combo_box("scaleBox"))
     , m_xNewDocLb(m_xBuilder->weld_label("newdoclbl"))
@@ -432,13 +442,41 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 {
     SdOptionsMiscItem aOptsItem( rAttrs->Get( ATTR_OPTIONS_MISC ) );
 
+    bool bReadOnly = officecfg::Office::Impress::Misc::NewDoc::AutoPilot::isReadOnly();
     m_xCbxStartWithTemplate->set_active( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
+    m_xCbxStartWithTemplate->set_sensitive(!bReadOnly);
+    m_xCbxStartWithTemplateImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Misc::ObjectMoveable::isReadOnly();
     m_xCbxMarkedHitMovesAlways->set_active( aOptsItem.GetOptionsMisc().IsMarkedHitMovesAlways() );
+    m_xCbxMarkedHitMovesAlways->set_sensitive(!bReadOnly);
+    m_xCbxMarkedHitMovesAlwaysImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Misc::TextObject::QuickEditing::isReadOnly();
     m_xCbxQuickEdit->set_active( aOptsItem.GetOptionsMisc().IsQuickEdit() );
+    m_xCbxQuickEdit->set_sensitive(!bReadOnly);
+    m_xCbxQuickEditImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Misc::TextObject::Selectable::isReadOnly();
     m_xCbxPickThrough->set_active( aOptsItem.GetOptionsMisc().IsPickThrough() );
+    m_xCbxPickThrough->set_sensitive(!bReadOnly);
+    m_xCbxPickThroughImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Misc::BackgroundCache::isReadOnly();
     m_xCbxMasterPageCache->set_active( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
+    m_xCbxMasterPageCache->set_sensitive(!bReadOnly);
+    m_xCbxMasterPageCacheImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Misc::CopyWhileMoving::isReadOnly();
     m_xCbxCopy->set_active( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
+    m_xCbxCopy->set_sensitive(!bReadOnly);
+    m_xCbxCopyImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Impress::Misc::Compatibility::AddBetween::isReadOnly();
     m_xCbxCompatibility->set_active( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
+    m_xCbxCompatibility->set_sensitive(!bReadOnly);
+    m_xCbxCompatibilityImg->set_visible(bReadOnly);
+
     m_xCbxDistort->set_active( aOptsItem.GetOptionsMisc().IsCrookNoContortion() );
     m_xCbxStartWithTemplate->save_state();
     m_xCbxMarkedHitMovesAlways->save_state();
@@ -477,6 +515,21 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
         const SfxUInt16Item& rItem = rAttrs->Get( nWhich2 );
         SetMetricValue( *m_xMtrFldTabstop, rItem.GetValue(), eUnit );
     }
+
+    if (SdOptionsGeneric::isMetricSystem())
+        bReadOnly = officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::isReadOnly();
+    else
+        bReadOnly = officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::isReadOnly();
+    m_xLbMetric->set_sensitive(!bReadOnly);
+    m_xLbMetricImg->set_visible(bReadOnly);
+
+    if (SdOptionsGeneric::isMetricSystem())
+        bReadOnly = officecfg::Office::Impress::Layout::Other::TabStop::Metric::isReadOnly();
+    else
+        bReadOnly = officecfg::Office::Impress::Layout::Other::TabStop::NonMetric::isReadOnly();
+    m_xMtrFldTabstop->set_sensitive(!bReadOnly);
+    m_xMtrFldTabstopImg->set_visible(bReadOnly);
+
     m_xLbMetric->save_value();
     m_xMtrFldTabstop->save_value();
     //Scale
@@ -613,7 +666,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls()
         // bIsEnabled and disable the controls.
     }
 
-    m_xCbxCompatibility->set_sensitive(bIsEnabled);
+    m_xCbxCompatibility->set_sensitive(bIsEnabled && !officecfg::Office::Impress::Misc::Compatibility::AddBetween::isReadOnly());
 }
 
 void SdTpOptionsMisc::PageCreated(const SfxAllItemSet& aSet)
