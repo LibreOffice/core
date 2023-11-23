@@ -86,15 +86,16 @@ PropertyValue lcl_GetLineColorPropertyFromErrorId(const std::string& rErrorId)
     return comphelper::makePropertyValue("LineColor", aColor);
 }
 
-OString encodeTextForLanguageTool(const OUString& text)
+OString encodeTextForLT(const OUString& text)
 {
     // Let's be a bit conservative. I don't find a good description what needs encoding (and in
     // which way) at https://languagetool.org/http-api/; the "Try it out!" function shows that
     // different cases are handled differently by the demo; some percent-encode the UTF-8
     // representation, like %D0%90 (for cyrillic А); some turn into entities like &#33; (for
-    // exclamation mark !); some other to things like \u0027 (for apostrophe ').
+    // exclamation mark !); some other to things like \u0027 (for apostrophe '). So only keep
+    // RFC 3986's "Unreserved Characters" set unencoded, use UTF-8 percent-encoding for the rest.
     static constexpr auto myCharClass = rtl::createUriCharClass(
-        u8"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+        u8"-._~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
     return OUStringToOString(
         rtl::Uri::encode(text, myCharClass.data(), rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8),
         RTL_TEXTENCODING_ASCII_US);
@@ -196,10 +197,9 @@ std::string makeHttpRequest(std::u16string_view aURL, HTTP_METHOD method, const 
     {
         OString apiKey
             = OUStringToOString(LanguageToolCfg::ApiKey::get().value_or(""), RTL_TEXTENCODING_UTF8);
-        OString username = OUStringToOString(LanguageToolCfg::Username::get().value_or(""),
-                                             RTL_TEXTENCODING_UTF8);
+        OUString username = LanguageToolCfg::Username::get().value_or("");
         if (!apiKey.isEmpty() && !username.isEmpty())
-            realPostData += "&username=" + username + "&apiKey=" + apiKey;
+            realPostData += "&username=" + encodeTextForLT(username) + "&apiKey=" + apiKey;
     }
 
     return makeHttpRequest_impl(aURL, method, realPostData, nullptr, nStatusCode);
@@ -440,7 +440,7 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     }
     else
     {
-        postData = "text=" + encodeTextForLanguageTool(aText) + "&language=" + langTag;
+        postData = "text=" + encodeTextForLT(aText) + "&language=" + langTag;
     }
 
     if (auto cachedResult = mCachedResults.find(postData); cachedResult != mCachedResults.end())
