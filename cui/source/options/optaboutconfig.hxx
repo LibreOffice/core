@@ -65,6 +65,7 @@ private:
     DECL_LINK(ExpandingHdl_Impl, const weld::TreeIter&, bool);
     DECL_LINK(HeaderBarClick, int, void);
     DECL_STATIC_LINK(CuiAboutConfigTabPage, ValidNameHdl, SvxNameDialog&, bool);
+    DECL_LINK(EditNumberHdl, SvxListDialog&, OUString);
 
 public:
     explicit CuiAboutConfigTabPage(weld::Window* pParent);

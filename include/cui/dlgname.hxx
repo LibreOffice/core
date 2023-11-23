@@ -146,10 +146,21 @@ public:
     bool IsDecorative() const { return m_xDecorativeCB->get_active(); }
 };
 
+enum class ListMode
+{
+    String,
+    Int64,
+    Int32,
+    Int16,
+    Double
+};
+
 /** Generic dialog to edit lists */
 class SvxListDialog : public weld::GenericDialogController
 {
 private:
+    ListMode m_aMode;
+    Link<SvxListDialog&, OUString> m_aEditHdl;
     std::unique_ptr<weld::TreeView> m_xList;
     std::unique_ptr<weld::Button> m_xAddBtn;
     std::unique_ptr<weld::Button> m_xRemoveBtn;
@@ -167,9 +178,10 @@ public:
     explicit SvxListDialog(weld::Window* pParent);
     virtual ~SvxListDialog() override;
 
-    std::vector<OUString> GetEntries() const;
+    std::vector<OUString> GetEntries();
     void SetEntries(std::vector<OUString> const& rParams);
     void EditEntry();
+    void SetMode(ListMode aMode);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

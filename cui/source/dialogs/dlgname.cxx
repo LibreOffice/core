@@ -148,6 +148,7 @@ IMPL_LINK_NOARG(SvxObjectTitleDescDialog, DecorativeHdl, weld::Toggleable&, void
 
 SvxListDialog::SvxListDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/listdialog.ui", "ListDialog")
+    , m_aMode(ListMode::String)
     , m_xList(m_xBuilder->weld_tree_view("assignlist"))
     , m_xAddBtn(m_xBuilder->weld_button("addbtn"))
     , m_xRemoveBtn(m_xBuilder->weld_button("removebtn"))
@@ -168,7 +169,7 @@ SvxListDialog::~SvxListDialog() {}
 
 IMPL_LINK_NOARG(SvxListDialog, AddHdl_Impl, weld::Button&, void)
 {
-    SvxNameDialog aNameDlg(m_xDialog.get(), "", "blabla");
+    SvxNameDialog aNameDlg(m_xDialog.get(), "", "");
 
     if (!aNameDlg.run())
         return;
@@ -213,7 +214,7 @@ void SvxListDialog::SelectionChanged()
     m_xEditBtn->set_sensitive(bEnable);
 }
 
-std::vector<OUString> SvxListDialog::GetEntries() const
+std::vector<OUString> SvxListDialog::GetEntries()
 {
     int nCount = m_xList->n_children();
     std::vector<OUString> aList;
@@ -240,11 +241,36 @@ void SvxListDialog::EditEntry()
         return;
 
     OUString sOldText(m_xList->get_selected_text());
-    SvxNameDialog aNameDlg(m_xDialog.get(), sOldText, "blabla");
+    OUString sNewText;
 
-    if (!aNameDlg.run())
-        return;
-    OUString sNewText = comphelper::string::strip(aNameDlg.GetName(), ' ');
+    if (m_aMode == ListMode::String)
+    {
+        SvxNameDialog aNameDlg(m_xDialog.get(), sOldText, "");
+        if (!aNameDlg.run())
+            return;
+        sNewText = comphelper::string::strip(aNameDlg.GetName(), ' ');
+    }
+    else if (m_aMode == ListMode::Int16 || m_aMode == ListMode::Int32 || m_aMode == ListMode::Int64)
+    {
+        sal_Int64 nMin = m_aMode == ListMode::Int16
+                             ? SAL_MIN_INT16
+                             : m_aMode == ListMode::Int32 ? SAL_MIN_INT32 : SAL_MIN_INT64;
+        sal_Int64 nMax = m_aMode == ListMode::Int16
+                             ? SAL_MAX_INT16
+                             : m_aMode == ListMode::Int32 ? SAL_MAX_INT32 : SAL_MAX_INT64;
+        SvxNumberDialog aNumberDlg(m_xDialog.get(), "", sOldText.toInt64(), nMin, nMax);
+        if (!aNumberDlg.run())
+            return;
+        sNewText = OUString::number(aNumberDlg.GetNumber());
+    }
+    else if (m_aMode == ListMode::Double)
+    {
+        SvxDecimalNumberDialog aNumberDlg(m_xDialog.get(), "", sOldText.toDouble());
+        if (!aNumberDlg.run())
+            return;
+        sNewText = OUString::number(aNumberDlg.GetNumber());
+    }
+
     if (!sNewText.isEmpty() && sNewText != sOldText)
     {
         m_xList->remove(nPos);
@@ -252,5 +278,7 @@ void SvxListDialog::EditEntry()
         m_xList->select(nPos);
     }
 }
+
+void SvxListDialog::SetMode(ListMode aMode) { m_aMode = aMode; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

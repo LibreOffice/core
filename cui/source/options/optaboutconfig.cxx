@@ -259,6 +259,54 @@ OUString lcl_StringListToString(const uno::Sequence<OUString>& seq)
     }
     return sBuffer.makeStringAndClear();
 }
+
+OUString lcl_IntListToString(const uno::Sequence<sal_Int16>& seq)
+{
+    OUStringBuffer sBuffer;
+    for (sal_Int32 i = 0; i != seq.getLength(); ++i)
+    {
+        if (i != 0)
+            sBuffer.append(",");
+        sBuffer.append(OUString::number(seq[i]));
+    }
+    return sBuffer.makeStringAndClear();
+}
+
+OUString lcl_IntListToString(const uno::Sequence<sal_Int32>& seq)
+{
+    OUStringBuffer sBuffer;
+    for (sal_Int32 i = 0; i != seq.getLength(); ++i)
+    {
+        if (i != 0)
+            sBuffer.append(",");
+        sBuffer.append(OUString::number(seq[i]));
+    }
+    return sBuffer.makeStringAndClear();
+}
+
+OUString lcl_IntListToString(const uno::Sequence<sal_Int64>& seq)
+{
+    OUStringBuffer sBuffer;
+    for (sal_Int32 i = 0; i != seq.getLength(); ++i)
+    {
+        if (i != 0)
+            sBuffer.append(",");
+        sBuffer.append(OUString::number(seq[i]));
+    }
+    return sBuffer.makeStringAndClear();
+}
+
+OUString lcl_DoubleListToString(const uno::Sequence<double>& seq)
+{
+    OUStringBuffer sBuffer;
+    for (sal_Int32 i = 0; i != seq.getLength(); ++i)
+    {
+        if (i != 0)
+            sBuffer.append(",");
+        sBuffer.append(OUString::number(seq[i]));
+    }
+    return sBuffer.makeStringAndClear();
+}
 }
 
 void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
@@ -724,68 +772,69 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "short-list")
             {
-                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
-                aNameDialog.SetCheckNameHdl(LINK(this, CuiAboutConfigTabPage, ValidNameHdl));
-                if (aNameDialog.run() == RET_OK)
+                SvxListDialog aListDialog(m_pParent);
+                aListDialog.SetEntries(commaStringToSequence(sDialogValue));
+                aListDialog.SetMode(ListMode::Int16);
+                if (aListDialog.run() == RET_OK)
                 {
-                    sDialogValue = aNameDialog.GetName();
-                    //create string sequence from comma separated string
-                    //uno::Sequence< OUString > seqStr;
-                    std::vector<OUString> seqStr = commaStringToSequence(sDialogValue);
-
-                    //create appropriate sequence with same size as string sequence
+                    std::vector<OUString> seqStr = aListDialog.GetEntries();
                     uno::Sequence<sal_Int16> seqShort(seqStr.size());
-                    //convert all strings to appropriate type
                     std::transform(
                         seqStr.begin(), seqStr.end(), seqShort.getArray(),
                         [](const auto& str) { return static_cast<sal_Int16>(str.toInt32()); });
                     pProperty->Value <<= seqShort;
+                    sDialogValue = lcl_IntListToString(seqShort);
                     bSaveChanges = true;
                 }
             }
             else if (sPropertyType == "int-list")
             {
-                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
-                aNameDialog.SetCheckNameHdl(LINK(this, CuiAboutConfigTabPage, ValidNameHdl));
-                if (aNameDialog.run() == RET_OK)
+                SvxListDialog aListDialog(m_pParent);
+                aListDialog.SetEntries(commaStringToSequence(sDialogValue));
+                aListDialog.SetMode(ListMode::Int32);
+                if (aListDialog.run() == RET_OK)
                 {
-                    sDialogValue = aNameDialog.GetName();
-                    std::vector<OUString> seqStrLong = commaStringToSequence(sDialogValue);
-
-                    uno::Sequence<sal_Int32> seqLong(seqStrLong.size());
-                    std::transform(seqStrLong.begin(), seqStrLong.end(), seqLong.getArray(),
-                                   [](const auto& str) { return str.toInt32(); });
-                    pProperty->Value <<= seqLong;
+                    std::vector<OUString> seqStr = aListDialog.GetEntries();
+                    uno::Sequence<sal_Int32> seq(seqStr.size());
+                    std::transform(
+                        seqStr.begin(), seqStr.end(), seq.getArray(),
+                        [](const auto& str) { return static_cast<sal_Int32>(str.toInt32()); });
+                    pProperty->Value <<= seq;
+                    sDialogValue = lcl_IntListToString(seq);
                     bSaveChanges = true;
                 }
             }
             else if (sPropertyType == "long-list")
             {
-                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
-                aNameDialog.SetCheckNameHdl(LINK(this, CuiAboutConfigTabPage, ValidNameHdl));
-                if (aNameDialog.run() == RET_OK)
+                SvxListDialog aListDialog(m_pParent);
+                aListDialog.SetEntries(commaStringToSequence(sDialogValue));
+                aListDialog.SetMode(ListMode::Int64);
+                if (aListDialog.run() == RET_OK)
                 {
-                    sDialogValue = aNameDialog.GetName();
-                    std::vector<OUString> seqStrHyper = commaStringToSequence(sDialogValue);
-                    uno::Sequence<sal_Int64> seqHyper(seqStrHyper.size());
-                    std::transform(seqStrHyper.begin(), seqStrHyper.end(), seqHyper.getArray(),
-                                   [](const auto& str) { return str.toInt64(); });
-                    pProperty->Value <<= seqHyper;
+                    std::vector<OUString> seqStr = aListDialog.GetEntries();
+                    uno::Sequence<sal_Int64> seq(seqStr.size());
+                    std::transform(
+                        seqStr.begin(), seqStr.end(), seq.getArray(),
+                        [](const auto& str) { return static_cast<sal_Int64>(str.toInt32()); });
+                    pProperty->Value <<= seq;
+                    sDialogValue = lcl_IntListToString(seq);
                     bSaveChanges = true;
                 }
             }
             else if (sPropertyType == "double-list")
             {
-                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
-                aNameDialog.SetCheckNameHdl(LINK(this, CuiAboutConfigTabPage, ValidNameHdl));
-                if (aNameDialog.run() == RET_OK)
+                SvxListDialog aListDialog(m_pParent);
+                aListDialog.SetEntries(commaStringToSequence(sDialogValue));
+                aListDialog.SetMode(ListMode::Double);
+                if (aListDialog.run() == RET_OK)
                 {
-                    sDialogValue = aNameDialog.GetName();
-                    std::vector<OUString> seqStrDoub = commaStringToSequence(sDialogValue);
-                    uno::Sequence<double> seqDoub(seqStrDoub.size());
-                    std::transform(seqStrDoub.begin(), seqStrDoub.end(), seqDoub.getArray(),
-                                   [](const auto& str) { return str.toDouble(); });
-                    pProperty->Value <<= seqDoub;
+                    std::vector<OUString> seqStr = aListDialog.GetEntries();
+                    uno::Sequence<double> seq(seqStr.size());
+                    std::transform(
+                        seqStr.begin(), seqStr.end(), seq.getArray(),
+                        [](const auto& str) { return static_cast<double>(str.toDouble()); });
+                    pProperty->Value <<= seq;
+                    sDialogValue = lcl_DoubleListToString(seq);
                     bSaveChanges = true;
                 }
             }
@@ -793,6 +842,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             {
                 SvxListDialog aListDialog(m_pParent);
                 aListDialog.SetEntries(commaStringToSequence(sDialogValue));
+                aListDialog.SetMode(ListMode::String);
                 if (aListDialog.run() == RET_OK)
                 {
                     auto seq = comphelper::containerToSequence(aListDialog.GetEntries());
