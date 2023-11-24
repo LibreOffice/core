@@ -57,7 +57,7 @@ public:
     virtual void SetFixFields(const DateTime* pNewDateTime) override;
     virtual void FieldsToCalc(SwCalc& rCalc, SwNodeOffset nLastNd, sal_Int32 nLastCnt) override;
     virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField, SwRootFrame const* pLayout) override;
-    virtual void FieldsToExpand(SwHashTable<HashStr>& rTable, const SetGetExpField& rToThisField, SwRootFrame const& rLayout) override;
+    virtual void FieldsToExpand(std::unordered_map<OUString, OUString>& rTable, const SetGetExpField& rToThisField, SwRootFrame const& rLayout) override;
     virtual bool IsNewFieldLst() const override;
     virtual void SetNewFieldLst( bool bFlag) override;
     virtual void InsDelFieldInFieldLst(bool bIns, const SwTextField& rField) override;

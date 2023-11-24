@@ -118,24 +118,18 @@ class SetGetExpFields : public o3tl::sorted_vector<std::unique_ptr<SetGetExpFiel
 {
 };
 
-// struct for saving strings from the SetExp's string fields
-struct HashStr final : public SwHash
-{
-    OUString aSetStr;
-    HashStr( const OUString& rName, OUString aText, HashStr* );
-};
 
-struct SwCalcFieldType final : public SwHash
-{
-    const SwFieldType* pFieldType;
-
-    SwCalcFieldType( const OUString& rStr, const SwFieldType* pFieldTyp )
-        : SwHash( rStr ), pFieldType( pFieldTyp )
-    {}
-};
+//struct SwCalcFieldType final : public SwHash
+//{
+//    const SwFieldType* pFieldType;
+//
+//    SwCalcFieldType( const OUString& rStr, const SwFieldType* pFieldTyp )
+//        : SwHash( rStr ), pFieldType( pFieldTyp )
+//    {}
+//};
 
 // search for the string that was saved under rName in the hash table
-OUString LookString( SwHashTable<HashStr> const & rTable, const OUString& rName );
+OUString LookString( std::unordered_map<OUString,OUString> const & rTable, const OUString& rName );
 
 const int GETFLD_ALL        = 3;        // combine flags via OR
 const int GETFLD_CALC       = 1;
@@ -144,7 +138,7 @@ const int GETFLD_EXPAND     = 2;
 class SwDocUpdateField
 {
     std::unique_ptr<SetGetExpFields> m_pFieldSortList; ///< current field list for calculation
-    SwHashTable<SwCalcFieldType> m_FieldTypeTable;
+    std::unordered_multimap<OUString, const SwFieldType*> m_FieldTypeTable;
 
     SwNodeOffset m_nNodes; ///< to check if the node count changed
     int m_nFieldListGetMode;
@@ -185,7 +179,8 @@ public:
         }
     }
 
-    SwHashTable<SwCalcFieldType> const& GetFieldTypeTable() const { return m_FieldTypeTable; }
+    std::unordered_multimap<OUString, const SwFieldType*> const& GetFieldTypeTable() const { return m_FieldTypeTable; }
+    std::unordered_multimap<OUString, const SwFieldType*> & GetFieldTypeTable() { return m_FieldTypeTable; }
 };
 
 #endif

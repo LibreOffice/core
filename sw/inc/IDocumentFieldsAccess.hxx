@@ -25,6 +25,7 @@
 #include <sal/types.h>
 #include "swtypes.hxx"
 #include "nodeoffset.hxx"
+#include <unordered_map>
 
 class SwFieldTypes;
 class SwFieldType;
@@ -40,8 +41,6 @@ class SetGetExpField;
 class SwNode;
 class SwTable;
 enum class SwFieldIds : sal_uInt16;
-template <class T> class SwHashTable;
-struct HashStr;
 class SwRootFrame;
 class IDocumentRedlineAccess;
 
@@ -128,7 +127,7 @@ namespace com::sun::star::uno { class Any; }
 
     virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField, SwRootFrame const* pLayout) = 0;
 
-    virtual void FieldsToExpand(SwHashTable<HashStr> & rTable, const SetGetExpField& rToThisField, SwRootFrame const& rLayout) = 0;
+    virtual void FieldsToExpand(std::unordered_map<OUString,OUString> & rTable, const SetGetExpField& rToThisField, SwRootFrame const& rLayout) = 0;
 
     virtual bool IsNewFieldLst() const = 0;
 

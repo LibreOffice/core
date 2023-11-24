@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 #include <i18nlangtag/lang.h>
 #include <basic/sbxvar.hxx>
 #include <unotools/syslocale.hxx>
@@ -36,8 +37,6 @@ class LocaleDataWrapper;
 class SwFieldType;
 class SwDoc;
 class SwUserFieldType;
-
-#define TBLSZ 47                // should be a prime, because of hash table
 
 const sal_Unicode cListDelim    = '|';
 
@@ -131,62 +130,12 @@ public:
     void SetDBvalue(bool bSet) {m_bDBvalue = bSet;}
 };
 
-// Calculate HashTables for VarTable and Operations
-struct SwHash
-{
-    SwHash( OUString aStr );
-    virtual ~SwHash();
-    OUString aStr;
-    std::unique_ptr<SwHash> pNext;
-};
-
-struct SwCalcExp final : public SwHash
+struct SwCalcExp
 {
     SwSbxValue  nValue;
     const SwFieldType* pFieldType;
 
-    SwCalcExp( const OUString& rStr, SwSbxValue aVal,
-                const SwFieldType* pFieldType );
-};
-
-/// T should be a subclass of SwHash
-template<class T>
-class SwHashTable
-{
-    std::vector<std::unique_ptr<T>> m_aData;
-public:
-    SwHashTable(size_t nSize) : m_aData(nSize)
-    {
-        assert(nSize < SAL_MAX_UINT32);
-    }
-    std::unique_ptr<T> & operator[](size_t idx) { return m_aData[idx]; }
-    std::unique_ptr<T> const & operator[](size_t idx) const { return m_aData[idx]; }
-    void resize(size_t nSize) { m_aData.resize(nSize); }
-
-    T* Find( std::u16string_view aStr, sal_uInt32* pPos = nullptr ) const
-    {
-        size_t nTableSize = m_aData.size();
-        assert(nTableSize < SAL_MAX_UINT32);
-        sal_uInt32 ii = 0;
-        for( size_t n = 0; n < aStr.size(); ++n )
-        {
-            ii = ii << 1 ^ aStr[n];
-        }
-        ii %= nTableSize;
-
-        if( pPos )
-            *pPos = ii;
-
-        for( T* pEntry = m_aData[ii].get(); pEntry; pEntry = static_cast<T*>(pEntry->pNext.get()) )
-        {
-            if( aStr == pEntry->aStr )
-            {
-                return pEntry;
-            }
-        }
-        return nullptr;
-    }
-
+    SwCalcExp( SwSbxValue aVal, const SwFieldType* pFieldType );
 };
 
 
@@ -198,7 +147,7 @@ extern "C" typedef double (*pfCalc)(double);
 
 class SwCalc
 {
-    SwHashTable<SwCalcExp> m_aVarTable;
+    std::unordered_map<OUString, SwCalcExp> m_aVarTable;
     OUStringBuffer m_aVarName;
     OUString    m_sCurrSym;
     OUString    m_sCommand;
@@ -245,7 +194,7 @@ public:
     SwCalcExp*  VarLook( const OUString &rStr, bool bIns = false );
     void        VarChange( const OUString& rStr, const SwSbxValue& rValue );
     void        VarChange( const OUString& rStr, double );
-    SwHashTable<SwCalcExp> & GetVarTable() { return m_aVarTable; }
+    std::unordered_map<OUString, SwCalcExp> & GetVarTable() { return m_aVarTable; }
 
     bool        Push(const SwUserFieldType* pUserFieldType);
     void        Pop();

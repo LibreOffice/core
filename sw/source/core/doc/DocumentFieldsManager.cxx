@@ -852,11 +852,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
     SwFieldIds nWhich;
 
     // Hash table for all string replacements is filled on-the-fly.
-    // Try to fabricate an uneven number.
-    const SwFieldTypes::size_type nHashSize {(( mpFieldTypes->size() / 7 ) + 1 ) * 7};
-    const sal_uInt16 nStrFormatCnt = o3tl::narrowing<sal_uInt16>(nHashSize);
-    OSL_ENSURE( nStrFormatCnt == nHashSize, "Downcasting to sal_uInt16 lost information!" );
-    SwHashTable<HashStr> aHashStrTable(nStrFormatCnt);
+    std::unordered_map<OUString, OUString> aHashStrTable;
 
     {
         const SwFieldType* pFieldType;
@@ -869,17 +865,15 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             case SwFieldIds::User:
                 {
                     // Entry present?
-                    sal_uInt32 nPos;
                     const OUString& rNm = pFieldType->GetName();
                     OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, 0, LANGUAGE_SYSTEM));
-                    SwHash* pFnd = aHashStrTable.Find( rNm, &nPos );
-                    if( pFnd )
+                    auto pFnd = aHashStrTable.find( rNm );
+                    if( pFnd != aHashStrTable.end() )
                         // modify entry in the hash table
-                        static_cast<HashStr*>(pFnd)->aSetStr = sExpand;
+                        pFnd->second = sExpand;
                     else
                         // insert the new entry
-                        aHashStrTable[nPos].reset( new HashStr( rNm, sExpand,
-                                                                aHashStrTable[nPos].release() ) );
+                        aHashStrTable.insert( { rNm, sExpand } );
                 }
                 break;
             default: break;
@@ -1051,19 +1045,17 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
 
             // Add entry to hash table
             // Entry present?
-            sal_uInt32 nPos;
-            HashStr* pFnd = aHashStrTable.Find( rName, &nPos );
+            auto pFnd = aHashStrTable.find( rName );
             OUString const value(pField->ExpandField(m_rDoc.IsClipBoard(), nullptr));
-            if( pFnd )
+            if( pFnd != aHashStrTable.end() )
             {
                 // Modify entry in the hash table
-                pFnd->aSetStr = value;
+                pFnd->second = value;
             }
             else
             {
                 // insert new entry
-               aHashStrTable[nPos].reset( new HashStr( rName,
-                    value, aHashStrTable[nPos].release()) );
+               aHashStrTable.insert( { rName, value } );
             }
 #endif
         }
@@ -1100,23 +1092,17 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                     // lookup the field's name
                     aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName();
                     // Entry present?
-                    sal_uInt32 nPos;
-                    HashStr* pFnd = aHashStrTable.Find( aNew, &nPos );
-                    if( pFnd )
+                    auto pFnd = aHashStrTable.find( aNew );
+                    if( pFnd != aHashStrTable.end() )
                         // Modify entry in the hash table
-                        pFnd->aSetStr = pSField->GetExpStr(pLayout);
+                        pFnd->second = pSField->GetExpStr(pLayout);
                     else
-                    {
                         // insert new entry
-                        aHashStrTable[nPos].reset( new HashStr( aNew,
-                                        pSField->GetExpStr(pLayout),
-                                        aHashStrTable[nPos].release() ) );
-                        pFnd = aHashStrTable[nPos].get();
-                    }
+                        pFnd = aHashStrTable.insert( { aNew, pSField->GetExpStr(pLayout) } ).first;
 
                     // Extension for calculation with Strings
                     SwSbxValue aValue;
-                    aValue.PutString( pFnd->aSetStr );
+                    aValue.PutString( pFnd->second );
                     aCalc.VarChange( aNew, aValue );
                 }
             }
@@ -1555,7 +1541,7 @@ void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
 #endif
 }
 
-void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
+void DocumentFieldsManager::FieldsToExpand( std::unordered_map<OUString, OUString> & rHashTable,
         const SetGetExpField& rToThisField, SwRootFrame const& rLayout)
 {
     // create the sorted list of all SetFields
@@ -1563,11 +1549,6 @@ void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
     mbNewFieldLst = false;
 
     IDocumentRedlineAccess const& rIDRA(m_rDoc.getIDocumentRedlineAccess());
-
-    // Hash table for all string replacements is filled on-the-fly.
-    // Try to fabricate an uneven number.
-    sal_uInt16 nTableSize = ((mpUpdateFields->GetSortList()->size() / 7) + 1) * 7;
-    rHashTable.resize(nTableSize);
 
     SetGetExpFields::const_iterator const itLast =
         mpUpdateFields->GetSortList()->upper_bound(&rToThisField);
@@ -1605,15 +1586,13 @@ void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
                 // look up the field's name
                 aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName();
                 // Entry present?
-                sal_uInt32 nPos;
-                SwHash* pFnd = rHashTable.Find( aNew, &nPos );
-                if( pFnd )
+                auto pFnd = rHashTable.find( aNew );
+                if( pFnd != rHashTable.end() )
                     // modify entry in the hash table
-                    static_cast<HashStr*>(pFnd)->aSetStr = pSField->GetExpStr(&rLayout);
+                    pFnd->second = pSField->GetExpStr(&rLayout);
                 else
                     // insert the new entry
-                    rHashTable[nPos].reset( new HashStr( aNew,
-                            pSField->GetExpStr(&rLayout), rHashTable[nPos].release()));
+                    rHashTable.insert( { aNew, pSField->GetExpStr(&rLayout) } );
             }
             break;
         case SwFieldIds::Database:
@@ -1622,20 +1601,14 @@ void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
 
                 // Insert entry in the hash table
                 // Entry present?
-                sal_uInt32 nPos;
-                HashStr* pFnd = rHashTable.Find( rName, &nPos );
+                auto pFnd = rHashTable.find( rName );
                 OUString const value(pField->ExpandField(m_rDoc.IsClipBoard(), nullptr));
-                if( pFnd )
-                {
+                if( pFnd != rHashTable.end() )
                     // modify entry in the hash table
-                    pFnd->aSetStr = value;
-                }
+                    pFnd->second = value;
                 else
-                {
                     // insert the new entry
-                    rHashTable[nPos].reset( new HashStr( rName,
-                        value, rHashTable[nPos].release()) );
-                }
+                    rHashTable.insert( { rName, value } );
             }
             break;
         default: break;

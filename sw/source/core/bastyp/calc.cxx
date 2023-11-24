@@ -218,8 +218,7 @@ static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 }
 
 SwCalc::SwCalc( SwDoc& rD )
-    : m_aVarTable(TBLSZ)
-    , m_aErrExpr( OUString(), SwSbxValue(), nullptr )
+    : m_aErrExpr( SwSbxValue(), nullptr )
     , m_nCommandPos(0)
     , m_rDoc( rD )
     , m_pCharClass( &GetAppCharClass() )
@@ -229,7 +228,6 @@ SwCalc::SwCalc( SwDoc& rD )
     , m_eCurrListOper( CALC_NAME )
     , m_eError( SwCalcError::NONE )
 {
-    m_aErrExpr.aStr = "~C_ERR~";
     LanguageType eLang = GetDocAppScriptLang( m_rDoc );
     LanguageTag aLanguageTag( eLang );
 
@@ -242,53 +240,36 @@ SwCalc::SwCalc( SwDoc& rD )
     m_sCurrSym = comphelper::string::strip(m_xLocaleDataWrapper->getCurrSymbol(), ' ');
     m_sCurrSym  = m_pCharClass->lowercase( m_sCurrSym );
 
-    static char const
-        sNType0[] = "false",
-        sNType1[] = "true",
-        sNType2[] = "pi",
-        sNType3[] = "e",
-        sNType4[] = "tables",
-        sNType5[] = "graf",
-        sNType6[] = "ole",
-        sNType7[] = "page",
-        sNType8[] = "para",
-        sNType9[] = "word",
-        sNType10[]= "char",
-
-        sNType11[] = "user_firstname" ,
-        sNType12[] = "user_lastname" ,
-        sNType13[] = "user_initials" ,
-        sNType14[] = "user_company" ,
-        sNType15[] = "user_street" ,
-        sNType16[] = "user_country" ,
-        sNType17[] = "user_zipcode" ,
-        sNType18[] = "user_city" ,
-        sNType19[] = "user_title" ,
-        sNType20[] = "user_position" ,
-        sNType21[] = "user_tel_work" ,
-        sNType22[] = "user_tel_home" ,
-        sNType23[] = "user_fax" ,
-        sNType24[] = "user_email" ,
-        sNType25[] = "user_state" ,
-        sNType26[] = "graph"
-        ;
-    static const char* const sNTypeTab[ 27 ] =
+    static constexpr OUString sNTypeTab[]
     {
-        sNType0, sNType1, sNType2, sNType3, sNType4, sNType5,
-        sNType6, sNType7, sNType8, sNType9, sNType10, sNType11,
-        sNType12, sNType13, sNType14, sNType15, sNType16, sNType17,
-        sNType18, sNType19, sNType20, sNType21, sNType22, sNType23,
-        sNType24,
+        u"false"_ustr,
+        u"true"_ustr,
+        u"pi"_ustr,
+        u"e"_ustr,
+        u"tables"_ustr,
+        u"graf"_ustr,
+        u"ole"_ustr,
+        u"page"_ustr,
+        u"para"_ustr,
+        u"word"_ustr,
+        u"char"_ustr,
 
-        // those have two HashIds
-        sNType25, sNType26
-    };
-    static sal_uInt16 const aHashValue[ 27 ] =
-    {
-        34, 38, 43,  7, 18, 32, 22, 29, 30, 33,  3,
-        28, 24, 40,  9, 11, 26, 45,  4, 23, 36, 44, 19,  5,  1,
-        // those have two HashIds
-        11, 38
+        u"user_firstname"_ustr,
+        u"user_lastname"_ustr,
+        u"user_initials"_ustr,
+        u"user_company"_ustr,
+        u"user_street"_ustr,
+        u"user_country"_ustr,
+        u"user_zipcode"_ustr,
+        u"user_city"_ustr,
+        u"user_title"_ustr,
+        u"user_position"_ustr,
+        u"user_tel_work"_ustr,
+        u"user_tel_home"_ustr,
+        u"user_fax"_ustr,
+        u"user_email"_ustr,
+        u"user_state"_ustr,
+        u"graph"_ustr
     };
     static UserOptToken const aAdrToken[ 12 ] =
     {
@@ -307,45 +288,36 @@ SwCalc::SwCalc( SwDoc& rD )
         &SwDocStat::nWord, &SwDocStat::nChar
     };
 
-#if TBLSZ != 47
-#error Did you adjust all hash values?
-#endif
-
     const SwDocStat& rDocStat = m_rDoc.getIDocumentStatistics().GetDocStat();
 
     SwSbxValue nVal;
-    OUString sTmpStr;
     sal_uInt16 n;
 
     for( n = 0; n < 25; ++n )
-    {
-        sTmpStr = OUString::createFromAscii(sNTypeTab[n]);
-        m_aVarTable[ aHashValue[ n ] ].reset( new SwCalcExp( sTmpStr, nVal, nullptr ) );
-    }
+        m_aVarTable.insert( { sNTypeTab[n], SwCalcExp( nVal, nullptr ) } );
 
-    m_aVarTable[ aHashValue[ 0 ] ]->nValue.PutBool( false );
-    m_aVarTable[ aHashValue[ 1 ] ]->nValue.PutBool( true );
-    m_aVarTable[ aHashValue[ 2 ] ]->nValue.PutDouble( M_PI );
-    m_aVarTable[ aHashValue[ 3 ] ]->nValue.PutDouble( M_E );
+    m_aVarTable.find( sNTypeTab[ 0 ] )->second.nValue.PutBool( false );
+    m_aVarTable.find( sNTypeTab[ 1 ] )->second.nValue.PutBool( true );
+    m_aVarTable.find( sNTypeTab[ 2 ] )->second.nValue.PutDouble( M_PI );
+    m_aVarTable.find( sNTypeTab[ 3 ] )->second.nValue.PutDouble( M_E );
 
     for( n = 0; n < 3; ++n )
-        m_aVarTable[ aHashValue[ n + 4 ] ]->nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
+        m_aVarTable.find( sNTypeTab[ n + 4 ] )->second.nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
     for( n = 0; n < 4; ++n )
-        m_aVarTable[ aHashValue[ n + 7 ] ]->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
+        m_aVarTable.find( sNTypeTab[ n + 7 ] )->second.nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
     SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
 
-    m_aVarTable[ aHashValue[ 11 ] ]->nValue.PutString( rUserOptions.GetFirstName() );
-    m_aVarTable[ aHashValue[ 12 ] ]->nValue.PutString( rUserOptions.GetLastName() );
-    m_aVarTable[ aHashValue[ 13 ] ]->nValue.PutString( rUserOptions.GetID() );
+    m_aVarTable.find( sNTypeTab[ 11 ] )->second.nValue.PutString( rUserOptions.GetFirstName() );
+    m_aVarTable.find( sNTypeTab[ 12 ] )->second.nValue.PutString( rUserOptions.GetLastName() );
+    m_aVarTable.find( sNTypeTab[ 13 ] )->second.nValue.PutString( rUserOptions.GetID() );
 
     for( n = 0; n < 11; ++n )
-        m_aVarTable[ aHashValue[ n + 14 ] ]->nValue.PutString(
+        m_aVarTable.find( sNTypeTab[ n + 14 ] )->second.nValue.PutString(
                                         rUserOptions.GetToken( aAdrToken[ n ] ));
 
     nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
-    sTmpStr = OUString::createFromAscii(sNTypeTab[25]);
-    m_aVarTable[ aHashValue[ 25 ] ]->pNext.reset( new SwCalcExp( sTmpStr, nVal, nullptr ) );
+    m_aVarTable.insert( { sNTypeTab[ 25 ], SwCalcExp( nVal, nullptr ) } );
 
 } // SwCalc::SwCalc
 
@@ -430,26 +402,23 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
 {
     m_aErrExpr.nValue.SetVoidValue(false);
 
-    sal_uInt32 ii = 0;
     OUString aStr = m_pCharClass->lowercase( rStr );
-
-    SwCalcExp* pFnd = m_aVarTable.Find(aStr, &ii);
+    SwCalcExp* pFnd = nullptr;
+    auto it = m_aVarTable.find(aStr);
+    if (it != m_aVarTable.end())
+        pFnd = &it->second;
 
     if( !pFnd )
     {
         // then check doc
-        SwHashTable<SwCalcFieldType> const & rDocTable = m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().GetFieldTypeTable();
-        for( SwHash* pEntry = rDocTable[ii].get(); pEntry; pEntry = pEntry->pNext.get() )
+        std::unordered_multimap<OUString, const SwFieldType*> & rDocTable
+            = m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().GetFieldTypeTable();
+        auto docIt = rDocTable.find(aStr);
+        if (docIt != rDocTable.end())
         {
-            if( aStr == pEntry->aStr )
-            {
-                // then insert here
-                pFnd = new SwCalcExp( aStr, SwSbxValue(),
-                                    static_cast<SwCalcFieldType*>(pEntry)->pFieldType );
-                pFnd->pNext = std::move( m_aVarTable[ii] );
-                m_aVarTable[ii].reset(pFnd);
-                break;
-            }
+            const SwFieldType* pFieldType = docIt->second;
+            it = m_aVarTable.insert( { aStr, SwCalcExp( SwSbxValue(), pFieldType ) } ).first;
+            pFnd = &it->second;
         }
     }
 
@@ -558,9 +527,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
         return &m_aErrExpr;
     }
 
-    SwCalcExp* pNewExp = new SwCalcExp( aStr, SwSbxValue(), nullptr );
-    pNewExp->pNext = std::move( m_aVarTable[ ii ] );
-    m_aVarTable[ ii ].reset( pNewExp );
+    SwCalcExp* pNewExp = &m_aVarTable.insert( { aStr, SwCalcExp( SwSbxValue(), nullptr ) } ).first->second;
 
     OUString sColumnName( GetColumnName( sTmpName ));
     OSL_ENSURE( !sColumnName.isEmpty(), "Missing DB column name" );
@@ -598,19 +565,11 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
 {
     OUString aStr = m_pCharClass->lowercase( rStr );
 
-    sal_uInt32 nPos = 0;
-    SwCalcExp* pFnd = m_aVarTable.Find( aStr, &nPos );
-
-    if( !pFnd )
-    {
-        pFnd = new SwCalcExp( aStr, rValue, nullptr );
-        pFnd->pNext = std::move( m_aVarTable[ nPos ] );
-        m_aVarTable[ nPos ].reset( pFnd );
-    }
+    auto it = m_aVarTable.find( aStr );
+    if (it != m_aVarTable.end())
+        it->second.nValue = rValue;
     else
-    {
-        pFnd->nValue = rValue;
-    }
+        m_aVarTable.insert( { aStr, SwCalcExp( rValue, nullptr ) } );
 }
 
 bool SwCalc::Push( const SwUserFieldType* pUserFieldType )
@@ -1442,19 +1401,8 @@ bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
     return bRet;
 }
 
-SwHash::SwHash(OUString _aStr)
-    : aStr(std::move(_aStr))
-{
-}
-
-SwHash::~SwHash()
-{
-}
-
-SwCalcExp::SwCalcExp(const OUString& rStr, SwSbxValue aVal,
-                      const SwFieldType* pType)
-    : SwHash(rStr)
-    , nValue(std::move(aVal))
+SwCalcExp::SwCalcExp(SwSbxValue aVal, const SwFieldType* pType)
+    : nValue(std::move(aVal))
     , pFieldType(pType)
 {
 }
@@ -1490,59 +1438,5 @@ SwSbxValue& SwSbxValue::MakeDouble()
         PutDouble( GetDouble() );
     return *this;
 }
-
-#ifdef STANDALONE_HASHCALC
-
-// this is example code how to create hash values in the CTOR:
-
-#include <stdio.h>
-void main()
-{
-    static char
-        sNType0[] = "false",    sNType1[] = "true",     sNType2[] = "pi",
-        sNType3[] = "e",        sNType4[] = "tables",   sNType5[] = "graf",
-        sNType6[] = "ole",      sNType7[] = "page",     sNType8[] = "para",
-        sNType9[] = "word",     sNType10[]= "char",
-        sNType11[] = "user_company" ,       sNType12[] = "user_firstname" ,
-        sNType13[] = "user_lastname" ,      sNType14[] = "user_initials",
-        sNType15[] = "user_street" ,        sNType16[] = "user_country" ,
-        sNType17[] = "user_zipcode" ,       sNType18[] = "user_city" ,
-        sNType19[] = "user_title" ,         sNType20[] = "user_position" ,
-        sNType21[] = "user_tel_home",       sNType22[] = "user_tel_work",
-        sNType23[] = "user_fax" ,           sNType24[] = "user_email" ,
-        sNType25[] = "user_state",          sNType26[] = "graph"
-        ;
-
-    static const char* sNTypeTab[ 27 ] =
-    {
-        sNType0, sNType1, sNType2, sNType3, sNType4, sNType5,
-        sNType6, sNType7, sNType8, sNType9, sNType10, sNType11,
-        sNType12, sNType13, sNType14, sNType15, sNType16, sNType17,
-        sNType18, sNType19, sNType20, sNType21, sNType22, sNType23,
-        sNType24, sNType25, sNType26
-    };
-
-    const unsigned short nTableSize = 47;
-    int aArr[ nTableSize ] = { 0 };
-    char ch;
-
-    for( int n = 0; n < 27; ++n )
-    {
-        unsigned int ii = 0;
-        const char* pp = sNTypeTab[ n ];
-
-        while( *pp )
-        {
-            ii = ii << 1 ^ *pp++;
-        }
-        ii %= nTableSize;
-
-        ch = aArr[ ii ] ? 'X' : ' ';
-        aArr[ ii ] = 1;
-        printf( "%-20s -> %3u [%c]\n", sNTypeTab[ n ], ii, ch );
-    }
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

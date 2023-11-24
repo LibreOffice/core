@@ -367,19 +367,12 @@ sal_Int32 SetGetExpField::GetCntPosFromContent() const
     return nRet;
 }
 
-HashStr::HashStr( const OUString& rName, OUString aText,
-                    HashStr* pNxt )
-    : SwHash( rName ), aSetStr(std::move( aText ))
-{
-    pNext.reset( pNxt );
-}
-
 /// Look up the Name, if it is present, return its String, otherwise return an empty String
-OUString LookString( SwHashTable<HashStr> const & rTable, const OUString& rName )
+OUString LookString( std::unordered_map<OUString, OUString> const & rTable, const OUString& rName )
 {
-    HashStr* pFnd = rTable.Find( comphelper::string::strip(rName, ' ') );
-    if( pFnd )
-        return pFnd->aSetStr;
+    auto it = rTable.find( comphelper::string::strip(rName, ' ') );
+    if( it != rTable.end() )
+        return it->second;
 
     return OUString();
 }
@@ -1191,16 +1184,10 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
     SetFieldsDirty( true );
     // look up and remove from the hash table
     sFieldName = GetAppCharClass().lowercase( sFieldName );
-    sal_uInt32 n;
 
-    SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
-
-    if( !pFnd )
-    {
-        SwCalcFieldType* pNew = new SwCalcFieldType( sFieldName, &rType );
-        pNew->pNext.reset( m_FieldTypeTable[n].release() );
-        m_FieldTypeTable[n].reset(pNew);
-    }
+    auto it = m_FieldTypeTable.find( sFieldName );
+    if( it == m_FieldTypeTable.end() )
+        m_FieldTypeTable.insert( { sFieldName, &rType } );
 }
 
 void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
@@ -1223,29 +1210,12 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
     SetFieldsDirty( true );
     // look up and remove from the hash table
     sFieldName = GetAppCharClass().lowercase( sFieldName );
-    sal_uInt32 n;
 
-    SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
-    if( !pFnd )
-        return;
-
-    if (m_FieldTypeTable[n].get() == pFnd)
-    {
-        m_FieldTypeTable[n].reset(static_cast<SwCalcFieldType*>(pFnd->pNext.release()));
-    }
-    else
-    {
-        SwHash* pPrev = m_FieldTypeTable[n].get();
-        while( pPrev->pNext.get() != pFnd )
-            pPrev = pPrev->pNext.get();
-        pPrev->pNext = std::move(pFnd->pNext);
-        // no need to explicitly delete here, the embedded linked list uses unique_ptr
-    }
+    GetFieldTypeTable().erase( sFieldName );
 }
 
 SwDocUpdateField::SwDocUpdateField(SwDoc& rDoc)
-    : m_FieldTypeTable(TBLSZ)
-    , m_nNodes(0)
+    : m_nNodes(0)
     , m_nFieldListGetMode(0)
     , m_rDoc(rDoc)
     , m_bInUpdateFields(false)

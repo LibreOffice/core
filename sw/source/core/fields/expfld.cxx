@@ -371,7 +371,7 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
     SetGetExpField aEndField(aPos.GetNode(), &rField, aPos.GetContentIndex(), rFrame.GetPhyPageNum());
     if(GetSubType() & nsSwGetSetExpType::GSE_STRING)
     {
-        SwHashTable<HashStr> aHashTable(0);
+        std::unordered_map<OUString, OUString> aHashTable;
         rDoc.getIDocumentFieldsAccess().FieldsToExpand(aHashTable, aEndField, rLayout);
         rExpand = LookString( aHashTable, GetFormula() );
     }

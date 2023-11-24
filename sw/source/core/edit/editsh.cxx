@@ -565,7 +565,7 @@ OUString SwEditShell::Calculate()
 
                     OUString sVar = aStr.copy( nTmpStt, nPos - nTmpStt );
                     if( !::FindOperator( sVar ) &&
-                        (aCalc.GetVarTable().Find(sVar) ||
+                        (aCalc.GetVarTable().find(sVar) != aCalc.GetVarTable().end() ||
                          aCalc.VarLook( sVar )) )
                     {
                         if( !bValidFields )
