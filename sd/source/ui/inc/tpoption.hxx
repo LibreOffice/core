@@ -76,6 +76,7 @@ private:
     OUString aInfo1;
     OUString aInfo2;
 
+    bool                m_bDrawMode;
     MapUnit             ePoolUnit;
 
     std::unique_ptr<weld::CheckButton> m_xCbxQuickEdit;
@@ -105,6 +106,7 @@ private:
     //Scale
     std::unique_ptr<weld::Frame> m_xScaleFrame;
     std::unique_ptr<weld::ComboBox> m_xCbScale;
+    std::unique_ptr<weld::Widget> m_xCbScaleImg;
     std::unique_ptr<weld::Label> m_xNewDocLb;
     std::unique_ptr<weld::Label> m_xFiInfo1;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldOriginalWidth;
@@ -113,6 +115,7 @@ private:
     std::unique_ptr<weld::Label> m_xFiInfo2;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldOriginalHeight;
     std::unique_ptr<weld::CheckButton> m_xCbxDistort;
+    std::unique_ptr<weld::Widget> m_xCbxDistortImg;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldInfo1;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldInfo2;
 

@@ -24,6 +24,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Draw.hxx>
 #include <sfx2/module.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strarray.hxx>
@@ -255,6 +256,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     : SfxTabPage(pPage, pController, "modules/simpress/ui/optimpressgeneralpage.ui", "OptSavePage", &rInAttrs)
     , nWidth(0)
     , nHeight(0)
+    , m_bDrawMode(false)
     , m_xCbxQuickEdit(m_xBuilder->weld_check_button("qickedit"))
     , m_xCbxQuickEditImg(m_xBuilder->weld_widget("lockqickedit"))
     , m_xCbxPickThrough(m_xBuilder->weld_check_button("textselected"))
@@ -276,6 +278,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , m_xCbxCompatibilityImg(m_xBuilder->weld_widget("lockcbCompatibility"))
     , m_xScaleFrame(m_xBuilder->weld_frame("scaleframe"))
     , m_xCbScale(m_xBuilder->weld_combo_box("scaleBox"))
+    , m_xCbScaleImg(m_xBuilder->weld_widget("lockscaleBox"))
     , m_xNewDocLb(m_xBuilder->weld_label("newdoclbl"))
     , m_xFiInfo1(m_xBuilder->weld_label("info1"))
     , m_xMtrFldOriginalWidth(m_xBuilder->weld_metric_spin_button("metricWidthFields", FieldUnit::MM))
@@ -284,6 +287,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , m_xFiInfo2(m_xBuilder->weld_label("info2"))
     , m_xMtrFldOriginalHeight(m_xBuilder->weld_metric_spin_button("metricHeightFields", FieldUnit::MM))
     , m_xCbxDistort(m_xBuilder->weld_check_button("distortcb"))
+    , m_xCbxDistortImg(m_xBuilder->weld_widget("lockdistortcb"))
     , m_xMtrFldInfo1(m_xBuilder->weld_metric_spin_button("metricInfo1Fields", FieldUnit::MM))
     , m_xMtrFldInfo2(m_xBuilder->weld_metric_spin_button("metricInfo2Fields", FieldUnit::MM))
 {
@@ -500,42 +504,54 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 {
     SdOptionsMiscItem aOptsItem( rAttrs->Get( ATTR_OPTIONS_MISC ) );
 
-    bool bReadOnly = officecfg::Office::Impress::Misc::NewDoc::AutoPilot::isReadOnly();
+    bool bReadOnly = m_bDrawMode ? false : officecfg::Office::Impress::Misc::NewDoc::AutoPilot::isReadOnly();
     m_xCbxStartWithTemplate->set_active( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
     m_xCbxStartWithTemplate->set_sensitive(!bReadOnly);
     m_xCbxStartWithTemplateImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Misc::ObjectMoveable::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Misc::ObjectMoveable::isReadOnly() :
+        officecfg::Office::Impress::Misc::ObjectMoveable::isReadOnly();
     m_xCbxMarkedHitMovesAlways->set_active( aOptsItem.GetOptionsMisc().IsMarkedHitMovesAlways() );
     m_xCbxMarkedHitMovesAlways->set_sensitive(!bReadOnly);
     m_xCbxMarkedHitMovesAlwaysImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Misc::TextObject::QuickEditing::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Misc::TextObject::QuickEditing::isReadOnly() :
+        officecfg::Office::Impress::Misc::TextObject::QuickEditing::isReadOnly();
     m_xCbxQuickEdit->set_active( aOptsItem.GetOptionsMisc().IsQuickEdit() );
     m_xCbxQuickEdit->set_sensitive(!bReadOnly);
     m_xCbxQuickEditImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Misc::TextObject::Selectable::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Misc::TextObject::Selectable::isReadOnly() :
+        officecfg::Office::Impress::Misc::TextObject::Selectable::isReadOnly();
     m_xCbxPickThrough->set_active( aOptsItem.GetOptionsMisc().IsPickThrough() );
     m_xCbxPickThrough->set_sensitive(!bReadOnly);
     m_xCbxPickThroughImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Misc::BackgroundCache::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Misc::BackgroundCache::isReadOnly() :
+        officecfg::Office::Impress::Misc::BackgroundCache::isReadOnly();
     m_xCbxMasterPageCache->set_active( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
     m_xCbxMasterPageCache->set_sensitive(!bReadOnly);
     m_xCbxMasterPageCacheImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Misc::CopyWhileMoving::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Misc::CopyWhileMoving::isReadOnly() :
+        officecfg::Office::Impress::Misc::CopyWhileMoving::isReadOnly();
     m_xCbxCopy->set_active( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
     m_xCbxCopy->set_sensitive(!bReadOnly);
     m_xCbxCopyImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Misc::Compatibility::AddBetween::isReadOnly();
+    bReadOnly = m_bDrawMode ? false : officecfg::Office::Impress::Misc::Compatibility::AddBetween::isReadOnly();
     m_xCbxCompatibility->set_active( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
     m_xCbxCompatibility->set_sensitive(!bReadOnly);
     m_xCbxCompatibilityImg->set_visible(bReadOnly);
 
     m_xCbxDistort->set_active( aOptsItem.GetOptionsMisc().IsCrookNoContortion() );
+    if (m_bDrawMode)
+    {
+        bReadOnly = officecfg::Office::Draw::Misc::NoDistort::isReadOnly();
+        m_xCbxDistort->set_sensitive(!bReadOnly);
+        m_xCbxDistortImg->set_visible(bReadOnly);
+    }
+
     m_xCbxStartWithTemplate->save_state();
     m_xCbxMarkedHitMovesAlways->save_state();
     m_xCbxQuickEdit->save_state();
@@ -575,16 +591,28 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     }
 
     if (SdOptionsGeneric::isMetricSystem())
-        bReadOnly = officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::isReadOnly();
+    {
+        bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::isReadOnly() :
+            officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::isReadOnly();
+    }
     else
-        bReadOnly = officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::isReadOnly();
+    {
+        bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::isReadOnly() :
+            officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::isReadOnly();
+    }
     m_xLbMetric->set_sensitive(!bReadOnly);
     m_xLbMetricImg->set_visible(bReadOnly);
 
     if (SdOptionsGeneric::isMetricSystem())
-        bReadOnly = officecfg::Office::Impress::Layout::Other::TabStop::Metric::isReadOnly();
+    {
+        bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Other::TabStop::Metric::isReadOnly() :
+            officecfg::Office::Impress::Layout::Other::TabStop::Metric::isReadOnly();
+    }
     else
-        bReadOnly = officecfg::Office::Impress::Layout::Other::TabStop::NonMetric::isReadOnly();
+    {
+        bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Other::TabStop::NonMetric::isReadOnly() :
+            officecfg::Office::Impress::Layout::Other::TabStop::NonMetric::isReadOnly();
+    }
     m_xMtrFldTabstop->set_sensitive(!bReadOnly);
     m_xMtrFldTabstopImg->set_visible(bReadOnly);
 
@@ -597,6 +625,13 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     nHeight = rAttrs->Get( ATTR_OPTIONS_SCALE_HEIGHT ).GetValue();
 
     m_xCbScale->set_entry_text( GetScale( nX, nY ) );
+    if (m_bDrawMode)
+    {
+        bReadOnly = officecfg::Office::Draw::Zoom::ScaleX::isReadOnly() &&
+            officecfg::Office::Draw::Zoom::ScaleY::isReadOnly();
+        m_xCbScale->set_sensitive(!bReadOnly);
+        m_xCbScaleImg->set_visible(bReadOnly);
+    }
 
     m_xMtrFldOriginalWidth->hide();
     m_xMtrFldOriginalWidth->set_text( aInfo1 ); // empty
@@ -644,6 +679,8 @@ void SdTpOptionsMisc::SetDrawMode()
     m_xMtrFldOriginalHeight->show();
     m_xCbxDistort->show();
     m_xCbxCompatibility->hide();
+
+    m_bDrawMode = true;
 }
 
 OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
