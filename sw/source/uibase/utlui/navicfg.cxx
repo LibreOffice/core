@@ -74,7 +74,8 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
         OUString("FieldTracking"),
         OUString("FootnoteTracking"),
         OUString("EndnoteTracking"),
-        OUString("NavigateOnSelect")};
+        OUString("NavigateOnSelect"),
+        OUString("SortAlphabeticallyBlock")};
 }
 
 SwNavigationConfig::SwNavigationConfig() :
@@ -146,6 +147,7 @@ void SwNavigationConfig::Load()
                     break;
                 }
                 case 22: m_bIsNavigateOnSelect = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 23: pValues[nProp] >>= m_nSortAlphabeticallyBlock; break;
             }
         }
     }
@@ -180,6 +182,7 @@ void SwNavigationConfig::ImplCommit()
                 break;
             }
             case 22: pValues[nProp] <<= m_bIsNavigateOnSelect; break;
+            case 23: pValues[nProp] <<= m_nSortAlphabeticallyBlock; break;
         }
     }
     PutProperties(aNames, aValues);
