@@ -27,29 +27,42 @@ void SAL_CALL Transmitter::run()
     {
         mProcessingRequired.wait();
 
-        ::osl::MutexGuard aGuard( mMutex );
+        OString aMessage;
+        bool isHighPrio = {};
 
-        if ( mFinishRequested ) {
-            return;
-        }
-        if ( !mHighPriority.empty() )
         {
-            OString aMessage( mHighPriority.front() );
-            mHighPriority.pop();
-            SAL_INFO( "sdremote.bluetooth", "write high prio line '" << aMessage << "'" );
-            pStreamSocket->write( aMessage.getStr(), aMessage.getLength() );
-        }
-        else if ( !mLowPriority.empty() )
-        {
-            OString aMessage( mLowPriority.front() );
-            mLowPriority.pop();
-            SAL_INFO( "sdremote.bluetooth", "write normal line '" << aMessage << "'" );
-            pStreamSocket->write( aMessage.getStr(), aMessage.getLength() );
+            ::osl::MutexGuard aGuard(mMutex);
+
+            if (mFinishRequested) {
+                return;
+            }
+            if (!mHighPriority.empty())
+            {
+                aMessage = mHighPriority.front();
+                mHighPriority.pop();
+                isHighPrio = true;
+            }
+            else if (!mLowPriority.empty())
+            {
+                aMessage = mLowPriority.front();
+                mLowPriority.pop();
+                isHighPrio = false;
+            }
         }
 
-        if ( mLowPriority.empty() && mHighPriority.empty())
+        SAL_INFO("sdremote.bluetooth", "write " << (isHighPrio ? "high prio" : "normal") << " line '" << aMessage << "'");
+        // pStreamSocket is owned by Communicator, which joins this thread
+        // before destroying pStreamSocket so it can't die here.
+        // Sending is SLOW and blocks!
+        pStreamSocket->write( aMessage.getStr(), aMessage.getLength() );
+
         {
-            mProcessingRequired.reset();
+            ::osl::MutexGuard aGuard(mMutex);
+
+            if (mLowPriority.empty() && mHighPriority.empty())
+            {
+                mProcessingRequired.reset();
+            }
         }
     }
 }
