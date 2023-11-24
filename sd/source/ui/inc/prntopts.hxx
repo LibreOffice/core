@@ -34,17 +34,27 @@ private:
     std::unique_ptr<weld::RadioButton> m_xRbtColor;
     std::unique_ptr<weld::RadioButton> m_xRbtGrayscale;
     std::unique_ptr<weld::RadioButton> m_xRbtBlackWhite;
+    std::unique_ptr<weld::Widget> m_xRbQualityImg;
     std::unique_ptr<weld::CheckButton> m_xCbxPagename;
+    std::unique_ptr<weld::Widget> m_xCbxPagenameImg;
     std::unique_ptr<weld::CheckButton> m_xCbxDate;
+    std::unique_ptr<weld::Widget> m_xCbxDateImg;
     std::unique_ptr<weld::CheckButton> m_xCbxTime;
+    std::unique_ptr<weld::Widget> m_xCbxTimeImg;
     std::unique_ptr<weld::CheckButton> m_xCbxHiddenPages;
+    std::unique_ptr<weld::Widget> m_xCbxHiddenPagesImg;
     std::unique_ptr<weld::RadioButton> m_xRbtDefault;
     std::unique_ptr<weld::RadioButton> m_xRbtPagesize;
     std::unique_ptr<weld::RadioButton> m_xRbtPagetile;
     std::unique_ptr<weld::RadioButton> m_xRbtBooklet;
+    std::unique_ptr<weld::Widget> m_xGridPageOpt;
+    std::unique_ptr<weld::Widget> m_xRbtPageOptImg;
     std::unique_ptr<weld::CheckButton> m_xCbxFront;
+    std::unique_ptr<weld::Widget> m_xCbxFrontImg;
     std::unique_ptr<weld::CheckButton> m_xCbxBack;
+    std::unique_ptr<weld::Widget> m_xCbxBackImg;
     std::unique_ptr<weld::CheckButton> m_xCbxPaperbin;
+    std::unique_ptr<weld::Widget> m_xCbxPaperbinImg;
 
     DECL_LINK(ClickCheckboxHdl, weld::Toggleable&, void);
     DECL_LINK(ClickBookletHdl, weld::Toggleable&, void);
