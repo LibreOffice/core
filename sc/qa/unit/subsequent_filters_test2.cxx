@@ -27,6 +27,8 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
+#include <cellvalue.hxx>
+#include <docpool.hxx>
 #include <dbdata.hxx>
 #include <validat.hxx>
 #include <formulacell.hxx>
@@ -39,6 +41,7 @@
 #include <columnspanset.hxx>
 #include <tokenstringcontext.hxx>
 #include <externalrefmgr.hxx>
+#include <filterentries.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -1611,6 +1614,41 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testSingleLine)
     pDoc = getScDoc();
     CPPUNIT_ASSERT(pDoc);
     testCells(pDoc);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testBackColorFilter)
+{
+    Color aBackColor1(0xc99c00);
+    Color aBackColor2(0x0369a3);
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScPatternAttr aPattern1(pDoc->GetPool());
+    aPattern1.GetItemSet().Put(SvxBrushItem(aBackColor1, ATTR_BACKGROUND));
+
+    ScPatternAttr aPattern2(pDoc->GetPool());
+    aPattern2.GetItemSet().Put(SvxBrushItem(aBackColor2, ATTR_BACKGROUND));
+
+    // Apply the pattern to cell A1:A2
+    pDoc->ApplyPatternAreaTab(0, 0, 0, 1, 0, aPattern1);
+
+    // Apply the pattern to cell A3:A5
+    pDoc->ApplyPatternAreaTab(0, 2, 0, 4, 0, aPattern2);
+
+    {
+        ScRefCellValue aCell;
+        aCell.assign(*pDoc, ScAddress(0, 0, 0));
+        CPPUNIT_ASSERT_MESSAGE("Cell A1 should be empty.", aCell.isEmpty());
+        aCell.assign(*pDoc, ScAddress(0, 2, 0));
+        CPPUNIT_ASSERT_MESSAGE("Cell A3 should be empty.", aCell.isEmpty());
+    }
+
+    {
+        ScFilterEntries aFilterEntries;
+        pDoc->GetFilterEntriesArea(0, 0, 4, 0, true, aFilterEntries);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aFilterEntries.getBackgroundColors().size());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
