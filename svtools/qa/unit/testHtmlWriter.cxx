@@ -175,10 +175,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacters)
     aHtml.start("abc"_ostr);
     aHtml.characters("hello");
     aHtml.end();
+    aHtml.characters(" "); // Should not try to close a not opened tag
+    aHtml.start("abc"_ostr);
+    aHtml.characters("world"); // Should close opening tag
+    aHtml.end();
 
     OString aString = extractFromStream(aStream);
 
-    CPPUNIT_ASSERT_EQUAL("<abc>hello</abc>"_ostr, aString);
+    CPPUNIT_ASSERT_EQUAL("<abc>hello</abc> <abc>world</abc>"_ostr, aString);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExactElementEnd)
