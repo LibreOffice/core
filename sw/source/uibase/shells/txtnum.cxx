@@ -310,6 +310,14 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                     GetShell().SetCurNumRule( aNewNumRule, bCreateNewList );
                 }
             }
+            else if (nSlot == FN_SVX_SET_OUTLINE)
+            {
+                // no outline provided: launch dialog to request a specific outline
+                SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
+                const SfxStringItem aPage(FN_PARAM_1, "outlinenum");
+                const SfxPoolItem* aItems[] = { &aPage, nullptr };
+                rBindings.Execute(SID_OUTLINE_BULLET, aItems);
+            }
         }
         break;
 
