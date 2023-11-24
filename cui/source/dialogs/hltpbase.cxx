@@ -37,6 +37,7 @@
 #include <strings.hrc>
 #include <dialmgr.hxx>
 #include <bitmaps.hlst>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 
 using namespace ::ucbhelper;
 
@@ -465,13 +466,21 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
                     if (xTransferable->isDataFlavorSupported(aFlavor))
                     {
                         OUString aClipBoardConentent;
-                        if (xTransferable->getTransferData(aFlavor) >>= aClipBoardConentent)
+                        try
                         {
-                            INetURLObject aURL;
-                            aURL.SetSmartURL(aClipBoardConentent);
-                            if (!aURL.HasError())
-                                aStrURL
-                                    = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+                            if (xTransferable->getTransferData(aFlavor) >>= aClipBoardConentent)
+                            {
+                                INetURLObject aURL;
+                                aURL.SetSmartURL(aClipBoardConentent);
+                                if (!aURL.HasError())
+                                    aStrURL
+                                        = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+                            }
+                        }
+                        // tdf#158345: Opening Hyperlink dialog leads to crash
+                        // MimeType = "text/plain;charset=utf-16"
+                        catch(const css::datatransfer::UnsupportedFlavorException&)
+                        {
                         }
                     }
                 }
