@@ -135,6 +135,7 @@
 #include <swunohelper.hxx>
 #include <fefly.hxx>
 #include <formatflysplit.hxx>
+#include <formatwraptextatflystart.hxx>
 
 using namespace ::com::sun::star;
 
@@ -969,6 +970,15 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         SwFormatFlySplit aSplit(true);
         bRet &= aSplit.PutValue(*pFlySplit, 0);
         rToSet.Put(aSplit);
+    }
+
+    const ::uno::Any* pWrapTextAtFlyStart = nullptr;
+    GetProperty(RES_WRAP_TEXT_AT_FLY_START, 0, pWrapTextAtFlyStart);
+    if (pWrapTextAtFlyStart)
+    {
+        SwFormatWrapTextAtFlyStart aWrapTextAtFlyStart(true);
+        bRet &= aWrapTextAtFlyStart.PutValue(*pWrapTextAtFlyStart, 0);
+        rToSet.Put(aWrapTextAtFlyStart);
     }
 
     return bRet;

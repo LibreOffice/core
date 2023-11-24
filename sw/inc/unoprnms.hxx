@@ -760,6 +760,7 @@ inline constexpr OUString UNO_NAME_PARA_IS_CONNECT_BORDER = u"ParaIsConnectBorde
 inline constexpr OUString UNO_NAME_ITEMS = u"Items"_ustr;
 inline constexpr OUString UNO_NAME_SELITEM = u"SelectedItem"_ustr;
 inline constexpr OUString UNO_NAME_IS_SPLIT_ALLOWED = u"IsSplitAllowed"_ustr;
+inline constexpr OUString UNO_NAME_WRAP_TEXT_AT_FLY_START = u"WrapTextAtFlyStart"_ustr;
 inline constexpr OUString UNO_NAME_HAS_TEXT_CHANGES_ONLY = u"HasTextChangesOnly"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_HIDDEN = u"CharHidden"_ustr;
 inline constexpr OUString UNO_NAME_IS_FOLLOWING_TEXT_FLOW = u"IsFollowingTextFlow"_ustr;

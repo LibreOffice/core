@@ -379,6 +379,12 @@ published service BaseFrameProperties
      */
     [optional, property] boolean IsSplitAllowed;
 
+    /** If `TRUE`, text wraps around a split fly on all pages.
+
+        @since LibreOffice 24.2
+     */
+    [optional, property] boolean WrapTextAtFlyStart;
+
 };
 
 
