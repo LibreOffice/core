@@ -540,7 +540,8 @@ tools::Rectangle FloatingWindow::ImplConvertToRelPos(vcl::Window* pReference, co
             pParentWinOutDev->ReMirror(aFloatRect);
     }
     else
-        aFloatRect.SetPos(pReference->OutputToScreenPixel(pReference->AbsoluteScreenToOutputPixel(rRect.TopLeft())));
+        aFloatRect = tools::Rectangle(pReference->OutputToScreenPixel(pReference->AbsoluteScreenToOutputPixel(rRect.TopLeft())),
+                                      rRect.GetSize());
 
     return aFloatRect;
 }
