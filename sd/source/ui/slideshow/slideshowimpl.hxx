@@ -198,6 +198,10 @@ public:
     /// ends the presentation async
     void endPresentation();
 
+    // possibly triggered from events @SlideshowImpl::Notify if needed, but asychron to
+    // allow the noted event to completely finish in the core
+    void AsyncNotifyEvent(const css::uno::Reference< css::drawing::XDrawPage >&, const SdrHintKind);
+
     ViewShell* getViewShell() const { return mpViewShell; }
 
     void paint();
@@ -339,6 +343,8 @@ private:
 
     ImplSVEvent * mnEndShowEvent;
     ImplSVEvent * mnContextMenuEvent;
+    ImplSVEvent * mnEventObjectChange;
+    ImplSVEvent * mnEventPageOrderChange;
 
     css::uno::Reference< css::presentation::XPresentation2 > mxPresentation;
     ::rtl::Reference< SlideShowListenerProxy > mxListenerProxy;
