@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
@@ -251,6 +252,29 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Shadow)
     Color nColor;
     xShapeProps->getPropertyValue(UNO_NAME_SHADOWCOLOR) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x808080), nColor);
+}
+
+CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158339_shape_text_in_group)
+{
+    // The document has a group of two shapes with text. This group is child of a drawing canvas.
+    // Without fix the text of the shapes were imported as separate text boxes.
+    loadFromURL(u"WPC_tdf158339_shape_text_in_group.docx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    // Make sure there is only one object on that page. Without fix there were three objects.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    // Get the group which represents the drawing canvas and the group object inside.
+    uno::Reference<drawing::XShapes> xCanvas(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xCanvas->getByIndex(1), uno::UNO_QUERY);
+    // Get the properties of the second shape inside the group
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(1), uno::UNO_QUERY);
+    // and make sure the shape has text.
+    uno::Reference<css::text::XTextFrame> xTextFrame;
+    xShapeProps->getPropertyValue(u"TextBoxContent"_ustr) >>= xTextFrame;
+    CPPUNIT_ASSERT(xTextFrame.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Group"), xTextFrame->getText()->getString());
 }
 }
 

@@ -88,7 +88,11 @@ WordprocessingCanvasContext::onCreateContext(sal_Int32 nElementToken,
                          << getBaseToken(nElementToken));
             break;
         case XML_wgp: // CT_WordprocessingGroup
-            return new oox::shape::WpgContext(*this, mpShapePtr);
+        {
+            rtl::Reference<WpgContext> pWPGContext = new oox::shape::WpgContext(*this, mpShapePtr);
+            pWPGContext->setFullWPGSupport(m_bFullWPGSupport);
+            return pWPGContext;
+        }
         default:
             // includes case XML_contentPart
             // Word uses this for Ink, as <w14:contentPart r:id="rId4"> for example. Thereby rId4 is
