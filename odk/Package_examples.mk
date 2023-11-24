@@ -551,6 +551,13 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     python/toolpanel/toolpanel.component \
     python/toolpanel/toolpanel.py \
     python/toolpanel/toolpanels/poc.xdl \
+    python/minimal-extension/Makefile \
+    python/minimal-extension/main.py \
+    python/minimal-extension/description.xml \
+    python/minimal-extension/Addons.xcu \
+    python/minimal-extension/registration/license.txt \
+    python/minimal-extension/pkg-description/pkg-description.en \
+    python/minimal-extension/META-INF/manifest.xml \
     python/DocumentHandling/DocumentConverter.py \
     python/DocumentHandling/DocumentLoader.py \
     python/DocumentHandling/DocumentPrinter.py \

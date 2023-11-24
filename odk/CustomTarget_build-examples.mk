@@ -28,6 +28,7 @@ my_example_dirs = \
     cpp/counter \
     cpp/remoteclient \
     python/toolpanel \
+    python/minimal-extension \
 
 
 #    cpp/custompanel \
