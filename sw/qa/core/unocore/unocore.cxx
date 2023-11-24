@@ -938,6 +938,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf108272Crash)
     createSwDoc("tdf108272-1-minimal.docx");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testWrapTextAtFlyStart)
+{
+    // Given a document with a fly frame:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    uno::Reference<text::XTextFramesSupplier> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xDocument->getTextFrames()->getByName("Frame1"),
+                                               uno::UNO_QUERY);
+    bool bWrapTextAtFlyStart{};
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
+    // - Unknown property: WrapTextAtFlyStart
+    // i.e. the property was missing.
+    xFrame->getPropertyValue("WrapTextAtFlyStart") >>= bWrapTextAtFlyStart;
+    CPPUNIT_ASSERT(!bWrapTextAtFlyStart);
+
+    // When marking it as WrapTextAtFlyStart=true:
+    xFrame->setPropertyValue("WrapTextAtFlyStart", uno::Any(true));
+
+    // Then make sure that WrapTextAtFlyStart is true when asking back:
+    xFrame->getPropertyValue("WrapTextAtFlyStart") >>= bWrapTextAtFlyStart;
+    CPPUNIT_ASSERT(bWrapTextAtFlyStart);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

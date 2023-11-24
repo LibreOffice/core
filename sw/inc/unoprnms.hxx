@@ -775,6 +775,7 @@ inline constexpr OUStringLiteral UNO_NAME_PARA_IS_CONNECT_BORDER = u"ParaIsConne
 inline constexpr OUStringLiteral UNO_NAME_ITEMS = u"Items";
 inline constexpr OUStringLiteral UNO_NAME_SELITEM = u"SelectedItem";
 inline constexpr OUStringLiteral UNO_NAME_IS_SPLIT_ALLOWED = u"IsSplitAllowed";
+inline constexpr OUStringLiteral UNO_NAME_WRAP_TEXT_AT_FLY_START = u"WrapTextAtFlyStart";
 inline constexpr OUStringLiteral UNO_NAME_HAS_TEXT_CHANGES_ONLY = u"HasTextChangesOnly";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_HIDDEN = u"CharHidden";
 inline constexpr OUStringLiteral UNO_NAME_IS_FOLLOWING_TEXT_FLOW = u"IsFollowingTextFlow";
