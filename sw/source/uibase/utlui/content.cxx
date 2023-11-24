@@ -431,6 +431,13 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         break;
         default: break;
     }
+
+    const int nShift = static_cast<int>(m_nContentType);
+    assert(nShift > -1);
+    const sal_Int32 nMask = 1 << nShift;
+    const sal_Int32 nBlock = SW_MOD()->GetNavigationConfig()->GetSortAlphabeticallyBlock();
+    m_bAlphabeticSort = nBlock & nMask;
+
     FillMemberList();
 }
 
@@ -1739,10 +1746,12 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         const ContentTypeId nContentType = pType->GetType();
 
         if (nContentType != ContentTypeId::FOOTNOTE && nContentType != ContentTypeId::ENDNOTE
-            && nContentType != ContentTypeId::POSTIT)
+            && nContentType != ContentTypeId::POSTIT && nContentType != ContentTypeId::UNKNOWN)
         {
             bRemoveSortEntry = false;
-            xPop->set_active("sort", pType->IsAlphabeticSort());
+            const sal_Int32 nMask = 1 << static_cast<int>(nContentType);
+            sal_uInt64 nSortAlphabeticallyBlock = m_pConfig->GetSortAlphabeticallyBlock();
+            xPop->set_active("sort", nSortAlphabeticallyBlock & nMask);
         }
 
         OUString aIdent;
@@ -4960,7 +4969,15 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
             pCntType = weld::fromId<SwContentType*>(rId);
         else
             pCntType = const_cast<SwContentType*>(weld::fromId<SwContent*>(rId)->GetParent());
-        pCntType->SetAlphabeticSort(!pCntType->IsAlphabeticSort());
+
+        // toggle and persist alphabetical sort setting
+        const int nShift = static_cast<int>(pCntType->GetType());
+        assert(nShift > -1);
+        const sal_Int32 nMask = 1 << nShift;
+        const sal_Int32 nBlock = m_pConfig->GetSortAlphabeticallyBlock();
+        pCntType->SetAlphabeticSort(~nBlock & nMask);
+        m_pConfig->SetSortAlphabeticallyBlock(nBlock ^ nMask);
+
         pCntType->FillMemberList();
         Display(true);
         return;

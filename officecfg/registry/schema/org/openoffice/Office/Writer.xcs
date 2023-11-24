@@ -5197,6 +5197,13 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="SortAlphabeticallyBlock" oor:type="xs:int" oor:nillable="false">
+        <!-- UIHints: Navigator -->
+        <info>
+          <desc>Specifies whether the contents of a content type are alphabetically sorted in the Navigator list box. Each content type corresponds to one bit position of the stored int. A bit with value 1 indicates alphabetical sorting for the corresponding content type.</desc>
+        </info>
+        <value>0</value>
+      </prop>
     </group>
     <group oor:name="Envelope">
       <info>

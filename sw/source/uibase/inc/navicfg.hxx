@@ -37,6 +37,8 @@ class SwNavigationConfig final : public utl::ConfigItem
 
     o3tl::enumarray<ContentTypeId, bool> mContentTypeTrack;
 
+    sal_Int32 m_nSortAlphabeticallyBlock = 0; // persists content type alphabetical sort setting
+
     static css::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
@@ -125,6 +127,16 @@ public:
     }
 
     bool    IsNavigateOnSelect() const {return m_bIsNavigateOnSelect;}
+
+    sal_Int32 GetSortAlphabeticallyBlock() const {return m_nSortAlphabeticallyBlock;}
+    void SetSortAlphabeticallyBlock(sal_Int32 nSet)
+    {
+        if(m_nSortAlphabeticallyBlock != nSet)
+        {
+            SetModified();
+            m_nSortAlphabeticallyBlock = nSet;
+        }
+    }
 };
 
 #endif
