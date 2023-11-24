@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <memory>
 
 namespace weld
 {

@@ -1,0 +1,10 @@
+--- src/lib/PMDTypes.h
++++ src/lib/PMDTypes.h
+@@ -11,6 +11,7 @@
+ #define __PMDTYPES_H__
+ 
+ #include <boost/optional.hpp>
++#include <cstdint>
+ 
+ #include "Units.h"
+ 

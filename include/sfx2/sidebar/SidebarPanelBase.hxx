@@ -28,6 +28,7 @@
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUpdateModel.hpp>
+#include <memory>
 
 class PanelLayout;
 

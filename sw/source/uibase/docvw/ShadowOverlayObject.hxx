@@ -20,6 +20,7 @@
 #pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
+#include <memory>
 
 class SwView;
 

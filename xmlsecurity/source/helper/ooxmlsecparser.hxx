@@ -17,6 +17,7 @@
 
 #include <xmloff/namespacemap.hxx>
 
+#include <memory>
 #include <stack>
 
 class XSecController;
