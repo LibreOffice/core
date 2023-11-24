@@ -469,23 +469,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
     CPPUNIT_ASSERT_EQUAL(17, nCount);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf69635)
-{
-    loadAndSave("tdf69635.docx");
-    xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
-    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
-    CPPUNIT_ASSERT(pXmlHeader1);
-    CPPUNIT_ASSERT(pXmlSettings);
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: "left"
-    // - Actual  : "right"
-    assertXPathContent(pXmlHeader1, "/w:hdr/w:p/w:r/w:t", "left");
-
-    // Make sure "left" appears as a hidden header
-    assertXPath(pXmlSettings, "/w:settings/w:evenAndOddHeaders", 0);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf148671, "tdf148671.docx")
 {
     // Don't assert with 'pFieldMark' failed when document is opened

@@ -505,51 +505,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
     CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page[5]/footer/txt"));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf145998_firstHeader)
-{
-    loadAndReload("tdf145998_firstHeader.odt");
-
-    // Sanity check - always good to test when dealing with page styles and breaks.
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Very first header"), parseDump("/root/page[1]/header/txt"));
-
-    // Page Style is already used in prior section - this can't be the first-header
-    CPPUNIT_ASSERT_EQUAL(OUString("Normal Header"), parseDump("/root/page[2]/header/txt"));
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testTdf135216_evenOddFooter)
-{
-    loadAndReload("tdf135216_evenOddFooter.odt");
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-
-    // get LO page style for the first page (even page #2)
-    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
-    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-
-    xCursor->jumpToFirstPage();  // Even/Left page #2
-    uno::Reference<text::XText> xFooter = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft");
-    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
-
-    xCursor->jumpToNextPage();
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst"));
-    CPPUNIT_ASSERT_EQUAL(OUString("odd page - first footer"), xFooter->getString());
-
-    xCursor->jumpToNextPage();
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft"));
-    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
-
-    // The contents of paragraph 2 should be the page number (2) located on page 1.
-    getParagraph(2, "2");
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf136929_framesOfParagraph)
 {
     loadAndReload("tdf136929_framesOfParagraph.odt");

@@ -152,20 +152,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104539)
             "dir", "13500000");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf57155, "tdf57155.docx")
-{
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-    // Without the fix in place, the image in the header of page 2 wouldn't exist
-    CPPUNIT_ASSERT_EQUAL(4, getShapes());
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTdf129582, "tdf129582.docx")
-{
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-    // Without the fix in place, the image in the footer of page 2 wouldn't exist
-    CPPUNIT_ASSERT_EQUAL(2, getShapes());
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testShapeEffectPreservation)
 {
     loadAndSave("shape-effect-preservation.docx");

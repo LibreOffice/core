@@ -521,18 +521,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf43017)
                                  getProperty<sal_Int32>(xText, "CharColor"));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf127778)
-{
-    createSwDoc("tdf127778.docx");
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    // Without the accompanying fix in place, this test would have failed with:
-    // equality assertion failed
-    // - Expected: 0
-    // - Actual  : 1
-    // i.e. the 2nd page had an unexpected header.
-    assertXPath(pLayout, "//page[2]/header", 0);
-}
-
 // related tdf#43017
 CPPUNIT_TEST_FIXTURE(Test, testTdf124754)
 {
@@ -1194,83 +1182,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141969)
     CPPUNIT_ASSERT_EQUAL(8.0f, getProperty<float>(xRun, "CharHeight"));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf154370)
-{
-    // Import a file with pargraph and character styles containing toggle properties applied to the end of
-    // the paragraphs. Should result in hard attributes resetting the properties
-    createSwDoc("tdf154370.docx");
-    {
-        auto xPara(getParagraph(2));
-        auto xRun = getRun(xPara, 2);
-
-        OUString rangeText = xRun->getString();
-        CPPUNIT_ASSERT_EQUAL(OUString("CharStyle BoldItalicCapsEmbossedStrike"), rangeText);
-
-        const uno::Reference<beans::XPropertyState> xRangePropState(xRun, uno::UNO_QUERY_THROW);
-        beans::PropertyState ePropertyState = xRangePropState->getPropertyState("CharWeight");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharWeightComplex");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharWeightAsian");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharPosture");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharPostureAsian");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharCaseMap");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharRelief");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharStrikeout");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-    }
-    {
-        auto xPara(getParagraph(3));
-        auto xRun = getRun(xPara, 2);
-
-        OUString rangeText = xRun->getString();
-        CPPUNIT_ASSERT_EQUAL(OUString("CharStyle SmallcapsImprint"), rangeText);
-
-        const uno::Reference<beans::XPropertyState> xRangePropState(xRun, uno::UNO_QUERY_THROW);
-        beans::PropertyState ePropertyState = xRangePropState->getPropertyState("CharCaseMap");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharRelief");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-    }
-    {
-        auto xPara(getParagraph(5));
-        auto xRun = getRun(xPara, 2);
-
-        OUString rangeText = xRun->getString();
-        CPPUNIT_ASSERT_EQUAL(OUString("CharStyle Hidden"), rangeText);
-
-        const uno::Reference<beans::XPropertyState> xRangePropState(xRun, uno::UNO_QUERY_THROW);
-        beans::PropertyState ePropertyState = xRangePropState->getPropertyState("CharHidden");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-    }
-    {
-        auto xPara(getParagraph(7));
-        auto xRun = getRun(xPara, 2);
-
-        OUString rangeText = xRun->getString();
-        CPPUNIT_ASSERT_EQUAL(OUString("OutlineShadow"), rangeText);
-
-        const uno::Reference<beans::XPropertyState> xRangePropState(xRun, uno::UNO_QUERY_THROW);
-        beans::PropertyState ePropertyState = xRangePropState->getPropertyState("CharContoured");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-
-        ePropertyState = xRangePropState->getPropertyState("CharShadowed");
-        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
-    }
-}
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();

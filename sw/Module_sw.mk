@@ -160,6 +160,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_uibase_fldui \
     CppunitTest_sw_core_view \
     CppunitTest_sw_core_attr \
+    CppunitTest_sw_core_header_footer \
     CppunitTest_sw_filter_ww8 \
     CppunitTest_sw_filter_html \
     CppunitTest_sw_filter_xml \

@@ -254,32 +254,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76683_negativeTwipsMeasure)
     CPPUNIT_ASSERT( nColumn1 > nColumn2 );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf112694, "tdf112694.docx")
-{
-    uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
-    // Header was on when header for file was for explicit first pages only
-    // (marked via <w:titlePg>).
-    CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, "HeaderIsOn"));
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testTdf113849_evenAndOddHeaders)
-{
-    loadAndReload("tdf113849_evenAndOddHeaders.odt");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", OUString("L. J. Kendall"), parseDump("/root/page[2]/header/txt"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer2 text", OUString("*"), parseDump("/root/page[2]/footer/txt"));
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header3 text", OUString("Shadow Hunt"), parseDump("/root/page[3]/header/txt"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer3 text", OUString("*"), parseDump("/root/page[3]/footer/txt"));
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header4 text", OUString("L. J. Kendall"), parseDump("/root/page[4]/header/txt"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer4 text", OUString("*"), parseDump("/root/page[4]/footer/txt"));
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer5 text", OUString(""), parseDump("/root/page[5]/footer/txt"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer6 text", OUString(""), parseDump("/root/page[6]/footer/txt"));
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages", 6, getPages() );
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf118361_RTLfootnoteSeparator, "tdf118361_RTLfootnoteSeparator.docx")
 {
     uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
