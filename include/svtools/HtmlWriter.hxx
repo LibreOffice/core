@@ -11,6 +11,7 @@
 #pragma once
 
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <string_view>
 #include <vector>
 #include <svtools/svtdllapi.h>
@@ -42,19 +43,17 @@ public:
 
     void flushStack();
 
-    static void writeAttribute(SvStream& rStream, std::string_view aAttribute, sal_Int32 aValue);
-    static void writeAttribute(SvStream& rStream, std::string_view aAttribute,
-                               std::string_view aValue);
-
-    void attribute(std::string_view aAttribute, const char* aValue);
     void attribute(std::string_view aAttribute, sal_Int32 aValue);
     void attribute(std::string_view aAttribute, std::string_view aValue);
-    void attribute(std::string_view aAttribute, std::u16string_view aValue);
+    void attribute(std::string_view aAttribute, const OUString& aValue);
+    template <size_t N> void attribute(std::string_view aAttribute, const char (&aValue)[N])
+    {
+        attribute(aAttribute, OUString(aValue));
+    }
     // boolean attribute e.g. <img ismap>
     void attribute(std::string_view aAttribute);
 
     void single(const OString& aContent);
-    void endAttribute();
 
     /// Writes character data.
     void characters(std::string_view rChars);

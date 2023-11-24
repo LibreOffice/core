@@ -771,18 +771,16 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
     }
     if( rInfo.bInNumberBulletList && bNumberedForListItem )
     {
-        HtmlWriter html(rWrt.Strm(), rWrt.maNamespace);
-        html.prettyPrint(rWrt.IsPrettyPrint());
-        html.start(OOO_STRING_SVTOOLS_HTML_li ""_ostr);
+        OStringBuffer sOut(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li);
         if (!bNumbered)
         {
             // Handles list headers (<text:list-header> ODF element)
-            html.attribute(OOO_STRING_SVTOOLS_HTML_O_style, "display: block");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_style "=\"display: block\"");
         }
         else if (USHRT_MAX != nNumStart)
-            html.attribute(OOO_STRING_SVTOOLS_HTML_O_value, OString::number(nNumStart));
-        // Finish the opening element, but don't close it.
-        html.characters("");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_value "=\"" + OString::number(nNumStart)
+                        + "\"");
+        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), sOut);
     }
 
     if( rWrt.m_nDefListLvl > 0 && !bForceDL )
@@ -2117,7 +2115,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
         if( !pItemSet )
         {
-            aHtml.endAttribute();
+            aHtml.end();
             return rWrt;
         }
         if (pItemSet->GetItemIfSet(RES_MARGIN_FIRSTLINE, false)
