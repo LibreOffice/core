@@ -1,7 +1,7 @@
 {
     "id": "org.libreoffice.LibreOffice",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "22.08",
+    "runtime-version": "23.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.openjdk17"
@@ -402,11 +402,102 @@
                     "dest-filename": "@MDDS_TARBALL@"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_TARBALL@",
-                    "sha256": "@FONT_NOTO_SHA256SUM@",
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_KUFI_ARABIC_TARBALL@",
+                    "sha256": "@FONT_NOTO_KUFI_ARABIC_SHA256SUM@",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "@FONT_NOTO_TARBALL@"
+                    "dest-filename": "@FONT_NOTO_KUFI_ARABIC_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SANS_TARBALL@",
+                    "sha256": "@FONT_NOTO_SANS_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SANS_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SERIF_TARBALL@",
+                    "sha256": "@FONT_NOTO_SERIF_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SERIF_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SANS_ARABIC_TARBALL@",
+                    "sha256": "@FONT_NOTO_SANS_ARABIC_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SANS_ARABIC_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_NASKH_ARABIC_TARBALL@",
+                    "sha256": "@FONT_NOTO_NASKH_ARABIC_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_NASKH_ARABIC_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SANS_HEBREW_TARBALL@",
+                    "sha256": "@FONT_NOTO_SANS_HEBREW_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SANS_HEBREW_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SERIF_HEBREW_TARBALL@",
+                    "sha256": "@FONT_NOTO_SERIF_HEBREW_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SERIF_HEBREW_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SANS_ARMENIAN_TARBALL@",
+                    "sha256": "@FONT_NOTO_SANS_ARMENIAN_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SANS_ARMENIAN_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SERIF_ARMENIAN_TARBALL@",
+                    "sha256": "@FONT_NOTO_SERIF_ARMENIAN_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SERIF_ARMENIAN_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SANS_GEORGIAN_TARBALL@",
+                    "sha256": "@FONT_NOTO_SANS_GEORGIAN_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SANS_GEORGIAN_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SERIF_GEORGIAN_TARBALL@",
+                    "sha256": "@FONT_NOTO_SERIF_GEORGIAN_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SERIF_GEORGIAN_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SANS_LAO_TARBALL@",
+                    "sha256": "@FONT_NOTO_SANS_LAO_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SANS_LAO_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SERIF_LAO_TARBALL@",
+                    "sha256": "@FONT_NOTO_SERIF_LAO_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SERIF_LAO_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_SANS_LISU_TARBALL@",
+                    "sha256": "@FONT_NOTO_SANS_LISU_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_NOTO_SANS_LISU_TARBALL@"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/@OPENLDAP_TARBALL@",
@@ -687,6 +778,13 @@
                     "type": "file",
                     "dest": "external/tarballs",
                     "dest-filename": "@JAVA_WEBSOCKET_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@ZXCVBN_C_TARBALL@",
+                    "sha256": "@ZXCVBN_C_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@ZXCVBN_C_TARBALL@"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/extern/@OPENSYMBOL_TTF@",
