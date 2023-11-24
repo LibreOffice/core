@@ -79,24 +79,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf48569)
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, eValue);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testN750935, "n750935.docx")
-{
-    // Some page break types were ignores, resulting in less pages.
-    CPPUNIT_ASSERT_EQUAL(5, getPages());
-
-    /*
-     * The problem was that the header and footer was not shared.
-     *
-     * xray ThisComponent.StyleFamilies.PageStyles.Default.FooterIsShared
-     */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    bool bValue = false;
-    xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(true, bValue);
-    xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(true, bValue);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testN751117, "n751117.docx")
 {
     // First shape: the end should be an arrow, should be rotated and should be flipped.

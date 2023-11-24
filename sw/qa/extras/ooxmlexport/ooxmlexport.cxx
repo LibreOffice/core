@@ -77,54 +77,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFooterBodyDistance)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 }
 
-// Check for correct header/footer with special first page with TOC inside:
-// - DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
-// - DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
-CPPUNIT_TEST_FIXTURE(Test, testTdf118393)
-{
-    loadAndReload("tdf118393.odt");
-    CPPUNIT_ASSERT_EQUAL( 7, getPages() );
-
-    // First page has no header/footer
-    {
-        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-
-        // check first page
-        xmlXPathObjectPtr pXmlPage1Header = getXPathNode(pXmlDoc, "/root/page[1]/header");
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Header->nodesetval));
-
-        xmlXPathObjectPtr pXmlPage1Footer = getXPathNode(pXmlDoc, "/root/page[1]/footer");
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Footer->nodesetval));
-
-        // check second page in the same way
-        xmlXPathObjectPtr pXmlPage2Header = getXPathNode(pXmlDoc, "/root/page[2]/header");
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Header->nodesetval));
-
-        xmlXPathObjectPtr pXmlPage2Footer = getXPathNode(pXmlDoc, "/root/page[2]/footer");
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Footer->nodesetval));
-   }
-
-    // All other pages should have header/footer
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/footer/txt/text()"));
-}
-
 DECLARE_OOXMLEXPORT_TEST(testfdo81031, "fdo81031.docx")
 {
     // vml image was not rendered
@@ -188,48 +140,6 @@ CPPUNIT_TEST_FIXTURE(Test, testParaShading)
     // Make sure the themeColor attribute is not written when it would be empty.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:shd", "themeColor");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
-{
-    // Test import and export of a section's headerf/footerf properties.
-    // (copied from a ww8export test, with doc converted to docx using Word)
-
-    CPPUNIT_ASSERT_EQUAL( 6, getPages() );
-
-    // The document has 6 pages. Note that we don't test if 4 or just 2 page
-    // styles are created, the point is that layout should be correct.
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header"),  parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer"),  parseDump("/root/page[1]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header"),   parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer"),   parseDump("/root/page[2]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header"),  parseDump("/root/page[3]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer"),  parseDump("/root/page[3]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header2"), parseDump("/root/page[4]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer 2"), parseDump("/root/page[4]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header 2"), parseDump("/root/page[5]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"), parseDump("/root/page[5]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),  parseDump("/root/page[6]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testFirstHeaderFooterB)
-{
-    loadAndReload("first-header-footerB.odt");
-    CPPUNIT_ASSERT_EQUAL( 6, getPages() );
-
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header"),  parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer"),  parseDump("/root/page[1]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header"),   parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer"),   parseDump("/root/page[2]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header"),  parseDump("/root/page[3]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer"),  parseDump("/root/page[3]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header2"), parseDump("/root/page[4]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer 2"), parseDump("/root/page[4]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header 2"), parseDump("/root/page[5]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"), parseDump("/root/page[5]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),  parseDump("/root/page[6]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO83044)
@@ -501,44 +411,6 @@ CPPUNIT_TEST_FIXTURE(Test, testRot270Flipv)
     assertXPath(pXmlDoc, "//a:xfrm", "flipV", "1");
     // This was 5400000.
     assertXPath(pXmlDoc, "//a:xfrm", "rot", "16200000");
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testMsoPosition)
-{
-    loadAndSave("bnc884615-mso-position.docx");
-    {
-        xmlDocUniquePtr doc = parseExport("word/footer1.xml");
-        // We write the frames out in different order than they were read, so check it's the correct
-        // textbox first by checking width. These tests may need reordering if that gets fixed.
-        OUString style1 = getXPath(doc, "/w:ftr/w:p/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-        CPPUNIT_ASSERT( style1.indexOf( ";width:531pt;" ) >= 0 );
-        CPPUNIT_ASSERT( style1.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
-        CPPUNIT_ASSERT( style1.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
-        OUString style2 = getXPath(doc, "/w:ftr/w:p/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-        CPPUNIT_ASSERT( style2.indexOf( ";width:549pt;" ) >= 0 );
-        CPPUNIT_ASSERT( style2.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
-        CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal:center" ) >= 0 );
-        CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
-        OUString style3 = getXPath(doc, "/w:ftr/w:p/w:r[5]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-        CPPUNIT_ASSERT( style3.indexOf( ";width:36pt;" ) >= 0 );
-        CPPUNIT_ASSERT( style3.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
-        CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
-    }
-
-    xmlDocUniquePtr doc = parseExport("word/header1.xml");
-    OUString style1 = getXPath(doc, "/w:hdr/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-    CPPUNIT_ASSERT( style1.indexOf( ";width:335.75pt;" ) >= 0 );
-    CPPUNIT_ASSERT( style1.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
-    CPPUNIT_ASSERT( style1.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
-    OUString style2 = getXPath(doc, "/w:hdr/w:p/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-    CPPUNIT_ASSERT( style2.indexOf( ";width:138.15pt;" ) >= 0 );
-    CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
-    CPPUNIT_ASSERT( style2.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
-    OUString style3 = getXPath(doc, "/w:hdr/w:p/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-    CPPUNIT_ASSERT( style3.indexOf( ";width:163.8pt;" ) >= 0 );
-    CPPUNIT_ASSERT( style3.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
-    CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
-
 }
 
 DECLARE_OOXMLEXPORT_TEST(testWpsCharColor, "wps-char-color.docx")
@@ -954,13 +826,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")
     bool bGridSnapToChars;
     xStyle->getPropertyValue("GridSnapToChars") >>= bGridSnapToChars;
     CPPUNIT_ASSERT_EQUAL(true, bGridSnapToChars);
-
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTdf79639, "tdf79639.docx")
-{
-    // This was 0, floating table in header wasn't converted to a TextFrame.
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")

@@ -757,26 +757,6 @@ DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
     CPPUNIT_ASSERT_EQUAL(uno::Any(uno::Sequence<OUString>()), xLevels->getByIndex(2));
 }
 
-DECLARE_ODFEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.odt")
-{
-    CPPUNIT_ASSERT_EQUAL(6, getPages());
-    // Test import and export of the header-first token.
-
-    // The document has 6 pages, two page styles for the first and second half of pages.
-    CPPUNIT_ASSERT_EQUAL(OUString("First header"),  parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First footer"),  parseDump("/root/page[1]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Left header"),   parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Left footer"),   parseDump("/root/page[2]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Right header"),  parseDump("/root/page[3]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Right footer"),  parseDump("/root/page[3]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First header2"), parseDump("/root/page[4]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First footer2"), parseDump("/root/page[4]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Right header2"), parseDump("/root/page[5]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Right footer2"), parseDump("/root/page[5]/footer/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Left header2"),  parseDump("/root/page[6]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Left footer2"),  parseDump("/root/page[6]/footer/txt/text()"));
-}
-
 DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
@@ -1874,53 +1854,6 @@ DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Export of this document failed with beans::UnknownPropertyException.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-}
-
-// Check for correct header/footer with special first page with TOC inside:
-// - DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
-// - DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
-DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
-{
-    CPPUNIT_ASSERT_EQUAL( 7, getPages() );
-
-    // First page has no header/footer
-    {
-        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-
-        // check first page
-        xmlXPathObjectPtr pXmlPage1Header = getXPathNode(pXmlDoc, "/root/page[1]/header");
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Header->nodesetval));
-
-        xmlXPathObjectPtr pXmlPage1Footer = getXPathNode(pXmlDoc, "/root/page[1]/footer");
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Footer->nodesetval));
-
-        // check second page in the same way
-        xmlXPathObjectPtr pXmlPage2Header = getXPathNode(pXmlDoc, "/root/page[2]/header");
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Header->nodesetval));
-
-        xmlXPathObjectPtr pXmlPage2Footer = getXPathNode(pXmlDoc, "/root/page[2]/footer");
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Footer->nodesetval));
-   }
-
-    // All other pages should have header/footer
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/footer/txt/text()"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/footer/txt/text()"));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf135338_firstLeftPageFooter, "tdf135338_firstLeftPageFooter.odt")

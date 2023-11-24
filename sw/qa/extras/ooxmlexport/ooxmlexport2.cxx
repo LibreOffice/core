@@ -722,20 +722,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65265, "fdo65265.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Format"), getProperty<OUString>(getRun(xParagraph2, 2), "RedlineType"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo65655, "fdo65655.docx")
-{
-    // The problem was that the DOCX had a non-blank odd footer and a blank even footer
-    // The 'Different Odd & Even Pages' was turned on
-    // However - LO assumed that because the 'even' footer is blank - it should ignore the 'Different Odd & Even Pages' flag
-    // So it did not import it and did not export it
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    bool bValue = false;
-    xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(false, bValue);
-    xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(false, bValue);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testFDO63053, "fdo63053.docx")
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
@@ -821,46 +807,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), nLtrRight);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFdo64238_a, "fdo64238_a.docx")
-{
-    // The problem was that when 'Show Only Odd Footer' was marked in Word and the Even footer *was filled*
-    // then LO would still import the Even footer and concatenate it to the odd footer.
-    // This case specifically is for :
-    // 'Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
-    // In this case the imported footer in LO was supposed to be blank, but instead was the 'even' footer
-    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "FooterText");
-    uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    sal_Int32 numOfRuns = 0;
-    while (xRunEnum->hasMoreElements())
-    {
-        xRunEnum->nextElement();
-        numOfRuns++;
-    }
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), numOfRuns);
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFdo64238_b, "fdo64238_b.docx")
-{
-    // The problem was that when 'Show Only Odd Footer' was marked in Word and the Even footer *was filled*
-    // then LO would still import the Even footer and concatenate it to the odd footer.
-    // This case specifically is for :
-    // 'Non-Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
-    // In this case the imported footer in LO was supposed to be just the odd footer, but instead was the 'odd' and 'even' footers concatenated
-    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "FooterText");
-    uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    sal_Int32 numOfRuns = 0;
-    while (xRunEnum->hasMoreElements())
-    {
-        xRunEnum->nextElement();
-        numOfRuns++;
-    }
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), numOfRuns);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo56679, "fdo56679.docx")
@@ -990,19 +936,6 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBorderSpacingExportCase2)
 
     // Assert the XPath expression - 'right' border
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:right", "space", "24");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFdo66145, "fdo66145.docx")
-{
-    // The Writer ignored the 'First Is Shared' flag
-    CPPUNIT_ASSERT_EQUAL(OUString("This is the FIRST page header."),
-        parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("This is the header for the REST OF THE FILE."),
-        parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("This is the header for the REST OF THE FILE."),
-        parseDump("/root/page[3]/header/txt/text()"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGrabBag)

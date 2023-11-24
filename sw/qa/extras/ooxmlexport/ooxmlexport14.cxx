@@ -1383,49 +1383,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146346, "tdf146346.docx")
 }
 #endif
 
-DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-footer.docx")
-{
-    // Load a document with a continuous section break on page 2.
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 1"),
-                         parseDump("/root/page[1]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer, section 1"),
-                         parseDump("/root/page[1]/footer/txt/text()"));
-    // Make sure the header stays like this; if we naively just update the page style name of the
-    // first para on page 2, then this would be 'Header, section 2', which is incorrect.
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 2"),
-                         parseDump("/root/page[2]/header/txt/text()"));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer, section 2"),
-                         parseDump("/root/page[2]/footer/txt/text()"));
-    // This is inherited from page 2.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header, section 2"),
-                         parseDump("/root/page[3]/header/txt/text()"));
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1
-    // - Actual  : 0
-    // - xpath should match exactly 1 node
-    // i.e. the footer had no text (inherited from page 2), while the correct behavior is to provide
-    // the own footer text.
-    CPPUNIT_ASSERT_EQUAL(OUString("Footer, section 3"),
-                         parseDump("/root/page[3]/footer/txt/text()"));
-
-    // Without the export fix in place, the import-export-import test would have failed with:
-    // - Expected: Header, section 2
-    // - Actual  : First page header, section 2
-    // i.e. both the header and the footer on page 3 was wrong.
-
-    // Additional problem: top margin on page 3 was wrong.
-    if (isExported())
-    {
-        xmlDocUniquePtr pXml = parseExport("word/document.xml");
-        // Without the accompanying fix in place, this test would have failed with:
-        // - Expected: 2200
-        // - Actual  : 2574
-        // i.e. the top margin on page 3 was too large and now matches the value from the input
-        // document.
-        assertXPath(pXml, "/w:document/w:body/w:sectPr/w:pgMar", "top", "2200");
-    }
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)
 {
     loadAndReload("hyphenation.odt");

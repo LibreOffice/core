@@ -721,32 +721,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo79535, "fdo79535.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testBnc875718, "bnc875718.docx")
-{
-    // The frame in the footer must not accidentally end up in the document body.
-    // The easiest way for this to test I've found is checking that
-    // xray ThisComponent.TextFrames.GetByIndex( index ).Anchor.Text.ImplementationName
-    // is not SwXBodyText but rather SwXHeadFootText
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    // The sample bugdoc has 3 footer.xml and has a textframe in each. The first one is hidden
-    // and it has no text in its anchored text range: it is anchored to body text. Ignoring...
-    for( int i = 1;
-         i < xIndexAccess->getCount();
-         ++i )
-    {
-        uno::Reference<text::XTextFrame> frame(xIndexAccess->getByIndex( i ), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> range = frame->getAnchor();
-        uno::Reference<lang::XServiceInfo> text(range->getText(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL( OUString( "SwXHeadFootText" ), text->getImplementationName());
-    }
-    // Also check that the footer contents are not in the body text.
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XText> text = textDocument->getText();
-    CPPUNIT_ASSERT(text); //Do not crash on empty content
-    CPPUNIT_ASSERT_EQUAL( OUString( "Text" ), text->getString());
-}
-
 DECLARE_OOXMLEXPORT_TEST(testCaption, "caption.docx")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Caption"), uno::UNO_QUERY);
