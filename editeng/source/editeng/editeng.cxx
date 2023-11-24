@@ -678,11 +678,6 @@ ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordTy
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
-void EditEngine::CursorMoved(const ContentNode* pPrevNode)
-{
-    pImpEditEngine->CursorMoved(pPrevNode);
-}
-
 void EditEngine::CheckIdleFormatter()
 {
     pImpEditEngine->CheckIdleFormatter();

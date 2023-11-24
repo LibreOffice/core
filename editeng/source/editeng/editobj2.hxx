@@ -47,14 +47,14 @@ class SharedStringPool;
 class XEditAttribute
 {
 private:
-    const SfxPoolItem*  pItem;
+    SfxPoolItemHolder   maItemHolder;
     sal_Int32           nStart;
     sal_Int32           nEnd;
 
 public:
-    XEditAttribute( const SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    XEditAttribute(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd );
 
-    const SfxPoolItem*      GetItem() const             { return pItem; }
+    const SfxPoolItem*      GetItem() const             { return maItemHolder.getItem(); }
 
     sal_Int32&              GetStart()                  { return nStart; }
     sal_Int32&              GetEnd()                    { return nEnd; }
@@ -65,7 +65,7 @@ public:
     sal_Int32               GetLen() const              { return nEnd-nStart; }
 
     bool IsFeature() const;
-    void SetItem(const SfxPoolItem& rNew);
+    void SetItem(SfxItemPool&, const SfxPoolItem&);
 
     inline bool operator==( const XEditAttribute& rCompare ) const;
 };
@@ -74,7 +74,7 @@ inline bool XEditAttribute::operator==( const XEditAttribute& rCompare ) const
 {
     return  (nStart == rCompare.nStart) &&
             (nEnd == rCompare.nEnd) &&
-            SfxPoolItem::areSame(pItem, rCompare.pItem);
+            SfxPoolItem::areSame(GetItem(), rCompare.GetItem());
 }
 
 struct XParaPortion
@@ -214,7 +214,6 @@ public:
 
     ContentInfo*            CreateAndInsertContent();
     XEditAttribute CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
-    void                    DestroyAttrib( const XEditAttribute& rAttr );
 
     ContentInfosType&       GetContents() { return maContents;}
     const ContentInfosType& GetContents() const { return maContents;}

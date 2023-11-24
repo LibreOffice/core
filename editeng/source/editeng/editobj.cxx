@@ -44,30 +44,22 @@ using std::endl;
 using namespace com::sun::star;
 
 
-static XEditAttribute MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
-{
-    // Create the new attribute in the pool
-    const SfxPoolItem& rNew = rPool.DirectPutItemInPool( rItem );
-
-    return XEditAttribute( rNew, nStart, nEnd );
-}
-
-XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
-    : pItem(&rAttr)
-    , nStart(nS)
-    , nEnd(nE)
+XEditAttribute::XEditAttribute(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nS, sal_Int32 nE)
+: maItemHolder(rPool, &rItem)
+, nStart(nS)
+, nEnd(nE)
 {
 }
 
 bool XEditAttribute::IsFeature() const
 {
-    sal_uInt16 nWhich = pItem->Which();
+    sal_uInt16 nWhich = GetItem()->Which();
     return  ((nWhich >= EE_FEATURE_START) && (nWhich <=  EE_FEATURE_END));
 }
 
-void XEditAttribute::SetItem(const SfxPoolItem& rNew)
+void XEditAttribute::SetItem(SfxItemPool& rPool, const SfxPoolItem& rItem)
 {
-    pItem = &rNew;
+    maItemHolder = SfxPoolItemHolder(rPool, &rItem);
 }
 
 XParaPortionList::XParaPortionList(OutputDevice* pRefDev, sal_uInt32 nPW,
@@ -110,9 +102,7 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
 
     for (const XEditAttribute & rAttr : rCopyFrom.maCharAttribs)
     {
-        XEditAttribute aMyAttr = MakeXEditAttribute(
-            rPoolToUse, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
-        maCharAttribs.push_back(aMyAttr);
+        maCharAttribs.emplace_back(rPoolToUse, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
     }
 
     if ( rCopyFrom.GetWrongList() )
@@ -121,8 +111,6 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
 
 ContentInfo::~ContentInfo()
 {
-    for (auto const& charAttrib : maCharAttribs)
-        aParaAttribs.GetPool()->DirectRemoveItemFromPool(*charAttrib.GetItem());
     maCharAttribs.clear();
 }
 
@@ -376,14 +364,8 @@ TextRotation EditTextObjectImpl::GetRotation() const
 
 XEditAttribute EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
-    return MakeXEditAttribute( *mpPool, rItem, nStart, nEnd );
+    return XEditAttribute(*mpPool, rItem, nStart, nEnd);
 }
-
-void EditTextObjectImpl::DestroyAttrib( const XEditAttribute& rAttr )
-{
-    mpPool->DirectRemoveItemFromPool( *rAttr.GetItem() );
-}
-
 
 ContentInfo* EditTextObjectImpl::CreateAndInsertContent()
 {
@@ -540,7 +522,6 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
             XEditAttribute& rAttr = rC.maCharAttribs[--nAttr];
             if ( !_nWhich || (rAttr.GetItem()->Which() == _nWhich) )
             {
-                mpPool->DirectRemoveItemFromPool(*rAttr.GetItem());
                 rC.maCharAttribs.erase(rC.maCharAttribs.begin()+nAttr);
                 bChanged = true;
             }

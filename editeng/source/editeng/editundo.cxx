@@ -514,26 +514,8 @@ EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel,
 {
 }
 
-namespace {
-
-struct RemoveAttribsFromPool
-{
-    SfxItemPool& mrPool;
-public:
-    explicit RemoveAttribsFromPool(SfxItemPool& rPool) : mrPool(rPool) {}
-    void operator() (std::unique_ptr<ContentAttribsInfo> const & rInfo)
-    {
-        rInfo->RemoveAllCharAttribsFromPool(mrPool);
-    }
-};
-
-}
-
 EditUndoSetAttribs::~EditUndoSetAttribs()
 {
-    // Get Items from Pool...
-    SfxItemPool* pPool = aNewAttribs.GetPool();
-    std::for_each(aPrevAttribs.begin(), aPrevAttribs.end(), RemoveAttribsFromPool(*pPool));
 }
 
 void EditUndoSetAttribs::Undo()
@@ -620,7 +602,7 @@ void EditUndoTransliteration::Undo()
     EditSelection aDelSel( aSel );
     aSel = pEE->InsertParaBreak( aSel );
     aDelSel.Max() = aSel.Min();
-    aDelSel.Max().GetNode()->GetCharAttribs().DeleteEmptyAttribs( pEE->GetEditDoc().GetItemPool() );
+    aDelSel.Max().GetNode()->GetCharAttribs().DeleteEmptyAttribs();
     EditSelection aNewSel;
     if ( pTxtObj )
     {

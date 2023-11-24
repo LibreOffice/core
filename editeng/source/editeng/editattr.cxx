@@ -46,14 +46,15 @@
 #include <editattr.hxx>
 
 
-
-EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE ) :
-    nStart(nS), nEnd(nE), bFeature(false), bEdge(false)
+EditCharAttrib::EditCharAttrib(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nS, sal_Int32 nE )
+: maItemHolder(rPool, &rItem)
+, nStart(nS)
+, nEnd(nE)
+, bFeature(false)
+, bEdge(false)
 {
-    pItem = &rAttr;
-
-    assert((rAttr.Which() >= EE_ITEMS_START) && (rAttr.Which() <= EE_ITEMS_END));
-    assert((rAttr.Which() < EE_FEATURE_START) || (rAttr.Which() > EE_FEATURE_END) || (nE == (nS+1)));
+    assert((rItem.Which() >= EE_ITEMS_START) && (rItem.Which() <= EE_ITEMS_END));
+    assert((rItem.Which() < EE_FEATURE_START) || (rItem.Which() > EE_FEATURE_END) || (nE == (nS+1)));
 }
 
 EditCharAttrib::~EditCharAttrib()
@@ -71,16 +72,16 @@ void EditCharAttrib::dumpAsXml(xmlTextWriterPtr pWriter) const
     pWriter, BAD_CAST("nStart"), "%" SAL_PRIdINT32, nStart);
     (void)xmlTextWriterWriteFormatAttribute(
     pWriter, BAD_CAST("nEnd"), "%" SAL_PRIdINT32, nEnd);
-    pItem->dumpAsXml(pWriter);
+    GetItem()->dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 
 
 
-EditCharAttribFont::EditCharAttribFont( const SvxFontItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribFont::EditCharAttribFont(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_FONTINFO || rAttr.Which() == EE_CHAR_FONTINFO_CJK || rAttr.Which() == EE_CHAR_FONTINFO_CTL);
+    assert(rItem.Which() == EE_CHAR_FONTINFO || rItem.Which() == EE_CHAR_FONTINFO_CJK || rItem.Which() == EE_CHAR_FONTINFO_CTL);
 }
 
 void EditCharAttribFont::SetFont( SvxFont& rFont, OutputDevice* )
@@ -95,10 +96,10 @@ void EditCharAttribFont::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribItalic::EditCharAttribItalic( const SvxPostureItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribItalic::EditCharAttribItalic(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_ITALIC || rAttr.Which() == EE_CHAR_ITALIC_CJK || rAttr.Which() == EE_CHAR_ITALIC_CTL);
+    assert(rItem.Which() == EE_CHAR_ITALIC || rItem.Which() == EE_CHAR_ITALIC_CJK || rItem.Which() == EE_CHAR_ITALIC_CTL);
 }
 
 void EditCharAttribItalic::SetFont( SvxFont& rFont, OutputDevice* )
@@ -108,10 +109,10 @@ void EditCharAttribItalic::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribWeight::EditCharAttribWeight( const SvxWeightItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribWeight::EditCharAttribWeight(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_WEIGHT || rAttr.Which() == EE_CHAR_WEIGHT_CJK || rAttr.Which() == EE_CHAR_WEIGHT_CTL);
+    assert(rItem.Which() == EE_CHAR_WEIGHT || rItem.Which() == EE_CHAR_WEIGHT_CJK || rItem.Which() == EE_CHAR_WEIGHT_CTL);
 }
 
 void EditCharAttribWeight::SetFont( SvxFont& rFont, OutputDevice* )
@@ -121,10 +122,10 @@ void EditCharAttribWeight::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribUnderline::EditCharAttribUnderline( const SvxUnderlineItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribUnderline::EditCharAttribUnderline(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_UNDERLINE);
+    assert(rItem.Which() == EE_CHAR_UNDERLINE);
 }
 
 void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
@@ -138,10 +139,10 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 
 
 
-EditCharAttribOverline::EditCharAttribOverline( const SvxOverlineItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribOverline::EditCharAttribOverline(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_OVERLINE);
+    assert(rItem.Which() == EE_CHAR_OVERLINE);
 }
 
 void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
@@ -153,10 +154,10 @@ void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 
 
 
-EditCharAttribFontHeight::EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribFontHeight::EditCharAttribFontHeight(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_FONTHEIGHT || rAttr.Which() == EE_CHAR_FONTHEIGHT_CJK || rAttr.Which() == EE_CHAR_FONTHEIGHT_CTL);
+    assert(rItem.Which() == EE_CHAR_FONTHEIGHT || rItem.Which() == EE_CHAR_FONTHEIGHT_CJK || rItem.Which() == EE_CHAR_FONTHEIGHT_CTL);
 }
 
 void EditCharAttribFontHeight::SetFont( SvxFont& rFont, OutputDevice* )
@@ -167,10 +168,10 @@ void EditCharAttribFontHeight::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribFontWidth::EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribFontWidth::EditCharAttribFontWidth(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_FONTWIDTH);
+    assert(rItem.Which() == EE_CHAR_FONTWIDTH);
 }
 
 void EditCharAttribFontWidth::SetFont( SvxFont& /*rFont*/, OutputDevice* )
@@ -180,10 +181,10 @@ void EditCharAttribFontWidth::SetFont( SvxFont& /*rFont*/, OutputDevice* )
 
 
 
-EditCharAttribStrikeout::EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribStrikeout::EditCharAttribStrikeout(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_STRIKEOUT);
+    assert(rItem.Which() == EE_CHAR_STRIKEOUT);
 }
 
 void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
@@ -193,10 +194,10 @@ void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribCaseMap::EditCharAttribCaseMap( const SvxCaseMapItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribCaseMap::EditCharAttribCaseMap(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_CASEMAP);
+    assert(rItem.Which() == EE_CHAR_CASEMAP);
 }
 
 void EditCharAttribCaseMap::SetFont( SvxFont& rFont, OutputDevice* )
@@ -206,10 +207,10 @@ void EditCharAttribCaseMap::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribColor::EditCharAttribColor( const SvxColorItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribColor::EditCharAttribColor(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_COLOR);
+    assert(rItem.Which() == EE_CHAR_COLOR);
 }
 
 void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
@@ -219,13 +220,10 @@ void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
-                                const SvxColorItem& rAttr,
-                                  sal_Int32 _nStart,
-                                  sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_BKGCOLOR);
+    assert(rItem.Which() == EE_CHAR_BKGCOLOR);
 }
 
 void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
@@ -235,10 +233,10 @@ void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetFillColor(aColor);
 }
 
-EditCharAttribLanguage::EditCharAttribLanguage( const SvxLanguageItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribLanguage::EditCharAttribLanguage(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert((rAttr.Which() == EE_CHAR_LANGUAGE) || (rAttr.Which() == EE_CHAR_LANGUAGE_CJK) || (rAttr.Which() == EE_CHAR_LANGUAGE_CTL));
+    assert((rItem.Which() == EE_CHAR_LANGUAGE) || (rItem.Which() == EE_CHAR_LANGUAGE_CJK) || (rItem.Which() == EE_CHAR_LANGUAGE_CTL));
 }
 
 void EditCharAttribLanguage::SetFont( SvxFont& rFont, OutputDevice* )
@@ -248,10 +246,10 @@ void EditCharAttribLanguage::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribShadow::EditCharAttribShadow( const SvxShadowedItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribShadow::EditCharAttribShadow(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_SHADOW);
+    assert(rItem.Which() == EE_CHAR_SHADOW);
 }
 
 void EditCharAttribShadow::SetFont( SvxFont& rFont, OutputDevice* )
@@ -261,10 +259,10 @@ void EditCharAttribShadow::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribEscapement::EditCharAttribEscapement( const SvxEscapementItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribEscapement::EditCharAttribEscapement(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_ESCAPEMENT);
+    assert(rItem.Which() == EE_CHAR_ESCAPEMENT);
 }
 
 void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
@@ -278,10 +276,10 @@ void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 
 
 
-EditCharAttribOutline::EditCharAttribOutline( const SvxContourItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribOutline::EditCharAttribOutline(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_OUTLINE);
+    assert(rItem.Which() == EE_CHAR_OUTLINE);
 }
 
 void EditCharAttribOutline::SetFont( SvxFont& rFont, OutputDevice* )
@@ -291,8 +289,8 @@ void EditCharAttribOutline::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribTab::EditCharAttribTab( const SfxVoidItem& rAttr, sal_Int32 nPos )
-    : EditCharAttrib( rAttr, nPos, nPos+1 )
+EditCharAttribTab::EditCharAttribTab(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nPos)
+: EditCharAttrib(rPool, rItem, nPos, nPos+1)
 {
     SetFeature( true );
 }
@@ -303,8 +301,8 @@ void EditCharAttribTab::SetFont( SvxFont&, OutputDevice* )
 
 
 
-EditCharAttribLineBreak::EditCharAttribLineBreak( const SfxVoidItem& rAttr, sal_Int32 nPos )
-    : EditCharAttrib( rAttr, nPos, nPos+1 )
+EditCharAttribLineBreak::EditCharAttribLineBreak(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nPos)
+: EditCharAttrib(rPool, rItem, nPos, nPos+1)
 {
     SetFeature( true );
 }
@@ -315,8 +313,8 @@ void EditCharAttribLineBreak::SetFont( SvxFont&, OutputDevice* )
 
 
 
-EditCharAttribField::EditCharAttribField( const SvxFieldItem& rAttr, sal_Int32 nPos )
-    : EditCharAttrib( rAttr, nPos, nPos+1 )
+EditCharAttribField::EditCharAttribField(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nPos)
+: EditCharAttrib(rPool, rItem, nPos, nPos+1)
 {
     SetFeature( true ); // !!!
 }
@@ -348,9 +346,9 @@ void EditCharAttribField::Reset()
     mxFldLineStyle.reset();
 }
 
-EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
-    : EditCharAttrib( *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd() ),
-        aFieldValue( rAttr.aFieldValue )
+EditCharAttribField::EditCharAttribField(const EditCharAttribField& rAttr)
+: EditCharAttrib(rAttr.GetHolder().getPool(), *rAttr.GetHolder().getItem(), rAttr.GetStart(), rAttr.GetEnd())
+, aFieldValue( rAttr.aFieldValue )
 {
     // Use this constructor only for temporary Objects, Item is not pooled.
     mxTxtColor = rAttr.mxTxtColor;
@@ -388,10 +386,10 @@ bool EditCharAttribField::operator == ( const EditCharAttribField& rAttr ) const
 
 
 
-EditCharAttribPairKerning::EditCharAttribPairKerning( const SvxAutoKernItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-: EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribPairKerning::EditCharAttribPairKerning(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_PAIRKERNING);
+    assert(rItem.Which() == EE_CHAR_PAIRKERNING);
 }
 
 void EditCharAttribPairKerning::SetFont( SvxFont& rFont, OutputDevice* )
@@ -401,10 +399,10 @@ void EditCharAttribPairKerning::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribKerning::EditCharAttribKerning( const SvxKerningItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-: EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribKerning::EditCharAttribKerning(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_KERNING);
+    assert(rItem.Which() == EE_CHAR_KERNING);
 }
 
 void EditCharAttribKerning::SetFont( SvxFont& rFont, OutputDevice* )
@@ -414,10 +412,10 @@ void EditCharAttribKerning::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribWordLineMode::EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-: EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribWordLineMode::EditCharAttribWordLineMode(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_WLM);
+    assert(rItem.Which() == EE_CHAR_WLM);
 }
 
 void EditCharAttribWordLineMode::SetFont( SvxFont& rFont, OutputDevice* )
@@ -427,10 +425,10 @@ void EditCharAttribWordLineMode::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribEmphasisMark::EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribEmphasisMark::EditCharAttribEmphasisMark(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_EMPHASISMARK);
+    assert(rItem.Which() == EE_CHAR_EMPHASISMARK);
 }
 
 void EditCharAttribEmphasisMark::SetFont( SvxFont& rFont, OutputDevice* )
@@ -440,10 +438,10 @@ void EditCharAttribEmphasisMark::SetFont( SvxFont& rFont, OutputDevice* )
 
 
 
-EditCharAttribRelief::EditCharAttribRelief( const SvxCharReliefItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribRelief::EditCharAttribRelief(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_RELIEF);
+    assert(rItem.Which() == EE_CHAR_RELIEF);
 }
 
 void EditCharAttribRelief::SetFont( SvxFont& rFont, OutputDevice* )
@@ -452,10 +450,10 @@ void EditCharAttribRelief::SetFont( SvxFont& rFont, OutputDevice* )
 }
 
 
-EditCharAttribGrabBag::EditCharAttribGrabBag( const SfxGrabBagItem& rAttr, sal_Int32 _nStart, sal_Int32 _nEnd )
-    : EditCharAttrib( rAttr, _nStart, _nEnd )
+EditCharAttribGrabBag::EditCharAttribGrabBag(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rAttr.Which() == EE_CHAR_GRABBAG);
+    assert(rItem.Which() == EE_CHAR_GRABBAG);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

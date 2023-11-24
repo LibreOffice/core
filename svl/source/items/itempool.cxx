@@ -794,14 +794,14 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 
 const SfxPoolItem& SfxItemPool::DirectPutItemInPoolImpl(const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership)
 {
+    // CAUTION: Do not register the problematic pool default
+    if (rItem.isExceptionalSCItem() && GetMasterPool()->newItem_UseDirect(rItem))
+        return rItem;
+
 #ifdef DBG_UTIL
     nAllDirectlyPooledSfxPoolItemCount++;
     nRemainingDirectlyPooledSfxPoolItemCount++;
 #endif
-
-    // CAUTION: Do not register the problematic pool default
-    if (rItem.isExceptionalSCItem() && GetMasterPool()->newItem_UseDirect(rItem))
-        return rItem;
 
     // make sure to use 'master'-pool, that's the one used by SfxItemSets
     const SfxPoolItem* pRetval(implCreateItemEntry(*GetMasterPool(), &rItem, nWhich, bPassingOwnership));
@@ -816,13 +816,16 @@ const SfxPoolItem& SfxItemPool::DirectPutItemInPoolImpl(const SfxPoolItem& rItem
 
 void SfxItemPool::DirectRemoveItemFromPool(const SfxPoolItem& rItem)
 {
+    // CAUTION: Do not remove the problematic pool default
+    if (rItem.isExceptionalSCItem() && GetMasterPool()->newItem_UseDirect(rItem))
+        return;
+
 #ifdef DBG_UTIL
     nRemainingDirectlyPooledSfxPoolItemCount--;
 #endif
 
     // make sure to use 'master'-pool, that's the one used by SfxItemSets
     implCleanupItemEntry(*GetMasterPool(), &rItem);
-    return;
 }
 
 void SfxItemPool::newItem_Callback(const SfxPoolItem& rItem) const

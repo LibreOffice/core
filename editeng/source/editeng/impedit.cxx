@@ -2156,7 +2156,11 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     if (!pEditEngine->GetSelectionEngine().HasAnchor())
     {
         if ( aNewEditSelection.Min() != aPaM )
-            pEditEngine->CursorMoved(aNewEditSelection.Min().GetNode());
+        {
+            const ContentNode* pNode(aNewEditSelection.Min().GetNode());
+            if (nullptr != pNode)
+                pNode->checkAndDeleteEmptyAttribs();
+        }
         aNewEditSelection.Min() = aPaM;
     }
     else

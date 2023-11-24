@@ -261,8 +261,9 @@ void EditView::SetSelection( const ESelection& rESel )
     {
         // tdf#113591 Get node from EditDoc, as the selection might have a pointer to an
         // already deleted node.
-        const ContentNode* pNode = pImpEditView->pEditEngine->GetEditDoc().GetEndPaM().GetNode();
-        pImpEditView->pEditEngine->CursorMoved( pNode );
+        const ContentNode* pNode(pImpEditView->pEditEngine->GetEditDoc().GetEndPaM().GetNode());
+        if (nullptr != pNode)
+            pNode->checkAndDeleteEmptyAttribs();
     }
     EditSelection aNewSelection( pImpEditView->pEditEngine->pImpEditEngine->ConvertSelection(
                                             rESel.nStartPara, rESel.nStartPos, rESel.nEndPara, rESel.nEndPos ) );
@@ -1719,7 +1720,12 @@ void EditView::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool 
         aSelection.Min() = aPaM;
 
     if (pImpEditView->GetEditSelection().Min() != aSelection.Min())
-        pImpEditView->pEditEngine->CursorMoved(pImpEditView->GetEditSelection().Min().GetNode());
+    {
+        const ContentNode* pNode(pImpEditView->GetEditSelection().Min().GetNode());
+        if (nullptr != pNode)
+            pNode->checkAndDeleteEmptyAttribs();
+    }
+
     pImpEditView->DrawSelectionXOR(aSelection);
     if (pImpEditView->GetEditSelection() != aSelection)
         pImpEditView->SetEditSelection(aSelection);

@@ -34,11 +34,29 @@ class SfxItemPool;
 #ifdef DBG_UTIL
 SVL_DLLPUBLIC size_t getAllocatedSfxItemSetCount();
 SVL_DLLPUBLIC size_t getUsedSfxItemSetCount();
+SVL_DLLPUBLIC size_t getAllocatedSfxPoolItemHolderCount();
+SVL_DLLPUBLIC size_t getUsedSfxPoolItemHolderCount();
 #endif
 
 // ItemSet/ItemPool helpers
 SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership);
 void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource);
+
+class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxPoolItemHolder
+{
+    SfxItemPool*            m_pPool;
+    const SfxPoolItem*      m_pItem;
+public:
+    SfxPoolItemHolder(SfxItemPool&, const SfxPoolItem* = nullptr);
+    SfxPoolItemHolder(const SfxPoolItemHolder&);
+    ~SfxPoolItemHolder();
+
+    const SfxPoolItemHolder& operator=(const SfxPoolItemHolder&);
+    bool operator==(const SfxPoolItemHolder &) const;
+    SfxItemPool& getPool() const { return *m_pPool; }
+    const SfxPoolItem* getItem() const { return m_pItem; }
+    sal_uInt16 Which() const { if(nullptr != m_pItem) return m_pItem->Which(); return 0; }
+};
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {

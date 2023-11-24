@@ -47,7 +47,7 @@ public:
                 // Create a new table field with the new ID, and set it to the
                 // attribute object.
                 SvxFieldItem aNewItem(SvxTableField(nTab), EE_FEATURE_FIELD);
-                rAttr.SetItem(pPool->DirectPutItemInPool(aNewItem));
+                rAttr.SetItem(*pPool, aNewItem);
             }
         }
     }

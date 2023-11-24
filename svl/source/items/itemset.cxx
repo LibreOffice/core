@@ -39,14 +39,73 @@
 #ifdef DBG_UTIL
 static size_t nAllocatedSfxItemSetCount(0);
 static size_t nUsedSfxItemSetCount(0);
+static size_t nAllocatedSfxPoolItemHolderCount(0);
+static size_t nUsedSfxPoolItemHolderCount(0);
 size_t getAllocatedSfxItemSetCount() { return nAllocatedSfxItemSetCount; }
 size_t getUsedSfxItemSetCount() { return nUsedSfxItemSetCount; }
+size_t getAllocatedSfxPoolItemHolderCount() { return nAllocatedSfxPoolItemHolderCount; }
+size_t getUsedSfxPoolItemHolderCount() { return nUsedSfxPoolItemHolderCount; }
 #endif
 // NOTE: Only needed for one Item in SC (see notes below for
 // ScPatternAttr/ATTR_PATTERN). Still keep it so that when errors
 // come up to this change be able to quickly check using the
 // fallback flag 'ITEM_CLASSIC_MODE'
 static bool g_bItemClassicMode(getenv("ITEM_CLASSIC_MODE"));
+
+SfxPoolItemHolder::SfxPoolItemHolder(SfxItemPool& rPool, const SfxPoolItem* pItem)
+: m_pPool(&rPool),
+  m_pItem(pItem)
+{
+#ifdef DBG_UTIL
+    nAllocatedSfxPoolItemHolderCount++;
+    nUsedSfxPoolItemHolderCount++;
+#endif
+    if (nullptr != m_pItem)
+        m_pItem = implCreateItemEntry(*m_pPool, m_pItem, m_pItem->Which(), false);
+}
+
+SfxPoolItemHolder::SfxPoolItemHolder(const SfxPoolItemHolder& rHolder)
+: m_pPool(rHolder.m_pPool),
+  m_pItem(rHolder.m_pItem)
+{
+#ifdef DBG_UTIL
+    nAllocatedSfxPoolItemHolderCount++;
+    nUsedSfxPoolItemHolderCount++;
+#endif
+    if (nullptr != m_pItem)
+        m_pItem = implCreateItemEntry(*m_pPool, m_pItem, m_pItem->Which(), false);
+}
+
+SfxPoolItemHolder::~SfxPoolItemHolder()
+{
+#ifdef DBG_UTIL
+    nAllocatedSfxPoolItemHolderCount--;
+#endif
+    if (nullptr != m_pItem)
+        implCleanupItemEntry(*m_pPool, m_pItem);
+}
+
+const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& rHolder)
+{
+    if (this == &rHolder || *this == rHolder)
+        return *this;
+
+    if (nullptr != m_pItem)
+        implCleanupItemEntry(*m_pPool, m_pItem);
+
+    m_pPool = rHolder.m_pPool;
+    m_pItem = rHolder.m_pItem;
+
+    if (nullptr != m_pItem)
+        m_pItem = implCreateItemEntry(*m_pPool, m_pItem, m_pItem->Which(), false);
+
+    return *this;
+}
+
+bool SfxPoolItemHolder::operator==(const SfxPoolItemHolder &rHolder) const
+{
+    return m_pPool == rHolder.m_pPool && areSfxPoolItemPtrsEqual(m_pItem, rHolder.m_pItem);
+}
 
 /**
  * Ctor for a SfxItemSet with exactly the Which Ranges, which are known to

@@ -617,7 +617,6 @@ private:
     // Methods...
 
 
-    void                CursorMoved( const ContentNode* pPrevNode );
     void                ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreUndoCheck = false );
     void                TextModified();
     void                CalcHeight( ParaPortion* pPortion );

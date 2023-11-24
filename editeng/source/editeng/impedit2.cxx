@@ -758,15 +758,6 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet() const
 
 //  MISC
 
-void ImpEditEngine::CursorMoved( const ContentNode* pPrevNode )
-{
-    // Delete empty attributes, but only if paragraph is not empty!
-    if (pPrevNode->GetCharAttribs().HasEmptyAttribs() && pPrevNode->Len())
-    {
-        const_cast<ContentNode*>(pPrevNode)->GetCharAttribs().DeleteEmptyAttribs(maEditDoc.GetItemPool());
-    }
-}
-
 void ImpEditEngine::TextModified()
 {
     mbFormatted = false;
@@ -949,9 +940,9 @@ EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, Edit
                             break;
     }
 
-    if ( aOldPaM != aPaM )
+    if ( aOldPaM != aPaM && nullptr != aOldPaM.GetNode() )
     {
-        CursorMoved( aOldPaM.GetNode() );
+        aOldPaM.GetNode()->checkAndDeleteEmptyAttribs();
     }
 
     // May cause, a CreateAnchor or deselection all
@@ -2454,8 +2445,10 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     EditPaM aStartPaM(aCurSel.Min());
     EditPaM aEndPaM(aCurSel.Max());
 
-    CursorMoved( aStartPaM.GetNode() ); // only so that newly set Attributes disappear...
-    CursorMoved( aEndPaM.GetNode() );   // only so that newly set Attributes disappear...
+    if( nullptr != aStartPaM.GetNode() )
+        aStartPaM.GetNode()->checkAndDeleteEmptyAttribs(); // only so that newly set Attributes disappear...
+    if( nullptr != aEndPaM.GetNode() )
+        aEndPaM.GetNode()->checkAndDeleteEmptyAttribs(); // only so that newly set Attributes disappear...
 
     OSL_ENSURE( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index out of range in ImpDeleteSelection" );
     OSL_ENSURE( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index out of range in ImpDeleteSelection" );
@@ -2532,7 +2525,6 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
         InsertUndo(std::make_unique<EditUndoDelContent>(pEditEngine, pNode, nPara));
     else
     {
-        maEditDoc.RemoveItemsFromPool(*pNode);
         if ( pNode->GetStyleSheet() )
             EndListening( *pNode->GetStyleSheet() );
         delete pNode;
@@ -2979,7 +2971,9 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPos+1 );
 
-    CursorMoved( rPaM.GetNode() );  // if empty Attributes have emerged.
+    if( nullptr != rPaM.GetNode() )
+        rPaM.GetNode()->checkAndDeleteEmptyAttribs(); // if empty Attributes have emerged.
+
     TextModified();
     return aPaM;
 }

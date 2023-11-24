@@ -222,152 +222,149 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] =
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
 {
     // Create a new attribute in the pool
-    const SfxPoolItem& rNew = rPool.DirectPutItemInPool( rAttr );
-
-    EditCharAttrib* pNew = nullptr;
-    switch( rNew.Which() )
+    switch( rAttr.Which() )
     {
         case EE_CHAR_LANGUAGE:
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
         {
-            pNew = new EditCharAttribLanguage( static_cast<const SvxLanguageItem&>(rNew), nS, nE );
+            return new EditCharAttribLanguage(rPool, rAttr, nS, nE);
         }
         break;
         case EE_CHAR_COLOR:
         {
-            pNew = new EditCharAttribColor( static_cast<const SvxColorItem&>(rNew), nS, nE );
+            return new EditCharAttribColor(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_FONTINFO:
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            pNew = new EditCharAttribFont( static_cast<const SvxFontItem&>(rNew), nS, nE );
+            return new EditCharAttribFont(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_FONTHEIGHT:
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            pNew = new EditCharAttribFontHeight( static_cast<const SvxFontHeightItem&>(rNew), nS, nE );
+            return new EditCharAttribFontHeight(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_FONTWIDTH:
         {
-            pNew = new EditCharAttribFontWidth( static_cast<const SvxCharScaleWidthItem&>(rNew), nS, nE );
+            return new EditCharAttribFontWidth(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_WEIGHT:
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
         {
-            pNew = new EditCharAttribWeight( static_cast<const SvxWeightItem&>(rNew), nS, nE );
+            return new EditCharAttribWeight(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_UNDERLINE:
         {
-            pNew = new EditCharAttribUnderline( static_cast<const SvxUnderlineItem&>(rNew), nS, nE );
+            return new EditCharAttribUnderline(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_OVERLINE:
         {
-            pNew = new EditCharAttribOverline( static_cast<const SvxOverlineItem&>(rNew), nS, nE );
+            return new EditCharAttribOverline(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_EMPHASISMARK:
         {
-            pNew = new EditCharAttribEmphasisMark( static_cast<const SvxEmphasisMarkItem&>(rNew), nS, nE );
+            return new EditCharAttribEmphasisMark(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_RELIEF:
         {
-            pNew = new EditCharAttribRelief( static_cast<const SvxCharReliefItem&>(rNew), nS, nE );
+            return new EditCharAttribRelief(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_STRIKEOUT:
         {
-            pNew = new EditCharAttribStrikeout( static_cast<const SvxCrossedOutItem&>(rNew), nS, nE );
+            return new EditCharAttribStrikeout(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
         {
-            pNew = new EditCharAttribItalic( static_cast<const SvxPostureItem&>(rNew), nS, nE );
+            return new EditCharAttribItalic(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_OUTLINE:
         {
-            pNew = new EditCharAttribOutline( static_cast<const SvxContourItem&>(rNew), nS, nE );
+            return new EditCharAttribOutline(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_SHADOW:
         {
-            pNew = new EditCharAttribShadow( static_cast<const SvxShadowedItem&>(rNew), nS, nE );
+            return new EditCharAttribShadow(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_ESCAPEMENT:
         {
-            pNew = new EditCharAttribEscapement( static_cast<const SvxEscapementItem&>(rNew), nS, nE );
+            return new EditCharAttribEscapement(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_PAIRKERNING:
         {
-            pNew = new EditCharAttribPairKerning( static_cast<const SvxAutoKernItem&>(rNew), nS, nE );
+            return new EditCharAttribPairKerning(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_KERNING:
         {
-            pNew = new EditCharAttribKerning( static_cast<const SvxKerningItem&>(rNew), nS, nE );
+            return new EditCharAttribKerning(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_WLM:
         {
-            pNew = new EditCharAttribWordLineMode( static_cast<const SvxWordLineModeItem&>(rNew), nS, nE );
+            return new EditCharAttribWordLineMode(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_XMLATTRIBS:
         {
-            pNew = new EditCharAttrib( rNew, nS, nE );  // Attribute is only for holding XML information...
+            return new EditCharAttrib(rPool, rAttr, nS, nE);  // Attribute is only for holding XML information...
         }
         break;
         case EE_CHAR_CASEMAP:
         {
-            pNew = new EditCharAttribCaseMap( static_cast<const SvxCaseMapItem&>(rNew), nS, nE );
+            return new EditCharAttribCaseMap(rPool, rAttr, nS, nE );
         }
         break;
         case EE_CHAR_GRABBAG:
         {
-            pNew = new EditCharAttribGrabBag( static_cast<const SfxGrabBagItem&>(rNew), nS, nE );
+            return new EditCharAttribGrabBag(rPool, rAttr, nS, nE );
         }
         break;
         case EE_FEATURE_TAB:
         {
-            pNew = new EditCharAttribTab( static_cast<const SfxVoidItem&>(rNew), nS );
+            return new EditCharAttribTab(rPool, rAttr, nS );
         }
         break;
         case EE_FEATURE_LINEBR:
         {
-            pNew = new EditCharAttribLineBreak( static_cast<const SfxVoidItem&>(rNew), nS );
+            return new EditCharAttribLineBreak(rPool, rAttr, nS );
         }
         break;
         case EE_FEATURE_FIELD:
         {
-            pNew = new EditCharAttribField( static_cast<const SvxFieldItem&>(rNew), nS );
+            return new EditCharAttribField(rPool, rAttr, nS );
         }
         break;
         case EE_CHAR_BKGCOLOR:
         {
-            pNew = new EditCharAttribBackgroundColor( static_cast<const SvxColorItem&>(rNew), nS, nE );
+            return new EditCharAttribBackgroundColor(rPool, rAttr, nS, nE );
         }
         break;
         default:
-        {
-            OSL_FAIL( "Invalid Attribute!" );
-        }
+        break;
     }
-    return pNew;
+
+    OSL_FAIL( "Invalid Attribute!" );
+    return nullptr;
 }
 
 TextPortionList::TextPortionList()
@@ -812,12 +809,6 @@ ContentAttribsInfo::ContentAttribsInfo( SfxItemSet aParaAttribs ) :
 {
 }
 
-void ContentAttribsInfo::RemoveAllCharAttribsFromPool(SfxItemPool& rPool) const
-{
-    for (const std::unique_ptr<EditCharAttrib>& rAttrib : aPrevCharAttribs)
-        rPool.DirectRemoveItemFromPool(*rAttrib->GetItem());
-}
-
 void ContentAttribsInfo::AppendCharAttrib(EditCharAttrib* pNew)
 {
     aPrevCharAttribs.push_back(std::unique_ptr<EditCharAttrib>(pNew));
@@ -1212,7 +1203,7 @@ ContentNode::~ContentNode()
 {
 }
 
-void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& rItemPool )
+void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
 {
     if ( !nNew )
         return;
@@ -1330,7 +1321,6 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
         {
             OSL_FAIL( "Empty Attribute after ExpandAttribs?" );
             bResort = true;
-            rItemPool.DirectRemoveItemFromPool( *pAttrib->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
         }
         else
@@ -1354,7 +1344,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
 #endif
 }
 
-void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemPool& rItemPool )
+void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
 {
     if ( !nDeleted )
         return;
@@ -1426,7 +1416,6 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItem
         if ( bDelAttr )
         {
             bResort = true;
-            rItemPool.DirectRemoveItemFromPool( *pAttrib->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
         }
         else
@@ -1813,6 +1802,14 @@ void ContentNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+void ContentNode::checkAndDeleteEmptyAttribs() const
+{
+    // Delete empty attributes, but only if paragraph is not empty!
+    if (GetCharAttribs().HasEmptyAttribs() && Len())
+    {
+        const_cast<ContentNode*>(this)->GetCharAttribs().DeleteEmptyAttribs();
+    }
+}
 
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
 : pStyle(nullptr)
@@ -1934,45 +1931,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
 
 EditDoc::~EditDoc()
 {
-    ImplDestroyContents();
-}
-
-namespace {
-
-class RemoveEachItemFromPool
-{
-    EditDoc& mrDoc;
-public:
-    explicit RemoveEachItemFromPool(EditDoc& rDoc) : mrDoc(rDoc) {}
-    void operator() (const std::unique_ptr<ContentNode>& rNode)
-    {
-        mrDoc.RemoveItemsFromPool(*rNode);
-    }
-};
-
-struct ClearSpellErrorsHandler
-{
-    void operator() (std::unique_ptr<ContentNode> const & rNode)
-    {
-        rNode->DestroyWrongList();
-    }
-};
-
-}
-
-void EditDoc::ImplDestroyContents()
-{
-    std::for_each(maContents.begin(), maContents.end(), RemoveEachItemFromPool(*this));
     maContents.clear();
-}
-
-void EditDoc::RemoveItemsFromPool(const ContentNode& rNode)
-{
-    for (sal_Int32 nAttr = 0; nAttr < rNode.GetCharAttribs().Count(); ++nAttr)
-    {
-        const EditCharAttrib& rAttr = *rNode.GetCharAttribs().GetAttribs()[nAttr];
-        GetItemPool().DirectRemoveItemFromPool(*rAttr.GetItem());
-    }
 }
 
 void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, SvtScriptType nScriptType )
@@ -2223,7 +2182,7 @@ sal_Int32 EditDoc::GetTextLen() const
 
 EditPaM EditDoc::Clear()
 {
-    ImplDestroyContents();
+    maContents.clear();
 
     ContentNode* pNode = new ContentNode( GetItemPool() );
     Insert(0, pNode);
@@ -2233,6 +2192,17 @@ EditPaM EditDoc::Clear()
     SetModified(false);
 
     return EditPaM( pNode, 0 );
+}
+
+namespace
+{
+struct ClearSpellErrorsHandler
+{
+    void operator() (std::unique_ptr<ContentNode> const & rNode)
+    {
+        rNode->DestroyWrongList();
+    }
+};
 }
 
 void EditDoc::ClearSpellErrors()
@@ -2257,7 +2227,7 @@ EditPaM EditDoc::RemoveText()
     SfxItemSet aPrevSet( pPrevFirstNode->GetContentAttribs().GetItems() );
     vcl::Font aPrevFont( pPrevFirstNode->GetCharAttribs().GetDefFont() );
 
-    ImplDestroyContents();
+    maContents.clear();
 
     ContentNode* pNode = new ContentNode( GetItemPool() );
     Insert(0, pNode);
@@ -2279,7 +2249,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, std::u16string_view rStr )
     assert(aPaM.GetNode());
 
     aPaM.GetNode()->Insert( rStr, aPaM.GetIndex() );
-    aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.size(), GetItemPool() );
+    aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.size() );
     aPaM.SetIndex( aPaM.GetIndex() + rStr.size() );
 
     SetModified( true );
@@ -2334,7 +2304,7 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
     assert(aPaM.GetNode());
 
     aPaM.GetNode()->Insert( rtl::OUStringChar(CH_FEATURE), aPaM.GetIndex() );
-    aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), 1, GetItemPool() );
+    aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), 1 );
 
     // Create a feature-attribute for the feature...
     EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rItem, aPaM.GetIndex(), aPaM.GetIndex()+1 );
@@ -2357,7 +2327,6 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
     pLeft->Append(pRight->GetString());
 
     // the one to the right disappears.
-    RemoveItemsFromPool(*pRight);
     sal_Int32 nRight = GetPos( pRight );
     Remove( nRight );
 
@@ -2370,7 +2339,7 @@ void EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
 {
     // Maybe remove Features!
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
-    aPaM.GetNode()->CollapseAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
+    aPaM.GetNode()->CollapseAttribs( aPaM.GetIndex(), nChars );
 
     SetModified( true );
 }
@@ -2405,7 +2374,6 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
     {
         // Will become a large Attribute.
         pEndingAttrib->GetEnd() = pStartingAttrib->GetEnd();
-        GetItemPool().DirectRemoveItemFromPool( *(pStartingAttrib->GetItem()) );
         pNode->GetCharAttribs().Remove(pStartingAttrib);
     }
     else if ( pStartingAttrib && ( *(pStartingAttrib->GetItem()) == rPoolItem ) )
@@ -2527,7 +2495,6 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
         {
             DBG_ASSERT( ( pAttr != rpStarting ) && ( pAttr != rpEnding ), "Delete and retain the same attribute?" );
             DBG_ASSERT( !pAttr->IsFeature(), "RemoveAttribs: Remove a feature?!" );
-            GetItemPool().DirectRemoveItemFromPool( *pAttr->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
         }
         else
@@ -2808,7 +2775,7 @@ void CharAttribList::ResortAttribs()
 #endif
 }
 
-void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
+void CharAttribList::OptimizeRanges()
 {
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     CharAttribList::DbgCheckAttribs(*this);
@@ -2824,7 +2791,6 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
                 if (*rNext.GetItem() == *rAttr.GetItem())
                 {
                     rAttr.GetEnd() = rNext.GetEnd();
-                    rItemPool.DirectRemoveItemFromPool(*rNext.GetItem());
                     aAttribs.erase(aAttribs.begin()+nNext);
                 }
                 break;  // only 1 attr with same which can start here.
@@ -2990,25 +2956,8 @@ const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
     return it == aAttribs.end() ? nullptr : it->get();
 }
 
-namespace {
-
-class RemoveEmptyAttrItem
+void CharAttribList::DeleteEmptyAttribs()
 {
-    SfxItemPool& mrItemPool;
-public:
-    explicit RemoveEmptyAttrItem(SfxItemPool& rPool) : mrItemPool(rPool) {}
-    void operator() (const std::unique_ptr<EditCharAttrib>& r)
-    {
-        if (r->IsEmpty())
-            mrItemPool.DirectRemoveItemFromPool(*r->GetItem());
-    }
-};
-
-}
-
-void CharAttribList::DeleteEmptyAttribs( SfxItemPool& rItemPool )
-{
-    std::for_each(aAttribs.begin(), aAttribs.end(), RemoveEmptyAttrItem(rItemPool));
     std::erase_if(aAttribs, [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsEmpty(); } );
     bHasEmptyAttribs = false;
 }

@@ -1095,9 +1095,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
                         aX.GetEnd() = nEndPos-nStartPos;
                 }
                 DBG_ASSERT( aX.GetEnd() <= (nEndPos-nStartPos), "CreateTextObject: Attribute too long!" );
-                if ( !aX.GetLen() && !bEmptyPara )
-                    pTxtObj->DestroyAttrib(aX);
-                else
+                if ( aX.GetLen() || bEmptyPara )
                     rCAttriblist.push_back(std::move(aX));
             }
             nAttr++;
