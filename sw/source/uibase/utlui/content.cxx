@@ -2364,122 +2364,129 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
     return pRetObj;
 }
 
-void SwContentTree::Expand(const weld::TreeIter& rParent, std::vector<std::unique_ptr<weld::TreeIter>>* pNodesToExpand)
+void SwContentTree::Expand(const weld::TreeIter& rParent,
+                           std::vector<std::unique_ptr<weld::TreeIter>>* pNodesToExpand)
 {
-    if (!(m_xTreeView->iter_has_child(rParent) || m_xTreeView->get_children_on_demand(rParent)))
+    if (!m_xTreeView->iter_has_child(rParent) && !m_xTreeView->get_children_on_demand(rParent))
         return;
 
-    if (m_nRootType == ContentTypeId::UNKNOWN || m_nRootType == ContentTypeId::OUTLINE ||
-            m_nRootType == ContentTypeId::REGION)
+    // pNodesToExpand is used by the Display function to restore the trees expand structure for
+    // hierarchical content types, e.g., OUTLINE and REGION.
+    if (pNodesToExpand)
+        pNodesToExpand->emplace_back(m_xTreeView->make_iterator(&rParent));
+
+    // rParentId is a string representation of a pointer to SwContentType or SwContent
+    const OUString& rParentId = m_xTreeView->get_id(rParent);
+    // bParentIsContentType tells if the passed rParent tree entry is a content type or content
+    const bool bParentIsContentType = lcl_IsContentType(rParent, *m_xTreeView);
+    // eParentContentTypeId is the content type of the passed rParent tree entry
+    const ContentTypeId eParentContentTypeId =
+            bParentIsContentType ? weld::fromId<SwContentType*>(rParentId)->GetType() :
+                                   weld::fromId<SwContent*>(rParentId)->GetParent()->GetType();
+
+    if (m_nRootType == ContentTypeId::UNKNOWN && bParentIsContentType)
     {
-        if (lcl_IsContentType(rParent, *m_xTreeView))
+        // m_nActiveBlock and m_nHiddenBlock are used to persist the content type expand state for
+        // the all content view mode
+        const sal_Int32 nOr = 1 << static_cast<int>(eParentContentTypeId); //linear -> Bitposition
+        if (State::HIDDEN != m_eState)
         {
-            ContentTypeId eContentTypeId =
-                    weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent))->GetType();
-            const sal_Int32 nOr = 1 << static_cast<int>(eContentTypeId); //linear -> Bitposition
-            if (State::HIDDEN != m_eState)
-            {
-                m_nActiveBlock |= nOr;
-                m_pConfig->SetActiveBlock(m_nActiveBlock);
-            }
-            else
-                m_nHiddenBlock |= nOr;
-            if (eContentTypeId == ContentTypeId::OUTLINE)
-            {
-                std::map< void*, bool > aCurrOutLineNodeMap;
+            m_nActiveBlock |= nOr;
+            m_pConfig->SetActiveBlock(m_nActiveBlock);
+        }
+        else
+            m_nHiddenBlock |= nOr;
+    }
 
-                SwWrtShell* pShell = GetWrtShell();
-                bool bParentHasChild = RequestingChildren(rParent);
-                if (pNodesToExpand)
-                    pNodesToExpand->emplace_back(m_xTreeView->make_iterator(&rParent));
-                if (bParentHasChild)
-                {
-                    std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rParent));
-                    bool bChild = m_xTreeView->iter_next(*xChild);
-                    while (bChild && lcl_IsContent(*xChild, *m_xTreeView))
-                    {
-                        if (m_xTreeView->iter_has_child(*xChild))
-                        {
-                            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xChild))));
-                            auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xChild))->GetOutlinePos();
-                            void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
-                            aCurrOutLineNodeMap.emplace( key, false );
-                            std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
-                            if( iter != mOutLineNodeMap.end() && mOutLineNodeMap[key])
-                            {
-                                aCurrOutLineNodeMap[key] = true;
-                                RequestingChildren(*xChild);
-                                if (pNodesToExpand)
-                                    pNodesToExpand->emplace_back(m_xTreeView->make_iterator(xChild.get()));
-                                m_xTreeView->set_children_on_demand(*xChild, false);
-                            }
-                        }
-                        bChild = m_xTreeView->iter_next(*xChild);
-                    }
-                }
-                mOutLineNodeMap = aCurrOutLineNodeMap;
-                return;
-            }
-            if (eContentTypeId == ContentTypeId::REGION)
-            {
-                std::map<const void*, bool> aCurrentRegionNodeExpandMap;
+    if (m_nRootType == ContentTypeId::OUTLINE || (m_nRootType == ContentTypeId::UNKNOWN &&
+                                                  eParentContentTypeId == ContentTypeId::OUTLINE))
+    {
+        if (bParentIsContentType)
+        {
+            std::map< void*, bool > aCurrOutLineNodeMap;
 
-                bool bParentHasChild = RequestingChildren(rParent);
-                if (pNodesToExpand)
-                    pNodesToExpand->emplace_back(m_xTreeView->make_iterator(&rParent));
-                if (bParentHasChild)
+            SwWrtShell* pShell = GetWrtShell();
+            bool bParentHasChild = RequestingChildren(rParent);
+            if (bParentHasChild)
+            {
+                std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rParent));
+                bool bChild = m_xTreeView->iter_next(*xChild);
+                while (bChild && lcl_IsContent(*xChild, *m_xTreeView))
                 {
-                    std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rParent));
-                    bool bChild = m_xTreeView->iter_next(*xChild);
-                    while (bChild && lcl_IsContent(*xChild, *m_xTreeView))
+                    if (m_xTreeView->iter_has_child(*xChild))
                     {
-                        if (m_xTreeView->iter_has_child(*xChild))
+                        assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xChild))));
+                        auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xChild))->GetOutlinePos();
+                        void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
+                        aCurrOutLineNodeMap.emplace( key, false );
+                        std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
+                        if( iter != mOutLineNodeMap.end() && mOutLineNodeMap[key])
                         {
-                            assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xChild))));
-                            const void* key = static_cast<const void*>(
-                                        weld::fromId<SwRegionContent*>(m_xTreeView->get_id(*xChild))
-                                        ->GetSectionFormat());
-                            aCurrentRegionNodeExpandMap.emplace(key, false);
-                            if (m_aRegionNodeExpandMap.contains(key) && m_aRegionNodeExpandMap[key])
-                            {
-                                aCurrentRegionNodeExpandMap[key] = true;
-                                RequestingChildren(*xChild);
-                                if (pNodesToExpand)
-                                    pNodesToExpand->emplace_back(m_xTreeView->make_iterator(xChild.get()));
-                                m_xTreeView->set_children_on_demand(*xChild, false);
-                            }
+                            aCurrOutLineNodeMap[key] = true;
+                            RequestingChildren(*xChild);
+                            if (pNodesToExpand)
+                                pNodesToExpand->emplace_back(m_xTreeView->make_iterator(xChild.get()));
+                            m_xTreeView->set_children_on_demand(*xChild, false);
                         }
-                        bChild = m_xTreeView->iter_next(*xChild);
                     }
+                    bChild = m_xTreeView->iter_next(*xChild);
                 }
-                m_aRegionNodeExpandMap = aCurrentRegionNodeExpandMap;
-                return;
             }
+            mOutLineNodeMap = aCurrOutLineNodeMap;
+            return;
         }
         else // content entry
         {
-            ContentTypeId eContentTypeId =
-                    weld::fromId<SwContent*>(m_xTreeView->get_id(rParent))->GetParent()->GetType();
-            if (eContentTypeId == ContentTypeId::OUTLINE)
+            SwWrtShell* pShell = GetWrtShell();
+            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(rParentId)));
+            auto const nPos = weld::fromId<SwOutlineContent*>(rParentId)->GetOutlinePos();
+            void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
+            mOutLineNodeMap[key] = true;
+        }
+    }
+    else if (m_nRootType == ContentTypeId::REGION || (m_nRootType == ContentTypeId::UNKNOWN &&
+                                                      eParentContentTypeId == ContentTypeId::REGION))
+    {
+        if (bParentIsContentType)
+        {
+            std::map<const void*, bool> aCurrentRegionNodeExpandMap;
+            if (RequestingChildren(rParent))
             {
-                SwWrtShell* pShell = GetWrtShell();
-                assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
-                auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rParent))->GetOutlinePos();
-                void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
-                mOutLineNodeMap[key] = true;
+                std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rParent));
+                while (m_xTreeView->iter_next(*xChild) && lcl_IsContent(*xChild, *m_xTreeView))
+                {
+                    if (m_xTreeView->iter_has_child(*xChild))
+                    {
+                        assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xChild))));
+                        const void* key =
+                                static_cast<const void*>(weld::fromId<SwRegionContent*>(
+                                                m_xTreeView->get_id(*xChild))->GetSectionFormat());
+                        bool bExpandNode =
+                                m_aRegionNodeExpandMap.contains(key) && m_aRegionNodeExpandMap[key];
+                        aCurrentRegionNodeExpandMap.emplace(key, bExpandNode);
+                        if (bExpandNode)
+                        {
+                            if (pNodesToExpand)
+                                pNodesToExpand->emplace_back(m_xTreeView->make_iterator(xChild.get()));
+                            RequestingChildren(*xChild);
+                            m_xTreeView->set_children_on_demand(*xChild, false);
+                        }
+                    }
+                }
             }
-            else if(eContentTypeId == ContentTypeId::REGION)
-            {
-                assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
-                const void* key = static_cast<const void*>(weld::fromId<SwRegionContent*>(m_xTreeView->get_id(rParent))->GetSectionFormat());
-                m_aRegionNodeExpandMap[key] = true;
-            }
+            m_aRegionNodeExpandMap = aCurrentRegionNodeExpandMap;
+            return;
+        }
+        else // content entry
+        {
+            assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(rParentId)));
+            const void* key = static_cast<const void*>(
+                        weld::fromId<SwRegionContent*>(rParentId)->GetSectionFormat());
+            m_aRegionNodeExpandMap[key] = true;
         }
     }
 
     RequestingChildren(rParent);
-    if (pNodesToExpand)
-        pNodesToExpand->emplace_back(m_xTreeView->make_iterator(&rParent));
 }
 
 IMPL_LINK(SwContentTree, ExpandHdl, const weld::TreeIter&, rParent, bool)

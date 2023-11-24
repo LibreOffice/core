@@ -109,10 +109,10 @@ class SwContentTree final : public SfxListener
     std::map< void*, bool > mOutLineNodeMap;
     std::map<const void*, bool> m_aRegionNodeExpandMap; // stores expand state of nodes with children
 
-    sal_Int32           m_nActiveBlock; // used to restore content types/categories expand state
+    sal_Int32           m_nActiveBlock;  // used to restore content types expand state
     sal_Int32           m_nHiddenBlock;
     size_t              m_nEntryCount;
-    ContentTypeId       m_nRootType;
+    ContentTypeId       m_nRootType;    // content type that is currently displayed in the tree
     ContentTypeId       m_nLastSelType;
     sal_uInt8           m_nOutlineLevel;
 
