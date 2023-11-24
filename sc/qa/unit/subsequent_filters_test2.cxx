@@ -32,6 +32,7 @@
 #include <editeng/colritem.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
+#include <docpool.hxx>
 #include <dbdata.hxx>
 #include <validat.hxx>
 #include <formulacell.hxx>
@@ -51,6 +52,7 @@
 #include <hints.hxx>
 #include <detfunc.hxx>
 #include <scerrors.hxx>
+#include <filterentries.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -198,6 +200,7 @@ public:
     void testSingleLine();
     void testNamedTableRef();
     void testRowImportCellStyleIssue();
+    void testBackColorFilter();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -322,6 +325,7 @@ public:
     CPPUNIT_TEST(testSingleLine);
     CPPUNIT_TEST(testNamedTableRef);
     CPPUNIT_TEST(testRowImportCellStyleIssue);
+    CPPUNIT_TEST(testBackColorFilter);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3128,6 +3132,41 @@ void ScFiltersTest2::testRowImportCellStyleIssue()
         CPPUNIT_ASSERT_EQUAL(Color(0xe7e6e6), rBackground.GetColor());
         auto const& rComplexColor = rBackground.getComplexColor();
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Light2, rComplexColor.getThemeColorType());
+    }
+}
+
+void ScFiltersTest2::testBackColorFilter()
+{
+    Color aBackColor1(0xc99c00);
+    Color aBackColor2(0x0369a3);
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScPatternAttr aPattern1(pDoc->GetPool());
+    aPattern1.GetItemSet().Put(SvxBrushItem(aBackColor1, ATTR_BACKGROUND));
+
+    ScPatternAttr aPattern2(pDoc->GetPool());
+    aPattern2.GetItemSet().Put(SvxBrushItem(aBackColor2, ATTR_BACKGROUND));
+
+    // Apply the pattern to cell A1:A2
+    pDoc->ApplyPatternAreaTab(0, 0, 0, 1, 0, aPattern1);
+
+    // Apply the pattern to cell A3:A5
+    pDoc->ApplyPatternAreaTab(0, 2, 0, 4, 0, aPattern2);
+
+    {
+        ScRefCellValue aCell;
+        aCell.assign(*pDoc, ScAddress(0, 0, 0));
+        CPPUNIT_ASSERT_MESSAGE("Cell A1 should be empty.", aCell.isEmpty());
+        aCell.assign(*pDoc, ScAddress(0, 2, 0));
+        CPPUNIT_ASSERT_MESSAGE("Cell A3 should be empty.", aCell.isEmpty());
+    }
+
+    {
+        ScFilterEntries aFilterEntries;
+        pDoc->GetFilterEntriesArea(0, 0, 4, 0, true, aFilterEntries);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aFilterEntries.getBackgroundColors().size());
     }
 }
 
