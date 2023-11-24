@@ -24,8 +24,7 @@ private:
 
     SvStream& mrStream;
 
-    bool mbElementOpen;
-    bool mbCharactersWritten;
+    bool mbOpeningTagOpen = false;
     bool mbPrettyPrint;
     /// XML namespace, in case of XHTML.
     OString maNamespace;
