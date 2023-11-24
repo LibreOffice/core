@@ -210,8 +210,9 @@ OUString SwModelTestBase::parseDump(const OString& aXPath, const OString& aAttri
     if (pXmlXpathObj->type == XPATH_NODESET)
     {
         xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("xpath should match exactly 1 node", 1,
-                                     xmlXPathNodeSetGetLength(pXmlNodes));
+        int nNodes = xmlXPathNodeSetGetLength(pXmlNodes);
+        OString aMessage("xpath ('" + aXPath + "') should match exactly 1 node");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), 1, nNodes);
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
         if (aAttribute.getLength())
             pXpathStrResult = xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr()));
@@ -343,7 +344,8 @@ SwModelTestBase::getParagraphOfText(int number, uno::Reference<text::XText> cons
                                     const OUString& content) const
 {
     uno::Reference<text::XTextRange> const xParagraph(getParagraphOrTable(number, xText),
-                                                      uno::UNO_QUERY_THROW);
+                                                      uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraph.is());
     if (!content.isEmpty())
         CPPUNIT_ASSERT_EQUAL_MESSAGE("paragraph does not contain expected content", content,
                                      xParagraph->getString());
