@@ -108,6 +108,8 @@ $(eval $(call gb_CppunitTest_use_components,sw_uwriter,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_uwriter))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(eval $(call gb_CppunitTest_set_non_application_font_use,sw_uwriter,abort))
+endif
 
 # vim: set noet sw=4 ts=4:
