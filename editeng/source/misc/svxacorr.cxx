@@ -833,37 +833,38 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
         // of an empty hint in SetAttr which would be removed by Delete
         // (fdo#62536, AUTOFMT in Writer)
         rDoc.Delete( nEndPos, nEndPos + 1 );
-        rDoc.Delete( nFndPos, nFndPos + 1 );
+
         // Span the Attribute over the area
         // the end.
         if( '*' == cInsChar )           // Bold
         {
             SvxWeightItem aSvxWeightItem( WEIGHT_BOLD, SID_ATTR_CHAR_WEIGHT );
-            rDoc.SetAttr( nFndPos, nEndPos - 1,
+            rDoc.SetAttr( nFndPos + 1, nEndPos,
                           SID_ATTR_CHAR_WEIGHT,
                           aSvxWeightItem);
         }
         else if( '/' == cInsChar )           // Italic
         {
             SvxPostureItem aSvxPostureItem( ITALIC_NORMAL, SID_ATTR_CHAR_POSTURE );
-            rDoc.SetAttr( nFndPos, nEndPos - 1,
+            rDoc.SetAttr( nFndPos + 1, nEndPos,
                           SID_ATTR_CHAR_POSTURE,
                           aSvxPostureItem);
         }
         else if( '-' == cInsChar )           // Strikeout
         {
             SvxCrossedOutItem aSvxCrossedOutItem( STRIKEOUT_SINGLE, SID_ATTR_CHAR_STRIKEOUT );
-            rDoc.SetAttr( nFndPos, nEndPos - 1,
+            rDoc.SetAttr( nFndPos + 1, nEndPos,
                           SID_ATTR_CHAR_STRIKEOUT,
                           aSvxCrossedOutItem);
         }
         else                            // Underline
         {
             SvxUnderlineItem aSvxUnderlineItem( LINESTYLE_SINGLE, SID_ATTR_CHAR_UNDERLINE );
-            rDoc.SetAttr( nFndPos, nEndPos - 1,
+            rDoc.SetAttr( nFndPos + 1, nEndPos,
                           SID_ATTR_CHAR_UNDERLINE,
                           aSvxUnderlineItem);
         }
+        rDoc.Delete( nFndPos, nFndPos + 1 );
     }
 
     return -1 != nFndPos;

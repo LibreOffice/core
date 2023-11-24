@@ -64,7 +64,7 @@ else
 		$(if $(gb_UITest__interactive),, \
 		    rm -fr $@.core && mkdir -p $(dir $(call gb_UITest_get_target,$*))user/ && mkdir $@.core && cd $@.core && ) \
 		$(if $(gb_UITest_use_config), \
-		    cp $(gb_UITest_use_config) $(dir $(call gb_UITest_get_target,$*))user/. && ) \
+		    cp $(gb_UITest_use_config) $(dir $(call gb_UITest_get_target,$*))user/user && ) \
 		$(call gb_CppunitTest_coredumpctl_setup,$@) \
 		($(gb_UITest_PRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
