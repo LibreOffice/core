@@ -54,6 +54,7 @@
 #include <macassgn.hxx>
 #include <docsh.hxx>
 #include <shellio.hxx>
+#include <unotextcursor.hxx>
 
 #include <cmdid.h>
 #include <sfx2/filedlghelper.hxx>
@@ -1042,7 +1043,7 @@ void SwGlossaryDlg::ResumeShowAutoText()
             m_xAutoText = text::AutoTextContainer::create( comphelper::getProcessComponentContext() );
         }
 
-        uno::Reference< XTextCursor > & xCursor = m_xExampleFrame->GetTextCursor();
+        rtl::Reference< SwXTextCursor > & xCursor = m_xExampleFrame->GetTextCursor();
         if(xCursor.is())
         {
             if (!sShortName.isEmpty())
@@ -1054,7 +1055,7 @@ void SwGlossaryDlg::ResumeShowAutoText()
                     uno::Any aEntry(xGroup->getByName(sShortName));
                     uno::Reference< XAutoTextEntry >  xEntry;
                     aEntry >>= xEntry;
-                    xEntry->applyTo(xCursor);
+                    xEntry->applyTo(static_cast<XSentenceCursor*>(xCursor.get()));
                 }
             }
         }
