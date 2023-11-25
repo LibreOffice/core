@@ -109,7 +109,7 @@ void merge(
 }
 
 XcsParser::XcsParser(int layer, Data & data):
-    valueParser_(layer), data_(data), state_(STATE_START), ignoring_(), bIsParsingInfo_(false), type_(TYPE_ERROR)
+    valueParser_(layer), data_(data), state_(STATE_START), ignoring_(), bIsParsingInfo_(false)
 {}
 
 XcsParser::~XcsParser() {}
@@ -307,13 +307,17 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
         Element top(std::move(elements_.top()));
         elements_.pop();
         if (top.node.is()) {
-            // Remove whitespace from description_ resulting from line breaks/indentation in xml files
-            OUString desc(description_.makeStringAndClear());
-            desc = desc.trim();
-            while (desc.indexOf("  ") != -1)
-                desc = desc.replaceAll("  ", " ");
-            top.node->setDescription(desc);
-            top.node->setType(type_);
+            if (top.node->kind() == Node::KIND_PROPERTY
+                || top.node->kind() == Node::KIND_LOCALIZED_PROPERTY)
+            {
+                // Remove whitespace from description_ resulting from line breaks/indentation in xml files
+                OUString desc(description_.makeStringAndClear());
+                desc = desc.trim();
+                while (desc.indexOf("  ") != -1)
+                    desc = desc.replaceAll("  ", " ");
+                top.node->setDescription(desc);
+                top.node->setType(type_);
+            }
             if (elements_.empty()) {
                 switch (state_) {
                 case STATE_TEMPLATES:
@@ -474,7 +478,7 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
 void XcsParser::handleProp(xmlreader::XmlReader & reader) {
     bool hasName = false;
     OUString name;
-    valueParser_.type_ = TYPE_ERROR;
+    type_ = TYPE_ERROR;
     bool localized = false;
     bool nillable = true;
     for (;;) {
@@ -489,9 +493,8 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "type")
         {
-            valueParser_.type_ = xmldata::parseType(
+            type_ = xmldata::parseType(
                 reader, reader.getAttributeValue(true));
-            type_ = valueParser_.type_;
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "localized")
         {
@@ -506,10 +509,11 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
         throw css::uno::RuntimeException(
             "no prop name attribute in " + reader.getUrl());
     }
-    if (valueParser_.type_ == TYPE_ERROR) {
+    if (type_ == TYPE_ERROR) {
         throw css::uno::RuntimeException(
             "no prop type attribute in " + reader.getUrl());
     }
+    valueParser_.type_ = type_;
     elements_.push(
         Element(
             (localized
