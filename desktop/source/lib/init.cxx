@@ -7754,6 +7754,15 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         }
     }
 
+#ifdef LINUX
+    {
+        const char *pAllowedPaths = getenv("SAL_ALLOWED_PATHS");
+        if (pAllowedPaths)
+            osl_setAllowedPaths(
+                OUString(pAllowedPaths, strlen(pAllowedPaths), RTL_TEXTENCODING_UTF8).pData);
+    }
+#endif
+
     // What stage are we at ?
     if (pThis == nullptr)
     {
