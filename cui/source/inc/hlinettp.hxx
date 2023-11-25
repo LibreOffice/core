@@ -36,7 +36,6 @@ class SvxHyperlinkInternetTp : public SvxHyperlinkTabPageBase
 private:
     bool                m_bMarkWndOpen;
 
-    std::unique_ptr<weld::RadioButton> m_xRbtLinktypInternet;
     std::unique_ptr<SvxHyperURLBox> m_xCbbTarget;
     std::unique_ptr<weld::Label> m_xFtTarget;
 

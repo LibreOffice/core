@@ -36,7 +36,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp(weld::Container* pParent,
     : SvxHyperlinkTabPageBase(pParent, pDlg, "cui/ui/hyperlinkinternetpage.ui", "HyperlinkInternetPage",
                               pItemSet)
     , m_bMarkWndOpen(false)
-    , m_xRbtLinktypInternet(xBuilder->weld_radio_button("linktyp_internet"))
     , m_xCbbTarget(new SvxHyperURLBox(xBuilder->weld_combo_box("target")))
     , m_xFtTarget(xBuilder->weld_label("target_label"))
 {
@@ -56,12 +55,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp(weld::Container* pParent,
 
     SetExchangeSupport ();
 
-    // set defaults
-    m_xRbtLinktypInternet->set_active(true);
-
     // set handlers
-    Link<weld::Toggleable&, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
-    m_xRbtLinktypInternet->connect_toggled( aLink );
     m_xCbbTarget->connect_focus_out( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
     m_xCbbTarget->connect_changed( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
     maTimer.SetInvokeHandler ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
@@ -167,12 +161,6 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, void)
 
 void SvxHyperlinkInternetTp::SetScheme(std::u16string_view rScheme)
 {
-    //if rScheme is empty or unknown the default behaviour is like it where HTTP
-    bool bInternet = true;
-
-    //update protocol button selection:
-    m_xRbtLinktypInternet->set_active(bInternet);
-
     //update target:
     RemoveImproperProtocol(rScheme);
     m_xCbbTarget->SetSmartProtocol( GetSmartProtocolFromButtons() );
@@ -223,19 +211,6 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons()
 
 /*************************************************************************
 |*
-|* Click on Radiobutton : WWW or ...
-|*
-|************************************************************************/
-IMPL_LINK(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, weld::Toggleable&, rButton, void)
-{
-    if (!rButton.get_active())
-        return;
-    OUString aScheme = GetSchemeFromButtons();
-    SetScheme(aScheme);
-}
-
-/*************************************************************************
-|*
 |* Combobox Target lost the focus
 |*
 |************************************************************************/
@@ -246,7 +221,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, weld::Widget&, 
 
 void SvxHyperlinkInternetTp::RefreshMarkWindow()
 {
-    if (m_xRbtLinktypInternet->get_active() && IsMarkWndVisible())
+    if (IsMarkWndVisible())
     {
         weld::WaitObject aWait(mpDialog->getDialog());
         OUString aStrURL( CreateAbsoluteURL() );
