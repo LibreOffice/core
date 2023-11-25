@@ -1911,6 +1911,7 @@ void MSWordExportBase::SaveData( SwNodeOffset nStt, SwNodeOffset nEnd )
     aData.pOldFlyOffset = m_pFlyOffset;
     aData.eOldAnchorType = m_eNewAnchorType;
 
+    aData.bOldWriteAll = false;
     aData.bOldOutTable = m_bOutTable;
     aData.bOldFlyFrameAttrs = m_bOutFlyFrameAttrs;
     aData.bOldStartTOX = m_bStartTOX;
