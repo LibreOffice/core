@@ -45,6 +45,8 @@ enum class SalEvent;
 -(void)windowDidDeminiaturize: (NSNotification*)pNotification;
 -(BOOL)windowShouldClose: (NSNotification*)pNotification;
 -(void)windowDidChangeBackingProperties:(NSNotification *)pNotification;
+-(void)windowWillStartLiveResize:(NSNotification *)pNotification;
+-(void)windowDidEndLiveResize:(NSNotification *)pNotification;
 //-(void)willEncodeRestorableState:(NSCoder*)pCoderState;
 //-(void)didDecodeRestorableState:(NSCoder*)pCoderState;
 //-(void)windowWillEnterVersionBrowser:(NSNotification*)pNotification;
@@ -260,9 +262,6 @@ enum class SalEvent;
 -(NSArray *)accessibilitySelectedChildren;
 -(NSArray *)accessibilityChildren;
 -(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder;
-
--(void)viewWillStartLiveResize;
--(void)viewDidEndLiveResize;
 
 @end
 

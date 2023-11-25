@@ -555,13 +555,6 @@ static bool isWakeupEvent( NSEvent *pEvent )
 
 bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
-    // Related: tdf#152703 Eliminate potential blocking during live resize
-    // Some events and timers call Application::Reschedule() or
-    // Application::Yield() so don't block and wait for events when a
-    // window is in live resize
-    if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
-        bWait = false;
-
     // ensure that the per thread autorelease pool is top level and
     // will therefore not be destroyed by cocoa implicitly
     SalData::ensureThreadAutoreleasePool();
@@ -599,6 +592,19 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                             dequeue: YES];
             if( pEvent )
             {
+                // tdf#155092 don't dispatch left mouse up events during live resizing
+                // If this is a left mouse up event, dispatching this event
+                // will trigger tdf#155092 to occur in the next mouse down
+                // event. So do not dispatch this event and push it back onto
+                // the front of the event queue so no more events will be
+                // dispatched until live resizing ends. Surprisingly, live
+                // resizing appears to end in the next mouse down event.
+                if ( ImplGetSVData()->mpWinData->mbIsLiveResize && [pEvent type] == NSEventTypeLeftMouseUp )
+                {
+                    [NSApp postEvent: pEvent atStart: YES];
+                    return false;
+                }
+
                 [NSApp sendEvent: pEvent];
                 if ( isWakeupEvent( pEvent ) )
                     continue;
@@ -607,9 +613,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 
             [NSApp updateWindows];
 
-            // Related: tdf#155092 keep LibreOffice state closely synched to
-            // the dispatched native event state during live resize.
-            if ( !bHandleAllCurrentEvents || !pEvent || now < [pEvent timestamp] || ImplGetSVData()->mpWinData->mbIsLiveResize )
+            if ( !bHandleAllCurrentEvents || !pEvent || now < [pEvent timestamp] )
                 break;
             // noelgrandin: I see sporadic hangs on the macos jenkins boxes, and the backtrace
             // points to the this loop - let us see if breaking out of here after too many
@@ -628,20 +632,22 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         }
 
         // if we had no event yet, wait for one if requested
-        if( bWait && ! bHadEvent )
+        // Related: tdf#152703 Eliminate potential blocking during live resize
+        // Some events and timers call Application::Reschedule() or
+        // Application::Yield() so don't block and wait for events when a
+        // window is in live resize
+        if( bWait && ! bHadEvent && !ImplGetSVData()->mpWinData->mbIsLiveResize )
         {
             SolarMutexReleaser aReleaser;
 
-            // Related: tdf#155092 don't block during a live resize.
-            // Also, attempt to fix macos jenkins hangs - part 3
+            // attempt to fix macos jenkins hangs - part 3
             // oox::xls::WorkbookFragment::finalizeImport() calls
             // AquaSalInstance::DoYield() with bWait set to true. But
             // since unit tests generally have no expected user generated
             // events, we can end up blocking and waiting forever so
             // don't block and wait when running unit tests.
-            NSDate *pDate = ( ImplGetSVData()->mpWinData->mbIsLiveResize || SalInstance::IsRunningUnitTest() ) ? [NSDate distantPast] : [NSDate distantFuture];
             pEvent = [NSApp nextEventMatchingMask: NSEventMaskAny
-                            untilDate: pDate
+                            untilDate: SalInstance::IsRunningUnitTest() ? [NSDate distantPast] : [NSDate distantFuture]
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
             if( pEvent )

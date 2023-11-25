@@ -196,24 +196,19 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
     return pRet;
 }
 
-// Update ImplGetSVData()->mpWinData->mbIsLiveResize and return the old value
-static bool updateWinDataInLiveResize(bool bInLiveResize)
+// Update ImplGetSVData()->mpWinData->mbIsLiveResize
+static void updateWinDataInLiveResize(bool bInLiveResize)
 {
-    bool bRet = false;
-
     ImplSVData* pSVData = ImplGetSVData();
     assert( pSVData );
     if ( pSVData )
     {
-        bRet = pSVData->mpWinData->mbIsLiveResize;
-        if ( bRet != bInLiveResize )
+        if ( pSVData->mpWinData->mbIsLiveResize != bInLiveResize )
         {
             pSVData->mpWinData->mbIsLiveResize = bInLiveResize;
             Scheduler::Wakeup();
         }
     }
-
-    return bRet;
 }
 
 @interface NSResponder (SalFrameWindow)
@@ -405,9 +400,8 @@ static bool updateWinDataInLiveResize(bool bInLiveResize)
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
 
-        bool bInLiveResize = [self inLiveResize];
-        bool bOldInLiveResize = updateWinDataInLiveResize(bInLiveResize);
-        if ( bInLiveResize || bOldInLiveResize )
+        updateWinDataInLiveResize( [self inLiveResize] );
+        if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
         {
 #if HAVE_FEATURE_SKIA
             // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
@@ -447,7 +441,7 @@ static bool updateWinDataInLiveResize(bool bInLiveResize)
             [self setMinSize:aMinSize];
             [self setMaxSize:aMaxSize];
 
-            if ( bInLiveResize )
+            if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
             {
                 // tdf#152703 Force repaint after live resizing ends
                 // Repost this notification so that this selector will be called
@@ -566,6 +560,20 @@ static bool updateWinDataInLiveResize(bool bInLiveResize)
         }
     }
 #endif
+}
+
+-(void)windowWillStartLiveResize:(NSNotification *)pNotification
+{
+    SolarMutexGuard aGuard;
+
+    updateWinDataInLiveResize(true);
+}
+
+-(void)windowDidEndLiveResize:(NSNotification *)pNotification
+{
+    SolarMutexGuard aGuard;
+
+    updateWinDataInLiveResize(false);
 }
 
 -(void)dockMenuItemTriggered: (id)sender
@@ -769,13 +777,7 @@ static bool updateWinDataInLiveResize(bool bInLiveResize)
     if (!mpFrame || !AquaSalFrame::isAlive(mpFrame))
         return;
 
-    const bool bIsLiveResize = [self inLiveResize];
-    const bool bWasLiveResize = pSVData->mpWinData->mbIsLiveResize;
-    if (bWasLiveResize != bIsLiveResize)
-    {
-        pSVData->mpWinData->mbIsLiveResize = bIsLiveResize;
-        Scheduler::Wakeup();
-    }
+    updateWinDataInLiveResize([self inLiveResize]);
 
     AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
     if (pGraphics)
@@ -2516,16 +2518,6 @@ static bool updateWinDataInLiveResize(bool bInLiveResize)
 -(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder
 {
     return [self accessibilityChildren];
-}
-
--(void)viewWillStartLiveResize
-{
-    updateWinDataInLiveResize(true);
-}
-
--(void)viewDidEndLiveResize
-{
-    updateWinDataInLiveResize(false);
 }
 
 @end
