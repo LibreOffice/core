@@ -2725,6 +2725,7 @@ AC_ARG_WITH(locales,
 ,)
 
 # Kerberos and GSSAPI used only by PostgreSQL as of LibO 3.5
+# and also by Mariadb/Mysql since LibO 24.8
 libo_FUZZ_ARG_WITH(krb5,
     AS_HELP_STRING([--with-krb5],
         [Enable MIT Kerberos 5 support in modules that support it.
@@ -10229,6 +10230,11 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     dnl ===================================================================
     dnl Check for system MariaDB
     dnl ===================================================================
+
+    if test "$with_gssapi" = "yes" -a "$enable_openssl" = "no"; then
+        AC_MSG_ERROR([GSSAPI needs OpenSSL, but --disable-openssl was given.])
+    fi
+
     AC_MSG_CHECKING([which MariaDB to use])
     if test "$with_system_mariadb" = "yes"; then
         AC_MSG_RESULT([external])
@@ -10277,10 +10283,26 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
 /g' | grep -E '(mysqlclient|mariadb)')
             if test "$_os" = "Darwin"; then
                 LIBMARIADB=${LIBMARIADB}.dylib
+                if test "$with_gssapi" != "no"; then
+                    WITH_GSSAPI=TRUE
+                    save_LIBS=$LIBS
+                    AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                        [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+                    GSSAPI_LIBS=$LIBS
+                    LIBS=$save_LIBS
+                fi
             elif test "$_os" = "WINNT"; then
                 LIBMARIADB=${LIBMARIADB}.dll
             else
                 LIBMARIADB=${LIBMARIADB}.so
+                if test "$with_gssapi" != "no"; then
+                    WITH_GSSAPI=TRUE
+                    save_LIBS=$LIBS
+                    AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                        [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+                    GSSAPI_LIBS=$LIBS
+                    LIBS=$save_LIBS
+                fi
             fi
             LIBMARIADB_PATH=$($MARIADBCONFIG --variable=pkglibdir)
             AC_MSG_CHECKING([for $LIBMARIADB in $LIBMARIADB_PATH])

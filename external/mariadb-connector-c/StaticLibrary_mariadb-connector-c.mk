@@ -53,6 +53,11 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_net \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_password \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_pvio \
+	$(ifneq $(filter $(OS),WNT), \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/auth_gssapi_client \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/gssapi_client \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/gssapi_errmsg \
+	) \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_sha1 \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_stmt_codec \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_string \
@@ -65,6 +70,10 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_client_plugin \
 	UnpackedTarball/mariadb-connector-c/plugins/auth/my_auth \
 	UnpackedTarball/mariadb-connector-c/plugins/auth/caching_sha2_pw \
+	$(ifneq $(filter $(OS),WNT), \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/gssapi_client \
+		UnpackedTarball/mariadb-connector-c/plugins/auth/gssapi_errmsg \
+	) \
 	UnpackedTarball/mariadb-connector-c/plugins/pvio/pvio_socket \
 	$(if $(filter $(OS),WNT), \
 		UnpackedTarball/mariadb-connector-c/libmariadb/win32_errmsg \
