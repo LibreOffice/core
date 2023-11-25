@@ -625,9 +625,6 @@ vcl/source/window/impldockingwrapper.hxx:46
 vcl/source/window/menufloatingwindow.hxx:38
     MenuFloatingWindow pMenu VclPtr<Menu>
     PopupMenu
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:529
-    writerfilter::dmapper::DomainMapper_Impl m_pLastSectionContext PropertyMapPtr
-    writerfilter::dmapper::SectionPropertyMap
 writerfilter/source/dmapper/NumberingManager.hxx:221
     writerfilter::dmapper::ListsManager m_pCurrentDefinition class AbstractListDef::Pointer
     writerfilter::dmapper::ListDef

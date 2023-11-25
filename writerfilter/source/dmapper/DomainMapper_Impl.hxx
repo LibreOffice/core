@@ -526,7 +526,7 @@ private:
     std::unique_ptr<ThemeHandler> m_pThemeHandler;
 
     PropertyMapPtr                  m_pTopContext;
-    PropertyMapPtr           m_pLastSectionContext;
+    tools::SvRef<SectionPropertyMap> m_pLastSectionContext;
     PropertyMapPtr           m_pLastCharacterContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
@@ -655,7 +655,7 @@ public:
 
     SectionPropertyMap* GetLastSectionContext( )
     {
-        return dynamic_cast< SectionPropertyMap* >( m_pLastSectionContext.get( ) );
+        return m_pLastSectionContext.get( );
     }
 
     css::uno::Reference<css::container::XNameContainer> const & GetPageStyles();

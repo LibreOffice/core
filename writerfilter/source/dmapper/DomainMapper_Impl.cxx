@@ -1269,7 +1269,8 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
     {
         if (m_aPropertyStacks[eId].size() == 1) // tdf#112202 only top level !!!
         {
-            m_pLastSectionContext = m_aPropertyStacks[eId].top();
+            m_pLastSectionContext = dynamic_cast< SectionPropertyMap* >( m_aPropertyStacks[eId].top().get() );
+            assert(m_pLastSectionContext);
         }
     }
     else if (eId == CONTEXT_CHARACTER)
