@@ -3227,23 +3227,21 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
     if ( !pImpl->m_bLocked )
         return;
 
-    ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
-
     try
     {
-        pImpl->m_bLocked = false;
-        // TODO/LATER: A warning could be shown in case the file is not the own one
-        aLockFile.RemoveFile();
-    }
-    catch( const io::WrongFormatException& )
-    {
+        ::svt::DocumentLockFile aLockFile(pImpl->m_aLogicName);
+
         try
+        {
+            pImpl->m_bLocked = false;
+            // TODO/LATER: A warning could be shown in case the file is not the own one
+            aLockFile.RemoveFile();
+        }
+        catch (const io::WrongFormatException&)
         {
             // erase the empty or corrupt file
             aLockFile.RemoveFileDirectly();
         }
-        catch( const uno::Exception& )
-        {}
     }
     catch( const uno::Exception& )
     {}
@@ -3251,23 +3249,21 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
     if(!pImpl->m_bMSOLockFileCreated)
         return;
 
-    ::svt::MSODocumentLockFile aMSOLockFile( pImpl->m_aLogicName );
-
     try
     {
-        pImpl->m_bLocked = false;
-        // TODO/LATER: A warning could be shown in case the file is not the own one
-        aMSOLockFile.RemoveFile();
-    }
-    catch( const io::WrongFormatException& )
-    {
+        ::svt::MSODocumentLockFile aMSOLockFile(pImpl->m_aLogicName);
+
         try
+        {
+            pImpl->m_bLocked = false;
+            // TODO/LATER: A warning could be shown in case the file is not the own one
+            aMSOLockFile.RemoveFile();
+        }
+        catch (const io::WrongFormatException&)
         {
             // erase the empty or corrupt file
             aMSOLockFile.RemoveFileDirectly();
         }
-        catch( const uno::Exception& )
-        {}
     }
     catch( const uno::Exception& )
     {}
