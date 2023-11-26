@@ -1814,6 +1814,10 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     {
         return Any(m_bMediaTypeFallbackUsed);
     }
+    else if (PropertyName == "HasElements")
+    {
+        return Any(m_pZipFile && m_pZipFile->entries().hasMoreElements());
+    }
     throw UnknownPropertyException(PropertyName);
 }
 void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )

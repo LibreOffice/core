@@ -25,9 +25,14 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+
+#include <sfx2/brokenpackageint.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/wldcrd.hxx>
 #include <sal/log.hxx>
@@ -853,6 +858,50 @@ void TypeDetection::impl_getAllFormatTypes(
 }
 
 
+static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStream,
+                        const css::uno::Reference<css::uno::XComponentContext>& xContext)
+{
+    std::vector<css::uno::Any> aArguments{
+        css::uno::Any(xStream),
+        css::uno::Any(css::beans::NamedValue("AllowRemoveOnInsert", css::uno::Any(false))),
+        css::uno::Any(css::beans::NamedValue("StorageFormat",
+                                             css::uno::Any(css::embed::StorageFormats::ZIP))),
+    };
+    try
+    {
+        // If this is a broken ZIP package, or not a ZIP, this would throw ZipIOException
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.packages.comp.ZipPackage", comphelper::containerToSequence(aArguments),
+            xContext);
+    }
+    catch (const css::packages::zip::ZipIOException&)
+    {
+        // Now test if repair will succeed
+        aArguments.emplace_back(css::beans::NamedValue("RepairPackage", css::uno::Any(true)));
+        try
+        {
+            // If this is a broken ZIP package that can be repaired, this would succeed,
+            // and the result will be not empty
+            if (css::uno::Reference<css::beans::XPropertySet> xPackage{
+                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                        "com.sun.star.packages.comp.ZipPackage",
+                        comphelper::containerToSequence(aArguments), xContext),
+                    css::uno::UNO_QUERY })
+                if (bool bHasElements; xPackage->getPropertyValue("HasElements") >>= bHasElements)
+                    return bHasElements;
+        }
+        catch (const css::uno::Exception&)
+        {
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
+    // The package is either not broken, or is not a repairable ZIP
+    return false;
+}
+
+
 OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                           const FlatDetection&                 lFlatTypes    ,
                                                                 bool                       bAllowDeep    ,
@@ -861,6 +910,59 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     // reset it everytimes, so the outside code can distinguish between
     // a set and a not set value.
     rLastChance.clear();
+
+    // tdf#96401: First of all, check if this is a broken ZIP package. Not doing this here would
+    // make some filters silently not recognize their content in broken packages, and some filters
+    // show a warning and mistakenly claim own content based on user choice.
+    if (bAllowDeep && !rDescriptor.getUnpackedValueOrDefault("RepairPackage", false)
+        && rDescriptor.getUnpackedValueOrDefault("RepairAllowed", true)
+        && rDescriptor.find(utl::MediaDescriptor::PROP_INTERACTIONHANDLER) != rDescriptor.end())
+    {
+        try
+        {
+            impl_openStream(rDescriptor);
+            if (auto xStream = rDescriptor.getUnpackedValueOrDefault(
+                    utl::MediaDescriptor::PROP_INPUTSTREAM,
+                    css::uno::Reference<css::io::XInputStream>()))
+            {
+                css::uno::Reference<css::uno::XComponentContext> xContext;
+
+                // SAFE ->
+                {
+                    osl::ClearableMutexGuard aLock(m_aMutex);
+                    xContext = m_xContext;
+                }
+                // <- SAFE
+
+                if (isBrokenZIP(xStream, xContext))
+                {
+                    if (css::uno::Reference<css::task::XInteractionHandler> xInteraction{
+                            rDescriptor.getValue(utl::MediaDescriptor::PROP_INTERACTIONHANDLER),
+                            css::uno::UNO_QUERY })
+                    {
+                        INetURLObject aURL(rDescriptor.getUnpackedValueOrDefault(
+                            utl::MediaDescriptor::PROP_URL, OUString()));
+                        OUString aDocumentTitle
+                            = aURL.getName(INetURLObject::LAST_SEGMENT, true,
+                                           INetURLObject::DecodeMechanism::WithCharset);
+
+                        // Ask the user whether they wants to try to repair
+                        RequestPackageReparation aRequest(aDocumentTitle);
+                        xInteraction->handle(aRequest.GetRequest());
+
+                        if (aRequest.isApproved())
+                            rDescriptor["RepairPackage"] <<= true;
+                        else
+                            rDescriptor["RepairAllowed"] <<= false; // Do not ask again
+                    }
+                }
+            }
+        }
+        catch (const css::uno::Exception&)
+        {
+            // No problem
+        }
+    }
 
     // step over all possible types for this URL.
     // solutions:

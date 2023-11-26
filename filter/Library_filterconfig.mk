@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,filterconfig,\
 	cppu \
 	sal \
 	salhelper \
+	sfx \
 	i18nlangtag \
 ))
 

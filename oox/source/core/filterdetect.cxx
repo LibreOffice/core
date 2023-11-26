@@ -427,7 +427,8 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
         Reference< XInputStream > xInputStream( extractUnencryptedPackage( aMediaDescriptor ), UNO_SET_THROW );
 
         // stream must be a ZIP package
-        ZipStorage aZipStorage( mxContext, xInputStream );
+        ZipStorage aZipStorage(mxContext, xInputStream,
+                               aMediaDescriptor.getUnpackedValueOrDefault("RepairPackage", false));
         if( aZipStorage.isStorage() )
         {
             // create the fast parser, register the XML namespaces, set document handler

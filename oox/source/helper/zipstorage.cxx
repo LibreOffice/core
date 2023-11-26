@@ -38,7 +38,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStream ) :
+ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStream, bool bRepairStorage ) :
     StorageBase( rxInStream, false )
 {
     OSL_ENSURE( rxContext.is(), "ZipStorage::ZipStorage - missing component context" );
@@ -61,7 +61,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
             implementation of relations handling.
          */
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext, false);
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext, bRepairStorage);
     }
     catch (Exception const&)
     {
