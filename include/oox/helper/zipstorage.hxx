@@ -43,7 +43,8 @@ class ZipStorage final : public StorageBase
 public:
     explicit            ZipStorage(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XInputStream >& rxInStream );
+                            const css::uno::Reference< css::io::XInputStream >& rxInStream,
+                            bool bRepairStorage = false );
 
     explicit            ZipStorage(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
