@@ -216,7 +216,8 @@ public class GLController {
             }
         }
 
-        throw new GLControllerException("No suitable EGL configuration found");
+        // if there's no 565 RGB configuration, select another one that fulfils the specification
+        return configs[0];
     }
 
     private void createEGLSurface() {
