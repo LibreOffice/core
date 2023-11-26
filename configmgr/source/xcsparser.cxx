@@ -316,7 +316,6 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
                 while (desc.indexOf("  ") != -1)
                     desc = desc.replaceAll("  ", " ");
                 top.node->setDescription(desc);
-                top.node->setType(type_);
             }
             if (elements_.empty()) {
                 switch (state_) {
@@ -478,7 +477,7 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
 void XcsParser::handleProp(xmlreader::XmlReader & reader) {
     bool hasName = false;
     OUString name;
-    type_ = TYPE_ERROR;
+    valueParser_.type_ = TYPE_ERROR;
     bool localized = false;
     bool nillable = true;
     for (;;) {
@@ -493,7 +492,7 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "type")
         {
-            type_ = xmldata::parseType(
+            valueParser_.type_ = xmldata::parseType(
                 reader, reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "localized")
@@ -509,11 +508,10 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
         throw css::uno::RuntimeException(
             "no prop name attribute in " + reader.getUrl());
     }
-    if (type_ == TYPE_ERROR) {
+    if (valueParser_.type_ == TYPE_ERROR) {
         throw css::uno::RuntimeException(
             "no prop type attribute in " + reader.getUrl());
     }
-    valueParser_.type_ = type_;
     elements_.push(
         Element(
             (localized

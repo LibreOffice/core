@@ -96,7 +96,6 @@ private:
     ElementStack elements_;
     bool bIsParsingInfo_;
     OUStringBuffer description_;
-    Type type_;
 };
 
 }

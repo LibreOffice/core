@@ -466,11 +466,16 @@ css::uno::Type Access::getTypeByHierarchicalName(OUString const & aName)
         throw css::container::NoSuchElementException(
             aName, getXWeak());
     }
-    auto type = child->getNode()->getType();
-    if (type == TYPE_ERROR)
+    auto const & p = child->getNode();
+    switch (p->kind()) {
+    case Node::KIND_PROPERTY:
+        return mapType(static_cast<PropertyNode *>(p.get())->getStaticType());
+    case Node::KIND_LOCALIZED_PROPERTY:
+        return mapType(static_cast<LocalizedPropertyNode *>(p.get())->getStaticType());
+    default:
         throw css::util::InvalidStateException(
             aName, getXWeak());
-    return mapType(child->getNode()->getType());
+    }
 }
 
 sal_Bool Access::hasByHierarchicalName(OUString const & aName)
