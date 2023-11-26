@@ -689,6 +689,9 @@ void DrawViewShell::ResetActualPage()
     sal_uInt16 nCurrentPageNum = maTabControl->GetPagePos(nCurrentPageId);
     sal_uInt16 nPageCount   = (meEditMode == EditMode::Page)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
 
+    if (nCurrentPageNum >= nPageCount)
+        nCurrentPageNum = nPageCount - 1;
+
     if (meEditMode == EditMode::Page)
     {
 

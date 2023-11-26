@@ -84,6 +84,7 @@ public:
     void testTdf136956();
     void testTdf39519();
     void testEncodedTableStyles();
+    void testTdf157117();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
@@ -107,6 +108,7 @@ public:
     CPPUNIT_TEST(testTdf136956);
     CPPUNIT_TEST(testTdf39519);
     CPPUNIT_TEST(testEncodedTableStyles);
+    CPPUNIT_TEST(testTdf157117);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -953,6 +955,46 @@ void SdMiscTest::testEncodedTableStyles()
         CPPUNIT_ASSERT(xCellStyle.is());
         CPPUNIT_ASSERT_EQUAL(OUString("table-body_1"), xCellStyle->getName());
     }
+}
+
+void SdMiscTest::testTdf157117()
+{
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    // insert two pages to make a total of 3 pages
+    dispatchCommand(mxComponent, ".uno:InsertPage", {});
+    dispatchCommand(mxComponent, ".uno:InsertPage", {});
+
+    // assert the document has 3 standard pages
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDocument->GetSdPageCount(PageKind::Standard));
+
+    // alternate page insert method
+    //    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    //    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    //    xDrawPages->insertNewByIndex(0);
+    //    xDrawPages->insertNewByIndex(0);
+    //    CPPUNIT_ASSERT_EQUAL(xDrawPages->getCount(), 3);
+
+    // move to the last page
+    dispatchCommand(mxComponent, ".uno:LastPage", {});
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    auto nPageNum = pPage->GetPageNum();
+    // assert move to last page
+    CPPUNIT_ASSERT_EQUAL(2, (nPageNum - 1) / 2);
+
+    // delete the last page
+    dispatchCommand(mxComponent, ".uno:DeletePage", {});
+    pPage = pViewShell->GetActualPage();
+    nPageNum = pPage->GetPageNum();
+
+    // Check that the new last page is moved to. Before, the first page was always moved to when
+    // the last page was deleted.
+    CPPUNIT_ASSERT_EQUAL(1, (nPageNum - 1) / 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
