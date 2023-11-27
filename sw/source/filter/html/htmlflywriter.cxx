@@ -723,68 +723,71 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         sOut.setLength(0);
     }
 
-    // Insert wrap for graphics that are anchored to a paragraph as
-    // <BR CLEAR=...> in the string
-    const SwFormatSurround* pSurround;
-    if( (nFrameOpts & HtmlFrmOpts::BrClear) &&
-        ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
-         (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
-        (pSurround = rItemSet.GetItemIfSet( RES_SURROUND )) )
+    if (!mbReqIF)
     {
-        sal_Int16 eHoriOri =    rFrameFormat.GetHoriOrient().GetHoriOrient();
-        pStr = nullptr;
-        css::text::WrapTextMode eSurround = pSurround->GetSurround();
-        bool bAnchorOnly = pSurround->IsAnchorOnly();
-        switch( eHoriOri )
+        // Insert wrap for graphics that are anchored to a paragraph as
+        // <BR CLEAR=...> in the string
+        const SwFormatSurround* pSurround;
+        if( (nFrameOpts & HtmlFrmOpts::BrClear) &&
+            ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
+             (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
+            (pSurround = rItemSet.GetItemIfSet( RES_SURROUND )) )
         {
-        case text::HoriOrientation::RIGHT:
+            sal_Int16 eHoriOri =    rFrameFormat.GetHoriOrient().GetHoriOrient();
+            pStr = nullptr;
+            css::text::WrapTextMode eSurround = pSurround->GetSurround();
+            bool bAnchorOnly = pSurround->IsAnchorOnly();
+            switch( eHoriOri )
             {
-                switch( eSurround )
+            case text::HoriOrientation::RIGHT:
                 {
-                case css::text::WrapTextMode_NONE:
-                case css::text::WrapTextMode_RIGHT:
-                    pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
-                    break;
-                case css::text::WrapTextMode_LEFT:
-                case css::text::WrapTextMode_PARALLEL:
-                    if( bAnchorOnly )
-                        m_bClearRight = true;
-                    break;
-                default:
-                    ;
+                    switch( eSurround )
+                    {
+                    case css::text::WrapTextMode_NONE:
+                    case css::text::WrapTextMode_RIGHT:
+                        pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
+                        break;
+                    case css::text::WrapTextMode_LEFT:
+                    case css::text::WrapTextMode_PARALLEL:
+                        if( bAnchorOnly )
+                            m_bClearRight = true;
+                        break;
+                    default:
+                        ;
+                    }
                 }
-            }
-            break;
+                break;
 
-        default:
-            // If a frame is centered, it gets left aligned. This
-            // should be taken into account here, too.
+            default:
+                // If a frame is centered, it gets left aligned. This
+                // should be taken into account here, too.
+                {
+                    switch( eSurround )
+                    {
+                    case css::text::WrapTextMode_NONE:
+                    case css::text::WrapTextMode_LEFT:
+                        pStr = OOO_STRING_SVTOOLS_HTML_AL_left;
+                        break;
+                    case css::text::WrapTextMode_RIGHT:
+                    case css::text::WrapTextMode_PARALLEL:
+                        if( bAnchorOnly )
+                            m_bClearLeft = true;
+                        break;
+                    default:
+                        ;
+                    }
+                }
+                break;
+
+            }
+
+            if( pStr )
             {
-                switch( eSurround )
-                {
-                case css::text::WrapTextMode_NONE:
-                case css::text::WrapTextMode_LEFT:
-                    pStr = OOO_STRING_SVTOOLS_HTML_AL_left;
-                    break;
-                case css::text::WrapTextMode_RIGHT:
-                case css::text::WrapTextMode_PARALLEL:
-                    if( bAnchorOnly )
-                        m_bClearLeft = true;
-                    break;
-                default:
-                    ;
-                }
+                sOut.append("<" OOO_STRING_SVTOOLS_HTML_linebreak
+                        " " OOO_STRING_SVTOOLS_HTML_O_clear
+                        "=\"" + OString::Concat(pStr) + "\">");
+                sRetEndTags = sOut.makeStringAndClear();
             }
-            break;
-
-        }
-
-        if( pStr )
-        {
-            sOut.append("<" OOO_STRING_SVTOOLS_HTML_linebreak
-                    " " OOO_STRING_SVTOOLS_HTML_O_clear
-                    "=\"" + OString::Concat(pStr) + "\">");
-            sRetEndTags = sOut.makeStringAndClear();
         }
     }
     return sRetEndTags;
@@ -1033,6 +1036,9 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             }
         }
     }
+
+    if (mbReqIF)
+        return;
 
     // Insert wrap for graphics that are anchored to a paragraph as
     // <BR CLEAR=...> in the string

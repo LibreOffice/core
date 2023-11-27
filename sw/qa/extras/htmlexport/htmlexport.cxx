@@ -3005,6 +3005,24 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
                          xTypeDetection->queryTypeByDescriptor(descr, true));
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoBrClearForImageWrap)
+{
+    // Given a document with a paragraph-anchored image with "none" wrap:
+    createSwDoc("image_anchored_to_paragraph_no_wrap.fodt");
+    // When exporting to reqif:
+    ExportToReqif();
+    // Make sure that there's no 'br' elements in the 'object' (used to represent the wrapping
+    // in HTML export, using 'clear' attribute):
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object");
+    assertXPath(pXmlDoc,
+                "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object/reqif-xhtml:br",
+                0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
