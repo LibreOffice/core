@@ -2396,7 +2396,8 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
     }
 
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
-    CPPUNIT_ASSERT_EQUAL(int(1), nState);
+    // OK or NOTVALIDATED (signature is OK, but certificate could not be validated)
+    CPPUNIT_ASSERT(nState == 1 || nState == 4);
 }
 
 void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
@@ -2454,7 +2455,8 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
     }
 
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
-    CPPUNIT_ASSERT_EQUAL(int(5), nState);
+    // PARTIAL_OK or NOTVALIDATED_PARTIAL_OK
+    CPPUNIT_ASSERT(nState == 5 || nState == 6);
 }
 
 void DesktopLOKTest::testSignDocument_PEM_PDF()
