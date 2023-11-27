@@ -155,7 +155,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "FootnoteLineRelativeWidth", XML_NAMESPACE_STYLE,    XML__EMPTY,     XML_TYPE_PERCENT8|MID_FLAG_SPECIAL_ITEM,    CTF_PM_FTN_LINE_WIDTH ),
     PLMAP( "FootnoteLineTextDistance", XML_NAMESPACE_STYLE,    XML__EMPTY,     XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM,    CTF_PM_FTN_LINE_DISTANCE ),
     PLMAP( "FootnoteLineWeight",        XML_NAMESPACE_STYLE,    XML_FOOTNOTE_SEP,    XML_TYPE_MEASURE16|MID_FLAG_ELEMENT_ITEM,    CTF_PM_FTN_LINE_WEIGHT ),
-    PLMAP( "FootnoteLineStyle",     XML_NAMESPACE_STYLE,    XML_EMPTY,  XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM,  CTF_PM_FTN_LINE_STYLE ),
+    PLMAP( "FootnoteLineStyle",     XML_NAMESPACE_STYLE,    XML_TOKEN_EMPTY,  XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM,  CTF_PM_FTN_LINE_STYLE ),
     PLMAP_EXT("GutterMargin", XML_NAMESPACE_LO_EXT, XML_MARGIN_GUTTER, XML_TYPE_MEASURE, CTF_PM_MARGINGUTTER),
 
     //////////////////////////////////////////////////////////////////////////
@@ -270,7 +270,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "FooterFillBitmapOffsetX",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_X ),
     HFMAP( "FooterFillBitmapOffsetY",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_Y ),
 
-    { nullptr, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false } // index 190
+    { nullptr, 0, XML_TOKEN_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false } // index 190
 };
 
 XMLPropertyMapEntry const g_XMLPageMasterDrawingPageStyleMap[] =
@@ -299,7 +299,7 @@ XMLPropertyMapEntry const g_XMLPageMasterDrawingPageStyleMap[] =
     DPMAP("FillBitmapOffsetX",            XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_X),
     DPMAP("FillBitmapOffsetY",            XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_Y),
 
-    { nullptr, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false }
+    { nullptr, 0, XML_TOKEN_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

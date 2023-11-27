@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <libxml/xmlerror.h>
+#include <libxml/parser.h>
 
 #include <memory>
 

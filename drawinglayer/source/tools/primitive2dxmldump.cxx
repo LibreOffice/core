@@ -15,6 +15,7 @@
 
 #include <math.h>
 #include <memory>
+#include <libxml/parser.h>
 #include <sal/log.hxx>
 
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
