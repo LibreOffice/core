@@ -52,6 +52,7 @@
 #include <unoprnms.hxx>
 #include <rootfrm.hxx>
 #include <bodyfrm.hxx>
+#include <formatwraptextatflystart.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1786,6 +1787,12 @@ void SwFlyAtContentFrame::DelEmpty()
 
 bool SwFlyAtContentFrame::IsWrapOnAllPages() const
 {
+    const SwFormatWrapTextAtFlyStart& rWrapTextAtFlyStart = GetFormat()->GetWrapTextAtFlyStart();
+    if (rWrapTextAtFlyStart.GetValue())
+    {
+        return true;
+    }
+
     const SwRootFrame* pRootFrame = getRootFrame();
     if (!pRootFrame)
     {
