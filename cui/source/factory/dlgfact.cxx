@@ -33,7 +33,6 @@
 #include <splitcelldlg.hxx>
 #include <cuiimapwnd.hxx>
 #include <cui/cuicharmap.hxx>
-#include <cui/dlgname.hxx>
 #include <srchxtra.hxx>
 #include <textanim.hxx>
 #include <autocdlg.hxx>

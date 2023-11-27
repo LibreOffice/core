@@ -27,7 +27,7 @@
 
 #include <cfgutil.hxx>
 #include <cui/cuicharmap.hxx>
-#include <cui/dlgname.hxx>
+#include <dlgname.hxx>
 #include <cuifmsearch.hxx>
 #include <cuigaldlg.hxx>
 #include <cuigrfflt.hxx>

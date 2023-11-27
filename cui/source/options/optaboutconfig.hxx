@@ -11,7 +11,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <cui/dlgname.hxx>
+#include <dlgname.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <vcl/weld.hxx>
 

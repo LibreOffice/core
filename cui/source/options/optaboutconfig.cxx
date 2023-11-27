@@ -33,7 +33,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppu/unotype.hxx>
-#include <cui/dlgname.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/textsearch.hxx>

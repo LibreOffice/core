@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "cuidllapi.h"
+#include <cui/cuidllapi.h>
 
 #include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>

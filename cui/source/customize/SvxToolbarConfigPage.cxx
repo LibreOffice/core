@@ -38,7 +38,7 @@
 #include <SvxConfigPageHelper.hxx>
 #include <dialmgr.hxx>
 
-#include <cui/dlgname.hxx>
+#include <dlgname.hxx>
 #include <comphelper/processfactory.hxx>
 
 SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
