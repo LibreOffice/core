@@ -172,6 +172,9 @@ void OInterfaceContainerHelper2::copyAndResetInUse()
 sal_Int32 OInterfaceContainerHelper2::addInterface( const Reference<XInterface> & rListener )
 {
     OSL_ASSERT( rListener.is() );
+    if ( !rListener.is() )
+        return 0;
+
     MutexGuard aGuard( rMutex );
     if( bInUse )
         copyAndResetInUse();
