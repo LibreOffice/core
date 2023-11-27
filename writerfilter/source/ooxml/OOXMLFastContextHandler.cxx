@@ -1840,8 +1840,8 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
 bool OOXMLFastContextHandlerShape::isDMLGroupShape() const
 {
-    return (mrShapeContext->getFullWPGSupport()
-       && (mrShapeContext->isWordProcessingGroupShape() || mrShapeContext->isWordprocessingCanvas()));
+    return (mrShapeContext->getFullWPGSupport() && mrShapeContext->isWordProcessingGroupShape())
+            || mrShapeContext->isWordprocessingCanvas();
 };
 
 void OOXMLFastContextHandlerShape::lcl_endFastElement

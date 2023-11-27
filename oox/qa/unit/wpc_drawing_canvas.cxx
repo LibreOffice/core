@@ -20,9 +20,11 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 
 using namespace ::com::sun::star;
@@ -275,6 +277,34 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158339_shape_text_in_group)
     xShapeProps->getPropertyValue(u"TextBoxContent"_ustr) >>= xTextFrame;
     CPPUNIT_ASSERT(xTextFrame.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Group"), xTextFrame->getText()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158348_shape_text_in_table_cell)
+{
+    // The document has a shape with text on a drawing canvas in a table cell.
+    // Without fix the text of the shape becomes part of the paragraph of the table cell.
+    loadFromURL(u"WPC_tdf158348_shape_text_in_table_cell.docx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // Get the shape and make sure it has text.
+    uno::Reference<drawing::XShapes> xCanvas(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xCanvas->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<css::text::XTextFrame> xTextFrame;
+    xShapeProps->getPropertyValue(u"TextBoxContent"_ustr) >>= xTextFrame;
+    CPPUNIT_ASSERT(xTextFrame.is());
+    // The string was empty without fix.
+    CPPUNIT_ASSERT_EQUAL(u"Inside shape"_ustr, xTextFrame->getText()->getString());
+
+    // Get the table and make sure the cell has only its own text.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    // The string had started with "Inside shape" without fix.
+    CPPUNIT_ASSERT(xCellA1->getString().startsWith("Inside table"));
 }
 }
 
