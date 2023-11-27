@@ -87,6 +87,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
 
 $(eval $(call gb_Library_use_externals,svxcore,\
 	boost_headers \
+	frozen \
 	icuuc \
 	icu_headers \
 	libxml2 \

@@ -38,6 +38,13 @@
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <unotools/viewoptions.hxx>
+#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
+
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 namespace svx
 {
@@ -74,30 +81,51 @@ namespace svx
             }
         }
 
-        switch (nSlotId)
+        // tdf#72991 - remember last used color depending on slot id
+        const auto aSlotNamedColorMap = frozen::make_unordered_map<sal_uInt16, NamedColor>(
+            { { SID_ATTR_CHAR_COLOR,
+                NamedColor(COL_DEFAULT_FONT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_FONT)) },
+              { SID_ATTR_CHAR_COLOR2,
+                NamedColor(COL_DEFAULT_FONT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_FONT)) },
+              { SID_FRAME_LINECOLOR,
+                NamedColor(COL_DEFAULT_FRAMELINE, SvxResId(RID_SVXSTR_COLOR_DEFAULT_FRAMELINE)) },
+              { SID_ATTR_CHAR_COLOR_BACKGROUND,
+                NamedColor(COL_DEFAULT_HIGHLIGHT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT)) },
+              { SID_ATTR_CHAR_BACK_COLOR,
+                NamedColor(COL_DEFAULT_HIGHLIGHT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT)) },
+              { SID_BACKGROUND_COLOR,
+                NamedColor(COL_DEFAULT_HIGHLIGHT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT)) },
+              { SID_TABLE_CELL_BACKGROUND_COLOR,
+                NamedColor(COL_DEFAULT_HIGHLIGHT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT)) },
+              { SID_ATTR_LINE_COLOR, NamedColor(COL_DEFAULT_SHAPE_STROKE,
+                                                SvxResId(RID_SVXSTR_COLOR_DEFAULT_SHAPE_STROKE)) },
+              { SID_ATTR_FILL_COLOR, NamedColor(COL_DEFAULT_SHAPE_FILLING,
+                                                SvxResId(RID_SVXSTR_COLOR_DEFAULT_SHAPE_FILLING)) }
+
+            });
+
+        const auto aIterator = aSlotNamedColorMap.find(nSlotId);
+        if (aIterator != aSlotNamedColorMap.end())
         {
-            case SID_ATTR_CHAR_COLOR:
-            case SID_ATTR_CHAR_COLOR2:
-                Update(NamedColor(COL_DEFAULT_FONT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_FONT)));
-                break;
-            case SID_FRAME_LINECOLOR:
-                Update(NamedColor(COL_DEFAULT_FRAMELINE, SvxResId(RID_SVXSTR_COLOR_DEFAULT_FRAMELINE)));
-                break;
-            case SID_ATTR_CHAR_COLOR_BACKGROUND:
-            case SID_ATTR_CHAR_BACK_COLOR:
-            case SID_BACKGROUND_COLOR:
-            case SID_TABLE_CELL_BACKGROUND_COLOR:
-                Update(NamedColor(COL_DEFAULT_HIGHLIGHT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT)));
-                break;
-            case SID_ATTR_LINE_COLOR:
-                Update(NamedColor(COL_DEFAULT_SHAPE_STROKE, SvxResId(RID_SVXSTR_COLOR_DEFAULT_SHAPE_STROKE)));
-                break;
-            case SID_ATTR_FILL_COLOR:
-                Update(NamedColor(COL_DEFAULT_SHAPE_FILLING, SvxResId(RID_SVXSTR_COLOR_DEFAULT_SHAPE_FILLING)));
-                break;
-            default:
-                Update(COL_TRANSPARENT);
+            NamedColor aNamedColor(aIterator->second);
+            SvtViewOptions aViewOpt(EViewType::Dialog, "ToolboxButtonColor");
+            if (aViewOpt.Exists())
+            {
+                css::uno::Any aUserItem = aViewOpt.GetUserItem(OUString::number(nSlotId));
+                OUString aUserData;
+                if (aUserItem >>= aUserData)
+                {
+                    sal_Int32 nIdx = 0;
+                    aNamedColor.m_aName = o3tl::getToken(aUserData, 0, ';', nIdx);
+                    aNamedColor.m_aColor
+                        = Color(ColorTransparencyTag::ColorTransparency,
+                                o3tl::toUInt32(o3tl::getToken(aUserData, 0, ';', nIdx)));
+                }
+            }
+            Update(aNamedColor);
         }
+        else
+            Update(COL_TRANSPARENT);
     }
 
     void ToolboxButtonColorUpdaterBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
@@ -109,7 +137,15 @@ namespace svx
         else if (rHint.GetId() == SfxHintId::ColorsChanged)
         {
             if (auto oColor = static_cast<SfxObjectShell&>(rBC).GetRecentColor(mnSlotId))
+            {
                 Update(*oColor);
+                // tdf#72991 - remember last used color depending on slot id
+                const OUString aUserData
+                    = oColor->m_aName + ";"
+                      + OUString::number(static_cast<sal_uInt32>(oColor->m_aColor));
+                SvtViewOptions(EViewType::Dialog, "ToolboxButtonColor")
+                    .SetUserItem(OUString::number(mnSlotId), css::uno::Any(aUserData));
+            }
         }
     }
 
