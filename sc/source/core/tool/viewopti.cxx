@@ -142,6 +142,7 @@ bool ScViewOptions::operator==( const ScViewOptions& rOpt ) const
     bEqual = bEqual && (aGridCol       == rOpt.aGridCol);
     bEqual = bEqual && (aGridColName   == rOpt.aGridColName);
     bEqual = bEqual && (aGridOpt       == rOpt.aGridOpt);
+    bEqual = bEqual && (sColorSchemeName == rOpt.sColorSchemeName);
     bEqual = bEqual && (aDocCol        == rOpt.aDocCol);
 
     return bEqual;
