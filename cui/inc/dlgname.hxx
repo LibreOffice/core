@@ -160,7 +160,6 @@ class SvxListDialog : public weld::GenericDialogController
 {
 private:
     ListMode m_aMode;
-    Link<SvxListDialog&, OUString> m_aEditHdl;
     std::unique_ptr<weld::TreeView> m_xList;
     std::unique_ptr<weld::Button> m_xAddBtn;
     std::unique_ptr<weld::Button> m_xRemoveBtn;
