@@ -77,7 +77,7 @@ using namespace ::xmloff::token;
 #define DPMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
 #define TMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
 #define PMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
-#define MAP_END() { nullptr, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
+#define MAP_END() { nullptr, 0, 0, XML_TOKEN_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
 
 // entry list for graphic properties
 

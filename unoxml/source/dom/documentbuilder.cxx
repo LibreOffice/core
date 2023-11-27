@@ -25,6 +25,7 @@
 
 #include <libxml/xmlerror.h>
 #include <libxml/tree.h>
+#include <libxml/parser.h>
 
 #include <memory>
 

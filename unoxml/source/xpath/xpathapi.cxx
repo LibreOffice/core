@@ -26,6 +26,7 @@
 #include <libxml/xmlerror.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
+#include <libxml/xmlIO.h>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -243,7 +244,7 @@ namespace XPath
         return selectSingleNode(contextNode, expr);
     }
 
-    static OUString make_error_message(xmlErrorPtr pError)
+    static OUString make_error_message(const xmlError* pError)
     {
         OUStringBuffer buf;
         if (pError) {
@@ -286,7 +287,11 @@ namespace XPath
             SAL_WARN("unoxml", "libxml2 error: " << str);
         }
 
+#if LIBXML_VERSION >= 21200
+        static void structured_error_func(void *, const xmlError* error)
+#else
         static void structured_error_func(void *, xmlErrorPtr error)
+#endif
         {
             SAL_WARN("unoxml", "libxml2 error: " << make_error_message(error));
         }

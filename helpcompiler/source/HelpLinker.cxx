@@ -809,7 +809,11 @@ static const HelpProcessingException* GpXMLParsingException = nullptr;
 
 extern "C" {
 
+#if LIBXML_VERSION >= 21200
+static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, const xmlError* error)
+#else
 static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, xmlErrorPtr error)
+#endif
 {
     std::string aErrorMsg = error->message;
     std::string aXMLParsingFile;

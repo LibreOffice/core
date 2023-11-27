@@ -550,7 +550,7 @@ Event& Entity::getEvent( CallbackType aType )
 OUString lclGetErrorMessage( xmlParserCtxtPtr ctxt, const OUString& sSystemId, sal_Int32 nLine )
 {
     const sal_Char* pMessage;
-    xmlErrorPtr error = xmlCtxtGetLastError( ctxt );
+    const xmlError* error = xmlCtxtGetLastError( ctxt );
     if( error && error->message )
         pMessage = error->message;
     else
