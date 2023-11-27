@@ -216,23 +216,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
 
     // shrink line 2
     assertXPath(
-        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr, "portion"_ostr,
         "viverra odio. Donec auctor molestie sem, sit amet tristique lectus hendrerit sed. ");
 
     // shrink line 7
     assertXPath(
-        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[7]", "portion",
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[7]"_ostr, "portion"_ostr,
         // This was "...diam ", not "...diam tempor "
         "laoreet vel leo nec, volutpat facilisis eros. Donec consequat arcu ut diam tempor ");
 
     // shrink line 2 of paragraph 2
     assertXPath(
-        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[2]", "portion",
+        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[2]"_ostr, "portion"_ostr,
         // This was "...Cras ", not "...Cras sodales "
         "Donec auctor molestie sem, sit amet tristique lectus hendrerit sed. Cras sodales ");
 
     // shrink line 2 of paragraph 4
-    assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[2]", "portion",
+    assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[2]"_ostr,
+                "portion"_ostr,
                 // This was "...et ", not "...et magnis "
                 "consequat arcu ut diam tempor luctus. Cum sociis natoque penatibus et magnis ");
 }

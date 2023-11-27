@@ -352,7 +352,7 @@ public:
         {
             return true;
         }
-        if (!compiler.getDiagnosticOpts().VerifyDiagnostics)
+        if (!compiler.getDiagnosticOpts().VerifyDiagnostics && utf16)
         {
             //TODO: Leave rewriting these uses of ordinary string literals for later (but already
             // cover them when verifying CompilerTest_compilerplugins_clang):
@@ -364,7 +364,7 @@ public:
                 Lexer::MeasureTokenLength(l3, compiler.getSourceManager(), compiler.getLangOpts()));
             l4 = l4.getLocWithOffset(
                 Lexer::MeasureTokenLength(l4, compiler.getSourceManager(), compiler.getLangOpts()));
-            if ((!utf16 || replaceText(l1, delta(l1, l2), macroBegin ? "u\"\" " : "u"))
+            if (replaceText(l1, delta(l1, l2), utf16 ? (macroBegin ? "u\"\" " : "u") : "")
                 && replaceText(l3, delta(l3, l4),
                                utf16 ? (macroEnd ? " \"\"_ustr" : "_ustr")
                                      : (macroEnd ? " \"\"_ostr" : "_ostr")))
@@ -377,6 +377,85 @@ public:
                " instance of %1 from an ordinary string literal",
                expr->getExprLoc())
             << utf16 << expr->getType().getLocalUnqualifiedType() << expr->getSourceRange();
+        return true;
+    }
+
+    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
+    {
+        if (ignoreLocation(expr))
+        {
+            return true;
+        }
+        if (expr->getOperator() != OO_Equal)
+        {
+            return true;
+        }
+        if (!loplugin::TypeCheck(expr->getArg(0)->getType())
+                 .Class("OString")
+                 .Namespace("rtl")
+                 .GlobalNamespace())
+        {
+            return true;
+        }
+        auto const e2 = dyn_cast<clang::StringLiteral>(expr->getArg(1)->IgnoreParenImpCasts());
+        if (e2 == nullptr)
+        {
+            return true;
+        }
+        if (rewriter != nullptr)
+        {
+            auto loc = e2->getEndLoc();
+            auto const macroEnd = loc.isMacroID()
+                                  && Lexer::isAtEndOfMacroExpansion(
+                                         loc, compiler.getSourceManager(), compiler.getLangOpts());
+            if (macroEnd)
+            {
+                loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+            }
+            if (insertTextAfterToken(loc, macroEnd ? " \"\"_ostr" : "_ostr"))
+            {
+                return true;
+            }
+        }
+        report(DiagnosticsEngine::Warning,
+               "use a _ostr user-defined string literal instead of assigning from an ordinary"
+               " string literal",
+               expr->getExprLoc())
+            << expr->getSourceRange();
+        return true;
+    }
+
+    bool VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
+    {
+        if (ignoreLocation(expr))
+        {
+            return true;
+        }
+        if (!loplugin::DeclCheck(expr->getMethodDecl()).Operator(OO_Equal))
+        {
+            return true;
+        }
+        if (!loplugin::TypeCheck(expr->getObjectType())
+                 .Class("OString")
+                 .Namespace("rtl")
+                 .GlobalNamespace())
+        {
+            return true;
+        }
+        auto const e2 = dyn_cast<clang::StringLiteral>(expr->getArg(0)->IgnoreParenImpCasts());
+        if (e2 == nullptr)
+        {
+            return true;
+        }
+        if (rewriter != nullptr)
+        {
+            //TODO
+        }
+        report(DiagnosticsEngine::Warning,
+               "use a _ostr user-defined string literal instead of assigning from an ordinary"
+               " string literal",
+               expr->getExprLoc())
+            << expr->getSourceRange();
         return true;
     }
 
