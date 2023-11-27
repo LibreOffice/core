@@ -23,6 +23,7 @@
 
 #include <string_view>
 
+#include <libxml/parser.h>
 #include <libxml/tree.h>
 
 #include <rtl/ustring.hxx>
