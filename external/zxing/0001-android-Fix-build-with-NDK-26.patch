@@ -1,0 +1,64 @@
+From 295b193b0105e68bb24747aefbff2653df892b4c Mon Sep 17 00:00:00 2001
+From: Michael Weghorn <m.weghorn@posteo.de>
+Date: Mon, 27 Nov 2023 14:28:34 +0100
+Subject: [PATCH] android: Fix build with NDK 26
+
+While the workarounds added in
+
+    commit df0b9213017a136bf7253ea1d4aba5677c52d45c
+    Author: axxel <awagger@gmail.com>
+    Date:   Thu Dec 15 20:43:48 2022 +0100
+
+        android: work around limitations of c++-20 support in NDK
+
+may be necessary for NDK 25, they are no longer for NDK 26,
+and even break the build with NDK 26:
+
+    C/C++: .../zxing-cpp/core/src/Generator.h:103:7: error: reference to 'default_sentinel_t' is ambiguous
+    C/C++:         std::default_sentinel_t end() { return {}; }
+    C/C++:              ^
+    C/C++: .../Android/Sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__iterator/default_sentinel.h:23:8: note: candidate found by name lookup is 'std::__ndk1::default_sentinel_t'
+    C/C++: struct default_sentinel_t { };
+    C/C++:        ^
+    C/C++: .../zxing-cpp/core/src/Generator.h:15:9: note: candidate found by name lookup is 'std::default_sentinel_t'
+    C/C++:         struct default_sentinel_t {};
+    C/C++:                ^
+    C/C++: 2 errors generated.
+
+Restrict the workaround to NDK version < 26 to fix this.
+
+Fixes: #673
+---
+ core/src/Generator.h | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/core/src/Generator.h b/core/src/Generator.h
+index 7a1fd179..a5083e9d 100644
+--- a/core/src/Generator.h
++++ b/core/src/Generator.h
+@@ -5,8 +5,12 @@
+ 
+ #pragma once
+ 
+-#ifdef __cpp_impl_coroutine
+ #ifdef __ANDROID__
++#include <android/ndk-version.h>
++#endif
++
++#ifdef __cpp_impl_coroutine
++#if defined __ANDROID__ && __NDK_MAJOR__ < 26
+ // NDK 25.1.8937393 can compile this code with c++20 but needs a few tweaks:
+ #include <experimental/coroutine>
+ namespace std {
+@@ -25,7 +29,7 @@ namespace std {
+ // this code is based on https://en.cppreference.com/w/cpp/coroutine/coroutine_handle#Example
+ // but modified trying to prevent accidental copying of generated objects
+ 
+-#ifdef __ANDROID__
++#if defined __ANDROID__ && __NDK_MAJOR__ < 26
+ template <class T>
+ #else
+ template <std::movable T>
+-- 
+2.42.0
+
