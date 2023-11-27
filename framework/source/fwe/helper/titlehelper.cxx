@@ -51,38 +51,24 @@ TitleHelper::TitleHelper(css::uno::Reference< css::uno::XComponentContext > xCon
                         const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
     : ::cppu::BaseMutex ()
     , m_xContext        (std::move(xContext))
+    , m_xOwner          (xOwner)
+    , m_xUntitledNumbers(xNumbers)
     , m_bExternalTitle  (false)
     , m_nLeasedNumber   (css::frame::UntitledNumbersConst::INVALID_NUMBER)
     , m_aListener       (m_aMutex)
 {
-    // SYNCHRONIZED ->
-    {
-        osl::MutexGuard aLock(m_aMutex);
-
-        m_xOwner = xOwner;
-        m_xUntitledNumbers = xNumbers;
-    }
-    // <- SYNCHRONIZED
-
-    css::uno::Reference< css::frame::XModel > xModel(xOwner, css::uno::UNO_QUERY);
-    if (xModel.is ())
+    if (css::uno::Reference<css::frame::XModel> xModel{ xOwner, css::uno::UNO_QUERY })
     {
         impl_startListeningForModel (xModel);
-        return;
     }
-
-    css::uno::Reference< css::frame::XController > xController(xOwner, css::uno::UNO_QUERY);
-    if (xController.is ())
+    else if (css::uno::Reference<css::frame::XController> xController{ xOwner,
+                                                                       css::uno::UNO_QUERY })
     {
         impl_startListeningForController (xController);
-        return;
     }
-
-    css::uno::Reference< css::frame::XFrame > xFrame(xOwner, css::uno::UNO_QUERY);
-    if (xFrame.is ())
+    else if (css::uno::Reference<css::frame::XFrame> xFrame{ xOwner, css::uno::UNO_QUERY })
     {
         impl_startListeningForFrame (xFrame);
-        return;
     }
 }
 
@@ -145,7 +131,7 @@ void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEv
     {
         osl::MutexGuard aLock(m_aMutex);
 
-        xSubTitle.set(m_xSubTitle.get (), css::uno::UNO_QUERY);
+        xSubTitle = m_xSubTitle;
     }
     // <- SYNCHRONIZED
 
@@ -167,7 +153,7 @@ void SAL_CALL TitleHelper::documentEventOccured(const css::document::DocumentEve
     {
         osl::MutexGuard aLock(m_aMutex);
 
-        xOwner.set(m_xOwner.get (), css::uno::UNO_QUERY);
+        xOwner.set(m_xOwner, css::uno::UNO_QUERY);
     }
     // <- SYNCHRONIZED
 
@@ -189,7 +175,7 @@ void SAL_CALL TitleHelper::frameAction(const css::frame::FrameActionEvent& aEven
     {
         osl::MutexGuard aLock(m_aMutex);
 
-        xOwner.set(m_xOwner.get (), css::uno::UNO_QUERY);
+        xOwner.set(m_xOwner, css::uno::UNO_QUERY);
     }
     // <- SYNCHRONIZED
 
@@ -219,7 +205,7 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
         osl::MutexGuard aLock(m_aMutex);
 
         xOwner = m_xOwner;
-        xNumbers.set(m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
+        xNumbers = m_xUntitledNumbers;
         nLeasedNumber = m_nLeasedNumber;
     }
     // <- SYNCHRONIZED
@@ -245,7 +231,7 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
         osl::MutexGuard aLock(m_aMutex);
 
         m_xOwner.clear();
-        m_sTitle        = OUString ();
+        m_sTitle.clear();
         m_nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
     }
     // <- SYNCHRONIZED
@@ -287,28 +273,26 @@ void TitleHelper::impl_sendTitleChangedEvent ()
 
 void TitleHelper::impl_updateTitle (bool init)
 {
-    css::uno::Reference< css::frame::XModel3 >     xModel;
-    css::uno::Reference< css::frame::XController > xController;
-    css::uno::Reference< css::frame::XFrame >      xFrame;
+    css::uno::Reference<css::uno::XInterface> xOwner;
+
     // SYNCHRONIZED ->
     {
         osl::MutexGuard aLock(m_aMutex);
 
-        xModel.set     (m_xOwner.get(), css::uno::UNO_QUERY);
-        xController.set(m_xOwner.get(), css::uno::UNO_QUERY);
-        xFrame.set     (m_xOwner.get(), css::uno::UNO_QUERY);
+        xOwner = m_xOwner;
     }
     // <- SYNCHRONIZED
 
-    if (xModel.is ())
+    if (css::uno::Reference<css::frame::XModel3> xModel{ xOwner, css::uno::UNO_QUERY })
     {
         impl_updateTitleForModel (xModel, init);
     }
-    else if (xController.is ())
+    else if (css::uno::Reference<css::frame::XController> xController{ xOwner,
+                                                                       css::uno::UNO_QUERY })
     {
         impl_updateTitleForController (xController, init);
     }
-    else if (xFrame.is ())
+    else if (css::uno::Reference<css::frame::XFrame> xFrame{ xOwner, css::uno::UNO_QUERY })
     {
         impl_updateTitleForFrame (xFrame, init);
     }
@@ -329,7 +313,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
             return;
 
         xOwner = m_xOwner;
-        xNumbers.set   (m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
+        xNumbers = m_xUntitledNumbers;
         nLeasedNumber = m_nLeasedNumber;
     }
     // <- SYNCHRONIZED
@@ -408,7 +392,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
             return;
 
         xOwner = m_xOwner;
-        xNumbers.set    (m_xUntitledNumbers.get(), css::uno::UNO_QUERY);
+        xNumbers = m_xUntitledNumbers;
         nLeasedNumber = m_nLeasedNumber;
     }
     // <- SYNCHRONIZED
@@ -554,7 +538,7 @@ void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
     {
         osl::MutexGuard aLock(m_aMutex);
 
-        xOwner   = m_xOwner.get();
+        xOwner   = m_xOwner;
         xContext = m_xContext;
     }
     // <- SYNCHRONIZED
@@ -639,7 +623,7 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
         osl::MutexGuard aLock(m_aMutex);
 
         // ignore duplicate calls. Makes outside using of this helper more easy :-)
-        xOldSubTitle.set(m_xSubTitle.get(), css::uno::UNO_QUERY);
+        xOldSubTitle = m_xSubTitle;
         if (xOldSubTitle == xSubTitle)
             return;
 
