@@ -930,7 +930,11 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
                         xInteraction->handle(aRequest.GetRequest());
 
                         if (aRequest.isApproved())
+                        {
+                            rDescriptor[utl::MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
+                            rDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= true;
                             rDescriptor["RepairPackage"] <<= true;
+                        }
                         else
                             rDescriptor["RepairAllowed"] <<= false; // Do not ask again
                     }
