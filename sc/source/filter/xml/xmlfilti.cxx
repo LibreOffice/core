@@ -382,7 +382,7 @@ void ScXMLConditionContext::GetOperator(
         rEntry.eOp = SC_BOTPERC;
     else if (IsXMLToken(aOpStr, XML_BOTTOM_VALUES))
         rEntry.eOp = SC_BOTVAL;
-    else if (IsXMLToken(aOpStr, XML_EMPTY))
+    else if (IsXMLToken(aOpStr, XML_TOKEN_EMPTY))
         rEntry.SetQueryByEmpty();
     else if (aOpStr == ">")
         rEntry.eOp = SC_GREATER;
@@ -772,7 +772,7 @@ void SAL_CALL ScXMLDPConditionContext::endFastElement( sal_Int32 /*nElement*/ )
     else
         aFilterField.eConnect = SC_AND;
     pFilterContext->SetIsCaseSensitive(bIsCaseSensitive);
-    if (IsXMLToken(sOperator, XML_EMPTY))
+    if (IsXMLToken(sOperator, XML_TOKEN_EMPTY))
         aFilterField.SetQueryByEmpty();
     else if (IsXMLToken(sOperator, XML_NOEMPTY))
         aFilterField.SetQueryByNonEmpty();
