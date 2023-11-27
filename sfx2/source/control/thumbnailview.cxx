@@ -246,6 +246,7 @@ void ThumbnailView::ImplInit()
     mbHasVisibleItems = false;
     mbShowTooltips = false;
     mbDrawMnemonics = false;
+    mbAllowMultiSelection = true;
     maFilterFunc = ViewFilterAll();
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -681,7 +682,7 @@ bool ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
     if ( pNext )
     {
-        if (aKeyCode.IsShift() && bValidRange)
+        if (aKeyCode.IsShift() && bValidRange && mbAllowMultiSelection)
         {
             std::pair<size_t,size_t> aRange;
             size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();

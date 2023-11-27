@@ -68,6 +68,7 @@ RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, st
     , mpLoadRecentFile(nullptr)
     , m_nExecuteHdlId(nullptr)
 {
+    mbAllowMultiSelection = false;
     AbsoluteScreenPixelRectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
 
