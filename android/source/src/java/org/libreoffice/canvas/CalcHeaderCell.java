@@ -8,10 +8,10 @@ import android.graphics.RectF;
 import android.text.TextPaint;
 
 public class CalcHeaderCell extends CommonCanvasElement {
-    private TextPaint mTextPaint = new TextPaint();
-    private Paint mBgPaint = new Paint();
-    private RectF mBounds;
-    private String mText;
+    private final TextPaint mTextPaint = new TextPaint();
+    private final Paint mBgPaint = new Paint();
+    private final RectF mBounds;
+    private final String mText;
 
     public CalcHeaderCell(float left, float top, float width, float height, String text, boolean selected) {
         mBounds = new RectF(left, top, left + width, top + height);
