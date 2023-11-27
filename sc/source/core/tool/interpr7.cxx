@@ -31,6 +31,7 @@
 #include <cstring>
 #include <memory>
 #include <string_view>
+#include <libxml/parser.h>
 
 using namespace com::sun::star;
 

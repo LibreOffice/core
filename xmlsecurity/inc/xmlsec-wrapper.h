@@ -23,6 +23,7 @@
 
 #include <sal/types.h>
 
+#include <libxml/parser.h>
 #include <xmlsec/base64.h>
 #include <xmlsec/bn.h>
 #include <xmlsec/errors.h>
