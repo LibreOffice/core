@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include <clew/clew.h>
+#include <libxml/parser.h>
 #include <libxml/xmlwriter.h>
 #include <libxml/xmlstring.h>
 #include <tools/stream.hxx>

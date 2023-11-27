@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 
 #include <string.h>
+#include <libxml/entities.h>
 
 using namespace css::uno;
 using namespace css::xml::dom;

@@ -861,11 +861,14 @@ void HelpLinker::main( std::vector<std::string> &args,
 // Variable to set an exception in "C" StructuredXMLErrorFunction
 static const HelpProcessingException* GpXMLParsingException = nullptr;
 
-extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
-{
-    (void)userData;
-    (void)error;
+extern "C" {
 
+#if LIBXML_VERSION >= 21200
+static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, const xmlError* error)
+#else
+static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, xmlErrorPtr error)
+#endif
+{
     std::string aErrorMsg = error->message;
     std::string aXMLParsingFile;
     if( error->file != nullptr )
@@ -876,6 +879,8 @@ extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
 
     // Reset error handler
     xmlSetStructuredErrorFunc( nullptr, nullptr );
+}
+
 }
 
 HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpProcessingException& e )

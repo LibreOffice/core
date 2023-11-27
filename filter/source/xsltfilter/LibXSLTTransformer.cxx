@@ -317,7 +317,7 @@ namespace XSLT
         }
         else
         {
-            xmlErrorPtr lastErr = xmlGetLastError();
+            const xmlError* lastErr = xmlGetLastError();
             OUString msg;
             if (lastErr)
                 msg = OUString::createFromAscii(lastErr->message);

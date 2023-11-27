@@ -388,7 +388,7 @@ private:
             case SC_EQUAL:
             {
                 if (rEntry.IsQueryByEmpty())
-                    return GetXMLToken(XML_EMPTY);
+                    return GetXMLToken(XML_TOKEN_EMPTY);
                 else if (rEntry.IsQueryByNonEmpty())
                     return GetXMLToken(XML_NOEMPTY);
 

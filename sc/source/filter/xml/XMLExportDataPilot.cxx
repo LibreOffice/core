@@ -127,7 +127,7 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, boo
 
     if (aQueryEntry.IsQueryByEmpty())
     {
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, GetXMLToken(XML_EMPTY));
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, GetXMLToken(XML_TOKEN_EMPTY));
     }
     else if (aQueryEntry.IsQueryByNonEmpty())
     {
