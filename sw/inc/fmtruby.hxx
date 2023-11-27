@@ -25,6 +25,8 @@
 
 class SwTextRuby;
 
+/// SfxPoolItem subclass that is owned by an SwTextRuby and contains info entered in Format -> Asian
+/// Phonetic Guide. This is a character property, i.e. appears in the SwpHints of an SwTextNode.
 class SW_DLLPUBLIC SwFormatRuby final : public SfxPoolItem
 {
     friend class SwTextRuby;
