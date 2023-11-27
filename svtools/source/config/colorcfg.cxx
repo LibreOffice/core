@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/confignode.hxx>
@@ -237,11 +238,28 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     }
 }
 
-void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& )
+void ColorConfig_Impl::Notify(const uno::Sequence<OUString>& rProperties)
 {
+    const bool bOnlyChangingCurrentColorScheme = rProperties.getLength() == 1 && rProperties[0] == "CurrentColorScheme";
+    const OUString sOldLoadedScheme = m_sLoadedScheme;
+
     //loading via notification always uses the default setting
     Load(OUString());
-    NotifyListeners(ConfigurationHints::NONE);
+
+    // If the name of the scheme hasn't changed, then there is no change to the
+    // global color scheme name, but Kit deliberately only changed the then
+    // current document when it last changed, so there are typically a mixture
+    // of documents with the original 'light' color scheme and the last changed
+    // color scheme 'dark'. Kit then tries to set the color scheme again to the
+    // last changed color scheme 'dark' to try and update a 'light' document
+    // that had opted out of the last change to 'dark'. So tag such an apparent
+    // null change attempt with 'OnlyCurrentDocumentColorScheme' to allow it to
+    // go through, but identify what that change is for, so the other color
+    // config listeners for whom it doesn't matter, can ignore it as an
+    // optimization.
+    const bool bOnlyCurrentDocumentColorScheme = bOnlyChangingCurrentColorScheme && sOldLoadedScheme == m_sLoadedScheme &&
+                                                 comphelper::LibreOfficeKit::isActive();
+    NotifyListeners(bOnlyCurrentDocumentColorScheme ? ConfigurationHints::OnlyCurrentDocumentColorScheme : ConfigurationHints::NONE);
 }
 
 void ColorConfig_Impl::ImplCommit()

@@ -22,6 +22,7 @@
 #include <config_wasm_strip.h>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/objitem.hxx>
@@ -31,6 +32,7 @@
 #include <svl/whiter.hxx>
 #include <svl/isethint.hxx>
 #include <svl/stritem.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/ctloptions.hxx>
@@ -70,6 +72,7 @@
 #include <dbconfig.hxx>
 #include <mmconfigitem.hxx>
 #include <strings.hrc>
+#include <unotxdoc.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/TextConnectionSettings.hpp>
@@ -969,7 +972,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, ConfigurationHints )
+void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, ConfigurationHints eHints)
 {
     if( pBrdCst == m_pUserOptions.get() )
     {
@@ -978,8 +981,8 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
     else if ( pBrdCst == m_pColorConfig.get() )
     {
         //invalidate only the current view in tiled rendering mode, or all views otherwise
-        bool bOnlyInvalidateCurrentView = comphelper::LibreOfficeKit::isActive();
-        SfxViewShell* pViewShell = bOnlyInvalidateCurrentView ? SfxViewShell::Current() : SfxViewShell::GetFirst();
+        const bool bKit = comphelper::LibreOfficeKit::isActive();
+        SfxViewShell* pViewShell = bKit ? SfxViewShell::Current() : SfxViewShell::GetFirst();
         while(pViewShell)
         {
             if(pViewShell->GetWindow())
@@ -991,24 +994,35 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                     aNewOptions.SetThemeName(m_pColorConfig->GetCurrentSchemeName());
                     SwViewColors aViewColors(*m_pColorConfig);
                     aNewOptions.SetColorConfig(aViewColors);
-                    pSwView->GetWrtShell().ApplyViewOptions(aNewOptions);
+                    const bool bChanged(aNewOptions != *pSwView->GetWrtShell().GetViewOptions());
+                    if (bChanged)
+                        pSwView->GetWrtShell().ApplyViewOptions(aNewOptions);
+                    else if (bKit)
+                    {
+                        SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pViewShell->GetCurrentDocument());
+                        SfxLokHelper::notifyViewRenderState(pViewShell, pModel);
+                    }
 
-                    if (bOnlyInvalidateCurrentView)
+                    if (bKit)
                     {
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
                             aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8().getStr());
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR,
                             aViewColors.m_aDocColor.AsRGBHexString().toUtf8().getStr());
                     }
+
+                    // if nothing changed, and the hint was OnlyCurrentDocumentColorScheme we can skip invalidate
+                    const bool bSkipInvalidate = !bChanged && bKit && eHints == ConfigurationHints::OnlyCurrentDocumentColorScheme;
+                    if (!bSkipInvalidate)
+                        pViewShell->GetWindow()->Invalidate();
                 }
-                if(pSwView !=  nullptr ||
-                   dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr ||
-                   dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
+                else if (dynamic_cast< const SwPagePreview *>( pViewShell ) != nullptr ||
+                         dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
                 {
                     pViewShell->GetWindow()->Invalidate();
                 }
             }
-            if (bOnlyInvalidateCurrentView)
+            if (bKit)
                 break;
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }

@@ -35,10 +35,11 @@ enum class ConfigurationHints {
     DecSep             = 0x0008,
     DatePatterns       = 0x0010,
     IgnoreLang         = 0x0020,
+    OnlyCurrentDocumentColorScheme = 0x0040,
     CtlSettingsChanged = 0x2000,
 };
 namespace o3tl {
-    template<> struct typed_flags<ConfigurationHints> : is_typed_flags<ConfigurationHints, 0x203f> {};
+    template<> struct typed_flags<ConfigurationHints> : is_typed_flags<ConfigurationHints, 0x207f> {};
 }
 
 /*

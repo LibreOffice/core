@@ -231,8 +231,10 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , ConfigurationHints )
+void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , ConfigurationHints eHint)
 {
+    if (eHint == ConfigurationHints::OnlyCurrentDocumentColorScheme)
+        return;
     onChangeColorConfig();
     InvalidateAllWin();
 }
