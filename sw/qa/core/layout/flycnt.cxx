@@ -31,6 +31,7 @@
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <formatwraptextatflystart.hxx>
 
 namespace
 {
@@ -1192,6 +1193,47 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrapOnAllPages)
     SwDoc* pDoc = getSwDoc();
     pDoc->getIDocumentSettingAccess().set(DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK,
                                           true);
+
+    // When formatting that document:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Reformat();
+
+    // Then make sure that the anchor text is also split between page 1 and page 2:
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage1Anchor = pPage1->FindLastBodyContent()->DynCastTextFrame();
+    CPPUNIT_ASSERT(pPage1Anchor);
+    OUString aAnchor1Text(pPage1Anchor->GetText().subView(
+        static_cast<sal_Int32>(pPage1Anchor->GetOffset()),
+        static_cast<sal_Int32>(pPage1Anchor->GetFollow()->GetOffset()
+                               - pPage1Anchor->GetOffset())));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: He heard quiet steps behind him. That
+    // - Actual  :
+    // i.e. the first page had no anchor text, only the second.
+    CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. That "), aAnchor1Text);
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    auto pPage2Anchor = pPage2->FindLastBodyContent()->DynCastTextFrame();
+    CPPUNIT_ASSERT(pPage2Anchor);
+    OUString aAnchor2Text(
+        pPage2Anchor->GetText().subView(static_cast<sal_Int32>(pPage2Anchor->GetOffset())));
+    CPPUNIT_ASSERT(!pPage2Anchor->GetFollow());
+    CPPUNIT_ASSERT_EQUAL(OUString("didn't bode well."), aAnchor2Text);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyPerFrameWrapOnAllPages)
+{
+    // Given a document where we want to wrap on all pages, around a split floating table:
+    createSwDoc("floattable-wrap-on-all-pages.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    SfxItemSet aSet(pFly->GetAttrSet());
+    SwFormatWrapTextAtFlyStart aItem(true);
+    aSet.Put(aItem);
+    pDoc->SetFlyFrameAttr(*pFly, aSet);
 
     // When formatting that document:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
