@@ -37,6 +37,7 @@ private:
     std::unique_ptr<weld::Button> m_xResetBtn;
     std::unique_ptr<weld::Button> m_xEditBtn;
     std::unique_ptr<weld::Button> m_xSearchBtn;
+    std::unique_ptr<weld::CheckButton> m_xModifiedCheckBtn;
     std::unique_ptr<weld::Entry> m_xSearchEdit;
     std::unique_ptr<weld::TreeView> m_xPrefBox;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
@@ -62,6 +63,7 @@ private:
     DECL_LINK(DoubleClickHdl_Impl, weld::TreeView&, bool);
     DECL_LINK(ResetBtnHdl_Impl, weld::Button&, void);
     DECL_LINK(SearchHdl_Impl, weld::Button&, void);
+    DECL_LINK(ModifiedHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ExpandingHdl_Impl, const weld::TreeIter&, bool);
     DECL_LINK(HeaderBarClick, int, void);
     DECL_STATIC_LINK(CuiAboutConfigTabPage, ValidNameHdl, SvxNameDialog&, bool);
@@ -72,8 +74,10 @@ public:
     virtual ~CuiAboutConfigTabPage() override;
     void InsertEntry(const OUString& rPropertyPath, const OUString& rProp, const OUString& rStatus,
                      const OUString& rType, const OUString& rValue, const OUString& rTooltip,
-                     const weld::TreeIter* pParentEntry, bool bInsertToPrefBox, bool bIsReadOnly);
+                     const weld::TreeIter* pParentEntry, bool bInsertToPrefBox, bool bIsReadOnly,
+                     bool bWasMOdified);
     void Reset();
+    void InputChanged();
     void FillItems(const css::uno::Reference<css::container::XNameAccess>& xNameAccess,
                    const weld::TreeIter* pParentEntry = nullptr, int lineage = 0,
                    bool bLoadAll = false);

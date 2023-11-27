@@ -427,7 +427,7 @@ void XcuParser::handlePropValue(
                 "xsi:nil and oor:external attributes for prop in " +
                 reader.getUrl());
         }
-        prop->setValue(valueParser_.getLayer(), css::uno::Any());
+        prop->setValue(valueParser_.getLayer(), css::uno::Any(), valueParser_.getLayer() == Data::NO_LAYER);
         state_.push(State::Ignore(false));
     } else if (external.isEmpty()) {
         valueParser_.separator_ = separator;
@@ -514,7 +514,7 @@ void XcuParser::handleLocpropValue(
                 } else {
                     static_cast< LocalizedValueNode * >(
                         i->second.get())->setValue(
-                            valueParser_.getLayer(), css::uno::Any());
+                            valueParser_.getLayer(), css::uno::Any(), valueParser_.getLayer() == Data::NO_LAYER);
                 }
                 state_.push(State::Ignore(true));
             } else {

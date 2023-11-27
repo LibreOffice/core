@@ -68,14 +68,16 @@ struct UserData
 {
     bool bIsPropertyPath;
     bool bIsReadOnly;
+    bool bWasModified;
     OUString sPropertyPath;
     OUString sTooltip;
     int aLineage;
     Reference<XNameAccess> aXNameAccess;
 
-    explicit UserData(OUString aPropertyPath, OUString aTooltip, bool isReadOnly)
+    explicit UserData(OUString aPropertyPath, OUString aTooltip, bool isReadOnly, bool wasModified)
         : bIsPropertyPath(true)
         , bIsReadOnly(isReadOnly)
+        , bWasModified(wasModified)
         , sPropertyPath(std::move(aPropertyPath))
         , sTooltip(std::move(aTooltip))
         , aLineage(0)
@@ -85,6 +87,7 @@ struct UserData
     explicit UserData(Reference<XNameAccess> const& rXNameAccess, int rIndex)
         : bIsPropertyPath(false)
         , bIsReadOnly(false)
+        , bWasModified(false)
         , aLineage(rIndex)
         , aXNameAccess(rXNameAccess)
     {
@@ -96,6 +99,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
     , m_xResetBtn(m_xBuilder->weld_button("reset"))
     , m_xEditBtn(m_xBuilder->weld_button("edit"))
     , m_xSearchBtn(m_xBuilder->weld_button("searchButton"))
+    , m_xModifiedCheckBtn(m_xBuilder->weld_check_button("modifiedButton"))
     , m_xSearchEdit(m_xBuilder->weld_entry("searchEntry"))
     , m_xPrefBox(m_xBuilder->weld_tree_view("preferences"))
     , m_xScratchIter(m_xPrefBox->make_iterator())
@@ -111,6 +115,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
     m_xPrefBox->connect_row_activated(LINK(this, CuiAboutConfigTabPage, DoubleClickHdl_Impl));
     m_xPrefBox->connect_expanding(LINK(this, CuiAboutConfigTabPage, ExpandingHdl_Impl));
     m_xSearchBtn->connect_clicked(LINK(this, CuiAboutConfigTabPage, SearchHdl_Impl));
+    m_xModifiedCheckBtn->connect_toggled(LINK(this, CuiAboutConfigTabPage, ModifiedHdl_Impl));
 
     m_options.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
     m_options.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
@@ -186,9 +191,14 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
                                         const OUString& rStatus, const OUString& rType,
                                         const OUString& rValue, const OUString& rTooltip,
                                         const weld::TreeIter* pParentEntry, bool bInsertToPrefBox,
-                                        bool bIsReadOnly)
+                                        bool bIsReadOnly, bool bWasModified)
 {
-    m_vectorUserData.push_back(std::make_unique<UserData>(rPropertyPath, rTooltip, bIsReadOnly));
+    bool bOnlyModified = m_xModifiedCheckBtn->get_active();
+    if (bOnlyModified && !bWasModified)
+        return;
+
+    m_vectorUserData.push_back(
+        std::make_unique<UserData>(rPropertyPath, rTooltip, bIsReadOnly, bWasModified));
     if (bInsertToPrefBox)
     {
         OUString sId(weld::toId(m_vectorUserData.back().get()));
@@ -197,6 +207,7 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
         m_xPrefBox->set_text(*m_xScratchIter, rStatus, 1);
         m_xPrefBox->set_text(*m_xScratchIter, rType, 2);
         m_xPrefBox->set_text(*m_xScratchIter, rValue, 3);
+        m_xPrefBox->set_text_emphasis(*m_xScratchIter, bWasModified, -1);
         m_xPrefBox->set_sensitive(*m_xScratchIter, !bIsReadOnly, -1);
     }
     else
@@ -204,6 +215,67 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
         m_prefBoxEntries.push_back(
             { rProp, rStatus, rType, rValue, m_vectorUserData.back().get() });
     }
+}
+
+void CuiAboutConfigTabPage::InputChanged()
+{
+    weld::WaitObject aWait(m_xDialog.get());
+
+    m_xPrefBox->hide();
+    m_xPrefBox->clear();
+    m_xPrefBox->freeze();
+
+    if (m_bSorted)
+        m_xPrefBox->make_unsorted();
+
+    if (m_xSearchEdit->get_text().isEmpty())
+    {
+        m_xPrefBox->clear();
+        Reference<XNameAccess> xConfigAccess = getConfigAccess("/", false);
+        FillItems(xConfigAccess);
+    }
+    else
+    {
+        m_options.searchString = m_xSearchEdit->get_text();
+        utl::TextSearch textSearch(m_options);
+        for (auto const& it : m_prefBoxEntries)
+        {
+            sal_Int32 endPos, startPos = 0;
+
+            for (size_t i = 0; i < 5; ++i)
+            {
+                OUString scrTxt;
+
+                if (i == 0)
+                    scrTxt = it.pUserData->sPropertyPath;
+                else if (i == 1)
+                    scrTxt = it.sProp;
+                else if (i == 2)
+                    scrTxt = it.sStatus;
+                else if (i == 3)
+                    scrTxt = it.sType;
+                else if (i == 4)
+                    scrTxt = it.sValue;
+
+                endPos = scrTxt.getLength();
+                if (textSearch.SearchForward(scrTxt, &startPos, &endPos))
+                {
+                    InsertEntry(it);
+                    break;
+                }
+            }
+        }
+    }
+
+    m_xPrefBox->thaw();
+    if (m_bSorted)
+        m_xPrefBox->make_sorted();
+
+    m_xPrefBox->all_foreach([this](weld::TreeIter& rEntry) {
+        m_xPrefBox->expand_row(rEntry);
+        return false;
+    });
+    m_xPrefBox->show();
 }
 
 void CuiAboutConfigTabPage::Reset()
@@ -380,6 +452,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
 
             OUString sTooltip;
             OUString sType;
+            bool bWasModified = false;
             css::uno::Type aType = cppu::UnoType<void>::get();
             OUString sDynamicType = aNode.getValueTypeName();
             try
@@ -389,6 +462,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 sTooltip
                     = xDocumentation->getDescriptionByHierarchicalName(sPath + "/" + sPropertyName);
                 aType = xDocumentation->getTypeByHierarchicalName(sFullPath);
+                bWasModified = xDocumentation->getModifiedByHierarchicalName(sFullPath);
             }
             catch (css::container::NoSuchElementException)
             {
@@ -616,7 +690,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 index = sPath.indexOf("/", index + 1);
 
             InsertEntry(sPath, sPath.copy(index + 1), item, sType, sValue.makeStringAndClear(),
-                        sTooltip, pParentEntry, !bLoadAll, bReadOnly);
+                        sTooltip, pParentEntry, !bLoadAll, bReadOnly, bWasModified);
         }
     }
 }
@@ -892,6 +966,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             //update listbox value.
             m_xPrefBox->set_text(*m_xScratchIter, sPropertyType, 2);
             m_xPrefBox->set_text(*m_xScratchIter, sDialogValue, 3);
+            m_xPrefBox->set_text_emphasis(*m_xScratchIter, true, -1);
             //update m_prefBoxEntries
             auto it = std::find_if(
                 m_prefBoxEntries.begin(), m_prefBoxEntries.end(),
@@ -902,6 +977,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             if (it != m_prefBoxEntries.end())
             {
                 it->sValue = sDialogValue;
+                it->pUserData->bWasModified = true;
 
                 auto modifiedIt = std::find_if(
                     m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
@@ -913,6 +989,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
                 if (modifiedIt != m_modifiedPrefBoxEntries.end())
                 {
                     modifiedIt->sValue = sDialogValue;
+                    modifiedIt->pUserData->bWasModified = true;
                 }
                 else
                 {
@@ -926,69 +1003,19 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(CuiAboutConfigTabPage, SearchHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(CuiAboutConfigTabPage, SearchHdl_Impl, weld::Button&, void) { InputChanged(); }
+
+IMPL_LINK_NOARG(CuiAboutConfigTabPage, ModifiedHdl_Impl, weld::Toggleable&, void)
 {
-    weld::WaitObject aWait(m_xDialog.get());
-
-    m_xPrefBox->hide();
-    m_xPrefBox->clear();
-    m_xPrefBox->freeze();
-
-    if (m_bSorted)
-        m_xPrefBox->make_unsorted();
-
-    if (m_xSearchEdit->get_text().isEmpty())
-    {
-        m_xPrefBox->clear();
-        Reference<XNameAccess> xConfigAccess = getConfigAccess("/", false);
-        FillItems(xConfigAccess);
-    }
-    else
-    {
-        m_options.searchString = m_xSearchEdit->get_text();
-        utl::TextSearch textSearch(m_options);
-        for (auto const& it : m_prefBoxEntries)
-        {
-            sal_Int32 endPos, startPos = 0;
-
-            for (size_t i = 0; i < 5; ++i)
-            {
-                OUString scrTxt;
-
-                if (i == 0)
-                    scrTxt = it.pUserData->sPropertyPath;
-                else if (i == 1)
-                    scrTxt = it.sProp;
-                else if (i == 2)
-                    scrTxt = it.sStatus;
-                else if (i == 3)
-                    scrTxt = it.sType;
-                else if (i == 4)
-                    scrTxt = it.sValue;
-
-                endPos = scrTxt.getLength();
-                if (textSearch.SearchForward(scrTxt, &startPos, &endPos))
-                {
-                    InsertEntry(it);
-                    break;
-                }
-            }
-        }
-    }
-
-    m_xPrefBox->thaw();
-    if (m_bSorted)
-        m_xPrefBox->make_sorted();
-
-    m_xPrefBox->all_foreach([this](weld::TreeIter& rEntry) {
-        m_xPrefBox->expand_row(rEntry);
-        return false;
-    });
-    m_xPrefBox->show();
+    InputChanged();
 }
 
 void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
 {
+    bool bOnlyModified = m_xModifiedCheckBtn->get_active();
+    if (bOnlyModified && !rEntry.pUserData->bWasModified)
+        return;
+
     OUString sPathWithProperty = rEntry.pUserData->sPropertyPath;
     sal_Int32 index = sPathWithProperty.lastIndexOf(rEntry.sProp);
     OUString sPath = sPathWithProperty.copy(0, index);
@@ -1009,6 +1036,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
             m_xPrefBox->set_text(*m_xScratchIter, rEntry.sStatus, 1);
             m_xPrefBox->set_text(*m_xScratchIter, rEntry.sType, 2);
             m_xPrefBox->set_text(*m_xScratchIter, rEntry.sValue, 3);
+            m_xPrefBox->set_text_emphasis(*m_xScratchIter, rEntry.pUserData->bWasModified, -1);
             m_xPrefBox->set_sensitive(*m_xScratchIter, !rEntry.pUserData->bIsReadOnly);
             return;
         }
@@ -1045,6 +1073,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
             m_xPrefBox->set_text(*xParentEntry, "", 1);
             m_xPrefBox->set_text(*xParentEntry, "", 2);
             m_xPrefBox->set_text(*xParentEntry, "", 3);
+            m_xPrefBox->set_text_emphasis(*m_xScratchIter, rEntry.pUserData->bWasModified, -1);
             m_xPrefBox->set_sensitive(*xParentEntry, true);
         }
 
@@ -1057,6 +1086,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
     m_xPrefBox->set_text(*m_xScratchIter, rEntry.sStatus, 1);
     m_xPrefBox->set_text(*m_xScratchIter, rEntry.sType, 2);
     m_xPrefBox->set_text(*m_xScratchIter, rEntry.sValue, 3);
+    m_xPrefBox->set_text_emphasis(*m_xScratchIter, rEntry.pUserData->bWasModified, -1);
     m_xPrefBox->set_sensitive(*m_xScratchIter, !rEntry.pUserData->bIsReadOnly);
 }
 

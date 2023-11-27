@@ -198,6 +198,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkCheckButton" id="modifiedButton">
+                <property name="label" translatable="yes" context="aboutconfigdialog|modifiedButton">Show only modified preferences</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -236,6 +250,7 @@
                           <attributes>
                             <attribute name="sensitive">10</attribute>
                             <attribute name="text">1</attribute>
+                            <attribute name="weight">8</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -251,6 +266,7 @@
                           <attributes>
                             <attribute name="sensitive">11</attribute>
                             <attribute name="text">2</attribute>
+                            <attribute name="weight">8</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -266,6 +282,7 @@
                           <attributes>
                             <attribute name="sensitive">12</attribute>
                             <attribute name="text">3</attribute>
+                            <attribute name="weight">8</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -281,6 +298,7 @@
                           <attributes>
                             <attribute name="sensitive">13</attribute>
                             <attribute name="text">4</attribute>
+                            <attribute name="weight">8</attribute>
                           </attributes>
                         </child>
                       </object>

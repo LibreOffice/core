@@ -33,6 +33,7 @@
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
+#include "data.hxx"
 #include "localizedvaluenode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
@@ -347,7 +348,7 @@ bool ValueParser::endElement() {
 
             switch (node_->kind()) {
             case Node::KIND_PROPERTY:
-                pValue = static_cast< PropertyNode * >(node_.get())->getValuePtr(layer_);
+                pValue = static_cast< PropertyNode * >(node_.get())->getValuePtr(layer_, layer_ == Data::NO_LAYER);
                 break;
             case Node::KIND_LOCALIZED_PROPERTY:
                 {
@@ -360,7 +361,7 @@ bool ValueParser::endElement() {
                     } else {
                         pLVNode = static_cast< LocalizedValueNode * >(i->second.get());
                     }
-                    pValue = pLVNode->getValuePtr(layer_);
+                    pValue = pLVNode->getValuePtr(layer_, layer_ == Data::NO_LAYER);
                 }
                 break;
             default:

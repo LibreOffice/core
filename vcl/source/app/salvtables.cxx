@@ -4419,8 +4419,21 @@ void SalInstanceTreeView::set_extra_row_indent(const weld::TreeIter& rIter, int 
 
 void SalInstanceTreeView::set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, int col)
 {
-    col = to_internal_model(col);
+    if (col == -1)
+    {
+        for (size_t nCur = 0; nCur < pEntry->ItemCount(); ++nCur)
+        {
+            SvLBoxItem& rItem = pEntry->GetItem(nCur);
+            if (rItem.GetType() == SvLBoxItemType::String)
+            {
+                static_cast<SvLBoxString&>(rItem).Emphasize(bOn);
+                InvalidateModelEntry(pEntry);
+            }
+        }
+        return;
+    }
 
+    col = to_internal_model(col);
     assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
     SvLBoxItem& rItem = pEntry->GetItem(col);
     assert(dynamic_cast<SvLBoxString*>(&rItem));

@@ -15631,14 +15631,28 @@ public:
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        auto weight = bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
+        if (col == -1)
+        {
+            for (const auto& elem : m_aWeightMap)
+                set(rGtkIter.iter, elem.second, weight);
+            return;
+        }
         col = to_internal_model(col);
-        set(rGtkIter.iter, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
+        set(rGtkIter.iter, m_aWeightMap[col], weight);
     }
 
     virtual void set_text_emphasis(int pos, bool bOn, int col) override
     {
+        auto weight = bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
+        if (col == -1)
+        {
+            for (const auto& elem : m_aWeightMap)
+                set(pos, elem.second, weight);
+            return;
+        }
         col = to_internal_model(col);
-        set(pos, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
+        set(pos, m_aWeightMap[col], weight);
     }
 
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override

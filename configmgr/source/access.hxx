@@ -168,6 +168,9 @@ public:
     virtual css::uno::Type SAL_CALL getTypeByHierarchicalName(
         OUString const & aName) override;
 
+    virtual sal_Bool SAL_CALL getModifiedByHierarchicalName(
+        OUString const & aName) override;
+
     virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName) override;
 
     virtual void SAL_CALL replaceByHierarchicalName(

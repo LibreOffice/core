@@ -973,7 +973,7 @@ void readDir(
                     case ReadValue::Error:
                         continue;
                     case ReadValue::Value:
-                        prop->setValue(layer, value);
+                        prop->setValue(layer, value, false);
                         finalize(client, path, member, layer);
                         break;
                     case ReadValue::Remove:
@@ -1005,7 +1005,7 @@ void readDir(
                         continue;
                     }
                     static_cast<LocalizedValueNode *>(member.get())->setValue(
-                        layer, value);
+                        layer, value, false);
                     finalize(client, path, member, layer);
                     break;
                 }

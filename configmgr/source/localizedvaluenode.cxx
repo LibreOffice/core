@@ -30,7 +30,7 @@
 namespace configmgr {
 
 LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any value):
-    Node(layer), value_(std::move(value))
+    Node(layer), value_(std::move(value)), modified_(false)
 {}
 
 LocalizedValueNode::LocalizedValueNode(int layer):
@@ -46,9 +46,10 @@ OUString LocalizedValueNode::getTemplateName() const {
 }
 
 
-void LocalizedValueNode::setValue(int layer, css::uno::Any const & value)
+void LocalizedValueNode::setValue(int layer, css::uno::Any const & value, bool bIsUserModification)
 {
     setLayer(layer);
+    modified_ = bIsUserModification;
     if (&value != &value_)
         value_ = value;
 }

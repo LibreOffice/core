@@ -43,6 +43,22 @@ interface XDocumentation {
     type getTypeByHierarchicalName( [in] string aName )
             raises( com::sun::star::container::NoSuchElementException,
                     com::sun::star::util::InvalidStateException );
+
+    /** @returns
+            whether the requested object was modified
+
+        @param aName
+            the hierarchical name of the object.
+
+        @throws NoSuchElementException
+            if an element under aName does not exist.
+
+        @throws InvalidStateException
+            when the object has an invalid type
+     */
+    boolean getModifiedByHierarchicalName( [in] string aName )
+            raises( com::sun::star::container::NoSuchElementException,
+                    com::sun::star::util::InvalidStateException );
 };
 
 }; }; }; };

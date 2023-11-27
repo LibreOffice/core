@@ -478,6 +478,28 @@ css::uno::Type Access::getTypeByHierarchicalName(OUString const & aName)
     }
 }
 
+sal_Bool Access::getModifiedByHierarchicalName(OUString const & aName)
+{
+    assert(thisIs(IS_ANY));
+    osl::MutexGuard g(*lock_);
+    checkLocalizedPropertyAccess();
+    rtl::Reference< ChildAccess > child(getSubChild(aName));
+    if (!child.is()) {
+        throw css::container::NoSuchElementException(
+            aName, getXWeak());
+    }
+    auto const & p = child->getNode();
+    switch (p->kind()) {
+    case Node::KIND_PROPERTY:
+        return static_cast<PropertyNode *>(p.get())->isModified();
+    case Node::KIND_LOCALIZED_VALUE:
+        return static_cast<LocalizedValueNode *>(p.get())->isModified();
+    default:
+        throw css::util::InvalidStateException(
+            aName, getXWeak());
+    }
+}
+
 sal_Bool Access::hasByHierarchicalName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));

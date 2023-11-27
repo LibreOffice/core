@@ -46,12 +46,14 @@ public:
 
     css::uno::Any const & getValue(Components & components);
 
-    void setValue(int layer, css::uno::Any const & value);
-    css::uno::Any *getValuePtr(int layer);
+    void setValue(int layer, css::uno::Any const & value, bool bIsUserModification);
+    css::uno::Any *getValuePtr(int layer, bool bIsUserModification);
 
     void setExternal(int layer, OUString const & descriptor);
 
     bool isExtension() const { return extension_;}
+
+    bool isModified() const { return modified_;}
 
 private:
     PropertyNode(PropertyNode const&) = default;
@@ -65,6 +67,8 @@ private:
         // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
     bool extension_;
+    /// Whether the property was modified by the user:
+    bool modified_;
     OUString externalDescriptor_;
     css::uno::Any value_;
 };

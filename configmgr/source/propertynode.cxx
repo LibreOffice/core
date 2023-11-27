@@ -39,7 +39,7 @@ PropertyNode::PropertyNode(
     int layer, Type staticType, bool nillable, css::uno::Any value,
     bool extension):
     Node(layer), staticType_(staticType), nillable_(nillable),
-    extension_(extension), value_(std::move(value))
+    extension_(extension), modified_(false), value_(std::move(value))
 {}
 
 rtl::Reference< Node > PropertyNode::clone(bool) const {
@@ -62,15 +62,18 @@ css::uno::Any const & PropertyNode::getValue(Components & components) {
     return value_;
 }
 
-void PropertyNode::setValue(int layer, css::uno::Any const & value) {
+void PropertyNode::setValue(int layer, css::uno::Any const & value, bool bIsUserModification) {
     setLayer(layer);
     value_ = value;
+    // Consider as modified when modified during runtime or by user registry modifications
+    modified_ = bIsUserModification;
     externalDescriptor_.clear();
 }
 
-css::uno::Any *PropertyNode::getValuePtr(int layer)
+css::uno::Any *PropertyNode::getValuePtr(int layer, bool bIsUserModification)
 {
     setLayer(layer);
+    modified_ = bIsUserModification;
     externalDescriptor_.clear();
     return &value_;
 }

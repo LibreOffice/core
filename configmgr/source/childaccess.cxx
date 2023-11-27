@@ -279,11 +279,11 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
         switch (node_->kind()) {
         case Node::KIND_PROPERTY:
             static_cast< PropertyNode * >(node_.get())->setValue(
-                Data::NO_LAYER, *changedValue_);
+                Data::NO_LAYER, *changedValue_, true);
             break;
         case Node::KIND_LOCALIZED_VALUE:
             static_cast< LocalizedValueNode * >(node_.get())->setValue(
-                Data::NO_LAYER, *changedValue_);
+                Data::NO_LAYER, *changedValue_, true);
             break;
         default:
             assert(false); // this cannot happen
