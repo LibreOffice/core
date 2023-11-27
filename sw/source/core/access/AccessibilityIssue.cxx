@@ -24,7 +24,6 @@
 #include <docsh.hxx>
 #include <view.hxx>
 #include <comphelper/lok.hxx>
-#include <cui/dlgname.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxdlg.hxx>
 
