@@ -42,6 +42,7 @@ public:
 class SdTpOptionsContents final : public SfxTabPage
 {
 private:
+    bool m_bDrawMode;
     std::unique_ptr<weld::CheckButton> m_xCbxRuler;
     std::unique_ptr<weld::Widget> m_xCbxRulerImg;
     std::unique_ptr<weld::CheckButton> m_xCbxDragStripes;
@@ -60,6 +61,10 @@ public:
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
+
+    virtual void PageCreated(const SfxAllItemSet& aSet) override;
+
+    void SetDrawMode() { m_bDrawMode = true; }
 };
 
 /**

@@ -736,7 +736,14 @@ std::unique_ptr<SfxTabPage> SdModule::CreateTabPage( sal_uInt16 nId, weld::Conta
         {
             ::CreateTabPage fnCreatePage = pFact->GetSdOptionsContentsTabPageCreatorFunc();
             if( fnCreatePage )
+            {
                 xRet = (*fnCreatePage)( pPage, pController, &rSet );
+                if (SID_SD_TP_CONTENTS == nId)
+                    aSet.Put(SfxUInt32Item(SID_SDMODE_FLAG, SD_DRAW_MODE));
+                else
+                    aSet.Put(SfxUInt32Item(SID_SDMODE_FLAG, SD_IMPRESS_MODE));
+                xRet->PageCreated(aSet);
+            }
         }
         break;
         case SID_SD_TP_SNAP:

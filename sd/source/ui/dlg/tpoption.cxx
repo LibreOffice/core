@@ -148,6 +148,7 @@ std::unique_ptr<SfxTabPage> SdTpOptionsSnap::Create( weld::Container* pPage, wel
 \************************************************************************/
 SdTpOptionsContents::SdTpOptionsContents(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "modules/simpress/ui/sdviewpage.ui", "SdViewPage", &rInAttrs)
+    , m_bDrawMode(false)
     , m_xCbxRuler(m_xBuilder->weld_check_button("ruler"))
     , m_xCbxRulerImg(m_xBuilder->weld_widget("lockruler"))
     , m_xCbxDragStripes(m_xBuilder->weld_check_button("dragstripes"))
@@ -216,19 +217,23 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_xCbxDragStripes->set_active( aLayoutItem.GetOptionsLayout().IsDragStripes() );
     m_xCbxHandlesBezier->set_active( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
 
-    bool bReadOnly = officecfg::Office::Impress::Layout::Display::Ruler::isReadOnly();
+    bool bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Display::Ruler::isReadOnly() :
+        officecfg::Office::Impress::Layout::Display::Ruler::isReadOnly();
     m_xCbxRuler->set_sensitive(!bReadOnly);
     m_xCbxRulerImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Layout::Display::Contour::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Display::Contour::isReadOnly() :
+        officecfg::Office::Impress::Layout::Display::Contour::isReadOnly();
     m_xCbxMoveOutline->set_sensitive(!bReadOnly);
     m_xCbxMoveOutlineImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Layout::Display::Guide::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Display::Guide::isReadOnly() :
+        officecfg::Office::Impress::Layout::Display::Guide::isReadOnly();
     m_xCbxDragStripes->set_sensitive(!bReadOnly);
     m_xCbxDragStripesImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Layout::Display::Bezier::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Display::Bezier::isReadOnly() :
+        officecfg::Office::Impress::Layout::Display::Bezier::isReadOnly();
     m_xCbxHandlesBezier->set_sensitive(!bReadOnly);
     m_xCbxHandlesBezierImg->set_visible(bReadOnly);
 
@@ -242,6 +247,17 @@ std::unique_ptr<SfxTabPage> SdTpOptionsContents::Create( weld::Container* pPage,
                                                 const SfxItemSet* rAttrs )
 {
     return std::make_unique<SdTpOptionsContents>(pPage, pController, *rAttrs);
+}
+
+void SdTpOptionsContents::PageCreated( const SfxAllItemSet& aSet )
+{
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_SDMODE_FLAG, false);
+    if (pFlagItem)
+    {
+        sal_uInt32 nFlags = pFlagItem->GetValue();
+        if ((nFlags & SD_DRAW_MODE) == SD_DRAW_MODE)
+            SetDrawMode();
+    }
 }
 
 /*************************************************************************
