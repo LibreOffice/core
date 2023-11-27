@@ -2530,6 +2530,12 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     if (!isFileLoadable(aFile))
         return nullptr;
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SAL_WARN( "sc.ui", "ScExternalRefManager::loadSrcDocument: blocked access to external file: \"" << aFile << "\"");
+        return nullptr;
+    }
+
     OUString aOptions = pFileData->maFilterOptions;
     if ( !pFileData->maFilterName.isEmpty() )
         rFilter = pFileData->maFilterName;      // don't overwrite stored filter with guessed filter
