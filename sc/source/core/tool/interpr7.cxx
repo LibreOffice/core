@@ -34,6 +34,7 @@
 
 #include <cstring>
 #include <memory>
+#include <libxml/parser.h>
 
 using namespace com::sun::star;
 

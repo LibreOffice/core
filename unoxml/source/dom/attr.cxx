@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <memory>
+#include <libxml/entities.h>
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

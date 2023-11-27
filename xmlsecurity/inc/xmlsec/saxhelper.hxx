@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_INC_XMLSEC_SAXHELPER_HXX
 #define INCLUDED_XMLSECURITY_INC_XMLSEC_SAXHELPER_HXX
 
+#include <libxml/parser.h>
 #include <libxml/tree.h>
 
 #include <rtl/ustring.hxx>

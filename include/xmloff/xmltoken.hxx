@@ -706,7 +706,7 @@ namespace xmloff { namespace token {
         XML_EMBEDDED_VISIBLE_AREA,
         XML_EMBOSSED,
         XML_EMISSIVE_COLOR,
-        XML_EMPTY,
+        XML_TOKEN_EMPTY,
         XML_EMPTY_LINE_REFRESH,
         XML_ENABLE_NUMBERING,
         XML_ENABLED,

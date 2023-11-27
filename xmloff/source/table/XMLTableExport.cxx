@@ -61,7 +61,7 @@ using namespace ::com::sun::star::style;
 #define CMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
 #define RMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
 #define CELLMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_CELL,context)
-#define MAP_END { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false }
+#define MAP_END { nullptr, 0, 0, XML_TOKEN_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 const XMLPropertyMapEntry* getColumnPropertiesMap()
 {

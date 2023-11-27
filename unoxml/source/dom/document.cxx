@@ -41,6 +41,7 @@
 #include <eventdispatcher.hxx>
 
 #include <string.h>
+#include <libxml/xmlIO.h>
 
 #include <osl/diagnose.h>
 

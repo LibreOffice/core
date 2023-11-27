@@ -16,6 +16,8 @@
 #include <tools/XmlWriter.hxx>
 
 #include <memory>
+#include <libxml/parser.h>
+#include <sal/log.hxx>
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
