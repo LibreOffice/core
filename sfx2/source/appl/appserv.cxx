@@ -594,7 +594,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
             const OUString& rSchemeName = pNewThemeArg->GetValue();
             svtools::EditableColorConfig aEditableConfig;
-            if (aEditableConfig.GetCurrentSchemeName() != rSchemeName)
+            // kit explicitly ignores changes to the global color scheme, except for the current ViewShell,
+            // so an attempted change to the same global color scheme when the now current ViewShell ignored
+            // the last change requires re-sending the change. In which case individual shells will have to
+            // decide if this color-scheme change is a change from their perspective to avoid unnecessary
+            // invalidations.
+            if (aEditableConfig.GetCurrentSchemeName() != rSchemeName || comphelper::LibreOfficeKit::isActive())
                 aEditableConfig.LoadScheme(rSchemeName);
             break;
         }

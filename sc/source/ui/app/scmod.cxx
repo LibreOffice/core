@@ -174,7 +174,7 @@ ScModule::~ScModule()
     DeleteCfg(); // Called from Exit()
 }
 
-void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, ConfigurationHints )
+void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, ConfigurationHints eHints)
 {
     if ( p == m_pColorConfig.get() || p == m_pAccessOptions.get() )
     {
@@ -208,7 +208,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
             }
         }
 
-        if (comphelper::LibreOfficeKit::isActive() && m_pColorConfig)
+        bool bSkipInvalidate = false;
+
+        const bool bKit = comphelper::LibreOfficeKit::isActive();
+        if (bKit && p == m_pColorConfig.get())
         {
             SfxViewShell* pSfxViewShell = SfxViewShell::Current();
             ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
@@ -220,26 +223,34 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
                 Color aFillColor(m_pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor);
                 aViewOptions.SetDocColor(aFillColor);
                 aViewOptions.SetColorSchemeName(svtools::ColorConfig::GetCurrentSchemeName());
-                pViewData.SetOptions(aViewOptions);
+                const bool bChanged(aViewOptions != pViewData.GetOptions());
+                if (bChanged)
+                    pViewData.SetOptions(aViewOptions);
                 ScModelObj* pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(SfxObjectShell::Current()->GetModel());
                 SfxLokHelper::notifyViewRenderState(SfxViewShell::Current(), pScModelObj);
                 // In Online, the document color is the one used for the background, contrary to
                 // Writer and Draw that use the application background color.
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
                         aFillColor.AsRGBHexString().toUtf8());
+
+                // if nothing changed, and the hint was OnlyCurrentDocumentColorScheme we can skip invalidate
+                bSkipInvalidate = !bChanged && eHints == ConfigurationHints::OnlyCurrentDocumentColorScheme;
             }
         }
 
-        // force all views to repaint, using the new options
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while(pViewShell)
+        //invalidate only the current view in tiled rendering mode, or all views otherwise
+        SfxViewShell* pViewShell = bKit ? SfxViewShell::Current() : SfxViewShell::GetFirst();
+        while (pViewShell)
         {
             if (ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(pViewShell))
             {
-                pViewSh->PaintGrid();
-                pViewSh->PaintTop();
-                pViewSh->PaintLeft();
-                pViewSh->PaintExtras();
+                if (!bSkipInvalidate)
+                {
+                    pViewSh->PaintGrid();
+                    pViewSh->PaintTop();
+                    pViewSh->PaintLeft();
+                    pViewSh->PaintExtras();
+                }
 
                 ScInputHandler* pHdl = pViewSh->GetInputHandler();
                 if ( pHdl )
@@ -251,6 +262,8 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
                 if (pWin)
                     pWin->Invalidate();
             }
+            if (bKit)
+                break;
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }
     }
