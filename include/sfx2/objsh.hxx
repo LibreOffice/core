@@ -475,7 +475,7 @@ public:
     void                        AvoidRecentDocs(bool bAvoid) { mbAvoidRecentDocs = bAvoid; }
 
     /// On first error ask user if import should continue; return saved answer.
-    bool                        IsContinueImportOnFilterExceptions(std::u16string_view aErrMessage);
+    bool                        IsContinueImportOnFilterExceptions();
 
     // Transfer IFace
     bool                        IsAbortingImport() const;

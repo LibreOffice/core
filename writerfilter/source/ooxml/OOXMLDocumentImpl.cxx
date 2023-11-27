@@ -514,15 +514,13 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
     {
         xParser->parseStream(aParserInput);
     }
-    catch (xml::sax::SAXException const& rErr)
+    catch (xml::sax::SAXException const&)
     {
         // don't silently swallow these - handlers may not have been executed,
         // and the domain mapper is likely in an inconsistent state
         // In case user chooses to try to continue loading, don't ask again for this file
         SfxObjectShell* rShell = SfxObjectShell::GetShellFromComponent(mxModel);
-        if (!rShell
-            || !rShell->IsContinueImportOnFilterExceptions(
-                Concat2View("SAXException: " + rErr.Message)))
+        if (!rShell || !rShell->IsContinueImportOnFilterExceptions())
             throw;
     }
     catch (uno::RuntimeException const&)
