@@ -68,6 +68,7 @@ CreateFlatParagraphIterator(SwDoc & rDoc, sal_Int32 const nTextMarkupType,
 SwXFlatParagraph::SwXFlatParagraph( SwTextNode& rTextNode, OUString aExpandText, const ModelToViewHelper& rMap )
     : SwXFlatParagraph_Base(& rTextNode, rMap)
     , maExpandText(std::move(aExpandText))
+    , maOrigText(rTextNode.GetText())
 {
 }
 
@@ -215,7 +216,7 @@ sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType )
 sal_Bool SAL_CALL SwXFlatParagraph::isModified()
 {
     SolarMutexGuard aGuard;
-    return nullptr == GetTextNode();
+    return !GetTextNode() || GetTextNode()->GetText() != maOrigText;
 }
 
 // text::XFlatParagraph:
