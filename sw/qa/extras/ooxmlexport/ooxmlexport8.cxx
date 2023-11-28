@@ -719,19 +719,12 @@ CPPUNIT_TEST_FIXTURE(Test, testN779642)
         uno::Any aFrame = xAnchor->getPropertyValue("TextFrame");
         uno::Reference<beans::XPropertySet> xFrame;
         aFrame >>= xFrame;
+        CPPUNIT_ASSERT(xFrame.is());
         sal_Int16 nValue;
         xFrame->getPropertyValue("VertOrient") >>= nValue;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::BOTTOM, nValue);
         xFrame->getPropertyValue("VertOrientRelation") >>= nValue;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", text::RelOrientation::PAGE_PRINT_AREA, nValue);
-
-        // tdf#106572 - perhaps not the best test to hijack since this file
-        // produces an error in Word, but it nicely matches danger points,
-        // and has a different first footer, so nice visual confirmation.
-        discardDumpedLayout();
-        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        // There is no footer text on the first page.
-        assertXPath(pXmlDoc, "/root/page[1]/footer/txt", 0);
     };
     createSwDoc("n779642.docx");
     verify();

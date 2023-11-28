@@ -464,7 +464,7 @@ DECLARE_RTFEXPORT_TEST(testFooterPara, "footer-para.rtf")
 {
     // check that paragraph properties in footer are imported
     uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("First Page"), "FooterText");
+        getStyles("PageStyles")->getByName("Standard"), "FooterTextFirst");
     uno::Reference<text::XTextContent> xParagraph = getParagraphOrTable(1, xFooterText);
     CPPUNIT_ASSERT_EQUAL(
         OUString("All Rights Reserved."),

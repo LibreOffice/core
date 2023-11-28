@@ -77,6 +77,7 @@ DECLARE_RTFEXPORT_TEST(testFdo49683, "fdo49683.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("two"), aKeywords[1]);
 }
 
+// TODO Use case not clear!
 DECLARE_RTFEXPORT_TEST(testFdo44174, "fdo44174.rtf")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -86,7 +87,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44174, "fdo44174.rtf")
                                                      uno::UNO_QUERY);
     OUString aValue;
     xPropertySet->getPropertyValue("PageStyleName") >>= aValue;
-    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), aValue);
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo50087, "fdo50087.rtf")

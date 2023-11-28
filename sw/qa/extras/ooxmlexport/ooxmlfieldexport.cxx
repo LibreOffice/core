@@ -256,7 +256,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFooterContainHyperlink)
     // Target due to which the file get corrupted
     // in MS Office 2007.
     // Check for footer1.xml.rels file.
-    xmlDocUniquePtr pXmlRels = parseExport("word/_rels/footer1.xml.rels");
+    xmlDocUniquePtr pXmlRels = parseExport("word/_rels/footer2.xml.rels");
     // Check the value of Target which is http://www.google.com/.
     assertXPath(pXmlRels,"/rels:Relationships/rels:Relationship","Target","http://www.google.com/");
 }
@@ -808,7 +808,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropDownFieldEntryLimit)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132185)
 {
     loadAndReload("tdf132185.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/footer1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/footer2.xml");
     // Since the default (without xml:space attribute) is to ignore leading and trailing spaces,
     // " PAGE \\* roman " will get imported as "PAGE \\* roman". This is also valid, and must be
     // treated accordingly. "roman" was ignored before the fix, exporting only " PAGE ".

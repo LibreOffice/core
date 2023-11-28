@@ -981,11 +981,13 @@ CPPUNIT_TEST_FIXTURE(Test, testBehindDoc)
 CPPUNIT_TEST_FIXTURE(Test, testFdo82114)
 {
     createSwDoc("fdo82114.rtf");
-    uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Converted1"), "HeaderText");
-    OUString aActual = xHeaderText->getString();
-    // This was 'Right page header, section 1'.
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 2"), aActual);
+    uno::Reference<text::XText> xHeaderTextPage1 = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName("Standard"), "HeaderTextFirst");
+    CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 1"), xHeaderTextPage1->getString());
+
+    uno::Reference<text::XText> xHeaderTextPage2 = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName("Converted1"), "HeaderTextFirst");
+    CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 2"), xHeaderTextPage2->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo44984)
@@ -1469,7 +1471,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImportHeaderFooter)
 
     //Check if Headers/Footers only contain what they should in this document
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("First Page"), "HeaderText");
+        getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextFirst");
     OUString aActual = xHeaderText->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("First Page Header"), aActual);
 
@@ -1484,7 +1486,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImportHeaderFooter)
     CPPUNIT_ASSERT_EQUAL(OUString("Header uneven"), aActual);
 
     uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("First Page"), "FooterText");
+        getStyles("PageStyles")->getByName("Default Page Style"), "FooterTextFirst");
     aActual = xFooterText->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("First Page Footer"), aActual);
 
@@ -1513,8 +1515,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextLeft");
     aActual = xHeaderTextLeft->getString();
-    CPPUNIT_ASSERT_EQUAL(OUString(SAL_NEWLINE_STRING SAL_NEWLINE_STRING "Header Page 2 ?"),
-                         aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString("\nHeader Page 2 ?"), aActual);
 #endif
 }
 

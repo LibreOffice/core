@@ -1528,13 +1528,17 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
 
     const char* pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
     /* is this a title page? */
-    if (m_pCurrentPageDesc->GetFollow() && m_pCurrentPageDesc->GetFollow() != m_pCurrentPageDesc)
+    if ((m_pCurrentPageDesc->GetFollow() && m_pCurrentPageDesc->GetFollow() != m_pCurrentPageDesc)
+        || !m_pCurrentPageDesc->IsFirstShared())
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_TITLEPG);
         pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERF : OOO_STRING_SVTOOLS_RTF_FOOTERF);
     }
     Strm().WriteChar('{').WriteCharPtr(pStr);
-    WriteHeaderFooterText(m_pCurrentPageDesc->GetMaster(), bHeader);
+    WriteHeaderFooterText(m_pCurrentPageDesc->IsFirstShared()
+                              ? m_pCurrentPageDesc->GetMaster()
+                              : m_pCurrentPageDesc->GetFirstMaster(),
+                          bHeader);
     Strm().WriteChar('}');
 
     SAL_INFO("sw.rtf", __func__ << " end");
