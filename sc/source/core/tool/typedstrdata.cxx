@@ -34,8 +34,31 @@ bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, 
     if (left.mbIsDate != right.mbIsDate)
         return left.mbIsDate < right.mbIsDate;
 
-    sal_Int32 nEqual = ScGlobal::GetCaseCollator().compareString(
-        left.maStrValue, right.maStrValue);
+    sal_Int32 nEqual
+        = ScGlobal::GetCaseTransliteration().compareString(left.maStrValue, right.maStrValue);
+
+    if (!nEqual)
+        return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
+
+    return nEqual < 0;
+}
+
+bool ScTypedStrData::LessSortCaseSensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
+{
+    if (left.meStrType != right.meStrType)
+        return left.meStrType < right.meStrType;
+
+    if (left.meStrType == Value)
+    {
+        if (left.mfValue == right.mfValue)
+            return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
+        return left.mfValue < right.mfValue;
+    }
+
+    if (left.mbIsDate != right.mbIsDate)
+        return left.mbIsDate < right.mbIsDate;
+
+    sal_Int32 nEqual = ScGlobal::GetCaseCollator().compareString(left.maStrValue, right.maStrValue);
 
     if (!nEqual)
         return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
@@ -58,8 +81,31 @@ bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left
     if (left.mbIsDate != right.mbIsDate)
         return left.mbIsDate < right.mbIsDate;
 
-    sal_Int32 nEqual = ScGlobal::GetCollator().compareString(
-        left.maStrValue, right.maStrValue);
+    sal_Int32 nEqual
+        = ScGlobal::GetTransliteration().compareString(left.maStrValue, right.maStrValue);
+
+    if (!nEqual)
+        return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
+
+    return nEqual < 0;
+}
+
+bool ScTypedStrData::LessSortCaseInsensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
+{
+    if (left.meStrType != right.meStrType)
+        return left.meStrType < right.meStrType;
+
+    if (left.meStrType == Value)
+    {
+        if (left.mfValue == right.mfValue)
+            return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
+        return left.mfValue < right.mfValue;
+    }
+
+    if (left.mbIsDate != right.mbIsDate)
+        return left.mbIsDate < right.mbIsDate;
+
+    sal_Int32 nEqual = ScGlobal::GetCaseCollator().compareString(left.maStrValue, right.maStrValue);
 
     if (!nEqual)
         return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
