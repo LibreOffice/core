@@ -887,14 +887,16 @@ void PropValVector::Insert(const beans::PropertyValue& rVal)
 uno::Sequence< uno::Any > PropValVector::getValues()
 {
     std::vector<uno::Any> aRet;
-    std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet), [](const beans::PropertyValue& rValue) { return rValue.Value; });
+    std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet),
+            [](const beans::PropertyValue& rValue) -> const uno::Any& { return rValue.Value; });
     return comphelper::containerToSequence(aRet);
 }
 
 uno::Sequence< OUString > PropValVector::getNames()
 {
     std::vector<OUString> aRet;
-    std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet), [](const beans::PropertyValue& rValue) { return rValue.Name; });
+    std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet),
+            [](const beans::PropertyValue& rValue) -> const OUString& { return rValue.Name; });
     return comphelper::containerToSequence(aRet);
 }
 
