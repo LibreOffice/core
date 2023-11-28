@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="LibreOfficeTheme" parent="LibreOfficeTheme.Base"/>
 
-    <style name="LibreOfficeTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LibreOfficeTheme.Base" parent="Theme.AppCompat.DayNight.NoActionBar">
     </style>
 
     <style name="ListItemText">
@@ -11,7 +11,7 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="LibreOfficeTheme.Toolbar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LibreOfficeTheme.Toolbar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/toolbar_background</item>
     </style>
 
