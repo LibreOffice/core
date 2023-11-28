@@ -3291,6 +3291,7 @@ alias
 tag
 fill-use-slide-background
 may-break-between-pages
+wrap-text-at-frame-start
 gradient-stop
 opacity-stop
 color-value
