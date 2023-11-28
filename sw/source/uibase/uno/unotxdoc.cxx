@@ -3711,6 +3711,11 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
     }
 }
 
+OUString SwXTextDocument::hyperlinkInfoAtPosition(int x, int y)
+{
+    return OUString::createFromAscii(std::to_string(x + y));
+}
+
 uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
 {
     SolarMutexGuard aGuard;
