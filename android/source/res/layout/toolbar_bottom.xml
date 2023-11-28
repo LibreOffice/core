@@ -115,7 +115,7 @@
                                         android:background="@drawable/image_button_background"
                                         android:paddingBottom="12dp"
                                         android:paddingTop="12dp"
-                                        app:srcCompat="@drawable/ic_format_clear_black_24dp" />
+                                        app:srcCompat="@drawable/ic_format_clear_24dp" />
 
                                 </LinearLayout>
 
@@ -340,7 +340,7 @@
                                     android:background="@drawable/image_button_background"
                                     android:paddingBottom="12dp"
                                     android:paddingTop="12dp"
-                                    app:srcCompat="@drawable/ic_folder_black_24dp" />
+                                    app:srcCompat="@drawable/ic_folder_24dp" />
 
                                 <ImageButton
                                     android:id="@+id/button_insert_table"
@@ -350,7 +350,7 @@
                                     android:background="@drawable/image_button_background"
                                     android:paddingBottom="12dp"
                                     android:paddingTop="12dp"
-                                    app:srcCompat="@drawable/ic_grid_on_black_24dp" />
+                                    app:srcCompat="@drawable/ic_grid_on_24dp" />
 
                                 <ImageButton
                                     android:id="@+id/button_delete_table"
@@ -360,7 +360,7 @@
                                     android:background="@drawable/image_button_background"
                                     android:paddingBottom="12dp"
                                     android:paddingTop="12dp"
-                                    app:srcCompat="@drawable/ic_grid_off_black_24dp" />
+                                    app:srcCompat="@drawable/ic_grid_off_24dp" />
                             </LinearLayout>
                         </ScrollView>
                     </LinearLayout>
@@ -515,7 +515,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/image_button_background"
                 android:padding="10dp"
-                app:srcCompat="@drawable/ic_filter_list_black_24dp" />
+                app:srcCompat="@drawable/ic_filter_list_24dp" />
 
             <ImageButton
                 android:id="@+id/button_send_UNO_commands_clear"
@@ -567,7 +567,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/image_button_background"
                 android:padding="10dp"
-                app:srcCompat="@drawable/ic_add_black_24dp" />
+                app:srcCompat="@drawable/ic_add_24dp" />
 
         </LinearLayout>
 
