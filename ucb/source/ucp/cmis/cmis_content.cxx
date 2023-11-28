@@ -1087,15 +1087,13 @@ namespace cmis
         std::vector< std::string > aPaths = pDoc->getPaths( );
         if ( !aPaths.empty() )
         {
-            auto sPath = aPaths.front( );
-            aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+            aCmisUrl.setObjectPath(STD_TO_OUSTR(aPaths.front()));
         }
         else
         {
             // We may have unfiled document depending on the server, those
             // won't have any path, use their ID instead
-            auto sId = pDoc->getId( );
-            aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
+            aCmisUrl.setObjectId(STD_TO_OUSTR(pDoc->getId()));
         }
         return aCmisUrl.asString( );
     }
