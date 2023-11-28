@@ -14,12 +14,11 @@
     android:orientation="vertical">
 
     <!-- The toolbar -->
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:elevation="3dp"
-        android:background="@color/toolbar_background"
         app:theme="@style/LibreOfficeTheme.Toolbar"
         tools:theme="@style/LibreOfficeTheme.Toolbar"
         app:popupTheme="@style/LibreOfficeTheme"
@@ -30,7 +29,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
 
     <androidx.drawerlayout.widget.DrawerLayout
