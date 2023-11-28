@@ -1406,8 +1406,7 @@ public:
                     rDev.DrawBitmap(aBelow, aGrey);
 
                     aBelow.Move(aGrey.GetSizePixel().Width(),0);
-                    BitmapEx aGreyMask(aSrc.GetBitmap(),
-                                       aSrc.GetAlphaMask());
+                    BitmapEx aGreyMask(aSrc);
                     rDev.DrawBitmapEx(aBelow, aGreyMask);
 
                     aLocation.Move(aSrc.GetSizePixel().Width()*6,0);

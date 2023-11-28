@@ -994,10 +994,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                         if ( aBitmapEx.GetSizePixel().Width() && aBitmapEx.GetSizePixel().Height() )
                         {
                             ImpMask( aBitmapEx );
-                            if ( aGraphic.IsTransparent() )
-                                aGraphic = Graphic( BitmapEx( aBitmapEx.GetBitmap(), aBitmapEx.GetAlphaMask() ) );
-                            else
-                                aGraphic = aBitmapEx;
+                            aGraphic = Graphic( aBitmapEx );
                         }
                     }
                 }

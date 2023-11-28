@@ -269,7 +269,7 @@ BitmapEx GetBitmapEx(BitmapEx const& rBitmapEx, DrawModeFlags nDrawMode)
         }
         else
         {
-            aBmpEx = BitmapEx(aColorBmp, aBmpEx.GetAlphaMask());
+            aBmpEx = BitmapEx(aColorBmp);
         }
     }
 

@@ -457,7 +457,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
 
             if( rBmpEx.IsAlpha() )
             {
-                aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlphaMask() );
+                aBmpEx2 = rBmpEx;
             }
             else
             {
