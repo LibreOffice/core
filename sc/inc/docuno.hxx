@@ -346,6 +346,9 @@ public:
     /// @see vcl::ITiledRenderable::setTextSelection().
     virtual void setTextSelection(int nType, int nX, int nY) override;
 
+    /// @see vcl::ITiledRenderable::hyperlinkInfoAtPosition().
+    virtual OUString hyperlinkInfoAtPosition(int x, int y) override;
+
     /// @see vcl::ITiledRenderable::getSelection().
     virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
 
