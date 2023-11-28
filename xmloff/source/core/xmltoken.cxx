@@ -3539,6 +3539,7 @@ namespace xmloff::token {
         TOKEN("fill-use-slide-background", XML_FILL_USE_SLIDE_BACKGROUND),
 
         TOKEN("may-break-between-pages", XML_MAY_BREAK_BETWEEN_PAGES),
+        TOKEN("wrap-text-at-frame-start", XML_WRAP_TEXT_AT_FRAME_START),
 
         TOKEN("gradient-stop", XML_GRADIENT_STOP),
         TOKEN("opacity-stop", XML_OPACITY_STOP),

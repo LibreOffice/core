@@ -926,6 +926,12 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:ref name="boolean"/>
           </rng:attribute>
         </rng:optional>
+    <!-- https://issues.oasis-open.org/browse/OFFICE-4150 multi-page floating tables, wrap on all pages -->
+        <rng:optional>
+          <rng:attribute name="loext:wrap-text-at-frame-start">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
         <!-- TODO: no proposal for loext:glow* -->
         <rng:optional>
           <rng:attribute name="loext:glow-radius">

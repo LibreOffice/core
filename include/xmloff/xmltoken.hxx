@@ -3537,6 +3537,7 @@ namespace xmloff::token {
         XML_FILL_USE_SLIDE_BACKGROUND,
 
         XML_MAY_BREAK_BETWEEN_PAGES,
+        XML_WRAP_TEXT_AT_FRAME_START,
 
         XML_GRADIENT_STOP, // multi-color-gradient
         XML_OPACITY_STOP,

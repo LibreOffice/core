@@ -664,6 +664,7 @@ inline constexpr OUStringLiteral PROP_Weight = u"Weight";
 inline constexpr OUStringLiteral PROP_Width = u"Width";
 inline constexpr OUStringLiteral PROP_WidthType = u"WidthType";
 inline constexpr OUStringLiteral PROP_WrapInfluenceOnPosition = u"WrapInfluenceOnPosition";
+inline constexpr OUStringLiteral PROP_WrapTextAtFlyStart = u"WrapTextAtFlyStart";
 inline constexpr OUStringLiteral PROP_WritingMode = u"WritingMode";
 inline constexpr OUStringLiteral PROP_XName = u"XName";
 inline constexpr OUStringLiteral PROP_YName = u"YName";
