@@ -4226,8 +4226,8 @@ void SwContentTree::UpdateTracking()
                 OUString aName = m_pActiveShell->GetTableFormat()->GetName();
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_TABLE),
                                                aName);
+                return;
             }
-            return;
         }
         // indexes
         if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); pTOX &&
