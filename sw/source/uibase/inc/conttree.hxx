@@ -106,8 +106,10 @@ class SwContentTree final : public SfxListener
     SwWrtShell*         m_pActiveShell;   // the active or a const. open view
     SwNavigationConfig* m_pConfig;
 
+    // these maps store the expand state of nodes with children
     std::map< void*, bool > mOutLineNodeMap;
-    std::map<const void*, bool> m_aRegionNodeExpandMap; // stores expand state of nodes with children
+    std::map<const void*, bool> m_aRegionNodeExpandMap;
+    std::map<const void*, bool> m_aPostItNodeExpandMap;
 
     sal_Int32           m_nActiveBlock;  // used to restore content types expand state
     sal_Int32           m_nHiddenBlock;

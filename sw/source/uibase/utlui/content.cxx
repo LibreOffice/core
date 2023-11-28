@@ -119,6 +119,8 @@
 
 #include <sectfrm.hxx>
 
+#include <docufld.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -2312,6 +2314,45 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                 }
             }
         }
+        else if (pCntType->GetType() == ContentTypeId::POSTIT)
+        {
+            std::vector<std::unique_ptr<weld::TreeIter>> aParentCandidates;
+            for(size_t i = 0; i < nCount; ++i)
+            {
+                const SwPostItContent* pCnt =
+                        static_cast<const SwPostItContent*>(pCntType->GetMember(i));
+
+                OUString sEntry = pCnt->GetName();
+                OUString sId(weld::toId(pCnt));
+
+                const SwPostItField* pPostItField =
+                        static_cast<const SwPostItField*>(pCnt->GetPostIt()->GetField());
+                auto lambda = [&pPostItField, this](const std::unique_ptr<weld::TreeIter>& xEntry)
+                {
+                    SwPostItContent* pParentCandidateCnt =
+                            weld::fromId<SwPostItContent*>(m_xTreeView->get_id(*xEntry));
+                    return pPostItField->GetParentPostItId() ==
+                            static_cast<const SwPostItField*>(pParentCandidateCnt->GetPostIt()
+                                                              ->GetField())->GetPostItId();
+                };
+
+                // if a parent candidate is not found use the passed root node
+                auto aFind = std::find_if(aParentCandidates.rbegin(), aParentCandidates.rend(), lambda);
+                if (aFind != aParentCandidates.rend())
+                    insert(aFind->get(), sEntry, sId, false, xChild.get());
+                else
+                    insert(&rParent, sEntry, sId, false, xChild.get());
+
+                m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+
+                // clear parent candidates when encountering a postit that doesn't have a parent
+                // following postits can't have a parent that is in these candidates
+                if (pPostItField->GetParentPostItId() == 0)
+                    aParentCandidates.clear();
+
+                aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));
+            }
+        }
         else
             InsertContent(rParent);
 
@@ -2485,6 +2526,47 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
             m_aRegionNodeExpandMap[key] = true;
         }
     }
+    else if (m_nRootType == ContentTypeId::POSTIT || (m_nRootType == ContentTypeId::UNKNOWN &&
+                                                      eParentContentTypeId == ContentTypeId::POSTIT))
+    {
+        if (bParentIsContentType)
+        {
+            std::map<const void*, bool> aCurrentPostItNodeExpandMap;
+            if (RequestingChildren(rParent))
+            {
+                std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rParent));
+                while (m_xTreeView->iter_next(*xChild) && lcl_IsContent(*xChild, *m_xTreeView))
+                {
+                    if (m_xTreeView->iter_has_child(*xChild))
+                    {
+                        assert(dynamic_cast<SwPostItContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xChild))));
+                        const void* key =
+                                static_cast<const void*>(weld::fromId<SwPostItContent*>(
+                                                             m_xTreeView->get_id(*xChild))->GetPostIt());
+                        bool bExpandNode =
+                                m_aPostItNodeExpandMap.contains(key) && m_aPostItNodeExpandMap[key];
+                        aCurrentPostItNodeExpandMap.emplace(key, bExpandNode);
+                        if (bExpandNode)
+                        {
+                            if (pNodesToExpand)
+                                pNodesToExpand->emplace_back(m_xTreeView->make_iterator(xChild.get()));
+                            RequestingChildren(*xChild);
+                            m_xTreeView->set_children_on_demand(*xChild, false);
+                        }
+                    }
+                }
+            }
+            m_aPostItNodeExpandMap = aCurrentPostItNodeExpandMap;
+            return;
+        }
+        else // content entry
+        {
+            assert(dynamic_cast<SwPostItContent*>(weld::fromId<SwTypeNumber*>(rParentId)));
+            const void* key = static_cast<const void*>(
+                        weld::fromId<SwPostItContent*>(rParentId)->GetPostIt());
+            m_aPostItNodeExpandMap[key] = true;
+        }
+    }
 
     RequestingChildren(rParent);
 }
@@ -2544,6 +2626,12 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
             assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
             const void* key = static_cast<const void*>(weld::fromId<SwRegionContent*>(m_xTreeView->get_id(rParent))->GetSectionFormat());
             m_aRegionNodeExpandMap[key] = false;
+        }
+        else if(eContentTypeId == ContentTypeId::POSTIT)
+        {
+            assert(dynamic_cast<SwPostItContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
+            const void* key = static_cast<const void*>(weld::fromId<SwPostItContent*>(m_xTreeView->get_id(rParent))->GetPostIt());
+            m_aPostItNodeExpandMap[key] = false;
         }
     }
 
@@ -2837,7 +2925,8 @@ void SwContentTree::Display( bool bActive )
                 rpRootContentT.reset(new SwContentType(pShell, m_nRootType, m_nOutlineLevel ));
             OUString aImage(GetImageIdForContentTypeId(m_nRootType));
             bool bChOnDemand(m_nRootType == ContentTypeId::OUTLINE ||
-                             m_nRootType == ContentTypeId::REGION);
+                             m_nRootType == ContentTypeId::REGION ||
+                             m_nRootType == ContentTypeId::POSTIT);
             OUString sId(weld::toId(rpRootContentT.get()));
             insert(nullptr, rpRootContentT->GetName(), sId, bChOnDemand, xEntry.get());
             m_xTreeView->set_image(*xEntry, aImage);
