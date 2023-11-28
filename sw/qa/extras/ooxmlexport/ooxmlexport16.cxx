@@ -30,29 +30,12 @@
 #include <unotools/fltrcfg.hxx>
 #include <unoprnms.hxx>
 #include <o3tl/string_view.hxx>
+#include <comphelper/scopeguard.hxx>
 
 class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        if (filename == std::string_view("tdf135774_numberingShading.docx"))
-        {
-            bool bIsExportAsShading = SvtFilterOptions::Get().IsCharBackground2Shading();
-            // This function is run at the end of the test - returning the filter options to normal.
-            std::unique_ptr<Resetter> pResetter(new Resetter(
-                [bIsExportAsShading] () {
-                    if (bIsExportAsShading)
-                        SvtFilterOptions::Get().SetCharBackground2Shading();
-                }));
-            // For these tests, ensure exporting CharBackground as w:highlight.
-            SvtFilterOptions::Get().SetCharBackground2Highlighting();
-            return pResetter;
-        }
-        return nullptr;
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
@@ -542,8 +525,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 {
+    bool bIsExportAsShading = SvtFilterOptions::Get().IsCharBackground2Shading();
+    // This function is run at the end of the test - returning the filter options to normal.
+    comphelper::ScopeGuard g(
+        [bIsExportAsShading]
+        {
+            if (bIsExportAsShading)
+                SvtFilterOptions::Get().SetCharBackground2Shading();
+        });
+    // For these test, ensure exporting CharBackground as w:highlight.
+    SvtFilterOptions::Get().SetCharBackground2Highlighting();
+
     loadAndSave("tdf135774_numberingShading.docx");
-    // This test uses preTest to export CharBackground as Highlight instead of the 7.0 default of Shading.
+    // This test uses a custom setting to export CharBackground as Highlight instead of the 7.0 default of Shading.
 
     // Before the fix, the imported shading was converted into a red highlight.
     xmlDocUniquePtr pXmlStyles = parseExport("word/numbering.xml");
