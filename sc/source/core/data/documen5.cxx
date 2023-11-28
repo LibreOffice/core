@@ -454,7 +454,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
             uno::Reference<embed::XEmbeddedObject> xIPObj =
                 FindOleObjectByName(pChartListener->GetName());
 
-            svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+            (void)svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
             // After the change, chart keeps track of its own data source ranges,
             // the listener doesn't need to listen anymore, except the chart has

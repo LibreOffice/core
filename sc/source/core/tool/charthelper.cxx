@@ -182,7 +182,7 @@ uno::Reference< chart2::XChartDocument > ScChartHelper::GetChartFromSdrObject( c
             uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<const SdrOle2Obj*>(pObject)->GetObjRef();
             if( xIPObj.is() )
             {
-                svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+                (void)svt::EmbeddedObjectRef::TryRunningState( xIPObj );
                 uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
                 xReturn.set( uno::Reference< chart2::XChartDocument >( xComponent, uno::UNO_QUERY ) );
             }
@@ -294,7 +294,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
 
     bool bDisableDataTableDialog = false;
     sal_Int32 nOldState = xEmbeddedObj->getCurrentState();
-    svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
+    (void)svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
     uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
     if ( xProps.is() &&
          ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
@@ -382,7 +382,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                     if ( xEmbeddedObj.is() && ( nRangeList < nRangeListCount ) )
                     {
                         bool bDisableDataTableDialog = false;
-                        svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
+                        (void)svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                         uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                         if ( xProps.is() &&
                              ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
