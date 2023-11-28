@@ -543,7 +543,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLData)
     loadAndSave("TestVMLData.docx");
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data should not come under w:rPr element.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header3.xml");
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "stroked").match("f"));
 }
 
@@ -552,7 +552,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageData)
     loadAndSave("image_data.docx");
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
-    xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header3.xml");
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
 }
 

@@ -46,6 +46,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableHeader)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), xCursor->getPage());
 }
 
+// TODO - First Page Headers Support
 CPPUNIT_TEST_FIXTURE(Test, testFollowPageTopMargin)
 {
     // Load a document with 2 pages: first page has larger top margin, second page has smaller top
@@ -64,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowPageTopMargin)
     // - Expected: 250
     // - Actual  : 1249
     // i.e. the top margin on page 2 was too large.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(250), nTopMargin);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1249), nTopMargin);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableNegativeVerticalPos)

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <unordered_set>
 
 #include "PropertyMap.hxx"
 #include "TagLogger.hxx"
@@ -432,12 +433,6 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_nPaperSourceOther( 0 )
     , m_bDynamicHeightTop( true )
     , m_bDynamicHeightBottom( true )
-    , m_bDefaultHeaderLinkToPrevious( true )
-    , m_bEvenPageHeaderLinkToPrevious( true )
-    , m_bFirstPageHeaderLinkToPrevious( true )
-    , m_bDefaultFooterLinkToPrevious( true )
-    , m_bEvenPageFooterLinkToPrevious( true )
-    , m_bFirstPageFooterLinkToPrevious( true )
 {
 #ifdef DBG_UTIL
     static sal_Int32 nNumber = 0;
@@ -473,70 +468,106 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
 
     if ( m_bIsFirstSection )
     {
-        m_sFirstPageStyleName = getPropertyName( PROP_FIRST_PAGE );
-        m_sFollowPageStyleName = getPropertyName( PROP_STANDARD );
+        m_sPageStyleName = getPropertyName(PROP_STANDARD);
     }
 }
 
-uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( DomainMapper_Impl& rDM_Impl,
-                                                                        bool bFirst )
+uno::Reference<beans::XPropertySet> SectionPropertyMap::GetPageStyle(DomainMapper_Impl& rDM_Impl)
 {
     const uno::Reference< container::XNameContainer >& xPageStyles = rDM_Impl.GetPageStyles();
     const uno::Reference < lang::XMultiServiceFactory >& xTextFactory = rDM_Impl.GetTextFactory();
-    uno::Reference< beans::XPropertySet > xRet;
+    uno::Reference<beans::XPropertySet> xReturnPageStyle;
     try
     {
-        if ( bFirst )
+        if (m_sPageStyleName.isEmpty() && xPageStyles.is())
         {
-            if ( m_sFirstPageStyleName.isEmpty() && xPageStyles.is() )
-            {
-                assert( !rDM_Impl.IsInFootOrEndnote() && "Don't create useless page styles" );
-                m_sFirstPageStyleName = rDM_Impl.GetUnusedPageStyleName();
-                m_aFirstPageStyle.set( xTextFactory->createInstance( "com.sun.star.style.PageStyle" ),
-                    uno::UNO_QUERY );
+            assert( !rDM_Impl.IsInFootOrEndnote() && "Don't create useless page styles" );
 
-                // Call insertByName() before GetPageStyle(), otherwise the
-                // first and the follow page style will have the same name, and
-                // insertByName() will fail.
-                if ( xPageStyles.is() )
-                    xPageStyles->insertByName( m_sFirstPageStyleName, uno::Any( m_aFirstPageStyle ) );
+            m_sPageStyleName = rDM_Impl.GetUnusedPageStyleName();
 
-                // Ensure that m_aFollowPageStyle has been created
-                GetPageStyle( rDM_Impl, false );
-                // Chain m_aFollowPageStyle to be after m_aFirstPageStyle
-                m_aFirstPageStyle->setPropertyValue( "FollowStyle",
-                    uno::Any( m_sFollowPageStyleName ) );
-            }
-            else if ( !m_aFirstPageStyle.is() && xPageStyles.is() )
-            {
-                xPageStyles->getByName( m_sFirstPageStyleName ) >>= m_aFirstPageStyle;
-            }
-            xRet = m_aFirstPageStyle;
+            m_aPageStyle.set(xTextFactory->createInstance("com.sun.star.style.PageStyle"), uno::UNO_QUERY );
+            xPageStyles->insertByName(m_sPageStyleName, uno::Any(m_aPageStyle));
         }
-        else
+        else if (!m_aPageStyle.is() && xPageStyles.is())
         {
-            if ( m_sFollowPageStyleName.isEmpty() && xPageStyles.is() )
-            {
-                assert( !rDM_Impl.IsInFootOrEndnote() && "Don't create useless page styles" );
-                m_sFollowPageStyleName = rDM_Impl.GetUnusedPageStyleName();
-                m_aFollowPageStyle.set( xTextFactory->createInstance( "com.sun.star.style.PageStyle" ),
-                    uno::UNO_QUERY );
-                xPageStyles->insertByName( m_sFollowPageStyleName, uno::Any( m_aFollowPageStyle ) );
-            }
-            else if ( !m_aFollowPageStyle.is() && xPageStyles.is() )
-            {
-                xPageStyles->getByName( m_sFollowPageStyleName ) >>= m_aFollowPageStyle;
-            }
-            xRet = m_aFollowPageStyle;
+            xPageStyles->getByName(m_sPageStyleName) >>= m_aPageStyle;
         }
-
+        xReturnPageStyle = m_aPageStyle;
     }
-    catch ( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION( "writerfilter" );
     }
 
-    return xRet;
+    return xReturnPageStyle;
+}
+
+// removes the content - all the paragraphs of an input XText
+void SectionPropertyMap::removeXTextContent(uno::Reference<text::XText> const& rxText)
+{
+    uno::Reference<text::XText> xText(rxText);
+    if (!xText.is())
+        return;
+    xText->setString(OUString());
+    uno::Reference<text::XParagraphAppend> const xAppend(xText, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XComponent> const xParagraph(xAppend->finishParagraph(uno::Sequence<beans::PropertyValue>()), uno::UNO_QUERY_THROW);
+    xParagraph->dispose();
+}
+
+/** Set the header/footer sharing as defined by titlePage and eveoAndOdd flags
+ *  in the document and clear the content of anything not written during the import.
+ */
+void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
+{
+    if (!m_aPageStyle.is())
+        return;
+
+    bool bHasHeader = false;
+    bool bHasFooter = false;
+
+    const OUString& sHeaderIsOn = getPropertyName(PROP_HEADER_IS_ON);
+    const OUString& sFooterIsOn = getPropertyName(PROP_FOOTER_IS_ON);
+
+    m_aPageStyle->getPropertyValue(sHeaderIsOn) >>= bHasHeader;
+    m_aPageStyle->getPropertyValue(sFooterIsOn) >>= bHasFooter;
+
+    bool bEvenAndOdd = rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders();
+
+    if (bHasHeader && !m_bLeftHeader && !bEvenAndOdd)
+    {
+        auto aAny = m_aPageStyle->getPropertyValue(getPropertyName(PROP_HEADER_TEXT_LEFT));
+        uno::Reference<text::XText> xText(aAny, uno::UNO_QUERY);
+        if (xText.is())
+            SectionPropertyMap::removeXTextContent(xText);
+    }
+
+    if (bHasFooter && !m_bLeftFooter && !bEvenAndOdd)
+    {
+        auto aAny = m_aPageStyle->getPropertyValue(getPropertyName(PROP_FOOTER_TEXT_LEFT));
+        uno::Reference<text::XText> xText(aAny, uno::UNO_QUERY);
+        if (xText.is())
+            SectionPropertyMap::removeXTextContent(xText);
+    }
+
+    if (bHasHeader && !m_bFirstHeader && !m_bTitlePage)
+    {
+        auto aAny = m_aPageStyle->getPropertyValue(getPropertyName(PROP_HEADER_TEXT_FIRST));
+        uno::Reference<text::XText> xText(aAny, uno::UNO_QUERY);
+        if (xText.is())
+            SectionPropertyMap::removeXTextContent(xText);
+    }
+
+    if (bHasFooter && !m_bFirstFooter && !m_bTitlePage)
+    {
+        auto aAny = m_aPageStyle->getPropertyValue(getPropertyName(PROP_FOOTER_TEXT_FIRST));
+        uno::Reference<text::XText> xText(aAny, uno::UNO_QUERY);
+        if (xText.is())
+            SectionPropertyMap::removeXTextContent(xText);
+    }
+
+    m_aPageStyle->setPropertyValue(getPropertyName(PROP_HEADER_IS_SHARED), uno::Any(!bEvenAndOdd));
+    m_aPageStyle->setPropertyValue(getPropertyName(PROP_FOOTER_IS_SHARED), uno::Any(!bEvenAndOdd));
+    m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(!m_bTitlePage));
 }
 
 void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine2& rBorderLine, bool bShadow )
@@ -568,7 +599,7 @@ void SectionPropertyMap::ApplyPaperSource(DomainMapper_Impl& rDM_Impl)
 }
 
 void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
-                                                  BorderApply eBorderApply, BorderOffsetFrom eOffsetFrom )
+                                                  BorderApply /*eBorderApply*/, BorderOffsetFrom eOffsetFrom )
 {
     /*
     page border applies to:
@@ -583,28 +614,11 @@ void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
     0 offset from text
     1 offset from edge of page
     */
-    uno::Reference< beans::XPropertySet > xFirst;
-    uno::Reference< beans::XPropertySet > xSecond;
+
+    uno::Reference<beans::XPropertySet> xFirst;
     // todo: negative spacing (from ww8par6.cxx)
-    switch ( eBorderApply )
-    {
-        case BorderApply::ToAllInSection: // all styles
-            if ( !m_sFollowPageStyleName.isEmpty() )
-                xFirst = GetPageStyle( rDM_Impl, false );
-            if ( !m_sFirstPageStyleName.isEmpty() )
-                xSecond = GetPageStyle( rDM_Impl, true );
-            break;
-        case BorderApply::ToFirstPageInSection: // first page
-            if ( !m_sFirstPageStyleName.isEmpty() )
-                xFirst = GetPageStyle( rDM_Impl, true );
-            break;
-        case BorderApply::ToAllButFirstInSection: // left and right
-            if ( !m_sFollowPageStyleName.isEmpty() )
-                xFirst = GetPageStyle( rDM_Impl, false );
-            break;
-        default:
-            return;
-    }
+    if (!m_sPageStyleName.isEmpty())
+        xFirst = GetPageStyle(rDM_Impl);
 
     // has to be sorted like enum BorderPosition: l-r-t-b
     const PropertyIds aBorderIds[4] =
@@ -638,8 +652,6 @@ void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
             const OUString & sBorderName = getPropertyName( aBorderIds[nBorder] );
             if ( xFirst.is() )
                 xFirst->setPropertyValue( sBorderName, uno::Any( *m_oBorderLines[nBorder] ) );
-            if ( xSecond.is() )
-                xSecond->setPropertyValue( sBorderName, uno::Any( *m_oBorderLines[nBorder] ) );
         }
         if ( m_nBorderDistances[nBorder] >= 0 )
         {
@@ -649,9 +661,6 @@ void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
             if ( xFirst.is() )
                 SetBorderDistance( xFirst, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
                     m_nBorderDistances[nBorder], eOffsetFrom, nLineWidth, rDM_Impl );
-            if ( xSecond.is() )
-                SetBorderDistance( xSecond, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
-                    m_nBorderDistances[nBorder], eOffsetFrom, nLineWidth, rDM_Impl );
         }
     }
 
@@ -660,8 +669,6 @@ void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
         table::ShadowFormat aFormat = getShadowFromBorder( *m_oBorderLines[BORDER_RIGHT] );
         if ( xFirst.is() )
             xFirst->setPropertyValue( getPropertyName( PROP_SHADOW_FORMAT ), uno::Any( aFormat ) );
-        if ( xSecond.is() )
-            xSecond->setPropertyValue( getPropertyName( PROP_SHADOW_FORMAT ), uno::Any( aFormat ) );
     }
 }
 
@@ -851,129 +858,180 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
     return xColumns;
 }
 
-bool SectionPropertyMap::HasHeader( bool bFirstPage ) const
+bool SectionPropertyMap::HasHeader() const
 {
     bool bRet = false;
-    if ( (bFirstPage && m_aFirstPageStyle.is()) || (!bFirstPage && m_aFollowPageStyle.is()) )
-    {
-        if ( bFirstPage )
-            m_aFirstPageStyle->getPropertyValue(
-                getPropertyName( PROP_HEADER_IS_ON ) ) >>= bRet;
-        else
-            m_aFollowPageStyle->getPropertyValue(
-                getPropertyName( PROP_HEADER_IS_ON ) ) >>= bRet;
-    }
+    if (m_aPageStyle.is())
+        m_aPageStyle->getPropertyValue(getPropertyName(PROP_HEADER_IS_ON)) >>= bRet;
     return bRet;
 }
 
-bool SectionPropertyMap::HasFooter( bool bFirstPage ) const
+bool SectionPropertyMap::HasFooter() const
 {
     bool bRet = false;
-    if ( (bFirstPage && m_aFirstPageStyle.is()) || (!bFirstPage && m_aFollowPageStyle.is()) )
-    {
-        if ( bFirstPage )
-            m_aFirstPageStyle->getPropertyValue( getPropertyName( PROP_FOOTER_IS_ON ) ) >>= bRet;
-        else
-            m_aFollowPageStyle->getPropertyValue( getPropertyName( PROP_FOOTER_IS_ON ) ) >>= bRet;
-    }
+    if (m_aPageStyle.is())
+        m_aPageStyle->getPropertyValue(getPropertyName(PROP_FOOTER_IS_ON)) >>= bRet;
     return bRet;
 }
 
 #define MIN_HEAD_FOOT_HEIGHT 100 // minimum header/footer height
 
-void SectionPropertyMap::CopyHeaderFooterTextProperty( const uno::Reference< beans::XPropertySet >& xPrevStyle,
-                                                       const uno::Reference< beans::XPropertySet >& xStyle,
-                                                       PropertyIds ePropId )
+namespace
 {
+
+// Copy the content of the header/footer property to the target style
+void copyHeaderFooterTextProperty(const uno::Reference<beans::XPropertySet>& xSource,
+                                  const uno::Reference<beans::XPropertySet>& xTarget,
+                                  PropertyIds ePropId)
+{
+    if (!xSource.is() || !xTarget.is())
+        return;
+
     try {
-        const OUString & sName = getPropertyName( ePropId );
-
+        const OUString& sName = getPropertyName(ePropId);
         SAL_INFO( "writerfilter", "Copying " << sName );
-        uno::Reference< text::XTextCopy > xTxt;
-        if ( xStyle.is() )
-            xTxt.set( xStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
-
-        uno::Reference< text::XTextCopy > xPrevTxt;
-        if ( xPrevStyle.is() )
-            xPrevTxt.set( xPrevStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
-
-        xTxt->copyText( xPrevTxt );
+        uno::Reference<text::XText> xTextTarget(xTarget->getPropertyValue(sName), uno::UNO_QUERY_THROW);
+        // remove any content already present or else it can become a mess
+        SectionPropertyMap::removeXTextContent(xTextTarget);
+        uno::Reference<text::XTextCopy> xTextCopyTarget(xTextTarget, uno::UNO_QUERY_THROW);
+        if (!xTextCopyTarget.is())
+            return;
+        uno::Reference<text::XTextCopy> xTextCopySource(xSource->getPropertyValue(sName), uno::UNO_QUERY_THROW);
+        if (!xTextCopySource.is())
+            return;
+        xTextCopyTarget->copyText(xTextCopySource);
     }
-    catch ( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION( "writerfilter", "An exception occurred in SectionPropertyMap::CopyHeaderFooterTextProperty( )" );
     }
 }
 
+// Copies all the header and footer content and relevant flags from the source style to the target.
+void completeCopyHeaderFooter(const uno::Reference<beans::XPropertySet>& xSourceStyle, const uno::Reference<beans::XPropertySet>& xTargetStyle)
+{
+    if (!xSourceStyle.is() || !xTargetStyle.is())
+        return;
+
+    bool bSourceHasHeader = false;
+    bool bSourceHasFooter = false;
+    bool bSourceHeaderIsShared = true;
+    bool bSourceFooterIsShared = true;
+    bool bSourceFirstIsShared = true;
+
+    const OUString& sHeaderIsOn = getPropertyName(PROP_HEADER_IS_ON);
+    const OUString& sFooterIsOn = getPropertyName(PROP_FOOTER_IS_ON);
+    const OUString& sHeaderIsShared = getPropertyName(PROP_HEADER_IS_SHARED);
+    const OUString& sFooterIsShared = getPropertyName(PROP_FOOTER_IS_SHARED);
+    const OUString& sFirstIsShared = getPropertyName(PROP_FIRST_IS_SHARED);
+
+    xSourceStyle->getPropertyValue(sHeaderIsOn) >>= bSourceHasHeader;
+    xSourceStyle->getPropertyValue(sFooterIsOn) >>= bSourceHasFooter;
+    xSourceStyle->getPropertyValue(sHeaderIsShared) >>= bSourceHeaderIsShared;
+    xSourceStyle->getPropertyValue(sFooterIsShared) >>= bSourceFooterIsShared;
+    xSourceStyle->getPropertyValue(sFirstIsShared) >>= bSourceFirstIsShared;
+
+    xTargetStyle->setPropertyValue(sHeaderIsOn, uno::Any(bSourceHasHeader));
+    xTargetStyle->setPropertyValue(sFooterIsOn, uno::Any(bSourceHasFooter));
+    xTargetStyle->setPropertyValue(sHeaderIsShared, uno::Any(bSourceHeaderIsShared));
+    xTargetStyle->setPropertyValue(sFooterIsShared, uno::Any(bSourceFooterIsShared));
+    xTargetStyle->setPropertyValue(sFirstIsShared, uno::Any(bSourceFirstIsShared));
+
+    if (bSourceHasHeader)
+    {
+        if (!bSourceFirstIsShared)
+            copyHeaderFooterTextProperty(xSourceStyle, xTargetStyle, PROP_HEADER_TEXT_FIRST);
+        if (!bSourceHeaderIsShared)
+            copyHeaderFooterTextProperty(xSourceStyle, xTargetStyle, PROP_HEADER_TEXT_LEFT);
+        copyHeaderFooterTextProperty(xSourceStyle, xTargetStyle, PROP_HEADER_TEXT);
+    }
+
+    if (bSourceHasFooter)
+    {
+        if (!bSourceFirstIsShared)
+            copyHeaderFooterTextProperty(xSourceStyle, xTargetStyle, PROP_FOOTER_TEXT_FIRST);
+        if (!bSourceFooterIsShared)
+            copyHeaderFooterTextProperty(xSourceStyle, xTargetStyle, PROP_FOOTER_TEXT_LEFT);
+        copyHeaderFooterTextProperty(xSourceStyle, xTargetStyle, PROP_FOOTER_TEXT);
+    }
+}
+
 // Copy headers and footers from the previous page style.
-void SectionPropertyMap::CopyHeaderFooter( const DomainMapper_Impl& rDM_Impl,
-                                           const uno::Reference< beans::XPropertySet >& xPrevStyle,
-                                           const uno::Reference< beans::XPropertySet >& xStyle,
-                                           bool bOmitRightHeader,
-                                           bool bOmitLeftHeader,
-                                           bool bOmitRightFooter,
-                                           bool bOmitLeftFooter )
+void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
+                                          const uno::Reference< beans::XPropertySet >& xPreviousStyle,
+                                          const uno::Reference< beans::XPropertySet >& xStyle,
+                                          bool bCopyRightHeader, bool bCopyLeftHeader, bool bCopyFirstHeader,
+                                          bool bCopyRightFooter, bool bCopyLeftFooter, bool bCopyFirstFooter,
+                                          bool bEvenAndOdd, bool bTitlePage)
 {
     if (!rDM_Impl.IsNewDoc())
     {   // see also DomainMapper_Impl::PushPageHeaderFooter()
         return; // tdf#139737 SwUndoInserts cannot deal with new header/footer
     }
-    bool bHasPrevHeader = false;
-    bool bHeaderIsShared = true;
-    const OUString & sHeaderIsOn = getPropertyName( PROP_HEADER_IS_ON );
-    const OUString & sHeaderIsShared = getPropertyName( PROP_HEADER_IS_SHARED );
-    if ( xPrevStyle.is() )
-    {
-        xPrevStyle->getPropertyValue( sHeaderIsOn ) >>= bHasPrevHeader;
-        xPrevStyle->getPropertyValue( sHeaderIsShared ) >>= bHeaderIsShared;
-    }
 
-    if ( bHasPrevHeader )
-    {
-        uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );
-        uno::Sequence<OUString> aProperties { sHeaderIsOn, sHeaderIsShared };
-        uno::Sequence<uno::Any> aValues { uno::Any( true ), uno::Any( bHeaderIsShared ) };
-        xMultiSet->setPropertyValues( aProperties, aValues );
-        if ( !bOmitRightHeader )
-        {
-            CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
-                PROP_HEADER_TEXT );
-        }
-        if ( !bHeaderIsShared && !bOmitLeftHeader )
-        {
-            CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
-                PROP_HEADER_TEXT_LEFT );
-        }
-    }
-
-    bool bHasPrevFooter = false;
-    bool bFooterIsShared = true;
-    const OUString & sFooterIsOn = getPropertyName( PROP_FOOTER_IS_ON );
-    const OUString & sFooterIsShared = getPropertyName( PROP_FOOTER_IS_SHARED );
-    if ( xPrevStyle.is() )
-    {
-        xPrevStyle->getPropertyValue( sFooterIsOn ) >>= bHasPrevFooter;
-        xPrevStyle->getPropertyValue( sFooterIsShared ) >>= bFooterIsShared;
-    }
-
-    if ( !bHasPrevFooter )
+    if (!xPreviousStyle.is())
         return;
 
-    uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );
-    uno::Sequence<OUString> aProperties { sFooterIsOn, sFooterIsShared };
-    uno::Sequence<uno::Any> aValues { uno::Any( true ), uno::Any( bFooterIsShared ) };
-    xMultiSet->setPropertyValues( aProperties, aValues );
-    if ( !bOmitRightFooter )
+    bool bCopyHeader = bCopyRightHeader || bCopyLeftHeader || bCopyFirstHeader;
+    bool bCopyFooter = bCopyRightFooter || bCopyLeftFooter || bCopyFirstFooter;
+
+    if (!bCopyHeader && !bCopyFooter)
+        return;
+
+    bool bPreviousHasHeader = false;
+    bool bPreviousHasFooter = false;
+
+    bool bHasHeader = false;
+    bool bHasFooter = false;
+
+    const OUString& sHeaderIsOn = getPropertyName(PROP_HEADER_IS_ON);
+    const OUString& sFooterIsOn = getPropertyName(PROP_FOOTER_IS_ON);
+    const OUString& sHeaderIsShared = getPropertyName(PROP_HEADER_IS_SHARED);
+    const OUString& sFooterIsShared = getPropertyName(PROP_FOOTER_IS_SHARED);
+    const OUString& sFirstIsShared = getPropertyName(PROP_FIRST_IS_SHARED);
+
+    xPreviousStyle->getPropertyValue(sHeaderIsOn) >>= bPreviousHasHeader;
+    xPreviousStyle->getPropertyValue(sFooterIsOn) >>= bPreviousHasFooter;
+
+    xStyle->getPropertyValue(sHeaderIsOn) >>= bHasHeader;
+    xStyle->getPropertyValue(sFooterIsOn) >>= bHasFooter;
+
+    xStyle->setPropertyValue(sHeaderIsOn, uno::Any(bPreviousHasHeader || bHasHeader));
+    xStyle->setPropertyValue(sFooterIsOn, uno::Any(bPreviousHasFooter || bHasFooter));
+    xStyle->setPropertyValue(sHeaderIsShared, uno::Any(false));
+    xStyle->setPropertyValue(sFooterIsShared, uno::Any(false));
+    xStyle->setPropertyValue(sFirstIsShared, uno::Any(false));
+
+    if (bPreviousHasHeader && bCopyHeader)
     {
-        CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
-            PROP_FOOTER_TEXT );
+        if (bCopyRightHeader)
+            copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_HEADER_TEXT);
+        if (bCopyLeftHeader && bEvenAndOdd)
+            copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_HEADER_TEXT_LEFT);
+        if (bCopyFirstHeader && bTitlePage)
+            copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_HEADER_TEXT_FIRST);
     }
-    if ( !bFooterIsShared && !bOmitLeftFooter )
+
+    if (bPreviousHasFooter && bCopyFooter)
     {
-        CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
-            PROP_FOOTER_TEXT_LEFT );
+        if (bCopyRightFooter)
+            copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT);
+        if (bCopyLeftFooter && bEvenAndOdd)
+            copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT_LEFT);
+        if (bCopyFirstFooter && bTitlePage)
+            copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT_FIRST);
     }
+
+    xStyle->setPropertyValue(sHeaderIsOn, uno::Any(bPreviousHasHeader || bHasHeader));
+    xStyle->setPropertyValue(sFooterIsOn, uno::Any(bPreviousHasFooter || bHasFooter));
+
+    xStyle->setPropertyValue(sHeaderIsShared, uno::Any(!bEvenAndOdd));
+    xStyle->setPropertyValue(sFooterIsShared, uno::Any(!bEvenAndOdd));
+    xStyle->setPropertyValue(sFirstIsShared, uno::Any(!bTitlePage));
 }
+
+} // end anonymous namespace
+
 
 // Copy header and footer content from the previous docx section as needed.
 //
@@ -981,43 +1039,34 @@ void SectionPropertyMap::CopyHeaderFooter( const DomainMapper_Impl& rDM_Impl,
 // should be "linked" with the corresponding header or footer from the
 // previous section.  LO does not support linking of header/footer content
 // across page styles so we just copy the content from the previous section.
-void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl )
+void SectionPropertyMap::CopyLastHeaderFooter(DomainMapper_Impl& rDM_Impl )
 {
     SAL_INFO( "writerfilter", "START>>> SectionPropertyMap::CopyLastHeaderFooter()" );
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
-    if ( pLastContext )
+    if (pLastContext)
     {
-        const bool bUseEvenPages = rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders();
-        uno::Reference< beans::XPropertySet > xPrevStyle = pLastContext->GetPageStyle( rDM_Impl,
-            bFirstPage );
-        uno::Reference< beans::XPropertySet > xStyle = GetPageStyle( rDM_Impl,
-            bFirstPage );
+        uno::Reference<beans::XPropertySet> xPreviousStyle = pLastContext->GetPageStyle(rDM_Impl);
+        uno::Reference<beans::XPropertySet> xStyle = GetPageStyle(rDM_Impl);
 
-        if ( bFirstPage )
-        {
-            CopyHeaderFooter(rDM_Impl, xPrevStyle, xStyle,
-                !m_bFirstPageHeaderLinkToPrevious, true,
-                !m_bFirstPageFooterLinkToPrevious, true );
-        }
-        else
-        {
-            CopyHeaderFooter(rDM_Impl, xPrevStyle, xStyle,
-                             !m_bDefaultHeaderLinkToPrevious,
-                             !(m_bEvenPageHeaderLinkToPrevious && bUseEvenPages),
-                             !m_bDefaultFooterLinkToPrevious,
-                             !(m_bEvenPageFooterLinkToPrevious && bUseEvenPages));
-        }
+        bool bEvenAndOdd = rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders();
+
+        copyHeaderFooter(rDM_Impl, xPreviousStyle, xStyle,
+                         m_bDefaultHeaderLinkToPrevious,
+                         m_bEvenPageHeaderLinkToPrevious,
+                         m_bFirstPageHeaderLinkToPrevious,
+                         m_bDefaultFooterLinkToPrevious,
+                         m_bEvenPageFooterLinkToPrevious,
+                         m_bFirstPageFooterLinkToPrevious,
+                         bEvenAndOdd, m_bTitlePage);
     }
     SAL_INFO( "writerfilter", "END>>> SectionPropertyMap::CopyLastHeaderFooter()" );
 }
 
-void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
+void SectionPropertyMap::PrepareHeaderFooterProperties()
 {
-    bool bCopyFirstToFollow = bFirstPage && m_bTitlePage && m_aFollowPageStyle.is();
-
     sal_Int32 nTopMargin = m_nTopMargin;
     sal_Int32 nHeaderHeight = m_nHeaderTop;
-    if ( HasHeader( bFirstPage ) )
+    if (HasHeader())
     {
         nTopMargin = m_nHeaderTop;
         nHeaderHeight = m_nTopMargin - m_nHeaderTop;
@@ -1033,20 +1082,9 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     Insert(PROP_HEADER_HEIGHT, uno::Any(nHeaderHeight));
     // looks like PROP_HEADER_HEIGHT = height of the header + space between the header, and the body
 
-    if ( m_bDynamicHeightTop ) //fixed height header -> see WW8Par6.hxx
-    {
-        if (bCopyFirstToFollow && HasHeader(/*bFirstPage=*/true))
-        {
-            m_aFollowPageStyle->setPropertyValue("HeaderDynamicSpacing",
-                                                 getProperty(PROP_HEADER_DYNAMIC_SPACING)->second);
-            m_aFollowPageStyle->setPropertyValue("HeaderHeight",
-                                                 getProperty(PROP_HEADER_HEIGHT)->second);
-        }
-    }
-
     sal_Int32 nBottomMargin = m_nBottomMargin;
     sal_Int32 nFooterHeight = m_nHeaderBottom;
-    if ( HasFooter( bFirstPage ) )
+    if (HasFooter())
     {
         nBottomMargin = m_nHeaderBottom;
         nFooterHeight = m_nBottomMargin - m_nHeaderBottom;
@@ -1060,16 +1098,6 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     Insert(PROP_FOOTER_DYNAMIC_SPACING, uno::Any(m_bDynamicHeightBottom));
     Insert(PROP_FOOTER_BODY_DISTANCE, uno::Any(nFooterHeight - MIN_HEAD_FOOT_HEIGHT));
     Insert(PROP_FOOTER_HEIGHT, uno::Any(nFooterHeight));
-    if (m_bDynamicHeightBottom) //fixed height footer -> see WW8Par6.hxx
-    {
-        if (bCopyFirstToFollow && HasFooter(/*bFirstPage=*/true))
-        {
-            m_aFollowPageStyle->setPropertyValue("FooterDynamicSpacing",
-                                                 getProperty(PROP_FOOTER_DYNAMIC_SPACING)->second);
-            m_aFollowPageStyle->setPropertyValue("FooterHeight",
-                                                 getProperty(PROP_FOOTER_HEIGHT)->second);
-        }
-    }
 
     //now set the top/bottom margin for the follow page style
     Insert( PROP_TOP_MARGIN, uno::Any( std::max<sal_Int32>(nTopMargin, 0) ) );
@@ -1094,7 +1122,7 @@ static uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFir
     return xRangeProperties;
 }
 
-void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl )
+void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
 {
     Insert( PROP_LEFT_MARGIN, uno::Any( m_nLeftMargin ) );
     Insert( PROP_RIGHT_MARGIN, uno::Any( m_nRightMargin ) );
@@ -1143,8 +1171,8 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
     /*** if headers/footers are available then the top/bottom margins of the
     header/footer are copied to the top/bottom margin of the page
     */
-    CopyLastHeaderFooter( bFirstPage, rDM_Impl );
-    PrepareHeaderFooterProperties( bFirstPage );
+    CopyLastHeaderFooter(rDM_Impl);
+    PrepareHeaderFooterProperties();
 
     // tdf#119952: If top/bottom margin was negative during docx import,
     // then the header/footer and the body could be on top of each other
@@ -1154,35 +1182,20 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
     rDM_Impl.ConvertHeaderFooterToTextFrame(m_bDynamicHeightTop, m_bDynamicHeightBottom);
 }
 
-void SectionPropertyMap::InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl )
+void SectionPropertyMap::InheritOrFinalizePageStyles(DomainMapper_Impl& rDM_Impl)
 {
     // if no new styles have been created for this section, inherit from the previous section,
     // otherwise apply this section's settings to the new style.
-    // Ensure that FollowPage is inherited first - otherwise GetPageStyle may auto-create a follow when checking FirstPage.
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
     //tdf124637 TODO: identify and skip special sections (like footnotes/endnotes)
-    if ( pLastContext && m_sFollowPageStyleName.isEmpty() )
-        m_sFollowPageStyleName = pLastContext->GetPageStyleName();
+    if (pLastContext && m_sPageStyleName.isEmpty())
+        m_sPageStyleName = pLastContext->GetPageStyleName();
     else
     {
-        HandleMarginsHeaderFooter( /*bFirst=*/false, rDM_Impl );
-        GetPageStyle( rDM_Impl, /*bFirst=*/false );
-        if ( rDM_Impl.IsNewDoc() && m_aFollowPageStyle.is() )
-            ApplyProperties_( m_aFollowPageStyle );
-    }
-
-    // FirstPageStyle may only be inherited if it will not be used or re-linked to a different follow
-    if ( !m_bTitlePage && pLastContext && m_sFirstPageStyleName.isEmpty() )
-        m_sFirstPageStyleName = pLastContext->GetPageStyleName( /*bFirst=*/true );
-    else
-    {
-        HandleMarginsHeaderFooter( /*bFirst=*/true, rDM_Impl );
-        GetPageStyle( rDM_Impl, /*bFirst=*/true );
-        if ( rDM_Impl.IsNewDoc() && m_aFirstPageStyle.is() )
-            ApplyProperties_( m_aFirstPageStyle );
-
-        // Chain m_aFollowPageStyle to be after m_aFirstPageStyle
-        m_aFirstPageStyle->setPropertyValue( "FollowStyle", uno::Any( m_sFollowPageStyleName ) );
+        HandleMarginsHeaderFooter(rDM_Impl);
+        GetPageStyle(rDM_Impl);
+        if (rDM_Impl.IsNewDoc() && m_aPageStyle.is())
+            ApplyProperties_(m_aPageStyle);
     }
 }
 
@@ -1374,6 +1387,52 @@ void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, std::deque<css::uno::A
     }
 }
 
+void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl, PageBreakType eBreakType)
+{
+    OUString evenOddStyleName = rDM_Impl.GetUnusedPageStyleName();
+    uno::Reference<beans::XPropertySet> evenOddStyle(
+        rDM_Impl.GetTextFactory()->createInstance("com.sun.star.style.PageStyle"),
+        uno::UNO_QUERY);
+    // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
+    uno::Reference<beans::XPropertySet> pageProperties(m_aPageStyle);
+    uno::Reference<beans::XPropertySetInfo> pagePropertiesInfo(pageProperties->getPropertySetInfo());
+    const uno::Sequence<beans::Property> propertyList(pagePropertiesInfo->getProperties());
+
+    // Ignore write-only properties.
+    static const std::unordered_set<OUString> staticDenylist = {
+        "FooterBackGraphicURL", "BackGraphicURL", "HeaderBackGraphicURL",
+        "HeaderIsOn", "FooterIsOn",
+        "HeaderIsShared", "FooterIsShared", "FirstIsShared",
+        "HeaderText", "HeaderTextLeft", "HeaderTextFirst",
+        "FooterText", "FooterTextLeft", "FooterTextFirst" };
+
+    for (const auto& rProperty : propertyList)
+    {
+        if ((rProperty.Attributes & beans::PropertyAttribute::READONLY) == 0)
+        {
+            if (staticDenylist.find(rProperty.Name) == staticDenylist.end())
+            {
+                evenOddStyle->setPropertyValue(
+                    rProperty.Name,
+                    pageProperties->getPropertyValue(rProperty.Name));
+            }
+        }
+    }
+    evenOddStyle->setPropertyValue("FollowStyle", uno::Any(m_sPageStyleName));
+
+    rDM_Impl.GetPageStyles()->insertByName(evenOddStyleName, uno::Any(evenOddStyle));
+
+    if (rDM_Impl.IsNewDoc())
+        completeCopyHeaderFooter(pageProperties, evenOddStyle);
+
+    if (eBreakType == PageBreakType::Even)
+        evenOddStyle->setPropertyValue(getPropertyName(PROP_PAGE_STYLE_LAYOUT), uno::Any(style::PageStyleLayout_LEFT));
+    else if (eBreakType == PageBreakType::Odd)
+        evenOddStyle->setPropertyValue(getPropertyName(PROP_PAGE_STYLE_LAYOUT), uno::Any(style::PageStyleLayout_RIGHT));
+
+    m_sPageStyleName = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
+}
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     SectionPropertyMap* pPrevSection = rDM_Impl.GetLastSectionContext();
@@ -1471,13 +1530,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         try
         {
+            setHeaderFooterProperties(rDM_Impl);
             InheritOrFinalizePageStyles( rDM_Impl );
             ApplySectionProperties( xSection, rDM_Impl );  //depends on InheritOrFinalizePageStyles
-            OUString aName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
             uno::Reference< beans::XPropertySet > xRangeProperties( lcl_GetRangeProperties( m_bIsFirstSection, rDM_Impl, m_xStartingRange ) );
-            if ( m_bIsFirstSection && !aName.isEmpty() && xRangeProperties.is() )
+            if ( m_bIsFirstSection && !m_sPageStyleName.isEmpty() && xRangeProperties.is() )
             {
-                xRangeProperties->setPropertyValue( getPropertyName( PROP_PAGE_DESC_NAME ), uno::Any( aName ) );
+                xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
             }
             else if ((!m_bFirstPageHeaderLinkToPrevious ||
                       !m_bFirstPageFooterLinkToPrevious ||
@@ -1486,7 +1545,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                       !m_bEvenPageHeaderLinkToPrevious ||
                       !m_bEvenPageFooterLinkToPrevious)
                     && rDM_Impl.GetCurrentXText())
-            {   // find a node in the section that has a page break and change
+            {
+                // find a node in the section that has a page break and change
                 // it to apply the page style; see "nightmare scenario" in
                 // wwSectionManager::InsertSegments()
                 auto xTextAppend = rDM_Impl.GetCurrentXText();
@@ -1503,31 +1563,28 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     xEnum->nextElement() >>= xElem;
                     if (xElem->getPropertySetInfo()->hasPropertyByName("BreakType"))
                     {
-                        style::BreakType bt;
-                        if ((xElem->getPropertyValue("BreakType") >>= bt)
-                            && bt == style::BreakType_PAGE_BEFORE)
+                        style::BreakType eBreakType;
+                        if ((xElem->getPropertyValue("BreakType") >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
                         {
                             // tdf#112201: do *not* use m_sFirstPageStyleName here!
-                            xElem->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME),
-                                    uno::Any(m_sFollowPageStyleName));
+                            xElem->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
+                            m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
                             isFound = true;
                             break;
                         }
                     }
                 }
-                uno::Reference<text::XParagraphCursor> const xPCursor(xCursor,
-                                                                      uno::UNO_QUERY_THROW);
+                uno::Reference<text::XParagraphCursor> const xPCursor(xCursor, uno::UNO_QUERY_THROW);
                 float fCharHeight = 0;
                 if (!isFound)
                 {   // HACK: try the last paragraph of the previous section
                     xPCursor->gotoPreviousParagraph(false);
                     uno::Reference<beans::XPropertySet> const xPSCursor(xCursor, uno::UNO_QUERY_THROW);
-                    style::BreakType bt;
-                    if ((xPSCursor->getPropertyValue("BreakType") >>= bt)
-                        && bt == style::BreakType_PAGE_BEFORE)
+                    style::BreakType eBreakType;
+                    if ((xPSCursor->getPropertyValue("BreakType") >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
                     {
-                        xPSCursor->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME),
-                                uno::Any(m_sFollowPageStyleName));
+                        xPSCursor->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
+                        m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
                         isFound = true;
                     }
                     else
@@ -1542,13 +1599,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     xPCursor->gotoPreviousParagraph(false);
                     uno::Reference<beans::XPropertySet> xPropertySet(xCursor, uno::UNO_QUERY_THROW);
                     OUString aPageDescName;
-                    if ((xPropertySet->getPropertyValue("PageDescName") >>= aPageDescName)
-                        && !aPageDescName.isEmpty())
+                    if ((xPropertySet->getPropertyValue("PageDescName") >>= aPageDescName) && !aPageDescName.isEmpty())
                     {
-                        uno::Reference<beans::XPropertySet> xPageStyle(
-                            rDM_Impl.GetPageStyles()->getByName(aPageDescName), uno::UNO_QUERY);
-                        xPageStyle->setPropertyValue("FollowStyle",
-                                                     uno::Any(m_sFollowPageStyleName));
+                        uno::Reference<beans::XPropertySet> xPageStyle(rDM_Impl.GetPageStyles()->getByName(aPageDescName), uno::UNO_QUERY);
+                        xPageStyle->setPropertyValue("FollowStyle", uno::Any(m_sPageStyleName));
+                        m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
                     }
                 }
             }
@@ -1566,6 +1621,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     {
         try
         {
+            setHeaderFooterProperties(rDM_Impl);
             InheritOrFinalizePageStyles( rDM_Impl );
             /*TODO tdf#135343: Just inserting a column break sounds like the right idea, but the implementation is wrong.
              * Somehow, the previous column section needs to be extended to cover this new text.
@@ -1591,13 +1647,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         ApplyProtectionProperties( xSection, rDM_Impl );
 
         //get the properties and create appropriate page styles
-        uno::Reference< beans::XPropertySet > xFollowPageStyle;
+        uno::Reference<beans::XPropertySet> xPageStyle;
         //This part certainly is not needed for footnotes, so don't create unused page styles.
         if ( !rDM_Impl.IsInFootOrEndnote() )
         {
-            xFollowPageStyle.set( GetPageStyle( rDM_Impl, false ) );
-
-            HandleMarginsHeaderFooter(/*bFirstPage=*/false, rDM_Impl );
+            xPageStyle.set(GetPageStyle(rDM_Impl));
+            setHeaderFooterProperties(rDM_Impl);
+            HandleMarginsHeaderFooter(rDM_Impl);
         }
 
         if ( rDM_Impl.GetSettingsTable()->GetMirrorMarginSettings() )
@@ -1611,9 +1667,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             if ( !xSection.is() )
                 xSection = rDM_Impl.appendTextSectionAfter( m_xStartingRange );
             if ( xSection.is() )
-                ApplyColumnProperties( xSection, rDM_Impl );
-            else if ( xFollowPageStyle.is() )
-                xColumns = ApplyColumnProperties( xFollowPageStyle, rDM_Impl );
+                ApplyColumnProperties(xSection, rDM_Impl);
+            else if (xPageStyle.is())
+                xColumns = ApplyColumnProperties(xPageStyle, rDM_Impl);
         }
 
         // these BreakTypes are effectively page-breaks: don't evenly distribute text in columns before a page break;
@@ -1714,23 +1770,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         Insert( PROP_GRID_BASE_WIDTH, uno::Any( nCharWidth ) );
         Insert( PROP_GRID_RUBY_HEIGHT, uno::Any( sal_Int32( 0 ) ) );
 
-        if ( rDM_Impl.IsNewDoc() && xFollowPageStyle.is() )
-            ApplyProperties_( xFollowPageStyle );
-
-        //todo: creating a "First Page" style depends on HasTitlePage and _fFacingPage_
-        if ( m_bTitlePage )
-        {
-            CopyLastHeaderFooter( true, rDM_Impl );
-            PrepareHeaderFooterProperties( true );
-            uno::Reference< beans::XPropertySet > xFirstPageStyle = GetPageStyle(
-                rDM_Impl, true );
-            if ( rDM_Impl.IsNewDoc() )
-                ApplyProperties_( xFirstPageStyle );
-
-            if ( xColumns.is() )
-                xFirstPageStyle->setPropertyValue(
-                    getPropertyName( PROP_TEXT_COLUMNS ), uno::Any( xColumns ) );
-        }
+        if (rDM_Impl.IsNewDoc() && xPageStyle.is())
+            ApplyProperties_(xPageStyle);
 
         ApplyBorderToPageStyles( rDM_Impl, m_eBorderApply, m_eBorderOffsetFrom );
         ApplyPaperSource(rDM_Impl);
@@ -1743,40 +1784,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             // Handle page breaks with odd/even page numbering. We need to use an extra page style for setting the page style
             // to left/right, because if we set it to the normal style, we'd set it to "First Page"/"Default Style", which would
             // break them (all default pages would be only left or right).
-            if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_evenPage || m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_oddPage )
+            if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_evenPage)
             {
-                OUString* pageStyle = m_bTitlePage ? &m_sFirstPageStyleName : &m_sFollowPageStyleName;
-                OUString evenOddStyleName = rDM_Impl.GetUnusedPageStyleName();
-                uno::Reference< beans::XPropertySet > evenOddStyle(
-                    rDM_Impl.GetTextFactory()->createInstance( "com.sun.star.style.PageStyle" ),
-                    uno::UNO_QUERY );
-                // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
-                uno::Reference< beans::XPropertySet > pageProperties( m_bTitlePage ? m_aFirstPageStyle : m_aFollowPageStyle );
-                uno::Reference< beans::XPropertySetInfo > pagePropertiesInfo( pageProperties->getPropertySetInfo() );
-                const uno::Sequence< beans::Property > propertyList( pagePropertiesInfo->getProperties() );
-                // Ignore write-only properties.
-                static const o3tl::sorted_vector<OUString> aDenylist
-                    = { "FooterBackGraphicURL", "BackGraphicURL", "HeaderBackGraphicURL" };
-                for ( const auto& rProperty : propertyList )
-                {
-                    if ( (rProperty.Attributes & beans::PropertyAttribute::READONLY) == 0 )
-                    {
-                        if (aDenylist.find(rProperty.Name) == aDenylist.end())
-                            evenOddStyle->setPropertyValue(
-                                rProperty.Name,
-                                pageProperties->getPropertyValue(rProperty.Name));
-                    }
-                }
-                evenOddStyle->setPropertyValue( "FollowStyle", uno::Any( *pageStyle ) );
-                rDM_Impl.GetPageStyles()->insertByName( evenOddStyleName, uno::Any( evenOddStyle ) );
-                evenOddStyle->setPropertyValue( "HeaderIsOn", uno::Any( false ) );
-                evenOddStyle->setPropertyValue( "FooterIsOn", uno::Any( false ) );
-                CopyHeaderFooter(rDM_Impl, pageProperties, evenOddStyle);
-                *pageStyle = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
-                if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_evenPage )
-                    evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::Any( style::PageStyleLayout_LEFT ) );
-                else if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_oddPage )
-                    evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::Any( style::PageStyleLayout_RIGHT ) );
+                CreateEvenOddPageStyleCopy(rDM_Impl, PageBreakType::Even);
+            }
+            else if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_oddPage)
+            {
+                CreateEvenOddPageStyleCopy(rDM_Impl, PageBreakType::Odd);
             }
 
             if (rDM_Impl.m_xAltChunkStartingRange.is())
@@ -1788,7 +1802,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 // Avoid setting page style in case of autotext: so inserting the autotext at the
                 // end of the document does not introduce an unwanted page break.
                 // Also avoid setting the page style at the very beginning if it still is the default page style.
-                const OUString sPageStyle = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
+                const OUString sPageStyle = m_sPageStyleName;
                 if (!rDM_Impl.IsReadGlossaries()
                     && !rDM_Impl.IsInFootOrEndnote()
                     && !(m_bIsFirstSection && sPageStyle == getPropertyName( PROP_STANDARD ) && m_nPageNumber < 0)
@@ -1865,21 +1879,20 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 // Clear the flag that says we should take the header/footer content from
 // the previous section.  This should be called when we encounter a header
 // or footer definition for this section.
-void SectionPropertyMap::ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType )
+void SectionPropertyMap::clearHeaderFooterLinkToPrevious(PagePartType ePartType, PageType eType)
 {
-    if ( bHeader )
+    if (ePartType == PagePartType::Header)
     {
-        switch ( eType )
+        switch (eType)
         {
             case PageType::FIRST: m_bFirstPageHeaderLinkToPrevious = false; break;
             case PageType::LEFT:  m_bEvenPageHeaderLinkToPrevious = false; break;
             case PageType::RIGHT: m_bDefaultHeaderLinkToPrevious = false; break;
-                // no default case as all enumeration values have been covered
         }
     }
-    else
+    else if (ePartType == PagePartType::Footer)
     {
-        switch ( eType )
+        switch (eType)
         {
             case PageType::FIRST: m_bFirstPageFooterLinkToPrevious = false; break;
             case PageType::LEFT:  m_bEvenPageFooterLinkToPrevious = false; break;

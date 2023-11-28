@@ -245,7 +245,9 @@ DECLARE_RTFEXPORT_TEST(testFdo47107, "fdo47107.rtf")
     xNumberingStyles->getByName("WWNum2");
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo44176, "fdo44176.rtf")
+// TODO - First Page Headers Support
+// This assumption is false now - we only have "Standard" page style, which should have properties properly set
+/*DECLARE_RTFEXPORT_TEST(testFdo44176, "fdo44176.rtf")
 {
     uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
     uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"),
@@ -257,7 +259,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44176, "fdo44176.rtf")
     xDefault->getPropertyValue("TopMargin") >>= nDefaultTop;
     xDefault->getPropertyValue("HeaderHeight") >>= nDefaultHeader;
     CPPUNIT_ASSERT_EQUAL(nFirstTop, nDefaultTop + nDefaultHeader);
-}
+}*/
 
 DECLARE_RTFEXPORT_TEST(testFdo39053, "fdo39053.rtf")
 {

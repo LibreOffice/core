@@ -68,6 +68,7 @@
 #include <com/sun/star/text/XRedline.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
@@ -774,6 +775,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
 
     if (m_aTextAppendStack.empty())
         return;
+
     uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if (!xTextAppend.is())
         return;
@@ -3639,6 +3641,48 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
     }
 }
 
+namespace
+{
+// Determines if the XText content is empty (no text, no shapes, no tables)
+bool isContentEmpty(uno::Reference<text::XText> const& xText, uno::Reference<text::XTextDocument> const& xTextDocument)
+{
+    if (!xText.is())
+        return true; // no XText means it's empty
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
+    auto xDrawPage = xDrawPageSupplier->getDrawPage();
+    if (xDrawPage && xDrawPage->hasElements())
+    {
+        for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
+        {
+            uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+            if (xShape.is())
+            {
+                uno::Reference<text::XTextRange> xAnchor = xShape->getAnchor();
+                if (xAnchor.is() && xAnchor->getText() == xText)
+                    return false;
+            }
+        }
+    }
+
+    uno::Reference<container::XEnumerationAccess> xEnumAccess(xText->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
+    while (xEnum->hasMoreElements())
+    {
+        auto xObject = xEnum->nextElement();
+        uno::Reference<text::XTextTable> const xTextTable(xObject, uno::UNO_QUERY);
+        if (xTextTable.is())
+            return false;
+
+        uno::Reference<text::XTextRange> const xParagraph(xObject, uno::UNO_QUERY);
+        if (xParagraph.is() && !xParagraph->getString().isEmpty())
+            return false;
+    }
+    return true;
+}
+
+} // end anonymous namespace
+
 void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageType eType)
 {
     m_bSaveParaHadField = m_bParaHadField;
@@ -3649,71 +3693,64 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
     const PropertyIds ePropIsOn = bHeader ? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
     const PropertyIds ePropShared = bHeader ? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
     const PropertyIds ePropTextLeft = bHeader ? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
+    const PropertyIds ePropTextFirst = bHeader ? PROP_HEADER_TEXT_FIRST: PROP_FOOTER_TEXT_FIRST;
     const PropertyIds ePropTextRight = bHeader ? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
 
     m_bDiscardHeaderFooter = true;
     m_eInHeaderFooterImport = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
 
     //get the section context
-    PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
-    //ask for the header/footer name of the given type
-    SectionPropertyMap* pSectionContext = dynamic_cast<SectionPropertyMap*>(pContext.get());
+    SectionPropertyMap* pSectionContext = GetSectionContext();;
     if (!pSectionContext)
         return;
 
-    // clear the "Link To Previous" flag so that the header/footer
-    // content is not copied from the previous section
-    pSectionContext->ClearHeaderFooterLinkToPrevious(bHeader, eType);
-
     if (!m_bIsNewDoc)
-    {
         return; // TODO sw cannot Undo insert header/footer without crashing
-    }
 
-    uno::Reference<beans::XPropertySet> xPageStyle = pSectionContext->GetPageStyle(*this, eType == PageType::FIRST);
+    uno::Reference<beans::XPropertySet> xPageStyle = pSectionContext->GetPageStyle(*this);
     if (!xPageStyle.is())
         return;
+
+    bool bEvenAndOdd = GetSettingsTable()->GetEvenAndOddHeaders();
+
     try
     {
-        const PropertyIds ePropText = eType == PageType::LEFT ? ePropTextLeft : ePropTextRight;
-        if (eType != PageType::LEFT || GetSettingsTable()->GetEvenAndOddHeaders())
+        // Turn on the headers
+        xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
+
+        // Set both sharing left and first to off so we can import the content regardless tha what value
+        // the "titlePage" or "evenAndOdd" flags are set (which decide what the sharing is set to in the document).
+        xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
+        xPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(false));
+
+        if (eType == PageType::LEFT)
         {
-            //switch on header/footer use
-            xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
+            if (bHeader)
+                pSectionContext->m_bLeftHeader = true;
+            else
+                pSectionContext->m_bLeftFooter = true;
 
-            // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
-            // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
-            if (eType != PageType::FIRST && GetSettingsTable()->GetEvenAndOddHeaders())
-                xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
-
-            //set the interface
-            uno::Reference<text::XText> xText;
-            xPageStyle->getPropertyValue(getPropertyName(ePropText)) >>= xText;
-            auto xTextCursor = m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xText->createTextCursorByRange(xText->getStart());
-            uno::Reference<text::XTextAppend> xTextAppend(xText, uno::UNO_QUERY_THROW);
-            m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTextCursor));
-            m_aHeaderFooterTextAppendStack.push(std::make_pair(TextAppendContext(xTextAppend, xTextCursor), ePagePartType));
+            prepareHeaderFooterContent(xPageStyle, ePagePartType, ePropTextLeft, bEvenAndOdd);
         }
-        // If we have *hidden* header footer
+        else if (eType == PageType::FIRST)
+        {
+            if (bHeader)
+                pSectionContext->m_bFirstHeader = true;
+            else
+                pSectionContext->m_bFirstFooter = true;
+
+            prepareHeaderFooterContent(xPageStyle, ePagePartType, ePropTextFirst, true);
+        }
         else
         {
-            bool bIsShared = false;
-            // Turn on the headers
-            xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
-            // Store the state of the previous state of shared prop
-            xPageStyle->getPropertyValue(getPropertyName(ePropShared)) >>= bIsShared;
-            // Turn on the shared prop in order to save the headers/footers in time
-            xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
-            // Add the content of the headers footers to the doc
-            uno::Reference<text::XText> xText;
-            xPageStyle->getPropertyValue(getPropertyName(ePropText)) >>= xText;
-            auto xTextCursor = m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xText->createTextCursorByRange(xText->getStart());
-            uno::Reference<text::XTextAppend> xTextAppend(xText, uno::UNO_QUERY_THROW);
-            m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTextCursor));
+            if (bHeader)
+                pSectionContext->m_bRightHeader = true;
+            else
+                pSectionContext->m_bRightFooter = true;
 
-            // Restore the original state of the shared prop after we stored the necessary values.
-            xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(bIsShared));
+            prepareHeaderFooterContent(xPageStyle, ePagePartType, ePropTextRight, true);
         }
+
         m_bDiscardHeaderFooter = false; // set only on success!
     }
     catch( const uno::Exception& )
@@ -3722,11 +3759,84 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
     }
 }
 
-void DomainMapper_Impl::PopPageHeaderFooter()
+/** Prepares the header/footer text content by first removing the existing
+ *  content and adding it to the text append stack. */
+void DomainMapper_Impl::prepareHeaderFooterContent(uno::Reference<beans::XPropertySet> const& xPageStyle,
+                                                   PagePartType ePagePartType, PropertyIds ePropertyID,
+                                                   bool bAppendToHeaderAndFooterTextStack)
+{
+    uno::Reference<text::XText> xText;
+    xPageStyle->getPropertyValue(getPropertyName(ePropertyID)) >>= xText;
+
+    //remove the existing content first
+    SectionPropertyMap::removeXTextContent(xText);
+
+    auto xTextCursor = m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xText->createTextCursorByRange(xText->getStart());
+    uno::Reference<text::XTextAppend> xTextAppend(xText, uno::UNO_QUERY_THROW);
+    m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTextCursor));
+    if (bAppendToHeaderAndFooterTextStack)
+        m_aHeaderFooterTextAppendStack.push(std::make_pair(TextAppendContext(xTextAppend, xTextCursor), ePagePartType));
+}
+
+/** Checks if the header and footer content on the text appennd stack is empty.
+ */
+void DomainMapper_Impl::checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, PageType eType)
+{
+    if (m_bDiscardHeaderFooter)
+        return;
+
+    if (m_aTextAppendStack.empty())
+        return;
+
+    SectionPropertyMap* pSectionContext = GetSectionContext();
+    if (!pSectionContext)
+        return;
+
+    bool bHeader = ePagePartType == PagePartType::Header;
+
+    uno::Reference<beans::XPropertySet> xPageStyle(pSectionContext->GetPageStyle(*this));
+
+    if (!xPageStyle.is())
+        return;
+
+    bool bEmpty = isContentEmpty(m_aTextAppendStack.top().xTextAppend, GetTextDocument());
+
+    if (eType == PageType::FIRST && bEmpty)
+    {
+        if (bHeader)
+            pSectionContext->m_bFirstHeader = false;
+        else
+            pSectionContext->m_bFirstFooter = false;
+    }
+    else if (eType == PageType::LEFT && bEmpty)
+    {
+        if (bHeader)
+            pSectionContext->m_bLeftHeader = false;
+        else
+            pSectionContext->m_bLeftFooter = false;
+    }
+    else if (eType == PageType::RIGHT && bEmpty)
+    {
+        if (bHeader)
+            pSectionContext->m_bRightHeader = false;
+        else
+            pSectionContext->m_bRightFooter = false;
+    }
+}
+
+void DomainMapper_Impl::PopPageHeaderFooter(PagePartType ePagePartType, PageType eType)
 {
     //header and footer always have an empty paragraph at the end
     //this has to be removed
-    RemoveLastParagraph( );
+    RemoveLastParagraph();
+
+    checkIfHeaderFooterIsEmpty(ePagePartType, eType);
+
+    // clear the "Link To Previous" flag so that the header/footer
+    // content is not copied from the previous section
+    SectionPropertyMap* pSectionContext = GetSectionContext();
+    if (pSectionContext)
+        pSectionContext->clearHeaderFooterLinkToPrevious(ePagePartType, eType);
 
     if (!m_aTextAppendStack.empty())
     {
@@ -9491,12 +9601,22 @@ void DomainMapper_Impl::substream(Id rName,
     switch( rName )
     {
     case NS_ooxml::LN_headerl:
-    case NS_ooxml::LN_headerr:
-    case NS_ooxml::LN_headerf:
+        PopPageHeaderFooter(PagePartType::Header, PageType::LEFT);
+    break;
     case NS_ooxml::LN_footerl:
+        PopPageHeaderFooter(PagePartType::Footer, PageType::LEFT);
+    break;
+    case NS_ooxml::LN_headerr:
+        PopPageHeaderFooter(PagePartType::Header, PageType::RIGHT);
+    break;
     case NS_ooxml::LN_footerr:
+        PopPageHeaderFooter(PagePartType::Footer, PageType::RIGHT);
+    break;
+    case NS_ooxml::LN_headerf:
+        PopPageHeaderFooter(PagePartType::Header, PageType::FIRST);
+    break;
     case NS_ooxml::LN_footerf:
-        PopPageHeaderFooter();
+        PopPageHeaderFooter(PagePartType::Footer, PageType::FIRST);
     break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
