@@ -14,13 +14,6 @@
     <style:style style:name="dp3" style:family="drawing-page">
       <style:drawing-page-properties presentation:background-visible="true" presentation:background-objects-visible="true" presentation:display-footer="true" presentation:display-page-number="true" presentation:display-date-time="true"/>
     </style:style>
-    <number:date-style style:name="D4">
-      <number:day number:style="long"/>
-      <number:text>.</number:text>
-      <number:month number:style="long"/>
-      <number:text>.</number:text>
-      <number:year number:style="long"/>
-    </number:date-style>
     <style:style style:name="gr1" style:family="graphic">
       <style:graphic-properties style:protect="size"/>
     </style:style>
@@ -54,7 +47,6 @@
   </office:automatic-styles>
   <office:body>
     <office:presentation>
-      <presentation:date-time-decl presentation:name="dtd1" presentation:source="current-date" style:data-style-name="D4"/>
       <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Blue_5f_Curve" presentation:presentation-page-layout-name="AL1T19" presentation:use-date-time-name="dtd1">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
         <draw:frame presentation:style-name="pr1" draw:text-style-name="P1" draw:layer="layout" svg:width="25cm" svg:height="3cm" svg:x="0cm" svg:y="4.5cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">

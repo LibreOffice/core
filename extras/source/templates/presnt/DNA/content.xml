@@ -4,6 +4,8 @@
   <office:font-face-decls>
     <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Serif CJK" svg:font-family="'Noto Serif CJK JP:palt','Noto Serif CJK KR','Noto Serif CJK SC','Noto Serif CJK TC','Noto Serif CJK HK'" style:font-family-generic="roman" style:font-pitch="variable" />
+    <style:font-face style:name="Noto Serif" svg:font-family="Noto Serif" style:font-family-generic="roman" style:font-pitch="variable" />
   </office:font-face-decls>
   <office:automatic-styles>
     <style:style style:name="dp1" style:family="drawing-page">

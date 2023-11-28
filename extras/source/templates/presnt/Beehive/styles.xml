@@ -441,7 +441,7 @@
     </style:style>
     <style:style style:name="Beehive1-outline7" style:family="presentation" style:parent-style-name="Beehive1-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="15pt" style:font-size-asian="15t" style:font-size-complex="15pt"/>
+      <style:text-properties fo:font-size="15pt" style:font-size-asian="15pt" style:font-size-complex="15pt"/>
     </style:style>
     <style:style style:name="Beehive1-outline8" style:family="presentation" style:parent-style-name="Beehive1-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>

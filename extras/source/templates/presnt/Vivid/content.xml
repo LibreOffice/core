@@ -17,13 +17,6 @@
     <style:style style:name="dp3" style:family="drawing-page">
       <style:drawing-page-properties presentation:transition-speed="fast" presentation:background-visible="true" presentation:background-objects-visible="true" presentation:display-footer="false" presentation:display-page-number="false" presentation:display-date-time="false"/>
     </style:style>
-    <number:date-style style:name="D3">
-      <number:day number:style="long"/>
-      <number:text>.</number:text>
-      <number:month number:style="long"/>
-      <number:text>.</number:text>
-      <number:year/>
-    </number:date-style>
     <style:style style:name="gr1" style:family="graphic">
       <style:graphic-properties style:protect="size"/>
     </style:style>
@@ -71,7 +64,6 @@
   </office:automatic-styles>
   <office:body>
     <office:presentation>
-      <presentation:date-time-decl presentation:name="dtd1" presentation:source="current-date" style:data-style-name="D3"/>
       <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Vivid" presentation:presentation-page-layout-name="AL1T0" presentation:use-date-time-name="dtd1">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
         <draw:frame presentation:style-name="pr1" draw:text-style-name="P1" draw:layer="layout" svg:width="25cm" svg:height="9cm" svg:x="1.25cm" svg:y="0.75cm" presentation:class="title" presentation:placeholder="true">

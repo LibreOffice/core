@@ -17,13 +17,6 @@
     <style:style style:name="dp3" style:family="drawing-page">
       <style:drawing-page-properties presentation:background-visible="true" presentation:background-objects-visible="true" presentation:display-footer="true" presentation:display-page-number="true" presentation:display-date-time="true" smil:type="fade" smil:subtype="crossfade" smil:fadeColor="#000000"/>
     </style:style>
-    <number:date-style style:name="D3">
-      <number:day number:style="long"/>
-      <number:text>.</number:text>
-      <number:month number:style="long"/>
-      <number:text>.</number:text>
-      <number:year/>
-    </number:date-style>
     <style:style style:name="gr1" style:family="graphic">
       <style:graphic-properties style:protect="size"/>
     </style:style>
@@ -121,7 +114,6 @@
   </office:automatic-styles>
   <office:body>
     <office:presentation>
-      <presentation:date-time-decl presentation:name="dtd1" presentation:source="current-date" style:data-style-name="D3"/>
       <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Progress" presentation:presentation-page-layout-name="AL1T0" presentation:use-footer-name="ftr1" presentation:use-date-time-name="dtd1" xml:id="id1" draw:id="id1">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
         <draw:frame presentation:style-name="pr1" draw:text-style-name="P1" draw:layer="layout" svg:width="25.007cm" svg:height="4.466cm" draw:transform="rotate (0.141371669411541) translate (1.05cm 8.049cm)" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
