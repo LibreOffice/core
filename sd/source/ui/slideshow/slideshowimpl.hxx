@@ -198,7 +198,7 @@ public:
     /// ends the presentation async
     void endPresentation();
 
-    // possibly triggered from events @SlideshowImpl::Notify if needed, but asychron to
+    // possibly triggered from events @SlideshowImpl::Notify if needed, but asynchron to
     // allow the noted event to completely finish in the core
     void AsyncNotifyEvent(const css::uno::Reference< css::drawing::XDrawPage >&, const SdrHintKind);
 
