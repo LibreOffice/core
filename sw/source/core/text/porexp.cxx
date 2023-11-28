@@ -211,6 +211,7 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
     // Draw field shade (can be disabled individually)
     if (!m_bMulti) // No gray background for multiportion brackets
         rInf.DrawViewOpt(*this, PortionType::Blank);
+    SwExpandPortion::Paint(rInf);
 
     if (m_cChar == CHAR_HARDBLANK)
     {
@@ -241,10 +242,6 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
             aInf.DrawText(aMarkerPor, TextFrameIndex(aMarker.getLength()), true);
             aInf.GetFont()->SetColor(colorBackup);
         }
-    }
-    else
-    {
-        SwExpandPortion::Paint(rInf);
     }
 }
 

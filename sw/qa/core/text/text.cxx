@@ -1263,9 +1263,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
         nSectionAfterNBSPX_legacy_leftAligned
-            = getXPath(pXmlDoc, "//textarray[3]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr).toInt32();
         nSectionAfterNBSPX_legacy_justified
-            = getXPath(pXmlDoc, "//textarray[8]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr).toInt32();
     }
 
     // Measure the X of sections after NBSPs in a file with the option enabled
@@ -1278,9 +1278,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
         nSectionAfterNBSPX_optionDisabled_leftAligned
-            = getXPath(pXmlDoc, "//textarray[3]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr).toInt32();
         nSectionAfterNBSPX_optionDisabled_justified
-            = getXPath(pXmlDoc, "//textarray[8]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr).toInt32();
     }
 
     // Measure the X of the sections after NBSPs in a file with the option enabled
@@ -1293,9 +1293,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
         nSectionAfterNBSPX_optionEnabled_leftAligned
-            = getXPath(pXmlDoc, "//textarray[3]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr).toInt32();
         nSectionAfterNBSPX_optionEnabled_justified
-            = getXPath(pXmlDoc, "//textarray[8]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr).toInt32();
     }
 
     // Assert left aligned NBSP for the legacy file is larger than zero
