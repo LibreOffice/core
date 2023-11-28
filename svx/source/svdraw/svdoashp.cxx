@@ -1727,7 +1727,7 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
     }
 
     Point aPt;
-    auto aRectangle = getRectangle();
+    tools::Rectangle aRectangle = getRectangle();
     switch (nPosNum)
     {
         case 0: aPt = aRectangle.TopCenter();    aPt.AdjustY( -nWdt ); break;
