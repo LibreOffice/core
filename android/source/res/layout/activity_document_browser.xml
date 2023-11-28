@@ -119,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        app:backgroundTint="@color/background_normal"
+        app:backgroundTint="?attr/colorBackgroundFloating"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -151,7 +151,7 @@
             android:layout_marginBottom="@dimen/new_doc_fab_tweak_bottom"
             android:layout_marginTop="@dimen/new_doc_fab_tweak_top"
             android:clickable="true"
-            app:backgroundTint="@color/background_normal"
+            app:backgroundTint="?attr/colorBackgroundFloating"
             app:fabSize="mini"
             app:srcCompat="@drawable/writer"
             app:useCompatPadding="true" />
@@ -183,7 +183,7 @@
             android:layout_marginBottom="@dimen/new_doc_fab_tweak_bottom"
             android:layout_marginTop="@dimen/new_doc_fab_tweak_top"
             android:clickable="true"
-            app:backgroundTint="@color/background_normal"
+            app:backgroundTint="?attr/colorBackgroundFloating"
             app:fabSize="mini"
             app:srcCompat="@drawable/impress"
             app:useCompatPadding="true" />
@@ -215,7 +215,7 @@
             android:layout_marginBottom="@dimen/new_doc_fab_tweak_bottom"
             android:layout_marginTop="@dimen/new_doc_fab_tweak_top"
             android:clickable="true"
-            app:backgroundTint="@color/background_normal"
+            app:backgroundTint="?attr/colorBackgroundFloating"
             app:fabSize="mini"
             app:srcCompat="@drawable/calc"
             app:useCompatPadding="true" />
@@ -247,7 +247,7 @@
             android:layout_marginBottom="@dimen/new_doc_fab_tweak_bottom"
             android:layout_marginTop="@dimen/new_doc_fab_tweak_top"
             android:clickable="true"
-            app:backgroundTint="@color/background_normal"
+            app:backgroundTint="?attr/colorBackgroundFloating"
             app:fabSize="mini"
             app:srcCompat="@drawable/draw"
             app:useCompatPadding="true" />
