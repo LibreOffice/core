@@ -15,7 +15,7 @@
         <property name="margin-start">6</property>
         <property name="margin-top">3</property>
         <property name="margin-bottom">3</property>
-        <property name="icon-name">res/info.png</property>
+        <property name="icon-name">vcl/res/infobox.png</property>
       </object>
       <packing>
         <property name="expand">False</property>

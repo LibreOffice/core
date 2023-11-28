@@ -19,6 +19,7 @@ LabelItemWindow::LabelItemWindow(vcl::Window* pParent, const OUString& rLabel)
 
     m_xLabel->set_label(rLabel);
     m_xImage->hide();
+    m_xImage->set_size_request(24, 24); // vcl/res/infobar.png is 32x32 - too large here
 
     SetOptimalSize();
 
