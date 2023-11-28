@@ -7,7 +7,7 @@
         android:pathData="M4,6h16v12h-16z"
         android:fillAlpha="0.99"
         android:strokeColor="#00000000"
-        android:fillColor="#4d4d4d"
+        android:fillColor="@color/toolbar_foreground"
         android:strokeWidth="4"
         android:strokeAlpha="0.99"/>
 </vector>
