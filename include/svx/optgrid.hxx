@@ -152,6 +152,8 @@ protected:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldBezAngle;
     std::unique_ptr<weld::Widget> m_xMtrFldBezAngleImg;
 
+    bool IsDrawMode() const { return m_Emode == DRAW_MODE; }
+
     DECL_LINK(ClickRotateHdl_Impl, weld::Toggleable&, void);
 private:
     DECL_DLLPRIVATE_LINK(ChangeDrawHdl_Impl, weld::MetricSpinButton&, void);

@@ -83,51 +83,62 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 
     SdOptionsSnapItem aOptsItem( rAttrs->Get( ATTR_OPTIONS_SNAP ) );
 
-    bool bReadOnly = officecfg::Office::Impress::Snap::Object::SnapLine::isReadOnly();
+    bool bDrawMode = SvxGridTabPage::IsDrawMode();
+    bool bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::SnapLine::isReadOnly() :
+        officecfg::Office::Impress::Snap::Object::SnapLine::isReadOnly();
     m_xCbxSnapHelplines->set_active( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
     m_xCbxSnapHelplines->set_sensitive(!bReadOnly);
     m_xCbxSnapHelplinesImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Object::PageMargin::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::PageMargin::isReadOnly() :
+        officecfg::Office::Impress::Snap::Object::PageMargin::isReadOnly();
     m_xCbxSnapBorder->set_active( aOptsItem.GetOptionsSnap().IsSnapBorder() );
     m_xCbxSnapBorder->set_sensitive(!bReadOnly);
     m_xCbxSnapBorderImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Object::ObjectFrame::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::ObjectFrame::isReadOnly() :
+        officecfg::Office::Impress::Snap::Object::ObjectFrame::isReadOnly();
     m_xCbxSnapFrame->set_active( aOptsItem.GetOptionsSnap().IsSnapFrame() );
     m_xCbxSnapFrame->set_sensitive(!bReadOnly);
     m_xCbxSnapFrameImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Object::ObjectPoint::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::ObjectPoint::isReadOnly() :
+        officecfg::Office::Impress::Snap::Object::ObjectPoint::isReadOnly();
     m_xCbxSnapPoints->set_active( aOptsItem.GetOptionsSnap().IsSnapPoints() );
     m_xCbxSnapPoints->set_sensitive(!bReadOnly);
     m_xCbxSnapPointsImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Position::CreatingMoving::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::CreatingMoving::isReadOnly() :
+        officecfg::Office::Impress::Snap::Position::CreatingMoving::isReadOnly();
     m_xCbxOrtho->set_active( aOptsItem.GetOptionsSnap().IsOrtho() );
     m_xCbxOrtho->set_sensitive(!bReadOnly);
     m_xCbxOrthoImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Position::ExtendEdges::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::ExtendEdges::isReadOnly() :
+        officecfg::Office::Impress::Snap::Position::ExtendEdges::isReadOnly();
     m_xCbxBigOrtho->set_active( aOptsItem.GetOptionsSnap().IsBigOrtho() );
     m_xCbxBigOrtho->set_sensitive(!bReadOnly);
     m_xCbxBigOrthoImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Position::Rotating::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::Rotating::isReadOnly() :
+        officecfg::Office::Impress::Snap::Position::Rotating::isReadOnly();
     m_xCbxRotate->set_active( aOptsItem.GetOptionsSnap().IsRotate() );
     m_xCbxRotate->set_sensitive(!bReadOnly);
     m_xCbxRotateImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Object::Range::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::Range::isReadOnly() :
+        officecfg::Office::Impress::Snap::Object::Range::isReadOnly();
     m_xMtrFldSnapArea->set_value(aOptsItem.GetOptionsSnap().GetSnapArea(), FieldUnit::PIXEL);
     m_xMtrFldSnapArea->set_sensitive(!bReadOnly);
     m_xMtrFldSnapAreaImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Position::RotatingValue::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::RotatingValue::isReadOnly() :
+        officecfg::Office::Impress::Snap::Position::RotatingValue::isReadOnly();
     m_xMtrFldAngle->set_value(aOptsItem.GetOptionsSnap().GetAngle().get(), FieldUnit::DEGREE);
     m_xMtrFldAngle->set_sensitive(!bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Snap::Position::PointReduction::isReadOnly();
+    bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::PointReduction::isReadOnly() :
+        officecfg::Office::Impress::Snap::Position::PointReduction::isReadOnly();
     m_xMtrFldBezAngle->set_value(aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle().get(), FieldUnit::DEGREE);
     m_xMtrFldBezAngle->set_sensitive(!bReadOnly);
     m_xMtrFldBezAngleImg->set_visible(bReadOnly);

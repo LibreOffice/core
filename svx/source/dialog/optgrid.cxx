@@ -19,12 +19,15 @@
 
 #include <svl/intitem.hxx>
 #include <svtools/unitconv.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <officecfg/Office/WriterWeb.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Draw.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/optgrid.hxx>
@@ -160,17 +163,20 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
         if (0 != (pItem->GetValue() & HTMLMODE_ON))
             m_Emode = HTML_MODE;
     }
-    else
+
+    if (m_Emode != HTML_MODE)
     {
-        SvtModuleOptions aMOpt;
-        if (aMOpt.IsImpress())
-            m_Emode = IMPRESS_MODE;
-        else if (aMOpt.IsDraw())
-            m_Emode = DRAW_MODE;
-        else if (aMOpt.IsCalc())
-            m_Emode = CALC_MODE;
-        else
+        SfxViewFrame* pCurrent = SfxViewFrame::Current();
+        OUString aModuleName = vcl::CommandInfoProvider::GetModuleIdentifier(pCurrent->GetFrame().GetFrameInterface());
+        std::u16string_view sModulename = aModuleName.subView(aModuleName.lastIndexOf('.') + 1);
+        if (sModulename.starts_with(u"Text"))
             m_Emode = WRITER_MODE;
+        else if (sModulename.starts_with(u"Spreadsheet"))
+            m_Emode = CALC_MODE;
+        else if (sModulename.starts_with(u"Presentation"))
+            m_Emode = IMPRESS_MODE;
+        else if (sModulename.starts_with(u"Drawing"))
+            m_Emode = DRAW_MODE;
     }
 
     m_xCbxRotate->connect_toggled(LINK(this, SvxGridTabPage, ClickRotateHdl_Impl));
@@ -259,7 +265,8 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
             case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Option::SnapToGrid::isReadOnly(); break;
             case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Option::SnapToGrid::isReadOnly(); break;
             case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Option::SnapToGrid::isReadOnly(); break;
-            default: //TODO Calc/Draw
+            case DRAW_MODE: bReadOnly = officecfg::Office::Draw::Grid::Option::SnapToGrid::isReadOnly(); break;
+            default: //TODO Calc
                 break;
         }
         m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
@@ -271,7 +278,8 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
             case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Option::Synchronize::isReadOnly(); break;
             case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Option::Synchronize::isReadOnly(); break;
             case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Option::Synchronize::isReadOnly(); break;
-            default: //TODO Calc/Draw
+            case DRAW_MODE: bReadOnly = officecfg::Office::Draw::Grid::Option::Synchronize::isReadOnly(); break;
+            default: //TODO Calc
                 break;
         }
         m_xCbxSynchronize->set_active(pGridAttr->bSynchronize);
@@ -283,7 +291,8 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
             case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Option::VisibleGrid::isReadOnly(); break;
             case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Option::VisibleGrid::isReadOnly(); break;
             case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Option::VisibleGrid::isReadOnly(); break;
-            default: //TODO Calc/Draw
+            case DRAW_MODE: bReadOnly = officecfg::Office::Draw::Grid::Option::VisibleGrid::isReadOnly(); break;
+            default: //TODO Calc
                 break;
         }
         m_xCbxGridVisible->set_active(pGridAttr->bGridVisible);
@@ -306,7 +315,15 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
                     bReadOnly = officecfg::Office::Impress::Grid::Resolution::XAxis::NonMetric::isReadOnly();
             }
             break;
-            default: //TODO Calc/Draw
+            case DRAW_MODE:
+            {
+                if (lcl_IsMetricSystem())
+                    bReadOnly = officecfg::Office::Draw::Grid::Resolution::XAxis::Metric::isReadOnly();
+                else
+                    bReadOnly = officecfg::Office::Draw::Grid::Resolution::XAxis::NonMetric::isReadOnly();
+            }
+            break;
+            default: //TODO Calc
                 break;
         }
         m_xMtrFldDrawX->set_sensitive(!bReadOnly);
@@ -324,7 +341,15 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
                     bReadOnly = officecfg::Office::Impress::Grid::Resolution::YAxis::NonMetric::isReadOnly();
             }
             break;
-            default: //TODO Calc/Draw
+            case DRAW_MODE:
+            {
+                if (lcl_IsMetricSystem())
+                    bReadOnly = officecfg::Office::Draw::Grid::Resolution::YAxis::Metric::isReadOnly();
+                else
+                    bReadOnly = officecfg::Office::Draw::Grid::Resolution::YAxis::NonMetric::isReadOnly();
+            }
+            break;
+            default: //TODO Calc
                 break;
         }
         m_xMtrFldDrawY->set_sensitive(!bReadOnly);
@@ -338,7 +363,8 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
             case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Subdivision::XAxis::isReadOnly(); break;
             case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Subdivision::XAxis::isReadOnly(); break;
             case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Subdivision::XAxis::isReadOnly(); break;
-            default: //TODO Calc/Draw
+            case DRAW_MODE: bReadOnly = officecfg::Office::Draw::Grid::Subdivision::XAxis::isReadOnly(); break;
+            default: //TODO Calc
                 break;
         }
         m_xNumFldDivisionX->set_sensitive(!bReadOnly);
@@ -349,7 +375,8 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
             case WRITER_MODE: bReadOnly = officecfg::Office::Writer::Grid::Subdivision::YAxis::isReadOnly(); break;
             case HTML_MODE: bReadOnly = officecfg::Office::WriterWeb::Grid::Subdivision::YAxis::isReadOnly(); break;
             case IMPRESS_MODE: bReadOnly = officecfg::Office::Impress::Grid::Subdivision::YAxis::isReadOnly(); break;
-            default: //TODO Calc/Draw
+            case DRAW_MODE: bReadOnly = officecfg::Office::Draw::Grid::Subdivision::YAxis::isReadOnly(); break;
+            default: //TODO Calc
                 break;
         }
         m_xNumFldDivisionY->set_sensitive(!bReadOnly);
@@ -421,7 +448,11 @@ IMPL_LINK(SvxGridTabPage, ChangeDrawHdl_Impl, weld::MetricSpinButton&, rField, v
 IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl, weld::Toggleable&, void)
 {
     if (m_xCbxRotate->get_active())
-        m_xMtrFldAngle->set_sensitive(!officecfg::Office::Impress::Snap::Position::RotatingValue::isReadOnly());
+    {
+        m_xMtrFldAngle->set_sensitive(m_Emode == DRAW_MODE ?
+            !officecfg::Office::Draw::Snap::Position::RotatingValue::isReadOnly() :
+            !officecfg::Office::Impress::Snap::Position::RotatingValue::isReadOnly());
+    }
     else
         m_xMtrFldAngle->set_sensitive(false);
 }
