@@ -40,6 +40,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileurl.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <utility>
 
@@ -931,8 +932,10 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
 
                         if (aRequest.isApproved())
                         {
+                            // lok: we want to overwrite file in jail, so don't use template flag
+                            const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
                             rDescriptor[utl::MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
-                            rDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= true;
+                            rDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsLOK;
                             rDescriptor["RepairPackage"] <<= true;
                         }
                         else
