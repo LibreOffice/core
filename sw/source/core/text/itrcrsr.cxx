@@ -1371,7 +1371,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
         if ( pPor->InSpaceGrp() && nSpaceAdd )
         {
             const_cast<SwTextSizeInfo&>(GetInfo()).SetIdx( nCurrStart );
-            nWidth = nWidth + sal_uInt16( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
+            nWidth = nWidth + sal_Int16( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
         }
         if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||
             ( pPor->IsMultiPortion() && static_cast<SwMultiPortion*>(pPor)->HasTabulator() )
@@ -1415,7 +1415,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             if ( pPor->InSpaceGrp() && nSpaceAdd )
             {
                 const_cast<SwTextSizeInfo&>(GetInfo()).SetIdx( nCurrStart );
-                nWidth = nWidth + sal_uInt16( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
+                nWidth = nWidth + sal_Int16( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
             }
 
             if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||

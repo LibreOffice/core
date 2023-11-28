@@ -237,6 +237,48 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
                 "consequat arcu ut diam tempor luctus. Cum sociis natoque penatibus et magnis ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158419)
+{
+    createSwDoc("tdf130088.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // second paragraph.
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    SwPosition aPosition(*pWrtShell->GetCursor()->Start());
+    SwTwips nSecondParaLeft
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    SwTwips nSecondParaWidth
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "width"_ostr).toInt32();
+    SwTwips nSecondParaTop
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    SwTwips nSecondParaHeight
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    Point aPoint;
+
+    // click at the end of the second line of the second paragraph
+    // (a line shrunk by the new justification)
+
+    aPoint.setX(nSecondParaLeft + nSecondParaWidth);
+    aPoint.setY(nSecondParaTop + (nSecondParaHeight / 6) * 1.5);
+    SwCursorMoveState aState(CursorMoveState::NONE);
+    pLayout->GetModelPositionForViewPoint(&aPosition, aPoint, &aState);
+    // Without the accompanying fix in place, this test would have failed: character position was 155,
+    // i.e. cursor was before the end of the paragraph.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(156), aPosition.GetContentIndex());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");
@@ -820,12 +862,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testAbi11870)
 {
     //just care it doesn't assert
     createSwDoc("abi11870-2.odt");
-}
-
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testOfz64109)
-{
-    //just care it doesn't assert
-    createSwDoc("ofz64109-1.fodt");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf118719)

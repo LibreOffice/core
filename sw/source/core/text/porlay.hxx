@@ -192,12 +192,7 @@ public:
         else
             (*m_pLLSpaceAdd)[ nIdx ] = nNew;
     }
-    tools::Long GetLLSpaceAdd( sal_uInt16 nIdx, bool bShrink = false )
-    {
-        // get shrink data only if asked explicitly, otherwise zero it
-        return ( bShrink || (*m_pLLSpaceAdd)[ nIdx ] < LONG_MAX/2 )
-            ? (*m_pLLSpaceAdd)[ nIdx ] : 0;
-    }
+    tools::Long GetLLSpaceAdd( sal_uInt16 nIdx ) { return (*m_pLLSpaceAdd)[ nIdx ]; }
     void RemoveFirstLLSpaceAdd() { m_pLLSpaceAdd->erase( m_pLLSpaceAdd->begin() ); }
     std::vector<tools::Long>* GetpLLSpaceAdd() const { return m_pLLSpaceAdd.get(); }
 
