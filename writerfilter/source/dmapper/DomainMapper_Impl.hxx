@@ -261,22 +261,6 @@ public:
     std::vector<FieldParagraph>& GetParagraphsToFinish() { return m_aParagraphsToFinish; }
 };
 
-struct TextAppendContext
-{
-    css::uno::Reference<css::text::XTextAppend> xTextAppend;
-    css::uno::Reference<css::text::XTextRange> xInsertPosition;
-    css::uno::Reference<css::text::XParagraphCursor> xCursor;
-    ParagraphPropertiesPtr pLastParagraphProperties;
-
-    /**
-     * Objects anchored to the current paragraph, may affect the paragraph
-     * spacing.
-     */
-    std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
-
-    inline TextAppendContext(css::uno::Reference<css::text::XTextAppend> xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur);
-};
-
 struct AnchoredContext
 {
     css::uno::Reference<css::text::XTextContent> xTextContent;
@@ -416,6 +400,27 @@ struct AnchoredObjectsInfo
     std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
 };
 
+struct TextAppendContext
+{
+    css::uno::Reference<css::text::XTextAppend> xTextAppend;
+    css::uno::Reference<css::text::XParagraphCursor> xCursor;
+    css::uno::Reference<css::text::XTextRange> xInsertPosition;
+    ParagraphPropertiesPtr pLastParagraphProperties;
+
+    /**
+     * Objects anchored to the current paragraph, may affect the paragraph
+     * spacing.
+     */
+    std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
+
+    TextAppendContext(css::uno::Reference<css::text::XTextAppend> const& i_xAppend,
+                      css::uno::Reference<css::text::XTextCursor> const& i_xCursor)
+        : xTextAppend(i_xAppend)
+        , xCursor(i_xCursor, css::uno::UNO_QUERY)
+        , xInsertPosition(xCursor)
+    {}
+};
+
 struct SymbolData
 {
     sal_Unicode cSymbol;
@@ -424,12 +429,6 @@ struct SymbolData
         cSymbol(),
         sFont()
     { }
-};
-
-enum class PagePartType
-{
-    Header,
-    Footer
 };
 
 class DomainMapper;
@@ -691,7 +690,13 @@ public:
 
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();
-    void RemoveLastParagraph( );
+    void RemoveLastParagraph();
+
+    void checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, PageType eType);
+    void prepareHeaderFooterContent(css::uno::Reference<css::beans::XPropertySet> const& xPageStyle,
+                                    PagePartType ePagePartType, PropertyIds eID,
+                                    bool bAppendToHeaderAndFooterTextStack);
+
     void SetIsDecimalComma() { m_bIsDecimalComma = true; };
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
@@ -858,7 +863,7 @@ public:
     /// Get the first pending shape, if there are any.
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
 
-    void PopPageHeaderFooter();
+    void PopPageHeaderFooter(PagePartType ePagePartType, PageType eType);
     bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
     void ConvertHeaderFooterToTextFrame(bool, bool);
     static void fillEmptyFrameProperties(std::vector<css::beans::PropertyValue>& rFrameProperties, bool bSetAnchorToChar);
@@ -1219,13 +1224,6 @@ private:
 
     std::unordered_map<OUString, CommentProperties> m_aCommentProps;
 };
-
-TextAppendContext::TextAppendContext(css::uno::Reference<css::text::XTextAppend> xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur)
-    : xTextAppend(std::move(xAppend))
-{
-    xCursor.set(xCur, css::uno::UNO_QUERY);
-    xInsertPosition = xCursor;
-}
 
 } //namespace writerfilter::dmapper
 

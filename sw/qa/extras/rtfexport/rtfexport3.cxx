@@ -258,17 +258,32 @@ DECLARE_RTFEXPORT_TEST(testTdf117268, "tdf117268.rtf")
     CPPUNIT_ASSERT_EQUAL(xCell, xAnchorCell);
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf117505, "tdf117505.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf117505)
 {
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
-    uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"),
-                                                   uno::UNO_QUERY);
-    // This was 499, small header height resulted in visible whitespace from
-    // remaining top margin -> header content moved down.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1499),
-                         getProperty<sal_Int32>(xFirstPage, "HeaderHeight"));
+    createSwDoc("tdf117505.odt");
+    {
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
+        uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"),
+                                                       uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1499),
+                             getProperty<sal_Int32>(xFirstPage, "HeaderHeight"));
+    }
+    // When saving to rtf:
+    saveAndReload("Rich Text Format");
+
+    {
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
+        uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("Standard"),
+                                                       uno::UNO_QUERY);
+        // This was 499, small header height resulted in visible whitespace from
+        // remaining top margin -> header content moved down.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1499),
+                             getProperty<sal_Int32>(xFirstPage, "HeaderHeight"));
+    }
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf112520, "tdf112520.docx")

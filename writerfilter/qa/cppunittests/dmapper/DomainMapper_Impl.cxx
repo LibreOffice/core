@@ -38,6 +38,7 @@ public:
     }
 };
 
+// TODO HEADER FOOTER TEST
 CPPUNIT_TEST_FIXTURE(Test, testPageBreakFooterTable)
 {
     // Load a document which refers to a footer which ends with a table, and there is a page break

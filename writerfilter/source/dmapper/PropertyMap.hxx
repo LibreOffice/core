@@ -21,6 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -201,11 +202,29 @@ protected:
     }
 };
 
+/** Type of an page, which has an effect which headers and/or footers will be used. */
 enum class PageType
 {
     FIRST,
     LEFT,
     RIGHT
+};
+
+/** Which page part we are refering to.
+ * This is mainly introduced to avoid having cryptic bools as input parameter.*/
+enum class PagePartType
+{
+    Header,
+    Footer
+};
+
+/** A page break type to force what the next page type will be.
+ * For example - the next page is forced to be even (left) or odd (right). */
+enum class PageBreakType
+{
+    Even,
+    Odd,
+    Both
 };
 
 class SectionPropertyMap : public PropertyMap
@@ -233,10 +252,8 @@ private:
     bool                                            m_bIsFirstSection;
     css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
 
-    OUString                                        m_sFirstPageStyleName;
-    OUString                                        m_sFollowPageStyleName;
-    css::uno::Reference< css::beans::XPropertySet > m_aFirstPageStyle;
-    css::uno::Reference< css::beans::XPropertySet > m_aFollowPageStyle;
+    OUString m_sPageStyleName;
+    css::uno::Reference<css::beans::XPropertySet> m_aPageStyle;
 
     std::optional< css::table::BorderLine2 >      m_oBorderLines[4];
     sal_Int32                                       m_nBorderDistances[4];
@@ -285,12 +302,12 @@ private:
 
     // The "Link To Previous" flag indicates whether the header/footer
     // content should be taken from the previous section
-    bool                                            m_bDefaultHeaderLinkToPrevious;
-    bool                                            m_bEvenPageHeaderLinkToPrevious;
-    bool                                            m_bFirstPageHeaderLinkToPrevious;
-    bool                                            m_bDefaultFooterLinkToPrevious;
-    bool                                            m_bEvenPageFooterLinkToPrevious;
-    bool                                            m_bFirstPageFooterLinkToPrevious;
+    bool m_bDefaultHeaderLinkToPrevious = true;
+    bool m_bEvenPageHeaderLinkToPrevious = true;
+    bool m_bFirstPageHeaderLinkToPrevious = true;
+    bool m_bDefaultFooterLinkToPrevious = true;
+    bool m_bEvenPageFooterLinkToPrevious = true;
+    bool m_bFirstPageFooterLinkToPrevious = true;
 
     void ApplyProperties_( const css::uno::Reference< css::beans::XPropertySet >& xStyle );
 
@@ -302,25 +319,17 @@ private:
     /// Check if document is protected. If so, ensure a section exists, and apply its protected value.
     void ApplyProtectionProperties( css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
 
-    css::uno::Reference< css::text::XTextColumns > ApplyColumnProperties( const css::uno::Reference< css::beans::XPropertySet >& xFollowPageStyle,
-                                                                          DomainMapper_Impl& rDM_Impl);
+    css::uno::Reference< css::text::XTextColumns > ApplyColumnProperties(const css::uno::Reference<css::beans::XPropertySet>& xPageStyle,
+                                                                         DomainMapper_Impl& rDM_Impl);
 
-    void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
+    void CopyLastHeaderFooter(DomainMapper_Impl& rDM_Impl);
 
-    static void CopyHeaderFooter( const DomainMapper_Impl& rDM_Impl,
-                                  const css::uno::Reference< css::beans::XPropertySet >& xPrevStyle,
-                                  const css::uno::Reference< css::beans::XPropertySet >& xStyle,
-                                  bool bOmitRightHeader = false, bool bOmitLeftHeader = false,
-                                  bool bOmitRightFooter = false, bool bOmitLeftFooter = false );
+    void CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl, PageBreakType eBreakType);
 
-    static void CopyHeaderFooterTextProperty( const css::uno::Reference< css::beans::XPropertySet >& xPrevStyle,
-                                              const css::uno::Reference< css::beans::XPropertySet >& xStyle,
-                                              PropertyIds ePropId );
+    void PrepareHeaderFooterProperties();
 
-    void PrepareHeaderFooterProperties( bool bFirstPage );
-
-    bool HasHeader( bool bFirstPage ) const;
-    bool HasFooter( bool bFirstPage ) const;
+    bool HasHeader() const;
+    bool HasFooter() const;
 
     static void SetBorderDistance( const css::uno::Reference< css::beans::XPropertySet >& xStyle,
                                    PropertyIds eMarginId,
@@ -342,12 +351,15 @@ public:
 
     const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
 
-    css::uno::Reference< css::beans::XPropertySet > GetPageStyle( DomainMapper_Impl& rDM_Impl, bool bFirst );
+    css::uno::Reference<css::beans::XPropertySet> GetPageStyle(DomainMapper_Impl& rDM_Impl);
 
-    const OUString& GetPageStyleName( bool bFirstPage = false )
+    const OUString& GetPageStyleName()
     {
-        return bFirstPage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
+        return m_sPageStyleName;
     }
+
+    bool getFirstPageHeader() { return m_bFirstPageHeaderLinkToPrevious; }
+    bool getFirstPageFooter() { return m_bFirstPageFooterLinkToPrevious; }
 
     // @throws css::beans::UnknownPropertyException
     // @throws css::beans::PropertyVetoException
@@ -405,8 +417,19 @@ public:
 
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
     // Handling of margins, header and footer for any kind of sections breaks.
-    void HandleMarginsHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
-    void ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType );
+    void HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl);
+    void clearHeaderFooterLinkToPrevious(PagePartType ePartType, PageType eType);
+    void setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl);
+
+    // Which headers/footer types are used (have been imported) by the current section.
+    bool m_bFirstHeader = false;
+    bool m_bFirstFooter = false;
+    bool m_bLeftHeader = false;
+    bool m_bLeftFooter = false;
+    bool m_bRightHeader = false;
+    bool m_bRightFooter = false;
+
+    static void removeXTextContent(css::uno::Reference<css::text::XText> const& rxText);
 };
 
 void BeforeConvertToTextFrame(std::deque<css::uno::Any>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
