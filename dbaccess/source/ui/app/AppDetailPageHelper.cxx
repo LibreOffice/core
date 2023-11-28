@@ -761,7 +761,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType eType,
 std::unique_ptr<weld::TreeIter> OAppDetailPageHelper::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
     std::unique_ptr<weld::TreeIter> xRet;
-    DBTreeViewBase* pTreeView = m_aLists[_eType].get();
+    DBTreeViewBase* pTreeView = _eType != E_NONE ? m_aLists[_eType].get() : nullptr;
     if (!pTreeView)
         return xRet;
     weld::TreeView& rTreeView = pTreeView->GetWidget();
