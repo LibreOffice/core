@@ -12,7 +12,6 @@
     </style>
 
     <style name="LibreOfficeTheme.Toolbar" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/toolbar_background</item>
     </style>
 
     <style name="LibreOfficeTheme.NavigationView">

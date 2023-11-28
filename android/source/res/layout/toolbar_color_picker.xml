@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:background="@color/toolbar_background"
+    android:background="?attr/colorPrimary"
     android:elevation="3dp"
     android:orientation="vertical"
     app:popupTheme="@style/LibreOfficeTheme.Toolbar"

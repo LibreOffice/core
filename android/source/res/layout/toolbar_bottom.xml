@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:background="@color/toolbar_background"
+    android:background="?attr/colorPrimary"
     android:elevation="3dp"
     android:orientation="vertical"
     app:popupTheme="@style/LibreOfficeTheme.Toolbar"
@@ -391,7 +391,7 @@
                                         android:paddingTop="12dp"
                                         android:textSize="14sp"
                                         android:gravity="center_vertical"
-                                        android:textColor="@color/fontBlack"
+                                        android:textColor="?android:attr/textColorPrimary"
                                         android:layout_alignParentLeft="true"
 
                                         />
@@ -420,7 +420,7 @@
                                         android:paddingTop="12dp"
                                         android:textSize="14sp"
                                         android:gravity="center_vertical"
-                                        android:textColor="@color/fontBlack"
+                                        android:textColor="?android:attr/textColorPrimary"
                                         android:layout_alignParentLeft="true"
 
                                         />
