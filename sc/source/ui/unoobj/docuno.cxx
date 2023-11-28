@@ -892,6 +892,12 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     }
 }
 
+OUString ScModelObj::hyperlinkInfoAtPosition(int /*x*/, int /*y*/)
+{
+    // To be implemented..
+    return OUString();
+}
+
 uno::Reference<datatransfer::XTransferable> ScModelObj::getSelection()
 {
     SolarMutexGuard aGuard;

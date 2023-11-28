@@ -2699,6 +2699,12 @@ void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
     }
 }
 
+OUString SdXImpressDocument::hyperlinkInfoAtPosition(int /*x*/, int /*y*/)
+{
+    // To be implemented..
+    return OUString();
+}
+
 uno::Reference<datatransfer::XTransferable> SdXImpressDocument::getSelection()
 {
     SolarMutexGuard aGuard;
