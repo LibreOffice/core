@@ -26,6 +26,8 @@ class SdPrintOptions final : public SfxTabPage
     friend class SdModule;
 
 private:
+    bool m_bDrawMode;
+
     std::unique_ptr<weld::Frame> m_xFrmContent;
     std::unique_ptr<weld::CheckButton> m_xCbxDraw;
     std::unique_ptr<weld::CheckButton> m_xCbxNotes;

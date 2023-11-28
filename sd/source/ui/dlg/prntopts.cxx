@@ -23,12 +23,14 @@
 #include <app.hrc>
 #include <svl/intitem.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Draw.hxx>
 
 /**
  *  dialog to adjust print options
  */
 SdPrintOptions::SdPrintOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "modules/simpress/ui/prntopts.ui", "prntopts", &rInAttrs)
+    , m_bDrawMode(false)
     , m_xFrmContent(m_xBuilder->weld_frame("contentframe"))
     , m_xCbxDraw(m_xBuilder->weld_check_button("drawingcb"))
     , m_xCbxNotes(m_xBuilder->weld_check_button("notecb"))
@@ -200,41 +202,59 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
             m_xRbtBlackWhite->set_active(true);
     }
 
-    bool bReadOnly = officecfg::Office::Impress::Print::Page::PageSize::isReadOnly() ||
-        officecfg::Office::Impress::Print::Page::PageTile::isReadOnly() ||
-        officecfg::Office::Impress::Print::Page::Booklet::isReadOnly();
+    bool bReadOnly = false;
+    if (m_bDrawMode)
+    {
+        bReadOnly = officecfg::Office::Draw::Print::Page::PageSize::isReadOnly() ||
+            officecfg::Office::Draw::Print::Page::PageTile::isReadOnly() ||
+            officecfg::Office::Draw::Print::Page::Booklet::isReadOnly();
+    }
+    else
+    {
+        bReadOnly = officecfg::Office::Impress::Print::Page::PageSize::isReadOnly() ||
+            officecfg::Office::Impress::Print::Page::PageTile::isReadOnly() ||
+            officecfg::Office::Impress::Print::Page::Booklet::isReadOnly();
+    }
     m_xGridPageOpt->set_sensitive(!bReadOnly);
     m_xRbtPageOptImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Print::Page::BookletFront::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Page::BookletFront::isReadOnly() :
+        officecfg::Office::Impress::Print::Page::BookletFront::isReadOnly();
     m_xCbxFront->set_sensitive(!bReadOnly);
     m_xCbxFrontImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Print::Page::BookletBack::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Page::BookletBack::isReadOnly() :
+        officecfg::Office::Impress::Print::Page::BookletBack::isReadOnly();
     m_xCbxBack->set_sensitive(!bReadOnly);
     m_xCbxBackImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Print::Other::FromPrinterSetup::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::FromPrinterSetup::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::FromPrinterSetup::isReadOnly();
     m_xCbxPaperbin->set_sensitive(!bReadOnly);
     m_xCbxPaperbinImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Print::Other::PageName::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::PageName::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::PageName::isReadOnly();
     m_xCbxPagename->set_sensitive(!bReadOnly);
     m_xCbxPagenameImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Print::Other::Date::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::Date::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::Date::isReadOnly();
     m_xCbxDate->set_sensitive(!bReadOnly);
     m_xCbxDateImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Print::Other::Time::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::Time::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::Time::isReadOnly();
     m_xCbxTime->set_sensitive(!bReadOnly);
     m_xCbxTimeImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Print::Other::HiddenPage::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::HiddenPage::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::HiddenPage::isReadOnly();
     m_xCbxHiddenPages->set_sensitive(!bReadOnly);
     m_xCbxHiddenPagesImg->set_visible(bReadOnly);
 
-    bReadOnly = officecfg::Office::Impress::Print::Other::Quality::isReadOnly();
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::Quality::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::Quality::isReadOnly();
     m_xRbtColor->set_sensitive(!bReadOnly);
     m_xRbtGrayscale->set_sensitive(!bReadOnly);
     m_xRbtBlackWhite->set_sensitive(!bReadOnly);
@@ -281,13 +301,25 @@ IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl, weld::Toggleable&, void)
 
 void SdPrintOptions::updateControls()
 {
-    m_xCbxFront->set_sensitive(m_xRbtBooklet->get_active() && !officecfg::Office::Impress::Print::Page::BookletFront::isReadOnly());
-    m_xCbxBack->set_sensitive(m_xRbtBooklet->get_active() && !officecfg::Office::Impress::Print::Page::BookletBack::isReadOnly());
+    bool bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Page::BookletFront::isReadOnly() :
+        officecfg::Office::Impress::Print::Page::BookletFront::isReadOnly();
+    m_xCbxFront->set_sensitive(m_xRbtBooklet->get_active() && !bReadOnly);
 
-    m_xCbxDate->set_sensitive( !m_xRbtBooklet->get_active() && !officecfg::Office::Impress::Print::Other::Date::isReadOnly() );
-    m_xCbxTime->set_sensitive( !m_xRbtBooklet->get_active() && !officecfg::Office::Impress::Print::Other::Time::isReadOnly() );
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Page::BookletBack::isReadOnly() :
+        officecfg::Office::Impress::Print::Page::BookletBack::isReadOnly();
+    m_xCbxBack->set_sensitive(m_xRbtBooklet->get_active() && !bReadOnly);
 
-    m_xCbxPagename->set_sensitive( !m_xRbtBooklet->get_active() && !officecfg::Office::Impress::Print::Other::PageName::isReadOnly() &&
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::Date::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::Date::isReadOnly();
+    m_xCbxDate->set_sensitive(!m_xRbtBooklet->get_active() && !bReadOnly);
+
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::Time::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::Time::isReadOnly();
+    m_xCbxTime->set_sensitive(!m_xRbtBooklet->get_active() && !bReadOnly);
+
+    bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Print::Other::PageName::isReadOnly() :
+        officecfg::Office::Impress::Print::Other::PageName::isReadOnly();
+    m_xCbxPagename->set_sensitive( !m_xRbtBooklet->get_active() && !bReadOnly &&
         (m_xCbxDraw->get_active() || m_xCbxNotes->get_active() || m_xCbxOutline->get_active()) );
 }
 
@@ -299,20 +331,18 @@ void    SdPrintOptions::SetDrawMode()
     }
 }
 
-void SdPrintOptions::PageCreated (const SfxAllItemSet&
-#ifdef MACOSX
-                                  aSet
-#endif
-                                  )
+void SdPrintOptions::PageCreated (const SfxAllItemSet& aSet)
 {
-#ifdef MACOSX
     const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_SDMODE_FLAG, false);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SD_DRAW_MODE ) == SD_DRAW_MODE )
-            SetDrawMode();
+            m_bDrawMode = true;
     }
+#ifdef MACOSX
+    if (m_bDrawMode)
+        SetDrawMode();
 #else
     SetDrawMode();
 #endif
