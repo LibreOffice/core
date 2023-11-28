@@ -141,8 +141,10 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
                     if ( aRequest.isApproved() )
                     {
                         aTypeName = aRequestedTypeName;
+                        // lok: we want to overwrite file in jail, so don't use template flag
+                        const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
                         aMediaDesc[MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
-                        aMediaDesc[MediaDescriptor::PROP_ASTEMPLATE] <<= true;
+                        aMediaDesc[MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsLOK;
                         aMediaDesc["RepairPackage"] <<= true;
                     }
                     else
