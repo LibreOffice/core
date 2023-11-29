@@ -61,7 +61,6 @@ using namespace ::com::sun::star::i18n;
 using namespace ::xmloff::token;
 
 
-const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 constexpr OUStringLiteral XML_NULLDATE = u"NullDate";
 
 struct SvXMLUnitConverter::Impl
@@ -444,6 +443,16 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     else
         fCount = 0.0;
     const int nDigits = sal_Int16(fCount) + 4;  // +4 for *86400 in seconds
+
+    // Since the beginning from initial source code import this was 11 without
+    // further explanation, effectively limiting fractions in ~current
+    // date+time to 2 decimals (maybe because old class Time code had a
+    // resolution of only 100th seconds). Preserve at least milliseconds, but
+    // strive for more.
+    // NOTE: sax/source/tools/converter.cxx uses 14-5 in a different context
+    // rounding nanoseconds and fractions of seconds.
+    constexpr int XML_MAXDIGITSCOUNT_TIME = 14;
+
     const int nFractionDecimals = std::max( XML_MAXDIGITSCOUNT_TIME - nDigits, 0);
 
     sal_uInt16 nHour, nMinute, nSecond;
