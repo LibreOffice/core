@@ -1328,8 +1328,13 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         SetNeedsListeningGroups(aGroupPos);
 
         for (i=nStartTab; i<=nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
+        {
             if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
+            {
                 maTabs[i]->InsertRow( nStartCol, nEndCol, nStartRow, nSize );
+                maTabs[i]->CommentNotifyAddressChange(nStartCol, nStartRow, nEndCol, MaxRow());
+            }
+        }
 
         //  UpdateRef for drawing layer must be after inserting,
         //  when the new row heights are known.
@@ -1449,8 +1454,13 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     std::vector<ScAddress> aGroupPos;
 
     for ( i = nStartTab; i <= nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
+    {
         if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
+        {
             maTabs[i]->DeleteRow(aCxt.maRegroupCols, nStartCol, nEndCol, nStartRow, nSize, pUndoOutline, &aGroupPos);
+            maTabs[i]->CommentNotifyAddressChange(nStartCol, nStartRow, nEndCol, MaxRow());
+        }
+    }
 
     // Newly joined groups have some of their members still listening.  We
     // need to make sure none of them are listening.

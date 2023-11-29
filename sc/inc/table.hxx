@@ -508,6 +508,7 @@ public:
     SCROW GetNotePosition( SCCOL nCol, size_t nIndex ) const;
     void CreateAllNoteCaptions();
     void ForgetNoteCaptions( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bPreserveData );
+    void CommentNotifyAddressChange(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
 
     void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
     void GetNotesInRange( const ScRange& rRange, std::vector<sc::NoteEntry>& rNotes ) const;
