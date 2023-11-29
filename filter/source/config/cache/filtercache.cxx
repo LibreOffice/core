@@ -768,7 +768,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(std::un
                 return m_xConfigTypes;
             sPath           = CFGPACKAGE_TD_TYPES;
             pConfig         = &m_xConfigTypes;
-            sRtlLog         = "impl_openconfig(E_PROVIDER_TYPES)";
+            sRtlLog         = "impl_openconfig(E_PROVIDER_TYPES)"_ostr;
         }
         break;
 
@@ -778,7 +778,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(std::un
                 return m_xConfigFilters;
             sPath           = CFGPACKAGE_TD_FILTERS;
             pConfig         = &m_xConfigFilters;
-            sRtlLog         = "impl_openconfig(E_PROVIDER_FILTERS)";
+            sRtlLog         = "impl_openconfig(E_PROVIDER_FILTERS)"_ostr;
         }
         break;
 
@@ -788,7 +788,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(std::un
                 return m_xConfigOthers;
             sPath   = CFGPACKAGE_TD_OTHERS;
             pConfig = &m_xConfigOthers;
-            sRtlLog = "impl_openconfig(E_PROVIDER_OTHERS)";
+            sRtlLog = "impl_openconfig(E_PROVIDER_OTHERS)"_ostr;
         }
         break;
 
@@ -798,7 +798,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(std::un
             // the old configuration format only. It's not cached!
             sPath   = CFGPACKAGE_TD_OLD;
             pConfig = &xOld;
-            sRtlLog = "impl_openconfig(E_PROVIDER_OLD)";
+            sRtlLog = "impl_openconfig(E_PROVIDER_OLD)"_ostr;
         }
         break;
 

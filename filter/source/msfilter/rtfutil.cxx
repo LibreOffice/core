@@ -31,7 +31,7 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
     SvGlobalName aName;
     if (rClassName == "PBrush")
     {
-        aAnsiUserType = "Bitmap Image";
+        aAnsiUserType = "Bitmap Image"_ostr;
         aName = SvGlobalName(0x0003000A, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);
     }
     else
@@ -40,7 +40,7 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
         {
             SAL_WARN("filter.ms", "WrapOle1InOle2: unexpected class name: '" << rClassName << "'");
         }
-        aAnsiUserType = "OLE Package";
+        aAnsiUserType = "OLE Package"_ostr;
         aName = SvGlobalName(0x0003000C, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);
     }
     pStorage->SetClass(aName, SotClipboardFormatId::NONE, "");
