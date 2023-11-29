@@ -3099,6 +3099,8 @@ void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     BitmapEx aImage = pDevice->GetBitmapEx(Point(0,0), aRenderSize);
     aImage.Scale(aOutputSize);
+    rJsonWriter.put("imagewidth", aRenderSize.Width());
+    rJsonWriter.put("imageheight", aRenderSize.Height());
 
     SvMemoryStream aOStm(65535, 65535);
     if(GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
