@@ -28,7 +28,7 @@ OString OOO_DLLPUBLIC_TEST getTextSelection(
     {
         if (o3tl::getToken(mimeType, 0, ';', nIndex) == "charset=utf-8")
         {
-            mimeType = "text/plain;charset=utf-16";
+            mimeType = "text/plain;charset=utf-16"_ostr;
             bConvert = true;
         }
     }
