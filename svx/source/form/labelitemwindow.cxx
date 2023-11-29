@@ -50,7 +50,8 @@ void LabelItemWindow::set_label(const OUString& rLabel, const LabelItemWindowTyp
         m_xLabel->set_font_color(Color(0x00, 0x47, 0x85));
         m_xBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
     }
-    m_xLabel->set_visible(!rLabel.isEmpty());
+    m_xLabel->set_visible(
+        true); // always show and not just if !rLabel.isEmpty() to not make the chevron appear
 }
 
 OUString LabelItemWindow::get_label() const { return m_xLabel->get_label(); }
