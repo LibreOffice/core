@@ -376,8 +376,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
     if ( !(nPosX != nOldX || nPosY != nOldY || bNew) )
     {
-        ScAddress aCell = GetViewData().GetCurPos();
-        HighlightOverlay(aCell);
+        HighlightOverlay();
         return;
     }
 
@@ -395,8 +394,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
     ShowAllCursors();
 
-    ScAddress aCell = aViewData.GetCurPos();
-    HighlightOverlay(aCell);
+    HighlightOverlay();
 
     CursorPosChanged();
 
@@ -1692,7 +1690,7 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
     }
 }
 
-void ScTabView::HighlightOverlay(const ScAddress& rCell)
+void ScTabView::HighlightOverlay()
 {
     if (!officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get())
     {
@@ -1701,15 +1699,16 @@ void ScTabView::HighlightOverlay(const ScAddress& rCell)
         return;
     }
 
-    SCROW nRow = rCell.Row();
-    SCCOL nCol = rCell.Col();
+    ScAddress aCell = GetViewData().GetCurPos();
+    SCROW nRow = aCell.Row();
+    SCCOL nCol = aCell.Col();
 
     bool nModifier = false;         // modifier key pressed?
     DoneBlockModeHighlight( nModifier );
-    InitBlockModeHighlight( nCol, 0, rCell.Tab(), true, false);
+    InitBlockModeHighlight( nCol, 0, aCell.Tab(), true, false);
     nModifier = true;
     DoneBlockModeHighlight( nModifier );
-    InitBlockModeHighlight( 0, nRow, rCell.Tab(), false, true );
+    InitBlockModeHighlight( 0, nRow, aCell.Tab(), false, true );
 }
 
 void ScTabView::MarkDataArea( bool bIncludeCursor )

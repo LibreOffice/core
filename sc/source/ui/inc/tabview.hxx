@@ -566,7 +566,7 @@ public:
      * @param nModifier: 0, KEY_SHIFT, KEY_MOD1, KEY_SHIFT | KEY_MOD1
      */
     void            MarkRows(SCROW nRow, sal_Int16 nModifier);
-    void            HighlightOverlay(const ScAddress& rCell);
+    void            HighlightOverlay();
 
     void            MarkDataArea( bool bIncludeCursor = true );
     void            MarkMatrixFormula();
