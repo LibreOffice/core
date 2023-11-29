@@ -1,93 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustmentPOS">
     <property name="lower">-120</property>
     <property name="upper">240</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPOS1">
     <property name="lower">-120</property>
     <property name="upper">240</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentSIZE">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentSIZE1">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkBox" id="PositionAndSize">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="FL_POSITION">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
           <object class="GtkBox" id="box3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">12</property>
-            <property name="homogeneous">True</property>
+            <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
+            <property name="spacing">12</property>
+            <property name="homogeneous">True</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=2 -->
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="FT_POS_X">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="possizetabpage|FT_POS_X">Position _X:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">MTR_FLD_POS_X</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">MTR_FLD_POS_X</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="FT_POS_Y">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="possizetabpage|FT_POS_Y">Position _Y:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">MTR_FLD_POS_Y</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">MTR_FLD_POS_Y</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="MTR_FLD_POS_X">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="halign">start</property>
-                    <property name="activates_default">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPOS</property>
                     <property name="digits">2</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_POS_X-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|MTR_FLD_POS_X">Enter the horizontal distance that you want to move the object relative to the base point selected in the grid.</property>
@@ -95,19 +95,19 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="MTR_FLD_POS_Y">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="halign">start</property>
-                    <property name="activates_default">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPOS1</property>
                     <property name="digits">4</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_POS_Y-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|MTR_FLD_POS_Y">Enter the vertical distance that you want to move the object relative to the base point selected in the grid.</property>
@@ -115,8 +115,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
               </object>
@@ -129,26 +129,26 @@
             <child>
               <object class="GtkBox" id="box4">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">never</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkViewport">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkDrawingArea" id="CTL_POSRECT">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="CTL_POSRECT-atkobject">
@@ -169,10 +169,10 @@
                 <child>
                   <object class="GtkLabel" id="FT_POSREFERENCE">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="possizetabpage|FT_POSREFERENCE">_Base point:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">CTL_POSRECT</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">CTL_POSRECT</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -192,7 +192,7 @@
         <child type="label">
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="possizetabpage|label1">Position</property>
             <property name="xalign">0</property>
             <attributes>
@@ -210,61 +210,61 @@
     <child>
       <object class="GtkFrame" id="FL_SIZE">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
           <object class="GtkBox" id="box5">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">12</property>
-            <property name="homogeneous">True</property>
+            <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
+            <property name="spacing">12</property>
+            <property name="homogeneous">True</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=3 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="FT_WIDTH">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="possizetabpage|FT_WIDTH">Wi_dth:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">MTR_FLD_WIDTH</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">MTR_FLD_WIDTH</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="FT_HEIGHT">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="possizetabpage|FT_HEIGHT">H_eight:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">MTR_FLD_HEIGHT</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">MTR_FLD_HEIGHT</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="MTR_FLD_WIDTH">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="halign">start</property>
-                    <property name="activates_default">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentSIZE</property>
                     <property name="digits">2</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_WIDTH-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|MTR_FLD_WIDTH">Enter a width for the selected object.</property>
@@ -272,19 +272,19 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="MTR_FLD_HEIGHT">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="halign">start</property>
-                    <property name="activates_default">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentSIZE1</property>
                     <property name="digits">2</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_HEIGHT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|MTR_FLD_HEIGHT">Enter a height for the selected object.</property>
@@ -292,18 +292,18 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CBX_SCALE">
                     <property name="label" translatable="yes" context="possizetabpage|CBX_SCALE">_Keep ratio</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="CBX_SCALE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|CBX_SCALE">Maintains proportions when you resize the selected object.</property>
@@ -311,8 +311,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -326,26 +326,26 @@
             <child>
               <object class="GtkBox" id="box6">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">never</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkViewport">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkDrawingArea" id="CTL_SIZERECT">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="CTL_SIZERECT-atkobject">
@@ -366,10 +366,10 @@
                 <child>
                   <object class="GtkLabel" id="FT_SIZEREFERENCE">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="possizetabpage|FT_SIZEREFERENCE">Base _point:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">CTL_SIZERECT</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">CTL_SIZERECT</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -389,7 +389,7 @@
         <child type="label">
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="possizetabpage|label2">Size</property>
             <property name="xalign">0</property>
             <attributes>
@@ -407,32 +407,32 @@
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="spacing">12</property>
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkFrame" id="FL_PROTECT">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
               <object class="GtkBox" id="box7">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="TSB_POSPROTECT">
                     <property name="label" translatable="yes" context="possizetabpage|TSB_POSPROTECT">Positio_n</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
                     <property name="inconsistent">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TSB_POSPROTECT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|TSB_POSPROTECT">Prevents changes to the position or the size of the selected object.</property>
@@ -449,11 +449,11 @@
                   <object class="GtkCheckButton" id="TSB_SIZEPROTECT">
                     <property name="label" translatable="yes" context="possizetabpage|TSB_SIZEPROTECT">_Size</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
                     <property name="inconsistent">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TSB_SIZEPROTECT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|TSB_SIZEPROTECT">Prevents you from resizing the object.</property>
@@ -471,7 +471,7 @@
             <child type="label">
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="possizetabpage|label3">Protect</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -489,26 +489,26 @@
         <child>
           <object class="GtkFrame" id="FL_ADJUST">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
               <object class="GtkBox" id="box8">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="TSB_AUTOGROW_WIDTH">
                     <property name="label" translatable="yes" context="possizetabpage|TSB_AUTOGROW_WIDTH">_Fit width to text</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
                     <property name="inconsistent">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TSB_AUTOGROW_WIDTH-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|TSB_AUTOGROW_WIDTH">Expands the width of the object to the width of the text, if the object is smaller than the text.</property>
@@ -525,11 +525,11 @@
                   <object class="GtkCheckButton" id="TSB_AUTOGROW_HEIGHT">
                     <property name="label" translatable="yes" context="possizetabpage|TSB_AUTOGROW_HEIGHT">Fit _height to text</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
                     <property name="inconsistent">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TSB_AUTOGROW_HEIGHT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|TSB_AUTOGROW_HEIGHT">Expands the height of the object to the height of the text, if the object is smaller than the text.</property>
@@ -547,7 +547,7 @@
             <child type="label">
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="possizetabpage|label4">Adapt</property>
                 <property name="xalign">0</property>
                 <attributes>
