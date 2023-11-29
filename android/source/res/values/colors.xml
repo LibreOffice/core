@@ -4,6 +4,11 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <resources>
+
+    <!-- "?attr/colorBackgroundFloating" could be used directly instead for API level >= 23,
+         but current minimum API level is lower. Overriden for dark theme in values-night/color.xml. -->
+    <color name="background_floating">@color/background_floating_material_light</color>
+
     <color name="background_light">#FAFAFA</color> <!--Material Grey 50-->
     <color name="background_normal">#F5F5F5</color> <!--Material Grey 100-->
     <color name="background_private">#FF292C29</color>
