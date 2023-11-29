@@ -9,11 +9,9 @@
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <!-- extractNativeLibs="true" needed e.g. for NSS to load modules at runtime -->
     <application
         android:name=".LibreOfficeApplication"
         android:allowBackup="true"
-        android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/LibreOfficeTheme"
