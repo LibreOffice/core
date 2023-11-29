@@ -830,7 +830,7 @@ void addField(
     SpecialType specialType;
     PolymorphicUnoType polymorphicUnoType;
     if (typeParameterIndex >= 0) {
-        descriptor = "Ljava/lang/Object;";
+        descriptor = "Ljava/lang/Object;"_ostr;
         signature = "T" + codemaker::convertString(type).replace('.', '/')
             + ";";
         specialType = SPECIAL_TYPE_NONE; //TODO: SPECIAL_TYPE_TYPE_PARAMETER?
@@ -1322,7 +1322,7 @@ sal_uInt16 addDirectArgument(
     OString desc;
     if (typeParameter) {
         methodDescriptor->addTypeParameter(fieldType);
-        desc = "Ljava/lang/Object;";
+        desc = "Ljava/lang/Object;"_ostr;
     } else {
         methodDescriptor->addParameter(fieldType, false, true, nullptr);
         getFieldDescriptor(manager, dependencies, fieldType, &desc, nullptr, nullptr);
@@ -1373,7 +1373,7 @@ void handlePlainStructType(
     OString className(codemaker::convertString(name).replace('.', '/'));
     OString superClass;
     if (entity->getDirectBase().isEmpty()) {
-        superClass = "java/lang/Object";
+        superClass = "java/lang/Object"_ostr;
     } else {
         superClass = codemaker::convertString(entity->getDirectBase()).
             replace('.', '/');
@@ -1570,10 +1570,10 @@ void handleExceptionType(
     OString superClass;
     if (className == "com/sun/star/uno/Exception") {
         baseException = true;
-        superClass = "java/lang/Exception";
+        superClass = "java/lang/Exception"_ostr;
     } else if (className == "com/sun/star/uno/RuntimeException") {
         baseRuntimeException = true;
-        superClass = "java/lang/RuntimeException";
+        superClass = "java/lang/RuntimeException"_ostr;
     } else {
         if (entity->getDirectBase().isEmpty()) {
             throw CannotDumpException(
