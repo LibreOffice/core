@@ -864,6 +864,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testAbi11870)
     createSwDoc("abi11870-2.odt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testOfz64109)
+{
+    //just care it doesn't assert
+    createSwDoc("ofz64109-1.fodt");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf118719)
 {
     // Insert a page break.
