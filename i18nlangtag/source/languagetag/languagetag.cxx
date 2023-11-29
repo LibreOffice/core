@@ -239,7 +239,7 @@ void LiblangtagDataRef::setupDataPath()
     }
 #endif
     if (maDataPath.isEmpty())
-        maDataPath = "|";   // assume system
+        maDataPath = "|"_ostr;   // assume system
     else
         lt_db_set_datadir( maDataPath.getStr());
 }
