@@ -3239,17 +3239,17 @@ void DrawingML::WriteParagraphTabStops(const Reference<XPropertySet>& rXPropSet)
         switch (rTabStop.Alignment)
         {
             case css::style::TabAlign_DECIMAL:
-                sAlignment = "dec";
+                sAlignment = "dec"_ostr;
                 break;
             case css::style::TabAlign_RIGHT:
-                sAlignment = "r";
+                sAlignment = "r"_ostr;
                 break;
             case css::style::TabAlign_CENTER:
-                sAlignment = "ctr";
+                sAlignment = "ctr"_ostr;
                 break;
             case css::style::TabAlign_LEFT:
             default:
-                sAlignment = "l";
+                sAlignment = "l"_ostr;
         }
         mpFS->singleElementNS(XML_a, XML_tab, XML_algn, sAlignment, XML_pos, sPosition);
     }
@@ -4466,10 +4466,10 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     tools::Rectangle aLogicRectLO(rEnhancedCustomShape2d.GetLogicRect());
     if (aTextAreaLO == aLogicRectLO)
     {
-        rTextAreaRect.left = "l";
-        rTextAreaRect.top = "t";
-        rTextAreaRect.right = "r";
-        rTextAreaRect.bottom = "b";
+        rTextAreaRect.left = "l"_ostr;
+        rTextAreaRect.top = "t"_ostr;
+        rTextAreaRect.right = "r"_ostr;
+        rTextAreaRect.bottom = "b"_ostr;
         return;
     }
     // Flip aTextAreaLO if shape is flipped
@@ -4484,7 +4484,7 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     const OString sWidth = OString::number(oox::drawingml::convertHmmToEmu(nWidth));
 
     // left
-    aGuide.sName = "textAreaLeft";
+    aGuide.sName = "textAreaLeft"_ostr;
     sal_Int32 nHelp = aTextAreaLO.Left() - aLogicRectLO.Left();
     const OString sLeft = OString::number(oox::drawingml::convertHmmToEmu(nHelp));
     aGuide.sFormula = "*/ " + sLeft + " w " + sWidth;
@@ -4492,7 +4492,7 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     rGuideList.push_back(aGuide);
 
     // right
-    aGuide.sName = "textAreaRight";
+    aGuide.sName = "textAreaRight"_ostr;
     nHelp = aTextAreaLO.Right() - aLogicRectLO.Left();
     const OString sRight = OString::number(oox::drawingml::convertHmmToEmu(nHelp));
     aGuide.sFormula = "*/ " + sRight + " w " + sWidth;
@@ -4504,7 +4504,7 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     const OString sHeight = OString::number(oox::drawingml::convertHmmToEmu(nHeight));
 
     // top
-    aGuide.sName = "textAreaTop";
+    aGuide.sName = "textAreaTop"_ostr;
     nHelp = aTextAreaLO.Top() - aLogicRectLO.Top();
     const OString sTop = OString::number(oox::drawingml::convertHmmToEmu(nHelp));
     aGuide.sFormula = "*/ " + sTop + " h " + sHeight;
@@ -4512,7 +4512,7 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     rGuideList.push_back(aGuide);
 
     // bottom
-    aGuide.sName = "textAreaBottom";
+    aGuide.sName = "textAreaBottom"_ostr;
     nHelp = aTextAreaLO.Bottom() - aLogicRectLO.Top();
     const OString sBottom = OString::number(oox::drawingml::convertHmmToEmu(nHelp));
     aGuide.sFormula = "*/ " + sBottom + " h " + sHeight;

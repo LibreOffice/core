@@ -980,7 +980,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
 
     // shape with 'lighter'
     sElement = "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/"
-               "a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/";
+               "a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/"_ostr;
 
     // Make sure the fallback in <w:color> has correct values
     assertXPath(pXmlDoc, sElement + "w:color", "val"_ostr, "558ED5");
@@ -1310,7 +1310,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
     assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val"_ostr, "35000");
 
     // Make sure a:alpha is written for characters and fill color is a schemeClr.
-    sElement = "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/";
+    sElement = "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/"_ostr;
     assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr", "val"_ostr, "accent4");
     assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumMod", "val"_ostr, "75000");
     assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val"_ostr, "20000");

@@ -356,13 +356,13 @@ void ThemeExport::writeGradientFill(model::GradientFill const& rGradientFill)
         switch (rGradientFill.meGradientType)
         {
             case model::GradientType::Circle:
-                sPathType = "circle";
+                sPathType = "circle"_ostr;
                 break;
             case model::GradientType::Rectangle:
-                sPathType = "rect";
+                sPathType = "rect"_ostr;
                 break;
             case model::GradientType::Shape:
-                sPathType = "shape";
+                sPathType = "shape"_ostr;
                 break;
             default:
                 break;
@@ -385,166 +385,166 @@ void ThemeExport::writePatternFill(model::PatternFill const& rPatternFill)
     switch (rPatternFill.mePatternPreset)
     {
         case model::PatternPreset::Percent_5:
-            sPresetType = "pct5";
+            sPresetType = "pct5"_ostr;
             break;
         case model::PatternPreset::Percent_10:
-            sPresetType = "pct10";
+            sPresetType = "pct10"_ostr;
             break;
         case model::PatternPreset::Percent_20:
-            sPresetType = "pct20";
+            sPresetType = "pct20"_ostr;
             break;
         case model::PatternPreset::Percent_25:
-            sPresetType = "pct25";
+            sPresetType = "pct25"_ostr;
             break;
         case model::PatternPreset::Percent_30:
-            sPresetType = "pct30";
+            sPresetType = "pct30"_ostr;
             break;
         case model::PatternPreset::Percent_40:
-            sPresetType = "pct40";
+            sPresetType = "pct40"_ostr;
             break;
         case model::PatternPreset::Percent_50:
-            sPresetType = "pct50";
+            sPresetType = "pct50"_ostr;
             break;
         case model::PatternPreset::Percent_60:
-            sPresetType = "pct60";
+            sPresetType = "pct60"_ostr;
             break;
         case model::PatternPreset::Percent_70:
-            sPresetType = "pct70";
+            sPresetType = "pct70"_ostr;
             break;
         case model::PatternPreset::Percent_75:
-            sPresetType = "pct75";
+            sPresetType = "pct75"_ostr;
             break;
         case model::PatternPreset::Percent_80:
-            sPresetType = "pct80";
+            sPresetType = "pct80"_ostr;
             break;
         case model::PatternPreset::Percent_90:
-            sPresetType = "pct90";
+            sPresetType = "pct90"_ostr;
             break;
         case model::PatternPreset::Horizontal:
-            sPresetType = "horz";
+            sPresetType = "horz"_ostr;
             break;
         case model::PatternPreset::Vertical:
-            sPresetType = "vert";
+            sPresetType = "vert"_ostr;
             break;
         case model::PatternPreset::LightHorizontal:
-            sPresetType = "ltHorz";
+            sPresetType = "ltHorz"_ostr;
             break;
         case model::PatternPreset::LightVertical:
-            sPresetType = "ltVert";
+            sPresetType = "ltVert"_ostr;
             break;
         case model::PatternPreset::DarkHorizontal:
-            sPresetType = "dkHorz";
+            sPresetType = "dkHorz"_ostr;
             break;
         case model::PatternPreset::DarkVertical:
-            sPresetType = "dkVert";
+            sPresetType = "dkVert"_ostr;
             break;
         case model::PatternPreset::NarrowHorizontal:
-            sPresetType = "narHorz";
+            sPresetType = "narHorz"_ostr;
             break;
         case model::PatternPreset::NarrowVertical:
-            sPresetType = "narVert";
+            sPresetType = "narVert"_ostr;
             break;
         case model::PatternPreset::DashedHorizontal:
-            sPresetType = "dashHorz";
+            sPresetType = "dashHorz"_ostr;
             break;
         case model::PatternPreset::DashedVertical:
-            sPresetType = "dashVert";
+            sPresetType = "dashVert"_ostr;
             break;
         case model::PatternPreset::Cross:
-            sPresetType = "cross";
+            sPresetType = "cross"_ostr;
             break;
         case model::PatternPreset::DownwardDiagonal:
-            sPresetType = "dnDiag";
+            sPresetType = "dnDiag"_ostr;
             break;
         case model::PatternPreset::UpwardDiagonal:
-            sPresetType = "upDiag";
+            sPresetType = "upDiag"_ostr;
             break;
         case model::PatternPreset::LightDownwardDiagonal:
-            sPresetType = "ltDnDiag";
+            sPresetType = "ltDnDiag"_ostr;
             break;
         case model::PatternPreset::LightUpwardDiagonal:
-            sPresetType = "ltUpDiag";
+            sPresetType = "ltUpDiag"_ostr;
             break;
         case model::PatternPreset::DarkDownwardDiagonal:
-            sPresetType = "dkDnDiag";
+            sPresetType = "dkDnDiag"_ostr;
             break;
         case model::PatternPreset::DarkUpwardDiagonal:
-            sPresetType = "dkUpDiag";
+            sPresetType = "dkUpDiag"_ostr;
             break;
         case model::PatternPreset::WideDownwardDiagonal:
-            sPresetType = "wdDnDiag";
+            sPresetType = "wdDnDiag"_ostr;
             break;
         case model::PatternPreset::WideUpwardDiagonal:
-            sPresetType = "wdUpDiag";
+            sPresetType = "wdUpDiag"_ostr;
             break;
         case model::PatternPreset::DashedDownwardDiagonal:
-            sPresetType = "dashDnDiag";
+            sPresetType = "dashDnDiag"_ostr;
             break;
         case model::PatternPreset::DashedUpwardDiagonal:
-            sPresetType = "dashUpDiag";
+            sPresetType = "dashUpDiag"_ostr;
             break;
         case model::PatternPreset::DiagonalCross:
-            sPresetType = "diagCross";
+            sPresetType = "diagCross"_ostr;
             break;
         case model::PatternPreset::SmallCheckerBoard:
-            sPresetType = "smCheck";
+            sPresetType = "smCheck"_ostr;
             break;
         case model::PatternPreset::LargeCheckerBoard:
-            sPresetType = "lgCheck";
+            sPresetType = "lgCheck"_ostr;
             break;
         case model::PatternPreset::SmallGrid:
-            sPresetType = "smGrid";
+            sPresetType = "smGrid"_ostr;
             break;
         case model::PatternPreset::LargeGrid:
-            sPresetType = "lgGrid";
+            sPresetType = "lgGrid"_ostr;
             break;
         case model::PatternPreset::DottedGrid:
-            sPresetType = "dotGrid";
+            sPresetType = "dotGrid"_ostr;
             break;
         case model::PatternPreset::SmallConfetti:
-            sPresetType = "smConfetti";
+            sPresetType = "smConfetti"_ostr;
             break;
         case model::PatternPreset::LargeConfetti:
-            sPresetType = "lgConfetti";
+            sPresetType = "lgConfetti"_ostr;
             break;
         case model::PatternPreset::HorizontalBrick:
-            sPresetType = "horzBrick";
+            sPresetType = "horzBrick"_ostr;
             break;
         case model::PatternPreset::DiagonalBrick:
-            sPresetType = "diagBrick";
+            sPresetType = "diagBrick"_ostr;
             break;
         case model::PatternPreset::SolidDiamond:
-            sPresetType = "solidDmnd";
+            sPresetType = "solidDmnd"_ostr;
             break;
         case model::PatternPreset::OpenDiamond:
-            sPresetType = "openDmnd";
+            sPresetType = "openDmnd"_ostr;
             break;
         case model::PatternPreset::DottedDiamond:
-            sPresetType = "dotDmnd";
+            sPresetType = "dotDmnd"_ostr;
             break;
         case model::PatternPreset::Plaid:
-            sPresetType = "plaid";
+            sPresetType = "plaid"_ostr;
             break;
         case model::PatternPreset::Sphere:
-            sPresetType = "sphere";
+            sPresetType = "sphere"_ostr;
             break;
         case model::PatternPreset::Weave:
-            sPresetType = "weave";
+            sPresetType = "weave"_ostr;
             break;
         case model::PatternPreset::Divot:
-            sPresetType = "divot";
+            sPresetType = "divot"_ostr;
             break;
         case model::PatternPreset::Shingle:
-            sPresetType = "shingle";
+            sPresetType = "shingle"_ostr;
             break;
         case model::PatternPreset::Wave:
-            sPresetType = "wave";
+            sPresetType = "wave"_ostr;
             break;
         case model::PatternPreset::Trellis:
-            sPresetType = "trellis";
+            sPresetType = "trellis"_ostr;
             break;
         case model::PatternPreset::ZigZag:
-            sPresetType = "zigZag";
+            sPresetType = "zigZag"_ostr;
             break;
         default:
             break;
@@ -697,13 +697,13 @@ void ThemeExport::writeLineStyle(model::LineStyle const& rLineStyle)
     switch (rLineStyle.meCapType)
     {
         case model::CapType::Flat:
-            sCap = "flat";
+            sCap = "flat"_ostr;
             break;
         case model::CapType::Round:
-            sCap = "rnd";
+            sCap = "rnd"_ostr;
             break;
         case model::CapType::Square:
-            sCap = "sq";
+            sCap = "sq"_ostr;
             break;
         case model::CapType::Unset:
             break;
@@ -713,10 +713,10 @@ void ThemeExport::writeLineStyle(model::LineStyle const& rLineStyle)
     switch (rLineStyle.mePenAlignment)
     {
         case model::PenAlignmentType::Center:
-            sPenAlign = "ctr";
+            sPenAlign = "ctr"_ostr;
             break;
         case model::PenAlignmentType::Inset:
-            sPenAlign = "in";
+            sPenAlign = "in"_ostr;
             break;
         case model::PenAlignmentType::Unset:
             break;
@@ -726,19 +726,19 @@ void ThemeExport::writeLineStyle(model::LineStyle const& rLineStyle)
     switch (rLineStyle.meCompoundLineType)
     {
         case model::CompoundLineType::Single:
-            sCompoundLine = "sng";
+            sCompoundLine = "sng"_ostr;
             break;
         case model::CompoundLineType::Double:
-            sCompoundLine = "dbl";
+            sCompoundLine = "dbl"_ostr;
             break;
         case model::CompoundLineType::ThickThin_Double:
-            sCompoundLine = "thickThin";
+            sCompoundLine = "thickThin"_ostr;
             break;
         case model::CompoundLineType::ThinThick_Double:
-            sCompoundLine = "thinThick";
+            sCompoundLine = "thinThick"_ostr;
             break;
         case model::CompoundLineType::Triple:
-            sCompoundLine = "tri";
+            sCompoundLine = "tri"_ostr;
             break;
         case model::CompoundLineType::Unset:
             break;
@@ -755,37 +755,37 @@ void ThemeExport::writeLineStyle(model::LineStyle const& rLineStyle)
         switch (rLineStyle.maLineDash.mePresetType)
         {
             case model::PresetDashType::Dot:
-                sPresetType = "dot";
+                sPresetType = "dot"_ostr;
                 break;
             case model::PresetDashType::Dash:
-                sPresetType = "dash";
+                sPresetType = "dash"_ostr;
                 break;
             case model::PresetDashType::LargeDash:
-                sPresetType = "lgDash";
+                sPresetType = "lgDash"_ostr;
                 break;
             case model::PresetDashType::DashDot:
-                sPresetType = "dashDot";
+                sPresetType = "dashDot"_ostr;
                 break;
             case model::PresetDashType::LargeDashDot:
-                sPresetType = "lgDashDot";
+                sPresetType = "lgDashDot"_ostr;
                 break;
             case model::PresetDashType::LargeDashDotDot:
-                sPresetType = "lgDashDotDot";
+                sPresetType = "lgDashDotDot"_ostr;
                 break;
             case model::PresetDashType::Solid:
-                sPresetType = "solid";
+                sPresetType = "solid"_ostr;
                 break;
             case model::PresetDashType::SystemDash:
-                sPresetType = "sysDash";
+                sPresetType = "sysDash"_ostr;
                 break;
             case model::PresetDashType::SystemDot:
-                sPresetType = "sysDot";
+                sPresetType = "sysDot"_ostr;
                 break;
             case model::PresetDashType::SystemDashDot:
-                sPresetType = "sysDashDot";
+                sPresetType = "sysDashDot"_ostr;
                 break;
             case model::PresetDashType::SystemDashDotDot:
-                sPresetType = "sysDashDotDot";
+                sPresetType = "sysDashDotDot"_ostr;
                 break;
             case model::PresetDashType::Unset:
                 break;

@@ -1462,7 +1462,7 @@ sal_Int32 VMLExport::StartShape()
     {
         OString sType;
         if (m_bUseHashMarkForType)
-            sType = "#";
+            sType = "#"_ostr;
         m_pShapeAttrList->add( XML_type, sType +
                 "_x0000_t" + OString::number( m_nShapeType ) );
     }

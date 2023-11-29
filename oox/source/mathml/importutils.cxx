@@ -55,7 +55,7 @@ OString tokenToString( int token )
     uno::Sequence< sal_Int8 > const & aTokenNameSeq = StaticTokenMap().getUtf8TokenName( token & TOKEN_MASK );
     OString tokenname( reinterpret_cast< const char* >( aTokenNameSeq.getConstArray() ), aTokenNameSeq.getLength() );
     if( tokenname.isEmpty())
-        tokenname = "???";
+        tokenname = "???"_ostr;
     int nmsp = ( token & NMSP_MASK & ~( TAG_OPENING | TAG_CLOSING ));
 #if 0 // this is awfully long
     OString namespacename = StaticNamespaceMap::get().count( nmsp ) != 0
@@ -66,13 +66,13 @@ OString tokenToString( int token )
     switch( nmsp )
     {
         case NMSP_officeMath:
-            namespacename = "m";
+            namespacename = "m"_ostr;
             break;
         case NMSP_doc:
-            namespacename = "w";
+            namespacename = "w"_ostr;
             break;
         default:
-            namespacename = "?";
+            namespacename = "?"_ostr;
             break;
     }
 #endif
