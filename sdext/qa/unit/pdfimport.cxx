@@ -568,7 +568,7 @@ namespace
             OString xpath = "//draw:frame[@draw:z-index='3'][1]/draw:text-box/text:p/text:span[1]"_ostr;
             OUString  sContent = getXPathContent(pXmlDoc, xpath).replaceAll("\n", "");
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"敏捷的狐狸跨过慵懒的"_ustr, sContent);
-            xpath = "//draw:frame[@draw:z-index='4'][1]/draw:text-box/text:p/text:span[1]";
+            xpath = "//draw:frame[@draw:z-index='4'][1]/draw:text-box/text:p/text:span[1]"_ostr;
             sContent = getXPathContent(pXmlDoc, xpath).replaceAll("\n", "");
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"狗。"_ustr, sContent);
 #endif
@@ -798,23 +798,23 @@ namespace
             // Test for ٱلسََّل . It appears in the 3rd frame, i.e. after the امُ عَلَيَْك which is in the 2nd frame (from left to right)
             // thus these two frames together appear as ٱلسََّل امُ عَلَيْكَ in Draw‬.
             // FIXME: Should be ٱلسَّلَامُ عَلَيْكَ (i.e. the two text frames should be merged into one so that the ل and the ا will show as لَا rather than ل ا)
-            xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 17420.1666666667 2159.23861112778)']/draw:text-box/text:p/text:span)";
+            xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 17420.1666666667 2159.23861112778)']/draw:text-box/text:p/text:span)"_ostr;
             sContent = getXPathContent(pXmlDoc, xpath);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"ٱلسََّل"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             // Test for "LibreOffice RTL"
-            xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 12779.375 5121.79583335)']/draw:text-box/text:p/text:span)";
+            xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 12779.375 5121.79583335)']/draw:text-box/text:p/text:span)"_ostr;
             sContent = getXPathContent(pXmlDoc, xpath);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"LibreOffice RTL"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             // Test for "LibreOffice LTR (test)"
-            xpath = "string(//draw:frame[last()-1]/draw:text-box/text:p/text:span[last()])";
+            xpath = "string(//draw:frame[last()-1]/draw:text-box/text:p/text:span[last()])"_ostr;
             sContent = getXPathContent(pXmlDoc, xpath);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"LibreOffice LTR (test)"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             /* Test for Chinese characters */
             // Use last() instead of matrix below, because the matrix may be different on different OS due to fallback of Chinese fonts.
-            xpath = "string(//draw:frame[last()]/draw:text-box/text:p/text:span)";
+            xpath = "string(//draw:frame[last()]/draw:text-box/text:p/text:span)"_ostr;
             sContent = getXPathContent(pXmlDoc, xpath);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"中文测试，中文"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
@@ -825,13 +825,13 @@ namespace
                     new OutputWrapString(aOutput2),
                     nullptr);
             xmlDocUniquePtr pXmlDoc2(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput2.getStr())));
-            xpath = "string(//draw:frame[@draw:z-index='3'][1]/draw:text-box/text:p/text:span)";
+            xpath = "string(//draw:frame[@draw:z-index='3'][1]/draw:text-box/text:p/text:span)"_ostr;
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), u"ٱلسََّل"_ustr, sContent);
-            xpath = "string(//draw:frame[@draw:z-index='2'][1]/draw:text-box/text:p/text:span)";
+            xpath = "string(//draw:frame[@draw:z-index='2'][1]/draw:text-box/text:p/text:span)"_ostr;
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
             CPPUNIT_ASSERT_EQUAL(u"امُ عَلَيَْك"_ustr, sContent);
-            xpath = "string(//draw:frame[last()]/draw:text-box/text:p/text:span)";
+            xpath = "string(//draw:frame[last()]/draw:text-box/text:p/text:span)"_ostr;
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), u"中文测试，中文"_ustr, sContent);
 #endif
@@ -858,17 +858,17 @@ namespace
             // Tab test: there are 10 tabs. Text before and after the tabs are shown in different draw frames.
             // With the Liberation Serif font, the horizontal position of the first frame is 20.03mm and the
             // second frame is 94.12mm.
-            xpath = "//draw:frame[@draw:z-index='2'][1]";
+            xpath = "//draw:frame[@draw:z-index='2'][1]"_ostr;
             sContent = getXPath(pXmlDoc, xpath, "transform"_ostr);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString("translate( 20.03mm 25.05mm )"), sContent);
-            xpath = "//draw:frame[@draw:z-index='3'][1]";
+            xpath = "//draw:frame[@draw:z-index='3'][1]"_ostr;
             sContent = getXPath(pXmlDoc, xpath, "transform"_ostr);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString("translate( 94.12mm 25.05mm )"), sContent);
 
             // Non-breaking space test: there are 10 NBSpaces, which are treated as the same as normal space in PDF,
             // thus each is expressed as a <text:s text:c="1" ...>.
             // The 10th text:s should exist and the attribute "text:c" should be "1".
-            xpath = "//draw:frame[@draw:z-index='4'][1]/draw:text-box/text:p/text:span/text:s[10]";
+            xpath = "//draw:frame[@draw:z-index='4'][1]/draw:text-box/text:p/text:span/text:s[10]"_ostr;
             sContent = getXPath(pXmlDoc, xpath, "c"_ostr);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString("1"), sContent);
 #endif
