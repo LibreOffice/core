@@ -241,13 +241,13 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
              0xFF == pSource[1] ) {
         // UTF-16 big endian
         // conversion is done so that encoding information can be easily extracted
-        m_sEncoding = "utf-16";
+        m_sEncoding = "utf-16"_ostr;
     }
     else if( 0xFF == pSource[0] &&
              0xFE == pSource[1] ) {
         // UTF-16 little endian
         // conversion is done so that encoding information can be easily extracted
-        m_sEncoding = "utf-16";
+        m_sEncoding = "utf-16"_ostr;
     }
     else if( 0x00 == pSource[0] && 0x3c == pSource[1]  && 0x00 == pSource[2] && 0x3f == pSource[3] ) {
         // UTF-16 big endian without byte order mark (this is (strictly speaking) an error.)
@@ -259,7 +259,7 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         reinterpret_cast<sal_uInt8*>(seq.getArray())[0] = 0xFE;
         reinterpret_cast<sal_uInt8*>(seq.getArray())[1] = 0xFF;
 
-        m_sEncoding = "utf-16";
+        m_sEncoding = "utf-16"_ostr;
     }
     else if( 0x3c == pSource[0] && 0x00 == pSource[1]  && 0x3f == pSource[2] && 0x00 == pSource[3] ) {
         // UTF-16 little endian without byte order mark (this is (strictly speaking) an error.)
@@ -270,7 +270,7 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         reinterpret_cast<sal_uInt8*>(seq.getArray())[0] = 0xFF;
         reinterpret_cast<sal_uInt8*>(seq.getArray())[1] = 0xFE;
 
-        m_sEncoding = "utf-16";
+        m_sEncoding = "utf-16"_ostr;
     }
     else if( 0xEF == pSource[0] &&
              0xBB == pSource[1] &&
@@ -280,15 +280,15 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         // The BOM is removed.
         memmove( seq.getArray(), &( seq.getArray()[3] ), seq.getLength()-3 );
         seq.realloc( seq.getLength() - 3 );
-        m_sEncoding = "utf-8";
+        m_sEncoding = "utf-8"_ostr;
     }
     else if( 0x00 == pSource[0] && 0x00 == pSource[1]  && 0x00 == pSource[2] && 0x3c == pSource[3] ) {
         // UCS-4 big endian
-        m_sEncoding = "ucs-4";
+        m_sEncoding = "ucs-4"_ostr;
     }
     else if( 0x3c == pSource[0] && 0x00 == pSource[1]  && 0x00 == pSource[2] && 0x00 == pSource[3] ) {
         // UCS-4 little endian
-        m_sEncoding = "ucs-4";
+        m_sEncoding = "ucs-4"_ostr;
     }
 /* TODO: no need to test for the moment since we return sal_False like default case anyway
     else if( 0x4c == pSource[0] && 0x6f == pSource[1]  &&
