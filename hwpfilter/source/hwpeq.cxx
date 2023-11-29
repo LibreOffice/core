@@ -534,9 +534,9 @@ static int next_token(OString &white, OString &token, std::istream *strm)
       token = buf;
     }
     if( token == "sub" || token == "from" )
-      token = "_";
+      token = "_"_ostr;
     if( token == "sup" || token == "to" )
-      token = "^";
+      token = "^"_ostr;
   }
   else if( IS_BINARY(ch) ) {
     do
