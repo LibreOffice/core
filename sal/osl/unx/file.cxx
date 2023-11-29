@@ -830,6 +830,18 @@ static std::vector<OString> allowedPathsRead;
 static std::vector<OString> allowedPathsReadWrite;
 static std::vector<OString> allowedPathsExecute;
 
+static OString getParentFolder(const OString &rFilePath)
+{
+    sal_Int32 n = rFilePath.lastIndexOf('/');
+    OString folderPath;
+    if (n < 1)
+        folderPath = ".";
+    else
+        folderPath = rFilePath.copy(0, n);
+
+    return folderPath;
+}
+
 SAL_DLLPUBLIC void osl_setAllowedPaths(
         rtl_uString *pustrFilePaths
     )
@@ -860,9 +872,25 @@ SAL_DLLPUBLIC void osl_setAllowedPaths(
         }
 
         char resolvedPath[PATH_MAX];
-        if (realpath(aPath.getStr(), resolvedPath))
+        bool isResolved = !!realpath(aPath.getStr(), resolvedPath);
+        bool notExists = !isResolved && errno == ENOENT;
+
+        if (notExists)
         {
-            OString aPushPath = OString(resolvedPath, strlen(resolvedPath));
+            sal_Int32 n = aPath.lastIndexOf('/');
+            OString folderPath = getParentFolder(aPath);
+            isResolved = !!realpath(folderPath.getStr(), resolvedPath);
+            notExists = !isResolved && errno == ENOENT;
+
+            if (notExists || !isResolved || strlen(resolvedPath) + aPath.getLength() - n + 1 >= PATH_MAX)
+                return; // too bad
+            else
+                strcat(resolvedPath, aPath.getStr() + n);
+        }
+
+        if (isResolved)
+        {
+            OString aPushPath(resolvedPath, strlen(resolvedPath));
             if (eType == 'r')
                 allowedPathsRead.push_back(aPushPath);
             else if (eType == 'w')
@@ -892,13 +920,13 @@ bool isForbidden(const OString &filePath, int nFlags)
         // fail to resolve. Thankfully our I/O APIs don't allow
         // symlink creation to race here.
         sal_Int32 n = filePath.lastIndexOf('/');
-        OString folderPath;
-        if (n < 1)
-            folderPath = ".";
-        else
-            folderPath = filePath.copy(0, n);
-        if (!realpath(folderPath.getStr(), resolvedPath) ||
-            strlen(resolvedPath) + filePath.getLength() - n + 1 >= PATH_MAX)
+        OString folderPath = getParentFolder(filePath);
+
+        bool isResolved = !!realpath(folderPath.getStr(), resolvedPath);
+        bool notExists = !isResolved && errno == ENOENT;
+        if (notExists) // folder doesn't exist, check parent, in the end of chain checks "."
+            return isForbidden(folderPath, nFlags);
+        else if (!isResolved || strlen(resolvedPath) + filePath.getLength() - n + 1 >= PATH_MAX)
             return true; // too bad
         else
             strcat(resolvedPath, filePath.getStr() + n);

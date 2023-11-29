@@ -1348,6 +1348,19 @@ namespace osl_Forbidden
         void forbidden()
         {
             File::setAllowedPaths(maScratchGood);
+
+            // check some corner cases first
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
+                                         true, File::isForbidden(".", osl_File_OpenFlag_Read));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
+                                         true, File::isForbidden("", osl_File_OpenFlag_Read));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
+                                         true, File::isForbidden("a", osl_File_OpenFlag_Read));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
+                                         true, File::isForbidden("/", osl_File_OpenFlag_Read));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read from non-existent should be allowed",
+                                         false, File::isForbidden(maScratchGood + "/notthere/file", osl_File_OpenFlag_Read));
+
             CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
                                          true, File::isForbidden(maScratchBad, osl_File_OpenFlag_Read));
             CPPUNIT_ASSERT_EQUAL_MESSAGE("read from good should be allowed",
@@ -1372,6 +1385,18 @@ namespace osl_Forbidden
                                          true, File::isForbidden(maScratchGood, 0x80));
             CPPUNIT_ASSERT_EQUAL_MESSAGE("exec from bad should be allowed",
                                          false, File::isForbidden(maScratchBad, 0x80));
+
+            File::setAllowedPaths(":r:" + maScratchBad);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("write to non-existent should be forbidden",
+                                         true, File::isForbidden(maScratchGood + "/notthere", osl_File_OpenFlag_Write));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("write to non-existent should be forbidden 2",
+                                         true, File::isForbidden(maScratchGood + "/notthere/file", osl_File_OpenFlag_Write));
+
+            File::setAllowedPaths(":r:" + maScratchBad + ":w:" + maScratchGood + "/notthere");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("write to non-existent should be allowed",
+                                         false, File::isForbidden(maScratchGood + "/notthere", osl_File_OpenFlag_Write));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("write to non-existent should be allowed 2",
+                                         false, File::isForbidden(maScratchGood + "/notthere/file", osl_File_OpenFlag_Write));
         }
 
         void open()
