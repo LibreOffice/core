@@ -1893,19 +1893,8 @@ std::shared_ptr<SalBitmap> CairoCommon::getBitmap(tools::Long nX, tools::Long nY
 {
     std::shared_ptr<SvpSalBitmap> pBitmap = std::make_shared<SvpSalBitmap>();
     BitmapPalette aPal;
-    vcl::PixelFormat ePixelFormat = vcl::PixelFormat::INVALID;
     assert(GetBitCount() != 1 && "not supported anymore");
-    if (GetBitCount() == 1)
-    {
-        ePixelFormat = vcl::PixelFormat::N8_BPP;
-        aPal.SetEntryCount(2);
-        aPal[0] = COL_BLACK;
-        aPal[1] = COL_WHITE;
-    }
-    else
-    {
-        ePixelFormat = vcl::PixelFormat::N32_BPP;
-    }
+    vcl::PixelFormat ePixelFormat = vcl::PixelFormat::N32_BPP;
 
     if (!pBitmap->ImplCreate(Size(nWidth, nHeight), ePixelFormat, aPal, false))
     {
