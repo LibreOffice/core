@@ -364,7 +364,7 @@ void PrinterInfoManager::initialize()
                         #if defined __sun
                         aValue = "lp";
                         #else
-                        aValue = "lpr";
+                        aValue = "lpr"_ostr;
                         #endif
                     }
                     aPrinter.m_aInfo.m_aCommand = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);

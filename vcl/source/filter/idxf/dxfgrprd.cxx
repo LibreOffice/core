@@ -149,7 +149,7 @@ sal_uInt16 DXFGroupReader::Read()
     if ( !bStatus )
     {
         nG = 0;
-        S = "EOF";
+        S = "EOF"_ostr;
     }
     nLastG = nG;
     return nG;

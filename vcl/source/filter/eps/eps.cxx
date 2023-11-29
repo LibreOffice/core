@@ -1230,7 +1230,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                         if( pA->GetComment() == "XPATHSTROKE_SEQ_BEGIN" )
                         {
-                            sSeqEnd = "XPATHSTROKE_SEQ_END";
+                            sSeqEnd = "XPATHSTROKE_SEQ_END"_ostr;
                             SvtGraphicStroke aStroke;
                             ReadSvtGraphicStroke( aMemStm, aStroke );
 
@@ -1265,7 +1265,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         }
                         else if (pA->GetComment() == "XPATHFILL_SEQ_BEGIN")
                         {
-                            sSeqEnd = "XPATHFILL_SEQ_END";
+                            sSeqEnd = "XPATHFILL_SEQ_END"_ostr;
                             SvtGraphicFill aFill;
                             ReadSvtGraphicFill( aMemStm, aFill );
                             switch( aFill.getFillType() )

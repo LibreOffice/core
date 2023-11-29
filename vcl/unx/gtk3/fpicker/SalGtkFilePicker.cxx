@@ -1025,7 +1025,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
                                     RTL_TEXTENCODING_UTF8
                                   );
 
-                                toReplace = "$dirname$";
+                                toReplace = "$dirname$"_ostr;
 
                                 aMsg = aMsg.replaceAt(
                                   aMsg.indexOf( toReplace ),

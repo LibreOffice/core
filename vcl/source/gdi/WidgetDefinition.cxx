@@ -80,13 +80,13 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
 
                 if (rTabItemValue.isLeftAligned() && rTabItemValue.isRightAligned()
                     && rTabItemValue.isFirst() && rTabItemValue.isLast())
-                    sExtra = "first_last";
+                    sExtra = "first_last"_ostr;
                 else if (rTabItemValue.isLeftAligned() || rTabItemValue.isFirst())
-                    sExtra = "first";
+                    sExtra = "first"_ostr;
                 else if (rTabItemValue.isRightAligned() || rTabItemValue.isLast())
-                    sExtra = "last";
+                    sExtra = "last"_ostr;
                 else
-                    sExtra = "middle";
+                    sExtra = "middle"_ostr;
             }
             break;
             case ControlType::ListHeader:
@@ -94,9 +94,9 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
                 if (ePart == ControlPart::Arrow)
                 {
                     if (rValue.getNumericVal() == 1)
-                        sExtra = "down";
+                        sExtra = "down"_ostr;
                     else
-                        sExtra = "up";
+                        sExtra = "up"_ostr;
                 }
             }
             break;
@@ -104,7 +104,7 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
             {
                 auto const& rPushButtonValue = static_cast<PushButtonValue const&>(rValue);
                 if (rPushButtonValue.mbIsAction)
-                    sExtra = "action";
+                    sExtra = "action"_ostr;
             }
             break;
             default:

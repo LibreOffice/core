@@ -38,13 +38,13 @@ DXFBlock::~DXFBlock()
 
 void DXFBlock::Read(DXFGroupReader & rDGR)
 {
-    m_sName = "";
-    m_sAlsoName = "";
+    m_sName = ""_ostr;
+    m_sAlsoName = ""_ostr;
     aBasePoint.fx=0.0;
     aBasePoint.fy=0.0;
     aBasePoint.fz=0.0;
     nFlags=0;
-    m_sXRef = "";
+    m_sXRef = ""_ostr;
 
     while (rDGR.Read()!=0)
     {

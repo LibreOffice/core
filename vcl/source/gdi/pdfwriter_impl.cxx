@@ -4199,8 +4199,8 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
        the DA and MK work as expected, but on AR5 this creates a region
        filled with the background color but nor text. Urgh.
     */
-    rButton.m_aMKDict = "/BC [] /BG [] /CA";
-    rButton.m_aMKDictCAString = "";
+    rButton.m_aMKDict = "/BC [] /BG [] /CA"_ostr;
+    rButton.m_aMKDictCAString = ""_ostr;
 }
 
 Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
@@ -4431,8 +4431,8 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     aDR.append( " 0 R" );
     rBox.m_aDRDict = aDR.makeStringAndClear();
     rBox.m_aDAString = aDA.makeStringAndClear();
-    rBox.m_aMKDict = "/CA";
-    rBox.m_aMKDictCAString = "8";
+    rBox.m_aMKDict = "/CA"_ostr;
+    rBox.m_aMKDictCAString = "8"_ostr;
     rBox.m_aRect = aCheckRect;
 
     // create appearance streams
@@ -4530,9 +4530,9 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     pop();
 
     //to encrypt this (el)
-    rBox.m_aMKDict = "/CA";
+    rBox.m_aMKDict = "/CA"_ostr;
     //after this assignment, to m_aMKDic cannot be added anything
-    rBox.m_aMKDictCAString = "l";
+    rBox.m_aMKDictCAString = "l"_ostr;
 
     rBox.m_aRect = aCheckRect;
 

@@ -772,7 +772,7 @@ static void GetNames(AbstractTrueTypeFont *t)
             t->psname = OString(std::string_view(pReverse, nReverseLen));
         }
         else
-            t->psname = "Unknown";
+            t->psname = "Unknown"_ostr;
     }
 
     /* Font family and subfamily names: preferred Apple */

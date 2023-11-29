@@ -1853,7 +1853,7 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
         if( elem.second )
             aCopy = OUStringToOString(elem.second->m_aOption, RTL_TEXTENCODING_MS_1252);
         else
-            aCopy = "*nil";
+            aCopy = "*nil"_ostr;
         nBytes = aCopy.getLength();
         memcpy( pRun, aCopy.getStr(), nBytes );
         pRun += nBytes;
