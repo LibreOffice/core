@@ -311,6 +311,22 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
 
         rCGContextHolder.saveState();
 
+        // Related: tdf#155092 translate Y coordinate for height differences
+        // When in live resize, the NSView's height may have changed before
+        // the CGLayer has been resized. This causes the CGLayer's content
+        // to be drawn just above or below the top left corner of the view
+        // so translate the Y coordinate by any difference between the
+        // NSView's height and the CGLayer's height.
+        NSView *pView = maShared.mpFrame->mpNSView;
+        if (pView)
+        {
+            // Use the NSView's bounds, not its frame, to properly handle
+            // any rotation and/or scaling that might have been already
+            // applied to the view
+            CGFloat fTranslateY = [pView bounds].size.height - maShared.maLayer.getSizePoints().height;
+            CGContextTranslateCTM(rCGContextHolder.get(), 0, fTranslateY);
+        }
+
         CGMutablePathRef rClip = maShared.mpFrame->getClipPath();
         if (rClip)
         {
