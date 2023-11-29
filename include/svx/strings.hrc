@@ -1463,7 +1463,7 @@
 #define RID_SVXITEMS_AUTHOR_COMPLETE                        NC_("RID_SVXITEMS_AUTHOR_COMPLETE", "Author: ")
 #define RID_SVXITEMS_DATE_COMPLETE                          NC_("RID_SVXITEMS_DATE_COMPLETE", "Date: ")
 #define RID_SVXITEMS_TEXT_COMPLETE                          NC_("RID_SVXITEMS_TEXT_COMPLETE", "Text: ")
-#define RID_SVXITEMS_BRUSH_CHAR                             NC_("RID_SVXITEMS_BRUSH_CHAR", "Character background")
+#define RID_SVXITEMS_BRUSH_CHAR                             NC_("RID_SVXITEMS_BRUSH_CHAR", "Character highlighting color")
 
 #define STR_COLORTABLE                                      NC_("STR_COLORTABLE", "Color Palette")
 

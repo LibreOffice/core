@@ -524,7 +524,7 @@ private:
             return;
         }
         // Determine the background color
-        // Try Character background (highlight)
+        // Try Character background (Character highlighting color)
         Color aBackgroundColor(nCharBackColor);
 
         // If not character background color, try paragraph background color

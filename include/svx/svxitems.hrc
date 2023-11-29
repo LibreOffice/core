@@ -68,7 +68,7 @@ const std::pair<TranslateId, sal_uInt16> RID_ATTR_NAMES[] =
     { NC_("RID_ATTR_NAMES", "Keep with next paragraph"),   SID_ATTR_PARA_KEEP },
     { NC_("RID_ATTR_NAMES", "Blinking")        ,           SID_ATTR_FLASH },
     { NC_("RID_ATTR_NAMES", "Page line-spacing")       ,   SID_ATTR_PARA_REGISTER },
-    { NC_("RID_ATTR_NAMES", "Character background")    ,   SID_ATTR_BRUSH_CHAR },
+    { NC_("RID_ATTR_NAMES", "Character highlighting color")    ,   SID_ATTR_BRUSH_CHAR },
     { NC_("RID_ATTR_NAMES", "Asian font")      ,           SID_ATTR_CHAR_CJK_FONT },
     { NC_("RID_ATTR_NAMES", "Size of Asian font")      ,   SID_ATTR_CHAR_CJK_FONTHEIGHT },
     { NC_("RID_ATTR_NAMES", "Language of Asian font"),     SID_ATTR_CHAR_CJK_LANGUAGE },
