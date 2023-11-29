@@ -431,6 +431,7 @@
     <NumberingLevel Prefix=" " NumType="4" Suffix="、" /> <!-- 1、2、3、 -->
     <NumberingLevel Prefix="(" NumType="4" Suffix=")" /> <!-- (1) (2) (3) -->
     <NumberingLevel Prefix=" " NumType="4" Suffix=")" /> <!-- 1) 2) 3) -->
+    <NumberingLevel Prefix="[" NumType="4" Suffix="]" /> <!-- [1] [2] [3] -->
     <NumberingLevel Prefix=" " NumType="0" Suffix="." /> <!-- A. B. C. -->
     <NumberingLevel Prefix=" " NumType="0" Suffix=")" /> <!-- A) B) C) -->
     <NumberingLevel Prefix=" " NumType="1" Suffix="." /> <!-- a. b. c. -->
