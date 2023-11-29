@@ -39,7 +39,7 @@ dependencies {
 
 android {
     namespace 'org.libreoffice'
-    compileSdk 33
+    compileSdk 34
     // uses non-conventional source layout, so need to reconfigure accordingly
     // ToDo move to conventional layout, so stuff can be stripped down.
     sourceSets {
@@ -55,7 +55,7 @@ android {
     }
     defaultConfig {
         // minSdkVersion is set in liboSettings.gradle
-        targetSdkVersion 33
+        targetSdkVersion 34
         // multidex needed when > 65,536 methods referenced with minSdKVersion < 21
         // s. https://developer.android.com/studio/build/multidex
         multiDexEnabled true
