@@ -1811,11 +1811,13 @@ class NoteCaptionUpdater
 {
     const ScDocument& m_rDocument;
     const ScAddress m_aAddress; // 'incomplete' address consisting of tab, column
+    bool m_bUpdateCaptionPos;  // false if we want to skip updating the caption pos, only useful in kit mode
     bool m_bAddressChanged;  // false if the cell anchor address is unchanged
 public:
-    NoteCaptionUpdater(const ScDocument& rDocument, const ScAddress& rPos, bool bAddressChanged)
+    NoteCaptionUpdater(const ScDocument& rDocument, const ScAddress& rPos, bool bUpdateCaptionPos, bool bAddressChanged)
         : m_rDocument(rDocument)
         , m_aAddress(rPos)
+        , m_bUpdateCaptionPos(bUpdateCaptionPos)
         , m_bAddressChanged(bAddressChanged)
     {
     }
@@ -1826,7 +1828,8 @@ public:
         ScAddress aAddr(m_aAddress);
         aAddr.SetRow(nRow);
 
-        p->UpdateCaptionPos(aAddr);
+        if (m_bUpdateCaptionPos)
+            p->UpdateCaptionPos(aAddr);
 
         // Notify our LOK clients
         if (m_bAddressChanged)
@@ -1839,7 +1842,14 @@ public:
 void ScColumn::UpdateNoteCaptions( SCROW nRow1, SCROW nRow2, bool bAddressChanged )
 {
     ScAddress aAddr(nCol, 0, nTab);
-    NoteCaptionUpdater aFunc(GetDoc(), aAddr, bAddressChanged);
+    NoteCaptionUpdater aFunc(GetDoc(), aAddr, true, bAddressChanged);
+    sc::ProcessNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
+}
+
+void ScColumn::CommentNotifyAddressChange( SCROW nRow1, SCROW nRow2 )
+{
+    ScAddress aAddr(nCol, 0, nTab);
+    NoteCaptionUpdater aFunc(GetDoc(), aAddr, false, true);
     sc::ProcessNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
 

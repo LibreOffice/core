@@ -717,6 +717,7 @@ public:
                             sc::ColumnBlockPosition& rDestBlockPos, bool bCloneCaption, SCROW nRowOffsetDest = 0) const;
 
     void UpdateNoteCaptions( SCROW nRow1, SCROW nRow2, bool bAddressChanged = true );
+    void CommentNotifyAddressChange( SCROW nRow1, SCROW nRow2 );
 
     void UpdateDrawObjects( std::vector<std::vector<SdrObject*>>& pObjects, SCROW nRowStart, SCROW nRowEnd );
     void UpdateDrawObjectsForRow( std::vector<SdrObject*>& pObjects, SCCOL nTargetCol, SCROW nTargetRow );

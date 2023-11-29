@@ -1941,6 +1941,21 @@ void ScTable::ForgetNoteCaptions( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         aCol[i].ForgetNoteCaptions(nRow1, nRow2, bPreserveData);
 }
 
+void ScTable::CommentNotifyAddressChange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    // Only in use in kit mode for now, but looks to me a good idea to revisit why (since OOo times)
+    // on deleting/inserting a column that we generate all the captions, while on deleting/inserting
+    // a row we do not. Presumably we should skip generating captions if we don't have to.
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if (!ValidCol(nCol1) || !ValidCol(nCol2))
+        return;
+    if ( nCol2 >= aCol.size() ) nCol2 = aCol.size() - 1;
+    for (SCCOL i = nCol1; i <= nCol2; ++i)
+        aCol[i].CommentNotifyAddressChange(nRow1, nRow2);
+}
+
 void ScTable::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
     for (SCCOL nCol = 0; nCol < aCol.size(); ++nCol)
