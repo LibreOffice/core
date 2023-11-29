@@ -394,11 +394,11 @@ namespace rtl_str
                 sal_Int32 nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(15), nIndex);
 
-                /* OString */ aSearchStr = "Line";
+                /* OString */ aSearchStr = "Line"_ostr;
                 /* sal_Int32 */ nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(0), nIndex);
 
-                /* OString */ aSearchStr = "";
+                /* OString */ aSearchStr = ""_ostr;
                 /* sal_Int32 */ nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(-1), nIndex);
             }

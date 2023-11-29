@@ -45,37 +45,37 @@ static OString errorToString(const osl::FileBase::RC _nError)
     OString sResult;
     switch (_nError) {
         case osl::FileBase::E_None:
-            sResult = "Success";
+            sResult = "Success"_ostr;
             break;
         case osl::FileBase::E_PERM:
-            sResult = "Operation not permitted";
+            sResult = "Operation not permitted"_ostr;
             break;
         case osl::FileBase::E_NOENT:
-            sResult = "No such file or directory";
+            sResult = "No such file or directory"_ostr;
             break;
         case osl::FileBase::E_EXIST:
-            sResult = "Already Exist";
+            sResult = "Already Exist"_ostr;
             break;
         case osl::FileBase::E_ACCES:
-            sResult = "Permission denied";
+            sResult = "Permission denied"_ostr;
             break;
         case osl::FileBase::E_INVAL:
-            sResult = "The format of the parameters was not valid";
+            sResult = "The format of the parameters was not valid"_ostr;
             break;
         case osl::FileBase::E_NOTDIR:
-            sResult = "Not a directory";
+            sResult = "Not a directory"_ostr;
             break;
         case osl::FileBase::E_ISDIR:
-            sResult = "Is a directory";
+            sResult = "Is a directory"_ostr;
             break;
         case osl::FileBase::E_BADF:
-            sResult = "Bad file";
+            sResult = "Bad file"_ostr;
             break;
         case osl::FileBase::E_NOTEMPTY:
-            sResult = "The directory is not empty";
+            sResult = "The directory is not empty"_ostr;
             break;
         default:
-            sResult = "Unknown Error";
+            sResult = "Unknown Error"_ostr;
             break;
     }
     return sResult;
@@ -4361,7 +4361,7 @@ namespace osl_Directory
                 bool b6 = _aVolumeInfo.getRAMDiskFlag();
 
                 OString sAttr;
-                if (b1) sAttr =  "Remote";
+                if (b1) sAttr =  "Remote"_ostr;
                 if (b2) sAttr += " Removeable";
                 if (b3) sAttr += " CDROM";
                 if (b4) sAttr += " Floppy";

@@ -948,26 +948,26 @@ namespace osl_Thread
                 switch (_aPriority)
                 {
                 case osl_Thread_PriorityHighest:
-                    sPrioStr = "Highest";
+                    sPrioStr = "Highest"_ostr;
                     break;
 
                 case osl_Thread_PriorityAboveNormal:
-                    sPrioStr = "AboveNormal";
+                    sPrioStr = "AboveNormal"_ostr;
                     break;
 
                 case osl_Thread_PriorityNormal:
-                    sPrioStr = "Normal";
+                    sPrioStr = "Normal"_ostr;
                     break;
 
                 case osl_Thread_PriorityBelowNormal:
-                    sPrioStr = "BelowNormal";
+                    sPrioStr = "BelowNormal"_ostr;
                     break;
 
                 case osl_Thread_PriorityLowest:
-                    sPrioStr = "Lowest";
+                    sPrioStr = "Lowest"_ostr;
                     break;
                 default:
-                    sPrioStr = "unknown";
+                    sPrioStr = "unknown"_ostr;
                 }
                 return sPrioStr;
             }
