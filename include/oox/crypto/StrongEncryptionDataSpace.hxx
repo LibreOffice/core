@@ -17,6 +17,7 @@
 #include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <oox/crypto/CryptoEngine.hxx>
+#include <memory>
 
 namespace com::sun::star::uno
 {

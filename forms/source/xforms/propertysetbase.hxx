@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <map>
+#include <memory>
 
 namespace com::sun::star::uno {
         class Any;

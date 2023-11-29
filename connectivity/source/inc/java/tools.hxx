@@ -27,7 +27,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-
+#include <memory>
 
 namespace connectivity
 {

@@ -12,6 +12,7 @@
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <cstdint>
 #include <vector>
 
 namespace vcl

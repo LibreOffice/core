@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <memory>
 
 using namespace ::osl;
 using namespace ::cppu;

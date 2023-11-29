@@ -11,6 +11,12 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libpagemaker))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libpagemaker,$(PAGEMAKER_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libpagemaker,1))
+
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libpagemaker))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libpagemaker,\
+    external/libpagemaker/cstdint.patch.0 \
+))
 
 # vim: set noet sw=4 ts=4:

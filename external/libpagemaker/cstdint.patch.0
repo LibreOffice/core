@@ -1,0 +1,10 @@
+--- src/lib/Units.h	2023-05-29 10:21:08.022718509 +0100
++++ src/lib/Units.h	2023-05-29 10:21:16.838724433 +0100
+@@ -10,6 +10,7 @@
+ #ifndef LIBPAGEMAKER_UNITS_H
+ #define LIBPAGEMAKER_UNITS_H
+ 
++#include <cstdint>
+ #include <string>
+ 
+ // TODO: remove this pointless abstraction.

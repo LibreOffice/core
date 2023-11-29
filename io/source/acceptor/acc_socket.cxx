@@ -19,6 +19,7 @@
 
 #include "acceptor.hxx"
 
+#include <memory>
 #include <unordered_set>
 
 #include <osl/mutex.hxx>

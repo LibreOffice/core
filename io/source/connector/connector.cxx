@@ -30,6 +30,7 @@
 #include <com/sun/star/connection/NoConnectException.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <memory>
 
 #include <services.hxx>
 #include "connector.hxx"

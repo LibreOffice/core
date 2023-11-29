@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-
+#include <memory>
 
 namespace textconversiondlgs
 {

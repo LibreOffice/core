@@ -22,6 +22,7 @@
 
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
+#include <memory>
 
 #include <com/sun/star/uno/Reference.hxx>
 
