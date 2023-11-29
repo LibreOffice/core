@@ -623,6 +623,13 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
 
     maSearchEditTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
     maSearchEditTimer.SetInvokeHandler(LINK(this, ScCheckListMenuControl, SearchEditTimeoutHdl));
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mxBtnSelectSingle->hide();
+        mxBtnUnselectSingle->hide();
+    }
+
 }
 
 void ScCheckListMenuControl::GrabFocus()
