@@ -1154,10 +1154,10 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
     switch (m_nObjType)
     {
         case EXC_OBJTYPE_CHECKBOX:
-            aObjectType = "Checkbox";
+            aObjectType = "Checkbox"_ostr;
             break;
         case EXC_OBJTYPE_BUTTON:
-            aObjectType = "Button";
+            aObjectType = "Button"_ostr;
             break;
     }
     pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, aObjectType);

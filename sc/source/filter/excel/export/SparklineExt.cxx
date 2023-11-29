@@ -23,7 +23,7 @@ namespace xcl::exp
 SparklineExt::SparklineExt(const XclExpRoot& rRoot)
     : XclExpExt(rRoot)
 {
-    maURI = "{05C60535-1F16-4fd2-B633-F4F36F0B64E0}";
+    maURI = "{05C60535-1F16-4fd2-B633-F4F36F0B64E0}"_ostr;
 }
 
 void SparklineExt::SaveXml(XclExpXmlStream& rStream)

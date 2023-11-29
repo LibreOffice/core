@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 
     // Check if all the rows from 5th to 10th get selected
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
-    aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\n3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\n4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\n5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\n6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\n";
+    aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\n3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\n4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\n5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\n6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\n"_ostr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select the 10th row with ctrl modifier
@@ -218,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 
     //  only row 5 should remain selected
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
-    aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n";
+    aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n"_ostr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 }
 
@@ -2305,7 +2305,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteCellMultilineContent)
     ViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
-    aView1.m_sInvalidateHeader = "";
+    aView1.m_sInvalidateHeader = ""_ostr;
     ScDocument& rDoc = pDocSh->GetDocument();
     sal_uInt16 nRow1Height = rDoc.GetRowHeight(static_cast<SCROW>(0), static_cast<SCTAB>(0), false);
 
@@ -2370,7 +2370,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
     // Go to A2 and paste.
     pView->SetCursor(0, 1);
     Scheduler::ProcessEventsToIdle();
-    aView.m_sInvalidateSheetGeometry = "";
+    aView.m_sInvalidateSheetGeometry = ""_ostr;
     pView->GetViewFrame().GetBindings().Execute(SID_PASTE);
     Scheduler::ProcessEventsToIdle();
 
@@ -2399,7 +2399,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
     // Go to A3 and paste.
     pView->SetCursor(0, 2);
     Scheduler::ProcessEventsToIdle();
-    aView.m_sInvalidateSheetGeometry = "";
+    aView.m_sInvalidateSheetGeometry = ""_ostr;
     pView->GetViewFrame().GetBindings().Execute(SID_PASTE);
     Scheduler::ProcessEventsToIdle();
 
@@ -2424,7 +2424,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, 820, 1336, 1, MOUSE_LEFT, 0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, 820, 1359, 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
-    aView.m_sInvalidateSheetGeometry = "";
+    aView.m_sInvalidateSheetGeometry = ""_ostr;
 
     // sort ascending
     uno::Sequence<beans::PropertyValue> aArgs;
@@ -2439,7 +2439,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL("rows"_ostr, aView.m_sInvalidateSheetGeometry);
 
-    aView.m_sInvalidateSheetGeometry = "";
+    aView.m_sInvalidateSheetGeometry = ""_ostr;
     // sort descending
     dispatchCommand(mxComponent, ".uno:SortDescending", aArgs);
 

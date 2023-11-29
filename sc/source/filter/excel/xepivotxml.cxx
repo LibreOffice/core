@@ -292,25 +292,25 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         switch (nDatePart)
         {
         case sheet::DataPilotFieldGroupBy::SECONDS:
-            sGroupBy = "seconds";
+            sGroupBy = "seconds"_ostr;
             break;
         case sheet::DataPilotFieldGroupBy::MINUTES:
-            sGroupBy = "minutes";
+            sGroupBy = "minutes"_ostr;
             break;
         case sheet::DataPilotFieldGroupBy::HOURS:
-            sGroupBy = "hours";
+            sGroupBy = "hours"_ostr;
             break;
         case sheet::DataPilotFieldGroupBy::DAYS:
-            sGroupBy = "days";
+            sGroupBy = "days"_ostr;
             break;
         case sheet::DataPilotFieldGroupBy::MONTHS:
-            sGroupBy = "months";
+            sGroupBy = "months"_ostr;
             break;
         case sheet::DataPilotFieldGroupBy::QUARTERS:
-            sGroupBy = "quarters";
+            sGroupBy = "quarters"_ostr;
             break;
         case sheet::DataPilotFieldGroupBy::YEARS:
-            sGroupBy = "years";
+            sGroupBy = "years"_ostr;
             break;
         }
 

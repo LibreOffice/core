@@ -546,14 +546,14 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(const SfxViewShell* pForVi
     switch (eHeaderType)
     {
         case COLUMN_HEADER:
-            aPayload = "column";
+            aPayload = "column"_ostr;
             break;
         case ROW_HEADER:
-            aPayload = "row";
+            aPayload = "row"_ostr;
             break;
         case BOTH_HEADERS:
         default:
-            aPayload = "all";
+            aPayload = "all"_ostr;
             break;
     }
 
