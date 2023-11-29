@@ -21,7 +21,6 @@
 #include <svtools/unitconv.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <officecfg/Office/WriterWeb.hxx>
 #include <officecfg/Office/Impress.hxx>
