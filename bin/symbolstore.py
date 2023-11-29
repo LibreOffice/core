@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -150,7 +150,7 @@ class CVSFileInfo(VCSFileInfo):
         f.close()
         if root_name:
             return root_name
-        print >> sys.stderr, "Failed to get CVS Root for %s" % filename
+        print("Failed to get CVS Root for %s" % filename, file=sys.stderr)
         return None
 
     def GetCleanRoot(self):
@@ -158,7 +158,7 @@ class CVSFileInfo(VCSFileInfo):
         if len(parts) > 1:
             # we don't want the extra colon
             return parts[1].replace(":","")
-        print >> sys.stderr, "Failed to get CVS Root for %s" % filename
+        print("Failed to get CVS Root for %s" % filename, file=sys.stderr)
         return None
 
     def GetRevision(self):
@@ -171,7 +171,7 @@ class CVSFileInfo(VCSFileInfo):
             parts = line.split("/")
             if len(parts) > 1 and parts[1] == filename:
                 return parts[2]
-        print >> sys.stderr, "Failed to get CVS Revision for %s" % filename
+        print("Failed to get CVS Revision for %s" % filename, file=sys.stderr)
         return None
 
     def GetFilename(self):
@@ -227,7 +227,7 @@ class SVNFileInfo(VCSFileInfo):
 
             exitStatus = command.close()
             if exitStatus:
-              print >> sys.stderr, "Failed to get SVN info for %s" % file
+              print("Failed to get SVN info for %s" % file, file=sys.stderr)
 
     def GetRoot(self):
         key = "Repository Root"
@@ -235,7 +235,7 @@ class SVNFileInfo(VCSFileInfo):
             match = self.rootRegex.match(self.svndata[key])
             if match:
                 return match.group(1)
-        print >> sys.stderr, "Failed to get SVN Root for %s" % self.file
+        print("Failed to get SVN Root for %s" % self.file, file=sys.stderr)
         return None
 
     # File bug to get this teased out from the current GetRoot, this is temporary
@@ -246,7 +246,7 @@ class SVNFileInfo(VCSFileInfo):
         key = "Revision"
         if key in self.svndata:
             return self.svndata[key]
-        print >> sys.stderr, "Failed to get SVN Revision for %s" % self.file
+        print("Failed to get SVN Revision for %s" % self.file, file=sys.stderr)
         return None
 
     def GetFilename(self):
@@ -255,7 +255,7 @@ class SVNFileInfo(VCSFileInfo):
                 url, repo = self.svndata["URL"], self.svndata["Repository Root"]
                 file = url[len(repo) + 1:]
             return "svn:%s:%s:%s" % (self.root, file, self.revision)
-        print >> sys.stderr, "Failed to get SVN Filename for %s" % self.file
+        print("Failed to get SVN Filename for %s" % self.file, file=sys.stderr)
         return self.file
 
 # Utility functions
@@ -304,7 +304,7 @@ def GetPlatformSpecificDumper(**kwargs):
     that is appropriate for the current platform."""
     return {'win32': Dumper_Win32,
             'cygwin': Dumper_Win32,
-            'linux2': Dumper_Linux,
+            'linux': Dumper_Linux,
             'sunos5': Dumper_Solaris,
             'darwin': Dumper_Mac}[sys.platform](**kwargs)
 
@@ -412,7 +412,7 @@ class Dumper:
         for arch in self.archs:
             try:
                 cmd = os.popen("%s %s %s" % (self.dump_syms, arch, file), "r")
-                module_line = cmd.next()
+                module_line = cmd.read()
                 if module_line.startswith("MODULE"):
                     # MODULE os cpu guid debug_file
                     (guid, debug_file) = (module_line.split())[3:5]
@@ -448,7 +448,7 @@ class Dumper:
                                 if cvs_root is None:
                                   if rootname:
                                      cvs_root = rootname
-                            # gather up files with cvs for indexing   
+                            # gather up files with cvs for indexing
                             if filename.startswith("cvs"):
                                 (ver, checkout, source_file, revision) = filename.split(":", 3)
                                 sourceFileStream += sourcepath + "*MYSERVER*" + source_file + '*' + revision + "\r\n"
@@ -460,12 +460,12 @@ class Dumper:
                     command_exit = cmd.close()
                     if command_exit:
                         if command_exit == 11:
-                            print >> sys.stderr, "INFO: dump_syms segfault while processing {}, retrying".format(file)
+                            print("INFO: dump_syms segfault while processing {}, retrying".format(file), file=sys.stderr)
                             return self.ProcessFile(file)
                         raise Exception("ERROR - dump_syms error while processing {} (exit code {})".format(file, command_exit))
                     # we output relative paths so callers can get a list of what
                     # was generated
-                    print rel_path
+                    print(rel_path)
                     if self.copy_debug:
                         self.CopyDebug(file, debug_file, guid)
                     if self.srcsrv:
@@ -473,10 +473,10 @@ class Dumper:
                         result = self.SourceServerIndexing(debug_file, guid, sourceFileStream, cvs_root)
                     result = True
             except StopIteration:
-                print >> sys.stderr, "WARN: dump_syms - no debug info extracted for {}".format(file)
+                print("WARN: dump_syms - no debug info extracted for {}".format(file), file=sys.stderr)
                 pass
             except:
-                print >> sys.stderr, "Unexpected error: ", sys.exc_info()[0]
+                print("Unexpected error: ", sys.exc_info()[0], file=sys.stderr)
                 raise
         return result
 
@@ -509,7 +509,7 @@ class Dumper_Win32(Dumper):
            # ignore python distutils stubs and scripts
            return False
         elif ext == "":
-           print >> sys.stderr, "INFO: Skipping {}, has no extension".format(file)
+           print("INFO: Skipping {}, has no extension".format(file), file=sys.stderr)
            return False
         return True
 
@@ -540,12 +540,12 @@ class Dumper_Win32(Dumper):
         rel_path = os.path.join(debug_file,
                                 guid,
                                 debug_file).replace("\\", "/")
-        print rel_path
+        print(rel_path)
         full_path = os.path.normpath(os.path.join(self.symbol_path,
                                                   rel_path))
         shutil.copyfile(file, full_path)
         pass
-        
+
     def SourceServerIndexing(self, debug_file, guid, sourceFileStream, cvs_root):
         # Creates a .pdb.stream file in the mozilla\objdir to be used for source indexing
         cwd = os.getcwd()
@@ -553,7 +553,7 @@ class Dumper_Win32(Dumper):
         stream_output_path = os.path.join(cwd, streamFilename)
         # Call SourceIndex to create the .stream file
         result = SourceIndex(sourceFileStream, stream_output_path, cvs_root)
-        
+
         if self.copy_debug:
             pdbstr_path = os.environ.get("PDBSTR_PATH")
             pdbstr = os.path.normpath(pdbstr_path)
@@ -583,7 +583,7 @@ class Dumper_Linux(Dumper):
         file_dbg = file + ".dbg"
         os.system("objcopy --only-keep-debug %s %s" % (file, file_dbg))
         os.system("objcopy --add-gnu-debuglink=%s %s" % (file_dbg, file))
-        
+
         rel_path = os.path.join(debug_file,
                                 guid,
                                 debug_file + ".dbg")
@@ -592,7 +592,7 @@ class Dumper_Linux(Dumper):
         shutil.copyfile(file_dbg, full_path)
         # gzip the shipped debug files
         os.system("gzip %s" % full_path)
-        print rel_path + ".gz"
+        print(rel_path + ".gz")
 
 class Dumper_Solaris(Dumper):
     def RunFileCommand(self, file):
@@ -641,14 +641,14 @@ def main():
                       action="store_true", dest="srcsrv", default=False,
                       help="Add source index information to debug files, making them suitable for use in a source server.")
     (options, args) = parser.parse_args()
-    
+
     #check to see if the pdbstr.exe exists
     if options.srcsrv:
         pdbstr = os.environ.get("PDBSTR_PATH")
         if not os.path.exists(pdbstr):
-            print >> sys.stderr, "Invalid path to pdbstr.exe - please set/check PDBSTR_PATH.\n"
+            print("Invalid path to pdbstr.exe - please set/check PDBSTR_PATH.\n", file=sys.stderr)
             sys.exit(1)
-            
+
     if len(args) < 3:
         parser.error("not enough arguments")
         exit(1)
