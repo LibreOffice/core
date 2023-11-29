@@ -17,6 +17,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <memory>
 
 namespace com::sun::star::security { class XCertificate; }
 namespace GpgME { class Context; }

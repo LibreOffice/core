@@ -24,6 +24,7 @@
 #include <vcl/BitmapPalette.hxx>
 #include <vcl/ColorMask.hxx>
 #include <vcl/Scanline.hxx>
+#include <memory>
 
 struct SalTwoRect;
 

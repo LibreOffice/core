@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 
+#include <memory>
 #include <vector>
 
 namespace weld { class Builder; class Widget; class Window; }
