@@ -59,7 +59,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNegativeHeight)
         }
         else if (pPage->GetPrev() && pPage->GetNext() && pPage->GetNext()->GetNext())
         {
-            // Middle pages: have a prevous and a next fly:
+            // Middle pages: have a previous and a next fly:
             CPPUNIT_ASSERT(pPage->GetSortedObjs());
             SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
