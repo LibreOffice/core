@@ -611,7 +611,7 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
     return nCnt;
 }
 
-tools::Long SwTextPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const
+SwTwips SwTextPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const
 {
     TextFrameIndex nCnt(0);
 

@@ -120,7 +120,7 @@ void SwMultiPortion::CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf )
         SetAscent( nTmp );
 }
 
-tools::Long SwMultiPortion::CalcSpacing( tools::Long , const SwTextSizeInfo & ) const
+SwTwips SwMultiPortion::CalcSpacing( tools::Long , const SwTextSizeInfo & ) const
 {
     return 0;
 }
@@ -219,7 +219,7 @@ SwBidiPortion::SwBidiPortion(TextFrameIndex const nEnd, sal_uInt8 nLv)
         SetDirection( DIR_LEFT2RIGHT );
 }
 
-tools::Long SwBidiPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo& rInf ) const
+SwTwips SwBidiPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo& rInf ) const
 {
     return HasTabulator() ? 0 : sal_Int32(GetSpaceCnt(rInf)) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
@@ -505,7 +505,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
     rInf.SetIdx( nStart );
 }
 
-tools::Long SwDoubleLinePortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo & ) const
+SwTwips SwDoubleLinePortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo & ) const
 {
     return HasTabulator() ? 0 : sal_Int32(GetSpaceCnt()) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }

@@ -89,7 +89,7 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
     sal_uInt16 nLastWidth = pLast->Width();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        nLastWidth = nLastWidth + o3tl::narrowing<sal_uInt16>(pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf ));
+        nLastWidth = nLastWidth + pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
     sal_uInt16 nPos;
     SwTextPaintInfo aInf( rInf );
@@ -306,7 +306,7 @@ void SwLinePortion::Move(SwTextPaintInfo & rInf) const
     rInf.SetIdx( rInf.GetIdx() + GetLen() );
 }
 
-tools::Long SwLinePortion::CalcSpacing( tools::Long , const SwTextSizeInfo & ) const
+SwTwips SwLinePortion::CalcSpacing( tools::Long , const SwTextSizeInfo & ) const
 {
     return 0;
 }

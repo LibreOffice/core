@@ -136,7 +136,7 @@ public:
     void ActualizeTabulator();
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
+    virtual SwTwips CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const;
 
     // Summarize the internal lines to calculate the (external) size
@@ -183,7 +183,7 @@ public:
     TextFrameIndex GetSmallerSpaceCnt() const
         { return ( m_nLineDiff < 0 ) ? m_nBlank1 : m_nBlank2; }
 
-    virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
+    virtual SwTwips CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const override;
 };
 
@@ -227,7 +227,7 @@ public:
     // Get number of blanks for justified alignment
     TextFrameIndex GetSpaceCnt(const SwTextSizeInfo &rInf) const;
     // Calculates extra spacing based on number of blanks
-    virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
+    virtual SwTwips CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
     // Manipulate the spacing array at pCurr
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const override;
 };
