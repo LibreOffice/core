@@ -1017,11 +1017,11 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
     {
         case EffectCommands::VERB:
             pType = "verb";
-            aCommand = "1"; /* FIXME hardcoded viewing */
+            aCommand = "1"_ostr; /* FIXME hardcoded viewing */
             break;
         case EffectCommands::PLAY:
         {
-            aCommand = "play";
+            aCommand = "play"_ostr;
             uno::Sequence<beans::NamedValue> aParamSeq;
             xCommand->getParameter() >>= aParamSeq;
             comphelper::SequenceAsHashMap aMap(aParamSeq);
@@ -1038,10 +1038,10 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
             break;
         }
         case EffectCommands::TOGGLEPAUSE:
-            aCommand = "togglePause";
+            aCommand = "togglePause"_ostr;
             break;
         case EffectCommands::STOP:
-            aCommand = "stop";
+            aCommand = "stop"_ostr;
             break;
         default:
             SAL_WARN("sd.eppt", "unknown command: " << xCommand->getCommand());

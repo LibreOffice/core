@@ -76,12 +76,12 @@ Cond::Cond(const Any& rAny, bool bIsMainSeqChild)
     if (rAny >>= eTiming)
     {
         if (eTiming == Timing_INDEFINITE)
-            msDelay = "indefinite";
+            msDelay = "indefinite"_ostr;
     }
     else if (rAny >>= aEvent)
     {
         if (aEvent.Trigger == EventTrigger::ON_NEXT && bIsMainSeqChild)
-            msDelay = "indefinite";
+            msDelay = "indefinite"_ostr;
         else
         {
             mpEvent = convertEventTrigger(aEvent.Trigger);

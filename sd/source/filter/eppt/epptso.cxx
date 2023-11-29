@@ -1711,7 +1711,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         {
                             // We can't map this custom shape to a PPT preset and it has a bitmap
                             // fill. Make sure that at least the bitmap fill is not lost.
-                            mType = "drawing.GraphicObject";
+                            mType = "drawing.GraphicObject"_ostr;
                             aGraphicPropertyName = "Bitmap";
                         }
                     }
@@ -1725,7 +1725,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         maSize = MapSize( css::awt::Size( aRect->Width, aRect->Height ) );
                         maRect = ::tools::Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
                     }
-                    mType = "drawing.dontknow";
+                    mType = "drawing.dontknow"_ostr;
                 }
             }
             sal_uInt8 nPlaceHolderAtom = EPP_PLACEHOLDER_NONE;
@@ -2354,7 +2354,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 if ( !mbPresObj )
                 {
-                    mType = "drawing.Text";
+                    mType = "drawing.Text"_ostr;
                     ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
@@ -2464,7 +2464,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             continue;
                     }
 
-                    mType = "drawing.Text";
+                    mType = "drawing.Text"_ostr;
                     ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
@@ -2565,7 +2565,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 else
                 {
                     mbPresObj = false;
-                    mType = "drawing.Text";
+                    mType = "drawing.Text"_ostr;
                     ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
@@ -2576,7 +2576,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 else
                 {
                     mbPresObj = false;
-                    mType = "drawing.Text";
+                    mType = "drawing.Text"_ostr;
                     ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
@@ -2587,7 +2587,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 else
                 {
                     mbPresObj = false;
-                    mType = "drawing.Text";
+                    mType = "drawing.Text"_ostr;
                     ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
@@ -2598,7 +2598,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 else
                 {
                     mbPresObj = false;
-                    mType = "drawing.Text";
+                    mType = "drawing.Text"_ostr;
                     ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
