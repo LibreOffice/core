@@ -159,7 +159,7 @@ void HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
 
     XMLHashMap* aXMLStrHM = file->GetStrings();
     static ResData s_ResData(""_ostr,""_ostr);
-    s_ResData.sResTyp   = "help";
+    s_ResData.sResTyp   = "help"_ostr;
 
     std::vector<OString> order = file->getOrder();
 

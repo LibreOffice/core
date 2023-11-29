@@ -857,7 +857,7 @@ bool SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFile )
     m_aErrorInformation.m_eCode = XML_ERROR_NONE;
     m_aErrorInformation.m_nLine = 0;
     m_aErrorInformation.m_nColumn = 0;
-    m_aErrorInformation.m_sMessage = "ERROR: Unable to open file ";
+    m_aErrorInformation.m_sMessage = "ERROR: Unable to open file "_ostr;
     m_aErrorInformation.m_sMessage += rFileName;
 
     OUString aFileURL(lcl_pathnameToAbsoluteUrl(rFileName));
@@ -895,7 +895,7 @@ bool SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFile )
         m_aErrorInformation.m_sMessage = "File " + pXMLFile->GetName() + " parsed successfully";
     }
     else
-        m_aErrorInformation.m_sMessage = "XML-File parsed successfully";
+        m_aErrorInformation.m_sMessage = "XML-File parsed successfully"_ostr;
 
     bool result = XML_Parse(m_aParser, static_cast< char * >(p), s, true);
     if (!result)
@@ -904,7 +904,7 @@ bool SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFile )
         m_aErrorInformation.m_nLine = XML_GetErrorLineNumber( m_aParser );
         m_aErrorInformation.m_nColumn = XML_GetErrorColumnNumber( m_aParser );
 
-        m_aErrorInformation.m_sMessage = "ERROR: ";
+        m_aErrorInformation.m_sMessage = "ERROR: "_ostr;
         if ( !pXMLFile->GetName().isEmpty())
             m_aErrorInformation.m_sMessage += pXMLFile->GetName();
         else

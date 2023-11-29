@@ -174,7 +174,7 @@ void LngParser::Merge(
         std::size_t nLastLangPos = 0;
 
         ResData aResData( sID, sSource );
-        aResData.sResTyp = "LngText";
+        aResData.sResTyp = "LngText"_ostr;
         MergeEntrys *pEntrys = aMergeDataFile.GetMergeEntrys( &aResData );
         // read languages
         bGroup = false;
@@ -188,7 +188,7 @@ void LngParser::Merge(
             {
                 bGroup = true;
                 nPos ++;
-                sLanguagesDone = "";
+                sLanguagesDone = ""_ostr;
             }
             else
             {

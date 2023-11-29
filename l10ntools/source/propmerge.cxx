@@ -195,7 +195,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         {
             const OString sID( o3tl::trim(sLine.subView( 0, sLine.indexOf('=') )) );
             ResData  aResData( sID, m_sSource );
-            aResData.sResTyp = "property";
+            aResData.sResTyp = "property"_ostr;
             OString sNewText;
             if( m_sLang == "qtz" )
             {

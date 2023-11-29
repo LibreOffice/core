@@ -90,7 +90,7 @@ bool MergeEntrys::GetText( OString &rReturn,
     bool bReturn = true;
     rReturn = sText[ nLangIndex ];
     if ( bDel )
-        sText[ nLangIndex ] = "";
+        sText[ nLangIndex ] = ""_ostr;
     bReturn = bTextFirst[ nLangIndex ];
     bTextFirst[ nLangIndex ] = false;
     return bReturn;
