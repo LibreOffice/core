@@ -97,11 +97,11 @@ void TestString::testStripStart()
     aOut = ::comphelper::string::stripStart(aIn, 'a');
     CPPUNIT_ASSERT_EQUAL("bc"_ostr, aOut);
 
-    aIn = "aaa";
+    aIn = "aaa"_ostr;
     aOut = ::comphelper::string::stripStart(aIn, 'a');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
-    aIn = "aba";
+    aIn = "aba"_ostr;
     aOut = ::comphelper::string::stripStart(aIn, 'a');
     CPPUNIT_ASSERT_EQUAL("ba"_ostr, aOut);
 }
@@ -117,11 +117,11 @@ void TestString::testStripEnd()
     aOut = ::comphelper::string::stripEnd(aIn, 'c');
     CPPUNIT_ASSERT_EQUAL("ab"_ostr, aOut);
 
-    aIn = "aaa";
+    aIn = "aaa"_ostr;
     aOut = ::comphelper::string::stripEnd(aIn, 'a');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
-    aIn = "aba";
+    aIn = "aba"_ostr;
     aOut = ::comphelper::string::stripEnd(aIn, 'a');
     CPPUNIT_ASSERT_EQUAL("ab"_ostr, aOut);
 }
@@ -137,11 +137,11 @@ void TestString::testStrip()
     aOut = ::comphelper::string::strip(aIn, 'c');
     CPPUNIT_ASSERT_EQUAL("ab"_ostr, aOut);
 
-    aIn = "aaa";
+    aIn = "aaa"_ostr;
     aOut = ::comphelper::string::strip(aIn, 'a');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
-    aIn = "aba";
+    aIn = "aba"_ostr;
     aOut = ::comphelper::string::strip(aIn, 'a');
     CPPUNIT_ASSERT_EQUAL("b"_ostr, aOut);
 }
