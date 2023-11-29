@@ -1591,13 +1591,13 @@ auto CurlProcessor::PropFind(
     switch (nDepth)
     {
         case DAVZERO:
-            depth = "Depth: 0";
+            depth = "Depth: 0"_ostr;
             break;
         case DAVONE:
-            depth = "Depth: 1";
+            depth = "Depth: 1"_ostr;
             break;
         case DAVINFINITY:
-            depth = "Depth: infinity";
+            depth = "Depth: infinity"_ostr;
             break;
         default:
             assert(false);
@@ -2275,13 +2275,13 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     switch (rLock.Depth)
     {
         case ucb::LockDepth_ZERO:
-            depth = "Depth: 0";
+            depth = "Depth: 0"_ostr;
             break;
         case ucb::LockDepth_ONE:
-            depth = "Depth: 1";
+            depth = "Depth: 1"_ostr;
             break;
         case ucb::LockDepth_INFINITY:
-            depth = "Depth: infinity";
+            depth = "Depth: infinity"_ostr;
             break;
         default:
             assert(false);
@@ -2295,10 +2295,10 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     switch (rLock.Timeout)
     {
         case -1:
-            timeout = "Timeout: Infinite";
+            timeout = "Timeout: Infinite"_ostr;
             break;
         case 0:
-            timeout = "Timeout: Second-180";
+            timeout = "Timeout: Second-180"_ostr;
             break;
         default:
             timeout = "Timeout: Second-" + OString::number(rLock.Timeout);
