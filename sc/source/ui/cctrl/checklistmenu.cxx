@@ -619,6 +619,11 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     // bulk_insert_for_each
     mxTreeChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
     mxListChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mxBtnSelectSingle->hide();
+        mxBtnUnselectSingle->hide();
+    }
 }
 
 void ScCheckListMenuControl::GrabFocus()
