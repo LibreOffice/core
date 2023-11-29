@@ -233,8 +233,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
             if (m_bIsEmbedded || m_bIsFile)
             {
-                userName = "sysdba";
-                userPassword = "masterkey";
+                userName = "sysdba"_ostr;
+                userPassword = "masterkey"_ostr;
             }
             else
             {
