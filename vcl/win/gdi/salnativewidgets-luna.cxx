@@ -990,6 +990,17 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     iState = MBI_HOT;
                 else
                     iState = MBI_NORMAL;
+
+                if(GetSalData()->mbThemeMenuSupport && Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                    && ( nState & (ControlState::SELECTED | nState & ControlState::ROLLOVER )))
+                {
+                    Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+                    ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
+                        aColor.GetGreen(),
+                        aColor.GetBlue())));
+                    FillRect(hDC, &rc, hbrush.get());
+                    return true;
+                }
             }
             else
             {
@@ -1604,9 +1615,14 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     // FIXME get the color directly from the theme, not from the settings
     Color aMenuBarTextColor = aStyleSettings.GetPersonaMenuBarTextColor().value_or( aStyleSettings.GetMenuTextColor() );
     // in aero menuitem highlight text is drawn in the same color as normal
-    aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
-    aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarTextColor );
-    aStyleSettings.SetMenuBarHighlightTextColor( aMenuBarTextColor );
+    // high contrast highlight color is not related to persona and not apply blur or transparency
+    if( !aStyleSettings.GetHighContrastMode() )
+    {
+        aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
+        aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarTextColor );
+        aStyleSettings.SetMenuBarHighlightTextColor( aMenuBarTextColor );
+    }
+
     pSVData->maNWFData.mnMenuFormatBorderX = 2;
     pSVData->maNWFData.mnMenuFormatBorderY = 2;
     pSVData->maNWFData.maMenuBarHighlightTextColor = aMenuBarTextColor;
