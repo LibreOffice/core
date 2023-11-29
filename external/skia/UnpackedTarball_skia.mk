@@ -41,6 +41,7 @@ skia_patches := \
     constexpr-template.patch.0 \
     missing-include.patch.0 \
     tdf147342.patch.0 \
+    0001-AvoidCombiningExtrememelyLargeMeshes.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
