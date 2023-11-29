@@ -269,7 +269,7 @@ void INetMIMEMessage::EnableAttachMultipartFormDataChild()
     o3tl::sprintf (sTail, "%08X%08X",
              static_cast< unsigned int >(aCurTime.GetTime()),
              static_cast< unsigned int >(nThis));
-    m_aBoundary = "------------_4D48";
+    m_aBoundary = "------------_4D48"_ostr;
     m_aBoundary += sTail;
 
     // Set header fields.
