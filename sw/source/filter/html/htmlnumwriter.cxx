@@ -316,9 +316,9 @@ SwHTMLWriter& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         sal_Int16 eType = rInfo.GetNumRule()->Get( i-1 ).GetNumberingType();
         OString aTag;
         if( SVX_NUM_CHAR_SPECIAL == eType || SVX_NUM_BITMAP == eType)
-            aTag = OOO_STRING_SVTOOLS_HTML_unorderlist;
+            aTag = OOO_STRING_SVTOOLS_HTML_unorderlist ""_ostr;
         else
-            aTag = OOO_STRING_SVTOOLS_HTML_orderlist;
+            aTag = OOO_STRING_SVTOOLS_HTML_orderlist ""_ostr;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false );
         if (rWrt.mbXHTML && (i != nNextDepth + 1 || (i != 1 && rNextInfo.IsNumbered())))
         {

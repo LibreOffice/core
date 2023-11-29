@@ -949,7 +949,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
                 {
                     if (nPercentHeight)
                     {
-                        sWidth = "auto";
+                        sWidth = "auto"_ostr;
                     }
                     else
                     {
@@ -979,7 +979,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
                 {
                     if (nPercentWidth)
                     {
-                        sHeight = "auto";
+                        sHeight = "auto"_ostr;
                     }
                     else
                     {
@@ -1378,7 +1378,7 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
     OString aTag(OOO_STRING_SVTOOLS_HTML_image ""_ostr);
     if (bReplacement)
         // Write replacement graphic of OLE object as <object>.
-        aTag = OOO_STRING_SVTOOLS_HTML_object;
+        aTag = OOO_STRING_SVTOOLS_HTML_object ""_ostr;
     rHtml.start(aTag);
 
     if(rWrt.mbEmbedImages)
@@ -1399,7 +1399,7 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
         OString sBuffer(OUStringToOString(aGraphicURL, RTL_TEXTENCODING_UTF8));
         OString aAttribute(OOO_STRING_SVTOOLS_HTML_O_src ""_ostr);
         if (bReplacement)
-            aAttribute = OOO_STRING_SVTOOLS_HTML_O_data;
+            aAttribute = OOO_STRING_SVTOOLS_HTML_O_data ""_ostr;
         rHtml.attribute(aAttribute, sBuffer);
     }
 
@@ -1696,10 +1696,10 @@ static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
 
         // Close the current <DL>!
         rWrt.OutAndSetDefList( 0 );
-        aTag = OOO_STRING_SVTOOLS_HTML_division;
+        aTag = OOO_STRING_SVTOOLS_HTML_division ""_ostr;
     }
     else
-        aTag = OOO_STRING_SVTOOLS_HTML_span;
+        aTag = OOO_STRING_SVTOOLS_HTML_span ""_ostr;
 
     // output as DIV
     if (rWrt.IsLFPossible())

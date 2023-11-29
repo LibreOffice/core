@@ -777,16 +777,16 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 if( pPseudo )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_tabledata " "
-                             OOO_STRING_SVTOOLS_HTML_parabreak;
+                             OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                 }
                 else
-                    rToken = OOO_STRING_SVTOOLS_HTML_parabreak;
+                    rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                 break;
             case RES_POOLCOLL_TABLE_HDLN:
                 if( pPseudo )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_tableheader " "
-                             OOO_STRING_SVTOOLS_HTML_parabreak;
+                             OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                 }
                 else
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;

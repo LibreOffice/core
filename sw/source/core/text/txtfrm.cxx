@@ -803,15 +803,15 @@ void SwTextFrame::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
     OString aMode = "Horizontal"_ostr;
     if (IsVertLRBT())
     {
-        aMode = "VertBTLR";
+        aMode = "VertBTLR"_ostr;
     }
     else if (IsVertLR())
     {
-        aMode = "VertLR";
+        aMode = "VertLR"_ostr;
     }
     else if (IsVertical())
     {
-        aMode = "Vertical";
+        aMode = "Vertical"_ostr;
     }
     (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("WritingMode"), BAD_CAST(aMode.getStr()));
 }

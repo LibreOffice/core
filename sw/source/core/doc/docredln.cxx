@@ -1352,16 +1352,16 @@ void SwRedlineData::dumpAsXml(xmlTextWriterPtr pWriter) const
     switch (GetType())
     {
         case RedlineType::Insert:
-            sRedlineType = "REDLINE_INSERT";
+            sRedlineType = "REDLINE_INSERT"_ostr;
             break;
         case RedlineType::Delete:
-            sRedlineType = "REDLINE_DELETE";
+            sRedlineType = "REDLINE_DELETE"_ostr;
             break;
         case RedlineType::Format:
-            sRedlineType = "REDLINE_FORMAT";
+            sRedlineType = "REDLINE_FORMAT"_ostr;
             break;
         default:
-            sRedlineType = "UNKNOWN";
+            sRedlineType = "UNKNOWN"_ostr;
             break;
     }
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(sRedlineType.getStr()));

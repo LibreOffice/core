@@ -175,7 +175,7 @@ OString InsertOLE1HeaderFromOle10NativeStream(const tools::SvRef<SotStorage>& xS
     OString aClassName;
     if (xStorage->GetClassName() == SvGlobalName(0x0003000A, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46))
     {
-        aClassName = "PBrush";
+        aClassName = "PBrush"_ostr;
     }
     else
     {
@@ -185,7 +185,7 @@ OString InsertOLE1HeaderFromOle10NativeStream(const tools::SvRef<SotStorage>& xS
             SAL_WARN("sw.html", "InsertOLE1HeaderFromOle10NativeStream: unexpected class id: "
                                     << xStorage->GetClassName().GetHexName());
         }
-        aClassName = "Package";
+        aClassName = "Package"_ostr;
     }
 
     // Write ObjectHeader, see [MS-OLEDS] 2.2.4.

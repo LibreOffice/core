@@ -318,16 +318,16 @@ void lclAddThemeValuesToCustomAttributes(
         if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Text)
         {
             if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark1)
-                sSchemeType = "text1";
+                sSchemeType = "text1"_ostr;
             else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark2)
-                sSchemeType = "text2";
+                sSchemeType = "text2"_ostr;
         }
         else if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Background)
         {
             if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light1)
-                sSchemeType = "background1";
+                sSchemeType = "background1"_ostr;
             else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light2)
-                sSchemeType = "background2";
+                sSchemeType = "background2"_ostr;
         }
 
         DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, nThemeAttrId), sSchemeType);
@@ -7113,74 +7113,74 @@ static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemS
     switch ( nNumberingType )
     {
         case SVX_NUM_CHARS_UPPER_LETTER:
-        case SVX_NUM_CHARS_UPPER_LETTER_N:  aType = "upperLetter"; break;
+        case SVX_NUM_CHARS_UPPER_LETTER_N:  aType = "upperLetter"_ostr; break;
 
         case SVX_NUM_CHARS_LOWER_LETTER:
-        case SVX_NUM_CHARS_LOWER_LETTER_N:  aType = "lowerLetter"; break;
+        case SVX_NUM_CHARS_LOWER_LETTER_N:  aType = "lowerLetter"_ostr; break;
 
-        case SVX_NUM_ROMAN_UPPER:           aType = "upperRoman";  break;
-        case SVX_NUM_ROMAN_LOWER:           aType = "lowerRoman";  break;
-        case SVX_NUM_ARABIC:                aType = "decimal";     break;
+        case SVX_NUM_ROMAN_UPPER:           aType = "upperRoman"_ostr;  break;
+        case SVX_NUM_ROMAN_LOWER:           aType = "lowerRoman"_ostr;  break;
+        case SVX_NUM_ARABIC:                aType = "decimal"_ostr;     break;
 
         case SVX_NUM_BITMAP:
-        case SVX_NUM_CHAR_SPECIAL:          aType = "bullet";      break;
+        case SVX_NUM_CHAR_SPECIAL:          aType = "bullet"_ostr;      break;
 
-        case style::NumberingType::CHARS_HEBREW: aType = "hebrew2"; break;
-        case style::NumberingType::NUMBER_HEBREW: aType = "hebrew1"; break;
-        case style::NumberingType::NUMBER_NONE: aType = "none"; break;
-        case style::NumberingType::FULLWIDTH_ARABIC: aType="decimalFullWidth"; break;
-        case style::NumberingType::TIAN_GAN_ZH: aType="ideographTraditional"; break;
-        case style::NumberingType::DI_ZI_ZH: aType="ideographZodiac"; break;
+        case style::NumberingType::CHARS_HEBREW: aType = "hebrew2"_ostr; break;
+        case style::NumberingType::NUMBER_HEBREW: aType = "hebrew1"_ostr; break;
+        case style::NumberingType::NUMBER_NONE: aType = "none"_ostr; break;
+        case style::NumberingType::FULLWIDTH_ARABIC: aType="decimalFullWidth"_ostr; break;
+        case style::NumberingType::TIAN_GAN_ZH: aType="ideographTraditional"_ostr; break;
+        case style::NumberingType::DI_ZI_ZH: aType="ideographZodiac"_ostr; break;
         case style::NumberingType::NUMBER_LOWER_ZH:
-            aType="taiwaneseCountingThousand";
+            aType="taiwaneseCountingThousand"_ostr;
             if (pOutSet) {
                 const SvxLanguageItem& rLang = pOutSet->Get( RES_CHRATR_CJK_LANGUAGE);
                 const LanguageType eLang = rLang.GetLanguage();
 
                 if (LANGUAGE_CHINESE_SIMPLIFIED == eLang) {
-                    aType="chineseCountingThousand";
+                    aType="chineseCountingThousand"_ostr;
                 }
             }
         break;
-        case style::NumberingType::NUMBER_UPPER_ZH_TW: aType="ideographLegalTraditional";break;
-        case style::NumberingType::NUMBER_UPPER_ZH: aType="chineseLegalSimplified"; break;
-        case style::NumberingType::NUMBER_TRADITIONAL_JA: aType="japaneseLegal";break;
-        case style::NumberingType::AIU_FULLWIDTH_JA: aType="aiueoFullWidth";break;
-        case style::NumberingType::AIU_HALFWIDTH_JA: aType="aiueo";break;
-        case style::NumberingType::IROHA_FULLWIDTH_JA: aType="iroha";break;
-        case style::NumberingType::IROHA_HALFWIDTH_JA: aType="irohaFullWidth";break;
-        case style::NumberingType::HANGUL_SYLLABLE_KO: aType="ganada";break;
-        case style::NumberingType::HANGUL_JAMO_KO: aType="chosung";break;
-        case style::NumberingType::NUMBER_HANGUL_KO: aType="koreanCounting"; break;
-        case style::NumberingType::NUMBER_LEGAL_KO: aType = "koreanLegal"; break;
-        case style::NumberingType::NUMBER_DIGITAL_KO: aType = "koreanDigital"; break;
-        case style::NumberingType::NUMBER_DIGITAL2_KO: aType = "koreanDigital2"; break;
-        case style::NumberingType::CIRCLE_NUMBER: aType="decimalEnclosedCircle"; break;
-        case style::NumberingType::CHARS_ARABIC: aType="arabicAlpha"; break;
-        case style::NumberingType::CHARS_ARABIC_ABJAD: aType="arabicAbjad"; break;
-        case style::NumberingType::CHARS_THAI: aType="thaiLetters"; break;
+        case style::NumberingType::NUMBER_UPPER_ZH_TW: aType="ideographLegalTraditional"_ostr;break;
+        case style::NumberingType::NUMBER_UPPER_ZH: aType="chineseLegalSimplified"_ostr; break;
+        case style::NumberingType::NUMBER_TRADITIONAL_JA: aType="japaneseLegal"_ostr;break;
+        case style::NumberingType::AIU_FULLWIDTH_JA: aType="aiueoFullWidth"_ostr;break;
+        case style::NumberingType::AIU_HALFWIDTH_JA: aType="aiueo"_ostr;break;
+        case style::NumberingType::IROHA_FULLWIDTH_JA: aType="iroha"_ostr;break;
+        case style::NumberingType::IROHA_HALFWIDTH_JA: aType="irohaFullWidth"_ostr;break;
+        case style::NumberingType::HANGUL_SYLLABLE_KO: aType="ganada"_ostr;break;
+        case style::NumberingType::HANGUL_JAMO_KO: aType="chosung"_ostr;break;
+        case style::NumberingType::NUMBER_HANGUL_KO: aType="koreanCounting"_ostr; break;
+        case style::NumberingType::NUMBER_LEGAL_KO: aType = "koreanLegal"_ostr; break;
+        case style::NumberingType::NUMBER_DIGITAL_KO: aType = "koreanDigital"_ostr; break;
+        case style::NumberingType::NUMBER_DIGITAL2_KO: aType = "koreanDigital2"_ostr; break;
+        case style::NumberingType::CIRCLE_NUMBER: aType="decimalEnclosedCircle"_ostr; break;
+        case style::NumberingType::CHARS_ARABIC: aType="arabicAlpha"_ostr; break;
+        case style::NumberingType::CHARS_ARABIC_ABJAD: aType="arabicAbjad"_ostr; break;
+        case style::NumberingType::CHARS_THAI: aType="thaiLetters"_ostr; break;
         case style::NumberingType::CHARS_PERSIAN:
-        case style::NumberingType::CHARS_NEPALI: aType="hindiVowels"; break;
+        case style::NumberingType::CHARS_NEPALI: aType="hindiVowels"_ostr; break;
         case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU:
-        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU: aType = "russianUpper"; break;
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU: aType = "russianUpper"_ostr; break;
         case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU:
-        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU: aType = "russianLower"; break;
-        case style::NumberingType::TEXT_NUMBER: aType="ordinal"; break;
-        case style::NumberingType::TEXT_CARDINAL: aType="cardinalText"; break;
-        case style::NumberingType::TEXT_ORDINAL: aType="ordinalText"; break;
-        case style::NumberingType::SYMBOL_CHICAGO: aType="chicago"; break;
-        case style::NumberingType::ARABIC_ZERO: aType = "decimalZero"; break;
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU: aType = "russianLower"_ostr; break;
+        case style::NumberingType::TEXT_NUMBER: aType="ordinal"_ostr; break;
+        case style::NumberingType::TEXT_CARDINAL: aType="cardinalText"_ostr; break;
+        case style::NumberingType::TEXT_ORDINAL: aType="ordinalText"_ostr; break;
+        case style::NumberingType::SYMBOL_CHICAGO: aType="chicago"_ostr; break;
+        case style::NumberingType::ARABIC_ZERO: aType = "decimalZero"_ostr; break;
         case style::NumberingType::ARABIC_ZERO3:
-            aType = "custom";
-            rFormat = "001, 002, 003, ...";
+            aType = "custom"_ostr;
+            rFormat = "001, 002, 003, ..."_ostr;
             break;
         case style::NumberingType::ARABIC_ZERO4:
-            aType = "custom";
-            rFormat = "0001, 0002, 0003, ...";
+            aType = "custom"_ostr;
+            rFormat = "0001, 0002, 0003, ..."_ostr;
             break;
         case style::NumberingType::ARABIC_ZERO5:
-            aType = "custom";
-            rFormat = "00001, 00002, 00003, ...";
+            aType = "custom"_ostr;
+            rFormat = "00001, 00002, 00003, ..."_ostr;
             break;
 /*
         Fallback the rest to the suggested default.
@@ -8748,8 +8748,8 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
     {
         switch( pFootnoteInfo->m_eNum )
         {
-            case FTNNUM_PAGE:       fmt = "eachPage"; break;
-            case FTNNUM_CHAPTER:    fmt = "eachSect"; break;
+            case FTNNUM_PAGE:       fmt = "eachPage"_ostr; break;
+            case FTNNUM_CHAPTER:    fmt = "eachSect"_ostr; break;
             default:                fmt.clear();      break;
         }
         if (!fmt.isEmpty())
@@ -9556,7 +9556,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
                 m_sOriginalBackgroundColor, RTL_TEXTENCODING_UTF8 );
 
         if ( aColor == COL_AUTO )
-            sColor = "auto";
+            sColor = "auto"_ostr;
 
         if( !m_pBackgroundAttrList.is() )
         {

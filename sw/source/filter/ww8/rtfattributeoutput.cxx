@@ -2019,10 +2019,10 @@ void lcl_TextFrameRelativeSize(std::vector<std::pair<OString, OString>>& rFlyPro
         switch (rSize.GetWidthPercentRelation())
         {
             case text::RelOrientation::PAGE_FRAME:
-                aRelation = "1"; // page
+                aRelation = "1"_ostr; // page
                 break;
             default:
-                aRelation = "0"; // margin
+                aRelation = "0"_ostr; // margin
                 break;
         }
         rFlyProperties.emplace_back(std::make_pair("sizerelh", aRelation));
@@ -2038,10 +2038,10 @@ void lcl_TextFrameRelativeSize(std::vector<std::pair<OString, OString>>& rFlyPro
     switch (rSize.GetHeightPercentRelation())
     {
         case text::RelOrientation::PAGE_FRAME:
-            aRelation = "1"; // page
+            aRelation = "1"_ostr; // page
             break;
         default:
-            aRelation = "0"; // margin
+            aRelation = "0"_ostr; // margin
             break;
     }
     rFlyProperties.emplace_back(std::make_pair("sizerelv", aRelation));

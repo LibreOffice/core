@@ -560,7 +560,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
         // all styles that do not correspond to an HTML tag, or that are
         // not derived from it, are exported as <P>
 
-        rInfo.aToken = OOO_STRING_SVTOOLS_HTML_parabreak;
+        rInfo.aToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
         bPara = true;
     }
 
@@ -820,7 +820,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
         (bHasParSpace || bXhtmlBlockQuote || pAdjItem) )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + rInfo.aToken) );
-        aToken = OOO_STRING_SVTOOLS_HTML_parabreak;
+        aToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
         bPara = true;
         rWrt.m_bNoAlign = false;
     }
@@ -880,7 +880,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
         if( eLang != LANGUAGE_DONTKNOW && eLang != rWrt.m_eLang )
         {
             rWrt.Strm().WriteOString( sOut );
-            sOut = "";
+            sOut = ""_ostr;
             rWrt.OutLanguage( eLang );
         }
 
@@ -889,7 +889,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
             if( !sOut.isEmpty() )
             {
                 rWrt.Strm().WriteOString( sOut );
-                sOut = "";
+                sOut = ""_ostr;
             }
             rWrt.OutDirection( nDir );
         }
@@ -899,7 +899,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
         {
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_class "=\"";
             rWrt.Strm().WriteOString( sOut );
-            sOut = "";
+            sOut = ""_ostr;
             OUString aClass( pFormatInfo->aClass );
             if( pFormatInfo->bScriptDependent )
             {
@@ -922,7 +922,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
             sOut += "\"";
         }
         rWrt.Strm().WriteOString( sOut );
-        sOut = "";
+        sOut = ""_ostr;
 
         std::string_view sStyle;
         if (rWrt.IsSpacePreserve())
@@ -951,7 +951,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
                 sCSS2_P_CLASS_leaders "\"><"
                 OOO_STRING_SVTOOLS_HTML_O_span;
             rWrt.Strm().WriteOString( sOut );
-            sOut = "";
+            sOut = ""_ostr;
         }
 
         rWrt.Strm().WriteChar( '>' );
@@ -2965,8 +2965,8 @@ static SwHTMLWriter& OutHTML_SvxEscapement( SwHTMLWriter& rWrt, const SfxPoolIte
     OString aTag;
     switch( eEscape )
     {
-    case SvxEscapement::Superscript: aTag = OOO_STRING_SVTOOLS_HTML_superscript; break;
-    case SvxEscapement::Subscript: aTag = OOO_STRING_SVTOOLS_HTML_subscript; break;
+    case SvxEscapement::Superscript: aTag = OOO_STRING_SVTOOLS_HTML_superscript ""_ostr; break;
+    case SvxEscapement::Subscript: aTag = OOO_STRING_SVTOOLS_HTML_subscript ""_ostr; break;
     default:
         ;
     }
@@ -3098,7 +3098,7 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
     }
 
     rWrt.Strm().WriteOString( sOut );
-    sOut = "";
+    sOut = ""_ostr;
 
     OUString sRel;
 
@@ -3116,7 +3116,7 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_href "=\"";
         rWrt.Strm().WriteOString( sOut );
         rWrt.OutHyperlinkHRefValue( aURL );
-        sOut = "\"";
+        sOut = "\""_ostr;
     }
 
     if( !rINetFormat.GetName().isEmpty() )
@@ -3124,7 +3124,7 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFormat.GetName() );
-        sOut = "\"";
+        sOut = "\""_ostr;
     }
 
     const OUString& rTarget = rINetFormat.GetTargetFrame();
@@ -3133,7 +3133,7 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget );
-        sOut = "\"";
+        sOut = "\""_ostr;
     }
 
     if( !sRel.isEmpty() )
@@ -3251,7 +3251,7 @@ static SwHTMLWriter& OutHTML_SwTextCharFormat( SwHTMLWriter& rWrt, const SfxPool
                 }
             }
             HTMLOutFuncs::Out_String( rWrt.Strm(), aClass );
-            sOut = "\"";
+            sOut = "\""_ostr;
         }
         sOut += ">";
         rWrt.Strm().WriteOString( sOut );

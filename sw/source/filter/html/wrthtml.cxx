@@ -1520,11 +1520,11 @@ OString SwHTMLWriter::convertDirection(SvxFrameDirection nDir)
     {
     case SvxFrameDirection::Horizontal_LR_TB:
     case SvxFrameDirection::Vertical_LR_TB:
-        sConverted = "ltr";
+        sConverted = "ltr"_ostr;
         break;
     case SvxFrameDirection::Horizontal_RL_TB:
     case SvxFrameDirection::Vertical_RL_TB:
-        sConverted = "rtl";
+        sConverted = "rtl"_ostr;
         break;
     default: break;
     }

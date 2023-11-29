@@ -456,7 +456,7 @@ void SwHTMLWriter::OutForm( bool bOn,
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
             Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( Strm(), *s );
-            sOut = "\"";
+            sOut = "\""_ostr;
         }
     }
 
@@ -470,7 +470,7 @@ void SwHTMLWriter::OutForm( bool bOn,
             OUString aURL
                 = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), *s);
             HTMLOutFuncs::Out_String( Strm(), aURL );
-            sOut = "\"";
+            sOut = "\""_ostr;
         }
     }
 
@@ -514,7 +514,7 @@ void SwHTMLWriter::OutForm( bool bOn,
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
             Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( Strm(), *s );
-            sOut = "\"";
+            sOut = "\""_ostr;
         }
     }
 
@@ -583,7 +583,7 @@ void SwHTMLWriter::OutHiddenControls(
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
                     Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( Strm(), *s );
-                    sOut = "\"";
+                    sOut = "\""_ostr;
                 }
             }
             aTmp = xPropSet->getPropertyValue( "HiddenValue" );
@@ -594,7 +594,7 @@ void SwHTMLWriter::OutHiddenControls(
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
                     Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( Strm(), *s );
-                    sOut = "\"";
+                    sOut = "\""_ostr;
                 }
             }
             sOut += ">";
@@ -933,7 +933,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
             rWrt.Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( rWrt.Strm(), *s );
-            sOut = "\"";
+            sOut = "\""_ostr;
         }
     }
 
@@ -951,7 +951,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), sValue );
-        sOut = "\"";
+        sOut = "\""_ostr;
     }
 
     sOut += " " + sOptions;
@@ -968,7 +968,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(),
                             URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), *s) );
-                sOut = "\"";
+                sOut = "\""_ostr;
             }
         }
 
@@ -1185,7 +1185,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
                     rWrt.Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( rWrt.Strm(), sVal );
-                    sOut = "\"";
+                    sOut = "\""_ostr;
                 }
                 if( bSelected )
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_selected;

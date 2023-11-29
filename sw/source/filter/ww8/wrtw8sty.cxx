@@ -435,7 +435,7 @@ void MSWordStyles::BuildStyleIds()
         OString aStyleId = CreateStyleId(entry.ww_name);
 
         if (aStyleId.isEmpty())
-            aStyleId = "Style";
+            aStyleId = "Style"_ostr;
 
         OString aLower(aStyleId.toAsciiLowerCase());
 

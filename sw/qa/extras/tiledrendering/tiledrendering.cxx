@@ -3309,7 +3309,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
         OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL("1"_ostr, sSelected);
     }
-    m_aFormFieldButton = "";
+    m_aFormFieldButton = ""_ostr;
 
     // Trigger a form field event to select a different item.
     vcl::ITiledRenderable::StringMap aArguments;
