@@ -2993,8 +2993,8 @@ void DesktopLOKTest::testTextSelectionHandles()
     CPPUNIT_ASSERT_EQUAL("1898, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
 
     // deselect & check
-    m_aTextSelectionStart = "";
-    m_aTextSelectionEnd = "";
+    m_aTextSelectionStart = ""_ostr;
+    m_aTextSelectionEnd = ""_ostr;
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
