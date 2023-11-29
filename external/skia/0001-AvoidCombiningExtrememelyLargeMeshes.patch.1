@@ -1,0 +1,34 @@
+From 6169a1fabae1743709bc9641ad43fcbb6a4f62e1 Mon Sep 17 00:00:00 2001
+From: John Stiles <johnstiles@google.com>
+Date: Fri, 24 Nov 2023 09:40:11 -0500
+Subject: [PATCH] Avoid combining extremely large meshes.
+
+Bug: chromium:1505053
+Change-Id: I42f2ff872bbf054686ec7af0cc85ff63055fcfbf
+Reviewed-on: https://skia-review.googlesource.com/c/skia/+/782936
+Commit-Queue: Michael Ludwig <michaelludwig@google.com>
+Reviewed-by: Michael Ludwig <michaelludwig@google.com>
+Auto-Submit: John Stiles <johnstiles@google.com>
+---
+ src/gpu/ganesh/ops/DrawMeshOp.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/gpu/ganesh/ops/DrawMeshOp.cpp b/src/gpu/ganesh/ops/DrawMeshOp.cpp
+index d827009b993..eed2757579e 100644
+--- a/src/gpu/ganesh/ops/DrawMeshOp.cpp
++++ b/src/gpu/ganesh/ops/DrawMeshOp.cpp
+@@ -1178,10 +1178,13 @@ GrOp::CombineResult MeshOp::onCombineIfPossible(GrOp* t, SkArenaAlloc*, const Gr
+         return CombineResult::kCannotCombine;
+     }
+ 
++    if (fVertexCount > INT32_MAX - that->fVertexCount) {
++        return CombineResult::kCannotCombine;
++    }
+     if (SkToBool(fIndexCount) != SkToBool(that->fIndexCount)) {
+         return CombineResult::kCannotCombine;
+     }
+-    if (SkToBool(fIndexCount) && fVertexCount + that->fVertexCount > SkToInt(UINT16_MAX)) {
++    if (SkToBool(fIndexCount) && fVertexCount > UINT16_MAX - that->fVertexCount) {
+         return CombineResult::kCannotCombine;
+     }
+ 
