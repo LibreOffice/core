@@ -1073,7 +1073,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 responseJSON.add_child("kinds", nodes);
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, responseJSON, /*pretty=*/ false);
-                handleArrayStr = ", \"handles\":";
+                handleArrayStr = ", \"handles\":"_ostr;
                 handleArrayStr = handleArrayStr + aStream.str().c_str();
                 if (bConnectorSelection)
                 {
@@ -1120,8 +1120,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
         if (sSelectionText.isEmpty())
         {
-            sSelectionText = "EMPTY";
-            sSelectionTextView = "EMPTY";
+            sSelectionText = "EMPTY"_ostr;
+            sSelectionTextView = "EMPTY"_ostr;
             if (!pOtherShell)
                 pViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, OString());
         }

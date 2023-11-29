@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxx"_ostr, "99");
     assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxy"_ostr, "99");
 
-    aBasePath = "/primitive2D/sdrrectangle/polypolygoncolor/polypolygon/polygon";
+    aBasePath = "/primitive2D/sdrrectangle/polypolygoncolor/polypolygon/polygon"_ostr;
 
     assertXPath(pXmlDoc, aBasePath + "/point", 5);
     assertXPath(pXmlDoc, aBasePath + "/point[1]", "x"_ostr, "49.5"); // hmm, weird, why?
@@ -315,7 +315,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     assertXPath(pXmlDoc, aBasePath + "/point[5]", "x"_ostr, "99");
     assertXPath(pXmlDoc, aBasePath + "/point[5]", "y"_ostr, "99");
 
-    aBasePath = "/primitive2D/sdrrectangle/polygonstroke";
+    aBasePath = "/primitive2D/sdrrectangle/polygonstroke"_ostr;
     assertXPath(pXmlDoc, aBasePath, 1);
 
     assertXPath(pXmlDoc, aBasePath + "/line", "color"_ostr, "#3465a4");
