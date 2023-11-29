@@ -43,7 +43,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.libreoffice.AboutDialogFragment;
 import org.libreoffice.BuildConfig;
@@ -199,7 +198,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         impressLayout = findViewById(R.id.impressLayout);
         calcLayout = findViewById(R.id.calcLayout);
         drawLayout = findViewById(R.id.drawLayout);
-        TextView openFileView = findViewById(R.id.open_file_view);
+        TextView openFileView = findViewById(R.id.open_file_button);
         openFileView.setOnClickListener(this);
 
 
@@ -458,7 +457,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             } else {
                 expandFabMenu();
             }
-        } else if (id == R.id.open_file_view) {
+        } else if (id == R.id.open_file_button) {
             showSystemFilePickerAndOpenFile();
         } else if (id == R.id.newWriterFAB) {
             loadNewDocument(DocumentType.WRITER);
