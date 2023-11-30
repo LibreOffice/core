@@ -1247,6 +1247,10 @@ void ScTiledRenderingTest::testCommentCallback()
 
         SfxLokHelper::setView(nView1);
 
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        if (pTabViewShell)
+            pTabViewShell->SetCursor(4, 4);
+
         // Add a new comment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
@@ -1267,15 +1271,32 @@ void ScTiledRenderingTest::testCommentCallback()
         CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
         CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
-        CPPUNIT_ASSERT_EQUAL(std::string("0 1 0 1"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
-        CPPUNIT_ASSERT_EQUAL(std::string("0 1 0 1"), aView2.m_aCommentCallbackResult.get<std::string>("cellRange"));
+        CPPUNIT_ASSERT_EQUAL(std::string("4 4 4 4"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
+        CPPUNIT_ASSERT_EQUAL(std::string("4 4 4 4"), aView2.m_aCommentCallbackResult.get<std::string>("cellRange"));
+
+        // Ensure deleting rows updates comments
+        if (pTabViewShell)
+            pTabViewShell->SetCursor(2, 2);
+
+        dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT_EQUAL(std::string("4 3 4 3"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
+        CPPUNIT_ASSERT_EQUAL(std::string("4 3 4 3"), aView2.m_aCommentCallbackResult.get<std::string>("cellRange"));
+
+        // Ensure deleting columns updates comments
+        if (pTabViewShell)
+            pTabViewShell->SetCursor(2, 2);
+
+        dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT_EQUAL(std::string("3 3 3 3"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
+        CPPUNIT_ASSERT_EQUAL(std::string("3 3 3 3"), aView2.m_aCommentCallbackResult.get<std::string>("cellRange"));
 
         std::string aCommentId = aView1.m_aCommentCallbackResult.get<std::string>("id");
 
         // Edit a comment
         // Select some random cell, we should be able to edit the cell note without
         // selecting the cell
-        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
         if (pTabViewShell)
             pTabViewShell->SetCursor(3, 100);
         aArgs = comphelper::InitPropertySequence(
@@ -1296,8 +1317,8 @@ void ScTiledRenderingTest::testCommentCallback()
         CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
         CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
-        CPPUNIT_ASSERT_EQUAL(std::string("0 1 0 1"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
-        CPPUNIT_ASSERT_EQUAL(std::string("0 1 0 1"), aView2.m_aCommentCallbackResult.get<std::string>("cellRange"));
+        CPPUNIT_ASSERT_EQUAL(std::string("3 3 3 3"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
+        CPPUNIT_ASSERT_EQUAL(std::string("3 3 3 3"), aView2.m_aCommentCallbackResult.get<std::string>("cellRange"));
 
         // Delete the comment
         if (pTabViewShell)
