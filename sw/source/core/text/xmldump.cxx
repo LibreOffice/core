@@ -198,15 +198,6 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%" SAL_PRIuUINT32, GetUpper()->GetFrameId() );
     if ( GetLower( ) )
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrameId() );
-    if (IsFootnoteFrame())
-    {
-        SwFootnoteFrame const*const pFF(static_cast<SwFootnoteFrame const*>(this));
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("ref"), "%" SAL_PRIuUINT32, pFF->GetRef()->GetFrameId() );
-        if (pFF->GetMaster())
-            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("master"), "%" SAL_PRIuUINT32, pFF->GetMaster()->GetFrameId() );
-        if (pFF->GetFollow())
-            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("follow"), "%" SAL_PRIuUINT32, pFF->GetFollow()->GetFrameId() );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

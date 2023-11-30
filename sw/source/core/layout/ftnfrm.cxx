@@ -3007,4 +3007,15 @@ void SwFootnoteFrame::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterEndElement(writer);
 }
 
+void SwFootnoteFrame::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
+{
+    SwLayoutFrame::dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("ref"), "%" SAL_PRIuUINT32, GetRef()->GetFrameId() );
+    if (GetMaster())
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("master"), "%" SAL_PRIuUINT32, GetMaster()->GetFrameId() );
+    if (GetFollow())
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("follow"), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -163,6 +163,7 @@ public:
     SwContentFrame* FindLastContent();
 
     void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
+    void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 
 #endif
