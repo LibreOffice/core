@@ -5655,7 +5655,6 @@ include/svl/nfsymbol.hxx
 include/svl/numuno.hxx
 include/svl/ownlist.hxx
 include/svl/pickerhistoryaccess.hxx
-include/svl/poolcach.hxx
 include/svl/poolitem.hxx
 include/svl/ptitem.hxx
 include/svl/rectitem.hxx
@@ -7905,6 +7904,7 @@ sc/inc/pagepar.hxx
 sc/inc/paramisc.hxx
 sc/inc/patattr.hxx
 sc/inc/pivot.hxx
+sc/inc/poolcach.hxx
 sc/inc/postit.hxx
 sc/inc/printopt.hxx
 sc/inc/prnsave.hxx
@@ -8093,6 +8093,7 @@ sc/source/core/data/olinetab.cxx
 sc/source/core/data/pagepar.cxx
 sc/source/core/data/patattr.cxx
 sc/source/core/data/pivot2.cxx
+sc/source/core/data/poolcach.cxx
 sc/source/core/data/poolhelp.cxx
 sc/source/core/data/postit.cxx
 sc/source/core/data/queryiter.cxx
@@ -11062,7 +11063,6 @@ svl/source/items/itemset.cxx
 svl/source/items/lckbitem.cxx
 svl/source/items/legacyitem.cxx
 svl/source/items/macitem.cxx
-svl/source/items/poolcach.cxx
 svl/source/items/ptitem.cxx
 svl/source/items/rectitem.cxx
 svl/source/items/rngitem.cxx

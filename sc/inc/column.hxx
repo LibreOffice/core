@@ -71,7 +71,7 @@ class Sparkline;
 
 class Fraction;
 class OutputDevice;
-class SfxItemPoolCache;
+class ScItemPoolCache;
 class SvtListener;
 class SfxPoolItem;
 class SfxStyleSheetBase;
@@ -144,7 +144,7 @@ public:
 
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
-    SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
+    SCROW       ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
                                      SCCOL nCol );
     void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                   ScEditDataArray* pDataArray = nullptr,
@@ -575,7 +575,7 @@ public:
 
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
-    SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged );
+    SCROW       ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged );
     void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );

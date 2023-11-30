@@ -26,7 +26,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/justifyitem.hxx>
 #include <osl/diagnose.h>
-#include <svl/poolcach.hxx>
+#include <poolcach.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <global.hxx>
@@ -846,7 +846,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
     while ((nStart <= nEndRow) && (nPos < mvData.size()));
 }
 
-void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache, ScEditDataArray* pDataArray, bool* const pIsChanged )
+void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, ScItemPoolCache* pCache, ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
 #if DEBUG_SC_TESTATTRARRAY
     TestData();
@@ -869,9 +869,9 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
 
     do
     {
-        const ScPatternAttr* pOldPattern = mvData[nPos].pPattern;
-        const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pCache->ApplyTo( *pOldPattern ) );
-        if (!SfxPoolItem::areSame(pNewPattern, pOldPattern))
+        const ScPatternAttr& rOldPattern = *mvData[nPos].pPattern;
+        const ScPatternAttr& rNewPattern = pCache->ApplyTo( rOldPattern );
+        if (!SfxPoolItem::areSame(rNewPattern, rOldPattern))
         {
             SCROW nY1 = nStart;
             SCROW nY2 = mvData[nPos].nEndRow;
@@ -884,7 +884,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
             {
                 if (nY1 < nStartRow) nY1=nStartRow;
                 if (nY2 > nEndRow) nY2=nEndRow;
-                SetPatternArea( nY1, nY2, pNewPattern, false, pDataArray );
+                SetPatternArea( nY1, nY2, &rNewPattern, false, pDataArray );
                 Search( nStart, nPos );
             }
             else
@@ -893,8 +893,8 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                 {
                     // ensure attributing changes text-width of cell
 
-                    const SfxItemSet& rNewSet = pNewPattern->GetItemSet();
-                    const SfxItemSet& rOldSet = pOldPattern->GetItemSet();
+                    const SfxItemSet& rNewSet = rNewPattern.GetItemSet();
+                    const SfxItemSet& rOldSet = rOldPattern.GetItemSet();
 
                     bool bNumFormatChanged;
                     if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
@@ -907,7 +907,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                 }
 
                 rDocument.GetPool()->DirectRemoveItemFromPool(*mvData[nPos].pPattern);
-                mvData[nPos].pPattern = pNewPattern;
+                mvData[nPos].pPattern = &rNewPattern;
                 if (Concat(nPos))
                     Search(nStart, nPos);
                 else
@@ -1237,7 +1237,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem&     rBoxItem,
     }
     else
     {
-        SfxItemPoolCache aCache( rDocument.GetPool(), &aNewFrame );
+        ScItemPoolCache aCache( rDocument.GetPool(), &aNewFrame );
         ApplyCacheArea( nStartRow, nEndRow, &aCache );
 
         return true;

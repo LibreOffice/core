@@ -27,7 +27,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/numformat.hxx>
-#include <svl/poolcach.hxx>
+#include <poolcach.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -5912,7 +5912,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
     }
     else
     {
-        SfxItemPoolCache aCache( mxPoolHelper->GetDocPool(), pSet );
+        ScItemPoolCache aCache( mxPoolHelper->GetDocPool(), pSet );
         SCTAB nMax = GetTableCount();
         for (const auto& rTab : rMark)
         {

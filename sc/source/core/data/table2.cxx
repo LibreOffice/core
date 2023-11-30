@@ -60,7 +60,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <svl/poolcach.hxx>
+#include <poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
 
@@ -479,7 +479,7 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
         ScDocumentPool* pPool = rDocument.GetPool();
         SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aSet( *pPool );
         aSet.Put( ScProtectionAttr( false ) );
-        SfxItemPoolCache aCache( pPool, &aSet );
+        ScItemPoolCache aCache( pPool, &aSet );
         ApplySelectionCache( &aCache, rMark );
     }
 
@@ -3219,7 +3219,7 @@ void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )
         CreateColumnIfNotExists(nCol).ApplyAttr( nRow, rAttr );
 }
 
-void ScTable::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark,
+void ScTable::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark,
                                    ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     if(!rMark.GetTableSelect(nTab))

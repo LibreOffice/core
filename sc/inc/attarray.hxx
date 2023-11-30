@@ -36,7 +36,7 @@ class ScMarkArray;
 class ScStyleSheet;
 class ScFlatBoolRowSegments;
 
-class SfxItemPoolCache;
+class ScItemPoolCache;
 class SfxStyleSheetBase;
 class SvxBoxItem;
 class SvxBoxInfoItem;
@@ -155,7 +155,7 @@ public:
                             bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr)
     { SetPatternAreaImpl(nStartRow, nEndRow, pPattern, bPutToPool, pDataArray, /*bPassingOwnership*/false); }
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
-    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
+    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, ScItemPoolCache* pCache,
                             ScEditDataArray* pDataArray = nullptr, bool* const pIsChanged = nullptr );
     void    SetAttrEntries(std::vector<ScAttrEntry> && vNewData);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,

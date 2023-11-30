@@ -101,7 +101,6 @@ protected:
         return m_ppItems[idx];
     }
 
-friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
 
 private:

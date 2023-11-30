@@ -132,7 +132,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/lckbitem \
     svl/source/items/legacyitem \
     svl/source/items/macitem \
-    svl/source/items/poolcach \
     svl/source/items/poolitem \
     svl/source/items/ptitem \
     svl/source/items/rectitem \

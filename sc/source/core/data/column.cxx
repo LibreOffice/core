@@ -47,7 +47,7 @@
 #include <bcaslot.hxx>
 
 #include <svl/numformat.hxx>
-#include <svl/poolcach.hxx>
+#include <poolcach.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <editeng/fieldupdater.hxx>
@@ -375,13 +375,13 @@ sal_uInt32 ScColumnData::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
     return nFormat;
 }
 
-SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
+SCROW ScColumn::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
                                      bool* const pIsChanged )
 {
     return ScColumnData::ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged, nCol );
 }
 
-SCROW ScColumnData::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
+SCROW ScColumnData::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
                                          bool* const pIsChanged, SCCOL nCol )
 {
     SCROW nTop = 0;
@@ -468,23 +468,23 @@ void ScColumn::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rM
 void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
-    SfxItemPoolCache aCache( GetDoc().GetPool(), pSet );
+    ScItemPoolCache aCache( GetDoc().GetPool(), pSet );
 
     const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
 
     //  true = keep old content
 
-    const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &aCache.ApplyTo( *pPattern ) );
+    const ScPatternAttr& rNewPattern = aCache.ApplyTo( *pPattern );
 
-    if (!SfxPoolItem::areSame(pNewPattern, pPattern))
-      pAttrArray->SetPattern( nRow, pNewPattern );
+    if (!SfxPoolItem::areSame(rNewPattern, *pPattern))
+      pAttrArray->SetPattern( nRow, &rNewPattern );
 }
 
 void ScColumnData::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                  ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
-    SfxItemPoolCache aCache( GetDoc().GetPool(), pSet );
+    ScItemPoolCache aCache( GetDoc().GetPool(), pSet );
     pAttrArray->ApplyCacheArea( nStartRow, nEndRow, &aCache, pDataArray, pIsChanged );
 }
 
@@ -492,7 +492,7 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScPatternAttr& rPattern, SvNumFormatType nNewType )
 {
     const SfxItemSet* pSet = &rPattern.GetItemSet();
-    SfxItemPoolCache aCache( GetDoc().GetPool(), pSet );
+    ScItemPoolCache aCache( GetDoc().GetPool(), pSet );
     SvNumberFormatter* pFormatter = GetDoc().GetFormatTable();
     SCROW nEndRow = rRange.aEnd.Row();
     for ( SCROW nRow = rRange.aStart.Row(); nRow <= nEndRow; nRow++ )
@@ -621,7 +621,7 @@ const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRo
 void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 {
     //  in order to only create a new SetItem, we don't need SfxItemPoolCache.
-    //TODO: Warning: SfxItemPoolCache seems to create too many Refs for the new SetItem ??
+    //TODO: Warning: ScItemPoolCache seems to create too many Refs for the new SetItem ??
 
     ScDocumentPool* pDocPool = GetDoc().GetPool();
 

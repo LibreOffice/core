@@ -16,23 +16,22 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_POOLCACH_HXX
-#define INCLUDED_SVL_POOLCACH_HXX
+#pragma once
 
-#include <svl/svldllapi.h>
+#include "scdllapi.h"
 #include <vector>
 
 class SfxItemPool;
 class SfxItemSet;
 class SfxPoolItem;
-class SfxSetItem;
+class ScPatternAttr;
 
-class SVL_DLLPUBLIC SfxItemPoolCache
+class ScItemPoolCache
 {
     struct SfxItemModifyImpl
     {
-        const SfxSetItem  *pOrigItem;
-        SfxSetItem        *pPoolItem;
+        const ScPatternAttr  *pOrigItem;
+        ScPatternAttr        *pPoolItem;
     };
 
     SfxItemPool             *pPool;
@@ -42,16 +41,13 @@ class SVL_DLLPUBLIC SfxItemPoolCache
     const SfxPoolItem       *pItemToPut;
 
 public:
-                            SfxItemPoolCache( SfxItemPool *pPool,
+                            ScItemPoolCache( SfxItemPool *pPool,
                                               const SfxPoolItem *pPutItem );
-                            SfxItemPoolCache( SfxItemPool *pPool,
+                            ScItemPoolCache( SfxItemPool *pPool,
                                               const SfxItemSet *pPutSet );
-                            ~SfxItemPoolCache();
+                            ~ScItemPoolCache();
 
-    const SfxSetItem&       ApplyTo( const SfxSetItem& rSetItem );
+    const ScPatternAttr&    ApplyTo( const ScPatternAttr& rSetItem );
 };
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

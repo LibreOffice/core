@@ -111,7 +111,6 @@ class SVL_DLLPUBLIC SfxPoolItem
 {
     friend class SfxItemPool;
     friend class SfxItemDisruptor_Impl;
-    friend class SfxItemPoolCache;
     friend class SfxItemSet;
 
     // allow ItemSetTooling to access
