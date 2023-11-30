@@ -41,7 +41,6 @@ public class AboutDialogFragment extends DialogFragment {
         textView.setTextColor(defaultColor);
 
         // Take care of placeholders in the version and vendor text views.
-        TextView versionView = messageView.findViewById(R.id.about_version);
         TextView vendorView = messageView.findViewById(R.id.about_vendor);
         try
         {
@@ -50,10 +49,10 @@ public class AboutDialogFragment extends DialogFragment {
             String[] tokens = versionName.split("/");
             if (tokens.length == 3)
             {
-                String version = String.format(versionView.getText().toString().replace("\n", "<br/>"),
-                        tokens[0], "<a href=\"https://hub.libreoffice.org/git-core/" + tokens[1] + "\">" + tokens[1] + "</a>");
+                String version = String.format(getString(R.string.app_version), tokens[0], tokens[1]);
                 @SuppressWarnings("deprecation") // since 24 with additional option parameter
                 Spanned versionString = Html.fromHtml(version);
+                TextView versionView = messageView.findViewById(R.id.about_version);
                 versionView.setText(versionString);
                 versionView.setMovementMethod(LinkMovementMethod.getInstance());
                 String vendor = vendorView.getText().toString();
@@ -65,7 +64,6 @@ public class AboutDialogFragment extends DialogFragment {
         }
         catch (PackageManager.NameNotFoundException e)
         {
-            versionView.setText("");
             vendorView.setText("");
         }
 
