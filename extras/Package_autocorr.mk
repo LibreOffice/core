@@ -53,6 +53,7 @@ $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr
 	acor_sr-ME.dat \
 	acor_sr-RS.dat \
 	acor_sv-SE.dat \
+	acor_th-TH.dat \
 	acor_tr-TR.dat \
 	acor_vi-VN.dat \
 	acor_vro-EE.dat \

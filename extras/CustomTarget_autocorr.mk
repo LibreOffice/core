@@ -55,6 +55,7 @@ extras_AUTOCORR_LANGS := \
 	sr-ME:sr-ME \
 	sr-RS:sr-RS \
 	sv:sv-SE \
+	th:th-TH \
 	tr:tr-TR \
 	vi:vi-VN \
 	vro:vro-EE \
@@ -223,6 +224,8 @@ extras_AUTOCORR_XMLFILES := \
 	sv/META-INF/manifest.xml \
 	sv/SentenceExceptList.xml \
 	sv/WordExceptList.xml \
+	th/DocumentList.xml \
+	th/META-INF/manifest.xml \
 	tr/DocumentList.xml \
 	tr/META-INF/manifest.xml \
 	tr/SentenceExceptList.xml \
