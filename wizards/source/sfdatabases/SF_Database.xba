@@ -28,7 +28,7 @@ Option Explicit
 &apos;&apos;&apos;		Transaction handling
 &apos;&apos;&apos;			Changes to data remain reversible until the moment the running script instructs the database to commit them.
 &apos;&apos;&apos;			The implicit (default) behaviour is that commit takes place after the execution of every single SQL statement.
-&apos;&apos;&apos;			The choice can be made (SetTranactionMode()) to take commitments manually.
+&apos;&apos;&apos;			The choice can be made (SetTransactionMode()) to take commitments manually.
 &apos;&apos;&apos;			The Commit() and Rollback() statements delimit transactions.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation and usage:

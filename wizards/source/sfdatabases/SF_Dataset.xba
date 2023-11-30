@@ -585,6 +585,7 @@ Check:
 		If Not ScriptForge.SF_Utils._Validate(Header, &quot;Header&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(MaxRows, &quot;MaxRows&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 	End If
+	If MaxRows &lt; 0 Then MaxRows = 1
 
 Try:
 	With _RowSet
@@ -608,7 +609,7 @@ Try:
 			End If
 
 			&apos;	Load data
-			Do While bRead And (MaxRows = 0 Or lRows &lt; MaxRows - 1)
+			Do While bRead
 				lRows = lRows + 1
 				If lRows = 0 Then
 					ReDim vResult(0 To lRows, 0 To lCols)
@@ -618,7 +619,7 @@ Try:
 				For i = 0 To lCols
 					vResult(lRows, i) = _ParentDatabase._GetColumnValue(_RowSet, i + 1)
 				Next i
-				bRead = .next()
+				If MaxRows = 0 Or lRows &lt; MaxRows - 1 Then bRead = .next() Else bRead = False
 			Loop
 
 		Else
@@ -1343,7 +1344,7 @@ Try:
 					&apos;	Field names
 					sFields = sFields &amp; &quot;,&quot; &amp; .Name
 					&apos;	Updatable field names
-					If Not _ReadOnly And .isDefinitelyWritable And Not .IsAutoIncrement Then sUpdatableFields = sUpdatableFields &amp; &quot;,&quot; &amp; .Name
+					If Not _ReadOnly And .IsWritable And Not .IsAutoIncrement Then sUpdatableFields = sUpdatableFields &amp; &quot;,&quot; &amp; .Name
 					&apos;	Default values
 					_DefaultValues(i) = _ConvertDefaultValue(oColumn)
 					&apos;	AutoValue
