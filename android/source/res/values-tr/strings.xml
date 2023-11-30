@@ -5,7 +5,7 @@
     <string name="app_name_settings">LibreOffice Görüntüleyici Ayarları</string>
 
     <string name="app_about_name"><b>LibreOffice Görüntüleyici \'Beta\'</b></string>
-    <string name="app_version">Versiyon: %1$s\nBuild ID: %2$s</string>
+    <string name="app_version">Versiyon: %1$s&lt;br&gt;Build ID: &lt;a href=&quot;https://hub.libreoffice.org/git-core/%2$s&quot;&gt;%2$s&lt;/a&gt;</string>
     <string name="app_description">LibreOffice Görüntüleyici LibreOffice tabanlı bir belge görüntüleyicisidir.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">Bu sürüm $VENDOR tarafından derlenmiştir.</string>
