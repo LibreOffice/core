@@ -42,6 +42,7 @@
 #include <comphelper/fileurl.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <utility>
 
 #define DEBUG_TYPE_DETECTION 0
@@ -841,6 +842,31 @@ void TypeDetection::impl_getAllFormatTypes(
 static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStream,
                         const css::uno::Reference<css::uno::XComponentContext>& xContext)
 {
+    try
+    {
+        // Only consider seekable streams starting with "PK", to avoid false detections
+        css::uno::Reference<css::io::XSeekable> xSeek(xStream, css::uno::UNO_QUERY_THROW);
+        comphelper::ScopeGuard restorePos(
+            [xSeek, nPos = xSeek->getPosition()]
+            {
+                try
+                {
+                    xSeek->seek(nPos);
+                }
+                catch (const css::uno::Exception&)
+                {
+                }
+            });
+        css::uno::Sequence<sal_Int8> magic(2);
+        xStream->readBytes(magic, 2);
+        if (magic.getLength() < 2 || magic[0] != 'P' || magic[1] != 'K')
+            return false;
+    }
+    catch (const css::uno::Exception&)
+    {
+        return false;
+    }
+
     std::vector<css::uno::Any> aArguments{
         css::uno::Any(xStream),
         css::uno::Any(css::beans::NamedValue("AllowRemoveOnInsert", css::uno::Any(false))),
