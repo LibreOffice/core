@@ -45,21 +45,15 @@ public class AboutDialogFragment extends DialogFragment {
         {
             String versionName = getActivity().getPackageManager()
                     .getPackageInfo(getActivity().getPackageName(), 0).versionName;
-            String[] tokens = versionName.split("/");
-            if (tokens.length == 3)
-            {
-                String version = String.format(getString(R.string.app_version), tokens[0], tokens[1]);
-                @SuppressWarnings("deprecation") // since 24 with additional option parameter
-                Spanned versionString = Html.fromHtml(version);
-                TextView versionView = messageView.findViewById(R.id.about_version);
-                versionView.setText(versionString);
-                versionView.setMovementMethod(LinkMovementMethod.getInstance());
-                TextView vendorView = messageView.findViewById(R.id.about_vendor);
-                String vendor = getString(R.string.app_vendor).replace("$VENDOR", tokens[2]);
-                vendorView.setText(vendor);
-            }
-            else
-                throw new PackageManager.NameNotFoundException();
+            String version = String.format(getString(R.string.app_version), versionName, BuildConfig.BUILD_ID_SHORT);
+            @SuppressWarnings("deprecation") // since 24 with additional option parameter
+            Spanned versionString = Html.fromHtml(version);
+            TextView versionView = messageView.findViewById(R.id.about_version);
+            versionView.setText(versionString);
+            versionView.setMovementMethod(LinkMovementMethod.getInstance());
+            TextView vendorView = messageView.findViewById(R.id.about_vendor);
+            String vendor = getString(R.string.app_vendor).replace("$VENDOR", BuildConfig.VENDOR);
+            vendorView.setText(vendor);
         }
         catch (PackageManager.NameNotFoundException e)
         {
