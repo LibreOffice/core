@@ -30,7 +30,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">begin</property>
+            <property name="pack_type">start</property>
             <property name="position">0</property>
           </packing>
         </child>
