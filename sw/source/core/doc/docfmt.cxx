@@ -1542,14 +1542,43 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
     // Copy the stashed formats as well between the page descriptors...
     for (bool bFirst : { true, false })
+    {
         for (bool bLeft : { true, false })
+        {
             for (bool bHeader : { true, false })
             {
                 if (!bLeft && !bFirst)
                     continue;
-                if (auto pStashedFormat = rSrcDesc.GetStashedFrameFormat(bHeader, bLeft, bFirst))
-                    rDstDesc.StashFrameFormat(*pStashedFormat, bHeader, bLeft, bFirst);
+
+                // Copy format only if it exists
+                if (auto pStashedFormatSrc = rSrcDesc.GetStashedFrameFormat(bHeader, bLeft, bFirst))
+                {
+                    if (pStashedFormatSrc->GetDoc() != this)
+                    {
+                        SwFrameFormat* pNewFormat = new SwFrameFormat(GetAttrPool(), "CopyDesc", GetDfltFrameFormat());
+
+                        SfxItemSet aAttrSet(pStashedFormatSrc->GetAttrSet());
+                        aAttrSet.ClearItem(RES_HEADER);
+                        aAttrSet.ClearItem(RES_FOOTER);
+
+                        pNewFormat->DelDiffs( aAttrSet );
+                        pNewFormat->SetFormatAttr( aAttrSet );
+
+                        if (bHeader)
+                            CopyHeader(*pStashedFormatSrc, *pNewFormat);
+                        else
+                            CopyFooter(*pStashedFormatSrc, *pNewFormat);
+
+                        rDstDesc.StashFrameFormat(*pNewFormat, bHeader, bLeft, bFirst);
+                    }
+                    else
+                    {
+                        rDstDesc.StashFrameFormat(*pStashedFormatSrc, bHeader, bLeft, bFirst);
+                    }
+                }
             }
+        }
+    }
 }
 
 void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
