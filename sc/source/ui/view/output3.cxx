@@ -33,6 +33,8 @@
 #include <tabvwsh.hxx>
 
 #include <svx/fmview.hxx>
+#include <svx/sdrpaintwindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 
 // #i72502#
 Point ScOutputData::PrePrintDrawingLayer(tools::Long nLogStX, tools::Long nLogStY )
@@ -204,7 +206,57 @@ void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
 
             if(pPageView)
             {
-                pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), mpDev);
+                if (nullptr != pPageView->FindPageWindow(*mpDev))
+                {
+                    // Target OutputDevice is registered for this view
+                    // (as it should be), we can just render
+                    pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), mpDev);
+                }
+                else if (0 != pPageView->PageWindowCount())
+                {
+                    // We need to temporarily make the target OutputDevice being
+                    // 'known/registered' in the paint mechanism so that
+                    // SdrPageView::DrawLayer can find it.
+                    // This situation can occur when someone interprets the
+                    // OutputDevice parameter that gets handed over to DrawLayer
+                    // (or other SdrPageView repaint methods) to be there to
+                    // define a new render target.
+                    // This is *not* the case: This parameter is used to
+                    // *identify* an already registered target-OutputDevice.
+                    // The default is even to call with a nullptr -> that triggers
+                    // the repaint for *all* registered OutputDevices/Windows.
+                    // Since this is a common and known misinterpretation it
+                    // is good to offer workarounds in the code - there are some
+                    // already.
+                    // For now - use an already existing 'patch mechanism' and
+                    // 'smuggle' the unknown/temporary OutputDevice as a
+                    // temporary SdrPaintWindow to the SdrPageWindow, that is
+                    // not very expensive.
+                    // NOTE: Just using the 1st SdrPageWindow here will be OK
+                    //   in most cases, the splitting of a view is only used
+                    //   in calc nowadays and should have identical zoom.
+                    //   Still, trigger a warning...
+                    OSL_ENSURE(1 == pPageView->PageWindowCount(),
+                        "ScOutputData::DrawSelectiveObjects: More than one SdrPageView, still using 1st one (!)");
+                    SdrPageWindow* patchedPageWindow(pPageView->GetPageWindow(0));
+                    assert(nullptr != patchedPageWindow && "SdrPageWindow *must* exist when 0 != PageWindowCount()");
+                    SdrPaintWindow temporaryPaintWindow(*pDrawView, *mpDev);
+                    SdrPaintWindow* previousPaintWindow(patchedPageWindow->patchPaintWindow(temporaryPaintWindow));
+                    pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), mpDev);
+                    patchedPageWindow->unpatchPaintWindow(previousPaintWindow);
+                }
+                else
+                {
+                    // There does not even exist a SdrPageWindow. Still call the
+                    // paint to get the paint done, but be aware that this will create
+                    // temporary SdrPaintWindow and SdrPageWindow and - due to the
+                    // former - will not be able to use the decomposition buffering
+                    // in the VC/VOC/OC mechanism. For that reason this might be
+                    // somewhat 'expensive'.
+                    // You will also get a warning about it (see OSL_FAIL in
+                    // SdrPageView::DrawLayer)
+                    pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), mpDev);
+                }
             }
         }
     }
