@@ -86,7 +86,9 @@ stop-start-cycle:
 	$(ANDROID_SDK_DIR)/platform-tools/adb shell stop && $(ANDROID_SDK_DIR)/platform-tools/adb shell start && sleep 10
 
 # build-host specific stuff (build paths and the like) to keep build.gradle static
-liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk $(SRCDIR)/android/Bootstrap/Makefile.shared
+liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk \
+		$(wildcard $(INSTDIR)/program/version.ini $(INSTDIR)/program/versionrc) \
+		$(SRCDIR)/android/Bootstrap/Makefile.shared
 	@echo "creating $@"
 	( \
 		echo "// created by Makefile.shared - your changes will be overridden" \
