@@ -122,6 +122,7 @@ class SvtPathOptions_Impl
         void            SetAutoTextPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::AutoText, rPath ); }
         void            SetBasicPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Basic, rPath ); }
         void            SetTempPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Temp, rPath ); }
+        void            SetWorkPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Work, rPath ); }
 
         OUString   SubstVar( const OUString& rVar ) const;
         OUString   ExpandMacros( const OUString& rPath ) const;
@@ -587,6 +588,11 @@ void SvtPathOptions::SetBasicPath( const OUString& rPath )
 void SvtPathOptions::SetTempPath( const OUString& rPath )
 {
     pImpl->SetTempPath( rPath );
+}
+
+void SvtPathOptions::SetWorkPath( const OUString& rPath )
+{
+    pImpl->SetWorkPath( rPath );
 }
 
 OUString SvtPathOptions::SubstituteVariable( const OUString& rVar ) const
