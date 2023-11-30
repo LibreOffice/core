@@ -32,7 +32,7 @@
 ## II. run test/soffice in gdb and set breakpoints in acquire/release
 ##     with a command to print the backtrace
 
-# set logging on
+# set logging enabled on
 # break foo.cxx:123
 # break foo.cxx:234
 
