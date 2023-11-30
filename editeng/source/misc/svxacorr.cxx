@@ -2024,20 +2024,21 @@ static void GeneratePackageName ( std::u16string_view rShort, OUString& rPackage
     rPackageName = aBuf.makeStringAndClear();
 }
 
-static const SvxAutocorrWord* lcl_SearchWordsInList(
-                SvxAutoCorrectLanguageLists* pList, std::u16string_view rTxt,
-                sal_Int32& rStt, sal_Int32 nEndPos)
+static std::optional<SvxAutocorrWordList::WordSearchStatus>
+lcl_SearchWordsInList( SvxAutoCorrectLanguageLists* pList,
+                       std::u16string_view rTxt,
+                       sal_Int32& rStt, sal_Int32 nEndPos )
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
     return pAutoCorrWordList->SearchWordsInList( rTxt, rStt, nEndPos );
 }
 
 // the search for the words in the substitution table
-const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
-                std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos,
-                SvxAutoCorrDoc&, LanguageTag& rLang )
+std::optional<SvxAutocorrWordList::WordSearchStatus>
+SvxAutoCorrect::SearchWordsInList(
+    std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos,
+    SvxAutoCorrDoc&, LanguageTag& rLang )
 {
-    const SvxAutocorrWord* pRet = nullptr;
     LanguageTag aLanguageTag( rLang);
     if( aLanguageTag.isSystemLocale() )
         aLanguageTag.reset( MsLangId::getConfiguredSystemLanguage());
@@ -2053,14 +2054,13 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
         const auto iter = m_aLangTable.find(aLanguageTag);
         assert(iter != m_aLangTable.end());
         SvxAutoCorrectLanguageLists & rList = iter->second;
-        pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
+        auto pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
         if( pRet )
         {
             rLang = aLanguageTag;
             return pRet;
         }
-        else
-            return nullptr;
+        return std::nullopt;
     }
 
     // If it still could not be found here, then keep on searching
@@ -2074,7 +2074,7 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
     {
         //the language is available - so bring it on
         SvxAutoCorrectLanguageLists& rList = m_aLangTable.find(aLanguageTag)->second;
-        pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
+        auto pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
         if( pRet )
         {
             rLang = aLanguageTag;
@@ -2089,14 +2089,22 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
         const auto iter = m_aLangTable.find(aLanguageTag);
         assert(iter != m_aLangTable.end());
         SvxAutoCorrectLanguageLists& rList = iter->second;
-        pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
+        auto pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
         if( pRet )
         {
             rLang = aLanguageTag;
             return pRet;
         }
     }
-    return nullptr;
+    return std::nullopt;
+}
+
+bool SvxAutoCorrect::SearchWordsNext(
+    std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos,
+    SvxAutocorrWordList::WordSearchStatus& rStatus )
+{
+    const SvxAutocorrWordList* pWordList = rStatus.GetAutocorrWordList();
+    return pWordList->SearchWordsNext( rTxt, rStt, nEndPos, rStatus );
 }
 
 bool SvxAutoCorrect::FindInWordStartExceptList( LanguageType eLang,
@@ -2971,6 +2979,92 @@ void SvxAutocorrWordList::DeleteAndDestroyAll()
     mpImpl->DeleteAndDestroyAll();
 }
 
+struct SvxAutocorrWordList::Iterator::Impl {
+    typedef SvxAutocorrWordList::AutocorrWordSetType::const_iterator VecIterType;
+    typedef AutocorrWordHashType::const_iterator HashIterType;
+
+    HashIterType  mHashIter, mHashEnd;
+    VecIterType   mSortedVectorIter, mSortedVectorEnd;
+
+    Impl(const HashIterType& hashIter, const HashIterType& hashEnd,
+         const VecIterType& vecIter, const VecIterType& vecEnd)
+        : mHashIter(hashIter), mHashEnd(hashEnd),
+          mSortedVectorIter(vecIter), mSortedVectorEnd(vecEnd) {}
+
+    bool Step() {
+        // Iterate hash table, followed by sorted vector
+        if (mHashIter != mHashEnd) {
+            return ++mHashIter != mHashEnd
+                   || mSortedVectorIter != mSortedVectorEnd;
+        }
+        return ++mSortedVectorIter != mSortedVectorEnd;
+    }
+
+    const SvxAutocorrWord& operator*() {
+        return (mHashIter == mHashEnd) ? *mSortedVectorIter : mHashIter->second;
+    }
+    const SvxAutocorrWord* operator->() {
+        return (mHashIter == mHashEnd) ? &*mSortedVectorIter : &mHashIter->second;
+    }
+};
+
+SvxAutocorrWordList::Iterator::Iterator(
+    std::unique_ptr<SvxAutocorrWordList::Iterator::Impl> pImpl
+) : mpImpl(std::move(pImpl))
+{
+}
+
+SvxAutocorrWordList::Iterator::Iterator(
+    const SvxAutocorrWordList::Iterator& it
+) : mpImpl(new Impl(*(it.mpImpl)))
+{
+}
+
+SvxAutocorrWordList::Iterator::~Iterator()
+{
+}
+
+bool SvxAutocorrWordList::Iterator::Step()
+{
+    return mpImpl->Step();
+}
+
+const SvxAutocorrWord& SvxAutocorrWordList::Iterator::operator*() const
+{
+    return **mpImpl;
+}
+
+const SvxAutocorrWord* SvxAutocorrWordList::Iterator::operator->() const
+{
+    return mpImpl->operator->();
+}
+
+bool SvxAutocorrWordList::ContainsPattern(const OUString& aShort) const
+{
+    // check hash table first
+    if (mpImpl->maHash.contains(aShort)) {
+        return true;
+    }
+
+    // then do binary search on sorted vector
+    CollatorWrapper& rCmp = ::GetCollatorWrapper();
+    auto it = std::lower_bound(mpImpl->maSortedVector.begin(),
+                               mpImpl->maSortedVector.end(),
+                               aShort,
+                               [&](const SvxAutocorrWord& elm,
+                                   const OUString& val) {
+                                       return rCmp.compareString(elm.GetShort(),
+                                                                 val) < 0;
+                                   } );
+    if (it != mpImpl->maSortedVector.end()
+        && rCmp.compareString(aShort, it->GetShort()) == 0)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 // returns true if inserted
 const SvxAutocorrWord* SvxAutocorrWordList::Insert(SvxAutocorrWord aWord) const
 {
@@ -3058,10 +3152,11 @@ const SvxAutocorrWordList::AutocorrWordSetType& SvxAutocorrWordList::getSortedCo
     return mpImpl->maSortedVector;
 }
 
-const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
-                                      std::u16string_view rTxt,
-                                      sal_Int32 &rStt,
-                                      sal_Int32 nEndPos) const
+std::optional<SvxAutocorrWord>
+SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
+                                 std::u16string_view rTxt,
+                                 sal_Int32 &rStt,
+                                 sal_Int32 nEndPos) const
 {
     const OUString& rChk = pFnd->GetShort();
 
@@ -3074,7 +3169,9 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     bool bColonNameColon = static_cast<sal_Int32>(rTxt.size()) > nEndPos &&
         rTxt[nEndPos] == ':' && rChk[0] == ':' && rChk.endsWith(":");
     if ( nEndPos + (bColonNameColon ? 1 : 0) < rChk.getLength() - left_wildcard - right_wildcard )
-        return nullptr;
+    {
+        return std::nullopt;
+    }
 
     bool bWasWordDelim = false;
     sal_Int32 nCalcStt = nEndPos - rChk.getLength() + left_wildcard;
@@ -3093,18 +3190,26 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             {
                 // fdo#33899 avoid "1/2", "1/3".. to be replaced by fractions in dates, eg. 1/2/14
                 if (static_cast<sal_Int32>(rTxt.size()) > nEndPos && rTxt[nEndPos] == '/' && rChk.indexOf('/') != -1)
-                    return nullptr;
-                return pFnd;
+                {
+                    return std::nullopt;
+                }
+                return *pFnd;
             }
             // get the first word delimiter position before the matching ".*word" pattern
             while( rStt && !(bWasWordDelim = IsWordDelim( rTxt[ --rStt ])))
                 ;
             if (bWasWordDelim) rStt++;
+
+            // don't let wildcard pattern override non-wildcard one
+            OUString aShort(rTxt.substr(rStt, nEndPos - rStt));
+            if (ContainsPattern(aShort)) {
+                return std::nullopt;
+            }
+
             OUString left_pattern( rTxt.substr(rStt, nEndPos - rStt - rChk.getLength() + left_wildcard) );
             // avoid double spaces before simple "word" replacement
             left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().subView(1) : pFnd->GetLong();
-            if( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(OUString(rTxt.substr(rStt, nEndPos - rStt)), left_pattern) ) )
-                return pNew;
+            return SvxAutocorrWord(aShort, left_pattern);
         }
     } else
     // match "word.*" or ".*word.*" patterns, eg. "i18n.*", ".*---.*", TODO: add transliteration support
@@ -3118,7 +3223,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
         while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
             ;
         // search the first occurrence (with a left word delimitation, if needed)
-        size_t nFndPos = std::u16string_view::npos;
+        size_t nFndPos = rStt - 1;
         do {
             nFndPos = rTxt.find( sTmp, nFndPos + 1);
             if (nFndPos == std::u16string_view::npos)
@@ -3139,10 +3244,14 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             }
             if (nEndPos + extra_repl <= static_cast<sal_Int32>(nFndPos))
             {
-                return nullptr;
+                return std::nullopt;
             }
-            // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
+            // return matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
             OUString aShort( rTxt.substr(nFndPos, nEndPos - nFndPos + extra_repl) );
+            // don't let wildcard pattern override non-wildcard one
+            if (ContainsPattern(aShort)) {
+                return std::nullopt;
+            }
 
             OUString aLong;
             rStt = nFndPos;
@@ -3158,42 +3267,84 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                     {
                         sal_Int32 nTmp(nFndPos);
                         while (nTmp < static_cast<sal_Int32>(nSttWdPos) && !IsWordDelim(rTxt[nTmp]))
+                        {
                             nTmp++;
-                        if (nTmp < static_cast<sal_Int32>(nSttWdPos))
+                        }
+                        if (nTmp < static_cast<sal_Int32>(nSttWdPos)) {
                             break; // word delimiter found
+                        }
                         buf.append(rTxt.substr(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
                         nFndPos = nSttWdPos + sTmp.getLength();
                     }
                 } while (nSttWdPos != std::u16string_view::npos);
-                if (static_cast<sal_Int32>(nEndPos - nFndPos) > extra_repl)
+                if (static_cast<sal_Int32>(nEndPos - nFndPos) > extra_repl) {
                     buf.append(rTxt.substr(nFndPos, nEndPos - nFndPos));
+                }
                 aLong = buf.makeStringAndClear();
             }
-            if ( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(aShort, aLong) ) )
+            if ( (static_cast<sal_Int32>(rTxt.size()) > nEndPos && IsWordDelim(rTxt[nEndPos])) || static_cast<sal_Int32>(rTxt.size()) == nEndPos )
             {
-                if ( (static_cast<sal_Int32>(rTxt.size()) > nEndPos && IsWordDelim(rTxt[nEndPos])) || static_cast<sal_Int32>(rTxt.size()) == nEndPos )
-                    return pNew;
+                return SvxAutocorrWord(aShort, aLong);
             }
         }
     }
-    return nullptr;
+    return std::nullopt;
 }
 
-const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(std::u16string_view rTxt, sal_Int32& rStt,
-                                                              sal_Int32 nEndPos) const
+std::optional<SvxAutocorrWordList::WordSearchStatus>
+SvxAutocorrWordList::SearchWordsInList(std::u16string_view rTxt,
+                                       sal_Int32& rStt,
+                                       sal_Int32 nEndPos) const
 {
-    for (auto const& elem : mpImpl->maHash)
+    for (auto it = mpImpl->maHash.begin(); it != mpImpl->maHash.end(); ++it)
     {
-        if( const SvxAutocorrWord *pTmp = WordMatches( &elem.second, rTxt, rStt, nEndPos ) )
-            return pTmp;
+        if(auto pTmp = WordMatches(&it->second, rTxt, rStt, nEndPos))
+        {
+            return WordSearchStatus(
+                *pTmp, this,
+                Iterator(std::make_unique<Iterator::Impl>(
+                    it, mpImpl->maHash.end(),
+                    mpImpl->maSortedVector.begin(), mpImpl->maSortedVector.end()
+                ))
+            );
+        }
     }
 
-    for (auto const& elem : mpImpl->maSortedVector)
+    for (auto it = mpImpl->maSortedVector.begin();
+         it != mpImpl->maSortedVector.end(); ++it)
     {
-        if( const SvxAutocorrWord *pTmp = WordMatches( &elem, rTxt, rStt, nEndPos ) )
-            return pTmp;
+        if(auto pTmp = WordMatches(&*it, rTxt, rStt, nEndPos))
+        {
+            return WordSearchStatus(
+                *pTmp, this,
+                Iterator(std::make_unique<Iterator::Impl>(
+                    mpImpl->maHash.end(), mpImpl->maHash.end(),
+                    it, mpImpl->maSortedVector.end()
+                ))
+            );
+        }
     }
-    return nullptr;
+
+    return std::nullopt;
+}
+
+bool
+SvxAutocorrWordList::SearchWordsNext(std::u16string_view rTxt,
+                                     sal_Int32& rStt,
+                                     sal_Int32 nEndPos,
+                                     SvxAutocorrWordList::WordSearchStatus& rStatus) const
+{
+    while(rStatus.StepIter())
+    {
+        if(auto pTmp = WordMatches(rStatus.GetWordAtIter(),
+                                   rTxt, rStt, nEndPos))
+        {
+            rStatus.mFnd = *pTmp;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

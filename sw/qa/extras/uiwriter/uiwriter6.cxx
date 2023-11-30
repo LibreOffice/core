@@ -3758,6 +3758,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155407)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158454)
+{
+    createSwDoc("tdf158454.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    // * without change tracking
+    CPPUNIT_ASSERT(!(pWrtShell->GetRedlineFlags() & RedlineFlags::On));
+
+    // Thai single autocorrect (อนุญาติ -> อนุญาต)
+    emulateTyping(*pTextDoc, u"อนุญาติ ");
+    OUString sReplaced = u"อนุญาต (จบ)"_ustr;
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    // Thai multiple autocorrects (กงศุลสังเกตุกระทันหัน -> กงสุลสังเกตกะทันหัน)
+    emulateTyping(*pTextDoc, u"กงศุลสังเกตุกระทันหัน ");
+    sReplaced = u"อนุญาต กงสุลสังเกตกะทันหัน (จบ)"_ustr;
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    // * with change tracking (showing redlines)
+    RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(nMode);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    // Thai single autocorrect (อนุญาติ -> อนุญาต)
+    emulateTyping(*pTextDoc, u"อนุญาติ ");
+    sReplaced = u"อนุญาต กงสุลสังเกตกะทันหัน อนุญาต (จบ)"_ustr;
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    // Thai multiple autocorrects (กงศุลสังเกตุกระทันหัน -> กงสุลสังเกตกะทันหัน)
+    emulateTyping(*pTextDoc, u"กงศุลสังเกตุกระทันหัน ");
+    sReplaced = u"อนุญาต กงสุลสังเกตกะทันหัน อนุญาต กงสุลสังเกตกะทันหัน (จบ)"_ustr;
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

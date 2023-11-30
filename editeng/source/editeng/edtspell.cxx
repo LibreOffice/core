@@ -647,31 +647,51 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
     OUString aShort( pCurNode->Copy( rSttPos, nEndPos - rSttPos ) );
     bool bRet = false;
 
-    if( aShort.isEmpty() )
+    if( aShort.isEmpty() ) {
         return bRet;
+    }
 
     LanguageTag aLanguageTag( mpEditEngine->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) ).nLang );
-    const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
-            pCurNode->GetString(), rSttPos, nEndPos, *this, aLanguageTag);
-    if( pFnd && pFnd->IsTextOnly() )
-    {
-
-        // replace also last colon of keywords surrounded by colons (for example, ":name:")
-        bool replaceLastChar = pFnd->GetShort()[0] == ':' && pFnd->GetShort().endsWith(":");
-
-        // then replace
-        EditSelection aSel( EditPaM( pCurNode, rSttPos ),
-                            EditPaM( pCurNode, nEndPos + (replaceLastChar ? 1 : 0) ));
-        aSel = mpEditEngine->DeleteSelection(aSel);
-        SAL_WARN_IF(nCursor < nEndPos, "editeng",
-                "Cursor in the heart of the action?!");
-        nCursor -= ( nEndPos-rSttPos );
-        mpEditEngine->InsertText(aSel, pFnd->GetLong());
-        nCursor = nCursor + pFnd->GetLong().getLength();
-        if( pPara )
-            *pPara = pCurNode->GetString();
-        bRet = true;
+    sal_Int32 sttPos = rSttPos;
+    auto pStatus = rACorrect.SearchWordsInList(pCurNode->GetString(),
+                                               sttPos, nEndPos,
+                                               *this, aLanguageTag);
+    if( !pStatus ) {
+        return bRet;
     }
+
+    sal_Int32 minSttPos = sttPos;
+    do {
+        const SvxAutocorrWord* pFnd = pStatus->GetAutocorrWord();
+        if( pFnd && pFnd->IsTextOnly() )
+        {
+            // replace also last colon of keywords surrounded by colons
+            // (for example, ":name:")
+            bool replaceLastChar = pFnd->GetShort()[0] == ':'
+                                   && pFnd->GetShort().endsWith(":");
+
+            // then replace
+            EditSelection aSel( EditPaM( pCurNode, sttPos ),
+                                EditPaM( pCurNode, nEndPos + (replaceLastChar ? 1 : 0) ));
+            aSel = mpEditEngine->DeleteSelection(aSel);
+            SAL_WARN_IF(nCursor < nEndPos, "editeng",
+                    "Cursor in the heart of the action?!");
+            nCursor -= ( nEndPos-sttPos );
+            mpEditEngine->InsertText(aSel, pFnd->GetLong());
+            nCursor = nCursor + pFnd->GetLong().getLength();
+            nEndPos = sttPos + pFnd->GetLong().getLength();
+            if( pPara ) {
+                *pPara = pCurNode->GetString();
+            }
+            bRet = true;
+            if( sttPos < minSttPos ) {
+                minSttPos = sttPos;
+            }
+        }
+        sttPos = rSttPos;
+    } while( SvxAutoCorrect::SearchWordsNext(pCurNode->GetString(),
+                                             sttPos, nEndPos, *pStatus) );
+    rSttPos = minSttPos;
 
     return bRet;
 }

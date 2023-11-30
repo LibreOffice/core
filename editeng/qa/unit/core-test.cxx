@@ -440,18 +440,35 @@ private:
     {
         //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
 
-        if (m_rText.isEmpty())
+        if (m_rText.isEmpty()) {
             return false;
+        }
 
         LanguageTag aLanguageTag(m_eLang);
-        const SvxAutocorrWord* pFnd
-            = rACorrect.SearchWordsInList(m_rText, rSttPos, nEndPos, *this, aLanguageTag);
-        if (pFnd && pFnd->IsTextOnly())
+        sal_Int32 sttPos = rSttPos;
+        auto pStatus = rACorrect.SearchWordsInList(m_rText, sttPos, nEndPos,
+                                                   *this, aLanguageTag);
+        if (pStatus)
         {
-            m_rText = m_rText.replaceAt(rSttPos, nEndPos, pFnd->GetLong());
-            if (pPara)
-                pPara->clear(); // =&pCurNode->GetString();
-            return true;
+            sal_Int32 minSttPos = sttPos;
+            do {
+                const SvxAutocorrWord* pFnd = pStatus->GetAutocorrWord();
+                if (pFnd && pFnd->IsTextOnly())
+                {
+                    m_rText = m_rText.replaceAt(sttPos, nEndPos, pFnd->GetLong());
+                    nEndPos = sttPos + pFnd->GetLong().getLength();
+                    if( pPara ) {
+                        pPara->clear(); // =&pCurNode->GetString();
+                    }
+                    return true;
+                }
+                if (sttPos < minSttPos) {
+                    minSttPos = sttPos;
+                }
+                sttPos = rSttPos;
+            } while (SvxAutoCorrect::SearchWordsNext(m_rText, sttPos, nEndPos,
+                                                     *pStatus));
+            rSttPos = minSttPos;
         }
 
         return false;

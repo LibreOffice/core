@@ -163,15 +163,62 @@ class EDITENG_DLLPUBLIC SvxAutocorrWordList
     SvxAutocorrWordList( const SvxAutocorrWordList& ) = delete;
     const SvxAutocorrWordList& operator= ( const SvxAutocorrWordList& ) = delete;
 
-    const SvxAutocorrWord* WordMatches(const SvxAutocorrWord *pFnd,
-                                       std::u16string_view rTxt,
-                                       sal_Int32 &rStt,
-                                       sal_Int32 nEndPos) const;
+    std::optional<SvxAutocorrWord> WordMatches(const SvxAutocorrWord *pFnd,
+                                               std::u16string_view rTxt,
+                                               sal_Int32 &rStt,
+                                               sal_Int32 nEndPos) const;
 public:
+    class EDITENG_DLLPUBLIC Iterator {
+        struct Impl;
+        std::unique_ptr<Impl> mpImpl;
+
+        // For construction from containers in *SvxAutocorrWordList::mpImpl
+        friend class SvxAutocorrWordList;
+        Iterator(std::unique_ptr<Impl> pImpl);
+
+    public:
+        Iterator(const Iterator& it);
+        ~Iterator();
+        bool Step();
+        const SvxAutocorrWord& operator*() const;
+        const SvxAutocorrWord* operator->() const;
+    };
+
+    class EDITENG_DLLPUBLIC WordSearchStatus {
+        SvxAutocorrWord               mFnd;
+
+        // For iteration
+        friend class SvxAutocorrWordList;
+        const SvxAutocorrWordList*    mpAutocorrWordList;
+        SvxAutocorrWordList::Iterator mAutocorrWordListIter;
+
+    public:
+        WordSearchStatus(
+            const SvxAutocorrWord& aFnd,
+            const SvxAutocorrWordList* pAutocorrWordList,
+            const SvxAutocorrWordList::Iterator& autocorrWordListIter
+        ) : mFnd(aFnd), mpAutocorrWordList(pAutocorrWordList),
+            mAutocorrWordListIter(autocorrWordListIter)
+        {}
+        const SvxAutocorrWord* GetAutocorrWord() const {
+            return &mFnd;
+        }
+        const SvxAutocorrWordList* GetAutocorrWordList() const {
+            return mpAutocorrWordList;
+        }
+        const SvxAutocorrWord* GetWordAtIter() const {
+            return &*mAutocorrWordListIter;
+        }
+        bool StepIter() {
+            return mAutocorrWordListIter.Step();
+        }
+    };
+
     SvxAutocorrWordList();
                            // free any objects still in the set
                            ~SvxAutocorrWordList();
     void                   DeleteAndDestroyAll();
+    bool                   ContainsPattern(const OUString& sShort) const;
     const SvxAutocorrWord* Insert(SvxAutocorrWord aWord) const;
     std::optional<SvxAutocorrWord> FindAndRemove(const SvxAutocorrWord *pWord);
     void                   LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt);
@@ -181,7 +228,10 @@ public:
     typedef std::vector<SvxAutocorrWord> AutocorrWordSetType;
     const AutocorrWordSetType & getSortedContent() const;
 
-    const SvxAutocorrWord* SearchWordsInList(std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos) const;
+    std::optional<WordSearchStatus>
+    SearchWordsInList(std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos) const;
+    bool
+    SearchWordsNext(std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos, WordSearchStatus& rStatus) const;
 };
 
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
@@ -323,10 +373,14 @@ public:
     // nEnd - to check position - as of this item forward
     // rLang - Input: in which language is searched
     //         Output: in which "language list" was it found
-    const SvxAutocorrWord* SearchWordsInList( std::u16string_view rTxt,
-                                    sal_Int32& rStt, sal_Int32 nEndPos,
-                                    SvxAutoCorrDoc& rDoc,
-                                    LanguageTag& rLang );
+    std::optional<SvxAutocorrWordList::WordSearchStatus>
+    SearchWordsInList( std::u16string_view rTxt,
+                       sal_Int32& rStt, sal_Int32 nEndPos,
+                       SvxAutoCorrDoc& rDoc,
+                       LanguageTag& rLang );
+    static bool SearchWordsNext( std::u16string_view rTxt,
+                          sal_Int32& rStt, sal_Int32 nEndPos,
+                          SvxAutocorrWordList::WordSearchStatus& rStatus );
 
     // Query/Set the Character for the Quote substitution
     sal_Unicode GetStartSingleQuote() const         { return cStartSQuote; }
