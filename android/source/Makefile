@@ -23,7 +23,7 @@ uninstall:
 	$(ANDROID_SDK_DIR)/platform-tools/adb uninstall $(ANDROID_PACKAGE_NAME)
 
 clean:
-	rm -rf assets assets_fullUI assets_strippedUI jniLibs jniLibs_debug $(OBJLOCAL)
+	rm -rf assets assets_fullUI assets_strippedUI build jniLibs jniLibs_debug $(OBJLOCAL)
 	rm -f native-code.cxx
 	rm -f liboSettings.gradle
 
