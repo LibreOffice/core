@@ -2817,6 +2817,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf156560)
     dispatchCommand(mxComponent, ".uno:InsertHeader", {});
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158459)
+{
+    createSwDoc("tdf158459_tracked_changes_across_nodes.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->FwdPara(); // Skip first paragraph
+    pWrtShell->EndOfSection(true); // Select everything to the end
+
+    SwDoc aClipboard;
+    pWrtShell->Copy(aClipboard); // This must not crash
+
+    pWrtShell->SelAll();
+    pWrtShell->Delete();
+    pWrtShell->Paste(aClipboard); // Replace everything with the copied stuff
+
+    SwNodes& rNodes = pDoc->GetNodes();
+    SwNodeIndex aIdx(rNodes.GetEndOfExtras());
+    SwContentNode* pContentNode = rNodes.GoNext(&aIdx);
+    CPPUNIT_ASSERT(pContentNode);
+    SwTextNode* pTextNode = pContentNode->GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    // Check that deleted parts (paragraph break, "c", "e") haven't been pasted
+    CPPUNIT_ASSERT_EQUAL(OUString("abdf"), pTextNode->GetText());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
