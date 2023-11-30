@@ -106,6 +106,7 @@ public:
     void            SetAutoTextPath( const OUString& rPath );
     void            SetBasicPath( const OUString& rPath );
     void            SetTempPath( const OUString& rPath );
+    void            SetWorkPath( const OUString& rPath );
 
     OUString        SubstituteVariable( const OUString& rVar ) const;
     OUString        ExpandMacros( const OUString& rPath ) const;
