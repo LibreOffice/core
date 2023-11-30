@@ -434,8 +434,6 @@ public:
     sal_uInt32  GetFieldDivisionX() const { Init(); return SvxOptionsGrid::GetFieldDivisionX(); }
     sal_uInt32  GetFieldDrawY() const { Init(); return SvxOptionsGrid::GetFieldDrawY(); }
     sal_uInt32  GetFieldDivisionY() const { Init(); return SvxOptionsGrid::GetFieldDivisionY(); }
-    sal_uInt32  GetFieldSnapX() const { Init(); return SvxOptionsGrid::GetFieldSnapX(); }
-    sal_uInt32  GetFieldSnapY() const { Init(); return SvxOptionsGrid::GetFieldSnapY(); }
     bool    IsUseGridSnap() const { Init(); return SvxOptionsGrid::GetUseGridSnap(); }
     bool    IsSynchronize() const { Init(); return SvxOptionsGrid::GetSynchronize(); }
     bool    IsGridVisible() const { Init(); return SvxOptionsGrid::GetGridVisible(); }
@@ -445,8 +443,6 @@ public:
     void    SetFieldDivisionX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDivisionX() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDivisionX( nSet ); } }
     void    SetFieldDrawY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDrawY() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDrawY( nSet ); } }
     void    SetFieldDivisionY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDivisionY() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDivisionY( nSet ); } }
-    void    SetFieldSnapX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldSnapX() ) { OptionsChanged(); SvxOptionsGrid::SetFieldSnapX( nSet ); } }
-    void    SetFieldSnapY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldSnapY() ) { OptionsChanged(); SvxOptionsGrid::SetFieldSnapY( nSet ); } }
     void    SetUseGridSnap( bool bSet ) { if( bSet != SvxOptionsGrid::GetUseGridSnap() ) { OptionsChanged(); SvxOptionsGrid::SetUseGridSnap( bSet ); } }
     void    SetSynchronize( bool bSet ) { if( bSet != SvxOptionsGrid::GetSynchronize() ) { OptionsChanged(); SvxOptionsGrid::SetSynchronize( bSet ); } }
     void    SetGridVisible( bool bSet ) { if( bSet != SvxOptionsGrid::GetGridVisible() ) { OptionsChanged(); SvxOptionsGrid::SetGridVisible( bSet ); } }

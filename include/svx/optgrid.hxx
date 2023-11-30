@@ -36,8 +36,6 @@ protected:
     sal_uInt32  nFldDivisionX;
     sal_uInt32  nFldDrawY;
     sal_uInt32  nFldDivisionY;
-    sal_uInt32  nFldSnapX;
-    sal_uInt32  nFldSnapY;
     bool        bUseGridsnap:1;
     bool        bSynchronize:1;
     bool        bGridVisible:1;
@@ -50,8 +48,6 @@ public:
     void    SetFieldDivisionX(sal_uInt32 nSet){nFldDivisionX  = nSet;}
     void    SetFieldDrawY   ( sal_uInt32 nSet){nFldDrawY      = nSet;}
     void    SetFieldDivisionY(sal_uInt32 nSet){nFldDivisionY  = nSet;}
-    void    SetFieldSnapX(    sal_uInt32 nSet){nFldSnapX      = nSet;}
-    void    SetFieldSnapY   ( sal_uInt32 nSet){nFldSnapY      = nSet;}
     void    SetUseGridSnap( bool bSet ) {bUseGridsnap   = bSet;}
     void    SetSynchronize( bool bSet ) {bSynchronize   = bSet;}
     void    SetGridVisible( bool bSet ) {bGridVisible   = bSet;}
@@ -61,8 +57,6 @@ public:
     sal_uInt32  GetFieldDivisionX() const {  return nFldDivisionX;}
     sal_uInt32  GetFieldDrawY   ( ) const {  return nFldDrawY;    }
     sal_uInt32  GetFieldDivisionY() const {  return nFldDivisionY;}
-    sal_uInt32  GetFieldSnapX(    ) const {  return nFldSnapX;    }
-    sal_uInt32  GetFieldSnapY   ( ) const {  return nFldSnapY;    }
     bool        GetUseGridSnap( ) const {  return bUseGridsnap; }
     bool        GetSynchronize( ) const {  return bSynchronize; }
     bool        GetGridVisible( ) const {  return bGridVisible; }

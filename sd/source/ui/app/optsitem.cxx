@@ -970,8 +970,6 @@ void SdOptionsGrid::SetDefaults()
     SetFieldDivisionY( nVal );
     SetFieldDrawX( nVal );
     SetFieldDrawY( nVal );
-    SetFieldSnapX( nVal );
-    SetFieldSnapY( nVal );
     SetUseGridSnap( false );
     SetSynchronize( true );
     SetGridVisible( false );
@@ -988,8 +986,6 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
             "Resolution/YAxis/Metric",
             "Subdivision/XAxis",
             "Subdivision/YAxis",
-            "SnapGrid/XAxis/Metric",
-            "SnapGrid/YAxis/Metric",
             "Option/SnapToGrid",
             "Option/Synchronize",
             "Option/VisibleGrid",
@@ -1006,8 +1002,6 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
             "Resolution/YAxis/NonMetric",
             "Subdivision/XAxis",
             "Subdivision/YAxis",
-            "SnapGrid/XAxis/NonMetric",
-            "SnapGrid/YAxis/NonMetric",
             "Option/SnapToGrid",
             "Option/Synchronize",
             "Option/VisibleGrid",
@@ -1034,13 +1028,10 @@ bool SdOptionsGrid::ReadData( const Any* pValues )
         const sal_uInt32 nDivY = FRound( *o3tl::doAccess<double>(pValues[ 3 ]) );
         SetFieldDivisionY( SvxOptionsGrid::GetFieldDrawY() / ( nDivY + 1 ) );
     }
-
-    if( pValues[4].hasValue() ) SetFieldSnapX( *o3tl::doAccess<sal_Int32>(pValues[ 4 ]) );
-    if( pValues[5].hasValue() ) SetFieldSnapY( *o3tl::doAccess<sal_Int32>(pValues[ 5 ]) );
-    if( pValues[6].hasValue() ) SetUseGridSnap( *o3tl::doAccess<bool>(pValues[ 6 ]) );
-    if( pValues[7].hasValue() ) SetSynchronize( *o3tl::doAccess<bool>(pValues[ 7 ]) );
-    if( pValues[8].hasValue() ) SetGridVisible( *o3tl::doAccess<bool>(pValues[ 8 ]) );
-    if( pValues[9].hasValue() ) SetEqualGrid( *o3tl::doAccess<bool>(pValues[ 9 ]) );
+    if( pValues[4].hasValue() ) SetUseGridSnap( *o3tl::doAccess<bool>(pValues[ 4 ]) );
+    if( pValues[5].hasValue() ) SetSynchronize( *o3tl::doAccess<bool>(pValues[ 5 ]) );
+    if( pValues[6].hasValue() ) SetGridVisible( *o3tl::doAccess<bool>(pValues[ 6 ]) );
+    if( pValues[7].hasValue() ) SetEqualGrid( *o3tl::doAccess<bool>(pValues[ 7 ]) );
 
     return true;
 }
@@ -1051,12 +1042,10 @@ bool SdOptionsGrid::WriteData( Any* pValues ) const
     pValues[ 1 ] <<= static_cast<sal_Int32>(GetFieldDrawY());
     pValues[ 2 ] <<= ( GetFieldDivisionX() ? ( static_cast<double>(GetFieldDrawX()) / GetFieldDivisionX() - 1.0 ) : double(0) );
     pValues[ 3 ] <<= ( GetFieldDivisionY() ? ( static_cast<double>(GetFieldDrawY()) / GetFieldDivisionY() - 1.0 ) : double(0) );
-    pValues[ 4 ] <<= static_cast<sal_Int32>(GetFieldSnapX());
-    pValues[ 5 ] <<= static_cast<sal_Int32>(GetFieldSnapY());
-    pValues[ 6 ] <<= IsUseGridSnap();
-    pValues[ 7 ] <<= IsSynchronize();
-    pValues[ 8 ] <<= IsGridVisible();
-    pValues[ 9 ] <<= IsEqualGrid();
+    pValues[ 4 ] <<= IsUseGridSnap();
+    pValues[ 5 ] <<= IsSynchronize();
+    pValues[ 6 ] <<= IsGridVisible();
+    pValues[ 7 ] <<= IsEqualGrid();
 
     return true;
 }
@@ -1077,8 +1066,6 @@ SdOptionsGridItem::SdOptionsGridItem( SdOptions const * pOpts ) :
     SetFieldDrawY( pOpts->GetFieldDrawY() );
     SetFieldDivisionX( pOpts->GetFieldDivisionX() ? ( pOpts->GetFieldDrawX() / pOpts->GetFieldDivisionX() - 1 ) : 0 );
     SetFieldDivisionY( pOpts->GetFieldDivisionY() ? ( pOpts->GetFieldDrawY() / pOpts->GetFieldDivisionY() - 1 ) : 0 );
-    SetFieldSnapX( pOpts->GetFieldSnapX() );
-    SetFieldSnapY( pOpts->GetFieldSnapY() );
     SetUseGridSnap( pOpts->IsUseGridSnap() );
     SetGridVisible( pOpts->IsGridVisible() );
 }
@@ -1089,8 +1076,6 @@ void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetFieldDivisionX( GetFieldDrawX() / ( GetFieldDivisionX() + 1 ) );
     pOpts->SetFieldDrawY( GetFieldDrawY() );
     pOpts->SetFieldDivisionY( GetFieldDrawY() / ( GetFieldDivisionY() + 1 ) );
-    pOpts->SetFieldSnapX( GetFieldSnapX() );
-    pOpts->SetFieldSnapY( GetFieldSnapY() );
     pOpts->SetUseGridSnap( GetUseGridSnap() );
     pOpts->SetSynchronize( GetSynchronize() );
     pOpts->SetGridVisible( GetGridVisible() );

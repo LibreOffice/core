@@ -58,8 +58,6 @@ SvxOptionsGrid::SvxOptionsGrid() :
     nFldDivisionX   ( 0 ),
     nFldDrawY       ( 100 ),
     nFldDivisionY   ( 0 ),
-    nFldSnapX       ( 100 ),
-    nFldSnapY       ( 100 ),
     bUseGridsnap    ( false ),
     bSynchronize    ( true ),
     bGridVisible    ( false ),
@@ -85,9 +83,7 @@ bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
                 nFldDrawX    == rItem.nFldDrawX    &&
                 nFldDivisionX== rItem.nFldDivisionX&&
                 nFldDrawY    == rItem.nFldDrawY    &&
-                nFldDivisionY== rItem.nFldDivisionY&&
-                nFldSnapX    == rItem.nFldSnapX    &&
-                nFldSnapY    == rItem.nFldSnapY     );
+                nFldDivisionY== rItem.nFldDivisionY );
 }
 
 bool  SvxGridItem::GetPresentation

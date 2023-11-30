@@ -690,50 +690,6 @@
           </info>
           <value>true</value>
         </prop>
-        <group oor:name="XAxis">
-          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap grid -->
-          <!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
-          <info>
-            <desc>Defines the horizontal distance between adjacent points of the snap grid.</desc>
-            <label>X axis</label>
-          </info>
-          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <desc>[UNIT=1/100 mm]</desc>
-              <label/>
-            </info>
-            <value>1000</value>
-          </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <desc>[UNIT=1/100 mm]</desc>
-              <label/>
-            </info>
-            <value>1270</value>
-          </prop>
-        </group>
-        <group oor:name="YAxis">
-          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap grid -->
-          <!-- Notice: Default-Default-nonmetrical value: 1270 1/100 mm. -->
-          <info>
-            <desc>Defines the vertical distance between adjacent points of the snap grid.</desc>
-            <label>Y axis</label>
-          </info>
-          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <desc>[UNIT=1/100 mm]</desc>
-              <label/>
-            </info>
-            <value>1000</value>
-          </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <desc>[UNIT=1/100 mm]</desc>
-              <label/>
-            </info>
-            <value>1270</value>
-          </prop>
-        </group>
       </group>
     </group>
     <group oor:name="Print">
