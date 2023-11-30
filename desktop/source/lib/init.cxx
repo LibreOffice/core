@@ -7973,6 +7973,14 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             OUString aNewTemp;
             osl::FileBase::getTempDirURL(aNewTemp);
             aOptions.SetTempPath(aNewTemp);
+            {
+                const char *pWorkPath = getenv("LOK_WORKDIR");
+                if (pWorkPath)
+                {
+                    OString sWorkPath(pWorkPath);
+                    aOptions.SetWorkPath(OStringToOUString(sWorkPath, RTL_TEXTENCODING_UTF8));
+                }
+            }
             desktop::Desktop::CreateTemporaryDirectory();
 
             // The RequestHandler is specifically set to be ready when all the other
