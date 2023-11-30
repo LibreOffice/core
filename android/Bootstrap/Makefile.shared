@@ -67,7 +67,7 @@ $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
 	#to keep some symbols, eg.: $(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so -w -K 'Java*'
 
-$(SODEST)/nss-libraries : 
+$(SODEST)/nss-libraries :
 	mkdir -p $(SODEST)
 	$(foreach lib,$(NSSLIBS),$(STRIP) -o $(SODEST)/lib$(lib).so $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib$(lib).so;)
 
