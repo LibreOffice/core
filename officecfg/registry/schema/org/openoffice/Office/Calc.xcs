@@ -780,50 +780,6 @@
           </info>
           <value>true</value>
         </prop>
-        <group oor:name="XAxis">
-          <!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
-          <!-- Notice: Default-value in  (nonmetric: 1270 1/100 mm)-->
-          <info>
-            <desc>Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
-            <label>X axis</label>
-          </info>
-          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <desc>Specifies the distance that is used with locales that use the metric system.</desc>
-              <label/>
-            </info>
-            <value>1000</value>
-          </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <desc>Specifies the distance that is used with locales that don't use the metric system.</desc>
-              <label/>
-            </info>
-            <value>1270</value>
-          </prop>
-        </group>
-        <group oor:name="YAxis">
-          <!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
-          <!-- Notice: Default-value in nonmetric: 1270 1/100 mm-->
-          <info>
-            <desc>Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
-            <label>Y axis</label>
-          </info>
-          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <desc>Specifies the distance that is used with locales that use the metric system.</desc>
-              <label/>
-            </info>
-            <value>1000</value>
-          </prop>
-          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <desc>Specifies the distance that is used with locales that don't use the metric system.</desc>
-              <label/>
-            </info>
-            <value>1270</value>
-          </prop>
-        </group>
       </group>
       <group oor:name="Resolution">
         <info>

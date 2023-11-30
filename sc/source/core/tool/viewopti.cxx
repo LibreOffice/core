@@ -46,15 +46,11 @@ void ScGridOptions::SetDefaults()
     {
         nFldDrawX = 1000;   // 1cm
         nFldDrawY = 1000;
-        nFldSnapX = 1000;
-        nFldSnapY = 1000;
     }
     else
     {
         nFldDrawX = 1270;   // 0,5"
         nFldDrawY = 1270;
-        nFldSnapX = 1270;
-        nFldSnapY = 1270;
     }
     nFldDivisionX = 1;
     nFldDivisionY = 1;
@@ -66,8 +62,6 @@ bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
             && nFldDivisionX    == rCpy.nFldDivisionX
             && nFldDrawY        == rCpy.nFldDrawY
             && nFldDivisionY    == rCpy.nFldDivisionY
-            && nFldSnapX        == rCpy.nFldSnapX
-            && nFldSnapY        == rCpy.nFldSnapY
             && bUseGridsnap     == rCpy.bUseGridsnap
             && bSynchronize     == rCpy.bSynchronize
             && bGridVisible     == rCpy.bGridVisible
@@ -156,8 +150,6 @@ std::unique_ptr<SvxGridItem> ScViewOptions::CreateGridItem() const
     pItem->SetFieldDivisionX  ( aGridOpt.GetFieldDivisionX() );
     pItem->SetFieldDrawY      ( aGridOpt.GetFieldDrawY() );
     pItem->SetFieldDivisionY  ( aGridOpt.GetFieldDivisionY() );
-    pItem->SetFieldSnapX      ( aGridOpt.GetFieldSnapX() );
-    pItem->SetFieldSnapY      ( aGridOpt.GetFieldSnapY() );
     pItem->SetUseGridSnap   ( aGridOpt.GetUseGridSnap() );
     pItem->SetSynchronize   ( aGridOpt.GetSynchronize() );
     pItem->SetGridVisible   ( aGridOpt.GetGridVisible() );
@@ -227,12 +219,10 @@ constexpr OUStringLiteral CFGPATH_GRID = u"Office.Calc/Grid";
 #define SCGRIDOPT_RESOLU_Y          1
 #define SCGRIDOPT_SUBDIV_X          2
 #define SCGRIDOPT_SUBDIV_Y          3
-#define SCGRIDOPT_OPTION_X          4
-#define SCGRIDOPT_OPTION_Y          5
-#define SCGRIDOPT_SNAPTOGRID        6
-#define SCGRIDOPT_SYNCHRON          7
-#define SCGRIDOPT_VISIBLE           8
-#define SCGRIDOPT_SIZETOGRID        9
+#define SCGRIDOPT_SNAPTOGRID        4
+#define SCGRIDOPT_SYNCHRON          5
+#define SCGRIDOPT_VISIBLE           6
+#define SCGRIDOPT_SIZETOGRID        7
 
 Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
 {
@@ -273,10 +263,6 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
                        : OUString("Resolution/YAxis/NonMetric")),   // SCGRIDOPT_RESOLU_Y
              "Subdivision/XAxis",                                   // SCGRIDOPT_SUBDIV_X
              "Subdivision/YAxis",                                   // SCGRIDOPT_SUBDIV_Y
-            (bIsMetric ? OUString("Option/XAxis/Metric")
-                       : OUString("Option/XAxis/NonMetric")),       // SCGRIDOPT_OPTION_X
-            (bIsMetric ? OUString("Option/YAxis/Metric")
-                       : OUString("Option/YAxis/NonMetric")),       // SCGRIDOPT_OPTION_Y
              "Option/SnapToGrid",                                   // SCGRIDOPT_SNAPTOGRID
              "Option/Synchronize",                                  // SCGRIDOPT_SYNCHRON
              "Option/VisibleGrid",                                  // SCGRIDOPT_VISIBLE
@@ -442,12 +428,6 @@ ScViewCfg::ScViewCfg() :
                     case SCGRIDOPT_SUBDIV_Y:
                         if (pValues[nProp] >>= nIntVal) aGrid.SetFieldDivisionY( nIntVal );
                         break;
-                    case SCGRIDOPT_OPTION_X:
-                        if (pValues[nProp] >>= nIntVal) aGrid.SetFieldSnapX( nIntVal );
-                        break;
-                    case SCGRIDOPT_OPTION_Y:
-                        if (pValues[nProp] >>= nIntVal) aGrid.SetFieldSnapY( nIntVal );
-                        break;
                     case SCGRIDOPT_SNAPTOGRID:
                         aGrid.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
@@ -584,12 +564,6 @@ IMPL_LINK_NOARG(ScViewCfg, GridCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCGRIDOPT_SUBDIV_Y:
                 pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldDivisionY());
-                break;
-            case SCGRIDOPT_OPTION_X:
-                pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldSnapX());
-                break;
-            case SCGRIDOPT_OPTION_Y:
-                pValues[nProp] <<= static_cast<sal_Int32>(rGrid.GetFieldSnapY());
                 break;
             case SCGRIDOPT_SNAPTOGRID:
                 pValues[nProp] <<= rGrid.GetUseGridSnap();
