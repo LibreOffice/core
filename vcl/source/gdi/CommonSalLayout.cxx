@@ -192,8 +192,8 @@ bool GenericSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationS
         hb_ot_layout_collect_lookups(pHbFace, HB_OT_TAG_GSUB, nullptr, nullptr, pFeatures, pLookups);
         if (!hb_set_is_empty(pLookups))
         {
-            // Find the output glyphs in each lookup (i.e. the glyphs that
-            // would result from applying this lookup).
+            // Find the input glyphs in each lookup (i.e. the glyphs that
+            // this lookup applies to).
             hb_codepoint_t nIdx = HB_SET_VALUE_INVALID;
             while (hb_set_next(pLookups, &nIdx))
             {
