@@ -40,8 +40,7 @@ public class AboutDialogFragment extends DialogFragment {
         int defaultColor = textView.getTextColors().getDefaultColor();
         textView.setTextColor(defaultColor);
 
-        // Take care of placeholders in the version and vendor text views.
-        TextView vendorView = messageView.findViewById(R.id.about_vendor);
+        // Take care of placeholders and set text in version and vendor text views.
         try
         {
             String versionName = getActivity().getPackageManager()
@@ -55,8 +54,8 @@ public class AboutDialogFragment extends DialogFragment {
                 TextView versionView = messageView.findViewById(R.id.about_version);
                 versionView.setText(versionString);
                 versionView.setMovementMethod(LinkMovementMethod.getInstance());
-                String vendor = vendorView.getText().toString();
-                vendor = vendor.replace("$VENDOR", tokens[2]);
+                TextView vendorView = messageView.findViewById(R.id.about_vendor);
+                String vendor = getString(R.string.app_vendor).replace("$VENDOR", tokens[2]);
                 vendorView.setText(vendor);
             }
             else
@@ -64,7 +63,6 @@ public class AboutDialogFragment extends DialogFragment {
         }
         catch (PackageManager.NameNotFoundException e)
         {
-            vendorView.setText("");
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
