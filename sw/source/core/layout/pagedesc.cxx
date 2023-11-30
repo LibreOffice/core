@@ -477,7 +477,7 @@ const SwFrameFormat* SwPageDesc::GetStashedFrameFormat(bool bHeader, bool bLeft,
     }
 }
 
-bool SwPageDesc::HasStashedFormat(bool bHeader, bool bLeft, bool bFirst)
+bool SwPageDesc::HasStashedFormat(bool bHeader, bool bLeft, bool bFirst) const
 {
     if (bHeader)
     {
