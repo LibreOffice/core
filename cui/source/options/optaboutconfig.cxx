@@ -751,8 +751,8 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
                 sal_Int64 nMax = sPropertyType == "short"
                                      ? SAL_MAX_INT16
                                      : sPropertyType == "int" ? SAL_MAX_INT32 : SAL_MAX_INT64;
-                SvxNumberDialog aNumberDialog(m_pParent, sPropertyName, sDialogValue.toInt64(),
-                                              nMin, nMax);
+                SvxNumberDialog aNumberDialog(m_xDialog.get(), sPropertyName,
+                                              sDialogValue.toInt64(), nMin, nMax);
                 if (aNumberDialog.run() == RET_OK)
                 {
                     sal_Int64 nNewValue = aNumberDialog.GetNumber();
@@ -774,7 +774,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "double")
             {
-                SvxDecimalNumberDialog aNumberDialog(m_pParent, sPropertyName,
+                SvxDecimalNumberDialog aNumberDialog(m_xDialog.get(), sPropertyName,
                                                      sDialogValue.toDouble());
                 if (aNumberDialog.run() == RET_OK)
                 {
@@ -786,7 +786,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "string")
             {
-                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
+                SvxNameDialog aNameDialog(m_xDialog.get(), sDialogValue, sPropertyName);
                 aNameDialog.SetCheckNameHdl(LINK(this, CuiAboutConfigTabPage, ValidNameHdl));
                 if (aNameDialog.run() == RET_OK)
                 {
@@ -797,7 +797,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "short-list")
             {
-                SvxListDialog aListDialog(m_pParent);
+                SvxListDialog aListDialog(m_xDialog.get());
                 aListDialog.SetEntries(commaStringToSequence(sDialogValue));
                 aListDialog.SetMode(ListMode::Int16);
                 if (aListDialog.run() == RET_OK)
@@ -814,7 +814,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "int-list")
             {
-                SvxListDialog aListDialog(m_pParent);
+                SvxListDialog aListDialog(m_xDialog.get());
                 aListDialog.SetEntries(commaStringToSequence(sDialogValue));
                 aListDialog.SetMode(ListMode::Int32);
                 if (aListDialog.run() == RET_OK)
@@ -831,7 +831,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "long-list")
             {
-                SvxListDialog aListDialog(m_pParent);
+                SvxListDialog aListDialog(m_xDialog.get());
                 aListDialog.SetEntries(commaStringToSequence(sDialogValue));
                 aListDialog.SetMode(ListMode::Int64);
                 if (aListDialog.run() == RET_OK)
@@ -848,7 +848,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "double-list")
             {
-                SvxListDialog aListDialog(m_pParent);
+                SvxListDialog aListDialog(m_xDialog.get());
                 aListDialog.SetEntries(commaStringToSequence(sDialogValue));
                 aListDialog.SetMode(ListMode::Double);
                 if (aListDialog.run() == RET_OK)
@@ -865,7 +865,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
             else if (sPropertyType == "string-list")
             {
-                SvxListDialog aListDialog(m_pParent);
+                SvxListDialog aListDialog(m_xDialog.get());
                 aListDialog.SetEntries(commaStringToSequence(sDialogValue));
                 aListDialog.SetMode(ListMode::String);
                 if (aListDialog.run() == RET_OK)
