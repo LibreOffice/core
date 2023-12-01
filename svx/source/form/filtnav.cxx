@@ -796,7 +796,7 @@ bool FmFilterModel::ValidateText(FmFilterItem const * pItem, OUString& rText, OU
             OUString aPreparedText;
             Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             pParseNode->parseNodeToPredicateStr(
-                aPreparedText, xConnection, xFormatter, xField, OUString(), aAppLocale, OUString("."), getParseContext() );
+                aPreparedText, xConnection, xFormatter, xField, OUString(), aAppLocale, ".", getParseContext() );
             rText = aPreparedText;
             return true;
         }

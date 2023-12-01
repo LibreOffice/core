@@ -252,13 +252,13 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
                                               const Reference< XConnection >& _rxConnection,
                                               const Reference< XNumberFormatter > & xFormatter,
                                               const css::lang::Locale& rIntl,
-                                              OUString _sDec,
+                                              const OUString& rDec,
                                               const IParseContext* pContext ) const
 {
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr(rString, _rxConnection, xFormatter, nullptr, OUString(), rIntl, pContext, true, true, _sDec, true);
+        parseNodeToStr(rString, _rxConnection, xFormatter, nullptr, OUString(), rIntl, pContext, true, true, rDec, true);
 }
 
 
@@ -268,13 +268,13 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
                                               const Reference< XPropertySet > & _xField,
                                               const OUString &_sPredicateTableAlias,
                                               const css::lang::Locale& rIntl,
-                                              OUString _sDec,
+                                              const OUString& rDec,
                                               const IParseContext* pContext ) const
 {
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr( rString, _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext, true, true, _sDec, true );
+        parseNodeToStr( rString, _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext, true, true, rDec, true );
 }
 
 
