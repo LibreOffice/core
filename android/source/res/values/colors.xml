@@ -6,7 +6,7 @@
 <resources>
 
     <!-- "?attr/colorBackgroundFloating" could be used directly instead for API level >= 23,
-         but current minimum API level is lower. Overriden for dark theme in values-night/color.xml. -->
+         but current minimum API level is lower. Overridden for dark theme in values-night/color.xml. -->
     <color name="background_floating">@color/background_floating_material_light</color>
 
     <color name="background_light">#FAFAFA</color> <!--Material Grey 50-->
