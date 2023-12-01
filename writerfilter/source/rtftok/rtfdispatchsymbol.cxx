@@ -180,9 +180,6 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTFKeyword::CELL:
         case RTFKeyword::NESTCELL:
         {
-            if (nKeyword == RTFKeyword::CELL)
-                m_bAfterCellBeforeRow = true;
-
             checkFirstRun();
             if (m_bNeedPap)
             {
@@ -236,7 +233,6 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         break;
         case RTFKeyword::ROW:
         {
-            m_bAfterCellBeforeRow = false;
             if (m_aStates.top().getTableRowWidthAfter() > 0)
             {
                 // Add fake cellx / cell, RTF equivalent of

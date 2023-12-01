@@ -330,7 +330,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_hasFHeader(false)
     , m_hasRFooter(false)
     , m_hasFFooter(false)
-    , m_bAfterCellBeforeRow(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, true);
