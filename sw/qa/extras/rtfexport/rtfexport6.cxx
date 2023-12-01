@@ -160,6 +160,20 @@ DECLARE_RTFEXPORT_TEST(testTdf86814, "tdf86814.rtf")
                          getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat, "tdf108505_fieldCharFormat.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+
+    // Character formatting can be defined inside the field for part of it. It wasn't being applied.
+    // Bold and green are specified. \fldrslt's "bogus result" (with italic/red) should be ignored.
+    uno::Reference<text::XTextRange> xRun = getRun(xPara, 3, "MZ");
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+    // CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xRun, "CharColor"));
+}
+
 /** Make sure that the document variable "Unused", which is not referenced in the document,
     is imported and exported. */
 DECLARE_RTFEXPORT_TEST(testTdf150267, "tdf150267.rtf")
