@@ -3805,7 +3805,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
         // Turn on the headers
         xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
 
-        // Set both sharing left and first to off so we can import the content regardless tha what value
+        // Set both sharing left and first to off so we can import the content regardless of what value
         // the "titlePage" or "evenAndOdd" flags are set (which decide what the sharing is set to in the document).
         xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
         xPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(false));
