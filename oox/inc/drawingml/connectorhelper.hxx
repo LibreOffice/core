@@ -76,7 +76,7 @@ void getLOBentHandlePositionsHmm(const oox::drawingml::ShapePtr& pConnector,
                                  std::vector<basegfx::B2DPoint>& rHandlePositions);
 
 /**
- * Calulates the handle positions of a connector of type ConnectorType_CURVE for which OOXML
+ * Calculates the handle positions of a connector of type ConnectorType_CURVE for which OOXML
  * compatible routing is enabled. Such connector corresponds to the OOXML curvedConnector shapes. The
  * calculation is based on the actual polygon of the connector. The coordinates are always returned
  * in Hmm, even for shapes on a text document draw page.
