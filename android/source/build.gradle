@@ -91,6 +91,11 @@ android {
     }
 }
 
+// show warnings about use of deprecated API
+tasks.withType(JavaCompile).configureEach {
+    options.deprecation = true
+}
+
 /* remark inherited from makefile:
 Then "assets". Let the directory structure under assets mimic
 that under solver for now.
