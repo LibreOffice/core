@@ -65,6 +65,7 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -1691,14 +1692,44 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
                         exportBubbleChart( xChartType );
                         break;
                     }
-                case chart::TYPEID_OFPIE:
-                    {
-                        break;
-                    }
-                case chart::TYPEID_DOUGHNUT:
+                case chart::TYPEID_DOUGHNUT: // doesn't currently happen
+                case chart::TYPEID_OFPIE:    // doesn't currently happen
                 case chart::TYPEID_PIE:
                     {
-                        exportPieChart( xChartType );
+                        sal_Int32 eCT = getChartType( );
+                        if(eCT == chart::TYPEID_DOUGHNUT)
+                        {
+                            exportDoughnutChart( xChartType );
+                        }
+                        else
+                        {
+
+                            PropertySet xChartTypeProp(rCT);
+                            chart2::PieChartSubType subtype(chart2::PieChartSubType_NONE);
+                            if (!xChartTypeProp.getProperty(subtype, PROP_SubPieType))
+                            {
+                                subtype = chart2::PieChartSubType_NONE;
+                            }
+                            if (subtype != chart2::PieChartSubType_NONE)
+                            {
+                                const char* sSubType = "pie";   // default
+                                switch (subtype) {
+                                    case chart2::PieChartSubType_PIE:
+                                        sSubType = "pie";
+                                        break;
+                                    case chart2::PieChartSubType_BAR:
+                                        sSubType = "bar";
+                                        break;
+                                    case chart2::PieChartSubType_NONE:
+                                    default:
+                                        assert(false);
+                                }
+
+                                exportOfPieChart(xChartType, sSubType);
+                            } else {
+                                exportPieChart( xChartType );
+                            }
+                        }
                         break;
                     }
                 case chart::TYPEID_RADARLINE:
@@ -2250,6 +2281,23 @@ void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xC
     pFS->endElement( FSNS( XML_c, XML_doughnutChart ) );
 }
 
+void ChartExport::exportOfPieChart(
+        const Reference< chart2::XChartType >& xChartType,
+        const char* sSubType )
+{
+    FSHelperPtr pFS = GetFS();
+    pFS->startElement(FSNS(XML_c, XML_ofPieChart));
+
+    pFS->singleElement(FSNS(XML_c, XML_ofPieType), XML_val, sSubType);
+
+    exportVaryColors(xChartType);
+
+    bool bPrimaryAxes = true;
+    exportAllSeries(xChartType, bPrimaryAxes);
+
+    pFS->endElement( FSNS( XML_c, XML_ofPieChart ) );
+}
+
 namespace {
 
 void writeDataLabelsRange(const FSHelperPtr& pFS, const XmlFilterBase* pFB, DataLabelsRange& rDLblsRange)
@@ -2330,12 +2378,6 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
 
 void ChartExport::exportPieChart( const Reference< chart2::XChartType >& xChartType )
 {
-    sal_Int32 eChartType = getChartType( );
-    if(eChartType == chart::TYPEID_DOUGHNUT)
-    {
-        exportDoughnutChart( xChartType );
-        return;
-    }
     FSHelperPtr pFS = GetFS();
     sal_Int32 nTypeId = XML_pieChart;
     if( mbIs3DChart )

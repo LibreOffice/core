@@ -156,6 +156,7 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
     , m_bConnectBars(false)
     , m_bGroupBarsPerAxis(true)
     , m_nStartingAngle(90)
+    , m_ePieChartSubType(PieChartSubType_NONE)
     , m_nGlobalSeriesIndex(0)
     , m_nCurrentAttributedPoint(-1)
     , m_nMissingValueTreatment(css::chart::MissingValueTreatment::LEAVE_GAP)
@@ -399,6 +400,16 @@ void VDataSeries::setStartingAngle( sal_Int32 nStartingAngle )
 sal_Int32 VDataSeries::getStartingAngle() const
 {
     return m_nStartingAngle;
+}
+
+void VDataSeries::setPieChartSubType(chart2::PieChartSubType eSubType)
+{
+    m_ePieChartSubType = eSubType;
+}
+
+chart2::PieChartSubType VDataSeries::getPieChartSubType() const
+{
+    return m_ePieChartSubType;
 }
 
 chart2::StackingDirection VDataSeries::getStackingDirection() const

@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/PolarCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -350,6 +351,13 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                     not support pie rotation. */
                 if( !is3dChart() && (maTypeInfo.meTypeId != TYPEID_OFPIE) )
                     convertPieRotation( aDiaProp, mrModel.mnFirstAngle );
+
+                if (maTypeInfo.meTypeId == TYPEID_OFPIE) {
+                    aDiaProp.setProperty(PROP_SubPieType,
+                            convertOfPieType(mrModel.mnOfPieType));
+                } else {
+                    aDiaProp.setProperty(PROP_SubPieType, PieChartSubType_NONE);
+                }
             }
             break;
             default:;
@@ -574,6 +582,26 @@ void TypeGroupConverter::convertPieExplosion( PropertySet& rPropSet, sal_Int32 n
         rPropSet.setProperty( PROP_Offset, fOffset );
     }
 }
+
+PieChartSubType TypeGroupConverter::convertOfPieType(sal_Int32 nOoxOfPieType ) const
+{
+    if( maTypeInfo.meTypeCategory == TYPECATEGORY_PIE ) {
+        switch (nOoxOfPieType) {
+        case XML_pie:
+            return PieChartSubType_PIE;
+            break;
+        case XML_bar:
+            return PieChartSubType_BAR;
+            break;
+        default:
+            OSL_FAIL( "TypeGroupConverter::convertOfPieType - unknown of-pie type" );
+            return PieChartSubType_NONE;
+        }
+    } else {
+        return PieChartSubType_NONE;
+    }
+}
+
 
 // private --------------------------------------------------------------------
 

@@ -19,6 +19,7 @@
 #pragma once
 
 #include <ChartType.hxx>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 
 namespace chart
 {

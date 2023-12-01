@@ -39,6 +39,7 @@
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <comphelper/classids.hxx>
@@ -152,6 +153,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     bool bSecondaryYaxisVisible = true;
     sal_Int32 nStartingAngle = 90;
     sal_Int32 n3DRelativeHeight = 100;
+    PieChartSubType ePieChartSubType = PieChartSubType_NONE;
     try
     {
         xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= bSortByXValues;
@@ -164,6 +166,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
         {
             xDiagram->getPropertyValue("3DRelativeHeight") >>= n3DRelativeHeight;
         }
+        xDiagram->getPropertyValue("SubPieType") >>= ePieChartSubType;
     }
     catch (const uno::Exception&)
     {
@@ -225,6 +228,12 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                 }
             }
 
+            if (ePieChartSubType != PieChartSubType_NONE)
+            {
+                xChartType->setFastPropertyValue(PROP_PIECHARTTYPE_SUBTYPE,
+                                                 uno::Any(ePieChartSubType));
+            }
+
             if (nT == 0)
                 m_bChartTypeUsesShiftedCategoryPositionPerDefault
                     = ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault(xChartType);
@@ -269,6 +278,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                 pSeries->setConnectBars(bConnectBars);
                 pSeries->setGroupBarsPerAxis(bGroupBarsPerAxis);
                 pSeries->setStartingAngle(nStartingAngle);
+                pSeries->setPieChartSubType(ePieChartSubType);
 
                 pSeries->setMissingValueTreatment(nMissingValueTreatment);
 

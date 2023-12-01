@@ -51,6 +51,7 @@
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
@@ -97,6 +98,7 @@ enum
     PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
     PROP_DIAGRAM_3DRELATIVEHEIGHT,
     PROP_DIAGRAM_DATATABLEHBORDER,
+    PROP_DIAGRAM_OF_PIE_TYPE,
     PROP_DIAGRAM_DATATABLEVBORDER,
     PROP_DIAGRAM_DATATABLEOUTLINE,
     PROP_DIAGRAM_EXTERNALDATA
@@ -183,6 +185,10 @@ void lcl_AddPropertiesToVector(
                   PROP_DIAGRAM_3DRELATIVEHEIGHT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "SubPieType",
+                  PROP_DIAGRAM_OF_PIE_TYPE,
+                  cppu::UnoType<chart2::PieChartSubType>::get(),
+                  beans::PropertyAttribute::MAYBEVOID );
     rOutProperties.emplace_back( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
                   cppu::UnoType<OUString>::get(),
@@ -202,6 +208,8 @@ const ::chart::tPropertyValueMap& StaticDiagramDefaults()
         ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
+        ::chart::PropertyHelper::setPropertyValueDefault< chart2::PieChartSubType >( aMap, PROP_DIAGRAM_OF_PIE_TYPE,
+                chart2::PieChartSubType_NONE);
         ::chart::SceneProperties::AddDefaultsToMap( aMap );
         return aMap;
     }();

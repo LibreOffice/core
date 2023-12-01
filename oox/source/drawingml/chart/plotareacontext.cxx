@@ -136,8 +136,9 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
                 case C_TOKEN( lineChart ):
                 case C_TOKEN( stockChart ):
                     return new LineTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
-                case C_TOKEN( doughnutChart ):
                 case C_TOKEN( ofPieChart ):
+                    return new OfPieTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( doughnutChart ):
                 case C_TOKEN( pie3DChart ):
                 case C_TOKEN( pieChart ):
                     return new PieTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );

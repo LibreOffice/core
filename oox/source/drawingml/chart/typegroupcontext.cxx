@@ -255,6 +255,36 @@ ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
         case C_TOKEN( holeSize ):
             mrModel.mnHoleSize = rAttribs.getInteger( XML_val, 10 );
             return nullptr;
+        case C_TOKEN( ser ):
+            return new PieSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
+        case C_TOKEN( serLines ):
+            return new ShapePrWrapperContext( *this, mrModel.mxSerLines.create() );
+        case C_TOKEN( varyColors ):
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, !bMSO2007Doc );
+            return nullptr;
+    }
+    return nullptr;
+}
+
+OfPieTypeGroupContext::OfPieTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
+    TypeGroupContextBase( rParent, rModel )
+{
+}
+
+OfPieTypeGroupContext::~OfPieTypeGroupContext()
+{
+}
+
+ContextHandlerRef OfPieTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
+    if( isRootElement() ) switch( nElement )
+    {
+        case C_TOKEN( dLbls ):
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
+        case C_TOKEN( gapWidth ):
+            mrModel.mnGapWidth = rAttribs.getInteger( XML_val, 150 );
+            return nullptr;
         case C_TOKEN( ofPieType ):
             mrModel.mnOfPieType = rAttribs.getToken( XML_val, XML_pie );
             return nullptr;

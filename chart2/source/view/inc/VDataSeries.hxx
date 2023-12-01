@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
@@ -141,6 +142,9 @@ public:
     void setStartingAngle( sal_Int32 nStartingAngle );
     sal_Int32 getStartingAngle() const;
 
+    void setPieChartSubType(css::chart2::PieChartSubType eSubType);
+    css::chart2::PieChartSubType getPieChartSubType() const;
+
     void setRoleOfSequenceForDataLabelNumberFormatDetection( std::u16string_view rRole );
 
     //this is only temporarily here for area chart:
@@ -230,6 +234,8 @@ private: //member
     bool                m_bGroupBarsPerAxis;
 
     sal_Int32               m_nStartingAngle;
+
+    css::chart2::PieChartSubType m_ePieChartSubType;
 
     OUString           m_aSeriesParticle;
     OUString           m_aCID;

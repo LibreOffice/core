@@ -535,6 +535,7 @@ StartWith
 StartingAngle
 State
 StringItemList
+SubPieType
 SubViewSize
 Subtotals
 Suffix

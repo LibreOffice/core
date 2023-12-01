@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_TYPEGROUPCONVERTER_HXX
 
 #include <drawingml/chart/converterbase.hxx>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 
 namespace com::sun::star {
     namespace chart2 { class XChartType; }
@@ -160,6 +161,8 @@ public:
     void                convertPieRotation( PropertySet& rPropSet, sal_Int32 nOoxAngle ) const;
     /** Sets the passed OOXML pie explosion at the passed property set. */
     void                convertPieExplosion( PropertySet& rPropSet, sal_Int32 nOoxExplosion ) const;
+    /** Converts of-pie types */
+    css::chart2::PieChartSubType convertOfPieType(sal_Int32 nOoxOfPieType ) const;
 
 private:
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */

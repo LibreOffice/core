@@ -54,6 +54,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
@@ -102,6 +103,7 @@ enum
     PROP_DIAGRAM_SORT_BY_X_VALUES,
 
     PROP_DIAGRAM_STARTING_ANGLE,
+    PROP_DIAGRAM_OF_PIE_TYPE,
 
     PROP_DIAGRAM_RIGHT_ANGLED_AXES,
     PROP_DIAGRAM_PERSPECTIVE,
@@ -226,6 +228,11 @@ void lcl_AddPropertiesToVector(
     rOutProperties.emplace_back( "StartingAngle",
                   PROP_DIAGRAM_STARTING_ANGLE,
                   cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "SubPieType",
+                  PROP_DIAGRAM_OF_PIE_TYPE,
+                  cppu::UnoType<chart2::PieChartSubType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 

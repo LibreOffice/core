@@ -100,8 +100,7 @@ enum
                   PROP_PIE_TEMPLATE_USE_RINGS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT }
-                ,
+                  | beans::PropertyAttribute::MAYBEDEFAULT },
                 { "SubPieType",
                   PROP_PIE_TEMPLATE_SUB_PIE_TYPE,
                   cppu::UnoType<chart2::PieChartSubType>::get(),

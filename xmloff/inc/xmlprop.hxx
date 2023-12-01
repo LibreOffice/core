@@ -593,6 +593,7 @@ inline constexpr OUString PROP_StandardPageMode = u"StandardPageMode"_ustr;
 inline constexpr OUString PROP_StartingAngle = u"StartingAngle"_ustr;
 inline constexpr OUString PROP_StepHelpCount = u"StepHelpCount"_ustr;
 inline constexpr OUString PROP_StepMain = u"StepMain"_ustr;
+inline constexpr OUString PROP_SubPieType = u"SubPieType"_ustr;
 inline constexpr OUString PROP_SurroundAnchorOnly = u"SurroundAnchorOnly"_ustr;
 inline constexpr OUString PROP_SurroundContour = u"SurroundContour"_ustr;
 inline constexpr OUString PROP_SymbolBitmap = u"SymbolBitmap"_ustr;
