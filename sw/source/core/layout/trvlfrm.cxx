@@ -49,6 +49,7 @@
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
+#include <flyfrms.hxx>
 
 #include <swselectionlist.hxx>
 #include <comphelper/lok.hxx>
@@ -164,8 +165,17 @@ bool SwLayoutFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoin
                                  pFrame->UnionFrame() :
                                  pFrame->GetPaintArea() );
 
+        auto pTextFrame = pFrame->DynCastTextFrame();
+        bool bSplitFly = false;
+        if (pTextFrame && pTextFrame->HasNonLastSplitFlyDrawObj())
+        {
+            // Don't consider a non-last anchor of the split fly, so the view point can be corrected
+            // to go to the nearest fly, instead of the last anchor on a later page.
+            bSplitFly = true;
+        }
+
         if ( aPaintRect.Contains( rPoint ) &&
-             ( bContentCheck || pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS ) ) )
+             ( bContentCheck || pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS ) ) && !bSplitFly )
             bRet = true;
         else
             pFrame = pFrame->GetNext();
@@ -217,6 +227,19 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
             }
 
             const SwContentFrame *pCnt = GetContentPos( aPoint, false, false, pCMS, false );
+
+            auto pTextFrame = pCnt ? pCnt->DynCastTextFrame() : nullptr;
+            if (pTextFrame)
+            {
+                SwFlyAtContentFrame* pFly = pTextFrame->HasNonLastSplitFlyDrawObj();
+                if (pFly)
+                {
+                    // No exact match, looking for a nearest doc model position. Consider our fly
+                    // frame.
+                    pCnt = pFly->GetContentPos( aPoint, false, false, pCMS, false );
+                }
+            }
+
             // GetContentPos may have modified pCMS
             if ( pCMS && pCMS->m_bStop )
                 return false;
