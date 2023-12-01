@@ -233,6 +233,8 @@
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <svtools/acceleratorexecute.hxx>
 
+#include <tools/hostfilter.hxx>
+
 using namespace css;
 using namespace vcl;
 using namespace desktop;
@@ -7747,6 +7749,12 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             else if (it == "notebookbar")
                 bNotebookbar = true;
         }
+    }
+
+    char* pAllowlist = ::getenv("LOK_HOST_ALLOWLIST");
+    if (pAllowlist)
+    {
+        HostFilter::setAllowedHostsRegex(pAllowlist);
     }
 
     // What stage are we at ?
