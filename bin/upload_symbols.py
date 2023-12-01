@@ -48,7 +48,11 @@ def main():
 
     data['csrfmiddlewaretoken'] = csrftoken
 
-    session.post(upload_url, headers=headers, files=files, data=data)
+    response = session.post(upload_url, headers=headers, files=files, data=data)
+    if response.ok:
+        print("Symbols uploaded successfully")
+    else:
+        print(response.text)
 
 
 if __name__ == "__main__":
