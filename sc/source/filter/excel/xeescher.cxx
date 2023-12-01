@@ -1566,7 +1566,7 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
 
     // load the chart OLE object
     if( SdrOle2Obj* pSdrOleObj = dynamic_cast< SdrOle2Obj* >( pSdrObj ) )
-        svt::EmbeddedObjectRef::TryRunningState( pSdrOleObj->GetObjRef() );
+        (void)svt::EmbeddedObjectRef::TryRunningState(pSdrOleObj->GetObjRef());
 
     // create the chart substream object
     ScfPropertySet aShapeProp( xShape );
