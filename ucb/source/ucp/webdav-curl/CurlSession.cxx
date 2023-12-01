@@ -37,6 +37,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <systools/curlinit.hxx>
+#include <tools/hostfilter.hxx>
 #include <config_version.h>
 
 #include <map>
@@ -1116,6 +1117,12 @@ auto CurlProcessor::ProcessRequest(
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders)
     -> void
 {
+    if (HostFilter::isForbidden(rURI.GetHost()))
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "Access denied to host: " << rURI.GetHost());
+        throw uno::RuntimeException("access to host denied");
+    }
+
     if (pEnv)
     { // add custom request headers passed by caller
         for (auto const& rHeader : pEnv->m_aRequestHeaders)
