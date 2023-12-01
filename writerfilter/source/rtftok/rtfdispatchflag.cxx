@@ -581,8 +581,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 dispatchSymbol(RTFKeyword::PAR);
             // \pard is allowed between \cell and \row, but in that case it should not reset the fact that we're inside a table.
             // It should not reset the paragraph style, either, so remember the old paragraph style.
-            RTFValue::Pointer_t pOldStyle
-                = m_aStates.top().getParagraphSprms().find(NS_ooxml::LN_CT_PPrBase_pStyle);
             m_aStates.top().getParagraphSprms() = m_aDefaultState.getParagraphSprms();
             m_aStates.top().getParagraphAttributes() = m_aDefaultState.getParagraphAttributes();
 
@@ -595,19 +593,14 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             {
                 // We are still in a table.
                 m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_inTbl, new RTFValue(1));
-                if (m_bAfterCellBeforeRow && pOldStyle)
-                    // And we still have the same paragraph style.
-                    m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_pStyle,
-                                                            pOldStyle);
                 // Ideally getDefaultSPRM() would take care of this, but it would not when we're buffering.
                 m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_tabs,
                                                         new RTFValue());
             }
             resetFrame();
 
-            // Reset currently selected paragraph style as well, unless we are in the special "after \cell, before \row" state.
+            // Reset currently selected paragraph style as well.
             // By default the style with index 0 is applied.
-            if (!m_bAfterCellBeforeRow)
             {
                 OUString const aName = getStyleName(0);
                 // But only in case it's not a character style.

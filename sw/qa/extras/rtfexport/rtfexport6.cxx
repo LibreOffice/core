@@ -172,6 +172,8 @@ DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat, "tdf108505_fieldCharFormat
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xRun, "CharColor"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(xPara, "ParaStyleName"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat2, "tdf108505_fieldCharFormat2.rtf")

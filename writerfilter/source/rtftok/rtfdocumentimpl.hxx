@@ -990,9 +990,6 @@ private:
     bool m_hasFHeader;
     bool m_hasRFooter;
     bool m_hasFFooter;
-
-    /// Are we after a \cell, but before a \row?
-    bool m_bAfterCellBeforeRow;
 };
 } // namespace writerfilter::rtftok
 
