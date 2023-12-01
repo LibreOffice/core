@@ -1888,11 +1888,14 @@ bool SvxAutoCorrect::PutText( const OUString& rShort, const OUString& rLong,
                                 LanguageType eLang )
 {
     LanguageTag aLanguageTag( eLang);
-    auto const iter = m_aLangTable.find(aLanguageTag);
-    if (iter != m_aLangTable.end())
+    if (auto const iter = m_aLangTable.find(aLanguageTag); iter != m_aLangTable.end())
         return iter->second.PutText(rShort, rLong);
-    if(CreateLanguageFile(aLanguageTag))
-        return m_aLangTable.find(aLanguageTag)->second.PutText(rShort, rLong);
+    if (CreateLanguageFile(aLanguageTag))
+    {
+        auto const iter = m_aLangTable.find(aLanguageTag);
+        assert (iter != m_aLangTable.end());
+        return iter->second.PutText(rShort, rLong);
+    }
     return false;
 }
 
