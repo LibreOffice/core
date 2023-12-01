@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
@@ -15,6 +14,9 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+
+#include <tools/hostfilter.hxx>
+#include <tools/urlobj.hxx>
 
 #include <utility>
 #include <webservicelink.hxx>
@@ -37,7 +39,9 @@ sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, co
     aResult.clear();
     bHasResult = false;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    INetURLObject aURLObject(aURL);
+    const OUString sHost = aURLObject.GetHost();
+    if (HostFilter::isForbidden(sHost))
     {
         SAL_WARN("sc.ui", "ScWebServiceLink::DataChanged: blocked access to external file: \""
                               << aURL << "\"");

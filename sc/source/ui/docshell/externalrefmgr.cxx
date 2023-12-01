@@ -50,6 +50,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
@@ -2537,7 +2538,9 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     if (!isFileLoadable(aFile))
         return nullptr;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    INetURLObject aURLObject(aFile);
+    const OUString sHost = aURLObject.GetHost();
+    if (HostFilter::isForbidden(sHost))
     {
         SAL_WARN( "sc.ui", "ScExternalRefManager::loadSrcDocument: blocked access to external file: \"" << aFile << "\"");
         return nullptr;
