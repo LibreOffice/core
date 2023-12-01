@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testNonFirstHeaderIsDisabled)
 
     // TODO
 
-    // Header can only be enabled or disabled, but can't be disbaled just for first, left or right page.
+    // Header can only be enabled or disabled, but can't be disabled just for first, left or right page.
     // If a header is enabled but empty, the header still takes space in LO, but not in MSO, where it acts the same as
     // if it is disabled.
 }
