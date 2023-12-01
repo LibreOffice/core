@@ -1243,8 +1243,7 @@ LOKDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEvent
     uno::Reference< accessibility::XAccessible > xSelectedObject;
     if (isText(m_nDocumentType))
     {
-        uno::Reference< accessibility::XAccessible > xSource(aEvent.Source, uno::UNO_QUERY);
-        xSelectedObject = xSource;
+        xSelectedObject = uno::Reference<accessibility::XAccessible>(aEvent.Source, uno::UNO_QUERY);
     }
     else
     {
