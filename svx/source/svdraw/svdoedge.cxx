@@ -1523,7 +1523,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         };
 
         // We change the path going from end to start. Thus inserting points does not affect the index
-        // of the preciding points.
+        // of the preceding points.
         // The end point has index nPointCount-1 and is a normal point and kept.
         // Insert new control point in the middle of last segments.
         Point aControl = SegmentPoint(nPointCount - 1, 0.5);
