@@ -45,7 +45,7 @@ struct VCL_DLLPUBLIC BitmapBuffer
     sal_uInt16      mnBitCount;
 };
 
-VCL_DLLPUBLIC std::unique_ptr<BitmapBuffer> StretchAndConvert(
+VCL_DLLPUBLIC std::optional<BitmapBuffer> StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
     ScanlineFormat nDstBitmapFormat, std::optional<BitmapPalette> pDstPal = std::nullopt, const ColorMask* pDstMask = nullptr );
 

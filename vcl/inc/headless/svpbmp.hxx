@@ -24,10 +24,11 @@
 
 #include <salbmp.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
+#include <optional>
 
 class VCL_DLLPUBLIC SvpSalBitmap final : public SalBitmap, public basegfx::SystemDependentDataHolder // MM02
 {
-    std::unique_ptr<BitmapBuffer> mpDIB;
+    std::optional<BitmapBuffer> moDIB;
 public:
              SvpSalBitmap();
     virtual ~SvpSalBitmap() override;
@@ -49,10 +50,10 @@ public:
     virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) override;
-    void                    Create(std::unique_ptr<BitmapBuffer> pBuf);
+    void                    Create(const std::optional<BitmapBuffer> & pBuf);
     const BitmapBuffer*     GetBuffer() const
     {
-        return mpDIB.get();
+        return moDIB ? &*moDIB : nullptr;
     }
     virtual void            Destroy() final override;
     virtual Size            GetSize() const override;

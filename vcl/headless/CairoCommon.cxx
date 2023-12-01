@@ -1988,15 +1988,15 @@ bool CairoCommon::supportsOperation(OutDevSupportType eType)
     return false;
 }
 
-std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc)
+std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc)
 {
     if (pSrc == nullptr)
-        return nullptr;
+        return std::nullopt;
 
     assert(pSrc->mnFormat == SVP_24BIT_FORMAT);
     const tools::Long nWidth = pSrc->mnWidth;
     const tools::Long nHeight = pSrc->mnHeight;
-    std::unique_ptr<BitmapBuffer> pDst(new BitmapBuffer);
+    std::optional<BitmapBuffer> pDst(std::in_place);
     pDst->mnFormat = (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown);
     pDst->mnWidth = nWidth;
     pDst->mnHeight = nHeight;
@@ -2010,7 +2010,7 @@ std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");
         pDst->mpBits = nullptr;
-        return nullptr;
+        return std::nullopt;
     }
 
     pDst->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
@@ -2018,7 +2018,7 @@ std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer
     {
         SAL_WARN("vcl.gdi", "scanline calculation wraparound");
         pDst->mpBits = nullptr;
-        return nullptr;
+        return std::nullopt;
     }
 
     try
@@ -2029,7 +2029,7 @@ std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer
     {
         // memory exception, clean up
         pDst->mpBits = nullptr;
-        return nullptr;
+        return std::nullopt;
     }
 
     for (tools::Long y = 0; y < nHeight; ++y)

@@ -38,7 +38,7 @@ BitmapHelper::BitmapHelper(const SalBitmap& rSourceBitmap, const bool bForceARGB
         const BitmapBuffer* pSrc = rSrcBmp.GetBuffer();
         const SalTwoRect aTwoRect
             = { 0, 0, pSrc->mnWidth, pSrc->mnHeight, 0, 0, pSrc->mnWidth, pSrc->mnHeight };
-        std::unique_ptr<BitmapBuffer> pTmp
+        std::optional<BitmapBuffer> pTmp
             = (pSrc->mnFormat == SVP_24BIT_FORMAT
                    ? FastConvert24BitRgbTo32BitCairo(pSrc)
                    : StretchAndConvert(*pSrc, aTwoRect, SVP_CAIRO_FORMAT));

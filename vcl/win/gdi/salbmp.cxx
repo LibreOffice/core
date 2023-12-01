@@ -220,7 +220,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap()
     }
 
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
-    std::unique_ptr<BitmapBuffer> pExtraRGB;
+    std::optional<BitmapBuffer> pExtraRGB;
 
     if(pRGB && ScanlineFormat::N24BitTcBgr != RemoveScanline(pRGB->mnFormat))
     {
@@ -232,7 +232,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap()
             ScanlineFormat::N24BitTcBgr);
 
         pSalRGB->ReleaseBuffer(pRGB, BitmapAccessMode::Write);
-        pRGB = pExtraRGB.get();
+        pRGB = pExtraRGB ? &*pExtraRGB : nullptr;
     }
 
     if(pRGB
@@ -302,7 +302,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     }
 
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
-    std::unique_ptr<BitmapBuffer> pExtraRGB;
+    std::optional<BitmapBuffer> pExtraRGB;
 
     if(pRGB && ScanlineFormat::N24BitTcBgr != RemoveScanline(pRGB->mnFormat))
     {
@@ -314,7 +314,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
             ScanlineFormat::N24BitTcBgr);
 
         pSalRGB->ReleaseBuffer(pRGB, BitmapAccessMode::Read);
-        pRGB = pExtraRGB.get();
+        pRGB = pExtraRGB ? &*pExtraRGB : nullptr;
     }
 
     WinSalBitmap* pSalA = const_cast< WinSalBitmap* >(&rAlphaSource);
@@ -329,7 +329,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     }
 
     BitmapBuffer* pA = pSalA->AcquireBuffer(BitmapAccessMode::Read);
-    std::unique_ptr<BitmapBuffer> pExtraA;
+    std::optional<BitmapBuffer> pExtraA;
 
     if(pA && ScanlineFormat::N8BitPal != RemoveScanline(pA->mnFormat))
     {
@@ -344,7 +344,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
             rTargetPalette);
 
         pSalA->ReleaseBuffer(pA, BitmapAccessMode::Read);
-        pA = pExtraA.get();
+        pA = pExtraA ? &*pExtraA : nullptr;
     }
 
     if(pRGB

@@ -106,8 +106,7 @@ VCL_DLLPUBLIC void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& 
 
 VCL_DLLPUBLIC cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer);
 
-VCL_DLLPUBLIC std::unique_ptr<BitmapBuffer>
-FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc);
+VCL_DLLPUBLIC std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc);
 
 enum class PaintMode
 {
