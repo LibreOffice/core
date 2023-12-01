@@ -155,27 +155,14 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         if (nNullable != ColumnValue::NULLABLE_UNKNOWN)
         {
 
-            OUString sSql;
-            // Dirty hack: can't change null directly in sql, we have to fiddle
-            // the system tables manually.
+            OUString sSql(getAlterTableColumn(rColName));
             if (nNullable == ColumnValue::NULLABLE)
             {
-                sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = NULL "
-                       "WHERE RDB$FIELD_NAME = '" + rColName + "' "
-                       "AND RDB$RELATION_NAME = '" + getName() + "'";
+                sSql += "DROP NOT NULL";
             }
             else if (nNullable == ColumnValue::NO_NULLS)
             {
-                // And if we are making NOT NULL then we have to make sure we have
-                // no nulls left in the column.
-                OUString sFillNulls("UPDATE \"" + getName() + "\" SET \""
-                                    + rColName + "\" = 0 "
-                                    "WHERE \"" + rColName + "\" IS NULL");
-                getConnection()->createStatement()->execute(sFillNulls);
-
-                sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = 1 "
-                       "WHERE RDB$FIELD_NAME = '" + rColName + "' "
-                       "AND RDB$RELATION_NAME = '" + getName() + "'";
+                sSql += "SET NOT NULL";
             }
             getConnection()->createStatement()->execute(sSql);
         }
