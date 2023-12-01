@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_DOCVW_SHADOWOVERLAYOBJECT_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
+#include <memory>
 
 class SwView;
 

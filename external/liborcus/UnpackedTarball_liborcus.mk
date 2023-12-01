@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/gcc9.patch.0 \
 	external/liborcus/libtool.patch.0 \
 	external/liborcus/fix-pch.patch.0 \
+	external/liborcus/cstdint.patch.0 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\

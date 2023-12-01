@@ -1,0 +1,40 @@
+--- include/orcus/types.hpp
++++ include/orcus/types.hpp
+@@ -16,6 +16,7 @@
+ #pragma GCC diagnostic ignored "-Wshadow"
+ #endif
+ 
++#include <cstdint>
+ #include <cstdlib>
+ #include <vector>
+ #include <string>
+--- src/liborcus/orcus_xlsx.cpp
++++ src/liborcus/orcus_xlsx.cpp
+@@ -31,6 +31,7 @@
+ #include "spreadsheet_iface_util.hpp"
+ 
+ #include <cstdlib>
++#include <limits>
+ #include <iostream>
+ #include <string>
+ #include <cstring>
+--- src/liborcus/xls_xml_context.cpp
++++ ./src/liborcus/xls_xml_context.cpp
+@@ -16,6 +16,7 @@
+ #include <mdds/sorted_string_map.hpp>
+ 
+ #include <iostream>
++#include <limits>
+ 
+ using namespace std;
+ 
+--- src/liborcus/xlsx_revision_context.cpp
++++ src/liborcus/xlsx_revision_context.cpp
+@@ -15,6 +15,7 @@
+ #include "orcus/string_pool.hpp"
+ #include "orcus/global.hpp"
+ 
++#include <limits>
+ #include <iostream>
+ 
+ using namespace std;

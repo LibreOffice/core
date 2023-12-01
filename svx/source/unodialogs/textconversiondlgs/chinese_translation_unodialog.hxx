@@ -30,6 +30,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <vcl/vclptr.hxx>
+#include <memory>
 
 
 namespace textconversiondlgs

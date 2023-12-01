@@ -33,6 +33,7 @@
 
 #include <services.hxx>
 #include "connector.hxx"
+#include <memory>
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.Connector"
 #define SERVICE_NAME "com.sun.star.connection.Connector"

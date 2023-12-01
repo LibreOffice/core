@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_signing, \
 	unotest \
 	utl \
 	xmlsecurity \
+	vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,xmlsecurity_signing,\

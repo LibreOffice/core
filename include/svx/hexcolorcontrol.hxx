@@ -23,6 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 #include <tools/link.hxx>
+#include <memory>
 
 namespace weld { class Entry; }
 
