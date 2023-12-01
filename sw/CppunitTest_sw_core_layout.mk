@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_core_layout, \
     sw/qa/core/layout/paintfrm \
     sw/qa/core/layout/sortedobjs \
     sw/qa/core/layout/tabfrm \
+    sw/qa/core/layout/trvlfrm \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_core_layout, \
