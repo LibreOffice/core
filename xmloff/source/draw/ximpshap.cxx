@@ -1785,7 +1785,7 @@ bool lcl_IsLikelyOOXMLCurve(const basegfx::B2DPolygon& rPolygon)
 
     basegfx::B2DVector aStartVec(rPolygon.getNextControlPoint(0) - rPolygon.getB2DPoint(0));
     basegfx::B2DVector aEndVec(rPolygon.getPrevControlPoint(nCount-1) - rPolygon.getB2DPoint(nCount - 1));
-    // LibreOffice uses one point less than OOXML for the same underlaying bentConnector or
+    // LibreOffice uses one point less than OOXML for the same underlying bentConnector or
     // STANDARD connector, respectively. A deeper inspection is only needed in case of 2 resulting
     // points. Those connector paths look like a quarter ellipse.
     switch (nCount)
