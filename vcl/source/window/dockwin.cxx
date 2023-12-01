@@ -927,7 +927,7 @@ Point DockingWindow::GetFloatingPos() const
             pWrapper->mpFloatWin->GetWindowState( aData );
             AbsoluteScreenPixelPoint aPos(aData.x(), aData.y());
             // LOK needs logic coordinates not absolute screen position for autofilter menu
-            if (!comphelper::LibreOfficeKit::isActive() || get_id() != "check_list_menu")
+            if (!comphelper::LibreOfficeKit::isActive())
                 return pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
             return Point(aPos);
         }
