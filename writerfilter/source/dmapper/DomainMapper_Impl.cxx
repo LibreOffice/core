@@ -3872,7 +3872,7 @@ void DomainMapper_Impl::prepareHeaderFooterContent(uno::Reference<beans::XProper
         m_aHeaderFooterTextAppendStack.push(std::make_pair(TextAppendContext(xTextAppend, xTextCursor), ePagePartType));
 }
 
-/** Checks if the header and footer content on the text appennd stack is empty.
+/** Checks if the header and footer content on the text appended stack is empty.
  */
 void DomainMapper_Impl::checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, PageType eType)
 {
