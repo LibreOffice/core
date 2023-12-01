@@ -193,7 +193,7 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
                 rConfig.m_xTargetLanguage, rConfig.m_xAPIUrl, rConfig.m_xAuthKey, aOut);
             SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
 
-            if (xStatusIndicator.is())
+            if (xStatusIndicator.is() && nCount)
                 xStatusIndicator->setValue((100 * ++nProgress) / nCount);
 
             Idle aIdle("ProgressBar::SetValue aIdle");
