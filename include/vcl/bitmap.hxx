@@ -107,7 +107,7 @@ struct BitmapSystemData
     int mnHeight;
 };
 
-class SAL_WARN_UNUSED VCL_DLLPUBLIC Bitmap
+class SAL_WARN_UNUSED VCL_DLLPUBLIC Bitmap final
 {
 public:
 
@@ -115,7 +115,7 @@ public:
                             Bitmap( const Bitmap& rBitmap );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
     explicit                Bitmap( std::shared_ptr<SalBitmap> xSalBitmap );
-    virtual                 ~Bitmap();
+                            ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
     Bitmap&                 operator=( Bitmap&& rBitmap ) noexcept;
@@ -259,7 +259,7 @@ public:
     bool                    CopyPixel_AlphaOptimized(
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc,
-                                const Bitmap& rBmpSrc );
+                                const AlphaMask& rBmpSrc );
 
     bool                    CopyPixel_AlphaOptimized(
                                 const tools::Rectangle& rRectDst,

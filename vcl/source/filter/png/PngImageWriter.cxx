@@ -162,7 +162,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
     Bitmap aBitmap;
     AlphaMask aAlphaMask;
     Bitmap::ScopedReadAccess pAccess;
-    Bitmap::ScopedReadAccess pAlphaAccess;
+    AlphaMask::ScopedReadAccess pAlphaAccess;
 
     if (setjmp(png_jmpbuf(pPng)))
     {
@@ -183,7 +183,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
         bool bCombineChannels = false;
         pAccess = Bitmap::ScopedReadAccess(aBitmap);
         if (bTranslucent)
-            pAlphaAccess = Bitmap::ScopedReadAccess(aAlphaMask);
+            pAlphaAccess = AlphaMask::ScopedReadAccess(aAlphaMask);
         Size aSize = aBitmapEx.GetSizePixel();
 
         int bitDepth = -1;

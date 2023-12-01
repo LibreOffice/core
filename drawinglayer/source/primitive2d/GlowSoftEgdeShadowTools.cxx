@@ -40,7 +40,7 @@ AlphaMask ProcessAndBlurAlphaMask(const AlphaMask& rMask, double fErodeDilateRad
 
     // Only completely white pixels on the initial mask must be considered for transparency. Any
     // other color must be treated as black. This creates 1-bit B&W bitmap.
-    BitmapEx mask(bConvertTo1Bit ? tmpMask.CreateMask(COL_WHITE) : tmpMask);
+    BitmapEx mask(bConvertTo1Bit ? tmpMask.GetBitmap().CreateMask(COL_WHITE) : tmpMask.GetBitmap());
 
     // Scaling down increases performance without noticeable quality loss. Additionally,
     // current blur implementation can only handle blur radius between 2 and 254.

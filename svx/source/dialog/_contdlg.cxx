@@ -115,7 +115,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             }
         }
         else if( rGraphic.IsTransparent() )
-            aBmp = rGraphic.GetBitmapEx().GetAlphaMask();
+            aBmp = rGraphic.GetBitmapEx().GetAlphaMask().GetBitmap();
         else
         {
             aBmp = rGraphic.GetBitmapEx().GetBitmap();

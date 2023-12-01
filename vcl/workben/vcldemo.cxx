@@ -1387,7 +1387,7 @@ public:
                     aAbove.Move(aSrc.GetSizePixel().Width(),0);
                     rDev.DrawBitmap(aAbove, aSrc.GetBitmap());
                     aAbove.Move(aSrc.GetSizePixel().Width(),0);
-                    rDev.DrawBitmap(aAbove, aSrc.GetAlphaMask());
+                    rDev.DrawBitmap(aAbove, aSrc.GetAlphaMask().GetBitmap());
 
                     // intermediates middle
                     BitmapEx aResult = AlphaRecovery(rDev, aLocation, aSrc);

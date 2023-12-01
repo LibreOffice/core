@@ -578,9 +578,7 @@ sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
     }
     else
     {
-        Bitmap aTestBitmap(maAlphaMask);
-        Bitmap::ScopedReadAccess pRead(aTestBitmap);
-
+        AlphaMask::ScopedReadAccess pRead(const_cast<AlphaMask&>(maAlphaMask));
         if(pRead)
         {
             const BitmapColor aBitmapColor(pRead->GetPixel(nY, nX));
@@ -1363,7 +1361,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
 void BitmapEx::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
 {
     AlphaMask aAlphaMask(GetAlphaMask());
-    BitmapScopedWriteAccess pAlphaWriteAccess(aAlphaMask);
+    AlphaMask::ScopedWriteAccess pAlphaWriteAccess(aAlphaMask);
     Bitmap::ScopedReadAccess pReadAccess(maBitmap);
     assert( pReadAccess.get() && pAlphaWriteAccess.get() );
     if ( !(pReadAccess.get() && pAlphaWriteAccess.get()) )
@@ -1394,7 +1392,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
     else
     {
         aAlpha = GetAlphaMask();
-        BitmapScopedWriteAccess pA(aAlpha);
+        AlphaMask::ScopedWriteAccess pA(aAlpha);
         assert(pA);
 
         if( !pA )

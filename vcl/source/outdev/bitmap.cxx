@@ -331,7 +331,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             alpha.Mirror(mirrorFlags);
         }
         SalBitmap* pSalSrcBmp = bitmap.ImplGetSalBitmap().get();
-        SalBitmap* pSalAlphaBmp = alpha.ImplGetSalBitmap().get();
+        SalBitmap* pSalAlphaBmp = alpha.GetBitmap().ImplGetSalBitmap().get();
 
         // #i83087# Naturally, system alpha blending (SalGraphics::DrawAlphaBitmap) cannot work
         // with separate alpha VDev
@@ -346,7 +346,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             {
                 if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, *this))
                 {
-                    mpAlphaVDev->BlendBitmap(aTR, rAlpha);
+                    mpAlphaVDev->BlendBitmap(aTR, rAlpha.GetBitmap());
                     return;
                 }
             }

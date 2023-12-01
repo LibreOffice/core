@@ -283,7 +283,7 @@ namespace drawinglayer::primitive2d
                             }
                             else
                             {
-                                BitmapEx aExpandVisibilityMask(aAlphaMask, aAlphaMask);
+                                BitmapEx aExpandVisibilityMask(aAlphaMask.GetBitmap(), aAlphaMask);
                                 maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             }
 
@@ -306,7 +306,7 @@ namespace drawinglayer::primitive2d
                             }
                             else
                             {
-                                BitmapEx aExpandVisibilityMask(rMask, rMask);
+                                BitmapEx aExpandVisibilityMask(rMask.GetBitmap(), rMask);
                                 maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             }
 
@@ -315,7 +315,7 @@ namespace drawinglayer::primitive2d
                         case Disposal::Previous:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmapEx);
-                            BitmapEx aExpandVisibilityMask(rAnimationFrame.maBitmapEx.GetAlphaMask(), rAnimationFrame.maBitmapEx.GetAlphaMask());
+                            BitmapEx aExpandVisibilityMask(rAnimationFrame.maBitmapEx.GetAlphaMask().GetBitmap(), rAnimationFrame.maBitmapEx.GetAlphaMask());
                             maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             break;
                         }

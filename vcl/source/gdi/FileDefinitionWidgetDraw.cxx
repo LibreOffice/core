@@ -498,7 +498,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     if (aBitmap.IsAlpha())
                     {
                         const std::shared_ptr<SalBitmap> pSalBitmapAlpha
-                            = aBitmap.GetAlphaMask().ImplGetSalBitmap();
+                            = aBitmap.GetAlphaMask().GetBitmap().ImplGetSalBitmap();
                         FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap,
                                                              *pSalBitmapAlpha);
                     }

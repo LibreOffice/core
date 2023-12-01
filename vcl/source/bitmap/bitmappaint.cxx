@@ -660,7 +660,7 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor) const
     }
 
     AlphaMask aNewBmp(GetSizePixel());
-    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    AlphaMask::ScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
         return AlphaMask();
 
@@ -709,8 +709,8 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor) const
     pWriteAcc.reset();
     pReadAcc.reset();
 
-    aNewBmp.maPrefSize = maPrefSize;
-    aNewBmp.maPrefMapMode = maPrefMapMode;
+    aNewBmp.SetPrefSize(maPrefSize);
+    aNewBmp.SetPrefMapMode(maPrefMapMode);
 
     return aNewBmp;
 }
@@ -730,7 +730,7 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor, sal_uInt8 nTol) cons
     // TODO: Possibly remove the 1bpp code later.
 
     AlphaMask aNewBmp(GetSizePixel());
-    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    AlphaMask::ScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
         return AlphaMask();
 
@@ -802,8 +802,8 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor, sal_uInt8 nTol) cons
     pWriteAcc.reset();
     pReadAcc.reset();
 
-    aNewBmp.maPrefSize = maPrefSize;
-    aNewBmp.maPrefMapMode = maPrefMapMode;
+    aNewBmp.SetPrefSize(maPrefSize);
+    aNewBmp.SetPrefMapMode(maPrefMapMode);
 
     return aNewBmp;
 }
@@ -903,7 +903,7 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
 
 bool Bitmap::ReplaceMask(const AlphaMask& rMask, const Color& rReplaceColor)
 {
-    ScopedReadAccess pMaskAcc(const_cast<AlphaMask&>(rMask));
+    AlphaMask::ScopedReadAccess pMaskAcc(const_cast<AlphaMask&>(rMask));
     BitmapScopedWriteAccess pAcc(*this);
 
     if (!pMaskAcc || !pAcc)

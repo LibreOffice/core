@@ -300,7 +300,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 }
                 else
                 {
-                    BitmapEx aTmpMask(aMask, aMask);
+                    BitmapEx aTmpMask(aMask.GetBitmap(), aMask);
                     pVDevMask->DrawBitmapEx(rAnimationFrame.maPositionPixel,
                                             aTmpMask );
                 }
@@ -310,7 +310,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             case Disposal::Back:
             {
                 // #i70772# react on no mask
-                const Bitmap aMask(rAnimationFrame.maBitmapEx.GetAlphaMask());
+                const AlphaMask aMask(rAnimationFrame.maBitmapEx.GetAlphaMask());
                 const Bitmap & rContent(rAnimationFrame.maBitmapEx.GetBitmap());
 
                 pVDevMask->Erase();
@@ -325,7 +325,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 }
                 else
                 {
-                    pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel, aMask);
+                    pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel, aMask.GetBitmap());
                 }
                 break;
             }
@@ -335,7 +335,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
                                     rAnimationFrame.maBitmapEx);
                 pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel,
-                                      rAnimationFrame.maBitmapEx.GetAlphaMask());
+                                      rAnimationFrame.maBitmapEx.GetAlphaMask().GetBitmap());
                 break;
             }
         }

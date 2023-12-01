@@ -205,7 +205,7 @@ void BitmapExTest::testCombineMaskOr()
     }
     AlphaMask aAlphaBitmap(Size(3, 3));
     {
-        BitmapScopedWriteAccess pWriteAccess(aAlphaBitmap);
+        AlphaMask::ScopedWriteAccess pWriteAccess(aAlphaBitmap);
         pWriteAccess->Erase(Color(0xff, 0xff, 0xff));
         for (int i = 1; i < 3; ++i)
         {
@@ -217,7 +217,7 @@ void BitmapExTest::testCombineMaskOr()
 
     {
         AlphaMask aMask = aBitmap.CreateAlphaMask(COL_RED, 1);
-        Bitmap::ScopedReadAccess pAccess(aMask);
+        AlphaMask::ScopedReadAccess pAccess(aMask);
         // the output is a greyscale palette bitmap
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 0));
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 1));

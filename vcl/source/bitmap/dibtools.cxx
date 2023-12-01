@@ -1754,7 +1754,7 @@ bool WriteDIBBitmapEx(
             // invert the alpha because the other routines actually want transparency
             AlphaMask tmpAlpha = rSource.maAlphaMask;
             tmpAlpha.Invert();
-            return ImplWriteDIB(tmpAlpha, rOStm, true, true);
+            return ImplWriteDIB(tmpAlpha.GetBitmap(), rOStm, true, true);
         }
     }
 

@@ -29,24 +29,23 @@
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC AlphaMask final : public Bitmap
+class VCL_DLLPUBLIC AlphaMask final
 {
 public:
-
                 AlphaMask();
     explicit    AlphaMask( const Bitmap& rBitmap );
                 AlphaMask( const AlphaMask& rAlphaMask );
                 AlphaMask( AlphaMask&& rAlphaMask );
     explicit    AlphaMask( const Size& rSizePixel, const sal_uInt8* pEraseTransparency = nullptr );
-    virtual     ~AlphaMask() override;
+                ~AlphaMask();
 
     AlphaMask&  operator=( const Bitmap& rBitmap );
-    AlphaMask&  operator=( const AlphaMask& rAlphaMask ) { return static_cast<AlphaMask&>( Bitmap::operator=( rAlphaMask ) ); }
-    AlphaMask&  operator=( AlphaMask&& rAlphaMask ) noexcept { return static_cast<AlphaMask&>( Bitmap::operator=( std::move(rAlphaMask) ) ); }
-    bool        operator==( const AlphaMask& rAlphaMask ) const { return Bitmap::operator==(rAlphaMask); }
-    bool        operator!=( const AlphaMask& rAlphaMask ) const { return Bitmap::operator!=(rAlphaMask); }
+    AlphaMask&  operator=( const AlphaMask& rAlphaMask ) { maBitmap = rAlphaMask.maBitmap; return *this; }
+    AlphaMask&  operator=( AlphaMask&& rAlphaMask ) noexcept { maBitmap = std::move(rAlphaMask.maBitmap); return *this; }
+    bool        operator==( const AlphaMask& rAlphaMask ) const { return maBitmap == rAlphaMask.maBitmap; }
+    bool        operator!=( const AlphaMask& rAlphaMask ) const { return maBitmap != rAlphaMask.maBitmap; }
 
-    Bitmap const & GetBitmap() const;
+    Bitmap const & GetBitmap() const { return maBitmap; }
 
     void        Erase( sal_uInt8 cTransparency );
     void        BlendWith(const AlphaMask& rOther);
@@ -63,22 +62,76 @@ public:
     // check if alpha is used, returns true if at least one pixel has transparence
     bool        hasAlpha() const;
 
-    BitmapReadAccess*  AcquireAlphaReadAccess() { return Bitmap::AcquireReadAccess(); }
-    BitmapWriteAccess* AcquireAlphaWriteAccess() { return Bitmap::AcquireWriteAccess(); }
-
-    using Bitmap::ReleaseAccess;
+    BitmapReadAccess*  AcquireAlphaReadAccess() { return maBitmap.AcquireReadAccess(); }
+    BitmapWriteAccess* AcquireAlphaWriteAccess() { return maBitmap.AcquireWriteAccess(); }    
+    static void ReleaseAccess( BitmapInfoAccess* pBitmapAccess ) { Bitmap::ReleaseAccess(pBitmapAccess); }
 
     typedef vcl::ScopedBitmapAccess<BitmapReadAccess, AlphaMask, &AlphaMask::AcquireAlphaReadAccess> ScopedReadAccess;
+    typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireAlphaWriteAccess> ScopedWriteAccess;
 
-    using Bitmap::IsEmpty;
+    bool IsEmpty() const { return maBitmap.IsEmpty(); }
+
+    void SetEmpty() { maBitmap.SetEmpty(); }
+
+    vcl::PixelFormat getPixelFormat() const { return maBitmap.getPixelFormat(); }
+
+    sal_Int64 GetSizeBytes() const { return maBitmap.GetSizeBytes(); }
+
+    Size GetSizePixel() const { return maBitmap.GetSizePixel(); }
+
+    void SetPrefSize( const Size& rSize ) { maBitmap.SetPrefSize(rSize); }
+
+    void SetPrefMapMode( const MapMode& rMapMode ) { maBitmap.SetPrefMapMode(rMapMode); }
+
+    BitmapReadAccess* AcquireReadAccess() { return maBitmap.AcquireReadAccess(); }
+
+    BitmapChecksum GetChecksum() const { return maBitmap.GetChecksum(); }
+
+    bool Invert();
+
+    bool Mirror( BmpMirrorFlags nMirrorFlags ) { return maBitmap.Mirror(nMirrorFlags); }
+
+    bool Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default ) { return maBitmap.Scale(rNewSize, nScaleFlag); }
+
+    bool Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default )
+    { return maBitmap.Scale(rScaleX, rScaleY, nScaleFlag); }
+
+    bool Convert( BmpConversion eConversion ) { return maBitmap.Convert(eConversion); }
+
+    vcl::Region CreateRegion( const Color& rColor, const tools::Rectangle& rRect ) const { return maBitmap.CreateRegion(rColor, rRect); }
+
+    bool Rotate( Degree10 nAngle10, const Color& rFillColor ) { return maBitmap.Rotate(nAngle10, rFillColor); }
+
+    bool Crop( const tools::Rectangle& rRectPixel ) { return maBitmap.Crop(rRectPixel); }
+
+    bool Expand( sal_Int32 nDX, sal_Int32 nDY, const Color* pInitColor = nullptr ) { return maBitmap.Expand(nDX, nDY, pInitColor); }
+
+    bool CopyPixel( const tools::Rectangle& rRectDst,
+                    const tools::Rectangle& rRectSrc )
+    { return maBitmap.CopyPixel(rRectDst, rRectSrc); }
+
+    bool CopyPixel( const tools::Rectangle& rRectDst,
+                    const tools::Rectangle& rRectSrc,
+                    const AlphaMask& rBmpSrc )
+    { return maBitmap.CopyPixel(rRectDst, rRectSrc, rBmpSrc.maBitmap); }
+
+    bool CopyPixel_AlphaOptimized(
+                    const tools::Rectangle& rRectDst,
+                    const tools::Rectangle& rRectSrc )
+    { return maBitmap.CopyPixel_AlphaOptimized(rRectDst, rRectSrc); }
+
+    bool CopyPixel_AlphaOptimized(
+                    const tools::Rectangle& rRectDst,
+                    const tools::Rectangle& rRectSrc,
+                    const AlphaMask& rBmpSrc )
+    { return maBitmap.CopyPixel_AlphaOptimized(rRectDst, rRectSrc, rBmpSrc); }
 
 private:
     friend class BitmapEx;
     friend class ::OutputDevice;
     friend bool VCL_DLLPUBLIC ReadDIBBitmapEx(BitmapEx& rTarget, SvStream& rIStm, bool bFileHeader, bool bMSOFormat);
 
-    SAL_DLLPRIVATE const Bitmap&    ImplGetBitmap() const;
-
+    Bitmap maBitmap;
 };
 
 #endif // INCLUDED_VCL_ALPHA_HXX

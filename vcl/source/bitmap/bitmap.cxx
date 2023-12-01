@@ -726,10 +726,10 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
 }
 
 bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc,
-                           const Bitmap& rBmpSrc )
+                           const AlphaMask& rBmpSrc )
 {
     assert(HasGreyPalette8Bit());
-    assert(rBmpSrc.HasGreyPalette8Bit());
+    assert(rBmpSrc.GetBitmap().HasGreyPalette8Bit());
     // Note: this code is copied from Bitmap::CopyPixel but avoids any palette lookups
     // This optimization is possible because the palettes of AlphaMasks are always identical (8bit GreyPalette, see ctor)
     const Size  aSizePix( GetSizePixel() );
@@ -740,10 +740,10 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
     if( aRectDst.IsEmpty() )
         return false;
 
-    if( rBmpSrc.mxSalBmp == mxSalBmp ) // self-copy
+    if( rBmpSrc.GetBitmap().mxSalBmp == mxSalBmp ) // self-copy
         return CopyPixel_AlphaOptimized(rRectDst, rRectSrc);
 
-    Bitmap*         pSrc = &const_cast<Bitmap&>(rBmpSrc);
+    Bitmap*         pSrc = &const_cast<Bitmap&>(rBmpSrc.GetBitmap());
     const Size      aCopySizePix( pSrc->GetSizePixel() );
     tools::Rectangle       aRectSrc( rRectSrc );
 

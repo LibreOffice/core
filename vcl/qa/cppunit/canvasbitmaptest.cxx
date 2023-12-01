@@ -675,7 +675,7 @@ void CanvasBitmapTest::runTest()
         AlphaMask aMask(Size(200,200));
         aMask.Erase(255);
         {
-            BitmapScopedWriteAccess pAcc(aMask);
+            AlphaMask::ScopedWriteAccess pAcc(aMask);
             if( pAcc.get() )
             {
                 pAcc->SetFillColor(COL_ALPHA_OPAQUE);
@@ -693,7 +693,7 @@ void CanvasBitmapTest::runTest()
         AlphaMask aAlpha(Size(200,200));
         aAlpha.Erase(0);
         {
-            BitmapWriteAccess* pAcc = aAlpha.AcquireWriteAccess();
+            BitmapWriteAccess* pAcc = aAlpha.AcquireAlphaWriteAccess();
             if( pAcc )
             {
                 pAcc->SetFillColor(COL_ALPHA_OPAQUE);

@@ -9056,7 +9056,7 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
     {
         BitmapEmit aEmit;
         aEmit.m_nObject = nMaskObject;
-        aEmit.m_aBitmap = BitmapEx( rObject.m_aAlphaMask, rObject.m_aAlphaMask );
+        aEmit.m_aBitmap = BitmapEx( rObject.m_aAlphaMask.GetBitmap(), rObject.m_aAlphaMask );
         writeBitmapObject( aEmit, true );
     }
 
@@ -9441,7 +9441,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
         {
             if( rObject.m_aBitmap.IsAlpha() )
             {
-                aBitmap = rObject.m_aBitmap.GetAlphaMask();
+                aBitmap = rObject.m_aBitmap.GetAlphaMask().GetBitmap();
                 aBitmap.Convert( BmpConversion::N1BitThreshold );
                 SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP, "vcl.pdfwriter", "mask conversion failed" );
             }

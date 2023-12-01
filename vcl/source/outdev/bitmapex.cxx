@@ -190,7 +190,7 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
                 rBitmapEx.Mirror(nMirrFlags);
 
             const SalBitmap* pSalSrcBmp = rBitmapEx.ImplGetBitmapSalBitmap().get();
-            std::shared_ptr<SalBitmap> xMaskBmp = rBitmapEx.maAlphaMask.ImplGetSalBitmap();
+            std::shared_ptr<SalBitmap> xMaskBmp = rBitmapEx.maAlphaMask.GetBitmap().ImplGetSalBitmap();
 
             if (xMaskBmp)
             {
@@ -274,7 +274,7 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
                 if (mpAlphaVDev)
                     mpAlphaVDev->DrawBitmapEx(rDestPt,
                                               rDestSize,
-                                              BitmapEx(rBitmapEx.GetAlphaMask(),
+                                              BitmapEx(rBitmapEx.GetAlphaMask().GetBitmap(),
                                                        rBitmapEx.GetAlphaMask()));
             }
             else
@@ -305,7 +305,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
     const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
     SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetSalBitmap().get();
-    Bitmap aAlphaBitmap;
+    AlphaMask aAlphaBitmap;
 
     if(rBitmapEx.IsAlpha())
     {
@@ -314,10 +314,10 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     else if (mpAlphaVDev)
     {
         aAlphaBitmap = AlphaMask(rBitmapEx.GetSizePixel());
-        aAlphaBitmap.Erase(COL_ALPHA_OPAQUE);
+        aAlphaBitmap.Erase(0); // opaque
     }
 
-    SalBitmap* pSalAlphaBmp = aAlphaBitmap.ImplGetSalBitmap().get();
+    SalBitmap* pSalAlphaBmp = aAlphaBitmap.GetBitmap().ImplGetSalBitmap().get();
 
     bDone = mpGraphics->DrawTransformedBitmap(
         aNull,
@@ -333,7 +333,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
         // Merge bitmap alpha to alpha device
         AlphaMask aAlpha(rBitmapEx.GetSizePixel());
         aAlpha.Erase( ( 1 - fAlpha ) * 255 );
-        mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aAlpha, aAlphaBitmap));
+        mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aAlpha.GetBitmap(), aAlphaBitmap));
     }
 
     return bDone;

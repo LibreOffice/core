@@ -260,7 +260,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(tools::Long nLines)
         if (nNewLines > 0)
         {
             {
-                BitmapScopedWriteAccess pAccess(*mpIncompleteAlpha);
+                AlphaMask::ScopedWriteAccess pAccess(*mpIncompleteAlpha);
                 pAccess->SetFillColor(COL_ALPHA_OPAQUE);
                 pAccess->FillRect(tools::Rectangle(Point(0, mnLastLines), Size(pAccess->Width(), nNewLines)));
             }

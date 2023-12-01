@@ -1301,7 +1301,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
-                    ImplWriteBmpRecord( aMsk, pA->GetPoint(), maVDev->PixelToLogic( aMsk.GetSizePixel() ), WIN_SRCPAINT );
+                    ImplWriteBmpRecord( aMsk.GetBitmap(), pA->GetPoint(), maVDev->PixelToLogic( aMsk.GetSizePixel() ), WIN_SRCPAINT );
                     ImplWriteBmpRecord( aBmp, pA->GetPoint(), maVDev->PixelToLogic( aBmp.GetSizePixel() ), WIN_SRCAND );
                 }
                 else
@@ -1318,7 +1318,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
-                    ImplWriteBmpRecord( aMsk, pA->GetPoint(), pA->GetSize(), WIN_SRCPAINT );
+                    ImplWriteBmpRecord( aMsk.GetBitmap(), pA->GetPoint(), pA->GetSize(), WIN_SRCPAINT );
                     ImplWriteBmpRecord( aBmp, pA->GetPoint(), pA->GetSize(), WIN_SRCAND );
                 }
                 else
@@ -1337,7 +1337,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
-                    ImplWriteBmpRecord( aMsk, pA->GetDestPoint(), pA->GetDestSize(), WIN_SRCPAINT );
+                    ImplWriteBmpRecord( aMsk.GetBitmap(), pA->GetDestPoint(), pA->GetDestSize(), WIN_SRCPAINT );
                     ImplWriteBmpRecord( aBmp, pA->GetDestPoint(), pA->GetDestSize(), WIN_SRCAND );
                 }
                 else
