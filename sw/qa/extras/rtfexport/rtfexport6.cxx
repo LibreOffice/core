@@ -171,7 +171,26 @@ DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat, "tdf108505_fieldCharFormat
     uno::Reference<text::XTextRange> xRun = getRun(xPara, 3, "MZ");
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-    // CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xRun, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xRun, "CharColor"));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat2, "tdf108505_fieldCharFormat2.rtf")
+{
+    // not exported properly. Currrently xyz exports as run 6, red, italic.
+    if (isExported())
+        return;
+
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+
+    // Preemptive test: nothing found wrong/fixed by the accompanying patch
+    // Character formatting should only be defined by the \fldrslt, and not by prior formatting.
+    // Prior formatting is italic, red, 20pt.
+    uno::Reference<text::XTextRange> xRun = getRun(xPara, 5, u"xyz"_ustr);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xRun, "CharColor"));
 }
 
 /** Make sure that the document variable "Unused", which is not referenced in the document,
