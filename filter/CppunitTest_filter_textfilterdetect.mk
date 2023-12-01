@@ -42,4 +42,8 @@ $(eval $(call gb_CppunitTest_use_rdb,filter_textfilterdetect,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,filter_textfilterdetect))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,filter_textfilterdetect, \
+    officecfg/registry \
+))
+
 # vim: set noet sw=4 ts=4:

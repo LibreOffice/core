@@ -35,6 +35,8 @@ boost_patches += boost-ios.patch.0
 # violations":
 boost_patches += 0001-Avoid-boost-phoenix-placeholders-uarg1.10-ODR-violat.patch.2
 
+boost_patches += boost.file_iterator.sharing_win.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
