@@ -240,7 +240,7 @@ void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
                         "ScOutputData::DrawSelectiveObjects: More than one SdrPageView, still using 1st one (!)");
                     SdrPageWindow* patchedPageWindow(pPageView->GetPageWindow(0));
                     assert(nullptr != patchedPageWindow && "SdrPageWindow *must* exist when 0 != PageWindowCount()");
-                    SdrPaintWindow temporaryPaintWindow(*pDrawView, *mpDev);
+                    SdrPaintWindow temporaryPaintWindow(*pLocalDrawView, *mpDev);
                     SdrPaintWindow* previousPaintWindow(patchedPageWindow->patchPaintWindow(temporaryPaintWindow));
                     pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), mpDev);
                     patchedPageWindow->unpatchPaintWindow(previousPaintWindow);
