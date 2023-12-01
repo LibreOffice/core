@@ -224,7 +224,8 @@ typedef int(*PDFFileHdl)(const char*, const char*, PDFFile*);
 static int handleFile( const char* pInFile, const char* pOutFile, const char* pPassword, PDFFileHdl pHdl )
 {
     int nRet = 0;
-    std::unique_ptr<PDFEntry> pEntry = pdfparse::PDFReader::read( pInFile );
+    std::unique_ptr<PDFEntry> pEntry
+        = pdfparse::PDFReader::read(OStringToOUString(pInFile, osl_getThreadTextEncoding()));
     if( pEntry )
     {
         PDFFile* pPDFFile = dynamic_cast<PDFFile*>(pEntry.get());

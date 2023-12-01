@@ -555,7 +555,6 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                                    bool                                          bMayUseUI )
 {
     uno::Reference< io::XStream > xEmbed;
-    OString aPDFFile;
     OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rInPDFFileURL.pData, &aSysUPath.pData ) != osl_File_E_None )
         return xEmbed;
@@ -563,9 +562,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
     if (!detectHasAdditionalStreams(aSysUPath))
         return xEmbed;
 
-    aPDFFile = OUStringToOString( aSysUPath, osl_getThreadTextEncoding() );
-
-    std::unique_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
+    std::unique_ptr<pdfparse::PDFEntry> pEntry(pdfparse::PDFReader::read(aSysUPath));
     if( pEntry )
     {
         pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());

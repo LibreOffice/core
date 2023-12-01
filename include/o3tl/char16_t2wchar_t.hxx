@@ -41,6 +41,7 @@ inline char16_t* toU(wchar_t* p) { return reinterpret_cast<char16_t*>(p); }
 inline char16_t const* toU(wchar_t const* p) { return reinterpret_cast<char16_t const*>(p); }
 
 inline std::u16string_view toU(std::wstring_view v) { return { toU(v.data()), v.size() }; }
+inline std::wstring_view toW(std::u16string_view v) { return { toW(v.data()), v.size() }; }
 #endif
 }
 

@@ -16,7 +16,9 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/docfac.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
@@ -31,6 +33,11 @@ using namespace com::sun::star;
 
 namespace
 {
+bool supportsService(const uno::Reference<lang::XComponent>& x, const OUString& s)
+{
+    return uno::Reference<lang::XServiceInfo>(x, uno::UNO_QUERY_THROW)->supportsService(s);
+}
+
 /// Test class for PlainTextFilterDetect.
 class TextFilterDetectTest : public UnoApiTest
 {
@@ -63,10 +70,6 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
 
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
 {
-    auto supportsService = [](const uno::Reference<lang::XComponent>& x, const OUString& s) {
-        return uno::Reference<lang::XServiceInfo>(x, uno::UNO_QUERY_THROW)->supportsService(s);
-    };
-
     // Given an empty file, with a pptx extension
     // When loading the file
     loadFromURL(u"empty.pptx");
@@ -171,6 +174,36 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(u"Writer template’s first line"_ustr, xParagraph->getString());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
+{
+    // Make sure that file locking is ON
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::set(true, xChanges);
+        xChanges->commit();
+    }
+
+    // Given a hybrid PDF file
+
+    // Created in Writer
+    loadFromURL(u"hybrid_writer_абв_αβγ.pdf");
+    // Make sure it opens in Writer.
+    // Without the accompanying fix in place, this test would have failed on Windows, as it was
+    // opened in Draw instead.
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
+
+    // Created in Calc
+    loadFromURL(u"hybrid_calc_абв_αβγ.pdf");
+    // Make sure it opens in Calc.
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.sheet.SpreadsheetDocument"));
+
+    // Created in Impress
+    loadFromURL(u"hybrid_impress_абв_αβγ.pdf");
+    // Make sure it opens in Impress.
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
 }
 }
 

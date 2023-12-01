@@ -36,7 +36,9 @@
 
 #include <string.h>
 
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -558,9 +560,14 @@ public:
 
 }
 
-std::unique_ptr<PDFEntry> PDFReader::read( const char* pFileName )
+std::unique_ptr<PDFEntry> PDFReader::read(std::u16string_view aFileName)
 {
-    file_iterator<> file_start( pFileName );
+#ifdef _WIN32
+    file_iterator<> file_start(std::wstring(o3tl::toW(aFileName)));
+#else
+    file_iterator<> file_start(
+        std::string(OUStringToOString(aFileName, osl_getThreadTextEncoding())));
+#endif
     if( ! file_start )
         return nullptr;
     file_iterator<> file_end = file_start.make_end();
