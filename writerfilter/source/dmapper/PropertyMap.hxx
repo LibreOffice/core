@@ -210,7 +210,7 @@ enum class PageType
     RIGHT
 };
 
-/** Which page part we are refering to.
+/** Which page part we are referring to.
  * This is mainly introduced to avoid having cryptic bools as input parameter.*/
 enum class PagePartType
 {
