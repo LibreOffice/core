@@ -7169,11 +7169,8 @@ void DomainMapper_Impl::CloseFieldCommand()
         (void)vSwitches;
         OUString const sFirstParam(vArguments.empty() ? OUString() : vArguments.front());
 
-        // apply font size to the form control
-        if (!m_aTextAppendStack.empty() && m_pLastCharacterContext
-            && (m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT)
-                || m_pLastCharacterContext->isSet(PROP_CHAR_FONT_NAME)
-                || m_pLastCharacterContext->isSet(PROP_CHAR_WEIGHT)))
+        // apply character properties to the form control
+        if (!m_aTextAppendStack.empty() && m_pLastCharacterContext)
         {
             uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
             if (xTextAppend.is())
@@ -7183,20 +7180,17 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {
                     xCrsr->gotoEnd(false);
                     uno::Reference< beans::XPropertySet > xProp( xCrsr, uno::UNO_QUERY );
-                    if (m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT))
+                    for (auto& rPropValue : m_pLastCharacterContext->GetPropertyValues(false))
                     {
-                        xProp->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), m_pLastCharacterContext->getProperty(PROP_CHAR_HEIGHT)->second);
-                        if (m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT_COMPLEX))
-                            xProp->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT_COMPLEX), m_pLastCharacterContext->getProperty(PROP_CHAR_HEIGHT_COMPLEX)->second);
+                        try
+                        {
+                            xProp->setPropertyValue(rPropValue.Name, rPropValue.Value);
+                        }
+                        catch(uno::Exception&)
+                        {
+                            TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "Unknown Field PropVal");
+                        }
                     }
-                    if (m_pLastCharacterContext->isSet(PROP_CHAR_WEIGHT))
-                    {
-                        xProp->setPropertyValue(getPropertyName(PROP_CHAR_WEIGHT), m_pLastCharacterContext->getProperty(PROP_CHAR_WEIGHT)->second);
-                        if (m_pLastCharacterContext->isSet(PROP_CHAR_WEIGHT_COMPLEX))
-                            xProp->setPropertyValue(getPropertyName(PROP_CHAR_WEIGHT_COMPLEX), m_pLastCharacterContext->getProperty(PROP_CHAR_WEIGHT_COMPLEX)->second);
-                    }
-                    if (m_pLastCharacterContext->isSet(PROP_CHAR_FONT_NAME))
-                        xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), m_pLastCharacterContext->getProperty(PROP_CHAR_FONT_NAME)->second);
                 }
             }
         }
