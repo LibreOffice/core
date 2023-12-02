@@ -411,6 +411,7 @@ public:
     const OUString& GetOrigName() const { return m_sOrigName; }
 
     css::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
+    OUString GetMimeType() const { return sMimeType; }
 
     const css::uno::Reference < css::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
@@ -768,6 +769,16 @@ void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContex
     }
 }
 
+OUString XMLTextFrameContext::getMimeTypeFromImportContext(const SvXMLImportContext& rContext) const
+{
+    const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast<const XMLTextFrameContext_Impl*>(&rContext);
+
+    if (pXMLTextFrameContext_Impl)
+        return pXMLTextFrameContext_Impl->GetMimeType();
+
+    return OUString();
+}
+
 OUString XMLTextFrameContext::getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const
 {
     const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
@@ -1071,6 +1082,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_ELEMENT(DRAW, XML_MIME_TYPE):
         case XML_ELEMENT(LO_EXT, XML_MIME_TYPE):
             sMimeType = aIter.toString();
+            printf ("MIME %s\n", sMimeType.toUtf8().getStr());
             break;
         case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES):
         case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_TABLE):

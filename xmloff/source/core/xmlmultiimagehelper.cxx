@@ -114,19 +114,23 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
         {
             const SvXMLImportContext& rContext = *maImplContextVector[a];
 
-
-            OUString sMimeType;
-
-            const OUString aStreamURL(getGraphicPackageURLFromImportContext(rContext));
-            if (!aStreamURL.isEmpty())
+            // First try the mime type provided by the document
+            OUString sMimeType = getMimeTypeFromImportContext(rContext);
+            if (sMimeType.isEmpty())
             {
-                sMimeType = getMimeTypeForURL(aStreamURL);
-            }
-            else
-            {
-                uno::Reference<graphic::XGraphic> xGraphic(getGraphicFromImportContext(rContext));
-                if (xGraphic.is())
-                    sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic);
+                // Try to determine the mime type from the extension
+                const OUString aStreamURL(getGraphicPackageURLFromImportContext(rContext));
+                if (!aStreamURL.isEmpty())
+                {
+                    sMimeType = getMimeTypeForURL(aStreamURL);
+                }
+                else
+                {
+                    // Try to determine the mime type from the graphic itself
+                    uno::Reference<graphic::XGraphic> xGraphic(getGraphicFromImportContext(rContext));
+                    if (xGraphic.is())
+                        sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic);
+                }
             }
 
             sal_uInt32 nNewQuality = getQualityIndex(sMimeType);
