@@ -381,6 +381,37 @@ if ( system( "git rev-parse --verify HEAD >/dev/null 2>&1" ) == 0 )
     $against="HEAD"
 }
 
+# If you want to allow non-ascii filenames set this variable to true.
+my $allownonascii=`git config hooks.allownonascii`;
+chomp $allownonascii;
+
+# Cross platform projects tend to avoid non-ascii filenames; prevent
+# them from being added to the repository. We exploit the fact that the
+# printable range starts at the space character and ends with tilde.
+if ( $allownonascii ne "true" &&
+    # Note that the use of brackets around a tr range is ok here, (it's
+    # even required, for portability to Solaris 10's /usr/bin/tr), since
+    # the square bracket bytes happen to fall in the designated range.
+    `git diff --cached --name-only --diff-filter=A -z $against | \
+     LC_ALL=C tr -d '[ -~]\\0'` ne "" )
+{
+    print <<EOM;
+Error: Attempt to add a non-ascii file name.
+
+This can cause problems if you want to work
+with people on other platforms.
+
+To be portable it is advisable to rename the file ...
+
+If you know what you are doing you can disable this
+check using:
+
+  git config hooks.allownonascii true
+
+EOM
+    exit( 1 );
+}
+
 # Block large files.
 open( FILES, "git diff --cached --name-only --diff-filter=A -z $against |" ) ||  die "Cannot run git diff-index.";
 while (<FILES>)
