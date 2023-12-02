@@ -29,7 +29,7 @@ namespace drawinglayer::primitive2d
    Negative fErodeDilateRadius values mean erode, positive - dilate.
    nTransparency defines minimal transparency level.
 */
-AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius,
+AlphaMask ProcessAndBlurAlphaMask(const AlphaMask& rMask, double fErodeDilateRadius,
                                   double fBlurRadius, sal_uInt8 nTransparency,
                                   bool bConvertTo1Bit = true);
 
