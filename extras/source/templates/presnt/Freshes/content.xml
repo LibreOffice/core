@@ -640,7 +640,7 @@
       <style:text-properties fo:color="#4c4c4c" loext:opacity="100%" fo:font-size="18pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="T16" style:family="text">
-      <style:text-properties fo:color="#000000" loext:opacity="30%" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:color="#666666" loext:opacity="100%" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="T17" style:family="text">
       <style:text-properties fo:color="#ffffff" loext:opacity="100%" fo:font-size="32pt" fo:font-weight="bold"/>
@@ -680,9 +680,6 @@
     </style:style>
     <style:style style:name="T29" style:family="text">
       <style:text-properties fo:color="#4c4c4c" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="18pt" fo:font-weight="bold"/>
-    </style:style>
-    <style:style style:name="T30" style:family="text">
-      <style:text-properties fo:color="#000000" loext:opacity="30%" style:font-name="Noto Sans1" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="T31" style:family="text">
       <style:text-properties fo:color="#ffffff" loext:opacity="100%" style:font-name="Lato Black1"/>
@@ -1492,7 +1489,7 @@
         <draw:frame draw:style-name="gr35" draw:text-style-name="P36" draw:layer="layout" svg:width="7.62cm" svg:height="4.315cm" svg:x="1.285cm" svg:y="6.427cm">
           <draw:text-box>
             <text:p text:style-name="P56">
-              <text:span text:style-name="T30">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</text:span>
+              <text:span text:style-name="T16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</text:span>
             </text:p>
           </draw:text-box>
         </draw:frame>
