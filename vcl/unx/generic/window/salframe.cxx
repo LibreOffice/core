@@ -282,7 +282,7 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
                 netwm_icon[ pos++ ] = (((( 255 - alpha.GetBlue()) * 256U ) + col.GetRed()) * 256 + col.GetGreen()) * 256 + col.GetBlue();
             }
         Bitmap::ReleaseAccess( iconData );
-        mask.ReleaseAccess( maskData );
+        Bitmap::ReleaseAccess( maskData );
     }
     netwm_icon.resize( pos );
 }

@@ -701,7 +701,7 @@ void CanvasBitmapTest::runTest()
                 pAcc->SetPixel(0,0,BitmapColor(0));
                 pAcc->SetPixel(0,1,BitmapColor(255));
                 pAcc->SetPixel(0,2,BitmapColor(0));
-                aAlpha.ReleaseAccess(pAcc);
+                Bitmap::ReleaseAccess(pAcc);
             }
         }
 
@@ -772,7 +772,7 @@ void CanvasBitmapTest::runTest()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) correct alpha content",
                                BitmapColor(2), pAlphaAcc->GetPixel(2,9));
 
-        aBitmapAlpha.ReleaseAccess(pAlphaAcc);
+        Bitmap::ReleaseAccess(pAlphaAcc);
         Bitmap::ReleaseAccess(pBmpAcc);
     }
 }

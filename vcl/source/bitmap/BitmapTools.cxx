@@ -992,7 +992,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
     ::Bitmap::ReleaseAccess( pBitmapReadAcc );
     if( pAlphaReadAcc )
-        aAlpha.ReleaseAccess( pAlphaReadAcc );
+        ::Bitmap::ReleaseAccess( pAlphaReadAcc );
 
     bHasAlpha = bIsAlpha;
 

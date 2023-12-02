@@ -176,17 +176,6 @@ bool AlphaMask::hasAlpha() const
     return false;
 }
 
-void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
-{
-    if( pAccess )
-    {
-        Bitmap::ReleaseAccess( pAccess );
-        Convert( BmpConversion::N8BitNoConversion );
-    }
-    assert( getPixelFormat() == vcl::PixelFormat::N8_BPP && "alpha bitmap should be 8bpp" );
-    assert( HasGreyPalette8Bit() && "alpha bitmap should have greyscale palette" );
-}
-
 bool AlphaMask::AlphaCombineOr(const AlphaMask& rMask)
 {
     ScopedReadAccess pMaskAcc(const_cast<AlphaMask&>(rMask));

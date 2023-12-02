@@ -66,7 +66,7 @@ public:
     BitmapReadAccess*  AcquireAlphaReadAccess() { return Bitmap::AcquireReadAccess(); }
     BitmapWriteAccess* AcquireAlphaWriteAccess() { return Bitmap::AcquireWriteAccess(); }
 
-    void        ReleaseAccess( BitmapReadAccess* pAccess );
+    using Bitmap::ReleaseAccess;
 
     typedef vcl::ScopedBitmapAccess<BitmapReadAccess, AlphaMask, &AlphaMask::AcquireAlphaReadAccess> ScopedReadAccess;
 

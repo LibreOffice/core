@@ -1182,7 +1182,7 @@ public:
         alpha.Erase(255); // transparent
         BitmapWriteAccess* alphaWrite = alpha.AcquireAlphaWriteAccess();
         alphaWrite->SetPixelIndex(0, 0, 255); // opaque
-        alpha.ReleaseAccess(alphaWrite);
+        Bitmap::ReleaseAccess(alphaWrite);
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
         exportDevice("blend_extended_04.png", device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
