@@ -65,7 +65,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
     maBitmap = Bitmap(aSize, rBitmapEx.maBitmap.getPixelFormat());
     SetSizePixel(aSize);
     if( rBitmapEx.IsAlpha() )
-        maAlphaMask = AlphaMask( aSize ).ImplGetBitmap();
+        maAlphaMask = AlphaMask( aSize );
 
     tools::Rectangle aDestRect( Point( 0, 0 ), aSize );
     tools::Rectangle aSrcRect( aSrc, aSize );
@@ -149,7 +149,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         maBitmap         ( rBmp ),
-        maAlphaMask      ( rAlphaMask.ImplGetBitmap() ),
+        maAlphaMask      ( rAlphaMask ),
         maBitmapSize     ( maBitmap.GetSizePixel() )
 {
     if (!maBitmap.IsEmpty() && !maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel())
@@ -438,10 +438,7 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                     else
                     {
                         sal_uInt8 nTransparencyOpaque = 0;
-                        std::optional<AlphaMask> pAlpha(std::in_place, GetSizePixel(), &nTransparencyOpaque);
-
-                        maAlphaMask = pAlpha->ImplGetBitmap();
-                        pAlpha.reset();
+                        maAlphaMask = AlphaMask(GetSizePixel(), &nTransparencyOpaque);
                         maAlphaMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maAlphaMask );
                     }
                 }
@@ -450,7 +447,7 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                     sal_uInt8 nTransparencyOpaque = 0;
                     const AlphaMask aAlphaSrc(pBmpExSrc->GetSizePixel(), &nTransparencyOpaque);
 
-                    maAlphaMask.CopyPixel( rRectDst, rRectSrc, &aAlphaSrc.ImplGetBitmap() );
+                    maAlphaMask.CopyPixel( rRectDst, rRectSrc, &aAlphaSrc );
                 }
             }
         }
