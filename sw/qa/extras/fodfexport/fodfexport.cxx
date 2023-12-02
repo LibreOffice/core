@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/graph.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -47,6 +48,30 @@ DECLARE_FODFEXPORT_TEST(testTdf113696WriterImage, "tdf113696-writerimage.odt")
         assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
                              "draw:image[@draw:mime-type='image/png']");
     }
+}
+
+DECLARE_FODFEXPORT_TEST(testSvgImageRoundtrip, "SvgImageTest.fodt")
+{
+    // Related to tdf#123396
+
+    // We should have one image (shape)
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    // Get the shape and extract the Graphic
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    uno::Reference<beans::XPropertySet> XPropertySet(xShape, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(XPropertySet.is());
+    uno::Reference<graphic::XGraphic> xGraphic;
+    XPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic aGraphic(xGraphic);
+
+    // The graphic should be SVG - so should contain a VectorGraphicData
+    auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+
+    // The VectorGraphicData type should be SVG
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Svg, pVectorGraphicData->getType());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

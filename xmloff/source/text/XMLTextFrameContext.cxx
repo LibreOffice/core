@@ -411,6 +411,7 @@ public:
     const OUString& GetOrigName() const { return m_sOrigName; }
 
     css::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
+    OUString GetMimeType() const { return sMimeType; }
 
     const css::uno::Reference < css::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
@@ -766,6 +767,16 @@ void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContex
     {
         OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
     }
+}
+
+OUString XMLTextFrameContext::getMimeTypeFromImportContext(const SvXMLImportContext& rContext) const
+{
+    const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast<const XMLTextFrameContext_Impl*>(&rContext);
+
+    if (pXMLTextFrameContext_Impl)
+        return pXMLTextFrameContext_Impl->GetMimeType();
+
+    return OUString();
 }
 
 OUString XMLTextFrameContext::getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const

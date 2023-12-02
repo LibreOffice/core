@@ -385,9 +385,11 @@ class SdXMLGraphicObjectShapeContext : public SdXMLShapeContext
 {
 private:
     OUString maURL;
+    OUString msMimeType;
     css::uno::Reference < css::io::XOutputStream > mxBase64Stream;
 
 public:
+    OUString const& getMimeType() const { return msMimeType; }
 
     SdXMLGraphicObjectShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
@@ -559,6 +561,7 @@ protected:
     /// helper to get the created xShape instance, needs to be overridden
     void removeGraphicFromImportContext(const SvXMLImportContext& rContext) override;
     OUString getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const override;
+    OUString getMimeTypeFromImportContext(const SvXMLImportContext& rContext) const override;
     css::uno::Reference<css::graphic::XGraphic> getGraphicFromImportContext(const SvXMLImportContext& rContext) const override;
 
 public:

@@ -2314,10 +2314,18 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
 // this is called from the parent group for each unparsed attribute in the attribute list
 bool SdXMLGraphicObjectShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    if( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
+    switch (aIter.getToken())
+    {
+    case XML_ELEMENT(XLINK, XML_HREF):
         maURL = aIter.toString();
-    else
-        return SdXMLShapeContext::processAttribute( aIter );
+        break;
+    case XML_ELEMENT(DRAW, XML_MIME_TYPE):
+    case XML_ELEMENT(LO_EXT, XML_MIME_TYPE):
+        msMimeType = aIter.toString();
+        break;
+    default:
+        return SdXMLShapeContext::processAttribute(aIter);
+    }
     return true;
 }
 
@@ -3314,6 +3322,16 @@ uno::Reference<graphic::XGraphic> SdXMLFrameShapeContext::getGraphicFromImportCo
     }
 
     return xGraphic;
+}
+
+OUString SdXMLFrameShapeContext::getMimeTypeFromImportContext(const SvXMLImportContext& rContext) const
+{
+    OUString aMimeType;
+    const SdXMLGraphicObjectShapeContext* pSdXMLGraphicObjectShapeContext = dynamic_cast<const SdXMLGraphicObjectShapeContext*>(&rContext);
+
+    if (pSdXMLGraphicObjectShapeContext)
+        aMimeType = pSdXMLGraphicObjectShapeContext->getMimeType();
+    return aMimeType;
 }
 
 OUString SdXMLFrameShapeContext::getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const
