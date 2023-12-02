@@ -68,15 +68,15 @@ void takeCareOfOffsetXY(
                 const tools::Rectangle aSrcDst(Point(), rSize);
                 aTarget.CopyPixel(aSrcDst, // Dst
                                   aSrcDst, // Src
-                                  &rTarget);
+                                  rTarget);
                 const Size aSizeA(b, h);
                 aTarget.CopyPixel(tools::Rectangle(Point(0, h), aSizeA), // Dst
                                   tools::Rectangle(Point(a, 0), aSizeA), // Src
-                                  &rTarget);
+                                  rTarget);
                 const Size aSizeB(a, h);
                 aTarget.CopyPixel(tools::Rectangle(Point(b, h), aSizeB), // Dst
                                   tools::Rectangle(Point(), aSizeB), // Src
-                                  &rTarget);
+                                  rTarget);
 
                 setOffsetXYCreatedBitmap(
                     const_cast<drawinglayer::primitive2d::FillGraphicPrimitive2D&>(
@@ -111,15 +111,15 @@ void takeCareOfOffsetXY(
                 const tools::Rectangle aSrcDst(Point(), rSize);
                 aTarget.CopyPixel(aSrcDst, // Dst
                                   aSrcDst, // Src
-                                  &rTarget);
+                                  rTarget);
                 const Size aSizeA(w, b);
                 aTarget.CopyPixel(tools::Rectangle(Point(w, 0), aSizeA), // Dst
                                   tools::Rectangle(Point(0, a), aSizeA), // Src
-                                  &rTarget);
+                                  rTarget);
                 const Size aSizeB(w, a);
                 aTarget.CopyPixel(tools::Rectangle(Point(w, b), aSizeB), // Dst
                                   tools::Rectangle(Point(), aSizeB), // Src
-                                  &rTarget);
+                                  rTarget);
 
                 setOffsetXYCreatedBitmap(
                     const_cast<drawinglayer::primitive2d::FillGraphicPrimitive2D&>(

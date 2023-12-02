@@ -56,7 +56,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
         tools::Rectangle aDestRect( Point( nIdx * aImageSize.Width(), 0 ), aImageSize );
         ImageAryData *pData = maImages[ nIdx ].get();
         BitmapEx aTmp = pData->maImage.GetBitmapEx();
-        aResult.CopyPixel( aDestRect, aSrcRect, &aTmp);
+        aResult.CopyPixel( aDestRect, aSrcRect, aTmp);
     }
 
     return aResult;

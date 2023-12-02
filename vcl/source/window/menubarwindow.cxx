@@ -106,7 +106,7 @@ void DecoToolBox::SetImages( tools::Long nMaxHeight, bool bForce )
                             (lastSize - maImage.GetSizePixel().Height())/2 ),
                         maImage.GetSizePixel() );
 
-    aBmpExDst.CopyPixel( aDestRect, aSrcRect, &aBmpExSrc );
+    aBmpExDst.CopyPixel( aDestRect, aSrcRect, aBmpExSrc );
     SetItemImage( ToolBoxItemId(IID_DOCUMENTCLOSE), Image( aBmpExDst ) );
 
 }

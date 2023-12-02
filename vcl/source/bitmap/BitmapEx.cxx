@@ -69,7 +69,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
 
     tools::Rectangle aDestRect( Point( 0, 0 ), aSize );
     tools::Rectangle aSrcRect( aSrc, aSize );
-    CopyPixel( aDestRect, aSrcRect, &rBitmapEx );
+    CopyPixel( aDestRect, aSrcRect, rBitmapEx );
 }
 
 BitmapEx::BitmapEx(Size aSize, vcl::PixelFormat ePixelFormat)
@@ -407,53 +407,49 @@ void BitmapEx::Expand( sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent )
                 "BitmapEx::Expand(): size mismatch for bitmap and alpha mask.");
 }
 
-bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc,
-                          const BitmapEx* pBmpExSrc )
+bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc )
 {
-    bool bRet = false;
+    if( maBitmap.IsEmpty() )
+        return false;
 
-    if( !pBmpExSrc || pBmpExSrc->IsEmpty() )
-    {
-        if( !maBitmap.IsEmpty() )
-        {
-            bRet = maBitmap.CopyPixel( rRectDst, rRectSrc );
+    bool bRet = maBitmap.CopyPixel( rRectDst, rRectSrc );
 
-            if( bRet && !maAlphaMask.IsEmpty() )
-                maAlphaMask.CopyPixel( rRectDst, rRectSrc );
-        }
-    }
-    else
-    {
-        if( !maBitmap.IsEmpty() )
-        {
-            bRet = maBitmap.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maBitmap );
-
-            if( bRet )
-            {
-                if( pBmpExSrc->IsAlpha() )
-                {
-                    if( IsAlpha() )
-                        // cast to use the optimized AlphaMask::CopyPixel
-                        maAlphaMask.CopyPixel_AlphaOptimized( rRectDst, rRectSrc, &pBmpExSrc->maAlphaMask );
-                    else
-                    {
-                        sal_uInt8 nTransparencyOpaque = 0;
-                        maAlphaMask = AlphaMask(GetSizePixel(), &nTransparencyOpaque);
-                        maAlphaMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maAlphaMask );
-                    }
-                }
-                else if (IsAlpha())
-                {
-                    sal_uInt8 nTransparencyOpaque = 0;
-                    const AlphaMask aAlphaSrc(pBmpExSrc->GetSizePixel(), &nTransparencyOpaque);
-
-                    maAlphaMask.CopyPixel( rRectDst, rRectSrc, &aAlphaSrc );
-                }
-            }
-        }
-    }
+    if( bRet && !maAlphaMask.IsEmpty() )
+        maAlphaMask.CopyPixel( rRectDst, rRectSrc );
 
     return bRet;
+}
+
+bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc,
+                          const BitmapEx& rBmpExSrc )
+{
+    if( maBitmap.IsEmpty() )
+        return false;
+
+    if (!maBitmap.CopyPixel( rRectDst, rRectSrc, rBmpExSrc.maBitmap ))
+        return false;
+
+    if( rBmpExSrc.IsAlpha() )
+    {
+        if( IsAlpha() )
+            // cast to use the optimized AlphaMask::CopyPixel
+            maAlphaMask.CopyPixel_AlphaOptimized( rRectDst, rRectSrc, rBmpExSrc.maAlphaMask );
+        else
+        {
+            sal_uInt8 nTransparencyOpaque = 0;
+            maAlphaMask = AlphaMask(GetSizePixel(), &nTransparencyOpaque);
+            maAlphaMask.CopyPixel( rRectDst, rRectSrc, rBmpExSrc.maAlphaMask );
+        }
+    }
+    else if (IsAlpha())
+    {
+        sal_uInt8 nTransparencyOpaque = 0;
+        const AlphaMask aAlphaSrc(rBmpExSrc.GetSizePixel(), &nTransparencyOpaque);
+
+        maAlphaMask.CopyPixel( rRectDst, rRectSrc, aAlphaSrc );
+    }
+
+    return true;
 }
 
 bool BitmapEx::Erase( const Color& rFillColor )

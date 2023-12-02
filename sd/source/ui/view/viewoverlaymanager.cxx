@@ -86,7 +86,7 @@ constexpr OUString aBigPlaceHolders[] =
     BMP_PLACEHOLDER_MOVIE_LARGE_HOVER
 };
 
-static BitmapEx* getButtonImage( int index, bool large )
+static BitmapEx& getButtonImage( int index, bool large )
 {
     static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
     static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
@@ -104,11 +104,11 @@ static BitmapEx* getButtonImage( int index, bool large )
 
     if( large )
     {
-        return gLargeButtonImages[index].get();
+        return *gLargeButtonImages[index].get();
     }
     else
     {
-        return gSmallButtonImages[index].get();
+        return *gSmallButtonImages[index].get();
     }
 }
 
@@ -368,13 +368,13 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 
         bool bLarge = nShapeSizePix > 250;
 
-        Size aSize( getButtonImage( 0, bLarge )->GetSizePixel() );
+        Size aSize( getButtonImage( 0, bLarge ).GetSizePixel() );
 
         aRet.Scale(Size(aSize.Width() << 1, aSize.Height() << 1));
 
         const ::tools::Rectangle aRectSrc( Point( 0, 0 ), aSize );
 
-        aRet = *(getButtonImage((nHighlight == 0) ? 4 : 0, bLarge));
+        aRet = getButtonImage((nHighlight == 0) ? 4 : 0, bLarge);
         aRet.Expand( aSize.Width(), aSize.Height(), true );
 
         aRet.CopyPixel( ::tools::Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
@@ -406,7 +406,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 
     bool bLarge = nShapeSizePix > 250;
 
-    Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge )->GetSizePixel()) );
+    Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge ).GetSizePixel()) );
 
     const int nColumns = 2;
     const int nRows = 2;

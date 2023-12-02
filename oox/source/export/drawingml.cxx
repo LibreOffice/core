@@ -3164,7 +3164,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             aSourceBitmap.Scale(aDestRect.GetSize());
             tools::Rectangle aSourceRect(Point(0, 0), aDestRect.GetSize());
             BitmapEx aDestBitmap(Bitmap(aDestSize, vcl::PixelFormat::N24_BPP), aMask);
-            aDestBitmap.CopyPixel(aDestRect, aSourceRect, &aSourceBitmap);
+            aDestBitmap.CopyPixel(aDestRect, aSourceRect, aSourceBitmap);
             Graphic aDestGraphic(aDestBitmap);
             sRelationId = writeGraphicToStorage(aDestGraphic);
             fBulletSizeRel = 1.0f;

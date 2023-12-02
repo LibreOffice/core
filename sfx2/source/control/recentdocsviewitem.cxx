@@ -208,7 +208,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
         aThumbnail.CopyPixel(
                 ::tools::Rectangle(Point((aThumbnailSize.Width() - aExtSize.Width()) / 2, (aThumbnailSize.Height() - aExtSize.Height()) / 2), aExtSize),
                 ::tools::Rectangle(Point(0, 0), aExtSize),
-                &aExt);
+                aExt);
     }
     else
     {

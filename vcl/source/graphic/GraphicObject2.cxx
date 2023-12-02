@@ -474,7 +474,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
 
             aBmpEx2.Scale(Size(nPadTotalWidth, nPadTotalHeight));
             aBmpEx2.Erase( Color(ColorAlpha,0,0,0,0) );
-            aBmpEx2.CopyPixel( tools::Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), tools::Rectangle( Point(0, 0), aBmpSize ), &rBmpEx );
+            aBmpEx2.CopyPixel( tools::Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), tools::Rectangle( Point(0, 0), aBmpSize ), rBmpEx );
             rBmpEx = aBmpEx2;
         }
     }

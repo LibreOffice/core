@@ -233,12 +233,37 @@ public:
     bool                    CopyPixel(
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc,
-                                const Bitmap* pBmpSrc = nullptr );
+                                const Bitmap& rBmpSrc );
+
+    /** Copy a rectangular area inside this bitmap.
+
+        @param rRectDst
+        Destination rectangle in this bitmap. This is clipped to the
+        bitmap dimensions.
+
+        @param rRectSrc
+        Source rectangl. This is clipped to the
+        bitmap dimensions. Note further that no scaling takes place
+        during this copy operation, i.e. only the minimum of source
+        and destination rectangle's width and height are used.
+
+        @return true, if the operation completed successfully. false
+        is not only returned when the operation failed, but also if
+        nothing had to be done, e.g. because one of the rectangles are
+        empty.
+     */
+    bool                    CopyPixel(
+                                const tools::Rectangle& rRectDst,
+                                const tools::Rectangle& rRectSrc );
 
     bool                    CopyPixel_AlphaOptimized(
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc,
-                                const Bitmap* pBmpSrc );
+                                const Bitmap& rBmpSrc );
+
+    bool                    CopyPixel_AlphaOptimized(
+                                const tools::Rectangle& rRectDst,
+                                const tools::Rectangle& rRectSrc );
 
     /** Alpha-blend the given bitmap against a specified uniform
           background color.

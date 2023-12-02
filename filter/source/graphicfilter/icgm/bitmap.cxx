@@ -393,7 +393,7 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescri
     }
     rDest.mxBitmap.Expand( 0, rSource.mnY );
     rDest.mxBitmap.CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
-        tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), &rSource.mxBitmap );
+        tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mxBitmap );
 
     if ( ( rSource.mnR.Y == rDest.mnQ.Y ) && ( rSource.mnR.X == rDest.mnQ.X ) )
     {   // Insert on Bottom
