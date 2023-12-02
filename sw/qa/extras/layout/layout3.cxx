@@ -2086,7 +2086,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf152307)
     // XML dump and some basic assertions
     sal_Int32 nPage = 7, nPages = 0;
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    nPages = countXPathNodes(pXmlDoc, "/root/page");
+    nPages = countXPathNodes(pXmlDoc, "/root/page"_ostr);
     CPPUNIT_ASSERT_MESSAGE("tdf152307.odt / testTdf152307: Not enough pages.", nPage < nPages);
     assertXPath(pXmlDoc, "/root/page[" + OString::number(nPage) + "]/body/section", 1);
 
@@ -2103,11 +2103,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf152307)
                                     "/root/page[" + OString::number(nPage) + "]/body/section/tab["
                                         + OString::number(nTables) + "]/row["
                                         + OString::number(nRowsLastTable) + "]/infos/bounds",
-                                    "bottom")
+                                    "bottom"_ostr)
                                .toInt32();
     // Where does the footer start (footer/info/bounds/top)?
     sal_Int32 nFooterTop
-        = getXPath(pXmlDoc, "/root/page[" + OString::number(nPage) + "]/footer/infos/bounds", "top")
+        = getXPath(pXmlDoc, "/root/page[" + OString::number(nPage) + "]/footer/infos/bounds",
+                   "top"_ostr)
               .toInt32();
     // Is the bottom value of the last row above the top value of the footer?
     OString aMsg = "tdf152307.odt / testTdf152307: Bottom value of last table row on page "
