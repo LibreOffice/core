@@ -1082,7 +1082,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_ELEMENT(DRAW, XML_MIME_TYPE):
         case XML_ELEMENT(LO_EXT, XML_MIME_TYPE):
             sMimeType = aIter.toString();
-            printf ("MIME %s\n", sMimeType.toUtf8().getStr());
             break;
         case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES):
         case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_TABLE):
