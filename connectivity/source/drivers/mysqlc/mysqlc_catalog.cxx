@@ -10,6 +10,9 @@
 #include "mysqlc_catalog.hxx"
 #include "mysqlc_tables.hxx"
 #include "mysqlc_views.hxx"
+#include "mysqlc_users.hxx"
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <comphelper/types.hxx>
 
 connectivity::mysqlc::Catalog::Catalog(
     const css::uno::Reference<css::sdbc::XConnection>& rConnection)
@@ -64,7 +67,27 @@ void connectivity::mysqlc::Catalog::refreshGroups()
 //----- IRefreshableUsers ----------------------------------------------------
 void connectivity::mysqlc::Catalog::refreshUsers()
 {
-    // TODO: implement me
+    css::uno::Reference<css::sdbc::XStatement> statement = m_xConnection->createStatement();
+    css::uno::Reference<css::sdbc::XResultSet> xUsers = statement->executeQuery(
+        "SELECT grantee FROM information_schema.user_privileges GROUP BY grantee");
+
+    if (!xUsers.is())
+        return;
+
+    ::std::vector<OUString> aUserNames;
+
+    css::uno::Reference<css::sdbc::XRow> xRow(xUsers, css::uno::UNO_QUERY);
+    while (xUsers->next())
+    {
+        aUserNames.push_back(xRow->getString(1));
+    }
+    xRow.clear();
+    ::comphelper::disposeComponent(xUsers);
+
+    if (!m_pUsers)
+        m_pUsers.reset(new Users(m_xConnection->getMetaData(), *this, m_aMutex, aUserNames));
+    else
+        m_pUsers->reFill(aUserNames);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
