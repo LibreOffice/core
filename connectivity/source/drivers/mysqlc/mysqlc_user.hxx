@@ -34,6 +34,12 @@ public:
     // XAuthorizable
     virtual void SAL_CALL changePassword(const OUString&, const OUString& newPassword) override;
     virtual sal_Int32 SAL_CALL getPrivileges(const OUString&, sal_Int32) override;
+    // return the privileges and additional the grant rights
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
+    void findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 objType,
+                                          sal_Int32& nRights, sal_Int32& nRightsWithGrant);
+
     virtual sal_Int32 SAL_CALL getGrantablePrivileges(const OUString&, sal_Int32) override;
 
     // IRefreshableGroups::

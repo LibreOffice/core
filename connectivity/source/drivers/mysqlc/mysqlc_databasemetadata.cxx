@@ -1011,11 +1011,23 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(const Any
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTablePrivileges(
-    const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/)
+    const Any& /* catalog */, const OUString& schemaPattern, const OUString& tableNamePattern)
 {
-    // TODO
-    SAL_WARN("connectivity.mysqlc", "method not implemented");
-    throw SQLException("getTablePrivileges method not implemented", *this, "IM001", 0, Any());
+    OUString query("SELECT TABLE_SCHEMA TABLE_CAT, "
+                   "NULL TABLE_SCHEM, "
+                   "TABLE_NAME, "
+                   "NULL GRANTOR,"
+                   "GRANTEE, "
+                   "PRIVILEGE_TYPE PRIVILEGE, "
+                   "IS_GRANTABLE "
+                   "FROM INFORMATION_SCHEMA.TABLE_PRIVILEGES "
+                   "WHERE TABLE_SCHEMA LIKE '?' "
+                   "AND TABLE_NAME='?'");
+    query = query.replaceFirst("?", schemaPattern);
+    query = query.replaceFirst("?", tableNamePattern);
+    Reference<XStatement> statement = m_rConnection.createStatement();
+    Reference<XResultSet> rs = statement->executeQuery(query);
+    return rs;
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getCrossReference(
