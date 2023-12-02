@@ -11,6 +11,8 @@
 
 #include "personalization.hxx"
 
+#include <dialmgr.hxx>
+
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/bootstrap.hxx>
@@ -21,6 +23,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
+#include <personas.hrc>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -144,6 +147,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     bool foundOne = false;
 
     OStringBuffer aLine;
+    int nLineNumberFilePersona = 0;
     while (aStream.IsOpen() && !aStream.eof() && nIndex < MAX_DEFAULT_PERSONAS)
     {
         OUString aPersonaSetting, aPreviewFile, aName;
@@ -151,8 +155,8 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 
         aStream.ReadLine(aLine);
         aPersonaSetting = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
-        aName = aPersonaSetting.getToken(1, ';', nParseIndex);
-        aPreviewFile = aPersonaSetting.getToken(0, ';', nParseIndex);
+        aName = CuiResId(RID_PERSONAS_COLOR[nLineNumberFilePersona].first);
+        aPreviewFile = aPersonaSetting.getToken(2, ';', nParseIndex);
 
         if (aPreviewFile.isEmpty())
             break;
@@ -175,6 +179,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         m_vDefaultPersonaImages[nIndex]->set_tooltip_text(aName);
         m_vDefaultPersonaImages[nIndex++]->show();
         foundOne = true;
+        ++nLineNumberFilePersona;
     }
 
     m_xDefaultPersona->set_sensitive(foundOne);
