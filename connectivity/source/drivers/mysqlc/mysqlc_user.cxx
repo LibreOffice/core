@@ -37,9 +37,11 @@ User::User(css::uno::Reference<css::sdbc::XConnection> xConnection, const OUStri
 {
 }
 
-void User::changePassword(const OUString&, const OUString& /* newPassword */)
+void User::changePassword(const OUString& /* oldPassword */, const OUString& newPassword)
 {
-    // TODO: implement
+    css::uno::Reference<XStatement> statement = m_xConnection->createStatement();
+    statement->execute("SET PASSWORD FOR " + m_Name + " = PASSWORD('" + newPassword + "')");
+    ::comphelper::disposeComponent(statement);
 }
 
 typedef connectivity::sdbcx::OUser_BASE OUser_BASE_RBHELPER;
