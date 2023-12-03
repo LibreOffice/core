@@ -2153,7 +2153,9 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
             CreateLanguageFile(aLanguageTag, false))
     {
         //the language is available - so bring it on
-        const SvStringsISortDtor* pList = m_aLangTable.find(aLanguageTag)->second.GetCplSttExceptList();
+        const auto iter = m_aLangTable.find(aLanguageTag);
+        assert(iter != m_aLangTable.end() && "CreateLanguageFile can't fail");
+        const SvStringsISortDtor* pList = iter->second.GetCplSttExceptList();
         if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sWord) != pList->end() )
             return true;
     }

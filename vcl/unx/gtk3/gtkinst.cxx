@@ -15565,7 +15565,9 @@ public:
         else
             col = to_internal_model(col);
 
-        if (get_bool(pos, m_aToggleTriStateMap.find(col)->second))
+        const auto iter = m_aToggleTriStateMap.find(col);
+        assert(iter != m_aToggleTriStateMap.end());
+        if (get_bool(pos, iter->second))
             return TRISTATE_INDET;
         return get_bool(pos, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
@@ -15578,7 +15580,9 @@ public:
             col = to_internal_model(col);
 
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        if (get_bool(rGtkIter.iter, m_aToggleTriStateMap.find(col)->second))
+        const auto iter = m_aToggleTriStateMap.find(col);
+        assert(iter != m_aToggleTriStateMap.end());
+        if (get_bool(rGtkIter.iter, iter->second))
             return TRISTATE_INDET;
         return get_bool(rGtkIter.iter, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
@@ -15641,13 +15645,17 @@ public:
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         col = to_internal_model(col);
-        return get_int(rGtkIter.iter, m_aWeightMap.find(col)->second) == PANGO_WEIGHT_BOLD;
+        const auto iter = m_aWeightMap.find(col);
+        assert(iter != m_aWeightMap.end());
+        return get_int(rGtkIter.iter, iter->second) == PANGO_WEIGHT_BOLD;
     }
 
     virtual bool get_text_emphasis(int pos, int col) const override
     {
         col = to_internal_model(col);
-        return get_int(pos, m_aWeightMap.find(col)->second) == PANGO_WEIGHT_BOLD;
+        const auto iter = m_aWeightMap.find(col);
+        assert(iter != m_aWeightMap.end());
+        return get_int(pos, iter->second) == PANGO_WEIGHT_BOLD;
     }
 
     virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int col) override
@@ -15683,7 +15691,9 @@ public:
     virtual bool get_sensitive(int pos, int col) const override
     {
         col = to_internal_model(col);
-        return get_bool(pos, m_aSensitiveMap.find(col)->second);
+        const auto iter = m_aSensitiveMap.find(col);
+        assert(iter != m_aSensitiveMap.end());
+        return get_bool(pos, iter->second);
     }
 
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col) override
@@ -15705,7 +15715,9 @@ public:
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         col = to_internal_model(col);
-        return get_bool(rGtkIter.iter, m_aSensitiveMap.find(col)->second);
+        const auto iter = m_aSensitiveMap.find(col);
+        assert(iter != m_aSensitiveMap.end());
+        return get_bool(rGtkIter.iter, iter->second);
     }
 
     void set_image(const GtkTreeIter& iter, int col, GdkPixbuf* pixbuf)

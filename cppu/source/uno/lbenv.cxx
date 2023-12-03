@@ -346,7 +346,7 @@ static void s_stub_defenv_revokeInterface(va_list * pParam)
 
     Ptr2ObjectMap::const_iterator const iFind(
         that->aPtr2ObjectMap.find( pInterface ) );
-    OSL_ASSERT( iFind != that->aPtr2ObjectMap.end() );
+    assert(iFind != that->aPtr2ObjectMap.end());
     ObjectEntry * pOEntry = iFind->second;
     if (! --pOEntry->nRef)
     {

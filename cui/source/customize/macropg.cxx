@@ -514,12 +514,14 @@ IMPL_LINK_NOARG(SvxMacroTabPage_, DeleteAllHdl_Impl, weld::Button&, void)
         if (bAppEvents)
         {
             EventsHash::iterator h_it = m_appEventsHash.find(sEventName);
+            assert(h_it != m_appEventsHash.end());
             h_it->second.first = sEventType;
             h_it->second.second = sEmptyString;
         }
         else
         {
             EventsHash::iterator h_it = m_docEventsHash.find(sEventName);
+            assert(h_it != m_docEventsHash.end());
             h_it->second.first = sEventType;
             h_it->second.second = sEmptyString;
         }

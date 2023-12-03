@@ -208,6 +208,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
         if ( nIndex != ( nLength - 1 ) )                        // resizing sequence
         {
             PropertyHashMap::iterator aHashIter2( m_aPropHashMap.find( m_aPropSeq[ nLength - 1 ].Name ) );
+            assert(aHashIter2 != m_aPropHashMap.end());
             (*aHashIter2).second = nIndex;
             pPropSeq[ nIndex ] = m_aPropSeq[ nLength - 1 ];
         }

@@ -583,6 +583,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     {
         const sal_Int32 nBookmark = ::comphelper::getINT32((*_rInsertRow)[0].getAny());
         m_aKeyIter = m_aKeyMap.find(nBookmark);
+        assert(m_aKeyIter != m_aKeyMap.end());
         m_aKeyIter->second.second.first = 2;
         m_aKeyIter->second.second.second = xRow;
         copyRowValue(_rInsertRow,m_aKeyIter->second.first,nBookmark);

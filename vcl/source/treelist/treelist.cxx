@@ -1124,7 +1124,9 @@ void SvListView::Impl::ActionMoving( SvTreeListEntry* pEntry )
     DBG_ASSERT(pParent,"Model not consistent");
     if (pParent != m_rThis.pModel->pRootItem.get() && pParent->m_Children.size() == 1)
     {
-        SvViewDataEntry* pViewData = m_DataTable.find( pParent )->second.get();
+        const auto iter = m_DataTable.find(pParent);
+        assert(iter != m_DataTable.end());
+        SvViewDataEntry* pViewData = iter->second.get();
         pViewData->SetExpanded(false);
     }
     // preliminary
@@ -1320,7 +1322,7 @@ void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, bool bFocus )
 {
     DBG_ASSERT(pEntry,"SetEntryFocus:No Entry");
     SvDataTable::iterator itr = m_pImpl->m_DataTable.find(pEntry);
-    DBG_ASSERT(itr != m_pImpl->m_DataTable.end(),"Entry not in Table");
+    assert(itr != m_pImpl->m_DataTable.end() && "Entry not in Table");
     itr->second->SetFocus(bFocus);
 }
 
