@@ -11,6 +11,7 @@
 
 #include "mysqlc_user.hxx"
 #include "mysqlc_users.hxx"
+#include <comphelper/types.hxx>
 
 using namespace ::connectivity;
 using namespace ::connectivity::mysqlc;
@@ -60,13 +61,18 @@ ObjectType Users::appendObject(const OUString& rName, const uno::Reference<XProp
 }
 
 //----- XDrop -----------------------------------------------------------------
-void Users::dropObject(sal_Int32 nPosition, const OUString&)
+void Users::dropObject(sal_Int32 nPosition, const OUString& rName)
 {
     uno::Reference<XPropertySet> xUser(getObject(nPosition));
 
     if (!ODescriptor::isNew(xUser))
     {
-        // TODO: drop me
+        Reference<XStatement> statement = m_xMetaData->getConnection()->createStatement();
+        if (statement.is())
+        {
+            statement->execute("DROP USER " + rName);
+            ::comphelper::disposeComponent(statement);
+        }
     }
 }
 
