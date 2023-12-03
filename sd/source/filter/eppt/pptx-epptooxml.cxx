@@ -187,23 +187,6 @@ const char* getPlaceholderTypeName(PlaceholderType ePlaceholder)
 
 namespace {
 
-enum PPTXLayout
-{
-    LAYOUT_BLANK,
-    LAYOUT_TITLE_SLIDE,
-    LAYOUT_TITLE_CONTENT,
-    LAYOUT_TITLE_2CONTENT,
-    LAYOUT_TITLE,
-    LAYOUT_CENTERED_TEXT,
-    LAYOUT_TITLE_2CONTENT_CONTENT,
-    LAYOUT_TITLE_CONTENT_2CONTENT,
-    LAYOUT_TITLE_2CONTENT_OVER_CONTENT,
-    LAYOUT_TITLE_CONTENT_OVER_CONTENT,
-    LAYOUT_TITLE_4CONTENT,
-    LAYOUT_TITLE_6CONTENT,
-    LAYOUT_SIZE
-};
-
 struct PPTXLayoutInfo
 {
     int nType;
@@ -213,71 +196,45 @@ struct PPTXLayoutInfo
 
 }
 
-const PPTXLayoutInfo aLayoutInfo[LAYOUT_SIZE] =
+const PPTXLayoutInfo aLayoutInfo[EPP_LAYOUT_SIZE] =
 {
-    { 20, "Blank Slide", "blank" },
-    { 0, "Title Slide", "tx" },
-    { 1, "Title, Content", "obj" },
-    { 3, "Title, 2 Content", "twoObj" },
+    { 0, "Title Slide", "title" },
+    { 1, "Title and text", "tx" },
+    { 2, "Title and chart", "chart" },
+    { 3, "Title, text on left, text on right", "twoObj" },
+    { 4, "Title, text on left and chart on right", "txAndChart" },
+    { 6, "Title, text on left, clip art on right", "txAndClipArt" },
+    { 6, "Title, text on left, media on right", "txAndMedia" },
+    { 7, "Title, chart on left and text on right", "chartAndTx" },
+    { 8, "Title and table", "tbl" },
+    { 9, "Title, clipart on left, text on right", "clipArtAndTx" },
+    { 10, "Title, text on left, object on right", "txAndObj" },
+    { 1, "Title and object", "obj" },
+    { 12, "Title, text on left, two objects on right", "txAndTwoObj" },
+    { 13, "Title, object on left, text on right", "objAndTx" },
+    { 14, "Title, object on top, text on bottom", "objOverTx" },
+    { 15, "Title, two objects on left, text on right", "twoObjAndTx" },
+    { 16, "Title, two objects on top, text on bottom", "twoObjOverTx" },
+    { 17, "Title, text on top, object on bottom", "txOverObj" },
+    { 18, "Title and four objects", "fourObj" },
     { 19, "Title Only", "titleOnly" },
-    { 32, "Centered Text", "objOnly" },                       // not exactly, but close
-    { 15, "Title, 2 Content and Content", "twoObjAndObj" },
-    { 12, "Title Content and 2 Content", "objAndTwoObj" },
-    { 16, "Title, 2 Content over Content", "twoObjOverTx" },      // not exactly, but close
-    { 14, "Title, Content over Content", "objOverTx" },           // not exactly, but close
-    { 18, "Title, 4 Content", "fourObj" },
-    { 34, "Title, 6 Content", "blank" }                           // not defined => blank
+    { 20, "Blank Slide", "blank" },
+    { 21, "Vertical title on right, vertical text on top, chart on bottom", "vertTitleAndTxOverChart" },
+    { 22, "Vertical title on right, vertical text on left", "vertTitleAndTx" },
+    { 23, "Title and vertical text body", "vertTx" },
+    { 24, "Title, clip art on left, vertical text on right", "clipArtAndVertTx" },
+    { 20, "Title, two objects each with text", "twoTxTwoObj" },
+    { 15, "Title, two objects on left, one object on right", "twoObjAndObj" },
+    { 20, "Title, object and caption text", "objTx" },
+    { 20, "Title, picture, and caption text", "picTx" },
+    { 20, "Section header title and subtitle text", "secHead" },
+    { 32, "Object only", "objOnly" },
+    { 12, "Title, one object on left, two objects on right", "objAndTwoObj" },
+    { 20, "Title, media on left, text on right", "mediaAndTx" },
+    { 34, "Title, 6 Content", "blank" }, // not defined in OOXML => blank
+    { 2, "Title and diagram", "dgm" },
+    { 0, "Custom layout defined by user", "cust" },
 };
-
-int PowerPointExport::GetPPTXLayoutId(int nOffset)
-{
-    int nId = LAYOUT_BLANK;
-
-    SAL_INFO("sd.eppt", "GetPPTXLayoutId " << nOffset);
-
-    switch (nOffset)
-    {
-    case 0:
-        nId = LAYOUT_TITLE_SLIDE;
-        break;
-    case 1:
-        nId = LAYOUT_TITLE_CONTENT;
-        break;
-    case 3:
-        nId = LAYOUT_TITLE_2CONTENT;
-        break;
-    case 19:
-        nId = LAYOUT_TITLE;
-        break;
-    case 15:
-        nId = LAYOUT_TITLE_2CONTENT_CONTENT;
-        break;
-    case 12:
-        nId = LAYOUT_TITLE_CONTENT_2CONTENT;
-        break;
-    case 16:
-        nId = LAYOUT_TITLE_2CONTENT_OVER_CONTENT;
-        break;
-    case 14:
-        nId = LAYOUT_TITLE_CONTENT_OVER_CONTENT;
-        break;
-    case 18:
-        nId = LAYOUT_TITLE_4CONTENT;
-        break;
-    case 32:
-        nId = LAYOUT_CENTERED_TEXT;
-        break;
-    case 34:
-        nId = LAYOUT_TITLE_6CONTENT;
-        break;
-    case 20:
-    default:
-        nId = LAYOUT_BLANK;
-        break;
-    }
-
-    return nId;
-}
 
 PowerPointShapeExport::PowerPointShapeExport(FSHelperPtr pFS, ShapeHashMap* pShapeMap,
         PowerPointExport* pFB)
@@ -1421,7 +1378,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     addRelation(pFS->getOutputStream(),
                 oox::getRelationship(Relationship::SLIDELAYOUT),
                 Concat2View("../slideLayouts/slideLayout" +
-                    OUString::number(GetLayoutFileId(GetPPTXLayoutId(GetLayoutOffset(mXPagePropSet)), nMasterNum)) +
+                    OUString::number(GetLayoutFileId(GetLayoutOffset(mXPagePropSet), nMasterNum)) +
                     ".xml"));
 
     if (WriteComments(nPageNum))
@@ -1556,19 +1513,23 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     // use master's id type as they have same range, mso does that as well
     pFS->startElementNS(XML_p, XML_sldLayoutIdLst);
 
-    for (int i = 0; i < LAYOUT_SIZE; i++)
+    sal_Int32 nLayout = 0;
+    OUString aSlideName;
+    css::uno::Reference< css::beans::XPropertySet >xPagePropSet;
+    xPagePropSet.set(mXDrawPage, UNO_QUERY);
+    if (xPagePropSet.is())
     {
-        sal_Int32 nLayoutFileId = GetLayoutFileId(i, nPageNum);
-        if (nLayoutFileId > 0)
-        {
-            AddLayoutIdAndRelation(pFS, nLayoutFileId);
-        }
-        else
-        {
-            ImplWritePPTXLayout(i, nPageNum);
-            AddLayoutIdAndRelation(pFS, GetLayoutFileId(i, nPageNum));
-        }
+        uno::Any aAny;
+        if (GetPropertyValue(aAny, xPagePropSet, "SlideLayout"))
+            aAny >>= nLayout;
     }
+
+    Reference< XNamed > xNamed(mXDrawPage, UNO_QUERY);
+    if (xNamed.is())
+        aSlideName = xNamed->getName();
+
+    ImplWritePPTXLayout(nLayout, nPageNum, aSlideName);
+    AddLayoutIdAndRelation(pFS, GetLayoutFileId(nLayout, nPageNum));
 
     pFS->endElementNS(XML_p, XML_sldLayoutIdLst);
 
@@ -1588,7 +1549,7 @@ sal_Int32 PowerPointExport::GetLayoutFileId(sal_Int32 nOffset, sal_uInt32 nMaste
     return mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ];
 }
 
-void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMasterNum)
+void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName)
 {
     SAL_INFO("sd.eppt", "write layout: " << nOffset);
 
@@ -1632,8 +1593,16 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
                         XML_type, aLayoutInfo[ nOffset ].sType,
                         XML_preserve, "1");
 
-    pFS->startElementNS(XML_p, XML_cSld,
-                        XML_name, aLayoutInfo[ nOffset ].sName);
+    if (!aSlideName.isEmpty())
+    {
+        pFS->startElementNS(XML_p, XML_cSld,
+            XML_name, aSlideName);
+    }
+    else
+    {
+        pFS->startElementNS(XML_p, XML_cSld,
+            XML_name, aLayoutInfo[nOffset].sName);
+    }
     //pFS->write( MINIMAL_SPTREE ); // TODO: write actual shape tree
     WriteShapeTree(pFS, LAYOUT, true);
 
@@ -2268,8 +2237,7 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
         }
         else
         {
-            pMasterPage
-                = &static_cast<SdPage&>(SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage());
+            pMasterPage = &static_cast<SdPage&>(SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage());
         }
         if (SdrObject* pMasterFooter = pMasterPage->GetPresObj(ePresObjKind))
             return GetXShapeForSdrObject(pMasterFooter);

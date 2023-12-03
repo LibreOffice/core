@@ -1462,7 +1462,7 @@ void SdOOXMLExportTest2::testTdf106867()
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
                 "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:cmd/"
                 "p:cBhvr/p:tgtEl/p:spTgt",
-                "spid", "455");
+                "spid", "67");
 }
 
 void SdOOXMLExportTest2::testTdf112280()
@@ -1839,11 +1839,11 @@ void SdOOXMLExportTest2::testAccentColor()
     assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:sp/p:style/a:fillRef/a:schemeClr", "val",
                 "accent6");
     xmlDocUniquePtr pXmlDocTheme1 = parseExport("ppt/theme/theme1.xml");
-    assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
-                "70ad47");
-    xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme24.xml");
-    assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
-                "deb340");
+    assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr",
+                "val", "70ad47");
+    xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme12.xml");
+    assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr",
+                "val", "deb340");
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Motyw pakietu Office

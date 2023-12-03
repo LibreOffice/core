@@ -103,7 +103,8 @@ enum WID_PAGE
     WID_PAGE_PAGENUMBERVISIBLE, WID_PAGE_DATETIMEVISIBLE, WID_PAGE_DATETIMEFIXED,
     WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT, WID_TRANSITION_TYPE, WID_TRANSITION_SUBTYPE,
     WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND,
-    WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE, WID_PAGE_THEME, WID_PAGE_THEME_UNO_REPRESENTATION
+    WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE, WID_PAGE_THEME, WID_PAGE_THEME_UNO_REPRESENTATION,
+    WID_PAGE_SLIDE_LAYOUT
 };
 
 }
@@ -284,7 +285,8 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { u"IsBackgroundDark",             WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
         { u"Theme", WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), 0,  0},
         // backwards compatible view of the theme for use in tests
-        { u"ThemeUnoRepresentation", WID_PAGE_THEME_UNO_REPRESENTATION, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0,  0}
+        { u"ThemeUnoRepresentation", WID_PAGE_THEME_UNO_REPRESENTATION, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0,  0},
+        { u"SlideLayout",            WID_PAGE_SLIDE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0}
     };
 
     static const SfxItemPropertyMapEntry aHandoutMasterPagePropertyMap_Impl[] =
@@ -591,6 +593,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         case WID_PAGE_TOP:
         case WID_PAGE_BOTTOM:
         case WID_PAGE_LAYOUT:
+        case WID_PAGE_SLIDE_LAYOUT:
         case WID_PAGE_DURATION:
         case WID_PAGE_CHANGE:
         {
@@ -617,6 +620,9 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 break;
             case WID_PAGE_LAYOUT:
                 GetPage()->SetAutoLayout( static_cast<AutoLayout>(nValue), true );
+                break;
+            case WID_PAGE_SLIDE_LAYOUT:
+                mSlideLayout <<= nValue;
                 break;
             case WID_PAGE_DURATION:
                 GetPage()->SetTime(nValue);
@@ -1056,6 +1062,9 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         break;
     case WID_PAGE_LAYOUT:
         aAny <<= static_cast<sal_Int16>( GetPage()->GetAutoLayout() );
+        break;
+    case WID_PAGE_SLIDE_LAYOUT:
+        aAny = mSlideLayout;
         break;
     case WID_PAGE_NUMBER:
         {

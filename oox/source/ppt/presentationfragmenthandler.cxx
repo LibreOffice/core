@@ -212,10 +212,10 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
 
     for (const auto& rEntry : *xMasterRelations)
     {
-        aLayoutFragmentPath = xMasterRelations->getFragmentPathFromRelation(rEntry.second);
-
         if (!rEntry.second.maType.endsWith("relationships/slideLayout"))
             continue;
+
+        aLayoutFragmentPath = xMasterRelations->getFragmentPathFromRelation(rEntry.second);
 
         sal_Int32 nIndex;
         if( rFilter.getMasterPages().empty() )
@@ -270,6 +270,9 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         rFilter.importFragment( new LayoutFragmentHandler( rFilter, aLayoutFragmentPath, pMasterPersistPtr ) );
         pMasterPersistPtr->createBackground( rFilter );
         pMasterPersistPtr->createXShapes( rFilter );
+
+        uno::Reference< beans::XPropertySet > xSet(pMasterPersistPtr->getPage(), uno::UNO_QUERY_THROW);
+        xSet->setPropertyValue("SlideLayout", Any(pMasterPersistPtr->getLayoutFromValueToken()));
 
         oox::drawingml::ThemePtr pTheme = pMasterPersistPtr->getTheme();
         if (pTheme)

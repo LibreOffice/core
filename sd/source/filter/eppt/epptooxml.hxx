@@ -89,7 +89,7 @@ private:
                                  bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
-    void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
+    void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName );
     static void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
     void WriteTheme( sal_Int32 nThemeNum, model::Theme* pTheme );
 
