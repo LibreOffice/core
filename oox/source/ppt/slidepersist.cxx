@@ -105,6 +105,7 @@ sal_Int16 SlidePersist::getLayoutFromValueToken() const
         case XML_titleOnly:         nLayout = 19; break;
         case XML_twoObj:
         case XML_twoColTx:          nLayout =  3; break;
+        case XML_twoObjAndObj:
         case XML_twoObjAndTx:       nLayout = 15; break;
         case XML_twoObjOverTx:      nLayout = 16; break;
         case XML_tx:                nLayout =  1; break;
@@ -112,19 +113,18 @@ sal_Int16 SlidePersist::getLayoutFromValueToken() const
         case XML_txAndClipArt:      nLayout =  6; break;
         case XML_txAndMedia:        nLayout =  6; break;
         case XML_txAndObj:          nLayout = 10; break;
+        case XML_objAndTwoObj:
         case XML_txAndTwoObj:       nLayout = 12; break;
         case XML_txOverObj:         nLayout = 17; break;
         case XML_vertTitleAndTx:    nLayout = 22; break;
         case XML_vertTitleAndTxOverChart: nLayout = 21; break;
         case XML_vertTx:            nLayout = 23; break;
+        case XML_objOnly:           nLayout = 32; break;
 
         case XML_twoTxTwoObj:
-        case XML_twoObjAndObj:
         case XML_objTx:
         case XML_picTx:
         case XML_secHead:
-        case XML_objOnly:
-        case XML_objAndTwoObj:
         case XML_mediaAndTx:
         case XML_dgm:
         case XML_cust:

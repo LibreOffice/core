@@ -89,7 +89,7 @@ private:
                                  bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
-    void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
+    void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName );
     static void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
     void WriteTheme( sal_Int32 nThemeNum, model::Theme* pTheme );
 
@@ -131,8 +131,6 @@ private:
     css::uno::Reference<css::drawing::XShape> GetReferencedPlaceholderXShape(const PlaceholderType eType, PageType ePageType) const;
     void WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType);
 
-    long FindEquivalentMasterPage(SdrPage* pMasterPage) const;
-
     /// Should we export as .pptm, ie. do we contain macros?
     bool mbPptm;
 
@@ -142,14 +140,12 @@ private:
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
     LayoutInfo mLayoutInfo[EPP_LAYOUT_SIZE];
-    std::vector<std::pair<SdrPage*, size_t>> mpSlidesMaster;
     std::vector< ::sax_fastparser::FSHelperPtr > mpSlidesFSArray;
     sal_Int32 mnLayoutFileIdMax;
 
     sal_uInt32 mnSlideIdMax;
     sal_uInt32 mnSlideMasterIdMax;
     sal_uInt32 mnAnimationNodeIdMax;
-    sal_uInt32 mnThemeIdMax;
 
     sal_uInt32 mnDiagramId;
 
