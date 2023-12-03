@@ -561,10 +561,8 @@ namespace xmloff
 
                 // generate a new control id
 
-                // find a free id
-                OUString sCurrentId = lcl_findFreeControlId( m_aControlIds );
-                // add it to the map
-                m_aCurrentPageIds->second[ xColumnProperties ] = sCurrentId;
+                // find a free id and add it to the map
+                m_aCurrentPageIds->second[xColumnProperties] = lcl_findFreeControlId(m_aControlIds);
 
                 // determine a number style, if needed
                 xColumnPropertiesMeta = xColumnProperties->getPropertySetInfo();
