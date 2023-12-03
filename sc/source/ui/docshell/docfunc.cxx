@@ -3485,7 +3485,7 @@ bool ScDocFunc::SetLayoutRTL( SCTAB nTab, bool bRTL )
         rDocShell.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoLayoutRTL>( &rDocShell, nTab, bRTL ) );
     }
 
-    rDocShell.PostPaint( 0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All );
+    rDocShell.PostPaint( 0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab, PaintPartFlags::All );
     aModificator.SetDocumentModified();
 
     SfxBindings* pBindings = rDocShell.GetViewBindings();
