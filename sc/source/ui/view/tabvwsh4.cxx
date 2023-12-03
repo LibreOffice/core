@@ -80,6 +80,8 @@
 #include <gridwin.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <comphelper/processfactory.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/flagguard.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -1687,6 +1689,65 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     SetBorderPixel( aBorder );
 }
 
+class ScViewOptiChangesListener : public cppu::WeakImplHelper<util::XChangesListener>
+{
+public:
+    ScViewOptiChangesListener(ScTabViewShell&);
+    void stopListening();
+
+    virtual void SAL_CALL changesOccurred(const util::ChangesEvent& Event) override;
+    virtual void SAL_CALL disposing(const lang::EventObject& rEvent) override;
+
+private:
+    ScTabViewShell& mrViewShell;
+    uno::Reference<util::XChangesNotifier> m_xChangesNotifier;
+};
+
+void ScViewOptiChangesListener::stopListening()
+{
+    if (m_xChangesNotifier.is())
+        m_xChangesNotifier->removeChangesListener(this);
+}
+
+// virtual
+void SAL_CALL ScViewOptiChangesListener::changesOccurred(const util::ChangesEvent& rEvent)
+{
+    OUString sChangedEntry;
+    rEvent.Changes[0].Accessor >>= sChangedEntry;
+
+    if (sChangedEntry == "Display/ColumnRowHighlighting")
+        mrViewShell.GetViewData().GetView()->HighlightOverlay();
+}
+
+// virtual
+void SAL_CALL ScViewOptiChangesListener::disposing(const lang::EventObject& /* rEvent */)
+{
+    m_xChangesNotifier.clear();
+}
+
+ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
+    : mrViewShell(rViewShell)
+{
+    // add a listener for configuration changes (ColumnRowHighlighting Checkbox)
+    uno::Reference<lang::XMultiServiceFactory> xConfigurationProvider(
+        configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()));
+
+    beans::NamedValue aProperty;
+    aProperty.Name = "nodepath";
+    aProperty.Value <<= OUString("/org.openoffice.Office.Calc/Content");
+
+    uno::Sequence<uno::Any> aArgumentList{ uno::Any(aProperty) };
+
+    uno::Reference<uno::XInterface> xConfigurationAccess
+        = xConfigurationProvider->createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationAccess", aArgumentList);
+
+    m_xChangesNotifier.set(xConfigurationAccess, uno::UNO_QUERY);
+
+    if (m_xChangesNotifier.is())
+        m_xChangesNotifier->addChangesListener(this);
+}
+
 ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell(rViewFrame, SfxViewShellFlags::HAS_PRINTOPTIONS),
@@ -1772,6 +1833,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     if (bInstalledScTabViewObjAsTempController)
         GetViewData().GetDocShell()->GetModel()->setCurrentController(nullptr);
 
+    mChangesListener.set(new ScViewOptiChangesListener(*this));
+
     // formula mode in online is not usable in collaborative mode,
     // this is a workaround for disabling formula mode in online
     // when there is more than a single view
@@ -1813,6 +1876,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
 ScTabViewShell::~ScTabViewShell()
 {
     bInDispose = true;
+    mChangesListener->stopListening();
+    mChangesListener.clear();
 
     // Notify other LOK views that we are going away.
     SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
