@@ -93,6 +93,7 @@ xr2                     http://schemas.microsoft.com/office/spreadsheetml/2015/r
 # extlst namespaces
 
 adec                    http://schemas.microsoft.com/office/drawing/2017/decorative
+asvg                    http://schemas.microsoft.com/office/drawing/2016/SVG/main
 
 # xls14Lst for features introduced by excel 2010
 xls14Lst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main

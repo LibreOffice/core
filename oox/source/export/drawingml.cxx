@@ -1266,11 +1266,33 @@ OUString DrawingML::GetRelationCompPrefix() const
     return OUString(getRelationCompPrefix(meDocumentType));
 }
 
+void GraphicExport::writeSvgExtension(OUString const& rSvgRelId)
+{
+    if (rSvgRelId.isEmpty())
+        return;
+
+    mpFS->startElementNS(XML_a, XML_extLst);
+    mpFS->startElementNS(XML_a, XML_ext, XML_uri, "{96DAC541-7B7A-43D3-8B79-37D633B846F1}");
+    mpFS->singleElementNS(XML_asvg, XML_svgBlip,
+            FSNS(XML_xmlns, XML_asvg), mpFilterBase->getNamespaceURL(OOX_NS(asvg)),
+            FSNS(XML_r, XML_embed), rSvgRelId);
+    mpFS->endElementNS(XML_a, XML_ext);
+    mpFS->endElementNS( XML_a, XML_extLst);
+}
+
 void GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia)
 {
     OUString sRelId = writeToStorage(rGraphic, bRelPathToMedia);
 
     mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
+
+    auto const& rVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
+
+    if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Svg)
+    {
+        OUString sSvgRelId = writeToStorage(rGraphic, bRelPathToMedia, TypeHint::SVG);
+        writeSvgExtension(sSvgRelId);
+    }
 
     for (auto const& rEffect : rEffects)
     {
@@ -1497,19 +1519,72 @@ OUString GraphicExport::writeNewEntryToStorage(const Graphic& rGraphic, bool bRe
     return sPath;
 }
 
-OUString GraphicExport::writeToStorage(const Graphic& rGraphic , bool bRelPathToMedia)
+namespace
+{
+BitmapChecksum makeChecksumUniqueForSVG(BitmapChecksum const& rChecksum)
+{
+    // need to modify the checksum so we know it's for SVG - just invert it
+    return ~rChecksum;
+}
+
+} // end anonymous namespace
+
+OUString GraphicExport::writeNewSvgEntryToStorage(const Graphic& rGraphic, bool bRelPathToMedia)
+{
+    OUString sMediaType = "image/svg";
+    OUString aExtension = "svg";
+
+    GfxLink const& rLink = rGraphic.GetGfxLink();
+    if (rLink.GetType() != GfxLinkType::NativeSvg)
+        return OUString();
+
+    const void* aData = rLink.GetData();
+    std::size_t nDataSize = rLink.GetDataSize();
+
+    GraphicExportCache& rGraphicExportCache = GraphicExportCache::get();
+    auto sImageCountString = OUString::number(rGraphicExportCache.nextImageCount());
+
+    OUString sComponentDir(getComponentDir(meDocumentType));
+
+    OUString sImagePath = sComponentDir + "/media/image" + sImageCountString + "." + aExtension;
+
+    Reference<XOutputStream> xOutStream = mpFilterBase->openFragmentStream(sImagePath, sMediaType);
+    xOutStream->writeBytes(Sequence<sal_Int8>(static_cast<const sal_Int8*>(aData), nDataSize));
+    xOutStream->closeOutput();
+
+    OUString sRelationCompPrefix;
+    if (bRelPathToMedia)
+        sRelationCompPrefix = "../";
+    else
+        sRelationCompPrefix = getRelationCompPrefix(meDocumentType);
+
+    OUString sPath = sRelationCompPrefix + "media/image" + sImageCountString + "." + aExtension;
+
+    rGraphicExportCache.addExportGraphics(makeChecksumUniqueForSVG(rGraphic.GetChecksum()), sPath);
+
+    return sPath;
+}
+
+OUString GraphicExport::writeToStorage(const Graphic& rGraphic, bool bRelPathToMedia, TypeHint eHint)
 {
     OUString sPath;
 
+    auto aChecksum = rGraphic.GetChecksum();
+    if (eHint == TypeHint::SVG)
+        aChecksum = makeChecksumUniqueForSVG(aChecksum);
+
     GraphicExportCache& rGraphicExportCache = GraphicExportCache::get();
-    sPath = rGraphicExportCache.findExportGraphics(rGraphic.GetChecksum());
+    sPath = rGraphicExportCache.findExportGraphics(aChecksum);
 
     if (sPath.isEmpty())
     {
-        sPath = writeNewEntryToStorage(rGraphic, bRelPathToMedia);
+        if (eHint == TypeHint::SVG)
+            sPath = writeNewSvgEntryToStorage(rGraphic, bRelPathToMedia);
+        else
+            sPath = writeNewEntryToStorage(rGraphic, bRelPathToMedia);
 
         if (sPath.isEmpty())
-            return OUString(); // couldn't store - just return empty string
+            return OUString(); // couldn't store
     }
 
     OUString sRelId = mpFilterBase->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::IMAGE), sPath);
@@ -1517,10 +1592,15 @@ OUString GraphicExport::writeToStorage(const Graphic& rGraphic , bool bRelPathTo
     return sRelId;
 }
 
-OUString DrawingML::writeGraphicToStorage( const Graphic& rGraphic , bool bRelPathToMedia )
+std::shared_ptr<GraphicExport> DrawingML::createGraphicExport()
+{
+    return std::make_shared<GraphicExport>(mpFS, mpFB, meDocumentType);
+}
+
+OUString DrawingML::writeGraphicToStorage(const Graphic& rGraphic , bool bRelPathToMedia, GraphicExport::TypeHint eHint)
 {
     GraphicExport aExporter(mpFS, mpFB, meDocumentType);
-    return aExporter.writeToStorage(rGraphic, bRelPathToMedia);
+    return aExporter.writeToStorage(rGraphic, bRelPathToMedia, eHint);
 }
 
 void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape)
@@ -1684,9 +1764,20 @@ void DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const & rX
         return;
 
     Graphic aGraphic(rxGraphic);
+
     sRelId = writeGraphicToStorage(aGraphic, bRelPathToMedia);
 
     mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
+
+    auto pVectorGraphicDataPtr = aGraphic.getVectorGraphicData();
+
+    if (pVectorGraphicDataPtr && pVectorGraphicDataPtr->getType() == VectorGraphicDataType::Svg)
+    {
+        GraphicExport aExporter(mpFS, mpFB, meDocumentType);
+        OUString sSvgRelId =  aExporter.writeToStorage(aGraphic, bRelPathToMedia, GraphicExport::TypeHint::SVG);
+        if (!sSvgRelId.isEmpty())
+            aExporter.writeSvgExtension(sSvgRelId);
+    }
 
     WriteImageBrightnessContrastTransparence(rXPropSet);
 

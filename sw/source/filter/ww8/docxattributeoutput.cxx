@@ -52,6 +52,7 @@
 #include <oox/token/relationship.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <oox/ole/olehelper.hxx>
+#include <oox/export/drawingml.hxx>
 
 #include <editeng/autokernitem.hxx>
 #include <editeng/unoprnms.hxx>
@@ -5074,6 +5075,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     const SwFrameFormat* pFrameFormat = pGrfNode ? pGrfNode->GetFlyFormat() : pOLEFrameFormat;
     // create the relation ID
     OString aRelId;
+    OUString sSvgRelId;
     sal_Int32 nImageType;
     if ( pGrfNode && pGrfNode->IsLinkedFile() )
     {
@@ -5109,9 +5111,14 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             aGraphic = *pOLENode->GetGraphic();
 
         m_rDrawingML.SetFS(m_pSerializer); // to be sure that we write to the right stream
-        OUString aImageId = m_rDrawingML.writeGraphicToStorage(aGraphic, false);
+        auto pGraphicExport = m_rDrawingML.createGraphicExport();
+        OUString aImageId = pGraphicExport->writeToStorage(aGraphic, false);
         aRelId = OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8);
 
+        if (aGraphic.getVectorGraphicData() && aGraphic.getVectorGraphicData()->getType() == VectorGraphicDataType::Svg)
+        {
+            sSvgRelId = pGraphicExport->writeToStorage(aGraphic, false, drawingml::GraphicExport::TypeHint::SVG);
+        }
         nImageType = XML_embed;
     }
 
@@ -5261,6 +5268,13 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         else if (nMode == GraphicDrawMode::Watermark) //watermark has a brightness/luminance of 0,5 and contrast of -0.7 in LibreOffice
             m_pSerializer->singleElementNS( XML_a, XML_lum, XML_bright, OString::number(70000), XML_contrast, OString::number(-70000) );
     }
+
+    if (!sSvgRelId.isEmpty())
+    {
+        auto pGraphicExport = m_rDrawingML.createGraphicExport();
+        pGraphicExport->writeSvgExtension(sSvgRelId);
+    }
+
     m_pSerializer->endElementNS( XML_a, XML_blip );
 
     if (xShapePropSet)
