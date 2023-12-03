@@ -81,7 +81,7 @@ class FormFieldsEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 mnIndex;
 
 public:
-    explicit FormFieldsEnumWrapper(uno::Reference<container::XIndexAccess> xIndexAccess)
+    explicit FormFieldsEnumWrapper(const uno::Reference<container::XIndexAccess>& xIndexAccess)
         : mxIndexAccess(xIndexAccess)
         , mnIndex(0)
     {
