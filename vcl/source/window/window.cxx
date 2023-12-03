@@ -3112,8 +3112,7 @@ const OUString& Window::GetHelpText() const
         static const char* pEnv = getenv( "HELP_DEBUG" );
         if( pEnv && *pEnv )
         {
-            OUString aTxt = mpWindowImpl->maHelpText + "\n------------------\n" + aStrHelpId;
-            mpWindowImpl->maHelpText = aTxt;
+            mpWindowImpl->maHelpText = mpWindowImpl->maHelpText + "\n------------------\n" + aStrHelpId;
         }
         mpWindowImpl->mbHelpTextDynamic = false;
     }
