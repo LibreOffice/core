@@ -83,9 +83,17 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
 {
     const ScRangeName* pRangeName;
     if (rLine.aScope == maGlobalString)
-        pRangeName = &m_RangeMap.find(STR_GLOBAL_RANGE_NAME)->second;
+    {
+        const auto iter = m_RangeMap.find(STR_GLOBAL_RANGE_NAME);
+        assert(iter != m_RangeMap.end());
+        pRangeName = &iter->second;
+    }
     else
-        pRangeName = &m_RangeMap.find(rLine.aScope)->second;
+    {
+        const auto iter = m_RangeMap.find(rLine.aScope);
+        assert(iter != m_RangeMap.end());
+        pRangeName = &iter->second;
+    }
 
     return pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(rLine.aName));
 }

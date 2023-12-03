@@ -339,7 +339,9 @@ void SolverSettings::SaveSolverSettings()
  */
 bool SolverSettings::ReadParamValue(SolverParameter eParam, OUString& rValue, bool bRemoveQuotes)
 {
-    OUString sRange = m_mNamedRanges.find(eParam)->second;
+    const auto iter = m_mNamedRanges.find(eParam);
+    assert(iter != m_mNamedRanges.end());
+    OUString sRange = iter->second;
     ScRangeData* pRangeData
         = m_pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(sRange));
     if (pRangeData)

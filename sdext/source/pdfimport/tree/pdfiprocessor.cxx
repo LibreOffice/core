@@ -471,6 +471,7 @@ const FontAttributes& PDFIProcessor::getFont( sal_Int32 nFontId ) const
     IdToFontMap::const_iterator it = m_aIdToFont.find( nFontId );
     if( it == m_aIdToFont.end() )
         it = m_aIdToFont.find( 0 );
+    assert(it != m_aIdToFont.end());
     return it->second;
 }
 
