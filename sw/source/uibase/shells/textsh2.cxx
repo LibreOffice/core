@@ -239,8 +239,7 @@ IMPL_LINK( SwBaseShell, InsertDBTextHdl, void*, p, void )
                                                                                                 aDBData));
             if( RET_OK == pDlg->Execute() )
             {
-                Reference <XResultSet> xResSet = pDBStruct->xCursor;
-                pDlg->DataToDoc( pDBStruct->aSelection, xSource, xConnection, xResSet);
+                pDlg->DataToDoc(pDBStruct->aSelection, xSource, xConnection, pDBStruct->xCursor);
             }
         }
         if ( bDispose )

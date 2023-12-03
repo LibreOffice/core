@@ -112,8 +112,7 @@ void XMLFootnoteImportContext::startFastElement(
     mbListContextPushed = true;
 
     // remember footnote (for CreateChildContext)
-    Reference<XFootnote> xNote(xTextContent, UNO_QUERY);
-    xFootnote = xNote;
+    xFootnote.set(xTextContent, UNO_QUERY);
 
     // else: ignore footnote! Content will be merged into document.
 }

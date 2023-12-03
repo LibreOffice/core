@@ -1296,12 +1296,11 @@ OUString GetErrorMessage( const css::uno::Any& aException )
 void SvxScriptErrorDialog::ShowAsyncErrorDialog( weld::Window* pParent, css::uno::Any const & aException )
 {
     SolarMutexGuard aGuard;
-    OUString sMessage = GetErrorMessage( aException );
 
     // Pass a copy of the message to the ShowDialog method as the
     // SvxScriptErrorDialog may be deleted before ShowDialog is called
     DialogData* pData = new DialogData;
-    pData->sMessage = sMessage;
+    pData->sMessage = GetErrorMessage(aException);
     pData->pParent = pParent;
     Application::PostUserEvent(
         LINK( nullptr, SvxScriptErrorDialog, ShowDialog ),

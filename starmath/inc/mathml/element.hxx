@@ -284,7 +284,7 @@ public: // text elements
     /**
       * Returns the element text
       */
-    void setText(OUString aText) { m_aText = aText; };
+    void setText(const OUString& rText) { m_aText = rText; };
 };
 
 namespace starmathdatabase

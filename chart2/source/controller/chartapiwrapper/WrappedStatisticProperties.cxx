@@ -160,8 +160,7 @@ void lcl_ConvertRangeToXML(
             lcl_getDataProviderFromContact( spChart2ModelContact ), uno::UNO_QUERY );
         if( xConverter.is())
         {
-            OUString aResult = xConverter->convertRangeToXML( rInOutRange );
-            rInOutRange = aResult;
+            rInOutRange = xConverter->convertRangeToXML( rInOutRange );
         }
     }
 }

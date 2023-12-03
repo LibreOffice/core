@@ -758,9 +758,8 @@ LocaleDataImpl::getAllCalendars2( const Locale& rLocale )
             offset++;
             sal_Int16 minimalDaysInFirstWeek = allCalendars[offset][0];
             offset++;
-            Calendar2 aCalendar(days, months, gmonths, pmonths, eras, startOfWeekDay,
+            calendarsSeqRange[i] = Calendar2(days, months, gmonths, pmonths, eras, startOfWeekDay,
                     minimalDaysInFirstWeek, defaultCalendar, calendarID);
-            calendarsSeqRange[i] = aCalendar;
         }
         return calendarsSeq;
     }

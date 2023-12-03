@@ -195,8 +195,7 @@ Sequence< OUString > StringResourceImpl::implGetResourceIDs( LocaleItem* pLocale
         int iTarget = 0;
         for( const auto& rEntry : rHashMap )
         {
-            OUString aStr = rEntry.first;
-            pStrings[iTarget] = aStr;
+            pStrings[iTarget] = rEntry.first;
             iTarget++;
         }
     }

@@ -1027,14 +1027,14 @@ void SAL_CALL UIConfigurationManager::removeSettings( const OUString& ResourceUR
             rElementType.bModified = true;
 
             Reference< XUIConfigurationManager > xThis(this);
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about removed element settings
             ConfigurationEvent aEvent;
 
             aEvent.ResourceURL = ResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xIfac;
+            aEvent.Source.set(xThis, UNO_QUERY);
+
             aEvent.Element <<= xRemovedSettings;
 
             aGuard.clear();

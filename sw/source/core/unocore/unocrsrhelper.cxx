@@ -887,11 +887,10 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         const SvxFontListItem* pFontListItem =
                                 static_cast<const SvxFontListItem* >(rDoc.GetDocShell()
                                                     ->GetItem( SID_ATTR_CHAR_FONTLIST ));
-                        const FontList*  pList = pFontListItem->GetFontList();
+                        const FontList* pList = pFontListItem->GetFontList();
 
-                        FontMetric aFontMetric = pList->Get(
-                            pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
-                        vcl::Font aFont(aFontMetric);
+                        vcl::Font aFont(pList->Get(
+                            pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE));
                         aFormat.SetBulletFont(&aFont);
                     }
                     aRule.Set( i, aFormat );

@@ -561,11 +561,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
     {
         // the connection could point on the other side
         if(pConn->GetSourceWin() == pDestWin)
-        {
-            OUString aTmp(aSourceFieldName);
-            aSourceFieldName = aDestFieldName;
-            aDestFieldName = aTmp;
-        }
+            std::swap(aSourceFieldName, aDestFieldName);
 
         pConn->GetData()->AppendConnLine( aSourceFieldName,aDestFieldName );
 

@@ -277,7 +277,7 @@ public:
         return mpSignatureLineUnsignedGraphic;
     }
 
-    void setSignatureLineUnsignedGraphic(css::uno::Reference<css::graphic::XGraphic> rGraphic)
+    void setSignatureLineUnsignedGraphic(const css::uno::Reference<css::graphic::XGraphic>& rGraphic)
     {
         mpSignatureLineUnsignedGraphic = rGraphic;
     }

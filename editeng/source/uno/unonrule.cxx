@@ -207,8 +207,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
         sal_UCS4 nCode = rFmt.GetBulletChar();
         OUString aStr( &nCode, 1 );
         aVal <<= aStr;
-        beans::PropertyValue aBulletProp( "BulletChar", -1, aVal, beans::PropertyState_DIRECT_VALUE);
-        pArray[nIdx++] = aBulletProp;
+        pArray[nIdx++] = beans::PropertyValue("BulletChar", -1, aVal, beans::PropertyState_DIRECT_VALUE);
     }
 
     if( rFmt.GetBulletFont() )

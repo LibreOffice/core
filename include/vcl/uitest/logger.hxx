@@ -58,7 +58,7 @@ public:
 
     static UITestLogger& getInstance();
 
-    void setAppName(OUString name) { app_name = name; }
+    void setAppName(const OUString& name) { app_name = name; }
 
     const OUString& getAppName() const { return app_name; }
 };
