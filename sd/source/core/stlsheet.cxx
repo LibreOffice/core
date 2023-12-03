@@ -621,6 +621,7 @@ struct ApiNameMap
         { std::u16string_view(u"notes"), HID_PSEUDOSHEET_NOTES },
         { std::u16string_view(u"standard"), HID_STANDARD_STYLESHEET_NAME },
         { std::u16string_view(u"objectwithoutfill"), HID_POOLSHEET_OBJWITHOUTFILL },
+        { std::u16string_view(u"Object with no fill and no line"), HID_POOLSHEET_OBJNOLINENOFILL },
 
         { std::u16string_view(u"Text"), HID_POOLSHEET_TEXT },
         { std::u16string_view(u"A4"), HID_POOLSHEET_A4 },
