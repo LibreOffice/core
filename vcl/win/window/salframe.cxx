@@ -76,11 +76,6 @@
 #include <window.h>
 #include <sallayout.hxx>
 
-#define COMPILE_MULTIMON_STUBS
-#pragma warning(push)
-#pragma warning(disable:4996) // 'GetVersionExA': was declared deprecated
-#include <multimon.h>
-#pragma warning(pop)
 #include <vector>
 
 #include <com/sun/star/uno/Exception.hpp>
