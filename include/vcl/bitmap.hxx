@@ -242,7 +242,7 @@ public:
         bitmap dimensions.
 
         @param rRectSrc
-        Source rectangl. This is clipped to the
+        Source rectangle. This is clipped to the
         bitmap dimensions. Note further that no scaling takes place
         during this copy operation, i.e. only the minimum of source
         and destination rectangle's width and height are used.
