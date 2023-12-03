@@ -360,6 +360,7 @@ sal_uInt16 SvXMLNamespaceMap::GetFirstKey() const
 sal_uInt16 SvXMLNamespaceMap::GetNextKey( sal_uInt16 nLastKey ) const
 {
     auto aIter = maKeyToNamespaceMap.find ( nLastKey );
+    assert(aIter != maKeyToNamespaceMap.end());
     return (++aIter == maKeyToNamespaceMap.end()) ? USHRT_MAX : (*aIter).first;
 }
 
@@ -378,6 +379,7 @@ sal_uInt16 SvXMLNamespaceMap::GetFirstIndex() const
 sal_uInt16 SvXMLNamespaceMap::GetNextIndex( sal_uInt16 nOldIdx ) const
 {
     auto aIter = maKeyToNamespaceMap.find ( nOldIdx );
+    assert(aIter != maKeyToNamespaceMap.end());
     return (++aIter == maKeyToNamespaceMap.end()) ? USHRT_MAX : (*aIter).first;
 }
 
