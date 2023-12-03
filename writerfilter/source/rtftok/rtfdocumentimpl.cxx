@@ -3718,8 +3718,7 @@ RTFError RTFDocumentImpl::handleEmbeddedObject()
 
     uno::Reference<io::XInputStream> xInputStream(
         new utl::OSeekableInputStreamWrapper(pStream.release(), /*_bOwner=*/true));
-    auto pStreamValue = new RTFValue(xInputStream);
-    m_aOLEAttributes.set(NS_ooxml::LN_inputstream, pStreamValue);
+    m_aOLEAttributes.set(NS_ooxml::LN_inputstream, new RTFValue(xInputStream));
 
     return RTFError::OK;
 }
