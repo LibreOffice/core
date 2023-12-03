@@ -2205,12 +2205,9 @@ TaskManager::load( const ContentMap::iterator& it, bool create )
     uno::Reference< ucb::XPersistentPropertySet > xS = m_xFileRegistry->openPropertySet( it->first,create );
     if( xS.is() )
     {
-        uno::Reference< beans::XPropertyContainer > xC( xS,uno::UNO_QUERY );
-        uno::Reference< beans::XPropertyAccess >    xA( xS,uno::UNO_QUERY );
-
         it->second.xS = xS;
-        it->second.xC = xC;
-        it->second.xA = xA;
+        it->second.xC.set(xS, uno::UNO_QUERY);
+        it->second.xA.set(xS, uno::UNO_QUERY);
 
         // Now put in all values in the storage in the local hash;
 
