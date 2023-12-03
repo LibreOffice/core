@@ -12,6 +12,8 @@
 #include "mysqlc_user.hxx"
 #include "mysqlc_users.hxx"
 #include <comphelper/types.hxx>
+#include <connectivity/dbtools.hxx>
+#include <TConnection.hxx>
 
 using namespace ::connectivity;
 using namespace ::connectivity::mysqlc;
@@ -40,7 +42,7 @@ void Users::impl_refresh()
 
 ObjectType Users::createObject(const OUString& rName)
 {
-    return new User(m_xMetaData->getConnection(), rName);
+    return new OUserExtend(m_xMetaData->getConnection(), rName);
 }
 
 uno::Reference<XPropertySet> Users::createDescriptor()
@@ -48,14 +50,28 @@ uno::Reference<XPropertySet> Users::createDescriptor()
     // There is some internal magic so that the same class can be used as either
     // a descriptor or as a normal user. See VUser.cxx for the details. In our
     // case we just need to ensure we use the correct constructor.
-    return new User(m_xMetaData->getConnection());
+    return new OUserExtend(m_xMetaData->getConnection(), "");
 }
 
 //----- XAppend ---------------------------------------------------------------
-ObjectType Users::appendObject(const OUString& rName, const uno::Reference<XPropertySet>&)
+ObjectType Users::appendObject(const OUString& rName,
+                               const uno::Reference<XPropertySet>& descriptor)
 {
-    // TODO: set sSql as appropriate
-    m_xMetaData->getConnection()->createStatement()->execute(OUString());
+    OUString aSql("GRANT USAGE ON * TO ");
+    OUString aQuote = m_xMetaData->getIdentifierQuoteString();
+    aSql += ::dbtools::quoteName(aQuote, rName) + " @\"%\" ";
+    OUString sPassword;
+    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD))
+        >>= sPassword;
+    if (!sPassword.isEmpty())
+    {
+        aSql += " IDENTIFIED BY '" + sPassword + "'";
+    }
+
+    Reference<XStatement> statement = m_xMetaData->getConnection()->createStatement();
+    if (statement.is())
+        statement->execute(aSql);
+    ::comphelper::disposeComponent(statement);
 
     return createObject(rName);
 }

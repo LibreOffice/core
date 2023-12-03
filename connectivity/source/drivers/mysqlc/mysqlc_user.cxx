@@ -15,6 +15,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
+#include <TConnection.hxx>
 
 using namespace ::connectivity;
 using namespace ::connectivity::mysqlc;
@@ -37,11 +38,39 @@ User::User(css::uno::Reference<css::sdbc::XConnection> xConnection, const OUStri
 {
 }
 
+OUserExtend::OUserExtend(const css::uno::Reference<css::sdbc::XConnection>& xConnection,
+                         const OUString& rName)
+    : User(xConnection, rName)
+{
+    construct();
+}
+
+void OUserExtend::construct()
+{
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),
+                     PROPERTY_ID_NAME, 0, &m_Name, ::cppu::UnoType<OUString>::get());
+
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),
+                     PROPERTY_ID_PASSWORD, 0, &m_Password, ::cppu::UnoType<OUString>::get());
+}
+
 void User::changePassword(const OUString& /* oldPassword */, const OUString& newPassword)
 {
     css::uno::Reference<XStatement> statement = m_xConnection->createStatement();
     statement->execute("SET PASSWORD FOR " + m_Name + " = PASSWORD('" + newPassword + "')");
     ::comphelper::disposeComponent(statement);
+}
+
+cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
+{
+    css::uno::Sequence<css::beans::Property> aProps;
+    describeProperties(aProps);
+    return new cppu::OPropertyArrayHelper(aProps);
+}
+
+cppu::IPropertyArrayHelper& OUserExtend::getInfoHelper()
+{
+    return *OUserExtend_PROP::getArrayHelper();
 }
 
 typedef connectivity::sdbcx::OUser_BASE OUser_BASE_RBHELPER;

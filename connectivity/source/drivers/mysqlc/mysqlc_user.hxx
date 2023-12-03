@@ -21,6 +21,8 @@ class User : public ::connectivity::sdbcx::OUser
 {
     css::uno::Reference<css::sdbc::XConnection> m_xConnection;
 
+    OUString m_Password;
+
 public:
     /**
     * Create a "new" descriptor, which isn't yet in the database.
@@ -44,6 +46,26 @@ public:
 
     // IRefreshableGroups::
     virtual void refreshGroups() override;
+};
+
+class OUserExtend;
+typedef ::comphelper::OPropertyArrayUsageHelper<OUserExtend> OUserExtend_PROP;
+
+class OUserExtend : public User, public OUserExtend_PROP
+{
+    OUString m_Password;
+
+protected:
+    // OPropertyArrayUsageHelper
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+    // OPropertySetHelper
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+public:
+    OUserExtend(const css::uno::Reference<css::sdbc::XConnection>& _xConnection,
+                const OUString& rName);
+
+    virtual void construct() override;
 };
 
 } // namespace connectivity::mysqlc
