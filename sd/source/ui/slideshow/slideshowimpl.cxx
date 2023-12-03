@@ -1848,6 +1848,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             case KEY_SPACE:
             case KEY_RIGHT:
             case KEY_DOWN:
+            case KEY_XF86FORWARD:
                 gotoNextEffect();
                 break;
 
@@ -1893,6 +1894,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             case KEY_LEFT:
             case KEY_UP:
             case KEY_BACKSPACE:
+            case KEY_XF86BACK:
                 gotoPreviousEffect();
                 break;
 

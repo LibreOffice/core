@@ -449,6 +449,12 @@ static sal_uInt16 GetKeyCode(int keyval, Qt::KeyboardModifiers modifiers)
             case Qt::Key_NumberSign:
                 nCode = KEY_NUMBERSIGN;
                 break;
+            case Qt::Key_Forward:
+                nCode = KEY_XF86FORWARD;
+                break;
+            case Qt::Key_Back:
+                nCode = KEY_XF86BACK;
+                break;
             case Qt::Key_Colon:
                 nCode = KEY_COLON;
                 break;

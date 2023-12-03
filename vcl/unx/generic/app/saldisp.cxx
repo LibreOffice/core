@@ -908,6 +908,12 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
         case KEY_NUMBERSIGN:
             aCustomKeyName = "#";
             break;
+        case KEY_XF86FORWARD:
+            aCustomKeyName = "XF86Forward";
+            break;
+        case KEY_XF86BACK:
+            aCustomKeyName = "XF86Back";
+            break;
         case KEY_COLON:
             aCustomKeyName = ":";
             break;
@@ -1268,6 +1274,12 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
         case XK_colon:
             nKey = KEY_COLON;
             *pcPrintable = ':';
+            break;
+        case 0x1008ff27: // tdf#148986: XF86Forward
+            nKey = KEY_XF86FORWARD;
+            break;
+        case 0x1008ff26: // tdf#148986: XF86Back
+            nKey = KEY_XF86BACK;
             break;
         // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
         case 0x1000FF02: // apXK_Copy

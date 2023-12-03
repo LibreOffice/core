@@ -952,6 +952,12 @@ OUString QtFrame::GetKeyName(sal_uInt16 nKeyCode)
             case KEY_NUMBERSIGN:
                 nRetCode = Qt::Key_NumberSign;
                 break;
+            case KEY_XF86FORWARD:
+                nRetCode = Qt::Key_Forward;
+                break;
+            case KEY_XF86BACK:
+                nRetCode = Qt::Key_Back;
+                break;
             case KEY_COLON:
                 nRetCode = Qt::Key_Colon;
                 break;

@@ -845,6 +845,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
         case awt::Key::RIGHT:
         case awt::Key::SPACE:
         case awt::Key::DOWN:
+        case awt::Key::XF86FORWARD:
             if (mxSlideShowController.is())
             {
                 mxSlideShowController->gotoNextEffect();
@@ -864,6 +865,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
         case awt::Key::LEFT:
         case awt::Key::UP:
         case awt::Key::BACKSPACE:
+        case awt::Key::XF86BACK:
             if (mxSlideShowController.is())
             {
                 mxSlideShowController->gotoPreviousEffect();

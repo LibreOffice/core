@@ -541,7 +541,7 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild )
 }
 
 // translation table from System keycodes into StartView keycodes
-#define KEY_TAB_SIZE     146
+#define KEY_TAB_SIZE     168
 
 const sal_uInt16 aImplTranslateKeyTab[KEY_TAB_SIZE] =
 {
@@ -691,7 +691,29 @@ const sal_uInt16 aImplTranslateKeyTab[KEY_TAB_SIZE] =
     0,                    //                                 142
     0,                    //                                 143
     0,                    // NUMLOCK                         144
-    0                     // SCROLLLOCK                      145
+    0,                    // SCROLLLOCK                      145
+    0,                    //                                 146
+    0,                    //                                 147
+    0,                    //                                 148
+    0,                    //                                 149
+    0,                    //                                 150
+    0,                    //                                 151
+    0,                    //                                 152
+    0,                    //                                 153
+    0,                    //                                 154
+    0,                    //                                 155
+    0,                    //                                 156
+    0,                    //                                 157
+    0,                    //                                 158
+    0,                    //                                 159
+    0,                    //                                 160
+    0,                    //                                 161
+    0,                    //                                 162
+    0,                    //                                 163
+    0,                    //                                 164
+    0,                    //                                 165
+    KEY_XF86BACK,         // VK_BROWSER_BACK                 166
+    KEY_XF86FORWARD       // VK_BROWSER_FORWARD              167
 };
 
 static UINT ImplSalGetWheelScrollLines()
@@ -2509,6 +2531,12 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
                 break;
             case KEY_NUMBERSIGN:
                 cSVCode = '#';
+                break;
+            case KEY_XF86FORWARD:
+                cSVCode = VK_BROWSER_FORWARD;
+                break;
+            case KEY_XF86BACK:
+                cSVCode = VK_BROWSER_BACK;
                 break;
             case KEY_COLON:
                 cSVCode = ':';
