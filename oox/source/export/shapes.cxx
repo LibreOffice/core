@@ -2689,10 +2689,10 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         assert(!sRelationType.isEmpty());
         assert(!sSuffix.isEmpty());
 
-        OUString sFileName
-            = "embeddings/oleObject" + OUString::number(++m_nEmbeddedObjects) + "." + sSuffix;
-        uno::Reference<io::XOutputStream> const xOutStream(mpFB->openFragmentStream(
-            OUString::createFromAscii(GetComponentDir()) + "/" + sFileName, sMediaType));
+        OUString sNumber = OUString::number(++m_nEmbeddedObjects);
+        OUString sFileName = "embeddings/oleObject" + sNumber + "." + sSuffix;
+        OUString sFilePath = GetComponentDir() + "/" + sFileName;
+        uno::Reference<io::XOutputStream> const xOutStream(mpFB->openFragmentStream(sFilePath, sMediaType));
         assert(xOutStream.is()); // no reason why that could fail
 
         try
@@ -2706,7 +2706,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
         sRelId = mpFB->addRelation(
             mpFS->getOutputStream(), sRelationType,
-            Concat2View(OUString::createFromAscii(GetRelationCompPrefix()) + sFileName));
+            Concat2View(GetRelationCompPrefix() + sFileName));
     }
 
     sal_Int64 nAspect;

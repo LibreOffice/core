@@ -140,28 +140,28 @@ protected:
     virtual ~DMLTextExport() {}
 };
 
-constexpr const char* getComponentDir(DocumentType eDocumentType)
+constexpr std::u16string_view getComponentDir(DocumentType eDocumentType)
 {
     switch (eDocumentType)
     {
-        case DOCUMENT_DOCX: return "word";
-        case DOCUMENT_PPTX: return "ppt";
-        case DOCUMENT_XLSX: return "xl";
+        case DOCUMENT_DOCX: return u"word";
+        case DOCUMENT_PPTX: return u"ppt";
+        case DOCUMENT_XLSX: return u"xl";
     }
 
-    return "";
+    return u"";
 }
 
-constexpr const char* getRelationCompPrefix(DocumentType eDocumentType)
+constexpr std::u16string_view getRelationCompPrefix(DocumentType eDocumentType)
 {
     switch (eDocumentType)
     {
-        case DOCUMENT_DOCX: return "";
+        case DOCUMENT_DOCX: return u"";
         case DOCUMENT_PPTX:
-        case DOCUMENT_XLSX: return "../";
+        case DOCUMENT_XLSX: return u"../";
     }
 
-    return "";
+    return u"";
 }
 
 class OOX_DLLPUBLIC GraphicExportCache
@@ -251,11 +251,14 @@ public:
     }
 };
 
-class GraphicExport
+class OOX_DLLPUBLIC GraphicExport
 {
+private:
     sax_fastparser::FSHelperPtr mpFS;
     oox::core::XmlFilterBase* mpFilterBase;
     DocumentType meDocumentType;
+
+    OUString writeNewEntryToStorage(const Graphic& rGraphic, bool bRelPathToMedia);
 
 public:
     GraphicExport(sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFilterBase, DocumentType eDocumentType)
@@ -319,8 +322,8 @@ protected:
 
     void WriteStyleProperties( sal_Int32 nTokenId, const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
-    const char* GetComponentDir() const;
-    const char* GetRelationCompPrefix() const;
+    OUString GetComponentDir() const;
+    OUString GetRelationCompPrefix() const;
 
     static bool EqualGradients( const css::awt::Gradient2& rGradient1, const css::awt::Gradient2& rGradient2 );
     bool IsFontworkShape(const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
@@ -349,7 +352,7 @@ public:
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
-    OUString writeGraphicToStorage( const Graphic &rGraphic , bool bRelPathToMedia = false );
+    OUString writeGraphicToStorage(const Graphic &rGraphic , bool bRelPathToMedia = false);
 
     void WriteColor( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
