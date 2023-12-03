@@ -110,12 +110,13 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
 {
     ScRangeList aPaintRanges;
     std::set<SCTAB> aTabsInvalidated;
+    const SCTAB nMaxTab = m_pDocument->GetTableCount() - 1;
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
         const ScRange& rRange = rRanges[i];
         SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
-        SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
+        SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = std::min<SCTAB>(nMaxTab, rRange.aEnd.Tab());
 
         if (!m_pDocument->ValidCol(nCol1)) nCol1 = m_pDocument->MaxCol();
         if (!m_pDocument->ValidRow(nRow1)) nRow1 = m_pDocument->MaxRow();
@@ -168,7 +169,8 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
             }
         }
         aPaintRanges.push_back(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
-        aTabsInvalidated.insert(nTab1);
+        for (auto nTabNum = nTab1; nTabNum <= nTab2; ++nTabNum)
+            aTabsInvalidated.insert(nTabNum);
     }
 
     Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart));
