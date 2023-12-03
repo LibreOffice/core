@@ -73,7 +73,7 @@ enum class EppLayout
     TITLERIGHT2BODIESLEFT = 18  /* Vertical title on the right, body on the left split into 2 rows                        */
 };
 
-#define EPP_LAYOUT_SIZE 25
+#define EPP_LAYOUT_SIZE 36
 
 struct PHLayout
 {

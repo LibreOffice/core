@@ -1083,6 +1083,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTableCellVerticalPropertyRoundtrip)
     assertXPath(pXml, "(//a:tcPr)[3]"_ostr, "vert"_ostr, "wordArtVert");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf157740_slideMasters)
+{
+    createSdImpressDoc("pptx/tdf157740.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    // Test how many slidemaster we have
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/presentation.xml");
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId"_ostr, 7);
+
+    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster1.xml");
+    assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 1);
+
+    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster7.xml");
+    assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -111,11 +111,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf149128)
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn"_ostr,
-                "id"_ostr, "42");
+                "id"_ostr, "8");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn"_ostr,
                 "idx"_ostr, "0");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:endCxn"_ostr,
-                "id"_ostr, "43");
+                "id"_ostr, "9");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:endCxn"_ostr,
                 "idx"_ostr, "2");
 }

@@ -67,11 +67,11 @@ namespace {
 class InsertBookmarkAsPage_FindDuplicateLayouts
 {
 public:
-    explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer )
+    explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::map<OUString, sal_Int32> &rLayoutsToTransfer )
         : mrLayoutsToTransfer(rLayoutsToTransfer) {}
     void operator()( SdDrawDocument&, SdPage const *, bool, SdDrawDocument* );
 private:
-    std::vector<OUString> &mrLayoutsToTransfer;
+    std::map<OUString, sal_Int32> &mrLayoutsToTransfer;
 };
 
 }
@@ -85,11 +85,11 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     if( nIndex != -1 )
         aLayout = aLayout.copy(0, nIndex);
 
-    std::vector<OUString>::const_iterator pIter =
-            find(mrLayoutsToTransfer.begin(),mrLayoutsToTransfer.end(),aLayout);
+    std::map<OUString, sal_Int32>::const_iterator pIter = mrLayoutsToTransfer.find(aLayout);
 
     bool bFound = pIter != mrLayoutsToTransfer.end();
 
+    sal_Int32 nLayout = 20; // blank page - master slide layout ID
     const sal_uInt16 nMPageCount = rDoc.GetMasterPageCount();
     for (sal_uInt16 nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
     {
@@ -110,6 +110,15 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
                     pBMMPage->GetLayoutName(), pBMMPage->GetName() + "_");
                 aLayout = pBMMPage->GetName();
 
+                uno::Reference< drawing::XDrawPage > xOldPage(rDoc.GetMasterPage(nMPage)->getUnoPage(), uno::UNO_QUERY_THROW);
+                uno::Reference<beans::XPropertySet> xPropSet(xOldPage, uno::UNO_QUERY_THROW);
+                if (xPropSet.is())
+                {
+                    uno::Any aLayoutID = xPropSet->getPropertyValue("SlideLayout");
+                    if (aLayoutID.hasValue()) {
+                        aLayoutID >>= nLayout;
+                    }
+                }
                 break;
             }
             else
@@ -118,7 +127,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     }
 
     if (!bFound)
-        mrLayoutsToTransfer.push_back(aLayout);
+        mrLayoutsToTransfer.insert({ aLayout, nLayout });
 }
 
 // Inserts a bookmark as a page
@@ -499,7 +508,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
 
-    std::vector<OUString> aLayoutsToTransfer;
+    std::map<OUString, sal_Int32> aLayoutsToTransfer;
     InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( aLayoutsToTransfer );
     lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nBMSdPageCount, aSearchFunctor, ( rBookmarkList.empty() && pBookmarkDoc != this ) );
 
@@ -511,11 +520,11 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     if( !aLayoutsToTransfer.empty() )
         bMergeMasterPages = true;
 
-    for ( const OUString& layoutName : aLayoutsToTransfer )
+    for ( const auto& layout : aLayoutsToTransfer )
     {
         StyleSheetCopyResultVector aCreatedStyles;
 
-        rStyleSheetPool.CopyLayoutSheets(layoutName, rBookmarkStyleSheetPool,aCreatedStyles);
+        rStyleSheetPool.CopyLayoutSheets(layout.first, rBookmarkStyleSheetPool, aCreatedStyles);
 
         if(!aCreatedStyles.empty())
         {
@@ -899,6 +908,19 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                 pRefPage->SetSize(aSize);
                 pRefPage->SetBorder(nLeft, nUpper, nRight, nLower);
                 pRefPage->SetOrientation( eOrient );
+
+                uno::Reference< drawing::XDrawPage > xNewPage(GetMasterPage(nPage)->getUnoPage(), uno::UNO_QUERY_THROW);
+                uno::Reference<beans::XPropertySet> xNewPropSet(xNewPage, uno::UNO_QUERY_THROW);
+                if (xNewPropSet.is())
+                {
+                    OUString aLayout(pRefPage->GetName());
+                    sal_Int32 nLayout = 20; // blank page - master slide layout ID
+                    if (auto it{ aLayoutsToTransfer.find(aLayout) }; it != std::end(aLayoutsToTransfer))
+                    {
+                        nLayout = it->second;
+                    }
+                    xNewPropSet->setPropertyValue("SlideLayout", uno::Any(nLayout));
+                }
             }
             else        // Can only be notes
             {

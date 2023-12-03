@@ -161,6 +161,25 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
                 if(xMasterPage.is())
                 {
+                    uno::Reference< beans::XPropertySet > xPropSet(xMasterPage, uno::UNO_QUERY_THROW);
+                    if (xPropSet.is())
+                    {
+                        OUString aPropName("SlideLayout");
+                        uno::Reference< beans::XPropertySetInfo > xInfo(xPropSet->getPropertySetInfo());
+                        if (xInfo.is() && xInfo->hasPropertyByName(aPropName))
+                        {
+                            sal_Int32 nType = -1;
+                            uno::Reference< container::XNameAccess > xPageLayouts(GetSdImport().getPageLayouts());
+                            if (xPageLayouts.is())
+                            {
+                                if (xPageLayouts->hasByName(maPageLayoutName))
+                                    xPageLayouts->getByName(maPageLayoutName) >>= nType;
+                            }
+                            if (-1 != nType)
+                                xPropSet->setPropertyValue(aPropName, uno::Any(static_cast<sal_Int16>(nType)));
+                        }
+                    }
+
                     uno::Reference < container::XNamed > xMasterNamed(xMasterPage, uno::UNO_QUERY);
                     if(xMasterNamed.is())
                     {
