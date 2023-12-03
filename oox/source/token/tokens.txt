@@ -682,6 +682,7 @@ aspectratio
 assign
 asst
 asteriskTotals
+asvg
 atEnd
 atLeast
 atMost
@@ -5091,6 +5092,7 @@ suppressTopSpacing
 suppressTopSpacingWP
 surface3DChart
 surfaceChart
+svgBlip
 swAng
 swCell
 swapBordersFacingPages

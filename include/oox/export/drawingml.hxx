@@ -259,16 +259,25 @@ private:
     DocumentType meDocumentType;
 
     OUString writeNewEntryToStorage(const Graphic& rGraphic, bool bRelPathToMedia);
+    OUString writeNewSvgEntryToStorage(const Graphic& rGraphic, bool bRelPathToMedia);
 
 public:
+    enum class TypeHint
+    {
+        Detect,
+        SVG
+    };
+
     GraphicExport(sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFilterBase, DocumentType eDocumentType)
         : mpFS(pFS)
         , mpFilterBase(pFilterBase)
         , meDocumentType(eDocumentType)
     {}
 
-    OUString writeToStorage(Graphic const& rGraphic, bool bRelPathToMedia = false);
+    OUString writeToStorage(Graphic const& rGraphic, bool bRelPathToMedia = false, TypeHint eHint = TypeHint::Detect);
+
     void writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia = false);
+    void writeSvgExtension(OUString const& rSvgRelId);
 };
 
 class OOX_DLLPUBLIC DrawingML
@@ -353,7 +362,7 @@ public:
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
-    OUString writeGraphicToStorage(const Graphic &rGraphic , bool bRelPathToMedia = false);
+    OUString writeGraphicToStorage(const Graphic &rGraphic , bool bRelPathToMedia = false, GraphicExport::TypeHint eHint = GraphicExport::TypeHint::Detect);
 
     void WriteColor( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
@@ -516,6 +525,7 @@ public:
                                         const OUString& sRelationshipType,
                                         OUString* pRelationshipId );
 
+    std::shared_ptr<GraphicExport> createGraphicExport();
 };
 
 }

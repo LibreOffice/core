@@ -961,6 +961,33 @@ CPPUNIT_TEST_FIXTURE(Test, testZOrderInHeader)
     CPPUNIT_ASSERT(nBackground < nFrontShape);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSvgExtensionsSupport)
+{
+    loadAndSave("SvgImageTest.odt");
+
+    xmlDocUniquePtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+
+    // Check we have 2 relationships - one for PNG and one for SVG files
+    assertXPath(pXmlDocRels,
+                "/rels:Relationships/rels:Relationship[@Target='media/image1.png']"_ostr, "Id"_ostr,
+                "rId2");
+
+    assertXPath(pXmlDocRels,
+                "/rels:Relationships/rels:Relationship[@Target='media/image2.svg']"_ostr, "Id"_ostr,
+                "rId3");
+
+    // Check there is the extension present
+    xmlDocUniquePtr pXmlDocContent = parseExport("word/document.xml");
+
+    OString aPath(
+        "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip"_ostr);
+    assertXPath(pXmlDocContent, aPath, "embed"_ostr, "rId2");
+
+    assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext"_ostr, "uri"_ostr,
+                "{96DAC541-7B7A-43D3-8B79-37D633B846F1}");
+    assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext/asvg:svgBlip"_ostr, "embed"_ostr, "rId3");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
