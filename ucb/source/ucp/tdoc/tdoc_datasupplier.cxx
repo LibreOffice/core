@@ -380,9 +380,8 @@ bool ResultSetDataSupplier::queryNamesOfChildren(std::unique_lock<std::mutex>& /
 OUString
 ResultSetDataSupplier::assembleChildURL( std::u16string_view aName )
 {
-    OUString aContURL
+    OUString aURL
         = m_xContent->getIdentifier()->getContentIdentifier();
-    OUString aURL( aContURL );
 
     sal_Int32 nUrlEnd = aURL.lastIndexOf( '/' );
     if ( nUrlEnd != aURL.getLength() - 1 )
