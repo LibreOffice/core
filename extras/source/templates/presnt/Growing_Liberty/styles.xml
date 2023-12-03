@@ -116,15 +116,15 @@
       <style:graphic-properties draw:fill="none"/>
       <style:text-properties fo:font-size="18pt"/>
     </style:style>
-    <style:style style:name="Title_20_A0" style:display-name="Title A0" style:family="graphic" style:parent-style-name="A4">
+    <style:style style:name="Title_20_A0" style:display-name="Title A0" style:family="graphic" style:parent-style-name="A0">
       <style:graphic-properties draw:stroke="none"/>
       <style:text-properties fo:font-size="96pt"/>
     </style:style>
-    <style:style style:name="Heading_20_A0" style:display-name="Heading A0" style:family="graphic" style:parent-style-name="A4">
+    <style:style style:name="Heading_20_A0" style:display-name="Heading A0" style:family="graphic" style:parent-style-name="A0">
       <style:graphic-properties draw:stroke="none"/>
       <style:text-properties fo:font-size="72pt"/>
     </style:style>
-    <style:style style:name="Text_20_A0" style:display-name="Text A0" style:family="graphic" style:parent-style-name="A4">
+    <style:style style:name="Text_20_A0" style:display-name="Text A0" style:family="graphic" style:parent-style-name="A0">
       <style:graphic-properties draw:stroke="none"/>
     </style:style>
     <style:style style:name="Graphic" style:family="graphic">
