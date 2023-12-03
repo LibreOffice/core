@@ -1030,8 +1030,7 @@ void SvxScriptOrgDialog::StoreCurrentSelection()
             aDescription = ";" + aDescription;
     }
     while (bEntry);
-    OUString sDesc( aDescription );
-    m_lastSelection[ m_sLanguage ] = sDesc;
+    m_lastSelection[m_sLanguage] = aDescription;
 }
 
 void SvxScriptOrgDialog::RestorePreviousSelection()
