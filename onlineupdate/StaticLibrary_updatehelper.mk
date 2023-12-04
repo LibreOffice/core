@@ -12,6 +12,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,updatehelper))
 $(eval $(call gb_StaticLibrary_set_include,updatehelper,\
 	-I$(SRCDIR)/onlineupdate/inc/ \
 	-I$(SRCDIR)/onlineupdate/source/update/common \
+	-I$(SRCDIR)/include/onlineupdate/mozilla/ \
+	-I$(SRCDIR)/include/onlineupdate/ \
 	$$(INCLUDE) \
 ))
 

@@ -11,6 +11,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,libmarverify))
 
 $(eval $(call gb_StaticLibrary_set_include,libmarverify,\
 	-I$(SRCDIR)/onlineupdate/source/libmar/src/ \
+	-I$(SRCDIR)/include/onlineupdate/mozilla/ \
+	-I$(SRCDIR)/include/onlineupdate/ \
 	$$(INCLUDE) \
 ))
 

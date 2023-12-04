@@ -12,6 +12,8 @@ $(eval $(call gb_Executable_Executable,updater))
 $(eval $(call gb_Executable_set_include,updater,\
 	-I$(SRCDIR)/onlineupdate/inc \
 	-I$(SRCDIR)/onlineupdate/source/update/common \
+	-I$(SRCDIR)/include/onlineupdate/mozilla/ \
+	-I$(SRCDIR)/include/onlineupdate/ \
 	$$(INCLUDE) \
 	$(if $(filter-out WNT,$(OS)),$$(GTK3_CFLAGS) ) \
 ))

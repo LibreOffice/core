@@ -11,6 +11,8 @@ $(eval $(call gb_Executable_Executable,mbsdiff))
 
 $(eval $(call gb_Executable_set_include,mbsdiff,\
 	-I$(SRCDIR)/onlineupdate/inc \
+	-I$(SRCDIR)/include/onlineupdate/mozilla/ \
+	-I$(SRCDIR)/include/onlineupdate/ \
 	$$(INCLUDE) \
 ))
 

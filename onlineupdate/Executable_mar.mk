@@ -13,6 +13,8 @@ $(eval $(call gb_Executable_set_include,mar,\
 	-I$(SRCDIR)/onlineupdate/source/libmar/src/ \
 	-I$(SRCDIR)/onlineupdate/source/libmar/verify/ \
 	-I$(SRCDIR)/onlineupdate/source/libmar/sign/ \
+	-I$(SRCDIR)/include/onlineupdate/mozilla/ \
+	-I$(SRCDIR)/include/onlineupdate/ \
 	$$(INCLUDE) \
 ))
 

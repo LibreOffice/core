@@ -17,6 +17,8 @@ $(eval $(call gb_Executable_set_include,update_service,\
 	-I$(SRCDIR)/onlineupdate/source/libmar/verify/ \
 	-I$(SRCDIR)/onlineupdate/source/libmar/sign/ \
 	-I$(SRCDIR)/onlineupdate/source/update/common/ \
+	-I$(SRCDIR)/include/onlineupdate/mozilla/ \
+	-I$(SRCDIR)/include/onlineupdate/ \
 	$$(INCLUDE) \
 ))
 
