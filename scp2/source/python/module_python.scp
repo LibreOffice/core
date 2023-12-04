@@ -46,8 +46,7 @@ Module gid_Module_Pyuno
     Files = (auto_python_ALL,
              gid_File_Pyuno_Rdb,
              gid_File_Lib_Python_So,
-             gid_File_Lib_Python3_So,
-             gid_File_Share_Registry_Pyuno_Xcd);
+             gid_File_Lib_Python3_So);
     Unixlinks = (gid_Unixlink_Python_Headers,
                  gid_Unixlink_Python_LibreOfficePython,
                  gid_Unixlink_Python_Resources,

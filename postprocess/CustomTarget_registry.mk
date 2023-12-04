@@ -30,7 +30,6 @@ postprocess_XCDS := \
 	lingucomponent.xcd \
 	main.xcd \
 	math.xcd \
-	pyuno.xcd \
 	writer.xcd \
 	xsltfilter.xcd
 
@@ -337,8 +336,6 @@ postprocess_FILES_math := \
 	$(postprocess_MOD)/org/openoffice/Office/Common-math.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-math.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-math.xcu
-
-postprocess_DEPS_pyuno := main
 
 ifeq ($(ENABLE_REPORTBUILDER),TRUE)
 postprocess_XCDS += reportbuilder.xcd

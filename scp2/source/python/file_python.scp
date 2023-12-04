@@ -50,14 +50,5 @@ End
 
 #endif // SYSTEM_PYTHON
 
-// Scripting Framework Python configuration settings
-
-File gid_File_Share_Registry_Pyuno_Xcd
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Share_Registry;
-    Name = "pyuno.xcd";
-End
-
 // DISABLE_PYUNO
 #endif
