@@ -4,7 +4,7 @@
 
 // Microsoft Visual C++ generated resource script.
 //
-#ifdef TEST_UPDATER
+#if defined(TEST_UPDATER) || defined(DEP_UPDATER)
 #include "../resource.h"
 #define MANIFEST_PATH "../updater.exe.manifest"
 #define COMCTL32_MANIFEST_PATH "../updater.exe.comctl32.manifest"
@@ -53,13 +53,13 @@ IDI_DIALOG ICON ICON_PATH
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Embedded an identifier to uniquely identify this as a Mozilla updater.
+// Embedded an identifier to uniquely identiy this as a Mozilla updater.
 //
 
 STRINGTABLE
 {
-  IDS_UPDATER_IDENTITY, "libreoffice-updater.exe-7bab28a0-0599-4f37-9efe-f7f8b71f05e3"
-}
+  IDS_UPDATER_IDENTITY, "moz-updater.exe-4cdccec4-5ee0-4a06-9817-4cd899a9db49"
+} 
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
+GUIDELINES DESIGNINFO 
 BEGIN
     IDD_DIALOG, DIALOG
     BEGIN
@@ -101,18 +101,18 @@ END
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE
+2 TEXTINCLUDE 
 BEGIN
     "#include ""winresrc.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"

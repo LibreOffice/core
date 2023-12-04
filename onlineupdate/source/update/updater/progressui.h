@@ -8,21 +8,25 @@
 #define PROGRESSUI_H__
 
 #include "updatedefines.h"
-#include "types.hxx"
 
-#if defined(_WIN32)
-#define NS_main wmain
+#if defined(XP_WIN)
+typedef WCHAR NS_tchar;
+#  define NS_main wmain
 #else
-#define NS_main main
+typedef char NS_tchar;
+#  define NS_main main
 #endif
 
 // Called to perform any initialization of the widget toolkit
 int InitProgressUI(int* argc, NS_tchar*** argv);
 
-#if defined(_WIN32)
+#if defined(XP_WIN)
 // Called on the main thread at startup
 int ShowProgressUI(bool indeterminate = false, bool initUIStrings = true);
 int InitProgressUIStrings();
+#elif defined(XP_MACOSX)
+// Called on the main thread at startup
+int ShowProgressUI(bool indeterminate = false);
 #else
 // Called on the main thread at startup
 int ShowProgressUI();
@@ -33,4 +37,4 @@ void QuitProgressUI();
 // May be called from any thread: progress is a number between 0 and 100
 void UpdateProgressUI(float progress);
 
-#endif // PROGRESSUI_H__
+#endif  // PROGRESSUI_H__

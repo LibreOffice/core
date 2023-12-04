@@ -5,6 +5,8 @@
 #ifndef _PATHHASH_H_
 #define _PATHHASH_H_
 
+#include <windows.h>
+
 /**
  * Converts a file path into a unique registry location for cert storage
  *
@@ -12,7 +14,8 @@
  * @param  registryPath A buffer to write the registry path to, must
  *                      be of size in WCHARs MAX_PATH + 1
  * @return TRUE if successful
-*/
-BOOL CalculateRegistryPathFromFilePath(const LPCWSTR filePath, LPWSTR registryPath);
+ */
+BOOL CalculateRegistryPathFromFilePath(const LPCWSTR filePath,
+                                       LPWSTR registryPath);
 
 #endif

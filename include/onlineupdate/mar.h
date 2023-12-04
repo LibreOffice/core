@@ -7,8 +7,9 @@
 #ifndef MAR_H__
 #define MAR_H__
 
-#include "mozilla/Assertions.h"
+#include <assert.h>  // for C11 static_assert
 #include <stdint.h>
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,38 +20,46 @@ extern "C" {
  * It is also used at various places internally and will affect memory usage.
  * If you want to increase this value above 9 then you need to adjust parsing
  * code in tool/mar.c.
-*/
+ */
 #define MAX_SIGNATURES 8
-#ifdef __cplusplus
 static_assert(MAX_SIGNATURES <= 9, "too many signatures");
-#else
-MOZ_STATIC_ASSERT(MAX_SIGNATURES <= 9, "too many signatures");
-#endif
 
-struct ProductInformationBlock
-{
-    const char* MARChannelID;
-    const char* productVersion;
+struct ProductInformationBlock {
+  const char* MARChannelID;
+  const char* productVersion;
 };
 
 /**
  * The MAR item data structure.
  */
-typedef struct MarItem_
-{
-    struct MarItem_* next; /* private field */
-    uint32_t offset; /* offset into archive */
-    uint32_t length; /* length of data in bytes */
-    uint32_t flags; /* contains file mode bits */
-    char name[1]; /* file path */
+typedef struct MarItem_ {
+  struct MarItem_* next; /* private field */
+  uint32_t offset;       /* offset into archive */
+  uint32_t length;       /* length of data in bytes */
+  uint32_t flags;        /* contains file mode bits */
+  char name[1];          /* file path */
 } MarItem;
+
+/**
+ * File offset and length for tracking access of byte indexes
+ */
+typedef struct SeenIndex_ {
+  struct SeenIndex_* next; /* private field */
+  uint32_t offset;         /* offset into archive */
+  uint32_t length;         /* length of the data in bytes */
+} SeenIndex;
 
 #define TABLESIZE 256
 
-struct MarFile_
-{
-    FILE* fp;
-    MarItem* item_table[TABLESIZE];
+/**
+ * Mozilla ARchive (MAR) file data structure
+ */
+struct MarFile_ {
+  unsigned char* buffer;          /* file buffer containing the entire MAR */
+  size_t data_len;                /* byte count of the data in the buffer */
+  MarItem* item_table[TABLESIZE]; /* hash table of files in the archive */
+  SeenIndex* index_list;          /* file indexes processed */
+  int item_table_is_valid;        /* header and index validation flag */
 };
 
 typedef struct MarFile_ MarFile;
@@ -64,16 +73,29 @@ typedef struct MarFile_ MarFile;
  */
 typedef int (*MarItemCallback)(MarFile* mar, const MarItem* item, void* data);
 
+enum MarReadResult_ {
+  MAR_READ_SUCCESS,
+  MAR_IO_ERROR,
+  MAR_MEM_ERROR,
+  MAR_FILE_TOO_BIG_ERROR,
+};
+
+typedef enum MarReadResult_ MarReadResult;
+
 /**
  * Open a MAR file for reading.
  * @param path      Specifies the path to the MAR file to open.  This path must
  *                  be compatible with fopen.
+ * @param out_mar   Out-parameter through which the created MarFile structure is
+ *                  returned. Guaranteed to be a valid structure if
+ *                  MAR_READ_SUCCESS is returned. Otherwise NULL will be
+ *                  assigned.
  * @return          NULL if an error occurs.
  */
-MarFile* mar_open(const char* path);
+MarReadResult mar_open(const char* path, MarFile** out_mar);
 
-#ifdef _WIN32
-MarFile* mar_wopen(const wchar_t* path);
+#ifdef XP_WIN
+MarReadResult mar_wopen(const wchar_t* path, MarFile** out_mar);
 #endif
 
 /**
@@ -81,6 +103,49 @@ MarFile* mar_wopen(const wchar_t* path);
  * @param mar       The MarFile object to close.
  */
 void mar_close(MarFile* mar);
+
+/**
+ * Reads the specified amount of data from the buffer in MarFile that contains
+ * the entirety of the MAR file data.
+ * @param mar       The MAR file to read from.
+ * @param dest      The buffer to read into.
+ * @param position  The byte index to start reading from the MAR at.
+ *                  On success, position will be incremented by size.
+ * @param size      The number of bytes to read.
+ * @return          0  If the specified amount of data was read.
+ *                  -1 If the buffer MAR is not large enough to read the
+ *                     specified amount of data at the specified position.
+ */
+int mar_read_buffer(MarFile* mar, void* dest, size_t* position, size_t size);
+
+/**
+ * Reads the specified amount of data from the buffer in MarFile that contains
+ * the entirety of the MAR file data. If there isn't that much data remaining,
+ * reads as much as possible.
+ * @param mar       The MAR file to read from.
+ * @param dest      The buffer to read into.
+ * @param position  The byte index to start reading from the MAR at.
+ *                  This function will increment position by the number of bytes
+ *                  copied.
+ * @param size      The maximum number of bytes to read.
+ * @return          The number of bytes copied into dest.
+ */
+int mar_read_buffer_max(MarFile* mar, void* dest, size_t* position,
+                        size_t size);
+
+/**
+ * Increments position by distance. Checks that the resulting position is still
+ * within the bounds of the buffer. Much like fseek, this will allow position to
+ * be successfully placed just after the end of the buffer.
+ * @param mar       The MAR file to read from.
+ * @param position  The byte index to start reading from the MAR at.
+ *                  On success, position will be incremented by size.
+ * @param distance  The number of bytes to move forward by.
+ * @return          0  If position was successfully moved.
+ *                  -1 If moving position by distance would move it outside the
+ *                     bounds of the buffer.
+ */
+int mar_buffer_seek(MarFile* mar, size_t* position, size_t distance);
 
 /**
  * Find an item in the MAR file by name.
@@ -111,7 +176,8 @@ int mar_enum_items(MarFile* mar, MarItemCallback callback, void* data);
  * @return          The number of bytes written or a negative value if an
  *                  error occurs.
  */
-int mar_read(MarFile* mar, const MarItem* item, int offset, char* buf, int bufsize);
+int mar_read(MarFile* mar, const MarItem* item, int offset, uint8_t* buf,
+             int bufsize);
 
 /**
  * Create a MAR file from a set of files.
@@ -134,7 +200,7 @@ int mar_create(const char* dest, int numfiles, char** files,
  */
 int mar_extract(const char* path);
 
-#define MAR_MAX_CERT_SIZE (16 * 1024) // Way larger than necessary
+#define MAR_MAX_CERT_SIZE (16 * 1024)  // Way larger than necessary
 
 /* Read the entire file (not a MAR file) into a newly-allocated buffer.
  * This function does not write to stderr. Instead, the caller should
@@ -183,8 +249,9 @@ int mar_verify_signatures(MarFile* mar, const uint8_t* const* certData,
  *
  * @param infoBlock Out parameter for where to store the result to
  * @return 0 on success, -1 on failure
-*/
-int mar_read_product_info_block(MarFile* mar, struct ProductInformationBlock* infoBlock);
+ */
+int mar_read_product_info_block(MarFile* mar,
+                                struct ProductInformationBlock* infoBlock);
 
 #ifdef __cplusplus
 }

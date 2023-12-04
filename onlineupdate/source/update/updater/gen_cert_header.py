@@ -1,42 +1,27 @@
-#!/usr/bin/env python
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this file,
+# You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from __future__ import print_function
 import os
-import sys
-import binascii
 
-try:
-    from configparser import ConfigParser
-except ImportError:
-    from ConfigParser import SafeConfigParser as ConfigParser
 
-def file_byte_generator(filename):
+def file_byte_generator(filename, block_size=512):
     with open(filename, "rb") as f:
-        block = f.read()
-        return block
+        while True:
+            block = f.read(block_size)
+            if block:
+                for byte in block:
+                    yield byte
+            else:
+                break
 
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
 
-def create_header(array_name, in_filename):
-    if sys.version_info >= (3,0):
-        hexified = ["0x" + binascii.hexlify(bytes([inp])).decode('ascii') for inp in file_byte_generator(in_filename)]
-    else:
-        hexified = ["0x" + binascii.hexlify(inp).decode('ascii') for inp in file_byte_generator(in_filename)]
-    print("const uint8_t " + array_name + "[] = {")
-    print(", ".join(hexified))
-    print("};")
+def create_header(out_fh, in_filename):
+    assert out_fh.name.endswith(".h")
+    array_name = os.path.basename(out_fh.name)[:-2] + "Data"
+    hexified = ["0x%02x" % byte for byte in file_byte_generator(in_filename)]
+
+    print("const uint8_t " + array_name + "[] = {", file=out_fh)
+    print(", ".join(hexified), file=out_fh)
+    print("};", file=out_fh)
     return 0
-
-if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        eprint('ERROR: usage: gen_cert_header.py array_name update_config_file')
-        sys.exit(1)
-
-    if not os.path.exists(sys.argv[2]):
-        eprint('The config file %s does not exist'%(sys.argv[2]))
-        sys.exit(1)
-
-    config = ConfigParser()
-    config.read(sys.argv[2])
-    sys.exit(create_header(sys.argv[1], config.get('Updater', 'certificate-der')))
