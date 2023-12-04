@@ -1098,6 +1098,9 @@ MetaBmpExScalePartAction::MetaBmpExScalePartAction( const Point& rDstPt, const S
 
 void MetaBmpExScalePartAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maDstPt, maDstSz))))
+        return;
+
     pOut->DrawBitmapEx( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmpEx );
 }
 
