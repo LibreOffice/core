@@ -38,6 +38,11 @@
 #include <unotools/streamwrap.hxx>
 #include <rtl/math.hxx>
 #include <o3tl/string_view.hxx>
+#include <IDocumentDeviceAccess.hxx>
+#include <printdata.hxx>
+#include <unotxdoc.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -4849,6 +4854,48 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf156528)
     // - Delta   : 1
     CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(257.0, o3tl::Length::mm, o3tl::Length::pt),
                                  bounds.getHeight(), 1);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf113866)
+{
+    loadFromURL(u"tdf113866.odt");
+
+    // Set -- Printer Settings->Options->Print text in Black -- to true
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    IDocumentDeviceAccess& rDocAccess = pDoc->getIDocumentDeviceAccess();
+    SwPrintData aDocPrintData = rDocAccess.getPrintData();
+    aDocPrintData.SetPrintBlackFont(true);
+    rDocAccess.setPrintData(aDocPrintData);
+
+    // Export to pdf
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    // Non-NULL pPdfDocument means pdfium is available.
+    if (pPdfDocument != nullptr)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+        CPPUNIT_ASSERT(pPdfPage);
+
+        int nPageObjectCount = pPdfPage->getObjectCount();
+        for (int i = 0; i < nPageObjectCount; ++i)
+        {
+            std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+
+            if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+                // Without the bug fix in place the test will fail with
+                // - Expected: rgba[008000ff]
+                // - Actual  : rgba[000000ff]
+                // With the bug fixed, the green text in the test doc will stay green,
+                // when exported to pdf, while Print Text in Black is true
+                CPPUNIT_ASSERT_EQUAL(COL_GREEN, pPageObject->getFillColor());
+        }
+    }
 }
 
 } // end anonymous namespace

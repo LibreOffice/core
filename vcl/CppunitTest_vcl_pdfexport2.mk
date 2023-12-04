@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_pdfexport2, \
 	cppuhelper \
 	sal \
 	subsequenttest \
+	sw \
 	test \
 	unotest \
 	utl \
@@ -32,7 +33,16 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_pdfexport2, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_pdfexport2, \
 	boost_headers \
+	libxml2 \
 	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
+))
+
+$(eval $(call gb_CppunitTest_set_include,vcl_pdfexport2,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
+    -I$(SRCDIR)/sw/qa/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_pdfexport2))
