@@ -9,6 +9,7 @@
 
 #include <test/unoapixml_test.hxx>
 #include <test/helper/transferable.hxx>
+#include <cppunit/tools/StringHelper.h>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -63,6 +64,32 @@ static std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
 {
     os << static_cast<sal_Int32>(id); return os;
 }
+
+namespace {
+// for passing data to testInvalidateOnTextEditWithDifferentZoomLevels
+struct ColRowZoom
+{
+    SCCOL col;
+    SCROW row;
+    int zoom;
+};
+}
+
+CPPUNIT_NS_BEGIN
+namespace StringHelper
+{
+// used by CPPUNIT_TEST_PARAMETERIZED for testInvalidateOnTextEditWithDifferentZoomLevels
+template<>
+inline std::string toString(const ColRowZoom& item)
+{
+    std::ostringstream ss;
+    ss << "zoom level: " << item.zoom << ", "
+          "col: " << item.col << ", "
+          "row: " << item.row;
+    return ss.str();
+}
+}
+CPPUNIT_NS_END
 
 class ScTiledRenderingTest : public UnoApiXmlTest
 {
@@ -3142,6 +3169,94 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     // Switch back to first view and make sure it's the same
     SfxLokHelper::setView(nFirstViewId);
     CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
+}
+
+/*
+ * testInvalidateOnTextEditWithDifferentZoomLevels
+ * steps:
+ * set view 1 zoom to the passed zoom level
+ * in view 1 type a char at the passed cell address
+ * store invalidation rectangle
+ * exit from in place editing (press esc)
+ * create view 2 (keep 100% zoom)
+ * go to the same cell address used in view 1
+ * type a char into the cell
+ * get invalidation rectangle for view 1
+ * check if the invalidation rectangle is equal to the one stored previously
+*/
+class testInvalidateOnTextEditWithDifferentZoomLevels : public ScTiledRenderingTest
+{
+public:
+    void TestBody(const ColRowZoom& rData);
+    CPPUNIT_TEST_SUITE(testInvalidateOnTextEditWithDifferentZoomLevels);
+    CPPUNIT_TEST_PARAMETERIZED(TestBody,
+                               std::initializer_list<ColRowZoom>
+                               {
+                                   // zoom level 120%
+                                   {0, 999, 1}, {99, 0, 1},
+                                   // zoom level 40%
+                                   {0, 999, -5}, {99, 0, -5}
+                               });
+    CPPUNIT_TEST_SUITE_END();
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(testInvalidateOnTextEditWithDifferentZoomLevels);
+
+void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom& rData)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    OUString sZoomUnoCmd = ".uno:ZoomPlus";
+    int nZoomLevel = rData.zoom;
+    if (nZoomLevel < 0)
+    {
+        nZoomLevel = -nZoomLevel;
+        sZoomUnoCmd = ".uno:ZoomMinus";
+    }
+    // view #1
+    ViewCallback aView1;
+    // set zoom level
+    for (int i = 0; i < nZoomLevel; ++i)
+        dispatchCommand(mxComponent, sZoomUnoCmd, {});
+    Scheduler::ProcessEventsToIdle();
+    auto* pTabViewShell1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pTabViewShell1);
+    // enable in place editing in view 1
+    auto& rInvalidations = aView1.m_aInvalidations;
+    pTabViewShell1->SetCursor(rData.col, rData.row);
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_bInvalidateTiles = false;
+    rInvalidations.clear();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT(!rInvalidations.empty());
+    tools::Rectangle aInvRect1 = rInvalidations[0];
+    // end editing
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    // view #2
+    SfxLokHelper::createView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+    Scheduler::ProcessEventsToIdle();
+    auto* pTabViewShell2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pTabViewShell2);
+    pTabViewShell2->SetCursor(rData.col, rData.row);
+    Scheduler::ProcessEventsToIdle();
+    // text edit in view #2
+    aView1.m_bInvalidateTiles = false;
+    rInvalidations.clear();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT(!rInvalidations.empty());
+    tools::Rectangle aInvRect2 = rInvalidations[0];
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalidation rectangle is wrong.", aInvRect1, aInvRect2);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
