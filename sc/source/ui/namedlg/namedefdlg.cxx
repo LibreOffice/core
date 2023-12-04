@@ -186,11 +186,15 @@ void ScNameDefDlg::AddPushed()
     ScRangeName* pRangeName = nullptr;
     if(aScope == maGlobalNameStr)
     {
-        pRangeName = maRangeMap.find(STR_GLOBAL_RANGE_NAME)->second;
+        const auto iter = maRangeMap.find(STR_GLOBAL_RANGE_NAME);
+        assert(iter != maRangeMap.end());
+        pRangeName = iter->second;
     }
     else
     {
-        pRangeName = maRangeMap.find(aScope)->second;
+        const auto iter = maRangeMap.find(aScope);
+        assert(iter != maRangeMap.end());
+        pRangeName = iter->second;
     }
     if (!pRangeName)
         return;

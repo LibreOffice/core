@@ -91,8 +91,9 @@ OUString const & lclGetGrabBagName(sal_uInt32 aId)
         { OOX_TOKEN(w14, stylisticSets), "CharStylisticSetsTextEffect" },
         { OOX_TOKEN(w14, cntxtAlts)    , "CharCntxtAltsTextEffect" },
     };
-
-    return aGrabBagNameMap.find(aId)->second;
+    const auto iter = aGrabBagNameMap.find(aId);
+    assert(iter != aGrabBagNameMap.end());
+    return iter->second;
 }
 
 }

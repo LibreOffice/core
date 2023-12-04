@@ -68,6 +68,7 @@ bool IncludesCollection::exists(std::string filePath) {
         add_to_collection(dirPath);
         mapIter = allIncludes.find(dirPath);
     }
+    assert(mapIter != allIncludes.end());
     DirContent dirContent = (*mapIter).second;
     DirContent::iterator dirIter = dirContent.find(fileName);
     return dirIter != dirContent.end();

@@ -368,7 +368,9 @@ void SolverSettings::WriteParamValue(SolverParameter eParam, OUString sValue, bo
     if (bQuoted)
         ScGlobal::AddQuotes(sValue, '"');
 
-    OUString sRange = m_mNamedRanges.find(eParam)->second;
+    const auto iter = m_mNamedRanges.find(eParam);
+    assert(iter != m_mNamedRanges.end());
+    OUString sRange = iter->second;
     ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sValue);
     m_pRangeName->insert(pNewEntry);
 }

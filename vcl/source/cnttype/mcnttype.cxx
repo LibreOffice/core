@@ -63,7 +63,9 @@ OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName )
     if ( !hasParameter( lower ) )
         throw css::container::NoSuchElementException( );
 
-    return m_ParameterMap.find( lower )->second;
+    const auto iter = m_ParameterMap.find(lower);
+    assert(iter != m_ParameterMap.end());
+    return iter->second;
 }
 
 void CMimeContentType::init( const OUString& aCntType )

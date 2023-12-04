@@ -2775,7 +2775,7 @@ void SwTabFramePainter::FindStylesForLine( Point& rStartPoint,
     if ( bHori )
     {
         aMapIter = maVertLines.find( rEndPoint.X() );
-        OSL_ENSURE( aMapIter != maVertLines.end(), "FindStylesForLine: Error" );
+        assert(aMapIter != maVertLines.end() && "FindStylesForLine: Error");
         const SwLineEntrySet& rVertSet2 = (*aMapIter).second;
 
         for ( const SwLineEntry& rEntry : rVertSet2 )

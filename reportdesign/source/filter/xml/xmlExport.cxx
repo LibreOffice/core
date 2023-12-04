@@ -755,6 +755,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
     TGrid::const_iterator aRowEnd = aFind->second.end();
 
     TGridStyleMap::const_iterator aRowFind = m_aRowStyleNames.find(_xSection);
+    assert(aRowFind != m_aRowStyleNames.end());
     auto aHeightIter = aRowFind->second.cbegin();
     OSL_ENSURE(aRowFind->second.size() == aFind->second.size(),"Different count for rows");
 

@@ -1750,7 +1750,11 @@ bool SvxAutoCorrect::AddWordStartException( const OUString& rNew,
         if (iter != m_aLangTable.end())
             pLists = &iter->second;
         else if(CreateLanguageFile(aLangTagUndetermined))
-            pLists = &m_aLangTable.find(aLangTagUndetermined)->second;
+        {
+            iter = m_aLangTable.find(aLangTagUndetermined);
+            assert(iter != m_aLangTable.end());
+            pLists = &iter->second;
+        }
     }
     OSL_ENSURE(pLists, "No auto correction file!");
     return pLists && pLists->AddToWordStartExceptList(rNew);
@@ -2030,7 +2034,9 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
             CreateLanguageFile(aLanguageTag, false))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists& rList = m_aLangTable.find(aLanguageTag)->second;
+        const auto iter = m_aLangTable.find(aLanguageTag);
+        assert(iter != m_aLangTable.end());
+        SvxAutoCorrectLanguageLists& rList = iter->second;
         pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
         if( pRet )
         {
