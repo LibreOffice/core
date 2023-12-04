@@ -34,6 +34,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/msgpool.hxx>
+#include <tools/json_writer.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -1065,6 +1066,22 @@ VclPtr<vcl::Window> SfxLokHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
     if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pViewShell).GetWidgetWindow())
         return pWindow;
     return {};
+}
+
+void SfxLokHelper::sendNetworkAccessError()
+{
+    tools::JsonWriter aWriter;
+    aWriter.put("code", static_cast<sal_uInt32>(
+        ErrCode(ErrCodeArea::Inet, sal_uInt16(ErrCodeClass::Access))));
+    aWriter.put("kind", "network");
+    aWriter.put("cmd", "paste");
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell)
+    {
+        pViewShell->libreOfficeKitViewCallback(
+            LOK_CALLBACK_ERROR, aWriter.extractAsStdString().c_str());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
