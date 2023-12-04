@@ -507,15 +507,6 @@ void DeInitVCL()
     // as this processes all pending events in debug builds.
     ImplGetSystemDependentDataManager().flushAll();
 
-    Scheduler::ImplDeInitScheduler();
-
-    pSVData->mpWinData->maMsgBoxImgList.clear();
-    pSVData->maCtrlData.maCheckImgList.clear();
-    pSVData->maCtrlData.maRadioImgList.clear();
-    pSVData->maCtrlData.moDisclosurePlus.reset();
-    pSVData->maCtrlData.moDisclosureMinus.reset();
-    pSVData->mpDefaultWin.disposeAndClear();
-
 #if defined _WIN32
     // See GetSystemClipboard (vcl/source/treelist/transfer2.cxx):
     if (auto const comp = css::uno::Reference<css::lang::XComponent>(
@@ -526,6 +517,15 @@ void DeInitVCL()
     }
     pSVData->m_xSystemClipboard.clear();
 #endif
+
+    Scheduler::ImplDeInitScheduler();
+
+    pSVData->mpWinData->maMsgBoxImgList.clear();
+    pSVData->maCtrlData.maCheckImgList.clear();
+    pSVData->maCtrlData.maRadioImgList.clear();
+    pSVData->maCtrlData.moDisclosurePlus.reset();
+    pSVData->maCtrlData.moDisclosureMinus.reset();
+    pSVData->mpDefaultWin.disposeAndClear();
 
 #ifndef NDEBUG
     DbgGUIDeInitSolarMutexCheck();

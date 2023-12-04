@@ -82,6 +82,18 @@ CWinClipboard::~CWinClipboard()
     unregisterClipboardViewer();
 }
 
+void CWinClipboard::disposing(std::unique_lock<std::mutex>& mutex)
+{
+    {
+        osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
+        s_pCWinClipbImpl = nullptr;
+    }
+
+    unregisterClipboardViewer();
+
+    WeakComponentImplHelper::disposing(mutex);
+}
+
 // XClipboard
 
 // to avoid unnecessary traffic we check first if there is a clipboard

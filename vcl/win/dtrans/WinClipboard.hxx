@@ -105,6 +105,8 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     IDataObjectPtr getIDataObject();
+
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
