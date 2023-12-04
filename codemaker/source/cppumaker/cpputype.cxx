@@ -2279,8 +2279,10 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out)
     for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
              entity_->getDirectMembers().begin());
          i != entity_->getDirectMembers().end();) {
+        const auto iter = types.find(i->type);
+        assert(iter != types.end());
         out << indent() << "{ { " << getTypeClass(i->type, true)
-            << ", the_tname" << types.find(i->type)->second
+            << ", the_tname" << iter->second
             << ".pData, the_name" << n++ << ".pData }, false }";
         ++i;
         out << (i == entity_->getDirectMembers().end() ? " };" : ",") << "\n";
@@ -2851,8 +2853,10 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
             sal_uInt32 k = parameters.find(i->type)->second;
             out << "the_pclass" << k << ", the_pname" << k << ".pData";
         } else {
+            const auto iter = types.find(i->type);
+            assert(iter != types.end());
             out << getTypeClass(i->type, true) << ", the_tname"
-                << types.find(i->type)->second << ".pData";
+                << iter->second << ".pData";
         }
         out << ", the_name" << n++ << ".pData }, "
             << (i->parameterized ? "true" : "false") << " }";

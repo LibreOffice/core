@@ -70,8 +70,9 @@ OUString const & lclGetNameForElementId(sal_uInt32 aId)
         { OOX_TOKEN(w14, stylisticSets), "stylisticSets" },
         { OOX_TOKEN(w14, cntxtAlts)    , "cntxtAlts" },
     };
-
-    return aIdMap.find(aId)->second;
+    const auto iter = aIdMap.find(aId);
+    assert(iter != aIdMap.end());
+    return iter->second;
 }
 
 OUString const & lclGetGrabBagName(sal_uInt32 aId)

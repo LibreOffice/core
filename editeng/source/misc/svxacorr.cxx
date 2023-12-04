@@ -1687,7 +1687,9 @@ SvxAutoCorrectLanguageLists& SvxAutoCorrect::GetLanguageList_(
     LanguageTag aLanguageTag( eLang);
     if (m_aLangTable.find(aLanguageTag) == m_aLangTable.end())
         (void)CreateLanguageFile(aLanguageTag);
-    return m_aLangTable.find(aLanguageTag)->second;
+    const auto iter = m_aLangTable.find(aLanguageTag);
+    assert(iter != m_aLangTable.end());
+    return iter->second;
 }
 
 void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
@@ -1912,14 +1914,16 @@ void SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntr
                                               LanguageType eLang )
 {
     LanguageTag aLanguageTag( eLang);
-    auto const iter = m_aLangTable.find(aLanguageTag);
+    auto iter = m_aLangTable.find(aLanguageTag);
     if (iter != m_aLangTable.end())
     {
         iter->second.MakeCombinedChanges( aNewEntries, aDeleteEntries );
     }
     else if(CreateLanguageFile( aLanguageTag ))
     {
-        m_aLangTable.find( aLanguageTag )->second.MakeCombinedChanges( aNewEntries, aDeleteEntries );
+        iter = m_aLangTable.find(aLanguageTag);
+        assert(iter != m_aLangTable.end());
+        iter->second.MakeCombinedChanges( aNewEntries, aDeleteEntries );
     }
 }
 

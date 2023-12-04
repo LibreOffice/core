@@ -1167,7 +1167,9 @@ void UnoControlModel::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGua
         rValue = *pProp;
     else if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
     {
-        pProp = &( maData.find( BASEPROPERTY_FONTDESCRIPTOR )->second );
+        const auto iter = maData.find( BASEPROPERTY_FONTDESCRIPTOR );
+        assert(iter != maData.end());
+        pProp = &(iter->second);
         css::awt::FontDescriptor aFD;
         (*pProp) >>= aFD;
         switch ( nPropId )

@@ -497,6 +497,7 @@ const GraphicsContext& PDFIProcessor::getGraphicsContext( sal_Int32 nGCId ) cons
     auto it = m_aIdToGC.find( nGCId );
     if( it == m_aIdToGC.end() )
         it = m_aIdToGC.find( 0 );
+    assert(it != m_aIdToGC.end());
     return it->second;
 }
 

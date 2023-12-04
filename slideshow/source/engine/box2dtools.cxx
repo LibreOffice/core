@@ -683,7 +683,10 @@ Box2DBodySharedPtr makeBodyDynamic(const Box2DBodySharedPtr& pBox2DBody)
 Box2DBodySharedPtr box2DWorld::makeShapeStatic(const slideshow::internal::ShapeSharedPtr& pShape)
 {
     assert(mpBox2DWorld);
-    Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(pShape->getXShape())->second;
+    assert(pShape && pShape->getXShape());
+    const auto iter = mpXShapeToBodyMap.find(pShape->getXShape());
+    assert(iter != mpXShapeToBodyMap.end());
+    Box2DBodySharedPtr pBox2DBody = iter->second;
     return makeBodyStatic(pBox2DBody);
 }
 

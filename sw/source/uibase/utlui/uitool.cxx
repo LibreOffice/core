@@ -285,12 +285,15 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     if (const SfxGrabBagItem* pGrabBag = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
     {
         bool bValue;
-        if (pGrabBag->GetGrabBag().find("BackgroundFullSize")->second >>= bValue)
+        const auto pGrabBagInner = pGrabBag->GetGrabBag();
+        const auto iter = pGrabBagInner.find("BackgroundFullSize");
+        assert(iter != pGrabBagInner.end());
+        if (iter->second >>= bValue)
         {
             rMaster.SetFormatAttr(SfxBoolItem(RES_BACKGROUND_FULL_SIZE, bValue));
         }
-        auto it = pGrabBag->GetGrabBag().find("RtlGutter");
-        if (it != pGrabBag->GetGrabBag().end() && (it->second >>= bValue))
+        auto it = pGrabBagInner.find("RtlGutter");
+        if (it != pGrabBagInner.end() && (it->second >>= bValue))
         {
             rMaster.SetFormatAttr(SfxBoolItem(RES_RTL_GUTTER, bValue));
         }

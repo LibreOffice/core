@@ -912,7 +912,9 @@ void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTa
     if(m_bDeleted)
     {
         sal_Int32 nBookmark = ::comphelper::getINT32((*_rDeleteRow)[0].getAny());
-        if(m_aKeyIter == m_aKeyMap.find(nBookmark) && m_aKeyIter != m_aKeyMap.end())
+        const auto iter = m_aKeyMap.find(nBookmark);
+        assert(iter != m_aKeyMap.end());
+        if(m_aKeyIter == iter && m_aKeyIter != m_aKeyMap.end())
             ++m_aKeyIter;
         m_aKeyMap.erase(nBookmark);
         m_bDeleted = true;

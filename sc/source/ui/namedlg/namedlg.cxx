@@ -280,9 +280,17 @@ bool ScNameDlg::IsFormulaValid()
 ScRangeName* ScNameDlg::GetRangeName(const OUString& rScope)
 {
     if (rScope == maGlobalNameStr)
-        return &m_RangeMap.find(STR_GLOBAL_RANGE_NAME)->second;
+    {
+        const auto iter = m_RangeMap.find(STR_GLOBAL_RANGE_NAME);
+        assert(iter != m_RangeMap.end());
+        return &iter->second;
+    }
     else
-        return &m_RangeMap.find(rScope)->second;
+    {
+        const auto iter = m_RangeMap.find(rScope);
+        assert(iter != m_RangeMap.end());
+        return &iter->second;
+    }
 }
 
 void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
