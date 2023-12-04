@@ -174,6 +174,8 @@ private:
     bool                    bInPrepareClose;
     bool                    bInDispose;
 
+    bool                    bMoveKeepEdit;
+
     sal_uInt16              nCurRefDlgId;
 
     std::unique_ptr<SfxBroadcaster> pAccessibilityBroadcaster;
@@ -437,6 +439,9 @@ public:
     void ResetDragObject();
     void SetDragLink(const OUString& rDoc, const OUString& rTab, const OUString& rArea);
     void SetDragJump(ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText);
+
+    void SetMoveKeepEdit(bool value) { bMoveKeepEdit = value; };
+    bool GetMoveKeepEdit() { return bMoveKeepEdit; };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
