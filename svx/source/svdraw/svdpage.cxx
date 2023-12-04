@@ -1099,7 +1099,7 @@ void SdrPageGridFrameList::Clear()
     for (sal_uInt16 i=0; i<nCount; i++) {
         delete GetObject(i);
     }
-    aList.clear();
+    m_aList.clear();
 }
 
 

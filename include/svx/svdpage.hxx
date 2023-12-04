@@ -302,18 +302,18 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrPageGridFrameList final
 {
-    std::vector<SdrPageGridFrame*> aList;
+    std::vector<SdrPageGridFrame*> m_aList;
 
     SdrPageGridFrameList(const SdrPageGridFrameList& rSrcList) = delete;
     void           operator=(const SdrPageGridFrameList& rSrcList) = delete;
-    SdrPageGridFrame* GetObject(sal_uInt16 i) const { return aList[i]; }
+    SdrPageGridFrame* GetObject(sal_uInt16 i) const { return m_aList[i]; }
 
 public:
     SdrPageGridFrameList()                                    {}
     ~SdrPageGridFrameList()                                            { Clear(); }
     void           Clear();
-    sal_uInt16     GetCount() const                                    { return sal_uInt16(aList.size()); }
-    void           Insert(const SdrPageGridFrame& rGF) { aList.push_back(new SdrPageGridFrame(rGF)); }
+    sal_uInt16     GetCount() const                                    { return sal_uInt16(m_aList.size()); }
+    void           Insert(const SdrPageGridFrame& rGF) { m_aList.push_back(new SdrPageGridFrame(rGF)); }
     SdrPageGridFrame&       operator[](sal_uInt16 nPos)                    { return *GetObject(nPos); }
     const SdrPageGridFrame& operator[](sal_uInt16 nPos) const              { return *GetObject(nPos); }
 };
