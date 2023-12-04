@@ -186,10 +186,6 @@ gb_CXX03FLAGS := -std=gnu++98 -Wno-long-long \
     -Wno-variadic-macros -Wno-deprecated-declarations
 endif
 
-# On Windows MSVC only supports C90 so force gnu89 (especially in clang) to
-# to catch potential gnu89/C90 incompatibilities locally.
-gb_CFLAGS_COMMON += -std=gnu89
-
 ifeq ($(ENABLE_LTO),TRUE)
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_LTOFLAGS := -flto=thin
