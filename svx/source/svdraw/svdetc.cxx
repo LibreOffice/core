@@ -278,7 +278,7 @@ std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
             if (nWidth <= 0 || nHeight <= 0)
                 return {};
 
-            Bitmap::ScopedReadAccess pAccess(aBitmap);
+            BitmapScopedReadAccess pAccess(aBitmap);
 
             if (pAccess)
             {

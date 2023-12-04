@@ -38,7 +38,7 @@
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapMaskToAlphaFilter.hxx>
 
 #include <o3tl/any.hxx>
@@ -578,7 +578,7 @@ sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
     }
     else
     {
-        AlphaMask::ScopedReadAccess pRead(const_cast<AlphaMask&>(maAlphaMask));
+        BitmapScopedReadAccess pRead(maAlphaMask);
         if(pRead)
         {
             const BitmapColor aBitmapColor(pRead->GetPixel(nY, nX));
@@ -591,7 +591,7 @@ sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
 
 Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
 {
-    Bitmap::ScopedReadAccess pReadAccess( const_cast<Bitmap&>(maBitmap) );
+    BitmapScopedReadAccess pReadAccess( maBitmap );
     assert(pReadAccess);
 
     BitmapColor aColor = pReadAccess->GetColor(nY, nX);
@@ -599,7 +599,7 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
     if (IsAlpha())
     {
         AlphaMask aAlpha = GetAlphaMask();
-        AlphaMask::ScopedReadAccess pAlphaReadAccess(aAlpha);
+        BitmapScopedReadAccess pAlphaReadAccess(aAlpha);
         aColor.SetAlpha(pAlphaReadAccess->GetPixel(nY, nX).GetIndex());
     }
     else if (maBitmap.getPixelFormat() != vcl::PixelFormat::N32_BPP)
@@ -664,7 +664,7 @@ namespace
 
         if(xWrite)
         {
-            Bitmap::ScopedReadAccess xRead(const_cast< Bitmap& >(rSource));
+            BitmapScopedReadAccess xRead(rSource);
 
             if (xRead)
             {
@@ -873,7 +873,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                     // For e.g. 8bit Bitmaps, the nearest color to the given erase color is
                     // determined and used -> this may be different from what is wanted here.
                     // Better create a new bitmap with the needed color explicitly.
-                    Bitmap::ScopedReadAccess xReadAccess(aChangedBitmap);
+                    BitmapScopedReadAccess xReadAccess(aChangedBitmap);
                     OSL_ENSURE(xReadAccess, "Got no Bitmap ReadAccess ?!?");
 
                     if(xReadAccess)
@@ -1062,7 +1062,7 @@ BitmapEx createBlendFrame(
         aContent.Erase(COL_BLACK);
 
         BitmapScopedWriteAccess pContent(aContent);
-        AlphaScopedWriteAccess pAlpha(aAlpha);
+        BitmapScopedWriteAccess pAlpha(aAlpha);
 
         if(pContent && pAlpha)
         {
@@ -1191,7 +1191,7 @@ static Bitmap DetectEdges( const Bitmap& rBmp )
 
     ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
     pVirDev->SetOutputSizePixel(aSize);
-    Bitmap::ScopedReadAccess pReadAcc(aWorkBmp);
+    BitmapScopedReadAccess pReadAcc(aWorkBmp);
     if( !pReadAcc )
         return rBmp;
 
@@ -1282,7 +1282,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
         else
             aWorkBmp = maBitmap;
 
-        BitmapReadAccess* pAcc = aWorkBmp.AcquireReadAccess();
+        BitmapScopedReadAccess pAcc(aWorkBmp);
 
         const tools::Long nWidth = pAcc ? pAcc->Width() : 0;
         const tools::Long nHeight = pAcc ? pAcc->Height() : 0;
@@ -1351,8 +1351,6 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
             if( ( fFactorX != 0. ) && ( fFactorY != 0. ) )
                 aRetPoly.Scale( fFactorX, fFactorY );
         }
-
-        Bitmap::ReleaseAccess(pAcc);
     }
 
     return aRetPoly;
@@ -1361,8 +1359,8 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
 void BitmapEx::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
 {
     AlphaMask aAlphaMask(GetAlphaMask());
-    AlphaMask::ScopedWriteAccess pAlphaWriteAccess(aAlphaMask);
-    Bitmap::ScopedReadAccess pReadAccess(maBitmap);
+    BitmapScopedWriteAccess pAlphaWriteAccess(aAlphaMask);
+    BitmapScopedReadAccess pReadAccess(maBitmap);
     assert( pReadAccess.get() && pAlphaWriteAccess.get() );
     if ( !(pReadAccess.get() && pAlphaWriteAccess.get()) )
         return;
@@ -1392,7 +1390,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
     else
     {
         aAlpha = GetAlphaMask();
-        AlphaMask::ScopedWriteAccess pA(aAlpha);
+        BitmapScopedWriteAccess pA(aAlpha);
         assert(pA);
 
         if( !pA )
@@ -1453,7 +1451,7 @@ void  BitmapEx::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
         sal_uInt32& rnRedMask, sal_uInt32& rnGreenMask, sal_uInt32& rnBlueMask, sal_uInt32& rnAlphaMask, sal_uInt32& rnTransparencyIndex,
         sal_uInt32& rnWidth, sal_uInt32& rnHeight, sal_uInt8& rnBitCount)
 {
-    Bitmap::ScopedReadAccess pReadAccess( maBitmap );
+    BitmapScopedReadAccess pReadAccess( maBitmap );
     assert( pReadAccess );
 
     if( pReadAccess->HasPalette() )

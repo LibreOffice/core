@@ -14,8 +14,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
 #include <vcl/BitmapSeparableUnsharpenFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) const
 {
@@ -35,8 +34,8 @@ BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) cons
 
     Bitmap aResultBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
 
-    Bitmap::ScopedReadAccess pReadAccBlur(aBlur);
-    Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+    BitmapScopedReadAccess pReadAccBlur(aBlur);
+    BitmapScopedReadAccess pReadAcc(aBitmap);
     BitmapScopedWriteAccess pWriteAcc(aResultBitmap);
 
     BitmapColor aColor, aColorBlur;

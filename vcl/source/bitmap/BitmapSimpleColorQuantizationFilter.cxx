@@ -11,8 +11,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/Octree.hxx>
 
 BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
@@ -23,7 +22,7 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
         return BitmapEx(aBitmap);
 
     Bitmap aNewBmp;
-    Bitmap::ScopedReadAccess pRAcc(aBitmap);
+    BitmapScopedReadAccess pRAcc(aBitmap);
     if (!pRAcc)
         return BitmapEx();
 

@@ -13,7 +13,7 @@
 
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 
@@ -47,7 +47,7 @@ void BitmapExTest::testGetPixelColor24_8()
     }
     AlphaMask aMask(Size(3, 3));
     {
-        AlphaScopedWriteAccess pWriteAccess(aMask);
+        BitmapScopedWriteAccess pWriteAccess(aMask);
         pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0xAA, 0xAA, 0xAA));
     }
 
@@ -95,7 +95,7 @@ void BitmapExTest::testTransformBitmapEx()
     aMatrix.rotate(M_PI / 2);
     BitmapEx aTransformed = aBitmapEx.TransformBitmapEx(16, 16, aMatrix);
     aBitmap = aTransformed.GetBitmap();
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     for (int i = 0; i < 16; ++i)
     {
         for (int j = 0; j < 16; ++j)
@@ -126,49 +126,49 @@ void BitmapExTest::testAlphaBlendWith()
     bitmap.Erase(64);
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 112),
-                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     alpha.Erase(12);
     bitmap.Erase(64);
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 73),
-                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     alpha.Erase(12);
     bitmap.Erase(12);
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 24),
-                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     alpha.Erase(127);
     bitmap.Erase(13);
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 134),
-                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     alpha.Erase(255);
     bitmap.Erase(255);
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
-                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     alpha.Erase(0);
     bitmap.Erase(255);
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
-                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     alpha.Erase(255);
     bitmap.Erase(0);
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
-                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     alpha.Erase(0);
     bitmap.Erase(0);
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 0),
-                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 }
 
 void BitmapExTest::testCreateMask()
@@ -181,7 +181,7 @@ void BitmapExTest::testCreateMask()
             pWriteAccess->SetPixel(i, i, COL_RED);
     }
     aBitmap = aBitmap.CreateMask(COL_RED, 1);
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     // the output is a greyscale palette bitmap
     CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 0));
     CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(0, 1));
@@ -205,7 +205,7 @@ void BitmapExTest::testCombineMaskOr()
     }
     AlphaMask aAlphaBitmap(Size(3, 3));
     {
-        AlphaMask::ScopedWriteAccess pWriteAccess(aAlphaBitmap);
+        BitmapScopedWriteAccess pWriteAccess(aAlphaBitmap);
         pWriteAccess->Erase(Color(0xff, 0xff, 0xff));
         for (int i = 1; i < 3; ++i)
         {
@@ -217,7 +217,7 @@ void BitmapExTest::testCombineMaskOr()
 
     {
         AlphaMask aMask = aBitmap.CreateAlphaMask(COL_RED, 1);
-        AlphaMask::ScopedReadAccess pAccess(aMask);
+        BitmapScopedReadAccess pAccess(aMask);
         // the output is a greyscale palette bitmap
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 0));
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 1));

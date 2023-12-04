@@ -40,7 +40,7 @@
 #include <bitmap/BitmapScaleConvolutionFilter.hxx>
 #include <bitmap/BitmapFastScaleFilter.hxx>
 #include <bitmap/BitmapInterpolateScaleFilter.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 
@@ -275,7 +275,7 @@ bool Bitmap::HasGreyPaletteAny() const
 {
     bool bRet = false;
 
-    ScopedInfoAccess pIAcc(const_cast<Bitmap&>(*this));
+    BitmapScopedInfoAccess pIAcc(*this);
 
     if( pIAcc )
     {
@@ -288,7 +288,7 @@ bool Bitmap::HasGreyPaletteAny() const
 bool Bitmap::HasGreyPalette8Bit() const
 {
     bool            bRet = false;
-    ScopedInfoAccess pIAcc(const_cast<Bitmap&>(*this));
+    BitmapScopedInfoAccess pIAcc(*this);
 
     if( pIAcc )
     {
@@ -360,47 +360,6 @@ void Bitmap::ImplSetSalBitmap(const std::shared_ptr<SalBitmap>& xImpBmp)
     mxSalBmp = xImpBmp;
 }
 
-BitmapInfoAccess* Bitmap::AcquireInfoAccess()
-{
-    std::unique_ptr<BitmapInfoAccess> pInfoAccess(new BitmapInfoAccess( *this ));
-
-    if( !*pInfoAccess )
-    {
-        return nullptr;
-    }
-
-    return pInfoAccess.release();
-}
-
-BitmapReadAccess* Bitmap::AcquireReadAccess()
-{
-    std::unique_ptr<BitmapReadAccess> pReadAccess(new BitmapReadAccess( *this ));
-
-    if( !*pReadAccess )
-    {
-        return nullptr;
-    }
-
-    return pReadAccess.release();
-}
-
-BitmapWriteAccess* Bitmap::AcquireWriteAccess()
-{
-    std::unique_ptr<BitmapWriteAccess> pWriteAccess(new BitmapWriteAccess( *this ));
-
-    if( !*pWriteAccess )
-    {
-        return nullptr;
-    }
-
-    return pWriteAccess.release();
-}
-
-void Bitmap::ReleaseAccess( BitmapInfoAccess* pBitmapAccess )
-{
-    delete pBitmapAccess;
-}
-
 bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
 {
     const Size          aSizePix( GetSizePixel() );
@@ -411,7 +370,7 @@ bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
     if( aRect.IsEmpty() || aSizePix == aRect.GetSize())
         return false;
 
-    ScopedReadAccess pReadAcc(*this);
+    BitmapScopedReadAccess pReadAcc(*this);
     if( !pReadAcc )
         return false;
 
@@ -557,7 +516,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
 
         if( nNextIndex )
         {
-            ScopedReadAccess    pSrcAcc(*pSrc);
+            BitmapScopedReadAccess  pSrcAcc(*pSrc);
             BitmapScopedWriteAccess pDstAcc(*this);
 
             if( pSrcAcc && pDstAcc )
@@ -592,7 +551,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
     if( aRectSrc.IsEmpty() )
         return false;
 
-    ScopedReadAccess pReadAcc(*pSrc);
+    BitmapScopedReadAccess pReadAcc(*pSrc);
     if( !pReadAcc )
         return false;
 
@@ -751,7 +710,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
     if( aRectSrc.IsEmpty() )
         return false;
 
-    ScopedReadAccess pReadAcc(*pSrc);
+    BitmapScopedReadAccess pReadAcc(*pSrc);
     if( !pReadAcc )
         return false;
 
@@ -787,7 +746,7 @@ bool Bitmap::Expand( sal_Int32 nDX, sal_Int32 nDY, const Color* pInitColor )
     const tools::Long          nWidth = aSizePixel.Width();
     const tools::Long          nHeight = aSizePixel.Height();
     const Size          aNewSize( nWidth + nDX, nHeight + nDY );
-    ScopedReadAccess    pReadAcc(*this);
+    BitmapScopedReadAccess pReadAcc(*this);
     if( !pReadAcc )
         return false;
 
@@ -957,7 +916,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
 
 bool Bitmap::ImplMakeGreyscales()
 {
-    ScopedReadAccess pReadAcc(*this);
+    BitmapScopedReadAccess pReadAcc(*this);
     if( !pReadAcc )
         return false;
 
@@ -1062,7 +1021,7 @@ bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const * pExtColo
 {
     SAL_WARN_IF(ePixelFormat <= getPixelFormat(), "vcl", "New pixel format must be greater!" );
 
-    Bitmap::ScopedReadAccess pReadAcc(*this);
+    BitmapScopedReadAccess pReadAcc(*this);
     if (!pReadAcc)
         return false;
 
@@ -1144,7 +1103,7 @@ bool Bitmap::ImplConvertDown8BPP(Color const * pExtColor)
 {
     SAL_WARN_IF(vcl::PixelFormat::N8_BPP > getPixelFormat(), "vcl", "New pixelformat must be lower ( or equal when pExtColor is set )!");
 
-    Bitmap::ScopedReadAccess pReadAcc(*this);
+    BitmapScopedReadAccess pReadAcc(*this);
     if (!pReadAcc)
         return false;
 
@@ -1397,7 +1356,7 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
     }
 }
 
-static void shiftColors(sal_Int32* pColorArray, const Bitmap::ScopedReadAccess& pReadAcc)
+static void shiftColors(sal_Int32* pColorArray, const BitmapScopedReadAccess& pReadAcc)
 {
     Scanline pScanlineRead = pReadAcc->GetScanline(0); // Why always 0?
     for (tools::Long n = 0; n < pReadAcc->Width(); ++n)
@@ -1417,7 +1376,7 @@ bool Bitmap::Dither()
     if( ( aSize.Width() <= 3 ) || ( aSize.Height() <= 2 ) )
         return false;
 
-    ScopedReadAccess pReadAcc(*this);
+    BitmapScopedReadAccess pReadAcc(*this);
     Bitmap aNewBmp(GetSizePixel(), vcl::PixelFormat::N8_BPP);
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     if( !pReadAcc || !pWriteAcc )
@@ -1673,7 +1632,7 @@ void Bitmap::RemoveBlendedStartColor(
     if(0 == nHeight || 0 == nWidth)
         return;
 
-    AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlphaMask));
+    BitmapScopedReadAccess pAlphaAcc(rAlphaMask);
 
     // inequal sizes of content and alpha, avoid change (maybe assert?)
     if(pAlphaAcc->Height() != nHeight || pAlphaAcc->Width() != nWidth)

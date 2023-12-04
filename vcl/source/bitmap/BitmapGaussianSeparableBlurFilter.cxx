@@ -13,8 +13,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx) const
 {
@@ -33,7 +32,7 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx) c
     // Do horizontal filtering
     blurContributions(nWidth, aNumberOfContributions, aBlurVector, aWeights, aPixels, aCounts);
 
-    Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+    BitmapScopedReadAccess pReadAcc(aBitmap);
 
     // switch coordinates as convolution pass transposes result
     Bitmap aNewBitmap(Size(nHeight, nWidth), vcl::PixelFormat::N24_BPP);
@@ -59,7 +58,7 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx) c
         // Do vertical filtering
         blurContributions(nHeight, aNumberOfContributions, aBlurVector, aWeights, aPixels, aCounts);
 
-        pReadAcc = Bitmap::ScopedReadAccess(aBitmap);
+        pReadAcc = aBitmap;
         aNewBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
         bResult = convolutionPass(aBitmap, aNewBitmap, pReadAcc.get(), aNumberOfContributions,
                                   aWeights.data(), aPixels.data(), aCounts.data());

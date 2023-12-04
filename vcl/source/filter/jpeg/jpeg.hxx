@@ -21,8 +21,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <com/sun/star/uno/Sequence.h>
 

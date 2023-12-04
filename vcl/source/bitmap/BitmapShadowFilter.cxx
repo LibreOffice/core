@@ -11,8 +11,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapShadowFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapShadowFilter::execute(BitmapEx const& rBitmapEx) const
 {

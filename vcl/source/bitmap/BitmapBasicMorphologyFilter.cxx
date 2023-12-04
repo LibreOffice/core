@@ -13,8 +13,7 @@
 #include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
 #include <vcl/BitmapBasicMorphologyFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>
 
@@ -26,16 +25,16 @@ namespace
 {
 struct FilterSharedData
 {
-    BitmapReadAccess* mpReadAccess;
-    BitmapWriteAccess* mpWriteAccess;
+    BitmapScopedReadAccess& mpReadAccess;
+    BitmapScopedWriteAccess& mpWriteAccess;
     sal_Int32 mnRadius;
     sal_uInt8 mnOutsideVal;
     Color maOutsideColor;
 
-    FilterSharedData(Bitmap::ScopedReadAccess& rReadAccess, BitmapScopedWriteAccess& rWriteAccess,
+    FilterSharedData(BitmapScopedReadAccess& rReadAccess, BitmapScopedWriteAccess& rWriteAccess,
                      sal_Int32 nRadius, sal_uInt8 nOutsideVal)
-        : mpReadAccess(rReadAccess.get())
-        , mpWriteAccess(rWriteAccess.get())
+        : mpReadAccess(rReadAccess)
+        , mpWriteAccess(rWriteAccess)
         , mnRadius(nRadius)
         , mnOutsideVal(nOutsideVal)
         , maOutsideColor(ColorTransparency, nOutsideVal, nOutsideVal, nOutsideVal, nOutsideVal)
@@ -73,14 +72,14 @@ template <typename MorphologyOp, int nComponentWidth> struct Value
                     bLookOutside ? rShared.mnOutsideVal : MorphologyOp::initVal);
     }
 
-    void apply(const BitmapReadAccess* pReadAccess, sal_Int32 x, sal_Int32 y,
+    void apply(BitmapScopedReadAccess& pReadAccess, sal_Int32 x, sal_Int32 y,
                sal_uInt8* pHint = nullptr)
     {
         sal_uInt8* pSource = (pHint ? pHint : pReadAccess->GetScanline(y)) + nWidthBytes * x;
         std::transform(pSource, pSource + nWidthBytes, aResult, aResult, MorphologyOp::apply);
     }
 
-    void copy(const BitmapWriteAccess* pWriteAccess, sal_Int32 x, sal_Int32 y,
+    void copy(BitmapScopedWriteAccess& pWriteAccess, sal_Int32 x, sal_Int32 y,
               sal_uInt8* pHint = nullptr)
     {
         sal_uInt8* pDest = (pHint ? pHint : pWriteAccess->GetScanline(y)) + nWidthBytes * x;
@@ -104,7 +103,7 @@ template <typename MorphologyOp> struct Value<MorphologyOp, 0>
     {
     }
 
-    void apply(const BitmapReadAccess* pReadAccess, sal_Int32 x, sal_Int32 y,
+    void apply(const BitmapScopedReadAccess& pReadAccess, sal_Int32 x, sal_Int32 y,
                sal_uInt8* /*pHint*/ = nullptr)
     {
         const auto& rSource = pReadAccess->GetColor(y, x);
@@ -114,7 +113,7 @@ template <typename MorphologyOp> struct Value<MorphologyOp, 0>
                         MorphologyOp::apply(rSource.GetBlue(), aResult.GetBlue()));
     }
 
-    void copy(BitmapWriteAccess* pWriteAccess, sal_Int32 x, sal_Int32 y,
+    void copy(BitmapScopedWriteAccess& pWriteAccess, sal_Int32 x, sal_Int32 y,
               sal_uInt8* /*pHint*/ = nullptr)
     {
         pWriteAccess->SetPixel(y, x, aResult);
@@ -145,8 +144,8 @@ template <typename MorphologyOp, int nComponentWidth> struct pass
     static void Horizontal(FilterSharedData const& rShared, const sal_Int32 nStart,
                            const sal_Int32 nEnd)
     {
-        BitmapReadAccess* pReadAccess = rShared.mpReadAccess;
-        BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
+        BitmapScopedReadAccess& pReadAccess = rShared.mpReadAccess;
+        BitmapScopedWriteAccess& pWriteAccess = rShared.mpWriteAccess;
 
         const sal_Int32 nLastIndex = pReadAccess->Width() - 1;
 
@@ -173,8 +172,8 @@ template <typename MorphologyOp, int nComponentWidth> struct pass
     static void Vertical(FilterSharedData const& rShared, const sal_Int32 nStart,
                          const sal_Int32 nEnd)
     {
-        BitmapReadAccess* pReadAccess = rShared.mpReadAccess;
-        BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
+        BitmapScopedReadAccess& pReadAccess = rShared.mpReadAccess;
+        BitmapScopedWriteAccess& pWriteAccess = rShared.mpWriteAccess;
 
         const sal_Int32 nLastIndex = pReadAccess->Height() - 1;
 
@@ -235,7 +234,7 @@ void runFilter(Bitmap& rBitmap, const sal_Int32 nRadius, const bool bParallel,
             auto pTag = comphelper::ThreadPool::createThreadTaskTag();
 
             {
-                Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+                BitmapScopedReadAccess pReadAccess(rBitmap);
                 BitmapScopedWriteAccess pWriteAccess(rBitmap);
                 FilterSharedData aSharedData(pReadAccess, pWriteAccess, nRadius, nOutsideVal);
 
@@ -253,7 +252,7 @@ void runFilter(Bitmap& rBitmap, const sal_Int32 nRadius, const bool bParallel,
                 rShared.waitUntilDone(pTag);
             }
             {
-                Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+                BitmapScopedReadAccess pReadAccess(rBitmap);
                 BitmapScopedWriteAccess pWriteAccess(rBitmap);
                 FilterSharedData aSharedData(pReadAccess, pWriteAccess, nRadius, nOutsideVal);
 
@@ -279,7 +278,7 @@ void runFilter(Bitmap& rBitmap, const sal_Int32 nRadius, const bool bParallel,
     else
     {
         {
-            Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+            BitmapScopedReadAccess pReadAccess(rBitmap);
             BitmapScopedWriteAccess pWriteAccess(rBitmap);
             FilterSharedData aSharedData(pReadAccess, pWriteAccess, nRadius, nOutsideVal);
             sal_Int32 nFirstIndex = 0;
@@ -287,7 +286,7 @@ void runFilter(Bitmap& rBitmap, const sal_Int32 nRadius, const bool bParallel,
             myPass::Horizontal(aSharedData, nFirstIndex, nLastIndex);
         }
         {
-            Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+            BitmapScopedReadAccess pReadAccess(rBitmap);
             BitmapScopedWriteAccess pWriteAccess(rBitmap);
             FilterSharedData aSharedData(pReadAccess, pWriteAccess, nRadius, nOutsideVal);
             sal_Int32 nFirstIndex = 0;
@@ -341,7 +340,7 @@ Bitmap BitmapBasicMorphologyFilter::filter(Bitmap const& rBitmap) const
     Bitmap bitmapCopy(rBitmap);
     ScanlineFormat nScanlineFormat;
     {
-        Bitmap::ScopedReadAccess pReadAccess(bitmapCopy);
+        BitmapScopedReadAccess pReadAccess(bitmapCopy);
         nScanlineFormat = pReadAccess ? pReadAccess->GetScanlineFormat() : ScanlineFormat::NONE;
     }
 

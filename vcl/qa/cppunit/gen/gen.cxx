@@ -42,7 +42,7 @@ public:
 CPPUNIT_TEST_FIXTURE(GenTest, testTdf121120)
 {
     Bitmap aBitmap = load("tdf121120.png");
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     const Size& rSize = aBitmap.GetSizePixel();
     Color aColor(pAccess->GetPixel(rSize.getHeight() / 2, rSize.getWidth() / 2));
     // Without the accompanying fix in place, this test would have failed with 'Expected: 255;
@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf107966)
 
     // Make sure that the polygon is visible.
     Bitmap aBitmap = pVirtualDevice->GetBitmap(Point(), Size(1350, 15));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     Color aPixel(pAccess->GetPixel(0, 0));
     // Without the accompanying fix in place, this test would have failed with 'Expected: 000000;
     // Actual: ffffff', i.e. the top left pixel was white, not black.

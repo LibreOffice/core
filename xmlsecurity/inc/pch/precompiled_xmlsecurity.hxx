@@ -96,7 +96,6 @@
 #include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
-#include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/task.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>

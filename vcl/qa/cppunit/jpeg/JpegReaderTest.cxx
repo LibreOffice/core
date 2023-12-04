@@ -14,7 +14,7 @@
 
 #include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <tools/stream.hxx>
 
 constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/jpeg/data/");
@@ -176,7 +176,7 @@ void JpegReaderTest::testTdf138950()
     CPPUNIT_ASSERT_EQUAL(tools::Long(720), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1280), aSize.Height());
 
-    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    BitmapScopedReadAccess pReadAccess(aBitmap);
     int nBlackCount = 0;
     for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
     {

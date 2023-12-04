@@ -1430,7 +1430,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             // Create a bitmap for the pattern with expected colors
                             vcl::bitmap::RawBitmap aResult(Size(8, 8), 24);
                             {
-                                Bitmap::ScopedReadAccess pRead(aBmp);
+                                BitmapScopedReadAccess pRead(aBmp);
 
                                 for (tools::Long y = 0; y < aResult.Height(); ++y)
                                 {

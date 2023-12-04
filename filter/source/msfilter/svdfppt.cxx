@@ -5654,7 +5654,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                         if ( aSize.Height() > 64 )
                             aSize.setHeight( 64 );
 
-                        Bitmap::ScopedReadAccess pAcc(aBmp);
+                        BitmapScopedReadAccess pAcc(aBmp);
                         if( pAcc )
                         {
                             sal_uLong nRt = 0, nGn = 0, nBl = 0;

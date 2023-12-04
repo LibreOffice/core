@@ -4221,8 +4221,8 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     BitmapEx aBmpEx = pDevice->GetBitmapEx({ 0, 0 }, { nCanvasWidth, nCanvasHeight });
     Bitmap aBmp = aBmpEx.GetBitmap();
     AlphaMask aAlpha = aBmpEx.GetAlphaMask();
-    Bitmap::ScopedReadAccess sraBmp(aBmp);
-    AlphaMask::ScopedReadAccess sraAlpha(aAlpha);
+    BitmapScopedReadAccess sraBmp(aBmp);
+    BitmapScopedReadAccess sraAlpha(aAlpha);
 
     assert(sraBmp->Height() == nCanvasHeight);
     assert(sraBmp->Width() == nCanvasWidth);

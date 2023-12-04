@@ -19,7 +19,7 @@
 
 #include <vcl/salgtype.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/bmpfast.hxx>
 
 #include <sal/log.hxx>

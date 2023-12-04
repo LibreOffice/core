@@ -474,7 +474,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
         Bitmap aTmpBitmap( pPreview->GetBitmapEx().GetBitmap() );
         aTmpBitmap.Scale( aSizeBitmap, BmpScaleFlag::BestQuality );
         aTmpBitmap.Convert( BmpConversion::N1BitThreshold );
-        BitmapReadAccess* pAcc = aTmpBitmap.AcquireReadAccess();
+        BitmapScopedReadAccess pAcc(aTmpBitmap);
         if ( pAcc )
         {
             mpPS->WriteOString( "%%BeginPreview: " );                    // BoundingBox
@@ -517,7 +517,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
                     nCount2--;
                 }
             }
-            Bitmap::ReleaseAccess( pAcc );
+            pAcc.reset();
             ImplExecMode( PS_RET );
             ImplWriteLine( "%%EndPreview" );
         }
@@ -1725,7 +1725,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, AlphaMask const * pAlphaMaskBitm
             ImplWriteLine( "eoclip newpath" );
             ImplWriteLine( "pom" );
         }
-        BitmapReadAccess* pAcc = aTileBitmap.AcquireReadAccess();
+        BitmapScopedReadAccess pAcc(aTileBitmap);
 
         if (!bDoTrans )
             ImplWriteLine( "pum" );
@@ -1936,7 +1936,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, AlphaMask const * pAlphaMaskBitm
         else
             ImplWriteLine( "pom" );
 
-        Bitmap::ReleaseAccess( pAcc );
+        pAcc.reset();
         nHeightLeft -= nHeight;
         if ( nHeightLeft )
         {

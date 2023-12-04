@@ -647,7 +647,7 @@ bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
     const Color aFGColor(0xFF0000);
     const Color aBGColor(0xFFFFFF);
 
-    Bitmap::ScopedReadAccess pAccess(rBitmap);
+    BitmapScopedReadAccess pAccess(rBitmap);
     for (tools::Long y = 0; y < pAccess->Height(); ++y)
     {
         Scanline pScanline = pAccess->GetScanline(y);

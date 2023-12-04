@@ -35,7 +35,7 @@
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <desktop/crashreport.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <watchdog.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <salinst.hxx>
@@ -558,7 +558,7 @@ BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, t
 
     {
         BitmapScopedWriteAccess pWriteAccess( aBitmap );
-        AlphaScopedWriteAccess pAlphaWriteAccess( aAlpha );
+        BitmapScopedWriteAccess pAlphaWriteAccess( aAlpha );
 #ifdef _WIN32
         assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr);
         assert(pWriteAccess->IsTopDown());

@@ -27,7 +27,7 @@
 #include <tools/UnitConversion.hxx>
 #include <o3tl/string_view.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 using namespace com::sun::star;
 

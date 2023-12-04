@@ -490,7 +490,7 @@ struct GraphicImportContext
     std::shared_ptr<Graphic> m_pGraphic;
     /// Write pixel data using this access.
     std::unique_ptr<BitmapScopedWriteAccess> m_pAccess;
-    std::unique_ptr<AlphaScopedWriteAccess> m_pAlphaAccess;
+    std::unique_ptr<BitmapScopedWriteAccess> m_pAlphaAccess;
     // Need to have an AlphaMask instance to keep its lifetime.
     AlphaMask mAlphaMask;
     /// Signals if import finished correctly.
@@ -613,7 +613,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                             // a temporary, and direct access to the Bitmap wouldn't work
                             // with AlphaScopedBitmapAccess. *sigh*
                             rContext.mAlphaMask = rBitmapEx.GetAlphaMask();
-                            rContext.m_pAlphaAccess = std::make_unique<AlphaScopedWriteAccess>(rContext.mAlphaMask);
+                            rContext.m_pAlphaAccess = std::make_unique<BitmapScopedWriteAccess>(rContext.mAlphaMask);
                         }
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)

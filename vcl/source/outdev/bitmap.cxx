@@ -27,8 +27,8 @@
 #include <vcl/metaact.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
 #include <bitmap/bmpfast.hxx>
 #include <drawmode.hxx>
 #include <salbmp.hxx>
@@ -650,8 +650,8 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
 
     TradScaleContext aTradContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
 
-    Bitmap::ScopedReadAccess pBitmapReadAccess(const_cast<Bitmap&>(rBitmap));
-    AlphaMask::ScopedReadAccess pAlphaReadAccess(const_cast<AlphaMask&>(rAlpha));
+    BitmapScopedReadAccess pBitmapReadAccess(rBitmap);
+    BitmapScopedReadAccess pAlphaReadAccess(rAlpha);
 
     DBG_ASSERT( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal,
                 "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!" );
@@ -821,7 +821,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
     {
         Bitmap aDither(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP);
         BitmapColor         aIndex( 0 );
-        Bitmap::ScopedReadAccess pB(aBmp);
+        BitmapScopedReadAccess pB(aBmp);
         BitmapScopedWriteAccess pW(aDither);
 
         if (pB && pP && pA && pW && pAlphaW)
@@ -913,7 +913,7 @@ Bitmap OutputDevice::BlendBitmap(
     {
         Bitmap aDither(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP);
         BitmapColor         aIndex( 0 );
-        Bitmap::ScopedReadAccess pB(aBmp);
+        BitmapScopedReadAccess pB(aBmp);
         BitmapScopedWriteAccess pW(aDither);
 
         for( int nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )

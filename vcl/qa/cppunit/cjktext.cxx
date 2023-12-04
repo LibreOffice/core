@@ -63,7 +63,7 @@ public:
 static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
-    Bitmap::ScopedReadAccess access(bitmap);
+    BitmapScopedReadAccess access(bitmap);
     tools::Long y = start.Y();
     while (y < bitmap.GetSizePixel().Height() && access->GetColor(y, start.X()) != COL_BLACK)
         ++y;
@@ -82,7 +82,7 @@ static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& star
 static tools::Long getCharacterRightSideHeight(VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
-    Bitmap::ScopedReadAccess access(bitmap);
+    BitmapScopedReadAccess access(bitmap);
     tools::Long x = start.X();
     while (x >= 0 && access->GetColor(start.Y(), x) != COL_BLACK)
         --x;

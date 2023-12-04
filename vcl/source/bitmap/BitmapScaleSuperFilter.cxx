@@ -21,7 +21,7 @@
 #include <comphelper/threadpool.hxx>
 #include <tools/helpers.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapScaleSuperFilter.hxx>
 
 #include <algorithm>
@@ -894,7 +894,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     }
 
     {
-        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        BitmapScopedReadAccess pReadAccess(aBitmap);
 
         // If source format is less than 24BPP, use 24BPP
         auto eSourcePixelFormat = aBitmap.getPixelFormat();

@@ -21,7 +21,7 @@
 #include <vcl/graph.hxx>
 #include <tools/stream.hxx>
 #include <filter/WebpReader.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <salinst.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
@@ -232,7 +232,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
         case PixelMode::Split:
         {
             // Split to normal and alpha bitmaps.
-            AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
+            BitmapScopedWriteAccess accessAlpha(bitmapAlpha);
             for (tools::Long y = 0; y < access->Height(); ++y)
             {
                 const unsigned char* src = tmpRgbaData.data() + width * 4 * y;
@@ -266,7 +266,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
             }
             if (!bitmapAlpha.IsEmpty())
             {
-                AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
+                BitmapScopedWriteAccess accessAlpha(bitmapAlpha);
                 for (tools::Long y = 0; y < accessAlpha->Height(); ++y)
                 {
                     const unsigned char* src = tmpRgbaData.data() + width * 4 * y;

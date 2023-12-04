@@ -16,7 +16,7 @@
 #include <vcl/alpha.hxx>
 
 #include <bitmap/BitmapDisabledImageFilter.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 namespace
 {
@@ -42,7 +42,7 @@ void BitmapProcessorTest::testDisabledImage()
         BitmapEx aDisabledBitmapEx(aDisabledImageFilter.execute(aBitmapEx));
         Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
         {
-            Bitmap::ScopedReadAccess pReadAccess(aDisabledBitmap);
+            BitmapScopedReadAccess pReadAccess(aDisabledBitmap);
             Color aColor(pReadAccess->GetPixel(0, 0));
             CPPUNIT_ASSERT_EQUAL(Color(0x00C5C5C5), aColor);
         }
@@ -56,7 +56,7 @@ void BitmapProcessorTest::testDisabledImage()
         }
         AlphaMask aMask(Size(3, 3));
         {
-            AlphaScopedWriteAccess pWriteAccess(aMask);
+            BitmapScopedWriteAccess pWriteAccess(aMask);
             pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0xAA, 0xAA, 0xAA));
         }
 
@@ -66,13 +66,13 @@ void BitmapProcessorTest::testDisabledImage()
 
         Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
         {
-            Bitmap::ScopedReadAccess pReadAccess(aDisabledBitmap);
+            BitmapScopedReadAccess pReadAccess(aDisabledBitmap);
             Color aColor(pReadAccess->GetPixel(0, 0));
             CPPUNIT_ASSERT_EQUAL(Color(0x00C5C5C5), aColor);
         }
         AlphaMask aDisabledAlphaMask(aDisabledBitmapEx.GetAlphaMask());
         {
-            AlphaMask::ScopedReadAccess pReadAccess(aDisabledAlphaMask);
+            BitmapScopedReadAccess pReadAccess(aDisabledAlphaMask);
             Color aColor(pReadAccess->GetPixel(0, 0));
             CPPUNIT_ASSERT_EQUAL(Color(0x0000AA), aColor);
         }

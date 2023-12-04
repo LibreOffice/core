@@ -23,7 +23,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <salbmp.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -323,7 +323,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
     if (nAngle10 == 1800_deg10)
         return Mirror(BmpMirrorFlags::Horizontal | BmpMirrorFlags::Vertical);
 
-    ScopedReadAccess pReadAcc(*this);
+    BitmapScopedReadAccess pReadAcc(*this);
     if (!pReadAcc)
         return false;
 
@@ -459,7 +459,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
 
 Bitmap Bitmap::CreateMask(const Color& rTransColor) const
 {
-    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    BitmapScopedReadAccess pReadAcc(*this);
     if (!pReadAcc)
         return Bitmap();
 
@@ -551,7 +551,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
     if (nTol == 0)
         return CreateMask(rTransColor);
 
-    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    BitmapScopedReadAccess pReadAcc(*this);
     if (!pReadAcc)
         return Bitmap();
 
@@ -642,7 +642,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
 
 AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor) const
 {
-    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    BitmapScopedReadAccess pReadAcc(*this);
     if (!pReadAcc)
         return AlphaMask();
 
@@ -660,7 +660,7 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor) const
     }
 
     AlphaMask aNewBmp(GetSizePixel());
-    AlphaMask::ScopedWriteAccess pWriteAcc(aNewBmp);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
         return AlphaMask();
 
@@ -720,7 +720,7 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor, sal_uInt8 nTol) cons
     if (nTol == 0)
         return CreateAlphaMask(rTransColor);
 
-    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    BitmapScopedReadAccess pReadAcc(*this);
     if (!pReadAcc)
         return AlphaMask();
 
@@ -730,7 +730,7 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor, sal_uInt8 nTol) cons
     // TODO: Possibly remove the 1bpp code later.
 
     AlphaMask aNewBmp(GetSizePixel());
-    AlphaMask::ScopedWriteAccess pWriteAcc(aNewBmp);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
         return AlphaMask();
 
@@ -811,7 +811,7 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor, sal_uInt8 nTol) cons
 vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rRect) const
 {
     tools::Rectangle aRect(rRect);
-    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    BitmapScopedReadAccess pReadAcc(*this);
 
     aRect.Intersection(tools::Rectangle(Point(), GetSizePixel()));
     aRect.Normalize();
@@ -903,7 +903,7 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
 
 bool Bitmap::ReplaceMask(const AlphaMask& rMask, const Color& rReplaceColor)
 {
-    AlphaMask::ScopedReadAccess pMaskAcc(const_cast<AlphaMask&>(rMask));
+    BitmapScopedReadAccess pMaskAcc(rMask);
     BitmapScopedWriteAccess pAcc(*this);
 
     if (!pMaskAcc || !pAcc)
@@ -942,8 +942,8 @@ bool Bitmap::ReplaceMask(const AlphaMask& rMask, const Color& rReplaceColor)
 bool Bitmap::Replace(const AlphaMask& rAlpha, const Color& rMergeColor)
 {
     Bitmap aNewBmp(GetSizePixel(), vcl::PixelFormat::N24_BPP);
-    ScopedReadAccess pAcc(*this);
-    AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlpha));
+    BitmapScopedReadAccess pAcc(*this);
+    BitmapScopedReadAccess pAlphaAcc(rAlpha);
     BitmapScopedWriteAccess pNewAcc(aNewBmp);
 
     if (!pAcc || !pAlphaAcc || !pNewAcc)
@@ -1151,7 +1151,7 @@ bool Bitmap::Blend(const AlphaMask& rAlpha, const Color& rBackgroundColor)
     if (vcl::isPalettePixelFormat(getPixelFormat()))
         Convert(BmpConversion::N24Bit);
 
-    AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlpha));
+    BitmapScopedReadAccess pAlphaAcc(rAlpha);
 
     BitmapScopedWriteAccess pAcc(*this);
 

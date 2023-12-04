@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
     // use assertColorsAreSimilar since the color might differ a little bit on mac
     Bitmap aBMP = aBMPEx.GetBitmap();
     {
-        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
         {
             const Color aColorTop = pReadAccess->GetColor(0, nX);
@@ -135,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
     // Check all borders are red or similar. Ignore the corners
     Bitmap aBMP = aBMPEx.GetBitmap();
     {
-        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 2; nX < aSize.Width() - 2; ++nX)
         {
             const Color aColorTop = pReadAccess->GetColor(0, nX);
@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
     AlphaMask aAlpha = aBMPEx.GetAlphaMask();
-    AlphaMask::ScopedReadAccess pReadAccess(aAlpha);
+    BitmapScopedReadAccess pReadAccess(aAlpha);
 
     // Without the fix in place, this test would have failed here
     CPPUNIT_ASSERT(!pReadAccess);
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157652)
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAccess(aBMP);
+    BitmapScopedReadAccess pReadAccess(aBMP);
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
@@ -282,7 +282,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAccess(aBMP);
+    BitmapScopedReadAccess pReadAccess(aBMP);
     int nBlackCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
@@ -334,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157795)
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAccess(aBMP);
+    BitmapScopedReadAccess pReadAccess(aBMP);
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
@@ -383,7 +383,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105362)
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAccess(aBMP);
+    BitmapScopedReadAccess pReadAccess(aBMP);
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAccess(aBMP);
+    BitmapScopedReadAccess pReadAccess(aBMP);
     int nBlackCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
@@ -482,7 +482,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAccess(aBMP);
+    BitmapScopedReadAccess pReadAccess(aBMP);
     int nLightGrayCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
@@ -533,7 +533,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAccess(aBMP);
+    BitmapScopedReadAccess pReadAccess(aBMP);
     int nBlackCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
@@ -585,7 +585,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
     {
-        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
         {
             for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     AlphaMask aAlpha = aBMPEx.GetAlphaMask();
     {
-        AlphaMask::ScopedReadAccess pReadAccess(aAlpha);
+        BitmapScopedReadAccess pReadAccess(aAlpha);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
         {
             for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
@@ -684,7 +684,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
     {
-        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
         {
             // Check the bottom half of the document is white
@@ -734,7 +734,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
     CPPUNIT_ASSERT_EQUAL(Size(320, 180), aBMPEx.GetSizePixel());
     Bitmap aBMP = aBMPEx.GetBitmap();
     {
-        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        BitmapScopedReadAccess pReadAccess(aBMP);
         int nNonWhiteCount = 0;
         // The word "Top" should be in rectangle 34,4 - 76,30. If text alignment is wrong, the rectangle will be white.
         for (tools::Long nY = 4; nY < (4 + 26); ++nY)
@@ -789,7 +789,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
         vcl::PngImageReader aPNGReader(aFileStream);
         BitmapEx aBMPEx = aPNGReader.read();
         Bitmap aBMP = aBMPEx.GetBitmap();
-        Bitmap::ScopedReadAccess pRead(aBMP);
+        BitmapScopedReadAccess pRead(aBMP);
         for (tools::Long nX = 154; nX < (154 + 12); ++nX)
         {
             for (tools::Long nY = 16; nY < (16 + 96); ++nY)

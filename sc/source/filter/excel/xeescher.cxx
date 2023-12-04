@@ -396,7 +396,7 @@ void XclExpImgData::Save( XclExpStream& rStrm )
     if (aBmp.getPixelFormat() != vcl::PixelFormat::N24_BPP)
         aBmp.Convert( BmpConversion::N24Bit );
 
-    Bitmap::ScopedReadAccess pAccess(aBmp);
+    BitmapScopedReadAccess pAccess(aBmp);
     if( !pAccess )
         return;
 

@@ -971,7 +971,7 @@ namespace vclcanvas
         Bitmap aBitmap( rOutDev.GetBitmapEx(aRect.TopLeft(),
                                           aRect.GetSize()).GetBitmap() );
 
-        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
+        BitmapScopedReadAccess pReadAccess( aBitmap );
 
         ENSURE_OR_THROW( pReadAccess.get() != nullptr,
                          "Could not acquire read access to OutDev bitmap" );

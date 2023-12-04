@@ -79,7 +79,7 @@ BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
 void JpegWriterTest::testWrite8BitGrayscale()
 {
     Bitmap bitmap = roundtripJPG(getFullUrl(u"8BitGrayscale.jpg")).GetBitmap();
-    Bitmap::ScopedReadAccess access(bitmap);
+    BitmapScopedReadAccess access(bitmap);
     const ScanlineFormat format = access->GetScanlineFormat();
     // Check that it's still 8bit grayscale.
     CPPUNIT_ASSERT_EQUAL(ScanlineFormat::N8BitPal, format);
@@ -95,7 +95,7 @@ void JpegWriterTest::testWrite8BitGrayscale()
 void JpegWriterTest::testWrite8BitNonGrayscale()
 {
     Bitmap bitmap = roundtripJPG(getFullUrl(u"8BitNonGrayscale.gif")).GetBitmap();
-    Bitmap::ScopedReadAccess access(bitmap);
+    BitmapScopedReadAccess access(bitmap);
     const ScanlineFormat format = access->GetScanlineFormat();
     // Check that it's still 8bit grayscale.
     CPPUNIT_ASSERT_EQUAL(ScanlineFormat::N8BitPal, format);

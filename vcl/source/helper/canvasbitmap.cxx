@@ -94,7 +94,7 @@ void VclCanvasBitmap::setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShi
     pCounts[bluePos]  = bitcount(blueShift);
 }
 
-Bitmap::ScopedReadAccess& VclCanvasBitmap::getBitmapReadAccess()
+BitmapScopedReadAccess& VclCanvasBitmap::getBitmapReadAccess()
 {
     // BitmapReadAccess is more expensive than BitmapInfoAccess,
     // as the latter requires also pixels, which may need converted
@@ -105,7 +105,7 @@ Bitmap::ScopedReadAccess& VclCanvasBitmap::getBitmapReadAccess()
     return *m_pBmpReadAcc;
 }
 
-Bitmap::ScopedReadAccess& VclCanvasBitmap::getAlphaReadAccess()
+BitmapScopedReadAccess& VclCanvasBitmap::getAlphaReadAccess()
 {
     if(!m_pAlphaReadAcc)
         m_pAlphaReadAcc.emplace(m_aAlpha);
@@ -128,7 +128,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     if( m_aBmpEx.IsAlpha() )
     {
         m_aAlpha = m_aBmpEx.GetAlphaMask().GetBitmap();
-        m_pAlphaAcc = Bitmap::ScopedInfoAccess(m_aAlpha);
+        m_pAlphaAcc = m_aAlpha;
     }
 
     m_aLayout.ScanLines      = 0;
@@ -403,7 +403,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
 
     if( !m_aBmpEx.IsAlpha() )
     {
-        Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+        BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
         OSL_ENSURE(pBmpAcc,"Invalid bmp read access");
 
         // can return bitmap data as-is
@@ -416,8 +416,8 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     }
     else
     {
-        Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
-        Bitmap::ScopedReadAccess& pAlphaAcc = getAlphaReadAccess();
+        BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+        BitmapScopedReadAccess& pAlphaAcc = getAlphaReadAccess();
         OSL_ENSURE(pBmpAcc,"Invalid bmp read access");
         OSL_ENSURE(pAlphaAcc,"Invalid alpha read access");
 
@@ -496,7 +496,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
     const tools::Long nScanlineLeftOffset( pos.X*m_nBitsPerInputPixel/8 );
     if( !m_aBmpEx.IsAlpha() )
     {
-        Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+        BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
         assert(pBmpAcc && "Invalid bmp read access");
 
         // can return bitmap data as-is
@@ -505,8 +505,8 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
     }
     else
     {
-        Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
-        Bitmap::ScopedReadAccess& pAlphaAcc = getAlphaReadAccess();
+        BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+        BitmapScopedReadAccess& pAlphaAcc = getAlphaReadAccess();
         assert(pBmpAcc && "Invalid bmp read access");
         assert(pAlphaAcc && "Invalid alpha read access");
 
@@ -1038,7 +1038,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB
     uno::Sequence< rendering::RGBColor > aRes(nNumColors);
     rendering::RGBColor* pOut( aRes.getArray() );
 
-    Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+    BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
     ENSURE_OR_THROW(pBmpAcc,
                     "Unable to get BitmapAccess");
 
@@ -1091,7 +1091,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
     uno::Sequence< rendering::ARGBColor > aRes(nNumColors);
     rendering::ARGBColor* pOut( aRes.getArray() );
 
-    Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+    BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
     ENSURE_OR_THROW(pBmpAcc,
                     "Unable to get BitmapAccess");
 
@@ -1146,7 +1146,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
     uno::Sequence< rendering::ARGBColor > aRes(nNumColors);
     rendering::ARGBColor* pOut( aRes.getArray() );
 
-    Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+    BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
     ENSURE_OR_THROW(pBmpAcc,
                     "Unable to get BitmapAccess");
 
@@ -1200,7 +1200,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( con
 
     uno::Sequence< sal_Int8 > aRes(nNumBytes);
     sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
-    Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+    BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
 
     if( m_aBmpEx.IsAlpha() )
     {
@@ -1250,7 +1250,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
 
     uno::Sequence< sal_Int8 > aRes(nNumBytes);
     sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
-    Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+    BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
 
     if( m_aBmpEx.IsAlpha() )
     {
@@ -1300,7 +1300,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
 
     uno::Sequence< sal_Int8 > aRes(nNumBytes);
     sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
-    Bitmap::ScopedReadAccess& pBmpAcc = getBitmapReadAccess();
+    BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
 
     if( m_aBmpEx.IsAlpha() )
     {

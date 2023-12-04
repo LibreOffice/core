@@ -99,7 +99,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
-#include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #endif // PCH_LEVEL >= 2

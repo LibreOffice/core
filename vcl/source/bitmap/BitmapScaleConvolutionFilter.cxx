@@ -20,7 +20,7 @@
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapScaleConvolutionFilter.hxx>
 
 #include <algorithm>
@@ -97,7 +97,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         return true;
     }
 
-    Bitmap::ScopedReadAccess pReadAcc(rSource);
+    BitmapScopedReadAccess pReadAcc(rSource);
 
     if(pReadAcc)
     {
@@ -187,7 +187,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         return true;
     }
 
-    Bitmap::ScopedReadAccess pReadAcc(rSource);
+    BitmapScopedReadAccess pReadAcc(rSource);
     if(!pReadAcc)
         return false;
 

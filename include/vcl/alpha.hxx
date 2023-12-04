@@ -62,13 +62,6 @@ public:
     // check if alpha is used, returns true if at least one pixel has transparence
     bool        hasAlpha() const;
 
-    BitmapReadAccess*  AcquireAlphaReadAccess() { return maBitmap.AcquireReadAccess(); }
-    BitmapWriteAccess* AcquireAlphaWriteAccess() { return maBitmap.AcquireWriteAccess(); }    
-    static void ReleaseAccess( BitmapInfoAccess* pBitmapAccess ) { Bitmap::ReleaseAccess(pBitmapAccess); }
-
-    typedef vcl::ScopedBitmapAccess<BitmapReadAccess, AlphaMask, &AlphaMask::AcquireAlphaReadAccess> ScopedReadAccess;
-    typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireAlphaWriteAccess> ScopedWriteAccess;
-
     bool IsEmpty() const { return maBitmap.IsEmpty(); }
 
     void SetEmpty() { maBitmap.SetEmpty(); }
@@ -82,8 +75,6 @@ public:
     void SetPrefSize( const Size& rSize ) { maBitmap.SetPrefSize(rSize); }
 
     void SetPrefMapMode( const MapMode& rMapMode ) { maBitmap.SetPrefMapMode(rMapMode); }
-
-    BitmapReadAccess* AcquireReadAccess() { return maBitmap.AcquireReadAccess(); }
 
     BitmapChecksum GetChecksum() const { return maBitmap.GetChecksum(); }
 

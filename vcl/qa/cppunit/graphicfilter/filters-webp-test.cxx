@@ -10,7 +10,7 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -94,7 +94,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
         pAccess->FillRect(tools::Rectangle(Point(0, 10), Size(10, 10)));
         pAccess->SetFillColor(COL_BLUE);
         pAccess->FillRect(tools::Rectangle(Point(10, 10), Size(10, 10)));
-        AlphaScopedWriteAccess pAccessAlpha(aAlpha);
+        BitmapScopedWriteAccess pAccessAlpha(aAlpha);
         pAccessAlpha->SetFillColor(BitmapColor(0)); // opaque
         pAccessAlpha->FillRect(tools::Rectangle(Point(0, 0), Size(10, 10)));
         pAccessAlpha->FillRect(tools::Rectangle(Point(10, 0), Size(10, 10)));
@@ -124,7 +124,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
 
     {
         Bitmap tmpBitmap = aResultBitmap.GetBitmap();
-        Bitmap::ScopedReadAccess pAccess(tmpBitmap);
+        BitmapScopedReadAccess pAccess(tmpBitmap);
         // Note that x,y are swapped.
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAccess->GetPixel(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(pAccess->GetPixel(0, 19)));
@@ -140,7 +140,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
             CPPUNIT_ASSERT_EQUAL(COL_BLUE, Color(pAccess->GetPixel(19, 19)));
         }
         AlphaMask tmpAlpha = aResultBitmap.GetAlphaMask();
-        AlphaMask::ScopedReadAccess pAccessAlpha(tmpAlpha);
+        BitmapScopedReadAccess pAccessAlpha(tmpAlpha);
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 0));
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 19));
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(19, 0));
@@ -181,7 +181,7 @@ void WebpFilterTest::testRead(std::u16string_view rName, bool lossy, bool alpha)
 
     {
         Bitmap tmpBitmap = aResultBitmap.GetBitmap();
-        Bitmap::ScopedReadAccess pAccess(tmpBitmap);
+        BitmapScopedReadAccess pAccess(tmpBitmap);
         // Note that x,y are swapped.
         if (lossy)
             CPPUNIT_ASSERT_LESS(sal_uInt16(2), pAccess->GetPixel(0, 0).GetColorError(COL_LIGHTRED));
@@ -191,7 +191,7 @@ void WebpFilterTest::testRead(std::u16string_view rName, bool lossy, bool alpha)
         if (alpha)
         {
             AlphaMask tmpAlpha = aResultBitmap.GetAlphaMask();
-            AlphaMask::ScopedReadAccess pAccessAlpha(tmpAlpha);
+            BitmapScopedReadAccess pAccessAlpha(tmpAlpha);
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 0));
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 9));
         }

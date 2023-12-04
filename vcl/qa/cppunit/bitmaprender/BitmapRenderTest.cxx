@@ -260,7 +260,7 @@ void BitmapRenderTest::testTdf116888()
     Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     CPPUNIT_ASSERT(!aBitmap.IsEmpty());
     aBitmap.Scale(0.8, 0.8); // This scaling discards mpUserData,
-    Bitmap::ScopedReadAccess pAccess(aBitmap); // forcing ReadTexture() here.
+    BitmapScopedReadAccess pAccess(aBitmap); // forcing ReadTexture() here.
     // Check that there is mpUserBuffer content.
     CPPUNIT_ASSERT(pAccess);
     const ScanlineFormat eFormat = pAccess->GetScanlineFormat();

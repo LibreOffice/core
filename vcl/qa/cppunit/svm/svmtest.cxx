@@ -28,7 +28,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <sal/log.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -1126,7 +1126,7 @@ void SvmTest::testBitmapExs()
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_MAGENTA);
 
-            AlphaScopedWriteAccess pAlphaAccess(aAlpha);
+            BitmapScopedWriteAccess pAlphaAccess(aAlpha);
             pAlphaAccess->Erase(Color(127, 127, 127));
         }
         pVirtualDev->DrawBitmapEx(Point(6, 6), BitmapEx(aBitmap, aAlpha));

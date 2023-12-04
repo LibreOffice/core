@@ -21,10 +21,15 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/bmpfast.hxx>
 
 BitmapWriteAccess::BitmapWriteAccess(Bitmap& rBitmap)
+    : BitmapReadAccess(rBitmap, BitmapAccessMode::Write)
+{
+}
+
+BitmapWriteAccess::BitmapWriteAccess(AlphaMask& rBitmap)
     : BitmapReadAccess(rBitmap, BitmapAccessMode::Write)
 {
 }

@@ -361,13 +361,15 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 {
     BitmapEx            aBmpEx( rGraphic.GetBitmapEx() );
     Bitmap              aBmp( aBmpEx.GetBitmap() );
-    BitmapReadAccess*   pBmpAcc = aBmp.AcquireReadAccess();
+    BitmapScopedReadAccess pBmpAcc(aBmp);
 
     if( !pBmpAcc )
         return;
 
     AlphaMask              aMask( aBmpEx.GetAlphaMask() );
-    BitmapReadAccess*   pMskAcc = !aMask.IsEmpty() ? aMask.AcquireReadAccess() : nullptr;
+    BitmapScopedReadAccess pMskAcc;
+    if (!aMask.IsEmpty())
+        pMskAcc = aMask;
     const tools::Long          nWidth = pBmpAcc->Width();
     const tools::Long          nHeight = pBmpAcc->Height();
     const tools::Long          nStartX = 0;
@@ -381,7 +383,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     {
         aMask = AlphaMask(aBmp.GetSizePixel());
         aMask.Erase( 0 );
-        pMskAcc = aMask.AcquireReadAccess();
+        pMskAcc = aMask;
     }
 
     // create temporary list to hold interfaces
@@ -464,9 +466,6 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
         for (auto const& elem : aTmp)
             elem->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
     }
-
-    Bitmap::ReleaseAccess( pBmpAcc );
-    Bitmap::ReleaseAccess( pMskAcc );
 }
 
 

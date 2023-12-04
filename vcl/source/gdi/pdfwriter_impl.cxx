@@ -82,7 +82,7 @@
 #include <comphelper/hash.hxx>
 
 #include <svdata.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <fontsubset.hxx>
 #include <font/EmphasisMark.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -8796,7 +8796,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
     aDev->DrawGradient( tools::Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
 
     Bitmap aSample = aDev->GetBitmap( Point( 0, 0 ), rObject.m_aSize );
-    Bitmap::ScopedReadAccess pAccess(aSample);
+    BitmapScopedReadAccess pAccess(aSample);
 
     Size aSize = aSample.GetSizePixel();
 
@@ -9454,7 +9454,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
         }
     }
 
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
 
     bool bTrueColor = true;
     sal_Int32 nBitsPerComponent = 0;

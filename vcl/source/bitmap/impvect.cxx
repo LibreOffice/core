@@ -649,7 +649,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
     VECT_PROGRESS( pProgress, 0 );
 
     std::optional<Bitmap> xBmp(std::in_place, rColorBmp );
-    Bitmap::ScopedReadAccess pRAcc(*xBmp);
+    BitmapScopedReadAccess pRAcc(*xBmp);
 
     if( pRAcc )
     {

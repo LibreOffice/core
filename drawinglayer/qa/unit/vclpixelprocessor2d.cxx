@@ -117,7 +117,7 @@ public:
 
         exportDevice("test-tdf139000.png", device);
         Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
-        Bitmap::ScopedReadAccess access(bitmap);
+        BitmapScopedReadAccess access(bitmap);
         // The upper half should keep its red background color.
         CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), access->GetColor(Point(0, 99)));
         // First line of the gradient should not be the start color, but something halfway.

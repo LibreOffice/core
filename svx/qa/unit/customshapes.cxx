@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_NonUI)
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pRead(aBMP);
+    BitmapScopedReadAccess pRead(aBMP);
     Size aSize = aBMP.GetSizePixel();
     // GetColor(Y,X)
     Color aActualColor = pRead->GetColor(aSize.Height() / 2, aSize.Width() * 0.125);
@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FrontLightDim)
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pRead(aBMP);
+    BitmapScopedReadAccess pRead(aBMP);
     Size aSize = aBMP.GetSizePixel();
     // GetColor(Y,X)
     Color aActualColor = pRead->GetColor(aSize.Height() / 2, aSize.Width() * 0.4);
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FirstLightHarsh)
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pRead(aBMP);
+    BitmapScopedReadAccess pRead(aBMP);
     Size aSize = aBMP.GetSizePixel();
     // GetColor(Y,X)
     const Color aActualColor = pRead->GetColor(aSize.Height() / 2, aSize.Width() / 2);
@@ -1221,7 +1221,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148501_OctagonBevel)
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
     Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pRead(aBMP);
+    BitmapScopedReadAccess pRead(aBMP);
     Size aSize = aBMP.GetSizePixel();
 
     // GetColor(Y,X). The chosen threshold for the ColorDistance can be adapted if necessary.

@@ -20,7 +20,7 @@
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
 #include <salbmp.hxx>
@@ -98,8 +98,8 @@ void AlphaMask::BlendWith(const AlphaMask& rOther)
         assert( maBitmap.HasGreyPalette8Bit() && "alpha bitmap should have greyscale palette" );
         return;
     }
-    AlphaMask::ScopedReadAccess pOtherAcc(const_cast<AlphaMask&>(rOther));
-    AlphaScopedWriteAccess pAcc(*this);
+    BitmapScopedReadAccess pOtherAcc(rOther);
+    BitmapScopedWriteAccess pAcc(*this);
     assert (pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8 && "cannot BlendWith this combination");
     if (!(pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8))
     {
@@ -143,7 +143,7 @@ bool AlphaMask::hasAlpha() const
     if(IsEmpty())
         return false;
 
-    ScopedReadAccess pAcc(const_cast<AlphaMask&>(*this));
+    BitmapScopedReadAccess pAcc(*this);
     const tools::Long nHeight(pAcc->Height());
     const tools::Long nWidth(pAcc->Width());
 
@@ -167,8 +167,8 @@ bool AlphaMask::hasAlpha() const
 
 bool AlphaMask::AlphaCombineOr(const AlphaMask& rMask)
 {
-    ScopedReadAccess pMaskAcc(const_cast<AlphaMask&>(rMask));
-    AlphaScopedWriteAccess pAcc(*this);
+    BitmapScopedReadAccess pMaskAcc(rMask);
+    BitmapScopedWriteAccess pAcc(*this);
 
     if (!pMaskAcc || !pAcc)
         return false;

@@ -1739,7 +1739,7 @@ static void assertTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, i
     pXTextDocument->paintTile(*pDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     Color aActualColor(pAccess->GetPixel(nPixelX, nPixelY));
     CPPUNIT_ASSERT_EQUAL(aColor, aActualColor);
 }
@@ -2843,7 +2843,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSemiTransparent)
             /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     Color aColor(pAccess->GetPixel(255, 255));
 
     // Without the accompanying fix in place, this test would have failed with 'Expected greater or
@@ -2872,7 +2872,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHighlightNumbering)
             /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
 
     // Yellow highlighting over numbering
     Color aColor(pAccess->GetPixel(103, 148));
@@ -2897,7 +2897,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHighlightNumbering_shd)
             /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
 
     // No highlighting over numbering - w:shd does not apply to numbering.
     Color aColor(pAccess->GetPixel(103, 148));
@@ -2927,7 +2927,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
             /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(100, 100), Size(nTileSize, nTileSize));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
 
     const char* aTexts[] = {
         "Insert paragraph break",
@@ -3008,7 +3008,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDoubleUnderlineAndStrikeOut)
             /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     bool bGreenLine = false;
     size_t nGreenLine = 0;
     // count green horizontal lines by tracking a column of pixels counting the
@@ -3054,7 +3054,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf43244_SpacesOnMargin)
         /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(730, 120), Size(nTileSize, nTileSize));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
 
     //Test if we see any spaces on the right margin in a 47x48 rectangle
     bool bSpaceFound = false;
@@ -3097,7 +3097,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClipText)
             /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
 
     // check top margin, it's not white completely (i.e. showing top of letter "T")
     bool bClipTop = true;

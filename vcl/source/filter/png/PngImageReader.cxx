@@ -18,8 +18,8 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <osl/endian.h>
+#include <vcl/BitmapWriteAccess.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 
@@ -325,7 +325,7 @@ bool fcTLbeforeIDAT(SvStream& rStream)
 bool reader(SvStream& rStream, Graphic& rGraphic,
             GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
             BitmapScopedWriteAccess* pAccess = nullptr,
-            AlphaScopedWriteAccess* pAlphaAccess = nullptr)
+            BitmapScopedWriteAccess* pAlphaAccess = nullptr)
 {
     if (!isPng(rStream))
         return false;
@@ -356,7 +356,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
     AlphaMask aBitmapAlpha;
     Size prefSize;
     BitmapScopedWriteAccess pWriteAccessInstance;
-    AlphaScopedWriteAccess pWriteAccessAlphaInstance;
+    BitmapScopedWriteAccess pWriteAccessAlphaInstance;
     const bool bFuzzing = utl::ConfigManager::IsFuzzing();
     const bool bSupportsBitmap32 = bFuzzing || ImplGetSVData()->mpDefInst->supportsBitmap32();
     const bool bOnlyCreateBitmap
@@ -503,18 +503,18 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
             return true;
         }
 
-        pWriteAccessInstance = BitmapScopedWriteAccess(aBitmap);
+        pWriteAccessInstance = aBitmap;
         if (!pWriteAccessInstance)
             return false;
         if (!aBitmapAlpha.IsEmpty())
         {
-            pWriteAccessAlphaInstance = AlphaScopedWriteAccess(aBitmapAlpha);
+            pWriteAccessAlphaInstance = aBitmapAlpha;
             if (!pWriteAccessAlphaInstance)
                 return false;
         }
     }
     BitmapScopedWriteAccess& pWriteAccess = pAccess ? *pAccess : pWriteAccessInstance;
-    AlphaScopedWriteAccess& pWriteAccessAlpha
+    BitmapScopedWriteAccess& pWriteAccessAlpha
         = pAlphaAccess ? *pAlphaAccess : pWriteAccessAlphaInstance;
 
     if (colorType == PNG_COLOR_TYPE_RGB)
@@ -856,7 +856,7 @@ BinaryDataContainer PngImageReader::getMicrosoftGifChunk(SvStream& rStream)
 }
 
 bool ImportPNG(SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags,
-               BitmapScopedWriteAccess* pAccess, AlphaScopedWriteAccess* pAlphaAccess)
+               BitmapScopedWriteAccess* pAccess, BitmapScopedWriteAccess* pAlphaAccess)
 {
     // Creating empty bitmaps should be practically a no-op, and thus thread-safe.
     Graphic aGraphic;

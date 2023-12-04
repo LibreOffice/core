@@ -12,7 +12,7 @@
 
 #include <pdf/PdfConfig.hxx>
 #include <vcl/graph.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/datetime.hxx>
 #include <tools/UnitConversion.hxx>
@@ -92,7 +92,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
         AlphaMask aMask(Size(nPageWidth, nPageHeight));
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
-            AlphaScopedWriteAccess pMaskAccess(aMask);
+            BitmapScopedWriteAccess pMaskAccess(aMask);
             ConstScanline pPdfBuffer = pPdfBitmap->getBuffer();
             const int nStride = pPdfBitmap->getStride();
             std::vector<sal_uInt8> aScanlineAlpha(nPageWidth);

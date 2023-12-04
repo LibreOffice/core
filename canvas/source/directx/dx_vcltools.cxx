@@ -100,7 +100,7 @@ namespace dxcanvas::tools
                 {
                     // first of all, ensure that Bitmap contains a DIB, by
                     // acquiring a read access
-                    BitmapReadAccess* pReadAcc = rBmp.AcquireReadAccess();
+                    BitmapScopedReadAccess pReadAcc(rBmp);
 
                     // TODO(P2): Acquiring a read access can actually
                     // force a read from VRAM, thus, avoiding this
@@ -116,8 +116,6 @@ namespace dxcanvas::tools
                             return drawDIBits( rGraphics,
                                                aBmpSysData.pDIB );
                         }
-
-                        Bitmap::ReleaseAccess( pReadAcc );
                     }
                 }
                 else
@@ -156,7 +154,7 @@ namespace dxcanvas::tools
 
                 Bitmap aBitmap( rBmpEx.GetBitmap() );
 
-                Bitmap::ScopedReadAccess pReadAccess( aBitmap );
+                BitmapScopedReadAccess pReadAccess( aBitmap );
 
                 const sal_Int32 nWidth( aBmpSize.Width() );
                 const sal_Int32 nHeight( aBmpSize.Height() );
@@ -167,7 +165,7 @@ namespace dxcanvas::tools
 
                 Bitmap aAlpha( rBmpEx.GetAlphaMask().GetBitmap() );
 
-                Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha );
+                BitmapScopedReadAccess pAlphaReadAccess( aAlpha );
 
                 // By convention, the access buffer always has
                 // one of the following formats:

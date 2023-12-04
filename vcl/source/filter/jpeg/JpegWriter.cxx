@@ -212,7 +212,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
             aGraphicBmp = rGraphic.GetBitmapEx().GetBitmap();
     }
 
-    mpReadAccess = Bitmap::ScopedReadAccess(aGraphicBmp);
+    mpReadAccess = aGraphicBmp;
     if( mpReadAccess )
     {
         if ( !mbGreys )  // bitmap was not explicitly converted into greyscale,

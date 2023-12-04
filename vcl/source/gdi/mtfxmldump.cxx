@@ -599,7 +599,7 @@ void writeBitmapContentChecksum(tools::XmlWriter& rWriter, Bitmap const& rBitmap
     Bitmap aBitmap(rBitmap);
 
     comphelper::Hash aHashEngine(comphelper::HashType::SHA1);
-    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    BitmapScopedReadAccess pReadAccess(aBitmap);
     assert(pReadAccess);
 
     for (tools::Long y = 0 ; y < pReadAccess->Height() ; ++y)

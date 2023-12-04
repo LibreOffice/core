@@ -17,7 +17,7 @@ BitmapSymmetryCheck::BitmapSymmetryCheck()
 
 bool BitmapSymmetryCheck::check(Bitmap& rBitmap)
 {
-    Bitmap::ScopedReadAccess aReadAccess(rBitmap);
+    BitmapScopedReadAccess aReadAccess(rBitmap);
     return checkImpl(aReadAccess.get());
 }
 

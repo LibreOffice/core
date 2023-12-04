@@ -399,8 +399,8 @@ sal::systools::COMReference<ID2D1Bitmap> createB2DBitmap(const BitmapEx& rBitmap
     if (bAlpha)
     {
         Bitmap aSrcAlpha(rBitmapEx.GetAlphaMask().GetBitmap());
-        Bitmap::ScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.GetBitmap()));
-        Bitmap::ScopedReadAccess pAlphaReadAccess(aSrcAlpha.AcquireReadAccess(), aSrcAlpha);
+        BitmapScopedReadAccess pReadAccess(rBitmapEx.GetBitmap());
+        BitmapScopedReadAccess pAlphaReadAccess(aSrcAlpha);
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
 
@@ -421,7 +421,7 @@ sal::systools::COMReference<ID2D1Bitmap> createB2DBitmap(const BitmapEx& rBitmap
     }
     else
     {
-        Bitmap::ScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.GetBitmap()));
+        BitmapScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.GetBitmap()));
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
 
@@ -1076,7 +1076,7 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_B2
     std::unique_ptr<sal_uInt8[]> aData(new sal_uInt8[nPixelCount]);
     sal_uInt8* pTarget = aData.get();
     Bitmap aSrcAlpha(aAlpha.GetBitmap());
-    Bitmap::ScopedReadAccess pReadAccess(aSrcAlpha.AcquireReadAccess(), aSrcAlpha);
+    BitmapScopedReadAccess pReadAccess(aSrcAlpha);
     const tools::Long nHeight(pReadAccess->Height());
     const tools::Long nWidth(pReadAccess->Width());
 

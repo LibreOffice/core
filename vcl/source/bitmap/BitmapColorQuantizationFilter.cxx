@@ -13,8 +13,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>
 #include <cstdlib>
@@ -26,7 +25,7 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
     if (vcl::numberOfColors(aBitmap.getPixelFormat()) <= sal_Int64(mnNewColorCount))
         return BitmapEx(aBitmap);
 
-    Bitmap::ScopedReadAccess pRAcc(aBitmap);
+    BitmapScopedReadAccess pRAcc(aBitmap);
     if (!pRAcc)
         return BitmapEx();
 

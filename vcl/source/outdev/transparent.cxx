@@ -30,8 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <pdf/pdfwriter_impl.hxx>
 #include <salgdi.hxx>
 
@@ -359,7 +358,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                 if( !aPaint.IsEmpty() && !aPolyMask.IsEmpty() )
                 {
                     BitmapScopedWriteAccess pW(aPaint);
-                    Bitmap::ScopedReadAccess pR(aPolyMask);
+                    BitmapScopedReadAccess pR(aPolyMask);
 
                     if( pW && pR )
                     {

@@ -22,7 +22,7 @@
 #include "decode.hxx"
 #include "gifread.hxx"
 #include <memory>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <graphic/GraphicReader.hxx>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
@@ -226,7 +226,7 @@ void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPal
         if (!aAnimation.Count())
             aBmp1.Erase(aWhite);
 
-        pAcc1 = BitmapScopedWriteAccess(aBmp1);
+        pAcc1 = aBmp1;
 
         if (pAcc1)
         {
@@ -248,7 +248,7 @@ void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPal
         else
             aBmp8.Erase(COL_WHITE);
 
-        pAcc8 = BitmapScopedWriteAccess(aBmp8);
+        pAcc8 = aBmp8;
         bStatus = bool(pAcc8);
     }
 }
@@ -729,13 +729,13 @@ Graphic GIFReader::GetIntermediateGraphic()
             pAcc1.reset();
             aImGraphic = BitmapEx( aBmp8, aBmp1 );
 
-            pAcc1 = BitmapScopedWriteAccess(aBmp1);
+            pAcc1 = aBmp1;
             bStatus = bStatus && pAcc1;
         }
         else
             aImGraphic = BitmapEx(aBmp8);
 
-        pAcc8 = BitmapScopedWriteAccess(aBmp8);
+        pAcc8 = aBmp8;
         bStatus = bStatus && pAcc8;
     }
 

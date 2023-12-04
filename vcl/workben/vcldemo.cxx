@@ -52,8 +52,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/BitmapEmbossGreyFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -1307,10 +1306,10 @@ public:
             AlphaMask aMask(aSrc.GetSizePixel());
             Bitmap aRecovered(aSrc.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             {
-                AlphaScopedWriteAccess pMaskAcc(aMask);
+                BitmapScopedWriteAccess pMaskAcc(aMask);
                 BitmapScopedWriteAccess pRecAcc(aRecovered);
-                Bitmap::ScopedReadAccess pAccW(aWhiteBmp); // a * pix + (1-a)
-                Bitmap::ScopedReadAccess pAccB(aBlackBmp); // a * pix + 0
+                BitmapScopedReadAccess pAccW(aWhiteBmp); // a * pix + (1-a)
+                BitmapScopedReadAccess pAccB(aBlackBmp); // a * pix + 0
                 int nSizeX = aSrc.GetSizePixel().Width();
                 int nSizeY = aSrc.GetSizePixel().Height();
                 for (int y = 0; y < nSizeY; y++)

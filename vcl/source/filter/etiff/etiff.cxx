@@ -62,7 +62,7 @@ private:
     sal_uInt64              mnStreamOfs;
 
     bool                    mbStatus;
-    BitmapReadAccess*       mpAcc;
+    BitmapScopedReadAccess  mpAcc;
 
     sal_uInt32              mnWidth, mnHeight, mnColors;
     sal_uInt32              mnCurAllPictHeight;
@@ -117,7 +117,6 @@ TIFFWriter::TIFFWriter(SvStream &rStream)
     : m_rOStm(rStream)
     , mnStreamOfs(0)
     , mbStatus(true)
-    , mpAcc(nullptr)
     , mnWidth(0)
     , mnHeight(0)
     , mnColors(0)
@@ -180,7 +179,7 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pF
             mnPalPos = 0;
             const AnimationFrame& rAnimationFrame = aAnimation.Get( i );
             Bitmap aBmp = rAnimationFrame.maBitmapEx.GetBitmap();
-            mpAcc = aBmp.AcquireReadAccess();
+            mpAcc = aBmp;
             if ( mpAcc )
             {
                 mnBitsPerPixel = vcl::pixelFormatBitCount(aBmp.getPixelFormat());
@@ -209,7 +208,7 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pF
                 m_rOStm.WriteUInt16( mnTagCount );
                 m_rOStm.Seek( nCurPos );
 
-                Bitmap::ReleaseAccess( mpAcc );
+                mpAcc.reset();
             }
             else
                 mbStatus = false;

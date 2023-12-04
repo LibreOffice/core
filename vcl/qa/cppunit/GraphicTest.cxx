@@ -123,7 +123,7 @@ bool checkBitmap(Graphic& rGraphic)
 
     Bitmap aBitmap(rGraphic.GetBitmapEx().GetBitmap());
     {
-        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        BitmapScopedReadAccess pReadAccess(aBitmap);
         for (tools::Long y = 0; y < rGraphic.GetSizePixel().Height(); y++)
         {
             for (tools::Long x = 0; x < rGraphic.GetSizePixel().Width(); x++)

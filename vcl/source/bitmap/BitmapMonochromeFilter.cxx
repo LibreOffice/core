@@ -11,13 +11,12 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const
 {
     Bitmap aBitmap = aBitmapEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+    BitmapScopedReadAccess pReadAcc(aBitmap);
     if (!pReadAcc)
         return BitmapEx();
 

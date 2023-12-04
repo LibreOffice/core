@@ -11,7 +11,7 @@
 #include <test/outputdevice.hxx>
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 namespace vcl::test {
 
@@ -104,7 +104,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha(vcl::PixelFormat aBitm
 
     AlphaMask aAlpha(aBitmapSize);
     {
-        AlphaScopedWriteAccess aWriteAccess(aAlpha);
+        BitmapScopedWriteAccess aWriteAccess(aAlpha);
         aWriteAccess->Erase(COL_ALPHA_TRANSPARENT);
         aWriteAccess->SetLineColor(Color(0xBB, 0xBB, 0xBB));
         aWriteAccess->DrawRect(tools::Rectangle(0, 0, 8, 8));
@@ -153,7 +153,7 @@ BitmapEx OutputDeviceTestBitmap::setupDrawBlend(vcl::PixelFormat aBitmapFormat)
 
     AlphaMask aAlpha(aBitmapSize);
     {
-        AlphaScopedWriteAccess aWriteAccess(aAlpha);
+        BitmapScopedWriteAccess aWriteAccess(aAlpha);
         aWriteAccess->Erase(COL_ALPHA_TRANSPARENT);
         aWriteAccess->SetLineColor(Color(0xBB, 0xBB, 0xBB));
         aWriteAccess->DrawRect(tools::Rectangle(0, 0, 8, 8));

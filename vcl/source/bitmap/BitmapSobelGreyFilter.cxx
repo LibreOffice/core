@@ -13,8 +13,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapSobelGreyFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>
 
@@ -25,7 +24,7 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
     if (!aBitmap.ImplMakeGreyscales())
         return BitmapEx();
 
-    Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+    BitmapScopedReadAccess pReadAcc(aBitmap);
     if (!pReadAcc)
         return BitmapEx();
 

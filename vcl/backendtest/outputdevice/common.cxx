@@ -10,7 +10,7 @@
 
 #include <test/outputdevice.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <salgdi.hxx>
 
 #include <map>

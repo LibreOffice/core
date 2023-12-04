@@ -10,7 +10,7 @@
 
 #include <basegfx/color/bcolortools.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapMaskToAlphaFilter.hxx>
 
 /**
@@ -23,7 +23,7 @@ BitmapEx BitmapMaskToAlphaFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aBitmap(rBitmapEx.GetBitmap());
     Bitmap aOutBitmap(aSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
 
-    Bitmap::ScopedReadAccess pRead(aBitmap);
+    BitmapScopedReadAccess pRead(aBitmap);
     BitmapScopedWriteAccess pWrite(aOutBitmap);
 
     if (pRead && pWrite)

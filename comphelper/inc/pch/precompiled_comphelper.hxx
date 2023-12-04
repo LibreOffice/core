@@ -112,7 +112,6 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
-#include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/vectorgraphicdata.hxx>

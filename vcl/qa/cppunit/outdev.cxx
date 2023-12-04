@@ -26,7 +26,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bufferdevice.hxx>
 #include <window.h>
 
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testVirtualDevice)
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(30, 31)));
 
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
-    Bitmap::ScopedReadAccess pAcc(aBmp);
+    BitmapScopedReadAccess pAcc(aBmp);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, static_cast<Color>(pAcc->GetPixel(0, 0)));
 #if !defined _WIN32 //TODO: various failures on Windows tinderboxes
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<Color>(pAcc->GetPixel(2, 1)));
@@ -204,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawBlackBitmap)
 
     // test to see if the color is black
     Bitmap aBlackBmp(pVDev->GetBitmap(Point(0, 0), Size(10, 10)));
-    Bitmap::ScopedReadAccess pReadAccess(aBlackBmp);
+    BitmapScopedReadAccess pReadAccess(aBlackBmp);
     const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), rColor);
 }
@@ -248,7 +248,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawWhiteBitmap)
 
     // test to see if the color is white
     Bitmap aWhiteBmp(pVDev->GetBitmap(Point(0, 0), Size(10, 10)));
-    Bitmap::ScopedReadAccess pReadAccess(aWhiteBmp);
+    BitmapScopedReadAccess pReadAccess(aWhiteBmp);
     const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), rColor);
 }
@@ -319,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGrayBitmap)
 
     // check to ensure that the bitmap is red
     {
-        Bitmap::ScopedReadAccess pReadAccess(aBmp);
+        BitmapScopedReadAccess pReadAccess(aBmp);
         const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
         CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), rColor);
     }
@@ -332,7 +332,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGrayBitmap)
     // should be a grey
     Bitmap aVDevBmp(pVDev->GetBitmap(Point(), Size(1, 1)));
     {
-        Bitmap::ScopedReadAccess pReadAccess(aVDevBmp);
+        BitmapScopedReadAccess pReadAccess(aVDevBmp);
         const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
         CPPUNIT_ASSERT_EQUAL(BitmapColor(0x26, 0x26, 0x26), rColor);
     }
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapEx)
     CPPUNIT_ASSERT_EQUAL(Size(16, 16), aTransformedSize);
 
     aBitmap = rBitmapEx.GetBitmap();
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     for (int i = 0; i < 16; ++i)
     {
         for (int j = 0; j < 16; ++j)
@@ -438,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapExFlip)
     const BitmapEx& rBitmapEx = pBitmapAction->GetBitmapEx();
 
     aBitmap = rBitmapEx.GetBitmap();
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    BitmapScopedReadAccess pAccess(aBitmap);
     int nX = 8 * 0.25;
     int nY = 8 * 0.25;
     BitmapColor aColor = pAccess->GetPixel(nY, nX);

@@ -1003,7 +1003,7 @@ namespace emfio
                     SAL_WARN( "emfio", "\tTODO Read DIB failed. Interrupting processing whole image. Please report bug report." );
                 if ( !aBmp.IsEmpty() )
                 {
-                    Bitmap::ScopedReadAccess pBmp(aBmp);
+                    BitmapScopedReadAccess pBmp(aBmp);
                     for ( tools::Long y = 0; y < pBmp->Height(); y++ )
                     {
                         for ( tools::Long x = 0; x < pBmp->Width(); x++ )

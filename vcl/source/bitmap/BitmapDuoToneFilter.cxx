@@ -11,8 +11,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapDuoToneFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 static sal_uInt8 lcl_getDuotoneColorComponent(sal_uInt8 base, sal_uInt16 color1, sal_uInt16 color2)
 {
@@ -30,7 +29,7 @@ BitmapEx BitmapDuoToneFilter::execute(BitmapEx const& rBitmapEx) const
     const sal_Int32 nHeight = aBitmap.GetSizePixel().Height();
 
     Bitmap aResultBitmap(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP);
-    Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+    BitmapScopedReadAccess pReadAcc(aBitmap);
     BitmapScopedWriteAccess pWriteAcc(aResultBitmap);
     const BitmapColor aColorOne(mnColorOne);
     const BitmapColor aColorTwo(mnColorTwo);

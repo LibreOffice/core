@@ -95,7 +95,7 @@ public:
                           mRenderState);
         exportDevice("test-draw-line.png", mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());
-        Bitmap::ScopedReadAccess access(bitmap);
+        BitmapScopedReadAccess access(bitmap);
         // Canvas uses AA, which blurs the line, and it cannot be turned off,
         // so do not check the end points.
         CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access->GetPixel(0, 0));
@@ -130,7 +130,7 @@ public:
 
         exportDevice("test-tdf134053.png", mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());
-        Bitmap::ScopedReadAccess access(bitmap);
+        BitmapScopedReadAccess access(bitmap);
         struct Check
         {
             tools::Long start;

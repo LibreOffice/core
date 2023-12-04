@@ -36,7 +36,7 @@
 #include <vcl/bitmapex.hxx>
 
 #include <canvasbitmap.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>
 
@@ -87,7 +87,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     int      extraBpp = 0;
 
     {
-        Bitmap::ScopedReadAccess pAcc( aContainedBmp );
+        BitmapScopedReadAccess pAcc( aContainedBmp );
         nDepth = pAcc->GetBitCount();
         if( pAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcMask )
             extraBpp = 8; // the format has 8 unused bits
@@ -675,7 +675,7 @@ void CanvasBitmapTest::runTest()
         AlphaMask aMask(Size(200,200));
         aMask.Erase(255);
         {
-            AlphaMask::ScopedWriteAccess pAcc(aMask);
+            BitmapScopedWriteAccess pAcc(aMask);
             if( pAcc.get() )
             {
                 pAcc->SetFillColor(COL_ALPHA_OPAQUE);
@@ -693,7 +693,7 @@ void CanvasBitmapTest::runTest()
         AlphaMask aAlpha(Size(200,200));
         aAlpha.Erase(0);
         {
-            BitmapWriteAccess* pAcc = aAlpha.AcquireAlphaWriteAccess();
+            BitmapScopedWriteAccess pAcc(aAlpha);
             if( pAcc )
             {
                 pAcc->SetFillColor(COL_ALPHA_OPAQUE);
@@ -701,7 +701,6 @@ void CanvasBitmapTest::runTest()
                 pAcc->SetPixel(0,0,BitmapColor(0));
                 pAcc->SetPixel(0,1,BitmapColor(255));
                 pAcc->SetPixel(0,2,BitmapColor(0));
-                Bitmap::ReleaseAccess(pAcc);
             }
         }
 
@@ -724,7 +723,7 @@ void CanvasBitmapTest::runTest()
                             vcl::PixelFormat::N8_BPP,  aBmp.getPixelFormat());
     {
         Bitmap aBitmap = aBmp.GetBitmap();
-        BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
+        BitmapScopedReadAccess pBmpAcc(aBitmap);
 
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
                                 pBmpAcc );
@@ -735,8 +734,6 @@ void CanvasBitmapTest::runTest()
                                BitmapColor(2), pBmpAcc->GetPixel(2,2));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) incorrect content",
                                BitmapColor(9), pBmpAcc->GetPixel(2,9));
-
-        Bitmap::ReleaseAccess(pBmpAcc);
     }
 
     xTestBmp.set( new TestBitmap( geometry::IntegerSize2D(10,10), false ));
@@ -750,9 +747,9 @@ void CanvasBitmapTest::runTest()
                             vcl::PixelFormat::N24_BPP,  aBmp.getPixelFormat());
     {
         Bitmap aBitmap = aBmp.GetBitmap();
-        BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
+        BitmapScopedReadAccess pBmpAcc(aBitmap);
         AlphaMask aBitmapAlpha = aBmp.GetAlphaMask();
-        BitmapReadAccess* pAlphaAcc = aBitmapAlpha.AcquireReadAccess();
+        BitmapScopedReadAccess pAlphaAcc(aBitmapAlpha);
 
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
                                 pBmpAcc);
@@ -771,9 +768,6 @@ void CanvasBitmapTest::runTest()
                                BitmapColor(0,3,9), pBmpAcc->GetPixel(2,9));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) correct alpha content",
                                BitmapColor(2), pAlphaAcc->GetPixel(2,9));
-
-        Bitmap::ReleaseAccess(pAlphaAcc);
-        Bitmap::ReleaseAccess(pBmpAcc);
     }
 }
 

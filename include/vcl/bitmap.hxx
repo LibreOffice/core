@@ -26,7 +26,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
-#include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 
 #include <o3tl/typed_flags_set.hxx>
@@ -604,16 +603,6 @@ public:
     SAL_DLLPRIVATE void     ImplSetSalBitmap( const std::shared_ptr<SalBitmap>& xImpBmp );
 
     SAL_DLLPRIVATE bool     ImplMakeGreyscales();
-
-public:
-
-    BitmapInfoAccess*       AcquireInfoAccess();
-    BitmapReadAccess*       AcquireReadAccess();
-    BitmapWriteAccess*      AcquireWriteAccess();
-    static void             ReleaseAccess( BitmapInfoAccess* pAccess );
-
-    typedef vcl::ScopedBitmapAccess<BitmapReadAccess, Bitmap, &Bitmap::AcquireReadAccess> ScopedReadAccess;
-    typedef vcl::ScopedBitmapAccess<BitmapInfoAccess, Bitmap, &Bitmap::AcquireInfoAccess> ScopedInfoAccess;
 
 private:
     SAL_DLLPRIVATE bool ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);

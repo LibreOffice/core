@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_VCL_BITMAPINFOACCESS_HXX
-#define INCLUDED_VCL_BITMAPINFOACCESS_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
@@ -38,10 +36,13 @@ class VCL_DLLPUBLIC BitmapInfoAccess
     friend class BitmapReadAccess;
 
 public:
-    BitmapInfoAccess(Bitmap& rBitmap, BitmapAccessMode nMode = BitmapAccessMode::Info);
+    BitmapInfoAccess(const Bitmap& rBitmap, BitmapAccessMode nMode = BitmapAccessMode::Info);
+    BitmapInfoAccess(const AlphaMask& rBitmap, BitmapAccessMode nMode = BitmapAccessMode::Info);
+
     virtual ~BitmapInfoAccess();
 
     bool operator!() const { return mpBuffer == nullptr; }
+    explicit operator bool() const { return mpBuffer != nullptr; }
 
     tools::Long Width() const { return mpBuffer ? mpBuffer->mnWidth : 0L; }
 
@@ -152,6 +153,47 @@ protected:
     BitmapAccessMode mnAccessMode;
 };
 
-#endif // INCLUDED_VCL_BITMAPINFOACCESS_HXX
+class BitmapScopedInfoAccess
+{
+public:
+    BitmapScopedInfoAccess(const Bitmap& rBitmap)
+        : moAccess(rBitmap)
+    {
+    }
+    BitmapScopedInfoAccess(const AlphaMask& rBitmap)
+        : moAccess(rBitmap)
+    {
+    }
+    BitmapScopedInfoAccess() {}
+
+    BitmapScopedInfoAccess& operator=(const Bitmap& rBitmap)
+    {
+        moAccess.emplace(rBitmap);
+        return *this;
+    }
+
+    BitmapScopedInfoAccess& operator=(const AlphaMask& rBitmap)
+    {
+        moAccess.emplace(rBitmap);
+        return *this;
+    }
+
+    bool operator!() const { return !moAccess.has_value() || !*moAccess; }
+    explicit operator bool() const { return moAccess && bool(*moAccess); }
+
+    void reset() { moAccess.reset(); }
+
+    BitmapInfoAccess* get() { return moAccess ? &*moAccess : nullptr; }
+    const BitmapInfoAccess* get() const { return moAccess ? &*moAccess : nullptr; }
+
+    BitmapInfoAccess* operator->() { return &*moAccess; }
+    const BitmapInfoAccess* operator->() const { return &*moAccess; }
+
+    BitmapInfoAccess& operator*() { return *moAccess; }
+    const BitmapInfoAccess& operator*() const { return *moAccess; }
+
+private:
+    std::optional<BitmapInfoAccess> moAccess;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

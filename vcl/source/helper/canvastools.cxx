@@ -43,7 +43,7 @@
 
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -283,8 +283,9 @@ namespace vcl::unotools
 
                 { // limit scoped access
                     BitmapScopedWriteAccess pWriteAccess( aBitmap );
-                    BitmapScopedWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : nullptr,
-                                                               aAlpha );
+                    BitmapScopedWriteAccess pAlphaWriteAccess;
+                    if (nAlphaDepth)
+                        pAlphaWriteAccess = aAlpha;
 
                     ENSURE_OR_THROW(pWriteAccess.get() != nullptr,
                                     "Cannot get write access to bitmap");

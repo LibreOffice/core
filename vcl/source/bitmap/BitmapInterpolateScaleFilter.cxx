@@ -22,7 +22,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapFastScaleFilter.hxx>
 #include <bitmap/BitmapInterpolateScaleFilter.hxx>
 
@@ -37,7 +37,7 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
 
     if ((nNewWidth > 1) && (nNewHeight > 1))
     {
-        Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+        BitmapScopedReadAccess pReadAcc(aBitmap);
         if (pReadAcc)
         {
             sal_Int32 nWidth = pReadAcc->Width();
@@ -143,8 +143,8 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                 const Bitmap aOriginal(aBitmap);
                 aBitmap = aNewBmp;
                 aNewBmp = Bitmap(Size(nNewWidth, nNewHeight), vcl::PixelFormat::N24_BPP);
-                pReadAcc = Bitmap::ScopedReadAccess(aBitmap);
-                pWriteAcc = BitmapScopedWriteAccess(aNewBmp);
+                pReadAcc = aBitmap;
+                pWriteAcc = aNewBmp;
 
                 if (pReadAcc && pWriteAcc)
                 {

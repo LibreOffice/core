@@ -10,7 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/bitmap.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -130,7 +130,7 @@ void BitmapFilterTest::testBlurCorrectness()
     CPPUNIT_ASSERT(BitmapSymmetryCheck::check(aBitmap24Bit));
 
     {
-        Bitmap::ScopedReadAccess aReadAccess(aBitmap24Bit);
+        BitmapScopedReadAccess aReadAccess(aBitmap24Bit);
         CPPUNIT_ASSERT_EQUAL(scanlineFormat, aReadAccess->GetScanlineFormat());
     }
 }

@@ -14,8 +14,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapConvolutionMatrixFilter.hxx>
 #include <vcl/BitmapSharpenFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <array>
 
@@ -24,7 +23,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
     const sal_Int32 nDivisor = 8;
-    Bitmap::ScopedReadAccess pReadAcc(aBitmap);
+    BitmapScopedReadAccess pReadAcc(aBitmap);
     if (!pReadAcc)
         return BitmapEx();
 

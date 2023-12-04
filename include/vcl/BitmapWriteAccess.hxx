@@ -7,25 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-
-#ifndef INCLUDED_VCL_INC_BITMAP_BITMAPWRITEACCESS_HXX
-#define INCLUDED_VCL_INC_BITMAP_BITMAPWRITEACCESS_HXX
+#pragma once
 
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <optional>
 
-typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess>
-    BitmapScopedWriteAccess;
-
-typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireAlphaWriteAccess>
-    AlphaScopedWriteAccess;
-
 class VCL_DLLPUBLIC BitmapWriteAccess final : public BitmapReadAccess
 {
 public:
     BitmapWriteAccess(Bitmap& rBitmap);
+    BitmapWriteAccess(AlphaMask& rBitmap);
     virtual ~BitmapWriteAccess() override;
 
     void CopyScanline(tools::Long nY, const BitmapReadAccess& rReadAcc);
@@ -89,6 +82,47 @@ private:
     BitmapWriteAccess& operator=(const BitmapWriteAccess&) = delete;
 };
 
-#endif
+class BitmapScopedWriteAccess
+{
+public:
+    BitmapScopedWriteAccess(Bitmap& rBitmap)
+        : moAccess(rBitmap)
+    {
+    }
+    BitmapScopedWriteAccess(AlphaMask& rBitmap)
+        : moAccess(rBitmap)
+    {
+    }
+    BitmapScopedWriteAccess() {}
+
+    BitmapScopedWriteAccess& operator=(Bitmap& rBitmap)
+    {
+        moAccess.emplace(rBitmap);
+        return *this;
+    }
+
+    BitmapScopedWriteAccess& operator=(AlphaMask& rBitmap)
+    {
+        moAccess.emplace(rBitmap);
+        return *this;
+    }
+
+    bool operator!() const { return !moAccess.has_value() || !*moAccess; }
+    explicit operator bool() const { return moAccess && bool(*moAccess); }
+
+    void reset() { moAccess.reset(); }
+
+    BitmapWriteAccess* get() { return moAccess ? &*moAccess : nullptr; }
+    const BitmapWriteAccess* get() const { return moAccess ? &*moAccess : nullptr; }
+
+    BitmapWriteAccess* operator->() { return &*moAccess; }
+    const BitmapWriteAccess* operator->() const { return &*moAccess; }
+
+    BitmapWriteAccess& operator*() { return *moAccess; }
+    const BitmapWriteAccess& operator*() const { return *moAccess; }
+
+private:
+    std::optional<BitmapWriteAccess> moAccess;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

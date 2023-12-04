@@ -16,7 +16,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <drawmode.hxx>
 
 class VclDrawModeTest : public test::BootstrapFixture
@@ -340,7 +340,7 @@ void VclDrawModeTest::testDrawModeBitmapEx()
     {
         BitmapEx aResultBitmapEx(vcl::drawmode::GetBitmapEx(aBmpEx, DrawModeFlags::GrayBitmap));
         Bitmap aResultBitmap(aResultBitmapEx.GetBitmap());
-        Bitmap::ScopedReadAccess pReadAccess(aResultBitmap);
+        BitmapScopedReadAccess pReadAccess(aResultBitmap);
 
         const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
         CPPUNIT_ASSERT_EQUAL(BitmapColor(0x26, 0x26, 0x26), rColor);
@@ -350,7 +350,7 @@ void VclDrawModeTest::testDrawModeBitmapEx()
     {
         BitmapEx aResultBitmapEx(vcl::drawmode::GetBitmapEx(aBmpEx, DrawModeFlags::NoFill));
         Bitmap aResultBitmap(aResultBitmapEx.GetBitmap());
-        Bitmap::ScopedReadAccess pReadAccess(aResultBitmap);
+        BitmapScopedReadAccess pReadAccess(aResultBitmap);
 
         const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
         CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), rColor);

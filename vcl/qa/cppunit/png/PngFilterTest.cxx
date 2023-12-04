@@ -27,7 +27,7 @@
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/tempfile.hxx>
@@ -64,7 +64,7 @@ void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
         CPPUNIT_ASSERT_MESSAGE(OString("Failed to read png from: " + sFilePath.toUtf8()).getStr(),
                                bReadOk);
         Bitmap aImportedBitmap = aImportedBitmapEx.GetBitmap();
-        Bitmap::ScopedInfoAccess pAccess(aImportedBitmap);
+        BitmapScopedInfoAccess pAccess(aImportedBitmap);
         auto nActualWidth = aImportedBitmapEx.GetSizePixel().Width();
         auto nActualHeight = aImportedBitmapEx.GetSizePixel().Height();
         auto nActualBpp = vcl::pixelFormatBitCount(aImportedBitmapEx.GetBitmap().getPixelFormat());
@@ -103,7 +103,7 @@ void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
         CPPUNIT_ASSERT_MESSAGE(
             OString("Failed to read exported png: " + sFilePath.toUtf8()).getStr(), bReadOk);
         Bitmap aExportedImportedBitmap = aExportedImportedBitmapEx.GetBitmap();
-        Bitmap::ScopedInfoAccess pAccess(aExportedImportedBitmap);
+        BitmapScopedInfoAccess pAccess(aExportedImportedBitmap);
         auto nActualWidth = aExportedImportedBitmapEx.GetSizePixel().Width();
         auto nActualHeight = aExportedImportedBitmapEx.GetSizePixel().Height();
         auto nActualBpp
@@ -208,7 +208,7 @@ void PngFilterTest::testPng()
 
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
-            Bitmap::ScopedReadAccess pAccess(aBitmap);
+            BitmapScopedReadAccess pAccess(aBitmap);
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Height());
 
@@ -255,7 +255,7 @@ void PngFilterTest::testPng()
 
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
-            Bitmap::ScopedReadAccess pAccess(aBitmap);
+            BitmapScopedReadAccess pAccess(aBitmap);
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Height());
             if (pAccess->GetBitCount() == 24 || pAccess->GetBitCount() == 32)
@@ -294,7 +294,7 @@ void PngFilterTest::testPng()
 
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
-            Bitmap::ScopedReadAccess pAccess(aBitmap);
+            BitmapScopedReadAccess pAccess(aBitmap);
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Height());
 
@@ -320,7 +320,7 @@ void PngFilterTest::testPng()
 
                 AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
                 {
-                    AlphaMask::ScopedReadAccess pAlphaAccess(aAlpha);
+                    BitmapScopedReadAccess pAlphaAccess(aAlpha);
                     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pAlphaAccess->GetBitCount());
                     CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Width());
                     CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Height());
@@ -1920,7 +1920,7 @@ void PngFilterTest::testPngRoundtrip24_8()
         AlphaMask aAlpha(Size(16, 16));
         {
             BitmapScopedWriteAccess pWriteAccessBitmap(aBitmap);
-            AlphaScopedWriteAccess pWriteAccessAlpha(aAlpha);
+            BitmapScopedWriteAccess pWriteAccessAlpha(aAlpha);
             pWriteAccessAlpha->Erase(Color(0xAA, 0xAA, 0xAA));
             pWriteAccessBitmap->Erase(COL_BLACK);
             for (int i = 0; i < 8; ++i)

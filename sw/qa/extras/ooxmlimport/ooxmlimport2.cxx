@@ -1159,7 +1159,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156078)
     Graphic exported;
     GraphicFilter::LoadGraphic(maTempFile.GetURL(), {}, exported);
     Bitmap bmp = exported.GetBitmapEx().GetBitmap();
-    Bitmap::ScopedReadAccess pAccess(bmp);
+    BitmapScopedReadAccess pAccess(bmp);
 
     // "1" must export to the top right corner; check its pixels
     bool numberPixelsFound = false;

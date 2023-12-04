@@ -14,7 +14,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -1180,9 +1180,9 @@ public:
         // as the alpha mask.
         device->Erase();
         alpha.Erase(255); // transparent
-        BitmapWriteAccess* alphaWrite = alpha.AcquireAlphaWriteAccess();
+        BitmapScopedWriteAccess alphaWrite(alpha);
         alphaWrite->SetPixelIndex(0, 0, 255); // opaque
-        Bitmap::ReleaseAccess(alphaWrite);
+        alphaWrite.reset();
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
         exportDevice("blend_extended_04.png", device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));

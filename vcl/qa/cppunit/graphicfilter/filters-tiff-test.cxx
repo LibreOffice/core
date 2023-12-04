@@ -13,7 +13,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
 
 #include <filter/TiffReader.hxx>
@@ -165,7 +165,7 @@ void TiffFilterTest::testTdf74331()
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aSize.Height());
 
-    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    BitmapScopedReadAccess pReadAccess(aBitmap);
 
     // Check the image contains different kinds of grays
     int nGrayCount = 0;
@@ -223,7 +223,7 @@ void TiffFilterTest::testRoundtrip()
     CPPUNIT_ASSERT_EQUAL(Size(2, 2), aResultBitmap.GetSizePixel());
 
     {
-        Bitmap::ScopedReadAccess pAccess(aResultBitmap);
+        BitmapScopedReadAccess pAccess(aResultBitmap);
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAccess->GetPixel(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(pAccess->GetPixel(0, 1)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(pAccess->GetPixel(1, 0)));
@@ -262,7 +262,7 @@ void TiffFilterTest::testRGB8bits()
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aSize.Height());
 
-        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        BitmapScopedReadAccess pReadAccess(aBitmap);
         const Color aColor = pReadAccess->GetColor(5, 5);
 
         if (rName == u"red8.tif")
@@ -297,7 +297,7 @@ void TiffFilterTest::testRGB16bits()
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aSize.Height());
 
-        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        BitmapScopedReadAccess pReadAccess(aBitmap);
         const Color aColor = pReadAccess->GetColor(5, 5);
 
         if (rName == u"red16.tif")

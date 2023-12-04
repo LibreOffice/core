@@ -68,7 +68,7 @@ static bool isBlack(Color col)
 static tools::Long getCharacterBaseWidth(VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
-    Bitmap::ScopedReadAccess access(bitmap);
+    BitmapScopedReadAccess access(bitmap);
     tools::Long y = start.Y();
     while (y >= 0 && !isBlack(access->GetColor(y, start.X())))
         --y;
@@ -87,7 +87,7 @@ static tools::Long getCharacterBaseWidth(VirtualDevice* device, const Point& sta
 static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
-    Bitmap::ScopedReadAccess access(bitmap);
+    BitmapScopedReadAccess access(bitmap);
     tools::Long y = start.Y();
     while (y < bitmap.GetSizePixel().Height() && !isBlack(access->GetColor(y, start.X())))
         ++y;
@@ -108,7 +108,7 @@ static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& star
 static tools::Long getCharacterLeftSideHeight(VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
-    Bitmap::ScopedReadAccess access(bitmap);
+    BitmapScopedReadAccess access(bitmap);
     tools::Long x = start.X();
     while (x < bitmap.GetSizePixel().Width() && !isBlack(access->GetColor(start.Y(), x)))
         ++x;

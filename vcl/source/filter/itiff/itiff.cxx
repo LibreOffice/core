@@ -24,7 +24,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/animate/Animation.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <unotools/configmgr.hxx>
@@ -242,7 +242,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             }
 
             AlphaMask bitmapAlpha(Size(w, h));
-            AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
+            BitmapScopedWriteAccess accessAlpha(bitmapAlpha);
             if (!accessAlpha)
             {
                 SAL_WARN("filter.tiff", "cannot create alpha " << w << " x " << h);

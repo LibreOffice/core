@@ -143,7 +143,7 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
         if (m_xCbFillHoles->get_active())
         {
             GDIMetaFile                 aNewMtf;
-            Bitmap::ScopedReadAccess    pRAcc(aTmp);
+            BitmapScopedReadAccess    pRAcc(aTmp);
 
             if( pRAcc )
             {

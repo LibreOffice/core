@@ -9,7 +9,7 @@
 
 #include <vcl/filter/PngImageWriter.hxx>
 #include <png.h>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -161,8 +161,8 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
 
     Bitmap aBitmap;
     AlphaMask aAlphaMask;
-    Bitmap::ScopedReadAccess pAccess;
-    AlphaMask::ScopedReadAccess pAlphaAccess;
+    BitmapScopedReadAccess pAccess;
+    BitmapScopedReadAccess pAlphaAccess;
 
     if (setjmp(png_jmpbuf(pPng)))
     {
@@ -181,9 +181,9 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
 
     {
         bool bCombineChannels = false;
-        pAccess = Bitmap::ScopedReadAccess(aBitmap);
+        pAccess = aBitmap;
         if (bTranslucent)
-            pAlphaAccess = AlphaMask::ScopedReadAccess(aAlphaMask);
+            pAlphaAccess = aAlphaMask;
         Size aSize = aBitmapEx.GetSizePixel();
 
         int bitDepth = -1;

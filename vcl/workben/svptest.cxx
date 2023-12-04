@@ -38,7 +38,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -110,7 +110,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     m_aBitmap(Size(256, 256), vcl::PixelFormat::N32_BPP)
 {
     // prepare an alpha mask
-    BitmapWriteAccess* pAcc = m_aBitmap.AcquireWriteAccess();
+    BitmapScopedWriteAccess pAcc(m_aBitmap);
     for( int nX = 0; nX < 256; nX++ )
     {
         for( int nY = 0; nY < 256; nY++ )
@@ -127,7 +127,6 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
             pAcc->SetPixel( nY, nX, BitmapColor( sal_uInt8(fRed), sal_uInt8(fGreen), sal_uInt8(fBlue) ) );
         }
     }
-    Bitmap::ReleaseAccess( pAcc );
 }
 
 static Point project( const Point& rPoint )

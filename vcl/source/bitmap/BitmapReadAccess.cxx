@@ -24,7 +24,12 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 
-BitmapReadAccess::BitmapReadAccess(Bitmap& rBitmap, BitmapAccessMode nMode)
+BitmapReadAccess::BitmapReadAccess(const AlphaMask& rBitmap, BitmapAccessMode nMode)
+    : BitmapReadAccess(rBitmap.GetBitmap(), nMode)
+{
+}
+
+BitmapReadAccess::BitmapReadAccess(const Bitmap& rBitmap, BitmapAccessMode nMode)
     : BitmapInfoAccess(rBitmap, nMode)
     , mFncGetPixel(nullptr)
     , mFncSetPixel(nullptr)

@@ -10,8 +10,7 @@
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapAlphaClampFilter.hxx>
-
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const
 {
@@ -20,7 +19,7 @@ BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const
 
     AlphaMask aBitmapAlpha(rBitmapEx.GetAlphaMask());
     {
-        AlphaScopedWriteAccess pWriteAlpha(aBitmapAlpha);
+        BitmapScopedWriteAccess pWriteAlpha(aBitmapAlpha);
         const Size aSize(rBitmapEx.GetSizePixel());
 
         for (sal_Int32 nY = 0; nY < sal_Int32(aSize.Height()); ++nY)

@@ -17,7 +17,7 @@
 #include <vcl/graphicfilter.hxx>
 
 #include <BitmapSymmetryCheck.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 namespace
 {
@@ -38,7 +38,7 @@ bool checkBitmapColor(Bitmap const& rBitmap, Color const& rExpectedColor)
 {
     bool bResult = true;
     Bitmap aBitmap(rBitmap);
-    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    BitmapScopedReadAccess pReadAccess(aBitmap);
     tools::Long nHeight = pReadAccess->Height();
     tools::Long nWidth = pReadAccess->Width();
     for (tools::Long y = 0; y < nHeight; ++y)

@@ -35,7 +35,7 @@ class GIFWriter
 {
     Bitmap              aAccBmp;
     SvStream& m_rGIF;
-    BitmapReadAccess*   m_pAcc;
+    BitmapScopedReadAccess   m_pAcc;
     sal_uInt32          nMinPercent;
     sal_uInt32          nMaxPercent;
     sal_uInt32          nLastPercent;
@@ -76,7 +76,6 @@ public:
 
 GIFWriter::GIFWriter(SvStream &rStream)
     : m_rGIF(rStream)
-    , m_pAcc(nullptr)
     , nMinPercent(0)
     , nMaxPercent(0)
     , nLastPercent(0)
@@ -110,7 +109,7 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
     bStatus = true;
     nLastPercent = 0;
     nInterlaced = 0;
-    m_pAcc = nullptr;
+    m_pAcc.reset();
 
     if ( pFilterConfigItem )
         nInterlaced = pFilterConfigItem->ReadInt32( "Interlaced", 0 );
@@ -262,7 +261,7 @@ bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
         else
             aAccBmp.Convert( BmpConversion::N8BitColors );
 
-        m_pAcc = aAccBmp.AcquireReadAccess();
+        m_pAcc = aAccBmp;
 
         if( !m_pAcc )
             bStatus = false;
@@ -274,8 +273,7 @@ bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 
 void GIFWriter::DestroyAccess()
 {
-    Bitmap::ReleaseAccess( m_pAcc );
-    m_pAcc = nullptr;
+    m_pAcc.reset();
 }
 
 

@@ -10,7 +10,7 @@
 
 #include <basegfx/color/bcolortools.hxx>
 
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapLightenFilter.hxx>
 
 BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
@@ -20,7 +20,7 @@ BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aBitmap(rBitmapEx.GetBitmap());
     Bitmap aDarkBitmap(aSize, vcl::PixelFormat::N24_BPP);
 
-    Bitmap::ScopedReadAccess pRead(aBitmap);
+    BitmapScopedReadAccess pRead(aBitmap);
     BitmapScopedWriteAccess pWrite(aDarkBitmap);
 
     if (pRead && pWrite)

@@ -6335,7 +6335,6 @@ include/vcl/salctype.hxx
 include/vcl/salgtype.hxx
 include/vcl/salnativewidgets.hxx
 include/vcl/scheduler.hxx
-include/vcl/scopedbitmapaccess.hxx
 include/vcl/seleng.hxx
 include/vcl/settings.hxx
 include/vcl/split.hxx

@@ -33,7 +33,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <memory>
 
 #define DIBCOREHEADERSIZE       ( 12UL )
@@ -967,7 +967,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
 
     const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
     AlphaMask aNewBmpAlpha;
-    AlphaScopedWriteAccess pAccAlpha;
+    BitmapScopedWriteAccess pAccAlpha;
     bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
 
     if (bAlphaPossible)
@@ -989,7 +989,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
     if (bAlphaPossible)
     {
         aNewBmpAlpha = AlphaMask(aSizePixel);
-        pAccAlpha = AlphaScopedWriteAccess(aNewBmpAlpha);
+        pAccAlpha = aNewBmpAlpha;
     }
 
     vcl::PixelFormat ePixelFormat(convertToBPP(aHeader.nBitCount));
@@ -1575,7 +1575,7 @@ bool ImplWriteDIB(
     if(!aSizePix.Width() || !aSizePix.Height())
         return false;
 
-    Bitmap::ScopedReadAccess pAcc(const_cast< Bitmap& >(rSource));
+    BitmapScopedReadAccess pAcc(rSource);
     const SvStreamEndian nOldFormat(rOStm.GetEndian());
     const sal_uInt64 nOldPos(rOStm.Tell());
 
@@ -1713,7 +1713,7 @@ bool ReadRawDIB(
     const int nHeight,
     const int nStride)
 {
-    BitmapScopedWriteAccess pWriteAccess(rTarget.maBitmap.AcquireWriteAccess(), rTarget.maBitmap);
+    BitmapScopedWriteAccess pWriteAccess(rTarget.maBitmap);
     for (int nRow = 0; nRow < nHeight; ++nRow)
     {
         pWriteAccess->CopyScanline(nRow, pBuf + (nStride * nRow), nFormat, nStride);

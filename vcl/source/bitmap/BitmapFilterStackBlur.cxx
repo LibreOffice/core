@@ -9,7 +9,7 @@
  */
 
 #include <vcl/BitmapFilterStackBlur.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/threadpool.hxx>
@@ -484,7 +484,7 @@ void runStackBlur(Bitmap& rBitmap, const sal_Int32 nRadius, const sal_Int32 nCom
             auto pTag = comphelper::ThreadPool::createThreadTaskTag();
 
             {
-                Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+                BitmapScopedReadAccess pReadAccess(rBitmap);
                 BitmapScopedWriteAccess pWriteAccess(rBitmap);
                 BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                            nComponentWidth, nColorChannels);
@@ -507,7 +507,7 @@ void runStackBlur(Bitmap& rBitmap, const sal_Int32 nRadius, const sal_Int32 nCom
                 rShared.waitUntilDone(pTag);
             }
             {
-                Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+                BitmapScopedReadAccess pReadAccess(rBitmap);
                 BitmapScopedWriteAccess pWriteAccess(rBitmap);
                 BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                            nComponentWidth, nColorChannels);
@@ -539,7 +539,7 @@ void runStackBlur(Bitmap& rBitmap, const sal_Int32 nRadius, const sal_Int32 nCom
     else
     {
         {
-            Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+            BitmapScopedReadAccess pReadAccess(rBitmap);
             BitmapScopedWriteAccess pWriteAccess(rBitmap);
             BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                        nComponentWidth, nColorChannels);
@@ -548,7 +548,7 @@ void runStackBlur(Bitmap& rBitmap, const sal_Int32 nRadius, const sal_Int32 nCom
             pBlurHorizontalFn(aSharedData, nFirstIndex, nLastIndex);
         }
         {
-            Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+            BitmapScopedReadAccess pReadAccess(rBitmap);
             BitmapScopedWriteAccess pWriteAccess(rBitmap);
             BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                        nComponentWidth, nColorChannels);
@@ -629,7 +629,7 @@ Bitmap BitmapFilterStackBlur::filter(Bitmap const& rBitmap) const
     Bitmap bitmapCopy(rBitmap);
     ScanlineFormat nScanlineFormat;
     {
-        Bitmap::ScopedReadAccess pReadAccess(bitmapCopy);
+        BitmapScopedReadAccess pReadAccess(bitmapCopy);
         nScanlineFormat = pReadAccess ? pReadAccess->GetScanlineFormat() : ScanlineFormat::NONE;
     }
 
