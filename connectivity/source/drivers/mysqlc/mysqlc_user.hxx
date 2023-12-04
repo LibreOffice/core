@@ -21,8 +21,6 @@ class User : public ::connectivity::sdbcx::OUser
 {
     css::uno::Reference<css::sdbc::XConnection> m_xConnection;
 
-    OUString m_Password;
-
 public:
     /**
     * Create a "new" descriptor, which isn't yet in the database.
