@@ -1198,6 +1198,11 @@ void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
         PixelInvalidate(nullptr);
 }
 
+bool Window::InvalidateByForeignEditView(EditView* )
+{
+    return false;
+}
+
 void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
 {
     if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
