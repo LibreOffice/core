@@ -226,6 +226,9 @@ public:
 
     static VclPtr<vcl::Window> getInPlaceDocWindow(SfxViewShell* pViewShell);
 
+    /// Sends Network Access error to LOK
+    static void sendNetworkAccessError();
+
     static void notifyLog(const std::ostringstream& stream);
 
 private:

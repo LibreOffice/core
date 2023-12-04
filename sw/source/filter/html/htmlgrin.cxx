@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <hintids.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <vcl/svapp.hxx>
@@ -34,6 +35,7 @@
 #include <editeng/langitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <vcl/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
@@ -69,6 +71,7 @@
 
 #include <vcl/graphicfilter.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
 
@@ -509,6 +512,9 @@ IMAGE_SETEVENT:
     }
     else if (m_sBaseURL.isEmpty() || !aGraphicData.isEmpty())
     {
+        if (comphelper::LibreOfficeKit::isActive() && HostFilter::isForbidden(aGraphicURL.GetHost()))
+            SfxLokHelper::sendNetworkAccessError();
+
         // sBaseURL is empty if the source is clipboard
         // aGraphicData is non-empty for <object data="..."> -> not a linked graphic.
         if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
