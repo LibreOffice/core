@@ -176,17 +176,6 @@ class UITest(object):
                     return
                 time.sleep(DEFAULT_SLEEP)
 
-    def _handle_crash_reporter(self):
-        xCrashReportDlg = self._xUITest.getTopFocusWindow()
-        state = get_state_as_dict(xCrashReportDlg)
-        print(state)
-        if state['ID'] != "CrashReportDialog":
-            return False
-        print("found a crash reporter")
-        xCancelBtn = xCrashReportDlg.getChild("btn_cancel")
-        self.close_dialog_through_button(xCancelBtn)
-        return True
-
     # Calls UITest.close_doc at exit
     @contextmanager
     def create_doc_in_start_center(self, app):
@@ -194,11 +183,7 @@ class UITest(object):
         try:
             xBtn = xStartCenter.getChild(app + "_all")
         except RuntimeException:
-            if self._handle_crash_reporter():
-                xStartCenter = self._xUITest.getTopFocusWindow()
-                xBtn = xStartCenter.getChild(app + "_all")
-            else:
-                raise
+            raise
 
         with EventListener(self._xContext, "OnNew") as event:
             xBtn.executeAction("CLICK", tuple())
