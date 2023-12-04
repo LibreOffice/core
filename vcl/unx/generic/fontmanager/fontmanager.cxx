@@ -728,6 +728,7 @@ FontFamily PrintFontManager::matchFamilyName( std::u16string_view rFamily )
 OString PrintFontManager::getFontFile(const PrintFont& rFont) const
 {
     std::unordered_map< int, OString >::const_iterator it = m_aAtomToDir.find(rFont.m_nDirectory);
+    assert(it != m_aAtomToDir.end());
     OString aPath = it->second + "/" + rFont.m_aFontFile;
     return aPath;
 }

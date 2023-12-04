@@ -315,7 +315,9 @@ void lclAddThemeValuesToCustomAttributes(
 
     if (rComplexColor.isValidThemeType())
     {
-        OString sSchemeType = constThemeColorTypeTokenMap.find(rComplexColor.getThemeColorType())->second;
+        const auto iter = constThemeColorTypeTokenMap.find(rComplexColor.getThemeColorType());
+        assert(iter != constThemeColorTypeTokenMap.end());
+        OString sSchemeType = iter->second;
         if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Text)
         {
             if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark1)

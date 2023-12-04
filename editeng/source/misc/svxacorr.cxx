@@ -2077,7 +2077,9 @@ bool SvxAutoCorrect::FindInWordStartExceptList( LanguageType eLang,
             CreateLanguageFile(aLanguageTag, false))
     {
         //the language is available - so bring it on
-        auto& rList = m_aLangTable.find(aLanguageTag)->second;
+        const auto iter = m_aLangTable.find(aLanguageTag);
+        assert(iter != m_aLangTable.end());
+        auto& rList = iter->second;
         if(rList.GetWordStartExceptList()->find(sWord) != rList.GetWordStartExceptList()->end() )
             return true;
     }

@@ -323,7 +323,9 @@ void box2DWorld::setShapeAngleByAngularVelocity(
     assert(mpBox2DWorld);
     if (fPassedTime > 0) // this only makes sense if there was an advance in time
     {
-        Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(xShape)->second;
+        const auto iter = mpXShapeToBodyMap.find(xShape);
+        assert(iter != mpXShapeToBodyMap.end());
+        Box2DBodySharedPtr pBox2DBody = iter->second;
         pBox2DBody->setAngleByAngularVelocity(fAngle, fPassedTime);
     }
 }
@@ -561,7 +563,9 @@ void box2DWorld::queueShapeAnimationEndUpdate(
 
 void box2DWorld::alertPhysicsAnimationEnd(const slideshow::internal::ShapeSharedPtr& pShape)
 {
-    Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(pShape->getXShape())->second;
+    const auto iter = mpXShapeToBodyMap.find(pShape->getXShape());
+    assert(iter != mpXShapeToBodyMap.end());
+    Box2DBodySharedPtr pBox2DBody = iter->second;
     // since the animation ended make the body static
     makeBodyStatic(pBox2DBody);
     pBox2DBody->setRestitution(fDefaultStaticBodyBounciness);
