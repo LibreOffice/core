@@ -1776,6 +1776,11 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
                                                                     true /* bGroups */, GetViewData().GetTabNo());
             }
         }
+        else
+        {
+            ErrorMessage(STR_ERR_INSERT_CELLS);
+        }
+
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
         collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "INSERT_CELLS");

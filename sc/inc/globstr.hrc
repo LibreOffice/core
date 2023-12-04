@@ -550,6 +550,7 @@
 #define STR_UNDO_EDIT_SPARKLINE                 NC_("STR_UNDO_EDIT_SPARKLINE", "Edit Sparkline")
 #define STR_UNDO_THEME_CHANGE                   NC_("STR_UNDO_THEME_CHANGE", "Theme Change")
 #define STR_UNDO_THEME_COLOR_CHANGE             NC_("STR_UNDO_THEME_COLOR_CHANGE", "Theme Color Change")
+#define STR_ERR_INSERT_CELLS                    NC_("STR_ERR_INSERT_CELLS", "Failed to insert cells")
 
 #endif
 
