@@ -7,21 +7,11 @@
 #if !defined(MACOSX) && !defined(UNIX) && !defined(_WIN32)
 #include "progressui.h"
 
-int InitProgressUI(int *argc, char ***argv)
-{
-    return 0;
-}
+int InitProgressUI(int* argc, char*** argv) { return 0; }
 
-int ShowProgressUI()
-{
-    return 0;
-}
+int ShowProgressUI() { return 0; }
 
-void QuitProgressUI()
-{
-}
+void QuitProgressUI() {}
 
-void UpdateProgressUI(float progress)
-{
-}
-#endif  // !defined(MACOSX) && !defined(UNIX) && !defined(_WIN32)
+void UpdateProgressUI(float progress) {}
+#endif // !defined(MACOSX) && !defined(UNIX) && !defined(_WIN32)

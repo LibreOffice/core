@@ -27,13 +27,11 @@
 
 /* Existing code makes assumptions that the file size is
    smaller than LONG_MAX. */
-MOZ_STATIC_ASSERT(MAX_SIZE_OF_MAR_FILE < ((int64_t)LONG_MAX),
-                  "max mar file size is too big");
+MOZ_STATIC_ASSERT(MAX_SIZE_OF_MAR_FILE < ((int64_t)LONG_MAX), "max mar file size is too big");
 
 /* We store at most the size up to the signature block + 4
    bytes per BLOCKSIZE bytes */
-MOZ_STATIC_ASSERT(sizeof(BLOCKSIZE) <
-                  (SIGNATURE_BLOCK_OFFSET + sizeof(uint32_t)),
+MOZ_STATIC_ASSERT(sizeof(BLOCKSIZE) < (SIGNATURE_BLOCK_OFFSET + sizeof(uint32_t)),
                   "BLOCKSIZE is too big");
 
 /* The maximum size of any signature supported by current and future
@@ -44,7 +42,7 @@ MOZ_STATIC_ASSERT(sizeof(BLOCKSIZE) <
    The product information block has an ID of 1. */
 #define PRODUCT_INFO_BLOCK_ID 1
 
-#define MAR_ITEM_SIZE(namelen) (3*sizeof(uint32_t) + (namelen) + 1)
+#define MAR_ITEM_SIZE(namelen) (3 * sizeof(uint32_t) + (namelen) + 1)
 
 /* Product Information Block (PIB) constants */
 #define PIB_MAX_MAR_CHANNEL_ID_SIZE 63
@@ -65,15 +63,11 @@ MOZ_STATIC_ASSERT(sizeof(BLOCKSIZE) <
 
 #include <stdio.h>
 
-#define HOST_TO_NETWORK64(x) ( \
-  ((((uint64_t) x) & 0xFF) << 56) | \
-  ((((uint64_t) x) >> 8) & 0xFF) << 48) | \
-  (((((uint64_t) x) >> 16) & 0xFF) << 40) | \
-  (((((uint64_t) x) >> 24) & 0xFF) << 32) | \
-  (((((uint64_t) x) >> 32) & 0xFF) << 24) | \
-  (((((uint64_t) x) >> 40) & 0xFF) << 16) | \
-  (((((uint64_t) x) >> 48) & 0xFF) << 8) | \
-  (((uint64_t) x) >> 56)
+#define HOST_TO_NETWORK64(x)                                                                       \
+    (((((uint64_t)x) & 0xFF) << 56) | ((((uint64_t)x) >> 8) & 0xFF) << 48)                         \
+        | (((((uint64_t)x) >> 16) & 0xFF) << 40) | (((((uint64_t)x) >> 24) & 0xFF) << 32)          \
+        | (((((uint64_t)x) >> 32) & 0xFF) << 24) | (((((uint64_t)x) >> 40) & 0xFF) << 16)          \
+        | (((((uint64_t)x) >> 48) & 0xFF) << 8) | (((uint64_t)x) >> 56)
 #define NETWORK_TO_HOST64 HOST_TO_NETWORK64
 
-#endif  /* MAR_PRIVATE_H__ */
+#endif /* MAR_PRIVATE_H__ */

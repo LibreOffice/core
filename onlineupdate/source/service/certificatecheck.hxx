@@ -13,10 +13,8 @@ struct CertificateCheckInfo
     LPCWSTR issuer;
 };
 
-BOOL DoCertificateAttributesMatch(PCCERT_CONTEXT pCertContext,
-                                  CertificateCheckInfo &infoToMatch);
+BOOL DoCertificateAttributesMatch(PCCERT_CONTEXT pCertContext, CertificateCheckInfo& infoToMatch);
 DWORD VerifyCertificateTrustForFile(LPCWSTR filePath);
-DWORD CheckCertificateForPEFile(LPCWSTR filePath,
-                                CertificateCheckInfo &infoToMatch);
+DWORD CheckCertificateForPEFile(LPCWSTR filePath, CertificateCheckInfo& infoToMatch);
 
 #endif

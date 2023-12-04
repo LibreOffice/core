@@ -10,7 +10,7 @@
 #define MAX_TEXT_LEN 600
 
 #ifdef _WIN32
-# include <windows.h>
+#include <windows.h>
 #endif
 
 #include "types.hxx"
@@ -24,15 +24,12 @@ struct StringTable
 /**
  * This function reads in localized strings from updater.ini
  */
-int ReadStrings(const NS_tchar *path, StringTable *results);
+int ReadStrings(const NS_tchar* path, StringTable* results);
 
 /**
  * This function reads in localized strings corresponding to the keys from a given .ini
  */
-int ReadStrings(const NS_tchar *path,
-                const char *keyList,
-                unsigned int numStrings,
-                char results[][MAX_TEXT_LEN],
-                const char *section = nullptr);
+int ReadStrings(const NS_tchar* path, const char* keyList, unsigned int numStrings,
+                char results[][MAX_TEXT_LEN], const char* section = nullptr);
 
-#endif  // READSTRINGS_H__
+#endif // READSTRINGS_H__

@@ -7,7 +7,6 @@
 
 #include "certificatecheck.hxx"
 
-BOOL DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate,
-                                        LPCWSTR filePath);
+BOOL DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath);
 
 #endif

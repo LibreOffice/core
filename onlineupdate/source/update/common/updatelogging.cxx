@@ -6,7 +6,6 @@
 #include <windows.h>
 #endif
 
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -20,23 +19,21 @@ UpdateLog::UpdateLog()
 {
 }
 
-void UpdateLog::Init(NS_tchar* sourcePathParam,
-                     const NS_tchar* fileName,
-                     const NS_tchar* alternateFileName,
-                     bool append)
+void UpdateLog::Init(NS_tchar* sourcePathParam, const NS_tchar* fileName,
+                     const NS_tchar* alternateFileName, bool append)
 {
     if (logFP)
         return;
 
     sourcePath = sourcePathParam;
     NS_tchar logFile[MAXPATHLEN];
-    NS_tsnprintf(logFile, sizeof(logFile)/sizeof(logFile[0]),
-                 NS_T("%s/%s"), sourcePathParam, fileName);
+    NS_tsnprintf(logFile, sizeof(logFile) / sizeof(logFile[0]), NS_T("%s/%s"), sourcePathParam,
+                 fileName);
 
     if (alternateFileName && NS_taccess(logFile, F_OK))
     {
-        NS_tsnprintf(logFile, sizeof(logFile)/sizeof(logFile[0]),
-                     NS_T("%s/%s"), sourcePathParam, alternateFileName);
+        NS_tsnprintf(logFile, sizeof(logFile) / sizeof(logFile[0]), NS_T("%s/%s"), sourcePathParam,
+                     alternateFileName);
     }
 
     logFP = NS_tfopen(logFile, append ? NS_T("a") : NS_T("w"));
@@ -59,7 +56,7 @@ void UpdateLog::Flush()
     fflush(logFP);
 }
 
-void UpdateLog::Printf(const char *fmt, ... )
+void UpdateLog::Printf(const char* fmt, ...)
 {
     if (!logFP)
         return;
@@ -71,7 +68,7 @@ void UpdateLog::Printf(const char *fmt, ... )
     va_end(ap);
 }
 
-void UpdateLog::WarnPrintf(const char *fmt, ... )
+void UpdateLog::WarnPrintf(const char* fmt, ...)
 {
     if (!logFP)
         return;

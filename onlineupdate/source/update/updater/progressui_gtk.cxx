@@ -21,19 +21,18 @@
 
 #define TIMER_INTERVAL 100
 
-static float    sProgressVal;  // between 0 and 100
+static float sProgressVal; // between 0 and 100
 static gboolean sQuit = FALSE;
 static gboolean sEnableUI;
-static guint    sTimerID;
+static guint sTimerID;
 
-static GtkWidget *sWin;
-static GtkWidget *sLabel;
-static GtkWidget *sProgressBar;
+static GtkWidget* sWin;
+static GtkWidget* sLabel;
+static GtkWidget* sProgressBar;
 
-static const char *sProgramPath;
+static const char* sProgramPath;
 
-static gboolean
-UpdateDialog(gpointer /*data*/)
+static gboolean UpdateDialog(gpointer /*data*/)
 {
     if (sQuit)
     {
@@ -43,20 +42,17 @@ UpdateDialog(gpointer /*data*/)
 
     float progress = sProgressVal;
 
-    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(sProgressBar),
-                                  progress / 100.0);
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(sProgressBar), progress / 100.0);
 
     return TRUE;
 }
 
-static gboolean
-OnDeleteEvent(GtkWidget * /*widget*/, GdkEvent * /*event*/, gpointer /*user_data*/)
+static gboolean OnDeleteEvent(GtkWidget* /*widget*/, GdkEvent* /*event*/, gpointer /*user_data*/)
 {
     return TRUE;
 }
 
-int
-InitProgressUI(int *pargc, char ***pargv)
+int InitProgressUI(int* pargc, char*** pargv)
 {
     sProgramPath = (*pargv)[0];
 
@@ -64,8 +60,7 @@ InitProgressUI(int *pargc, char ***pargv)
     return 0;
 }
 
-int
-ShowProgressUI()
+int ShowProgressUI()
 {
     if (!sEnableUI)
         return -1;
@@ -92,22 +87,21 @@ ShowProgressUI()
     if (!sWin)
         return -1;
 
-    static GdkPixbuf *pixbuf;
+    static GdkPixbuf* pixbuf;
 
-    g_signal_connect(G_OBJECT(sWin), "delete_event",
-                     G_CALLBACK(OnDeleteEvent), nullptr);
+    g_signal_connect(G_OBJECT(sWin), "delete_event", G_CALLBACK(OnDeleteEvent), nullptr);
 
     gtk_window_set_title(GTK_WINDOW(sWin), strings.title);
     gtk_window_set_type_hint(GTK_WINDOW(sWin), GDK_WINDOW_TYPE_HINT_DIALOG);
     gtk_window_set_position(GTK_WINDOW(sWin), GTK_WIN_POS_CENTER_ALWAYS);
     gtk_window_set_resizable(GTK_WINDOW(sWin), FALSE);
     gtk_window_set_decorated(GTK_WINDOW(sWin), TRUE);
-    gtk_window_set_deletable(GTK_WINDOW(sWin),FALSE);
-    pixbuf = gdk_pixbuf_new_from_xpm_data (icon_data);
+    gtk_window_set_deletable(GTK_WINDOW(sWin), FALSE);
+    pixbuf = gdk_pixbuf_new_from_xpm_data(icon_data);
     gtk_window_set_icon(GTK_WINDOW(sWin), pixbuf);
     g_object_unref(pixbuf);
 
-    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+    GtkWidget* vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
     gtk_box_set_homogeneous(GTK_BOX(vbox), true);
     sLabel = gtk_label_new(strings.info);
     gtk_misc_set_alignment(GTK_MISC(sLabel), 0.0f, 0.0f);
@@ -127,21 +121,16 @@ ShowProgressUI()
 }
 
 // Called on a background thread
-void
-QuitProgressUI()
-{
-    sQuit = TRUE;
-}
+void QuitProgressUI() { sQuit = TRUE; }
 
 // Called on a background thread
-void
-UpdateProgressUI(float progress)
+void UpdateProgressUI(float progress)
 {
-    sProgressVal = progress;  // 32-bit writes are atomic
+    sProgressVal = progress; // 32-bit writes are atomic
 }
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
 
-#endif  // defined(UNIX) || defined(MACOSX)
+#endif // defined(UNIX) || defined(MACOSX)

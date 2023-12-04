@@ -14,12 +14,9 @@
 
 #include "progressui.h"
 
-#define LOG(args...)  __android_log_print(ANDROID_LOG_INFO, "GeckoUpdater" , ## args)
+#define LOG(args...) __android_log_print(ANDROID_LOG_INFO, "GeckoUpdater", ##args)
 
-int InitProgressUI(int *argc, char ***argv)
-{
-    return 0;
-}
+int InitProgressUI(int* argc, char*** argv) { return 0; }
 
 int ShowProgressUI()
 {
@@ -27,10 +24,7 @@ int ShowProgressUI()
     return 0;
 }
 
-void QuitProgressUI()
-{
-    LOG("Finished applying update\n");
-}
+void QuitProgressUI() { LOG("Finished applying update\n"); }
 
 void UpdateProgressUI(float progress)
 {

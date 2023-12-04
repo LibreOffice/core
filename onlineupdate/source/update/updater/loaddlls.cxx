@@ -3,7 +3,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-
 #ifdef _WIN32
 #ifndef UNICODE
 #define UNICODE
@@ -27,8 +26,9 @@ struct AutoLoadSystemDependencies
             // SetDefaultDllDirectories is always available on Windows 8 and above. It
             // is also available on Windows Vista, Windows Server 2008, and
             // Windows 7 when MS KB2533623 has been applied.
-            decltype(SetDefaultDllDirectories)* setDefaultDllDirectories =
-                (decltype(SetDefaultDllDirectories)*) GetProcAddress(module, "SetDefaultDllDirectories");
+            decltype(SetDefaultDllDirectories)* setDefaultDllDirectories
+                = (decltype(SetDefaultDllDirectories)*)GetProcAddress(module,
+                                                                      "SetDefaultDllDirectories");
             if (setDefaultDllDirectories)
             {
                 setDefaultDllDirectories(LOAD_LIBRARY_SEARCH_SYSTEM32);
@@ -36,49 +36,27 @@ struct AutoLoadSystemDependencies
             }
         }
 
-        // TODO: moggi: do we need all that code?
-        // When SetDefaultDllDirectories is not available, fallback to preloading
-        // dlls. The order that these are loaded does not matter since they are
-        // loaded using the LOAD_WITH_ALTERED_SEARCH_PATH flag.
+            // TODO: moggi: do we need all that code?
+            // When SetDefaultDllDirectories is not available, fallback to preloading
+            // dlls. The order that these are loaded does not matter since they are
+            // loaded using the LOAD_WITH_ALTERED_SEARCH_PATH flag.
 #ifdef HAVE_64BIT_BUILD
         // DLLs for Firefox x64 on Windows 7 (x64).
         // Note: dwmapi.dll is preloaded since a crash will try to load it from the
         // application's directory.
-        static LPCWSTR delayDLLs[] = { L"apphelp.dll",
-                                       L"cryptbase.dll",
-                                       L"cryptsp.dll",
-                                       L"dwmapi.dll",
-                                       L"mpr.dll",
-                                       L"ntmarta.dll",
-                                       L"profapi.dll",
-                                       L"propsys.dll",
-                                       L"sspicli.dll",
-                                       L"wsock32.dll"
-                                     };
+        static LPCWSTR delayDLLs[]
+            = { L"apphelp.dll", L"cryptbase.dll", L"cryptsp.dll", L"dwmapi.dll",  L"mpr.dll",
+                L"ntmarta.dll", L"profapi.dll",   L"propsys.dll", L"sspicli.dll", L"wsock32.dll" };
 
 #else
         // DLLs for Firefox x86 on Windows XP through Windows 7 (x86 and x64).
         // Note: dwmapi.dll is preloaded since a crash will try to load it from the
         // application's directory.
-        static LPCWSTR delayDLLs[] = { L"apphelp.dll",
-                                       L"crypt32.dll",
-                                       L"cryptbase.dll",
-                                       L"cryptsp.dll",
-                                       L"dwmapi.dll",
-                                       L"mpr.dll",
-                                       L"msasn1.dll",
-                                       L"ntmarta.dll",
-                                       L"profapi.dll",
-                                       L"propsys.dll",
-                                       L"psapi.dll",
-                                       L"secur32.dll",
-                                       L"sspicli.dll",
-                                       L"userenv.dll",
-                                       L"uxtheme.dll",
-                                       L"ws2_32.dll",
-                                       L"ws2help.dll",
-                                       L"wsock32.dll"
-                                     };
+        static LPCWSTR delayDLLs[]
+            = { L"apphelp.dll", L"crypt32.dll", L"cryptbase.dll", L"cryptsp.dll", L"dwmapi.dll",
+                L"mpr.dll",     L"msasn1.dll",  L"ntmarta.dll",   L"profapi.dll", L"propsys.dll",
+                L"psapi.dll",   L"secur32.dll", L"sspicli.dll",   L"userenv.dll", L"uxtheme.dll",
+                L"ws2_32.dll",  L"ws2help.dll", L"wsock32.dll" };
 #endif
 
         WCHAR systemDirectory[MAX_PATH + 1] = { L'\0' };
@@ -99,8 +77,7 @@ struct AutoLoadSystemDependencies
         for (size_t i = 0; i < sizeof(delayDLLs) / sizeof(delayDLLs[0]); ++i)
         {
             size_t fileLen = wcslen(delayDLLs[i]);
-            wcsncpy(systemDirectory + systemDirLen, delayDLLs[i],
-                    MAX_PATH - systemDirLen);
+            wcsncpy(systemDirectory + systemDirLen, delayDLLs[i], MAX_PATH - systemDirLen);
             if (systemDirLen + fileLen <= MAX_PATH)
             {
                 systemDirectory[systemDirLen + fileLen] = L'\0';

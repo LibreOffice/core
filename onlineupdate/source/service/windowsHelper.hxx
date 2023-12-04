@@ -12,15 +12,12 @@
 
 struct AutoHandle
 {
-    AutoHandle(HANDLE handle):
-        mHandle(handle)
+    AutoHandle(HANDLE handle)
+        : mHandle(handle)
     {
     }
 
-    ~AutoHandle()
-    {
-        release(mHandle);
-    }
+    ~AutoHandle() { release(mHandle); }
 
     void release(HANDLE handle)
     {
@@ -30,15 +27,9 @@ struct AutoHandle
         }
     }
 
-    HANDLE get() const
-    {
-        return mHandle;
-    }
+    HANDLE get() const { return mHandle; }
 
-    bool operator==(const AutoHandle& rhs) const
-    {
-        return mHandle == rhs.mHandle;
-    }
+    bool operator==(const AutoHandle& rhs) const { return mHandle == rhs.mHandle; }
 
     HANDLE mHandle;
 };

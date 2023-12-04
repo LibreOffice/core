@@ -15,25 +15,24 @@
 class ArchiveReader
 {
 public:
-    ArchiveReader() : mArchive(nullptr) {}
-    ~ArchiveReader()
+    ArchiveReader()
+        : mArchive(nullptr)
     {
-        Close();
     }
+    ~ArchiveReader() { Close(); }
 
-    int Open(const NS_tchar *path);
+    int Open(const NS_tchar* path);
     int VerifySignature();
-    int VerifyProductInformation(const char *MARChannelID,
-                                 const char *appVersion);
+    int VerifyProductInformation(const char* MARChannelID, const char* appVersion);
     void Close();
 
-    int ExtractFile(const char *item, const NS_tchar *destination);
-    int ExtractFileToStream(const char *item, FILE *fp);
+    int ExtractFile(const char* item, const NS_tchar* destination);
+    int ExtractFileToStream(const char* item, FILE* fp);
 
 private:
-    int ExtractItemToStream(const MarItem *item, FILE *fp);
+    int ExtractItemToStream(const MarItem* item, FILE* fp);
 
-    MarFile *mArchive;
+    MarFile* mArchive;
 };
 
-#endif  // ArchiveReader_h__
+#endif // ArchiveReader_h__

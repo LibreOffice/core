@@ -8,42 +8,42 @@
 #include "readstrings.h"
 
 #ifndef MAXPATHLEN
-# ifdef PATH_MAX
-#  define MAXPATHLEN PATH_MAX
-# elif defined(MAX_PATH)
-#  define MAXPATHLEN MAX_PATH
-# elif defined(_MAX_PATH)
-#  define MAXPATHLEN _MAX_PATH
-# elif defined(CCHMAXPATH)
-#  define MAXPATHLEN CCHMAXPATH
-# else
-#  define MAXPATHLEN 1024
-# endif
+#ifdef PATH_MAX
+#define MAXPATHLEN PATH_MAX
+#elif defined(MAX_PATH)
+#define MAXPATHLEN MAX_PATH
+#elif defined(_MAX_PATH)
+#define MAXPATHLEN _MAX_PATH
+#elif defined(CCHMAXPATH)
+#define MAXPATHLEN CCHMAXPATH
+#else
+#define MAXPATHLEN 1024
+#endif
 #endif
 
 #if defined(_WIN32)
-# include <windows.h>
-# include <shlwapi.h>
-# include <direct.h>
-# include <io.h>
-# include <stdio.h>
-# include <stdarg.h>
+#include <windows.h>
+#include <shlwapi.h>
+#include <direct.h>
+#include <io.h>
+#include <stdio.h>
+#include <stdarg.h>
 
-# define F_OK 00
-# define W_OK 02
-# define R_OK 04
-# define S_ISDIR(s) (((s) & _S_IFMT) == _S_IFDIR)
-# define S_ISREG(s) (((s) & _S_IFMT) == _S_IFREG)
+#define F_OK 00
+#define W_OK 02
+#define R_OK 04
+#define S_ISDIR(s) (((s)&_S_IFMT) == _S_IFDIR)
+#define S_ISREG(s) (((s)&_S_IFMT) == _S_IFREG)
 
-# define access _access
+#define access _access
 
-# define putenv _putenv
-# define DELETE_DIR L"tobedeleted"
-# define CALLBACK_BACKUP_EXT L".moz-callback"
+#define putenv _putenv
+#define DELETE_DIR L"tobedeleted"
+#define CALLBACK_BACKUP_EXT L".moz-callback"
 
-# define LOG_S "%S"
-# define NS_T(str) L ## str
-# define NS_SLASH NS_T('\\')
+#define LOG_S "%S"
+#define NS_T(str) L##str
+#define NS_SLASH NS_T('\\')
 
 static inline int mywcsprintf(WCHAR* dest, size_t count, const WCHAR* fmt, ...)
 {
@@ -56,78 +56,78 @@ static inline int mywcsprintf(WCHAR* dest, size_t count, const WCHAR* fmt, ...)
     return result;
 }
 #define NS_tsnprintf mywcsprintf
-# define NS_taccess _waccess
-# define NS_tchdir _wchdir
-# define NS_tchmod _wchmod
-# define NS_tfopen _wfopen
-# define NS_tmkdir(path, perms) _wmkdir(path)
-# define NS_tremove _wremove
+#define NS_taccess _waccess
+#define NS_tchdir _wchdir
+#define NS_tchmod _wchmod
+#define NS_tfopen _wfopen
+#define NS_tmkdir(path, perms) _wmkdir(path)
+#define NS_tremove _wremove
 // _wrename is used to avoid the link tracking service.
-# define NS_trename _wrename
-# define NS_trmdir _wrmdir
-# define NS_tstat _wstat
-# define NS_tlstat _wstat // No symlinks on Windows
-# define NS_tstat_t _stat
-# define NS_tstrcat wcscat
-# define NS_tstrcmp wcscmp
-# define NS_tstrncmp wcsncmp
-# define NS_tstricmp wcsicmp
-# define NS_tstrcpy wcscpy
-# define NS_tstrncpy wcsncpy
-# define NS_tstrlen wcslen
-# define NS_tstrchr wcschr
-# define NS_tstrrchr wcsrchr
-# define NS_tstrstr wcsstr
-# include "win_dirent.h"
-# define NS_tDIR DIR
-# define NS_tdirent dirent
-# define NS_topendir opendir
-# define NS_tclosedir closedir
-# define NS_treaddir readdir
+#define NS_trename _wrename
+#define NS_trmdir _wrmdir
+#define NS_tstat _wstat
+#define NS_tlstat _wstat // No symlinks on Windows
+#define NS_tstat_t _stat
+#define NS_tstrcat wcscat
+#define NS_tstrcmp wcscmp
+#define NS_tstrncmp wcsncmp
+#define NS_tstricmp wcsicmp
+#define NS_tstrcpy wcscpy
+#define NS_tstrncpy wcsncpy
+#define NS_tstrlen wcslen
+#define NS_tstrchr wcschr
+#define NS_tstrrchr wcsrchr
+#define NS_tstrstr wcsstr
+#include "win_dirent.h"
+#define NS_tDIR DIR
+#define NS_tdirent dirent
+#define NS_topendir opendir
+#define NS_tclosedir closedir
+#define NS_treaddir readdir
 #else
-# include <sys/wait.h>
-# include <unistd.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #ifdef __sun
-# include <sys/stat.h>
+#include <sys/stat.h>
 #else
-# include <fts.h>
+#include <fts.h>
 #endif
-# include <dirent.h>
+#include <dirent.h>
 
 #ifdef MACOSX
-# include <sys/time.h>
+#include <sys/time.h>
 #endif
 
-# define LOG_S "%s"
-# define NS_T(str) str
-# define NS_SLASH NS_T('/')
-# define NS_tsnprintf snprintf
-# define NS_taccess access
-# define NS_tchdir chdir
-# define NS_tchmod chmod
-# define NS_tfopen fopen
-# define NS_tmkdir mkdir
-# define NS_tremove remove
-# define NS_trename rename
-# define NS_trmdir rmdir
-# define NS_tstat stat
-# define NS_tstat_t stat
-# define NS_tlstat lstat
-# define NS_tstrcat strcat
-# define NS_tstrcmp strcmp
-# define NS_tstrncmp strncmp
-# define NS_tstricmp strcasecmp
-# define NS_tstrcpy strcpy
-# define NS_tstrncpy strncpy
-# define NS_tstrlen strlen
-# define NS_tstrrchr strrchr
-# define NS_tstrstr strstr
-# define NS_tDIR DIR
-# define NS_tdirent dirent
-# define NS_topendir opendir
-# define NS_tclosedir closedir
-# define NS_treaddir readdir
+#define LOG_S "%s"
+#define NS_T(str) str
+#define NS_SLASH NS_T('/')
+#define NS_tsnprintf snprintf
+#define NS_taccess access
+#define NS_tchdir chdir
+#define NS_tchmod chmod
+#define NS_tfopen fopen
+#define NS_tmkdir mkdir
+#define NS_tremove remove
+#define NS_trename rename
+#define NS_trmdir rmdir
+#define NS_tstat stat
+#define NS_tstat_t stat
+#define NS_tlstat lstat
+#define NS_tstrcat strcat
+#define NS_tstrcmp strcmp
+#define NS_tstrncmp strncmp
+#define NS_tstricmp strcasecmp
+#define NS_tstrcpy strcpy
+#define NS_tstrncpy strncpy
+#define NS_tstrlen strlen
+#define NS_tstrrchr strrchr
+#define NS_tstrstr strstr
+#define NS_tDIR DIR
+#define NS_tdirent dirent
+#define NS_topendir opendir
+#define NS_tclosedir closedir
+#define NS_treaddir readdir
 #endif
 
 #define BACKUP_EXT NS_T(".moz-backup")

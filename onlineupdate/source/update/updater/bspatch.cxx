@@ -41,34 +41,33 @@
 #include <limits.h>
 
 #if defined(_WIN32)
-# include <io.h>
+#include <io.h>
 #else
-# include <unistd.h>
+#include <unistd.h>
 #endif
 
 #ifdef _WIN32
-# include <winsock2.h>
+#include <winsock2.h>
 #else
-# include <arpa/inet.h>
+#include <arpa/inet.h>
 #endif
 
 #ifndef SSIZE_MAX
-# define SSIZE_MAX LONG_MAX
+#define SSIZE_MAX LONG_MAX
 #endif
 
-int
-MBS_ReadHeader(FILE* file, MBSPatchHeader *header)
+int MBS_ReadHeader(FILE* file, MBSPatchHeader* header)
 {
     size_t s = fread(header, 1, sizeof(MBSPatchHeader), file);
     if (s != sizeof(MBSPatchHeader))
         return READ_ERROR;
 
-    header->slen      = ntohl(header->slen);
-    header->scrc32    = ntohl(header->scrc32);
-    header->dlen      = ntohl(header->dlen);
-    header->cblen     = ntohl(header->cblen);
-    header->difflen   = ntohl(header->difflen);
-    header->extralen  = ntohl(header->extralen);
+    header->slen = ntohl(header->slen);
+    header->scrc32 = ntohl(header->scrc32);
+    header->dlen = ntohl(header->dlen);
+    header->cblen = ntohl(header->cblen);
+    header->difflen = ntohl(header->difflen);
+    header->extralen = ntohl(header->extralen);
 
     struct stat hs;
     s = fstat(fileno(file), &hs);
@@ -78,31 +77,26 @@ MBS_ReadHeader(FILE* file, MBSPatchHeader *header)
     if (memcmp(header->tag, "MBDIFF10", 8) != 0)
         return UNEXPECTED_BSPATCH_ERROR;
 
-    if (sizeof(MBSPatchHeader) +
-            header->cblen +
-            header->difflen +
-            header->extralen != uint32_t(hs.st_size))
+    if (sizeof(MBSPatchHeader) + header->cblen + header->difflen + header->extralen
+        != uint32_t(hs.st_size))
         return UNEXPECTED_BSPATCH_ERROR;
 
     return OK;
 }
 
-int
-MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
-               unsigned char *fbuffer, FILE* file)
+int MBS_ApplyPatch(const MBSPatchHeader* header, FILE* patchFile, unsigned char* fbuffer,
+                   FILE* file)
 {
-    unsigned char *fbufend = fbuffer + header->slen;
+    unsigned char* fbufend = fbuffer + header->slen;
 
-    unsigned char *buf = (unsigned char*) malloc(header->cblen +
-                         header->difflen +
-                         header->extralen);
+    unsigned char* buf = (unsigned char*)malloc(header->cblen + header->difflen + header->extralen);
     if (!buf)
         return BSPATCH_MEM_ERROR;
 
     int rv = OK;
 
     size_t r = header->cblen + header->difflen + header->extralen;
-    unsigned char *wb = buf;
+    unsigned char* wb = buf;
     while (r)
     {
         const size_t count = std::min(r, size_t(SSIZE_MAX));
@@ -118,13 +112,13 @@ MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
     }
 
     {
-        MBSPatchTriple *ctrlsrc = (MBSPatchTriple*) buf;
-        unsigned char *diffsrc = buf + header->cblen;
-        unsigned char *extrasrc = diffsrc + header->difflen;
+        MBSPatchTriple* ctrlsrc = (MBSPatchTriple*)buf;
+        unsigned char* diffsrc = buf + header->cblen;
+        unsigned char* extrasrc = diffsrc + header->difflen;
 
-        MBSPatchTriple *ctrlend = (MBSPatchTriple*) diffsrc;
-        unsigned char *diffend = extrasrc;
-        unsigned char *extraend = extrasrc + header->extralen;
+        MBSPatchTriple* ctrlend = (MBSPatchTriple*)diffsrc;
+        unsigned char* diffend = extrasrc;
+        unsigned char* extraend = extrasrc + header->extralen;
 
         do
         {
@@ -137,15 +131,12 @@ MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
                    " x: %u\n"
                    " y: %u\n"
                    " z: %i\n",
-                   ctrlsrc->x,
-                   ctrlsrc->y,
-                   ctrlsrc->z);
+                   ctrlsrc->x, ctrlsrc->y, ctrlsrc->z);
 #endif
 
             /* Add x bytes from oldfile to x bytes from the diff block */
 
-            if (fbuffer + ctrlsrc->x > fbufend ||
-                    diffsrc + ctrlsrc->x > diffend)
+            if (fbuffer + ctrlsrc->x > fbufend || diffsrc + ctrlsrc->x > diffend)
             {
                 rv = UNEXPECTED_BSPATCH_ERROR;
                 goto end;
@@ -154,7 +145,7 @@ MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
             {
                 diffsrc[i] += fbuffer[i];
             }
-            if ((uint32_t) fwrite(diffsrc, 1, ctrlsrc->x, file) != ctrlsrc->x)
+            if ((uint32_t)fwrite(diffsrc, 1, ctrlsrc->x, file) != ctrlsrc->x)
             {
                 rv = WRITE_ERROR_PATCH_FILE;
                 goto end;
@@ -169,7 +160,7 @@ MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
                 rv = UNEXPECTED_BSPATCH_ERROR;
                 goto end;
             }
-            if ((uint32_t) fwrite(extrasrc, 1, ctrlsrc->y, file) != ctrlsrc->y)
+            if ((uint32_t)fwrite(extrasrc, 1, ctrlsrc->y, file) != ctrlsrc->y)
             {
                 rv = WRITE_ERROR_PATCH_FILE;
                 goto end;
@@ -188,8 +179,7 @@ MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
             /* and on to the next control block */
 
             ++ctrlsrc;
-        }
-        while (ctrlsrc < ctrlend);
+        } while (ctrlsrc < ctrlend);
     }
 
 end:

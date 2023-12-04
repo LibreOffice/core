@@ -30,10 +30,7 @@ BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra);
  * @param  newFileName       The filename of another file in the same directory
  * @return TRUE if successful
  */
-BOOL
-PathGetSiblingFilePath(LPWSTR destinationBuffer,
-                       LPCWSTR siblingFilePath,
-                       LPCWSTR newFileName)
+BOOL PathGetSiblingFilePath(LPWSTR destinationBuffer, LPCWSTR siblingFilePath, LPCWSTR newFileName)
 {
     if (wcslen(siblingFilePath) >= MAX_PATH)
     {
@@ -68,11 +65,8 @@ PathGetSiblingFilePath(LPWSTR destinationBuffer,
  *                         user will be used.
  * @return TRUE if there was no error starting the process.
  */
-BOOL
-LaunchWinPostProcess(const WCHAR *installationDir,
-                     const WCHAR *updateInfoDir,
-                     bool forceSync,
-                     HANDLE userToken)
+BOOL LaunchWinPostProcess(const WCHAR* installationDir, const WCHAR* updateInfoDir, bool forceSync,
+                          HANDLE userToken)
 {
     WCHAR workingDirectory[MAX_PATH + 1] = { L'\0' };
     wcsncpy(workingDirectory, installationDir, MAX_PATH);
@@ -90,22 +84,20 @@ LaunchWinPostProcess(const WCHAR *installationDir,
     WCHAR exearg[MAX_PATH + 1];
     WCHAR exeasync[10];
     bool async = true;
-    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeRelPath", nullptr,
-                                  exefile, MAX_PATH + 1, inifile))
-    {
-        return FALSE;
-    }
-
-    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeArg", nullptr, exearg,
-                                  MAX_PATH + 1, inifile))
-    {
-        return FALSE;
-    }
-
-    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeAsync", L"TRUE",
-                                  exeasync,
-                                  sizeof(exeasync)/sizeof(exeasync[0]),
+    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeRelPath", nullptr, exefile, MAX_PATH + 1,
                                   inifile))
+    {
+        return FALSE;
+    }
+
+    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeArg", nullptr, exearg, MAX_PATH + 1,
+                                  inifile))
+    {
+        return FALSE;
+    }
+
+    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeAsync", L"TRUE", exeasync,
+                                  sizeof(exeasync) / sizeof(exeasync[0]), inifile))
     {
         return FALSE;
     }
@@ -134,7 +126,7 @@ LaunchWinPostProcess(const WCHAR *installationDir,
     wcsncpy(dummyArg, L"argv0ignored ", sizeof(dummyArg) / sizeof(dummyArg[0]) - 1);
 
     size_t len = wcslen(exearg) + wcslen(dummyArg);
-    WCHAR *cmdline = (WCHAR *) malloc((len + 1) * sizeof(WCHAR));
+    WCHAR* cmdline = (WCHAR*)malloc((len + 1) * sizeof(WCHAR));
     if (!cmdline)
     {
         return FALSE;
@@ -143,9 +135,7 @@ LaunchWinPostProcess(const WCHAR *installationDir,
     wcsncpy(cmdline, dummyArg, len);
     wcscat(cmdline, exearg);
 
-    if (forceSync ||
-            !_wcsnicmp(exeasync, L"false", 6) ||
-            !_wcsnicmp(exeasync, L"0", 2))
+    if (forceSync || !_wcsnicmp(exeasync, L"false", 6) || !_wcsnicmp(exeasync, L"0", 2))
     {
         async = false;
     }
@@ -155,37 +145,30 @@ LaunchWinPostProcess(const WCHAR *installationDir,
     // file or copying the update.log file.
     CopyFileW(slogFile, dlogFile, false);
 
-    STARTUPINFOW si = {sizeof(si), 0};
+    STARTUPINFOW si = { sizeof(si), 0 };
     si.lpDesktop = L"";
-    PROCESS_INFORMATION pi = {0};
+    PROCESS_INFORMATION pi = { 0 };
 
     bool ok;
     if (userToken)
     {
-        ok = CreateProcessAsUserW(userToken,
-                                  exefullpath,
-                                  cmdline,
-                                  nullptr,  // no special security attributes
-                                  nullptr,  // no special thread attributes
-                                  false,    // don't inherit filehandles
-                                  0,        // No special process creation flags
-                                  nullptr,  // inherit my environment
-                                  workingDirectory,
-                                  &si,
-                                  &pi);
+        ok = CreateProcessAsUserW(userToken, exefullpath, cmdline,
+                                  nullptr, // no special security attributes
+                                  nullptr, // no special thread attributes
+                                  false, // don't inherit filehandles
+                                  0, // No special process creation flags
+                                  nullptr, // inherit my environment
+                                  workingDirectory, &si, &pi);
     }
     else
     {
-        ok = CreateProcessW(exefullpath,
-                            cmdline,
-                            nullptr,  // no special security attributes
-                            nullptr,  // no special thread attributes
-                            false,    // don't inherit filehandles
-                            0,        // No special process creation flags
-                            nullptr,  // inherit my environment
-                            workingDirectory,
-                            &si,
-                            &pi);
+        ok = CreateProcessW(exefullpath, cmdline,
+                            nullptr, // no special security attributes
+                            nullptr, // no special thread attributes
+                            false, // don't inherit filehandles
+                            0, // No special process creation flags
+                            nullptr, // inherit my environment
+                            workingDirectory, &si, &pi);
     }
     free(cmdline);
     if (ok)
@@ -206,20 +189,17 @@ LaunchWinPostProcess(const WCHAR *installationDir,
  *         maintenanceservice_installer.exe is located.
  * @return TRUE if successful
  */
-BOOL
-StartServiceUpdate(LPCWSTR installDir)
+BOOL StartServiceUpdate(LPCWSTR installDir)
 {
     // Get a handle to the local computer SCM database
-    SC_HANDLE manager = OpenSCManager(nullptr, nullptr,
-                                      SC_MANAGER_ALL_ACCESS);
+    SC_HANDLE manager = OpenSCManager(nullptr, nullptr, SC_MANAGER_ALL_ACCESS);
     if (!manager)
     {
         return FALSE;
     }
 
     // Open the service
-    SC_HANDLE svc = OpenServiceW(manager, SVC_NAME,
-                                 SERVICE_ALL_ACCESS);
+    SC_HANDLE svc = OpenServiceW(manager, SVC_NAME, SERVICE_ALL_ACCESS);
     if (!svc)
     {
         CloseServiceHandle(manager);
@@ -233,8 +213,8 @@ StartServiceUpdate(LPCWSTR installDir)
 
     // The service exists and we opened it, get the config bytes needed
     DWORD bytesNeeded;
-    if (!QueryServiceConfigW(svc, nullptr, 0, &bytesNeeded) &&
-            GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    if (!QueryServiceConfigW(svc, nullptr, 0, &bytesNeeded)
+        && GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         CloseServiceHandle(svc);
         return FALSE;
@@ -253,8 +233,8 @@ StartServiceUpdate(LPCWSTR installDir)
 
     CloseServiceHandle(svc);
 
-    QUERY_SERVICE_CONFIGW &serviceConfig =
-        *reinterpret_cast<QUERY_SERVICE_CONFIGW*>(serviceConfigBuffer.get());
+    QUERY_SERVICE_CONFIGW& serviceConfig
+        = *reinterpret_cast<QUERY_SERVICE_CONFIGW*>(serviceConfigBuffer.get());
 
     PathUnquoteSpacesW(serviceConfig.lpBinaryPathName);
 
@@ -269,8 +249,7 @@ StartServiceUpdate(LPCWSTR installDir)
     // Get the new maintenance service path from the install dir
     WCHAR newMaintServicePath[MAX_PATH + 1] = { L'\0' };
     wcsncpy(newMaintServicePath, installDir, MAX_PATH);
-    PathAppendSafe(newMaintServicePath,
-                   L"maintenanceservice.exe");
+    PathAppendSafe(newMaintServicePath, L"maintenanceservice.exe");
 
     // Copy the temp file in alongside the maintenance service.
     // This is a requirement for maintenance service upgrades.
@@ -280,19 +259,15 @@ StartServiceUpdate(LPCWSTR installDir)
     }
 
     // Start the upgrade comparison process
-    STARTUPINFOW si = {0};
+    STARTUPINFOW si = { 0 };
     si.cb = sizeof(STARTUPINFOW);
     // No particular desktop because no UI
     si.lpDesktop = L"";
-    PROCESS_INFORMATION pi = {0};
+    PROCESS_INFORMATION pi = { 0 };
     WCHAR cmdLine[64] = { '\0' };
-    wcsncpy(cmdLine, L"dummyparam.exe upgrade",
-            sizeof(cmdLine) / sizeof(cmdLine[0]) - 1);
-    BOOL svcUpdateProcessStarted = CreateProcessW(tmpService,
-                                   cmdLine,
-                                   nullptr, nullptr, FALSE,
-                                   0,
-                                   nullptr, installDir, &si, &pi);
+    wcsncpy(cmdLine, L"dummyparam.exe upgrade", sizeof(cmdLine) / sizeof(cmdLine[0]) - 1);
+    BOOL svcUpdateProcessStarted = CreateProcessW(tmpService, cmdLine, nullptr, nullptr, FALSE, 0,
+                                                  nullptr, installDir, &si, &pi);
     if (svcUpdateProcessStarted)
     {
         CloseHandle(pi.hProcess);
@@ -325,18 +300,15 @@ StartServiceCommand(int argc, LPCWSTR* argv)
     }
 
     // Get a handle to the SCM database.
-    SC_HANDLE serviceManager = OpenSCManager(nullptr, nullptr,
-                               SC_MANAGER_CONNECT |
-                               SC_MANAGER_ENUMERATE_SERVICE);
+    SC_HANDLE serviceManager
+        = OpenSCManager(nullptr, nullptr, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
     if (!serviceManager)
     {
         return 17001;
     }
 
     // Get a handle to the service.
-    SC_HANDLE service = OpenServiceW(serviceManager,
-                                     SVC_NAME,
-                                     SERVICE_START);
+    SC_HANDLE service = OpenServiceW(serviceManager, SVC_NAME, SERVICE_START);
     if (!service)
     {
         CloseServiceHandle(serviceManager);
@@ -386,7 +358,7 @@ LaunchServiceSoftwareUpdateCommand(int argc, LPCWSTR* argv)
     // The service command is the same as the updater.exe command line except
     // it has 2 extra args: 1) The Path to updater.exe, and 2) the command
     // being executed which is "software-update"
-    LPCWSTR *updaterServiceArgv = new LPCWSTR[argc + 2];
+    LPCWSTR* updaterServiceArgv = new LPCWSTR[argc + 2];
     updaterServiceArgv[0] = L"MozillaMaintenance";
     updaterServiceArgv[1] = L"software-update";
 
@@ -409,8 +381,7 @@ LaunchServiceSoftwareUpdateCommand(int argc, LPCWSTR* argv)
  * @param  extra The filename to append
  * @return TRUE if the file name was successful appended to base
  */
-BOOL
-PathAppendSafe(LPWSTR base, LPCWSTR extra)
+BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra)
 {
     if (wcslen(base) + wcslen(extra) >= MAX_PATH)
     {
@@ -427,8 +398,7 @@ PathAppendSafe(LPWSTR base, LPCWSTR extra)
  * @param  updateDirPath The path of the update directory
  * @return TRUE if successful
  */
-BOOL
-WriteStatusPending(LPCWSTR updateDirPath)
+BOOL WriteStatusPending(LPCWSTR updateDirPath)
 {
     WCHAR updateStatusFilePath[MAX_PATH + 1] = { L'\0' };
     wcsncpy(updateStatusFilePath, updateDirPath, MAX_PATH);
@@ -438,16 +408,15 @@ WriteStatusPending(LPCWSTR updateDirPath)
     }
 
     const char pending[] = "pending";
-    HANDLE statusFile = CreateFileW(updateStatusFilePath, GENERIC_WRITE, 0,
-                                    nullptr, CREATE_ALWAYS, 0, nullptr);
+    HANDLE statusFile
+        = CreateFileW(updateStatusFilePath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
     if (statusFile == INVALID_HANDLE_VALUE)
     {
         return FALSE;
     }
 
     DWORD wrote;
-    BOOL ok = WriteFile(statusFile, pending,
-                        sizeof(pending) - 1, &wrote, nullptr);
+    BOOL ok = WriteFile(statusFile, pending, sizeof(pending) - 1, &wrote, nullptr);
     CloseHandle(statusFile);
     return ok && (wrote == sizeof(pending) - 1);
 }
@@ -458,8 +427,7 @@ WriteStatusPending(LPCWSTR updateDirPath)
  * @param  updateDirPath The path of the update directory
  * @return TRUE if successful
  */
-BOOL
-WriteStatusFailure(LPCWSTR updateDirPath, int errorCode)
+BOOL WriteStatusFailure(LPCWSTR updateDirPath, int errorCode)
 {
     WCHAR updateStatusFilePath[MAX_PATH + 1] = { L'\0' };
     wcsncpy(updateStatusFilePath, updateDirPath, MAX_PATH);
@@ -468,8 +436,8 @@ WriteStatusFailure(LPCWSTR updateDirPath, int errorCode)
         return FALSE;
     }
 
-    HANDLE statusFile = CreateFileW(updateStatusFilePath, GENERIC_WRITE, 0,
-                                    nullptr, CREATE_ALWAYS, 0, nullptr);
+    HANDLE statusFile
+        = CreateFileW(updateStatusFilePath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
     if (statusFile == INVALID_HANDLE_VALUE)
     {
         return FALSE;
@@ -479,8 +447,7 @@ WriteStatusFailure(LPCWSTR updateDirPath, int errorCode)
 
     DWORD toWrite = strlen(failure);
     DWORD wrote;
-    BOOL ok = WriteFile(statusFile, failure,
-                        toWrite, &wrote, nullptr);
+    BOOL ok = WriteFile(statusFile, failure, toWrite, &wrote, nullptr);
     CloseHandle(statusFile);
     return ok && wrote == toWrite;
 }
@@ -526,9 +493,8 @@ WaitForServiceStop(LPCWSTR serviceName, DWORD maxWaitSeconds)
     DWORD lastServiceState = 0x000000CF;
 
     // Get a handle to the SCM database.
-    SC_HANDLE serviceManager = OpenSCManager(nullptr, nullptr,
-                               SC_MANAGER_CONNECT |
-                               SC_MANAGER_ENUMERATE_SERVICE);
+    SC_HANDLE serviceManager
+        = OpenSCManager(nullptr, nullptr, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
     if (!serviceManager)
     {
         DWORD lastError = GetLastError();
@@ -544,9 +510,7 @@ WaitForServiceStop(LPCWSTR serviceName, DWORD maxWaitSeconds)
     }
 
     // Get a handle to the service.
-    SC_HANDLE service = OpenServiceW(serviceManager,
-                                     serviceName,
-                                     SERVICE_QUERY_STATUS);
+    SC_HANDLE service = OpenServiceW(serviceManager, serviceName, SERVICE_QUERY_STATUS);
     if (!service)
     {
         DWORD lastError = GetLastError();
@@ -664,8 +628,7 @@ IsProcessRunning(LPCWSTR filename)
             CloseHandle(snapshot);
             return ERROR_SUCCESS;
         }
-    }
-    while (Process32NextW(snapshot, &processEntry));
+    } while (Process32NextW(snapshot, &processEntry));
     CloseHandle(snapshot);
     return ERROR_NOT_FOUND;
 }
@@ -707,14 +670,12 @@ WaitForProcessExit(LPCWSTR filename, DWORD maxSeconds)
  *
  *  @return TRUE if the fallback key exists and there was no error checking
 */
-BOOL
-DoesFallbackKeyExist()
+BOOL DoesFallbackKeyExist()
 {
     HKEY testOnlyFallbackKey;
-    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                      TEST_ONLY_FALLBACK_KEY_PATH, 0,
-                      KEY_READ | KEY_WOW64_64KEY,
-                      &testOnlyFallbackKey) != ERROR_SUCCESS)
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, TEST_ONLY_FALLBACK_KEY_PATH, 0,
+                      KEY_READ | KEY_WOW64_64KEY, &testOnlyFallbackKey)
+        != ERROR_SUCCESS)
     {
         return FALSE;
     }
@@ -731,8 +692,7 @@ DoesFallbackKeyExist()
  * @param isLocal out parameter which will hold TRUE if the drive is local
  * @return TRUE if the call succeeded
 */
-BOOL
-IsLocalFile(LPCWSTR file, BOOL &isLocal)
+BOOL IsLocalFile(LPCWSTR file, BOOL& isLocal)
 {
     WCHAR rootPath[MAX_PATH + 1] = { L'\0' };
     if (wcslen(file) > MAX_PATH)
@@ -746,7 +706,6 @@ IsLocalFile(LPCWSTR file, BOOL &isLocal)
     return TRUE;
 }
 
-
 /**
  * Determines the DWORD value of a registry key value
  *
@@ -755,12 +714,10 @@ IsLocalFile(LPCWSTR file, BOOL &isLocal)
  * @param retValue  Out parameter which will hold the value
  * @return TRUE on success
 */
-static BOOL
-GetDWORDValue(HKEY key, LPCWSTR valueName, DWORD &retValue)
+static BOOL GetDWORDValue(HKEY key, LPCWSTR valueName, DWORD& retValue)
 {
     DWORD regDWORDValueSize = sizeof(DWORD);
-    LONG retCode = RegQueryValueExW(key, valueName, 0, nullptr,
-                                    reinterpret_cast<LPBYTE>(&retValue),
+    LONG retCode = RegQueryValueExW(key, valueName, 0, nullptr, reinterpret_cast<LPBYTE>(&retValue),
                                     &regDWORDValueSize);
     return ERROR_SUCCESS == retCode;
 }
@@ -774,20 +731,16 @@ GetDWORDValue(HKEY key, LPCWSTR valueName, DWORD &retValue)
  * @return TRUE if the user can actually elevate and the value was obtained
  *         successfully.
 */
-BOOL
-IsUnpromptedElevation(BOOL &isUnpromptedElevation)
+BOOL IsUnpromptedElevation(BOOL& isUnpromptedElevation)
 {
     if (!UACHelper::CanUserElevate())
     {
         return FALSE;
     }
 
-    LPCWSTR UACBaseRegKey =
-        L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
+    LPCWSTR UACBaseRegKey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
     HKEY baseKey;
-    LONG retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                                 UACBaseRegKey, 0,
-                                 KEY_READ, &baseKey);
+    LONG retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE, UACBaseRegKey, 0, KEY_READ, &baseKey);
     if (retCode != ERROR_SUCCESS)
     {
         return FALSE;
@@ -795,10 +748,8 @@ IsUnpromptedElevation(BOOL &isUnpromptedElevation)
 
     DWORD consent;
     DWORD secureDesktop = 0;
-    BOOL success = GetDWORDValue(baseKey, L"ConsentPromptBehaviorAdmin",
-                                 consent);
-    success = success &&
-              GetDWORDValue(baseKey, L"PromptOnSecureDesktop", secureDesktop);
+    BOOL success = GetDWORDValue(baseKey, L"ConsentPromptBehaviorAdmin", consent);
+    success = success && GetDWORDValue(baseKey, L"PromptOnSecureDesktop", secureDesktop);
     isUnpromptedElevation = !consent && !secureDesktop;
 
     RegCloseKey(baseKey);

@@ -32,15 +32,15 @@
 #undef UPDATER_NO_STRING_GLUE_STL
 
 #if defined(UNIX)
-# include <sys/types.h>
+#include <sys/types.h>
 #elif defined(_WIN32)
-# include <io.h>
+#include <io.h>
 #endif
 
-static int inbuf_size  = 262144;
+static int inbuf_size = 262144;
 static int outbuf_size = 262144;
-static char *inbuf  = nullptr;
-static char *outbuf = nullptr;
+static char* inbuf = nullptr;
+static char* outbuf = nullptr;
 
 /**
  * Performs a verification on the opened MAR file with the passed in
@@ -50,9 +50,7 @@ static char *outbuf = nullptr;
  * @param  certData  The certificate data.
  * @return OK on success, CERT_VERIFY_ERROR on failure.
 */
-template<uint32_t SIZE>
-int
-VerifyLoadedCert(MarFile *archive, const uint8_t (&certData)[SIZE])
+template <uint32_t SIZE> int VerifyLoadedCert(MarFile* archive, const uint8_t (&certData)[SIZE])
 {
     (void)archive;
     (void)certData;
@@ -77,8 +75,7 @@ VerifyLoadedCert(MarFile *archive, const uint8_t (&certData)[SIZE])
  *
  * @return OK on success
 */
-int
-ArchiveReader::VerifySignature()
+int ArchiveReader::VerifySignature()
 {
     if (!mArchive)
     {
@@ -122,9 +119,7 @@ ArchiveReader::VerifySignature()
  *                                           this updater is newer than the
  *                                           one in the MAR.
  */
-int
-ArchiveReader::VerifyProductInformation(const char *MARChannelID,
-                                        const char *appVersion)
+int ArchiveReader::VerifyProductInformation(const char* MARChannelID, const char* appVersion)
 {
     if (!mArchive)
     {
@@ -132,8 +127,7 @@ ArchiveReader::VerifyProductInformation(const char *MARChannelID,
     }
 
     ProductInformationBlock productInfoBlock;
-    int rv = mar_read_product_info_block(mArchive,
-                                         &productInfoBlock);
+    int rv = mar_read_product_info_block(mArchive, &productInfoBlock);
     if (rv != OK)
     {
         return COULD_NOT_READ_PRODUCT_INFO_BLOCK_ERROR;
@@ -144,12 +138,12 @@ ArchiveReader::VerifyProductInformation(const char *MARChannelID,
     if (MARChannelID && strlen(MARChannelID))
     {
         // Check for at least one match in the comma separated list of values.
-        const char *delimiter = " ,\t";
+        const char* delimiter = " ,\t";
         // Make a copy of the string in case a read only memory buffer
         // was specified.  strtok modifies the input buffer.
         char channelCopy[512] = { 0 };
         strncpy(channelCopy, MARChannelID, sizeof(channelCopy) - 1);
-        char *channel = strtok(channelCopy, delimiter);
+        char* channel = strtok(channelCopy, delimiter);
         rv = MAR_CHANNEL_MISMATCH_ERROR;
         while (channel)
         {
@@ -173,33 +167,32 @@ ArchiveReader::VerifyProductInformation(const char *MARChannelID,
             - 12.0a2 being older than 12.0b1
             - 12.0a1 being older than 12.0
             - 12.0 being older than 12.1a1 */
-        int versionCompareResult =
-            mozilla::CompareVersions(appVersion, productInfoBlock.productVersion);
+        int versionCompareResult
+            = mozilla::CompareVersions(appVersion, productInfoBlock.productVersion);
         if (1 == versionCompareResult)
         {
             rv = VERSION_DOWNGRADE_ERROR;
         }
     }
 
-    free((void *)productInfoBlock.MARChannelID);
-    free((void *)productInfoBlock.productVersion);
+    free((void*)productInfoBlock.MARChannelID);
+    free((void*)productInfoBlock.productVersion);
     return rv;
 }
 
-int
-ArchiveReader::Open(const NS_tchar *path)
+int ArchiveReader::Open(const NS_tchar* path)
 {
     if (mArchive)
         Close();
 
     if (!inbuf)
     {
-        inbuf = (char *)malloc(inbuf_size);
+        inbuf = (char*)malloc(inbuf_size);
         if (!inbuf)
         {
             // Try again with a smaller buffer.
             inbuf_size = 1024;
-            inbuf = (char *)malloc(inbuf_size);
+            inbuf = (char*)malloc(inbuf_size);
             if (!inbuf)
                 return ARCHIVE_READER_MEM_ERROR;
         }
@@ -207,12 +200,12 @@ ArchiveReader::Open(const NS_tchar *path)
 
     if (!outbuf)
     {
-        outbuf = (char *)malloc(outbuf_size);
+        outbuf = (char*)malloc(outbuf_size);
         if (!outbuf)
         {
             // Try again with a smaller buffer.
             outbuf_size = 1024;
-            outbuf = (char *)malloc(outbuf_size);
+            outbuf = (char*)malloc(outbuf_size);
             if (!outbuf)
                 return ARCHIVE_READER_MEM_ERROR;
         }
@@ -229,8 +222,7 @@ ArchiveReader::Open(const NS_tchar *path)
     return OK;
 }
 
-void
-ArchiveReader::Close()
+void ArchiveReader::Close()
 {
     if (mArchive)
     {
@@ -251,10 +243,9 @@ ArchiveReader::Close()
     }
 }
 
-int
-ArchiveReader::ExtractFile(const char *name, const NS_tchar *dest)
+int ArchiveReader::ExtractFile(const char* name, const NS_tchar* dest)
 {
-    const MarItem *item = mar_find_item(mArchive, name);
+    const MarItem* item = mar_find_item(mArchive, name);
     if (!item)
         return READ_ERROR;
 
@@ -265,7 +256,7 @@ ArchiveReader::ExtractFile(const char *name, const NS_tchar *dest)
     if (fd == -1)
         return WRITE_ERROR;
 
-    FILE *fp = fdopen(fd, "wb");
+    FILE* fp = fdopen(fd, "wb");
 #endif
     if (!fp)
         return WRITE_ERROR;
@@ -276,18 +267,16 @@ ArchiveReader::ExtractFile(const char *name, const NS_tchar *dest)
     return rv;
 }
 
-int
-ArchiveReader::ExtractFileToStream(const char *name, FILE *fp)
+int ArchiveReader::ExtractFileToStream(const char* name, FILE* fp)
 {
-    const MarItem *item = mar_find_item(mArchive, name);
+    const MarItem* item = mar_find_item(mArchive, name);
     if (!item)
         return READ_ERROR;
 
     return ExtractItemToStream(item, fp);
 }
 
-int
-ArchiveReader::ExtractItemToStream(const MarItem *item, FILE *fp)
+int ArchiveReader::ExtractItemToStream(const MarItem* item, FILE* fp)
 {
     /* decompress the data chunk by chunk */
 
@@ -307,7 +296,7 @@ ArchiveReader::ExtractItemToStream(const MarItem *item, FILE *fp)
             break;
         }
 
-        if (offset < (int) item->length && strm.avail_in == 0)
+        if (offset < (int)item->length && strm.avail_in == 0)
         {
             inlen = mar_read(mArchive, item, offset, inbuf, inbuf_size);
             if (inlen <= 0)

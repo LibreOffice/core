@@ -13,7 +13,6 @@
  *                      be of size in WCHARs MAX_PATH + 1
  * @return TRUE if successful
 */
-BOOL CalculateRegistryPathFromFilePath(const LPCWSTR filePath,
-                                       LPWSTR registryPath);
+BOOL CalculateRegistryPathFromFilePath(const LPCWSTR filePath, LPWSTR registryPath);
 
 #endif
