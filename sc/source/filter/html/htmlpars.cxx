@@ -20,6 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 
 #include <scitems.hxx>
@@ -37,6 +38,7 @@
 #include <editeng/justifyitem.hxx>
 #include <sal/log.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <svl/numformat.hxx>
 #include <svl/intitem.hxx>
 #include <utility>
@@ -47,6 +49,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
@@ -1316,6 +1319,13 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     {
         OSL_FAIL( "Image: graphic without URL ?!?" );
         return ;
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        INetURLObject aURL(pImage->aURL);
+        if (HostFilter::isForbidden(aURL.GetHost()))
+            SfxLokHelper::sendNetworkAccessError();
     }
 
     sal_uInt16 nFormat;
