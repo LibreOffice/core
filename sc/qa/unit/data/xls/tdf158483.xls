@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ss:Workbook xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns:o="urn:schemas-microsoft-com:office:office">
+    <o:DocumentProperties>
+        <o:Title>Id</o:Title>
+    </o:DocumentProperties>
+    <ss:ExcelWorkbook>
+        <ss:WindowHeight>9000</ss:WindowHeight>
+        <ss:WindowWidth>36470</ss:WindowWidth>
+        <ss:ProtectStructure>False</ss:ProtectStructure>
+        <ss:ProtectWindows>False</ss:ProtectWindows>
+    </ss:ExcelWorkbook>
+    <ss:Styles>
+        <ss:Style ss:ID="Default">
+            <ss:Alignment ss:Vertical="Top" ss:WrapText="1" />
+            <ss:Font ss:FontName="arial" ss:Size="10" />
+            <ss:Borders>
+                <ss:Border ss:Color="#cdcdcd" ss:Weight="1"
+                ss:LineStyle="Continuous" ss:Position="Top" />
+                <ss:Border ss:Color="#cdcdcd" ss:Weight="1"
+                ss:LineStyle="Continuous" ss:Position="Bottom" />
+                <ss:Border ss:Color="#cdcdcd" ss:Weight="1"
+                ss:LineStyle="Continuous" ss:Position="Left" />
+                <ss:Border ss:Color="#cdcdcd" ss:Weight="1"
+                ss:LineStyle="Continuous" ss:Position="Right" />
+            </ss:Borders>
+            <ss:Interior />
+            <ss:NumberFormat />
+            <ss:Protection />
+        </ss:Style>
+        <ss:Style ss:ID="title">
+            <ss:Borders />
+            <ss:Font />
+            <ss:Alignment ss:WrapText="1" ss:Vertical="Center"
+            ss:Horizontal="Center" />
+            <ss:NumberFormat ss:Format="@" />
+        </ss:Style>
+        <ss:Style ss:ID="headercell">
+            <ss:Font ss:Bold="0" ss:Size="12" />
+            <ss:Alignment ss:WrapText="1" ss:Horizontal="Center" />
+            <ss:Interior ss:Pattern="Solid" ss:Color="#dddddd" />
+            <ss:Borders>
+                <ss:Border ss:Color="#cdcdcd" ss:Weight="1"
+                ss:LineStyle="Continuous" ss:Position="Top" />
+                <ss:Border ss:Color="#cdcdcd" ss:Weight="1"
+                ss:LineStyle="Continuous" ss:Position="Bottom" />
+                <ss:Border ss:Color="#cdcdcd" ss:Weight="1"
+                ss:LineStyle="Continuous" ss:Position="Left" />
+                <ss:Border ss:Color="#cdcdcd" ss:Weight="1"
+                ss:LineStyle="Continuous" ss:Position="Right" />
+            </ss:Borders>
+        </ss:Style>
+        <ss:Style ss:ID="even">
+            <ss:Interior ss:Pattern="Solid" ss:Color="#f6f6f6" />
+        </ss:Style>
+        <ss:Style ss:Parent="even" ss:ID="evendate">
+            <ss:NumberFormat ss:Format="dd-mm-yyyy" />
+        </ss:Style>
+        <ss:Style ss:Parent="even" ss:ID="evendatetime">
+            <ss:NumberFormat ss:Format="dd-mm-yyyy hh:mm:ss" />
+        </ss:Style>
+        <ss:Style ss:Parent="even" ss:ID="evenint">
+            <ss:NumberFormat ss:Format="0" />
+        </ss:Style>
+        <ss:Style ss:Parent="even" ss:ID="evenfloat">
+            <ss:NumberFormat ss:Format="0.00" />
+        </ss:Style>
+        <ss:Style ss:ID="odd">
+            <ss:Interior ss:Pattern="Solid" ss:Color="#FFFFFF" />
+        </ss:Style>
+        <ss:Style ss:Parent="odd" ss:ID="odddate">
+            <ss:NumberFormat ss:Format="dd-mm-yyyy" />
+        </ss:Style>
+        <ss:Style ss:Parent="odd" ss:ID="odddatetime">
+            <ss:NumberFormat ss:Format="dd-mm-yyyy hh:mm:ss" />
+        </ss:Style>
+        <ss:Style ss:Parent="odd" ss:ID="oddint">
+            <ss:NumberFormat ss:Format="0" />
+        </ss:Style>
+        <ss:Style ss:Parent="odd" ss:ID="oddfloat">
+            <ss:NumberFormat ss:Format="0.00" />
+        </ss:Style>
+    </ss:Styles>
+    <ss:Worksheet ss:Name="Id">
+        <ss:Names>
+            <ss:NamedRange ss:Name="Print_Titles"
+            ss:RefersTo="='Id'!R1:R2" />
+        </ss:Names>
+        <ss:Table x:FullRows="1" x:FullColumns="1">
+            <ss:Column ss:AutoFitWidth="1" ss:Width="121" />
+            <ss:Column ss:AutoFitWidth="1" ss:Width="789" />
+            <ss:Column ss:AutoFitWidth="1" ss:Width="204" />
+            <ss:Column ss:AutoFitWidth="1" ss:Width="40" />
+            <ss:Column ss:AutoFitWidth="1" ss:Width="60" />
+            <ss:Row ss:Height="38">
+                <ss:Cell ss:StyleID="title" ss:MergeAcross="4">
+                    <ss:Data xmlns:html="http://www.w3.org/TR/REC-html40"
+                    ss:Type="String">
+                        <html:B>
+                            <html:U>
+                                <html:Font html:Size="15">
+                                Id</html:Font>
+                            </html:U>
+                        </html:B>
+                    </ss:Data>
+                    <ss:NamedCell ss:Name="Print_Titles" />
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1">
+                <ss:Cell ss:StyleID="headercell">
+                    <ss:Data ss:Type="String">Código</ss:Data>
+                    <ss:NamedCell ss:Name="Print_Titles" />
+                </ss:Cell>
+                <ss:Cell ss:StyleID="headercell">
+                    <ss:Data ss:Type="String">Descrição</ss:Data>
+                    <ss:NamedCell ss:Name="Print_Titles" />
+                </ss:Cell>
+                <ss:Cell ss:StyleID="headercell">
+                    <ss:Data ss:Type="String">Preço</ss:Data>
+                    <ss:NamedCell ss:Name="Print_Titles" />
+                </ss:Cell>
+                <ss:Cell ss:StyleID="headercell">
+                    <ss:Data ss:Type="String">Stock Custo - Preço
+                    médio</ss:Data>
+                    <ss:NamedCell ss:Name="Print_Titles" />
+                </ss:Cell>
+                <ss:Cell ss:StyleID="headercell">
+                    <ss:Data ss:Type="String">Ativo</ss:Data>
+                    <ss:NamedCell ss:Name="Print_Titles" />
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101110001</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Alimentacao
+                    Extra</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String"></ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101110003</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Buffet
+                    Especial</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String"></ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101210009</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Garoto Cafe C/
+                    Leite</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 100.00) (2:
+                    100.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101210003</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Cafe
+                    Expresso</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 100.00) (2:
+                    100.00) (4: 150.00) (5: 100.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101211001</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Cha</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 100.00) (2:
+                    100.00) (4: 200.00) (5: 120.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101210007</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">
+                    Descafeinado</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 100.00) (2:
+                    100.00) (4: 250.00) (5: 100.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101310011</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Peito De Frango
+                    Grelhado</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 1 100.00) (2: 1
+                    100.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101310003</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Espetada De
+                    Frango</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 1 190.00) (2: 1
+                    190.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101311012</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Costeleta De Porco C/
+                    Ananas</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 1 200.00) (2: 1
+                    200.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101210002</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Cafe C/
+                    Leite</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 130.00) (2:
+                    130.00) (4: 150.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101210010</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Leite Com
+                    Chocolate</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 130.00) (2:
+                    130.00) (4: 150.00) (5: 165.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101310004</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Espetadinha De
+                    Frango</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 1 300.00) (2: 1
+                    300.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101310006</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Frango
+                    Grelhado</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 1 300.00) (2: 1
+                    300.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101311011</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Chorrillana</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 1 300.00) (2: 1
+                    300.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101311013</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Entrecosto Com Molho
+                    Barbecue</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 1 400.00) (2: 1
+                    400.00) (6: 1 350.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101310013</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Poke Bowl
+                    Fitness</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 1 460.00) (2: 1
+                    460.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101311004</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Bife De Atum
+                    Criola</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 1 500.00) (2: 1
+                    500.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101311010</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Bitoque</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 1 500.00) (2: 1
+                    500.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101311016</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Espetada De
+                    Carne</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 1 780.00) (2: 1
+                    780.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101311002</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Bife A Porto
+                    Grande</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 1 800.00) (2: 1
+                    800.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101210004</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Capuccino</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 250.00) (2:
+                    250.00) (4: 150.00) (5: 165.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101310005</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Frango A
+                    Passarinho</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">(1: 550.00) (2:
+                    550.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101310008</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Nuggets de
+                    Frango</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(1: 750.00) (2:
+                    750.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">101210011</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">Código
+                    Livre</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String"></ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="oddfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="odd">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">101113002</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">Menu Do Dia</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">(5: 2
+                    000.00)</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="evenfloat">
+                    <ss:Data ss:Type="Number">0</ss:Data>
+                </ss:Cell>
+                <ss:Cell ss:StyleID="even">
+                    <ss:Data ss:Type="String">true</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+        </ss:Table>
+        <x:WorksheetOptions>
+            <x:PageSetup>
+                <x:Layout x:CenterHorizontal="1"
+                x:Orientation="Landscape" />
+                <x:Footer x:Data="Page &amp;P of &amp;N"
+                x:Margin="0.5" />
+                <x:PageMargins x:Top="0.5" x:Right="0.5"
+                x:Left="0.5" x:Bottom="0.8" />
+            </x:PageSetup>
+            <x:FitToPage />
+            <x:Print>
+                <x:PrintErrors>Blank</x:PrintErrors>
+                <x:FitWidth>1</x:FitWidth>
+                <x:FitHeight>32767</x:FitHeight>
+                <x:ValidPrinterInfo />
+                <x:VerticalResolution>600</x:VerticalResolution>
+            </x:Print>
+            <x:Selected />
+            <x:DoNotDisplayGridlines />
+            <x:ProtectObjects>False</x:ProtectObjects>
+            <x:ProtectScenarios>False</x:ProtectScenarios>
+        </x:WorksheetOptions>
+    </ss:Worksheet>
+</ss:Workbook>

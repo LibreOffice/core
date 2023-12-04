@@ -1388,6 +1388,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf147955)
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testImportCrashes)
 {
     testImportCrash("ods/tdf149752.ods");
+    testImportCrash("xls/tdf158483.xls");
     testImportCrash("ods/tdf122643.ods");
     testImportCrash("ods/tdf132278.ods");
     testImportCrash("xlsx/tdf130959.xlsx");
