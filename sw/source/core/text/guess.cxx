@@ -82,7 +82,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     // allow shrinking, i.e. more text in justified lines, depending on the justification algorithm
     if ( rAdjust == SvxAdjust::Block && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING))
+                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
+         // tdf#158436 avoid shrinking at underflow, e.g. no-break space
+         // after a very short word resulted endless loop
+         !rInf.IsUnderflow() )
     {
         // allow up to 2% shrinking of the line
         nLineWidth = nLineWidth / 0.98 + rInf.X() / 0.98 - rInf.X();

@@ -1408,6 +1408,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130088, "tdf130088.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf158436, "tdf158436.docx")
+{
+    // This resulted freezing
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)
 {
     loadAndReload("hyphenation.odt");
