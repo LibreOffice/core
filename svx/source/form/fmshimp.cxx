@@ -3380,7 +3380,7 @@ void FmXFormShell::CreateExternalView_Lock()
 
                 // value list
                 MapUString2UstringSeq::const_iterator aCurrentValueList = aRadioValueLists.find(rCtrlSource.first);
-                assert(aCurrentValueList != aRadioValueLists.end());
+                assert(aCurrentValueList != aRadioValueLists.end() && "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 pListBoxDescription->Name = FM_PROP_STRINGITEMLIST;
                 pListBoxDescription->Value <<= (*aCurrentValueList).second;
                 ++pListBoxDescription;
