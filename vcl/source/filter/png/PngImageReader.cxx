@@ -209,7 +209,6 @@ void getImportantChunks(SvStream& rInStream, SvStream& rOutStream, sal_uInt32 nW
                         sal_uInt32 nHeight)
 {
     sal_uInt64 nPos = rInStream.Tell();
-    sal_uInt32 nChunkSize, nChunkType;
     rInStream.SetEndian(SvStreamEndian::BIG);
     rOutStream.SetEndian(SvStreamEndian::BIG);
     rOutStream.WriteUInt64(PNG_SIGNATURE);
@@ -232,6 +231,7 @@ void getImportantChunks(SvStream& rInStream, SvStream& rOutStream, sal_uInt32 nW
                    + PNG_CRC_SIZE);
     while (rInStream.good())
     {
+        sal_uInt32 nChunkSize(0), nChunkType(0);
         rInStream.ReadUInt32(nChunkSize);
         rInStream.ReadUInt32(nChunkType);
         bool bBreakOuter = false;
@@ -255,13 +255,20 @@ void getImportantChunks(SvStream& rInStream, SvStream& rOutStream, sal_uInt32 nW
             {
                 // Seek back to start of chunk
                 rInStream.SeekRel(-PNG_TYPE_SIZE - PNG_SIZE_SIZE);
+                const size_t nDataSize = PNG_SIZE_SIZE + PNG_TYPE_SIZE
+                                         + static_cast<size_t>(nChunkSize) + PNG_CRC_SIZE;
+                if (nDataSize > rInStream.remainingSize())
+                {
+                    SAL_WARN("vcl.filter", "png claims record of size: "
+                                               << nDataSize << ", but only "
+                                               << rInStream.remainingSize() << " available.");
+                    bBreakOuter = true;
+                    break;
+                }
                 // Copy chunk to rOutStream
-                std::vector<uint8_t> aData(nChunkSize + PNG_TYPE_SIZE + PNG_SIZE_SIZE
-                                           + PNG_CRC_SIZE);
-                rInStream.ReadBytes(aData.data(),
-                                    PNG_TYPE_SIZE + PNG_SIZE_SIZE + nChunkSize + PNG_CRC_SIZE);
-                rOutStream.WriteBytes(aData.data(),
-                                      PNG_TYPE_SIZE + PNG_SIZE_SIZE + nChunkSize + PNG_CRC_SIZE);
+                std::vector<uint8_t> aData(nDataSize);
+                rInStream.ReadBytes(aData.data(), nDataSize);
+                rOutStream.WriteBytes(aData.data(), nDataSize);
                 break;
             }
         }
