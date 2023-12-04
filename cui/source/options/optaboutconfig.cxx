@@ -400,7 +400,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
             OUStringBuffer sValue;
 
             // Fall back to dynamic type when this is empty
-            if (aType == cppu::UnoType<void>::get())
+            if (aType == cppu::UnoType<void>::get() && sDynamicType != "void")
             {
                 if (sDynamicType == "boolean")
                     aType = cppu::UnoType<sal_Bool>::get();
@@ -436,138 +436,51 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 sValue = it->sValue;
             else
             {
-                if (aNode.getValueType().getTypeClass() == css::uno::TypeClass_VOID)
+                bool bHasValue = sDynamicType != "void";
+                if (aType == cppu::UnoType<sal_Bool>::get())
                 {
-                    // Skip, no value set
-                }
-                else if (aType == cppu::UnoType<sal_Bool>::get())
-                {
-                    sValue = OUString::boolean(aNode.get<bool>());
+                    if (bHasValue)
+                        sValue = OUString::boolean(aNode.get<bool>());
                     sType = "boolean";
                 }
                 else if (aType == cppu::UnoType<sal_Int16>::get())
                 {
-                    sValue = OUString::number(aNode.get<sal_Int16>());
+                    if (bHasValue)
+                        sValue = OUString::number(aNode.get<sal_Int16>());
                     sType = "short";
                 }
                 else if (aType == cppu::UnoType<sal_Int32>::get())
                 {
-                    sValue = OUString::number(aNode.get<sal_Int32>());
+                    if (bHasValue)
+                        sValue = OUString::number(aNode.get<sal_Int32>());
                     sType = "int";
                 }
                 else if (aType == cppu::UnoType<sal_Int64>::get())
                 {
-                    sValue = OUString::number(aNode.get<sal_Int64>());
+                    if (bHasValue)
+                        sValue = OUString::number(aNode.get<sal_Int64>());
                     sType = "long";
                 }
                 else if (aType == cppu::UnoType<double>::get())
                 {
-                    sValue = OUString::number(aNode.get<double>());
+                    if (bHasValue)
+                        sValue = OUString::number(aNode.get<double>());
                     sType = "double";
                 }
                 else if (aType == cppu::UnoType<OUString>::get())
                 {
-                    sValue = aNode.get<OUString>();
+                    if (bHasValue)
+                        sValue = aNode.get<OUString>();
                     sType = "string";
                 }
                 else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int8>>::get())
                 {
-                    const uno::Sequence<sal_Int8> seq = aNode.get<uno::Sequence<sal_Int8>>();
-                    for (sal_Int8 j : seq)
+                    if (bHasValue)
                     {
-                        OUString s = OUString::number(static_cast<sal_uInt8>(j), 16);
-                        if (s.getLength() == 1)
+                        const uno::Sequence<sal_Int8> seq = aNode.get<uno::Sequence<sal_Int8>>();
+                        for (sal_Int8 j : seq)
                         {
-                            sValue.append("0");
-                        }
-                        sValue.append(s.toAsciiUpperCase());
-                    }
-                    sType = "hexBinary";
-                }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Bool>>::get())
-                {
-                    uno::Sequence<sal_Bool> seq = aNode.get<uno::Sequence<sal_Bool>>();
-                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
-                    {
-                        if (j != 0)
-                        {
-                            sValue.append(",");
-                        }
-                        sValue.append(OUString::boolean(seq[j]));
-                    }
-                    sType = "boolean-list";
-                }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int16>>::get())
-                {
-                    uno::Sequence<sal_Int16> seq = aNode.get<uno::Sequence<sal_Int16>>();
-                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
-                    {
-                        if (j != 0)
-                        {
-                            sValue.append(",");
-                        }
-                        sValue.append(static_cast<sal_Int32>(seq[j]));
-                    }
-                    sType = "short-list";
-                }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get())
-                {
-                    uno::Sequence<sal_Int32> seq = aNode.get<uno::Sequence<sal_Int32>>();
-                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
-                    {
-                        if (j != 0)
-                        {
-                            sValue.append(",");
-                        }
-                        sValue.append(seq[j]);
-                    }
-                    sType = "int-list";
-                }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int64>>::get())
-                {
-                    uno::Sequence<sal_Int64> seq = aNode.get<uno::Sequence<sal_Int64>>();
-                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
-                    {
-                        if (j != 0)
-                        {
-                            sValue.append(",");
-                        }
-                        sValue.append(seq[j]);
-                    }
-                    sType = "long-list";
-                }
-                else if (aType == cppu::UnoType<css::uno::Sequence<double>>::get())
-                {
-                    uno::Sequence<double> seq = aNode.get<uno::Sequence<double>>();
-                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
-                    {
-                        if (j != 0)
-                        {
-                            sValue.append(",");
-                        }
-                        sValue.append(seq[j]);
-                    }
-                    sType = "double-list";
-                }
-                else if (aType == cppu::UnoType<css::uno::Sequence<OUString>>::get())
-                {
-                    sValue = lcl_StringListToString(aNode.get<uno::Sequence<OUString>>());
-                    sType = "string-list";
-                }
-                else if (aType
-                         == cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int8>>>::get())
-                {
-                    const uno::Sequence<uno::Sequence<sal_Int8>> seq
-                        = aNode.get<uno::Sequence<uno::Sequence<sal_Int8>>>();
-                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
-                    {
-                        if (j != 0)
-                        {
-                            sValue.append(",");
-                        }
-                        for (sal_Int8 k : seq[j])
-                        {
-                            OUString s = OUString::number(static_cast<sal_uInt8>(k), 16);
+                            OUString s = OUString::number(static_cast<sal_uInt8>(j), 16);
                             if (s.getLength() == 1)
                             {
                                 sValue.append("0");
@@ -575,12 +488,125 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                             sValue.append(s.toAsciiUpperCase());
                         }
                     }
+                    sType = "hexBinary";
+                }
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Bool>>::get())
+                {
+                    if (bHasValue)
+                    {
+                        uno::Sequence<sal_Bool> seq = aNode.get<uno::Sequence<sal_Bool>>();
+                        for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                        {
+                            if (j != 0)
+                            {
+                                sValue.append(",");
+                            }
+                            sValue.append(OUString::boolean(seq[j]));
+                        }
+                    }
+                    sType = "boolean-list";
+                }
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int16>>::get())
+                {
+                    if (bHasValue)
+                    {
+                        uno::Sequence<sal_Int16> seq = aNode.get<uno::Sequence<sal_Int16>>();
+                        for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                        {
+                            if (j != 0)
+                            {
+                                sValue.append(",");
+                            }
+                            sValue.append(static_cast<sal_Int32>(seq[j]));
+                        }
+                    }
+                    sType = "short-list";
+                }
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get())
+                {
+                    if (bHasValue)
+                    {
+                        uno::Sequence<sal_Int32> seq = aNode.get<uno::Sequence<sal_Int32>>();
+                        for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                        {
+                            if (j != 0)
+                            {
+                                sValue.append(",");
+                            }
+                            sValue.append(seq[j]);
+                        }
+                    }
+                    sType = "int-list";
+                }
+                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int64>>::get())
+                {
+                    if (bHasValue)
+                    {
+                        uno::Sequence<sal_Int64> seq = aNode.get<uno::Sequence<sal_Int64>>();
+                        for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                        {
+                            if (j != 0)
+                            {
+                                sValue.append(",");
+                            }
+                            sValue.append(seq[j]);
+                        }
+                    }
+                    sType = "long-list";
+                }
+                else if (aType == cppu::UnoType<css::uno::Sequence<double>>::get())
+                {
+                    if (bHasValue)
+                    {
+                        uno::Sequence<double> seq = aNode.get<uno::Sequence<double>>();
+                        for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                        {
+                            if (j != 0)
+                            {
+                                sValue.append(",");
+                            }
+                            sValue.append(seq[j]);
+                        }
+                    }
+                    sType = "double-list";
+                }
+                else if (aType == cppu::UnoType<css::uno::Sequence<OUString>>::get())
+                {
+                    if (bHasValue)
+                        sValue = lcl_StringListToString(aNode.get<uno::Sequence<OUString>>());
+                    sType = "string-list";
+                }
+                else if (aType
+                         == cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int8>>>::get())
+                {
+                    if (bHasValue)
+                    {
+                        const uno::Sequence<uno::Sequence<sal_Int8>> seq
+                            = aNode.get<uno::Sequence<uno::Sequence<sal_Int8>>>();
+                        for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                        {
+                            if (j != 0)
+                            {
+                                sValue.append(",");
+                            }
+                            for (sal_Int8 k : seq[j])
+                            {
+                                OUString s = OUString::number(static_cast<sal_uInt8>(k), 16);
+                                if (s.getLength() == 1)
+                                {
+                                    sValue.append("0");
+                                }
+                                sValue.append(s.toAsciiUpperCase());
+                            }
+                        }
+                    }
                     sType = "hexBinary-list";
                 }
                 else
                 {
-                    SAL_WARN("cui.options", "path \"" << sPath << "\" member " << item
+                    SAL_INFO("cui.options", "path \"" << sPath << "\" member " << item
                                                       << " of unsupported type " << sType);
+                    continue;
                 }
             }
 
