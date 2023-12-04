@@ -231,7 +231,10 @@ void EditView::InvalidateOtherViewWindows( const tools::Rectangle& rInvRect )
         for (auto& pWin : pImpEditView->aOutWindowSet)
         {
             if (pWin)
-                pWin->Invalidate( bNegativeX ? lcl_negateRectX(rInvRect) : rInvRect );
+            {
+                if (!pWin->InvalidateByForeignEditView(this))
+                    pWin->Invalidate( bNegativeX ? lcl_negateRectX(rInvRect) : rInvRect );
+            }
         }
     }
 }

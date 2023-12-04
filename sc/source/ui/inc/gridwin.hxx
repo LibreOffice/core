@@ -380,6 +380,7 @@ public:
     void LogicInvalidate(const tools::Rectangle* pRectangle) override;
     void LogicInvalidatePart(const tools::Rectangle* pRectangle, int nPart);
 
+    bool InvalidateByForeignEditView(EditView* pEditView) override;
     /// Update the cell selection according to what handles have been dragged.
     /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.
     /// Coordinates are in pixels.

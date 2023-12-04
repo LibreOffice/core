@@ -62,6 +62,7 @@ class VclWindowEvent;
 class AllSettings;
 class InputContext;
 class VclEventListeners;
+class EditView;
 enum class ImplPaintFlags;
 enum class VclEventId;
 enum class PointerStyle;
@@ -970,6 +971,7 @@ public:
      */
     virtual void                        LogicInvalidate(const tools::Rectangle* pRectangle);
 
+    virtual bool                        InvalidateByForeignEditView(EditView* );
     /**
      * Notification about some rectangle of the output device got invalidated. Used for the
      * dialogs and floating windows (e.g. context menu, popup).

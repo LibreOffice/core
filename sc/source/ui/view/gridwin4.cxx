@@ -671,6 +671,11 @@ int lcl_GetMultiLineHeight(EditEngine* pEditEngine)
 
     return nHeight;
 }
+
+tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
+{
+    return tools::Rectangle(-rRect.Right(), rRect.Top(), -rRect.Left(), rRect.Bottom());
+}
 }
 
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
@@ -1763,6 +1768,27 @@ void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     LogicInvalidatePart(pRectangle, pViewShell->getPart());
+}
+
+bool ScGridWindow::InvalidateByForeignEditView(EditView* pEditView)
+{
+    if (!pEditView)
+        return false;
+
+    auto* pGridWin = dynamic_cast<ScGridWindow*>(pEditView->GetWindow());
+    if (!pGridWin)
+        return false;
+
+    const ScViewData& rViewData = pGridWin->getViewData();
+    tools::Long nRefTabNo = rViewData.GetRefTabNo();
+    tools::Long nX = rViewData.GetCurXForTab(nRefTabNo);
+    tools::Long nY = rViewData.GetCurYForTab(nRefTabNo);
+
+    tools::Rectangle aPixRect = getViewData().GetEditArea(eWhich, nX, nY, this, nullptr, true);
+    tools::Rectangle aLogicRect = PixelToLogic(aPixRect, getViewData().GetLogicMode());
+    Invalidate(pEditView->IsNegativeX() ? lcl_negateRectX(aLogicRect) : aLogicRect);
+
+    return true;
 }
 
 void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
