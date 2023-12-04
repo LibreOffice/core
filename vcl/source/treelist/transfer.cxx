@@ -23,7 +23,6 @@
 #include <shlobj.h>
 #endif
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -1036,7 +1035,6 @@ namespace {
 class TransferableClipboardNotifier : public ::cppu::WeakImplHelper< XClipboardListener >
 {
 private:
-    ::osl::Mutex&                   mrMutex;
     Reference< XClipboardNotifier > mxNotifier;
     TransferableDataHelper*         mpListener;
 
@@ -1048,7 +1046,7 @@ protected:
     virtual void SAL_CALL disposing( const EventObject& Source ) override;
 
 public:
-    TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener, ::osl::Mutex& _rMutex );
+    TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener );
 
     /// determines whether we're currently listening
     bool isListening() const { return mpListener != nullptr; }
@@ -1059,9 +1057,8 @@ public:
 
 }
 
-TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener, ::osl::Mutex& _rMutex )
-    :mrMutex( _rMutex )
-    ,mxNotifier( _rxClipboard, UNO_QUERY )
+TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener )
+    :mxNotifier( _rxClipboard, UNO_QUERY )
     ,mpListener( &_rListener )
 {
     osl_atomic_increment( &m_refCount );
@@ -1079,11 +1076,6 @@ TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< X
 void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::ClipboardEvent& event )
 {
     SolarMutexGuard aSolarGuard;
-        // the SolarMutex here is necessary, since
-        // - we cannot call mpListener without our own mutex locked
-        // - Rebind respectively InitFormats (called by Rebind) will
-        // try to lock the SolarMutex, too
-    ::osl::MutexGuard aGuard( mrMutex );
     if( mpListener )
         mpListener->Rebind( event.Contents );
 }
@@ -1098,7 +1090,7 @@ void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& )
 
 void TransferableClipboardNotifier::dispose()
 {
-    ::osl::MutexGuard aGuard( mrMutex );
+    SolarMutexGuard g;
 
     Reference< XClipboardListener > xKeepMeAlive( this );
 
@@ -1111,7 +1103,6 @@ void TransferableClipboardNotifier::dispose()
 
 struct TransferableDataHelper_Impl
 {
-    ::osl::Mutex                    maMutex;
     rtl::Reference<TransferableClipboardNotifier>  mxClipboardListener;
 
     TransferableDataHelper_Impl()
@@ -1155,7 +1146,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
 {
     if ( this != &rDataHelper )
     {
-        ::osl::MutexGuard aGuard(mxImpl->maMutex);
+        SolarMutexGuard g;
 
         const bool bWasClipboardListening = mxImpl->mxClipboardListener.is();
 
@@ -1176,7 +1167,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
 
 TransferableDataHelper& TransferableDataHelper::operator=(TransferableDataHelper&& rDataHelper)
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+    SolarMutexGuard g;
 
     const bool bWasClipboardListening = mxImpl->mxClipboardListener.is();
 
@@ -1198,7 +1189,7 @@ TransferableDataHelper::~TransferableDataHelper()
 {
     StopClipboardListening( );
     {
-        ::osl::MutexGuard aGuard(mxImpl->maMutex);
+        SolarMutexGuard g;
         maFormats.clear();
         mxObjDesc.reset();
     }
@@ -1302,7 +1293,6 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
 void TransferableDataHelper::InitFormats()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
 
     maFormats.clear();
     mxObjDesc.reset(new TransferableObjectDescriptor);
@@ -1328,14 +1318,14 @@ void TransferableDataHelper::InitFormats()
 
 bool TransferableDataHelper::HasFormat( SotClipboardFormatId nFormat ) const
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+    SolarMutexGuard g;
     return std::any_of(maFormats.begin(), maFormats.end(),
               [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; });
 }
 
 bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+    SolarMutexGuard g;
     for (auto const& format : maFormats)
     {
         if( TransferableDataHelper::IsEqual( rFlavor, format ) )
@@ -1347,20 +1337,20 @@ bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 
 sal_uInt32 TransferableDataHelper::GetFormatCount() const
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+    SolarMutexGuard g;
     return maFormats.size();
 }
 
 SotClipboardFormatId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+    SolarMutexGuard g;
     DBG_ASSERT(nFormat < maFormats.size(), "TransferableDataHelper::GetFormat: invalid format index");
     return( ( nFormat < maFormats.size() ) ? maFormats[ nFormat ].mnSotId : SotClipboardFormatId::NONE );
 }
 
 DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) const
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+    SolarMutexGuard g;
     DBG_ASSERT(nFormat < maFormats.size(), "TransferableDataHelper::GetFormat: invalid format index");
 
     DataFlavor aRet;
@@ -1409,11 +1399,11 @@ Any TransferableDataHelper::GetAny( SotClipboardFormatId nFormat, const OUString
 
 Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& rDestDoc ) const
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
     Any aRet;
 
     try
     {
+        SolarMutexGuard g;
         if( mxTransfer.is() )
         {
             const SotClipboardFormatId         nRequestFormat = SotExchange::GetFormat( rFlavor );
@@ -1429,8 +1419,6 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
                     {
 // tdf#133365: only release solar mutex on Windows
 #ifdef _WIN32
-                        // tdf#133527: first, make sure that we actually hold the mutex
-                        SolarMutexGuard g;
                         // Our own thread may handle the nested IDataObject::GetData call,
                         // and try to acquire solar mutex
                         SolarMutexReleaser r;
@@ -1451,8 +1439,6 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
             {
 // tdf#133365: only release solar mutex on Windows
 #ifdef _WIN32
-                // tdf#133527: first, make sure that we actually hold the mutex
-                SolarMutexGuard g;
                 // Our own thread may handle the nested IDataObject::GetData call,
                 // and try to acquire solar mutex
                 SolarMutexReleaser r;
@@ -2116,18 +2102,18 @@ void TransferableDataHelper::Rebind( const Reference< XTransferable >& _rxNewCon
 
 bool TransferableDataHelper::StartClipboardListening( )
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+    SolarMutexGuard g;
 
     StopClipboardListening( );
 
-    mxImpl->mxClipboardListener = new TransferableClipboardNotifier(mxClipboard, *this, mxImpl->maMutex);
+    mxImpl->mxClipboardListener = new TransferableClipboardNotifier(mxClipboard, *this);
 
     return mxImpl->mxClipboardListener->isListening();
 }
 
 void TransferableDataHelper::StopClipboardListening( )
 {
-    ::osl::MutexGuard aGuard(mxImpl->maMutex);
+    SolarMutexGuard g;
 
     if (mxImpl->mxClipboardListener.is())
     {
