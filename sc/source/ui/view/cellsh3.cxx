@@ -40,6 +40,7 @@
 #include <autoform.hxx>
 #include <cellsh.hxx>
 #include <inputhdl.hxx>
+#include <inputopt.hxx>
 #include <editable.hxx>
 #include <funcdesc.hxx>
 #include <markdata.hxx>
@@ -1087,6 +1088,25 @@ void ScCellShell::Execute( SfxRequest& rReq )
             // called from Basic at the hidden view to select a range in the visible view
             OSL_FAIL("old slot SID_MARKAREA");
             break;
+
+        case FID_MOVE_KEEP_INSERT_MODE:
+        {
+            const SfxBoolItem* pEnabledArg = rReq.GetArg<SfxBoolItem>(FID_MOVE_KEEP_INSERT_MODE);
+            if (!pEnabledArg) {
+                SAL_WARN("sfx.appl", "FID_MOVE_KEEP_INSERT_MODE: must specify if you would like this to be enabled");
+                break;
+            }
+
+            ScInputOptions aInputOptions = pScMod->GetInputOptions();
+
+            aInputOptions.SetMoveKeepEdit(pEnabledArg->GetValue());
+            pScMod->SetInputOptions(aInputOptions);
+
+            if (comphelper::LibreOfficeKit::isActive())
+                pTabViewShell->SetMoveKeepEdit(pEnabledArg->GetValue());
+
+            break;
+        }
 
         default:
             OSL_FAIL("ScCellShell::Execute: unknown slot");

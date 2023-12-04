@@ -446,6 +446,8 @@ interface CellMovement
     ]
     SID_DATA_SELECT         [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_DETECTIVE_FILLMODE  [ ExecMethod = Execute; StateMethod = GetState; ] // api:
+
+    FID_MOVE_KEEP_INSERT_MODE [ ExecMethod = Execute; ]
 }
 
 

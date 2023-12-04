@@ -3852,7 +3852,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertPlainTextContentControl"),
         OUString(".uno:InsertPictureContentControl"),
         OUString(".uno:DataFilterAutoFilter"),
-        OUString(".uno:CellProtection")
+        OUString(".uno:CellProtection"),
+        OUString(".uno:MoveKeepInsertMode")
     };
 
     util::URL aCommandURL;

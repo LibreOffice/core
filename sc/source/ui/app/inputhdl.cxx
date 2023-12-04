@@ -3816,6 +3816,14 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
 
         if (pActiveViewSh)
             pActiveViewSh->FindNextUnprot( bShift, true );
+
+        ScModule* pScMod = SC_MOD();
+        const ScInputOptions& rOpt = pScMod->GetInputOptions();
+
+        if ( (rOpt.GetMoveKeepEdit() && !comphelper::LibreOfficeKit::isActive())
+             || (pActiveViewSh->GetMoveKeepEdit() && comphelper::LibreOfficeKit::isActive()) )
+            pScMod->SetInputMode( SC_INPUT_TABLE );
+
         return true;
     }
 
@@ -3855,6 +3863,12 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
 
                 if (pActiveViewSh)
                     pActiveViewSh->MoveCursorEnter( bShift && !bControl );
+
+                ScModule* pScMod = SC_MOD();
+                const ScInputOptions& rOpt = pScMod->GetInputOptions();
+                if ( (rOpt.GetMoveKeepEdit() && !comphelper::LibreOfficeKit::isActive())
+                    || (pActiveViewSh->GetMoveKeepEdit() && comphelper::LibreOfficeKit::isActive()) )
+                    pScMod->SetInputMode( SC_INPUT_TABLE );
 
                 bUsed = true;
             }
