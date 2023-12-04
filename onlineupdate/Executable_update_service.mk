@@ -49,9 +49,9 @@ $(eval $(call gb_Executable_add_ldflags,update_service,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,update_service,\
-	onlineupdate/source/service/certificatecheck \
+	onlineupdate/source/update/common/certificatecheck \
 	onlineupdate/source/service/maintenanceservice \
-	onlineupdate/source/service/registrycertificates \
+	onlineupdate/source/update/common/registrycertificates \
 	onlineupdate/source/service/servicebase \
 	onlineupdate/source/service/serviceinstall \
 	onlineupdate/source/service/workmonitor \

@@ -86,8 +86,7 @@ $(eval $(call gb_Executable_add_exception_objects,updater,\
 	onlineupdate/source/update/updater/updater \
 	$(if $(filter WNT,$(OS)),\
 		onlineupdate/source/update/updater/loaddlls \
-		onlineupdate/source/update/updater/progressui_win \
-		onlineupdate/source/update/updater/win_dirent )\
+		onlineupdate/source/update/updater/progressui_win )\
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
