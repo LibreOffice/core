@@ -102,7 +102,7 @@ public:
         std::copy_n(literal, N, more.buffer);
     }
 
-#if !(defined _MSC_VER && _MSC_VER >= 1930 && _MSC_VER <= 1938 && defined _MANAGED)
+#if !(defined _MSC_VER && _MSC_VER >= 1930 && _MSC_VER <= 1939 && defined _MANAGED)
 #if HAVE_CPP_CONSTEVAL
     consteval
 #else

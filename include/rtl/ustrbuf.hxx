@@ -124,7 +124,7 @@ public:
     explicit OUStringBuffer(bool) = delete;
     explicit OUStringBuffer(char) = delete;
     explicit OUStringBuffer(wchar_t) = delete;
-#if !(defined _MSC_VER && _MSC_VER >= 1930 && _MSC_VER <= 1938 && defined _MANAGED)
+#if !(defined _MSC_VER && _MSC_VER >= 1930 && _MSC_VER <= 1939 && defined _MANAGED)
     explicit OUStringBuffer(char8_t) = delete;
 #endif
     explicit OUStringBuffer(char16_t) = delete;
