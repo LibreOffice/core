@@ -3,10 +3,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifdef _WIN32
-#ifndef UNICODE
-#define UNICODE
-#endif
 #include <windows.h>
 
 // Delayed load libraries are loaded when the first symbol is used.
@@ -36,7 +32,6 @@ struct AutoLoadSystemDependencies
             }
         }
 
-            // TODO: moggi: do we need all that code?
             // When SetDefaultDllDirectories is not available, fallback to preloading
             // dlls. The order that these are loaded does not matter since they are
             // loaded using the LOAD_WITH_ALTERED_SEARCH_PATH flag.
@@ -93,4 +88,3 @@ struct AutoLoadSystemDependencies
         }
     }
 } loadDLLs;
-#endif

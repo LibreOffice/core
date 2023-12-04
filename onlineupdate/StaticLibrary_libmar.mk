@@ -11,6 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,libmar))
 
 $(eval $(call gb_StaticLibrary_set_include,libmar,\
 	-I$(SRCDIR)/onlineupdate/source/libmar/src/ \
+	-I$(SRCDIR)/include/onlineupdate/ \
 	$$(INCLUDE) \
 ))
 

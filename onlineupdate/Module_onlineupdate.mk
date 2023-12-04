@@ -18,7 +18,6 @@ $(eval $(call gb_Module_add_targets,onlineupdate,\
 	$(if $(filter WNT,$(OS)),\
 		Executable_update_service \
 		WinResTarget_updater )\
-	Executable_test_updater_dialog \
 	Executable_mar \
 	Executable_updater \
 	Executable_mbsdiff \

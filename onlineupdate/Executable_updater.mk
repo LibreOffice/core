@@ -12,7 +12,6 @@ $(eval $(call gb_Executable_Executable,updater))
 $(eval $(call gb_Executable_set_include,updater,\
 	-I$(SRCDIR)/onlineupdate/inc \
 	-I$(SRCDIR)/onlineupdate/source/update/common \
-	-I$(SRCDIR)/onlineupdate/source/update/updater/xpcom/glue \
 	$$(INCLUDE) \
 	$(if $(filter-out WNT,$(OS)),$$(GTK3_CFLAGS) ) \
 ))
@@ -73,7 +72,7 @@ endif
 $(eval $(call gb_Executable_add_exception_objects,updater,\
 	onlineupdate/source/update/updater/xpcom/glue/nsVersionComparator \
 	onlineupdate/source/update/updater/archivereader \
-	onlineupdate/source/update/updater/bspatch \
+	onlineupdate/source/update/updater/bspatch/bspatch \
 	onlineupdate/source/update/updater/progressui_gtk \
 	onlineupdate/source/update/updater/updater \
 	$(if $(filter WNT,$(OS)),\

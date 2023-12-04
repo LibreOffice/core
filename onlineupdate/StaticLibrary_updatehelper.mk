@@ -25,7 +25,6 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,updatehelper,\
 	onlineupdate/source/update/common/readstrings \
 	onlineupdate/source/update/common/uachelper \
 	onlineupdate/source/update/common/updatehelper \
-	onlineupdate/source/update/common/updatelogging \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
