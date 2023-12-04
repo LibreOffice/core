@@ -7,7 +7,7 @@
 #ifndef MAR_H__
 #define MAR_H__
 
-#include <assert.h>  // for C11 static_assert
+#include <assert.h> // for C11 static_assert
 #include <stdint.h>
 #include <stdio.h>
 
@@ -24,29 +24,32 @@ extern "C" {
 #define MAX_SIGNATURES 8
 static_assert(MAX_SIGNATURES <= 9, "too many signatures");
 
-struct ProductInformationBlock {
-  const char* MARChannelID;
-  const char* productVersion;
+struct ProductInformationBlock
+{
+    const char* MARChannelID;
+    const char* productVersion;
 };
 
 /**
  * The MAR item data structure.
  */
-typedef struct MarItem_ {
-  struct MarItem_* next; /* private field */
-  uint32_t offset;       /* offset into archive */
-  uint32_t length;       /* length of data in bytes */
-  uint32_t flags;        /* contains file mode bits */
-  char name[1];          /* file path */
+typedef struct MarItem_
+{
+    struct MarItem_* next; /* private field */
+    uint32_t offset; /* offset into archive */
+    uint32_t length; /* length of data in bytes */
+    uint32_t flags; /* contains file mode bits */
+    char name[1]; /* file path */
 } MarItem;
 
 /**
  * File offset and length for tracking access of byte indexes
  */
-typedef struct SeenIndex_ {
-  struct SeenIndex_* next; /* private field */
-  uint32_t offset;         /* offset into archive */
-  uint32_t length;         /* length of the data in bytes */
+typedef struct SeenIndex_
+{
+    struct SeenIndex_* next; /* private field */
+    uint32_t offset; /* offset into archive */
+    uint32_t length; /* length of the data in bytes */
 } SeenIndex;
 
 #define TABLESIZE 256
@@ -54,12 +57,13 @@ typedef struct SeenIndex_ {
 /**
  * Mozilla ARchive (MAR) file data structure
  */
-struct MarFile_ {
-  unsigned char* buffer;          /* file buffer containing the entire MAR */
-  size_t data_len;                /* byte count of the data in the buffer */
-  MarItem* item_table[TABLESIZE]; /* hash table of files in the archive */
-  SeenIndex* index_list;          /* file indexes processed */
-  int item_table_is_valid;        /* header and index validation flag */
+struct MarFile_
+{
+    unsigned char* buffer; /* file buffer containing the entire MAR */
+    size_t data_len; /* byte count of the data in the buffer */
+    MarItem* item_table[TABLESIZE]; /* hash table of files in the archive */
+    SeenIndex* index_list; /* file indexes processed */
+    int item_table_is_valid; /* header and index validation flag */
 };
 
 typedef struct MarFile_ MarFile;
@@ -73,11 +77,12 @@ typedef struct MarFile_ MarFile;
  */
 typedef int (*MarItemCallback)(MarFile* mar, const MarItem* item, void* data);
 
-enum MarReadResult_ {
-  MAR_READ_SUCCESS,
-  MAR_IO_ERROR,
-  MAR_MEM_ERROR,
-  MAR_FILE_TOO_BIG_ERROR,
+enum MarReadResult_
+{
+    MAR_READ_SUCCESS,
+    MAR_IO_ERROR,
+    MAR_MEM_ERROR,
+    MAR_FILE_TOO_BIG_ERROR,
 };
 
 typedef enum MarReadResult_ MarReadResult;
@@ -130,8 +135,7 @@ int mar_read_buffer(MarFile* mar, void* dest, size_t* position, size_t size);
  * @param size      The maximum number of bytes to read.
  * @return          The number of bytes copied into dest.
  */
-int mar_read_buffer_max(MarFile* mar, void* dest, size_t* position,
-                        size_t size);
+int mar_read_buffer_max(MarFile* mar, void* dest, size_t* position, size_t size);
 
 /**
  * Increments position by distance. Checks that the resulting position is still
@@ -176,8 +180,7 @@ int mar_enum_items(MarFile* mar, MarItemCallback callback, void* data);
  * @return          The number of bytes written or a negative value if an
  *                  error occurs.
  */
-int mar_read(MarFile* mar, const MarItem* item, int offset, uint8_t* buf,
-             int bufsize);
+int mar_read(MarFile* mar, const MarItem* item, int offset, uint8_t* buf, int bufsize);
 
 /**
  * Create a MAR file from a set of files.
@@ -200,7 +203,7 @@ int mar_create(const char* dest, int numfiles, char** files,
  */
 int mar_extract(const char* path);
 
-#define MAR_MAX_CERT_SIZE (16 * 1024)  // Way larger than necessary
+#define MAR_MAX_CERT_SIZE (16 * 1024) // Way larger than necessary
 
 /* Read the entire file (not a MAR file) into a newly-allocated buffer.
  * This function does not write to stderr. Instead, the caller should
@@ -250,8 +253,7 @@ int mar_verify_signatures(MarFile* mar, const uint8_t* const* certData,
  * @param infoBlock Out parameter for where to store the result to
  * @return 0 on success, -1 on failure
  */
-int mar_read_product_info_block(MarFile* mar,
-                                struct ProductInformationBlock* infoBlock);
+int mar_read_product_info_block(MarFile* mar, struct ProductInformationBlock* infoBlock);
 
 #ifdef __cplusplus
 }

@@ -10,7 +10,6 @@
 void WINAPI SvcMain(DWORD dwArgc, LPWSTR* lpszArgv);
 void SvcInit(DWORD dwArgc, LPWSTR* lpszArgv);
 void WINAPI SvcCtrlHandler(DWORD dwCtrl);
-void ReportSvcStatus(DWORD dwCurrentState, DWORD dwWin32ExitCode,
-                     DWORD dwWaitHint);
+void ReportSvcStatus(DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWaitHint);
 
-#endif  // TOOLKIT_COMPONENTS_MAINTENANCESERVICE_MAINTENANCESERVICE_H_
+#endif // TOOLKIT_COMPONENTS_MAINTENANCESERVICE_MAINTENANCESERVICE_H_

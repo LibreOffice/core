@@ -21,56 +21,70 @@
 // implement those parts here too.
 static dirent gDirEnt;
 
-DIR::DIR(const WCHAR* path) : findHandle(INVALID_HANDLE_VALUE) {
-  memset(name, 0, sizeof(name));
-  wcsncpy(name, path, sizeof(name) / sizeof(name[0]));
-  wcsncat(name, L"\\*", sizeof(name) / sizeof(name[0]) - wcslen(name) - 1);
+DIR::DIR(const WCHAR* path)
+    : findHandle(INVALID_HANDLE_VALUE)
+{
+    memset(name, 0, sizeof(name));
+    wcsncpy(name, path, sizeof(name) / sizeof(name[0]));
+    wcsncat(name, L"\\*", sizeof(name) / sizeof(name[0]) - wcslen(name) - 1);
 }
 
-DIR::~DIR() {
-  if (findHandle != INVALID_HANDLE_VALUE) {
-    FindClose(findHandle);
-  }
+DIR::~DIR()
+{
+    if (findHandle != INVALID_HANDLE_VALUE)
+    {
+        FindClose(findHandle);
+    }
 }
 
 dirent::dirent() { d_name[0] = L'\0'; }
 
 DIR* opendir(const WCHAR* path) { return new DIR(path); }
 
-int closedir(DIR* dir) {
-  delete dir;
-  return 0;
+int closedir(DIR* dir)
+{
+    delete dir;
+    return 0;
 }
 
-dirent* readdir(DIR* dir) {
-  WIN32_FIND_DATAW data;
-  if (dir->findHandle != INVALID_HANDLE_VALUE) {
-    BOOL result = FindNextFileW(dir->findHandle, &data);
-    if (!result) {
-      if (GetLastError() != ERROR_NO_MORE_FILES) {
-        errno = ENOENT;
-      }
-      return 0;
+dirent* readdir(DIR* dir)
+{
+    WIN32_FIND_DATAW data;
+    if (dir->findHandle != INVALID_HANDLE_VALUE)
+    {
+        BOOL result = FindNextFileW(dir->findHandle, &data);
+        if (!result)
+        {
+            if (GetLastError() != ERROR_NO_MORE_FILES)
+            {
+                errno = ENOENT;
+            }
+            return 0;
+        }
     }
-  } else {
-    // Reading the first directory entry
-    dir->findHandle = FindFirstFileW(dir->name, &data);
-    if (dir->findHandle == INVALID_HANDLE_VALUE) {
-      if (GetLastError() == ERROR_FILE_NOT_FOUND) {
-        errno = ENOENT;
-      } else {
-        errno = EBADF;
-      }
-      return 0;
+    else
+    {
+        // Reading the first directory entry
+        dir->findHandle = FindFirstFileW(dir->name, &data);
+        if (dir->findHandle == INVALID_HANDLE_VALUE)
+        {
+            if (GetLastError() == ERROR_FILE_NOT_FOUND)
+            {
+                errno = ENOENT;
+            }
+            else
+            {
+                errno = EBADF;
+            }
+            return 0;
+        }
     }
-  }
-  size_t direntBufferLength =
-      sizeof(gDirEnt.d_name) / sizeof(gDirEnt.d_name[0]);
-  wcsncpy(gDirEnt.d_name, data.cFileName, direntBufferLength);
-  // wcsncpy does not guarantee a null-terminated string if the source string is
-  // too long.
-  gDirEnt.d_name[direntBufferLength - 1] = '\0';
-  return &gDirEnt;
+    size_t direntBufferLength = sizeof(gDirEnt.d_name) / sizeof(gDirEnt.d_name[0]);
+    wcsncpy(gDirEnt.d_name, data.cFileName, direntBufferLength);
+    // wcsncpy does not guarantee a null-terminated string if the source string is
+    // too long.
+    gDirEnt.d_name[direntBufferLength - 1] = '\0';
+    return &gDirEnt;
 }
 
 /**
@@ -80,12 +94,14 @@ dirent* readdir(DIR* dir) {
  * @param  extra The filename to append
  * @return TRUE if the file name was successful appended to base
  */
-BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra) {
-  if (wcslen(base) + wcslen(extra) >= MAX_PATH) {
-    return FALSE;
-  }
+BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra)
+{
+    if (wcslen(base) + wcslen(extra) >= MAX_PATH)
+    {
+        return FALSE;
+    }
 
-  return PathAppendW(base, extra);
+    return PathAppendW(base, extra);
 }
 
 /**
@@ -95,30 +111,35 @@ BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra) {
  *         A buffer of size MAX_PATH + 1 to store the result.
  * @return TRUE if successful
  */
-BOOL GetUUIDString(LPWSTR outBuf) {
-  UUID uuid;
-  RPC_WSTR uuidString = nullptr;
+BOOL GetUUIDString(LPWSTR outBuf)
+{
+    UUID uuid;
+    RPC_WSTR uuidString = nullptr;
 
-  // Note: the return value of UuidCreate should always be RPC_S_OK on systems
-  // after Win2K / Win2003 due to the network hardware address no longer being
-  // used to create the UUID.
-  if (UuidCreate(&uuid) != RPC_S_OK) {
-    return FALSE;
-  }
-  if (UuidToStringW(&uuid, &uuidString) != RPC_S_OK) {
-    return FALSE;
-  }
-  if (!uuidString) {
-    return FALSE;
-  }
+    // Note: the return value of UuidCreate should always be RPC_S_OK on systems
+    // after Win2K / Win2003 due to the network hardware address no longer being
+    // used to create the UUID.
+    if (UuidCreate(&uuid) != RPC_S_OK)
+    {
+        return FALSE;
+    }
+    if (UuidToStringW(&uuid, &uuidString) != RPC_S_OK)
+    {
+        return FALSE;
+    }
+    if (!uuidString)
+    {
+        return FALSE;
+    }
 
-  if (wcslen(reinterpret_cast<LPCWSTR>(uuidString)) > MAX_PATH) {
-    return FALSE;
-  }
-  wcsncpy(outBuf, reinterpret_cast<LPCWSTR>(uuidString), MAX_PATH + 1);
-  RpcStringFreeW(&uuidString);
+    if (wcslen(reinterpret_cast<LPCWSTR>(uuidString)) > MAX_PATH)
+    {
+        return FALSE;
+    }
+    wcsncpy(outBuf, reinterpret_cast<LPCWSTR>(uuidString), MAX_PATH + 1);
+    RpcStringFreeW(&uuidString);
 
-  return TRUE;
+    return TRUE;
 }
 
 /**
@@ -130,37 +151,44 @@ BOOL GetUUIDString(LPWSTR outBuf) {
  * name. Must already have been allocated with size >= MAX_PATH.
  * @return TRUE if tmpPath was successfully filled in, FALSE on errors
  */
-BOOL GetUUIDTempFilePath(LPCWSTR basePath, LPCWSTR prefix, LPWSTR tmpPath) {
-  WCHAR filename[MAX_PATH + 1] = {L"\0"};
-  if (prefix) {
-    if (wcslen(prefix) > MAX_PATH) {
-      return FALSE;
+BOOL GetUUIDTempFilePath(LPCWSTR basePath, LPCWSTR prefix, LPWSTR tmpPath)
+{
+    WCHAR filename[MAX_PATH + 1] = { L"\0" };
+    if (prefix)
+    {
+        if (wcslen(prefix) > MAX_PATH)
+        {
+            return FALSE;
+        }
+        wcsncpy(filename, prefix, MAX_PATH + 1);
     }
-    wcsncpy(filename, prefix, MAX_PATH + 1);
-  }
 
-  WCHAR tmpFileNameString[MAX_PATH + 1] = {L"\0"};
-  if (!GetUUIDString(tmpFileNameString)) {
-    return FALSE;
-  }
+    WCHAR tmpFileNameString[MAX_PATH + 1] = { L"\0" };
+    if (!GetUUIDString(tmpFileNameString))
+    {
+        return FALSE;
+    }
 
-  size_t tmpFileNameStringLen = wcslen(tmpFileNameString);
-  if (wcslen(filename) + tmpFileNameStringLen > MAX_PATH) {
-    return FALSE;
-  }
-  wcsncat(filename, tmpFileNameString, tmpFileNameStringLen);
+    size_t tmpFileNameStringLen = wcslen(tmpFileNameString);
+    if (wcslen(filename) + tmpFileNameStringLen > MAX_PATH)
+    {
+        return FALSE;
+    }
+    wcsncat(filename, tmpFileNameString, tmpFileNameStringLen);
 
-  size_t basePathLen = wcslen(basePath);
-  if (basePathLen > MAX_PATH) {
-    return FALSE;
-  }
-  // Use basePathLen + 1 so wcsncpy will add null termination and if a caller
-  // doesn't allocate MAX_PATH + 1 for tmpPath this won't fail when there is
-  // actually enough space allocated.
-  wcsncpy(tmpPath, basePath, basePathLen + 1);
-  if (!PathAppendSafe(tmpPath, filename)) {
-    return FALSE;
-  }
+    size_t basePathLen = wcslen(basePath);
+    if (basePathLen > MAX_PATH)
+    {
+        return FALSE;
+    }
+    // Use basePathLen + 1 so wcsncpy will add null termination and if a caller
+    // doesn't allocate MAX_PATH + 1 for tmpPath this won't fail when there is
+    // actually enough space allocated.
+    wcsncpy(tmpPath, basePath, basePathLen + 1);
+    if (!PathAppendSafe(tmpPath, filename))
+    {
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }

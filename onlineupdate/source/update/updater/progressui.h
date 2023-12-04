@@ -11,10 +11,10 @@
 
 #if defined(XP_WIN)
 typedef WCHAR NS_tchar;
-#  define NS_main wmain
+#define NS_main wmain
 #else
 typedef char NS_tchar;
-#  define NS_main main
+#define NS_main main
 #endif
 
 // Called to perform any initialization of the widget toolkit
@@ -37,4 +37,4 @@ void QuitProgressUI();
 // May be called from any thread: progress is a number between 0 and 100
 void UpdateProgressUI(float progress);
 
-#endif  // PROGRESSUI_H__
+#endif // PROGRESSUI_H__

@@ -7,7 +7,7 @@
 #ifndef MAR_PRIVATE_H__
 #define MAR_PRIVATE_H__
 
-#include <assert.h>  // for C11 static_assert
+#include <assert.h> // for C11 static_assert
 #include "limits.h"
 #include <stdint.h>
 
@@ -27,8 +27,7 @@
 
 /* Existing code makes assumptions that the file size is
    smaller than LONG_MAX. */
-static_assert(MAX_SIZE_OF_MAR_FILE < ((int64_t)LONG_MAX),
-              "max mar file size is too big");
+static_assert(MAX_SIZE_OF_MAR_FILE < ((int64_t)LONG_MAX), "max mar file size is too big");
 
 /* We store at most the size up to the signature block + 4
    bytes per BLOCKSIZE bytes */
@@ -53,26 +52,24 @@ static_assert(sizeof(BLOCKSIZE) < (SIGNATURE_BLOCK_OFFSET + sizeof(uint32_t)),
    runtime.  For that reason we use ntohl, htonl, and define HOST_TO_NETWORK64
    instead of the NSPR equivalents. */
 #ifdef XP_WIN
-#  include <winsock2.h>
+#include <winsock2.h>
 /* Include stdio.h before redefining ftello and fseeko to avoid clobbering
  * the ftello() and fseeko() function declarations in MinGW's stdio.h. */
-#  include <stdio.h>
-#  define ftello _ftelli64
-#  define fseeko _fseeki64
+#include <stdio.h>
+#define ftello _ftelli64
+#define fseeko _fseeki64
 #else
-#  define _FILE_OFFSET_BITS 64
-#  include <netinet/in.h>
-#  include <unistd.h>
-#  include <stdio.h>
+#define _FILE_OFFSET_BITS 64
+#include <netinet/in.h>
+#include <unistd.h>
+#include <stdio.h>
 #endif
 
-#define HOST_TO_NETWORK64(x)                                               \
-  (((((uint64_t)x) & 0xFF) << 56) | ((((uint64_t)x) >> 8) & 0xFF) << 48) | \
-      (((((uint64_t)x) >> 16) & 0xFF) << 40) |                             \
-      (((((uint64_t)x) >> 24) & 0xFF) << 32) |                             \
-      (((((uint64_t)x) >> 32) & 0xFF) << 24) |                             \
-      (((((uint64_t)x) >> 40) & 0xFF) << 16) |                             \
-      (((((uint64_t)x) >> 48) & 0xFF) << 8) | (((uint64_t)x) >> 56)
+#define HOST_TO_NETWORK64(x)                                                                       \
+    (((((uint64_t)x) & 0xFF) << 56) | ((((uint64_t)x) >> 8) & 0xFF) << 48)                         \
+        | (((((uint64_t)x) >> 16) & 0xFF) << 40) | (((((uint64_t)x) >> 24) & 0xFF) << 32)          \
+        | (((((uint64_t)x) >> 32) & 0xFF) << 24) | (((((uint64_t)x) >> 40) & 0xFF) << 16)          \
+        | (((((uint64_t)x) >> 48) & 0xFF) << 8) | (((uint64_t)x) >> 56)
 #define NETWORK_TO_HOST64 HOST_TO_NETWORK64
 
 #endif /* MAR_PRIVATE_H__ */

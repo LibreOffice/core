@@ -22,19 +22,19 @@
  * compiler to inline even in DEBUG builds. It should be used very rarely.
  */
 #if defined(_MSC_VER)
-#  define MOZ_ALWAYS_INLINE_EVEN_DEBUG __forceinline
+#define MOZ_ALWAYS_INLINE_EVEN_DEBUG __forceinline
 #elif defined(__GNUC__)
-#  define MOZ_ALWAYS_INLINE_EVEN_DEBUG __attribute__((always_inline)) inline
+#define MOZ_ALWAYS_INLINE_EVEN_DEBUG __attribute__((always_inline)) inline
 #else
-#  define MOZ_ALWAYS_INLINE_EVEN_DEBUG inline
+#define MOZ_ALWAYS_INLINE_EVEN_DEBUG inline
 #endif
 
 #if !defined(DEBUG)
-#  define MOZ_ALWAYS_INLINE MOZ_ALWAYS_INLINE_EVEN_DEBUG
+#define MOZ_ALWAYS_INLINE MOZ_ALWAYS_INLINE_EVEN_DEBUG
 #elif defined(_MSC_VER) && !defined(__cplusplus)
-#  define MOZ_ALWAYS_INLINE __inline
+#define MOZ_ALWAYS_INLINE __inline
 #else
-#  define MOZ_ALWAYS_INLINE inline
+#define MOZ_ALWAYS_INLINE inline
 #endif
 
 #if defined(_MSC_VER)
@@ -46,36 +46,35 @@
  * Current versions of g++ do not correctly set __cplusplus, so we check both
  * for forward compatibility.
  */
-#  define MOZ_HAVE_NEVER_INLINE __declspec(noinline)
-#  define MOZ_HAVE_NORETURN __declspec(noreturn)
+#define MOZ_HAVE_NEVER_INLINE __declspec(noinline)
+#define MOZ_HAVE_NORETURN __declspec(noreturn)
 #elif defined(__clang__)
 /*
  * Per Clang documentation, "Note that marketing version numbers should not
  * be used to check for language features, as different vendors use different
  * numbering schemes. Instead, use the feature checking macros."
  */
-#  ifndef __has_extension
-#    define __has_extension \
-      __has_feature /* compatibility, for older versions of clang */
-#  endif
-#  if __has_attribute(noinline)
-#    define MOZ_HAVE_NEVER_INLINE __attribute__((noinline))
-#  endif
-#  if __has_attribute(noreturn)
-#    define MOZ_HAVE_NORETURN __attribute__((noreturn))
-#  endif
+#ifndef __has_extension
+#define __has_extension __has_feature /* compatibility, for older versions of clang */
+#endif
+#if __has_attribute(noinline)
+#define MOZ_HAVE_NEVER_INLINE __attribute__((noinline))
+#endif
+#if __has_attribute(noreturn)
+#define MOZ_HAVE_NORETURN __attribute__((noreturn))
+#endif
 #elif defined(__GNUC__)
-#  define MOZ_HAVE_NEVER_INLINE __attribute__((noinline))
-#  define MOZ_HAVE_NORETURN __attribute__((noreturn))
-#  define MOZ_HAVE_NORETURN_PTR __attribute__((noreturn))
+#define MOZ_HAVE_NEVER_INLINE __attribute__((noinline))
+#define MOZ_HAVE_NORETURN __attribute__((noreturn))
+#define MOZ_HAVE_NORETURN_PTR __attribute__((noreturn))
 #endif
 
 #if defined(__clang__)
-#  if __has_attribute(no_stack_protector)
-#    define MOZ_HAVE_NO_STACK_PROTECTOR __attribute__((no_stack_protector))
-#  endif
+#if __has_attribute(no_stack_protector)
+#define MOZ_HAVE_NO_STACK_PROTECTOR __attribute__((no_stack_protector))
+#endif
 #elif defined(__GNUC__)
-#  define MOZ_HAVE_NO_STACK_PROTECTOR __attribute__((no_stack_protector))
+#define MOZ_HAVE_NO_STACK_PROTECTOR __attribute__((no_stack_protector))
 #endif
 
 /*
@@ -83,9 +82,9 @@
  * to mark some false positives
  */
 #ifdef __clang_analyzer__
-#  if __has_extension(attribute_analyzer_noreturn)
-#    define MOZ_HAVE_ANALYZER_NORETURN __attribute__((analyzer_noreturn))
-#  endif
+#if __has_extension(attribute_analyzer_noreturn)
+#define MOZ_HAVE_ANALYZER_NORETURN __attribute__((analyzer_noreturn))
+#endif
 #endif
 
 /**
@@ -99,9 +98,9 @@
  * This is useful to have clearer information on assertion failures.
  */
 #if defined(__clang__) && __has_attribute(nomerge)
-#  define MOZ_NOMERGE __attribute__((nomerge))
+#define MOZ_NOMERGE __attribute__((nomerge))
 #else
-#  define MOZ_NOMERGE
+#define MOZ_NOMERGE
 #endif
 
 /*
@@ -111,9 +110,9 @@
  * guaranteed to support this, but most do.
  */
 #if defined(MOZ_HAVE_NEVER_INLINE)
-#  define MOZ_NEVER_INLINE MOZ_HAVE_NEVER_INLINE
+#define MOZ_NEVER_INLINE MOZ_HAVE_NEVER_INLINE
 #else
-#  define MOZ_NEVER_INLINE /* no support */
+#define MOZ_NEVER_INLINE /* no support */
 #endif
 
 /*
@@ -121,9 +120,9 @@
  * in debug builds, and nothing in opt builds.
  */
 #if defined(DEBUG)
-#  define MOZ_NEVER_INLINE_DEBUG MOZ_NEVER_INLINE
+#define MOZ_NEVER_INLINE_DEBUG MOZ_NEVER_INLINE
 #else
-#  define MOZ_NEVER_INLINE_DEBUG /* don't inline in opt builds */
+#define MOZ_NEVER_INLINE_DEBUG /* don't inline in opt builds */
 #endif
 /*
  * MOZ_NORETURN, specified at the start of a function declaration, indicates
@@ -143,14 +142,14 @@
  * This modifier does not affect the corresponding function's linking behavior.
  */
 #if defined(MOZ_HAVE_NORETURN)
-#  define MOZ_NORETURN MOZ_HAVE_NORETURN
+#define MOZ_NORETURN MOZ_HAVE_NORETURN
 #else
-#  define MOZ_NORETURN /* no support */
+#define MOZ_NORETURN /* no support */
 #endif
 #if defined(MOZ_HAVE_NORETURN_PTR)
-#  define MOZ_NORETURN_PTR MOZ_HAVE_NORETURN_PTR
+#define MOZ_NORETURN_PTR MOZ_HAVE_NORETURN_PTR
 #else
-#  define MOZ_NORETURN_PTR /* no support */
+#define MOZ_NORETURN_PTR /* no support */
 #endif
 
 /**
@@ -169,9 +168,9 @@
  *   MOZ_COLD int foo() { return 42; }
  */
 #if defined(__GNUC__) || defined(__clang__)
-#  define MOZ_COLD __attribute__((cold))
+#define MOZ_COLD __attribute__((cold))
 #else
-#  define MOZ_COLD
+#define MOZ_COLD
 #endif
 
 /**
@@ -185,9 +184,9 @@
  *   MOZ_NONNULL(1, 2) int foo(char *p, char *q);
  */
 #if defined(__GNUC__) || defined(__clang__)
-#  define MOZ_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
+#define MOZ_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
 #else
-#  define MOZ_NONNULL(...)
+#define MOZ_NONNULL(...)
 #endif
 
 /**
@@ -200,9 +199,9 @@
  *   char* foo(char *p, char *q) MOZ_NONNULL_RETURN;
  */
 #if defined(__GNUC__) || defined(__clang__)
-#  define MOZ_NONNULL_RETURN __attribute__((returns_nonnull))
+#define MOZ_NONNULL_RETURN __attribute__((returns_nonnull))
 #else
-#  define MOZ_NONNULL_RETURN
+#define MOZ_NONNULL_RETURN
 #endif
 
 /*
@@ -222,9 +221,9 @@
  *
  */
 #if defined(MOZ_HAVE_ANALYZER_NORETURN)
-#  define MOZ_PRETEND_NORETURN_FOR_STATIC_ANALYSIS MOZ_HAVE_ANALYZER_NORETURN
+#define MOZ_PRETEND_NORETURN_FOR_STATIC_ANALYSIS MOZ_HAVE_ANALYZER_NORETURN
 #else
-#  define MOZ_PRETEND_NORETURN_FOR_STATIC_ANALYSIS /* no support */
+#define MOZ_PRETEND_NORETURN_FOR_STATIC_ANALYSIS /* no support */
 #endif
 
 /*
@@ -235,19 +234,19 @@
  * AddressSanitizer.
  */
 #if defined(__has_feature)
-#  if __has_feature(address_sanitizer)
-#    define MOZ_HAVE_ASAN_IGNORE
-#  endif
+#if __has_feature(address_sanitizer)
+#define MOZ_HAVE_ASAN_IGNORE
+#endif
 #elif defined(__GNUC__)
-#  if defined(__SANITIZE_ADDRESS__)
-#    define MOZ_HAVE_ASAN_IGNORE
-#  endif
+#if defined(__SANITIZE_ADDRESS__)
+#define MOZ_HAVE_ASAN_IGNORE
+#endif
 #endif
 
 #if defined(MOZ_HAVE_ASAN_IGNORE)
-#  define MOZ_ASAN_IGNORE MOZ_NEVER_INLINE __attribute__((no_sanitize_address))
+#define MOZ_ASAN_IGNORE MOZ_NEVER_INLINE __attribute__((no_sanitize_address))
 #else
-#  define MOZ_ASAN_IGNORE /* nothing */
+#define MOZ_ASAN_IGNORE /* nothing */
 #endif
 
 /*
@@ -257,26 +256,26 @@
  * inlining currently breaks the blocklisting mechanism of ThreadSanitizer.
  */
 #if defined(__has_feature)
-#  if __has_feature(thread_sanitizer)
-#    define MOZ_TSAN_IGNORE MOZ_NEVER_INLINE __attribute__((no_sanitize_thread))
-#  else
-#    define MOZ_TSAN_IGNORE /* nothing */
-#  endif
+#if __has_feature(thread_sanitizer)
+#define MOZ_TSAN_IGNORE MOZ_NEVER_INLINE __attribute__((no_sanitize_thread))
 #else
-#  define MOZ_TSAN_IGNORE /* nothing */
+#define MOZ_TSAN_IGNORE /* nothing */
+#endif
+#else
+#define MOZ_TSAN_IGNORE /* nothing */
 #endif
 
 #if defined(__has_attribute)
-#  if __has_attribute(no_sanitize)
-#    define MOZ_HAVE_NO_SANITIZE_ATTR
-#  endif
+#if __has_attribute(no_sanitize)
+#define MOZ_HAVE_NO_SANITIZE_ATTR
+#endif
 #endif
 
 #ifdef __clang__
-#  ifdef MOZ_HAVE_NO_SANITIZE_ATTR
-#    define MOZ_HAVE_UNSIGNED_OVERFLOW_SANITIZE_ATTR
-#    define MOZ_HAVE_SIGNED_OVERFLOW_SANITIZE_ATTR
-#  endif
+#ifdef MOZ_HAVE_NO_SANITIZE_ATTR
+#define MOZ_HAVE_UNSIGNED_OVERFLOW_SANITIZE_ATTR
+#define MOZ_HAVE_SIGNED_OVERFLOW_SANITIZE_ATTR
+#endif
 #endif
 
 /*
@@ -313,10 +312,9 @@
  * those costs -- but only after carefully verifying that no overflow can occur.
  */
 #ifdef MOZ_HAVE_UNSIGNED_OVERFLOW_SANITIZE_ATTR
-#  define MOZ_NO_SANITIZE_UNSIGNED_OVERFLOW \
-    __attribute__((no_sanitize("unsigned-integer-overflow")))
+#define MOZ_NO_SANITIZE_UNSIGNED_OVERFLOW __attribute__((no_sanitize("unsigned-integer-overflow")))
 #else
-#  define MOZ_NO_SANITIZE_UNSIGNED_OVERFLOW /* nothing */
+#define MOZ_NO_SANITIZE_UNSIGNED_OVERFLOW /* nothing */
 #endif
 
 /*
@@ -342,10 +340,9 @@
  * those costs -- but only after carefully verifying that no overflow can occur.
  */
 #ifdef MOZ_HAVE_SIGNED_OVERFLOW_SANITIZE_ATTR
-#  define MOZ_NO_SANITIZE_SIGNED_OVERFLOW \
-    __attribute__((no_sanitize("signed-integer-overflow")))
+#define MOZ_NO_SANITIZE_SIGNED_OVERFLOW __attribute__((no_sanitize("signed-integer-overflow")))
 #else
-#  define MOZ_NO_SANITIZE_SIGNED_OVERFLOW /* nothing */
+#define MOZ_NO_SANITIZE_SIGNED_OVERFLOW /* nothing */
 #endif
 
 #undef MOZ_HAVE_NO_SANITIZE_ATTR
@@ -374,12 +371,11 @@
  *   void *my_allocator(size_t bytes) MOZ_ALLOCATOR { ... }
  */
 #if defined(__GNUC__) || defined(__clang__)
-#  define MOZ_ALLOCATOR __attribute__((malloc, warn_unused_result))
-#  define MOZ_INFALLIBLE_ALLOCATOR \
-    __attribute__((malloc, warn_unused_result, returns_nonnull))
+#define MOZ_ALLOCATOR __attribute__((malloc, warn_unused_result))
+#define MOZ_INFALLIBLE_ALLOCATOR __attribute__((malloc, warn_unused_result, returns_nonnull))
 #else
-#  define MOZ_ALLOCATOR
-#  define MOZ_INFALLIBLE_ALLOCATOR
+#define MOZ_ALLOCATOR
+#define MOZ_INFALLIBLE_ALLOCATOR
 #endif
 
 /**
@@ -396,11 +392,11 @@
  *   MOZ_MAYBE_UNUSED int foo() { return 42; }
  */
 #if defined(__GNUC__) || defined(__clang__)
-#  define MOZ_MAYBE_UNUSED __attribute__((__unused__))
+#define MOZ_MAYBE_UNUSED __attribute__((__unused__))
 #elif defined(_MSC_VER)
-#  define MOZ_MAYBE_UNUSED __pragma(warning(suppress : 4505))
+#define MOZ_MAYBE_UNUSED __pragma(warning(suppress : 4505))
 #else
-#  define MOZ_MAYBE_UNUSED
+#define MOZ_MAYBE_UNUSED
 #endif
 
 /*
@@ -418,9 +414,9 @@
  * This modifier does not affect the corresponding function's linking behavior.
  */
 #if defined(MOZ_HAVE_NO_STACK_PROTECTOR)
-#  define MOZ_NO_STACK_PROTECTOR MOZ_HAVE_NO_STACK_PROTECTOR
+#define MOZ_NO_STACK_PROTECTOR MOZ_HAVE_NO_STACK_PROTECTOR
 #else
-#  define MOZ_NO_STACK_PROTECTOR /* no support */
+#define MOZ_NO_STACK_PROTECTOR /* no support */
 #endif
 
 #ifdef __cplusplus
@@ -453,15 +449,14 @@
  *     MOZ_POP_DISABLE_NONTRIVIAL_UNION_WARNINGS
  *   };
  */
-#  if defined(_MSC_VER)
-#    define MOZ_PUSH_DISABLE_NONTRIVIAL_UNION_WARNINGS          \
-      __pragma(warning(push)) __pragma(warning(disable : 4582)) \
-          __pragma(warning(disable : 4583))
-#    define MOZ_POP_DISABLE_NONTRIVIAL_UNION_WARNINGS __pragma(warning(pop))
-#  else
-#    define MOZ_PUSH_DISABLE_NONTRIVIAL_UNION_WARNINGS /* nothing */
-#    define MOZ_POP_DISABLE_NONTRIVIAL_UNION_WARNINGS  /* nothing */
-#  endif
+#if defined(_MSC_VER)
+#define MOZ_PUSH_DISABLE_NONTRIVIAL_UNION_WARNINGS                                                 \
+    __pragma(warning(push)) __pragma(warning(disable : 4582)) __pragma(warning(disable : 4583))
+#define MOZ_POP_DISABLE_NONTRIVIAL_UNION_WARNINGS __pragma(warning(pop))
+#else
+#define MOZ_PUSH_DISABLE_NONTRIVIAL_UNION_WARNINGS /* nothing */
+#define MOZ_POP_DISABLE_NONTRIVIAL_UNION_WARNINGS /* nothing */
+#endif
 
 /*
  * The following macros are attributes that support the static analysis plugin
@@ -748,140 +743,124 @@
 //
 //     #if defined(__GNUC__) && ! defined(__clang__)
 //
-#  ifdef XGILL_PLUGIN
-#    pragma GCC diagnostic ignored "-Wignored-attributes"
-#    pragma GCC diagnostic ignored "-Wattributes"
-#  endif
+#ifdef XGILL_PLUGIN
+#pragma GCC diagnostic ignored "-Wignored-attributes"
+#pragma GCC diagnostic ignored "-Wattributes"
+#endif
 
-#  if defined(MOZ_CLANG_PLUGIN) || defined(XGILL_PLUGIN)
-#    define MOZ_CAN_RUN_SCRIPT __attribute__((annotate("moz_can_run_script")))
-#    define MOZ_CAN_RUN_SCRIPT_FOR_DEFINITION         \
-      __attribute__((annotate("moz_can_run_script"))) \
-      __attribute__((annotate("moz_can_run_script_for_definition")))
-#    define MOZ_CAN_RUN_SCRIPT_BOUNDARY \
-      __attribute__((annotate("moz_can_run_script_boundary")))
-#    define MOZ_MUST_OVERRIDE __attribute__((annotate("moz_must_override")))
-#    define MOZ_STATIC_CLASS __attribute__((annotate("moz_global_class")))
-#    define MOZ_STATIC_LOCAL_CLASS                        \
-      __attribute__((annotate("moz_static_local_class"))) \
-      __attribute__((annotate("moz_trivial_dtor")))
-#    define MOZ_STACK_CLASS __attribute__((annotate("moz_stack_class")))
-#    define MOZ_NONHEAP_CLASS __attribute__((annotate("moz_nonheap_class")))
-#    define MOZ_HEAP_CLASS __attribute__((annotate("moz_heap_class")))
-#    define MOZ_NON_TEMPORARY_CLASS \
-      __attribute__((annotate("moz_non_temporary_class")))
-#    define MOZ_TEMPORARY_CLASS __attribute__((annotate("moz_temporary_class")))
-#    define MOZ_TRIVIAL_CTOR_DTOR \
-      __attribute__((annotate("moz_trivial_ctor_dtor")))
-#    define MOZ_ALLOW_TEMPORARY __attribute__((annotate("moz_allow_temporary")))
-#    ifdef DEBUG
+#if defined(MOZ_CLANG_PLUGIN) || defined(XGILL_PLUGIN)
+#define MOZ_CAN_RUN_SCRIPT __attribute__((annotate("moz_can_run_script")))
+#define MOZ_CAN_RUN_SCRIPT_FOR_DEFINITION                                                          \
+    __attribute__((annotate("moz_can_run_script")))                                                \
+        __attribute__((annotate("moz_can_run_script_for_definition")))
+#define MOZ_CAN_RUN_SCRIPT_BOUNDARY __attribute__((annotate("moz_can_run_script_boundary")))
+#define MOZ_MUST_OVERRIDE __attribute__((annotate("moz_must_override")))
+#define MOZ_STATIC_CLASS __attribute__((annotate("moz_global_class")))
+#define MOZ_STATIC_LOCAL_CLASS                                                                     \
+    __attribute__((annotate("moz_static_local_class")))                                            \
+        __attribute__((annotate("moz_trivial_dtor")))
+#define MOZ_STACK_CLASS __attribute__((annotate("moz_stack_class")))
+#define MOZ_NONHEAP_CLASS __attribute__((annotate("moz_nonheap_class")))
+#define MOZ_HEAP_CLASS __attribute__((annotate("moz_heap_class")))
+#define MOZ_NON_TEMPORARY_CLASS __attribute__((annotate("moz_non_temporary_class")))
+#define MOZ_TEMPORARY_CLASS __attribute__((annotate("moz_temporary_class")))
+#define MOZ_TRIVIAL_CTOR_DTOR __attribute__((annotate("moz_trivial_ctor_dtor")))
+#define MOZ_ALLOW_TEMPORARY __attribute__((annotate("moz_allow_temporary")))
+#ifdef DEBUG
 /* in debug builds, these classes do have non-trivial constructors. */
-#      define MOZ_ONLY_USED_TO_AVOID_STATIC_CONSTRUCTORS \
-        __attribute__((annotate("moz_global_class")))
-#    else
-#      define MOZ_ONLY_USED_TO_AVOID_STATIC_CONSTRUCTORS \
-        __attribute__((annotate("moz_global_class"))) MOZ_TRIVIAL_CTOR_DTOR
-#    endif
-#    define MOZ_IMPLICIT __attribute__((annotate("moz_implicit")))
-#    define MOZ_IS_SMARTPTR_TO_REFCOUNTED \
-      __attribute__((annotate("moz_is_smartptr_to_refcounted")))
-#    define MOZ_IS_REFPTR MOZ_IS_SMARTPTR_TO_REFCOUNTED
-#    define MOZ_NO_ARITHMETIC_EXPR_IN_ARGUMENT \
-      __attribute__((annotate("moz_no_arith_expr_in_arg")))
-#    define MOZ_OWNING_REF __attribute__((annotate("moz_owning_ref")))
-#    define MOZ_NON_OWNING_REF __attribute__((annotate("moz_non_owning_ref")))
-#    define MOZ_UNSAFE_REF(reason) __attribute__((annotate("moz_unsafe_ref")))
-#    define MOZ_NO_ADDREF_RELEASE_ON_RETURN \
-      __attribute__((annotate("moz_no_addref_release_on_return")))
-#    define MOZ_NEEDS_NO_VTABLE_TYPE \
-      __attribute__((annotate("moz_needs_no_vtable_type")))
-#    define MOZ_NON_MEMMOVABLE __attribute__((annotate("moz_non_memmovable")))
-#    define MOZ_NEEDS_MEMMOVABLE_TYPE \
-      __attribute__((annotate("moz_needs_memmovable_type")))
-#    define MOZ_NEEDS_MEMMOVABLE_MEMBERS \
-      __attribute__((annotate("moz_needs_memmovable_members")))
-#    define MOZ_NO_DANGLING_ON_TEMPORARIES \
-      __attribute__((annotate("moz_no_dangling_on_temporaries")))
-#    define MOZ_INHERIT_TYPE_ANNOTATIONS_FROM_TEMPLATE_ARGS \
-      __attribute__((                                       \
-          annotate("moz_inherit_type_annotations_from_template_args")))
-#    define MOZ_NON_AUTOABLE __attribute__((annotate("moz_non_autoable")))
-#    define MOZ_INIT_OUTSIDE_CTOR
-#    define MOZ_IS_CLASS_INIT
-#    define MOZ_NON_PARAM __attribute__((annotate("moz_non_param")))
-#    define MOZ_REQUIRED_BASE_METHOD \
-      __attribute__((annotate("moz_required_base_method")))
-#    define MOZ_MUST_RETURN_FROM_CALLER_IF_THIS_IS_ARG \
-      __attribute__((annotate("moz_must_return_from_caller_if_this_is_arg")))
-#    define MOZ_MAY_CALL_AFTER_MUST_RETURN \
-      __attribute__((annotate("moz_may_call_after_must_return")))
-#    define MOZ_LIFETIME_BOUND __attribute__((annotate("moz_lifetime_bound")))
-#    define MOZ_KNOWN_LIVE __attribute__((annotate("moz_known_live")))
-#    ifndef XGILL_PLUGIN
-#      define MOZ_UNANNOTATED __attribute__((annotate("moz_unannotated")))
-#      define MOZ_ANNOTATED __attribute__((annotate("moz_annotated")))
-#    else
-#      define MOZ_UNANNOTATED /* nothing */
-#      define MOZ_ANNOTATED   /* nothing */
-#    endif
+#define MOZ_ONLY_USED_TO_AVOID_STATIC_CONSTRUCTORS __attribute__((annotate("moz_global_class")))
+#else
+#define MOZ_ONLY_USED_TO_AVOID_STATIC_CONSTRUCTORS                                                 \
+    __attribute__((annotate("moz_global_class"))) MOZ_TRIVIAL_CTOR_DTOR
+#endif
+#define MOZ_IMPLICIT __attribute__((annotate("moz_implicit")))
+#define MOZ_IS_SMARTPTR_TO_REFCOUNTED __attribute__((annotate("moz_is_smartptr_to_refcounted")))
+#define MOZ_IS_REFPTR MOZ_IS_SMARTPTR_TO_REFCOUNTED
+#define MOZ_NO_ARITHMETIC_EXPR_IN_ARGUMENT __attribute__((annotate("moz_no_arith_expr_in_arg")))
+#define MOZ_OWNING_REF __attribute__((annotate("moz_owning_ref")))
+#define MOZ_NON_OWNING_REF __attribute__((annotate("moz_non_owning_ref")))
+#define MOZ_UNSAFE_REF(reason) __attribute__((annotate("moz_unsafe_ref")))
+#define MOZ_NO_ADDREF_RELEASE_ON_RETURN __attribute__((annotate("moz_no_addref_release_on_return")))
+#define MOZ_NEEDS_NO_VTABLE_TYPE __attribute__((annotate("moz_needs_no_vtable_type")))
+#define MOZ_NON_MEMMOVABLE __attribute__((annotate("moz_non_memmovable")))
+#define MOZ_NEEDS_MEMMOVABLE_TYPE __attribute__((annotate("moz_needs_memmovable_type")))
+#define MOZ_NEEDS_MEMMOVABLE_MEMBERS __attribute__((annotate("moz_needs_memmovable_members")))
+#define MOZ_NO_DANGLING_ON_TEMPORARIES __attribute__((annotate("moz_no_dangling_on_temporaries")))
+#define MOZ_INHERIT_TYPE_ANNOTATIONS_FROM_TEMPLATE_ARGS                                            \
+    __attribute__((annotate("moz_inherit_type_annotations_from_template_args")))
+#define MOZ_NON_AUTOABLE __attribute__((annotate("moz_non_autoable")))
+#define MOZ_INIT_OUTSIDE_CTOR
+#define MOZ_IS_CLASS_INIT
+#define MOZ_NON_PARAM __attribute__((annotate("moz_non_param")))
+#define MOZ_REQUIRED_BASE_METHOD __attribute__((annotate("moz_required_base_method")))
+#define MOZ_MUST_RETURN_FROM_CALLER_IF_THIS_IS_ARG                                                 \
+    __attribute__((annotate("moz_must_return_from_caller_if_this_is_arg")))
+#define MOZ_MAY_CALL_AFTER_MUST_RETURN __attribute__((annotate("moz_may_call_after_must_return")))
+#define MOZ_LIFETIME_BOUND __attribute__((annotate("moz_lifetime_bound")))
+#define MOZ_KNOWN_LIVE __attribute__((annotate("moz_known_live")))
+#ifndef XGILL_PLUGIN
+#define MOZ_UNANNOTATED __attribute__((annotate("moz_unannotated")))
+#define MOZ_ANNOTATED __attribute__((annotate("moz_annotated")))
+#else
+#define MOZ_UNANNOTATED /* nothing */
+#define MOZ_ANNOTATED /* nothing */
+#endif
 
 /*
  * It turns out that clang doesn't like void func() __attribute__ {} without a
  * warning, so use pragmas to disable the warning.
  */
-#    ifdef __clang__
-#      define MOZ_HEAP_ALLOCATOR                                 \
-        _Pragma("clang diagnostic push")                         \
-            _Pragma("clang diagnostic ignored \"-Wgcc-compat\"") \
-                __attribute__((annotate("moz_heap_allocator")))  \
-                _Pragma("clang diagnostic pop")
-#    else
-#      define MOZ_HEAP_ALLOCATOR __attribute__((annotate("moz_heap_allocator")))
-#    endif
-#  else
-#    define MOZ_CAN_RUN_SCRIPT                              /* nothing */
-#    define MOZ_CAN_RUN_SCRIPT_FOR_DEFINITION               /* nothing */
-#    define MOZ_CAN_RUN_SCRIPT_BOUNDARY                     /* nothing */
-#    define MOZ_MUST_OVERRIDE                               /* nothing */
-#    define MOZ_STATIC_CLASS                                /* nothing */
-#    define MOZ_STATIC_LOCAL_CLASS                          /* nothing */
-#    define MOZ_STACK_CLASS                                 /* nothing */
-#    define MOZ_NONHEAP_CLASS                               /* nothing */
-#    define MOZ_HEAP_CLASS                                  /* nothing */
-#    define MOZ_NON_TEMPORARY_CLASS                         /* nothing */
-#    define MOZ_TEMPORARY_CLASS                             /* nothing */
-#    define MOZ_TRIVIAL_CTOR_DTOR                           /* nothing */
-#    define MOZ_ALLOW_TEMPORARY                             /* nothing */
-#    define MOZ_ONLY_USED_TO_AVOID_STATIC_CONSTRUCTORS      /* nothing */
-#    define MOZ_IMPLICIT                                    /* nothing */
-#    define MOZ_IS_SMARTPTR_TO_REFCOUNTED                   /* nothing */
-#    define MOZ_IS_REFPTR                                   /* nothing */
-#    define MOZ_NO_ARITHMETIC_EXPR_IN_ARGUMENT              /* nothing */
-#    define MOZ_HEAP_ALLOCATOR                              /* nothing */
-#    define MOZ_OWNING_REF                                  /* nothing */
-#    define MOZ_NON_OWNING_REF                              /* nothing */
-#    define MOZ_UNSAFE_REF(reason)                          /* nothing */
-#    define MOZ_NO_ADDREF_RELEASE_ON_RETURN                 /* nothing */
-#    define MOZ_NEEDS_NO_VTABLE_TYPE                        /* nothing */
-#    define MOZ_NON_MEMMOVABLE                              /* nothing */
-#    define MOZ_NEEDS_MEMMOVABLE_TYPE                       /* nothing */
-#    define MOZ_NEEDS_MEMMOVABLE_MEMBERS                    /* nothing */
-#    define MOZ_NO_DANGLING_ON_TEMPORARIES                  /* nothing */
-#    define MOZ_INHERIT_TYPE_ANNOTATIONS_FROM_TEMPLATE_ARGS /* nothing */
-#    define MOZ_INIT_OUTSIDE_CTOR                           /* nothing */
-#    define MOZ_IS_CLASS_INIT                               /* nothing */
-#    define MOZ_NON_PARAM                                   /* nothing */
-#    define MOZ_NON_AUTOABLE                                /* nothing */
-#    define MOZ_REQUIRED_BASE_METHOD                        /* nothing */
-#    define MOZ_MUST_RETURN_FROM_CALLER_IF_THIS_IS_ARG      /* nothing */
-#    define MOZ_MAY_CALL_AFTER_MUST_RETURN                  /* nothing */
-#    define MOZ_LIFETIME_BOUND                              /* nothing */
-#    define MOZ_KNOWN_LIVE                                  /* nothing */
-#    define MOZ_UNANNOTATED                                 /* nothing */
-#    define MOZ_ANNOTATED                                   /* nothing */
-#  endif /* defined(MOZ_CLANG_PLUGIN) || defined(XGILL_PLUGIN) */
+#ifdef __clang__
+#define MOZ_HEAP_ALLOCATOR                                                                         \
+    _Pragma("clang diagnostic push") _Pragma("clang diagnostic ignored \"-Wgcc-compat\"")          \
+        __attribute__((annotate("moz_heap_allocator"))) _Pragma("clang diagnostic pop")
+#else
+#define MOZ_HEAP_ALLOCATOR __attribute__((annotate("moz_heap_allocator")))
+#endif
+#else
+#define MOZ_CAN_RUN_SCRIPT /* nothing */
+#define MOZ_CAN_RUN_SCRIPT_FOR_DEFINITION /* nothing */
+#define MOZ_CAN_RUN_SCRIPT_BOUNDARY /* nothing */
+#define MOZ_MUST_OVERRIDE /* nothing */
+#define MOZ_STATIC_CLASS /* nothing */
+#define MOZ_STATIC_LOCAL_CLASS /* nothing */
+#define MOZ_STACK_CLASS /* nothing */
+#define MOZ_NONHEAP_CLASS /* nothing */
+#define MOZ_HEAP_CLASS /* nothing */
+#define MOZ_NON_TEMPORARY_CLASS /* nothing */
+#define MOZ_TEMPORARY_CLASS /* nothing */
+#define MOZ_TRIVIAL_CTOR_DTOR /* nothing */
+#define MOZ_ALLOW_TEMPORARY /* nothing */
+#define MOZ_ONLY_USED_TO_AVOID_STATIC_CONSTRUCTORS /* nothing */
+#define MOZ_IMPLICIT /* nothing */
+#define MOZ_IS_SMARTPTR_TO_REFCOUNTED /* nothing */
+#define MOZ_IS_REFPTR /* nothing */
+#define MOZ_NO_ARITHMETIC_EXPR_IN_ARGUMENT /* nothing */
+#define MOZ_HEAP_ALLOCATOR /* nothing */
+#define MOZ_OWNING_REF /* nothing */
+#define MOZ_NON_OWNING_REF /* nothing */
+#define MOZ_UNSAFE_REF(reason) /* nothing */
+#define MOZ_NO_ADDREF_RELEASE_ON_RETURN /* nothing */
+#define MOZ_NEEDS_NO_VTABLE_TYPE /* nothing */
+#define MOZ_NON_MEMMOVABLE /* nothing */
+#define MOZ_NEEDS_MEMMOVABLE_TYPE /* nothing */
+#define MOZ_NEEDS_MEMMOVABLE_MEMBERS /* nothing */
+#define MOZ_NO_DANGLING_ON_TEMPORARIES /* nothing */
+#define MOZ_INHERIT_TYPE_ANNOTATIONS_FROM_TEMPLATE_ARGS /* nothing */
+#define MOZ_INIT_OUTSIDE_CTOR /* nothing */
+#define MOZ_IS_CLASS_INIT /* nothing */
+#define MOZ_NON_PARAM /* nothing */
+#define MOZ_NON_AUTOABLE /* nothing */
+#define MOZ_REQUIRED_BASE_METHOD /* nothing */
+#define MOZ_MUST_RETURN_FROM_CALLER_IF_THIS_IS_ARG /* nothing */
+#define MOZ_MAY_CALL_AFTER_MUST_RETURN /* nothing */
+#define MOZ_LIFETIME_BOUND /* nothing */
+#define MOZ_KNOWN_LIVE /* nothing */
+#define MOZ_UNANNOTATED /* nothing */
+#define MOZ_ANNOTATED /* nothing */
+#endif /* defined(MOZ_CLANG_PLUGIN) || defined(XGILL_PLUGIN) */
 
-#  define MOZ_RAII MOZ_NON_TEMPORARY_CLASS MOZ_STACK_CLASS
+#define MOZ_RAII MOZ_NON_TEMPORARY_CLASS MOZ_STACK_CLASS
 
 // XGILL_PLUGIN is used for the GC rooting hazard analysis, which compiles with
 // gcc. gcc has different rules governing __attribute__((...)) placement, so
@@ -894,18 +873,18 @@
 // lambda function, which is one source of the difficulty here. It appears that
 // this will be fixed in c++23: https://github.com/cplusplus/papers/issues/882
 
-#  ifdef XGILL_PLUGIN
+#ifdef XGILL_PLUGIN
 
-#    undef MOZ_MUST_OVERRIDE
-#    undef MOZ_CAN_RUN_SCRIPT_FOR_DEFINITION
-#    undef MOZ_CAN_RUN_SCRIPT
-#    undef MOZ_CAN_RUN_SCRIPT_BOUNDARY
-#    define MOZ_MUST_OVERRIDE                 /* nothing */
-#    define MOZ_CAN_RUN_SCRIPT_FOR_DEFINITION /* nothing */
-#    define MOZ_CAN_RUN_SCRIPT                /* nothing */
-#    define MOZ_CAN_RUN_SCRIPT_BOUNDARY       /* nothing */
+#undef MOZ_MUST_OVERRIDE
+#undef MOZ_CAN_RUN_SCRIPT_FOR_DEFINITION
+#undef MOZ_CAN_RUN_SCRIPT
+#undef MOZ_CAN_RUN_SCRIPT_BOUNDARY
+#define MOZ_MUST_OVERRIDE /* nothing */
+#define MOZ_CAN_RUN_SCRIPT_FOR_DEFINITION /* nothing */
+#define MOZ_CAN_RUN_SCRIPT /* nothing */
+#define MOZ_CAN_RUN_SCRIPT_BOUNDARY /* nothing */
 
-#  endif
+#endif
 
 #endif /* __cplusplus */
 
@@ -947,27 +926,27 @@
  * pattern seen in MinGW's source.
  */
 #ifdef __MINGW32__
-#  define MOZ_FORMAT_PRINTF(stringIndex, firstToCheck) \
+#define MOZ_FORMAT_PRINTF(stringIndex, firstToCheck)                                               \
     __attribute__((format(__MINGW_PRINTF_FORMAT, stringIndex, firstToCheck)))
-#  ifndef __MINGW_WPRINTF_FORMAT
-#    if defined(__clang__)
-#      define __MINGW_WPRINTF_FORMAT wprintf
-#    elif defined(_UCRT) || __USE_MINGW_ANSI_STDIO
-#      define __MINGW_WPRINTF_FORMAT gnu_wprintf
-#    else
-#      define __MINGW_WPRINTF_FORMAT ms_wprintf
-#    endif
-#  endif
-#  define MOZ_FORMAT_WPRINTF(stringIndex, firstToCheck) \
+#ifndef __MINGW_WPRINTF_FORMAT
+#if defined(__clang__)
+#define __MINGW_WPRINTF_FORMAT wprintf
+#elif defined(_UCRT) || __USE_MINGW_ANSI_STDIO
+#define __MINGW_WPRINTF_FORMAT gnu_wprintf
+#else
+#define __MINGW_WPRINTF_FORMAT ms_wprintf
+#endif
+#endif
+#define MOZ_FORMAT_WPRINTF(stringIndex, firstToCheck)                                              \
     __attribute__((format(__MINGW_WPRINTF_FORMAT, stringIndex, firstToCheck)))
 #elif __GNUC__ || __clang__
-#  define MOZ_FORMAT_PRINTF(stringIndex, firstToCheck) \
+#define MOZ_FORMAT_PRINTF(stringIndex, firstToCheck)                                               \
     __attribute__((format(printf, stringIndex, firstToCheck)))
-#  define MOZ_FORMAT_WPRINTF(stringIndex, firstToCheck) \
+#define MOZ_FORMAT_WPRINTF(stringIndex, firstToCheck)                                              \
     __attribute__((format(wprintf, stringIndex, firstToCheck)))
 #else
-#  define MOZ_FORMAT_PRINTF(stringIndex, firstToCheck)
-#  define MOZ_FORMAT_WPRINTF(stringIndex, firstToCheck)
+#define MOZ_FORMAT_PRINTF(stringIndex, firstToCheck)
+#define MOZ_FORMAT_WPRINTF(stringIndex, firstToCheck)
 #endif
 
 /**
@@ -978,9 +957,9 @@
  *   virtual ReturnType MOZ_XPCOM_ABI foo();
  */
 #if defined(XP_WIN)
-#  define MOZ_XPCOM_ABI __stdcall
+#define MOZ_XPCOM_ABI __stdcall
 #else
-#  define MOZ_XPCOM_ABI
+#define MOZ_XPCOM_ABI
 #endif
 
 /**
@@ -991,9 +970,9 @@
  * https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
  */
 #if defined(_MSC_VER)
-#  define MOZ_EMPTY_BASES __declspec(empty_bases)
+#define MOZ_EMPTY_BASES __declspec(empty_bases)
 #else
-#  define MOZ_EMPTY_BASES
+#define MOZ_EMPTY_BASES
 #endif
 
 #endif /* mozilla_Attributes_h */

@@ -17,6 +17,5 @@ BOOL VerifySameFiles(LPCWSTR file1Path, LPCWSTR file2Path, BOOL& sameContent);
 // Mozilla application as an updater.  Before the maintenance service will
 // execute the updater it must have this updater identity string in its string
 // table.  No other signed Mozilla product will have this string table value.
-#define UPDATER_IDENTITY_STRING \
-  "moz-updater.exe-4cdccec4-5ee0-4a06-9817-4cd899a9db49"
+#define UPDATER_IDENTITY_STRING "moz-updater.exe-4cdccec4-5ee0-4a06-9817-4cd899a9db49"
 #define IDS_UPDATER_IDENTITY 1006

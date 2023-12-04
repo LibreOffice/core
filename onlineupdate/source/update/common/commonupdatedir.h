@@ -7,14 +7,13 @@
 #include "mozilla/UniquePtr.h"
 
 #ifdef XP_WIN
-#  include <windows.h>
+#include <windows.h>
 typedef WCHAR NS_tchar;
 #else
 typedef char NS_tchar;
 #endif
 
-bool GetInstallHash(const char16_t* installPath,
-                    mozilla::UniquePtr<NS_tchar[]>& result);
+bool GetInstallHash(const char16_t* installPath, mozilla::UniquePtr<NS_tchar[]>& result);
 
 #ifdef XP_WIN
 // In addition to getting the update directory, this function also creates it.
@@ -24,16 +23,14 @@ bool GetInstallHash(const char16_t* installPath,
 // permissions are set properly. Thus, we won't even give out the path of the
 // update directory without ensuring that it was created with the correct
 // permissions.
-HRESULT GetCommonUpdateDirectory(const wchar_t* installPath,
-                                 mozilla::UniquePtr<wchar_t[]>& result);
+HRESULT GetCommonUpdateDirectory(const wchar_t* installPath, mozilla::UniquePtr<wchar_t[]>& result);
 // Returns the old common update directory. Since this directory was used before
 // we made sure to always set the correct permissions, it is possible that the
 // permissions on this directory are set such that files can only be modified
 // or deleted by the user that created them. This function exists entirely to
 // allow us to migrate files out of the old update directory and into the new
 // one.
-HRESULT GetOldUpdateDirectory(const wchar_t* installPath,
-                              mozilla::UniquePtr<wchar_t[]>& result);
+HRESULT GetOldUpdateDirectory(const wchar_t* installPath, mozilla::UniquePtr<wchar_t[]>& result);
 #endif
 
 #endif

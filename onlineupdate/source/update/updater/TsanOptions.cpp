@@ -6,11 +6,12 @@
 #include "mozilla/Attributes.h"
 #include "mozilla/TsanOptions.h"
 
-#ifndef _MSC_VER  // Not supported by clang-cl yet
+#ifndef _MSC_VER // Not supported by clang-cl yet
 
 // See also mozglue/build/TsanOptions.cpp before modifying this
-extern "C" const char* __tsan_default_suppressions() {
-  // clang-format off
+extern "C" const char* __tsan_default_suppressions()
+{
+    // clang-format off
   return "# Add your suppressions below\n"
 
          // External uninstrumented libraries
@@ -18,6 +19,6 @@ extern "C" const char* __tsan_default_suppressions() {
 
       // End of suppressions.
       ;  // Please keep this semicolon.
-  // clang-format on
+    // clang-format on
 }
-#endif  // _MSC_VER
+#endif // _MSC_VER

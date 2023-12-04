@@ -127,4 +127,4 @@
 
 // Error codes 110 and 111 are reserved for UpdateService.jsm
 
-#endif  // UPDATEERRORS_H
+#endif // UPDATEERRORS_H

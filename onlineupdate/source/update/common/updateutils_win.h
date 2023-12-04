@@ -15,21 +15,23 @@
  */
 
 #ifndef XP_WIN
-#  error This library should only be used on Windows
+#error This library should only be used on Windows
 #endif
 
 #include <windows.h>
 
-struct DIR {
-  explicit DIR(const WCHAR* path);
-  ~DIR();
-  HANDLE findHandle;
-  WCHAR name[MAX_PATH + 1];
+struct DIR
+{
+    explicit DIR(const WCHAR* path);
+    ~DIR();
+    HANDLE findHandle;
+    WCHAR name[MAX_PATH + 1];
 };
 
-struct dirent {
-  dirent();
-  WCHAR d_name[MAX_PATH + 1];
+struct dirent
+{
+    dirent();
+    WCHAR d_name[MAX_PATH + 1];
 };
 
 DIR* opendir(const WCHAR* path);
@@ -44,4 +46,4 @@ BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra);
 BOOL GetUUIDString(LPWSTR outBuf);
 BOOL GetUUIDTempFilePath(LPCWSTR basePath, LPCWSTR prefix, LPWSTR tmpPath);
 
-#endif  // WINDIRENT_H__
+#endif // WINDIRENT_H__

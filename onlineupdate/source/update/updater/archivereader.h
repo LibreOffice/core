@@ -11,7 +11,7 @@
 #include "mar.h"
 
 #ifdef XP_WIN
-#  include <windows.h>
+#include <windows.h>
 
 typedef WCHAR NS_tchar;
 #else
@@ -19,28 +19,28 @@ typedef char NS_tchar;
 #endif
 
 // This class provides an API to extract files from an update archive.
-class ArchiveReader {
- public:
-  ArchiveReader() = default;
-  ~ArchiveReader() { Close(); }
+class ArchiveReader
+{
+public:
+    ArchiveReader() = default;
+    ~ArchiveReader() { Close(); }
 
-  int Open(const NS_tchar* path);
-  int VerifySignature();
-  int VerifyProductInformation(const char* MARChannelID,
-                               const char* appVersion);
-  void Close();
+    int Open(const NS_tchar* path);
+    int VerifySignature();
+    int VerifyProductInformation(const char* MARChannelID, const char* appVersion);
+    void Close();
 
-  int ExtractFile(const char* item, const NS_tchar* destination);
-  int ExtractFileToStream(const char* item, FILE* fp);
+    int ExtractFile(const char* item, const NS_tchar* destination);
+    int ExtractFileToStream(const char* item, FILE* fp);
 
- private:
-  int ExtractItemToStream(const MarItem* item, FILE* fp);
+private:
+    int ExtractItemToStream(const MarItem* item, FILE* fp);
 
-  MarFile* mArchive = nullptr;
-  uint8_t* mInBuf = nullptr;
-  uint8_t* mOutBuf = nullptr;
-  size_t mInBufSize = 262144;
-  size_t mOutBufSize = 262144;
+    MarFile* mArchive = nullptr;
+    uint8_t* mInBuf = nullptr;
+    uint8_t* mOutBuf = nullptr;
+    size_t mInBufSize = 262144;
+    size_t mOutBufSize = 262144;
 };
 
-#endif  // ArchiveReader_h__
+#endif // ArchiveReader_h__

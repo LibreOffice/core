@@ -10,25 +10,27 @@
 #include <time.h>
 #include "mozilla/Attributes.h"
 
-class UpdateLog {
- public:
-  static UpdateLog& GetPrimaryLog() {
-    static UpdateLog primaryLog;
-    return primaryLog;
-  }
+class UpdateLog
+{
+public:
+    static UpdateLog& GetPrimaryLog()
+    {
+        static UpdateLog primaryLog;
+        return primaryLog;
+    }
 
-  void Init(NS_tchar* logFilePath);
-  void Finish();
-  void Flush();
-  void Printf(const char* fmt, ...) MOZ_FORMAT_PRINTF(2, 3);
-  void WarnPrintf(const char* fmt, ...) MOZ_FORMAT_PRINTF(2, 3);
+    void Init(NS_tchar* logFilePath);
+    void Finish();
+    void Flush();
+    void Printf(const char* fmt, ...) MOZ_FORMAT_PRINTF(2, 3);
+    void WarnPrintf(const char* fmt, ...) MOZ_FORMAT_PRINTF(2, 3);
 
-  ~UpdateLog() { Finish(); }
+    ~UpdateLog() { Finish(); }
 
- protected:
-  UpdateLog();
-  FILE* logFP;
-  NS_tchar mDstFilePath[MAXPATHLEN];
+protected:
+    UpdateLog();
+    FILE* logFP;
+    NS_tchar mDstFilePath[MAXPATHLEN];
 };
 
 bool IsValidFullPath(NS_tchar* fullPath);

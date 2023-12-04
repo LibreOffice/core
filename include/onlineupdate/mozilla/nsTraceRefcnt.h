@@ -8,31 +8,32 @@
 
 #include "nscore.h"
 
-class nsTraceRefcnt {
- public:
-  static void Shutdown();
+class nsTraceRefcnt
+{
+public:
+    static void Shutdown();
 
-  static nsresult DumpStatistics();
+    static nsresult DumpStatistics();
 
-  static void ResetStatistics();
+    static void ResetStatistics();
 
-  /**
+    /**
    * Tell nsTraceRefcnt whether refcounting, allocation, and destruction
    * activity is legal.  This is used to trigger assertions for any such
    * activity that occurs because of static constructors or destructors.
    */
-  static void SetActivityIsLegal(bool aLegal);
+    static void SetActivityIsLegal(bool aLegal);
 
-  /**
+    /**
    * Start refcount logging aClass. If refcount logging has not already begun,
    * it will use the environment variable XPCOM_MEM_LATE_REFCNT_LOG to decide
    * where to make the log, in a similar way as the other nsTraceRefcnt logs.
    */
-  static void StartLoggingClass(const char* aClass);
+    static void StartLoggingClass(const char* aClass);
 
 #ifdef MOZ_ENABLE_FORKSERVER
-  static void ResetLogFiles(const char* aProcType = nullptr);
+    static void ResetLogFiles(const char* aProcType = nullptr);
 #endif
 };
 
-#endif  // nsTraceRefcnt_h
+#endif // nsTraceRefcnt_h
