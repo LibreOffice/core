@@ -1191,9 +1191,10 @@ void SvListView::Impl::RemoveViewData( SvTreeListEntry* pParent )
 
 void SvListView::Impl::ActionRemoving( SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT(pEntry,"Remove:No Entry");
-
-    SvViewDataEntry* pViewData = m_DataTable.find( pEntry )->second.get();
+    assert(pEntry && "Remove:No Entry");
+    const auto iter = m_DataTable.find(pEntry);
+    assert(iter != m_DataTable.end());
+    SvViewDataEntry* pViewData = iter->second.get();
     sal_uInt32 nSelRemoved = 0;
     if ( pViewData->IsSelected() )
         nSelRemoved = 1 + m_rThis.pModel->GetChildSelectionCount(&m_rThis, pEntry);

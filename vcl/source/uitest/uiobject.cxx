@@ -1748,6 +1748,7 @@ void MenuButtonUIObject::execute(const OUString& rAction,
     else if (rAction == "OPENFROMLIST")
     {
         auto itr = rParameters.find("POS");
+        assert(itr != rParameters.end());
         sal_uInt32 nPos = itr->second.toUInt32();
 
         sal_uInt32 nId = mxMenuButton->GetPopupMenu()->GetItemId(nPos);

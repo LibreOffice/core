@@ -48,6 +48,7 @@ bool SvStringHashTable::Test( const OString& rElement, sal_uInt32 * pInsertPos )
 SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nInsertPos ) const
 {
     auto it = maInt2EntryMap.find(nInsertPos);
+    assert(it != maInt2EntryMap.end());
     return it->second.get();
 }
 

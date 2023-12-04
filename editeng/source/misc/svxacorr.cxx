@@ -1728,7 +1728,11 @@ bool SvxAutoCorrect::AddCplSttException( const OUString& rNew,
         if (iter != m_aLangTable.end())
             pLists = &iter->second;
         else if(CreateLanguageFile(aLangTagUndetermined))
-            pLists = &m_aLangTable.find(aLangTagUndetermined)->second;
+        {
+            iter = m_aLangTable.find(aLangTagUndetermined);
+            assert(iter != m_aLangTable.end());
+            pLists = &iter->second;
+        }
     }
     OSL_ENSURE(pLists, "No auto correction data");
     return pLists && pLists->AddToCplSttExceptList(rNew);
