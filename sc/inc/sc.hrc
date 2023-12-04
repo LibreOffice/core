@@ -247,6 +247,7 @@ class SvxZoomSliderItem;
 
 #define SID_OPEN_CALC                   (SC_FUNCTION_START + 4)
 #define SID_CONVERT_FORMULA_TO_VALUE    (SC_FUNCTION_START + 5)
+#define FID_MOVE_KEEP_INSERT_MODE       (SC_FUNCTION_START + 6)
 #ifndef FILE_MENU_END // duplicated in sfx2/sfxsids.hrc
 #define FILE_MENU_END                   (SC_FUNCTION_START + 20)
 #endif

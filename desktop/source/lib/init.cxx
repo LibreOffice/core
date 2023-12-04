@@ -3818,6 +3818,7 @@ static void doc_iniUnoCommands ()
         u".uno:InsertPictureContentControl"_ustr,
         u".uno:DataFilterAutoFilter"_ustr,
         u".uno:CellProtection"_ustr,
+        u".uno:MoveKeepInsertMode"_ustr
     };
 
     util::URL aCommandURL;

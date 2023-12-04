@@ -26,6 +26,7 @@ class ScInputOptions
 private:
     sal_uInt16  nMoveDir;           // enum ScDirection
     bool        bMoveSelection;
+    bool        bMoveKeepEdit;
     bool        bEnterEdit;
     bool        bExtendFormat;
     bool        bRangeFinder;
@@ -47,6 +48,8 @@ public:
     bool        GetMoveSelection() const        { return bMoveSelection; }
     void        SetEnterEdit(bool bSet)         { bEnterEdit = bSet;     }
     bool        GetEnterEdit() const            { return bEnterEdit;     }
+    void        SetMoveKeepEdit(bool bSet)      { bMoveKeepEdit = bSet;  }
+    bool        GetMoveKeepEdit() const         { return bMoveKeepEdit;  }
     void        SetExtendFormat(bool bSet)      { bExtendFormat = bSet;  }
     bool        GetExtendFormat() const         { return bExtendFormat;  }
     void        SetRangeFinder(bool bSet)       { bRangeFinder = bSet;   }
