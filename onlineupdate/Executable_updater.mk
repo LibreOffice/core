@@ -11,9 +11,10 @@ $(eval $(call gb_Executable_Executable,updater))
 
 $(eval $(call gb_Executable_set_include,updater,\
 	-I$(SRCDIR)/onlineupdate/inc \
+	-I$(SRCDIR)/onlineupdate/source/update/updater/xpcom/glue \
 	-I$(SRCDIR)/onlineupdate/source/update/common \
-	-I$(SRCDIR)/include/onlineupdate/mozilla/ \
-	-I$(SRCDIR)/include/onlineupdate/ \
+	-I$(SRCDIR)/include/onlineupdate/mozilla \
+	-I$(SRCDIR)/include/onlineupdate \
 	$$(INCLUDE) \
 	$(if $(filter-out WNT,$(OS)),$$(GTK3_CFLAGS) ) \
 ))
@@ -52,12 +53,14 @@ $(eval $(call gb_Executable_add_ldflags,updater,\
 
 $(eval $(call gb_Executable_add_defs,updater,\
 	-DVERIFY_MAR_SIGNATURE \
+	-DXP_WIN=1 \
 ))
 
 else
 
 $(eval $(call gb_Executable_add_defs,updater,\
 	-DVERIFY_MAR_SIGNATURE \
+	-DXP_UNIX=1 \
 	-DNSS3 \
 ))
 
@@ -71,8 +74,12 @@ $(eval $(call gb_Executable_add_libs,updater,\
 
 endif
 
+$(eval $(call gb_Executable_add_defs,updater,\
+	-DNS_NO_XPCOM \
+))
+
+
 $(eval $(call gb_Executable_add_exception_objects,updater,\
-	onlineupdate/source/update/updater/xpcom/glue/nsVersionComparator \
 	onlineupdate/source/update/updater/archivereader \
 	onlineupdate/source/update/updater/bspatch/bspatch \
 	onlineupdate/source/update/updater/progressui_gtk \

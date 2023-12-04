@@ -14,8 +14,8 @@ ifneq ($(ENABLE_ONLINE_UPDATE_MAR),)
 $(eval $(call gb_Module_add_targets,onlineupdate,\
 	StaticLibrary_libmar \
 	StaticLibrary_libmarverify \
-	StaticLibrary_updatehelper \
 	$(if $(filter WNT,$(OS)),\
+		StaticLibrary_updatehelper \
 		Executable_update_service \
 		WinResTarget_updater )\
 	Executable_mar \
