@@ -866,7 +866,12 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             else if (sPropertyType == "string-list")
             {
                 SvxListDialog aListDialog(m_xDialog.get());
-                aListDialog.SetEntries(commaStringToSequence(sDialogValue));
+                Reference<XNameAccess> xConfigAccess
+                    = getConfigAccess(pUserData->sPropertyPath, false);
+                Any aNode = xConfigAccess->getByName(sPropertyName);
+                uno::Sequence<OUString> aList = aNode.get<uno::Sequence<OUString>>();
+                aListDialog.SetEntries(
+                    comphelper::sequenceToContainer<std::vector<OUString>>(aList));
                 aListDialog.SetMode(ListMode::String);
                 if (aListDialog.run() == RET_OK)
                 {
