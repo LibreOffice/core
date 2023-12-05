@@ -33,12 +33,18 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/charhiddenitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <svl/grabbagitem.hxx>
@@ -77,11 +83,14 @@
 #include <txtatr.hxx>
 #include <cellatr.hxx>
 #include <fmtrowsplt.hxx>
+#include <com/sun/star/awt/FontRelief.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
 #include <oox/export/vmlexport.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -479,9 +488,9 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
         ClearOverridesFromSet( *pCharFormatItem, aExportSet );
 
     // check toggle properties in DOCX output
+    if (pCharFormatItem)
     {
-        SvxWeightItem aBoldProperty(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
-        handleToggleProperty(aExportSet, pCharFormatItem, RES_CHRATR_WEIGHT, &aBoldProperty);
+        handleToggleProperty(aExportSet, *pCharFormatItem);
     }
 
     // tdf#113790: AutoFormat style overwrites char style, so remove all
@@ -558,29 +567,82 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
 // i.e., the effective value to be applied to the content shall be true if its effective value is true for
 // an odd number of levels of the style hierarchy.
 //
-// To prevent such logic inside output, it is required to write inline w:b token on content level.
-void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatCharFormat* pCharFormatItem,
-    sal_uInt16 nWhich, const SfxPoolItem* pValue)
+// To prevent such logic inside output, it is required to write inline attribute tokens on content level.
+void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatCharFormat& rCharFormatItem)
 {
-    if (rExportSet.HasItem(nWhich) || !pValue)
+    if (rExportSet.HasItem(RES_CHRATR_WEIGHT) || rExportSet.HasItem(RES_CHRATR_POSTURE)  ||
+        rExportSet.HasItem(RES_CHRATR_CTL_WEIGHT) || rExportSet.HasItem(RES_CHRATR_CTL_POSTURE)  ||
+        rExportSet.HasItem(RES_CHRATR_CONTOUR) || rExportSet.HasItem(RES_CHRATR_CASEMAP) ||
+        rExportSet.HasItem(RES_CHRATR_RELIEF) || rExportSet.HasItem(RES_CHRATR_SHADOWED) ||
+        rExportSet.HasItem(RES_CHRATR_CROSSEDOUT) || rExportSet.HasItem(RES_CHRATR_HIDDEN))
         return;
 
-    bool hasPropertyInCharStyle = false;
-    bool hasPropertyInParaStyle = false;
+    SvxWeightItem aBoldProperty(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    SvxPostureItem aPostureProperty(ITALIC_NORMAL, RES_CHRATR_POSTURE);
+    SvxContourItem aContouredProperty(true, RES_CHRATR_CONTOUR);
+    SvxCaseMapItem aCaseMapCapsProperty(SvxCaseMap::Uppercase, RES_CHRATR_CASEMAP);
+    SvxCaseMapItem aCaseMapSmallProperty(SvxCaseMap::SmallCaps, RES_CHRATR_CASEMAP);
+    SvxCharReliefItem aEmbossedProperty(FontRelief::Embossed, RES_CHRATR_RELIEF);
+    SvxCharReliefItem aImprintProperty(FontRelief::Engraved, RES_CHRATR_RELIEF);
+    SvxShadowedItem aShadowedProperty(true, RES_CHRATR_SHADOWED);
+    SvxCrossedOutItem aStrikeoutProperty(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT);
+    SvxCharHiddenItem aHiddenProperty(true, RES_CHRATR_HIDDEN);
 
-    // get bold flag from specified character style
-    if (pCharFormatItem)
+    bool hasWeightPropertyInCharStyle = false;
+    bool hasWeightComplexPropertyInCharStyle = false;
+    bool hasPosturePropertyInCharStyle = false;
+    bool hasPostureComplexPropertyInCharStyle = false;
+    bool bHasCapsPropertyInCharStyle = false;
+    bool bHasSmallCapsPropertyInCharStyle = false;
+    bool bHasEmbossedPropertyInCharStyle = false;
+    bool bHasImprintPropertyInCharStyle = false;
+    bool hasContouredPropertyInCharStyle = false;
+    bool hasShadowedPropertyInCharStyle = false;
+    bool hasStrikeoutPropertyInCharStyle = false;
+    bool hasHiddenPropertyInCharStyle = false;
+
+
+    // get attribute flags from specified character style
+    if (const SwCharFormat* pCharFormat = rCharFormatItem.GetCharFormat())
     {
-        if (const SwCharFormat* pCharFormat = pCharFormatItem->GetCharFormat())
+        if (const SfxPoolItem* pWeightItem = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_WEIGHT))
+            hasWeightPropertyInCharStyle = (*pWeightItem == aBoldProperty);
+
+        if (const SfxPoolItem* pWeightComplexItem = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_CTL_WEIGHT))
+            hasWeightComplexPropertyInCharStyle = (*pWeightComplexItem == aBoldProperty);
+
+        if (const SfxPoolItem* pPostureItem = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_POSTURE))
+            hasPosturePropertyInCharStyle = (*pPostureItem == aPostureProperty);
+
+        if (const SfxPoolItem* pPostureComplexItem = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_CTL_POSTURE))
+            hasPostureComplexPropertyInCharStyle = (*pPostureComplexItem == aPostureProperty);
+
+        if (const SfxPoolItem* pContouredItem = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_CONTOUR))
+            hasContouredPropertyInCharStyle = (*pContouredItem == aContouredProperty);
+
+        if (const SfxPoolItem* pShadowedItem = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_SHADOWED))
+            hasShadowedPropertyInCharStyle = (*pShadowedItem == aShadowedProperty);
+
+        if (const SfxPoolItem* pStrikeoutItem = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_CROSSEDOUT))
+            hasStrikeoutPropertyInCharStyle = (*pStrikeoutItem == aStrikeoutProperty);
+
+        if (const SfxPoolItem* pHiddenItem = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_HIDDEN))
+            hasHiddenPropertyInCharStyle = (*pHiddenItem == aHiddenProperty);
+
+        if (const SfxPoolItem* pCaseMapItem  = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_CASEMAP))
         {
-            if (const SfxPoolItem* pItem = pCharFormat->GetAttrSet().GetItem(nWhich))
-            {
-                hasPropertyInCharStyle = (*pItem == *pValue);
-            }
+            bHasCapsPropertyInCharStyle = (*pCaseMapItem == aCaseMapCapsProperty);
+            bHasSmallCapsPropertyInCharStyle = (*pCaseMapItem == aCaseMapSmallProperty);
+        }
+
+        if (const SfxPoolItem* pReliefItem  = pCharFormat->GetAttrSet().GetItem(RES_CHRATR_RELIEF))
+        {
+            bHasEmbossedPropertyInCharStyle = (*pReliefItem == aEmbossedProperty);
+            bHasImprintPropertyInCharStyle = (*pReliefItem == aImprintProperty);
         }
     }
 
-    // get bold flag from specified paragraph style
+    // get attribute flags from specified paragraph style and apply properties if they are set in character and paragraph style
     {
         SwTextFormatColl& rTextColl = static_cast<SwTextFormatColl&>( m_rNode.GetAnyFormatColl() );
         sal_uInt16 nStyle = m_rExport.m_pStyles->GetSlot( &rTextColl );
@@ -588,17 +650,59 @@ void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatC
         const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nStyle);
         if (pFormat)
         {
-            if (const SfxPoolItem* pItem = pFormat->GetAttrSet().GetItem(nWhich))
+            const SfxPoolItem* pItem;
+            if (hasWeightPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_WEIGHT)) &&
+                (*pItem == aBoldProperty))
+                rExportSet.Put(aBoldProperty);
+
+            if (hasWeightComplexPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_CTL_WEIGHT)) &&
+                *pItem == aBoldProperty)
             {
-                hasPropertyInParaStyle = (*pItem == *pValue);
+                rExportSet.Put(aBoldProperty, RES_CHRATR_CTL_WEIGHT);
+            }
+
+            if (hasPosturePropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_POSTURE)) &&
+                *pItem == aPostureProperty)
+                rExportSet.Put(aPostureProperty);
+
+            if (hasPostureComplexPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_CTL_POSTURE)) &&
+                *pItem == aPostureProperty)
+            {
+                rExportSet.Put(aPostureProperty, RES_CHRATR_CTL_POSTURE);
+            }
+
+            if (hasContouredPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_CONTOUR)) && *pItem == aContouredProperty)
+                rExportSet.Put(aContouredProperty);
+
+            if (hasShadowedPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_SHADOWED)) &&
+                *pItem == aShadowedProperty)
+                rExportSet.Put(aShadowedProperty);
+
+            if (hasStrikeoutPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_CROSSEDOUT)) &&
+                *pItem == aStrikeoutProperty)
+                rExportSet.Put(aStrikeoutProperty);
+
+            if (hasHiddenPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_HIDDEN)) &&
+                (*pItem == aHiddenProperty))
+                rExportSet.Put(aHiddenProperty);
+
+            if ((bHasCapsPropertyInCharStyle||bHasSmallCapsPropertyInCharStyle) && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_CASEMAP)))
+            {
+                if (bHasCapsPropertyInCharStyle && *pItem == aCaseMapCapsProperty)
+                    rExportSet.Put(aCaseMapCapsProperty);
+                else if (bHasSmallCapsPropertyInCharStyle && *pItem == aCaseMapSmallProperty)
+                    rExportSet.Put(aCaseMapSmallProperty);
+            }
+
+            if ((bHasEmbossedPropertyInCharStyle||bHasImprintPropertyInCharStyle) && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_RELIEF)))
+            {
+                if (bHasEmbossedPropertyInCharStyle && *pItem == aEmbossedProperty)
+                    rExportSet.Put(aEmbossedProperty);
+                else if (bHasImprintPropertyInCharStyle && *pItem == aImprintProperty)
+                    rExportSet.Put(aImprintProperty);
             }
         }
-    }
 
-    // add inline property
-    if (hasPropertyInCharStyle && hasPropertyInParaStyle)
-    {
-        rExportSet.Put(*pValue);
     }
 }
 

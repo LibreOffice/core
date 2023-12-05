@@ -37,6 +37,7 @@
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -79,6 +80,10 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/awt/FontRelief.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -515,6 +520,17 @@ uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetChara
             xSupplier->getStyleFamilies()->getByName("CharacterStyles") >>= m_xCharacterStyles;
     }
     return m_xCharacterStyles;
+}
+
+uno::Reference<container::XNameContainer> const& DomainMapper_Impl::GetParagraphStyles()
+{
+    if (!m_xParagraphStyles.is())
+    {
+        uno::Reference<style::XStyleFamiliesSupplier> xSupplier(m_xTextDocument, uno::UNO_QUERY);
+        if (xSupplier.is())
+            xSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>= m_xParagraphStyles;
+    }
+    return m_xParagraphStyles;
 }
 
 OUString DomainMapper_Impl::GetUnusedCharacterStyleName()
@@ -3017,7 +3033,148 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
 }
 
-void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
+void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap)
+{
+    std::optional<PropertyMap::Property> charStyleProperty = pPropertyMap->getProperty(PROP_CHAR_STYLE_NAME);
+    if (charStyleProperty.has_value())
+    {
+        OUString sCharStyleName;
+        charStyleProperty->second >>= sCharStyleName;
+        float fCharStyleBold = css::awt::FontWeight::NORMAL;
+        float fCharStyleBoldComplex = css::awt::FontWeight::NORMAL;
+        css::awt::FontSlant eCharStylePosture = css::awt::FontSlant_NONE;
+        css::awt::FontSlant eCharStylePostureComplex = css::awt::FontSlant_NONE;
+        sal_Int16 nCharStyleCaseMap = css::style::CaseMap::NONE;
+        sal_Int16 nCharStyleRelief = css::awt::FontRelief::NONE;
+        bool bCharStyleContoured = false;//Outline;
+        bool bCharStyleShadowed = false;
+        sal_Int16 nCharStyleStrikeThrough = awt::FontStrikeout::NONE;
+        bool bCharStyleHidden = false;
+
+        uno::Reference<beans::XPropertySet> xCharStylePropertySet = GetCharacterStyles()->getByName(sCharStyleName).get<uno::Reference<beans::XPropertySet>>();
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT)) >>= fCharStyleBold;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT_COMPLEX)) >>= fCharStyleBoldComplex;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE)) >>= eCharStylePosture;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE_COMPLEX)) >>= eCharStylePostureComplex;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CASE_MAP)) >>= nCharStyleCaseMap;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_RELIEF)) >>= nCharStyleRelief;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CONTOURED)) >>= bCharStyleContoured;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_SHADOWED)) >>= bCharStyleShadowed;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_STRIKEOUT)) >>= nCharStyleStrikeThrough;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_HIDDEN)) >>= bCharStyleHidden;
+        if (fCharStyleBold > css::awt::FontWeight::NORMAL || eCharStylePosture != css::awt::FontSlant_NONE|| nCharStyleCaseMap != css::style::CaseMap::NONE ||
+            nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
+            nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden)
+        {
+            uno::Reference<beans::XPropertySet> xParaStylePropertySet = GetParagraphStyles()->getByName(m_sCurrentParaStyleName).get<uno::Reference<beans::XPropertySet>>();
+            float fParaStyleBold = css::awt::FontWeight::NORMAL;
+            float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
+            css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
+            css::awt::FontSlant eParaStylePostureComplex = css::awt::FontSlant_NONE;
+            sal_Int16 nParaStyleCaseMap = css::style::CaseMap::NONE;
+            sal_Int16 nParaStyleRelief = css::awt::FontRelief::NONE;
+            bool bParaStyleContoured = false;
+            bool bParaStyleShadowed = false;
+            sal_Int16 nParaStyleStrikeThrough = awt::FontStrikeout::NONE;
+            bool bParaStyleHidden = false;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT)) >>= fParaStyleBold;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT_COMPLEX)) >>= fParaStyleBoldComplex;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE)) >>= eParaStylePosture;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE_COMPLEX)) >>= eParaStylePostureComplex;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CASE_MAP)) >>= nParaStyleCaseMap;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_RELIEF)) >>= nParaStyleRelief;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_SHADOWED)) >>= bParaStyleShadowed;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CONTOURED)) >>= bParaStyleContoured;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_STRIKEOUT)) >>= nParaStyleStrikeThrough;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_HIDDEN)) >>= bParaStyleHidden;
+            if (fCharStyleBold > css::awt::FontWeight::NORMAL && fParaStyleBold > css::awt::FontWeight::NORMAL)
+            {
+                std::optional<PropertyMap::Property> charBoldProperty = pPropertyMap->getProperty(PROP_CHAR_WEIGHT);
+                if (!charBoldProperty.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_WEIGHT, uno::Any(css::awt::FontWeight::NORMAL));
+                }
+            }
+            if (fCharStyleBoldComplex > css::awt::FontWeight::NORMAL && fParaStyleBoldComplex > css::awt::FontWeight::NORMAL)
+            {
+                std::optional<PropertyMap::Property> charBoldPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_WEIGHT_COMPLEX);
+                if (!charBoldPropertyComplex.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_WEIGHT_COMPLEX, uno::Any(css::awt::FontWeight::NORMAL));
+                    pPropertyMap->Insert(PROP_CHAR_WEIGHT_ASIAN, uno::Any(css::awt::FontWeight::NORMAL));
+                }
+            }
+            if (eCharStylePosture != css::awt::FontSlant_NONE && eParaStylePosture != css::awt::FontSlant_NONE)
+            {
+                std::optional<PropertyMap::Property> charItalicProperty = pPropertyMap->getProperty(PROP_CHAR_POSTURE);
+                if (!charItalicProperty.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_POSTURE, uno::Any(css::awt::FontSlant_NONE));
+                }
+            }
+            if (eCharStylePostureComplex != css::awt::FontSlant_NONE && eParaStylePostureComplex != css::awt::FontSlant_NONE)
+            {
+                std::optional<PropertyMap::Property> charItalicPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_POSTURE_COMPLEX);
+                if (!charItalicPropertyComplex.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_POSTURE_COMPLEX, uno::Any(css::awt::FontSlant_NONE));
+                    pPropertyMap->Insert(PROP_CHAR_POSTURE_ASIAN, uno::Any(css::awt::FontSlant_NONE));
+                }
+            }
+            if (nCharStyleCaseMap == nParaStyleCaseMap && nCharStyleCaseMap != css::style::CaseMap::NONE)
+            {
+                std::optional<PropertyMap::Property> charCaseMap = pPropertyMap->getProperty(PROP_CHAR_CASE_MAP);
+                if (!charCaseMap.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_CASE_MAP, uno::Any(css::style::CaseMap::NONE));
+                }
+            }
+            if (nParaStyleRelief != css::awt::FontRelief::NONE && nCharStyleRelief == nParaStyleRelief)
+            {
+                std::optional<PropertyMap::Property> charRelief = pPropertyMap->getProperty(PROP_CHAR_RELIEF);
+                if (!charRelief.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_RELIEF, uno::Any(css::awt::FontRelief::NONE));
+                }
+            }
+            if (bParaStyleContoured && bCharStyleContoured)
+            {
+                std::optional<PropertyMap::Property> charContoured = pPropertyMap->getProperty(PROP_CHAR_CONTOURED);
+                if (!charContoured.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_CONTOURED, uno::Any(false));
+                }
+            }
+            if (bParaStyleShadowed && bCharStyleShadowed)
+            {
+                std::optional<PropertyMap::Property> charShadow = pPropertyMap->getProperty(PROP_CHAR_SHADOWED);
+                if (!charShadow.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_SHADOWED, uno::Any(false));
+                }
+            }
+            if (nParaStyleStrikeThrough == css::awt::FontStrikeout::SINGLE && nParaStyleStrikeThrough == nCharStyleStrikeThrough)
+            {
+                std::optional<PropertyMap::Property> charStrikeThrough = pPropertyMap->getProperty(PROP_CHAR_STRIKEOUT);
+                if (!charStrikeThrough.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_STRIKEOUT, uno::Any(css::awt::FontStrikeout::NONE));
+                }
+            }
+            if (bParaStyleHidden && bCharStyleHidden)
+            {
+                std::optional<PropertyMap::Property> charHidden = pPropertyMap->getProperty(PROP_CHAR_HIDDEN);
+                if (!charHidden.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_HIDDEN, uno::Any(false));
+                }
+            }
+        }
+    }
+}
+
+
+    void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -3034,6 +3191,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
 
     try
     {
+        applyToggleAttributes(pPropertyMap);
         // If we are in comments, then disable CharGrabBag, comment text doesn't support that.
         uno::Sequence< beans::PropertyValue > aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
 
