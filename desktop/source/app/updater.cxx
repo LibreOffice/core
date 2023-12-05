@@ -477,7 +477,7 @@ update_info parse_response(const std::string& rResponse)
     }
 
     orcus::json::node aLanguageNode = aDocumentRoot.child("languages");
-    if (aUpdateNode.type() != orcus::json::node_t::object)
+    if (aLanguageNode.type() != orcus::json::node_t::object)
     {
         throw invalid_update_info();
     }
