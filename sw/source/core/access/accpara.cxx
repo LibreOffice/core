@@ -3519,9 +3519,10 @@ uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
     OUString strHeading;
     if (m_nHeadingLevel >= 0)
     {
-        strHeading = "heading-level:" + OUString::number(m_nHeadingLevel);
-        // tdf#84102: expose the same attribute with the name "level"
-        strHeading += ";level:" + OUString::number(m_nHeadingLevel) + ";";
+        // report heading level using the "level" object attribute as specified in ARIA,
+        // maps to attributes of the same name for AT-SPI, IAccessible2, UIA
+        // https://www.w3.org/TR/core-aam-1.2/#ariaLevelHeading
+        strHeading = "level:" + OUString::number(m_nHeadingLevel) + ";";
     }
 
     return uno::Any(strHeading);
