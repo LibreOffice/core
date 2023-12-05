@@ -187,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrappedByTable)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
     auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pFly);
-    // Get the bottom of of the floating table, ignoring margins:
+    // Get the bottom of the floating table, ignoring margins:
     SwTwips nFloatingBottom = pFly->getFrameArea().Top() + pFly->getFramePrintArea().Height();
     SwFrame* pBody = pPage->FindBodyCont();
     auto pTab = pBody->GetLower()->GetNext()->DynCastTabFrame();
