@@ -3266,7 +3266,7 @@ bool ScModelObj::HasChangesListeners() const
 namespace
 {
 
-void lcl_dataAreaInvalidation(ScDocument& rDocument, ScModelObj* pModel,
+void lcl_dataAreaInvalidation(ScModelObj* pModel,
                               const ScRangeList& rRanges,
                               bool bInvalidateDataArea, bool bExtendDataArea)
 {
@@ -3293,10 +3293,6 @@ void lcl_dataAreaInvalidation(ScDocument& rDocument, ScModelObj* pModel,
         bool bInvalidate = bAreaExtended || bInvalidateDataArea;
         if ( bInvalidate )
         {
-            ScTable* pTab = rDocument.FetchTable( nTab );
-            if ( pTab )
-                pTab->InvalidateCellArea();
-
             if ( comphelper::LibreOfficeKit::isActive() )
                 SfxLokHelper::notifyPartSizeChangedAllViews( pModel, nTab );
         }
@@ -3318,8 +3314,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
 
     if ( pDocShell )
     {
-        ScDocument& rDocument = pDocShell->GetDocument();
-        lcl_dataAreaInvalidation(rDocument, this, rRanges, bInvalidateDataArea, bExtendDataArea);
+        lcl_dataAreaInvalidation(this, rRanges, bInvalidateDataArea, bExtendDataArea);
 
         // check if we were called only to update data area
         if (bIsDataAreaInvalidateType || bIsDataAreaExtendType)
