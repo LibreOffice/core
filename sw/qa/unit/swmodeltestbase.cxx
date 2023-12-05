@@ -66,7 +66,6 @@ void SwModelTestBase::executeImportTest(const char* filename, const char* pPassw
 {
     maTempFile.EnableKillingFile(false);
     header();
-    std::unique_ptr<Resetter> const pChanges(preTest(filename));
     loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
     verify();
     finish();
@@ -77,7 +76,6 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
 {
     maTempFile.EnableKillingFile(false);
     header();
-    std::unique_ptr<Resetter> const pChanges(preTest(filename));
     loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
     verify();
     postLoad(filename);
@@ -91,7 +89,6 @@ void SwModelTestBase::executeLoadReloadVerify(const char* filename, const char* 
 {
     maTempFile.EnableKillingFile(false);
     header();
-    std::unique_ptr<Resetter> const pChanges(preTest(filename));
     loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
     postLoad(filename);
     saveAndReload(mpFilter, pPassword);
@@ -104,7 +101,6 @@ void SwModelTestBase::executeImportExport(const char* filename, const char* pPas
 {
     maTempFile.EnableKillingFile(false);
     header();
-    std::unique_ptr<Resetter> const pChanges(preTest(filename));
     loadAndSave(filename, pPassword);
     maTempFile.EnableKillingFile(false);
     verify();

@@ -140,14 +140,6 @@ protected:
         CPPUNIT_FAIL( "verify method must be overridden" );
     }
 
-    /**
-     * Override this function if some special filename-specific setup is needed
-     */
-    virtual std::unique_ptr<Resetter> preTest(const char* /*filename*/)
-    {
-        return nullptr;
-    }
-
     /// Override this function if some special file-specific setup is needed during export test: after load, but before save.
     virtual void postLoad(const char* /*pFilename*/)
     {
