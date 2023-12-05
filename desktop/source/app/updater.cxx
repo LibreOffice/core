@@ -36,7 +36,6 @@
 
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
-#include <orcus/pstring.hpp>
 
 #include <systools/curlinit.hxx>
 #include <comphelper/hash.hxx>
@@ -48,6 +47,7 @@
 #include <functional>
 #include <memory>
 #include <set>
+#include <string_view>
 
 namespace {
 
@@ -391,9 +391,9 @@ public:
     }
 };
 
-OUString toOUString(const std::string& rStr)
+OUString toOUString(const std::string_view& rStr)
 {
-    return OUString::fromUtf8(rStr.c_str());
+    return OUString::fromUtf8(rStr);
 }
 
 update_file parse_update_file(orcus::json::node& rNode)
@@ -422,12 +422,12 @@ update_file parse_update_file(orcus::json::node& rNode)
     }
 
     update_file aUpdateFile;
-    aUpdateFile.aURL = toOUString(aURLNode.string_value().str());
+    aUpdateFile.aURL = toOUString(aURLNode.string_value());
 
     if (aUpdateFile.aURL.isEmpty())
         throw invalid_update_info();
 
-    aUpdateFile.aHash = toOUString(aHashNode.string_value().str());
+    aUpdateFile.aHash = toOUString(aHashNode.string_value());
     aUpdateFile.nSize = static_cast<sal_uInt32>(aSizeNode.numeric_value());
     return aUpdateFile;
 }
@@ -454,7 +454,7 @@ update_info parse_response(const std::string& rResponse)
     {
         update_info aUpdateInfo;
         auto aMsgNode = aDocumentRoot.child("response");
-        aUpdateInfo.aMessage = toOUString(aMsgNode.string_value().str());
+        aUpdateInfo.aMessage = toOUString(aMsgNode.string_value());
         return aUpdateInfo;
     }
 
@@ -483,17 +483,17 @@ update_info parse_response(const std::string& rResponse)
     }
 
     update_info aUpdateInfo;
-    aUpdateInfo.aFromBuildID = toOUString(aFromNode.string_value().str());
-    aUpdateInfo.aSeeAlsoURL = toOUString(aSeeAlsoNode.string_value().str());
+    aUpdateInfo.aFromBuildID = toOUString(aFromNode.string_value());
+    aUpdateInfo.aSeeAlsoURL = toOUString(aSeeAlsoNode.string_value());
 
     aUpdateInfo.aUpdateFile = parse_update_file(aUpdateNode);
 
-    std::vector<orcus::pstring> aLanguages = aLanguageNode.keys();
+    std::vector<std::string_view> aLanguages = aLanguageNode.keys();
     for (auto const& language : aLanguages)
     {
         language_file aLanguageFile;
         auto aLangEntry = aLanguageNode.child(language);
-        aLanguageFile.aLangCode = toOUString(language.str());
+        aLanguageFile.aLangCode = toOUString(language);
         aLanguageFile.aUpdateFile = parse_update_file(aLangEntry);
         aUpdateInfo.aLanguageFiles.push_back(aLanguageFile);
     }
