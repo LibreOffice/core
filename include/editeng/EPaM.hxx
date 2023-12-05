@@ -21,43 +21,29 @@
 
 struct EPaM
 {
-    sal_Int32 nPara;
-    sal_Int32 nIndex;
+    sal_Int32 nPara = 0;
+    sal_Int32 nIndex = 0;
 
-    EPaM()
-        : nPara(0)
-        , nIndex(0)
+    EPaM() = default;
+
+    EPaM(sal_Int32 _nParagraph, sal_Int32 _nIndex)
+        : nPara(_nParagraph)
+        , nIndex(_nIndex)
     {
     }
-    EPaM(sal_Int32 nP, sal_Int32 nI)
-        : nPara(nP)
-        , nIndex(nI)
+
+    bool operator==(const EPaM& rInstance) const
     {
+        return nPara == rInstance.nPara && nIndex == rInstance.nIndex;
     }
-    EPaM(const EPaM& r)
-        : nPara(r.nPara)
-        , nIndex(r.nIndex)
+
+    bool operator!=(const EPaM& rSelection) const = default;
+
+    bool operator<(const EPaM& rInstance) const
     {
+        return (nPara < rInstance.nPara) || (nPara == rInstance.nPara && nIndex < rInstance.nIndex);
     }
-    EPaM& operator=(const EPaM& r)
-    {
-        nPara = r.nPara;
-        nIndex = r.nIndex;
-        return *this;
-    }
-    inline bool operator==(const EPaM& r) const;
-    inline bool operator<(const EPaM& r) const;
 };
-
-inline bool EPaM::operator<(const EPaM& r) const
-{
-    return (nPara < r.nPara) || ((nPara == r.nPara) && nIndex < r.nIndex);
-}
-
-inline bool EPaM::operator==(const EPaM& r) const
-{
-    return (nPara == r.nPara) && (nIndex == r.nIndex);
-}
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
