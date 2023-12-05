@@ -136,10 +136,13 @@ bool SvPasswordHelper::CompareHashPassword(const uno::Sequence<sal_Int8>& rOldPa
 
 double SvPasswordHelper::GetPasswordStrengthPercentage(const char* pPassword)
 {
-    // Entropy bits corresponding to 100% password strength
-    static constexpr double fMaxPassStrengthEntorpyBits = 112.0;
+    // Entropy bits ≥ 112 are mapped to 100% password strength.
+    // 112 was picked since according to the linked below KeePass help page, it
+    // corresponds to a strong password:
+    // <http://web.archive.org/web/20231128131604/https://keepass.info/help/kb/pw_quality_est.html>
+    static constexpr double fMaxPassStrengthEntropyBits = 112.0;
     return std::min(100.0,
-                    ZxcvbnMatch(pPassword, nullptr, nullptr) * 100.0 / fMaxPassStrengthEntorpyBits);
+                    ZxcvbnMatch(pPassword, nullptr, nullptr) * 100.0 / fMaxPassStrengthEntropyBits);
 }
 
 double SvPasswordHelper::GetPasswordStrengthPercentage(const OUString& aPassword)
