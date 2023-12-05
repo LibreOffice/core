@@ -124,6 +124,23 @@ class UITest(object):
         finally:
             self.close_doc()
 
+    def wait_and_yield_dialog(self, event, parent, close_button):
+        while not event.executed:
+            time.sleep(DEFAULT_SLEEP)
+        dialog = self._xUITest.getTopFocusWindow()
+        if parent == dialog:
+            raise Exception("executing the action did not open the dialog")
+        try:
+            yield dialog
+        except:
+            if not close_button:
+                if 'cancel' in dialog.getChildren():
+                    self.close_dialog_through_button(dialog.getChild("cancel"))
+            raise
+        finally:
+            if close_button:
+                self.close_dialog_through_button(dialog.getChild(close_button))
+
     # Calls UITest.close_dialog_through_button at exit
     @contextmanager
     def execute_dialog_through_command(self, command, printNames=False, close_button = "ok", eventName = "DialogExecute"):
@@ -131,23 +148,7 @@ class UITest(object):
             xDialogParent = self._xUITest.getTopFocusWindow()
             if not self._xUITest.executeDialog(command):
                 raise Exception("Dialog not executed for: " + command)
-            while True:
-                if event.executed:
-                    xDialog = self._xUITest.getTopFocusWindow()
-                    if xDialogParent == xDialog:
-                        raise Exception("executing the action did not open the dialog")
-                    try:
-                        yield xDialog
-                    except:
-                        if not close_button:
-                            if 'cancel' in xDialog.getChildren():
-                                self.close_dialog_through_button(xDialog.getChild("cancel"))
-                        raise
-                    finally:
-                        if close_button:
-                            self.close_dialog_through_button(xDialog.getChild(close_button))
-                    return
-                time.sleep(DEFAULT_SLEEP)
+            yield from self.wait_and_yield_dialog(event, xDialogParent, close_button)
 
     @contextmanager
     def execute_modeless_dialog_through_command(self, command, printNames=False, close_button = "ok"):
@@ -163,18 +164,7 @@ class UITest(object):
         xDialogParent = self._xUITest.getTopFocusWindow()
         with EventListener(self._xContext, event_name) as event:
             ui_object.executeAction(action, parameters)
-            while True:
-                if event.executed:
-                    xDialog = self._xUITest.getTopFocusWindow()
-                    if xDialogParent == xDialog:
-                        raise Exception("executing the action did not open the dialog")
-                    try:
-                        yield xDialog
-                    finally:
-                        if close_button:
-                            self.close_dialog_through_button(xDialog.getChild(close_button))
-                    return
-                time.sleep(DEFAULT_SLEEP)
+            yield from self.wait_and_yield_dialog(event, xDialogParent, close_button)
 
     # Calls UITest.close_doc at exit
     @contextmanager
