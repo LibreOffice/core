@@ -1548,7 +1548,7 @@ private:
     SwWW8AttrIter(const SwWW8AttrIter&) = delete;
     SwWW8AttrIter& operator=(const SwWW8AttrIter&) = delete;
 
-    void handleToggleProperty(SfxItemSet& rExportSet, const SwFormatCharFormat* pCharFormatItem, sal_uInt16 nWhich, const SfxPoolItem* pValue);
+    void handleToggleProperty(SfxItemSet& rExportSet, const SwFormatCharFormat& rCharFormatItem);
 public:
     SwWW8AttrIter( MSWordExportBase& rWr, const SwTextNode& rNd );
 
