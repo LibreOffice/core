@@ -21,24 +21,18 @@
 
 struct ESelection
 {
-    sal_Int32 nStartPara;
-    sal_Int32 nStartPos;
-    sal_Int32 nEndPara;
-    sal_Int32 nEndPos;
+    sal_Int32 nStartPara = 0;
+    sal_Int32 nStartPos = 0;
+    sal_Int32 nEndPara = 0;
+    sal_Int32 nEndPos = 0;
 
-    ESelection()
-        : nStartPara(0)
-        , nStartPos(0)
-        , nEndPara(0)
-        , nEndPos(0)
-    {
-    }
+    ESelection() = default;
 
-    ESelection(sal_Int32 nStPara, sal_Int32 nStPos, sal_Int32 nEPara, sal_Int32 nEPos)
-        : nStartPara(nStPara)
-        , nStartPos(nStPos)
-        , nEndPara(nEPara)
-        , nEndPos(nEPos)
+    ESelection(sal_Int32 _nStartPara, sal_Int32 _nStartPos, sal_Int32 _nEndPara, sal_Int32 _nEndPos)
+        : nStartPara(_nStartPara)
+        , nStartPos(_nStartPos)
+        , nEndPara(_nEndPara)
+        , nEndPos(_nEndPos)
     {
     }
 
@@ -50,71 +44,55 @@ struct ESelection
     {
     }
 
-    void Adjust();
-    bool operator==(const ESelection& rS) const;
-    bool operator!=(const ESelection& rS) const { return !operator==(rS); }
-    bool operator<(const ESelection& rS) const;
-    bool operator>(const ESelection& rS) const;
-    bool IsZero() const;
-    bool HasRange() const;
+    void Adjust()
+    {
+        if (nStartPara > nEndPara || (nStartPara == nEndPara && nStartPos > nEndPos))
+        {
+            std::swap(nStartPara, nEndPara);
+            std::swap(nStartPos, nEndPos);
+        }
+    }
+
+    bool operator==(const ESelection& rSelection) const
+    {
+        return nStartPara == rSelection.nStartPara && nStartPos == rSelection.nStartPos
+               && nEndPara == rSelection.nEndPara && nEndPos == rSelection.nEndPos;
+    }
+
+    bool operator!=(const ESelection& rSelection) const = default;
+
+    bool operator<(const ESelection& rSelection) const
+    {
+        // The selection must be adjusted.
+        // => Only check if end of 'this' < Start of rS
+        return nEndPara < rSelection.nStartPara
+               || (nEndPara == rSelection.nStartPara && nEndPos < rSelection.nStartPos
+                   && operator!=(rSelection));
+    }
+
+    bool operator>(const ESelection& rSelection) const
+    {
+        // The selection must be adjusted.
+        // => Only check if end of 'this' < Start of rS
+        return nStartPara > rSelection.nEndPara
+               || (nStartPara == rSelection.nEndPara && nStartPos > rSelection.nEndPos
+                   && operator!=(rSelection));
+    }
+
+    bool IsZero() const
+    {
+        return nStartPara == 0 && nStartPos == 0 && nEndPara == 0 && nEndPos == 0;
+    }
+
+    bool HasRange() const { return nStartPara != nEndPara || nStartPos != nEndPos; }
 };
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
-                                                     ESelection const& sel)
+                                                     ESelection const& rSelection)
 {
-    return stream << "ESelection(" << sel.nStartPara << ',' << sel.nStartPos << "," << sel.nEndPara
-                  << "," << sel.nEndPos << ")";
+    return stream << "ESelection(" << rSelection.nStartPara << ',' << rSelection.nStartPos << ","
+                  << rSelection.nEndPara << "," << rSelection.nEndPos << ")";
 }
 
-inline bool ESelection::HasRange() const
-{
-    return (nStartPara != nEndPara) || (nStartPos != nEndPos);
-}
-
-inline bool ESelection::IsZero() const
-{
-    return ((nStartPara == 0) && (nStartPos == 0) && (nEndPara == 0) && (nEndPos == 0));
-}
-
-inline bool ESelection::operator==(const ESelection& rS) const
-{
-    return ((nStartPara == rS.nStartPara) && (nStartPos == rS.nStartPos)
-            && (nEndPara == rS.nEndPara) && (nEndPos == rS.nEndPos));
-}
-
-inline bool ESelection::operator<(const ESelection& rS) const
-{
-    // The selection must be adjusted.
-    // => Only check if end of 'this' < Start of rS
-    return (nEndPara < rS.nStartPara)
-           || ((nEndPara == rS.nStartPara) && (nEndPos < rS.nStartPos) && !operator==(rS));
-}
-
-inline bool ESelection::operator>(const ESelection& rS) const
-{
-    // The selection must be adjusted.
-    // => Only check if end of 'this' < Start of rS
-    return (nStartPara > rS.nEndPara)
-           || ((nStartPara == rS.nEndPara) && (nStartPos > rS.nEndPos) && !operator==(rS));
-}
-
-inline void ESelection::Adjust()
-{
-    bool bSwap = false;
-    if (nStartPara > nEndPara)
-        bSwap = true;
-    else if ((nStartPara == nEndPara) && (nStartPos > nEndPos))
-        bSwap = true;
-
-    if (bSwap)
-    {
-        sal_Int32 nSPar = nStartPara;
-        sal_Int32 nSPos = nStartPos;
-        nStartPara = nEndPara;
-        nStartPos = nEndPos;
-        nEndPara = nSPar;
-        nEndPos = nSPos;
-    }
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
