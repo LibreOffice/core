@@ -169,6 +169,36 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableJoin)
     CPPUNIT_ASSERT(pFly->GetPrecede());
     CPPUNIT_ASSERT(!pFly->HasFollow());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrappedByTable)
+{
+    // Given a document with a floating table, wrapped by an inline table:
+    // When laying out the document:
+    createSwDoc("floattable-wrapped-by-table.docx");
+
+    // Then make sure the inline table wraps around the floating table:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage);
+    // Get the top of the inline table, ignoring margins:
+    CPPUNIT_ASSERT(pPage->GetSortedObjs());
+    SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pFly);
+    // Get the bottom of of the floating table, ignoring margins:
+    SwTwips nFloatingBottom = pFly->getFrameArea().Top() + pFly->getFramePrintArea().Height();
+    SwFrame* pBody = pPage->FindBodyCont();
+    auto pTab = pBody->GetLower()->GetNext()->DynCastTabFrame();
+    SwTwips nInlineTop = pTab->getFrameArea().Top() + pTab->getFramePrintArea().Top();
+    // Make sure the inline table is on the right of the floating one, not below it:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 7287
+    // - Actual  : 7287
+    // i.e. the inline table was under the floating one, not on the right of it.
+    CPPUNIT_ASSERT_LESS(nFloatingBottom, nInlineTop);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
