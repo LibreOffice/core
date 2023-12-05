@@ -3179,6 +3179,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
             nSurround = text::WrapTextMode_PARALLEL;
 
         bool bShiftDown = css::text::WrapTextMode_NONE == nSurround;
+        bool bSplitFly = pFly->IsFlySplitAllowed();
         if (!bShiftDown && bAddVerticalFlyOffsets)
         {
             if (nSurround == text::WrapTextMode_PARALLEL && isHoriOrientShiftDown)
@@ -3201,6 +3202,18 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 // normally an SwFlyPortion is created instead that increases the height
                 // of the first table row.
                 bShiftDown = aTabRange.overlaps(aFlyRange);
+
+                if (bSplitFly && pFly->GetAnchorFrame()->GetUpper() == GetUpper())
+                {
+                    // Split fly followed by an inline table. Check if we have enough space to shift
+                    // to the right instead.
+                    SwTwips nShiftedTabRight = aFlyRectWithoutSpaces.Right() + getFramePrintArea().Width();
+                    SwTwips nRightShiftDeadline = pFly->GetAnchorFrame()->GetUpper()->getFrameArea().Right();
+                    if (aRectFnSet.XDiff(nRightShiftDeadline, nShiftedTabRight) >= 0)
+                    {
+                        bShiftDown = false;
+                    }
+                }
             }
         }
 
@@ -3241,9 +3254,16 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
             }
         }
 
+        bool bFlyHoriOrientLeft = text::HoriOrientation::LEFT == rHori.GetHoriOrient();
+        if (bSplitFly && !bFlyHoriOrientLeft)
+        {
+            // If a split fly is oriented "from left", we already checked if it has enough space on
+            // the right, so from-left and left means the same here.
+            bFlyHoriOrientLeft = rHori.GetHoriOrient() == text::HoriOrientation::NONE;
+        }
         if ((css::text::WrapTextMode_RIGHT == nSurround
              || css::text::WrapTextMode_PARALLEL == nSurround)
-            && text::HoriOrientation::LEFT == rHori.GetHoriOrient()
+            && bFlyHoriOrientLeft
             && !bShiftDown)
         {
             const tools::Long nWidth
