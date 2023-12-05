@@ -466,6 +466,8 @@ private:
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedPageStyleNo;
     css::uno::Reference<css::container::XNameContainer> m_xCharacterStyles;
+    css::uno::Reference<css::container::XNameContainer> m_xParagraphStyles;
+
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedCharacterStyleNo;
     css::uno::Reference<css::text::XText> m_xBodyText;
@@ -669,6 +671,7 @@ public:
     css::uno::Reference<css::container::XNameContainer> const & GetPageStyles();
     OUString GetUnusedPageStyleName();
     css::uno::Reference<css::container::XNameContainer> const & GetCharacterStyles();
+    css::uno::Reference<css::container::XNameContainer> const& GetParagraphStyles();
     OUString GetUnusedCharacterStyleName();
     css::uno::Reference<css::text::XText> const & GetBodyText();
     const css::uno::Reference<css::lang::XMultiServiceFactory>& GetTextFactory() const
@@ -762,6 +765,7 @@ public:
     bool isParaSdtEndDeferred() const;
 
     void finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove = false, const bool bNoNumbering = false);
+    void applyToggleAttributes( const PropertyMapPtr& pPropertyMap );
     void appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap );
     void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
     void appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOleHandler );
