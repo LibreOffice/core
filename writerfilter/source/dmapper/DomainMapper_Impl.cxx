@@ -983,8 +983,19 @@ void DomainMapper_Impl::PushSdt()
     }
 
     uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if (!xTextAppend.is())
+    {
+        return;
+    }
+
+    uno::Reference<text::XText> xText = xTextAppend->getText();
+    if (!xText.is())
+    {
+        return;
+    }
+
     uno::Reference<text::XTextCursor> xCursor
-        = xTextAppend->getText()->createTextCursorByRange(xTextAppend->getEnd());
+        = xText->createTextCursorByRange(xTextAppend->getEnd());
     // Offset so the cursor is not adjusted as we import the SDT's content.
     bool bStart = !xCursor->goLeft(1, /*bExpand=*/false);
     m_xSdtStarts.push({bStart, OUString(), xCursor->getStart()});
