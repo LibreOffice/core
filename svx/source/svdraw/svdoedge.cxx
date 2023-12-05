@@ -1511,7 +1511,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
     if (eKind != SdrEdgeKind::Bezier || nPointCount <= 2)
         return aXP1;
 
-    if (pInfo->m_bUseOOXMLCurve) // Routing method OOXML
+    if (pInfo && pInfo->m_bUseOOXMLCurve) // Routing method OOXML
     {
         // The additional points needed are located on the segments of the path of the
         // corresponding bentConnector as calculated above.
