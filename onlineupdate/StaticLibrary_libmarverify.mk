@@ -19,6 +19,7 @@ $(eval $(call gb_StaticLibrary_set_include,libmarverify,\
 ifneq ($(OS),WNT)
 $(eval $(call gb_StaticLibrary_add_defs,libmarverify,\
 	-DMAR_NSS \
+	-DXP_WIN=1 \
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,libmarverify,\

@@ -22,6 +22,10 @@ $(eval $(call gb_StaticLibrary_add_cobjects,libmar,\
 	onlineupdate/source/libmar/src/mar_read \
 ))
 
+$(eval $(call gb_StaticLibrary_add_defs,libmar,\
+	-DXP_WIN=1 \
+))
+
 $(eval $(call gb_StaticLibrary_use_static_libraries,\
 	libmarverify \
 ))

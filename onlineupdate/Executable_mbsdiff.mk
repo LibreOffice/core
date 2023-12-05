@@ -25,6 +25,10 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_libs,mbsdiff,\
     ws2_32.lib \
 ))
+
+$(eval $(call gb_Executable_add_defs,mbsdiff,\
+	-DXP_WIN=1 \
+))
 endif
 
 $(eval $(call gb_Executable_add_cxxobjects,mbsdiff,\

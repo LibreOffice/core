@@ -48,6 +48,10 @@ $(eval $(call gb_Executable_add_ldflags,update_service,\
     /ENTRY:wmainCRTStartup \
 ))
 
+$(eval $(call gb_Executable_add_defs,update_service,\
+	-DXP_WIN=1 \
+))
+
 $(eval $(call gb_Executable_add_exception_objects,update_service,\
 	onlineupdate/source/update/common/certificatecheck \
 	onlineupdate/source/service/maintenanceservice \

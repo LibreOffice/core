@@ -20,6 +20,7 @@ $(eval $(call gb_StaticLibrary_set_include,updatehelper,\
 $(eval $(call gb_StaticLibrary_add_defs,updatehelper,\
 	-DNSS3 \
 	-DVERIFY_MAR_SIGNATURE \
+	-DXP_WIN=1 \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,updatehelper,\
