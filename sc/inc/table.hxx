@@ -180,12 +180,6 @@ private:
     SCROW           nRepeatStartY;
     SCROW           nRepeatEndY;
 
-    // last used col and row
-    bool            mbCellAreaDirty;
-    bool            mbCellAreaEmpty;
-    SCCOL           mnEndCol;
-    SCROW           mnEndRow;
-
     // Standard row height for this sheet - benefits XLSX because default height defined per sheet
     sal_uInt16 mnOptimalMinRowHeight; // in Twips
 
@@ -621,8 +615,7 @@ public:
     void        InvalidateTableArea();
     void        InvalidatePageBreaks();
 
-    void        InvalidateCellArea() { mbCellAreaDirty = true; }
-    bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow );            // FALSE = empty
+    bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = empty
     bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow, bool bCalcHiddens = false) const;
     bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bCalcHiddens = false) const;
     bool        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
