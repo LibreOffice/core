@@ -543,7 +543,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     , mxReverseOrderBox(m_xBuilder->weld_check_button("reverseorder"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
     , mxCancelButton(m_xBuilder->weld_button("cancel"))
-    , mxHelpButton(m_xBuilder->weld_button("help"))
     , mxBackwardBtn(m_xBuilder->weld_button("backward"))
     , mxForwardBtn(m_xBuilder->weld_button("forward"))
     , mxFirstBtn(m_xBuilder->weld_button("btnFirst"))
@@ -676,7 +675,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     // setup click hdl
     mxOKButton->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxCancelButton->connect_clicked(LINK(this, PrintDialog, ClickHdl));
-    mxHelpButton->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxSetupButton->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
     mxBackwardBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxForwardBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
@@ -1871,15 +1869,6 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
     {
         storeToSettings();
         m_xDialog->response(&rButton == mxOKButton.get() ? RET_OK : RET_CANCEL);
-    }
-    else if( &rButton == mxHelpButton.get() )
-    {
-        // start help system
-        Help* pHelp = Application::GetHelp();
-        if( pHelp )
-        {
-            pHelp->Start("vcl/ui/printdialog/PrintDialog", mxOKButton.get());
-        }
     }
     else if( &rButton == mxForwardBtn.get() )
     {
