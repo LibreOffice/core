@@ -147,6 +147,9 @@ BitmapColor& BitmapPalette::operator[](sal_uInt16 nIndex)
     return mpImpl->GetBitmapData()[nIndex];
 }
 
+/// Returns the BitmapColor (i.e. palette index) that is either an exact match
+/// of the required color, or failing that, the entry that is the closest i.e. least error
+/// as measured by Color::GetColorError.
 sal_uInt16 BitmapPalette::GetBestIndex(const BitmapColor& rCol) const
 {
     auto const& rBitmapColor = mpImpl->GetBitmapData();
@@ -175,6 +178,23 @@ sal_uInt16 BitmapPalette::GetBestIndex(const BitmapColor& rCol) const
     }
 
     return nRetIndex;
+}
+
+/// Returns the BitmapColor (i.e. palette index) that is an exact match
+/// of the required color. Returns SAL_MAX_UINT16 if nothing found.
+sal_uInt16 BitmapPalette::GetMatchingIndex(const BitmapColor& rCol) const
+{
+    auto const& rBitmapColor = mpImpl->GetBitmapData();
+
+    for (size_t j = 0; j < rBitmapColor.size(); ++j)
+    {
+        if (rCol == rBitmapColor[j])
+        {
+            return j;
+        }
+    }
+
+    return SAL_MAX_UINT16;
 }
 
 bool BitmapPalette::IsGreyPaletteAny() const

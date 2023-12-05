@@ -77,6 +77,9 @@ public:
         return mpBuffer ? mpBuffer->mnBitCount : 0;
     }
 
+    /// Returns the BitmapColor (i.e. palette index) that is either an exact match
+    /// of the required color, or failing that, the entry that is the closest i.e. least error
+    /// as measured by Color::GetColorError.
     BitmapColor GetBestMatchingColor(const BitmapColor& rBitmapColor) const
     {
         if (HasPalette())
@@ -121,7 +124,13 @@ public:
         return pBuffer->maPalette[nColor];
     }
 
+    /// Returns the BitmapColor (i.e. palette index) that is either an exact match
+    /// of the required color, or failing that, the entry that is the closest i.e. least error
+    /// as measured by Color::GetColorError.
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rBitmapColor) const;
+    /// Returns the BitmapColor (i.e. palette index) that is an exact match
+    /// of the required color. Returns SAL_MAX_UINT16 if nothing found.
+    sal_uInt16 GetMatchingPaletteIndex(const BitmapColor& rBitmapColor) const;
 
     const ColorMask& GetColorMask() const
     {

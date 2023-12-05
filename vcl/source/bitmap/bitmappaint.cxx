@@ -31,6 +31,12 @@
 #include <algorithm>
 #include <memory>
 
+static BitmapColor UpdatePaletteForNewColor(BitmapScopedWriteAccess& pAcc,
+                                            const sal_uInt16 nActColors,
+                                            const sal_uInt16 nMaxColors, const tools::Long nHeight,
+                                            const tools::Long nWidth,
+                                            const BitmapColor& rWantedColor);
+
 bool Bitmap::Erase(const Color& rFillColor)
 {
     if (IsEmpty())
@@ -63,32 +69,6 @@ bool Bitmap::Invert()
     if (!mxSalBmp)
         return false;
 
-    // For alpha masks, we need to actually invert the underlying data
-    // or the optimisations elsewhere do not work right.
-    if (typeid(*this) != typeid(AlphaMask))
-    {
-        // We want to avoid using ScopedReadAccess until we really need
-        // it, because on Skia it triggers a GPU->RAM copy, which is very slow.
-        ScopedReadAccess pReadAcc(*this);
-        if (!pReadAcc)
-            return false;
-        if (pReadAcc->HasPalette())
-        {
-            BitmapScopedWriteAccess pWriteAcc(*this);
-            BitmapPalette aBmpPal(pWriteAcc->GetPalette());
-            const sal_uInt16 nCount = aBmpPal.GetEntryCount();
-
-            for (sal_uInt16 i = 0; i < nCount; i++)
-            {
-                aBmpPal[i].Invert();
-            }
-
-            pWriteAcc->SetPalette(aBmpPal);
-            mxSalBmp->InvalidateChecksum();
-            return true;
-        }
-    }
-
     // try optimised call, much faster on Skia
     if (mxSalBmp->Invert())
     {
@@ -100,17 +80,54 @@ bool Bitmap::Invert()
     const tools::Long nWidth = pWriteAcc->Width();
     const tools::Long nHeight = pWriteAcc->Height();
 
-    for (tools::Long nY = 0; nY < nHeight; nY++)
+    if (pWriteAcc->HasPalette())
     {
-        Scanline pScanline = pWriteAcc->GetScanline(nY);
-        for (tools::Long nX = 0; nX < nWidth; nX++)
+        const sal_uInt16 nActColors = pWriteAcc->GetPaletteEntryCount();
+        const sal_uInt16 nMaxColors = 1 << pWriteAcc->GetBitCount();
+
+        if (pWriteAcc->GetPalette().IsGreyPalette8Bit())
         {
-            BitmapColor aBmpColor = pWriteAcc->GetPixelFromData(pScanline, nX);
-            aBmpColor.Invert();
-            pWriteAcc->SetPixelOnData(pScanline, nX, aBmpColor);
+            for (tools::Long nY = 0; nY < nHeight; nY++)
+            {
+                Scanline pScanline = pWriteAcc->GetScanline(nY);
+                for (tools::Long nX = 0; nX < nWidth; nX++)
+                {
+                    BitmapColor aBmpColor = pWriteAcc->GetPixelFromData(pScanline, nX);
+                    aBmpColor.SetIndex(0xff - aBmpColor.GetIndex());
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aBmpColor);
+                }
+            }
+        }
+        else
+        {
+            for (tools::Long nY = 0; nY < nHeight; nY++)
+            {
+                Scanline pScanline = pWriteAcc->GetScanline(nY);
+                for (tools::Long nX = 0; nX < nWidth; nX++)
+                {
+                    BitmapColor aBmpColor = pWriteAcc->GetPixelFromData(pScanline, nX);
+                    aBmpColor = pWriteAcc->GetPaletteColor(aBmpColor.GetIndex());
+                    aBmpColor.Invert();
+                    BitmapColor aReplace = UpdatePaletteForNewColor(
+                        pWriteAcc, nActColors, nMaxColors, nHeight, nWidth, aBmpColor);
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aReplace);
+                }
+            }
         }
     }
-
+    else
+    {
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                BitmapColor aBmpColor = pWriteAcc->GetPixelFromData(pScanline, nX);
+                aBmpColor.Invert();
+                pWriteAcc->SetPixelOnData(pScanline, nX, aBmpColor);
+            }
+        }
+    }
     mxSalBmp->InvalidateChecksum();
 
     return true;
@@ -902,45 +919,8 @@ bool Bitmap::ReplaceMask(const AlphaMask& rMask, const Color& rReplaceColor)
         const sal_uInt16 nActColors = pAcc->GetPaletteEntryCount();
         const sal_uInt16 nMaxColors = 1 << pAcc->GetBitCount();
 
-        // default to the nearest color
-        aReplace = pAcc->GetBestMatchingColor(rReplaceColor);
-
-        // for paletted images without a matching palette entry
-        // look for an unused palette entry (NOTE: expensive!)
-        if (pAcc->GetPaletteColor(aReplace.GetIndex()) != BitmapColor(rReplaceColor))
-        {
-            // if the palette has empty entries use the last one
-            if (nActColors < nMaxColors)
-            {
-                pAcc->SetPaletteEntryCount(nActColors + 1);
-                pAcc->SetPaletteColor(nActColors, rReplaceColor);
-                aReplace = BitmapColor(static_cast<sal_uInt8>(nActColors));
-            }
-            else
-            {
-                std::unique_ptr<bool[]> pFlags(new bool[nMaxColors]);
-
-                // Set all entries to false
-                std::fill(pFlags.get(), pFlags.get() + nMaxColors, false);
-
-                for (tools::Long nY = 0; nY < nHeight; nY++)
-                {
-                    Scanline pScanline = pAcc->GetScanline(nY);
-                    for (tools::Long nX = 0; nX < nWidth; nX++)
-                        pFlags[pAcc->GetIndexFromData(pScanline, nX)] = true;
-                }
-
-                for (sal_uInt16 i = 0; i < nMaxColors; i++)
-                {
-                    // Hurray, we do have an unused entry
-                    if (!pFlags[i])
-                    {
-                        pAcc->SetPaletteColor(i, rReplaceColor);
-                        aReplace = BitmapColor(static_cast<sal_uInt8>(i));
-                    }
-                }
-            }
-        }
+        aReplace
+            = UpdatePaletteForNewColor(pAcc, nActColors, nMaxColors, nHeight, nWidth, aReplace);
     }
     else
         aReplace = rReplaceColor;
@@ -1194,6 +1174,53 @@ bool Bitmap::Blend(const AlphaMask& rAlpha, const Color& rBackgroundColor)
     }
 
     return true;
+}
+
+static BitmapColor UpdatePaletteForNewColor(BitmapScopedWriteAccess& pAcc,
+                                            const sal_uInt16 nActColors,
+                                            const sal_uInt16 nMaxColors, const tools::Long nHeight,
+                                            const tools::Long nWidth,
+                                            const BitmapColor& rWantedColor)
+{
+    // default to the nearest color
+    sal_uInt16 aReplacePalIndex = pAcc->GetMatchingPaletteIndex(rWantedColor);
+    if (aReplacePalIndex != SAL_MAX_UINT16)
+        return BitmapColor(static_cast<sal_uInt8>(aReplacePalIndex));
+
+    // for paletted images without a matching palette entry
+
+    // if the palette has empty entries use the last one
+    if (nActColors < nMaxColors)
+    {
+        pAcc->SetPaletteEntryCount(nActColors + 1);
+        pAcc->SetPaletteColor(nActColors, rWantedColor);
+        return BitmapColor(static_cast<sal_uInt8>(nActColors));
+    }
+
+    // look for an unused palette entry (NOTE: expensive!)
+    std::unique_ptr<bool[]> pFlags(new bool[nMaxColors]);
+
+    // Set all entries to false
+    std::fill(pFlags.get(), pFlags.get() + nMaxColors, false);
+
+    for (tools::Long nY = 0; nY < nHeight; nY++)
+    {
+        Scanline pScanline = pAcc->GetScanline(nY);
+        for (tools::Long nX = 0; nX < nWidth; nX++)
+            pFlags[pAcc->GetIndexFromData(pScanline, nX)] = true;
+    }
+
+    for (sal_uInt16 i = 0; i < nMaxColors; i++)
+    {
+        // Hurray, we do have an unused entry
+        if (!pFlags[i])
+        {
+            pAcc->SetPaletteColor(i, rWantedColor);
+            return BitmapColor(static_cast<sal_uInt8>(i));
+        }
+    }
+    assert(false && "found nothing");
+    return BitmapColor(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

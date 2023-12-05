@@ -65,7 +65,13 @@ public:
     const BitmapColor& operator[](sal_uInt16 nIndex) const;
     BitmapColor& operator[](sal_uInt16 nIndex);
 
+    /// Returns the BitmapColor (i.e. palette index) that is either an exact match
+    /// of the required color, or failing that, the entry that is the closest i.e. least error
+    /// as measured by Color::GetColorError.
     sal_uInt16 GetBestIndex(const BitmapColor& rCol) const;
+    /// Returns the BitmapColor (i.e. palette index) that is an exact match
+    /// of the required color. Returns SAL_MAX_UINT16 if nothing found.
+    sal_uInt16 GetMatchingIndex(const BitmapColor& rCol) const;
 
     /// Returns true if the palette is 8-bit grey palette.
     bool IsGreyPalette8Bit() const;
