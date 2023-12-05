@@ -25,12 +25,12 @@
 #include <osl/diagnose.h>
 
 template< typename R, typename S, typename U >
-static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
+static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask, bool bShrink = true )
 {
     bool bCut = false;
     if ( rRef >= nStart )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
-    else if ( nDelta < 0 && rRef >= nStart + nDelta )
+    else if ( nDelta < 0 && bShrink && rRef >= nStart + nDelta )
         rRef = nStart + nDelta;             //TODO: limit ???
     if ( rRef < 0 )
     {
@@ -46,12 +46,12 @@ static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
 }
 
 template< typename R, typename S, typename U >
-static bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
+static bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask, bool bShrink = true )
 {
     bool bCut = false;
     if ( rRef >= nStart )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
-    else if ( nDelta < 0 && rRef >= nStart + nDelta )
+    else if ( nDelta < 0 && bShrink && rRef >= nStart + nDelta )
         rRef = nStart + nDelta - 1;         //TODO: limit ???
     if (rRef < 0)
     {
@@ -284,9 +284,14 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
             SCTAB nMaxTab = pDoc->GetTableCount() - 1;
             nMaxTab = sal::static_int_cast<SCTAB>(nMaxTab + nDz);      // adjust to new count
             bool bExp = (bExpand && IsExpand( theTab1, theTab2, nTab1, nDz ));
-            bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, nMaxTab );
-            bCut2 = lcl_MoveEnd( theTab2, nTab1, nDz, nMaxTab );
-            if ( bCut1 || bCut2 )
+            bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, nMaxTab, false /*bShrink*/);
+            bCut2 = lcl_MoveEnd( theTab2, nTab1, nDz, nMaxTab, false /*bShrink*/);
+            if ( theTab2 < theTab1 )
+            {
+                eRet = UR_INVALID;
+                theTab2 = theTab1;
+            }
+            else if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             if ( bExp )
             {
