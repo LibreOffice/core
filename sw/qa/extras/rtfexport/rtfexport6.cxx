@@ -178,7 +178,7 @@ DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat, "tdf108505_fieldCharFormat
 
 DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat2, "tdf108505_fieldCharFormat2.rtf")
 {
-    // not exported properly. Currrently xyz exports as run 6, red, italic.
+    // not exported properly. Currently xyz exports as run 6, red, italic.
     if (isExported())
         return;
 
