@@ -562,7 +562,11 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
     if (pCodeCompleteWnd->IsVisible() && CodeCompleteOptions::IsCodeCompleteOn())
     {
-        if (pCodeCompleteWnd->HandleKeyInput(rKEvt))
+        pCodeCompleteWnd->HandleKeyInput(rKEvt);
+        if( rKEvt.GetKeyCode().GetCode() == KEY_UP
+            || rKEvt.GetKeyCode().GetCode() == KEY_DOWN
+            || rKEvt.GetKeyCode().GetCode() == KEY_TAB
+            || rKEvt.GetKeyCode().GetCode() == KEY_POINT)
             return;
     }
 
