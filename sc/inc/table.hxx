@@ -180,12 +180,6 @@ private:
     SCROW           nRepeatStartY;
     SCROW           nRepeatEndY;
 
-    // last used col and row
-    bool            mbCellAreaDirty;
-    bool            mbCellAreaEmpty;
-    SCCOL           mnEndCol;
-    SCROW           mnEndRow;
-
     std::unique_ptr<ScTableProtection> pTabProtection;
 
     std::unique_ptr<ScCompressedArray<SCCOL, sal_uInt16>> mpColWidth;
@@ -617,8 +611,7 @@ public:
     void        InvalidateTableArea();
     void        InvalidatePageBreaks();
 
-    void        InvalidateCellArea() { mbCellAreaDirty = true; }
-    bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow );            // FALSE = empty
+    bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = empty
     bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow, bool bCalcHiddens = false) const;
     bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bCalcHiddens = false) const;
     bool        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
