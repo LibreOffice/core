@@ -59,4 +59,11 @@ inline bool EPaM::operator==(const EPaM& r) const
     return (nPara == r.nPara) && (nIndex == r.nIndex);
 }
 
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     EPaM const& aPaM)
+{
+    return stream << "EPaM(" << aPaM.nPara << ',' << aPaM.nIndex << ")";
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
