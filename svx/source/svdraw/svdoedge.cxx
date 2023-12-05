@@ -892,8 +892,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
     bool bUnt2=nAngle2==27000;
     bool bHor2=bLks2 || bRts2;
     bool bVer2=bObn2 || bUnt2;
-    bool bInfo=pInfo!=nullptr;
-    if (bInfo) {
+    if (pInfo) {
         pInfo->m_nAngle1=nAngle1;
         pInfo->m_nAngle2=nAngle2;
         pInfo->m_nObj1Lines=1;
@@ -935,7 +934,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
             nQ+=std::abs(aXP[3].X()-aXP[2].X())+std::abs(aXP[3].Y()-aXP[2].Y());
             *pnQuality=nQ;
         }
-        if (bInfo) {
+        if (pInfo) {
             pInfo->m_nObj1Lines=2;
             pInfo->m_nObj2Lines=2;
             if (bHor1) {
@@ -1274,7 +1273,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
     XPolygon aXP2(ImpCalcObjToCenter(aPt2,nAngle2,aBewareRect2,aMeeting));
     sal_uInt16 nXP1Cnt=aXP1.GetPointCount();
     sal_uInt16 nXP2Cnt=aXP2.GetPointCount();
-    if (bInfo) {
+    if (pInfo) {
         pInfo->m_nObj1Lines=nXP1Cnt; if (nXP1Cnt>1) pInfo->m_nObj1Lines--;
         pInfo->m_nObj2Lines=nXP2Cnt; if (nXP2Cnt>1) pInfo->m_nObj2Lines--;
     }
@@ -1290,7 +1289,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
     }
     if (bInsMeetingPoint) {
         aXP1.Insert(XPOLY_APPEND,aMeeting,PolyFlags::Normal);
-        if (bInfo) {
+        if (pInfo) {
             // Inserting a MeetingPoint adds 2 new lines,
             // either might become the center line.
             if (pInfo->m_nObj1Lines==pInfo->m_nObj2Lines) {
@@ -1306,7 +1305,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
                 }
             }
         }
-    } else if (bInfo && aEP1!=aEP2 && nXP1Cnt+nXP2Cnt>=4) {
+    } else if (pInfo && aEP1!=aEP2 && nXP1Cnt+nXP2Cnt>=4) {
         // By connecting both ends, another line is added, this becomes the center line.
         pInfo->m_nMiddleLine=nXP1Cnt-1;
     }
@@ -1318,7 +1317,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
     }
     sal_uInt16 nPointCount=aXP1.GetPointCount();
     char cForm;
-    if (bInfo || pnQuality!=nullptr) {
+    if (pInfo || pnQuality!=nullptr) {
         if (nPointCount==2) cForm='I';
         else if (nPointCount==3) cForm='L';
         else if (nPointCount==4) { // Z or U
@@ -1342,7 +1341,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
             } else cForm='4'; // else is case 3 with 5 lines
         } else cForm='?';
         // more shapes:
-        if (bInfo) {
+        if (pInfo) {
             if (cForm=='I' || cForm=='L' || cForm=='Z' || cForm=='U') {
                 pInfo->m_nObj1Lines=1;
                 pInfo->m_nObj2Lines=1;
@@ -1456,7 +1455,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         if (bOverflow || nQual==0xFFFFFFFF) nQual=0xFFFFFFFE;
         *pnQuality=nQual;
     }
-    if (bInfo) { // now apply line offsets to aXP1
+    if (pInfo) { // now apply line offsets to aXP1
         if (pInfo->m_nMiddleLine!=0xFFFF) {
             sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(SdrEdgeLineCode::MiddleLine,aXP1);
             if (pInfo->ImpIsHorzLine(SdrEdgeLineCode::MiddleLine,aXP1)) {
