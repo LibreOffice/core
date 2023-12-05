@@ -2335,9 +2335,13 @@ void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rD
                 || mXPagePropSet->getPropertyValue("IsDateTimeFixed") == false)))
     {
         if ((xShape = GetReferencedPlaceholderXShape(DateAndTime, ePageType)))
+        {
+            const auto iter = maPlaceholderShapeToIndexMap.find(xShape);
+            assert(iter != maPlaceholderShapeToIndexMap.end());
             rDML.WritePlaceholderReferenceShape(DateAndTime,
-                                                maPlaceholderShapeToIndexMap.find(xShape)->second,
+                                                iter->second,
                                                 ePageType, mXPagePropSet);
+        }
     }
 }
 
