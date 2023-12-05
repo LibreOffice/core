@@ -518,24 +518,16 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
     if (xStatusIndicator.is())
         xStatusIndicator->end();
 
-    bool bRet = false;
     if (nDocRetval)
-    {
         rError = nDocRetval;
-        if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW ||
-            nDocRetval == SCWARN_IMPORT_ROW_OVERFLOW ||
-            nDocRetval == SCWARN_IMPORT_COLUMN_OVERFLOW ||
-            nDocRetval == SCWARN_IMPORT_SHEET_OVERFLOW)
-            bRet = true;
-    }
     else if (nStylesRetval)
         rError = nStylesRetval;
     else if (nMetaRetval)
         rError = nMetaRetval;
     else if (nSettingsRetval)
         rError = nSettingsRetval;
-    else
-        bRet = true;
+
+    bool bRet = !rError.IsError();
 
     ::svx::DropUnusedNamedItems(xModel);
 
