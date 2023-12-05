@@ -683,7 +683,7 @@ fi
 if test -n "$with_android_ndk"; then
     eval ANDROID_NDK_DIR=$with_android_ndk
 
-    ANDROID_API_LEVEL=16
+    ANDROID_API_LEVEL=21
     if test -n "$with_android_api_level" ; then
         ANDROID_API_LEVEL="$with_android_api_level"
     fi
@@ -696,16 +696,10 @@ if test -n "$with_android_ndk"; then
     elif test $host_cpu = aarch64; then
         LLVM_TRIPLE=aarch64-linux-android
         ANDROID_SYSROOT_PLATFORM=$LLVM_TRIPLE
-        # minimum android version that supports aarch64
-        if test "$ANDROID_API_LEVEL" -lt "21" ; then
-            ANDROID_API_LEVEL=21
-        fi
         ANDROID_APP_ABI=arm64-v8a
     elif test $host_cpu = x86_64; then
         LLVM_TRIPLE=x86_64-linux-android
         ANDROID_SYSROOT_PLATFORM=$LLVM_TRIPLE
-        # minimum android version that supports x86_64
-        ANDROID_API_LEVEL=21
         ANDROID_APP_ABI=x86_64
     else
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
@@ -735,21 +729,11 @@ if test -n "$with_android_ndk"; then
     11.1.*|12.1.*|13.1.*|14.1.*|16.*|17.*|18.*|19.*|20.*|21.*|22.*)
         AC_MSG_ERROR([Building for Android requires NDK version >= 23.*])
         ;;
-    23.*)
+    23.*|24.*|25.*)
         ;;
     *)
-        # NDK 24 dropped support for API levels < 19
-        if test "$ANDROID_API_LEVEL" -lt "19"; then
-            ANDROID_API_LEVEL=19
-        fi
-        case $ANDROID_NDK_VERSION in
-        24.*|25.*)
-            ;;
-        *)
-            AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* to 25.* have been used successfully. Proceed at your own risk.])
-            add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* to 25.* have been used successfully. Proceed at your own risk."
-            ;;
-        esac
+        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* to 25.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 23.* to 25.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 

@@ -313,11 +313,6 @@ class LOKitTileProvider implements TileProvider {
     }
 
     public void printDocument() {
-        if (Build.VERSION.SDK_INT < 19) {
-            mContext.showCustomStatusMessage(mContext.getString(R.string.printing_not_supported));
-            return;
-        }
-
         String mInputFileName = (new File(mInputFile)).getName();
         String file = mInputFileName.substring(0,(mInputFileName.length()-3))+"pdf";
         String cacheFile = mContext.getExternalCacheDir().getAbsolutePath() + "/" + file;

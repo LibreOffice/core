@@ -1089,21 +1089,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     public void startPresentation(String tempPath) {
-        // pre-KitKat android doesn't have chrome-based WebView, which is needed to show svg slideshow
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Intent intent = new Intent(this, PresentationActivity.class);
-            intent.setData(Uri.parse(tempPath));
-            startActivity(intent);
-        } else {
-            // copy the svg file path to clipboard for the user to paste in a browser
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("temp svg file path", tempPath);
-            clipboard.setPrimaryClip(clip);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.alert_copy_svg_slide_show_to_clipboard)
-                    .setPositiveButton(R.string.alert_copy_svg_slide_show_to_clipboard_dismiss, null).show();
-        }
+        Intent intent = new Intent(this, PresentationActivity.class);
+        intent.setData(Uri.parse(tempPath));
+        startActivity(intent);
     }
 
     @Override

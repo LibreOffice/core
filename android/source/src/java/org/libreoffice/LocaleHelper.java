@@ -38,8 +38,7 @@ public class LocaleHelper {
         Resources res = context.getResources();
         Configuration cfg = res.getConfiguration();
         cfg.locale = locale;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            cfg.setLayoutDirection(locale);
+        cfg.setLayoutDirection(locale);
 
         res.updateConfiguration(cfg, res.getDisplayMetrics());
         return context;

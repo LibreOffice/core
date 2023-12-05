@@ -179,12 +179,10 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         editFAB = findViewById(R.id.editFAB);
         editFAB.setOnClickListener(this);
-        // allow creating new docs only when experimental editing is enabled and
-        // Intent.ACTION_CREATE_DOCUMENT (used in 'createNewFileDialog') is available (SDK version >= 19)
+        // allow creating new docs only when experimental editing is enabled
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         final boolean bEditingEnabled = BuildConfig.ALLOW_EDITING && preferences.getBoolean(LibreOfficeMainActivity.ENABLE_EXPERIMENTAL_PREFS_KEY, false);
-        final boolean bAllowCreatingDocs = bEditingEnabled && Build.VERSION.SDK_INT >= 19;
-        editFAB.setVisibility(bAllowCreatingDocs ? View.VISIBLE : View.INVISIBLE);
+        editFAB.setVisibility(bEditingEnabled ? View.VISIBLE : View.INVISIBLE);
 
         impressFAB = findViewById(R.id.newImpressFAB);
         impressFAB.setOnClickListener(this);
@@ -266,15 +264,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     }
 
     private void showSystemFilePickerAndOpenFile() {
-        Intent intent = new Intent();
-        if (Build.VERSION.SDK_INT >= 19) {
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-        }
-        else {
-            // Intent.ACTION_OPEN_DOCUMENT added in API level 19, but minSdkVersion is currently 16
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-        }
-
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_MIME_TYPES, SUPPORTED_MIME_TYPES);
 
@@ -363,13 +353,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
     private void addDocumentToRecents(Uri fileUri) {
         SharedPreferences prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
-        if (Build.VERSION.SDK_INT < 19) {
-            // ContentResolver#takePersistableUriPermission only available from SDK level 19 on
-            Log.i(LOGTAG, "Recently used files not supported, requires SDK version >= 19.");
-            // drop potential entries
-            prefs.edit().putString(RECENT_DOCUMENTS_KEY, "").apply();
-            return;
-        }
 
         // preserve permissions across device reboots,
         // s. https://developer.android.com/training/data-storage/shared/documents-files#persist-permissions
