@@ -1006,6 +1006,40 @@ CPPUNIT_TEST_FIXTURE(Test, testSvgExtensionsSupport)
     assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext/asvg:svgBlip"_ostr, "embed"_ostr, "rId3");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testtdf158044)
+{
+    loadAndSave("tdf158044.odt");
+    // write hard attributes to prevent multiple toggle attributes from vanishing
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
+                "BoldItalicCapsEmbossedStrike");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:b[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:bCs[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:i[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:iCs[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:strike[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:emboss[1]"_ostr);
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
+                "SmallcapsImprint");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:imprint[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:smallCaps[1]"_ostr);
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[2]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
+                "AllCaps");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[2]/w:rPr[1]/w:caps[1]"_ostr);
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r[2]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
+                "Hidden");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r[2]/w:rPr[1]/w:vanish[1]"_ostr);
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
+                "OutlineShadow");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:outline[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:shadow[1]"_ostr);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
