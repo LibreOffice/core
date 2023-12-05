@@ -23,6 +23,7 @@
 #include "edtspell.hxx"
 #include "eerdll2.hxx"
 #include <editeng/svxfont.hxx>
+#include <editeng/EPaM.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
@@ -51,29 +52,6 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
 
 class ContentNode;
 class EditDoc;
-
-struct EPaM
-{
-    sal_Int32  nPara;
-    sal_Int32  nIndex;
-
-    EPaM() : nPara(0), nIndex(0) {}
-    EPaM( sal_Int32 nP, sal_Int32 nI ) : nPara(nP), nIndex(nI) {}
-    EPaM( const EPaM& r) : nPara(r.nPara), nIndex(r.nIndex) {}
-    EPaM& operator = ( const EPaM& r )  { nPara = r.nPara; nIndex = r.nIndex; return *this; }
-    inline bool operator == ( const EPaM& r ) const;
-    inline bool operator < ( const EPaM& r ) const;
-};
-
-inline bool EPaM::operator < ( const EPaM& r ) const
-{
-    return ( nPara < r.nPara ) || ( ( nPara == r.nPara ) && nIndex < r.nIndex );
-}
-
-inline bool EPaM::operator == ( const EPaM& r ) const
-{
-    return ( nPara == r.nPara ) && ( nIndex == r.nIndex );
-}
 
 struct ScriptTypePosInfo
 {
