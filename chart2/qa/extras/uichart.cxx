@@ -388,6 +388,54 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf158223)
+{
+    loadFromURL(u"ods/tdf158223.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xIA->getCount());
+
+    for (sal_Int32 sheetIndex = 0; sheetIndex < 2; ++sheetIndex)
+    {
+        OUString sExpectedValuesX("$Tabelle" + OUString::number(sheetIndex + 1) + ".$A$2:$A$11");
+        OUString sExpectedValuesY("$Tabelle" + OUString::number(sheetIndex + 1) + ".$B$2:$B$11");
+        uno::Reference<chart2::XChartDocument> xChartDoc
+            = getChartDocFromSheet(sheetIndex, mxComponent);
+        Reference<chart2::data::XDataSequence> xValuesX
+            = getDataSequenceFromDocByRole(xChartDoc, u"values-x");
+        CPPUNIT_ASSERT_EQUAL(sExpectedValuesX, xValuesX->getSourceRangeRepresentation());
+        Reference<chart2::data::XDataSequence> xValuesY
+            = getDataSequenceFromDocByRole(xChartDoc, u"values-y");
+        CPPUNIT_ASSERT_EQUAL(sExpectedValuesY, xValuesY->getSourceRangeRepresentation());
+    }
+
+    // Remove last sheet
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(3)) } }));
+    dispatchCommand(mxComponent, ".uno:Remove", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xIA->getCount());
+
+    for (sal_Int32 sheetIndex = 0; sheetIndex < 2; ++sheetIndex)
+    {
+        OUString sExpectedValuesX("$Tabelle" + OUString::number(sheetIndex + 1) + ".$A$2:$A$11");
+        OUString sExpectedValuesY("$Tabelle" + OUString::number(sheetIndex + 1) + ".$B$2:$B$11");
+        uno::Reference<chart2::XChartDocument> xChartDoc
+            = getChartDocFromSheet(sheetIndex, mxComponent);
+        Reference<chart2::data::XDataSequence> xValuesX
+            = getDataSequenceFromDocByRole(xChartDoc, u"values-x");
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: $Tabelle2.$A$2:$A$11
+        // - Actual  : $Tabelle2.$A$2:$Tabelle1.$A$11
+        CPPUNIT_ASSERT_EQUAL(sExpectedValuesX, xValuesX->getSourceRangeRepresentation());
+        Reference<chart2::data::XDataSequence> xValuesY
+            = getDataSequenceFromDocByRole(xChartDoc, u"values-y");
+        CPPUNIT_ASSERT_EQUAL(sExpectedValuesY, xValuesY->getSourceRangeRepresentation());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
