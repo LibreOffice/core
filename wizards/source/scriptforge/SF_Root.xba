@@ -1022,7 +1022,7 @@ Try:
 	&apos;	SF_Dialog.CreateControl
 			.AddText(	Context := &quot;DUPLICATECONTROL&quot; _
 						, MsgId := &quot;A control with the same name exists already in the dialog &apos;%3&apos;.\n\n&quot; _
-									&amp; &quot;« %1 » = %2\n&quot; _
+									&amp; &quot;« %1 » = %2&quot; _
 						, Comment :=	&quot;SF_Dialog CreateControl\n&quot; _
 									&amp;	&quot;%1: An identifier\n&quot; _
 									&amp;	&quot;%2: A string\n&quot; _
@@ -1059,7 +1059,7 @@ Try:
 	&apos;	SF_Dataset.Update/Insert/Delete/GetValue
 			.AddText(	Context := &quot;NOCURRENTRECORD&quot; _
 						, MsgId := &quot;A database record could not be retrieved, inserted or updated by the database system.\n&quot; _
-									&amp; &quot;The current record could not be determined.\n&quot; _
+									&amp; &quot;The current record could not be determined.&quot; _
 						, Comment :=	&quot;SF_Dataset can&apos;t read field values or store field updates&quot; _
 					)
 	&apos;	SF_Dataset._SetColumnValue
