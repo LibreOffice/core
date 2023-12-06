@@ -1,3 +1,24 @@
+--- include/orcus/base64.hpp
++++ include/orcus/base64.hpp
+@@ -9,6 +9,7 @@
+ #define __ORCUS_BASE64_HPP__
+ 
+ #include "env.hpp"
++#include <stdint.h>
+ #include <vector>
+ #include <string>
+ 
+--- include/orcus/types.hpp
++++ include/orcus/types.hpp
+@@ -16,6 +16,7 @@
+ #pragma GCC diagnostic ignored "-Wshadow"
+ #endif
+ 
++#include <stdint.h>
+ #include <cstdlib>
+ #include <vector>
+ #include <string>
+
 --- src/liborcus/orcus_xlsx.cpp
 +++ src/liborcus/orcus_xlsx.cpp
 @@ -32,6 +32,7 @@
