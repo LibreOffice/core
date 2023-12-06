@@ -1035,7 +1035,11 @@ void AquaSalFrame::Flush()
     {
         mbForceFlush = false;
         mpGraphics->Flush();
-        [mpNSView display];
+        // Related: tdf#155266 skip redisplay of the view when forcing flush
+        // It appears that calling -[NSView display] overwhelms some Intel Macs
+        // so only flush the graphics and skip immediate redisplay of the view.
+        if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+            [mpNSView display];
     }
 }
 
@@ -1057,7 +1061,11 @@ void AquaSalFrame::Flush( const tools::Rectangle& rRect )
     {
         mbForceFlush = false;
         mpGraphics->Flush( rRect );
-        [mpNSView display];
+        // Related: tdf#155266 skip redisplay of the view when forcing flush
+        // It appears that calling -[NSView display] overwhelms some Intel Macs
+        // so only flush the graphics and skip immediate redisplay of the view.
+        if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+            [mpNSView display];
     }
 }
 
