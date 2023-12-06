@@ -25,7 +25,7 @@ def main():
     update_config = args.update_config
     filename_prefix = args.filename_prefix
     workdir = args.workdir
-    product_name = args.update_config
+    product_name = args.product_name
 
     if len(update_config) == 0:
         print("missing update config")
