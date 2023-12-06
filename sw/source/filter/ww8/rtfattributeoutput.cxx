@@ -1856,7 +1856,13 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField
                 msfilter::rtfutil::OutString(rFieldCmd, m_rExport.GetCurrentEncoding()));
         if (nMode & FieldFlags::CmdEnd)
         {
-            m_aRunText->append("}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {");
+            m_aRunText->append("}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT);
+            // The fldrslt contains its own full copy of character formatting,
+            // but if the result is empty (nMode & FieldFlags::End) or field export is condensed
+            // in any way (multiple flags) then avoid spamming an unnecessary plain character reset.
+            if (nMode == FieldFlags::CmdEnd)
+                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PLAIN);
+            m_aRunText->append(" {");
         }
         if (nMode & FieldFlags::Close)
         {
