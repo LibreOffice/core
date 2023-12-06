@@ -2359,7 +2359,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
 
             if (m_aStates.top().isFieldLocked())
                 singleChar(cFieldLock);
-            singleChar(cFieldSep);
+            singleChar(cFieldSep, true);
         }
         break;
         case Destination::FIELDRESULT:
@@ -2586,7 +2586,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             str = OUString::Concat(field) + " \"" + str.replaceAll("\"", "\\\"") + "\"";
             singleChar(cFieldStart);
             Mapper().utext(str.getStr(), str.getLength());
-            singleChar(cFieldSep);
+            singleChar(cFieldSep, true);
             // no result
             singleChar(cFieldEnd);
         }
