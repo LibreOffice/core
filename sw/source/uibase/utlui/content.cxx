@@ -2306,8 +2306,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                         m_xTreeView->set_image(*xChild, bHidden ? RID_BMP_HIDE : RID_BMP_NO_HIDE);
 
                     // remove any parent candidates equal to or higher than this node
-                    aParentCandidates.erase(std::remove_if(aParentCandidates.begin(), aParentCandidates.end(),
-                                                           std::not_fn(lambda)), aParentCandidates.end());
+                    std::erase_if(aParentCandidates, std::not_fn(lambda));
 
                     // add this node as a parent candidate for any following nodes at a higher region level
                     aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));
