@@ -2517,7 +2517,12 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     // DateFieldmark / ODF_FORMDATE is not a field...
                     if (pFieldmark->GetFieldname() != ODF_FORMDATE)
                     {
-                        OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::CmdEnd );
+                        FieldFlags nFlags = FieldFlags::CmdEnd;
+                        // send hint that fldrslt is empty, to avoid spamming RTF CharProp reset.
+                        // ::End does nothing when sending rFieldCmd=OUString(), so safe to do.
+                        if (pFieldmark->GetContent().isEmpty())
+                            nFlags |= FieldFlags::End;
+                        OutputField(nullptr, lcl_getFieldId(pFieldmark), OUString(), nFlags);
 
                         if (pFieldmark->GetFieldname() == ODF_UNHANDLED)
                         {
