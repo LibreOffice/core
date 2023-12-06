@@ -827,7 +827,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
             locale = getenv( "LANG" );
 
         if( locale.isEmpty() )
-            locale = "C";
+            locale = "C"_ostr;
     }
 
     /* return the locale */
