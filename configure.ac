@@ -14656,7 +14656,10 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
         };
         S const s;
 
-        struct S1 { consteval S1(int) {} };
+        struct S1 {
+             int a;
+             consteval S1(int n): a(n) {}
+        };
         struct S2 {
             S1 x;
             S2(): x(0) {}
