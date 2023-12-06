@@ -709,6 +709,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverRTFExport)
     CPPUNIT_ASSERT(!pFly->GetAttrSet().GetWrapInfluenceOnObjPos().GetAllowOverlap());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf158409, "tdf158409.rtf")
+{
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, "DocTitle");
+    CPPUNIT_ASSERT_EQUAL(8.0, getProperty<double>(xRun, "CharHeight"));
+
+    xRun = getRun(getParagraph(2), 1, "DocTitle");
+    CPPUNIT_ASSERT_EQUAL(8.0, getProperty<double>(xRun, "CharHeight"));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
