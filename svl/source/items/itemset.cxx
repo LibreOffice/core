@@ -169,6 +169,39 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, WhichRangesContainer&& ranges, SfxPo
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
+/** special constructor for SfxItemSetFixed copy constructor */
+SfxItemSet::SfxItemSet( const SfxItemSet& rOther,
+                        SfxPoolItem const ** ppMyItems )
+    : m_pPool(rOther.m_pPool)
+    , m_pParent(rOther.m_pParent)
+    , m_nCount(rOther.m_nCount)
+    , m_nTotalCount(rOther.m_nTotalCount)
+    , m_bItemsFixed(true)
+    , m_ppItems(ppMyItems)
+    , m_pWhichRanges(rOther.m_pWhichRanges)
+    , m_aCallback(rOther.m_aCallback)
+{
+#ifdef DBG_UTIL
+    nAllocatedSfxItemSetCount++;
+    nUsedSfxItemSetCount++;
+#endif
+    assert(ppMyItems);
+    assert(m_pWhichRanges.size() > 0);
+    assert(svl::detail::validRanges2(m_pWhichRanges));
+
+    if (0 == rOther.Count())
+        return;
+
+    // Copy attributes
+    SfxPoolItem const** ppDst(m_ppItems);
+
+    for (const auto& rSource : rOther)
+    {
+        *ppDst = implCreateItemEntry(*GetPool(), rSource, 0, false);
+        ppDst++;
+    }
+}
+
 SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     : m_pPool(&pool)
     , m_pParent(nullptr)

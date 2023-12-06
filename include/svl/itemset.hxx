@@ -120,6 +120,8 @@ protected:
     SfxItemSet( SfxItemPool&, SfxAllItemSetFlag );
     /** special constructor for SfxItemSetFixed */
     SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems, sal_uInt16 nTotalCount );
+    /** special constructor for SfxItemSetFixed copy constructor */
+    SfxItemSet( const SfxItemSet& rOther, SfxPoolItem const ** ppMyItems );
 
 public:
     SfxItemSet( const SfxItemSet& );
@@ -144,6 +146,8 @@ public:
     // Get number of items
     sal_uInt16                  Count() const { return m_nCount; }
     sal_uInt16                  TotalCount() const { return m_nTotalCount; }
+
+    bool IsItemsFixed() const { return m_bItemsFixed; }
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
     template<class T>
@@ -333,17 +337,27 @@ static constexpr sal_uInt16 CountRanges1()
     return nCapacity;
 }}
 
+// Split out the array because we need it to be initialised before we call
+// the SfxItemSet constructor
+template<sal_uInt16... WIDs>
+struct SfxItemSetFixedStorage
+{
+    static constexpr sal_uInt16 NITEMS = svl::detail::CountRanges1<WIDs...>();
+    const SfxPoolItem* m_aItems[NITEMS] {};
+};
+
 // Allocate the items array inside the object, to reduce allocation cost.
 //
 template<sal_uInt16... WIDs>
-class SfxItemSetFixed : public SfxItemSet
+class SfxItemSetFixed : public SfxItemSetFixedStorage<WIDs...>, public SfxItemSet
 {
 public:
     SfxItemSetFixed( SfxItemPool& rPool)
-        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<WIDs...>{}), m_aItems, NITEMS) {}
-private:
-    static constexpr sal_uInt16 NITEMS = svl::detail::CountRanges1<WIDs...>();
-    const SfxPoolItem* m_aItems[NITEMS] = {};
+        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<WIDs...>{}),
+                     SfxItemSetFixedStorage<WIDs...>::m_aItems,
+                     SfxItemSetFixedStorage<WIDs...>::NITEMS) {}
+    SfxItemSetFixed( const SfxItemSetFixed<WIDs...>& rOther )
+        : SfxItemSet(rOther, SfxItemSetFixedStorage<WIDs...>::m_aItems) {}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
