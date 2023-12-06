@@ -287,7 +287,9 @@ void ZipPackage::parseManifest()
                                     const sal_Int32 nStartKeyAlg = xml::crypto::DigestID::SHA256;
                                     pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
 
-                                    if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
+                                    if (!m_bHasEncryptedEntries
+                                        && (pStream->getName() == "content.xml"
+                                            || pStream->getName() == "encrypted-package"))
                                     {
                                         m_bHasEncryptedEntries = true;
                                         m_nChecksumDigestID = nDigestAlg;
@@ -336,7 +338,9 @@ void ZipPackage::parseManifest()
                                     pStream->SetToBeCompressed ( true );
                                     pStream->SetToBeEncrypted ( true );
                                     pStream->SetIsEncrypted ( true );
-                                    if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
+                                    if (!m_bHasEncryptedEntries
+                                        && (pStream->getName() == "content.xml"
+                                            || pStream->getName() == "encrypted-package"))
                                     {
                                         m_bHasEncryptedEntries = true;
                                         m_nStartKeyGenerationID = nStartKeyAlg;

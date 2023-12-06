@@ -62,9 +62,11 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -374,6 +376,8 @@ public:
     bool m_bInCheckIn:1;
     bool m_bDisableFileSync = false;
     bool m_bNotifyWhenEditable = false;
+    /// if true, xStorage is an inner package and not directly from xStream
+    bool m_bODFWholesomeEncryption = false;
 
     OUString m_aName;
     OUString m_aLogicName;
@@ -410,6 +414,9 @@ public:
     uno::Reference<io::XStream> xStream;
     uno::Reference<io::XStream> m_xLockingStream;
     uno::Reference<task::XInteractionHandler> xInteraction;
+    uno::Reference<io::XStream> m_xODFDecryptedInnerPackageStream;
+    uno::Reference<embed::XStorage> m_xODFEncryptedOuterStorage;
+    uno::Reference<embed::XStorage> m_xODFDecryptedInnerZipStorage;
 
     ErrCodeMsg  nLastStorageError;
 
@@ -670,6 +677,7 @@ bool SfxMedium::IsSkipImages() const
 
 SvStream* SfxMedium::GetInStream()
 {
+    //assert(!pImpl->xStorage); // either SvStream or Storage
     if ( pImpl->m_pInStream )
         return pImpl->m_pInStream.get();
 
@@ -740,6 +748,7 @@ void SfxMedium::CloseInStream_Impl(bool bInDestruction)
 
 SvStream* SfxMedium::GetOutStream()
 {
+    assert(!pImpl->xStorage); // either SvStream or Storage
     if ( !pImpl->m_pOutStream )
     {
         // Create a temp. file if there is none because we always
@@ -953,8 +962,11 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 
     // if the medium was constructed with a Storage: use this one, not a temp. storage
     // if a temporary storage already exists: use it
-    if ( pImpl->xStorage.is() && ( pImpl->m_aLogicName.isEmpty() || pImpl->pTempFile ) )
+    if (pImpl->xStorage.is()
+        && (pImpl->m_bODFWholesomeEncryption || pImpl->m_aLogicName.isEmpty() || pImpl->pTempFile))
+    {
         return pImpl->xStorage;
+    }
 
     // if necessary close stream that was used for reading
     if ( pImpl->m_pInStream && !pImpl->m_pInStream->IsWritable() )
@@ -971,15 +983,15 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 }
 
 
-void SfxMedium::SetEncryptionDataToStorage_Impl()
+bool SfxMedium::SetEncryptionDataToStorage_Impl()
 {
     // in case media-descriptor contains password it should be used on opening
     if ( !pImpl->xStorage.is() || !pImpl->m_pSet )
-        return;
+        return false;
 
     uno::Sequence< beans::NamedValue > aEncryptionData;
     if ( !GetEncryptionData_Impl( pImpl->m_pSet.get(), aEncryptionData ) )
-        return;
+        return false;
 
     // replace the password with encryption data
     pImpl->m_pSet->ClearItem( SID_PASSWORD );
@@ -992,9 +1004,10 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
     catch( const uno::Exception& )
     {
         SAL_WARN( "sfx.doc", "It must be possible to set a common password for the storage" );
-        // TODO/LATER: set the error code in case of problem
-        // SetError(ERRCODE_IO_GENERAL);
+        SetError(ERRCODE_IO_GENERAL);
+        return false;
     }
+    return true;
 }
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
@@ -1699,12 +1712,54 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
 #endif
 }
 
+// this either returns non-null or throws exception
+uno::Reference<embed::XStorage>
+SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const xStorage)
+{
+    uno::Reference<embed::XStorage> xRet;
+    if (xStorage->hasByName("encrypted-package"))
+    {
+        uno::Reference<io::XStream> const
+            xDecryptedInnerPackage = xStorage->openStreamElement(
+                "encrypted-package",
+                embed::ElementModes::READ | embed::ElementModes::NOCREATE);
+        assert(xDecryptedInnerPackage.is()); // just for testing? not if wrong pwd
+        // need a seekable stream => copy
+        Reference<uno::XComponentContext> const xContext(::comphelper::getProcessComponentContext());
+        uno::Reference<io::XStream> const xDecryptedInnerPackageStream(
+            xContext->getServiceManager()->createInstanceWithContext(
+                "com.sun.star.comp.MemoryStream", xContext),
+            UNO_QUERY_THROW);
+        comphelper::OStorageHelper::CopyInputToOutput(xDecryptedInnerPackage->getInputStream(), xDecryptedInnerPackageStream->getOutputStream());
+        xDecryptedInnerPackageStream->getOutputStream()->closeOutput();
+#if 0
+        // debug: dump to temp file
+        uno::Reference<io::XTempFile> const xTempFile(io::TempFile::create(xContext), uno::UNO_SET_THROW);
+        xTempFile->setRemoveFile(false);
+        comphelper::OStorageHelper::CopyInputToOutput(xDecryptedInnerPackageStream->getInputStream(), xTempFile->getOutputStream());
+        xTempFile->getOutputStream()->closeOutput();
+        SAL_DE BUG("AAA tempfile " << xTempFile->getResourceName());
+        uno::Reference<io::XSeekable>(xDecryptedInnerPackageStream, uno::UNO_QUERY_THROW)->seek(0);
+#endif
+        // create storage, if this succeeds assume password is correct
+        xRet = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+            PACKAGE_STORAGE_FORMAT_STRING, xDecryptedInnerPackageStream,
+            embed::ElementModes::READWRITE, xContext, false);
+        assert(xRet.is());
+        pImpl->m_bODFWholesomeEncryption = true;
+        pImpl->m_xODFDecryptedInnerPackageStream = xDecryptedInnerPackageStream;
+        pImpl->m_xODFEncryptedOuterStorage = xStorage;
+        pImpl->xStorage = xRet;
+    }
+    return xRet;
+}
 
 uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
 {
     if ( pImpl->xStorage.is() || pImpl->m_bTriedStorage )
         return pImpl->xStorage;
 
+    assert(!pImpl->m_pOutStream /*&& !pImpl->m_pInStream*/); // either SvStream or Storage
     uno::Sequence< uno::Any > aArgs( 2 );
     auto pArgs = aArgs.getArray();
 
@@ -1797,10 +1852,26 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
 
     pImpl->m_bTriedStorage = true;
 
+    if (pImpl->xStorage.is())
+    {
+        pImpl->m_bODFWholesomeEncryption = false;
+        if (SetEncryptionDataToStorage_Impl())
+        {
+            try
+            {
+                TryEncryptedInnerPackage(pImpl->xStorage);
+            }
+            catch (Exception const&)
+            {
+                TOOLS_WARN_EXCEPTION("sfx.doc", "exception from TryEncryptedInnerPackage: ");
+                SetError(ERRCODE_IO_GENERAL);
+            }
+        }
+    }
+
     // TODO/LATER: Get versionlist on demand
     if ( pImpl->xStorage.is() )
     {
-        SetEncryptionDataToStorage_Impl();
         GetVersionList();
     }
 
@@ -1867,6 +1938,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
     if ( bResetStorage )
     {
         pImpl->xStorage.clear();
+        pImpl->m_xODFDecryptedInnerPackageStream.clear();
+        pImpl->m_xODFEncryptedOuterStorage.clear();
         if ( pImpl->m_pInStream )
             pImpl->m_pInStream->Seek( 0 );
     }
@@ -1875,7 +1948,39 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
     return pImpl->xStorage;
 }
 
+uno::Reference<embed::XStorage> SfxMedium::GetScriptingStorageToSign_Impl()
+{
+    // this was set when it was initially loaded
+    if (pImpl->m_bODFWholesomeEncryption)
+    {
+        // (partial) scripting signature can only be in inner storage!
+        // Note: a "PackageFormat" storage like pImpl->xStorage doesn't work
+        // (even if it's not encrypted) because it hides the "META-INF" dir.
+        // This "ZipFormat" storage is used only read-only; a writable one is
+        // created manually in SignContents_Impl().
+        if (!pImpl->m_xODFDecryptedInnerZipStorage.is())
+        {
+            GetStorage(false);
+            // don't care about xStorage here because Zip is readonly
+            SAL_WARN_IF(!pImpl->m_xODFDecryptedInnerPackageStream.is(), "sfx.doc", "no inner package stream?");
+            if (pImpl->m_xODFDecryptedInnerPackageStream.is())
+            {
+                pImpl->m_xODFDecryptedInnerZipStorage =
+                    ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+                        ZIP_STORAGE_FORMAT_STRING,
+                        pImpl->m_xODFDecryptedInnerPackageStream->getInputStream());
+            }
+        }
+        return pImpl->m_xODFDecryptedInnerZipStorage;
+    }
+    else
+    {
+        return GetZipStorageToSign_Impl(true);
+    }
+}
 
+// note: currently nobody who calls this with "false" writes into an ODF
+// storage that is returned here, that is only for OOXML
 uno::Reference< embed::XStorage > const & SfxMedium::GetZipStorageToSign_Impl( bool bReadOnly )
 {
     if ( !GetErrorIgnoreWarning() && !pImpl->m_xZipStorage.is() )
@@ -1919,6 +2024,7 @@ void SfxMedium::CloseZipStorage_Impl()
 
         pImpl->m_xZipStorage.clear();
     }
+    pImpl->m_xODFDecryptedInnerZipStorage.clear();
 }
 
 void SfxMedium::CloseStorage()
@@ -1938,6 +2044,9 @@ void SfxMedium::CloseStorage()
         }
 
         pImpl->xStorage.clear();
+        pImpl->m_xODFDecryptedInnerPackageStream.clear();
+//        pImpl->m_xODFDecryptedInnerZipStorage.clear();
+        pImpl->m_xODFEncryptedOuterStorage.clear();
         pImpl->bStorageBasedOnInStream = false;
     }
 
@@ -3632,12 +3741,17 @@ void SfxMedium::SetLoadTargetFrame(SfxFrame* pFrame )
     pImpl->wLoadTargetFrame = pFrame;
 }
 
-
-void SfxMedium::SetStorage_Impl( const uno::Reference < embed::XStorage >& rStor )
+void SfxMedium::SetStorage_Impl(const uno::Reference<embed::XStorage>& xStorage)
 {
-    pImpl->xStorage = rStor;
+    pImpl->xStorage = xStorage;
+    pImpl->m_bODFWholesomeEncryption = false;
 }
 
+void SfxMedium::SetInnerStorage_Impl(const uno::Reference<embed::XStorage>& xStorage)
+{
+    pImpl->xStorage = xStorage;
+    pImpl->m_bODFWholesomeEncryption = true;
+}
 
 SfxItemSet& SfxMedium::GetItemSet() const
 {
@@ -4173,7 +4287,18 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
         bool bODF = GetFilter()->IsOwnFormat();
         try
         {
-            xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
+            if (pImpl->m_bODFWholesomeEncryption && bSignScriptingContent)
+            {
+                assert(pImpl->xStorage); // GetStorage was called above
+                assert(pImpl->m_xODFDecryptedInnerPackageStream);
+                xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                    ZIP_STORAGE_FORMAT_STRING, pImpl->m_xODFDecryptedInnerPackageStream);
+            }
+            else
+            {
+                xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                    ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
+            }
         }
         catch (const io::IOException&)
         {
@@ -4205,7 +4330,11 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                                                 embed::ElementModes::READWRITE ),
                 uno::UNO_SET_THROW );
 
-            if ( xSigner->signScriptingContent( GetZipStorageToSign_Impl(), xStream ) )
+            // note: the storage passed here must be independent from the
+            // xWriteableZipStor because a writable storage can't have 2
+            // instances of sub-storage for the same directory open, but with
+            // independent storages it somehow works
+            if (xSigner->signScriptingContent(GetScriptingStorageToSign_Impl(), xStream))
             {
                 // remove the document signature if any
                 OUString aDocSigName = xSigner->getDocumentContentSignatureDefaultStreamName();
@@ -4217,6 +4346,20 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                 xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
                 xTransact->commit();
 
+                if (pImpl->m_bODFWholesomeEncryption)
+                {   // manually copy the inner package to the outer one
+                    uno::Reference<io::XSeekable>(pImpl->m_xODFDecryptedInnerPackageStream, uno::UNO_QUERY_THROW)->seek(0);
+                    uno::Reference<io::XStream> const xEncryptedPackage =
+                        pImpl->m_xODFEncryptedOuterStorage->openStreamElement(
+                            "encrypted-package",
+                            embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE);
+                    comphelper::OStorageHelper::CopyInputToOutput(pImpl->m_xODFDecryptedInnerPackageStream->getInputStream(), xEncryptedPackage->getOutputStream());
+                    xTransact.set(pImpl->m_xODFEncryptedOuterStorage, uno::UNO_QUERY_THROW);
+                    xTransact->commit(); // Commit() below won't do this
+                }
+
+                assert(!pImpl->xStorage.is() // ensure this doesn't overwrite
+                    || !uno::Reference<util::XModifiable>(pImpl->xStorage, uno::UNO_QUERY_THROW)->isModified());
                 // the temporary file has been written, commit it to the original file
                 Commit();
                 bChanges = true;

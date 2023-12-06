@@ -115,16 +115,19 @@ namespace {
 class SfxDocPasswordVerifier : public ::comphelper::IDocPasswordVerifier
 {
 public:
-    explicit     SfxDocPasswordVerifier( const Reference< embed::XStorage >& rxStorage ) :
-                            mxStorage( rxStorage ) {}
+    explicit SfxDocPasswordVerifier(SfxMedium& rMedium)
+        : m_rMedium(rMedium)
+        , mxStorage(rMedium.GetStorage())
+    {
+    }
 
     virtual ::comphelper::DocPasswordVerifierResult
                         verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData ) override;
     virtual ::comphelper::DocPasswordVerifierResult
                         verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData ) override;
 
-
 private:
+    SfxMedium & m_rMedium;
     Reference< embed::XStorage > mxStorage;
 };
 
@@ -147,9 +150,14 @@ private:
         // and immediately closed
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( mxStorage, rEncryptionData );
 
-        mxStorage->openStreamElement(
+        // for new ODF encryption, try to extract the encrypted inner package
+        // (it will become the SfxObjectShell storage)
+        if (!m_rMedium.TryEncryptedInnerPackage(mxStorage))
+        {   // ... old ODF encryption:
+            mxStorage->openStreamElement(
                 "content.xml",
                 embed::ElementModes::READ | embed::ElementModes::NOCREATE );
+        }
 
         // no exception -> success
         eResult = ::comphelper::DocPasswordVerifierResult::OK;
@@ -247,7 +255,7 @@ ErrCode CheckPasswd_Impl
                                                      { "ForSalvage", css::uno::Any(true) } });
                         }
 
-                        SfxDocPasswordVerifier aVerifier( xStorage );
+                        SfxDocPasswordVerifier aVerifier(*pFile);
                         aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
                             aVerifier, aEncryptionData, aPassword, xInteractionHandler, pFile->GetOrigURL(), comphelper::DocPasswordRequestType::Standard );
 

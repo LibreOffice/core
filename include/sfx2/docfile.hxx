@@ -70,7 +70,7 @@ class SFX2_DLLPUBLIC SfxMedium final : public SvRefBase
     SAL_DLLPRIVATE void CloseOutStream_Impl();
     SAL_DLLPRIVATE void CloseStreams_Impl(bool bInDestruction = false);
 
-    SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
+    SAL_DLLPRIVATE bool SetEncryptionDataToStorage_Impl();
 
 public:
 
@@ -218,10 +218,14 @@ public:
     SAL_DLLPRIVATE OUString const & GetBackup_Impl();
 
     SAL_DLLPRIVATE css::uno::Reference< css::embed::XStorage > const & GetZipStorageToSign_Impl( bool bReadOnly = true );
+    SAL_DLLPRIVATE css::uno::Reference<css::embed::XStorage> GetScriptingStorageToSign_Impl();
     SAL_DLLPRIVATE void CloseZipStorage_Impl();
 
     // the storage that will be returned by the medium on GetStorage request
     SAL_DLLPRIVATE void SetStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xNewStorage );
+    SAL_DLLPRIVATE void SetInnerStorage_Impl(const css::uno::Reference<css::embed::XStorage>& xStorage);
+    SAL_DLLPRIVATE css::uno::Reference<css::embed::XStorage>
+        TryEncryptedInnerPackage(css::uno::Reference<css::embed::XStorage> xStorage);
 
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
     SAL_DLLPRIVATE void AddVersion_Impl( css::util::RevisionTag& rVersion );

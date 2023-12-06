@@ -1150,6 +1150,9 @@ bool SfxObjectShell::SaveTo_Impl
     // tdf#41063, tdf#135244: prevent jumping to cursor at any temporary modification
     auto aViewGuard(LockAllViews());
 
+    uno::Reference<uno::XComponentContext> const xContext(
+        ::comphelper::getProcessComponentContext());
+
     std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
     if ( !pFilter )
     {
@@ -1173,6 +1176,12 @@ bool SfxObjectShell::SaveTo_Impl
         return false;
     }
 
+    SvtSaveOptions::ODFSaneDefaultVersion nVersion(SvtSaveOptions::ODFSVER_LATEST_EXTENDED);
+    if (bOwnTarget && !utl::ConfigManager::IsFuzzing())
+    {
+        nVersion = GetODFSaneDefaultVersion();
+    }
+
     bool bNeedsDisconnectionOnFail = false;
 
     bool bStoreToSameLocation = false;
@@ -1193,7 +1202,6 @@ bool SfxObjectShell::SaveTo_Impl
         if ( bTryToPreserveScriptSignature )
         {
             // check that the storage format stays the same
-            SvtSaveOptions::ODFSaneDefaultVersion nVersion = GetODFSaneDefaultVersion();
 
             OUString aODFVersion;
             try
@@ -1220,6 +1228,33 @@ bool SfxObjectShell::SaveTo_Impl
         }
     }
 
+    uno::Reference<io::XStream> xODFDecryptedInnerPackageStream;
+    uno::Reference<embed::XStorage> xODFDecryptedInnerPackage;
+    uno::Sequence<beans::NamedValue> aEncryptionData;
+    if (GetEncryptionData_Impl(&rMedium.GetItemSet(), aEncryptionData))
+    {
+        assert(aEncryptionData.getLength() != 0);
+        if (bOwnTarget && nVersion == SvtSaveOptions::ODFSVER_LATEST_EXTENDED
+            && officecfg::Office::Common::Misc::ExperimentalMode::get())
+        {
+            // when embedded objects are stored here, it should be called from
+            // this function for the root document and encryption data was cleared
+            assert(GetCreateMode() != SfxObjectCreateMode::EMBEDDED);
+            // clear now to store inner package (+ embedded objects) unencrypted
+            rMedium.GetItemSet().ClearItem(SID_ENCRYPTIONDATA);
+            rMedium.GetItemSet().ClearItem(SID_PASSWORD);
+            xODFDecryptedInnerPackageStream.set(
+                xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.comp.MemoryStream", xContext),
+                UNO_QUERY_THROW);
+            xODFDecryptedInnerPackage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                PACKAGE_STORAGE_FORMAT_STRING, xODFDecryptedInnerPackageStream,
+                css::embed::ElementModes::WRITE, xContext, false);
+            assert(xODFDecryptedInnerPackage.is());
+        }
+    }
+
+    bool isStreamAndInputStreamCleared(false);
     // use UCB for case sensitive/insensitive file name comparison
     if ( !pMedium->GetName().equalsIgnoreAsciiCase("private:stream")
       && !rMedium.GetName().equalsIgnoreAsciiCase("private:stream")
@@ -1280,6 +1315,7 @@ bool SfxObjectShell::SaveTo_Impl
               || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
             {
                 pMedium->CloseAndRelease();
+                isStreamAndInputStreamCleared = true;
 
                 // TODO/LATER: for now the medium must be closed since it can already contain streams from old medium
                 //             in future those streams should not be copied in case a valid target url is provided,
@@ -1287,7 +1323,15 @@ bool SfxObjectShell::SaveTo_Impl
                 //             reachable.
                 rMedium.CloseAndRelease();
                 rMedium.SetHasEmbeddedObjects(GetEmbeddedObjectContainer().HasEmbeddedObjects());
-                rMedium.GetOutputStorage();
+                if (xODFDecryptedInnerPackageStream.is())
+                {
+                    assert(!rMedium.GetItemSet().GetItem(SID_STREAM));
+                    rMedium.SetInnerStorage_Impl(xODFDecryptedInnerPackage);
+                }
+                else
+                {
+                    rMedium.GetOutputStorage();
+                }
                 rMedium.SetHasEmbeddedObjects(false);
             }
         }
@@ -1299,6 +1343,7 @@ bool SfxObjectShell::SaveTo_Impl
 
             pMedium->CloseAndRelease();
             rMedium.CloseAndRelease();
+            isStreamAndInputStreamCleared = true;
             rMedium.CreateTempFileNoCopy();
             rMedium.GetOutStream();
         }
@@ -1310,7 +1355,16 @@ bool SfxObjectShell::SaveTo_Impl
 
             pMedium->CloseAndRelease();
             rMedium.CloseAndRelease();
-            rMedium.GetOutputStorage();
+            isStreamAndInputStreamCleared = true;
+            if (xODFDecryptedInnerPackageStream.is())
+            {
+                assert(!rMedium.GetItemSet().GetItem(SID_STREAM));
+                rMedium.SetInnerStorage_Impl(xODFDecryptedInnerPackage);
+            }
+            else
+            {
+                rMedium.GetOutputStorage();
+            }
         }
         else // means if ( bStorageBasedSource && !bStorageBasedTarget )
         {
@@ -1325,6 +1379,7 @@ bool SfxObjectShell::SaveTo_Impl
             {
                 pMedium->CloseAndRelease();
                 rMedium.CloseAndRelease();
+                isStreamAndInputStreamCleared = true;
                 rMedium.CreateTempFileNoCopy();
                 rMedium.GetOutStream();
             }
@@ -1339,10 +1394,20 @@ bool SfxObjectShell::SaveTo_Impl
         // TODO/LATER: let the medium be prepared for alien formats as well
 
         rMedium.CloseAndRelease();
+        isStreamAndInputStreamCleared = true;
         if ( bStorageBasedTarget )
         {
             rMedium.SetHasEmbeddedObjects(GetEmbeddedObjectContainer().HasEmbeddedObjects());
-            rMedium.GetOutputStorage();
+            if (xODFDecryptedInnerPackageStream.is())
+            {
+                assert(!rMedium.GetItemSet().GetItem(SID_STREAM));
+                // this should set only xStorage, all of the streams remain null
+                rMedium.SetInnerStorage_Impl(xODFDecryptedInnerPackage);
+            }
+            else
+            {
+                rMedium.GetOutputStorage();
+            }
             rMedium.SetHasEmbeddedObjects(false);
         }
     }
@@ -1353,6 +1418,9 @@ bool SfxObjectShell::SaveTo_Impl
         SAL_WARN("sfx.doc", "SfxObjectShell::SaveTo_Impl: very early error return");
         return false;
     }
+
+    // these have been cleared on all paths that don't take above error return
+    assert(isStreamAndInputStreamCleared); (void) isStreamAndInputStreamCleared;
 
     rMedium.LockOrigFileOnDemand( false, false );
 
@@ -1416,19 +1484,26 @@ bool SfxObjectShell::SaveTo_Impl
         }
 
         // transfer password from the parameters to the storage
-        uno::Sequence< beans::NamedValue > aEncryptionData;
         bool bPasswdProvided = false;
-        if ( GetEncryptionData_Impl( &rMedSet, aEncryptionData ) )
+        if (aEncryptionData.getLength() != 0)
         {
             bPasswdProvided = true;
-            try {
-                ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
+            if (xODFDecryptedInnerPackageStream.is())
+            {
                 bOk = true;
             }
-            catch( uno::Exception& )
+            else
             {
-                SAL_WARN( "sfx.doc", "Setting of common encryption key failed!" );
-                SetError(ERRCODE_IO_GENERAL);
+                // TODO: GetStorage() already did that?
+                try {
+                    ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
+                    bOk = true;
+                }
+                catch( uno::Exception& )
+                {
+                    SAL_WARN( "sfx.doc", "Setting of common encryption key failed!" );
+                    SetError(ERRCODE_IO_GENERAL);
+                }
             }
         }
         else
@@ -1576,6 +1651,13 @@ bool SfxObjectShell::SaveTo_Impl
 
     if ( bOk )
     {
+        uno::Any mediaType;
+        if (xODFDecryptedInnerPackageStream.is())
+        {   // before the signature copy closes it
+            mediaType = uno::Reference<beans::XPropertySet>(xODFDecryptedInnerPackage,
+                uno::UNO_QUERY_THROW)->getPropertyValue("MediaType");
+        }
+
         // if ODF version of oasis format changes on saving the signature should not be preserved
         if ( bTryToPreserveScriptSignature && bNoPreserveForOasis )
             bTryToPreserveScriptSignature = ( SotStorage::GetVersion( rMedium.GetStorage() ) == SOFFICE_FILEFORMAT_60 );
@@ -1610,14 +1692,26 @@ bool SfxObjectShell::SaveTo_Impl
                     rMedium.StorageCommit_Impl();
                     rMedium.CloseStorage();
 
-                    uno::Reference< embed::XStorage > xReadOrig = pMedium->GetZipStorageToSign_Impl();
+                    // signature must use Zip storage, not Package storage
+                    uno::Reference<embed::XStorage> const xReadOrig(
+                            pMedium->GetScriptingStorageToSign_Impl());
+                    uno::Reference<embed::XStorage> xTarget;
+                    if (xODFDecryptedInnerPackageStream.is())
+                    {
+                        xTarget = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                            ZIP_STORAGE_FORMAT_STRING, xODFDecryptedInnerPackageStream);
+                    }
+                    else
+                    {
+                        xTarget = rMedium.GetZipStorageToSign_Impl(false);
+                    }
+
                     if ( !xReadOrig.is() )
                         throw uno::RuntimeException();
                     uno::Reference< embed::XStorage > xMetaInf = xReadOrig->openStorageElement(
                                 "META-INF",
                                 embed::ElementModes::READ );
 
-                    uno::Reference< embed::XStorage > xTarget = rMedium.GetZipStorageToSign_Impl( false );
                     if ( !xTarget.is() )
                         throw uno::RuntimeException();
                     uno::Reference< embed::XStorage > xTargetMetaInf = xTarget->openStorageElement(
@@ -1648,6 +1742,12 @@ bool SfxObjectShell::SaveTo_Impl
                             xTransact.set( xTarget, uno::UNO_QUERY );
                             if ( xTransact.is() )
                                 xTransact->commit();
+                            if (xODFDecryptedInnerPackageStream.is())
+                            {   // recreate, to have it with copied sig
+                                xODFDecryptedInnerPackage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                                    PACKAGE_STORAGE_FORMAT_STRING, xODFDecryptedInnerPackageStream,
+                                    css::embed::ElementModes::WRITE, xContext, false);
+                            }
                         }
                         else
                         {
@@ -1665,12 +1765,60 @@ bool SfxObjectShell::SaveTo_Impl
             rMedium.CloseZipStorage_Impl();
         }
 
+        if (xODFDecryptedInnerPackageStream.is())
+        {
+            rMedium.StorageCommit_Impl();
+            // prevent dispose as inner storage will be needed later
+            assert(!rMedium.WillDisposeStorageOnClose_Impl());
+            rMedium.CloseStorage();
+            // restore encryption for outer package, note: disable for debugging
+            rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
+            assert(xODFDecryptedInnerPackageStream.is());
+            // now create the outer storage
+            uno::Reference<embed::XStorage> const xOuterStorage(rMedium.GetOutputStorage());
+            assert(xOuterStorage.is());
+            // the outer storage needs the same properties as the inner one
+            SetupStorage(xOuterStorage, SOFFICE_FILEFORMAT_CURRENT, false);
+
+#if 0
+            // does this need to happen here? - GetStorage already did it
+            try {
+                ::comphelper::OStorageHelper::SetCommonStorageEncryptionData(xOuterStorage, aEncryptionData);
+            }
+            catch (uno::Exception&)
+            {
+                SAL_WARN("sfx.doc", "Setting of common encryption key failed!");
+                SetError(ERRCODE_IO_GENERAL);
+                bOk = false;
+            }
+#endif
+
+            uno::Reference<io::XStream> const xEncryptedInnerPackage =
+                xOuterStorage->openStreamElement(
+                    "encrypted-package", embed::ElementModes::WRITE);
+            uno::Reference<beans::XPropertySet> const xEncryptedPackageProps(
+                    xEncryptedInnerPackage, uno::UNO_QUERY_THROW);
+            xEncryptedPackageProps->setPropertyValue("MediaType", mediaType);
+
+            // encryption: just copy into package stream
+            uno::Reference<io::XSeekable>(xODFDecryptedInnerPackageStream, uno::UNO_QUERY_THROW)->seek(0);
+            comphelper::OStorageHelper::CopyInputToOutput(
+                xODFDecryptedInnerPackageStream->getInputStream(),
+                xEncryptedInnerPackage->getOutputStream());
+            // rely on Commit() below
+        }
+
         const OUString sName( rMedium.GetName( ) );
         bOk = rMedium.Commit();
         const OUString sNewName( rMedium.GetName( ) );
 
         if ( sName != sNewName )
             GetMedium( )->SwitchDocumentToFile( sNewName );
+
+        if (xODFDecryptedInnerPackageStream.is())
+        {   // set the inner storage on the medium again, after Switch
+            rMedium.SetInnerStorage_Impl(xODFDecryptedInnerPackage);
+        }
 
         if ( bOk )
         {

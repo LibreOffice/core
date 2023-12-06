@@ -1840,8 +1840,11 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocum
             }
 
             if ( bScriptingContent )
-                aResult = xLocSigner->verifyScriptingContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
-                                                                uno::Reference< io::XInputStream >() );
+            {
+                aResult = xLocSigner->verifyScriptingContentSignatures(
+                    GetMedium()->GetScriptingStorageToSign_Impl(),
+                    uno::Reference<io::XInputStream>());
+            }
             else
             {
                 if (GetMedium()->GetStorage(false).is())
@@ -2034,7 +2037,7 @@ bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent, weld::Window* p
                 xSigner->setParentWindow(pDialogParent->GetXWindow());
 
             if (bSignScriptingContent)
-                xSigner->showScriptingContentSignatures(GetMedium()->GetZipStorageToSign_Impl(),
+                xSigner->showScriptingContentSignatures(GetMedium()->GetScriptingStorageToSign_Impl(),
                                                         uno::Reference<io::XInputStream>());
             else
             {

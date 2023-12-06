@@ -1924,7 +1924,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
                     {
                         task::DocumentMacroConfirmationRequest aRequest;
                         aRequest.DocumentURL = getDocumentLocation();
-                        aRequest.DocumentStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
+                        aRequest.DocumentStorage = rDocShell.GetMedium()->GetScriptingStorageToSign_Impl();
                         aRequest.DocumentSignatureInformation = aInfo;
                         aRequest.DocumentVersion = aVersion;
                         aRequest.Classification = task::InteractionClassification_QUERY;
