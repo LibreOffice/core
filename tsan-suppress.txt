@@ -17,6 +17,9 @@ deadlock:AffineBridge::v_callInto_v
 # Ignore stuff in external DBUS library.
 # Some kind of dbus lock issue when we call it from psp::CUPSManager.
 deadlock:_dbus_lock
+race:g_dbus_connection_signal_unsubscribe
+race:g_path_get_basename
+race:g_date_time_format_iso8601
 
 # inside an assert so I don't care.
 race:cppu::OWeakConnectionPoint::acquire
