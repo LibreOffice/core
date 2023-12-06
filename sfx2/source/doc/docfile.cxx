@@ -1869,6 +1869,11 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         }
     }
 
+    if (GetErrorCode()) // decryption failed?
+    {
+        pImpl->xStorage.clear();
+    }
+
     // TODO/LATER: Get versionlist on demand
     if ( pImpl->xStorage.is() )
     {

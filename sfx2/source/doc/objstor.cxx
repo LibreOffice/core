@@ -1012,26 +1012,17 @@ bool SfxObjectShell::DoSave()
             }
         }
 
-        uno::Sequence< beans::NamedValue > aEncryptionData;
         if ( IsPackageStorageFormat_Impl( *GetMedium() ) )
         {
-            if ( GetEncryptionData_Impl( &GetMedium()->GetItemSet(), aEncryptionData ) )
+            GetMedium()->GetStorage(); // sets encryption properties if necessary
+            if (GetMedium()->GetErrorCode())
             {
-                try
-                {
-                    //TODO/MBA: GetOutputStorage?! Special mode, because it's "Save"?!
-                    ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( GetMedium()->GetStorage(), aEncryptionData );
-                    bOk = true;
-                }
-                catch( uno::Exception& )
-                {
-                    SetError(ERRCODE_IO_GENERAL);
-                }
-
-                DBG_ASSERT( bOk, "The root storage must allow to set common password!\n" );
+                SetError(ERRCODE_IO_GENERAL);
             }
             else
+            {
                 bOk = true;
+            }
 #if HAVE_FEATURE_SCRIPTING
             if ( HasBasic() )
             {
@@ -1471,12 +1462,12 @@ bool SfxObjectShell::SaveTo_Impl
     bCopyTo =   GetCreateMode() == SfxObjectCreateMode::EMBEDDED ||
                 (pSaveToItem && pSaveToItem->GetValue());
 
-    bool bOk = false;
+    bool bOk = true;
     // TODO/LATER: get rid of bOk
     if (bOwnTarget && pFilter && !(pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER))
     {
         uno::Reference< embed::XStorage > xMedStorage = rMedium.GetStorage();
-        if ( !xMedStorage.is() )
+        if (!xMedStorage.is() || rMedium.GetErrorCode())
         {
             // no saving without storage
             pImpl->bForbidReload = bOldStat;
@@ -1484,31 +1475,7 @@ bool SfxObjectShell::SaveTo_Impl
         }
 
         // transfer password from the parameters to the storage
-        bool bPasswdProvided = false;
-        if (aEncryptionData.getLength() != 0)
-        {
-            bPasswdProvided = true;
-            if (xODFDecryptedInnerPackageStream.is())
-            {
-                bOk = true;
-            }
-            else
-            {
-                // TODO: GetStorage() already did that?
-                try {
-                    ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
-                    bOk = true;
-                }
-                catch( uno::Exception& )
-                {
-                    SAL_WARN( "sfx.doc", "Setting of common encryption key failed!" );
-                    SetError(ERRCODE_IO_GENERAL);
-                }
-            }
-        }
-        else
-            bOk = true;
-
+        bool const bPasswdProvided(aEncryptionData.getLength() != 0);
         pFilter = rMedium.GetFilter();
 
         const SfxStringItem *pVersionItem = !rMedium.IsInCheckIn()? SfxItemSet::GetItem<SfxStringItem>(pSet, SID_DOCINFO_COMMENTS, false): nullptr;
@@ -1777,21 +1744,9 @@ bool SfxObjectShell::SaveTo_Impl
             // now create the outer storage
             uno::Reference<embed::XStorage> const xOuterStorage(rMedium.GetOutputStorage());
             assert(xOuterStorage.is());
+            assert(!rMedium.GetErrorCode());
             // the outer storage needs the same properties as the inner one
             SetupStorage(xOuterStorage, SOFFICE_FILEFORMAT_CURRENT, false);
-
-#if 0
-            // does this need to happen here? - GetStorage already did it
-            try {
-                ::comphelper::OStorageHelper::SetCommonStorageEncryptionData(xOuterStorage, aEncryptionData);
-            }
-            catch (uno::Exception&)
-            {
-                SAL_WARN("sfx.doc", "Setting of common encryption key failed!");
-                SetError(ERRCODE_IO_GENERAL);
-                bOk = false;
-            }
-#endif
 
             uno::Reference<io::XStream> const xEncryptedInnerPackage =
                 xOuterStorage->openStreamElement(
@@ -3310,6 +3265,9 @@ bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
         const SfxStringItem* pPasswdItem = rMedium.GetItemSet().GetItem(SID_PASSWORD, false);
         if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, pMedium ) )
         {
+            // note: this could be needed in case no interaction handler is
+            // provided (which CheckPasswd_Impl needs) but a password item is,
+            // but it could be done in a better way
             uno::Sequence< beans::NamedValue > aEncryptionData;
             if ( GetEncryptionData_Impl(&pMedium->GetItemSet(), aEncryptionData) )
             {
