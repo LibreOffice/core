@@ -557,6 +557,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     python/DocumentHandling/DocumentSaver.py \
     python/DocumentHandling/README.md \
     python/DocumentHandling/tests/hello.odt \
+    python/Drawing/SDraw.py \
 ))
 
 # vim: set noet sw=4 ts=4:
