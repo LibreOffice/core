@@ -495,7 +495,7 @@ static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
     OSL_ENSURE( pDShell, "No DocShell?!");
     SfxViewFrame& rViewFrame = *rView.GetViewFrame();
 
-    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, rViewFrame.GetFrameWeld()))
+    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, rView.GetFrameWeld()))
         return;
 
     // We are doing tiledRendering, let the client handles the URL loading,
