@@ -947,6 +947,9 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         }
         catch( const packages::WrongPasswordException& )
         {
+            // note: due to SHA1 check this fallback is only done for
+            // * ODF 1.2 files written by OOo < 3.4beta / LO < 3.5
+            // * ODF 1.1/OOoXML files written by any version
             if ( m_rZipPackage.GetStartKeyGenID() == xml::crypto::DigestID::SHA1 )
             {
                 SAL_WARN("package", "ZipPackageStream::getDataStream(): SHA1 mismatch, trying fallbacks...");

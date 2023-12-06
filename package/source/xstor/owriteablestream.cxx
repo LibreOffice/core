@@ -1113,7 +1113,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         }
         catch ( const uno::Exception& ex )
         {
-            TOOLS_WARN_EXCEPTION( "package.xstor", "Can't write encryption related properties");
+            TOOLS_WARN_EXCEPTION("package.xstor", "GetStream: decrypting stream failed");
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             throw io::IOException(ex.Message); // TODO:
         }

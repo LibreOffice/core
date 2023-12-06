@@ -160,7 +160,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
         {
             m_bBroken = true;
             Dispose();
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("PK11_CipherOp failed");
         }
 
         m_nConverted += aToConvert.getLength();
@@ -221,7 +221,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
         {
             m_bBroken = true;
             Dispose();
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("PK11_CipherOp failed");
         }
 
         aResult.realloc( nPrefResLen );
@@ -235,7 +235,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     {
         m_bBroken = true;
         Dispose();
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("PK11_DigestFinal failed");
     }
 
     aResult.realloc( nPrefixLen + nFinalLen );
@@ -251,7 +251,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
         {
             m_bBroken = true;
             Dispose();
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("incorrect size of padding");
         }
 
         aResult.realloc( aResult.getLength() - nBytesToRemove );

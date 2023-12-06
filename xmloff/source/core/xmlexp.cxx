@@ -1185,6 +1185,7 @@ lcl_AddGrddl(SvXMLExport const & rExport, const SvXMLExportFlags /*nExportMode*/
 #endif
 }
 
+// note: the point of this is presumably to mitigate SHA/1k info leak of plain text
 void SvXMLExport::addChaffWhenEncryptedStorage()
 {
     uno::Reference< embed::XEncryptionProtectedSource2 > xEncr(mpImpl->mxTargetStorage, uno::UNO_QUERY);

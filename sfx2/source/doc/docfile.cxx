@@ -2954,13 +2954,11 @@ void SfxMedium::Download( const Link<void*,void>& aLink )
 }
 
 
-void SfxMedium::Init_Impl()
-/*  [Description]
-    Includes a valid:: sun:: com:: star:: util:: URL (If a file name was
-    previously in there) in the logical name and if available sets the
-    physical name as the file name.
+/**
+    Sets m_aLogicName to a valid URL and if available sets
+    the physical name m_aName to the file name.
  */
-
+void SfxMedium::Init_Impl()
 {
     Reference< XOutputStream > rOutStream;
 
@@ -4124,7 +4122,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
     }
     catch ( const uno::Exception& )
     {
-        SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
+        TOOLS_WARN_EXCEPTION("sfx.doc", "Couldn't use signing functionality!");
     }
 
     CloseAndRelease();
@@ -4134,6 +4132,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
     return bChanges;
 }
 
+// note: this is the only function creating scripting signature
 bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                                   bool bSignScriptingContent,
                                   bool bHasValidDocumentSignature,
@@ -4294,7 +4293,7 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
     }
     catch ( const uno::Exception& )
     {
-        SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
+        TOOLS_WARN_EXCEPTION("sfx.doc", "Couldn't use signing functionality!");
     }
 
     CloseAndRelease();
