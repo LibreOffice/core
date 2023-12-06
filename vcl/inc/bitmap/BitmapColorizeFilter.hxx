@@ -8,11 +8,9 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAP_BITMAPCOLORIZEFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAP_BITMAPCOLORIZEFILTER_HXX
+#pragma once
 
 #include <tools/color.hxx>
-
 #include <vcl/BitmapFilter.hxx>
 
 class BitmapColorizeFilter final : public BitmapFilter
@@ -28,7 +26,5 @@ public:
 private:
     Color maColor;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
