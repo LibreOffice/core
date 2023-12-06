@@ -32,6 +32,9 @@
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <unotools/configmgr.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/tpviewpage.ui", "TpViewPage", &rArgSet)
@@ -318,20 +321,32 @@ ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogControl
     : SfxTabPage(pPage, pController, "modules/scalc/ui/scgeneralpage.ui", "ScGeneralPage", &rArgSet)
     , pDoc(nullptr)
     , m_xUnitLB(m_xBuilder->weld_combo_box("unitlb"))
+    , m_xUnitImg(m_xBuilder->weld_widget("lockunitlb"))
     , m_xTabMF(m_xBuilder->weld_metric_spin_button("tabmf", FieldUnit::CM))
+    , m_xTabImg(m_xBuilder->weld_widget("locktabmf"))
     , m_xAlwaysRB(m_xBuilder->weld_radio_button("alwaysrb"))
     , m_xRequestRB(m_xBuilder->weld_radio_button("requestrb"))
     , m_xNeverRB(m_xBuilder->weld_radio_button("neverrb"))
+    , m_xUpdateLinksImg(m_xBuilder->weld_widget("lockupdatelinks"))
     , m_xAlignCB(m_xBuilder->weld_check_button("aligncb"))
+    , m_xAlignImg(m_xBuilder->weld_widget("lockaligncb"))
     , m_xAlignLB(m_xBuilder->weld_combo_box("alignlb"))
     , m_xEditModeCB(m_xBuilder->weld_check_button("editmodecb"))
+    , m_xEditModeImg(m_xBuilder->weld_widget("lockeditmodecb"))
     , m_xFormatCB(m_xBuilder->weld_check_button("formatcb"))
+    , m_xFormatImg(m_xBuilder->weld_widget("lockformatcb"))
     , m_xExpRefCB(m_xBuilder->weld_check_button("exprefcb"))
+    , m_xExpRefImg(m_xBuilder->weld_widget("lockexprefcb"))
     , m_xSortRefUpdateCB(m_xBuilder->weld_check_button("sortrefupdatecb"))
+    , m_xSortRefUpdateImg(m_xBuilder->weld_widget("locksortrefupdatecb"))
     , m_xMarkHdrCB(m_xBuilder->weld_check_button("markhdrcb"))
+    , m_xMarkHdrImg(m_xBuilder->weld_widget("lockmarkhdrcb"))
     , m_xReplWarnCB(m_xBuilder->weld_check_button("replwarncb"))
+    , m_xReplWarnImg(m_xBuilder->weld_widget("lockreplwarncb"))
     , m_xLegacyCellSelectionCB(m_xBuilder->weld_check_button("legacy_cell_selection_cb"))
+    , m_xLegacyCellSelectionImg(m_xBuilder->weld_widget("locklegacy_cell"))
     , m_xEnterPasteModeCB(m_xBuilder->weld_check_button("enter_paste_mode_cb"))
+    , m_xEnterPasteModeImg(m_xBuilder->weld_widget("lockenter_paste"))
 {
     SetExchangeSupport();
 
@@ -530,11 +545,33 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
         }
         ::SetFieldUnit(*m_xTabMF, eFieldUnit);
     }
-    m_xUnitLB->save_value();
+
+    bool bReadOnly = false;
+    MeasurementSystem eSys = ScGlobal::getLocaleData().getMeasurementSystemEnum();
+    if (eSys == MeasurementSystem::Metric)
+    {
+        bReadOnly = officecfg::Office::Calc::Layout::Other::MeasureUnit::Metric::isReadOnly();
+    }
+    else
+    {
+        bReadOnly = officecfg::Office::Calc::Layout::Other::MeasureUnit::NonMetric::isReadOnly();
+    }
+    m_xUnitLB->set_sensitive(!bReadOnly);
+    m_xUnitImg->set_visible(bReadOnly);
 
     if(const SfxUInt16Item* pTabStopItem = rCoreSet->GetItemIfSet(SID_ATTR_DEFTABSTOP, false))
         m_xTabMF->set_value(m_xTabMF->normalize(pTabStopItem->GetValue()), FieldUnit::TWIP);
-    m_xTabMF->save_value();
+
+    if (eSys == MeasurementSystem::Metric)
+    {
+        bReadOnly = officecfg::Office::Calc::Layout::Other::TabStop::Metric::isReadOnly();
+    }
+    else
+    {
+        bReadOnly = officecfg::Office::Calc::Layout::Other::TabStop::NonMetric::isReadOnly();
+    }
+    m_xTabMF->set_sensitive(!bReadOnly);
+    m_xTabImg->set_visible(bReadOnly);
 
     m_xUnitLB->save_value();
     m_xTabMF->save_value();
@@ -562,35 +599,82 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
             // added to avoid warnings
         }
     }
+
+    if (officecfg::Office::Calc::Content::Update::Link::isReadOnly())
+    {
+        m_xAlwaysRB->set_sensitive(false);
+        m_xNeverRB->set_sensitive(false);
+        m_xRequestRB->set_sensitive(false);
+        m_xUpdateLinksImg->set_visible(true);
+    }
     if(const SfxBoolItem* pSelectionItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_SELECTION, false))
         m_xAlignCB->set_active(pSelectionItem->GetValue());
+
+    bReadOnly = officecfg::Office::Calc::Input::MoveSelection::isReadOnly();
+    m_xAlignCB->set_sensitive(!bReadOnly);
+    m_xAlignImg->set_visible(bReadOnly);
 
     if(const SfxUInt16Item* pPosItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_SELECTIONPOS, false))
         m_xAlignLB->set_active(pPosItem->GetValue());
 
+    bReadOnly = officecfg::Office::Calc::Input::MoveSelectionDirection::isReadOnly();
+    m_xAlignCB->set_sensitive(!bReadOnly);
+
     if(const SfxBoolItem* pEditModeItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_EDITMODE, false))
         m_xEditModeCB->set_active(pEditModeItem->GetValue());
+
+    bReadOnly = officecfg::Office::Calc::Input::SwitchToEditMode::isReadOnly();
+    m_xEditModeCB->set_sensitive(!bReadOnly);
+    m_xEditModeImg->set_visible(bReadOnly);
 
     if(const SfxBoolItem* pExpandItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_FMT_EXPAND, false))
         m_xFormatCB->set_active(pExpandItem->GetValue());
 
+    bReadOnly = officecfg::Office::Calc::Input::ExpandFormatting::isReadOnly();
+    m_xFormatCB->set_sensitive(!bReadOnly);
+    m_xFormatImg->set_visible(bReadOnly);
+
     if(const SfxBoolItem* pExpandItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_REF_EXPAND, false))
         m_xExpRefCB->set_active(pExpandItem->GetValue());
+
+    bReadOnly = officecfg::Office::Calc::Input::ExpandReference::isReadOnly();
+    m_xExpRefCB->set_sensitive(!bReadOnly);
+    m_xExpRefImg->set_visible(bReadOnly);
 
     if (const SfxBoolItem* pUpdateItem = rCoreSet->GetItemIfSet(SID_SC_OPT_SORT_REF_UPDATE))
         m_xSortRefUpdateCB->set_active(pUpdateItem->GetValue());
 
+    bReadOnly = officecfg::Office::Calc::Input::UpdateReferenceOnSort::isReadOnly();
+    m_xSortRefUpdateCB->set_sensitive(!bReadOnly);
+    m_xSortRefUpdateImg->set_visible(bReadOnly);
+
     if(const SfxBoolItem* pHeaderItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_MARK_HEADER, false))
         m_xMarkHdrCB->set_active(pHeaderItem->GetValue());
+
+    bReadOnly = officecfg::Office::Calc::Input::HighlightSelection::isReadOnly();
+    m_xMarkHdrCB->set_sensitive(!bReadOnly);
+    m_xMarkHdrImg->set_visible(bReadOnly);
 
     if( const SfxBoolItem* pWarnItem = rCoreSet->GetItemIfSet( SID_SC_INPUT_REPLCELLSWARN, false ) )
         m_xReplWarnCB->set_active( pWarnItem->GetValue() );
 
+    bReadOnly = officecfg::Office::Calc::Input::ReplaceCellsWarning::isReadOnly();
+    m_xReplWarnCB->set_sensitive(!bReadOnly);
+    m_xReplWarnImg->set_visible(bReadOnly);
+
     if( const SfxBoolItem* pSelectionItem = rCoreSet->GetItemIfSet( SID_SC_INPUT_LEGACY_CELL_SELECTION, false ) )
         m_xLegacyCellSelectionCB->set_active( pSelectionItem->GetValue() );
 
+    bReadOnly = officecfg::Office::Calc::Input::LegacyCellSelection::isReadOnly();
+    m_xLegacyCellSelectionCB->set_sensitive(!bReadOnly);
+    m_xLegacyCellSelectionImg->set_visible(bReadOnly);
+
     if( const SfxBoolItem* pPasteModeItem = rCoreSet->GetItemIfSet( SID_SC_INPUT_ENTER_PASTE_MODE, false ) )
         m_xEnterPasteModeCB->set_active( pPasteModeItem->GetValue() );
+
+    bReadOnly = officecfg::Office::Calc::Input::EnterPasteMode::isReadOnly();
+    m_xEnterPasteModeCB->set_sensitive(!bReadOnly);
+    m_xEnterPasteModeImg->set_visible(bReadOnly);
 
     m_xAlignCB->save_state();
     m_xAlignLB->save_value();
@@ -638,7 +722,8 @@ IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl, weld::ComboBox&, void)
 
 IMPL_LINK(ScTpLayoutOptions, AlignHdl, weld::Toggleable&, rBox, void)
 {
-    m_xAlignLB->set_sensitive(rBox.get_active());
+    m_xAlignLB->set_sensitive(rBox.get_active() &&
+        !officecfg::Office::Calc::Input::MoveSelectionDirection::isReadOnly());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

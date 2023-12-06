@@ -81,22 +81,34 @@ class ScTpLayoutOptions : public SfxTabPage
     ScDocument *pDoc;
 
     std::unique_ptr<weld::ComboBox> m_xUnitLB;
+    std::unique_ptr<weld::Widget> m_xUnitImg;
     std::unique_ptr<weld::MetricSpinButton> m_xTabMF;
+    std::unique_ptr<weld::Widget> m_xTabImg;
 
     std::unique_ptr<weld::RadioButton> m_xAlwaysRB;
     std::unique_ptr<weld::RadioButton> m_xRequestRB;
     std::unique_ptr<weld::RadioButton> m_xNeverRB;
+    std::unique_ptr<weld::Widget> m_xUpdateLinksImg;
 
     std::unique_ptr<weld::CheckButton> m_xAlignCB;
+    std::unique_ptr<weld::Widget> m_xAlignImg;
     std::unique_ptr<weld::ComboBox> m_xAlignLB;
     std::unique_ptr<weld::CheckButton> m_xEditModeCB;
+    std::unique_ptr<weld::Widget> m_xEditModeImg;
     std::unique_ptr<weld::CheckButton> m_xFormatCB;
+    std::unique_ptr<weld::Widget> m_xFormatImg;
     std::unique_ptr<weld::CheckButton> m_xExpRefCB;
+    std::unique_ptr<weld::Widget> m_xExpRefImg;
     std::unique_ptr<weld::CheckButton> m_xSortRefUpdateCB;
+    std::unique_ptr<weld::Widget> m_xSortRefUpdateImg;
     std::unique_ptr<weld::CheckButton> m_xMarkHdrCB;
+    std::unique_ptr<weld::Widget> m_xMarkHdrImg;
     std::unique_ptr<weld::CheckButton> m_xReplWarnCB;
+    std::unique_ptr<weld::Widget> m_xReplWarnImg;
     std::unique_ptr<weld::CheckButton> m_xLegacyCellSelectionCB;
+    std::unique_ptr<weld::Widget> m_xLegacyCellSelectionImg;
     std::unique_ptr<weld::CheckButton> m_xEnterPasteModeCB;
+    std::unique_ptr<weld::Widget> m_xEnterPasteModeImg;
 
     DECL_LINK(MetricHdl, weld::ComboBox&, void );
     DECL_LINK( AlignHdl, weld::Toggleable&, void );
