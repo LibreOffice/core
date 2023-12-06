@@ -23,6 +23,7 @@
 #include <unotools/resmgr.hxx>
 
 #include <cmath>
+#include <complex>
 
 #include <memory>
 #include <vector>
@@ -380,8 +381,7 @@ public:
 
 class Complex
 {
-    double                  r;
-    double                  i;
+    std::complex<double>    num;
     sal_Unicode             c;
 
 public:
@@ -629,66 +629,59 @@ inline FDCategory FuncData::GetCategory() const
 
 
 inline Complex::Complex( double fReal, double fImag, sal_Unicode cC ) :
-        r( fReal ), i( fImag ), c( cC )
+        c( cC )
 {
+    num = std::complex(fReal, fImag);
 }
 
 
 inline double Complex::Real() const
 {
-    return r;
+    return num.real();
 }
 
 
 inline double Complex::Imag() const
 {
-    return i;
+    return num.imag();
 }
 
 
 inline double Complex::Abs() const
 {
-    return std::hypot(r, i);
+    return std::abs(num);
 }
 
 
 void Complex::Conjugate()
 {
-    i = -i;
+    num = std::conj(num);
 }
 
 
 inline void Complex::Mult( double f )
 {
-    i *= f;
-    r *= f;
+    num = num * f;
 }
 
 
 inline void Complex::Mult( const Complex& rM )
 {
-    double  r_ = r;
-    double  i_ = i;
-
-    r = r_ * rM.r - i_ * rM.i;
-    i = r_ * rM.i + i_ * rM.r;
-
+    num = num * rM.num;
     if( !c ) c = rM.c;
 }
 
 
 inline void Complex::Sub( const Complex& rC )
 {
-    r -= rC.r;
-    i -= rC.i;
+    num = num - rC.num;
     if( !c ) c = rC.c;
 }
 
 
 inline void Complex::Add( const Complex& rAdd )
 {
-    r += rAdd.r;
-    i += rAdd.i;
+    num = num + rAdd.num;
     if( !c ) c = rAdd.c;
 }
 

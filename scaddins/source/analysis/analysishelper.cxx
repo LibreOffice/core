@@ -27,6 +27,7 @@
 #include <rtl/math.hxx>
 #include <algorithm>
 #include <cmath>
+#include <complex>
 #include <memory>
 
 #include "analysisdefs.hxx"
@@ -1591,9 +1592,8 @@ bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
 
     if( IsImagUnit( *pStr ) && rStr.getLength() == 1)
     {
-        rCompl.r = 0.0;
-        rCompl.i = 1.0;
         rCompl.c = *pStr;
+        rCompl.num = std::complex(0.0, 1.0);
         return true;
     }
 
@@ -1613,8 +1613,7 @@ bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
                 rCompl.c = pStr[ 1 ];
                 if( pStr[ 2 ] == 0 )
                 {
-                    rCompl.r = f;
-                    rCompl.i = ( *pStr == '+' )? 1.0 : -1.0;
+                    rCompl.num = std::complex(f, ( *pStr == '+' )? 1.0 : -1.0);
                     return true;
                 }
             }
@@ -1624,8 +1623,7 @@ bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
                 pStr++;
                 if( *pStr == 0 )
                 {
-                    rCompl.r = r;
-                    rCompl.i = f;
+                    rCompl.num = std::complex(r, f);
                     return true;
                 }
             }
@@ -1637,43 +1635,40 @@ bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
             pStr++;
             if( *pStr == 0 )
             {
-                rCompl.i = f;
-                rCompl.r = 0.0;
+                rCompl.num = std::complex(0.0, f);
                 return true;
             }
             break;
         case 0:     // only real-part
-            rCompl.r = f;
-            rCompl.i = 0.0;
+            rCompl.num = std::complex(f, 0.0);
             return true;
     }
 
     return false;
 }
 
-
 OUString Complex::GetString() const
 {
-    finiteOrThrow(r);
-    finiteOrThrow(i);
+    finiteOrThrow(num.real());
+    finiteOrThrow(num.imag());
     OUStringBuffer aRet;
 
-    bool bHasImag = i != 0.0;
-    bool bHasReal = !bHasImag || (r != 0.0);
+    bool bHasImag = num.imag() != 0.0;
+    bool bHasReal = !bHasImag || (num.real() != 0.0);
 
     if( bHasReal )
-        aRet.append(::GetString( r, false ));
+        aRet.append(::GetString( num.real(), false ));
     if( bHasImag )
     {
-        if( i == 1.0 )
+        if( num.imag() == 1.0 )
         {
             if( bHasReal )
                 aRet.append('+');
         }
-        else if( i == -1.0 )
+        else if( num.imag() == -1.0 )
             aRet.append('-');
         else
-            aRet.append(::GetString( i, bHasReal ));
+            aRet.append(::GetString( num.imag(), bHasReal ));
         aRet.append((c != 'j') ? 'i' : 'j');
     }
 
@@ -1683,139 +1678,65 @@ OUString Complex::GetString() const
 
 double Complex::Arg() const
 {
-    if( r == 0.0 && i == 0.0 )
+    // Note: there are differing opinions on whether arg(0) should be 0 or undefined, we are treating it as undefined
+    if( num.real() == 0.0 && num.imag() == 0.0 )
         throw lang::IllegalArgumentException();
-
-    double  phi = acos( r / Abs() );
-
-    if( i < 0.0 )
-        phi = -phi;
-
-    return phi;
+    return std::arg(num);
 }
 
 
 void Complex::Power( double fPower )
 {
-    if( r == 0.0 && i == 0.0 )
-    {
-        if( fPower <= 0 )
-            throw lang::IllegalArgumentException();
-        r = i = 0.0;
-        return;
-    }
-
-    double      p, phi;
-
-    p = Abs();
-
-    phi = acos( r / p );
-    if( i < 0.0 )
-        phi = -phi;
-
-    p = pow( p, fPower );
-    phi *= fPower;
-
-    r = cos( phi ) * p;
-    i = sin( phi ) * p;
+    if( num.real() == 0.0 && num.imag() == 0.0 && fPower <= 0 )
+        throw lang::IllegalArgumentException();
+    num = std::pow(num, fPower);
 }
 
 
 void Complex::Sqrt()
 {
-    static const double fMultConst = M_SQRT1_2;
-    double  p = Abs();
-    double  i_ = sqrt( p - r ) * fMultConst;
-
-    r = sqrt( p + r ) * fMultConst;
-    i = ( i < 0.0 )? -i_ : i_;
+    num = std::sqrt(num);
 }
 
 
 void Complex::Sin()
 {
-    if( !::rtl::math::isValidArcArg( r ) )
+    if( !::rtl::math::isValidArcArg( num.real() ) )
         throw lang::IllegalArgumentException();
-
-    if( i )
-    {
-        double  r_;
-
-        r_ = sin( r ) * cosh( i );
-        i = cos( r ) * sinh( i );
-        r = r_;
-    }
-    else
-        r = sin( r );
+    num = std::sin(num);
 }
 
 
 void Complex::Cos()
 {
-    if( !::rtl::math::isValidArcArg( r ) )
+    if( !::rtl::math::isValidArcArg( num.real() ) )
         throw lang::IllegalArgumentException();
-
-    if( i )
-    {
-        double      r_;
-
-        r_ = cos( r ) * cosh( i );
-        i = -( sin( r ) * sinh( i ) );
-        r = r_;
-    }
-    else
-        r = cos( r );
+    num = std::cos(num);
 }
 
 
 void Complex::Div( const Complex& z )
 {
-    if( z.r == 0 && z.i == 0 )
+    if( z.num.real() == 0 && z.num.imag() == 0 )
         throw lang::IllegalArgumentException();
-
-    double  a1 = r;
-    double  a2 = z.r;
-    double  b1 = i;
-    double  b2 = z.i;
-
-    double  f = 1.0 / ( a2 * a2 + b2 * b2 );
-
-    r = ( a1 * a2 + b1 * b2 ) * f;
-    i = ( a2 * b1 - a1 * b2 ) * f;
-
-    if( !c ) c = z.c;
+    num = num / z.num;
 }
 
 
 void Complex::Exp()
 {
-    double  fE = exp( r );
-    r = fE * cos( i );
-    i = fE * sin( i );
+    num = std::exp(num);
 }
-
 
 void Complex::Ln()
 {
-    if( r == 0.0 && i == 0.0 )
-        throw lang::IllegalArgumentException();
-
-    double      fAbs = Abs();
-    bool        bNegi = i < 0.0;
-
-    i = acos( r / fAbs );
-
-    if( bNegi )
-        i = -i;
-
-    r = log( fAbs );
+    num = std::log(num);
 }
 
 
 void Complex::Log10()
 {
-    Ln();
-    Mult( M_LOG10E );
+    num = std::log10(num);
 }
 
 
@@ -1828,157 +1749,64 @@ void Complex::Log2()
 
 void Complex::Tan()
 {
-    if ( i )
-    {
-        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
-            throw lang::IllegalArgumentException();
-        double fScale =1.0 / ( cos( 2.0 * r ) + cosh( 2.0 * i ));
-        r = sin( 2.0 * r ) * fScale;
-        i = sinh( 2.0 * i ) * fScale;
-    }
-    else
-    {
-        if( !::rtl::math::isValidArcArg( r ) )
-            throw lang::IllegalArgumentException();
-        r = tan( r );
-    }
+    // using 2.0 * num.real/imag as a precaution because a) this is what our previous implementation did and
+    // b) the std::complex implementation may use cos(2x) etc, see the comment in isValidArcArg for details
+    if ( ( num.imag() && !::rtl::math::isValidArcArg( 2.0 * num.real() ) )
+        || ( !num.imag() && !::rtl::math::isValidArcArg( num.real() ) ) )
+        throw lang::IllegalArgumentException();
+    num = std::tan(num);
 }
 
 
 void Complex::Sec()
 {
-    if( i )
-    {
-        if( !::rtl::math::isValidArcArg( 2 * r ) )
-            throw lang::IllegalArgumentException();
-        double fScale = 1.0 / (cosh( 2.0 * i) + cos ( 2.0 * r));
-        double  r_;
-        r_ = 2.0 * cos( r ) * cosh( i ) * fScale;
-        i = 2.0 * sin( r ) * sinh( i ) * fScale;
-        r = r_;
-    }
-    else
-    {
-        if( !::rtl::math::isValidArcArg( r ) )
-            throw lang::IllegalArgumentException();
-        r = 1.0 / cos( r );
-    }
+    Cos();
+    num = 1.0 / num;
 }
 
 
 void Complex::Csc()
 {
-    if( i )
-    {
-        if( !::rtl::math::isValidArcArg( 2 * r ) )
-            throw lang::IllegalArgumentException();
-        double fScale = 1.0 / (cosh( 2.0 * i) - cos ( 2.0 * r));
-        double  r_;
-        r_ = 2.0 * sin( r ) * cosh( i ) * fScale;
-        i = -2.0 * cos( r ) * sinh( i ) * fScale;
-        r = r_;
-    }
-    else
-    {
-        if( !::rtl::math::isValidArcArg( r ) )
-            throw lang::IllegalArgumentException();
-        r = 1.0 / sin( r );
-    }
+    Sin();
+    num = 1.0 / num;
 }
 
 
 void Complex::Cot()
 {
-    if ( i )
-    {
-        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
-            throw lang::IllegalArgumentException();
-        double fScale =1.0 / ( cosh( 2.0 * i ) - cos( 2.0 * r ) );
-        r = sin( 2.0 * r ) * fScale;
-        i = - ( sinh( 2.0 * i ) * fScale );
-    }
-    else
-    {
-        if( !::rtl::math::isValidArcArg( r ) )
-            throw lang::IllegalArgumentException();
-        r = 1.0 / tan( r );
-    }
+
+    Tan();
+    num = 1.0 / num;
 }
 
 
 void Complex::Sinh()
 {
-    if( !::rtl::math::isValidArcArg( r ) )
+    if( !::rtl::math::isValidArcArg( num.imag() ) )
         throw lang::IllegalArgumentException();
-
-    if( i )
-    {
-        double  r_;
-        r_ = sinh( r ) * cos( i );
-        i = cosh( r ) * sin( i );
-        r = r_;
-    }
-    else
-        r = sinh( r );
+    num = std::sinh(num);
 }
 
 
 void Complex::Cosh()
 {
-    if( !::rtl::math::isValidArcArg( r ) )
+    if( !::rtl::math::isValidArcArg( num.imag() ) )
         throw lang::IllegalArgumentException();
-
-    if( i )
-    {
-        double  r_;
-        r_ = cosh( r ) * cos( i );
-        i = sinh( r ) * sin( i );
-        r = r_;
-    }
-    else
-        r = cosh( r );
+    num = std::cosh(num);
 }
 
 
 void Complex::Sech()
 {
-    if ( i )
-    {
-        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
-            throw lang::IllegalArgumentException();
-        double fScale =1.0 / ( cosh( 2.0 * r ) + cos( 2.0 * i ));
-        double r_;
-        r_ = 2.0 * cosh( r ) * cos( i ) * fScale;
-        i = - (2.0 * sinh( r ) * sin( i ) * fScale );
-        r = r_ ;
-    }
-    else
-    {
-        if( !::rtl::math::isValidArcArg( r ) )
-            throw lang::IllegalArgumentException();
-        r = 1.0 / cosh( r );
-    }
+    Cosh();
+    num = 1.0 / num;
 }
 
 
 void Complex::Csch()
 {
-    if ( i )
-    {
-        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
-            throw lang::IllegalArgumentException();
-        double fScale =1.0 / ( cosh( 2.0 * r ) - cos( 2.0 * i ));
-        double r_;
-        r_ = 2.0 * sinh( r ) * cos( i ) * fScale;
-        i = - ( 2.0 * cosh( r ) * sin( i ) * fScale );
-        r = r_ ;
-    }
-    else
-    {
-        if( !::rtl::math::isValidArcArg( r ) )
-            throw lang::IllegalArgumentException();
-        r = 1.0 / sinh( r );
-    }
+    Sinh();
+    num = 1.0 / num;
 }
 
 
