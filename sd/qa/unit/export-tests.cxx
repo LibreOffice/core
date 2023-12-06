@@ -1933,10 +1933,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport)
     {
         // Load the original file
         createSdImpressDoc("odp/SvgImageTest.odp");
-        const OString sFailedMessage = "Failed on filter: " + rFormat.toUtf8();
+        // Save into the target format
         saveAndReload(rFormat);
 
-        // Check whether graphic was exported well
+        const OString sFailedMessage = "Failed on filter: " + rFormat.toUtf8();
+
+        // Check whether SVG graphic was exported as expected
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1),
@@ -1944,15 +1946,24 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport)
         uno::Reference<drawing::XDrawPage> xDrawPage(
             xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDrawPage.is());
+
+        // Get the image
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
 
+        // Convert to a XGraphic
         uno::Reference<graphic::XGraphic> xGraphic;
         xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+
+        // Access the Graphic
         Graphic aGraphic(xGraphic);
+
+        // Check if it contian a VectorGraphicData struct
         auto pVectorGraphic = aGraphic.getVectorGraphicData();
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pVectorGraphic);
+
+        // Which should be of type SVG, which means we have a SVG file
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), VectorGraphicDataType::Svg,
                                      pVectorGraphic->getType());
     }

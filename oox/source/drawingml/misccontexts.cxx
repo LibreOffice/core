@@ -619,20 +619,24 @@ ContextHandlerRef BlipExtensionContext::onCreateContext(sal_Int32 nElement, cons
         case OOX_TOKEN(a14, imgProps):
             return new ArtisticEffectContext(*this, mrBlipProps.maEffect);
 
+        // Import the SVG Blip
         case OOX_TOKEN(asvg, svgBlip):
         {
             if (rAttribs.hasAttribute(R_TOKEN(embed)))
             {
-                // internal picture URL
                 OUString aFragmentPath = getFragmentPathFromRelId(rAttribs.getStringDefaulted(R_TOKEN(embed)));
                 if (!aFragmentPath.isEmpty())
                 {
+                    // Read the graphic from the fragment path
                     auto xGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic(aFragmentPath);
+
+                    // Overwrite the fill graphic with the one contining SVG
                     mrBlipProps.mxFillGraphic = xGraphic;
                     if (mpBlipFill)
                         mpBlipFill->mxGraphic = xGraphic;
                 }
             }
+            // TODO - link
         }
         break;
     }

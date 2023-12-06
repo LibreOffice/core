@@ -2225,28 +2225,37 @@ void Test::testSvgImageSupport()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        // Check whether the export code swaps in the image which was swapped out before by auto mechanism
+        // Use case to import a document containing a SVG image, export in target format, import and check if the
+        // SVG image is present and as expected in the document
 
+        // Import ODT file
         createSwDoc("SvgImageTest.odt");
 
-        // Export the document and import again for a check
+        // Export the document in target format and import again
         saveAndReload(rFilterName);
 
-        // Check whether graphic exported well after it was swapped out
+        // Prepare fail message (writing which import/export filter was used)
         const OString sFailedMessage = "Failed on filter: "_ostr + rFilterName.toUtf8();
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 1, getShapes());
 
-        // First image
+        // Get the image
         uno::Reference<drawing::XShape> xImage(getShape(1), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
 
+        // Convert to a XGraphic
         uno::Reference<graphic::XGraphic> xGraphic;
         xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+
+        // Access the Graphic
         Graphic aGraphic(xGraphic);
+
+        // Check if it contian a VectorGraphicData struct
         auto pVectorGraphic = aGraphic.getVectorGraphicData();
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pVectorGraphic);
+
+        // Which should be of type SVG, which means we have a SVG file
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), VectorGraphicDataType::Svg, pVectorGraphic->getType());
     }
 }
