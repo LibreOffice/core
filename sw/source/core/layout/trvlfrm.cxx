@@ -507,43 +507,36 @@ bool SwCellFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
         }
     }
 
-    if ( Lower() )
+    if (Lower()->IsLayoutFrame())
+        return SwLayoutFrame::GetModelPositionForViewPoint(pPos, rPoint, pCMS);
+
+    Calc(pRenderContext);
+    bool bRet = false;
+
+    const SwFrame *pFrame = Lower();
+    while (pFrame && !bRet)
     {
-        if ( Lower()->IsLayoutFrame() )
-            return SwLayoutFrame::GetModelPositionForViewPoint( pPos, rPoint, pCMS );
-        else
+        pFrame->Calc(pRenderContext);
+        if (pFrame->getFrameArea().Contains(rPoint))
         {
-            Calc(pRenderContext);
-            bool bRet = false;
-
-            const SwFrame *pFrame = Lower();
-            while ( pFrame && !bRet )
-            {
-                pFrame->Calc(pRenderContext);
-                if ( pFrame->getFrameArea().Contains( rPoint ) )
-                {
-                    bRet = pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
-                    if ( pCMS && pCMS->m_bStop )
-                        return false;
-                }
-                pFrame = pFrame->GetNext();
-            }
-            if ( !bRet )
-            {
-                const bool bFill = pCMS && pCMS->m_pFill;
-                Point aPoint( rPoint );
-                const SwContentFrame *pCnt = GetContentPos( rPoint, true );
-                if( bFill && pCnt->IsTextFrame() )
-                {
-                    rPoint = aPoint;
-                }
-                pCnt->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
-            }
-            return true;
+            bRet = pFrame->GetModelPositionForViewPoint(pPos, rPoint, pCMS);
+            if (pCMS && pCMS->m_bStop)
+                return false;
         }
+        pFrame = pFrame->GetNext();
     }
-
-    return false;
+    if (!bRet)
+    {
+        const bool bFill = pCMS && pCMS->m_pFill;
+        Point aPoint(rPoint);
+        const SwContentFrame *pCnt = GetContentPos(rPoint, true);
+        if (bFill && pCnt->IsTextFrame())
+        {
+            rPoint = aPoint;
+        }
+        pCnt->GetModelPositionForViewPoint(pPos, rPoint, pCMS);
+    }
+    return true;
 }
 
 //Problem: If two Flys have the same size and share the same position then
