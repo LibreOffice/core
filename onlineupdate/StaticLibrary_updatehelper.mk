@@ -19,8 +19,11 @@ $(eval $(call gb_StaticLibrary_set_include,updatehelper,\
 
 $(eval $(call gb_StaticLibrary_add_defs,updatehelper,\
 	-DNSS3 \
+	-DUNICODE  \
 	-DVERIFY_MAR_SIGNATURE \
 	-DXP_WIN=1 \
+	-DNTDDI_VERSION=NTDDI_WIN8 \
+	-DMOZ_MAINTENANCE_SERVICE \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,updatehelper,\
@@ -28,6 +31,11 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,updatehelper,\
 	onlineupdate/source/update/common/readstrings \
 	onlineupdate/source/update/common/uachelper \
 	onlineupdate/source/update/common/updatehelper \
+	onlineupdate/source/update/common/updatecommon \
+))
+
+$(eval $(call gb_StaticLibrary_add_exception_objects,updatehelper,\
+	onlineupdate/source/update/common/updateutils_win \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
