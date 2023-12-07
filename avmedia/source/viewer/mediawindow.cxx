@@ -303,7 +303,7 @@ void MediaWindow::executeFormatErrorBox(weld::Window* pParent)
     xBox->run();
 }
 
-bool MediaWindow::isMediaURL(std::u16string_view rURL, const OUString& rReferer, bool bDeep, rtl::Reference<PlayerListener> xPreferredPixelSizeListener)
+bool MediaWindow::isMediaURL(std::u16string_view rURL, const OUString& rReferer, bool bDeep, const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener)
 {
     const INetURLObject aURL( rURL );
 
@@ -416,7 +416,7 @@ MediaWindow::grabFrame(const uno::Reference<media::XPlayer>& xPlayer,
 uno::Reference< graphic::XGraphic > MediaWindow::grabFrame(const OUString& rURL,
                                                            const OUString& rReferer,
                                                            const OUString& sMimeType,
-                                                           rtl::Reference<PlayerListener> xPreferredPixelSizeListener)
+                                                           const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener)
 {
     uno::Reference<media::XPlayer> xPlayer(createPlayer(rURL, rReferer, &sMimeType));
 

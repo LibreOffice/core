@@ -82,8 +82,7 @@ void MenuContentHandler::gatherMenuContent(
 
         auto aCommandProperties = vcl::CommandInfoProvider::GetCommandProperties(
             aNewContent.m_aCommandURL, m_sModuleLongName);
-        OUString aLabel = vcl::CommandInfoProvider::GetLabelForCommand(aCommandProperties);
-        aNewContent.m_aMenuLabel = aLabel;
+        aNewContent.m_aMenuLabel = vcl::CommandInfoProvider::GetLabelForCommand(aCommandProperties);
 
         if (!rMenuContent.m_aFullLabelWithPath.isEmpty())
             aNewContent.m_aFullLabelWithPath

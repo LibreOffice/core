@@ -557,8 +557,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             sal_Int32 i = 0;
             for (auto const& masterPageTarget : aMasterPageTargetSet)
             {
-                uno::Reference< drawing::XDrawPage > xMasterPage( masterPageTarget,  uno::UNO_QUERY );
-                mMasterPageTargets[i++] = xMasterPage;
+                mMasterPageTargets[i++].set(masterPageTarget,  uno::UNO_QUERY);
             }
 
             bRet = implExport( rDescriptor );

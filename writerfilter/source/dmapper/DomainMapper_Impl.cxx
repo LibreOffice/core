@@ -6780,8 +6780,7 @@ void DomainMapper_Impl::handleToc
 
             // init [xTOCMarkerCursor]
             uno::Reference< text::XText > xText = xTextAppend->getText();
-            uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
-            m_xTOCMarkerCursor = xCrsr;
+            m_xTOCMarkerCursor = xText->createTextCursor();
 
             // create header of the TOC with the TOC title inside
             createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, "com.sun.star.text.IndexHeaderSection", true);

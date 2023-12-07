@@ -129,7 +129,7 @@ namespace avmedia
         static bool         executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink);
         static void         executeFormatErrorBox(weld::Window* pParent);
         static bool         isMediaURL(std::u16string_view rURL, const OUString& rReferer, bool bDeep = false,
-                                       rtl::Reference<PlayerListener> xPreferredPixelSizeListener = nullptr);
+                                       const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener = nullptr);
 
         static css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr );
 
@@ -138,7 +138,7 @@ namespace avmedia
                   const css::uno::Reference<css::graphic::XGraphic>& rGraphic = nullptr);
 
         static css::uno::Reference< css::graphic::XGraphic > grabFrame(const OUString& rURL, const OUString& rReferer,
-            const OUString& sMimeType, rtl::Reference<PlayerListener> xPreferredPixelSizeListener);
+            const OUString& sMimeType, const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener);
 
         static void dispatchInsertAVMedia(const css::uno::Reference<css::frame::XDispatchProvider>&,
                                           const css::awt::Size& rSize, const OUString& rURL, bool bLink);

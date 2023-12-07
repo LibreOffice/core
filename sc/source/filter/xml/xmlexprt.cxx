@@ -4530,8 +4530,7 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
         assert(!sBaseCellAddress.isEmpty());
         AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sBaseCellAddress);
 
-        OUString sSymbol = rxEntry.second->GetSymbol(pDoc->GetStorageGrammar());
-        OUString sTempSymbol(sSymbol);
+        OUString sTempSymbol(rxEntry.second->GetSymbol(pDoc->GetStorageGrammar()));
         ScRange aRange;
         if (rxEntry.second->IsReference(aRange))
         {

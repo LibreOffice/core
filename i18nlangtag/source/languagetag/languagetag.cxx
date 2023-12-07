@@ -2774,10 +2774,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     ::std::vector< ::std::vector< OUString > > aListFallbacks( rList.size());
     size_t i = 0;
     for (auto const& elem : rList)
-    {
-        ::std::vector< OUString > aTmp( LanguageTag(elem).getFallbackStrings( true));
-        aListFallbacks[i++] = aTmp;
-    }
+        aListFallbacks[i++] = LanguageTag(elem).getFallbackStrings(true);
+
     for (auto const& rfb : aFallbacks)
     {
         size_t nPosFb = 0;
