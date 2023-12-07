@@ -94,7 +94,7 @@ private:
     bool mbModelValid;
 
     void Initialize();
-    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
+    void doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel);
 
     std::unique_ptr<Dim3DLookResourceGroup> m_pDim3DLookResourceGroup;
     std::unique_ptr<StackingResourceGroup> m_pStackingResourceGroup;

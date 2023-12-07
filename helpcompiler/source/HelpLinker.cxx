@@ -821,12 +821,11 @@ static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, const xmlErr
 static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, xmlErrorPtr error)
 #endif
 {
-    std::string aErrorMsg = error->message;
     std::string aXMLParsingFile;
     if( error->file != nullptr )
         aXMLParsingFile = error->file;
     int nXMLParsingLine = error->line;
-    GpXMLParsingException = new HelpProcessingException( aErrorMsg, aXMLParsingFile, nXMLParsingLine );
+    GpXMLParsingException = new HelpProcessingException(error->message, aXMLParsingFile, nXMLParsingLine);
 
     // Reset error handler
     xmlSetStructuredErrorFunc( nullptr, nullptr );

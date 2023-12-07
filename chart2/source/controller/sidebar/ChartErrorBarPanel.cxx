@@ -369,7 +369,7 @@ void ChartErrorBarPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartErrorBarPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
+void ChartErrorBarPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     if (mbModelValid)
     {

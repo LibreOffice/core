@@ -102,7 +102,7 @@ private:
     OUString maTextSubTitle;
 
     void Initialize();
-    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
+    void doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel);
 
     void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 

@@ -557,7 +557,7 @@ void ChartElementsPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartElementsPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
+void ChartElementsPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     if (mbModelValid)
     {

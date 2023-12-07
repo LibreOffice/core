@@ -79,7 +79,7 @@ private:
     bool mbModelValid;
 
     void Initialize();
-    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
+    void doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel);
 
     DECL_LINK(RadioBtnHdl, weld::Toggleable&, void);
     DECL_LINK(ListBoxHdl, weld::ComboBox&, void);

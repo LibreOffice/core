@@ -74,7 +74,7 @@ private:
     rtl::Reference<ChartSidebarSelectionListener> mxSelectionListener;
 
     void Initialize();
-    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
+    void doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel);
 
     bool mbUpdate;
     bool mbModelValid;

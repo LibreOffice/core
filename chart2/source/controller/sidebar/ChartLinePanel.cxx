@@ -196,7 +196,7 @@ void ChartLinePanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-void ChartLinePanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
+void ChartLinePanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     if (mbModelValid)
     {

@@ -300,7 +300,7 @@ void ChartAxisPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartAxisPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
+void ChartAxisPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     if (mbModelValid)
     {

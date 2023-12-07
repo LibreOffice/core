@@ -145,15 +145,14 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
     if ( !xDispatch.is() )
         return;
 
-    Sequence< PropertyValue > aArgs{
+    SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
+    pExecuteInfo->xDispatch     = xDispatch;
+    pExecuteInfo->aTargetURL    = aTargetURL;
+    pExecuteInfo->aArgs         = {
         comphelper::makePropertyValue("Referer", OUString( "private:user" )),
         comphelper::makePropertyValue("FileName", aName)
     };
 
-    SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
-    pExecuteInfo->xDispatch     = xDispatch;
-    pExecuteInfo->aTargetURL    = aTargetURL;
-    pExecuteInfo->aArgs         = aArgs;
     Application::PostUserEvent( LINK( nullptr, SfxURLToolBoxControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
 }
 

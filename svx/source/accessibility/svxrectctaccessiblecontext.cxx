@@ -148,13 +148,11 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
         if (!xChild.is() && mpRepr)
         {
             const ChildIndexToPointData*    p = IndexToPoint( nIndex );
-            OUString aName(SvxResId(p->pResIdName));
-            OUString aDescr(SvxResId(p->pResIdDescr));
 
             tools::Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 
-            rtl::Reference<SvxRectCtlChildAccessibleContext> pChild = new SvxRectCtlChildAccessibleContext(this, aName,
-                    aDescr, aFocusRect, nIndex );
+            rtl::Reference<SvxRectCtlChildAccessibleContext> pChild = new SvxRectCtlChildAccessibleContext(this,
+                    SvxResId(p->pResIdName), SvxResId(p->pResIdDescr), aFocusRect, nIndex );
             mvChildren[ nIndex ] = pChild;
             xChild = pChild;
 

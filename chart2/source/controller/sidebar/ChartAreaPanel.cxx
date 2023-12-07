@@ -512,7 +512,7 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-void ChartAreaPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
+void ChartAreaPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     if (mbModelValid)
     {

@@ -261,7 +261,7 @@ void ChartTypePanel::HandleContextChange(const vcl::EnumContext& rContext)
 
 void ChartTypePanel::modelInvalid() { mbModelValid = false; }
 
-void ChartTypePanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
+void ChartTypePanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     if (mbModelValid)
     {
