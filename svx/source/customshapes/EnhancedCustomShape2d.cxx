@@ -1195,10 +1195,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                 {
                     if ( m_aLogicRect.GetHeight() > m_aLogicRect.GetWidth() )
                     {
-                        css::drawing::EnhancedCustomShapeParameter aFirst = aHandle.aPosition.First;
-                        css::drawing::EnhancedCustomShapeParameter aSecond = aHandle.aPosition.Second;
-                        aHandle.aPosition.First = aSecond;
-                        aHandle.aPosition.Second = aFirst;
+                        std::swap(aHandle.aPosition.First, aHandle.aPosition.Second);
                     }
                 }
                 if (m_bOOXMLShape)
