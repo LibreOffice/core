@@ -593,6 +593,7 @@ certain functionality.
 @li @c xmlsecurity.comp - xml security component
 @li @c xmlsecurity.dialogs - xml security dialogs
 @li @c xmlsecurity.helper
+@li @c xmlsecurity.nss
 @li @c xmlsecurity.ooxml - OOXML signature support
 @li @c xmlsecurity.qa
 @li @c xmlsecurity.workben

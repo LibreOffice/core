@@ -35,31 +35,50 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
     ::rtl::Reference< OCipherContext > xResult = new OCipherContext;
 
     xResult->m_pSlot = PK11_GetBestSlot( nNSSCipherID, nullptr );
-    if ( xResult->m_pSlot )
+    if (!xResult->m_pSlot)
     {
-        SECItem aKeyItem = { siBuffer, const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aKey.getConstArray() ) ), sal::static_int_cast<unsigned>( aKey.getLength() ) };
-        xResult->m_pSymKey = PK11_ImportSymKey( xResult->m_pSlot, nNSSCipherID, PK11_OriginDerive, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, &aKeyItem, nullptr );
-        if ( xResult->m_pSymKey )
-        {
-            SECItem aIVItem = { siBuffer, const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aInitializationVector.getConstArray() ) ), sal::static_int_cast<unsigned>( aInitializationVector.getLength() ) };
-            xResult->m_pSecParam = PK11_ParamFromIV( nNSSCipherID, &aIVItem );
-            if ( xResult->m_pSecParam )
-            {
-                xResult->m_pContext = PK11_CreateContextBySymKey( nNSSCipherID, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, xResult->m_pSymKey, xResult->m_pSecParam);
-                if ( xResult->m_pContext )
-                {
-                    xResult->m_bEncryption = bEncryption;
-                    xResult->m_bW3CPadding = bW3CPadding;
-                    xResult->m_bPadding = bW3CPadding || ( PK11_GetPadMechanism( nNSSCipherID ) == nNSSCipherID );
-                    xResult->m_nBlockSize = PK11_GetBlockSize( nNSSCipherID, xResult->m_pSecParam );
-                    if ( xResult->m_nBlockSize <= SAL_MAX_INT8 )
-                        return xResult;
-                }
-            }
-        }
+        SAL_WARN("xmlsecurity.nss", "PK11_GetBestSlot failed");
+        throw uno::RuntimeException("PK11_GetBestSlot failed");
     }
 
-    return uno::Reference< xml::crypto::XCipherContext >();
+    SECItem aKeyItem = { siBuffer,
+        const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(aKey.getConstArray())),
+        sal::static_int_cast<unsigned>(aKey.getLength()) };
+    xResult->m_pSymKey = PK11_ImportSymKey(xResult->m_pSlot, nNSSCipherID,
+        PK11_OriginDerive, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, &aKeyItem, nullptr);
+    if (!xResult->m_pSymKey)
+    {
+        SAL_WARN("xmlsecurity.nss", "PK11_ImportSymKey failed");
+        throw uno::RuntimeException("PK11_ImportSymKey failed");
+    }
+
+    SECItem aIVItem = { siBuffer,
+        const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(aInitializationVector.getConstArray())),
+        sal::static_int_cast<unsigned>(aInitializationVector.getLength()) };
+    xResult->m_pSecParam = PK11_ParamFromIV(nNSSCipherID, &aIVItem);
+    if (!xResult->m_pSecParam)
+    {
+        SAL_WARN("xmlsecurity.nss", "PK11_ParamFromIV failed");
+        throw uno::RuntimeException("PK11_ParamFromIV failed");
+    }
+
+    xResult->m_pContext = PK11_CreateContextBySymKey( nNSSCipherID, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, xResult->m_pSymKey, xResult->m_pSecParam);
+    if (!xResult->m_pContext)
+    {
+        SAL_WARN("xmlsecurity.nss", "PK11_CreateContextBySymKey failed");
+        throw uno::RuntimeException("PK11_CreateContextBySymKey failed");
+    }
+
+    xResult->m_bEncryption = bEncryption;
+    xResult->m_bW3CPadding = bW3CPadding;
+    xResult->m_bPadding = bW3CPadding || ( PK11_GetPadMechanism( nNSSCipherID ) == nNSSCipherID );
+    xResult->m_nBlockSize = PK11_GetBlockSize(nNSSCipherID, xResult->m_pSecParam);
+    if (SAL_MAX_INT8 < xResult->m_nBlockSize)
+    {
+        SAL_WARN("xmlsecurity.nss", "PK11_GetBlockSize unexpected result");
+        throw uno::RuntimeException("PK11_GetBlockSize unexpected result");
+    }
+    return xResult;
 }
 
 void OCipherContext::Dispose()
