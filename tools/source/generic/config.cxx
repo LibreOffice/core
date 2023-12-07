@@ -205,7 +205,6 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     sal_uInt64 i;
     const sal_uInt8*    pLine;
     ImplKeyData*    pPrevKey = nullptr;
-    ImplKeyData*    pKey;
     ImplGroupData*  pPrevGroup = nullptr;
     ImplGroupData*  pGroup = nullptr;
     i = 0;
@@ -250,7 +249,6 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                 pData->mpFirstGroup = pGroup;
             pPrevGroup  = pGroup;
             pPrevKey    = nullptr;
-            pKey        = nullptr;
 
             // filter group names
             pLine++;
@@ -292,7 +290,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                 {
                     while ( pGroup->mnEmptyLines )
                     {
-                        pKey                = new ImplKeyData;
+                        ImplKeyData* pKey = new ImplKeyData;
                         pKey->mbIsComment   = true;
                         pPrevKey->mpNext    = pKey;
                         pPrevKey            = pKey;
@@ -301,7 +299,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                 }
 
                 // Generate new key
-                pKey        = new ImplKeyData;
+                ImplKeyData* pKey = new ImplKeyData;
                 pKey->mpNext = nullptr;
                 if ( pPrevKey )
                     pPrevKey->mpNext = pKey;
