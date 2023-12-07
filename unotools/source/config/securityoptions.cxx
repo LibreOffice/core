@@ -78,7 +78,9 @@ bool IsReadOnly( EOption eOption )
             bReadonly = officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::isReadOnly();
             break;
         case SvtSecurityOptions::EOption::MacroTrustedAuthors:
-            bReadonly = false; // TODO? officecfg::Office::Common::Security::Scripting::TrustedAuthors::isReadOnly();
+            // the officecfg does not expose isReadOnly for a ConfigurationSet, so we have to code this ourself
+            bReadonly =
+              comphelper::detail::ConfigurationWrapper::get().isReadOnly("/org.openoffice.Office.Common/Security/Scripting/TrustedAuthors");
             break;
         case SvtSecurityOptions::EOption::CtrlClickHyperlink:
             bReadonly = officecfg::Office::Common::Security::Scripting::HyperlinksWithCtrlClick::isReadOnly();
