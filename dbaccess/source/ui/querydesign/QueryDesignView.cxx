@@ -161,12 +161,8 @@ namespace
             OUString aSourceFieldName(_aDragLeft->GetField());
             OUString aDestFieldName(_aDragRight->GetField());
             // the connection could point on the other side
-            if(pConn->GetSourceWin() == _aDragRight->GetTabWindow())
-            {
-                OUString aTmp(aSourceFieldName);
-                aSourceFieldName = aDestFieldName;
-                aDestFieldName = aTmp;
-            }
+            if (pConn->GetSourceWin() == _aDragRight->GetTabWindow())
+                std::swap(aSourceFieldName, aDestFieldName);
             pConn->GetData()->AppendConnLine( aSourceFieldName,aDestFieldName);
             pConn->UpdateLineList();
             // Modified-Flag
