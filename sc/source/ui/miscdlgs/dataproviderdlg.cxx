@@ -913,9 +913,7 @@ IMPL_LINK_NOARG(ScDataProviderDlg, TransformationSelectHdl, weld::ComboBox&, voi
 
 sc::ExternalDataSource ScDataProviderDlg::getDataSource(ScDocument* pDoc)
 {
-    OUString aURL = mxEditURL->get_text();
-    OUString aProvider = mxProviderList->get_active_text();
-    sc::ExternalDataSource aSource(aURL, aProvider, pDoc);
+    sc::ExternalDataSource aSource(mxEditURL->get_text(), mxProviderList->get_active_text(), pDoc);
 
     OUString aID = mxEditID->get_text();
     aSource.setID(aID);

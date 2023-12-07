@@ -56,8 +56,7 @@ void ContentResultSetWrapper::impl_init_xRowOrigin(std::unique_lock<std::mutex>&
     if(m_xRowOrigin.is())
         return;
 
-    Reference< XRow > xOrgig( m_xResultSetOrigin, UNO_QUERY );
-    m_xRowOrigin = xOrgig;
+    m_xRowOrigin.set(m_xResultSetOrigin, UNO_QUERY);
     OSL_ENSURE( m_xRowOrigin.is(), "interface XRow is required" );
 }
 

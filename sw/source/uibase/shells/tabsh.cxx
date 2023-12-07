@@ -708,11 +708,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                     aBoxSet.Get(
                                     RES_BOXATR_FORMAT ).GetValue() ));
 
-                OUString sCurText( rSh.GetTableBoxText() );
                 pCoreSet->Put( SvxNumberInfoItem( pFormatter,
                                     aBoxSet.Get(
                                         RES_BOXATR_VALUE).GetValue(),
-                                    sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
+                                    rSh.GetTableBoxText(), SID_ATTR_NUMBERFORMAT_INFO ));
 
                 SwWrtShell* pSh = &rSh;
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

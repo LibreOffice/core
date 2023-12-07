@@ -552,8 +552,7 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
     {
         sheet::ActivationEvent aEvent;
         uno::Reference< sheet::XSpreadsheetView > xView(this);
-        uno::Reference< uno::XInterface > xSource(xView, uno::UNO_QUERY);
-        aEvent.Source = xSource;
+        aEvent.Source.set(xView, uno::UNO_QUERY);
         aEvent.ActiveSheet = new ScTableSheetObj(pDocSh, rViewData.GetTabNo());
         // Listener's handler may remove it from the listeners list
         for (size_t i = aActivationListeners.size(); i > 0; --i)

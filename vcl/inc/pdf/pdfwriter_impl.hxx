@@ -325,7 +325,7 @@ public:
         return m_aColorBitmap;
     }
 
-    void setOutline(basegfx::B2DPolyPolygon aOutline) { m_aOutline = aOutline; }
+    void setOutline(const basegfx::B2DPolyPolygon& rOutline) { m_aOutline = rOutline; }
     const basegfx::B2DPolyPolygon& getOutline() const { return m_aOutline; }
 
     void addCode( sal_Ucs i_cCode )

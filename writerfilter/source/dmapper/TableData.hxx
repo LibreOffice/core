@@ -208,7 +208,7 @@ public:
     /**
         Add properties to the last cell of the row.
      */
-    void insertCellProperties(TablePropertyMapPtr pProps)
+    void insertCellProperties(const TablePropertyMapPtr& pProps)
     {
         if (!mCells.empty())
             mCells.back()->insertProperties(pProps);
@@ -376,7 +376,7 @@ public:
 
         @param pProps   the properties to add
      */
-    void insertCellProperties(TablePropertyMapPtr pProps)
+    void insertCellProperties(const TablePropertyMapPtr& pProps)
     {
         mpRow->insertCellProperties(pProps);
     }

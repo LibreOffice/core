@@ -661,10 +661,10 @@ void ODatabaseExport::createRowSet()
 bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTextColor, const FontDescriptor& _rFont)
 {
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
-    OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
+    const OUString& rTableName(bHaveDefaultTable ? m_sDefaultTableName : _rTableName);
     OCopyTableWizard aWizard(
         nullptr,
-        sTableName,
+        rTableName,
         bHaveDefaultTable ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData,
         ODatabaseExport::TColumns(m_aDestColumns),
         m_vDestVector,

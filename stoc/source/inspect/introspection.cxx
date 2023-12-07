@@ -1774,8 +1774,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                         // Enter in own property array
                         Property& rProp = rAllPropArray[ rPropCount ];
-                        OUString aFieldName = xField->getName();
-                        rProp.Name = aFieldName;
+                        rProp.Name = xField->getName();
                         rProp.Handle = rPropCount;
                         Type aFieldType( xPropType->getTypeClass(), xPropType->getName() );
                         rProp.Type = aFieldType;
