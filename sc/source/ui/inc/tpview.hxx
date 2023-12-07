@@ -29,32 +29,54 @@ class ScTpContentOptions : public SfxTabPage
     std::unique_ptr<ScViewOptions> m_xLocalOptions;
 
     std::unique_ptr<weld::ComboBox> m_xGridLB;
+    std::unique_ptr<weld::Widget> m_xGridImg;
     std::unique_ptr<weld::CheckButton> m_xBreakCB;
+    std::unique_ptr<weld::Widget> m_xBreakImg;
     std::unique_ptr<weld::CheckButton> m_xGuideLineCB;
+    std::unique_ptr<weld::Widget> m_xGuideLineImg;
 
     std::unique_ptr<weld::CheckButton> m_xFormulaCB;
+    std::unique_ptr<weld::Widget> m_xFormulaImg;
     std::unique_ptr<weld::CheckButton> m_xNilCB;
+    std::unique_ptr<weld::Widget> m_xNilImg;
     std::unique_ptr<weld::CheckButton> m_xAnnotCB;
+    std::unique_ptr<weld::Widget> m_xAnnotImg;
     std::unique_ptr<weld::CheckButton> m_xFormulaMarkCB;
+    std::unique_ptr<weld::Widget> m_xFormulaMarkImg;
     std::unique_ptr<weld::CheckButton> m_xValueCB;
+    std::unique_ptr<weld::Widget> m_xValueImg;
     std::unique_ptr<weld::CheckButton> m_xColRowHighCB;
+    std::unique_ptr<weld::Widget> m_xColRowHighImg;
     std::unique_ptr<weld::CheckButton> m_xAnchorCB;
+    std::unique_ptr<weld::Widget> m_xAnchorImg;
     std::unique_ptr<weld::CheckButton> m_xRangeFindCB;
+    std::unique_ptr<weld::Widget> m_xRangeFindImg;
 
     std::unique_ptr<weld::ComboBox> m_xObjGrfLB;
+    std::unique_ptr<weld::Widget> m_xObjGrfImg;
     std::unique_ptr<weld::ComboBox> m_xDiagramLB;
+    std::unique_ptr<weld::Widget> m_xDiagramImg;
     std::unique_ptr<weld::ComboBox> m_xDrawLB;
+    std::unique_ptr<weld::Widget> m_xDrawImg;
 
     std::unique_ptr<weld::CheckButton> m_xSyncZoomCB;
+    std::unique_ptr<weld::Widget> m_xSyncZoomImg;
 
     std::unique_ptr<weld::CheckButton> m_xRowColHeaderCB;
+    std::unique_ptr<weld::Widget> m_xRowColHeaderImg;
     std::unique_ptr<weld::CheckButton> m_xHScrollCB;
+    std::unique_ptr<weld::Widget> m_xHScrollImg;
     std::unique_ptr<weld::CheckButton> m_xVScrollCB;
+    std::unique_ptr<weld::Widget> m_xVScrollImg;
     std::unique_ptr<weld::CheckButton> m_xTblRegCB;
+    std::unique_ptr<weld::Widget> m_xTblRegImg;
     std::unique_ptr<weld::CheckButton> m_xOutlineCB;
+    std::unique_ptr<weld::Widget> m_xOutlineImg;
     std::unique_ptr<weld::CheckButton> m_xSummaryCB;
+    std::unique_ptr<weld::Widget> m_xSummaryImg;
     std::unique_ptr<weld::RadioButton> m_xThemedCursorRB;
     std::unique_ptr<weld::RadioButton> m_xSystemCursorRB;
+    std::unique_ptr<weld::Widget> m_xCursorImg;
 
     void    InitGridOpt();
     DECL_LINK( GridHdl, weld::ComboBox&, void );

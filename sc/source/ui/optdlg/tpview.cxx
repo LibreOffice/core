@@ -38,28 +38,50 @@
 ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/tpviewpage.ui", "TpViewPage", &rArgSet)
     , m_xGridLB(m_xBuilder->weld_combo_box("grid"))
+    , m_xGridImg(m_xBuilder->weld_widget("lockgrid"))
     , m_xBreakCB(m_xBuilder->weld_check_button("break"))
+    , m_xBreakImg(m_xBuilder->weld_widget("lockbreak"))
     , m_xGuideLineCB(m_xBuilder->weld_check_button("guideline"))
+    , m_xGuideLineImg(m_xBuilder->weld_widget("lockguideline"))
     , m_xFormulaCB(m_xBuilder->weld_check_button("formula"))
+    , m_xFormulaImg(m_xBuilder->weld_widget("lockformula"))
     , m_xNilCB(m_xBuilder->weld_check_button("nil"))
+    , m_xNilImg(m_xBuilder->weld_widget("locknil"))
     , m_xAnnotCB(m_xBuilder->weld_check_button("annot"))
+    , m_xAnnotImg(m_xBuilder->weld_widget("lockannot"))
     , m_xFormulaMarkCB(m_xBuilder->weld_check_button("formulamark"))
+    , m_xFormulaMarkImg(m_xBuilder->weld_widget("lockformulamark"))
     , m_xValueCB(m_xBuilder->weld_check_button("value"))
+    , m_xValueImg(m_xBuilder->weld_widget("lockvalue"))
     , m_xColRowHighCB(m_xBuilder->weld_check_button("colrowhigh"))
+    , m_xColRowHighImg(m_xBuilder->weld_widget("lockcolrowhigh"))
     , m_xAnchorCB(m_xBuilder->weld_check_button("anchor"))
+    , m_xAnchorImg(m_xBuilder->weld_widget("lockanchor"))
     , m_xRangeFindCB(m_xBuilder->weld_check_button("rangefind"))
+    , m_xRangeFindImg(m_xBuilder->weld_widget("lockrangefind"))
     , m_xObjGrfLB(m_xBuilder->weld_combo_box("objgrf"))
+    , m_xObjGrfImg(m_xBuilder->weld_widget("lockobjgrf"))
     , m_xDiagramLB(m_xBuilder->weld_combo_box("diagram"))
+    , m_xDiagramImg(m_xBuilder->weld_widget("lockdiagram"))
     , m_xDrawLB(m_xBuilder->weld_combo_box("draw"))
+    , m_xDrawImg(m_xBuilder->weld_widget("lockdraw"))
     , m_xSyncZoomCB(m_xBuilder->weld_check_button("synczoom"))
+    , m_xSyncZoomImg(m_xBuilder->weld_widget("locksynczoom"))
     , m_xRowColHeaderCB(m_xBuilder->weld_check_button("rowcolheader"))
+    , m_xRowColHeaderImg(m_xBuilder->weld_widget("lockrowcolheader"))
     , m_xHScrollCB(m_xBuilder->weld_check_button("hscroll"))
+    , m_xHScrollImg(m_xBuilder->weld_widget("lockhscroll"))
     , m_xVScrollCB(m_xBuilder->weld_check_button("vscroll"))
+    , m_xVScrollImg(m_xBuilder->weld_widget("lockvscroll"))
     , m_xTblRegCB(m_xBuilder->weld_check_button("tblreg"))
+    , m_xTblRegImg(m_xBuilder->weld_widget("locktblreg"))
     , m_xOutlineCB(m_xBuilder->weld_check_button("outline"))
+    , m_xOutlineImg(m_xBuilder->weld_widget("lockoutline"))
     , m_xSummaryCB(m_xBuilder->weld_check_button("cbSummary"))
+    , m_xSummaryImg(m_xBuilder->weld_widget("lockcbSummary"))
     , m_xThemedCursorRB(m_xBuilder->weld_radio_button("rbThemedCursor"))
     , m_xSystemCursorRB(m_xBuilder->weld_radio_button("rbSystemCursor"))
+    , m_xCursorImg(m_xBuilder->weld_widget("lockCursor"))
 {
     SetExchangeSupport();
     Link<weld::ComboBox&,void> aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
@@ -210,6 +232,96 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
         m_xRangeFindCB->set_active(pFinderItem->GetValue());
     if(const SfxBoolItem* pZoomItem = rCoreSet->GetItemIfSet(SID_SC_OPT_SYNCZOOM, false))
         m_xSyncZoomCB->set_active(pZoomItem->GetValue());
+
+    bool bReadOnly = officecfg::Office::Calc::Layout::Line::GridLine::isReadOnly() ||
+        officecfg::Office::Calc::Layout::Line::GridOnColoredCells::isReadOnly();
+    m_xGridLB->set_sensitive(!bReadOnly);
+    m_xGridImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Line::PageBreak::isReadOnly();
+    m_xBreakCB->set_sensitive(!bReadOnly);
+    m_xBreakImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Line::Guide::isReadOnly();
+    m_xGuideLineCB->set_sensitive(!bReadOnly);
+    m_xGuideLineImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::Formula::isReadOnly();
+    m_xFormulaCB->set_sensitive(!bReadOnly);
+    m_xFormulaImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::ZeroValue::isReadOnly();
+    m_xNilCB->set_sensitive(!bReadOnly);
+    m_xNilImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::NoteTag::isReadOnly();
+    m_xAnnotCB->set_sensitive(!bReadOnly);
+    m_xAnnotImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::FormulaMark::isReadOnly();
+    m_xFormulaMarkCB->set_sensitive(!bReadOnly);
+    m_xFormulaMarkImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::ValueHighlighting::isReadOnly();
+    m_xValueCB->set_sensitive(!bReadOnly);
+    m_xValueImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::isReadOnly();
+    m_xColRowHighCB->set_sensitive(!bReadOnly);
+    m_xColRowHighImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::Anchor::isReadOnly();
+    m_xAnchorCB->set_sensitive(!bReadOnly);
+    m_xAnchorImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Input::ShowReference::isReadOnly();
+    m_xRangeFindCB->set_sensitive(!bReadOnly);
+    m_xRangeFindImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::ObjectGraphic::isReadOnly();
+    m_xObjGrfLB->set_sensitive(!bReadOnly);
+    m_xObjGrfImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::Chart::isReadOnly();
+    m_xDiagramLB->set_sensitive(!bReadOnly);
+    m_xDiagramImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Content::Display::DrawingObject::isReadOnly();
+    m_xDrawLB->set_sensitive(!bReadOnly);
+    m_xDrawImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Zoom::Synchronize::isReadOnly();
+    m_xSyncZoomCB->set_sensitive(!bReadOnly);
+    m_xSyncZoomImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Window::ColumnRowHeader::isReadOnly();
+    m_xRowColHeaderCB->set_sensitive(!bReadOnly);
+    m_xRowColHeaderImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Window::HorizontalScroll::isReadOnly();
+    m_xHScrollCB->set_sensitive(!bReadOnly);
+    m_xHScrollImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Window::VerticalScroll::isReadOnly();
+    m_xVScrollCB->set_sensitive(!bReadOnly);
+    m_xVScrollImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Window::SheetTab::isReadOnly();
+    m_xTblRegCB->set_sensitive(!bReadOnly);
+    m_xTblRegImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Window::OutlineSymbol::isReadOnly();
+    m_xOutlineCB->set_sensitive(!bReadOnly);
+    m_xOutlineImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Window::SearchSummary::isReadOnly();
+    m_xSummaryCB->set_sensitive(!bReadOnly);
+    m_xSummaryImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Layout::Window::ThemedCursor::isReadOnly();
+    m_xThemedCursorRB->set_sensitive(!bReadOnly);
+    m_xSystemCursorRB->set_sensitive(!bReadOnly);
+    m_xCursorImg->set_visible(bReadOnly);
 
     m_xRangeFindCB->save_state();
     m_xSyncZoomCB->save_state();
