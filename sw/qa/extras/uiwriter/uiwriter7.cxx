@@ -2825,7 +2825,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf62032ApplyStyle)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf62032_apply_style.odt");
+    createSwDoc("tdf62032_apply_style.odt");
+    SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtSh->Down(/*bSelect=*/false);
