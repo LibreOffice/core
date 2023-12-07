@@ -1872,9 +1872,14 @@ AC_ARG_ENABLE(z7-debug,
 libo_FUZZ_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
         [Enable the online update service that will check for new versions of
-         LibreOffice. Disabled by default. Requires --with-privacy-policy-url to be set.
-         If the value is "mar", the experimental Mozilla-like update will be
-         enabled instead of the traditional update mechanism.]),
+         LibreOffice. Disabled by default. Requires --with-privacy-policy-url to be set.]),
+,)
+
+libo_FUZZ_ARG_ENABLE(online-update-mar,
+    AS_HELP_STRING([--enable-online-update-mar],
+        [Enable the experimental Mozilla-like online update service that will
+         check for new versions of LibreOffice. Disabled by default. Requires
+         --with-update-config to be set.]),
 ,)
 
 AC_ARG_WITH(update-config,
@@ -2196,7 +2201,7 @@ AC_ARG_WITH(system-libs,
 
 AC_ARG_WITH(system-bzip2,
     AS_HELP_STRING([--with-system-bzip2],
-        [Use bzip2 already on system. Used when --enable-online-update=mar
+        [Use bzip2 already on system. Used when --enable-online-update-mar
         or --enable-python=internal]),,
     [with_system_bzip2="$with_system_libs"])
 
@@ -13586,19 +13591,11 @@ dnl Test whether to enable online update service
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable online update])
 ENABLE_ONLINE_UPDATE=
-ENABLE_ONLINE_UPDATE_MAR=
-UPDATE_CONFIG=
 if test "$enable_online_update" = ""; then
     AC_MSG_RESULT([no])
 else
     if test "$enable_online_update" = "mar"; then
-        AC_MSG_RESULT([yes - MAR-based online update])
-        ENABLE_ONLINE_UPDATE_MAR="TRUE"
-        if test "$with_update_config" = ""; then
-            AC_MSG_ERROR([mar based online updater needs an update config specified with "with-update-config])
-        fi
-        UPDATE_CONFIG="$with_update_config"
-        AC_DEFINE(HAVE_FEATURE_UPDATE_MAR)
+        AC_MSG_ERROR([--enable-online-update=mar is deprecated, use --enable-online-update-mar instead])
     elif test "$enable_online_update" = "yes"; then
         if test "$enable_curl" != "yes"; then
             AC_MSG_ERROR([--disable-online-update must be used when --disable-curl is used])
@@ -13610,6 +13607,25 @@ else
     fi
 fi
 AC_SUBST(ENABLE_ONLINE_UPDATE)
+
+
+dnl ===================================================================
+dnl Test whether to enable mar online update service
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable mar online update])
+ENABLE_ONLINE_UPDATE_MAR=
+UPDATE_CONFIG=
+if test "$enable_online_update_mar" = yes; then
+    AC_MSG_RESULT([yes])
+    ENABLE_ONLINE_UPDATE_MAR="TRUE"
+    if test "$with_update_config" = ""; then
+        AC_MSG_ERROR([mar based online updater needs an update config specified with "with-update-config])
+    fi
+    UPDATE_CONFIG="$with_update_config"
+    AC_DEFINE(HAVE_FEATURE_UPDATE_MAR)
+else
+    AC_MSG_RESULT([no])
+fi
 AC_SUBST(ENABLE_ONLINE_UPDATE_MAR)
 AC_SUBST(UPDATE_CONFIG)
 
