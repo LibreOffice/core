@@ -17,6 +17,7 @@ $(eval $(call gb_Executable_set_include,update_service,\
 	-I$(SRCDIR)/onlineupdate/source/libmar/verify/ \
 	-I$(SRCDIR)/onlineupdate/source/libmar/sign/ \
 	-I$(SRCDIR)/onlineupdate/source/update/common/ \
+	-I$(SRCDIR)/onlineupdate/source/service/ \
 	-I$(SRCDIR)/include/onlineupdate/mozilla/ \
 	-I$(SRCDIR)/include/onlineupdate/ \
 	$$(INCLUDE) \
@@ -50,6 +51,13 @@ $(eval $(call gb_Executable_add_ldflags,update_service,\
 
 $(eval $(call gb_Executable_add_defs,update_service,\
 	-DXP_WIN=1 \
+	-DUNICODE  \
+	-DMOZ_MAINTENANCE_SERVICE \
+	-DNS_NO_XPCOM \
+	-D__ORDER_BIG_ENDIAN__=4321 \
+	-D__ORDER_LITTLE_ENDIAN__=1234 \
+	-D__BYTE_ORDER__=1234 \
+	-DNTDDI_VERSION=NTDDI_WIN8 \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,update_service,\

@@ -18,9 +18,6 @@ $(eval $(call gb_Module_add_targets,onlineupdate,\
 		StaticLibrary_updatehelper \
 		Executable_update_service \
 		WinResTarget_updater )\
-	Executable_mar \
-	Executable_updater \
-	Executable_mbsdiff \
 	CustomTarget_generated \
 ))
 endif
