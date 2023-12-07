@@ -31,19 +31,13 @@
      return converter.from_bytes( s );
  #else
      return ::locale::conv::utf_to_utf<wchar_t>(s.c_str(), s.c_str() + s.size());
-@@ -138,8 +152,15 @@
+@@ -138,6 +152,9 @@
      WideCharToMultiByte(CP_UTF8, 0, s.c_str(), -1, str.get(), nSize, nullptr, nullptr);
      return str.get();
  #elif !defined NUMBERTEXT_BOOST
 +#if defined __GNUC__
-+#pragma GCC diagnostic push
 +#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
      typedef std::codecvt_utf8<wchar_t> convert_type;
      std::wstring_convert<convert_type, wchar_t> converter;
-+#if defined __GNUC__
-+#pragma GCC diagnostic pop
-+#endif
      return converter.to_bytes( s );
- #else
-     return ::locale::conv::utf_to_utf<char>(s.c_str(), s.c_str() + s.size());
