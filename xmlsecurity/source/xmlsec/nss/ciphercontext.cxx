@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 #include "ciphercontext.hxx"
 #include <pk11pub.h>
@@ -247,7 +248,8 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
         OSL_ENSURE( aResult.getLength() >= m_nBlockSize, "Not enough data to handle the padding!" );
 
         sal_Int8 nBytesToRemove = aResult[aResult.getLength() - 1];
-        if ( nBytesToRemove <= 0 || nBytesToRemove > aResult.getLength() )
+        // see https://www.w3.org/TR/xmlenc-core1/#sec-Alg-Block
+        if (nBytesToRemove <= 0 || m_nBlockSize < nBytesToRemove)
         {
             m_bBroken = true;
             Dispose();
