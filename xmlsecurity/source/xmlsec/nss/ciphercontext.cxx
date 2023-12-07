@@ -124,12 +124,12 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
     if ( aData.hasElements() )
     {
         sal_Int32 nOldLastBlockLen = m_aLastBlock.getLength();
-        OSL_ENSURE( nOldLastBlockLen <= m_nBlockSize, "Unexpected last block size!" );
 
         sal_Int32 nAvailableData = nOldLastBlockLen + aData.getLength();
         sal_Int32 nToConvertLen;
         if ( m_bEncryption || !m_bW3CPadding )
         {
+            assert(nOldLastBlockLen < m_nBlockSize);
             if ( nAvailableData % m_nBlockSize == 0 )
                 nToConvertLen = nAvailableData;
             else if ( nAvailableData < m_nBlockSize )
@@ -139,6 +139,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
         }
         else
         {
+            assert(nOldLastBlockLen < m_nBlockSize * 2);
             // decryption with W3C padding needs at least one block for finalizing
             if ( nAvailableData < m_nBlockSize * 2 )
                 nToConvertLen = 0;
@@ -171,7 +172,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
     }
 
     uno::Sequence< sal_Int8 > aResult;
-    OSL_ENSURE( aToConvert.getLength() % m_nBlockSize == 0, "Unexpected size of the data to encrypt!" );
+    assert(aToConvert.getLength() % m_nBlockSize == 0);
     if ( aToConvert.hasElements() )
     {
         int nResultLen = 0;
@@ -200,8 +201,8 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    OSL_ENSURE( m_nBlockSize <= SAL_MAX_INT8, "Unexpected block size!" );
-    OSL_ENSURE( m_nConverted % m_nBlockSize == 0, "Unexpected amount of bytes is already converted!" );
+    assert(m_nBlockSize <= SAL_MAX_INT8);
+    assert(m_nConverted % m_nBlockSize == 0); // whole blocks are converted
     sal_Int32 nSizeForPadding = ( m_nConverted + m_aLastBlock.getLength() ) % m_nBlockSize;
 
     // if it is decryption, the amount of data should be rounded to the block size even in case of padding
@@ -212,7 +213,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     {
         // in this case the last block should be smaller than standard block
         // it will be increased with the padding
-        OSL_ENSURE( m_aLastBlock.getLength() < m_nBlockSize, "Unexpected size of cashed incomplete last block!" );
+        assert(m_aLastBlock.getLength() < m_nBlockSize);
 
         // W3CPadding handling for encryption
         sal_Int32 nPaddingSize = m_nBlockSize - nSizeForPadding;
@@ -230,7 +231,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     }
 
     // finally should the last block be smaller than two standard blocks
-    OSL_ENSURE( m_aLastBlock.getLength() < m_nBlockSize * 2 , "Unexpected size of cashed incomplete last block!" );
+    assert(m_aLastBlock.getLength() < m_nBlockSize * 2);
 
     uno::Sequence< sal_Int8 > aResult;
     if ( m_aLastBlock.hasElements() )
@@ -263,19 +264,19 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     if ( m_bW3CPadding && !m_bEncryption )
     {
         // W3CPadding handling for decryption
-        // aResult should have enough data, since we let m_aLastBlock be big enough in case of decryption
-        OSL_ENSURE( aResult.getLength() >= m_nBlockSize, "Not enough data to handle the padding!" );
+        // aResult should have enough data, except if the input was completely empty
 
-        sal_Int8 nBytesToRemove = aResult[aResult.getLength() - 1];
         // see https://www.w3.org/TR/xmlenc-core1/#sec-Alg-Block
-        if (nBytesToRemove <= 0 || m_nBlockSize < nBytesToRemove)
+        if (aResult.getLength() < m_nBlockSize
+            || aResult[aResult.getLength()-1] <= 0
+            || m_nBlockSize < aResult[aResult.getLength()-1])
         {
             m_bBroken = true;
             Dispose();
             throw uno::RuntimeException("incorrect size of padding");
         }
 
-        aResult.realloc( aResult.getLength() - nBytesToRemove );
+        aResult.realloc(aResult.getLength() - aResult[aResult.getLength()-1]);
     }
 
     Dispose();
