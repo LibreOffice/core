@@ -120,7 +120,11 @@ IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, weld::Button&, void)
     SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current());
     SwFEShell* pFEShell = pDocShell ? pDocShell->GetFEShell() : nullptr;
     if (pFEShell)
-        m_xLineNo->set_label(OUString::number(pFEShell->GetLineCount()));
+    {
+        OUString sLineCount = OUString::number(pFEShell->GetLineCount());
+        m_xLineNo->set_label(sLineCount);
+        m_xLineNo->set_size_request(m_xLineNo->get_approximate_digit_width() * sLineCount.getLength(), -1);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
