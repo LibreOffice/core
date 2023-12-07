@@ -426,8 +426,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
     if (bForceStr || aCell.hasString())
     {
         sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
-        OUString aStr = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
-        aLastInRangeString = aStr;
+        aLastInRangeString = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
     }
     else
     {
