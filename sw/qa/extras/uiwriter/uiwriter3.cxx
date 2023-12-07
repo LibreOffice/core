@@ -2371,6 +2371,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104649)
     CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf111969_lastHalfcharOfSelection)
+{
+    // Given a document with a selected character,
+    // the last half of the character should also be considered to be "in the selection"
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    // move the cursor after the "o" (this is better/safer than testing cursor at end of paragrah)
+    pWrtShell->Insert2("Hello!");
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // get last pixel that will be part of the selection (current position 1pt wide).
+    Point aLogicL(pWrtShell->GetCharRect().Center());
+    // cursor pos WOULD be in the selection, but just reduce by one for good measure...
+    aLogicL.AdjustX(-1);
+    // sanity check - pixel after should NOT be in the selection
+    Point aLogicR(pWrtShell->GetCharRect().Center());
+    aLogicR.AdjustX(1);
+    SwRect aStartRect;
+    SwRect aEndRect;
+    //now select the letter 'o'
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    // sanity check - the selection really does contain (or not) the two logic points
+    pWrtShell->GetCursor_()->FillStartEnd(aStartRect, aEndRect);
+    SwRect aSel(aStartRect.TopLeft(), aEndRect.BottomRight());
+    CPPUNIT_ASSERT(aSel.Contains(aLogicL));
+    CPPUNIT_ASSERT(!aSel.Contains(aLogicR));
+
+    // the pixel just at the end of the selection is considered to be in ModelPositionForViewPoint
+    CPPUNIT_ASSERT(pWrtShell->TestCurrPam(aLogicL));
+    // the pixel just past the end of the selection is not considered to be inside.
+    CPPUNIT_ASSERT(!pWrtShell->TestCurrPam(aLogicR));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 {
     createSwDoc("tdf134931.odt");

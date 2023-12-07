@@ -1292,6 +1292,7 @@ bool SwCursorShell::TestCurrPam(
 
     SwCursorMoveState aTmpState( CursorMoveState::NONE );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
+    aTmpState.m_bPosMatchesBounds = true; // treat last half of character same as first half
     if ( !GetLayout()->GetModelPositionForViewPoint( &aPtPos, aPt, &aTmpState ) && bTstHit )
         return false;
 
