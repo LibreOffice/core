@@ -103,9 +103,15 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, weld::Button&, void)
     {
         xD->setParentWindow(m_xDialog->GetXWindow());
         if( mxCert.is() )
+        {
             xD->showCertificate( mxCert );
+            mxAlwaysTrustCB->set_sensitive(true);
+        }
         else if( mxStore.is() )
+        {
             xD->showScriptingContentSignatures( mxStore, uno::Reference< io::XInputStream >() );
+            mxAlwaysTrustCB->set_sensitive(true);
+        }
     }
 }
 
@@ -147,6 +153,7 @@ void MacroWarning::InitControls()
     // show signature controls?
     if (mbShowSignatures)
     {
+        mxAlwaysTrustCB->set_sensitive(false);
         mxViewSignsBtn->connect_clicked(LINK(this, MacroWarning, ViewSignsBtnHdl));
         mxViewSignsBtn->set_sensitive(false);
 
