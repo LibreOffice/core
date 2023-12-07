@@ -19,9 +19,11 @@
         </info>
         <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
             <info>
-                <desc>Determines if the automatic Updater is enabled or disabled</desc>
+                <desc>Determines if the automatic Updater is enabled
+                or disabled. Defaults to false, as long as this is
+                regarded experimental.</desc>
             </info>
-            <value>true</value>
+            <value>false</value>
         </prop>
         <prop oor:name="Mode" oor:type="xs:int" oor:nillable="false">
             <info>
