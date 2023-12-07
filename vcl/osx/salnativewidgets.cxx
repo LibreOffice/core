@@ -757,6 +757,22 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
 
                     CGContextRestoreGState(context);
 
+                    // Related: tdf#155266 force flush after drawing native scrollbars
+                    // When scrolling on some Intel Macs either via dragging
+                    // the scrollbar thumb or via swiping the trackpad with two
+                    // fingers, final repaint of scrollbars doesn't appear to
+                    // get flushed to the screen. It appears that scrollbars
+                    // aren't updated and repainted until after a batch of
+                    // native scroll events have been dispatched. On slower
+                    // machines, this lag is long enough that any pending
+                    // forced flushes have already been done so when the timer
+                    // that repaints scrollbars finally fires, the repainted
+                    // scrollbars won't get flushed to the native window until
+                    // the next normal flush which may not occur until seconds
+                    // later.
+                    if (mpFrame && nType == ControlType::Scrollbar)
+                        mpFrame->mbForceFlush = true;
+
                     bOK = true;
 
                     [pBar release];
