@@ -1220,7 +1220,9 @@ void SvListView::Impl::ActionRemoving( SvTreeListEntry* pEntry )
     SvTreeListEntry* pCurEntry = pEntry->pParent;
     if (pCurEntry && pCurEntry != m_rThis.pModel->pRootItem.get() && pCurEntry->m_Children.size() == 1)
     {
-        pViewData = m_DataTable.find(pCurEntry)->second.get();
+        SvDataTable::iterator itr = m_DataTable.find(pCurEntry);
+        assert(itr != m_DataTable.end() && "Entry not in Table");
+        pViewData = itr->second.get();
         pViewData->SetExpanded(false);
     }
 }

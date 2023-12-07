@@ -2850,7 +2850,9 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
          i != entity_->getMembers().end();) {
         out << indent() << "{ { ";
         if (i->parameterized) {
-            sal_uInt32 k = parameters.find(i->type)->second;
+            const auto iter = parameters.find(i->type);
+            assert(iter != parameters.end());
+            sal_uInt32 k = iter->second;
             out << "the_pclass" << k << ", the_pname" << k << ".pData";
         } else {
             const auto iter = types.find(i->type);

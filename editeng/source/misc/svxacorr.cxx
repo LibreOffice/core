@@ -2008,7 +2008,9 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
     if (m_aLangTable.find(aLanguageTag) != m_aLangTable.end() || CreateLanguageFile(aLanguageTag, false))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists & rList = m_aLangTable.find(aLanguageTag)->second;
+        const auto iter = m_aLangTable.find(aLanguageTag);
+        assert(iter != m_aLangTable.end());
+        SvxAutoCorrectLanguageLists & rList = iter->second;
         pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
         if( pRet )
         {
@@ -2068,7 +2070,9 @@ bool SvxAutoCorrect::FindInWordStartExceptList( LanguageType eLang,
     if (m_aLangTable.find(aLanguageTag) != m_aLangTable.end() || CreateLanguageFile(aLanguageTag, false))
     {
         //the language is available - so bring it on
-        auto& rList = m_aLangTable.find(aLanguageTag)->second;
+        const auto iter = m_aLangTable.find(aLanguageTag);
+        assert(iter != m_aLangTable.end() && "CreateLanguageFile can't fail");
+        auto& rList = iter->second;
         if(rList.GetWordStartExceptList()->find(sWord) != rList.GetWordStartExceptList()->end() )
             return true;
     }
@@ -2082,7 +2086,9 @@ bool SvxAutoCorrect::FindInWordStartExceptList( LanguageType eLang,
                  CreateLanguageFile(aLanguageTag, false)))
     {
         //the language is available - so bring it on
-        auto& rList = m_aLangTable.find(aLanguageTag)->second;
+        const auto iter = m_aLangTable.find(aLanguageTag);
+        assert(iter != m_aLangTable.end() && "CreateLanguageFile can't fail");
+        auto& rList = iter->second;
         if(rList.GetWordStartExceptList()->find(sWord) != rList.GetWordStartExceptList()->end() )
             return true;
     }
@@ -2162,7 +2168,9 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
                  CreateLanguageFile(aLanguageTag, false)))
     {
         //the language is available - so bring it on
-        const SvStringsISortDtor* pList = m_aLangTable.find(aLanguageTag)->second.GetCplSttExceptList();
+        const auto iter = m_aLangTable.find(aLanguageTag);
+        assert(iter != m_aLangTable.end() && "CreateLanguageFile can't fail");
+        const SvStringsISortDtor* pList = iter->second.GetCplSttExceptList();
         if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sWord) != pList->end() )
             return true;
     }

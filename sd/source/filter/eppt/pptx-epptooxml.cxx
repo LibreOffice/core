@@ -2306,9 +2306,13 @@ void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rD
             && (aAny >>= aText) && !aText.isEmpty()))
     {
         if ((xShape = GetReferencedPlaceholderXShape(Footer, ePageType)))
+        {
+            const auto iter = maPlaceholderShapeToIndexMap.find(xShape);
+            assert(iter != maPlaceholderShapeToIndexMap.end());
             rDML.WritePlaceholderReferenceShape(Footer,
-                                                maPlaceholderShapeToIndexMap.find(xShape)->second,
+                                                iter->second,
                                                 ePageType, mXPagePropSet);
+        }
     }
 
     if (ePageType == LAYOUT

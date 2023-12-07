@@ -3402,8 +3402,7 @@ void FmXFormShell::CreateExternalView_Lock()
                 // column position
                 pDispatchArgs->Name = FMARG_ADDCOL_COLUMNPOS;
                 FmMapUString2Int16::const_iterator aOffset = aRadioPositions.find(rCtrlSource.first);
-                DBG_ASSERT(aOffset != aRadioPositions.end(),
-                    "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
+                assert(aOffset != aRadioPositions.end() && "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 sal_Int16 nPosition = (*aOffset).second;
                 nPosition = nPosition + nOffset;
                     // we already inserted nOffset additional columns...
