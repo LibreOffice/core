@@ -39,6 +39,10 @@ public:
 
     bool    getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius, bool bUseRings, double fMaxOffset ) const;
 
+    // Determine if the pie wedges are ordered clockwise (returns true) or
+    // counterclockwise (returns false)
+    bool    clockwiseWedges() const;
+
 public:
     //Distance between different category rings, seen relative to width of a ring:
     double  m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
@@ -222,6 +226,9 @@ struct PieLabelInfo;
             sal_Int32 n3DRelativeHeight);
 
 private: //member
+    // Constants for of-pie charts. Some of these will want to become
+    // user-selectable values. TODO
+
     // Radius scalings for left and right of-pie subcharts
     static constexpr double m_fLeftScale = 2.0/3;
     static constexpr double m_fRightScale = 1.0/3;

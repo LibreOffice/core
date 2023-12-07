@@ -178,6 +178,14 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
     return true;
 }
 
+
+bool PiePositionHelper::clockwiseWedges() const
+{
+    const ExplicitScaleData& rAngleScale = m_bSwapXAndY ? m_aScales[1] : m_aScales[0];
+    return rAngleScale.Orientation == AxisOrientation_MATHEMATICAL;
+}
+
+
 PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
                    , sal_Int32 nDimensionCount
                    , bool bExcludingPositioning )
@@ -1087,8 +1095,9 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
             // Left of-pie has the "composite" wedge (the one expanded in the right
             // subgraph) facing to the right in the chart, to allow the expansion
             // lines to meet it
-            double compositeVal = pDataSrc->getData(pSeries, nRingPtCnt - 1, eType);
-            return compositeVal * 360 / (ringSum * 2);
+            const double compositeVal = pDataSrc->getData(pSeries, nRingPtCnt - 1, eType);
+            const double degAng = compositeVal * 360 / (ringSum * 2);
+            return m_aPosHelper.clockwiseWedges() ? 360 - degAng : degAng;
         } else {
             /// The angle degree offset is set by the same property of the
             /// data series.
