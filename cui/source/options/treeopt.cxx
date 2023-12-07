@@ -80,7 +80,6 @@
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
-#include <com/sun/star/setup/UpdateCheck.hpp>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/langitem.hxx>
@@ -1735,20 +1734,14 @@ void OfaTreeOptionsDialog::generalOptions(const std::vector<sal_uInt16>& vPageId
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 
+#if !HAVE_FEATURE_UPDATE_MAR
             // Disable Online Update page if service not installed
-            if( RID_SVXPAGE_ONLINEUPDATE == nPageId )
+            if( RID_SVXPAGE_ONLINEUPDATE == nPageId
+                && !SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateEnabled() )
             {
-                try
-                {
-                    Reference < XInterface > xService( setup::UpdateCheck::create( ::comphelper::getProcessComponentContext() ) );
-                    if( ! xService.is() )
-                        continue;
-                }
-                catch ( css::uno::DeploymentException& )
-                {
-                    continue;
-                }
+                continue;
             }
+#endif
 
             // Disable Basic IDE options, if experimental features are not enabled
             if( RID_SVXPAGE_BASICIDE_OPTIONS == nPageId )

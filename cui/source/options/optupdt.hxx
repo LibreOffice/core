@@ -28,6 +28,8 @@
 class SvxOnlineUpdateTabPage : public SfxTabPage
 {
 private:
+    bool m_showTraditionalOnlineUpdate;
+
     OUString       m_aNeverChecked;
     OUString       m_aLastCheckedTemplate;
 
@@ -52,6 +54,11 @@ private:
     std::unique_ptr<weld::Widget> m_xExtrasImg;
     std::unique_ptr<weld::Label> m_xUserAgentLabel;
     std::unique_ptr<weld::LinkButton> m_xPrivacyPolicyButton;
+    std::unique_ptr<weld::Box> m_xBox2;
+    std::unique_ptr<weld::Frame> m_xFrameDest;
+    std::unique_ptr<weld::Frame> m_xFrameAgent;
+    std::unique_ptr<weld::Frame> m_xMar;
+    std::unique_ptr<weld::CheckButton> m_xEnableMar;
 
     DECL_LINK(FileDialogHdl_Impl, weld::Button&, void);
     DECL_LINK(CheckNowHdl_Impl, weld::Button&, void);
@@ -71,6 +78,8 @@ public:
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
     virtual void            FillUserData() override;
+
+    static bool isTraditionalOnlineUpdateEnabled();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

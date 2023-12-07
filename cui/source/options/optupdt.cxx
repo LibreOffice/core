@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/numformat.hxx>
@@ -34,12 +35,14 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/setup/UpdateCheck.hpp>
 #include <com/sun/star/setup/UpdateCheckConfig.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <sfx2/filedlghelper.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Update.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -49,6 +52,7 @@ using namespace ::css;
 
 SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optonlineupdatepage.ui", "OptOnlineUpdatePage", &rSet)
+    , m_showTraditionalOnlineUpdate(isTraditionalOnlineUpdateEnabled())
     , m_xNeverChecked(m_xBuilder->weld_label("neverchecked"))
     , m_xAutoCheckCheckBox(m_xBuilder->weld_check_button("autocheck"))
     , m_xAutoCheckImg(m_xBuilder->weld_widget("lockautocheck"))
@@ -67,36 +71,60 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
     , m_xExtrasImg(m_xBuilder->weld_widget("lockextrabits"))
     , m_xUserAgentLabel(m_xBuilder->weld_label("useragent"))
     , m_xPrivacyPolicyButton(m_xBuilder->weld_link_button("btnPrivacyPolicy"))
+    , m_xBox2(m_xBuilder->weld_box("box2"))
+    , m_xFrameDest(m_xBuilder->weld_frame("frameDest"))
+    , m_xFrameAgent(m_xBuilder->weld_frame("frameAgent"))
+    , m_xMar(m_xBuilder->weld_frame("frameMar"))
+    , m_xEnableMar(m_xBuilder->weld_check_button("enableMar"))
 {
-    m_aNeverChecked = m_xNeverChecked->get_label();
+    if (m_showTraditionalOnlineUpdate) {
+        m_aNeverChecked = m_xNeverChecked->get_label();
 
-    m_xAutoCheckCheckBox->connect_toggled( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
-    m_xExtrasCheckBox->connect_toggled( LINK( this, SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl ) );
-    m_xCheckNowButton->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
-    m_xChangePathButton->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
-    m_xPrivacyPolicyButton->set_uri(
-        officecfg::Office::Common::Menus::PrivacyPolicyURL::get()
-        + "?type=updatecheck&LOvers=" + utl::ConfigManager::getProductVersion()
-        + "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47());
+        m_xAutoCheckCheckBox->connect_toggled( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
+        m_xExtrasCheckBox->connect_toggled( LINK( this, SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl ) );
+        m_xCheckNowButton->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
+        m_xChangePathButton->connect_clicked( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
+        m_xPrivacyPolicyButton->set_uri(
+            officecfg::Office::Common::Menus::PrivacyPolicyURL::get()
+            + "?type=updatecheck&LOvers=" + utl::ConfigManager::getProductVersion()
+            + "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47());
 
 
-    uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    m_xUpdateAccess = setup::UpdateCheckConfig::create( xContext );
-    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+        m_xUpdateAccess = setup::UpdateCheckConfig::create( xContext );
+        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
 
-    bool bDownloadSupported = false;
-    m_xUpdateAccess->getByName( "DownloadSupported" ) >>= bDownloadSupported;
+        bool bDownloadSupported = false;
+        m_xUpdateAccess->getByName( "DownloadSupported" ) >>= bDownloadSupported;
 
-    m_xAutoDownloadCheckBox->set_visible(bDownloadSupported);
-    m_xDestPathLabel->set_visible(bDownloadSupported);
-    m_xDestPath->set_visible(bDownloadSupported);
-    m_xChangePathButton->set_visible(bDownloadSupported);
+        m_xAutoDownloadCheckBox->set_visible(bDownloadSupported);
+        m_xDestPathLabel->set_visible(bDownloadSupported);
+        m_xDestPath->set_visible(bDownloadSupported);
+        m_xChangePathButton->set_visible(bDownloadSupported);
 
-    m_aLastCheckedTemplate = m_xLastChecked->get_label();
+        m_aLastCheckedTemplate = m_xLastChecked->get_label();
 
-    UpdateLastCheckedText();
-    UpdateUserAgent();
+        UpdateLastCheckedText();
+        UpdateUserAgent();
+    } else {
+        m_xAutoCheckCheckBox->hide();
+        m_xEveryDayButton->hide();
+        m_xEveryWeekButton->hide();
+        m_xEveryMonthButton->hide();
+        m_xCheckNowButton->hide();
+        m_xBox2->hide();
+        m_xAutoCheckImg->hide();
+        m_xCheckIntervalImg->hide();
+        m_xFrameDest->hide();
+        m_xFrameAgent->hide();
+        m_xPrivacyPolicyButton->hide();
+    }
+
+#if HAVE_FEATURE_UPDATE_MAR
+    m_xMar->show();
+    m_xEnableMar->set_sensitive(!officecfg::Office::Update::Update::Enabled::isReadOnly());
+#endif
 }
 
 SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
@@ -232,130 +260,148 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
 
-    bool bValue;
-    sal_Int64 nValue;
+    if (m_showTraditionalOnlineUpdate) {
+        bool bValue;
+        sal_Int64 nValue;
 
-    if( m_xAutoCheckCheckBox->get_state_changed_from_saved() )
-    {
-        bValue = m_xAutoCheckCheckBox->get_active();
-        m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::Any( bValue ) );
+        if( m_xAutoCheckCheckBox->get_state_changed_from_saved() )
+        {
+            bValue = m_xAutoCheckCheckBox->get_active();
+            m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::Any( bValue ) );
+            bModified = true;
+        }
+
+        nValue = 0;
+        if( m_xEveryDayButton->get_active() )
+        {
+            if( !m_xEveryDayButton->get_saved_state() )
+                nValue = 86400;
+        }
+        else if( m_xEveryWeekButton->get_active() )
+        {
+            if( !m_xEveryWeekButton->get_saved_state() )
+                nValue = 604800;
+        }
+        else if( m_xEveryMonthButton->get_active() )
+        {
+            if( !m_xEveryMonthButton->get_saved_state() )
+                nValue = 2592000;
+        }
+
+        if( nValue > 0 )
+        {
+            m_xUpdateAccess->replaceByName( "CheckInterval", uno::Any( nValue ) );
+            bModified = true;
+        }
+
+        if( m_xAutoDownloadCheckBox->get_state_changed_from_saved() )
+        {
+            bValue = m_xAutoDownloadCheckBox->get_active();
+            m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::Any( bValue ) );
+            bModified = true;
+        }
+
+        OUString sValue, aURL;
+        m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
+
+        if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_xDestPath->get_label(), aURL) ) &&
+            ( aURL != sValue ) )
+        {
+            m_xUpdateAccess->replaceByName( "DownloadDestination", uno::Any( aURL ) );
+            bModified = true;
+        }
+
+        if( m_xExtrasCheckBox->get_state_changed_from_saved() )
+        {
+            bValue = m_xExtrasCheckBox->get_active();
+            m_xUpdateAccess->replaceByName( "ExtendedUserAgent", uno::Any( bValue ) );
+            bModified = true;
+        }
+
+        uno::Reference< util::XChangesBatch > xChangesBatch(m_xUpdateAccess, uno::UNO_QUERY);
+        if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
+            xChangesBatch->commitChanges();
+    }
+
+#if HAVE_FEATURE_UPDATE_MAR
+    if (m_xEnableMar->get_state_changed_from_saved()) {
+        auto batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Update::Update::Enabled::set(m_xEnableMar->get_active(), batch);
+        batch->commit();
         bModified = true;
     }
-
-    nValue = 0;
-    if( m_xEveryDayButton->get_active() )
-    {
-        if( !m_xEveryDayButton->get_saved_state() )
-            nValue = 86400;
-    }
-    else if( m_xEveryWeekButton->get_active() )
-    {
-        if( !m_xEveryWeekButton->get_saved_state() )
-            nValue = 604800;
-    }
-    else if( m_xEveryMonthButton->get_active() )
-    {
-        if( !m_xEveryMonthButton->get_saved_state() )
-            nValue = 2592000;
-    }
-
-    if( nValue > 0 )
-    {
-        m_xUpdateAccess->replaceByName( "CheckInterval", uno::Any( nValue ) );
-        bModified = true;
-    }
-
-    if( m_xAutoDownloadCheckBox->get_state_changed_from_saved() )
-    {
-        bValue = m_xAutoDownloadCheckBox->get_active();
-        m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::Any( bValue ) );
-        bModified = true;
-    }
-
-    OUString sValue, aURL;
-    m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
-
-    if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_xDestPath->get_label(), aURL) ) &&
-        ( aURL != sValue ) )
-    {
-        m_xUpdateAccess->replaceByName( "DownloadDestination", uno::Any( aURL ) );
-        bModified = true;
-    }
-
-    if( m_xExtrasCheckBox->get_state_changed_from_saved() )
-    {
-        bValue = m_xExtrasCheckBox->get_active();
-        m_xUpdateAccess->replaceByName( "ExtendedUserAgent", uno::Any( bValue ) );
-        bModified = true;
-    }
-
-    uno::Reference< util::XChangesBatch > xChangesBatch(m_xUpdateAccess, uno::UNO_QUERY);
-    if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
-        xChangesBatch->commitChanges();
+#endif
 
     return bModified;
 }
 
 void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
 {
-    bool bValue = false;
-    m_xUpdateAccess->getByName( "AutoCheckEnabled" ) >>= bValue;
-    beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoCheckEnabled");
-    bool bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
+    if (m_showTraditionalOnlineUpdate) {
+        bool bValue = false;
+        m_xUpdateAccess->getByName( "AutoCheckEnabled" ) >>= bValue;
+        beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoCheckEnabled");
+        bool bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
 
-    m_xAutoCheckCheckBox->set_active(bValue);
-    m_xAutoCheckCheckBox->set_sensitive(!bReadOnly);
-    m_xAutoCheckImg->set_visible(bReadOnly);
+        m_xAutoCheckCheckBox->set_active(bValue);
+        m_xAutoCheckCheckBox->set_sensitive(!bReadOnly);
+        m_xAutoCheckImg->set_visible(bReadOnly);
 
-    sal_Int64 nValue = 0;
-    m_xUpdateAccess->getByName( "CheckInterval" ) >>= nValue;
-    aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/CheckInterval");
-    bool bReadOnly2 = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
-    m_xEveryDayButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
-    m_xEveryWeekButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
-    m_xEveryMonthButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
-    m_xCheckIntervalImg->set_visible(bReadOnly2);
+        sal_Int64 nValue = 0;
+        m_xUpdateAccess->getByName( "CheckInterval" ) >>= nValue;
+        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/CheckInterval");
+        bool bReadOnly2 = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
+        m_xEveryDayButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
+        m_xEveryWeekButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
+        m_xEveryMonthButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
+        m_xCheckIntervalImg->set_visible(bReadOnly2);
 
-    if( nValue == 86400 )
-        m_xEveryDayButton->set_active(true);
-    else if( nValue == 604800 )
-        m_xEveryWeekButton->set_active(true);
-    else
-        m_xEveryMonthButton->set_active(true);
+        if( nValue == 86400 )
+            m_xEveryDayButton->set_active(true);
+        else if( nValue == 604800 )
+            m_xEveryWeekButton->set_active(true);
+        else
+            m_xEveryMonthButton->set_active(true);
 
-    m_xAutoCheckCheckBox->save_state();
-    m_xEveryDayButton->save_state();
-    m_xEveryWeekButton->save_state();
-    m_xEveryMonthButton->save_state();
+        m_xAutoCheckCheckBox->save_state();
+        m_xEveryDayButton->save_state();
+        m_xEveryWeekButton->save_state();
+        m_xEveryMonthButton->save_state();
 
-    m_xUpdateAccess->getByName( "AutoDownloadEnabled" ) >>= bValue;
-    aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoDownloadEnabled");
-    bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
-    m_xAutoDownloadCheckBox->set_active(bValue);
-    m_xAutoDownloadCheckBox->set_sensitive(!bReadOnly);
-    m_xAutoDownloadImg->set_visible(bReadOnly);
-    m_xDestPathLabel->set_sensitive(true);
-    m_xDestPath->set_sensitive(true);
+        m_xUpdateAccess->getByName( "AutoDownloadEnabled" ) >>= bValue;
+        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoDownloadEnabled");
+        bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
+        m_xAutoDownloadCheckBox->set_active(bValue);
+        m_xAutoDownloadCheckBox->set_sensitive(!bReadOnly);
+        m_xAutoDownloadImg->set_visible(bReadOnly);
+        m_xDestPathLabel->set_sensitive(true);
+        m_xDestPath->set_sensitive(true);
 
-    OUString sValue, aPath;
-    m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
-    aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/DownloadDestination");
-    bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
-    m_xChangePathButton->set_sensitive(!bReadOnly);
+        OUString sValue, aPath;
+        m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
+        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/DownloadDestination");
+        bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
+        m_xChangePathButton->set_sensitive(!bReadOnly);
 
-    if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sValue, aPath) )
-        m_xDestPath->set_label(aPath);
+        if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sValue, aPath) )
+            m_xDestPath->set_label(aPath);
 
-    m_xUpdateAccess->getByName( "ExtendedUserAgent" ) >>= bValue;
-    aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/ExtendedUserAgent");
-    bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
-    m_xExtrasCheckBox->set_active(bValue);
-    m_xExtrasCheckBox->set_sensitive(!bReadOnly);
-    m_xExtrasImg->set_visible(bReadOnly);
-    m_xExtrasCheckBox->save_state();
-    UpdateUserAgent();
+        m_xUpdateAccess->getByName( "ExtendedUserAgent" ) >>= bValue;
+        aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/ExtendedUserAgent");
+        bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
+        m_xExtrasCheckBox->set_active(bValue);
+        m_xExtrasCheckBox->set_sensitive(!bReadOnly);
+        m_xExtrasImg->set_visible(bReadOnly);
+        m_xExtrasCheckBox->save_state();
+        UpdateUserAgent();
 
-    m_xAutoDownloadCheckBox->save_state();
+        m_xAutoDownloadCheckBox->save_state();
+    }
+
+#if HAVE_FEATURE_UPDATE_MAR
+    m_xEnableMar->set_active(officecfg::Office::Update::Update::Enabled::get());
+    m_xEnableMar->save_state();
+#endif
 }
 
 void SvxOnlineUpdateTabPage::FillUserData()
@@ -443,6 +489,19 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, weld::Button&, void)
     {
          TOOLS_WARN_EXCEPTION("cui.options", "Caught exception, thread terminated");
     }
+}
+
+bool SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateEnabled() {
+    try
+    {
+        css::uno::Reference < css::uno::XInterface > xService( setup::UpdateCheck::create( ::comphelper::getProcessComponentContext() ) );
+        if( xService.is() )
+            return true;
+    }
+    catch ( css::uno::DeploymentException& )
+    {
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

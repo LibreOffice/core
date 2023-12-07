@@ -224,7 +224,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame">
+          <object class="GtkFrame" id="frameDest">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label-xalign">0</property>
@@ -378,7 +378,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame">
+          <object class="GtkFrame" id="frameAgent">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label-xalign">0</property>
@@ -517,6 +517,40 @@
             <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="frameMar">
+            <property name="visible">False</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <object class="GtkCheckButton" id="enableMar">
+                <property name="label" translatable="yes" context="optonlineupdatepage|enableMar">Enable au_tomatic update</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">start</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="enableMar-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|enableMar">Mark to enable automatic update.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="labelMar">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="optonlineupdatepage|labelMar">Automatic Update</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>
