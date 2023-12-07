@@ -1024,11 +1024,13 @@ bool OutputDevice::ForceFallbackFont(vcl::Font const& rFallbackFont)
 {
     vcl::Font aOldFont = GetFont();
     SetFont(rFallbackFont);
-    InitFont();
+    if (!InitFont())
+        return false;
 
     mpForcedFallbackInstance = mpFontInstance;
     SetFont(aOldFont);
-    InitFont();
+    if (!InitFont())
+        return false;
 
     if (mpForcedFallbackInstance)
         return true;
