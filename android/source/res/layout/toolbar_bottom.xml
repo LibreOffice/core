@@ -478,7 +478,6 @@
             android:padding="10dp"
             android:src="@drawable/ic_search_direction_up"
             android:contentDescription="@string/search_find_previous" />
-            />
     </LinearLayout>
 
     <LinearLayout
