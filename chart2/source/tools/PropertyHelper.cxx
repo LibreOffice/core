@@ -20,6 +20,7 @@
 #include <PropertyHelper.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
@@ -113,15 +114,29 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
     const OUString & rPreferredName )
 {
     if( ! xNameContainer.is() ||
-        ! rValue.hasValue() ||
-        ( rValue.getValueType() != xNameContainer->getElementType()))
+        ! rValue.hasValue() )
+        return rPreferredName;
+
+    Any aValue(rValue);
+
+    if ( rValue.has<css::awt::Gradient>())
+    {
+        // tdf#158421 the lists for Gradients needs awt::Gradient2
+        // as type, convert input data if needed (and warn about it,
+        // the caller should be changed to offer the needed type)
+        SAL_WARN("chart2","input value needs to be awt::Gradient2");
+        const basegfx::BGradient aTemp(model::gradient::getFromAny(rValue));
+        aValue <<= model::gradient::createUnoGradient2(aTemp);
+    }
+
+    if ( aValue.getValueType() != xNameContainer->getElementType())
         return rPreferredName;
 
     try
     {
         Reference< container::XNameAccess > xNameAccess( xNameContainer, uno::UNO_QUERY_THROW );
         const uno::Sequence<OUString> aElementNames = xNameAccess->getElementNames();
-        auto it = std::find_if( aElementNames.begin(), aElementNames.end(), lcl_EqualsElement( rValue, xNameAccess ));
+        auto it = std::find_if( aElementNames.begin(), aElementNames.end(), lcl_EqualsElement( aValue, xNameAccess ));
 
         // element found => return name
         if( it != aElementNames.end())
@@ -159,7 +174,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
         }
 
         OSL_ASSERT( !aUniqueName.isEmpty());
-        xNameContainer->insertByName( aUniqueName, rValue );
+        xNameContainer->insertByName( aUniqueName, aValue );
         return aUniqueName;
     }
     catch( const uno::Exception & )

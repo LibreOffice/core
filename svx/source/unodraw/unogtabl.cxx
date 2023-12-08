@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include "UnoNameItemTable.hxx"
 
 #include <svx/svdmodel.hxx>
@@ -65,7 +65,8 @@ NameOrIndex* SvxUnoGradientTable::createItem() const { return new XFillGradientI
 // XElementAccess
 uno::Type SAL_CALL SvxUnoGradientTable::getElementType()
 {
-    return cppu::UnoType<awt::Gradient>::get();
+    // tdf#158421 use newer extended type for the list
+    return cppu::UnoType<awt::Gradient2>::get();
 }
 
 /**
