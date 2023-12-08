@@ -165,7 +165,7 @@ void ImpEditEngine::Dispose()
     auto pApp = SfxApplication::Get();
     if(pApp)
         EndListening(*pApp);
-    pVirtDev.disposeAndClear();
+    mpVirtDev.disposeAndClear();
     mpOwnDev.disposeAndClear();
     pSharedVCL.reset();
 }
@@ -193,14 +193,14 @@ ImpEditEngine::~ImpEditEngine()
     pSpellInfo.reset();
 }
 
-void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
+void ImpEditEngine::SetRefDevice(OutputDevice* pRef)
 {
     if (pRef)
-        pRefDev = pRef;
+        mpRefDev = pRef;
     else
-        pRefDev = pSharedVCL->GetVirtualDevice();
+        mpRefDev = pSharedVCL->GetVirtualDevice();
 
-    nOnePixelInRef = static_cast<sal_uInt16>(pRefDev->PixelToLogic( Size( 1, 0 ) ).Width());
+    nOnePixelInRef = static_cast<sal_uInt16>(mpRefDev->PixelToLogic( Size( 1, 0 ) ).Width());
 
     if ( IsFormatted() )
     {
@@ -216,12 +216,12 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
 
     mpOwnDev.disposeAndClear();
     mpOwnDev = VclPtr<VirtualDevice>::Create();
-    pRefDev = mpOwnDev;
-    pRefDev->SetMapMode(MapMode(MapUnit::MapTwip));
-    SetRefDevice( pRefDev );
+    mpRefDev = mpOwnDev;
+    mpRefDev->SetMapMode(MapMode(MapUnit::MapTwip));
+    SetRefDevice(mpRefDev);
 
-    pRefDev->SetMapMode( rMapMode );
-    nOnePixelInRef = static_cast<sal_uInt16>(pRefDev->PixelToLogic( Size( 1, 0 ) ).Width());
+    mpRefDev->SetMapMode( rMapMode );
+    nOnePixelInRef = static_cast<sal_uInt16>(mpRefDev->PixelToLogic(Size(1, 0)).Width());
     if ( IsFormatted() )
     {
         FormatFullDoc();

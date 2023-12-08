@@ -464,7 +464,7 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
     fprintf( fp, "\n==================   EditEngine & Views   ======================================" );
     fprintf( fp, "\n================================================================================" );
     fprintf( fp, "\nControl: %x", unsigned( pEE->GetControlWord() ) );
-    fprintf( fp, "\nRefMapMode: %i", int( pEE->pImpEditEngine->pRefDev->GetMapMode().GetMapUnit() ) );
+    fprintf( fp, "\nRefMapMode: %i", int( pEE->pImpEditEngine->mpRefDev->GetMapMode().GetMapUnit() ) );
     fprintf( fp, "\nPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64, sal_Int64(pEE->GetPaperSize().Width()), sal_Int64(pEE->GetPaperSize().Height()) );
     fprintf( fp, "\nMaxAutoPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64, sal_Int64(pEE->GetMaxAutoPaperSize().Width()), sal_Int64(pEE->GetMaxAutoPaperSize().Height()) );
     fprintf( fp, "\nMinAutoPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64 , sal_Int64(pEE->GetMinAutoPaperSize().Width()), sal_Int64(pEE->GetMinAutoPaperSize().Height()) );

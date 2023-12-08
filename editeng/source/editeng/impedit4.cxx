@@ -3120,7 +3120,7 @@ sal_Int32 ImpEditEngine::LogicToTwips(sal_Int32 n)
 {
     Size aSz(n, 0);
     MapMode aTwipsMode( MapUnit::MapTwip );
-    aSz = pRefDev->LogicToLogic( aSz, nullptr, &aTwipsMode );
+    aSz = mpRefDev->LogicToLogic( aSz, nullptr, &aTwipsMode );
     return aSz.Width();
 }
 

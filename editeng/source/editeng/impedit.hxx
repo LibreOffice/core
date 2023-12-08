@@ -534,8 +534,8 @@ private:
     SfxStyleSheetPool*  pStylePool;
     SfxItemPool*        pTextObjectPool;
 
-    VclPtr< VirtualDevice> pVirtDev;
-    VclPtr< OutputDevice > pRefDev;
+    VclPtr<VirtualDevice> mpVirtDev;
+    VclPtr<OutputDevice> mpRefDev;
     VclPtr<VirtualDevice> mpOwnDev;
 
     svtools::ColorConfig maColorConfig;
@@ -814,24 +814,24 @@ private:
 
     VirtualDevice* GetVirtualDevice(const MapMode& rMapMode, DrawModeFlags nDrawMode)
     {
-        if ( !pVirtDev )
-            pVirtDev = VclPtr<VirtualDevice>::Create();
+        if (!mpVirtDev)
+            mpVirtDev = VclPtr<VirtualDevice>::Create();
 
-        if ( ( pVirtDev->GetMapMode().GetMapUnit() != rMapMode.GetMapUnit() ) ||
-             ( pVirtDev->GetMapMode().GetScaleX() != rMapMode.GetScaleX() ) ||
-             ( pVirtDev->GetMapMode().GetScaleY() != rMapMode.GetScaleY() ) )
+        if ((mpVirtDev->GetMapMode().GetMapUnit() != rMapMode.GetMapUnit()) ||
+            (mpVirtDev->GetMapMode().GetScaleX() != rMapMode.GetScaleX()) ||
+            (mpVirtDev->GetMapMode().GetScaleY() != rMapMode.GetScaleY()) )
         {
-            MapMode aMapMode( rMapMode );
-            aMapMode.SetOrigin( Point( 0, 0 ) );
-            pVirtDev->SetMapMode( aMapMode );
+            MapMode aMapMode(rMapMode);
+            aMapMode.SetOrigin(Point(0, 0));
+            mpVirtDev->SetMapMode(aMapMode);
         }
 
-        pVirtDev->SetDrawMode( nDrawMode );
+        mpVirtDev->SetDrawMode(nDrawMode);
 
-        return pVirtDev;
+        return mpVirtDev;
     }
 
-    void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
+    void EraseVirtualDevice() { mpVirtDev.disposeAndClear(); }
 
     DECL_LINK( StatusTimerHdl, Timer *, void);
     DECL_LINK( IdleFormatHdl, Timer *, void);
@@ -1131,11 +1131,11 @@ public:
 
     bool isUsedByModel() const override { return true; }
 
-    OutputDevice*       GetRefDevice() const { return pRefDev.get(); }
-    void                SetRefDevice( OutputDevice* pRefDef );
+    OutputDevice*       GetRefDevice() const { return mpRefDev.get(); }
+    void                SetRefDevice(OutputDevice* mpRefDef);
 
-    const MapMode&      GetRefMapMode() const { return pRefDev->GetMapMode(); }
-    void                SetRefMapMode( const MapMode& rMapMode );
+    const MapMode&      GetRefMapMode() const { return mpRefDev->GetMapMode(); }
+    void                SetRefMapMode(const MapMode& rMapMode);
 
     InternalEditStatus& GetStatus() { return maStatus; }
     void                CallStatusHdl();

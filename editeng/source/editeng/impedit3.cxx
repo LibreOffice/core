@@ -1418,13 +1418,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         if ( aTextSize.Height() == 0 )
         {
             SeekCursor( pNode, pLine->GetStart()+1, aTmpFont );
-            aTmpFont.SetPhysFont(*pRefDev);
-            ImplInitDigitMode(*pRefDev, aTmpFont.GetLanguage());
+            aTmpFont.SetPhysFont(*mpRefDev);
+            ImplInitDigitMode(*mpRefDev, aTmpFont.GetLanguage());
 
             if ( IsFixedCellHeight() )
                 aTextSize.setHeight( ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() ) );
             else
-                aTextSize.setHeight( aTmpFont.GetPhysTxtSize( pRefDev ).Height() );
+                aTextSize.setHeight( aTmpFont.GetPhysTxtSize(mpRefDev).Height() );
             pLine->SetHeight( static_cast<sal_uInt16>(aTextSize.Height()) );
         }
 
@@ -1790,10 +1790,10 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
 
     SvxFont aTmpFont;
     SeekCursor( pParaPortion->GetNode(), bLineBreak ? pParaPortion->GetNode()->Len() : 0, aTmpFont );
-    aTmpFont.SetPhysFont(*pRefDev);
+    aTmpFont.SetPhysFont(*mpRefDev);
 
     TextPortion* pDummyPortion = new TextPortion( 0 );
-    pDummyPortion->SetSize(aTmpFont.GetPhysTxtSize(pRefDev));
+    pDummyPortion->SetSize(aTmpFont.GetPhysTxtSize(mpRefDev));
     if ( IsFixedCellHeight() )
         pDummyPortion->setHeight( ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() ) );
     pParaPortion->GetTextPortions().Append(pDummyPortion);
@@ -3105,11 +3105,11 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     if ( nPropr != 100 )
     {
         rFont.SetPropr( 100 );
-        rFont.SetPhysFont(*pRefDev);
+        rFont.SetPhysFont(*mpRefDev);
     }
     sal_uInt16 nAscent, nDescent;
 
-    FontMetric aMetric( pRefDev->GetFontMetric() );
+    FontMetric aMetric(mpRefDev->GetFontMetric());
     nAscent = static_cast<sal_uInt16>(aMetric.GetAscent());
     if ( IsAddExtLeading() )
         nAscent = sal::static_int_cast< sal_uInt16 >(
@@ -3125,10 +3125,10 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     {
         sal_uInt16 nIntLeading = ( aMetric.GetInternalLeading() > 0 ) ? static_cast<sal_uInt16>(aMetric.GetInternalLeading()) : 0;
         // Fonts without leading cause problems
-        if ( ( nIntLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
+        if ( ( nIntLeading == 0 ) && (mpRefDev->GetOutDevType() == OUTDEV_PRINTER))
         {
             // Lets see what Leading one gets on the screen
-            VclPtr<VirtualDevice> pVDev = GetVirtualDevice( pRefDev->GetMapMode(), pRefDev->GetDrawMode() );
+            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(mpRefDev->GetMapMode(), mpRefDev->GetDrawMode());
             rFont.SetPhysFont(*pVDev);
             aMetric = pVDev->GetFontMetric();
 
