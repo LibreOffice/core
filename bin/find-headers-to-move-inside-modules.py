@@ -21,8 +21,6 @@ with a.stdout as txt:
         if header.startswith(b"sal/"): continue
         if header.startswith(b"salhelper/"): continue
         if header.startswith(b"uno/"): continue
-        # these are direct copies of mozilla code
-        if header.startswith(b"onlineupdate/mozilla/"): continue
         headerSet.add(header)
 
 headerSetUnused = headerSet.copy()

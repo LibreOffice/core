@@ -1,0 +1,21 @@
+--- onlineupdate/source/update/updater/progressui_gtk.cpp
++++ onlineupdate/source/update/updater/progressui_gtk.cpp
+@@ -5,6 +5,7 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+ #include <gtk/gtk.h>
++#include <string.h>
+ #include <unistd.h>
+ #include "mozilla/Sprintf.h"
+ #include "mozilla/Atomics.h"
+@@ -52,8 +53,8 @@
+     char ini_path[PATH_MAX];
+     SprintfLiteral(ini_path, "%s.ini", (*pargv)[0]);
+     if (ReadStrings(ini_path, &sStrings) != OK) {
+-      sEnableUI = false;
+-      return -1;
++      sStrings.title.reset(strdup("LibreOffice Update"));
++      sStrings.info.reset(strdup("Please wait while we update your installation."));
+     }
+ 
+     char icon_path[PATH_MAX];

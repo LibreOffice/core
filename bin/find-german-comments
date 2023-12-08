@@ -304,7 +304,6 @@ class Parser:
             "o3tl" : 1,
             "odk" : 1,
             "officecfg" : 1,
-            "onlineupdate" : 1,
             "opencl" : 1,
             "oox" : 1,
             "package" : 1,

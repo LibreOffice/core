@@ -1,0 +1,11 @@
+--- onlineupdate/source/update/updater/progressui_gtk.cpp
++++ onlineupdate/source/update/updater/progressui_gtk.cpp
+@@ -94,7 +94,7 @@
+   gtk_window_set_icon(GTK_WINDOW(sWin), sPixbuf);
+   g_object_unref(sPixbuf);
+ 
+-  GtkWidget* vbox = gtk_vbox_new(TRUE, 6);
++  GtkWidget* vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+   sLabel = gtk_label_new(sStrings.info.get());
+   gtk_misc_set_alignment(GTK_MISC(sLabel), 0.0f, 0.0f);
+   sProgressBar = gtk_progress_bar_new();
