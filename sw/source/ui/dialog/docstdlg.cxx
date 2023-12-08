@@ -121,7 +121,8 @@ IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, weld::Button&, void)
     SwFEShell* pFEShell = pDocShell ? pDocShell->GetFEShell() : nullptr;
     if (pFEShell)
     {
-        OUString sLineCount = OUString::number(pFEShell->GetLineCount());
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
+        OUString sLineCount = rLocaleData.getNum(pFEShell->GetLineCount(), 0);
         m_xLineNo->set_label(sLineCount);
         m_xLineNo->set_size_request(m_xLineNo->get_approximate_digit_width() * sLineCount.getLength(), -1);
     }
