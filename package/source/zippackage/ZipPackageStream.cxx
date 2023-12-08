@@ -53,6 +53,7 @@
 
 #include <rtl/random.h>
 #include <sal/log.hxx>
+#include <o3tl/unreachable.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <PackageConstants.hxx>
@@ -184,9 +185,19 @@ sal_Int32 ZipPackageStream::GetEncryptionAlgorithm() const
     return m_nImportedEncryptionAlgorithm ? m_nImportedEncryptionAlgorithm : m_rZipPackage.GetEncAlgID();
 }
 
-sal_Int32 ZipPackageStream::GetBlockSize() const
+sal_Int32 ZipPackageStream::GetIVSize() const
 {
-    return GetEncryptionAlgorithm() == css::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 8;
+    switch (GetEncryptionAlgorithm())
+    {
+        case css::xml::crypto::CipherID::BLOWFISH_CFB_8:
+            return 8;
+        case css::xml::crypto::CipherID::AES_CBC_W3C_PADDING:
+            return 16;
+        case css::xml::crypto::CipherID::AES_GCM_W3C:
+            return 12;
+        default:
+            O3TL_UNREACHABLE;
+    }
 }
 
 ::rtl::Reference<EncryptionData> ZipPackageStream::GetEncryptionData(Bugs const bugs)
@@ -567,7 +578,9 @@ bool ZipPackageStream::saveChild(
         {
             if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
             {
-                uno::Sequence < sal_Int8 > aSalt( 16 ), aVector( GetBlockSize() );
+                uno::Sequence<sal_Int8> aSalt(16);
+                // note: for GCM it's particularly important that IV is unique
+                uno::Sequence<sal_Int8> aVector(GetIVSize());
                 rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
                 rtl_random_getBytes ( rRandomPool, aVector.getArray(), aVector.getLength() );
                 if ( !m_bHaveOwnKey )

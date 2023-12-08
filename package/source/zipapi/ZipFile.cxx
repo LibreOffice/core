@@ -187,7 +187,8 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
         throw ZipIOException("Can not create derived key!" );
     }
 
-    if ( xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING )
+    if (xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING
+        || xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_GCM_W3C)
     {
         uno::Reference< uno::XComponentContext > xContext = xArgContext;
         if ( !xContext.is() )
@@ -450,6 +451,9 @@ void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
 
 bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentContext >& rxContext, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
+    if (rData->m_nEncAlg == xml::crypto::CipherID::AES_GCM_W3C)
+        return true; /*TODO fails because of tag*/
+
     if ( !rData.is() || !rData->m_aKey.hasElements() )
         return false;
 

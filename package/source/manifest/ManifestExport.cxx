@@ -381,6 +381,15 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
                 sEncAlgName = sAES256_URL;
             }
+            else if (nEncAlgID == xml::crypto::CipherID::AES_GCM_W3C)
+            {
+                SAL_WARN_IF(nDerivedKeySize != 32, "package.manifest", "Unexpected key size is provided!");
+                if (nDerivedKeySize != 32)
+                {
+                    throw uno::RuntimeException(THROW_WHERE "Unexpected key size is provided!");
+                }
+                sEncAlgName = AESGCM256_URL;
+            }
             else if ( nEncAlgID == xml::crypto::CipherID::BLOWFISH_CFB_8 )
             {
                 sEncAlgName = sBlowfish_Name;
