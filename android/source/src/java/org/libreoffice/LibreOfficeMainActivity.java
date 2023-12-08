@@ -324,7 +324,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         String mimeType = getODFMimeTypeForDocument();
         intent.setType(mimeType);
-        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, mDocumentUri);
+        if (Build.VERSION.SDK_INT >= 26) {
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, mDocumentUri);
+        }
 
         startActivityForResult(intent, REQUEST_CODE_SAVEAS);
     }
@@ -351,7 +353,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType(FileUtilities.MIMETYPE_PDF);
         // suggest directory and file name based on the doc
-        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, mDocumentUri);
+        if (Build.VERSION.SDK_INT >= 26) {
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, mDocumentUri);
+        }
         final String displayName = toolbarTop.getTitle().toString();
         final String suggestedFileName = FileUtilities.stripExtensionFromFileName(displayName) + ".pdf";
         intent.putExtra(Intent.EXTRA_TITLE, suggestedFileName);
