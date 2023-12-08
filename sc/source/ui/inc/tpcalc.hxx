@@ -21,6 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 #include "editfield.hxx"
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 class ScDocOptions;
 
@@ -38,32 +40,46 @@ public:
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
+    css::uno::Reference<css::configuration::XReadWriteAccess> m_xReadWriteAccess;
+
     std::unique_ptr<ScDocOptions> pOldOptions;
     std::unique_ptr<ScDocOptions> pLocalOptions;
 
     std::unique_ptr<weld::CheckButton> m_xBtnIterate;
+    std::unique_ptr<weld::Widget> m_xBtnIterateImg;
     std::unique_ptr<weld::Label> m_xFtSteps;
     std::unique_ptr<weld::SpinButton> m_xEdSteps;
+    std::unique_ptr<weld::Widget> m_xEdStepsImg;
     std::unique_ptr<weld::Label> m_xFtEps;
     std::unique_ptr<ScDoubleField> m_xEdEps;
+    std::unique_ptr<weld::Widget> m_xEdEpsImg;
 
     std::unique_ptr<weld::RadioButton> m_xBtnDateStd;
     std::unique_ptr<weld::RadioButton> m_xBtnDateSc10;
     std::unique_ptr<weld::RadioButton> m_xBtnDate1904;
+    std::unique_ptr<weld::Widget> m_xDateImg;
 
     std::unique_ptr<weld::CheckButton> m_xBtnCase;
+    std::unique_ptr<weld::Widget> m_xBtnCaseImg;
     std::unique_ptr<weld::CheckButton> m_xBtnCalc;
+    std::unique_ptr<weld::Widget> m_xBtnCalcImg;
     std::unique_ptr<weld::CheckButton> m_xBtnMatch;
+    std::unique_ptr<weld::Widget> m_xBtnMatchImg;
     std::unique_ptr<weld::RadioButton> m_xBtnWildcards;
     std::unique_ptr<weld::RadioButton> m_xBtnRegex;
     std::unique_ptr<weld::RadioButton> m_xBtnLiteral;
+    std::unique_ptr<weld::Widget> m_xFormulaImg;
     std::unique_ptr<weld::CheckButton> m_xBtnLookUp;
+    std::unique_ptr<weld::Widget> m_xBtnLookUpImg;
     std::unique_ptr<weld::CheckButton> m_xBtnGeneralPrec;
+    std::unique_ptr<weld::Widget> m_xBtnGeneralPrecImg;
 
     std::unique_ptr<weld::Label> m_xFtPrec;
     std::unique_ptr<weld::SpinButton> m_xEdPrec;
+    std::unique_ptr<weld::Widget> m_xEdPrecImg;
 
     std::unique_ptr<weld::CheckButton> m_xBtnThread;
+    std::unique_ptr<weld::Widget> m_xBtnThreadImg;
 
 private:
     void            Init();

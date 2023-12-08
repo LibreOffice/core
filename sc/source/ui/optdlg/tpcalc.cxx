@@ -38,27 +38,42 @@ ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController*
         rCoreAttrs.Get(SID_SCDOCOPTIONS).GetDocOptions()))
     , pLocalOptions(new ScDocOptions)
     , m_xBtnIterate(m_xBuilder->weld_check_button("iterate"))
+    , m_xBtnIterateImg(m_xBuilder->weld_widget("lockiterate"))
     , m_xFtSteps(m_xBuilder->weld_label("stepsft"))
     , m_xEdSteps(m_xBuilder->weld_spin_button("steps"))
+    , m_xEdStepsImg(m_xBuilder->weld_widget("locksteps"))
     , m_xFtEps(m_xBuilder->weld_label("minchangeft"))
     , m_xEdEps(new ScDoubleField(m_xBuilder->weld_entry("minchange")))
+    , m_xEdEpsImg(m_xBuilder->weld_widget("lockminchange"))
     , m_xBtnDateStd(m_xBuilder->weld_radio_button("datestd"))
     , m_xBtnDateSc10(m_xBuilder->weld_radio_button("datesc10"))
     , m_xBtnDate1904(m_xBuilder->weld_radio_button("date1904"))
+    , m_xDateImg(m_xBuilder->weld_widget("lockdate"))
     , m_xBtnCase(m_xBuilder->weld_check_button("case"))
+    , m_xBtnCaseImg(m_xBuilder->weld_widget("lockcase"))
     , m_xBtnCalc(m_xBuilder->weld_check_button("calc"))
+    , m_xBtnCalcImg(m_xBuilder->weld_widget("lockcalc"))
     , m_xBtnMatch(m_xBuilder->weld_check_button("match"))
+    , m_xBtnMatchImg(m_xBuilder->weld_widget("lockmatch"))
     , m_xBtnWildcards(m_xBuilder->weld_radio_button("formulawildcards"))
     , m_xBtnRegex(m_xBuilder->weld_radio_button("formularegex"))
     , m_xBtnLiteral(m_xBuilder->weld_radio_button("formulaliteral"))
+    , m_xFormulaImg(m_xBuilder->weld_widget("lockformulawild"))
     , m_xBtnLookUp(m_xBuilder->weld_check_button("lookup"))
+    , m_xBtnLookUpImg(m_xBuilder->weld_widget("locklookup"))
     , m_xBtnGeneralPrec(m_xBuilder->weld_check_button("generalprec"))
+    , m_xBtnGeneralPrecImg(m_xBuilder->weld_widget("lockgeneralprec"))
     , m_xFtPrec(m_xBuilder->weld_label("precft"))
     , m_xEdPrec(m_xBuilder->weld_spin_button("prec"))
+    , m_xEdPrecImg(m_xBuilder->weld_widget("lockprec"))
     , m_xBtnThread(m_xBuilder->weld_check_button("threadingenabled"))
+    , m_xBtnThreadImg(m_xBuilder->weld_widget("lockthreadingenabled"))
 {
     Init();
     SetExchangeSupport();
+
+    css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
 }
 
 ScTpCalcOptions::~ScTpCalcOptions()
@@ -90,12 +105,21 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
 
     *pLocalOptions = *pOldOptions;
 
+    bool bReadOnly = officecfg::Office::Calc::Calculate::Other::CaseSensitive::isReadOnly();
     m_xBtnCase->set_active( !pLocalOptions->IsIgnoreCase() );
-    m_xBtnCase->set_sensitive( !officecfg::Office::Calc::Calculate::Other::CaseSensitive::isReadOnly() );
+    m_xBtnCase->set_sensitive(!bReadOnly);
+    m_xBtnCaseImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Calculate::Other::Precision::isReadOnly();
     m_xBtnCalc->set_active( pLocalOptions->IsCalcAsShown() );
-    m_xBtnCalc->set_sensitive( !officecfg::Office::Calc::Calculate::Other::Precision::isReadOnly() );
+    m_xBtnCalc->set_sensitive(!bReadOnly);
+    m_xBtnCalcImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Calculate::Other::SearchCriteria::isReadOnly();
     m_xBtnMatch->set_active( pLocalOptions->IsMatchWholeCell() );
-    m_xBtnMatch->set_sensitive( !officecfg::Office::Calc::Calculate::Other::SearchCriteria::isReadOnly() );
+    m_xBtnMatch->set_sensitive(!bReadOnly);
+    m_xBtnMatchImg->set_visible(bReadOnly);
+
     bool bWildcards = pLocalOptions->IsFormulaWildcardsEnabled();
     bool bRegex = pLocalOptions->IsFormulaRegexEnabled();
     // If both, Wildcards and Regex, are set then Wildcards shall take
@@ -116,9 +140,20 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
         m_xBtnRegex->set_sensitive( false );
         m_xBtnLiteral->set_sensitive( false );
     }
+    bReadOnly = officecfg::Office::Calc::Calculate::Other::Wildcards::isReadOnly() ||
+        officecfg::Office::Calc::Calculate::Other::RegularExpressions::isReadOnly();
+    m_xFormulaImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Calculate::Other::FindLabel::isReadOnly();
     m_xBtnLookUp->set_active( pLocalOptions->IsLookUpColRowNames() );
-    m_xBtnLookUp->set_sensitive( !officecfg::Office::Calc::Calculate::Other::FindLabel::isReadOnly() );
+    m_xBtnLookUp->set_sensitive(!bReadOnly);
+    m_xBtnLookUpImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Calculate::IterativeReference::Iteration::isReadOnly();
     m_xBtnIterate->set_active( pLocalOptions->IsIter() );
+    m_xBtnIterate->set_sensitive(!bReadOnly);
+    m_xBtnIterateImg->set_visible(bReadOnly);
+
     m_xEdSteps->set_value( pLocalOptions->GetIterCount() );
     m_xEdEps->SetValue( pLocalOptions->GetIterEps(), 6 );
 
@@ -137,7 +172,45 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
             break;
     }
 
+    // TODO: these option settings need to be simplified.
+    bReadOnly = false;
+    OUString aDateConfPath = officecfg::Office::Calc::Calculate::Other::path() + "/Date/DD";
+    if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aDateConfPath))
+    {
+        css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aDateConfPath);
+        bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+    }
+
+    if (!bReadOnly)
+    {
+        aDateConfPath = officecfg::Office::Calc::Calculate::Other::path() + "/Date/MM";
+        if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aDateConfPath))
+        {
+            css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aDateConfPath);
+            bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+        }
+    }
+
+    if (!bReadOnly)
+    {
+        aDateConfPath = officecfg::Office::Calc::Calculate::Other::path() + "/Date/YY";
+        if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aDateConfPath))
+        {
+            css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aDateConfPath);
+            bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+        }
+    }
+
+    if (bReadOnly)
+    {
+        m_xBtnDateStd->set_sensitive(false);
+        m_xBtnDateSc10->set_sensitive(false);
+        m_xBtnDate1904->set_sensitive(false);
+        m_xDateImg->set_visible(true);
+    }
+
     sal_uInt16 nPrec = pLocalOptions->GetStdPrecision();
+    bReadOnly = officecfg::Office::Calc::Calculate::Other::DecimalPlaces::isReadOnly();
     if (nPrec == SvNumberFormatter::UNLIMITED_PRECISION)
     {
         m_xFtPrec->set_sensitive(false);
@@ -149,11 +222,24 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
     {
         m_xBtnGeneralPrec->set_active(true);
         m_xFtPrec->set_sensitive(true);
-        m_xEdPrec->set_sensitive(true);
+        m_xEdPrec->set_sensitive(!bReadOnly);
         m_xEdPrec->set_value(nPrec);
     }
+    m_xBtnGeneralPrec->set_sensitive(!bReadOnly);
+    m_xBtnGeneralPrecImg->set_visible(bReadOnly);
+    m_xEdPrecImg->set_visible(bReadOnly);
 
-    m_xBtnThread->set_sensitive( !officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::isReadOnly() );
+    bReadOnly = officecfg::Office::Calc::Calculate::IterativeReference::Steps::isReadOnly();
+    m_xEdSteps->set_sensitive(!bReadOnly);
+    m_xEdStepsImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Calculate::IterativeReference::MinimumChange::isReadOnly();
+    m_xEdEps->set_sensitive(!bReadOnly);
+    m_xEdEpsImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::isReadOnly();
+    m_xBtnThread->set_sensitive(!bReadOnly);
+    m_xBtnThreadImg->set_visible(bReadOnly);
     m_xBtnThread->set_active( officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get() );
 
     CheckClickHdl(*m_xBtnIterate);
@@ -281,7 +367,7 @@ IMPL_LINK(ScTpCalcOptions, CheckClickHdl, weld::Toggleable&, rBtn, void)
     {
         if (rBtn.get_active())
         {
-            m_xEdPrec->set_sensitive(true);
+            m_xEdPrec->set_sensitive(!officecfg::Office::Calc::Calculate::Other::DecimalPlaces::isReadOnly());
             m_xFtPrec->set_sensitive(true);
         }
         else
@@ -295,8 +381,8 @@ IMPL_LINK(ScTpCalcOptions, CheckClickHdl, weld::Toggleable&, rBtn, void)
         if (rBtn.get_active())
         {
             pLocalOptions->SetIter( true );
-            m_xFtSteps->set_sensitive(true);  m_xEdSteps->set_sensitive(true);
-            m_xFtEps->set_sensitive(true);  m_xEdEps->set_sensitive(true);
+            m_xFtSteps->set_sensitive(true);  m_xEdSteps->set_sensitive(!officecfg::Office::Calc::Calculate::IterativeReference::Steps::isReadOnly());
+            m_xFtEps->set_sensitive(true);  m_xEdEps->set_sensitive(!officecfg::Office::Calc::Calculate::IterativeReference::MinimumChange::isReadOnly());
         }
         else
         {
