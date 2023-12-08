@@ -33,7 +33,7 @@
 class AccDialogEventListener : public AccEventListener
 {
 public:
-    AccDialogEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
+    AccDialogEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager);
     virtual ~AccDialogEventListener() override;
 
     //AccessibleEventListener

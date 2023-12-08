@@ -33,8 +33,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccTableEventListener::AccTableEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccDescendantManagerEventListener(pAcc, pManager)
+AccTableEventListener::AccTableEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccDescendantManagerEventListener(pAcc, rManager)
 {}
 AccTableEventListener::~AccTableEventListener()
 {
@@ -56,22 +56,22 @@ void  AccTableEventListener::notifyEvent( const css::accessibility::AccessibleEv
 
     case AccessibleEventId::TABLE_CAPTION_CHANGED:
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_CAPTION_CHANGED);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_CAPTION_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED:
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_COLUMN_DESCRIPTION_CHANGED);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_COLUMN_DESCRIPTION_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_COLUMN_HEADER_CHANGED);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_COLUMN_HEADER_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_ROW_HEADER_CHANGED);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_ROW_HEADER_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_MODEL_CHANGED:
@@ -81,12 +81,12 @@ void  AccTableEventListener::notifyEvent( const css::accessibility::AccessibleEv
         }
     case AccessibleEventId::TABLE_SUMMARY_CHANGED:
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_SUMMARY_CHANGED);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_SUMMARY_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_ROW_DESCRIPTION_CHANGED);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_ROW_DESCRIPTION_CHANGED);
             break;
         }
     default:
@@ -108,8 +108,8 @@ void AccTableEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->InsertAccObj(pAcc, m_xAccessible.get());
-            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED);
+            m_rObjManager.InsertAccObj(pAcc, m_xAccessible.get());
+            m_rObjManager.NotifyAccEvent(pAcc, UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED);
         }
     }
     else if (oldValue >>= xChild)
@@ -118,7 +118,7 @@ void AccTableEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->DeleteAccObj( pAcc );
+            m_rObjManager.DeleteAccObj( pAcc );
         }
     }
 
@@ -131,11 +131,11 @@ void AccTableEventListener::HandleTableModelChangeEvent(Any newValue)
         if (m_xAccessible.is())
         {
             //delete all oldValue's existing children
-            m_pObjManager->DeleteChildrenAccObj(m_xAccessible.get());
+            m_rObjManager.DeleteChildrenAccObj(m_xAccessible.get());
             //add all oldValue's existing children
-            m_pObjManager->InsertChildrenAccObj(m_xAccessible.get());
+            m_rObjManager.InsertChildrenAccObj(m_xAccessible.get());
         }
-        m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_MODEL_CHANGED);
+        m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_MODEL_CHANGED);
     }
 }
 

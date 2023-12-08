@@ -41,9 +41,9 @@ using namespace com::sun::star::accessibility;
 using namespace cppu;
 
 AccEventListener::AccEventListener(css::accessibility::XAccessible* pAcc,
-                                   AccObjectWinManager* pManager)
+                                   AccObjectWinManager& rManager)
     : m_xAccessible(pAcc)
-    , m_pObjManager(pManager)
+    , m_rObjManager(rManager)
 {
 }
 
@@ -82,18 +82,18 @@ void AccEventListener::notifyEvent(const css::accessibility::AccessibleEventObje
  */
 void AccEventListener::HandleNameChangedEvent(Any name)
 {
-    if (m_pObjManager->IsTopWinAcc(m_xAccessible.get()))
+    if (m_rObjManager.IsTopWinAcc(m_xAccessible.get()))
     {
-        XAccessible* pAccDoc = m_pObjManager->GetAccDocByAccTopWin(m_xAccessible.get());
+        XAccessible* pAccDoc = m_rObjManager.GetAccDocByAccTopWin(m_xAccessible.get());
         if (pAccDoc)
         {
-            m_pObjManager->UpdateAccName(pAccDoc);
-            m_pObjManager->NotifyAccEvent(pAccDoc, UnoMSAAEvent::OBJECT_NAMECHANGE);
+            m_rObjManager.UpdateAccName(pAccDoc);
+            m_rObjManager.NotifyAccEvent(pAccDoc, UnoMSAAEvent::OBJECT_NAMECHANGE);
         }
     }
 
-    m_pObjManager->SetAccName(m_xAccessible.get(), name);
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_NAMECHANGE);
+    m_rObjManager.SetAccName(m_xAccessible.get(), name);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_NAMECHANGE);
 }
 
 /**
@@ -110,9 +110,9 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
         if (xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->InsertAccObj(pAcc, m_xAccessible.get());
-            m_pObjManager->InsertChildrenAccObj(pAcc);
-            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
+            m_rObjManager.InsertAccObj(pAcc, m_xAccessible.get());
+            m_rObjManager.InsertChildrenAccObj(pAcc);
+            m_rObjManager.NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
         }
     }
     else if (oldValue >>= xChild)
@@ -120,9 +120,9 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
         if (xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_REMOVED);
-            m_pObjManager->DeleteChildrenAccObj(pAcc);
-            m_pObjManager->DeleteAccObj(pAcc);
+            m_rObjManager.NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_REMOVED);
+            m_rObjManager.DeleteChildrenAccObj(pAcc);
+            m_rObjManager.DeleteAccObj(pAcc);
         }
     }
 }
@@ -132,7 +132,7 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
  */
 void AccEventListener::HandleDescriptionChangedEvent()
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DESCRIPTIONCHANGE);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DESCRIPTIONCHANGE);
 }
 
 /**
@@ -140,7 +140,7 @@ void AccEventListener::HandleDescriptionChangedEvent()
  */
 void AccEventListener::HandleBoundrectChangedEvent()
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::BOUNDRECT_CHANGED);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::BOUNDRECT_CHANGED);
 }
 
 /**
@@ -148,8 +148,8 @@ void AccEventListener::HandleBoundrectChangedEvent()
  */
 void AccEventListener::HandleVisibleDataChangedEvent()
 {
-    m_pObjManager->UpdateValue(m_xAccessible.get());
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::VISIBLE_DATA_CHANGED);
+    m_rObjManager.UpdateValue(m_xAccessible.get());
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::VISIBLE_DATA_CHANGED);
 }
 
 /**
@@ -196,8 +196,8 @@ void AccEventListener::FireStateFocusedChange(bool enable)
 {
     if (enable)
     {
-        m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
-        m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
+        m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+        m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
     }
     else
     {
@@ -243,7 +243,7 @@ short AccEventListener::GetParentRole()
 {
     if (m_xAccessible.is())
     {
-        return m_pObjManager->GetParentRole(m_xAccessible.get());
+        return m_rObjManager.GetParentRole(m_xAccessible.get());
     }
     return -1;
 }
@@ -273,7 +273,7 @@ void AccEventListener::RemoveMeFromBroadcaster(bool const isNotifyDestroy)
         }
         if (isNotifyDestroy)
         {
-            m_pObjManager->NotifyDestroy(m_xAccessible.get());
+            m_rObjManager.NotifyDestroy(m_xAccessible.get());
         }
         m_xAccessible.clear(); // release cyclic reference
     }

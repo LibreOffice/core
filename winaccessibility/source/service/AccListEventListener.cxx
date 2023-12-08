@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccListEventListener::AccListEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccDescendantManagerEventListener(pAcc, pManager)
+AccListEventListener::AccListEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccDescendantManagerEventListener(pAcc, rManager)
 {
 }
 
@@ -84,15 +84,15 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
             XAccessible* pAcc = xChild.get();
 
             // Valueset has cache the child item xacc,Update state if no insert obj
-            bool bHasCache = m_pObjManager->InsertAccObj(pAcc, m_xAccessible.get());
+            bool bHasCache = m_rObjManager.InsertAccObj(pAcc, m_xAccessible.get());
             if (!bHasCache)
             {
-                m_pObjManager->UpdateState(pAcc);
+                m_rObjManager.UpdateState(pAcc);
             }
 
-            m_pObjManager->IncreaseState( pAcc, AccessibleStateType::FOCUSED);
+            m_rObjManager.IncreaseState( pAcc, AccessibleStateType::FOCUSED);
 
-            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED);
+            m_rObjManager.NotifyAccEvent(pAcc, UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED);
         }
     }
     if (oldValue >>= xChild)
@@ -100,7 +100,7 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->DeleteAccObj( pAcc );
+            m_rObjManager.DeleteAccObj( pAcc );
         }
     }
 }
@@ -116,10 +116,9 @@ void AccListEventListener::HandleValueChangedEvent(Any, Any)
     //to enable value changed event
     if (GetParentRole() == AccessibleRole::COMBO_BOX)
     {
-        XAccessible* pParentAcc =
-            m_pObjManager->GetParentXAccessible(m_xAccessible.get());
-        m_pObjManager->UpdateValue(pParentAcc);
-        m_pObjManager->NotifyAccEvent(pParentAcc, UnoMSAAEvent::OBJECT_VALUECHANGE);
+        XAccessible* pParentAcc = m_rObjManager.GetParentXAccessible(m_xAccessible.get());
+        m_rObjManager.UpdateValue(pParentAcc);
+        m_rObjManager.NotifyAccEvent(pParentAcc, UnoMSAAEvent::OBJECT_VALUECHANGE);
     }
 }
 

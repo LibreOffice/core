@@ -39,7 +39,7 @@ private:
     std::vector<com::sun::star::accessibility::XAccessible*> m_aUnselectedChildrenForDeletion;
 
 public:
-    AccDescendantManagerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
+    AccDescendantManagerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager);
     virtual ~AccDescendantManagerEventListener() override;
 
     // XAccessibleEventListener

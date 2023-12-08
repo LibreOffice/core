@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccTreeEventListener::AccTreeEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccDescendantManagerEventListener(pAcc, pManager)
+AccTreeEventListener::AccTreeEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccDescendantManagerEventListener(pAcc, rManager)
 {}
 AccTreeEventListener::~AccTreeEventListener()
 {
@@ -71,8 +71,8 @@ void AccTreeEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->InsertAccObj(pAcc, m_xAccessible.get());
-            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED);
+            m_rObjManager.InsertAccObj(pAcc, m_xAccessible.get());
+            m_rObjManager.NotifyAccEvent(pAcc, UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED);
         }
     }
     if (oldValue >>= xChild)
@@ -81,7 +81,7 @@ void AccTreeEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->DeleteAccObj(pAcc);
+            m_rObjManager.DeleteAccObj(pAcc);
         }
     }
 

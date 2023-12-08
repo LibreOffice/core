@@ -711,16 +711,16 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         switch( xContext->getAccessibleRole() )
         {
         case AccessibleRole::DIALOG:
-            pRet = new AccDialogEventListener(pXAcc, this);
+            pRet = new AccDialogEventListener(pXAcc, *this);
             break;
         case AccessibleRole::FRAME:
-            pRet = new AccFrameEventListener(pXAcc, this);
+            pRet = new AccFrameEventListener(pXAcc, *this);
             break;
         case AccessibleRole::WINDOW:
-            pRet = new AccWindowEventListener(pXAcc, this);
+            pRet = new AccWindowEventListener(pXAcc, *this);
             break;
         case AccessibleRole::ROOT_PANE:
-            pRet = new AccFrameEventListener(pXAcc, this);
+            pRet = new AccFrameEventListener(pXAcc, *this);
             break;
             //Container
         case AccessibleRole::CANVAS:
@@ -747,12 +747,12 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case AccessibleRole::TABLE_CELL:
         case AccessibleRole::TOOL_BAR:
         case AccessibleRole::VIEW_PORT:
-            pRet = new AccContainerEventListener(pXAcc, this);
+            pRet = new AccContainerEventListener(pXAcc, *this);
             break;
         case AccessibleRole::BLOCK_QUOTE:
         case AccessibleRole::PARAGRAPH:
         case AccessibleRole::HEADING:
-            pRet = new AccParagraphEventListener(pXAcc, this);
+            pRet = new AccParagraphEventListener(pXAcc, *this);
             break;
             //Component
         case AccessibleRole::CHECK_BOX:
@@ -772,15 +772,15 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case AccessibleRole::TOOL_TIP:
         case AccessibleRole::SPIN_BOX:
         case AccessibleRole::DATE_EDITOR:
-            pRet = new AccComponentEventListener(pXAcc, this);
+            pRet = new AccComponentEventListener(pXAcc, *this);
             break;
             //text component
         case AccessibleRole::TEXT:
-            pRet = new AccTextComponentEventListener(pXAcc, this);
+            pRet = new AccTextComponentEventListener(pXAcc, *this);
             break;
             //menu
         case AccessibleRole::MENU:
-            pRet = new AccMenuEventListener(pXAcc, this);
+            pRet = new AccMenuEventListener(pXAcc, *this);
             break;
             //object container
         case AccessibleRole::SHAPE:
@@ -788,22 +788,22 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case AccessibleRole::EMBEDDED_OBJECT:
         case AccessibleRole::GRAPHIC:
         case AccessibleRole::TEXT_FRAME:
-            pRet = new AccObjectContainerEventListener(pXAcc, this);
+            pRet = new AccObjectContainerEventListener(pXAcc, *this);
             break;
             //descendmanager
         case AccessibleRole::LIST:
-            pRet = new AccListEventListener(pXAcc, this);
+            pRet = new AccListEventListener(pXAcc, *this);
             break;
         case AccessibleRole::TREE:
-            pRet = new AccTreeEventListener(pXAcc, this);
+            pRet = new AccTreeEventListener(pXAcc, *this);
             break;
             //special
         case AccessibleRole::COLUMN_HEADER:
         case AccessibleRole::TABLE:
-            pRet = new AccTableEventListener(pXAcc, this);
+            pRet = new AccTableEventListener(pXAcc, *this);
             break;
         default:
-            pRet = new AccContainerEventListener(pXAcc, this);
+            pRet = new AccContainerEventListener(pXAcc, *this);
             break;
         }
     }

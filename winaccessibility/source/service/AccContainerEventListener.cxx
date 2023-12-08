@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccContainerEventListener::AccContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccEventListener(pAcc, pManager)
+AccContainerEventListener::AccContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccEventListener(pAcc, rManager)
 {
 }
 
@@ -125,7 +125,7 @@ void AccContainerEventListener::HandleSelectionChangedEvent(const Any& /*oldValu
 
     //menu bar does not process selection change event,just same as word behavior
     if (GetRole()!=AccessibleRole::MENU_BAR)
-        m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
+        m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
 }
 
 /**
@@ -137,10 +137,10 @@ void AccContainerEventListener::HandleAllChildrenChangedEvent()
     if (m_xAccessible.is())
     {
         //delete all oldValue's existing children
-        m_pObjManager->DeleteChildrenAccObj(m_xAccessible.get());
+        m_rObjManager.DeleteChildrenAccObj(m_xAccessible.get());
         //add all oldValue's existing children
-        m_pObjManager->InsertChildrenAccObj(m_xAccessible.get());
-        m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_REORDER);
+        m_rObjManager.InsertChildrenAccObj(m_xAccessible.get());
+        m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_REORDER);
     }
 }
 
@@ -149,8 +149,8 @@ void AccContainerEventListener::HandleAllChildrenChangedEvent()
  */
 void AccContainerEventListener::HandleTextChangedEvent(Any, Any newValue)
 {
-    m_pObjManager->SetValue(m_xAccessible.get(), newValue);
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_TEXTCHANGE);
+    m_rObjManager.SetValue(m_xAccessible.get(), newValue);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_TEXTCHANGE);
 }
 
 /**
@@ -179,17 +179,17 @@ void AccContainerEventListener::SetComponentState(sal_Int64 state, bool enable )
     case AccessibleStateType::ENABLED:
         if(enable)
         {
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
-            m_pObjManager->UpdateState(m_xAccessible.get());
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
+            m_rObjManager.UpdateState(m_xAccessible.get());
 
             UpdateAllChildrenState(m_xAccessible.get());
         }
         else
         {
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
-            m_pObjManager->UpdateState(m_xAccessible.get());
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
+            m_rObjManager.UpdateState(m_xAccessible.get());
 
             UpdateAllChildrenState(m_xAccessible.get());
         }
@@ -202,12 +202,12 @@ void AccContainerEventListener::SetComponentState(sal_Int64 state, bool enable )
         {
             if (!enable) /* get the active state */
             {
-                m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+                m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
             }
 
             else    /* lose the active state */
             {
-                m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+                m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
             }
         }
         break;
@@ -216,8 +216,8 @@ void AccContainerEventListener::SetComponentState(sal_Int64 state, bool enable )
     case AccessibleStateType::COLLAPSE:
     case AccessibleStateType::CHECKED:
         {
-            m_pObjManager->UpdateState(m_xAccessible.get());
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
+            m_rObjManager.UpdateState(m_xAccessible.get());
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
             break;
         }
 
@@ -239,22 +239,22 @@ void AccContainerEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         switch(state)
         {
         case AccessibleStateType::SELECTED:
-            m_pObjManager->IncreaseState(m_xAccessible.get(), state);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), state);
             break;
         case AccessibleStateType::INDETERMINATE:
         case AccessibleStateType::BUSY:
         case AccessibleStateType::FOCUSABLE:
         case AccessibleStateType::OFFSCREEN:
-            m_pObjManager->IncreaseState(m_xAccessible.get(), state);
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), state);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
             break;
         case AccessibleStateType::SHOWING:
             // UNO !SHOWING == MSAA OFFSCREEN
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
             break;
         case AccessibleStateType::VISIBLE:
             // UNO !VISIBLE == MSAA INVISIBLE
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
             break;
         default:
             break;
@@ -266,22 +266,22 @@ void AccContainerEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         switch(state)
         {
         case AccessibleStateType::SELECTED:
-            m_pObjManager->DecreaseState(m_xAccessible.get(), state);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), state);
             break;
         case AccessibleStateType::BUSY:
         case AccessibleStateType::INDETERMINATE:
         case AccessibleStateType::FOCUSABLE:
         case AccessibleStateType::OFFSCREEN:
-            m_pObjManager->DecreaseState(m_xAccessible.get(), state);
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), state);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
             break;
         case AccessibleStateType::SHOWING:
             // UNO !SHOWING == MSAA OFFSCREEN
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
             break;
         case AccessibleStateType::VISIBLE:
             // UNO !VISIBLE == MSAA INVISIBLE
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
             break;
         default:
             break;
@@ -297,16 +297,16 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
 {
     if(enable)
     {
-        m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+        m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
         // if the acc role is MENU_BAR, UnoMSAAEvent::MENU_START event should be sent
         // if the acc role is POPUP_MENU, UnoMSAAEvent::MENUPOPUPSTART event should be sent
         short role = GetRole();
         if(role == AccessibleRole::MENU_BAR)
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENU_START);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENU_START);
         }
         else if (role == AccessibleRole::POPUP_MENU)
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENUPOPUPSTART);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENUPOPUPSTART);
         //Disable the focused event on option_pane and Panel.
         //only disable option_pane for toolbar has panel to get focus
         else if (role == AccessibleRole::PANEL || role == AccessibleRole::OPTION_PANE )
@@ -316,7 +316,7 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
             if (parentRole == AccessibleRole::TOOL_BAR
                 || parentRole == AccessibleRole::SCROLL_PANE // sidebar
                 || parentRole == AccessibleRole::PANEL) // sidebar
-                m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
+                m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
         }
         else if (role == AccessibleRole::COMBO_BOX )
         {
@@ -335,32 +335,32 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
                     {
                         if (IsEditable(mxChildContext))
                         {
-                            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
-                            m_pObjManager->IncreaseState( mxChild.get(), AccessibleStateType::FOCUSED);
-                            m_pObjManager->NotifyAccEvent(mxChild.get(), UnoMSAAEvent::STATE_FOCUSED);
+                            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+                            m_rObjManager.IncreaseState( mxChild.get(), AccessibleStateType::FOCUSED);
+                            m_rObjManager.NotifyAccEvent(mxChild.get(), UnoMSAAEvent::STATE_FOCUSED);
                             bSendFocusOnCombobox = false;
                         }
                     }
                 }
             }
             if (bSendFocusOnCombobox)
-                m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
+                m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
         }
         else
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
     }
     else
     {
-        m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+        m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
         // if the acc role is MENU_BAR, UnoMSAAEvent::MENU_END event should be sent
         // if the acc role is POPUP_MENU, UnoMSAAEvent::MENUPOPUPEND event should be sent
         if (GetRole() == AccessibleRole::MENU_BAR)
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENU_END);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENU_END);
         }
         else if (GetRole() == AccessibleRole::POPUP_MENU)
         {
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENUPOPUPEND);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENUPOPUPEND);
         }
     }
 }
@@ -373,8 +373,8 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
  */
 void AccContainerEventListener::HandleValueChangedEvent(Any, Any)
 {
-    m_pObjManager->UpdateValue(m_xAccessible.get());
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
+    m_rObjManager.UpdateValue(m_xAccessible.get());
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
 }
 
 bool AccContainerEventListener::IsEditable(Reference<XAccessibleContext> const & xContext)
@@ -391,7 +391,7 @@ bool AccContainerEventListener::NotifyChildEvent(UnoMSAAEvent eWinEvent, const A
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->NotifyAccEvent(pAcc, eWinEvent);
+            m_rObjManager.NotifyAccEvent(pAcc, eWinEvent);
             return true;
         }
     }
@@ -404,7 +404,7 @@ void AccContainerEventListener::HandleSelectionChangedAddEvent(const Any& /*oldV
     {
         return ;
     }
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_ADD);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_ADD);
 }
 
 void AccContainerEventListener::HandleSelectionChangedRemoveEvent(const Any& /*oldValue*/, const Any& newValue)
@@ -413,7 +413,7 @@ void AccContainerEventListener::HandleSelectionChangedRemoveEvent(const Any& /*o
     {
         return ;
     }
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_REMOVE);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_REMOVE);
 }
 
 void AccContainerEventListener::HandleSelectionChangedWithinEvent(const Any& /*oldValue*/, const Any& newValue)
@@ -422,7 +422,7 @@ void AccContainerEventListener::HandleSelectionChangedWithinEvent(const Any& /*o
     {
         return ;
     }
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_WITHIN);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_WITHIN);
 }
 
 void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible)
@@ -452,7 +452,7 @@ void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible
         css::accessibility::XAccessible* mpAccessible = mxAccessible.get();
         if(mpAccessible != nullptr)
         {
-            m_pObjManager->UpdateState(mpAccessible);
+            m_rObjManager.UpdateState(mpAccessible);
             UpdateAllChildrenState(mpAccessible);
         }
     }
@@ -460,17 +460,17 @@ void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible
 
 void AccContainerEventListener::HandlePageChangedEvent(const Any& /*oldValue*/, const Any& /*newValue*/)
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_PAGECHANGED);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_PAGECHANGED);
 }
 
 void AccContainerEventListener::HandleSectionChangedEvent(const Any& /*oldValue*/, const Any& /*newValue*/ )
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SECTION_CHANGED);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SECTION_CHANGED);
 }
 
 void AccContainerEventListener::HandleColumnChangedEvent(const Any& /*oldValue*/, const Any& /*newValue*/)
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::COLUMN_CHANGED);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::COLUMN_CHANGED);
 }
 
 void  AccContainerEventListener::HandleNameChangedEvent( Any name )
@@ -487,7 +487,7 @@ void  AccContainerEventListener::HandleNameChangedEvent( Any name )
                 short childrole = mxChildContext->getAccessibleRole();
                 if (childrole == AccessibleRole::TEXT)
                 {
-                    m_pObjManager->SetAccName(mxChild.get(), name);
+                    m_rObjManager.SetAccName(mxChild.get(), name);
                 }
             }
         }

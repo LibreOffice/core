@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccDialogEventListener::AccDialogEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccEventListener(pAcc, pManager)
+AccDialogEventListener::AccDialogEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccEventListener(pAcc, rManager)
 {}
 AccDialogEventListener::~AccDialogEventListener()
 {
@@ -77,9 +77,9 @@ void AccDialogEventListener::SetComponentState(sal_Int64 state, bool enable)
     case AccessibleStateType::VISIBLE:
         // UNO !VISIBLE == MSAA INVISIBLE
         if( enable )
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         else
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         break;
     case AccessibleStateType::ACTIVE:
         // Only frames should be active

@@ -34,7 +34,7 @@ class AccTextComponentEventListener : public AccComponentEventListener
 {
 public:
     AccTextComponentEventListener(css::accessibility::XAccessible* pAcc,
-                                  AccObjectWinManager* pManager);
+                                  AccObjectWinManager& rManager);
     virtual ~AccTextComponentEventListener() override;
 
     virtual void SetComponentState(sal_Int64 state, bool enable) override;

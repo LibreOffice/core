@@ -33,7 +33,7 @@
 class AccMenuEventListener : public AccComponentEventListener
 {
 public:
-    AccMenuEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
+    AccMenuEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager);
     virtual ~AccMenuEventListener() override;
 
     //AccessibleEventListener

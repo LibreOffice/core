@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccMenuEventListener::AccMenuEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccComponentEventListener(pAcc, pManager)
+AccMenuEventListener::AccMenuEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccComponentEventListener(pAcc, rManager)
 {}
 AccMenuEventListener::~AccMenuEventListener()
 {
@@ -64,7 +64,7 @@ void  AccMenuEventListener::notifyEvent( const css::accessibility::AccessibleEve
  */
 void AccMenuEventListener::HandleSelectionChangedEventNoArgs()
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
 }
 
 /**
@@ -79,8 +79,8 @@ void AccMenuEventListener::FireStatePropertyChange(sal_Int64 state, bool set)
         {
             //for sub menu is popup, there is a menu selected event.
         case AccessibleStateType::SELECTED:
-            m_pObjManager->IncreaseState(m_xAccessible.get(), state);
-            m_pObjManager->UpdateChildState(m_xAccessible.get());
+            m_rObjManager.IncreaseState(m_xAccessible.get(), state);
+            m_rObjManager.UpdateChildState(m_xAccessible.get());
             break;
         default:
             AccComponentEventListener::FireStatePropertyChange(state, set);
@@ -93,7 +93,7 @@ void AccMenuEventListener::FireStatePropertyChange(sal_Int64 state, bool set)
         {
             //for sub menu is popup, there is a menu selected event.
         case AccessibleStateType::SELECTED:
-            m_pObjManager->DecreaseState(m_xAccessible.get(), state);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), state);
 
             break;
         default:

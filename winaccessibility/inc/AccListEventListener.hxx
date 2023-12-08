@@ -33,7 +33,7 @@
 class AccListEventListener : public AccDescendantManagerEventListener
 {
 public:
-    AccListEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
+    AccListEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager);
     virtual ~AccListEventListener() override;
 
     // XAccessibleEventListener

@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccTextComponentEventListener::AccTextComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccComponentEventListener(pAcc, pManager)
+AccTextComponentEventListener::AccTextComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccComponentEventListener(pAcc, rManager)
 {}
 AccTextComponentEventListener::~AccTextComponentEventListener()
 {

@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccParagraphEventListener::AccParagraphEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccContainerEventListener(pAcc, pManager)
+AccParagraphEventListener::AccParagraphEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccContainerEventListener(pAcc, rManager)
 {}
 AccParagraphEventListener::~AccParagraphEventListener()
 {
@@ -64,12 +64,12 @@ void  AccParagraphEventListener::notifyEvent( const css::accessibility::Accessib
             sal_Int64 State;
             if( (aEvent.NewValue >>= State) && (State == AccessibleStateType::SELECTED) )
             {
-                m_pObjManager->IncreaseState(m_xAccessible.get(), State);
+                m_rObjManager.IncreaseState(m_xAccessible.get(), State);
                 break;
             }
             else if( (aEvent.OldValue >>= State) && (State == AccessibleStateType::SELECTED) )
             {
-                m_pObjManager->DecreaseState(m_xAccessible.get(), State);
+                m_rObjManager.DecreaseState(m_xAccessible.get(), State);
                 break;
             }
 
@@ -94,7 +94,7 @@ void  AccParagraphEventListener::notifyEvent( const css::accessibility::Accessib
  */
 void AccParagraphEventListener::HandleCaretChangedEvent(Any, Any)
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_CARETCHANGE);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_CARETCHANGE);
 }
 
 /**
@@ -124,7 +124,7 @@ void AccParagraphEventListener::SetComponentState(sal_Int64 state, bool enable )
 
 void AccParagraphEventListener::HandleTextSelectionChangedEvent()
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TEXT_SELECTION_CHANGED);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TEXT_SELECTION_CHANGED);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

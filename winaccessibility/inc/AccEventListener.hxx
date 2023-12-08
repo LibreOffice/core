@@ -36,11 +36,11 @@ class AccEventListener : public ::cppu::WeakImplHelper<css::accessibility::XAcce
 protected:
     //accessible owner's pointer
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
-    // pointer for object's manager
-    AccObjectWinManager* m_pObjManager;
+    // reference to object's manager
+    AccObjectWinManager& m_rObjManager;
 
 public:
-    AccEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
+    AccEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager);
     virtual ~AccEventListener() override;
 
     // XEventListener

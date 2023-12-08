@@ -36,8 +36,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccFrameEventListener::AccFrameEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccEventListener(pAcc, pManager)
+AccFrameEventListener::AccFrameEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccEventListener(pAcc, rManager)
 {
 }
 
@@ -85,9 +85,9 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
             const SystemEnvData* systemdata
                 = pvclwindow->GetWindow()->GetSystemData();
 
-            m_pObjManager->InsertAccObj(pAcc, m_xAccessible.get(), systemdata->hWnd);
-            m_pObjManager->InsertChildrenAccObj(pAcc);
-            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
+            m_rObjManager.InsertAccObj(pAcc, m_xAccessible.get(), systemdata->hWnd);
+            m_rObjManager.InsertChildrenAccObj(pAcc);
+            m_rObjManager.NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
         }
     }
     else if (oldValue >>= xChild)
@@ -112,9 +112,9 @@ void AccFrameEventListener::SetComponentState(sal_Int64 state, bool enable )
     case AccessibleStateType::VISIBLE:
         // UNO !VISIBLE == MSAA INVISIBLE
         if( enable )
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         else
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         break;
     case AccessibleStateType::ACTIVE:
         // Only frames should be active

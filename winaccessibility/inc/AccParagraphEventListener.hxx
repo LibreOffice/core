@@ -33,7 +33,7 @@
 class AccParagraphEventListener : public AccContainerEventListener
 {
 public:
-    AccParagraphEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
+    AccParagraphEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager);
     virtual ~AccParagraphEventListener() override;
 
     //AccessibleEventListener

@@ -34,7 +34,7 @@
 class AccObjectContainerEventListener: public AccContainerEventListener
 {
 public:
-    AccObjectContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
+    AccObjectContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager);
     virtual ~AccObjectContainerEventListener() override;
 
     virtual void HandleStateChangedEvent(

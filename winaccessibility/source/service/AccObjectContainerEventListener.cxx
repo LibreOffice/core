@@ -33,8 +33,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
 AccObjectContainerEventListener::AccObjectContainerEventListener(
-    css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-    : AccContainerEventListener(pAcc, pManager)
+    css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+    : AccContainerEventListener(pAcc, rManager)
 {
 }
 AccObjectContainerEventListener::~AccObjectContainerEventListener() {}
@@ -51,7 +51,7 @@ void AccObjectContainerEventListener::HandleStateChangedEvent(Any oldValue, Any 
     {
         if (newV == AccessibleStateType::FOCUSED)
         {
-            m_pObjManager->UpdateAccName(m_xAccessible.get());
+            m_rObjManager.UpdateAccName(m_xAccessible.get());
         }
     }
     AccContainerEventListener::HandleStateChangedEvent(oldValue, newValue);

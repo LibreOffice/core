@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccComponentEventListener::AccComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-        :AccEventListener(pAcc, pManager)
+AccComponentEventListener::AccComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+        :AccEventListener(pAcc, rManager)
 {
 }
 
@@ -92,8 +92,8 @@ void  AccComponentEventListener::notifyEvent( const css::accessibility::Accessib
  */
 void AccComponentEventListener::HandleValueChangedEvent(Any, Any)
 {
-    m_pObjManager->UpdateValue(m_xAccessible.get());
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
+    m_rObjManager.UpdateValue(m_xAccessible.get());
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
 }
 
 /**
@@ -101,8 +101,8 @@ void AccComponentEventListener::HandleValueChangedEvent(Any, Any)
  */
 void AccComponentEventListener::HandleActionChangedEvent()
 {
-    m_pObjManager->UpdateAction(m_xAccessible.get());
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DEFACTIONCHANGE);
+    m_rObjManager.UpdateAction(m_xAccessible.get());
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DEFACTIONCHANGE);
 }
 
 /**
@@ -113,8 +113,8 @@ void AccComponentEventListener::HandleActionChangedEvent()
  */
 void AccComponentEventListener::HandleTextChangedEvent(Any, Any newValue)
 {
-    m_pObjManager->SetValue(m_xAccessible.get(), newValue);
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
+    m_rObjManager.SetValue(m_xAccessible.get(), newValue);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
 }
 
 /**
@@ -125,7 +125,7 @@ void AccComponentEventListener::HandleTextChangedEvent(Any, Any newValue)
  */
 void AccComponentEventListener::HandleCaretChangedEvent(Any, Any)
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_CARETCHANGE);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_CARETCHANGE);
 }
 
 /**
@@ -152,13 +152,13 @@ void AccComponentEventListener::SetComponentState(sal_Int64 state, bool enable)
         {
             if(enable)
             {
-                m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
-                m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
+                m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+                m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
             }
             else
             {
-                m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
-                m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
+                m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+                m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
             }
         }
         else
@@ -172,22 +172,22 @@ void AccComponentEventListener::SetComponentState(sal_Int64 state, bool enable)
     case AccessibleStateType::ENABLED:
         if(enable)
         {
-            m_pObjManager->UpdateState(m_xAccessible.get());
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
+            m_rObjManager.UpdateState(m_xAccessible.get());
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
             // 8. label should have no FOCUSABLE state, Firefox has READONLY state, we can also have.
             if (    GetRole() != AccessibleRole::LABEL
                 &&  GetRole() != AccessibleRole::STATIC
                 &&  GetRole() != AccessibleRole::NOTIFICATION
                 &&  GetRole() != AccessibleRole::SCROLL_BAR)
             {
-                m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
+                m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
             }
         }
         else
         {
-            m_pObjManager->UpdateState(m_xAccessible.get());
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
+            m_rObjManager.UpdateState(m_xAccessible.get());
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);
         }
         break;
     case AccessibleStateType::ACTIVE:
@@ -214,34 +214,34 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         {
         case AccessibleStateType::CHECKED:
         case AccessibleStateType::INDETERMINATE:
-            m_pObjManager->IncreaseState(m_xAccessible.get(), state);
-            m_pObjManager->UpdateAction(m_xAccessible.get());
+            m_rObjManager.IncreaseState(m_xAccessible.get(), state);
+            m_rObjManager.UpdateAction(m_xAccessible.get());
 
-            if (!m_pObjManager->IsSpecialToolbarItem(m_xAccessible.get()))
+            if (!m_rObjManager.IsSpecialToolbarItem(m_xAccessible.get()))
             {
-                m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_CHECKED);
+                m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_CHECKED);
             }
             break;
         case AccessibleStateType::PRESSED:
-            m_pObjManager->IncreaseState(m_xAccessible.get(), state);
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), state);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
             break;
         case AccessibleStateType::SELECTED:
-            m_pObjManager->IncreaseState(m_xAccessible.get(), state);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), state);
             break;
         case AccessibleStateType::ARMED:
-            m_pObjManager->IncreaseState(m_xAccessible.get(), state);
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_ARMED);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), state);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_ARMED);
             break;
         case AccessibleStateType::SHOWING:
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
             // UNO !SHOWING == MSAA OFFSCREEN
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING );
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_SHOWING);
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_SHOWING);
             break;
         case AccessibleStateType::VISIBLE:
             // UNO !VISIBLE == MSAA INVISIBLE
-            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE );
+            m_rObjManager.IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
             break;
         default:
             break;
@@ -254,38 +254,38 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         {
         case AccessibleStateType::CHECKED:
         case AccessibleStateType::INDETERMINATE:
-            m_pObjManager->DecreaseState(m_xAccessible.get(), state);
-            m_pObjManager->UpdateAction(m_xAccessible.get());
+            m_rObjManager.DecreaseState(m_xAccessible.get(), state);
+            m_rObjManager.UpdateAction(m_xAccessible.get());
 
-            if (!m_pObjManager->IsSpecialToolbarItem(m_xAccessible.get()))
+            if (!m_rObjManager.IsSpecialToolbarItem(m_xAccessible.get()))
             {
-                m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_CHECKED);
+                m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_CHECKED);
             }
             break;
         case AccessibleStateType::PRESSED:
-            m_pObjManager->DecreaseState(m_xAccessible.get(), state);
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), state);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
             break;
         case AccessibleStateType::SELECTED:
-            m_pObjManager->DecreaseState(m_xAccessible.get(), state);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), state);
             //if the state is unset, no need to send MSAA SELECTION event
-            //m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_SELECTED);
+            //m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_SELECTED);
             break;
         case AccessibleStateType::ARMED:
             {
-                m_pObjManager->DecreaseState(m_xAccessible.get(), state);
+                m_rObjManager.DecreaseState(m_xAccessible.get(), state);
                 //if the state is unset, no need to send MSAA MENU event
-                //m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_ARMED);
+                //m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_ARMED);
             }
             break;
         case AccessibleStateType::SHOWING:
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
             // UNO !SHOWING == MSAA OFFSCREEN
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
             break;
         case AccessibleStateType::VISIBLE:
             // UNO !VISIBLE == MSAA INVISIBLE
-            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
             break;
 
         default:
@@ -304,24 +304,24 @@ void AccComponentEventListener::FireStateFocusedChange(bool enable)
     if(enable)
     {
         if (GetParentRole() != AccessibleRole::COMBO_BOX)
-            m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
+            m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
     }
     else
     {
         //if lose focus, no need to send MSAA FOCUS event
-        m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+        m_rObjManager.DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
     }
 }
 
 void AccComponentEventListener::HandleSelectionChangedEventNoArgs()
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
 }
 
 //add TEXT_SELECTION_CHANGED event
 void AccComponentEventListener::HandleTextSelectionChangedEvent()
 {
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TEXT_SELECTION_CHANGED);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TEXT_SELECTION_CHANGED);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

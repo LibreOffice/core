@@ -32,8 +32,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccDescendantManagerEventListener::AccDescendantManagerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
-    :   AccComponentEventListener(pAcc, pManager)
+AccDescendantManagerEventListener::AccDescendantManagerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)
+    :   AccComponentEventListener(pAcc, rManager)
 {
 }
 
@@ -88,10 +88,10 @@ void AccDescendantManagerEventListener::HandleSelectionChangedEvent(Any oldValue
             //if the Role is the SC cell ,don't add the selected state.
             if (xContext.is() && xContext->getAccessibleRole() != AccessibleRole::TABLE_CELL)
             {
-                m_pObjManager->IncreaseState( pAcc, AccessibleStateType::SELECTED);
+                m_rObjManager.IncreaseState( pAcc, AccessibleStateType::SELECTED);
             }
 
-            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::SELECTION_CHANGED);
+            m_rObjManager.NotifyAccEvent(pAcc, UnoMSAAEvent::SELECTION_CHANGED);
             bSend=true;
         }
     }
@@ -100,12 +100,12 @@ void AccDescendantManagerEventListener::HandleSelectionChangedEvent(Any oldValue
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->DecreaseState( pAcc, AccessibleStateType::SELECTED);
+            m_rObjManager.DecreaseState( pAcc, AccessibleStateType::SELECTED);
         }
     }
     if (!bSend)
     {
-        m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
+        m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
     }
 }
 
@@ -119,8 +119,8 @@ void AccDescendantManagerEventListener::HandleChildChangedNoFocusEvent(Any oldVa
         {
             XAccessible* pAcc = xChild.get();
 
-            m_pObjManager->InsertAccObj(pAcc, m_xAccessible.get());
-            m_pObjManager->InsertChildrenAccObj(pAcc);
+            m_rObjManager.InsertAccObj(pAcc, m_xAccessible.get());
+            m_rObjManager.InsertChildrenAccObj(pAcc);
         }
     }
     if (oldValue >>= xChild)
@@ -128,8 +128,8 @@ void AccDescendantManagerEventListener::HandleChildChangedNoFocusEvent(Any oldVa
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->DeleteChildrenAccObj( pAcc );
-            m_pObjManager->DeleteAccObj( pAcc );
+            m_rObjManager.DeleteChildrenAccObj( pAcc );
+            m_rObjManager.DeleteAccObj( pAcc );
         }
     }
 }
@@ -142,7 +142,7 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(UnoMSAAEvent eWinEvent,
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            m_pObjManager->NotifyAccEvent(pAcc, eWinEvent);
+            m_rObjManager.NotifyAccEvent(pAcc, eWinEvent);
 
             if (AccObjectWinManager::IsStateManageDescendant(m_xAccessible.get()))
             {
@@ -159,7 +159,7 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(UnoMSAAEvent eWinEvent,
                 {
                     // handle any pending deletions for objects previously removed from selection
                     for (XAccessible* pAcc2 : m_aUnselectedChildrenForDeletion)
-                        m_pObjManager->DeleteAccObj(pAcc2);
+                        m_rObjManager.DeleteAccObj(pAcc2);
                     m_aUnselectedChildrenForDeletion.clear();
                 }
             }
@@ -174,7 +174,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedAddEvent(const Any
     {
         return ;
     }
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_ADD);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_ADD);
 }
 
 void AccDescendantManagerEventListener::HandleSelectionChangedRemoveEvent(const Any& /*oldValue*/, const Any &newValue)
@@ -183,7 +183,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedRemoveEvent(const 
     {
         return ;
     }
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_REMOVE);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_REMOVE);
 }
 
 void AccDescendantManagerEventListener::HandleSelectionChangedWithinEvent(const Any& /*oldValue*/, const Any &newValue)
@@ -192,7 +192,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedWithinEvent(const 
     {
         return ;
     }
-    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_WITHIN);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_WITHIN);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
