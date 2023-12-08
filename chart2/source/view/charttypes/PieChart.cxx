@@ -182,7 +182,7 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
 bool PiePositionHelper::clockwiseWedges() const
 {
     const ExplicitScaleData& rAngleScale = m_bSwapXAndY ? m_aScales[1] : m_aScales[0];
-    return rAngleScale.Orientation == AxisOrientation_MATHEMATICAL;
+    return rAngleScale.Orientation == AxisOrientation_REVERSE;
 }
 
 
