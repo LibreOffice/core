@@ -3,11 +3,12 @@ gb_Side:=host
 include ../../config_host.mk
 endif
 
-# The default target just builds.
+# The default target builds the APK and runs lint.
 
 all: build-gradle
 
 DISABLE_UI=TRUE
+BUILD_VARIANT=$(if $(DISABLE_UI),StrippedUI,FullUI)$(if $(ENABLE_ANDROID_EDITING),Editing)$(if $(ENABLE_RELEASE_BUILD),Release,Debug)
 BOOTSTRAPDIR=../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
@@ -29,7 +30,7 @@ clean:
 
 build-gradle: liboSettings.gradle local.properties link-so
 ifeq ($(ENABLE_JAVA),TRUE)
-	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then ./gradlew $(if $(verbose),--info) $(if $(versionCode),-PcmdVersionCode=$(versionCode)) assemble$(if $(DISABLE_UI),StrippedUI,FullUI)$(if $(ENABLE_ANDROID_EDITING),Editing)$(if $(ENABLE_RELEASE_BUILD),Release,Debug) ; fi
+	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then ./gradlew $(if $(verbose),--info) $(if $(versionCode),-PcmdVersionCode=$(versionCode)) assemble$(BUILD_VARIANT) lint$(BUILD_VARIANT)  ; fi
 endif
 
 run:

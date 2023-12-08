@@ -89,8 +89,14 @@ android {
         fullUI.dimension "default"
     }
     lint {
-        // don't error-out on missing translations
-        warning 'MissingTranslation'
+        warningsAsErrors true
+        // don't error-out on missing translations or external updates (new gradle plugin,
+        // library versions or target API become available)
+        informational 'AndroidGradlePluginVersion', 'GradleDependency', 'MissingTranslation', 'NewerVersionAvailable', 'OldTargetApi'
+        // don't fail on pre-existing issues
+        // These should be dealt with at some point, though.
+        // To update lint-baseline.xml, just remove the file and run the build again.
+        baseline file("lint-baseline.xml")
     }
 }
 
