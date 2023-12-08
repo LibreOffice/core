@@ -26,7 +26,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sal/log.hxx>
-
+#include <vcl/virdev.hxx>
 
 FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
@@ -69,6 +69,28 @@ bool GetApplyCharUnit( const SfxItemSet& rSet )
 FieldUnit GetModuleFieldUnit()
 {
     return SfxModule::GetCurrentFieldUnit();
+}
+
+void SvxRatioConnector::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    // contrast of GetDialogTextColor() is too strong
+    rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetDisableColor());
+    rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
+
+    Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
+    const sal_Int16 aWidth = aSize.Width() / 2;
+    const sal_Int16 aHeight = aSize.Height() - 1;
+
+    if (m_aConType == ConnectorType::Top)
+    {
+        rRenderContext.DrawLine(Point(0, 0), Point(aWidth, 0)); //top-left
+        rRenderContext.DrawLine(Point(aWidth, 0), Point(aWidth, aHeight)); //bottom-right
+    }
+    else
+    {
+        rRenderContext.DrawLine(Point(0, aHeight), Point(aWidth, aHeight));
+        rRenderContext.DrawLine(Point(aWidth, aHeight), Point(aWidth, 0));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

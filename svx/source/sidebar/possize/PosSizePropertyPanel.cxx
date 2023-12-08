@@ -48,6 +48,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include <svtools/unitconv.hxx>
+#include <bitmaps.hlst>
 
 using namespace css;
 using namespace css::uno;
@@ -62,6 +63,8 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     SfxBindings* pBindings,
     css::uno::Reference<css::ui::XSidebar> xSidebar)
 :   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui"),
+    m_aRatioTop(ConnectorType::Top),
+    m_aRatioBottom(ConnectorType::Bottom),
     mxFtPosX(m_xBuilder->weld_label("horizontallabel")),
     mxMtrPosX(m_xBuilder->weld_metric_spin_button("horizontalpos", FieldUnit::CM)),
     mxFtPosY(m_xBuilder->weld_label("verticallabel")),
@@ -69,10 +72,13 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxFtWidth(m_xBuilder->weld_label("widthlabel")),
     mxMtrWidth(m_xBuilder->weld_metric_spin_button("selectwidth", FieldUnit::CM)),
     mxFtHeight(m_xBuilder->weld_label("heightlabel")),
-    mxMtrHeight(m_xBuilder->weld_metric_spin_button("selectheight", FieldUnit::CM)),
-    mxCbxScale(m_xBuilder->weld_check_button("ratio")),
-    mxFtAngle(m_xBuilder->weld_label("rotationlabel")),
-    mxMtrAngle(m_xBuilder->weld_metric_spin_button("rotation", FieldUnit::DEGREE)),
+    mxMtrHeight(m_xBuilder->weld_metric_spin_button("selectheight", FieldUnit::CM))
+    , mxCbxScale(m_xBuilder->weld_check_button("ratio"))
+    , m_xCbxScaleImg(m_xBuilder->weld_image("imRatio"))
+    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, "daRatioTop", m_aRatioTop))
+    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, "daRatioBottom", m_aRatioBottom))
+    , mxFtAngle(m_xBuilder->weld_label("rotationlabel"))
+    , mxMtrAngle(m_xBuilder->weld_metric_spin_button("rotation", FieldUnit::DEGREE)),
     mxCtrlDial(new DialControl),
     mxDial(new weld::CustomWeld(*m_xBuilder, "orientationcontrol", *mxCtrlDial)),
     mxFtFlip(m_xBuilder->weld_label("fliplabel")),
@@ -126,6 +132,19 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     nWidth = std::max(nWidth, mxFtWidth->get_preferred_size().Width());;
     mxFtWidth->set_label(sLabel);
     mxFtWidth->set_size_request(nWidth, -1);
+
+    // vertical alignment = fill makes the drawingarea expand the associated spinedits so we have to size it here
+    const sal_Int16 aHeight
+        = static_cast<sal_Int16>(std::max(int(mxCbxScale->get_preferred_size().getHeight() / 2
+                                              - mxMtrWidth->get_preferred_size().getHeight() / 2),
+                                          12));
+    const sal_Int16 aWidth
+        = static_cast<sal_Int16>(mxCbxScale->get_preferred_size().getWidth() / 2);
+    m_xImgRatioTop->set_size_request(aWidth, aHeight);
+    m_xImgRatioBottom->set_size_request(aWidth, aHeight);
+    //init needed for gtk3
+    m_xCbxScaleImg->set_from_icon_name(mxCbxScale->get_active() ? RID_SVXBMP_LOCKED
+                                                                : RID_SVXBMP_UNLOCKED);
 
     mpBindings->Update( SID_ATTR_METRIC );
     mpBindings->Update( SID_ATTR_TRANSFORM_WIDTH );
@@ -429,6 +448,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, v
 
 IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::Toggleable&, void )
 {
+    m_xCbxScaleImg->set_from_icon_name(mxCbxScale->get_active() ? RID_SVXBMP_LOCKED : RID_SVXBMP_UNLOCKED);
     if ( mxCbxScale->get_active() )
     {
         mlOldWidth  = std::max(GetCoreValue(*mxMtrWidth,  mePoolUnit), SAL_CONST_INT64(1));
@@ -774,6 +794,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     if ( aUserItem >>= aTemp )
         sUserData = aTemp;
     mxCbxScale->set_active(static_cast<bool>(sUserData.toInt32()));
+    m_xCbxScaleImg->set_from_icon_name(mxCbxScale->get_active() ? RID_SVXBMP_LOCKED : RID_SVXBMP_UNLOCKED);
 }
 
 void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::property_tree::ptree& rState)

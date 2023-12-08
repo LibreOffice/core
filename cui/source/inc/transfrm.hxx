@@ -19,6 +19,7 @@
 #pragma once
 
 #include <svx/dlgctrl.hxx>
+#include <svx/dlgutil.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/anchorid.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -91,6 +92,9 @@ private:
     SvxRectCtl          m_aCtlPos;
     SvxRectCtl          m_aCtlSize;
 
+    SvxRatioConnector m_aRatioTop;
+    SvxRatioConnector m_aRatioBottom;
+
     // position
     std::unique_ptr<weld::Widget> m_xFlPosition;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;
@@ -104,6 +108,9 @@ private:
     std::unique_ptr<weld::Label> m_xFtHeight;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrHeight;
     std::unique_ptr<weld::CheckButton> m_xCbxScale;
+    std::unique_ptr<weld::Image> m_xCbxScaleImg;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
     std::unique_ptr<weld::CustomWeld> m_xCtlSize;
 
     // protect

@@ -22,6 +22,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
+#include <svx/dlgutil.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <svx/swframeexample.hxx>
 #include <swtypes.hxx>
@@ -74,6 +75,9 @@ class SwFramePage final : public SfxTabPage
 
     SwFrameExample m_aExampleWN;
 
+    SvxRatioConnector m_aRatioTop;
+    SvxRatioConnector m_aRatioBottom;
+
     // size
     std::unique_ptr<weld::Label> m_xWidthFT;
     std::unique_ptr<weld::Label> m_xWidthAutoFT;
@@ -88,6 +92,10 @@ class SwFramePage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xAutoHeightCB;
 
     std::unique_ptr<weld::CheckButton> m_xFixedRatioCB;
+    std::unique_ptr<weld::Image> m_xCbxScaleImg;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
+
     std::unique_ptr<weld::Button> m_xRealSizeBT;
 
     // anchor
@@ -142,6 +150,7 @@ class SwFramePage final : public SfxTabPage
 
     DECL_LINK(AutoWidthClickHdl, weld::Toggleable&, void);
     DECL_LINK(AutoHeightClickHdl, weld::Toggleable&, void);
+    DECL_LINK(RatioClickHdl, weld::Toggleable&, void);
 
     // update example
     void            UpdateExample();

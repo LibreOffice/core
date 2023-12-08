@@ -28,6 +28,7 @@
 #include <svx/numberingpreview.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/timer.hxx>
+#include <svx/dlgutil.hxx>
 
 #define MN_GALLERY_ENTRY 100
 
@@ -218,6 +219,8 @@ class SvxNumOptionsTabPage : public SfxTabPage
     TypedWhichId<SvxNumBulletItem> nNumItemId;
     MapUnit             eCoreUnit;
 
+    SvxRatioConnector m_aRatioTop;
+    SvxRatioConnector m_aRatioBottom;
     SvxNumberingPreview m_aPreviewWIN;
     std::unique_ptr<weld::Widget> m_xGrid;
     std::unique_ptr<weld::TreeView> m_xLevelLB;
@@ -247,6 +250,9 @@ class SvxNumOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xHeightFT;
     std::unique_ptr<weld::MetricSpinButton> m_xHeightMF;
     std::unique_ptr<weld::CheckButton> m_xRatioCB;
+    std::unique_ptr<weld::Image> m_xCbxScaleImg;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
     std::unique_ptr<weld::Label> m_xOrientFT;
     std::unique_ptr<weld::ComboBox> m_xOrientLB;
     std::unique_ptr<weld::Widget> m_xAllLevelsFrame;

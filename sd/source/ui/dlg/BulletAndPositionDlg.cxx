@@ -48,6 +48,8 @@
 #include <sdresid.hxx>
 #include <DrawViewShell.hxx>
 
+#include <bitmaps.hlst>
+
 #define SHOW_NUMBERING 0
 #define SHOW_BULLET 1
 #define SHOW_BITMAP 2
@@ -87,6 +89,8 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , nActNumLvl(1)
     , p_Window(pWindow)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
+    , m_aRatioTop(ConnectorType::Top)
+    , m_aRatioBottom(ConnectorType::Bottom)
     , m_xGrid(m_xBuilder->weld_widget("grid2"))
     , m_xLevelLB(m_xBuilder->weld_tree_view("levellb"))
     , m_xFmtLB(m_xBuilder->weld_combo_box("numfmtlb"))
@@ -110,6 +114,9 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , m_xHeightFT(m_xBuilder->weld_label("heightft"))
     , m_xHeightMF(m_xBuilder->weld_metric_spin_button("heightmf", FieldUnit::CM))
     , m_xRatioCB(m_xBuilder->weld_check_button("keepratio"))
+    , m_xCbxScaleImg(m_xBuilder->weld_image("imRatio"))
+    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, "daRatioTop", m_aRatioTop))
+    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, "daRatioBottom", m_aRatioBottom))
     , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
     , m_xDistBorderFT(m_xBuilder->weld_label("indent"))
     , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button("indentmf", FieldUnit::CM))
@@ -154,6 +161,19 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     aInvalidateTimer.SetTimeout(50);
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+
+    // vertical alignment = fill makes the drawingarea expand the associated spinedits so we have to size it here
+    const sal_Int16 aHeight
+        = static_cast<sal_Int16>(std::max(int(m_xRatioCB->get_preferred_size().getHeight() / 2
+                                              - m_xWidthMF->get_preferred_size().getHeight() / 2),
+                                          12));
+    const sal_Int16 aWidth
+        = static_cast<sal_Int16>(m_xRatioCB->get_preferred_size().getWidth() / 2);
+    m_xImgRatioTop->set_size_request(aWidth, aHeight);
+    m_xImgRatioBottom->set_size_request(aWidth, aHeight);
+    //init needed for gtk3
+    m_xCbxScaleImg->set_from_icon_name(m_xRatioCB->get_active() ? RID_SVXBMP_LOCKED
+                                                                : RID_SVXBMP_UNLOCKED);
 
     // Fill ListBox with predefined / translated numbering types.
     sal_uInt32 nCount = SvxNumberingTypeTable::Count();
@@ -642,6 +662,9 @@ void SvxBulletAndPositionDlg::SwitchNumberType(sal_uInt8 nType)
     m_xHeightFT->set_visible(bBitmap);
     m_xHeightMF->set_visible(bBitmap);
     m_xRatioCB->set_visible(bBitmap);
+    m_xCbxScaleImg->set_visible(bBitmap);
+    m_xImgRatioTop->set_visible(bBitmap);
+    m_xImgRatioBottom->set_visible(bBitmap);
 
     m_xWidthFT->set_sensitive(bEnableBitmap);
     m_xWidthMF->set_sensitive(bEnableBitmap);
@@ -1046,6 +1069,8 @@ IMPL_LINK(SvxBulletAndPositionDlg, SizeHdl_Impl, weld::MetricSpinButton&, rField
 
 IMPL_LINK(SvxBulletAndPositionDlg, RatioHdl_Impl, weld::Toggleable&, rBox, void)
 {
+    m_xCbxScaleImg->set_from_icon_name(m_xRatioCB->get_active() ? RID_SVXBMP_LOCKED
+                                                                : RID_SVXBMP_UNLOCKED);
     if (rBox.get_active())
     {
         if (bLastWidthModified)

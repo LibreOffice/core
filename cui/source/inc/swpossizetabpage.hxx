@@ -21,6 +21,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/swframeexample.hxx>
 #include <vcl/weld.hxx>
+#include <svx/dlgutil.hxx>
 
 // SvxSwPosSizeTabPage - position and size page for Writer drawing objects
 struct FrmMap;
@@ -55,10 +56,15 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     TriState    m_nProtectSizeState;
 
     SwFrameExample m_aExampleWN;
+    SvxRatioConnector m_aRatioTop;
+    SvxRatioConnector m_aRatioBottom;
 
     std::unique_ptr<weld::MetricSpinButton> m_xWidthMF;
     std::unique_ptr<weld::MetricSpinButton> m_xHeightMF;
     std::unique_ptr<weld::CheckButton> m_xKeepRatioCB;
+    std::unique_ptr<weld::Image> m_xCbxScaleImg;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
     std::unique_ptr<weld::RadioButton> m_xToPageRB;
     std::unique_ptr<weld::RadioButton> m_xToParaRB;
     std::unique_ptr<weld::RadioButton> m_xToCharRB;
@@ -91,6 +97,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     DECL_LINK(MirrorHdl, weld::Toggleable&, void);
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ProtectHdl, weld::Toggleable&, void);
+    DECL_LINK(RatioHdl_Impl, weld::Toggleable&, void);
 
     void            InitPos(RndStdIds nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,

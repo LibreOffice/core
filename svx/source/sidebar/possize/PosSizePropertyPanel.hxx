@@ -31,6 +31,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include <svx/dlgutil.hxx>
 
 class SdrView;
 
@@ -78,6 +79,9 @@ public:
         boost::property_tree::ptree& rState) override;
 
 private:
+    SvxRatioConnector m_aRatioTop;
+    SvxRatioConnector m_aRatioBottom;
+
     //Position
     std::unique_ptr<weld::Label> mxFtPosX;
     std::unique_ptr<weld::MetricSpinButton> mxMtrPosX;
@@ -90,6 +94,9 @@ private:
     std::unique_ptr<weld::Label> mxFtHeight;
     std::unique_ptr<weld::MetricSpinButton> mxMtrHeight;
     std::unique_ptr<weld::CheckButton> mxCbxScale;
+    std::unique_ptr<weld::Image> m_xCbxScaleImg;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
 
     //rotation
     std::unique_ptr<weld::Label> mxFtAngle;

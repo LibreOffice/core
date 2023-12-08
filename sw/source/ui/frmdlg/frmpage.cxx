@@ -76,6 +76,8 @@
 #include <comphelper/lok.hxx>
 #include <memory>
 
+#include <bitmaps.hlst>
+
 using namespace ::com::sun::star;
 using namespace ::sfx2;
 
@@ -643,6 +645,8 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     , m_bAllowVertPositioning( true )
     , m_bIsMathOLE(false)
     , m_bIsMathBaselineAlignment(true)
+    , m_aRatioTop(ConnectorType::Top)
+    , m_aRatioBottom(ConnectorType::Bottom)
     , m_xWidthFT(m_xBuilder->weld_label("widthft"))
     , m_xWidthAutoFT(m_xBuilder->weld_label("autowidthft"))
     , m_xRelWidthCB(m_xBuilder->weld_check_button("relwidth"))
@@ -653,7 +657,10 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     , m_xRelHeightCB(m_xBuilder->weld_check_button("relheight"))
     , m_xRelHeightRelationLB(m_xBuilder->weld_combo_box("relheightrelation"))
     , m_xAutoHeightCB(m_xBuilder->weld_check_button("autoheight"))
-    , m_xFixedRatioCB(m_xBuilder->weld_check_button("ratio"))
+    , m_xFixedRatioCB(m_xBuilder->weld_check_button("CBX_SCALE"))
+    , m_xCbxScaleImg(m_xBuilder->weld_image("imRatio"))
+    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, "daRatioTop", m_aRatioTop))
+    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, "daRatioBottom", m_aRatioBottom))
     , m_xRealSizeBT(m_xBuilder->weld_button("origsize"))
     , m_xAnchorFrame(m_xBuilder->weld_widget("anchorframe"))
     , m_xAnchorAtPageRB(m_xBuilder->weld_radio_button("topage"))
@@ -717,6 +724,8 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
 
     m_xAutoWidthCB->connect_toggled(LINK(this, SwFramePage, AutoWidthClickHdl));
     m_xAutoHeightCB->connect_toggled(LINK(this, SwFramePage, AutoHeightClickHdl));
+
+    m_xFixedRatioCB->connect_toggled(LINK(this, SwFramePage, RatioClickHdl));
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -975,7 +984,10 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
         }
 
         if (m_sDlgType == "PictureDialog")
+        {
             m_xFixedRatioCB->set_active(false);
+            m_xCbxScaleImg->set_from_icon_name(RID_SVXBMP_UNLOCKED);
+        }
         else
         {
             if ( m_bNew )
@@ -2163,6 +2175,11 @@ IMPL_LINK_NOARG(SwFramePage, AutoHeightClickHdl, weld::Toggleable&, void)
         HandleAutoCB(m_xAutoHeightCB->get_active(), *m_xHeightFT, *m_xHeightAutoFT, *m_xWidthED->get());
 }
 
+IMPL_LINK_NOARG(SwFramePage, RatioClickHdl, weld::Toggleable&, void)
+{
+    m_xCbxScaleImg->set_from_icon_name(m_xFixedRatioCB->get_active() ? RID_SVXBMP_LOCKED : RID_SVXBMP_UNLOCKED);
+}
+
 IMPL_LINK( SwFramePage, ModifyHdl, weld::MetricSpinButton&, rEdit, void )
 {
     SwTwips nWidth  = static_cast< SwTwips >(m_xWidthED->DenormalizePercent(m_xWidthED->get_value(FieldUnit::TWIP)));
@@ -2391,6 +2408,7 @@ void SwFramePage::Init(const SfxItemSet& rSet)
         m_xRelHeightRelationLB->set_active(1);
     else
         m_xRelHeightRelationLB->set_active(0);
+    m_xCbxScaleImg->set_from_icon_name(m_xFixedRatioCB->get_active() ? RID_SVXBMP_LOCKED : RID_SVXBMP_UNLOCKED);
 }
 
 void SwFramePage::SetFormatUsed(bool bFormatUsed)

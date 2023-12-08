@@ -34,12 +34,13 @@
 #include <svtools/unitconv.hxx>
 
 #include <transfrm.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/anchorid.hxx>
 #include <svl/rectitem.hxx>
 #include <swpossizetabpage.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/fieldvalues.hxx>
+
+#include <bitmaps.hlst>
 
 // static ----------------------------------------------------------------
 
@@ -731,6 +732,8 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(weld::Container* pPage, weld::Dia
     , mfOldHeight(0.0)
     , m_aCtlPos(this)
     , m_aCtlSize(this)
+    , m_aRatioTop(ConnectorType::Top)
+    , m_aRatioBottom(ConnectorType::Bottom)
     , m_xFlPosition(m_xBuilder->weld_widget("FL_POSITION"))
     , m_xMtrPosX(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_X", FieldUnit::CM))
     , m_xMtrPosY(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_Y", FieldUnit::CM))
@@ -741,6 +744,9 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(weld::Container* pPage, weld::Dia
     , m_xFtHeight(m_xBuilder->weld_label("FT_HEIGHT"))
     , m_xMtrHeight(m_xBuilder->weld_metric_spin_button("MTR_FLD_HEIGHT", FieldUnit::CM))
     , m_xCbxScale(m_xBuilder->weld_check_button("CBX_SCALE"))
+    , m_xCbxScaleImg(m_xBuilder->weld_image("imRatio"))
+    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, "daRatioTop", m_aRatioTop))
+    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, "daRatioBottom", m_aRatioBottom))
     , m_xCtlSize(new weld::CustomWeld(*m_xBuilder, "CTL_SIZERECT", m_aCtlSize))
     , m_xFlProtect(m_xBuilder->weld_widget("FL_PROTECT"))
     , m_xTsbPosProtect(m_xBuilder->weld_check_button("TSB_POSPROTECT"))
@@ -761,9 +767,19 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(weld::Container* pPage, weld::Dia
     m_aCtlSize.SetActualRP(RectPoint::LT);
     meRP = RectPoint::LT; // see above
 
-    m_xMtrWidth->connect_value_changed( LINK( this, SvxPositionSizeTabPage, ChangeWidthHdl ) );
-    m_xMtrHeight->connect_value_changed( LINK( this, SvxPositionSizeTabPage, ChangeHeightHdl ) );
-    m_xCbxScale->connect_toggled( LINK( this, SvxPositionSizeTabPage, ClickAutoHdl ) );
+    m_xMtrWidth->connect_value_changed(LINK(this, SvxPositionSizeTabPage, ChangeWidthHdl));
+    m_xMtrHeight->connect_value_changed(LINK(this, SvxPositionSizeTabPage, ChangeHeightHdl));
+
+    m_xCbxScale->connect_toggled(LINK(this, SvxPositionSizeTabPage, ClickAutoHdl));
+    // vertical alignment = fill makes the drawingarea expand the associated spinedits so we have to size it here
+    const sal_Int16 aHeight
+        = static_cast<sal_Int16>(std::max(int(m_xCbxScale->get_preferred_size().getHeight() / 2
+                                              - m_xFtWidth->get_preferred_size().getHeight() / 2),
+                                          12));
+    const sal_Int16 aWidth
+        = static_cast<sal_Int16>(m_xCbxScale->get_preferred_size().getWidth() / 2);
+    m_xImgRatioTop->set_size_request(aWidth, aHeight);
+    m_xImgRatioBottom->set_size_request(aWidth, aHeight);
 
     m_xFlAdjust->set_sensitive(false);
 
@@ -1080,6 +1096,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     // Is matching set?
     OUString aStr = GetUserData();
     m_xCbxScale->set_active(aStr.toInt32() != 0);
+    m_xCbxScaleImg->set_from_icon_name(m_xCbxScale->get_active() ? RID_SVXBMP_LOCKED : RID_SVXBMP_UNLOCKED);
 
     m_xMtrPosX->save_value();
     m_xMtrPosY->save_value();
@@ -1545,6 +1562,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl, weld::Toggleable&, 
 
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl, weld::Toggleable&, void)
 {
+    m_xCbxScaleImg->set_from_icon_name(m_xCbxScale->get_active() ? RID_SVXBMP_LOCKED : RID_SVXBMP_UNLOCKED);
     if (m_xCbxScale->get_active())
     {
         mfOldWidth  = std::max( static_cast<double>(GetCoreValue( *m_xMtrWidth,  mePoolUnit )), 1.0 );

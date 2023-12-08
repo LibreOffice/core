@@ -23,6 +23,7 @@
 #include <tools/fldunit.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/rendercontext/DrawModeFlags.hxx>
+#include <vcl/customweld.hxx>
 
 class SfxItemSet;
 
@@ -34,6 +35,24 @@ constexpr DrawModeFlags OUTPUT_DRAWMODE_COLOR = DrawModeFlags::Default;
 constexpr DrawModeFlags OUTPUT_DRAWMODE_CONTRAST
     = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText
       | DrawModeFlags::SettingsGradient;
+
+enum ConnectorType
+{
+    Top,
+    Bottom
+};
+
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxRatioConnector final
+    : public weld::CustomWidgetController
+{
+    ConnectorType m_aConType;
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+
+public:
+    SvxRatioConnector(ConnectorType conType)
+        : m_aConType(conType){};
+};
 
 #endif
 

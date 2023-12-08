@@ -27,6 +27,7 @@
 #include <vcl/weld.hxx>
 #include "View.hxx"
 #include <svx/numberingpreview.hxx>
+#include <svx/dlgutil.hxx>
 
 #define MN_GALLERY_ENTRY 100
 
@@ -71,6 +72,8 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     MapUnit eCoreUnit;
 
     SvxNumberingPreview m_aPreviewWIN;
+    SvxRatioConnector m_aRatioTop;
+    SvxRatioConnector m_aRatioBottom;
     std::unique_ptr<weld::Widget> m_xGrid;
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::ComboBox> m_xFmtLB;
@@ -93,6 +96,9 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_xHeightFT;
     std::unique_ptr<weld::MetricSpinButton> m_xHeightMF;
     std::unique_ptr<weld::CheckButton> m_xRatioCB;
+    std::unique_ptr<weld::Image> m_xCbxScaleImg;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
     std::unique_ptr<weld::Menu> m_xGalleryMenu;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
     std::unique_ptr<weld::Label> m_xDistBorderFT;

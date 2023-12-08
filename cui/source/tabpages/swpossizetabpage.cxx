@@ -38,6 +38,8 @@
 #include <svtools/unitconv.hxx>
 #include <osl/diagnose.h>
 
+#include <bitmaps.hlst>
+
 using namespace ::com::sun::star::text;
 
 namespace {
@@ -539,9 +541,14 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(weld::Container* pPage, weld::DialogCon
     , m_bIsMultiSelection(false)
     , m_bIsInRightToLeft(false)
     , m_nProtectSizeState(TRISTATE_FALSE)
+    , m_aRatioTop(ConnectorType::Top)
+    , m_aRatioBottom(ConnectorType::Bottom)
     , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
     , m_xHeightMF(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
     , m_xKeepRatioCB(m_xBuilder->weld_check_button("ratio"))
+    , m_xCbxScaleImg(m_xBuilder->weld_image("imRatio"))
+    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, "daRatioTop", m_aRatioTop))
+    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, "daRatioBottom", m_aRatioBottom))
     , m_xToPageRB(m_xBuilder->weld_radio_button("topage"))
     , m_xToParaRB(m_xBuilder->weld_radio_button("topara"))
     , m_xToCharRB(m_xBuilder->weld_radio_button("tochar"))
@@ -574,6 +581,20 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(weld::Container* pPage, weld::DialogCon
     SetFieldUnit(*m_xVertByMF, eDlgUnit, true);
     SetFieldUnit(*m_xWidthMF , eDlgUnit, true);
     SetFieldUnit(*m_xHeightMF, eDlgUnit, true);
+
+    // vertical alignment = fill makes the drawingarea expand the associated spinedits so we have to size it here
+    const sal_Int16 aHeight
+        = static_cast<sal_Int16>(std::max(int(m_xKeepRatioCB->get_preferred_size().getHeight() / 2
+                                              - m_xWidthMF->get_preferred_size().getHeight() / 2),
+                                          12));
+    const sal_Int16 aWidth
+        = static_cast<sal_Int16>(m_xKeepRatioCB->get_preferred_size().getWidth() / 2);
+    m_xImgRatioTop->set_size_request(aWidth, aHeight);
+    m_xImgRatioBottom->set_size_request(aWidth, aHeight);
+    //init needed for gtk3
+    m_xCbxScaleImg->set_from_icon_name(m_xKeepRatioCB->get_active() ? RID_SVXBMP_LOCKED
+                                                                    : RID_SVXBMP_UNLOCKED);
+    m_xKeepRatioCB->connect_toggled(LINK(this, SvxSwPosSizeTabPage, RatioHdl_Impl));
 
     SetExchangeSupport();
 
@@ -1107,6 +1128,11 @@ RndStdIds SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
              *pbHasChanged = false;
     }
     return nRet;
+}
+
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RatioHdl_Impl, weld::Toggleable&, void)
+{
+    m_xCbxScaleImg->set_from_icon_name(m_xKeepRatioCB->get_active() ? RID_SVXBMP_LOCKED : RID_SVXBMP_UNLOCKED);
 }
 
 IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyClickHdl, weld::Toggleable&, void)

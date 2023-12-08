@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -52,7 +52,7 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=2 n-rows=8 -->
+              <!-- n-columns=3 n-rows=7 -->
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -295,26 +295,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="ratio">
-                    <property name="label" translatable="yes" context="frmtypepage|ratio">_Keep ratio</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="ratio-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|ratio">Maintains the height and width ratio when you change the width or the height setting.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">6</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkButton" id="origsize">
                     <property name="label" translatable="yes" context="frmtypepage|origsize">_Original Size</property>
                     <property name="can-focus">True</property>
@@ -330,9 +310,112 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">7</property>
+                    <property name="top-attach">6</property>
                     <property name="width">2</property>
                   </packing>
+                </child>
+                <child>
+                  <!-- n-columns=2 n-rows=3 -->
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="column-spacing">3</property>
+                    <child>
+                      <object class="GtkCheckButton" id="CBX_SCALE">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="frmtypepage|ratio_tip">Keep ratio</property>
+                        <property name="valign">center</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="CBX_SCALE-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="frmtypepage|accessible_name|CBX_SCALE">Keep Ratio</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|CBX_SCALE">Maintains proportions when you resize the selected object.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="imRatio">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <property name="pixbuf">res/unlocked.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="imRatio-atkobject">
+                            <property name="AtkObject::accessible-role">image</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkDrawingArea" id="daRatioTop">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">12</property>
+                        <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="daRatioTop-atkobject">
+                            <property name="AtkObject::accessible-role">image</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkDrawingArea" id="daRatioBottom">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="daRatioBottom-atkobject">
+                            <property name="AtkObject::accessible-role">image</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                    <property name="height">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>

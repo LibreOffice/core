@@ -117,4 +117,7 @@ inline constexpr OUString RID_BMP_A11Y_CHECK_ISSUES_FOUND = u"svx/res/a11y_check
 
 inline constexpr OUString RID_BMP_QUERYINSMODE = u"res/queryinsmode.png"_ustr;
 
+inline constexpr OUString RID_SVXBMP_LOCKED = u"res/locked.png"_ustr;
+inline constexpr OUString RID_SVXBMP_UNLOCKED = u"res/unlocked.png"_ustr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
