@@ -46,4 +46,6 @@ $(eval $(call gb_Executable_add_cobjects,mar,\
 	onlineupdate/source/libmar/tool/mar \
 ))
 
+$(eval $(call gb_Executable_set_warnings_not_errors,mar))
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */

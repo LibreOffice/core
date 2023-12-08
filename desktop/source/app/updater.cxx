@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/configmgr.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
 #include <sal/log.hxx>
@@ -316,7 +317,7 @@ bool update()
         SAL_WARN("desktop.updater", "Updater executable path: " << aUpdaterPath);
         for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
         {
-            SAL_WARN("desktop.updater", pArgs[i]);
+            SAL_WARN("desktop.updater", OUString(o3tl::toU(pArgs[i])));
         }
         bSuccess = false;
     }

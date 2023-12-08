@@ -29,4 +29,6 @@ $(eval $(call gb_StaticLibrary_add_cobjects,libmarverify,\
 	onlineupdate/source/libmar/verify/cryptox \
 ))
 
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,libmarverify))
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */

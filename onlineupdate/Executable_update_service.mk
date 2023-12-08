@@ -55,4 +55,8 @@ $(eval $(call gb_Executable_add_exception_objects,update_service,\
 	onlineupdate/source/service/workmonitor \
 ))
 
+$(eval $(call gb_Executable_add_cxxflags,update_service,-Zc:strictStrings-))
+
+$(eval $(call gb_Executable_add_defs,update_service,-DUNICODE))
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */

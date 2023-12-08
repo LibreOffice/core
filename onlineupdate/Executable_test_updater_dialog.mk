@@ -60,4 +60,8 @@ $(eval $(call gb_Executable_add_exception_objects,test_updater_dialog,\
  	onlineupdate/workben/test_dialog \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Executable_add_defs,test_updater_dialog,-DUNICODE))
+endif
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */

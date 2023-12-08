@@ -82,4 +82,14 @@ $(eval $(call gb_Executable_add_exception_objects,updater,\
 		onlineupdate/source/update/updater/win_dirent )\
 ))
 
+$(eval $(call gb_Executable_set_warnings_not_errors,updater))
+
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Executable_add_cxxflags,updater,-Zc:strictStrings-))
+
+$(eval $(call gb_Executable_add_defs,updater,-DUNICODE))
+
+endif
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */

@@ -386,7 +386,7 @@ get_relative_offset(const NS_tchar *abs_path)
     size_t len = NS_tstrlen(prefix);
     if (NS_tstrlen(abs_path) <= len)
         return abs_path;
-    if (0 != strncmp(abs_path, prefix, len))
+    if (0 != NS_tstrncmp(abs_path, prefix, len))
         return abs_path;
     return abs_path + len + 1;
 }

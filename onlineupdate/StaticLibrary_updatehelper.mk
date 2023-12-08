@@ -28,4 +28,10 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,updatehelper,\
 	onlineupdate/source/update/common/updatelogging \
 ))
 
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,updatehelper))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_StaticLibrary_add_cxxflags,updatehelper,-Zc:strictStrings-))
+endif
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */

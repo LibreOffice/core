@@ -24,4 +24,6 @@ $(eval $(call gb_StaticLibrary_use_static_libraries,\
 	libmarverify \
 ))
 
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,libmar))
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
