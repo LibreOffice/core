@@ -519,6 +519,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150790)
                 "colors", "#Bookmark 2 Bookmark End#Bookmark 3 Bookmark Start");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129357)
+{
+    createSwDoc("tdf129357.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // visible soft hyphen
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push/push/textarray[2]/text", "-");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
 {
     createSwDoc("tdf42748.fodt");
