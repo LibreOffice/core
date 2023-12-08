@@ -54,6 +54,7 @@ class SfxGrabBagItem;
 
 #define CH_FEATURE_OLD  (sal_uInt8)         0xFF
 #define CH_FEATURE      u'\x0001'
+#define CH_SOFTHYPHEN   u'\x00AD'
 
 // DEF_METRIC: For my pool, the DefMetric should always appear when
 // GetMetric (nWhich)!
