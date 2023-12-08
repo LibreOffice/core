@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <comphelper/string.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include <tools/lineend.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -161,7 +162,7 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
 
     mxEdCopyFrom->set_text( aStrSelectedArea );
 
-    if ( mxLbLists->n_children() == 0 )
+    if ( mxLbLists->n_children() == 0 || officecfg::Office::Calc::SortList::List::isReadOnly() )
     {
         mxFtLists->set_sensitive(false);
         mxLbLists->set_sensitive(false);
@@ -174,6 +175,7 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
     mxBtnDiscard->hide();
     mxBtnAdd->show();
     mxBtnModify->hide();
+    mxBtnNew->set_sensitive(!officecfg::Office::Calc::SortList::List::isReadOnly());
     mxBtnAdd->set_sensitive(false);
     mxBtnModify->set_sensitive(false);
 
