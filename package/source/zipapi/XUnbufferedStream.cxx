@@ -93,6 +93,7 @@ XUnbufferedStream::XUnbufferedStream(
     if ( bMustDecrypt )
     {
         m_xCipherContext = ZipFile::StaticGetCipher( xContext, rData, false );
+        // this is only relevant when padding is used
         mnBlockSize = ( rData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 1 );
     }
 

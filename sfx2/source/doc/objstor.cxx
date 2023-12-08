@@ -167,6 +167,11 @@ bool SfxObjectShell::QuerySlotExecutable( sal_uInt16 /*nSlotId*/ )
     return true;
 }
 
+static bool UseODFWholesomeEncryption(SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
+{
+    return nODFVersion == SvtSaveOptions::ODFSVER_LATEST_EXTENDED
+        && officecfg::Office::Common::Misc::ExperimentalMode::get();
+}
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
@@ -358,8 +363,16 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 
         auto pEncryptionAlgs = aEncryptionAlgs.getArray();
         pEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
-        pEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
-        pEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+        if (UseODFWholesomeEncryption(nDefVersion))
+        {
+            pEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_GCM_W3C;
+            pEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
+        }
+        else
+        {
+            pEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+            pEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
+        }
     }
 
     try
@@ -1225,8 +1238,7 @@ bool SfxObjectShell::SaveTo_Impl
     if (GetEncryptionData_Impl(&rMedium.GetItemSet(), aEncryptionData))
     {
         assert(aEncryptionData.getLength() != 0);
-        if (bOwnTarget && nVersion == SvtSaveOptions::ODFSVER_LATEST_EXTENDED
-            && officecfg::Office::Common::Misc::ExperimentalMode::get())
+        if (bOwnTarget && UseODFWholesomeEncryption(nVersion))
         {
             // when embedded objects are stored here, it should be called from
             // this function for the root document and encryption data was cleared

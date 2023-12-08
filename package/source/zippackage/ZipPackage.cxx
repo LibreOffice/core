@@ -1714,7 +1714,9 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                 sal_Int32 nID = 0;
                 if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA256 && nID != xml::crypto::DigestID::SHA1 ) )
-                    throw IllegalArgumentException(THROW_WHERE "Unexpected start key generation algorithm is provided!", uno::Reference< uno::XInterface >(), 2 );
+                {
+                    throw IllegalArgumentException(THROW_WHERE "Unexpected start key generation algorithm is provided!", uno::Reference<uno::XInterface>(), 2);
+                }
 
                 m_nStartKeyGenerationID = nID;
             }
@@ -1722,8 +1724,12 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             {
                 sal_Int32 nID = 0;
                 if ( !( rAlgorithm.Value >>= nID )
-                  || ( nID != xml::crypto::CipherID::AES_CBC_W3C_PADDING && nID != xml::crypto::CipherID::BLOWFISH_CFB_8 ) )
-                    throw IllegalArgumentException(THROW_WHERE "Unexpected start key generation algorithm is provided!", uno::Reference< uno::XInterface >(), 2 );
+                  || (nID != xml::crypto::CipherID::AES_GCM_W3C
+                      && nID != xml::crypto::CipherID::AES_CBC_W3C_PADDING
+                      && nID != xml::crypto::CipherID::BLOWFISH_CFB_8))
+                {
+                    throw IllegalArgumentException(THROW_WHERE "Unexpected encryption algorithm is provided!", uno::Reference<uno::XInterface>(), 2);
+                }
 
                 m_nCommonEncryptionID = nID;
             }
@@ -1732,7 +1738,9 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                 sal_Int32 nID = 0;
                 if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA1_1K && nID != xml::crypto::DigestID::SHA256_1K ) )
-                    throw IllegalArgumentException(THROW_WHERE "Unexpected start key generation algorithm is provided!", uno::Reference< uno::XInterface >(), 2 );
+                {
+                    throw IllegalArgumentException(THROW_WHERE "Unexpected checksum algorithm is provided!", uno::Reference<uno::XInterface>(), 2);
+                }
 
                 m_nChecksumDigestID = nID;
             }

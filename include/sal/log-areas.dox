@@ -343,6 +343,7 @@ certain functionality.
 @section package
 
 @li @c package
+@li @c package.manifest
 @li @c package.xstor
 @li @c package.threadeddeflate
 

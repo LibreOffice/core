@@ -20,13 +20,15 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <osl/diagnose.h>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
 #include "ciphercontext.hxx"
 #include <pk11pub.h>
+
+constexpr size_t nAESGCMIVSize = 12;
+constexpr size_t nAESGCMTagSize = 16;
 
 using namespace ::com::sun::star;
 
@@ -52,27 +54,50 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
         throw uno::RuntimeException("PK11_ImportSymKey failed");
     }
 
-    SECItem aIVItem = { siBuffer,
-        const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(aInitializationVector.getConstArray())),
-        sal::static_int_cast<unsigned>(aInitializationVector.getLength()) };
-    xResult->m_pSecParam = PK11_ParamFromIV(nNSSCipherID, &aIVItem);
-    if (!xResult->m_pSecParam)
+    if (nNSSCipherID == CKM_AES_GCM)
     {
-        SAL_WARN("xmlsecurity.nss", "PK11_ParamFromIV failed");
-        throw uno::RuntimeException("PK11_ParamFromIV failed");
+        // TODO: when runtime requirements are raised to NSS 3.52, replace this
+        // according to https://fedoraproject.org/wiki/Changes/NssGCMParams
+        xResult->m_pSecParam = SECITEM_AllocItem(nullptr, nullptr, sizeof(CK_NSS_GCM_PARAMS));
+        if (!xResult->m_pSecParam)
+        {
+            SAL_WARN("xmlsecurity.nss", "SECITEM_AllocItem failed");
+            throw uno::RuntimeException("SECITEM_AllocItem failed");
+        }
+        assert(aInitializationVector.getLength() == nAESGCMIVSize);
+        xResult->m_AESGCMIV = aInitializationVector;
+        CK_NSS_GCM_PARAMS * pParams = reinterpret_cast<CK_NSS_GCM_PARAMS*>(xResult->m_pSecParam->data);
+        pParams->pIv = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(xResult->m_AESGCMIV.getConstArray()));
+        pParams->ulIvLen = sal::static_int_cast<unsigned>(xResult->m_AESGCMIV.getLength());
+        pParams->pAAD = nullptr;
+        pParams->ulAADLen = 0;
+        pParams->ulTagBits = nAESGCMTagSize * 8;
     }
-
-    xResult->m_pContext = PK11_CreateContextBySymKey( nNSSCipherID, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, xResult->m_pSymKey, xResult->m_pSecParam);
-    if (!xResult->m_pContext)
+    else
     {
-        SAL_WARN("xmlsecurity.nss", "PK11_CreateContextBySymKey failed");
-        throw uno::RuntimeException("PK11_CreateContextBySymKey failed");
+        SECItem aIVItem = { siBuffer,
+            const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(aInitializationVector.getConstArray())),
+            sal::static_int_cast<unsigned>(aInitializationVector.getLength()) };
+        xResult->m_pSecParam = PK11_ParamFromIV(nNSSCipherID, &aIVItem);
+        if (!xResult->m_pSecParam)
+        {
+            SAL_WARN("xmlsecurity.nss", "PK11_ParamFromIV failed");
+            throw uno::RuntimeException("PK11_ParamFromIV failed");
+        }
+
+        xResult->m_pContext = PK11_CreateContextBySymKey( nNSSCipherID, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, xResult->m_pSymKey, xResult->m_pSecParam);
+        if (!xResult->m_pContext)
+        {
+            SAL_WARN("xmlsecurity.nss", "PK11_CreateContextBySymKey failed");
+            throw uno::RuntimeException("PK11_CreateContextBySymKey failed");
+        }
     }
 
     xResult->m_bEncryption = bEncryption;
     xResult->m_bW3CPadding = bW3CPadding;
     xResult->m_bPadding = bW3CPadding || ( PK11_GetPadMechanism( nNSSCipherID ) == nNSSCipherID );
-    xResult->m_nBlockSize = PK11_GetBlockSize(nNSSCipherID, xResult->m_pSecParam);
+    // in NSS 3.94, a global default value of 8 is returned for CKM_AES_GCM
+    xResult->m_nBlockSize = nNSSCipherID == CKM_AES_GCM ? 16 : PK11_GetBlockSize(nNSSCipherID, xResult->m_pSecParam);
     if (SAL_MAX_INT8 < xResult->m_nBlockSize)
     {
         SAL_WARN("xmlsecurity.nss", "PK11_GetBlockSize unexpected result");
@@ -119,6 +144,18 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
 
     if ( m_bDisposed )
         throw lang::DisposedException();
+
+    if (m_AESGCMIV.getLength())
+    {
+        if (SAL_MAX_INT32 - nAESGCMIVSize - nAESGCMTagSize <= static_cast<size_t>(m_aLastBlock.getLength()) + static_cast<size_t>(aData.getLength()))
+        {
+            m_bBroken = true;
+            throw uno::RuntimeException("overflow");
+        }
+        m_aLastBlock.realloc(m_aLastBlock.getLength() + aData.getLength());
+        memcpy(m_aLastBlock.getArray() + m_aLastBlock.getLength() - aData.getLength(), aData.getConstArray(), aData.getLength());
+        return {};
+    }
 
     uno::Sequence< sal_Int8 > aToConvert;
     if ( aData.hasElements() )
@@ -200,6 +237,61 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
 
     if ( m_bDisposed )
         throw lang::DisposedException();
+
+    if (m_AESGCMIV.getLength())
+    {
+        uno::Sequence<sal_Int8> aResult;
+        unsigned outLen;
+        if (m_bEncryption)
+        {
+            assert(sal::static_int_cast<size_t>(m_aLastBlock.getLength()) <= SAL_MAX_INT32 - nAESGCMIVSize - nAESGCMTagSize);
+            // add space for IV and tag
+            aResult.realloc(m_aLastBlock.getLength() + nAESGCMIVSize + nAESGCMTagSize);
+            // W3C xmlenc-core1 requires the IV preceding the ciphertext,
+            // but NSS doesn't do it, so copy it manually
+            memcpy(aResult.getArray(), m_AESGCMIV.getConstArray(), nAESGCMIVSize);
+            if (PK11_Encrypt(m_pSymKey, CKM_AES_GCM, m_pSecParam,
+                    reinterpret_cast<unsigned char*>(aResult.getArray() + nAESGCMIVSize),
+                    &outLen, aResult.getLength() - nAESGCMIVSize,
+                    reinterpret_cast<unsigned char const*>(m_aLastBlock.getConstArray()),
+                    m_aLastBlock.getLength()) != SECSuccess)
+            {
+                m_bBroken = true;
+                Dispose();
+                throw uno::RuntimeException("PK11_Encrypt failed");
+            }
+            assert(outLen == sal::static_int_cast<unsigned>(aResult.getLength() - nAESGCMIVSize));
+        }
+        else if (nAESGCMIVSize + nAESGCMTagSize < sal::static_int_cast<size_t>(m_aLastBlock.getLength()))
+        {
+            if (0 != memcmp(m_AESGCMIV.getConstArray(), m_aLastBlock.getConstArray(), nAESGCMIVSize))
+            {
+                m_bBroken = true;
+                Dispose();
+                throw uno::RuntimeException("inconsistent IV");
+            }
+            aResult.realloc(m_aLastBlock.getLength() - nAESGCMIVSize - nAESGCMTagSize);
+            if (PK11_Decrypt(m_pSymKey, CKM_AES_GCM, m_pSecParam,
+                    reinterpret_cast<unsigned char*>(aResult.getArray()),
+                    &outLen, aResult.getLength(),
+                    reinterpret_cast<unsigned char const*>(m_aLastBlock.getConstArray() + nAESGCMIVSize),
+                    m_aLastBlock.getLength() - nAESGCMIVSize) != SECSuccess)
+            {
+                m_bBroken = true;
+                Dispose();
+                throw uno::RuntimeException("PK11_Decrypt failed");
+            }
+            assert(outLen == sal::static_int_cast<unsigned>(aResult.getLength()));
+        }
+        else
+        {
+            m_bBroken = true;
+            Dispose();
+            throw uno::RuntimeException("incorrect size of input");
+        }
+        Dispose();
+        return aResult;
+    }
 
     assert(m_nBlockSize <= SAL_MAX_INT8);
     assert(m_nConverted % m_nBlockSize == 0); // whole blocks are converted

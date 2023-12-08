@@ -38,6 +38,7 @@ private:
 
     sal_Int32 m_nBlockSize;
     css::uno::Sequence< sal_Int8 > m_aLastBlock;
+    css::uno::Sequence<sal_Int8> m_AESGCMIV;
 
     bool m_bEncryption;
     bool m_bPadding;

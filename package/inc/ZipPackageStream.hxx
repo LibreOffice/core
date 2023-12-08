@@ -89,7 +89,7 @@ public:
     sal_Int32 GetStartKeyGenID() const;
 
     sal_Int32 GetEncryptionAlgorithm() const;
-    sal_Int32 GetBlockSize() const;
+    sal_Int32 GetIVSize() const;
 
     void SetToBeCompressed (bool bNewValue) { m_bToBeCompressed = bNewValue;}
     void SetIsEncrypted (bool bNewValue) { m_bIsEncrypted = bNewValue;}

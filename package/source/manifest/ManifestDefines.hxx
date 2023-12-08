@@ -86,6 +86,9 @@ inline constexpr OUString BLOWFISH_URL = u"urn:oasis:names:tc:opendocument:xmlns
 inline constexpr OUString AES128_URL = u"http://www.w3.org/2001/04/xmlenc#aes128-cbc"_ustr;
 inline constexpr OUString AES192_URL = u"http://www.w3.org/2001/04/xmlenc#aes192-cbc"_ustr;
 inline constexpr OUString AES256_URL = u"http://www.w3.org/2001/04/xmlenc#aes256-cbc"_ustr;
+inline constexpr OUString AESGCM128_URL = u"http://www.w3.org/2009/xmlenc11#aes128-gcm"_ustr;
+inline constexpr OUString AESGCM192_URL = u"http://www.w3.org/2009/xmlenc11#aes192-gcm"_ustr;
+inline constexpr OUString AESGCM256_URL = u"http://www.w3.org/2009/xmlenc11#aes256-gcm"_ustr;
 
 inline constexpr OUString PBKDF2_NAME = u"PBKDF2"_ustr;
 inline constexpr OUString PGP_NAME = u"PGP"_ustr;

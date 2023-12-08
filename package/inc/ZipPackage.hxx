@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <comphelper/refcountedmutex.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/unreachable.hxx>
 
 #include "HashMaps.hxx"
 #include "ZipFile.hxx"
@@ -124,7 +125,18 @@ public:
     sal_Int32 GetStartKeyGenID() const { return m_nStartKeyGenerationID; }
     sal_Int32 GetEncAlgID() const { return m_nCommonEncryptionID; }
     sal_Int32 GetChecksumAlgID() const { return m_nChecksumDigestID; }
-    sal_Int32 GetDefaultDerivedKeySize() const { return m_nCommonEncryptionID == css::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 32 : 16; }
+    sal_Int32 GetDefaultDerivedKeySize() const {
+        switch (m_nCommonEncryptionID)
+        {
+            case css::xml::crypto::CipherID::BLOWFISH_CFB_8:
+                return 16;
+            case css::xml::crypto::CipherID::AES_CBC_W3C_PADDING:
+            case css::xml::crypto::CipherID::AES_GCM_W3C:
+                return 32;
+            default:
+                O3TL_UNREACHABLE;
+        }
+    }
 
     rtl::Reference<comphelper::RefCountedMutex>& GetSharedMutexRef() { return m_aMutexHolder; }
 

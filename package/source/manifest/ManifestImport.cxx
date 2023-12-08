@@ -21,6 +21,7 @@
 #include "ManifestDefines.hxx"
 #include <PackageConstants.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
@@ -184,6 +185,22 @@ void ManifestImport::doAlgorithm(StringHashMap &rConvertedAttribs)
     if ( aString == BLOWFISH_NAME || aString == BLOWFISH_URL ) {
         aSequence[PKG_MNFST_ENCALG].Name = gsEncryptionAlgProperty;
         aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
+    } else if (aString == AESGCM256_URL) {
+        aSequence[PKG_MNFST_ENCALG].Name = gsEncryptionAlgProperty;
+        aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::AES_GCM_W3C;
+        SAL_INFO_IF(nDerivedKeySize != 0 && nDerivedKeySize != 32, "package.manifest", "Unexpected derived key length!");
+        SAL_WARN_IF(nDerivedKeySize != 0 && nDerivedKeySize != 32, "package.manifest", "Unexpected derived key length!");
+        nDerivedKeySize = 32;
+    } else if (aString == AESGCM192_URL) {
+        aSequence[PKG_MNFST_ENCALG].Name = gsEncryptionAlgProperty;
+        aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::AES_GCM_W3C;
+        SAL_INFO_IF(nDerivedKeySize != 0 && nDerivedKeySize != 24, "package.manifest", "Unexpected derived key length!");
+        nDerivedKeySize = 24;
+    } else if (aString == AESGCM128_URL) {
+        aSequence[PKG_MNFST_ENCALG].Name = gsEncryptionAlgProperty;
+        aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::AES_GCM_W3C;
+        SAL_INFO_IF(nDerivedKeySize != 0 && nDerivedKeySize != 16, "package.manifest", "Unexpected derived key length!");
+        nDerivedKeySize = 16;
     } else if ( aString == AES256_URL ) {
         aSequence[PKG_MNFST_ENCALG].Name = gsEncryptionAlgProperty;
         aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
