@@ -867,12 +867,14 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                   (rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel) &&
                   (rNEvt.GetWindow() == mpImplWin) )
         {
+            const Point& rMousePos = rNEvt.GetCommandEvent()->GetMousePosPixel();
+            const tools::Rectangle aWinRect(mpImplWin->GetPosPixel(), mpImplWin->GetSizePixel());
+            const bool bMousePositionedOverWin = aWinRect.Contains(rMousePos);
+
             MouseWheelBehaviour nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
-            if  (   ( nWheelBehavior == MouseWheelBehaviour::ALWAYS )
-                ||  (   ( nWheelBehavior == MouseWheelBehaviour::FocusOnly )
-                    &&  HasChildPathFocus()
-                    )
-                )
+            if (bMousePositionedOverWin
+                && ((nWheelBehavior == MouseWheelBehaviour::ALWAYS)
+                    || ((nWheelBehavior == MouseWheelBehaviour::FocusOnly) && HasChildPathFocus())))
             {
                 bDone = mpImplLB->HandleWheelAsCursorTravel(*rNEvt.GetCommandEvent(), *this);
             }
