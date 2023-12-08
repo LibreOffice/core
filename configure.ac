@@ -11856,7 +11856,7 @@ if ! test "$enable_atspi_tests" = no; then
     if ! test "$XVFB_RUN" = no; then
         dnl make sure the found xvfb-run actually works
         AC_MSG_CHECKING([whether $XVFB_RUN works...])
-        if $XVFB_RUN true >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD; then
+        if $XVFB_RUN --auto-servernum true >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD; then
             AC_MSG_RESULT([yes])
         else
             AC_MSG_RESULT([no])
