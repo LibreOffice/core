@@ -46,9 +46,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <boost/property_tree/ptree.hpp>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::linguistic2;
+using namespace css;
 
 #define SCRLRANGE   20  // Scroll 1/20 of the width/height, when in QueryDrop
 
@@ -1416,7 +1414,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             else
             {
                 // is cursor at a misspelled word ?
-                Reference< linguistic2::XSpellChecker1 >  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
+                uno::Reference<linguistic2::XSpellChecker1>  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
                 bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
                 EditView* pActiveView = GetEditViewPtr();
 
@@ -1648,7 +1646,7 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
     return Pair( nRealDiffX, nRealDiffY );
 }
 
-Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetClipboard() const
+uno::Reference<datatransfer::clipboard::XClipboard> ImpEditView::GetClipboard() const
 {
     if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
         return pCallbacks->GetClipboard();
@@ -1671,7 +1669,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
             {
                 if ( !bReadOnly )
                 {
-                    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
+                    uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
                     CutCopy( aClipBoard, true );
                     bDone = true;
                 }
@@ -1679,7 +1677,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
             break;
             case KeyFuncType::COPY:
             {
-                Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
+                uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
                 CutCopy( aClipBoard, false );
                 bDone = true;
             }
@@ -1689,7 +1687,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
                 if ( !bReadOnly && IsPasteEnabled() )
                 {
                     pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
-                    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
+                    uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
                     Paste( aClipBoard, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
                     pEditEngine->pImpEditEngine->UndoActionEnd();
                     bDone = true;
@@ -1717,12 +1715,12 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !bReadOnly &&
          Application::GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
     {
-        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSystemPrimarySelection());
+        uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetSystemPrimarySelection());
         Paste( aClipBoard );
     }
     else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
     {
-        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSystemPrimarySelection());
+        uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetSystemPrimarySelection());
         CutCopy( aClipBoard, false );
     }
 
@@ -1807,7 +1805,7 @@ OUString ImpEditView::SpellIgnoreWord()
 
         if ( !aWord.isEmpty() )
         {
-            Reference< XDictionary >  xDic = LinguMgr::GetIgnoreAllList();
+            uno::Reference<linguistic2::XDictionary> xDic = LinguMgr::GetIgnoreAllList();
             if (xDic.is())
                 xDic->add( aWord, false, OUString() );
             EditDoc& rDoc = pEditEngine->GetEditDoc();
@@ -1913,7 +1911,7 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
     return false;
 }
 
-void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bCut )
+void ImpEditView::CutCopy(uno::Reference<datatransfer::clipboard::XClipboard> const & rxClipboard, bool bCut )
 {
     if ( !(rxClipboard.is() && HasSelection()) )
         return;
@@ -1946,12 +1944,12 @@ void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XC
     }
 }
 
-void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial, SotClipboardFormatId format)
+void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> const & rxClipboard, bool bUseSpecial, SotClipboardFormatId format)
 {
     if ( !rxClipboard.is() )
         return;
 
-    uno::Reference< datatransfer::XTransferable > xDataObj;
+    uno::Reference<datatransfer::XTransferable> xDataObj;
 
     try
     {
@@ -2440,7 +2438,7 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
     }
     else
     {
-        uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+        uno::Reference<datatransfer::XTransferable> xDataObj = rDTDE.Transferable;
         if ( xDataObj.is() )
         {
             bChanges = true;
@@ -2680,7 +2678,7 @@ void ImpEditView::AddDragAndDropListeners()
     if (bActiveDragAndDropListener)
         return;
 
-    css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget;
+    uno::Reference<datatransfer::dnd::XDropTarget> xDropTarget;
     if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
         xDropTarget = pCallbacks->GetDropTarget();
     else if (auto xWindow = GetWindow())
@@ -2691,7 +2689,7 @@ void ImpEditView::AddDragAndDropListeners()
 
     mxDnDListener = new vcl::unohelper::DragAndDropWrapper(this);
 
-    css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
+    uno::Reference<datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
     if (xDragGestureRecognizer.is())
     {
         uno::Reference<datatransfer::dnd::XDragGestureListener> xDGL(mxDnDListener, uno::UNO_QUERY);
@@ -2711,7 +2709,7 @@ void ImpEditView::RemoveDragAndDropListeners()
     if (!bActiveDragAndDropListener)
         return;
 
-    css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget;
+    uno::Reference<datatransfer::dnd::XDropTarget> xDropTarget;
     if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
         xDropTarget = pCallbacks->GetDropTarget();
     else if (auto xWindow = GetWindow())
@@ -2719,7 +2717,7 @@ void ImpEditView::RemoveDragAndDropListeners()
 
     if (xDropTarget.is())
     {
-        css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
+        uno::Reference<datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
         if (xDragGestureRecognizer.is())
         {
             uno::Reference<datatransfer::dnd::XDragGestureListener> xDGL(mxDnDListener, uno::UNO_QUERY);
