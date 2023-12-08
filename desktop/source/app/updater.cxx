@@ -141,9 +141,11 @@ void CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempD
 #ifdef UNX
 typedef char CharT;
 #define tstrncpy std::strncpy
+char const * toStream(char const * s) { return s; }
 #elif defined(_WIN32)
 typedef wchar_t CharT;
 #define tstrncpy std::wcsncpy
+OUString toStream(wchar_t const * s) { return OUString(o3tl::toU(s)); }
 #else
 #error "Need an implementation"
 #endif
@@ -317,7 +319,7 @@ bool update()
         SAL_WARN("desktop.updater", "Updater executable path: " << aUpdaterPath);
         for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
         {
-            SAL_WARN("desktop.updater", OUString(o3tl::toU(pArgs[i])));
+            SAL_WARN("desktop.updater", toStream(pArgs[i]));
         }
         bSuccess = false;
     }
