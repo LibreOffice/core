@@ -25,9 +25,13 @@ class ColorListBox;
 class ScRedlineOptionsTabPage : public SfxTabPage
 {
     std::unique_ptr<ColorListBox> m_xContentColorLB;
+    std::unique_ptr<weld::Widget> m_xContentColorImg;
     std::unique_ptr<ColorListBox> m_xRemoveColorLB;
+    std::unique_ptr<weld::Widget> m_xRemoveColorImg;
     std::unique_ptr<ColorListBox> m_xInsertColorLB;
+    std::unique_ptr<weld::Widget> m_xInsertColorImg;
     std::unique_ptr<ColorListBox> m_xMoveColorLB;
+    std::unique_ptr<weld::Widget> m_xMoveColorImg;
 
 public:
     ScRedlineOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );

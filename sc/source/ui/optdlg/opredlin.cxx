@@ -25,6 +25,7 @@
 #include <scmod.hxx>
 #include <docsh.hxx>
 #include <svx/svxids.hrc>
+#include <officecfg/Office/Calc.hxx>
 
 #include <opredlin.hxx>
 
@@ -32,12 +33,16 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage(weld::Container* pPage, weld::D
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optchangespage.ui", "OptChangesPage", &rSet)
     , m_xContentColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changes"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xContentColorImg(m_xBuilder->weld_widget("lockchanges"))
     , m_xRemoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletions"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xRemoveColorImg(m_xBuilder->weld_widget("lockdeletions"))
     , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("entries"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xInsertColorImg(m_xBuilder->weld_widget("lockentries"))
     , m_xMoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertions"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xMoveColorImg(m_xBuilder->weld_widget("lockinsertions"))
 {
     m_xContentColorLB->SetSlotId(SID_AUTHOR_COLOR);
     m_xRemoveColorLB->SetSlotId(SID_AUTHOR_COLOR);
@@ -105,15 +110,23 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
 
     Color nColor = aAppOptions.GetTrackContentColor();
     m_xContentColorLB->SelectEntry(nColor);
+    m_xContentColorLB->set_sensitive(!officecfg::Office::Calc::Revision::Color::Change::isReadOnly());
+    m_xContentColorImg->set_visible(officecfg::Office::Calc::Revision::Color::Change::isReadOnly());
 
     nColor = aAppOptions.GetTrackMoveColor();
     m_xMoveColorLB->SelectEntry(nColor);
+    m_xMoveColorLB->set_sensitive(!officecfg::Office::Calc::Revision::Color::Insertion::isReadOnly());
+    m_xMoveColorImg->set_visible(officecfg::Office::Calc::Revision::Color::Insertion::isReadOnly());
 
     nColor = aAppOptions.GetTrackInsertColor();
     m_xInsertColorLB->SelectEntry(nColor);
+    m_xInsertColorLB->set_sensitive(!officecfg::Office::Calc::Revision::Color::MovedEntry::isReadOnly());
+    m_xInsertColorImg->set_visible(officecfg::Office::Calc::Revision::Color::MovedEntry::isReadOnly());
 
     nColor = aAppOptions.GetTrackDeleteColor();
     m_xRemoveColorLB->SelectEntry(nColor);
+    m_xRemoveColorLB->set_sensitive(!officecfg::Office::Calc::Revision::Color::Deletion::isReadOnly());
+    m_xRemoveColorImg->set_visible(officecfg::Office::Calc::Revision::Color::Deletion::isReadOnly());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
