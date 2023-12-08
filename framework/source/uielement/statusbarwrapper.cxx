@@ -28,6 +28,7 @@
 #include <tools/solar.h>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/wintypes.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -99,7 +100,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments )
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         if ( pWindow )
         {
-            sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
+            WinBits nStyles = WinBits( WB_LEFT | WB_3DLOOK );
 
             pStatusBar = VclPtr<FrameworkStatusBar>::Create( pWindow, nStyles );
             pStatusBarManager = new StatusBarManager( m_xContext, xFrame, pStatusBar );

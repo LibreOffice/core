@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weldutils.hxx>
+#include <vcl/wintypes.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -145,7 +146,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xParentWindow );
         if ( pWindow )
         {
-            sal_uLong nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+            WinBits nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
             pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
             pToolBar->SetLineSpacing(true);

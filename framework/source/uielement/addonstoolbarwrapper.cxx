@@ -27,6 +27,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/wintypes.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -102,7 +103,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         if ( pWindow )
         {
-            sal_uLong nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+            WinBits nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
             pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
             pToolBar->SetLineSpacing(true);
