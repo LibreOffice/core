@@ -112,7 +112,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,ODK,odk) \
 	offapi \
 	officecfg \
-	onlineupdate \
 	oovbaapi \
 	oox \
 	$(call gb_Helper_optional,OPENCL,opencl) \

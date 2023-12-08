@@ -13644,6 +13644,7 @@ AC_MSG_CHECKING([whether to enable mar online update])
 ENABLE_ONLINE_UPDATE_MAR=
 if test "$enable_online_update_mar" = yes; then
     AC_MSG_RESULT([yes])
+    BUILD_TYPE="$BUILD_TYPE ONLINEUPDATE"
     ENABLE_ONLINE_UPDATE_MAR="TRUE"
     AC_DEFINE(HAVE_FEATURE_UPDATE_MAR)
 else

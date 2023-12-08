@@ -85,6 +85,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,OPENSSL,openssl) \
 	$(call gb_Helper_optional,ORCUS,liborcus) \
 	$(call gb_Helper_optional,PAGEMAKER,libpagemaker) \
+	$(if $(ENABLE_ONLINE_UPDATE_MAR),onlineupdate) \
 	$(call gb_Helper_optional,PDFIUM,pdfium) \
 	$(call gb_Helper_optional,POPPLER,poppler) \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
