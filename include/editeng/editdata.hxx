@@ -25,6 +25,7 @@
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <editeng/ESelection.hxx>
+#include <editeng/EPosition.hxx>
 #include <memory>
 #include <ostream>
 
@@ -46,12 +47,10 @@ enum class EEAnchorMode {
 
 enum class EERemoveParaAttribsMode { RemoveAll, RemoveCharItems, RemoveNone };
 
-#define EE_PARA_NOT_FOUND       SAL_MAX_INT32
 #define EE_PARA_APPEND          SAL_MAX_INT32
 #define EE_PARA_ALL             SAL_MAX_INT32
 #define EE_PARA_MAX_COUNT       SAL_MAX_INT32
 
-#define EE_INDEX_NOT_FOUND      SAL_MAX_INT32
 #define EE_TEXTPOS_ALL          SAL_MAX_INT32
 #define EE_TEXTPOS_MAX_COUNT    SAL_MAX_INT32
 
@@ -85,29 +84,6 @@ EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 #define EDITUNDO_TRANSLITERATE      125
 
 #define EDITUNDO_USER               200
-
-struct EPosition
-{
-    sal_Int32   nPara;
-    sal_Int32   nIndex;
-
-    EPosition()
-        : nPara( EE_PARA_NOT_FOUND )
-        , nIndex( EE_INDEX_NOT_FOUND )
-        { }
-
-    EPosition( sal_Int32 nPara_, sal_Int32 nPos_ )
-        : nPara( nPara_ )
-        , nIndex( nPos_ )
-        { }
-};
-
-template<typename charT, typename traits>
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, EPosition const& pos)
-{
-    return stream << "EPosition(" << pos.nPara << ',' << pos.nIndex << ")";
-}
 
 struct EDITENG_DLLPUBLIC EFieldInfo
 {
