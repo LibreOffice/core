@@ -141,6 +141,7 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -153,6 +154,7 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -165,6 +167,7 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -177,6 +180,7 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -189,6 +193,7 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -201,6 +206,7 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -213,6 +219,7 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -225,6 +232,7 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -238,6 +246,7 @@
         <property name="halign">start</property>
         <property name="label">...</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -266,5 +275,18 @@
         <property name="AtkObject::accessible-description" translatable="yes" context="statisticsinfopage|extended_tip|StatisticsInfoPage">Displays statistics for the current file.</property>
       </object>
     </child>
+  </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="nopages"/>
+      <widget name="notables"/>
+      <widget name="nogrfs"/>
+      <widget name="nooles"/>
+      <widget name="noparas"/>
+      <widget name="nowords"/>
+      <widget name="nochars"/>
+      <widget name="nocharsexspaces"/>
+      <widget name="nolines"/>
+    </widgets>
   </object>
 </interface>
