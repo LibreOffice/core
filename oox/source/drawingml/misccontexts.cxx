@@ -630,7 +630,7 @@ ContextHandlerRef BlipExtensionContext::onCreateContext(sal_Int32 nElement, cons
                     // Read the graphic from the fragment path
                     auto xGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic(aFragmentPath);
 
-                    // Overwrite the fill graphic with the one contining SVG
+                    // Overwrite the fill graphic with the one containing SVG
                     mrBlipProps.mxFillGraphic = xGraphic;
                     if (mpBlipFill)
                         mpBlipFill->mxGraphic = xGraphic;

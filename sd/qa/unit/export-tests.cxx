@@ -1959,7 +1959,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport)
         // Access the Graphic
         Graphic aGraphic(xGraphic);
 
-        // Check if it contian a VectorGraphicData struct
+        // Check if it contains a VectorGraphicData struct
         auto pVectorGraphic = aGraphic.getVectorGraphicData();
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pVectorGraphic);
 
