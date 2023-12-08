@@ -1009,6 +1009,9 @@ void SfxDispatcher::SetMenu_Impl()
     if ( !xImp->pFrame )
         return;
 
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     SfxViewFrame* pTop = xImp->pFrame->GetTopViewFrame();
     if ( !pTop || pTop->GetBindings().GetDispatcher() != this )
         return;
