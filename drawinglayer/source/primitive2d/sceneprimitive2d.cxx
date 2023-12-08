@@ -34,6 +34,7 @@
 #include <utility>
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/threadpool.hxx>
+#include <comphelper/lok.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace com::sun::star;
@@ -280,7 +281,7 @@ namespace drawinglayer::primitive2d
 
             // determine the oversample value
             static const sal_uInt16 nDefaultOversampleValue(3);
-            const sal_uInt16 nOversampleValue(SvtOptionsDrawinglayer::IsAntiAliasing() ? nDefaultOversampleValue : 0);
+            sal_uInt16 nOversampleValue(SvtOptionsDrawinglayer::IsAntiAliasing() ? nDefaultOversampleValue : 0);
 
             geometry::ViewInformation3D aViewInformation3D(getViewInformation3D());
             {
@@ -352,12 +353,62 @@ namespace drawinglayer::primitive2d
             const double fLogicY((aInverseOToV * basegfx::B2DVector(0.0, aDiscreteRange.getHeight() * fReduceFactor)).getLength());
 
             // generate ViewSizes
-            const double fFullViewSizeX((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(fLogicX, 0.0)).getLength());
-            const double fFullViewSizeY((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fLogicY)).getLength());
+            double fFullViewSizeX((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(fLogicX, 0.0)).getLength());
+            double fFullViewSizeY((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fLogicY)).getLength());
 
             // generate RasterWidth and RasterHeight for visible part
-            const sal_Int32 nRasterWidth(basegfx::fround(fFullViewSizeX * aUnitVisibleRange.getWidth()) + 1);
-            const sal_Int32 nRasterHeight(basegfx::fround(fFullViewSizeY * aUnitVisibleRange.getHeight()) + 1);
+            sal_Int32 nRasterWidth(basegfx::fround(fFullViewSizeX * aUnitVisibleRange.getWidth()) + 1);
+            sal_Int32 nRasterHeight(basegfx::fround(fFullViewSizeY * aUnitVisibleRange.getHeight()) + 1);
+
+            if(!rViewInformation.getReducedDisplayQuality() && comphelper::LibreOfficeKit::isActive())
+            {
+                // for this purpose allow reduced 3D quality and make a compromize
+                // between quality and speed. This is balanced between those two
+                // targets, fine-tuning/experimenting can be done with the values
+                // below.
+
+                // define some values which allow fine-tuning this feature
+                static const double fMin(80.0);
+                static const double fSqareMin(fMin * fMin);
+                static const double fMax(800.0);
+                static const double fSqareMax(fMax * fMax);
+                static const double fMaxReduction(0.65);
+
+                // get the square pixels (work on pixel numbers to get same
+                // behaviour independent of width/height relations)
+                const double fSquarePixels(nRasterWidth * nRasterHeight);
+
+                if (fSquarePixels > fSqareMin)
+                {
+                    // only reduce at all when more than fSqareMin pixels needed
+                    double fReduction(fMaxReduction);
+
+                    if (fSquarePixels < fSqareMax)
+                    {
+                        // range between fSqareMin and fSqareMax, calculate a
+                        // linear interpolated reduction based on square root
+                        fReduction = sqrt(fSquarePixels); // [fMin .. fMax]
+                        fReduction = fReduction - fMin; // [0 .. (fMax - fMin)]
+                        fReduction = fReduction / (fMax - fMin); // [0 .. 1]
+                        fReduction = 1.0 - (fReduction * (1.0 - fMaxReduction)); // [1 .. fMaxReduction]
+
+                        // reduce oversampling for this range
+                        if(nOversampleValue > 2)
+                            nOversampleValue--;
+                    }
+                    else
+                    {
+                        // more than fSqareMax pixels, disable oversampling
+                        nOversampleValue = 0;
+                    }
+
+                    // adapt needed values to reduction
+                    nRasterWidth = basegfx::fround(fReduction * nRasterWidth);
+                    nRasterHeight = basegfx::fround(fReduction * nRasterHeight);
+                    fFullViewSizeX *= fReduction;
+                    fFullViewSizeY *= fReduction;
+                }
+            }
 
             if(!(nRasterWidth && nRasterHeight))
                 return;
