@@ -24,8 +24,11 @@
 class ScTpPrintOptions : public SfxTabPage
 {
     std::unique_ptr<weld::CheckButton>       m_xSkipEmptyPagesCB;
+    std::unique_ptr<weld::Widget>            m_xSkipEmptyPagesImg;
     std::unique_ptr<weld::CheckButton>       m_xSelectedSheetsCB;
+    std::unique_ptr<weld::Widget>            m_xSelectedSheetsImg;
     std::unique_ptr<weld::CheckButton>       m_xForceBreaksCB;
+    std::unique_ptr<weld::Widget>            m_xForceBreaksImg;
 
 public:
     ScTpPrintOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);

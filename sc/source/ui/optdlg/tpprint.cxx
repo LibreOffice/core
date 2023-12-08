@@ -25,13 +25,17 @@
 #include <printopt.hxx>
 #include <scmod.hxx>
 #include <sc.hrc>
+#include <officecfg/Office/Calc.hxx>
 
 ScTpPrintOptions::ScTpPrintOptions( weld::Container* pPage, weld::DialogController* pController,
                                     const SfxItemSet& rCoreAttrs )
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optdlg.ui", "optCalcPrintPage", &rCoreAttrs )
     , m_xSkipEmptyPagesCB(m_xBuilder->weld_check_button("suppressCB"))
+    , m_xSkipEmptyPagesImg(m_xBuilder->weld_widget("locksuppressCB"))
     , m_xSelectedSheetsCB(m_xBuilder->weld_check_button("printCB"))
+    , m_xSelectedSheetsImg(m_xBuilder->weld_widget("lockprintCB"))
     , m_xForceBreaksCB(m_xBuilder->weld_check_button("forceBreaksCB"))
+    , m_xForceBreaksImg(m_xBuilder->weld_widget("lockforceBreaksCB"))
 {
 }
 
@@ -75,9 +79,17 @@ void ScTpPrintOptions::Reset( const SfxItemSet* rCoreSet )
     }
 
     m_xSkipEmptyPagesCB->set_active( aOptions.GetSkipEmpty() );
+    m_xForceBreaksCB->set_active(aOptions.GetForceBreaks());
+
+    m_xSkipEmptyPagesCB->set_sensitive(!officecfg::Office::Calc::Print::Page::EmptyPages::isReadOnly());
+    m_xSkipEmptyPagesImg->set_visible(officecfg::Office::Calc::Print::Page::EmptyPages::isReadOnly());
+    m_xSelectedSheetsCB->set_sensitive(!officecfg::Office::Calc::Print::Other::AllSheets::isReadOnly());
+    m_xSelectedSheetsImg->set_visible(officecfg::Office::Calc::Print::Other::AllSheets::isReadOnly());
+    m_xForceBreaksCB->set_sensitive(!officecfg::Office::Calc::Print::Page::ForceBreaks::isReadOnly());
+    m_xForceBreaksImg->set_visible(officecfg::Office::Calc::Print::Page::ForceBreaks::isReadOnly());
+
     m_xSkipEmptyPagesCB->save_state();
     m_xSelectedSheetsCB->save_state();
-    m_xForceBreaksCB->set_active( aOptions.GetForceBreaks() );
     m_xForceBreaksCB->save_state();
 }
 
