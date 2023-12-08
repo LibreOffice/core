@@ -320,7 +320,7 @@ void checkEffects(std::vector<model::EffectStyle> const& rEffectStyleList)
         CPPUNIT_ASSERT_EQUAL(false, rEffect.mbRotateWithShape);
 
         CPPUNIT_ASSERT_EQUAL(model::ColorType::RGB, rEffect.maColor.getType());
-        CPPUNIT_ASSERT_EQUAL(Color(0x000000), rEffect.maColor.getRGB());
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, rEffect.maColor.getRGB());
 
         CPPUNIT_ASSERT_EQUAL(size_t(1), rEffect.maColor.getTransformations().size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Alpha,
@@ -351,9 +351,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
     CPPUNIT_ASSERT_EQUAL(Color(0x9B8357), pTheme->GetColor(model::ThemeColorType::Accent4));
     CPPUNIT_ASSERT_EQUAL(Color(0xC2BC80), pTheme->GetColor(model::ThemeColorType::Accent5));
     CPPUNIT_ASSERT_EQUAL(Color(0x94A088), pTheme->GetColor(model::ThemeColorType::Accent6));
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), pTheme->GetColor(model::ThemeColorType::Dark1));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pTheme->GetColor(model::ThemeColorType::Dark1));
     CPPUNIT_ASSERT_EQUAL(Color(0x637052), pTheme->GetColor(model::ThemeColorType::Dark2));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pTheme->GetColor(model::ThemeColorType::Light1));
     CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
 
     model::FontScheme const& rFontScheme = pTheme->getFontScheme();
@@ -397,9 +397,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
     CPPUNIT_ASSERT_EQUAL(Color(0x9B8357), pTheme->GetColor(model::ThemeColorType::Accent4));
     CPPUNIT_ASSERT_EQUAL(Color(0xC2BC80), pTheme->GetColor(model::ThemeColorType::Accent5));
     CPPUNIT_ASSERT_EQUAL(Color(0x94A088), pTheme->GetColor(model::ThemeColorType::Accent6));
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), pTheme->GetColor(model::ThemeColorType::Dark1));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pTheme->GetColor(model::ThemeColorType::Dark1));
     CPPUNIT_ASSERT_EQUAL(Color(0x637052), pTheme->GetColor(model::ThemeColorType::Dark2));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pTheme->GetColor(model::ThemeColorType::Light1));
     CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
 }
 

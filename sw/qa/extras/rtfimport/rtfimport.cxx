@@ -1780,7 +1780,7 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
         auto fillStyle = getProperty<drawing::FillStyle>(xPara, "FillStyle");
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
-        CPPUNIT_ASSERT_EQUAL(Color(0xffffff), fillColor);
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, fillColor);
     }
 
     {
@@ -1805,7 +1805,7 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
 
         CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, fillStyle);
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), fillColor);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, fillColor);
     }
 
     {
