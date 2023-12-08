@@ -404,9 +404,32 @@ public:
 
     void            SetSelectionMode( EESelectionMode eMode );
 
-    inline PointerStyle GetPointer();
+    PointerStyle GetPointer()
+    {
+        if ( !mxPointer )
+        {
+            mxPointer = IsVertical() ? PointerStyle::TextVertical : PointerStyle::Text;
+            return *mxPointer;
+        }
 
-    inline vcl::Cursor*     GetCursor();
+        if(PointerStyle::Text == *mxPointer && IsVertical())
+        {
+            mxPointer = PointerStyle::TextVertical;
+        }
+        else if(PointerStyle::TextVertical == *mxPointer && !IsVertical())
+        {
+            mxPointer = PointerStyle::Text;
+        }
+
+        return *mxPointer;
+    }
+
+    vcl::Cursor* GetCursor()
+    {
+        if ( !pCursor )
+            pCursor.reset( new vcl::Cursor );
+        return pCursor.get();
+    }
 
     void            AddDragAndDropListeners();
     void            RemoveDragAndDropListeners();
@@ -789,7 +812,25 @@ private:
     void ForceAutoColor( bool b ) { mbForceAutoColor = b; }
     bool IsForceAutoColor() const { return mbForceAutoColor; }
 
-    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, DrawModeFlags nDrawMode );
+    VirtualDevice* GetVirtualDevice(const MapMode& rMapMode, DrawModeFlags nDrawMode)
+    {
+        if ( !pVirtDev )
+            pVirtDev = VclPtr<VirtualDevice>::Create();
+
+        if ( ( pVirtDev->GetMapMode().GetMapUnit() != rMapMode.GetMapUnit() ) ||
+             ( pVirtDev->GetMapMode().GetScaleX() != rMapMode.GetScaleX() ) ||
+             ( pVirtDev->GetMapMode().GetScaleY() != rMapMode.GetScaleY() ) )
+        {
+            MapMode aMapMode( rMapMode );
+            aMapMode.SetOrigin( Point( 0, 0 ) );
+            pVirtDev->SetMapMode( aMapMode );
+        }
+
+        pVirtDev->SetDrawMode( nDrawMode );
+
+        return pVirtDev;
+    }
+
     void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
 
     DECL_LINK( StatusTimerHdl, Timer *, void);
@@ -799,8 +840,19 @@ private:
 
     void                CheckIdleFormatter();
 
-    inline const ParaPortion* FindParaPortion( const ContentNode* pNode ) const;
-    inline ParaPortion* FindParaPortion( ContentNode const * pNode );
+    const ParaPortion* FindParaPortion(const ContentNode* pNode) const
+    {
+        sal_Int32 nPos = maEditDoc.GetPos( pNode );
+        DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
+        return GetParaPortions()[ nPos ];
+    }
+
+    ParaPortion* FindParaPortion(ContentNode const * pNode)
+    {
+        sal_Int32 nPos = maEditDoc.GetPos( pNode );
+        DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
+        return GetParaPortions()[ nPos ];
+    }
 
     css::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
 
@@ -836,8 +888,34 @@ public:
                             ImpEditEngine(const ImpEditEngine&) = delete;
     ImpEditEngine&          operator=(const ImpEditEngine&) = delete;
 
-    inline EditUndoManager& GetUndoManager();
-    inline EditUndoManager* SetUndoManager(EditUndoManager* pNew);
+    EditUndoManager& GetUndoManager()
+    {
+        if ( !pUndoManager )
+        {
+            pUndoManager = new EditUndoManager();
+            pUndoManager->SetEditEngine(pEditEngine);
+        }
+        return *pUndoManager;
+    }
+
+    EditUndoManager* SetUndoManager(EditUndoManager* pNew)
+    {
+        EditUndoManager* pRetval = pUndoManager;
+
+        if(pUndoManager)
+        {
+            pUndoManager->SetEditEngine(nullptr);
+        }
+
+        pUndoManager = pNew;
+
+        if(pUndoManager)
+        {
+            pUndoManager->SetEditEngine(pEditEngine);
+        }
+
+        return pRetval;
+    }
 
     // @return the previous bUpdateLayout state
     bool                    SetUpdateLayout( bool bUpdate, EditView* pCurView = nullptr, bool bForceUpdate = false );
@@ -1000,10 +1078,45 @@ public:
     static bool     DoVisualCursorTraveling();
 
     EditSelection         ConvertSelection( sal_Int32 nStartPara, sal_Int32 nStartPos, sal_Int32 nEndPara, sal_Int32 nEndPos );
-    inline EPaM           CreateEPaM( const EditPaM& rPaM ) const;
-    inline EditPaM        CreateEditPaM( const EPaM& rEPaM );
-    inline ESelection     CreateESel( const EditSelection& rSel ) const;
-    inline EditSelection  CreateSel( const ESelection& rSel );
+
+    EPaM CreateEPaM( const EditPaM& rPaM ) const
+    {
+        const ContentNode* pNode = rPaM.GetNode();
+        return EPaM(maEditDoc.GetPos(pNode), rPaM.GetIndex());
+    }
+
+    EditPaM CreateEditPaM( const EPaM& rEPaM )
+    {
+        DBG_ASSERT( rEPaM.nPara < maEditDoc.Count(), "CreateEditPaM: invalid paragraph" );
+        DBG_ASSERT( maEditDoc[ rEPaM.nPara ]->Len() >= rEPaM.nIndex, "CreateEditPaM: invalid Index" );
+        return EditPaM( maEditDoc[ rEPaM.nPara], rEPaM.nIndex );
+    }
+
+    ESelection CreateESel(const EditSelection& rSel) const
+    {
+        const ContentNode* pStartNode = rSel.Min().GetNode();
+        const ContentNode* pEndNode = rSel.Max().GetNode();
+        ESelection aESel;
+        aESel.nStartPara = maEditDoc.GetPos( pStartNode );
+        aESel.nStartPos = rSel.Min().GetIndex();
+        aESel.nEndPara = maEditDoc.GetPos( pEndNode );
+        aESel.nEndPos = rSel.Max().GetIndex();
+        return aESel;
+    }
+
+    EditSelection CreateSel(const ESelection& rSel)
+    {
+        DBG_ASSERT( rSel.nStartPara < maEditDoc.Count(), "CreateSel: invalid start paragraph" );
+        DBG_ASSERT( rSel.nEndPara < maEditDoc.Count(), "CreateSel: invalid end paragraph" );
+        EditSelection aSel;
+        aSel.Min().SetNode( maEditDoc[ rSel.nStartPara ] );
+        aSel.Min().SetIndex( rSel.nStartPos );
+        aSel.Max().SetNode( maEditDoc[ rSel.nEndPara ] );
+        aSel.Max().SetIndex( rSel.nEndPos );
+        DBG_ASSERT( !aSel.DbgIsBuggy( maEditDoc ), "CreateSel: incorrect selection!" );
+        return aSel;
+
+    }
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool() const { return pStylePool; }
@@ -1226,133 +1339,6 @@ public:
     tools::Long getBottomDocOffset(const tools::Rectangle& rect) const;
     Size getTopLeftDocOffset(const tools::Rectangle& rect) const;
 };
-
-inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM ) const
-{
-    const ContentNode* pNode = rPaM.GetNode();
-    return EPaM(maEditDoc.GetPos(pNode), rPaM.GetIndex());
-}
-
-inline EditPaM ImpEditEngine::CreateEditPaM( const EPaM& rEPaM )
-{
-    DBG_ASSERT( rEPaM.nPara < maEditDoc.Count(), "CreateEditPaM: invalid paragraph" );
-    DBG_ASSERT( maEditDoc[ rEPaM.nPara ]->Len() >= rEPaM.nIndex, "CreateEditPaM: invalid Index" );
-    return EditPaM( maEditDoc[ rEPaM.nPara], rEPaM.nIndex );
-}
-
-inline ESelection ImpEditEngine::CreateESel( const EditSelection& rSel ) const
-{
-    const ContentNode* pStartNode = rSel.Min().GetNode();
-    const ContentNode* pEndNode = rSel.Max().GetNode();
-    ESelection aESel;
-    aESel.nStartPara = maEditDoc.GetPos( pStartNode );
-    aESel.nStartPos = rSel.Min().GetIndex();
-    aESel.nEndPara = maEditDoc.GetPos( pEndNode );
-    aESel.nEndPos = rSel.Max().GetIndex();
-    return aESel;
-}
-
-inline EditSelection ImpEditEngine::CreateSel( const ESelection& rSel )
-{
-    DBG_ASSERT( rSel.nStartPara < maEditDoc.Count(), "CreateSel: invalid start paragraph" );
-    DBG_ASSERT( rSel.nEndPara < maEditDoc.Count(), "CreateSel: invalid end paragraph" );
-    EditSelection aSel;
-    aSel.Min().SetNode( maEditDoc[ rSel.nStartPara ] );
-    aSel.Min().SetIndex( rSel.nStartPos );
-    aSel.Max().SetNode( maEditDoc[ rSel.nEndPara ] );
-    aSel.Max().SetIndex( rSel.nEndPos );
-    DBG_ASSERT( !aSel.DbgIsBuggy( maEditDoc ), "CreateSel: incorrect selection!" );
-    return aSel;
-}
-
-inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, DrawModeFlags nDrawMode )
-{
-    if ( !pVirtDev )
-        pVirtDev = VclPtr<VirtualDevice>::Create();
-
-    if ( ( pVirtDev->GetMapMode().GetMapUnit() != rMapMode.GetMapUnit() ) ||
-         ( pVirtDev->GetMapMode().GetScaleX() != rMapMode.GetScaleX() ) ||
-         ( pVirtDev->GetMapMode().GetScaleY() != rMapMode.GetScaleY() ) )
-    {
-        MapMode aMapMode( rMapMode );
-        aMapMode.SetOrigin( Point( 0, 0 ) );
-        pVirtDev->SetMapMode( aMapMode );
-    }
-
-    pVirtDev->SetDrawMode( nDrawMode );
-
-    return pVirtDev;
-}
-
-inline EditUndoManager& ImpEditEngine::GetUndoManager()
-{
-    if ( !pUndoManager )
-    {
-        pUndoManager = new EditUndoManager();
-        pUndoManager->SetEditEngine(pEditEngine);
-    }
-    return *pUndoManager;
-}
-
-inline EditUndoManager* ImpEditEngine::SetUndoManager(EditUndoManager* pNew)
-{
-    EditUndoManager* pRetval = pUndoManager;
-
-    if(pUndoManager)
-    {
-        pUndoManager->SetEditEngine(nullptr);
-    }
-
-    pUndoManager = pNew;
-
-    if(pUndoManager)
-    {
-        pUndoManager->SetEditEngine(pEditEngine);
-    }
-
-    return pRetval;
-}
-
-inline const ParaPortion* ImpEditEngine::FindParaPortion( const ContentNode* pNode ) const
-{
-    sal_Int32 nPos = maEditDoc.GetPos( pNode );
-    DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
-    return GetParaPortions()[ nPos ];
-}
-
-inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode const * pNode )
-{
-    sal_Int32 nPos = maEditDoc.GetPos( pNode );
-    DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
-    return GetParaPortions()[ nPos ];
-}
-
-inline PointerStyle ImpEditView::GetPointer()
-{
-    if ( !mxPointer )
-    {
-        mxPointer = IsVertical() ? PointerStyle::TextVertical : PointerStyle::Text;
-        return *mxPointer;
-    }
-
-    if(PointerStyle::Text == *mxPointer && IsVertical())
-    {
-        mxPointer = PointerStyle::TextVertical;
-    }
-    else if(PointerStyle::TextVertical == *mxPointer && !IsVertical())
-    {
-        mxPointer = PointerStyle::Text;
-    }
-
-    return *mxPointer;
-}
-
-inline vcl::Cursor* ImpEditView::GetCursor()
-{
-    if ( !pCursor )
-        pCursor.reset( new vcl::Cursor );
-    return pCursor.get();
-}
 
 void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = nullptr, const MapUnit* pDestUnit = nullptr );
