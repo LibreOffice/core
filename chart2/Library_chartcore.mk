@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     ucbhelper \
     utl \
     vcl \
+    docmodel \
 ))
 
 $(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/chartcore,services))
