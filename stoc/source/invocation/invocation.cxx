@@ -936,8 +936,7 @@ void Invocation_Impl::fillInfoForMethod
     for( sal_Int32 i = 0 ; i < nParamCount ; i++ )
     {
         Reference< XIdlClass > xParamClass = pInfo[i].aType;
-        Type aParamType( xParamClass->getTypeClass(), xParamClass->getName() );
-        pParamTypes[ i ] = aParamType;
+        pParamTypes[ i ] = Type(xParamClass->getTypeClass(), xParamClass->getName());
         pParamModes[ i ] = pInfo[i].aMode;
     }
 }

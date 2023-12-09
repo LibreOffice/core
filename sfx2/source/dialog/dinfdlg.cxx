@@ -2469,8 +2469,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 sal_Int32 k = 0;
                 for ( const auto& rxValue : pLine->m_aValues )
                 {
-                    OUString sValue( rxValue->m_xValueEdit->get_text() );
-                    seqValueRange[k] = sValue;
+                    seqValueRange[k] = rxValue->m_xValueEdit->get_text();
                     ++k;
                 }
                 aPropertiesSeqRange[i].Value <<= seqValue;
