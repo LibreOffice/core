@@ -5395,8 +5395,7 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, G
             xTransferable = new GtkDnDTransferable(pDrop);
 #endif
         }
-        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTransferable->getTransferDataFlavors();
-        aEvent.SupportedDataFlavors = aFormats;
+        aEvent.SupportedDataFlavors = xTransferable->getTransferDataFlavors();
         fire_dragEnter(aEvent);
         m_bInDrag = true;
     }

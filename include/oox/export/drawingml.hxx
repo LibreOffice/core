@@ -269,7 +269,7 @@ public:
     };
 
     GraphicExport(sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFilterBase, DocumentType eDocumentType)
-        : mpFS(pFS)
+        : mpFS(std::move(pFS))
         , mpFilterBase(pFilterBase)
         , meDocumentType(eDocumentType)
     {}
@@ -353,7 +353,7 @@ protected:
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
         : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS(std::move( pFS )), mpFB( pFB ), mbIsBackgroundDark( false ), mbPlaceholder(false) {}
-    void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
+    void SetFS(const ::sax_fastparser::FSHelperPtr& pFS) { mpFS = pFS; }
     const ::sax_fastparser::FSHelperPtr& GetFS() const { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
     DocumentType GetDocumentType() const { return meDocumentType; }

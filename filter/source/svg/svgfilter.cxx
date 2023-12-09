@@ -603,9 +603,8 @@ bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor
     // Select only one draw page
     uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
-    uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex(0), uno::UNO_QUERY );
     mSelectedPages.resize( 1 );
-    mSelectedPages[0] = xDrawPage;
+    mSelectedPages[0].set(xDrawPages->getByIndex(0), uno::UNO_QUERY);
 
     bool bGotSelection = xSelection->getSelection() >>= maShapeSelection;
 

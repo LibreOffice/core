@@ -902,8 +902,7 @@ void UpdateFieldContent(SfxRequest& rReq, SwWrtShell& rWrtSh)
         });
 
     comphelper::SequenceAsHashMap aMap(aField);
-    auto aName = aMap["Name"].get<OUString>();
-    rRefmark.GetRefName() = aName;
+    rRefmark.GetRefName() = aMap["Name"].get<OUString>();
 
     OUString aContent = aMap["Content"].get<OUString>();
     auto pTextRefMark = const_cast<SwTextRefMark*>(rRefmark.GetTextRefMark());

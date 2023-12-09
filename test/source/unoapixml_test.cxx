@@ -22,7 +22,7 @@ using namespace css;
 using namespace css::uno;
 
 UnoApiXmlTest::UnoApiXmlTest(OUString path)
-    : UnoApiTest(path)
+    : UnoApiTest(std::move(path))
 {
 }
 

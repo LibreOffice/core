@@ -1542,8 +1542,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         else
                         {
                             // return nothing
-                            uno::Any aAny;
-                            aRet = aAny;
+                            aRet = uno::Any();
                         }
                     }
                 }

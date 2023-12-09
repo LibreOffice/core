@@ -1566,11 +1566,10 @@ void HierarchyContent::transfer(
     // 1) Create new child content.
 
 
-    OUString aType = xSource->isFolder()
+    ucb::ContentInfo aContentInfo;
+    aContentInfo.Type = xSource->isFolder()
         ? HIERARCHY_FOLDER_CONTENT_TYPE
         : HIERARCHY_LINK_CONTENT_TYPE;
-    ucb::ContentInfo aContentInfo;
-    aContentInfo.Type = aType;
     aContentInfo.Attributes = 0;
 
     // Note: The static cast is okay here, because its sure that

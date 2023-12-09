@@ -1152,7 +1152,7 @@ XclExpChText::XclExpChText( const XclExpChRoot& rRoot ) :
 {
 }
 
-void XclExpChText::SetFont( XclExpChFontRef xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId )
+void XclExpChText::SetFont(const XclExpChFontRef& xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId)
 {
     mxFont = xFont;
     maData.maTextComplexColor = rComplexColor;
@@ -2922,7 +2922,7 @@ XclExpChAxis::XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType ) :
     maData.mnType = nAxisType;
 }
 
-void XclExpChAxis::SetFont( XclExpChFontRef xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId )
+void XclExpChAxis::SetFont(const XclExpChFontRef& xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId)
 {
     mxFont = xFont;
     if( mxTick )

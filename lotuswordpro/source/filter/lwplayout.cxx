@@ -498,9 +498,7 @@ void LwpHeadLayout::RegisterStyle()
         //if the layout is relative to para, the layout will be registered in para
         if (!xLayout->IsRelativeAnchored())
             xLayout->DoRegisterStyle();
-        rtl::Reference<LwpVirtualLayout> xNext(
-            dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
-        xLayout = xNext;
+        xLayout.set(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
     }
 }
 

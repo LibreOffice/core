@@ -716,8 +716,7 @@ bool SmDocShell::Save()
         if( mpTree )
             ArrangeFormula();
 
-        Reference<css::frame::XModel> xModel(GetModel());
-        SmXMLExportWrapper aEquation(xModel);
+        SmXMLExportWrapper aEquation(GetModel());
         aEquation.SetFlat(false);
         return aEquation.Export(*GetMedium());
     }

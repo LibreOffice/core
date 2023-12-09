@@ -173,13 +173,11 @@ void getMacroFromAny(
         if (eType == STARBASIC)
         {
             // create macro and return
-            SvxMacro aMacro(sMacroVal, sLibVal, eType);
-            rMacro = aMacro;
+            rMacro = SvxMacro(sMacroVal, sLibVal, eType);
         }
         else if (eType == EXTENDED_STYPE)
         {
-            SvxMacro aMacro(sScriptVal, sScript);
-            rMacro = aMacro;
+            rMacro = SvxMacro(sScriptVal, sScript);
         }
         else
         {
@@ -334,13 +332,10 @@ void SvEventDescriptor::getByName(
     const SvMacroItemId nEvent )
 {
     const SvxMacroItem& rItem = getMacroItem();
-    if( rItem.HasMacro( nEvent ) )
+    if (rItem.HasMacro(nEvent))
         rMacro = rItem.GetMacro(nEvent);
     else
-    {
-        SvxMacro aEmptyMacro("", "");
-        rMacro = aEmptyMacro;
-    }
+        rMacro = SvxMacro("", "");
 }
 
 SvDetachedEventDescriptor::SvDetachedEventDescriptor(

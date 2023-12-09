@@ -73,7 +73,7 @@ public:
 
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
     void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };
-    void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
+    void setPlaceholder(const oox::drawingml::ShapePtr& pPlaceholder) { mpPlaceholder = pPlaceholder; }
     void setModelId( const OUString& rId ) { msModelId = rId; }
 
     /// Flags shape as having a non-empty spPr tag

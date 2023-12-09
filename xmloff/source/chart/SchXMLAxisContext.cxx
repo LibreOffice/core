@@ -582,10 +582,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLAxisContext::cre
     {
         case XML_ELEMENT(CHART, XML_TITLE):
         {
-            Reference< drawing::XShape > xTitleShape = getTitleShape();
             return new SchXMLTitleContext( m_rImportHelper, GetImport(),
                                                m_aCurrentAxis.aTitle,
-                                               xTitleShape );
+                                               getTitleShape() );
         }
         break;
 

@@ -63,17 +63,15 @@ ZipPackageHelper::ZipPackageHelper(
         Any(beans::NamedValue("StorageFormat", Any(ZIP_STORAGE_FORMAT_STRING)))
     };
 
-    Reference< XHierarchicalNameAccess > xHNameAccess(
+    mxHNameAccess.set(
         mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             "com.sun.star.packages.comp.ZipPackage",
             aArguments, mxContext ), UNO_QUERY);
-    mxHNameAccess = xHNameAccess;
 
     if( !mxHNameAccess.is() )
         return;
 
-    Reference<XSingleServiceFactory> xFactory(mxHNameAccess, UNO_QUERY);
-    mxFactory = xFactory;
+    mxFactory.set(mxHNameAccess, UNO_QUERY);
 
     // get root zip folder
     mxHNameAccess->getByHierarchicalName( "/" ) >>= mxRootFolder;

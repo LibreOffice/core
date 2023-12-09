@@ -160,11 +160,9 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageM
         SvMemoryStream aMemoryStream;
         SvmWriter aWriter(aMemoryStream);
         aWriter.Write(rGDIMetaFile);
-        uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aMemoryStream.GetData()),
-                                          aMemoryStream.Tell());
-
         exp::FixedLayoutPage aPage;
-        aPage.aMetafile = aSequence;
+        aPage.aMetafile = uno::Sequence<sal_Int8>(
+            static_cast<const sal_Int8*>(aMemoryStream.GetData()), aMemoryStream.Tell());
         aPage.aCssPixels = aCss;
         aPage.aChapterNames = aRenderer.getChapterNames();
         rPageMetafiles.push_back(aPage);

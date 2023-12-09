@@ -117,8 +117,7 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
 
         //Get the xfcontainer for the next para
         pParaCont = xPara->GetXFContainer();
-        rtl::Reference<LwpPara> xNext(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
-        xPara = xNext;
+        xPara.set(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
     }
 
     //process frame which anchor is to cell after converter all the para

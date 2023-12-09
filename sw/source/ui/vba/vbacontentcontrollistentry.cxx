@@ -17,7 +17,7 @@ SwVbaContentControlListEntry::SwVbaContentControlListEntry(
     const uno::Reference<uno::XComponentContext>& rContext, std::shared_ptr<SwContentControl> pCC,
     size_t nZIndex)
     : SwVbaContentControlListEntry_BASE(rParent, rContext)
-    , m_pCC(pCC)
+    , m_pCC(std::move(pCC))
     , m_nZIndex(nZIndex)
 {
 }

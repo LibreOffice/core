@@ -77,9 +77,7 @@ void ContentResultSetWrapper::impl_init_xPropertySetOrigin(std::unique_lock<std:
     if( m_xPropertySetOrigin.is() )
         return;
 
-    Reference< XPropertySet > xOrig( m_xResultSetOrigin, UNO_QUERY );
-
-    m_xPropertySetOrigin = xOrig;
+    m_xPropertySetOrigin.set(m_xResultSetOrigin, UNO_QUERY);
     OSL_ENSURE( m_xPropertySetOrigin.is(), "interface XPropertySet is required" );
 }
 

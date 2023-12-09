@@ -324,7 +324,7 @@ public:
 
        @param pProperties    properties of the row to be ended
      */
-    void endRow(TablePropertyMapPtr pProperties)
+    void endRow(const TablePropertyMapPtr& pProperties)
     {
         mpRow->insertProperties(pProperties);
         mRows.push_back(mpRow);

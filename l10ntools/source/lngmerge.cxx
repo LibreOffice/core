@@ -142,8 +142,7 @@ void LngParser::ReadLine(std::string_view rLine_in,
     {
         OString sLang(o3tl::trim(o3tl::getToken(rLine_in, 0, '=')));
         if (!sLang.isEmpty()) {
-            OString sText(o3tl::getToken(rLine_in,1, '"'));
-            rText_inout[sLang] = sText;
+            rText_inout[sLang] = OString(o3tl::getToken(rLine_in, 1, '"'));
         }
     }
 }

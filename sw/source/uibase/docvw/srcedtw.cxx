@@ -956,11 +956,10 @@ void SwSrcEditWindow::SetFont()
     }
     const SvxFontListItem* pFontListItem =
         static_cast<const SvxFontListItem* >(m_pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ));
-    const FontList*  pList = pFontListItem->GetFontList();
-    FontMetric aFontMetric = pList->Get(sFontName,WEIGHT_NORMAL, ITALIC_NONE);
+    const FontList* pList = pFontListItem->GetFontList();
+    vcl::Font aFont(pList->Get(sFontName, WEIGHT_NORMAL, ITALIC_NONE));
 
     const vcl::Font& rFont = GetTextEngine()->GetFont();
-    vcl::Font aFont(aFontMetric);
     Size aSize(rFont.GetFontSize());
     //font height is stored in point and set in twip
     aSize.setHeight(

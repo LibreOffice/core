@@ -665,7 +665,7 @@ public:
     /** Sets this object to the specified data point position. */
     void                SetPointPos( const XclChDataPointPos& rPointPos, sal_uInt16 nFormatIdx );
     /** Sets type and text formatting for a data point label (CHTEXT group). */
-    void         SetDataLabel( XclImpChTextRef xLabel ) { mxLabel = xLabel; }
+    void         SetDataLabel(const XclImpChTextRef& xLabel) { mxLabel = xLabel; }
 
     /** Updates default data format for series group. */
     void                UpdateGroupFormat( const XclChExtTypeInfo& rTypeInfo );
@@ -788,7 +788,7 @@ public:
     /** Sets a data point or series format (CHDATAFORMAT group) for this series. */
     void                SetDataFormat( const XclImpChDataFormatRef& xDataFmt );
     /** Sets a label text (CHTEXT group) attached  to a series or data point. */
-    void                SetDataLabel( const XclImpChTextRef& xLabel );
+    void                SetDataLabel(const XclImpChTextRef& xLabel);
     /** Adds error bar settings from the passed series to the own series. */
     void                AddChildSeries( const XclImpChSeries& rSeries );
     /** Updates missing series formatting by using default formatting from axes sets. */

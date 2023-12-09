@@ -684,8 +684,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OUString&, rIdent, void
 
                         if ( pPasswordRequest->isPassword() )
                         {
-                            OUString aNewPass = pPasswordRequest->getPassword();
-                            Sequence<OUString> aPasswd { aNewPass };
+                            Sequence<OUString> aPasswd { pPasswordRequest->getPassword() };
 
                             m_xMasterPasswd->addPersistent(
                                 sUrl, sUserName, aPasswd, xInteractionHandler );

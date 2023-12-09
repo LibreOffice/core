@@ -332,10 +332,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
             uno::Sequence<OUString> aSeq(nCount);
             OUString* pAry = aSeq.getArray();
             for (size_t i=0; i<nCount; ++i)
-            {
-                OUString aEntry((*pUserList)[i].GetString());
-                pAry[i] = aEntry;
-            }
+                pAry[i] = (*pUserList)[i].GetString();
             aRet <<= aSeq;
         }
     }

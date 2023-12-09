@@ -1776,8 +1776,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         Property& rProp = rAllPropArray[ rPropCount ];
                         rProp.Name = xField->getName();
                         rProp.Handle = rPropCount;
-                        Type aFieldType( xPropType->getTypeClass(), xPropType->getName() );
-                        rProp.Type = aFieldType;
+                        rProp.Type = Type(xPropType->getTypeClass(), xPropType->getName());
                         FieldAccessMode eAccessMode = xField->getAccessMode();
                         rProp.Attributes = (eAccessMode == FieldAccessMode_READONLY ||
                                             eAccessMode == FieldAccessMode_CONST)

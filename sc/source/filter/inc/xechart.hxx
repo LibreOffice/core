@@ -473,7 +473,7 @@ public:
     virtual             ~XclExpChFontBase();
 
     /** Derived classes set font color and color identifier to internal data structures. */
-    virtual void SetFont( XclExpChFontRef xFont, const model::ComplexColor& rComplexColor, sal_uInt32 nColorId ) = 0;
+    virtual void SetFont(const XclExpChFontRef& xFont, const model::ComplexColor& rComplexColor, sal_uInt32 nColorId) = 0;
     /** Derived classes set text rotation to internal data structures. */
     virtual void        SetRotation( sal_uInt16 nRotation ) = 0;
 
@@ -496,7 +496,7 @@ public:
     explicit            XclExpChText( const XclExpChRoot& rRoot );
 
     /** Sets font color and color identifier to internal data structures. */
-    virtual void SetFont( XclExpChFontRef xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId ) override;
+    virtual void SetFont(const XclExpChFontRef& xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId) override;
     /** Sets text rotation to internal data structures. */
     virtual void        SetRotation( sal_uInt16 nRotation ) override;
 
@@ -1020,7 +1020,7 @@ public:
     explicit            XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType );
 
     /** Sets font color and color identifier to internal data structures. */
-    virtual void SetFont( XclExpChFontRef xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId ) override;
+    virtual void SetFont(const XclExpChFontRef& xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId) override;
     /** Sets text rotation to internal data structures. */
     virtual void        SetRotation( sal_uInt16 nRotation ) override;
 
@@ -1137,7 +1137,7 @@ public:
     /** Removes the last created data series object from the series list. */
     void                RemoveLastSeries();
     /** Stores a CHTEXT group that describes a data point label. */
-    void                SetDataLabel( XclExpChTextRef const & xText );
+    void                SetDataLabel(const XclExpChTextRef& xText);
     /** Sets the plot area position and size to manual mode. */
     void                SetManualPlotArea();
 

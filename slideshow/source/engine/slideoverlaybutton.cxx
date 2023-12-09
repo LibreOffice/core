@@ -58,8 +58,8 @@ SlideOverlayButton::SlideOverlayButton(css::uno::Reference<css::rendering::XBitm
                                        const UnoViewContainer& rViewContainer)
     : mxIconBitmap(std::move(xIconBitmap))
     , mrEventMultiplexer(rEventMultiplexer)
-    , mpPosition(pPosition)
-    , mClickHandler(clickHandler)
+    , mpPosition(std::move(pPosition))
+    , mClickHandler(std::move(clickHandler))
     , mrScreenUpdater(rScreenUpdater)
 {
     for (const auto& pView : rViewContainer)

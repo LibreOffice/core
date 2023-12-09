@@ -40,10 +40,9 @@
 
 void SfxPreviewWin_Impl::SetObjectShell(SfxObjectShell const * pObj)
 {
-    std::shared_ptr<GDIMetaFile> xFile = pObj
+    xMetaFile = pObj
         ? pObj->GetPreviewMetaFile()
         : std::shared_ptr<GDIMetaFile>();
-    xMetaFile = xFile;
     Invalidate();
 }
 

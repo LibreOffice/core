@@ -45,7 +45,7 @@ struct OUStringAndHashCode
     OUString maString;
     sal_Int32 mnHashCode;
 
-    OUStringAndHashCode(OUString s) : maString(s), mnHashCode(maString.hashCode()) {}
+    OUStringAndHashCode(OUString s) : maString(std::move(s)), mnHashCode(maString.hashCode()) {}
 };
 struct OUStringAndHashCodeEqual
 {

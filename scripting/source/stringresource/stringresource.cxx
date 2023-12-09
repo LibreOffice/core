@@ -417,8 +417,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
         for( const auto& rEntry : rSourceMap )
         {
             OUString aId  = rEntry.first;
-            OUString aStr = rEntry.second;
-            rTargetMap[ aId ] = aStr;
+            rTargetMap[ aId ] = rEntry.second;
         }
 
         const IdToIndexMap& rSourceIndexMap = pCopyFromItem->m_aIdToIndexMap;

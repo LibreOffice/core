@@ -116,17 +116,14 @@ void TemplateLocalView::Populate()
 
         for (sal_uInt16 j = 0; j < nEntries; ++j)
         {
-            OUString aName = mpDocTemplates->GetName(i,j);
-            OUString aURL = mpDocTemplates->GetPath(i,j);
-
             TemplateItemProperties aProperties;
             aProperties.nId = j+1;
             aProperties.nDocId = j;
             aProperties.nRegionId = i;
-            aProperties.aName = aName;
-            aProperties.aPath = aURL;
+            aProperties.aName = mpDocTemplates->GetName(i, j);
+            aProperties.aPath = mpDocTemplates->GetPath(i, j);
             aProperties.aRegionName = aRegionName;
-            aProperties.aThumbnail = TemplateLocalView::fetchThumbnail(aURL,
+            aProperties.aThumbnail = TemplateLocalView::fetchThumbnail(aProperties.aPath,
                                                                           mnThumbnailWidth,
                                                                           mnThumbnailHeight);
 

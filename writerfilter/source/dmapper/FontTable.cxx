@@ -271,11 +271,10 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
 
 void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
 {
-    OUString sValue = val.getString();
     switch( name )
     {
         case NS_ooxml::LN_CT_FontRel_fontKey:
-            m_fontKey = sValue;
+            m_fontKey = val.getString();
             break;
         case NS_ooxml::LN_CT_Rel_id:
             break;
