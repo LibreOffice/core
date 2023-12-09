@@ -1867,9 +1867,6 @@ private:
 
         SetupPaperOrientation(ePageKind, rInfo);
 
-        MapMode aMap (rInfo.maMap);
-        rInfo.maMap = aMap;
-
         if (mpOptions->IsBooklet())
             PrepareBooklet(ePageKind, rInfo);
         else
