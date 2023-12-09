@@ -1715,7 +1715,7 @@ void SAL_CALL ScViewOptiChangesListener::changesOccurred(const util::ChangesEven
     for (const auto& change : rEvent.Changes)
     {
         if (OUString sChangedEntry;
-            (change.Accessor >>= sChangedEntry) && sChangedEntry == "Display/ColumnRowHighlighting")
+            (change.Accessor >>= sChangedEntry) && sChangedEntry == "ColumnRowHighlighting")
         {
             mrViewShell.GetViewData().GetView()->HighlightOverlay();
             break;
@@ -1738,7 +1738,7 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
 
     beans::NamedValue aProperty;
     aProperty.Name = "nodepath";
-    aProperty.Value <<= OUString("/org.openoffice.Office.Calc/Content");
+    aProperty.Value <<= OUString("/org.openoffice.Office.Calc/Content/Display");
 
     uno::Sequence<uno::Any> aArgumentList{ uno::Any(aProperty) };
 
