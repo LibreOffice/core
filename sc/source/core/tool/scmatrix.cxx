@@ -340,7 +340,7 @@ public:
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool);
 
     void ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,
-            ScInterpreter* pInterpreter, ScMatrix::CalculateOpFunction op);
+            ScInterpreter* pInterpreter, const ScMatrix::CalculateOpFunction& op);
     bool IsValueOrEmpty( const MatrixImplType::const_position_type & rPos ) const;
     double GetDouble( const MatrixImplType::const_position_type & rPos) const;
     FormulaError GetErrorIfNotString( const MatrixImplType::const_position_type & rPos ) const;
@@ -2890,7 +2890,7 @@ bool ScMatrixImpl::IsStringOrEmpty(const MatrixImplType::const_position_type & r
 }
 
 void ScMatrixImpl::ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,
-    ScInterpreter* pInterpreter, ScMatrix::CalculateOpFunction Op)
+    ScInterpreter* pInterpreter, const ScMatrix::CalculateOpFunction& Op)
 {
     // Check output matrix size, otherwise output iterator logic will be wrong.
     assert(maMat.size().row == nMaxRow && maMat.size().column == nMaxCol
@@ -3638,7 +3638,7 @@ void ScMatrix::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow,
 }
 
 void ScMatrix::ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,
-            ScInterpreter* pInterpreter, CalculateOpFunction op)
+            ScInterpreter* pInterpreter, const CalculateOpFunction& op)
 {
     pImpl->ExecuteBinaryOp(nMaxCol, nMaxRow, rInputMat1, rInputMat2, pInterpreter, op);
 }

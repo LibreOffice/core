@@ -413,7 +413,7 @@ public:
 
     /** Apply binary operation to values from two input matrices, storing result into this matrix. */
     void ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,
-            ScInterpreter* pInterpreter, CalculateOpFunction op);
+            ScInterpreter* pInterpreter, const CalculateOpFunction& op);
 
 #if DEBUG_MATRIX
     void Dump() const;

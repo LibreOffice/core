@@ -184,9 +184,6 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Highlight
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Line)
             {
-                OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
-                OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-
                 basegfx::B2DRectangle rRectangle = pAnnotation->getRectangle();
                 basegfx::B2DRectangle rRectangleHMM(
                     convertPointToMm100(rRectangle.getMinX()),
@@ -210,8 +207,10 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
 
                 auto& rPDFGraphicAnnotation = aPDFGraphicAnnotations.back();
                 rPDFGraphicAnnotation.maRectangle = rRectangleHMM;
-                rPDFGraphicAnnotation.maAuthor = sAuthor;
-                rPDFGraphicAnnotation.maText = sText;
+                rPDFGraphicAnnotation.maAuthor
+                    = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
+                rPDFGraphicAnnotation.maText
+                    = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
                 rPDFGraphicAnnotation.maDateTime = aDateTime;
                 rPDFGraphicAnnotation.meSubType = eSubtype;
                 rPDFGraphicAnnotation.maColor = aColor;

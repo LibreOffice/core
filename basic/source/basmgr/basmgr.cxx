@@ -301,17 +301,16 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::Cont
 }
 
 BasicError::BasicError( ErrCodeMsg nId, BasicErrorReason nR )
+    : nErrorId(std::move(nId))
+    , nReason(nR)
 {
-    nErrorId    = nId;
-    nReason     = nR;
 }
 
 BasicError::BasicError( const BasicError& rErr )
+    : nErrorId(rErr.nErrorId)
+    , nReason(rErr.nReason)
 {
-    nErrorId    = rErr.nErrorId;
-    nReason     = rErr.nReason;
 }
-
 
 class BasicLibInfo
 {

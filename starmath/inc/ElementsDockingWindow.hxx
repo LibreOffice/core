@@ -46,7 +46,7 @@ class SmElementsControl
     std::vector<std::unique_ptr<ElementData>> maItemDatas;
     std::unique_ptr<weld::IconView> mpIconView;
 
-    Link<OUString, void> maSelectHdlLink;
+    Link<const OUString&, void> maSelectHdlLink;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
     void addElements(int nCategory);
@@ -69,7 +69,7 @@ public:
 
     void setSmSyntaxVersion(sal_Int16 nSmSyntaxVersion);
 
-    void SetSelectHdl(const Link<OUString, void>& rLink) { maSelectHdlLink = rLink; }
+    void SetSelectHdl(const Link<const OUString&, void>& rLink) { maSelectHdlLink = rLink; }
 
     static Color GetTextColor();
     static Color GetControlBackground();

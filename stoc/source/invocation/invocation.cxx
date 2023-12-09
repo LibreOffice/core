@@ -920,8 +920,7 @@ void Invocation_Impl::fillInfoForMethod
     rInfo.aName = xMethod->getName();
     rInfo.eMemberType = MemberType_METHOD;
     Reference< XIdlClass > xReturnClass = xMethod->getReturnType();
-    Type aReturnType( xReturnClass->getTypeClass(), xReturnClass->getName() );
-    rInfo.aType = aReturnType;
+    rInfo.aType = Type(xReturnClass->getTypeClass(), xReturnClass->getName());
     Sequence<ParamInfo> aParamInfos = xMethod->getParameterInfos();
     sal_Int32 nParamCount = aParamInfos.getLength();
     if( nParamCount <= 0 )

@@ -71,10 +71,9 @@ ShareControlFile::ShareControlFile( std::u16string_view aOrigURL )
             if ( e.Code == ucb::IOErrorCode_NOT_EXISTING )
             {
                 // Create file...
-                SvMemoryStream aStream(0,0);
-                uno::Reference< io::XInputStream > xInput( new ::utl::OInputStreamWrapper( aStream ) );
                 ucb::InsertCommandArgument aInsertArg;
-                aInsertArg.Data = xInput;
+                SvMemoryStream aStream(0,0);
+                aInsertArg.Data.set(new ::utl::OInputStreamWrapper(aStream));
                 aInsertArg.ReplaceExisting = false;
                 aContent.executeCommand( "insert", uno::Any( aInsertArg ) );
 

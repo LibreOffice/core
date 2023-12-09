@@ -236,8 +236,7 @@ const SwPrintData & DocumentDeviceManager::getPrintData() const
         const SwDocShell *pDocSh = m_rDoc.GetDocShell();
         OSL_ENSURE( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
         bool bWeb = dynamic_cast< const SwWebDocShell * >(pDocSh) !=  nullptr;
-        SwPrintOptions aPrintOptions( bWeb );
-        *pThis->mpPrtData = aPrintOptions;
+        *pThis->mpPrtData = SwPrintOptions(bWeb);
     }
     assert(mpPrtData && "this will always be set by now");
     return *mpPrtData;

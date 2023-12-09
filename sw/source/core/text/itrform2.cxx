@@ -1168,7 +1168,6 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
     {
         if (rInf.GetOpt().IsFieldName())
         {
-            OUString aFieldName = SwFieldType::GetTypeStr(SwFieldTypesEnum::Input);
             // assume this is only the *first* portion and follows will be created elsewhere => input field must start at Idx
             assert(rInf.GetText()[sal_Int32(rInf.GetIdx())] == CH_TXT_ATR_INPUTFIELDSTART);
             TextFrameIndex nFieldLen(-1);
@@ -1182,7 +1181,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 }
             }
             assert(2 <= sal_Int32(nFieldLen));
-            pPor = new SwFieldPortion(aFieldName, nullptr, nFieldLen);
+            pPor = new SwFieldPortion(SwFieldType::GetTypeStr(SwFieldTypesEnum::Input), nullptr, nFieldLen);
         }
         else
         {

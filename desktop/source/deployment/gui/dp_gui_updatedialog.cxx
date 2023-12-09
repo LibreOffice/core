@@ -665,13 +665,12 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
                 dp_gui::UpdateData aUpdData = m_enabledUpdates[ p->m_nIndex ];
 
                 dp_misc::DescriptionInfoset aInfoset( m_context, aUpdData.aUpdateInfo );
-                uno::Sequence< OUString > aItem
+                aItemList.realloc(nCount + 1);
+                aItemList.getArray()[nCount] =
                 {
                     dp_misc::getIdentifier( aUpdData.aInstalledPackage ),
                     aInfoset.getVersion()
                 };
-                aItemList.realloc( nCount + 1 );
-                aItemList.getArray()[ nCount ] = aItem;
                 nCount += 1;
             }
             else

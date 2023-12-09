@@ -73,7 +73,7 @@ IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::ComboBox&, rList, void)
         mxElementsControl->setSmSyntaxVersion(pViewSh->GetDoc()->GetSmSyntaxVersion());
 }
 
-IMPL_LINK(SmElementsPanel, ElementClickHandler, OUString, ElementSource, void)
+IMPL_LINK(SmElementsPanel, ElementClickHandler, const OUString&, ElementSource, void)
 {
     if (SmViewShell* pViewSh = GetView())
     {

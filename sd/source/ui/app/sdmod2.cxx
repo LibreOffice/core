@@ -199,11 +199,9 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         if( pAuthorField->GetType() != SvxAuthorType::Fix )
         {
             SvtUserOptions aUserOptions;
-            SvxAuthorField aAuthorField(
+            *const_cast< SvxAuthorField* >(pAuthorField) = SvxAuthorField(
                     aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID(),
-                    pAuthorField->GetType(), pAuthorField->GetFormat() );
-
-            *const_cast< SvxAuthorField* >(pAuthorField) = aAuthorField;
+                    pAuthorField->GetType(), pAuthorField->GetFormat());
         }
         pInfo->SetRepresentation( pAuthorField->GetFormatted() );
 

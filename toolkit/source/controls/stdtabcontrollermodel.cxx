@@ -189,9 +189,8 @@ static css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > Impl
     css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > aSeq( nCtrls );
     for ( sal_uInt32 n = 0; n < nCtrls; n++ )
     {
-        css::uno::Reference< css::io::XPersistObject >  xObj = InStream->readObject();
-        css::uno::Reference< css::awt::XControlModel >  xI( xObj, css::uno::UNO_QUERY );
-        aSeq.getArray()[n] = xI;
+        css::uno::Reference<css::io::XPersistObject> xObj = InStream->readObject();
+        aSeq.getArray()[n].set(xObj, css::uno::UNO_QUERY);
     }
 
     // Skip remainder if more data exists than this version recognizes

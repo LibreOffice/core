@@ -41,7 +41,7 @@ public:
 
 private:
     DECL_LINK(CategorySelectedHandle, weld::ComboBox&, void);
-    DECL_LINK(ElementClickHandler, OUString, void);
+    DECL_LINK(ElementClickHandler, const OUString&, void);
 
     SmViewShell* GetView() const;
 

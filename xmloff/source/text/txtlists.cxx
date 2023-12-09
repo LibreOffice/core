@@ -143,10 +143,8 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
     if ( mpMapListIdToListStyleDefaultListId->find( sListStyleName ) ==
                             mpMapListIdToListStyleDefaultListId->end() )
     {
-        ::std::pair< OUString, OUString >
-                            aListIdMapData( sListId, sListStyleDefaultListId );
         (*mpMapListIdToListStyleDefaultListId)[ sListStyleName ] =
-                                                            aListIdMapData;
+            ::std::pair<OUString, OUString>(sListId, sListStyleDefaultListId);
     }
 }
 

@@ -481,7 +481,6 @@ namespace XSLT
                         // create pipe
                         css::uno::Reference<XOutputStream> pipeout =
                                         Pipe::create(m_xContext);
-                        css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
                         //connect transformer to pipe
                         m_tcontrol->setOutputStream(pipeout);
@@ -490,7 +489,7 @@ namespace XSLT
                         InputSource aInput;
                         aInput.sSystemId = aURL;
                         aInput.sPublicId = aURL;
-                        aInput.aInputStream = pipein;
+                        aInput.aInputStream.set(pipeout, UNO_QUERY);
 
                         // transform
                         m_tcontrol->start();

@@ -199,7 +199,6 @@ OUString SwAddressPreview::FillData(
                                                 rConfigItem.GetCurrentDBData() );
     const OUString* pAssignment = aAssignment.getConstArray();
     const std::vector<std::pair<OUString, int>>& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
-    OUString sNotAssigned = "<" + SwResId(STR_NOTASSIGNED) + ">";
 
     bool bIncludeCountry = rConfigItem.IsIncludeCountry();
     const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
@@ -269,7 +268,7 @@ OUString SwAddressPreview::FillData(
             }
             else
             {
-                aItem.sText = sNotAssigned;
+                aItem.sText = "<" + SwResId(STR_NOTASSIGNED) + ">";
             }
 
         }

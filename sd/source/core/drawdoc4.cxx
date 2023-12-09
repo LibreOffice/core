@@ -641,11 +641,10 @@ void SdDrawDocument::CreateDefaultCellStyles()
     OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/soffice.cfg/simpress/styles.xml");
     rtl::Bootstrap::expandMacros(aURL);
     SvFileStream aFile(aURL, StreamMode::READ);
-    Reference<css::io::XInputStream> xInputStream(new utl::OInputStreamWrapper(aFile));
 
     css::xml::sax::InputSource aParserInput;
     aParserInput.sPublicId = aURL;
-    aParserInput.aInputStream = xInputStream;
+    aParserInput.aInputStream.set(new utl::OInputStreamWrapper(aFile));
     Reference<css::xml::sax::XFastParser> xFastParser(xImporter, UNO_QUERY);
     if (xFastParser)
         xFastParser->parseStream(aParserInput);

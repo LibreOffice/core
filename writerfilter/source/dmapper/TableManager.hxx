@@ -140,7 +140,7 @@ class TableManager : public virtual SvRefBase
             mpRowProps.clear();
         }
 
-        void setRowProps(TablePropertyMapPtr pProps)
+        void setRowProps(const TablePropertyMapPtr& pProps)
         {
             mpRowProps = pProps;
         }

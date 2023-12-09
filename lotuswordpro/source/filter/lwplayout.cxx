@@ -1367,9 +1367,7 @@ rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
         {
             return xLay;
         }
-        rtl::Reference<LwpVirtualLayout> xNext(
-            dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
-        xLay = xNext;
+        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
     }
     return rtl::Reference<LwpVirtualLayout>();
 }
