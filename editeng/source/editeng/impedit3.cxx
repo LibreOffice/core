@@ -46,6 +46,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <editeng/numitem.hxx>
 #include <outleeng.hxx>
+#include <TextPortion.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>

@@ -480,32 +480,6 @@ sal_Int32 TextPortionList::GetStartPos(sal_Int32 nPortion)
     return nPos;
 }
 
-ExtraPortionInfo::ExtraPortionInfo()
-: nOrgWidth(0)
-, nWidthFullCompression(0)
-, nPortionOffsetX(0)
-, nMaxCompression100thPercent(0)
-, nAsianCompressionTypes(AsianCompressionFlags::Normal)
-, bFirstCharIsRightPunktuation(false)
-, bCompressed(false)
-{
-}
-
-ExtraPortionInfo::~ExtraPortionInfo()
-{
-}
-
-void ExtraPortionInfo::SaveOrgDXArray( const sal_Int32* pDXArray, sal_Int32 nLen )
-{
-    if (pDXArray)
-    {
-        pOrgDXArray.reset(new sal_Int32[nLen]);
-        memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(sal_Int32) );
-    }
-    else
-        pOrgDXArray.reset();
-}
-
 ParaPortion::ParaPortion( ContentNode* pN ) :
     pNode(pN),
     nHeight(0),
