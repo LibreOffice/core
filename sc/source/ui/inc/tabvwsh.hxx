@@ -94,8 +94,8 @@ class ScFormEditData;
 class ScViewOptiChangesListener;
 class SC_DLLPUBLIC ScTabViewShell : public SfxViewShell, public ScDBFunc
 {
-    rtl::Reference<ScViewOptiChangesListener> mChangesListener;
 private:
+    rtl::Reference<ScViewOptiChangesListener> mChangesListener;
     struct SendFormulabarUpdate
     {
         OUString m_aText;

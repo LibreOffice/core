@@ -1705,7 +1705,7 @@ private:
 
 void ScViewOptiChangesListener::stopListening()
 {
-    if (m_xChangesNotifier.is())
+    if (m_xChangesNotifier)
         m_xChangesNotifier->removeChangesListener(this);
 }
 
@@ -1736,19 +1736,16 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
     uno::Reference<lang::XMultiServiceFactory> xConfigurationProvider(
         configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()));
 
-    beans::NamedValue aProperty;
-    aProperty.Name = "nodepath";
-    aProperty.Value <<= OUString("/org.openoffice.Office.Calc/Content/Display");
-
-    uno::Sequence<uno::Any> aArgumentList{ uno::Any(aProperty) };
+    beans::NamedValue aProperty{ u"nodepath"_ustr,
+                                 uno::Any(u"/org.openoffice.Office.Calc/Content/Display"_ustr) };
 
     uno::Reference<uno::XInterface> xConfigurationAccess
         = xConfigurationProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess", aArgumentList);
+            "com.sun.star.configuration.ConfigurationAccess", { uno::Any(aProperty) });
 
     m_xChangesNotifier.set(xConfigurationAccess, uno::UNO_QUERY);
 
-    if (m_xChangesNotifier.is())
+    if (m_xChangesNotifier)
         m_xChangesNotifier->addChangesListener(this);
 }
 
