@@ -386,7 +386,9 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     // get the font weight
     double fWeight = 0;
     CFNumberRef pWeightNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontWeightTrait ));
-    CFNumberGetValue( pWeightNum, kCFNumberDoubleType, &fWeight );
+    // tdf#140401 check if attribute is a nullptr
+    if( pWeightNum )
+        CFNumberGetValue( pWeightNum, kCFNumberDoubleType, &fWeight );
     int nInt = WEIGHT_NORMAL;
 
     // Special case fixes
@@ -432,7 +434,9 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     // get the font slant
     double fSlant = 0;
     CFNumberRef pSlantNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontSlantTrait ));
-    CFNumberGetValue( pSlantNum, kCFNumberDoubleType, &fSlant );
+    // tdf#140401 check if attribute is a nullptr
+    if( pSlantNum )
+        CFNumberGetValue( pSlantNum, kCFNumberDoubleType, &fSlant );
     if( fSlant >= 0.035 )
     {
         rDFA.SetItalic( ITALIC_NORMAL );
@@ -440,7 +444,9 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     // get width trait
     double fWidth = 0;
     CFNumberRef pWidthNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontWidthTrait ));
-    CFNumberGetValue( pWidthNum, kCFNumberDoubleType, &fWidth );
+    // tdf#140401 check if attribute is a nullptr
+    if( pWidthNum )
+        CFNumberGetValue( pWidthNum, kCFNumberDoubleType, &fWidth );
     nInt = WIDTH_NORMAL;
 
     if( fWidth > 0 )
