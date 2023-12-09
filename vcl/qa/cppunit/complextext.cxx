@@ -529,6 +529,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advanceme
 
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
 {
+#if HAVE_MORE_FONTS
 #if !defined _WIN32 // TODO: Fails on jenkins but passes locally
     vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
 
@@ -573,6 +574,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
         // - Actual  : 5
         CPPUNIT_ASSERT_EQUAL(3, nStart);
     }
+#endif
 #endif
 }
 
