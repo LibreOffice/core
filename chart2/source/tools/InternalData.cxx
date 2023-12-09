@@ -277,9 +277,7 @@ void InternalData::swapColumnWithNext( sal_Int32 nColumnIndex )
         std::swap(m_aData[nIndex1], m_aData[nIndex2]);
     }
 
-    std::vector< uno::Any > aTemp( m_aColumnLabels[nColumnIndex] );
-    m_aColumnLabels[nColumnIndex] = m_aColumnLabels[nColumnIndex + 1];
-    m_aColumnLabels[nColumnIndex + 1] = aTemp;
+    std::swap(m_aColumnLabels[nColumnIndex], m_aColumnLabels[nColumnIndex + 1]);
 }
 
 bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
