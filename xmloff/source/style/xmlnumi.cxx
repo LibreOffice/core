@@ -969,8 +969,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             Reference < XInterface > xIfc = xFactory->createInstance("com.sun.star.style.NumberingStyle");
             if( !xIfc.is() )
                 return;
-            Reference < XStyle > xTmp( xIfc, UNO_QUERY );
-            xStyle = xTmp;
+            xStyle.set(xIfc, UNO_QUERY);
             if( !xStyle.is() )
                 return;
 

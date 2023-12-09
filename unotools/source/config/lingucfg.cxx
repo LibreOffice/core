@@ -1177,10 +1177,7 @@ OUString SvtLinguConfig::GetSynonymsContextImage(
 {
     OUString   aRes;
     if (!rServiceImplName.isEmpty())
-    {
-        OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, "SynonymsContextMenuImage" ) );
-        aRes = aPath;
-    }
+        aRes = GetVendorImageUrl_Impl(rServiceImplName, "SynonymsContextMenuImage");
     return aRes;
 }
 

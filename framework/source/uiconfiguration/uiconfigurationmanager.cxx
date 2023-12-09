@@ -1099,14 +1099,13 @@ void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourc
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
             Reference< XUIConfigurationManager > xThis(this);
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about removed element settings
             ConfigurationEvent aEvent;
 
             aEvent.ResourceURL = NewResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xIfac;
+            aEvent.Source.set(xThis, UNO_QUERY);
             aEvent.Element <<= xInsertSettings;
 
             aGuard.clear();

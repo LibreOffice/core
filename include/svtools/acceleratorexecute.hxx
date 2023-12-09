@@ -177,7 +177,7 @@ class SVT_DLLPUBLIC AcceleratorExecute final
                                                                                               const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
         static css::uno::Reference<css::ui::XAcceleratorConfiguration> lok_createNewAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString sModule);
-        void lok_setModuleConfig(css::uno::Reference<css::ui::XAcceleratorConfiguration> acceleratorConfig);
+        void lok_setModuleConfig(const css::uno::Reference<css::ui::XAcceleratorConfiguration>& acceleratorConfig);
 
         /** TODO document me */
         static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel);

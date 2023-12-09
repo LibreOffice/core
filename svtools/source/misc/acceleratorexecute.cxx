@@ -429,7 +429,7 @@ css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::lok_
     return css::uno::Reference<css::ui::XAcceleratorConfiguration>();
 }
 
-void AcceleratorExecute::lok_setModuleConfig(css::uno::Reference<css::ui::XAcceleratorConfiguration> acceleratorConfig)
+void AcceleratorExecute::lok_setModuleConfig(const css::uno::Reference<css::ui::XAcceleratorConfiguration>& acceleratorConfig)
 {
     this->m_xModuleCfg = acceleratorConfig;
 }

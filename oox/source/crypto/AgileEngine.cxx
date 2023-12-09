@@ -202,20 +202,17 @@ bool hashCalc(std::vector<sal_uInt8>& output,
 {
     if (sAlgorithm == u"SHA1")
     {
-        std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA1);
-        output = out;
+        output = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA1);
         return true;
     }
     else if (sAlgorithm == u"SHA384")
     {
-        std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA384);
-        output = out;
+        output = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA384);
         return true;
     }
     else if (sAlgorithm == u"SHA512")
     {
-        std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA512);
-        output = out;
+        output = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA512);
         return true;
     }
     return false;

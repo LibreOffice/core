@@ -2090,14 +2090,12 @@ void ScOrucsImportCellStyle::reset()
 
 void ScOrucsImportCellStyle::set_name(std::string_view name)
 {
-    OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
-    maCurrentStyle.maName = aName;
+    maCurrentStyle.maName = OUString(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
 }
 
 void ScOrucsImportCellStyle::set_display_name(std::string_view name)
 {
-    OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
-    maCurrentStyle.maDisplayName = aName;
+    maCurrentStyle.maDisplayName = OUString(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
 }
 
 void ScOrucsImportCellStyle::set_xf(size_t index)
@@ -2112,8 +2110,7 @@ void ScOrucsImportCellStyle::set_builtin(size_t index)
 
 void ScOrucsImportCellStyle::set_parent_name(std::string_view name)
 {
-    const OUString aParentName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
-    maCurrentStyle.maParentName = aParentName;
+    maCurrentStyle.maParentName = OUString(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
 }
 
 void ScOrucsImportCellStyle::commit()

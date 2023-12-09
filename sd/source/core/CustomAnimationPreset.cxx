@@ -217,12 +217,11 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
     {
         // create stream
         std::unique_ptr<SvStream> pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, StreamMode::READ );
-        Reference<XInputStream> xInputStream( new utl::OInputStreamWrapper( std::move(pIStm) ) );
 
         // prepare ParserInputSource
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = rPath;
-        aParserInput.aInputStream = xInputStream;
+        aParserInput.aInputStream.set(new utl::OInputStreamWrapper(std::move(pIStm)));
 
         // get filter
         Reference< xml::sax::XFastParser > xFilter( xServiceFactory->createInstance("com.sun.star.comp.Xmloff.AnimationsImport" ), UNO_QUERY_THROW );

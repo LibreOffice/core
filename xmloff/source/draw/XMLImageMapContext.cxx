@@ -120,12 +120,8 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
     Reference<XInterface> xIfc = xFactory->createInstance(
         OUString::createFromAscii(pServiceName));
     DBG_ASSERT(xIfc.is(), "can't create image map object!");
-    if( xIfc.is() )
-    {
-        Reference<XPropertySet> xPropertySet( xIfc, UNO_QUERY );
-
-        xMapEntry = xPropertySet;
-    }
+    if (xIfc.is())
+        xMapEntry.set(xIfc, UNO_QUERY);
     // else: can't create service -> ignore
     // else: can't even get factory -> ignore
 }

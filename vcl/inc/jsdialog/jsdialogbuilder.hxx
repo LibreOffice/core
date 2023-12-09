@@ -381,7 +381,7 @@ public:
     JSWidget(JSDialogSender* pSender, VclClass* pObject, SalInstanceBuilder* pBuilder,
              const a11yref& rAlly, FactoryFunction pUITestFactoryFunction, void* pUserData,
              bool bTakeOwnership)
-        : BaseInstanceClass(pObject, pBuilder, rAlly, pUITestFactoryFunction, pUserData,
+        : BaseInstanceClass(pObject, pBuilder, rAlly, std::move(pUITestFactoryFunction), pUserData,
                             bTakeOwnership)
         , m_bIsFreezed(false)
         , m_pSender(pSender)

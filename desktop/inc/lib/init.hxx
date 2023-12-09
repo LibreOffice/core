@@ -129,12 +129,12 @@ namespace desktop {
         struct CallbackData
         {
             CallbackData(OString payload)
-                : PayloadString(payload)
+                : PayloadString(std::move(payload))
             {
             }
 
             CallbackData(OString payload, int viewId)
-                : PayloadString(payload)
+                : PayloadString(std::move(payload))
                 , PayloadObject(viewId)
             {
             }

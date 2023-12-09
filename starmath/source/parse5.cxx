@@ -2715,12 +2715,10 @@ std::unique_ptr<SmExpressionNode> SmParser5::DoError(SmParseError eError)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
-    // Identify error message
-    OUString sStrBuf(SmResId(RID_ERR_IDENT) + starmathdatabase::getParseErrorDesc(eError));
-
     // Generate error node
     m_aCurToken.eType = TERROR;
-    m_aCurToken.cMathChar = sStrBuf;
+    // Identify error message
+    m_aCurToken.cMathChar = SmResId(RID_ERR_IDENT) + starmathdatabase::getParseErrorDesc(eError);
     auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
     SmErrorNode* pErr(new SmErrorNode(m_aCurToken));
     pErr->SetSelection(m_aCurESelection);
