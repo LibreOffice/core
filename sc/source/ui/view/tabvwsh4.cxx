@@ -1717,7 +1717,7 @@ void SAL_CALL ScViewOptiChangesListener::changesOccurred(const util::ChangesEven
         if (OUString sChangedEntry;
             (change.Accessor >>= sChangedEntry) && sChangedEntry == "ColumnRowHighlighting")
         {
-            mrViewShell.GetViewData().GetView()->HighlightOverlay();
+            mrViewShell.HighlightOverlay();
             break;
         }
     }
