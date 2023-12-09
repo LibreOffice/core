@@ -1336,14 +1336,8 @@ void UnoControlModel::ImplEnsureHandleOrder( const sal_Int32 _nCount, sal_Int32*
                 if ( _nFirstHandle == *pLaterHandles )
                 {
                     // indeed it is -> exchange the both places in the sequences
-                    sal_Int32 nHandle( *_pHandles );
-                    *_pHandles = *pLaterHandles;
-                    *pLaterHandles = nHandle;
-
-                    uno::Any aValue( *_pValues );
-                    *_pValues = *pLaterValues;
-                    *pLaterValues = aValue;
-
+                    std::swap(*_pHandles, *pLaterHandles);
+                    std::swap(*_pValues, *pLaterValues);
                     break;
                     // this will leave the inner loop, and continue with the outer loop.
                     // Note that this means we will encounter the _nSecondHandle handle, again, once we reached
