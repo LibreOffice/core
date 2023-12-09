@@ -56,6 +56,7 @@
 #include <comphelper/string.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <scabstdlg.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include <basegfx/utils/zoomtools.hxx>
 
@@ -693,6 +694,18 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 PaintGrid();
                 rBindings.Invalidate( FID_TOGGLESYNTAX );
                 rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
+                rReq.Done();
+            }
+            break;
+        case FID_TOGGLECOLROWHIGHLIGHTING:
+            {
+                bool bNewVal = !officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get();
+
+                auto pChange(comphelper::ConfigurationChanges::create());
+                officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::set(bNewVal, pChange);
+                pChange->commit();
+
+                rReq.AppendItem(SfxBoolItem(nSlot, bNewVal));
                 rReq.Done();
             }
             break;
