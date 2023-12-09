@@ -41,7 +41,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/CharacterSet \
 	UnpackedTarball/zxing/core/src/ConcentricFinder \
 	UnpackedTarball/zxing/core/src/Content \
-	UnpackedTarball/zxing/core/src/DecodeHints \
 	UnpackedTarball/zxing/core/src/datamatrix/DMBitLayout \
 	UnpackedTarball/zxing/core/src/datamatrix/DMDataBlock \
 	UnpackedTarball/zxing/core/src/datamatrix/DMDecoder \
@@ -58,6 +57,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/GlobalHistogramBinarizer \
 	UnpackedTarball/zxing/core/src/GridSampler \
 	UnpackedTarball/zxing/core/src/GTIN \
+	UnpackedTarball/zxing/core/src/HRI \
 	UnpackedTarball/zxing/core/src/HybridBinarizer \
 	UnpackedTarball/zxing/core/src/maxicode/MCBitMatrixParser \
 	UnpackedTarball/zxing/core/src/maxicode/MCDecoder \
@@ -117,10 +117,10 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/qrcode/QRWriter \
 	UnpackedTarball/zxing/core/src/qrcode/QRVersion \
 	UnpackedTarball/zxing/core/src/ReadBarcode \
-	UnpackedTarball/zxing/core/src/Result \
-	UnpackedTarball/zxing/core/src/ResultPoint \
 	UnpackedTarball/zxing/core/src/ReedSolomonDecoder \
 	UnpackedTarball/zxing/core/src/ReedSolomonEncoder \
+	UnpackedTarball/zxing/core/src/Result \
+	UnpackedTarball/zxing/core/src/ResultPoint \
 	UnpackedTarball/zxing/core/src/TextDecoder \
 	UnpackedTarball/zxing/core/src/TextEncoder \
 	UnpackedTarball/zxing/core/src/TextUtfEncoding \
