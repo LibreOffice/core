@@ -1672,12 +1672,8 @@ static bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape
         Reference< XTextRange > xStart( xSelectedText->getStart() );
         Reference< XTextRange > xEnd( xSelectedText->getEnd() );
 
-        if( xTextRangeCompare->compareRegionEnds( xStart, xEnd ) < 0 )
-        {
-            Reference< XTextRange > xTemp( xStart );
-            xStart = xEnd;
-            xEnd = xTemp;
-        }
+        if (xTextRangeCompare->compareRegionEnds(xStart, xEnd) < 0)
+            std::swap(xStart, xEnd);
 
         sal_Int16 nPara = 0;
         while( xParaEnum->hasMoreElements() )
