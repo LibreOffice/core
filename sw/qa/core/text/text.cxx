@@ -103,6 +103,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
     assertXPath(pXmlDoc, "//floattransparent");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLastBibliographyPdfExport)
+{
+    // Given a document with a bibliography as the last paragraph:
+    createSwDoc("tdf158505.odt");
+
+    // It should be possible to export to PDF:
+    save("writer_pdf_Export");
+
+    // Without the accompanying fix, the export to PDF would get stuck in an infinite loop
+    CPPUNIT_ASSERT(true);
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
 {
     // Given a document with a bibliography entry field:

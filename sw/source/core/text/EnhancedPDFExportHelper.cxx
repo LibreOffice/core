@@ -2722,7 +2722,10 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
                         }
                     }
                 }
-                mrSh.MovePara(GoNextPara, fnParaStart);
+                if (!mrSh.MovePara(GoNextPara, fnParaStart))
+                { // Cursor is stuck in the TOX due to document ending immediately afterwards
+                    break;
+                }
             }
         }
     }
