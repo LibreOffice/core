@@ -11,7 +11,9 @@
 
 #include <config_crypto.h>
 
-#if defined(LINUX) && !defined(SYSTEM_OPENSSL)
+// Also include/systools/curlinit.hxx needs GetCABundleFile() if
+// !defined(SYSTEM_CURL) it defines LO_CURL_NEEDS_CA_BUNDLE.
+#if defined(LINUX) && (!defined(SYSTEM_OPENSSL) || defined(LO_CURL_NEEDS_CA_BUNDLE))
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <unistd.h>

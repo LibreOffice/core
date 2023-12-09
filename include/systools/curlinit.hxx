@@ -16,7 +16,9 @@
 #if defined(LINUX) && !defined(SYSTEM_CURL)
 #include <com/sun/star/uno/RuntimeException.hpp>
 
+#define LO_CURL_NEEDS_CA_BUNDLE
 #include "opensslinit.hxx"
+#undef LO_CURL_NEEDS_CA_BUNDLE
 #endif
 
 #include <rtl/string.hxx>
