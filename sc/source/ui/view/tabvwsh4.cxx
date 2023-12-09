@@ -1712,11 +1712,15 @@ void ScViewOptiChangesListener::stopListening()
 // virtual
 void SAL_CALL ScViewOptiChangesListener::changesOccurred(const util::ChangesEvent& rEvent)
 {
-    OUString sChangedEntry;
-    rEvent.Changes[0].Accessor >>= sChangedEntry;
-
-    if (sChangedEntry == "Display/ColumnRowHighlighting")
-        mrViewShell.GetViewData().GetView()->HighlightOverlay();
+    for (const auto& change : rEvent.Changes)
+    {
+        if (OUString sChangedEntry;
+            (change.Accessor >>= sChangedEntry) && sChangedEntry == "Display/ColumnRowHighlighting")
+        {
+            mrViewShell.GetViewData().GetView()->HighlightOverlay();
+            break;
+        }
+    }
 }
 
 // virtual
