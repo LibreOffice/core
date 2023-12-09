@@ -2746,8 +2746,8 @@ void SwTabFramePainter::FindStylesForLine( Point& rStartPoint,
     }
 
     aMapIter = maHoriLines.find( rStartPoint.Y() );
-    OSL_ENSURE( aMapIter != maHoriLines.end(), "FindStylesForLine: Error" );
-    const SwLineEntrySet& rHoriSet = (*aMapIter).second;
+    assert(aMapIter != maHoriLines.end() && "FindStylesForLine: Error");
+    const SwLineEntrySet& rHoriSet = aMapIter->second;
 
     for ( const SwLineEntry& rEntry : rHoriSet )
     {
