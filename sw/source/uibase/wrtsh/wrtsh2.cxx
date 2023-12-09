@@ -495,7 +495,7 @@ static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
     {
         // May be the relative link -> try to convert to absolute path
         OUString sParentPath =
-            rVSh.GetDoc()->GetDocShell()->GetMedium()->GetURLObject().GetPath();
+            rView.GetDocShell()->GetMedium()->GetURLObject().GetPath();
 
         bool bCorrectURL = true;
         aURL = INetURLObject();
