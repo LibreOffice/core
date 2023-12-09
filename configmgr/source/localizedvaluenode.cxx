@@ -34,7 +34,7 @@ LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any value):
 {}
 
 LocalizedValueNode::LocalizedValueNode(int layer):
-    Node(layer)
+    Node(layer), modified_(false)
 {}
 
 rtl::Reference< Node > LocalizedValueNode::clone(bool) const {
