@@ -465,8 +465,12 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         else
         {
             [self clearLiveResizeTimer];
-            mpFrame->SendPaintEvent();
         }
+
+        // tdf#158461 eliminate flicker during live resizing
+        // When using Skia/Metal, the window content will flicker while
+        // live resizing a window if we don't send a paint event.
+        mpFrame->SendPaintEvent();
     }
 
     mbInWindowDidResize = NO;
