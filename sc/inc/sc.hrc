@@ -277,6 +277,7 @@ class SvxZoomSliderItem;
 #define FID_TOGGLEHEADERS       (VIEW_MENU_START + 2)
 #define FID_SCALE               TypedWhichId<SvxZoomItem>(VIEW_MENU_START + 4)
 #define FID_TOGGLESYNTAX        (VIEW_MENU_START + 5)
+#define FID_TOGGLECOLROWHIGHLIGHTING (VIEW_MENU_START + 6)
 #define FID_PAGEBREAKMODE       (VIEW_MENU_START + 7)
 #define FID_FUNCTION_BOX        (VIEW_MENU_START + 8)
 #define FID_NORMALVIEWMODE      (VIEW_MENU_START + 9)

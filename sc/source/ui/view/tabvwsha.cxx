@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
+#include <officecfg/Office/Calc.hxx>
 
 #include <comphelper/lok.hxx>
 #include <editeng/boxitem.hxx>
@@ -376,6 +377,12 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_TOGGLESYNTAX:
                 rSet.Put(SfxBoolItem(nWhich, GetViewData().IsSyntaxMode()));
+                break;
+
+            case FID_TOGGLECOLROWHIGHLIGHTING:
+                rSet.Put(SfxBoolItem(
+                    nWhich,
+                    officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get()));
                 break;
 
             case FID_TOGGLEHEADERS:
