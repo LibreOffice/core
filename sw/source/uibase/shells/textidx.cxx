@@ -127,6 +127,12 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
                         rShell.GetCursor_()->GetPoint()->Assign(*pTableRowNode);
                         rShell.UpdateTableOf(*pCurrentTOX);
                     }
+                    else
+                    {
+                        // I think this ideally should be a pop-up warning, right?
+                        SAL_WARN("sw", "No matching bibliography mark found. "
+                                        "This feature is only guaranteed to work if the bibliography table is up to date.");
+                    }
                 }
             }
 
