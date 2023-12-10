@@ -2092,8 +2092,12 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                                 aFInfo.SetFrame( nullptr );
                             }
                             //#125102# in case of the mode RedlineFlags::ShowDelete the ** are still contained in pText
-                            if(!(m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags() & RedlineFlags::ShowDelete))
-                                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint()) - TextFrameIndex(1);
+                            if (m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags() & RedlineFlags::ShowDelete)
+                            {
+                                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint())
+                                       - TextFrameIndex(1);
+                                bBreak++;
+                            }
                             // Was a character deleted before starting?
                             if (cBlank && cBlank != (*pText)[sal_Int32(nSttPos) - 1])
                                 --nSttPos;
@@ -2141,11 +2145,13 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                                 m_aDelPam.DeleteMark();
                                 aFInfo.SetFrame(nullptr);
                             }
-                            //#125102# in case of the mode RedlineFlags::ShowDelete the ** are still contained in pText
-                            if (!(m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags()
-                                  & RedlineFlags::ShowDelete))
+                            //#125102# in case of the mode RedlineFlags::ShowDelete the // or -- are still contained in pText
+                            if (m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags() & RedlineFlags::ShowDelete)
+                            {
                                 nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint())
                                        - TextFrameIndex(1);
+                                bBreak++;
+                            }
                             // Was a character deleted before starting?
                             if (cBlank && cBlank != (*pText)[sal_Int32(nSttPos) - 1])
                                 --nSttPos;
