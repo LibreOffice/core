@@ -259,7 +259,7 @@ public:
     SvStream&       WriteChar( char nChar );
     SvStream&       WriteUChar( unsigned char nChar );
     SvStream&       WriteFloat( float nFloat );
-    SvStream&       WriteDouble( const double& rDouble );
+    SvStream&       WriteDouble( double nDouble );
 
     template <typename N>
     SvStream&       WriteNumberAsString( N n ) { return WriteOString(OString::number(n)); }

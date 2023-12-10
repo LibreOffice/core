@@ -1029,21 +1029,13 @@ SvStream& SvStream::WriteFloat( float v )
     return *this;
 }
 
-SvStream& SvStream::WriteDouble ( const double& r )
+SvStream& SvStream::WriteDouble ( double v )
 {
 #if defined UNX
     if (m_isSwap)
-    {
-      double nHelp = r;
-      SwapDouble(nHelp);
-      writeNumberWithoutSwap(nHelp);
-      return *this;
-    }
-    else
+        SwapDouble(v);
 #endif
-    {
-        writeNumberWithoutSwap(r);
-    }
+    writeNumberWithoutSwap(v);
     return *this;
 }
 
