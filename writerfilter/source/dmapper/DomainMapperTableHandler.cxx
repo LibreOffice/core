@@ -383,9 +383,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             {
                 // First get the style properties, then the table ones
                 PropertyMapPtr pTableProps( m_aTableProperties.get() );
-                TablePropertyMapPtr pEmptyProps( new TablePropertyMap );
 
-                m_aTableProperties = pEmptyProps;
+                m_aTableProperties = TablePropertyMapPtr(new TablePropertyMap);
 
                 PropertyMapPtr pMergedProperties = pStyleSheet->GetMergedInheritedProperties(pStyleSheetTable);
 

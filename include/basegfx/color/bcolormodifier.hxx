@@ -250,7 +250,7 @@ namespace basegfx
 
     public:
         BColorModifier_matrix(std::vector<double> aVector)
-        :   maVector(aVector)
+            : maVector(std::move(aVector))
         {
         }
 

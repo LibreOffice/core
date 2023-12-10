@@ -150,10 +150,8 @@ void OComponentHelper::dispose()
         {
             try
             {
-                Reference<XInterface > xSource(
-                    Reference<XInterface >::query( static_cast<XComponent *>(this) ) );
                 EventObject aEvt;
-                aEvt.Source = xSource;
+                aEvt.Source = Reference<XInterface >::query( static_cast<XComponent *>(this) );
                 // inform all listeners to release this object
                 // The listener container are automatically cleared
                 rBHelper.aLC.disposeAndClear( aEvt );

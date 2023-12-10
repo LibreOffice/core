@@ -4757,8 +4757,7 @@ HwpImportFilter::HwpImportFilter(const Reference< XComponentContext >& rxContext
         rtl::Reference<HwpReader> p = new HwpReader;
         p->setDocumentHandler( xHandler );
 
-        Reference< XImporter > xImporter( xHandler, UNO_QUERY );
-        rImporter = xImporter;
+        rImporter.set(xHandler, UNO_QUERY);
         rFilter = p;
     }
     catch( Exception & )

@@ -2594,17 +2594,16 @@ void ScOutputData::AddPDFNotes()
                         tools::Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
                         const ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
 
+                        vcl::PDFNote aNote;
+
                         // Note title is the cell address (as on printed note pages)
                         ScAddress aAddress( nMergeX, nMergeY, nTab );
-                        OUString aTitle(aAddress.Format(ScRefFlags::VALID, mpDoc, mpDoc->GetAddressConvention()));
+                        aNote.Title = aAddress.Format(ScRefFlags::VALID, mpDoc, mpDoc->GetAddressConvention());
 
                         // Content has to be a simple string without line breaks
                         OUString aContent = pNote->GetText();
-                        aContent = aContent.replaceAll("\n", " ");
+                        aNote.Contents = aContent.replaceAll("\n", " ");
 
-                        vcl::PDFNote aNote;
-                        aNote.Title = aTitle;
-                        aNote.Contents = aContent;
                         pPDFData->CreateNote( aNoteRect, aNote );
                     }
                 }

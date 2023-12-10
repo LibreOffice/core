@@ -60,8 +60,8 @@ public:
     ListEntryCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                               uno::Reference<uno::XComponentContext> xContext,
                               sw::mark::IDropdownFieldmark& rFormField)
-        : mxParent(xParent)
-        , mxContext(xContext)
+        : mxParent(std::move(xParent))
+        , mxContext(std::move(xContext))
         , m_rDropDown(rFormField)
     {
     }

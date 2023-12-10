@@ -149,8 +149,7 @@ namespace oox::ppt {
         case PPT_TOKEN( spTgt ):
         {
             mpTarget->mnType = XML_spTgt;
-            OUString aId = rAttribs.getStringDefaulted( XML_spid);
-            mpTarget->msValue = aId;
+            mpTarget->msValue = rAttribs.getStringDefaulted(XML_spid);
             return new ShapeTargetElementContext( *this, mpTarget->maShapeTarget );
         }
         default:

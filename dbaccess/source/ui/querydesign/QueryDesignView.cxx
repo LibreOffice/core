@@ -921,10 +921,7 @@ namespace
                 }
             }
 
-            {
-                OUString sTemp(comphelper::string::stripEnd(aWorkStr, ','));
-                aWorkStr = sTemp;
-            }
+            aWorkStr = comphelper::string::stripEnd(aWorkStr, ',');
 
             if ( !aWorkStr.isEmpty() )
             {

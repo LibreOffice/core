@@ -1570,8 +1570,7 @@ bool SfxDocTemplate_Impl::Construct( )
 
     uno::Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-    uno::Reference< XPersist > xInfo( document::DocumentProperties::create(xContext), UNO_QUERY );
-    mxInfo = xInfo;
+    mxInfo.set(document::DocumentProperties::create(xContext), UNO_QUERY);
 
     mxTemplates = frame::DocumentTemplates::create(xContext);
 

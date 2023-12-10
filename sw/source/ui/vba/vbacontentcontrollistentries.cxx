@@ -22,7 +22,7 @@ class ContentControlListEntriesEnumWrapper : public EnumerationHelper_BASE
 public:
     explicit ContentControlListEntriesEnumWrapper(
         uno::Reference<container::XIndexAccess> xIndexAccess)
-        : mxIndexAccess(xIndexAccess)
+        : mxIndexAccess(std::move(xIndexAccess))
         , mnIndex(0)
     {
     }
@@ -55,9 +55,9 @@ public:
     ContentControlListEntryCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                                             uno::Reference<uno::XComponentContext> xContext,
                                             std::shared_ptr<SwContentControl> pCC)
-        : mxParent(xParent)
-        , mxContext(xContext)
-        , m_pCC(pCC)
+        : mxParent(std::move(xParent))
+        , mxContext(std::move(xContext))
+        , m_pCC(std::move(pCC))
     {
     }
 

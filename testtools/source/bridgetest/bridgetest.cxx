@@ -720,10 +720,11 @@ static bool performTest(
             static_cast< sal_Int32 >(0x80000000), 1, 0x7FFFFFFF };
         sal_Int32 _aInt = 0xBABEBABE;
         float _aFloat = 3.14f;
-        Any _any1(true);
-        Any _any2(&_aInt, cppu::UnoType<sal_Int32>::get());
-        Any _any3(&_aFloat, cppu::UnoType<float>::get());
-        Any _arAny[] = { _any1, _any2, _any3 };
+        Any _arAny[] = {
+            Any(true),
+            Any(&_aInt, cppu::UnoType<sal_Int32>::get()),
+            Any(&_aFloat, cppu::UnoType<float>::get())
+        };
         Reference< XInterface > _arObj[3];
         _arObj[0] = new OWeakObject();
         _arObj[1] = new OWeakObject();

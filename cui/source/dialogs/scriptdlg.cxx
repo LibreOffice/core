@@ -814,8 +814,7 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
         try
         {
             Any aResult = xInv->invoke( "Creatable", args, outIndex, outArgs );
-            Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
-            aChildNode = newNode;
+            aChildNode.set(aResult, UNO_QUERY);
 
         }
         catch( Exception const & )
@@ -895,8 +894,7 @@ void SvxScriptOrgDialog::renameEntry(const weld::TreeIter& rEntry)
         try
         {
             Any aResult = xInv->invoke( "Renamable", args, outIndex, outArgs );
-            Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
-            aChildNode = newNode;
+            aChildNode.set(aResult, UNO_QUERY);
 
         }
         catch( Exception const & )

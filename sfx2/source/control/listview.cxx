@@ -70,7 +70,6 @@ void ListView::AppendItem(const OUString& rId, const OUString& rTitle, const OUS
                           const OUString& rPath, bool bDefault)
 {
     INetURLObject aUrl(rPath, INetProtocol::File);
-    OUString sPath = aUrl.getFSysPath(FSysStyle::Detect);
 
     std::unique_ptr<ListViewItem> pItem(new ListViewItem);
     pItem->maId = rId;
@@ -83,7 +82,7 @@ void ListView::AppendItem(const OUString& rId, const OUString& rTitle, const OUS
     pItem->mnSize = getFileSize(rPath);
     pItem->maDisplayModify = getDisplayFileModifyTime(rPath);
     pItem->maDisplaySize = getDisplayFileSize(rPath);
-    pItem->maDisplayPath = sPath;
+    pItem->maDisplayPath = aUrl.getFSysPath(FSysStyle::Detect);
 
     OUString sImage("");
     if (pItem->mbDefault)

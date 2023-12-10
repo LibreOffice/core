@@ -234,12 +234,11 @@ TemplateScanner::State TemplateScanner::GatherFolderList()
             if (xRow.is())
             {
                 OUString sTargetDir (xRow->getString (2));
-                OUString aId = xContentAccess->queryContentIdentifierString();
 
                 mpFolderDescriptors->insert(
                     FolderDescriptor(
                         Classify(sTargetDir),
-                        aId,
+                        xContentAccess->queryContentIdentifierString(),
                         mxFolderEnvironment));
             }
         }

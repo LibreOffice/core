@@ -1739,8 +1739,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&
         {
             const auto pFontListItem(static_cast<const SvxFontListItem*>(m_pDoc->GetDocShell()->GetItem(SID_ATTR_CHAR_FONTLIST)));
             const auto pList(pFontListItem->GetFontList());
-            FontMetric aFontInfo(pList->Get(rBulletName, WEIGHT_NORMAL, ITALIC_NONE));
-            vcl::Font aFont(aFontInfo);
+            vcl::Font aFont(pList->Get(rBulletName, WEIGHT_NORMAL, ITALIC_NONE));
             aFormat.SetBulletFont(&aFont);
         }
         aSetRule.Set(i, &aFormat);

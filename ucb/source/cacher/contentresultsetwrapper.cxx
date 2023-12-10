@@ -50,7 +50,6 @@ ContentResultSetWrapper::ContentResultSetWrapper(
     //!! call impl_init() at the end of constructor of derived class
 };
 
-
 void ContentResultSetWrapper::impl_init_xRowOrigin(std::unique_lock<std::mutex>&)
 {
     if(m_xRowOrigin.is())
@@ -65,12 +64,9 @@ void ContentResultSetWrapper::impl_init_xContentAccessOrigin(std::unique_lock<st
     if(m_xContentAccessOrigin.is())
         return;
 
-    Reference< XContentAccess > xOrgig( m_xResultSetOrigin, UNO_QUERY );
-
-    m_xContentAccessOrigin = xOrgig;
+    m_xContentAccessOrigin.set(m_xResultSetOrigin, UNO_QUERY);
     OSL_ENSURE( m_xContentAccessOrigin.is(), "interface XContentAccess is required" );
 }
-
 
 void ContentResultSetWrapper::impl_init_xPropertySetOrigin(std::unique_lock<std::mutex>&)
 {

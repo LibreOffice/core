@@ -775,8 +775,7 @@ bool SmDocShell::SaveAs( SfxMedium& rMedium )
         if( mpTree )
             ArrangeFormula();
 
-        Reference<css::frame::XModel> xModel(GetModel());
-        SmXMLExportWrapper aEquation(xModel);
+        SmXMLExportWrapper aEquation(GetModel());
         aEquation.SetFlat(false);
         bRet = aEquation.Export(rMedium);
     }
@@ -797,15 +796,13 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
         const OUString& rFltName = pFlt->GetFilterName();
         if(rFltName == STAROFFICE_XML)
         {
-            Reference<css::frame::XModel> xModel(GetModel());
-            SmXMLExportWrapper aEquation(xModel);
+            SmXMLExportWrapper aEquation(GetModel());
             aEquation.SetFlat(false);
             bRet = aEquation.Export(rMedium);
         }
         else if(rFltName == MATHML_XML)
         {
-            Reference<css::frame::XModel> xModel(GetModel());
-            SmXMLExportWrapper aEquation(xModel);
+            SmXMLExportWrapper aEquation(GetModel());
             aEquation.SetFlat(true);
             aEquation.SetUseHTMLMLEntities(true);
             bRet = aEquation.Export(rMedium);

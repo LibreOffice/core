@@ -721,7 +721,7 @@ public:
     /** Reads the CHSERTRENDLINE record. */
     void                ReadChSerTrendLine( XclImpStream& rStrm );
     /** Sets formatting information for the trend line. */
-    void         SetDataFormat( XclImpChDataFormatRef xDataFmt ) { mxDataFmt = xDataFmt; }
+    void         SetDataFormat(const XclImpChDataFormatRef& xDataFmt) { mxDataFmt = xDataFmt; }
 
     void         SetTrendlineName( const OUString& aTrendlineName) { maTrendLineName = aTrendlineName; }
 

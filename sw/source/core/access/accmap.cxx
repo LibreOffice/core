@@ -2196,8 +2196,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
                 mpShapeMap->find( aFrameOrObj.GetDrawObject() );
             if( aIter != mpShapeMap->end() )
             {
-                rtl::Reference < ::accessibility::AccessibleShape > xAcc( (*aIter).second );
-                xShapeAccImpl = xAcc;
+                xShapeAccImpl = aIter->second;
             }
         }
         if( pObj && GetShell()->ActionPend() &&

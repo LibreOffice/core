@@ -4313,8 +4313,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
             OUString* pResArr = aRet.getArray();
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
-                OUString sEntry = lcl_CreateOutlineString(i, pDoc) + "|outline";
-                pResArr[i] = sEntry;
+                pResArr[i] = lcl_CreateOutlineString(i, pDoc) + "|outline";
             }
         }
         else if (m_sLinkSuffix == "|drawingobject")

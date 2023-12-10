@@ -74,7 +74,7 @@ public:
     static css::uno::WeakReference< css::drawing::XDrawPage > mxDebugPage;
 #endif
 
-    void setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; }
+    void setMasterPersist(const SlidePersistPtr& pMasterPersistPtr) { mpMasterPagePtr = pMasterPersistPtr; }
     const SlidePersistPtr& getMasterPersist() const { return mpMasterPagePtr; }
 
     void setPath( const OUString& rPath ) { maPath = rPath; }

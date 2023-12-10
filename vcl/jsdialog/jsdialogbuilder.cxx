@@ -373,14 +373,15 @@ void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow,
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId)
+void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, const OUString& rParentId,
+                               const OUString& rCloseId)
 {
     if (!mpIdleNotify)
         return;
 
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
-    (*pData)[PARENT_ID ""_ostr] = sParentId;
-    (*pData)[CLOSE_ID ""_ostr] = sCloseId;
+    (*pData)[PARENT_ID ""_ostr] = rParentId;
+    (*pData)[CLOSE_ID ""_ostr] = rCloseId;
     mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, pWindow, std::move(pData));
     mpIdleNotify->Start();
 }

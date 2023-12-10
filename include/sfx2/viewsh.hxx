@@ -475,7 +475,7 @@ public:
     void setBlockedCommandList(const char* blockedCommandList);
     bool isBlockedCommand(OUString command);
 
-    void SetStoringHelper(std::shared_ptr<SfxStoringHelper> xHelper) { m_xHelper = xHelper; }
+    void SetStoringHelper(const std::shared_ptr<SfxStoringHelper>& xHelper) { m_xHelper = xHelper; }
 
     StylesHighlighterColorMap& GetStylesHighlighterParaColorMap() { return ParaStylesColorMap; }
     StylesHighlighterColorMap& GetStylesHighlighterCharColorMap() { return CharStylesColorMap; }

@@ -2295,10 +2295,8 @@ bool TabBar::StartDrag(const CommandEvent& rCEvt, vcl::Region& rRegion)
     }
     mbInSelect = false;
 
-    vcl::Region aRegion;
-
     // assign region
-    rRegion = aRegion;
+    rRegion = vcl::Region();
 
     return true;
 }

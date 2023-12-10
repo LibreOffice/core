@@ -163,7 +163,8 @@ public:
     void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
     virtual void sendAction(VclPtr<vcl::Window> pWindow,
                             std::unique_ptr<jsdialog::ActionDataMap> pData);
-    virtual void sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId);
+    virtual void sendPopup(VclPtr<vcl::Window> pWindow, const OUString& rParentId,
+                           const OUString& rCloseId);
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
     void flush() { mpIdleNotify->Invoke(); }
 
@@ -347,7 +348,8 @@ public:
 
     virtual void sendAction(std::unique_ptr<jsdialog::ActionDataMap> pData) = 0;
 
-    virtual void sendPopup(vcl::Window* pPopup, OUString sParentId, OUString sCloseId) = 0;
+    virtual void sendPopup(vcl::Window* pPopup, const OUString& rParentId, const OUString& rCloseId)
+        = 0;
 
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId) = 0;
 };
@@ -476,10 +478,11 @@ public:
             m_pSender->sendAction(BaseInstanceClass::m_xWidget, std::move(pData));
     }
 
-    virtual void sendPopup(vcl::Window* pPopup, OUString sParentId, OUString sCloseId) override
+    virtual void sendPopup(vcl::Window* pPopup, const OUString& rParentId,
+                           const OUString& rCloseId) override
     {
         if (!m_bIsFreezed && m_pSender)
-            m_pSender->sendPopup(pPopup, sParentId, sCloseId);
+            m_pSender->sendPopup(pPopup, rParentId, rCloseId);
     }
 
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId) override

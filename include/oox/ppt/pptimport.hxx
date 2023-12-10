@@ -66,7 +66,7 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
     const SlidePersistPtr&                                  getActualSlidePersist() const { return mpActualSlidePersist; };
-    void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
+    void                                                    setActualSlidePersist(const SlidePersistPtr& pActualSlidePersist) { mpActualSlidePersist = pActualSlidePersist; };
     std::map< OUString, oox::drawingml::ThemePtr >&         getThemes(){ return maThemes; };
     std::vector< SlidePersistPtr >&                         getDrawPages(){ return maDrawPages; };
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };

@@ -82,19 +82,19 @@ void ScriptEventContainer::replaceByName( const OUString& aName, const Any& aEle
     {
         throw NoSuchElementException();
     }
+
+    ContainerEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.Accessor <<= aName;
+    aEvent.Element = aElement;
+
     sal_Int32 iHashResult = (*aIt).second;
-    Any aOldElement = mValues[ iHashResult ];
+    aEvent.ReplacedElement = mValues[ iHashResult ];
     mValues[ iHashResult ] = aElement;
 
     // Fire event
-    ContainerEvent aEvent;
-    aEvent.Source = *this;
-    aEvent.Element = aElement;
-    aEvent.ReplacedElement = aOldElement;
-    aEvent.Accessor <<= aName;
     maContainerListeners.elementReplaced( aEvent );
 }
-
 
 // Methods XNameContainer
 void ScriptEventContainer::insertByName( const OUString& aName, const Any& aElement )

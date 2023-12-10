@@ -58,7 +58,7 @@ public:
         mxOutputStream = xOutputStream;
     }
 
-    void setOutput( std::shared_ptr< ForMergeBase > pForMerge )
+    void setOutput(const std::shared_ptr<ForMergeBase>& pForMerge)
     {
         flush();
         mbWriteToOutStream = false;
