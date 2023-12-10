@@ -1,0 +1,11 @@
+--- src/core/CLucene/index/FieldsReader.cpp
++++ src/core/CLucene/index/FieldsReader.cpp
+@@ -230,7 +230,7 @@
+ 			int64_t pointer = fieldsStream->getFilePointer();
+ 			//Skip ahead of where we are by the length of what is stored
+ 			fieldsStream->skipChars(length);
+-			f = _CLNEW LazyField(this, fi->name, Field::STORE_YES | getIndexType(fi, tokenize) | getTermVectorType(fi), length, pointer);
++			f = _CLNEW LazyField(this, fi->name, +Field::STORE_YES | getIndexType(fi, tokenize) | getTermVectorType(fi), length, pointer);
+ 			f->setOmitNorms(fi->omitNorms);
+ 		}
+ 		doc.add(*f);
