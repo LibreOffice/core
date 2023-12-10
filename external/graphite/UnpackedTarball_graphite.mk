@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,graphite,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,graphite, \
     external/graphite/ubsan.patch \
+    external/graphite/enumarith.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
