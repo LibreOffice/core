@@ -355,7 +355,7 @@ void SvStream::ClearError()
 
 void SvStream::SetError( ErrCode nErrorCode )
 {
-    if (m_nError == ERRCODE_NONE)
+    if (m_nError == ERRCODE_NONE || (m_nError.IsWarning() && nErrorCode.IsError()))
         m_nError = nErrorCode;
 }
 

@@ -215,7 +215,7 @@ std::vector<InfobarData>& SfxObjectShell::getPendingInfobars()
 
 void SfxObjectShell::SetError(const ErrCodeMsg& lErr)
 {
-    if (pImpl->lErr==ERRCODE_NONE)
+    if (pImpl->lErr == ERRCODE_NONE || (pImpl->lErr.IsWarning() && lErr.IsError()))
     {
         pImpl->lErr=lErr;
     }

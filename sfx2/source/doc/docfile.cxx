@@ -508,7 +508,8 @@ ErrCodeMsg const & SfxMedium::GetLastStorageCreationState() const
 
 void SfxMedium::SetError(ErrCodeMsg nError)
 {
-    pImpl->m_eError = nError;
+    if (pImpl->m_eError == ERRCODE_NONE || (pImpl->m_eError.IsWarning() && nError.IsError()))
+        pImpl->m_eError = nError;
 }
 
 void SfxMedium::SetWarningError(const ErrCodeMsg& nWarningError)
