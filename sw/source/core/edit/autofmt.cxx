@@ -2110,8 +2110,10 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
 
                     SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
                     if (pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext))
+                    {
                         --nPos;
-                    break;
+                        break;
+                    }
                 }
                 [[fallthrough]];
             case '-':
