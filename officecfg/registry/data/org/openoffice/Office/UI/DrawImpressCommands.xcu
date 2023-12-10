@@ -168,6 +168,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">3D Objects</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">3D Objects (double click for multi-selection)</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -886,6 +889,9 @@
       <node oor:name=".uno:ConnectorToolbox" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Connectors</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Connectors (double click for multi-selection)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
