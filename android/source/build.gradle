@@ -40,6 +40,9 @@ dependencies {
 android {
     namespace 'org.libreoffice'
     compileSdk 34
+    buildFeatures {
+        buildConfig = true
+    }
     // uses non-conventional source layout, so need to reconfigure accordingly
     // ToDo move to conventional layout, so stuff can be stripped down.
     sourceSets {
