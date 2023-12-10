@@ -1602,10 +1602,10 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         bReturn = executeDispatch_Delete();
         if( ! bReturn )
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pChartWindow->GetFrameWeld(),
+            std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pChartWindow->GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           SchResId(STR_ACTION_NOTPOSSIBLE)));
-            xInfoBox->run();
+            xInfoBox->runAsync(xInfoBox, [] (int) {});
         }
     }
 
