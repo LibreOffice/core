@@ -85,15 +85,6 @@ constexpr sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * nArbitraryCell
 namespace
 {
     const char SYLK_LF[]  = "\x1b :";
-
-    bool lcl_IsEndianSwap( const SvStream& rStrm )
-    {
-    #ifdef OSL_BIGENDIAN
-        return rStrm.GetEndian() != SvStreamEndian::BIG;
-    #else
-        return rStrm.GetEndian() != SvStreamEndian::LITTLE;
-    #endif
-    }
 }
 
 namespace {
@@ -508,50 +499,14 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
 void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, std::u16string_view rString, bool bZero )
 {
     rtl_TextEncoding eEnc = rStrm.GetStreamCharSet();
-    if ( eEnc == RTL_TEXTENCODING_UNICODE )
+    rStrm.WriteUnicodeOrByteText(rString, eEnc);
+    if (bZero)
     {
-        if ( !lcl_IsEndianSwap( rStrm ) )
-            rStrm.WriteBytes(rString.data(), rString.size() * sizeof(sal_Unicode));
+        if (eEnc == RTL_TEXTENCODING_UNICODE)
+            rStrm.WriteUnicode(0);
         else
-        {
-            const sal_Unicode* p = rString.data();
-            const sal_Unicode* const pStop = p + rString.size();
-            while ( p < pStop )
-            {
-                rStrm.WriteUInt16( *p );
-            }
-        }
-        if ( bZero )
-            rStrm.WriteUInt16( 0 );
+            rStrm.WriteChar(0);
     }
-    else
-    {
-        OString aByteStr(OUStringToOString(rString, eEnc));
-        rStrm.WriteOString( aByteStr );
-        if ( bZero )
-            rStrm.WriteChar( 0 );
-    }
-}
-
-// This function could be replaced by endlub()
-void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
-{
-    if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
-    {   // same as endl() but unicode
-        switch ( rStrm.GetLineDelimiter() )
-        {
-            case LINEEND_CR :
-                rStrm.WriteUInt16( '\r' );
-            break;
-            case LINEEND_LF :
-                rStrm.WriteUInt16( '\n' );
-            break;
-            default:
-                rStrm.WriteUInt16( '\r' ).WriteUInt16( '\n' );
-        }
-    }
-    else
-        endl( rStrm );
 }
 
 // tdf#104927
@@ -2078,7 +2033,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
             // NOTE: this Doc2Text() is only called for clipboard via
             // ScImportExport::ExportStream().
             if (nStartRow != nEndRow || nStartCol != nEndCol)
-                WriteUnicodeOrByteEndl( rStrm );
+                endlub(rStrm);
             if( rStrm.GetError() != ERRCODE_NONE )
                 break;
             if( nSizeLimit && rStrm.Tell() > nSizeLimit )
@@ -2431,7 +2386,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     OUString aCellStr;
     OUString aValStr;
     lcl_WriteSimpleString( rStrm, u"ID;PCALCOOO32" );
-    WriteUnicodeOrByteEndl( rStrm );
+    endlub(rStrm);
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
     {
@@ -2544,7 +2499,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                         if ( !aCellStr.isEmpty() )
                             lcl_WriteString( rStrm, aCellStr, 0, ';' );
                     }
-                    WriteUnicodeOrByteEndl( rStrm );
+                    endlub(rStrm);
                     break;
 
                 default:
@@ -2555,7 +2510,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
         }
     }
     lcl_WriteSimpleString( rStrm, rtl::OUStringChar( 'E' ) );
-    WriteUnicodeOrByteEndl( rStrm );
+    endlub(rStrm);
     return rStrm.GetError() == ERRCODE_NONE;
 }
 

@@ -110,7 +110,6 @@ public:
             OUString& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
             bool bMergeSeps, bool& rbIsQuoted, bool& rbOverflowCell, bool bRemoveSpace );
     static  void    WriteUnicodeOrByteString( SvStream& rStrm, std::u16string_view rString, bool bZero = false );
-    static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
 
     /** ScImportExport::CountVisualWidth
         Count the width of string visually ( in multiple of western characters), considering CJK
