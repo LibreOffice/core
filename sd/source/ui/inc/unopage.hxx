@@ -56,7 +56,6 @@ private:
     SdrModel* mpSdrModel;
     bool      mbIsImpressDocument;
     sal_Int16 mnTempPageNumber; // for printing handouts
-    css::uno::Any  mSlideLayout;  // import slide layout pptx
     const SvxItemPropertySet*   mpPropSet;
 
     void UpdateModel();

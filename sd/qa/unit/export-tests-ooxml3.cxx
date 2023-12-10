@@ -288,6 +288,10 @@ void SdOOXMLExportTest3::testTdf114848()
     xmlDocUniquePtr pXmlDocTheme1 = parseExport("ppt/theme/theme1.xml");
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
                 "1f497d");
+    xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme2.xml");
+
+    assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
+                "1f497d");
 }
 
 void SdOOXMLExportTest3::testTdf147586()

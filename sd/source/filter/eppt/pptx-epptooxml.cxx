@@ -25,8 +25,6 @@
 #include <oox/ole/vbaproject.hxx>
 #include "epptooxml.hxx"
 #include <oox/export/shapes.hxx>
-#include <svx/svdlayer.hxx>
-#include <unokywds.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -42,8 +40,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XMasterPageTarget.hpp>
-#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
@@ -392,7 +388,6 @@ PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContex
     , mnSlideIdMax(1 << 8)
     , mnSlideMasterIdMax(1U << 31)
     , mnAnimationNodeIdMax(1)
-    , mnThemeIdMax(0)
     , mnDiagramId(1)
     , mbCreateNotes(false)
     , mnPlaceholderIndexMax(1)
@@ -1494,111 +1489,8 @@ void PowerPointExport::AddLayoutIdAndRelation(const FSHelperPtr& pFS, sal_Int32 
                          FSNS(XML_r, XML_id), sRelId);
 }
 
-static bool lcl_ContainsEquivalentObject(SdrPage* pPage, SdrObject* pObj)
-{
-    bool bFound = false;
-    SdrObject* pObjNext;
-
-    if (!pPage || !pObj)
-        return bFound;
-
-    for (size_t nObj = 0; nObj < pPage->GetObjCount(); ++nObj)
-    {
-        pObjNext = pPage->GetObj(nObj);
-        if (pObjNext && pObjNext->GetMergedItemSet().Equals(
-                pObj->GetMergedItemSet(), false))
-        {
-            bFound = true;
-            break;
-        }
-    }
-
-    return bFound;
-}
-
-static bool lcl_ComparePageObjects(SdrPage* pMasterPage, SdrPage* pMasterNext)
-{
-    if (!pMasterPage || !pMasterNext)
-        return false;
-
-    bool bFound = true;
-    SdrObject* pObjNext;
-    SdrLayerID aLayer =
-        pMasterNext->GetLayerAdmin().GetLayerID(sUNO_LayerName_background_objects);
-
-    for (size_t nObj = 0; nObj < pMasterPage->GetObjCount(); ++nObj)
-    {
-        pObjNext = pMasterPage->GetObj(nObj);
-        if (!pObjNext || pObjNext->GetLayer() == aLayer)
-            continue;
-
-        if (!lcl_ContainsEquivalentObject(pMasterNext, pObjNext))
-        {
-            bFound = false;
-            break;
-        }
-    }
-
-    return bFound;
-}
-
-long PowerPointExport::FindEquivalentMasterPage(SdrPage* pMasterPage) const
-{
-    SdrPage* pMasterNext;
-    long nFound = -1;
-
-    if (!pMasterPage)
-        return nFound;
-
-    for (size_t nMaster = 0; nMaster < mpSlidesMaster.size(); ++nMaster)
-    {
-        pMasterNext = mpSlidesMaster[nMaster].first;
-        if (!pMasterNext)
-            continue;
-
-        if (pMasterNext->getSdrPageProperties().GetItemSet().Equals(
-                pMasterPage->getSdrPageProperties().GetItemSet(), false) &&
-            lcl_ComparePageObjects(pMasterPage, pMasterNext))
-        {
-            nFound = nMaster;
-            break;
-        }
-    }
-
-    return nFound;
-}
-
 void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPropertySet > const& aXBackgroundPropSet)
 {
-    SdrPage* pMasterPage = SdPage::getImplementation(mXDrawPage);
-    if (!pMasterPage)
-        return;
-
-    uno::Reference<beans::XPropertySet> xPropSet(mXDrawPage, uno::UNO_QUERY_THROW);
-    if (!xPropSet.is())
-        return;
-
-    sal_Int32 nLayout;
-    Any aLayout = xPropSet->getPropertyValue("SlideLayout");
-    long nFound = FindEquivalentMasterPage(pMasterPage);
-    if (aLayout.hasValue() && nFound != -1)
-    {
-        aLayout >>= nLayout;
-        size_t nOffset = GetPPTXLayoutId(nLayout);
-
-        if (mLayoutInfo[nOffset].mnFileIdArray.size() < mnMasterPages)
-        {
-            mLayoutInfo[nOffset].mnFileIdArray.resize(mnMasterPages);
-        }
-
-        mLayoutInfo[nOffset].mnFileIdArray[nPageNum] = mpSlidesMaster[nFound].second;
-
-        if (nPageNum == mnMasterPages - 1)
-            mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
-
-        return;
-    }
-
     SAL_INFO("sd.eppt", "write master slide: " << nPageNum << "\n--------------");
 
     // slides list
@@ -1621,7 +1513,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                                           OUString::number(nPageNum + 1) + ".xml",
                                          "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml");
 
-
+    SdrPage* pMasterPage = SdPage::getImplementation(mXDrawPage);
     model::Theme* pTheme = nullptr;
     if (pMasterPage)
     {
@@ -1629,12 +1521,12 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     }
 
     // write theme per master
-    WriteTheme(mnThemeIdMax, pTheme);
+    WriteTheme(nPageNum, pTheme);
 
     // add implicit relation to the presentation theme
     addRelation(pFS->getOutputStream(),
                 oox::getRelationship(Relationship::THEME),
-                Concat2View("../theme/theme" + OUString::number(++mnThemeIdMax) + ".xml"));
+                Concat2View("../theme/theme" + OUString::number(nPageNum + 1) + ".xml"));
 
     pFS->startElementNS(XML_p, XML_sldMaster, PNMSS);
 
@@ -1676,13 +1568,6 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
             ImplWritePPTXLayout(i, nPageNum);
             AddLayoutIdAndRelation(pFS, GetLayoutFileId(i, nPageNum));
         }
-    }
-
-    if (aLayout.hasValue())
-    {
-        aLayout >>= nLayout;
-        mpSlidesMaster.push_back(std::make_pair(pMasterPage,
-                                                GetLayoutFileId(GetPPTXLayoutId(nLayout), nPageNum)));
     }
 
     pFS->endElementNS(XML_p, XML_sldLayoutIdLst);
@@ -2383,11 +2268,10 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
         }
         else
         {
-            SdrPage* pPage = &SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage();
-            long nFound = FindEquivalentMasterPage(pPage);
-            pMasterPage = dynamic_cast<SdPage*>(nFound != -1 ? mpSlidesMaster[nFound].first : pPage);
+            pMasterPage
+                = &static_cast<SdPage&>(SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage());
         }
-        if (SdrObject* pMasterFooter = (pMasterPage ? pMasterPage->GetPresObj(ePresObjKind) : nullptr))
+        if (SdrObject* pMasterFooter = pMasterPage->GetPresObj(ePresObjKind))
             return GetXShapeForSdrObject(pMasterFooter);
     }
     return nullptr;
