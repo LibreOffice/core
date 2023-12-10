@@ -170,6 +170,49 @@ void SetTabNoAndCursor( const ScViewData& rViewData, std::u16string_view rCellId
     }
 }
 
+void HandleConditionalFormat(sal_uInt32 nIndex, bool bCondFormatDlg, bool bContainsCondFormat,
+                             const sal_uInt16 nSlot, SfxViewShell* pTabViewShell)
+{
+    condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
+    switch (nSlot)
+    {
+        case SID_OPENDLG_CONDFRMT:
+        case SID_OPENDLG_CURRENTCONDFRMT:
+            eType = condformat::dialog::CONDITION;
+            break;
+        case SID_OPENDLG_COLORSCALE:
+            eType = condformat::dialog::COLORSCALE;
+            break;
+        case SID_OPENDLG_DATABAR:
+            eType = condformat::dialog::DATABAR;
+            break;
+        case SID_OPENDLG_ICONSET:
+            eType = condformat::dialog::ICONSET;
+            break;
+        case SID_OPENDLG_CONDDATE:
+            eType = condformat::dialog::DATE;
+            break;
+        default:
+            assert(false);
+            break;
+    }
+
+    if (bCondFormatDlg || !bContainsCondFormat)
+    {
+        // Put the xml string parameter to initialize the
+        // Conditional Format Dialog.
+        ScCondFormatDlgItem aDlgItem(nullptr, nIndex, false); // Change here
+        aDlgItem.SetDialogType(eType);
+        pTabViewShell->GetPool().Put(aDlgItem);
+
+        sal_uInt16 nId = ScCondFormatDlgWrapper::GetChildWindowId();
+        SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+        SfxChildWindow* pWnd = pViewFrm->GetChildWindow(nId);
+
+        SC_MOD()->SetRefDialog(nId, pWnd == nullptr);
+    }
+}
+
 void InsertCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, InsCellCmd eCmd)
 {
     if (eCmd!=INS_NONE)
@@ -2345,78 +2388,58 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 // or should create a new overlapping conditional format
                 if(bContainsCondFormat && !bCondFormatDlg && bContainsExistingCondFormat)
                 {
-                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
+                    std::shared_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                                    ScResId(STR_EDIT_EXISTING_COND_FORMATS), pTabViewShell));
                     xQueryBox->set_default_response(RET_YES);
-                    bool bEditExisting = xQueryBox->run() == RET_YES;
-                    if (bEditExisting)
-                    {
-                        // differentiate between ranges where one conditional format is defined
-                        // and several formats are defined
-                        // if we have only one => open the cond format dlg to edit it
-                        // otherwise open the manage cond format dlg
-                        if (rCondFormats.size() == 1)
+                    xQueryBox->runAsync(xQueryBox, [this, nIndex, nSlot, aPos, pTabViewShell] (int nResult) {
+                        sal_uInt32 nNewIndex = nIndex;
+                        bool bNewCondFormatDlg = false;
+
+                        // use fresh data
+                        ScDocument& rInnerDoc = GetViewData().GetDocument();
+                        const ScPatternAttr* pInnerPattern = rInnerDoc.GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
+                        ScConditionalFormatList* pInnerList = rInnerDoc.GetCondFormList(aPos.Tab());
+                        const ScCondFormatIndexes& rInnerCondFormats = pInnerPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
+                        bool bInnerContainsCondFormat = !rInnerCondFormats.empty();
+
+                        bool bEditExisting = nResult == RET_YES;
+                        if (bEditExisting)
                         {
-                            pCondFormat = pList->GetFormat(rCondFormats[0]);
-                            assert(pCondFormat);
-                            nIndex = pCondFormat->GetKey();
-                            bCondFormatDlg = true;
+                            // differentiate between ranges where one conditional format is defined
+                            // and several formats are defined
+                            // if we have only one => open the cond format dlg to edit it
+                            // otherwise open the manage cond format dlg
+                            if (rInnerCondFormats.size() == 1)
+                            {
+                                const ScConditionalFormat* pCondFormat = pInnerList->GetFormat(rInnerCondFormats[0]);
+                                assert(pCondFormat);
+                                nNewIndex = pCondFormat->GetKey();
+                                bNewCondFormatDlg = true;
+                            }
+                            else
+                            {
+                                // Queue message to open Conditional Format Manager Dialog.
+                                GetViewData().GetDispatcher().Execute(
+                                    SID_OPENDLG_CONDFRMT_MANAGER, SfxCallMode::ASYNCHRON);
+                                return;
+                            }
                         }
                         else
                         {
-                            // Queue message to open Conditional Format Manager Dialog.
-                            GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT_MANAGER, SfxCallMode::ASYNCHRON );
-                            break;
+                            // define an overlapping conditional format
+                            const ScConditionalFormat* pCondFormat = pInnerList->GetFormat(rInnerCondFormats[0]);
+                            assert(pCondFormat);
+                            bNewCondFormatDlg = true;
                         }
-                    }
-                    else
-                    {
-                        // define an overlapping conditional format
-                        pCondFormat = pList->GetFormat(rCondFormats[0]);
-                        assert(pCondFormat);
-                        bCondFormatDlg = true;
-                    }
+
+                        HandleConditionalFormat(nNewIndex, bNewCondFormatDlg, bInnerContainsCondFormat,
+                            nSlot, pTabViewShell);
+                    });
                 }
-
-                condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
-                switch(nSlot)
+                else
                 {
-                    case SID_OPENDLG_CONDFRMT:
-                    case SID_OPENDLG_CURRENTCONDFRMT:
-                        eType = condformat::dialog::CONDITION;
-                        break;
-                    case SID_OPENDLG_COLORSCALE:
-                        eType = condformat::dialog::COLORSCALE;
-                        break;
-                    case SID_OPENDLG_DATABAR:
-                        eType = condformat::dialog::DATABAR;
-                        break;
-                    case SID_OPENDLG_ICONSET:
-                        eType = condformat::dialog::ICONSET;
-                        break;
-                    case SID_OPENDLG_CONDDATE:
-                        eType = condformat::dialog::DATE;
-                        break;
-                    default:
-                        assert(false);
-                        break;
-                }
-
-
-                if(bCondFormatDlg || !bContainsCondFormat)
-                {
-                    // Put the xml string parameter to initialize the
-                    // Conditional Format Dialog.
-                    ScCondFormatDlgItem aDlgItem(nullptr, nIndex, false);
-                    aDlgItem.SetDialogType(eType);
-                    pTabViewShell->GetPool().Put(aDlgItem);
-
-                    sal_uInt16      nId      = ScCondFormatDlgWrapper::GetChildWindowId();
-                    SfxViewFrame*   pViewFrm = pTabViewShell->GetViewFrame();
-                    SfxChildWindow* pWnd     = pViewFrm->GetChildWindow( nId );
-
-                    pScMod->SetRefDialog( nId, pWnd == nullptr );
+                    HandleConditionalFormat(nIndex, bCondFormatDlg, bContainsCondFormat, nSlot, pTabViewShell);
                 }
             }
             break;
@@ -3276,10 +3299,10 @@ void ErrorOrRunPivotLayoutDialog(TranslateId pSrcErrorId,
     if (pSrcErrorId)
     {
         // Error occurred during data creation.  Launch an error and bail out.
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
+        std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                     VclMessageType::Info, VclButtonsType::Ok,
                                                     ScResId(pSrcErrorId)));
-        xInfoBox->run();
+        xInfoBox->runAsync(xInfoBox, [] (int) {});
         return;
     }
 
