@@ -1,0 +1,36 @@
+--- gzlib.c
++++ gzlib.c
+@@ -3,6 +3,9 @@
+  * For conditions of distribution and use, see copyright notice in zlib.h
+  */
+ 
++#if !defined _WIN32
++#include <unistd.h>
++#endif
+ #include "gzguts.h"
+ 
+ #if defined(_WIN32) && !defined(__BORLANDC__)
+--- gzread.c
++++ gzread.c
+@@ -3,6 +3,9 @@
+  * For conditions of distribution and use, see copyright notice in zlib.h
+  */
+ 
++#if !defined _WIN32
++#include <unistd.h>
++#endif
+ #include "gzguts.h"
+ 
+ /* Use read() to load a buffer -- return -1 on error, otherwise 0.  Read from
+--- gzwrite.c
++++ gzwrite.c
+@@ -3,6 +3,9 @@
+  * For conditions of distribution and use, see copyright notice in zlib.h
+  */
+ 
++#if !defined _WIN32
++#include <unistd.h>
++#endif
+ #include "gzguts.h"
+ 
+ /* Initialize state for writing a gzip file.  Mark initialization by setting
