@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libebook,0))
 $(eval $(call gb_UnpackedTarball_add_patches,libebook, \
     external/libebook/libebook-no-icu-boolean.patch.1 \
     external/libebook/include.patch \
+    external/libebook/enumarith.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
