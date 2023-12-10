@@ -1047,11 +1047,9 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 if ( m_aTempURL.isEmpty() && !( m_nMode & StreamMode::TRUNC ) )
                     throw RuntimeException();
 
-                // create wrapper to stream that is only used while reading inside package component
-                Reference < XInputStream > xStream = new FileStreamWrapper_Impl( m_aTempURL );
-
                 InsertCommandArgument aArg;
-                aArg.Data = xStream;
+                // create wrapper to stream that is only used while reading inside package component
+                aArg.Data.set(new FileStreamWrapper_Impl(m_aTempURL));
                 aArg.ReplaceExisting = true;
                 m_pContent->executeCommand( "insert", Any(aArg) );
 

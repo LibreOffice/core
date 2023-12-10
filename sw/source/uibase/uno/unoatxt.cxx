@@ -961,8 +961,7 @@ void SwAutoTextEventDescriptor::getByName(
 
     // return empty macro, unless macro is found
     OUString sEmptyStr;
-    SvxMacro aEmptyMacro(sEmptyStr, sEmptyStr);
-    rMacro = aEmptyMacro;
+    rMacro = SvxMacro(sEmptyStr, sEmptyStr);
 
     if ( !pBlocks || pBlocks->GetError())
         return;

@@ -2495,8 +2495,7 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< css::frame
 
     if (m_xFirstDispatchInterceptor == _xInterceptor)
     {   // our chain will have a new first element
-        Reference< css::frame::XDispatchProviderInterceptor >  xSlave(m_xFirstDispatchInterceptor->getSlaveDispatchProvider(), UNO_QUERY);
-        m_xFirstDispatchInterceptor = xSlave;
+        m_xFirstDispatchInterceptor.set(m_xFirstDispatchInterceptor->getSlaveDispatchProvider(), UNO_QUERY);
     }
     // do this before removing the interceptor from the chain as we won't know it's slave afterwards)
 

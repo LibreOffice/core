@@ -394,10 +394,9 @@ void SfxClassificationHelper::Impl::parsePolicy()
             aPath = aLocalized;
     }
 
-    std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(aPath, StreamMode::READ);
-    uno::Reference<io::XInputStream> xInputStream(new utl::OStreamWrapper(std::move(pStream)));
     xml::sax::InputSource aParserInput;
-    aParserInput.aInputStream = xInputStream;
+    std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(aPath, StreamMode::READ);
+    aParserInput.aInputStream.set(new utl::OStreamWrapper(std::move(pStream)));
 
     uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xComponentContext);
     rtl::Reference<SfxClassificationParser> xClassificationParser(new SfxClassificationParser());

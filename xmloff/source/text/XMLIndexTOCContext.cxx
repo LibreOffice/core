@@ -176,8 +176,7 @@ void XMLIndexTOCContext::startFastElement(
         if( xIfc.is() )
         {
             // get Property set
-            Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
-            xTOCPropertySet = xPropSet;
+            xTOCPropertySet.set(xIfc, UNO_QUERY);
 
             // insert section
             // a) insert section

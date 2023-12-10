@@ -1510,12 +1510,9 @@ void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
 
 void Border::finalizeImport( bool bRTL )
 {
-    if ( bRTL )
-    {
-        BorderLineModel aTmp = maModel.maLeft;
-        maModel.maLeft = maModel.maRight;
-        maModel.maRight = aTmp;
-    }
+    if (bRTL)
+        std::swap(maModel.maLeft, maModel.maRight);
+
     maApiData.mbBorderUsed = maModel.maLeft.mbUsed || maModel.maRight.mbUsed || maModel.maTop.mbUsed || maModel.maBottom.mbUsed;
     maApiData.mbDiagUsed   = maModel.maDiagonal.mbUsed;
 

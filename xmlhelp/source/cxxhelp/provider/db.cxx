@@ -119,8 +119,7 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
         if( bOptimizeForPerformance )
         {
             const char* pValSrc = pData + iPos;
-            OString aValStr( pValSrc, nValLen );
-            (*m_pStringToDataMap)[aOKeyStr] = aValStr;
+            (*m_pStringToDataMap)[aOKeyStr] = OString(pValSrc, nValLen);
         }
         else
         {

@@ -868,8 +868,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
             Reference<XInterface> xIfc =
                 xFactory->createInstance( sService );
             if (xIfc.is()) {
-                Reference<XPropertySet> xTmp( xIfc, UNO_QUERY );
-                xMaster = xTmp;
+                xMaster.set(xIfc, UNO_QUERY);
 
                 // set name
                 xMaster->setPropertyValue("Name", Any(sName));

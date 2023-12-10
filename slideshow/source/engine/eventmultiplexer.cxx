@@ -1285,15 +1285,15 @@ void EventMultiplexer::notifyHyperlinkClicked(
         { return pHandler.getHandler()->handleHyperlink( hyperLink ); } );
 }
 
-basegfx::B2DPoint EventMultiplexer::toMatrixPoint(uno::Reference<uno::XInterface> xInterface,
-                                                  basegfx::B2DPoint pnt)
+basegfx::B2DPoint EventMultiplexer::toMatrixPoint(const uno::Reference<uno::XInterface>& xInterface,
+                                                  const basegfx::B2DPoint& pnt)
 {
     uno::Reference<presentation::XSlideShowView> xView(xInterface, uno::UNO_QUERY_THROW);
     return mpImpl->toMatrixPoint(xView, pnt);
 }
 
-basegfx::B2DPoint EventMultiplexer::toNormalPoint(uno::Reference<uno::XInterface> xInterface,
-                                                  basegfx::B2DPoint pnt)
+basegfx::B2DPoint EventMultiplexer::toNormalPoint(const uno::Reference<uno::XInterface>& xInterface,
+                                                  const basegfx::B2DPoint& pnt)
 {
     uno::Reference<presentation::XSlideShowView> xView(xInterface, uno::UNO_QUERY_THROW);
     return mpImpl->toNormalPoint(xView, pnt);

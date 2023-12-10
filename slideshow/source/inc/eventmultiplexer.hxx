@@ -650,11 +650,11 @@ public:
     */
     void notifyHyperlinkClicked( OUString const& hyperLink );
 
-    basegfx::B2DPoint toMatrixPoint(css::uno::Reference<css::uno::XInterface> xInterface,
-                                    basegfx::B2DPoint pnt);
+    basegfx::B2DPoint toMatrixPoint(const css::uno::Reference<css::uno::XInterface>& xInterface,
+                                    const basegfx::B2DPoint& pnt);
 
-    basegfx::B2DPoint toNormalPoint(css::uno::Reference<css::uno::XInterface> xInterface,
-                                    basegfx::B2DPoint pnt);
+    basegfx::B2DPoint toNormalPoint(const css::uno::Reference<css::uno::XInterface>& xInterface,
+                                    const basegfx::B2DPoint& pnt);
 
 private:
     std::unique_ptr<EventMultiplexerImpl> mpImpl;

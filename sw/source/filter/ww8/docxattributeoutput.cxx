@@ -929,9 +929,8 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : std::as_const(aGrabBag))
             {
-                OUString sValue = rProp.Value.get<OUString>();
                 if (rProp.Name == "ooxml:CT_SdtPlaceholder_docPart_val")
-                    m_aPlaceHolderDocPart = sValue;
+                    m_aPlaceHolderDocPart = rProp.Value.get<OUString>();
             }
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_color")
@@ -940,9 +939,8 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : std::as_const(aGrabBag))
             {
-                OUString sValue = rProp.Value.get<OUString>();
                 if (rProp.Name == "ooxml:CT_SdtColor_val")
-                    m_aColor = sValue;
+                    m_aColor = rProp.Value.get<OUString>();
             }
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_appearance")

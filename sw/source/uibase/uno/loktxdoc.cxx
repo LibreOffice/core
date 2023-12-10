@@ -450,9 +450,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
             else
                 aValue = aToken;
         } while (nIndex >= 0);
-        OUString aDecodedValue
-            = INetURLObject::decode(aValue, INetURLObject::DecodeMechanism::WithCharset);
-        aMap[aKey] = aDecodedValue;
+        aMap[aKey] = INetURLObject::decode(aValue, INetURLObject::DecodeMechanism::WithCharset);
     } while (nParamIndex >= 0);
 
     if (o3tl::starts_with(rCommand, aTextFormFields))

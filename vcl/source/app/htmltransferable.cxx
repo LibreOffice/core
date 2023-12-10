@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 namespace vcl::unohelper
 {
 HtmlTransferable::HtmlTransferable(OString sData)
-    : data(sData)
+    : data(std::move(sData))
 {
 }
 

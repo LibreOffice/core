@@ -804,8 +804,7 @@ void StyleSheetTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t r
 {
     //create a new style entry
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
-    StyleSheetEntryPtr pNewEntry( new StyleSheetEntry );
-    m_pImpl->m_pCurrentEntry = pNewEntry;
+    m_pImpl->m_pCurrentEntry = StyleSheetEntryPtr(new StyleSheetEntry);
     m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->m_pProperties.get() );
     ref->resolve(*this);
     m_pImpl->m_rDMapper.ProcessDeferredStyleCharacterProperties();
@@ -850,8 +849,7 @@ void StyleSheetTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t r
         xPropertySet->setPropertyValue("InteropGrabBag", uno::Any(comphelper::containerToSequence(aGrabBag)));
     }
 
-    StyleSheetEntryPtr pEmptyEntry;
-    m_pImpl->m_pCurrentEntry = pEmptyEntry;
+    m_pImpl->m_pCurrentEntry = StyleSheetEntryPtr();
 }
 /*-------------------------------------------------------------------------
     sorting helper

@@ -245,7 +245,7 @@ public:
     void ConvertFormulaToValue( const ScRange& rRange, bool bInteraction );
 
     SC_DLLPUBLIC bool InsertSparklines(ScRange const& rDataRange, ScRange const& rSparklineRange,
-                                       std::shared_ptr<sc::SparklineGroup> pSparklineGroup);
+                                       const std::shared_ptr<sc::SparklineGroup>& pSparklineGroup);
 
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rAddress);
     SC_DLLPUBLIC bool DeleteSparklineGroup(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup, SCTAB nTab);

@@ -252,7 +252,7 @@ public:
     void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
     const FFDataHandler::Pointer_t& getFFDataHandler() const { return m_pFFDataHandler; }
 
-    void setFormControlHelper(FormControlHelper::Pointer_t pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }
+    void setFormControlHelper(const FormControlHelper::Pointer_t& pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }
     const FormControlHelper::Pointer_t& getFormControlHelper() const { return m_pFormControlHelper; }
     const PropertyMapPtr& getProperties() const { return m_pProperties; }
 

@@ -286,8 +286,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                 if( !xAttrContainer.is() )
                 {
                     // add an unknown attribute container to the properties
-                    Reference< XNameContainer > xNew( SvUnoAttributeContainer_CreateInstance(), UNO_QUERY );
-                    xAttrContainer = xNew;
+                    xAttrContainer.set(SvUnoAttributeContainer_CreateInstance(), UNO_QUERY);
 
                     // find map entry and create new property state
                     if( -1 == nIndex )

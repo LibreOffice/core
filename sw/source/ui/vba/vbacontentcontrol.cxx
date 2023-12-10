@@ -37,7 +37,7 @@ SwVbaContentControl::SwVbaContentControl(const uno::Reference<XHelperInterface>&
                                          std::shared_ptr<SwContentControl> pContentControl)
     : SwVbaContentControl_BASE(rParent, rContext)
     , mxTextDocument(xTextDocument)
-    , m_pCC(pContentControl)
+    , m_pCC(std::move(pContentControl))
 {
     assert(m_pCC && "SwVbaContentControl created without a shared_ptr. Why would you do that?");
 }

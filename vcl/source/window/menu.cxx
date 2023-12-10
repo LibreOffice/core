@@ -1684,10 +1684,7 @@ static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext 
     if (nPos != -1)
     {
         if (nPos < aNonMnem.getLength() && i_rLong[nPos+1] == aNonMnem[nPos])
-        {
-            OUString aTmp = OUString::Concat(aNonMnem.subView(0, nPos)) + "~" + aNonMnem.subView(nPos);
-            aNonMnem = aTmp;
-        }
+            aNonMnem = OUString::Concat(aNonMnem.subView(0, nPos)) + "~" + aNonMnem.subView(nPos);
     }
     return aNonMnem;
 }

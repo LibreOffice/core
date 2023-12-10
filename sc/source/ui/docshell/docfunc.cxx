@@ -5773,7 +5773,7 @@ void ScDocFunc::EndListAction()
 }
 
 bool ScDocFunc::InsertSparklines(ScRange const& rDataRange, ScRange const& rSparklineRange,
-                                std::shared_ptr<sc::SparklineGroup> pSparklineGroup)
+                                 const std::shared_ptr<sc::SparklineGroup>& pSparklineGroup)
 {
     std::vector<sc::SparklineData> aSparklineDataVector;
 

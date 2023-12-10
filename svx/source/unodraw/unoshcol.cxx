@@ -92,9 +92,8 @@ void SvxShapeCollection::dispose()
         // Create an event with this as sender
         try
         {
-            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) ) );
             document::EventObject aEvt;
-            aEvt.Source = xSource;
+            aEvt.Source = uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) );
             // inform all listeners to release this object
             // The listener container are automatically cleared
             std::unique_lock g(m_aMutex);

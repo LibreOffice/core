@@ -886,15 +886,13 @@ uno::Reference< sdbc::XResultSet > getResultSet(
 {
     uno::Reference< sdbc::XResultSet > xResultSet;
 
-    uno::Sequence< beans::Property > aProps{ makeProperty("IsFolder", -1 /* unknown */),
-                                             makeProperty("IsDocument", -1 /* unknown */),
-                                             makeProperty("TargetURL", -1 /* unknown */) };
-
     ucb::OpenCommandArgument2 aArg;
     aArg.Mode       = ucb::OpenMode::ALL;
     aArg.Priority   = 0; // unused
     aArg.Sink       = nullptr;
-    aArg.Properties = aProps;
+    aArg.Properties = { makeProperty("IsFolder", -1 /* unknown */),
+                        makeProperty("IsDocument", -1 /* unknown */),
+                        makeProperty("TargetURL", -1 /* unknown */) };
 
     ucb::Command aOpenCommand( "open",
                                      -1,
