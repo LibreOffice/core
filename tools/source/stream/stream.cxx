@@ -647,9 +647,9 @@ OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStream, rtl_TextEncodi
         read_zeroTerminated_uInt8s_ToOString(rStream), eEnc);
 }
 
-/** Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
+/** Attempt to write a sequence of nUnits 16bit units from an OUString,
     returned value is number of bytes written */
-std::size_t write_uInt16s_FromOUString(SvStream& rStrm, std::u16string_view rStr,
+static std::size_t write_uInt16s_FromOUString(SvStream& rStrm, std::u16string_view rStr,
     std::size_t nUnits)
 {
     DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "write_uInt16s_FromOUString: swapping sizeof(sal_Unicode) not implemented" );
@@ -676,19 +676,22 @@ std::size_t write_uInt16s_FromOUString(SvStream& rStrm, std::u16string_view rStr
     return nWritten;
 }
 
-bool SvStream::WriteUnicodeOrByteText( std::u16string_view rStr, rtl_TextEncoding eDestCharSet )
+bool SvStream::WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestCharSet, bool bZero)
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
     {
         write_uInt16s_FromOUString(*this, rStr, rStr.size());
-        return m_nError == ERRCODE_NONE;
+        if (bZero)
+            WriteUnicode(0);
     }
     else
     {
         OString aStr(OUStringToOString(rStr, eDestCharSet));
-        write_uInt8s_FromOString(*this, aStr, aStr.getLength());
-        return m_nError == ERRCODE_NONE;
+        WriteBytes(aStr.getStr(), aStr.getLength());
+        if (bZero)
+            WriteChar(0);
     }
+    return m_nError == ERRCODE_NONE;
 }
 
 bool SvStream::WriteByteStringLine( std::u16string_view rStr, rtl_TextEncoding eDestCharSet )
@@ -1985,7 +1988,7 @@ std::size_t write_uInt16_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
     if (rStrm.good())
     {
         nWritten += sizeof(sal_uInt16);
-        nWritten += write_uInt8s_FromOString(rStrm, rStr, nUnits);
+        nWritten += rStrm.WriteBytes(rStr.data(), nUnits);
     }
     return nWritten;
 }

@@ -211,7 +211,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     OUString strTo = strFrom + strFrom;
                     aTmpStr = aTmpStr.replaceAll(strFrom, strTo);
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
-                    write_uInt16s_FromOUString(rOut, aTmpStr);
+                    rOut.WriteUnicodeOrByteText(aTmpStr, eCharSet);
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
                 }
                 else if ( bContextOrNotAsciiEncoding )

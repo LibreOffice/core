@@ -562,7 +562,7 @@ namespace
     void WriteLines(SvStream &rStream, const OString& rStr)
     {
         OString aStr(convertLineEnd(rStr, rStream.GetLineDelimiter()) );
-        write_uInt8s_FromOString(rStream, aStr);
+        rStream.WriteBytes(aStr.getStr(), aStr.getLength());
         endl( rStream );
     }
 }

@@ -471,15 +471,11 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
             // extra bits are used to tell the client to prefer external
             // reference link.
 
-            WriteUnicodeOrByteString( rStrm, aAppName, true );
-            WriteUnicodeOrByteString( rStrm, aDocName, true );
-            WriteUnicodeOrByteString( rStrm, aRefName, true );
-            WriteUnicodeOrByteString( rStrm, u"calc:extref", true );
-            if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
-                rStrm.WriteUInt16( 0 );
-            else
-                rStrm.WriteChar( 0 );
-            return rStrm.GetError() == ERRCODE_NONE;
+            rStrm.WriteUnicodeOrByteText(aAppName, true);
+            rStrm.WriteUnicodeOrByteText(aDocName, true);
+            rStrm.WriteUnicodeOrByteText(aRefName, true);
+            rStrm.WriteUnicodeOrByteText(u"calc:extref", true);
+            return rStrm.WriteUnicodeOrByteText(u"", true); // One more trailing zero
         }
     }
     if( nFmt == SotClipboardFormatId::HTML )
@@ -494,19 +490,6 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
     }
 
     return false;
-}
-
-void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, std::u16string_view rString, bool bZero )
-{
-    rtl_TextEncoding eEnc = rStrm.GetStreamCharSet();
-    rStrm.WriteUnicodeOrByteText(rString, eEnc);
-    if (bZero)
-    {
-        if (eEnc == RTL_TEXTENCODING_UNICODE)
-            rStrm.WriteUnicode(0);
-        else
-            rStrm.WriteChar(0);
-    }
 }
 
 // tdf#104927
@@ -919,12 +902,7 @@ static void lcl_WriteString( SvStream& rStrm, OUString& rString, sal_Unicode cQu
         rString = OUStringChar(cQuote) + rString + OUStringChar(cQuote);
     }
 
-    ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
-}
-
-static void lcl_WriteSimpleString( SvStream& rStrm, std::u16string_view rString )
-{
-    ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
+    rStrm.WriteUnicodeOrByteText(rString);
 }
 
 bool ScImportExport::Text2Doc( SvStream& rStrm )
@@ -1968,7 +1946,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                             if( aCellStr.indexOf( cSep ) != -1 )
                                 lcl_WriteString( rStrm, aCellStr, cStr, cStr );
                             else
-                                lcl_WriteSimpleString( rStrm, aCellStr );
+                                rStrm.WriteUnicodeOrByteText(aCellStr);
                         }
                         else
                         {
@@ -1990,7 +1968,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                             if( mExportTextOptions.mbAddQuotes && ( aCellStr.indexOf( cSep ) != -1 ) )
                                 lcl_WriteString( rStrm, aCellStr, cStr, cStr );
                             else
-                                lcl_WriteSimpleString( rStrm, aCellStr );
+                                rStrm.WriteUnicodeOrByteText(aCellStr);
                         }
                     }
                     break;
@@ -1998,7 +1976,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     {
                         const Color* pColor;
                         aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, rDoc);
-                        lcl_WriteSimpleString( rStrm, aCellStr );
+                        rStrm.WriteUnicodeOrByteText(aCellStr);
                     }
                     break;
                     case CELLTYPE_NONE:
@@ -2023,11 +2001,11 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         if( mExportTextOptions.mbAddQuotes && hasLineBreaksOrSeps(aCellStr, cSep) )
                             lcl_WriteString( rStrm, aCellStr, cStr, cStr );
                         else
-                            lcl_WriteSimpleString( rStrm, aCellStr );
+                            rStrm.WriteUnicodeOrByteText(aCellStr);
                     }
                 }
                 if( nCol < nEndCol )
-                    lcl_WriteSimpleString( rStrm, rtl::OUStringChar(cSep) );
+                    rStrm.WriteUnicodeOrByteText(rtl::OUStringChar(cSep));
             }
             // Do not append a line feed for one single cell.
             // NOTE: this Doc2Text() is only called for clipboard via
@@ -2385,7 +2363,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     SCROW nEndRow = aRange.aEnd.Row();
     OUString aCellStr;
     OUString aValStr;
-    lcl_WriteSimpleString( rStrm, u"ID;PCALCOOO32" );
+    rStrm.WriteUnicodeOrByteText(u"ID;PCALCOOO32");
     endlub(rStrm);
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
@@ -2422,7 +2400,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             + OUString::number( r )
                             + ";K"
                             + aValStr;
-                    lcl_WriteSimpleString( rStrm, aBufStr );
+                    rStrm.WriteUnicodeOrByteText(aBufStr);
                     goto checkformula;
 
                 case CELLTYPE_STRING:
@@ -2436,7 +2414,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             + ";Y"
                             + OUString::number( r )
                             + ";K";
-                    lcl_WriteSimpleString( rStrm, aBufStr );
+                    rStrm.WriteUnicodeOrByteText(aBufStr);
                     lcl_WriteString( rStrm, aCellStr, '"', ';' );
 
                 checkformula:
@@ -2495,7 +2473,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 // formula Expression
                                 aPrefix = ";E";
                         }
-                        lcl_WriteSimpleString( rStrm, aPrefix );
+                        rStrm.WriteUnicodeOrByteText(aPrefix);
                         if ( !aCellStr.isEmpty() )
                             lcl_WriteString( rStrm, aCellStr, 0, ';' );
                     }
@@ -2509,7 +2487,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             }
         }
     }
-    lcl_WriteSimpleString( rStrm, rtl::OUStringChar( 'E' ) );
+    rStrm.WriteUnicodeOrByteText(u"E");
     endlub(rStrm);
     return rStrm.GetError() == ERRCODE_NONE;
 }

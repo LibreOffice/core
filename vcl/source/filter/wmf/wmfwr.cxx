@@ -568,7 +568,7 @@ void WMFWriter::TrueExtTextOut( const Point& rPoint, std::u16string_view rString
     WritePointYX( rPoint );
     sal_uInt16 nNewTextLen = static_cast<sal_uInt16>(rByteString.getLength());
     pWMF->WriteUInt16( nNewTextLen ).WriteUInt16( 0 );
-    write_uInt8s_FromOString(*pWMF, rByteString, nNewTextLen);
+    pWMF->WriteBytes(rByteString.getStr(), nNewTextLen);
     if ( nNewTextLen & 1 )
         pWMF->WriteUChar( 0 );
 

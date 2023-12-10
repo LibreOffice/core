@@ -364,10 +364,10 @@ public:
                                              sal_Int32 nMaxCodepointsToRead = 0xFFFE );
     /** Write a sequence of Unicode characters if
         eDestCharSet==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
-        Bytecodes converted to eDestCharSet */
-    bool            WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestCharSet );
-    bool            WriteUnicodeOrByteText(std::u16string_view rStr )
-                    { return WriteUnicodeOrByteText( rStr, GetStreamCharSet() ); }
+        Bytecodes converted to eDestCharSet. Write trailing zero, if bZero is true. */
+    bool            WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestCharSet, bool bZero = false);
+    bool            WriteUnicodeOrByteText(std::u16string_view rStr, bool bZero = false)
+                    { return WriteUnicodeOrByteText(rStr, GetStreamCharSet(), bZero); }
 
     /** Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
         otherwise write as Bytecode converted to eDestCharSet.
@@ -475,17 +475,6 @@ inline OUString read_uInt32_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
     return read_uInt16s_ToOUString(rStrm, nUnits);
 }
 
-/// Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
-/// returned value is number of bytes written
-TOOLS_DLLPUBLIC std::size_t write_uInt16s_FromOUString(SvStream& rStrm,
-    std::u16string_view rStr, std::size_t nUnits);
-
-inline std::size_t write_uInt16s_FromOUString(SvStream& rStrm,
-    std::u16string_view rStr)
-{
-    return write_uInt16s_FromOUString(rStrm, rStr, rStr.size());
-}
-
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
@@ -542,19 +531,6 @@ inline OUString read_uInt8_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
                                                          rtl_TextEncoding eEnc)
 {
     return OStringToOUString(read_uInt8_lenPrefixed_uInt8s_ToOString(rStrm), eEnc);
-}
-
-/// Attempt to write a prefixed sequence of nUnits 8bit units from an OString,
-/// returned value is number of bytes written
-inline std::size_t write_uInt8s_FromOString(SvStream& rStrm, std::string_view rStr,
-                                                         std::size_t nUnits)
-{
-    return rStrm.WriteBytes(rStr.data(), nUnits);
-}
-
-inline std::size_t write_uInt8s_FromOString(SvStream& rStrm, std::string_view rStr)
-{
-    return write_uInt8s_FromOString(rStrm, rStr, rStr.size());
 }
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed

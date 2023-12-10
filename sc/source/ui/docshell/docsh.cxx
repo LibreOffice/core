@@ -2017,16 +2017,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     aString = "sep=" + OUStringChar(cDelim);
                     if (cStrDelim != 0)
                         rStream.WriteUniOrByteChar( '"', eCharSet);
-                    if (eCharSet == RTL_TEXTENCODING_UNICODE)
-                    {
-                        write_uInt16s_FromOUString( rStream, aString);
-                    }
-                    else
-                    {
-                        OString aStrEnc = OUStringToOString( aString, eCharSet);
-                        // write byte encoded
-                        rStream.WriteBytes( aStrEnc.getStr(), aStrEnc.getLength());
-                    }
+                    rStream.WriteUnicodeOrByteText(aString, eCharSet);
                     if (cStrDelim != 0)
                         rStream.WriteUniOrByteChar( '"', eCharSet);
                     endlub( rStream );
@@ -2243,7 +2234,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
 
                         if ( bNeedQuotes || bForceQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
-                        write_uInt16s_FromOUString(rStream, aUniString);
+                        rStream.WriteUnicodeOrByteText(aUniString, eCharSet);
                         if ( bNeedQuotes || bForceQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                     }
