@@ -2428,14 +2428,19 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
     {
         // m_nActiveBlock and m_nHiddenBlock are used to persist the content type expand state for
         // the all content view mode
-        const sal_Int32 nOr = 1 << static_cast<int>(eParentContentTypeId); //linear -> Bitposition
-        if (State::HIDDEN != m_eState)
+        const int nShift = static_cast<int>(eParentContentTypeId);
+        SAL_WARN_IF(nShift < 0, "sw.ui", "ContentTypeId::UNKNOWN negative shift");
+        if (nShift >= 0)
         {
-            m_nActiveBlock |= nOr;
-            m_pConfig->SetActiveBlock(m_nActiveBlock);
+            const sal_Int32 nOr = 1 << nShift; //linear -> Bitposition
+            if (State::HIDDEN != m_eState)
+            {
+                m_nActiveBlock |= nOr;
+                m_pConfig->SetActiveBlock(m_nActiveBlock);
+            }
+            else
+                m_nHiddenBlock |= nOr;
         }
-        else
-            m_nHiddenBlock |= nOr;
     }
 
     if (m_nRootType == ContentTypeId::OUTLINE || (m_nRootType == ContentTypeId::UNKNOWN &&
@@ -2599,14 +2604,19 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
         }
         ContentTypeId eContentTypeId =
                 weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent))->GetType();
-        const sal_Int32 nAnd = ~(1 << static_cast<int>(eContentTypeId));
-        if (State::HIDDEN != m_eState)
+        const int nShift = static_cast<int>(eContentTypeId);
+        SAL_WARN_IF(nShift < 0, "sw.ui", "ContentTypeId::UNKNOWN negative shift");
+        if (nShift >= 0)
         {
-            m_nActiveBlock &= nAnd;
-            m_pConfig->SetActiveBlock(m_nActiveBlock);
+            const sal_Int32 nAnd = ~(1 << nShift);
+            if (State::HIDDEN != m_eState)
+            {
+                m_nActiveBlock &= nAnd;
+                m_pConfig->SetActiveBlock(m_nActiveBlock);
+            }
+            else
+                m_nHiddenBlock &= nAnd;
         }
-        else
-            m_nHiddenBlock &= nAnd;
     }
     else // content entry
     {
