@@ -63,7 +63,7 @@ static bool unitTestMode = false;
 
 StringRef initMainFileName(CompilerInstance& compiler)
 {
-    StringRef const& fn(compiler.getASTContext().getSourceManager().getFileEntryForID(
+    StringRef const& fn(compiler.getASTContext().getSourceManager().getFileEntryRefForID(
         compiler.getASTContext().getSourceManager().getMainFileID())->getName());
     if (fn == "<stdin>")
         // stdin means icecream, so we can rely on -main-file-name containing the full path name
@@ -342,8 +342,8 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
          it != rewriter.buffer_end();
          ++it )
     {
-        const FileEntry* e = context.getSourceManager().getFileEntryForID( it->first );
-        if( e == NULL )
+        auto e = context.getSourceManager().getFileEntryRefForID( it->first );
+        if( !e )
             continue; // Failed modification because of a macro expansion?
         /* Check where the file actually is, and warn about cases where modification
            most probably doesn't matter (generated files in workdir).
