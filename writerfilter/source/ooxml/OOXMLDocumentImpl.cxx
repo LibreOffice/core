@@ -838,7 +838,7 @@ const uno::Sequence<beans::PropertyValue>& OOXMLDocumentImpl::getMediaDescriptor
     return maMediaDescriptor;
 }
 
-void OOXMLDocumentImpl::setShapeContext( rtl::Reference<oox::shape::ShapeContextHandler> xContext )
+void OOXMLDocumentImpl::setShapeContext(const rtl::Reference<oox::shape::ShapeContextHandler>& xContext)
 {
     if (!maShapeContexts.empty())
         maShapeContexts.top() = xContext;

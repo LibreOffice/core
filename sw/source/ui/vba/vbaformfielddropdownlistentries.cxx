@@ -30,7 +30,7 @@ class ListEntriesEnumWrapper : public EnumerationHelper_BASE
 
 public:
     explicit ListEntriesEnumWrapper(uno::Reference<container::XIndexAccess> xIndexAccess)
-        : mxIndexAccess(xIndexAccess)
+        : mxIndexAccess(std::move(xIndexAccess))
         , mnIndex(0)
     {
     }

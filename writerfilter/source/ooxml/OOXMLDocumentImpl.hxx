@@ -136,7 +136,7 @@ public:
     virtual sal_Int32 getXNoteId() const override;
     virtual const OUString & getTarget() const override;
     virtual rtl::Reference<oox::shape::ShapeContextHandler> getShapeContext( ) override;
-    virtual void setShapeContext( rtl::Reference<oox::shape::ShapeContextHandler> xContext ) override;
+    virtual void setShapeContext(const rtl::Reference<oox::shape::ShapeContextHandler>& xContext) override;
     virtual const oox::drawingml::ThemePtr & getTheme() const override
     {
         return mpTheme;

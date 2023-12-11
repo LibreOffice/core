@@ -238,10 +238,7 @@ bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
 
     FontCharMapRef xFontCharMap ( mpGraphics->GetFontCharMap() );
     if (!xFontCharMap.is())
-    {
-        FontCharMapRef xDefaultMap( new FontCharMap() );
-        rxFontCharMap = xDefaultMap;
-    }
+        rxFontCharMap = FontCharMapRef(new FontCharMap());
     else
         rxFontCharMap = xFontCharMap;
 

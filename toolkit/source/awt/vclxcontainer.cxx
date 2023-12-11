@@ -77,8 +77,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::ge
             {
                 vcl::Window* pChild = pWindow->GetChild( n );
                 css::uno::Reference< css::awt::XWindowPeer >  xWP = pChild->GetComponentInterface();
-                css::uno::Reference< css::awt::XWindow > xW( xWP, css::uno::UNO_QUERY );
-                pChildRefs[n] = xW;
+                pChildRefs[n].set(xWP, css::uno::UNO_QUERY);
             }
         }
     }

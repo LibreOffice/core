@@ -184,7 +184,7 @@ public:
     virtual ~ListDef( ) override;
 
     // Accessors
-    void SetAbstractDefinition( AbstractListDef::Pointer pAbstract ) { m_pAbstractDef = pAbstract; };
+    void SetAbstractDefinition(const AbstractListDef::Pointer& pAbstract) { m_pAbstractDef = pAbstract; };
     const AbstractListDef::Pointer& GetAbstractDefinition( ) const { return m_pAbstractDef; };
 
     // Mapping functions

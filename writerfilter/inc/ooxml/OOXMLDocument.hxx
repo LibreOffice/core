@@ -214,7 +214,7 @@ public:
     virtual sal_Int32 getXNoteId() const = 0;
     virtual const OUString & getTarget() const = 0;
     virtual rtl::Reference<oox::shape::ShapeContextHandler> getShapeContext( ) = 0;
-    virtual void setShapeContext( rtl::Reference<oox::shape::ShapeContextHandler> xContext ) = 0;
+    virtual void setShapeContext(const rtl::Reference<oox::shape::ShapeContextHandler>& xContext) = 0;
     virtual const oox::drawingml::ThemePtr & getTheme() const = 0;
 
     /// Push context of drawingML shapes, so nested shapes are handled separately.
