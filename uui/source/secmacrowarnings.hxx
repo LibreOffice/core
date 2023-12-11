@@ -35,6 +35,7 @@ private:
     std::unique_ptr<weld::Label> mxNotYetValid;
     std::unique_ptr<weld::Label> mxNoLongerValid;
     std::unique_ptr<weld::Button> mxViewSignsBtn;
+    std::unique_ptr<weld::Button> mxViewCertBtn;
     std::unique_ptr<weld::CheckButton> mxAlwaysTrustCB;
     std::unique_ptr<weld::Button> mxEnableBtn;
     std::unique_ptr<weld::Button> mxDisableBtn;

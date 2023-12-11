@@ -125,7 +125,7 @@ Macros may contain viruses. Disabling macros for a document is always safe. If y
                 </child>
                 <child>
                   <object class="GtkButton" id="viewSignsButton">
-                    <property name="label" translatable="yes" context="macrowarnmedium|viewSignsButton">_View Signatures…</property>
+                    <property name="label" translatable="yes" context="macrowarnmedium|viewSignsButton">_Show Signatures…</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
@@ -138,6 +138,23 @@ Macros may contain viruses. Disabling macros for a document is always safe. If y
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="viewCertButton">
+                    <property name="label" translatable="yes" context="macrowarnmedium|viewCertButton">_Show Certificate…</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
