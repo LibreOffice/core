@@ -159,11 +159,7 @@ void MacroWarning::InitControls()
         mxAlwaysTrustCB->set_sensitive(false);
         mxViewSignsBtn->connect_clicked(LINK(this, MacroWarning, ViewSignsBtnHdl));
         mxViewSignsBtn->set_sensitive(false);
-
-        if (!SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors))
-            mxAlwaysTrustCB->connect_toggled(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
-        else
-            mxAlwaysTrustCB->set_visible(false);
+        mxAlwaysTrustCB->connect_toggled(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
 
         mnActSecLevel = SvtSecurityOptions::GetMacroSecurityLevel();
         if ( mnActSecLevel >= 2 )
