@@ -68,6 +68,7 @@ MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     , mxNotYetValid(m_xBuilder->weld_label("certNotYetValidLabel"))
     , mxNoLongerValid(m_xBuilder->weld_label("certNoLongerValidLabel"))
     , mxViewSignsBtn(m_xBuilder->weld_button("viewSignsButton"))
+    , mxViewCertBtn(m_xBuilder->weld_button("viewCertButton"))
     , mxAlwaysTrustCB(m_xBuilder->weld_check_button("alwaysTrustCheckbutton"))
     , mxEnableBtn(m_xBuilder->weld_button("ok"))
     , mxDisableBtn(m_xBuilder->weld_button("cancel"))
@@ -156,10 +157,12 @@ void MacroWarning::InitControls()
     // show signature controls?
     if (mbShowSignatures)
     {
+        mxAlwaysTrustCB->connect_toggled(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
         mxAlwaysTrustCB->set_sensitive(false);
         mxViewSignsBtn->connect_clicked(LINK(this, MacroWarning, ViewSignsBtnHdl));
-        mxViewSignsBtn->set_sensitive(false);
-        mxAlwaysTrustCB->connect_toggled(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
+        mxViewSignsBtn->set_visible(false);
+        mxViewCertBtn->connect_clicked(LINK(this, MacroWarning, ViewSignsBtnHdl));
+        mxViewCertBtn->set_visible(false);
 
         mnActSecLevel = SvtSecurityOptions::GetMacroSecurityLevel();
         if ( mnActSecLevel >= 2 )
@@ -192,7 +195,8 @@ void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage 
     }
 
     mxSignsFI->set_label(s.makeStringAndClear());
-    mxViewSignsBtn->set_sensitive(true);
+    mxViewSignsBtn->set_visible(true);
+    mxViewCertBtn->set_visible(false);
 }
 
 void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCertificate >& _rxCert )
@@ -210,7 +214,8 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
         utl::typeConvert( mxCert->getNotValidAfter(), aDateTimeEnd );
         mxNotYetValid->set_visible(now < aDateTimeStart);
         mxNoLongerValid->set_visible(now > aDateTimeEnd);
-        mxViewSignsBtn->set_sensitive(true);
+        mxViewSignsBtn->set_visible(false);
+        mxViewCertBtn->set_visible(true);
     }
 }
 
