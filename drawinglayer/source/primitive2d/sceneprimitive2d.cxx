@@ -362,7 +362,7 @@ namespace drawinglayer::primitive2d
 
             if(!rViewInformation.getReducedDisplayQuality() && comphelper::LibreOfficeKit::isActive())
             {
-                // for this purpose allow reduced 3D quality and make a compromize
+                // for this purpose allow reduced 3D quality and make a compromise
                 // between quality and speed. This is balanced between those two
                 // targets, fine-tuning/experimenting can be done with the values
                 // below.

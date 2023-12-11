@@ -2088,7 +2088,7 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
             // NOTE: with the new BGRAD_SEQ_* we could use basegfx::B2DPolygon and
             // basegfx::BGradient here directly, but may have to add streaming OPs
             // for these, so for now just go with what we use all the time. The real
-            // work for improvement should not go to this 'compromize' but to a real
+            // work for improvement should not go to this 'compromise' but to a real
             // re-work of the SVG export (or/and others) to no longer work on metafiles
             // but on UNO API or primitives (whatever fits best to the specific export)
             fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
