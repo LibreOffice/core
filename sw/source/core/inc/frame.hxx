@@ -761,6 +761,10 @@ public:
     virtual Size ChgSize( const Size& aNewSize );
 
     virtual void Cut() = 0;
+
+    /// Inserts the current frame under pParent, before pSibling.
+    ///
+    /// If pSibling is nullptr, then insert under pParent, at the end.
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) = 0;
 
     void ValidateLineNum() { mbValidLineNum = true; }
