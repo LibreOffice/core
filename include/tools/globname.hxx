@@ -35,17 +35,17 @@ class SvStream;
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC SvGlobalName
 {
 public:
-    SvGlobalName() = default;
-    SvGlobalName(const SvGlobalName& rObj) = default;
+    constexpr SvGlobalName() = default;
+    constexpr SvGlobalName(const SvGlobalName& rObj) = default;
 
-    SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+    inline constexpr SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                   sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                   sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
 
     // create SvGlobalName from a platform independent representation
     SvGlobalName( const css::uno::Sequence< sal_Int8 >& aSeq );
 
-    SvGlobalName( const SvGUID & rId );
+    inline constexpr SvGlobalName( const SvGUID & rId );
 
     SvGlobalName & operator = ( const SvGlobalName & rObj ) = default;
 
@@ -71,6 +71,19 @@ public:
 private:
     SvGUID m_aData = {};
 };
+
+inline constexpr SvGlobalName::SvGlobalName(const SvGUID& rId)
+    : m_aData(rId)
+{
+}
+
+inline constexpr SvGlobalName::SvGlobalName(sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                                            sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10,
+                                            sal_uInt8 b11, sal_uInt8 b12, sal_uInt8 b13,
+                                            sal_uInt8 b14, sal_uInt8 b15)
+    : m_aData{ n1, n2, n3, { b8, b9, b10, b11, b12, b13, b14, b15 } }
+{
+}
 
 #endif
 

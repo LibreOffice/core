@@ -27,17 +27,6 @@
 #include <tools/globname.hxx>
 
 // SvGlobalName ----------------------------------------------------------------
-SvGlobalName::SvGlobalName( const SvGUID & rId ) :
-    m_aData( rId )
-{
-}
-
-SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                            sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                            sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 ) :
-    m_aData{ n1, n2, n3, { b8, b9, b10, b11, b12, b13, b14, b15 } }
-{
-}
 
 SvGlobalName::SvGlobalName( const css::uno::Sequence < sal_Int8 >& aSeq )
 {
