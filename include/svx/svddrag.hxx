@@ -45,34 +45,34 @@ struct SdrDragStatUserData
 
 class SVXCORE_DLLPUBLIC SdrDragStat final
 {
-    SdrHdl*  pHdl;      // The Handle for the User
-    SdrView* pView;
-    SdrPageView* pPageView;
+    SdrHdl*  m_pHdl;      // The Handle for the User
+    SdrView* m_pView;
+    SdrPageView* m_pPageView;
     std::vector<Point> mvPnts; // All previous Points: [0]=Start, [Count()-2]=Prev
-    Point     aRef1;     // Referencepoint: Resize fixed point, (axis of rotation,
-    Point     aRef2;     // axis of reflection, ...)
-    Point     aPos0;     // Position at the last Event
-    Point     aRealNow;  // Current dragging position without Snap, Ortho and Limit
-    tools::Rectangle aActionRect;
+    Point     m_aRef1;     // Referencepoint: Resize fixed point, (axis of rotation,
+    Point     m_aRef2;     // axis of reflection, ...)
+    Point     m_aPos0;     // Position at the last Event
+    Point     m_aRealNow;  // Current dragging position without Snap, Ortho and Limit
+    tools::Rectangle m_aActionRect;
 
-    bool      bEndDragChangesAttributes;
-    bool      bEndDragChangesGeoAndAttributes;
+    bool      m_bEndDragChangesAttributes;
+    bool      m_bEndDragChangesGeoAndAttributes;
     /// Table row drag: table will re-layout itself later.
     bool      mbEndDragChangesLayout;
-    bool      bMouseIsUp;
+    bool      m_bMouseIsUp;
 
-    bool      bShown;    // Xor visible?
-    sal_uInt16    nMinMov;   // So much has to be minimally moved first
-    bool      bMinMoved; // MinMove surpassed?
+    bool      m_bShown;    // Xor visible?
+    sal_uInt16    m_nMinMov;   // So much has to be minimally moved first
+    bool      m_bMinMoved; // MinMove surpassed?
 
-    bool      bHorFixed; // Dragging only vertical
-    bool      bVerFixed; // Dragging only horizontal
-    bool      bWantNoSnap; // To decide if pObj-> MovCreate () should use NoSnapPos or not.
+    bool      m_bHorFixed; // Dragging only vertical
+    bool      m_bVerFixed; // Dragging only horizontal
+    bool      m_bWantNoSnap; // To decide if pObj-> MovCreate () should use NoSnapPos or not.
                           // Therefore, NoSnapPos is written into the buffer.
-    bool  bOrtho4;
-    bool  bOrtho8;
+    bool  m_bOrtho4;
+    bool  m_bOrtho8;
 
-    SdrDragMethod* pDragMethod;
+    SdrDragMethod* m_pDragMethod;
     std::unique_ptr<SdrDragStatUserData>  mpUserData;     // Userdata
 
     void Clear();
@@ -93,62 +93,62 @@ public:
     SdrDragStat()                                    { Reset(); }
     ~SdrDragStat();
     void         Reset();
-    SdrView*     GetView() const                     { return pView; }
-    void         SetView(SdrView* pV)                { pView=pV; }
-    SdrPageView* GetPageView() const                 { return pPageView; }
-    void         SetPageView(SdrPageView* pPV)       { pPageView=pPV; }
+    SdrView*     GetView() const                     { return m_pView; }
+    void         SetView(SdrView* pV)                { m_pView=pV; }
+    SdrPageView* GetPageView() const                 { return m_pPageView; }
+    void         SetPageView(SdrPageView* pPV)       { m_pPageView=pPV; }
     const Point& GetPoint(sal_Int32 nNum) const      { return mvPnts[nNum]; }
     sal_Int32    GetPointCount() const               { return mvPnts.size(); }
     const Point& GetStart() const                    { return mvPnts[0]; }
     const Point& GetPrev() const                     { return mvPnts[GetPrevPos()]; }
-    const Point& GetPos0() const                     { return aPos0;  }
+    const Point& GetPos0() const                     { return m_aPos0;  }
     const Point& GetNow() const                      { return mvPnts.back(); }
     void         SetNow(Point const &pt)             { mvPnts.back() = pt; }
-    const Point& GetRef1() const                     { return aRef1;  }
-    void         SetRef1(const Point &pt)            { aRef1 = pt;  }
-    const Point& GetRef2() const                     { return aRef2;  }
-    void         SetRef2(const Point &pt)            { aRef2 = pt;  }
-    const        SdrHdl* GetHdl() const              { return pHdl;   }
-    void         SetHdl(SdrHdl* pH)                  { pHdl=pH;       }
+    const Point& GetRef1() const                     { return m_aRef1;  }
+    void         SetRef1(const Point &pt)            { m_aRef1 = pt;  }
+    const Point& GetRef2() const                     { return m_aRef2;  }
+    void         SetRef2(const Point &pt)            { m_aRef2 = pt;  }
+    const        SdrHdl* GetHdl() const              { return m_pHdl;   }
+    void         SetHdl(SdrHdl* pH)                  { m_pHdl=pH;       }
     SdrDragStatUserData* GetUser() const             { return mpUserData.get();  }
     void         SetUser(std::unique_ptr<SdrDragStatUserData> pU) { mpUserData = std::move(pU); }
-    bool         IsShown() const                     { return bShown; }
-    void         SetShown(bool bOn)                  { bShown=bOn; }
+    bool         IsShown() const                     { return m_bShown; }
+    void         SetShown(bool bOn)                  { m_bShown=bOn; }
 
-    bool         IsMinMoved() const                  { return bMinMoved; }
-    void         SetMinMoved()                       { bMinMoved=true; }
-    void         ResetMinMoved()                     { bMinMoved=false; }
-    void         SetMinMove(sal_uInt16 nDist)        { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
+    bool         IsMinMoved() const                  { return m_bMinMoved; }
+    void         SetMinMoved()                       { m_bMinMoved=true; }
+    void         ResetMinMoved()                     { m_bMinMoved=false; }
+    void         SetMinMove(sal_uInt16 nDist)        { m_nMinMov=nDist; if (m_nMinMov<1) m_nMinMov=1; }
 
-    bool         IsHorFixed() const                  { return bHorFixed; }
-    void         SetHorFixed(bool bOn)               { bHorFixed=bOn; }
-    bool         IsVerFixed() const                  { return bVerFixed; }
-    void         SetVerFixed(bool bOn)               { bVerFixed=bOn; }
+    bool         IsHorFixed() const                  { return m_bHorFixed; }
+    void         SetHorFixed(bool bOn)               { m_bHorFixed=bOn; }
+    bool         IsVerFixed() const                  { return m_bVerFixed; }
+    void         SetVerFixed(bool bOn)               { m_bVerFixed=bOn; }
 
     // Here, the object can say: "I do not want to snap to coordinates!"
     // for example, the angle of the arc ...
-    bool         IsNoSnap() const                     { return bWantNoSnap; }
-    void         SetNoSnap(bool bOn = true)           { bWantNoSnap=bOn; }
+    bool         IsNoSnap() const                     { return m_bWantNoSnap; }
+    void         SetNoSnap(bool bOn = true)           { m_bWantNoSnap=bOn; }
 
     // And here the Obj say which Ortho (if there is one) can be usefully applied to him.
     // Ortho4 means Ortho in four directions (for Rect and CIRT)
-    bool         IsOrtho4Possible() const             { return bOrtho4; }
-    void         SetOrtho4Possible(bool bOn = true)   { bOrtho4=bOn; }
+    bool         IsOrtho4Possible() const             { return m_bOrtho4; }
+    void         SetOrtho4Possible(bool bOn = true)   { m_bOrtho4=bOn; }
     // Ortho8 means Ortho in 8 directions (for lines)
-    bool         IsOrtho8Possible() const             { return bOrtho8; }
-    void         SetOrtho8Possible(bool bOn = true)   { bOrtho8=bOn; }
+    bool         IsOrtho8Possible() const             { return m_bOrtho8; }
+    void         SetOrtho8Possible(bool bOn = true)   { m_bOrtho8=bOn; }
 
     // Is set by an object that was dragged.
-    bool         IsEndDragChangesAttributes() const    { return bEndDragChangesAttributes; }
-    void         SetEndDragChangesAttributes(bool bOn) { bEndDragChangesAttributes=bOn; }
-    bool         IsEndDragChangesGeoAndAttributes() const   { return bEndDragChangesGeoAndAttributes; }
-    void         SetEndDragChangesGeoAndAttributes(bool bOn) { bEndDragChangesGeoAndAttributes=bOn; }
+    bool         IsEndDragChangesAttributes() const    { return m_bEndDragChangesAttributes; }
+    void         SetEndDragChangesAttributes(bool bOn) { m_bEndDragChangesAttributes=bOn; }
+    bool         IsEndDragChangesGeoAndAttributes() const   { return m_bEndDragChangesGeoAndAttributes; }
+    void         SetEndDragChangesGeoAndAttributes(bool bOn) { m_bEndDragChangesGeoAndAttributes=bOn; }
     bool         IsEndDragChangesLayout() const   { return mbEndDragChangesLayout; }
     void         SetEndDragChangesLayout(bool bOn) { mbEndDragChangesLayout=bOn; }
 
     // Is set by the view and can be evaluated by Obj
-    bool         IsMouseDown() const                  { return !bMouseIsUp; }
-    void         SetMouseDown(bool bDown)         { bMouseIsUp=!bDown; }
+    bool         IsMouseDown() const                  { return !m_bMouseIsUp; }
+    void         SetMouseDown(bool bDown)         { m_bMouseIsUp=!bDown; }
 
     void         Reset(const Point& rPnt);
     void         NextMove(const Point& rPnt);
@@ -160,11 +160,11 @@ public:
     Fraction     GetXFact() const;
     Fraction     GetYFact() const;
 
-    SdrDragMethod* GetDragMethod() const             { return pDragMethod; }
-    void         SetDragMethod(SdrDragMethod* pMth)  { pDragMethod=pMth; }
+    SdrDragMethod* GetDragMethod() const             { return m_pDragMethod; }
+    void         SetDragMethod(SdrDragMethod* pMth)  { m_pDragMethod=pMth; }
 
-    const tools::Rectangle& GetActionRect() const          { return aActionRect; }
-    void         SetActionRect(const tools::Rectangle& rR) { aActionRect=rR; }
+    const tools::Rectangle& GetActionRect() const          { return m_aActionRect; }
+    void         SetActionRect(const tools::Rectangle& rR) { m_aActionRect=rR; }
 
     // Also considering 1stPointAsCenter
     void         TakeCreateRect(tools::Rectangle& rRect) const;

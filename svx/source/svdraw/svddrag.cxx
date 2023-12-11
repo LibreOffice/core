@@ -35,80 +35,80 @@ void SdrDragStat::Clear()
 
 void SdrDragStat::Reset()
 {
-    pView=nullptr;
-    pPageView=nullptr;
-    bShown=false;
-    nMinMov=1;
-    bMinMoved=false;
-    bHorFixed=false;
-    bVerFixed=false;
-    bWantNoSnap=false;
-    pHdl=nullptr;
-    bOrtho4=false;
-    bOrtho8=false;
-    pDragMethod=nullptr;
-    bEndDragChangesAttributes=false;
-    bEndDragChangesGeoAndAttributes=false;
+    m_pView=nullptr;
+    m_pPageView=nullptr;
+    m_bShown=false;
+    m_nMinMov=1;
+    m_bMinMoved=false;
+    m_bHorFixed=false;
+    m_bVerFixed=false;
+    m_bWantNoSnap=false;
+    m_pHdl=nullptr;
+    m_bOrtho4=false;
+    m_bOrtho8=false;
+    m_pDragMethod=nullptr;
+    m_bEndDragChangesAttributes=false;
+    m_bEndDragChangesGeoAndAttributes=false;
     mbEndDragChangesLayout=false;
-    bMouseIsUp=false;
+    m_bMouseIsUp=false;
     Clear();
-    aActionRect=tools::Rectangle();
+    m_aActionRect=tools::Rectangle();
 }
 
 void SdrDragStat::Reset(const Point& rPnt)
 {
     Reset();
     mvPnts[0]=rPnt;
-    aPos0=rPnt;
-    aRealNow=rPnt;
+    m_aPos0=rPnt;
+    m_aRealNow=rPnt;
 }
 
 void SdrDragStat::NextMove(const Point& rPnt)
 {
-    aPos0=mvPnts.back();
-    aRealNow=rPnt;
+    m_aPos0=mvPnts.back();
+    m_aRealNow=rPnt;
     mvPnts.back()=rPnt;
 }
 
 void SdrDragStat::NextPoint()
 {
-    mvPnts.emplace_back(aRealNow);
+    mvPnts.emplace_back(m_aRealNow);
 }
 
 void SdrDragStat::PrevPoint()
 {
     if (mvPnts.size()>1) { // one has to remain at all times
         mvPnts.erase(mvPnts.begin()+mvPnts.size()-2);
-        mvPnts.back() = aRealNow;
+        mvPnts.back() = m_aRealNow;
     }
 }
 
 bool SdrDragStat::CheckMinMoved(const Point& rPnt)
 {
-    if (!bMinMoved) {
+    if (!m_bMinMoved) {
         tools::Long dx=rPnt.X()-GetPrev().X(); if (dx<0) dx=-dx;
         tools::Long dy=rPnt.Y()-GetPrev().Y(); if (dy<0) dy=-dy;
-        if (dx>=tools::Long(nMinMov) || dy>=tools::Long(nMinMov))
-            bMinMoved=true;
+        if (dx>=tools::Long(m_nMinMov) || dy>=tools::Long(m_nMinMov))
+            m_bMinMoved=true;
     }
-    return bMinMoved;
+    return m_bMinMoved;
 }
 
 Fraction SdrDragStat::GetXFact() const
 {
-    tools::Long nMul=mvPnts.back().X()-aRef1.X();
-    tools::Long nDiv=GetPrev().X()-aRef1.X();
+    tools::Long nMul=mvPnts.back().X()-m_aRef1.X();
+    tools::Long nDiv=GetPrev().X()-m_aRef1.X();
     if (nDiv==0) nDiv=1;
-    if (bHorFixed) { nMul=1; nDiv=1; }
+    if (m_bHorFixed) { nMul=1; nDiv=1; }
     return Fraction(nMul,nDiv);
 }
 
 Fraction SdrDragStat::GetYFact() const
 {
-    tools::Long nMul=mvPnts.back().Y()-aRef1.Y();
-    tools::Long nDiv=GetPrev().Y()-aRef1.Y();
+    tools::Long nMul=mvPnts.back().Y()-m_aRef1.Y();
+    tools::Long nDiv=GetPrev().Y()-m_aRef1.Y();
     if (nDiv==0) nDiv=1;
-    if (bVerFixed) { nMul=1; nDiv=1; }
+    if (m_bVerFixed) { nMul=1; nDiv=1; }
     return Fraction(nMul,nDiv);
 }
 
@@ -120,7 +120,7 @@ void SdrDragStat::TakeCreateRect(tools::Rectangle& rRect) const
         rRect.SetRight(aBtmRgt.X() );
         rRect.SetBottom(aBtmRgt.Y() );
     }
-    if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
+    if (m_pView!=nullptr && m_pView->IsCreate1stPointAsCenter()) {
         rRect.AdjustTop(rRect.Top()-rRect.Bottom() );
         rRect.AdjustLeft(rRect.Left()-rRect.Right() );
     }
