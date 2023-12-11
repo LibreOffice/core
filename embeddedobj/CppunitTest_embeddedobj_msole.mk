@@ -33,6 +33,10 @@ $(eval $(call gb_CppunitTest_use_libraries,embeddedobj_msole, \
     tl \
 ))
 
+$(eval $(call gb_CppunitTest_use_system_win32_libs,embeddedobj_msole,\
+	ole32 \
+))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,embeddedobj_msole))
 
 $(eval $(call gb_CppunitTest_use_ure,embeddedobj_msole))
