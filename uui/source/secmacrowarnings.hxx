@@ -32,6 +32,8 @@ class MacroWarning : public weld::MessageDialogController
 private:
     std::unique_ptr<weld::Widget> mxGrid;
     std::unique_ptr<weld::Label> mxSignsFI;
+    std::unique_ptr<weld::Label> mxNotYetValid;
+    std::unique_ptr<weld::Label> mxNoLongerValid;
     std::unique_ptr<weld::Button> mxViewSignsBtn;
     std::unique_ptr<weld::CheckButton> mxAlwaysTrustCB;
     std::unique_ptr<weld::Button> mxEnableBtn;
