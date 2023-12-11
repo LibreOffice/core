@@ -23,7 +23,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 
@@ -63,6 +65,8 @@ MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     : MessageDialogController(pParent, "uui/ui/macrowarnmedium.ui", "MacroWarnMedium", "grid")
     , mxGrid(m_xBuilder->weld_widget("grid"))
     , mxSignsFI(m_xBuilder->weld_label("signsLabel"))
+    , mxNotYetValid(m_xBuilder->weld_label("certNotYetValidLabel"))
+    , mxNoLongerValid(m_xBuilder->weld_label("certNoLongerValidLabel"))
     , mxViewSignsBtn(m_xBuilder->weld_button("viewSignsButton"))
     , mxAlwaysTrustCB(m_xBuilder->weld_check_button("alwaysTrustCheckbutton"))
     , mxEnableBtn(m_xBuilder->weld_button("ok"))
@@ -203,6 +207,14 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
     {
         OUString s( GetContentPart( mxCert->getSubjectName(), u"CN" ) );
         mxSignsFI->set_label(s);
+
+        ::DateTime now( ::DateTime::SYSTEM );
+        DateTime aDateTimeStart( DateTime::EMPTY );
+        DateTime aDateTimeEnd( DateTime::EMPTY );
+        utl::typeConvert( mxCert->getNotValidBefore(), aDateTimeStart );
+        utl::typeConvert( mxCert->getNotValidAfter(), aDateTimeEnd );
+        mxNotYetValid->set_visible(now < aDateTimeStart);
+        mxNoLongerValid->set_visible(now > aDateTimeEnd);
         mxViewSignsBtn->set_sensitive(true);
     }
 }
