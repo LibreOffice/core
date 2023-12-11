@@ -1193,7 +1193,7 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
                     pSeries->getTotalPointCount() :
                     nPointIndex);
             ///point color:
-            if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
+            if (!pSeries->hasPointOwnColor(nPropIdx) && m_xColorScheme.is())
             {
                 xPointShape->setPropertyValue("FillColor",
                     uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
