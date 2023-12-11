@@ -20,6 +20,7 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/xmlsechelper.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -31,33 +32,7 @@
 
 using namespace ::com::sun::star::security;
 using namespace ::com::sun::star;
-
-
-// HACK!!! copied from xmlsecurity/source/dialog/resourcemanager.cxx
-
-namespace
-{
-    std::u16string_view GetContentPart( std::u16string_view _rRawString, std::u16string_view _rPartId )
-    {
-        std::u16string_view      s;
-
-        size_t  nContStart = _rRawString.find( _rPartId );
-        if( nContStart != std::u16string_view::npos )
-        {
-            nContStart = nContStart + _rPartId.size();
-            ++nContStart;                   // now its start of content, directly after Id
-
-            size_t  nContEnd = _rRawString.find( ',', nContStart );
-
-            if ( nContEnd != std::u16string_view::npos )
-                s = _rRawString.substr( nContStart, nContEnd - nContStart );
-            else
-                s = _rRawString.substr( nContStart );
-        }
-
-        return s;
-    }
-}
+using namespace comphelper;
 
 MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     : MessageDialogController(pParent, "uui/ui/macrowarnmedium.ui", "MacroWarnMedium", "grid")
@@ -183,13 +158,14 @@ void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage 
         return;
 
     mpInfos = &rInfos;
-    OUString aCN_Id("CN");
-    OUStringBuffer s(GetContentPart( rInfos[ 0 ].Signer->getSubjectName(), aCN_Id ));
+    OUStringBuffer s(xmlsec::GetContentPart(rInfos[0].Signer->getSubjectName(),
+                                            rInfos[0].Signer->getCertificateKind()));
 
     for( sal_Int32 i = 1 ; i < nCnt ; ++i )
     {
         s.append(OUString::Concat("\n")
-            + GetContentPart( rInfos[ i ].Signer->getSubjectName(), aCN_Id ));
+                 + xmlsec::GetContentPart(rInfos[i].Signer->getSubjectName(),
+                                          rInfos[0].Signer->getCertificateKind()));
     }
 
     mxSignsFI->set_label(s.makeStringAndClear());
@@ -201,7 +177,7 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
     mxCert = _rxCert;
     if( mxCert.is() )
     {
-        OUString s( GetContentPart( mxCert->getSubjectName(), u"CN" ) );
+        OUString s(xmlsec::GetContentPart(mxCert->getSubjectName(), mxCert->getCertificateKind()));
         mxSignsFI->set_label(s);
         mxViewSignsBtn->set_sensitive(true);
     }
