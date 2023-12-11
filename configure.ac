@@ -3364,6 +3364,9 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
                 fi
             fi
         fi
+        if test "$enable_ccache" = yes && test -z "$CCACHE"; then
+            AC_MSG_ERROR([No suitable ccache found])
+        fi
         ;;
     esac
 else
