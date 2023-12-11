@@ -78,20 +78,19 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, weld::Button&, void)
 
     uno::Reference< security::XDocumentDigitalSignatures > xD(
         security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
-    if( xD.is() )
-    {
-        xD->setParentWindow(m_xDialog->GetXWindow());
-        if( mxCert.is() )
-        {
-            xD->showCertificate( mxCert );
-            mxAlwaysTrustCB->set_sensitive(true);
-        }
-        else if( mxStore.is() )
-        {
-            xD->showScriptingContentSignatures( mxStore, uno::Reference< io::XInputStream >() );
-            mxAlwaysTrustCB->set_sensitive(true);
-        }
-    }
+    if( !xD.is() )
+        return;
+
+    xD->setParentWindow(m_xDialog->GetXWindow());
+    if( mxCert.is() )
+        xD->showCertificate( mxCert );
+    else if( mxStore.is() )
+        xD->showScriptingContentSignatures( mxStore, uno::Reference< io::XInputStream >() );
+    else
+        return;
+
+    mxAlwaysTrustCB->set_sensitive(true);
+    mxEnableBtn->set_sensitive(true);
 }
 
 IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, weld::Button&, void)
@@ -122,7 +121,7 @@ IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, weld::Toggleable&, void)
 {
-    const bool bEnable = (mnActSecLevel < 2 || mxAlwaysTrustCB->get_active());
+    const bool bEnable = (mnActSecLevel < 3 || mxAlwaysTrustCB->get_active());
     mxEnableBtn->set_sensitive(bEnable);
     mxDisableBtn->set_sensitive(!mxAlwaysTrustCB->get_active());
 }
