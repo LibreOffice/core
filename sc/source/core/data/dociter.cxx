@@ -1383,7 +1383,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
         SCCOL nPos = i - nStartCol;
         if ( bInitialization || pNextEnd[nPos] < nRow )
         {
-            const ScAttrArray& pArray = rDoc.maTabs[nTab]->ColumnData(i).AttrArray();
+            const ScAttrArray& pArray = rDoc.maTabs[nTab]->GetColumnData(i).AttrArray();
 
             SCSIZE nIndex;
             if (bInitialization)
@@ -1579,7 +1579,7 @@ ScDocAttrIterator::ScDocAttrIterator(ScDocument& rDocument, SCTAB nTable,
     nCol( nCol1 )
 {
     if ( ValidTab(nTab) && nTab < rDoc.GetTableCount() && rDoc.maTabs[nTab] )
-        pColIter = rDoc.maTabs[nTab]->ColumnData(nCol).CreateAttrIterator( nStartRow, nEndRow );
+        pColIter = rDoc.maTabs[nTab]->GetColumnData(nCol).CreateAttrIterator( nStartRow, nEndRow );
 }
 
 ScDocAttrIterator::~ScDocAttrIterator()
@@ -1599,7 +1599,7 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
 
         ++nCol;
         if ( nCol <= nEndCol )
-            pColIter = rDoc.maTabs[nTab]->ColumnData(nCol).CreateAttrIterator( nStartRow, nEndRow );
+            pColIter = rDoc.maTabs[nTab]->GetColumnData(nCol).CreateAttrIterator( nStartRow, nEndRow );
         else
             pColIter.reset();
     }
@@ -1711,10 +1711,10 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument& rDocument, SCTAB nTable,
 {
     if ( ValidTab(nTab) && nTab < rDoc.GetTableCount() && rDoc.maTabs[nTab] )
     {
-        pColIter = rDoc.maTabs[nTab]->ColumnData(nIterStartCol).CreateAttrIterator( nStartRow, nEndRow );
+        pColIter = rDoc.maTabs[nTab]->GetColumnData(nIterStartCol).CreateAttrIterator( nStartRow, nEndRow );
         while ( nIterEndCol < nEndCol &&
-                rDoc.maTabs[nTab]->ColumnData(nIterEndCol).IsAllAttrEqual(
-                    rDoc.maTabs[nTab]->ColumnData(nIterEndCol+1), nStartRow, nEndRow ) )
+                rDoc.maTabs[nTab]->GetColumnData(nIterEndCol).IsAllAttrEqual(
+                    rDoc.maTabs[nTab]->GetColumnData(nIterEndCol+1), nStartRow, nEndRow ) )
             ++nIterEndCol;
     }
 }
@@ -1728,7 +1728,7 @@ void ScAttrRectIterator::DataChanged()
     if (pColIter)
     {
         SCROW nNextRow = pColIter->GetNextRow();
-        pColIter = rDoc.maTabs[nTab]->ColumnData(nIterStartCol).CreateAttrIterator( nNextRow, nEndRow );
+        pColIter = rDoc.maTabs[nTab]->GetColumnData(nIterStartCol).CreateAttrIterator( nNextRow, nEndRow );
     }
 }
 
@@ -1749,10 +1749,10 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
         if ( nIterStartCol <= nEndCol )
         {
             nIterEndCol = nIterStartCol;
-            pColIter = rDoc.maTabs[nTab]->ColumnData(nIterStartCol).CreateAttrIterator( nStartRow, nEndRow );
+            pColIter = rDoc.maTabs[nTab]->GetColumnData(nIterStartCol).CreateAttrIterator( nStartRow, nEndRow );
             while ( nIterEndCol < nEndCol &&
-                    rDoc.maTabs[nTab]->ColumnData(nIterEndCol).IsAllAttrEqual(
-                        rDoc.maTabs[nTab]->ColumnData(nIterEndCol+1), nStartRow, nEndRow ) )
+                    rDoc.maTabs[nTab]->GetColumnData(nIterEndCol).IsAllAttrEqual(
+                        rDoc.maTabs[nTab]->GetColumnData(nIterEndCol+1), nStartRow, nEndRow ) )
                 ++nIterEndCol;
         }
         else

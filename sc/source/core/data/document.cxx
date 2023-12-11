@@ -5509,7 +5509,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 
             //TODO: pass on ?
 
-            const ScAttrArray& pAttrArray = pTable->ColumnData(nOldCol).AttrArray();
+            const ScAttrArray& pAttrArray = pTable->GetColumnData(nOldCol).AttrArray();
             SCSIZE nIndex;
             if ( pAttrArray.Count() )
                 pAttrArray.Search( nOldRow, nIndex );

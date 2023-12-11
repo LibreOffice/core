@@ -309,12 +309,8 @@ public:
     // out-of-line the cold part of the function
     void CreateColumnIfNotExistsImpl( const SCCOL nScCol );
 
-    ScColumnData& GetColumnData( SCCOL nCol )
-    {
-        if( nCol >= aCol.size())
-            return aDefaultColData;
-        return aCol[nCol];
-    }
+    const ScColumnData& GetColumnData( SCCOL nCol ) const { return nCol < aCol.size() ? aCol[ nCol ] : aDefaultColData; }
+    ScColumnData& GetColumnData( SCCOL nCol ) { return nCol < aCol.size() ? aCol[ nCol ] : aDefaultColData; }
 
     sal_uInt64      GetCellCount() const;
     sal_uInt64      GetWeightedCount() const;
@@ -1186,8 +1182,6 @@ public:
     OString dumpSheetGeomData(bool bColumns, SheetGeomType eGeomType);
 
     std::set<SCCOL> QueryColumnsWithFormulaCells() const;
-
-    const ScColumnData& ColumnData( SCCOL nCol ) const { return nCol < aCol.size() ? aCol[ nCol ] : aDefaultColData; }
 
     void CheckIntegrity() const;
 

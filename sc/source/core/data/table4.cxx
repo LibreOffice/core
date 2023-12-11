@@ -1311,7 +1311,7 @@ void ScTable::GetBackColorArea(SCCOL& rStartCol, SCROW& /*rStartRow*/,
         {
             for (SCCOL nCol = rStartCol; nCol <= rEndCol; ++nCol)
             {
-                const ScPatternAttr* pPattern = ColumnData(nCol).GetPattern(rEndRow + 1);
+                const ScPatternAttr* pPattern = GetColumnData(nCol).GetPattern(rEndRow + 1);
                 const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
                 if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty() ||
                     pBackground != pDefBackground)
