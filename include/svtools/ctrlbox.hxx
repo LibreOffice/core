@@ -329,6 +329,7 @@ private:
     bool            mbWYSIWYG;
     OUString        maFontMRUEntriesFile;
     Idle            maUpdateIdle;
+    Link<const FontMetric&, void> m_aLivePreviewHdl;
 
     SVT_DLLPRIVATE void         ImplDestroyFontList();
 
@@ -356,6 +357,8 @@ public:
     void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xComboBox->connect_focus_in(rLink); }
     void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_xComboBox->connect_focus_out(rLink); }
     void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_xComboBox->connect_key_press(rLink); }
+    void connect_popup_toggled(const Link<weld::ComboBox&, void>& rLink){ m_xComboBox->connect_popup_toggled(rLink); }
+    void connect_live_preview(const Link<const FontMetric&, void>& rLink) { m_aLivePreviewHdl = rLink; }
     int get_active() const { return m_xComboBox->get_active(); }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
     void set_active_or_entry_text(const OUString& rText);
