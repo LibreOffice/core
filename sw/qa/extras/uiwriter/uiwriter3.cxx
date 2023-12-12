@@ -2379,7 +2379,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf111969_lastHalfcharOfSelection)
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    // move the cursor after the "o" (this is better/safer than testing cursor at end of paragrah)
+    // move the cursor after the "o" (this is better/safer than testing cursor at end of paragraph)
     pWrtShell->Insert2("Hello!");
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     // get last pixel that will be part of the selection (current position 1pt wide).
