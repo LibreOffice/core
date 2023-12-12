@@ -52,7 +52,6 @@ private:
     std::vector<prefBoxEntry> m_prefBoxEntries;
 
     bool m_bSorted;
-    weld::Window* m_pParent;
 
     void AddToModifiedVector(const std::shared_ptr<Prop_Impl>& rProp);
     static std::vector<OUString> commaStringToSequence(std::u16string_view rCommaSepString);
@@ -67,7 +66,6 @@ private:
     DECL_LINK(ExpandingHdl_Impl, const weld::TreeIter&, bool);
     DECL_LINK(HeaderBarClick, int, void);
     DECL_STATIC_LINK(CuiAboutConfigTabPage, ValidNameHdl, SvxNameDialog&, bool);
-    DECL_LINK(EditNumberHdl, SvxListDialog&, OUString);
 
 public:
     explicit CuiAboutConfigTabPage(weld::Window* pParent);

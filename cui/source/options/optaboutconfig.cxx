@@ -104,7 +104,6 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
     , m_xPrefBox(m_xBuilder->weld_tree_view("preferences"))
     , m_xScratchIter(m_xPrefBox->make_iterator())
     , m_bSorted(false)
-    , m_pParent(pParent)
 {
     m_xPrefBox->set_size_request(m_xPrefBox->get_approximate_digit_width() * 100,
                                  m_xPrefBox->get_height_rows(23));

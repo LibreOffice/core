@@ -407,19 +407,6 @@ void BitmapEx::Expand( sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent )
                 "BitmapEx::Expand(): size mismatch for bitmap and alpha mask.");
 }
 
-bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc )
-{
-    if( maBitmap.IsEmpty() )
-        return false;
-
-    bool bRet = maBitmap.CopyPixel( rRectDst, rRectSrc );
-
-    if( bRet && !maAlphaMask.IsEmpty() )
-        maAlphaMask.CopyPixel( rRectDst, rRectSrc );
-
-    return bRet;
-}
-
 bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc,
                           const BitmapEx& rBmpExSrc )
 {

@@ -199,11 +199,6 @@ void SvxHyperlinkInternetTp::RemoveImproperProtocol(std::u16string_view aProperS
     }
 }
 
-OUString SvxHyperlinkInternetTp::GetSchemeFromButtons()
-{
-    return INET_HTTP_SCHEME;
-}
-
 INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons()
 {
     return INetProtocol::Http;

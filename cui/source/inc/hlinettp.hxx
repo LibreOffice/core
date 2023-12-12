@@ -39,7 +39,6 @@ private:
     std::unique_ptr<SvxHyperURLBox> m_xCbbTarget;
     std::unique_ptr<weld::Label> m_xFtTarget;
 
-    DECL_LINK( Click_SmartProtocol_Impl, weld::Toggleable&, void ); ///< Radiobutton toggled: Type HTTP or
     DECL_LINK( LostFocusTargetHdl_Impl, weld::Widget&, void ); ///< Combobox "Target" lost its focus
     DECL_LINK( ModifiedTargetHdl_Impl, weld::ComboBox&, void );    ///< Contents of editfield "Target" modified
 
@@ -48,7 +47,6 @@ private:
 
     void    SetScheme(std::u16string_view rScheme);
     void    RemoveImproperProtocol(std::u16string_view rProperScheme);
-    static OUString  GetSchemeFromButtons();
     static INetProtocol GetSmartProtocolFromButtons();
 
     OUString CreateAbsoluteURL() const;

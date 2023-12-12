@@ -152,27 +152,6 @@ public:
                             const tools::Rectangle& rRectSrc,
                             const BitmapEx& rBmpExSrc );
 
-    /** Copy a rectangular area from one part of the bitmap to another.
-
-        @param rRectDst
-        Destination rectangle in this bitmap. This is clipped to the
-        bitmap dimensions.
-
-        @param rRectSrc
-        Source rectangle in this bitmap. This is clipped to the
-        bitmap dimensions. Note further that no scaling takes place
-        during this copy operation, i.e. only the minimum of source
-        and destination rectangle's width and height are used.
-
-        @return true, if the operation completed successfully. false
-        is not only returned when the operation failed, but also if
-        nothing had to be done, e.g. because one of the rectangles are
-        empty.
-     */
-    bool                CopyPixel(
-                            const tools::Rectangle& rRectDst,
-                            const tools::Rectangle& rRectSrc );
-
     /** Fill the entire bitmap with the given color
 
         @param rFillColor

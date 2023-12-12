@@ -108,11 +108,6 @@ public:
 
     bool CopyPixel_AlphaOptimized(
                     const tools::Rectangle& rRectDst,
-                    const tools::Rectangle& rRectSrc )
-    { return maBitmap.CopyPixel_AlphaOptimized(rRectDst, rRectSrc); }
-
-    bool CopyPixel_AlphaOptimized(
-                    const tools::Rectangle& rRectDst,
                     const tools::Rectangle& rRectSrc,
                     const AlphaMask& rBmpSrc )
     { return maBitmap.CopyPixel_AlphaOptimized(rRectDst, rRectSrc, rBmpSrc); }
