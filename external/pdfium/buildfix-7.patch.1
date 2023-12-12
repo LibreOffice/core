@@ -1,0 +1,13 @@
+fix weird link failures on centos7:
+pdfium/core/fpdfdoc/cpdf_formcontrol.cpp:134: undefined reference to `fxcrt::StringViewTemplate<char>::StringViewTemplate(char const&)'
+--- pdfium/core/fxcrt/string_view_template.h.orig	2025-11-11 13:26:05.268265314 +0100
++++ pdfium/core/fxcrt/string_view_template.h	2025-11-11 13:26:36.836918076 +0100
+@@ -73,7 +73,7 @@
+   // Deliberately implicit to avoid calling on every char literal.
+   // |ch| must be an lvalue that outlives the StringViewTemplate.
+   // NOLINTNEXTLINE(runtime/explicit)
+-  constexpr StringViewTemplate(const CharType& ch) noexcept
++  StringViewTemplate(const CharType& ch) noexcept
+       : m_Span(reinterpret_cast<const UnsignedType*>(&ch), 1u) {}
+ 
+   StringViewTemplate& operator=(const CharType* src) {

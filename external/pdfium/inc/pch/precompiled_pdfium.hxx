@@ -334,7 +334,6 @@
 #include <core/fxcrt/pauseindicator_iface.h>
 #include <core/fxcrt/retain_ptr.h>
 #include <core/fxcrt/scoped_set_insertion.h>
-#include <core/fxcrt/small_buffer.h>
 #include <core/fxcrt/span_util.h>
 #include <core/fxcrt/stl_util.h>
 #include <core/fxcrt/string_data_template.h>
@@ -375,6 +374,7 @@
 #include <core/fxge/cfx_substfont.h>
 #include <core/fxge/cfx_textrenderoptions.h>
 #include <core/fxge/cfx_unicodeencoding.h>
+#include <core/fxge/dib/blend.h>
 #include <core/fxge/dib/cfx_bitmapcomposer.h>
 #include <core/fxge/dib/cfx_bitmapstorer.h>
 #include <core/fxge/dib/cfx_cmyk_to_srgb.h>
@@ -458,6 +458,7 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
+#include <third_party/abseil-cpp/absl/container/inlined_vector.h>
 #include <third_party/abseil-cpp/absl/types/optional.h>
 #include <third_party/abseil-cpp/absl/types/variant.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
@@ -478,8 +479,8 @@
 #include <third_party/base/debug/alias.h>
 #include <third_party/base/memory/aligned_memory.h>
 #include <third_party/base/memory/ptr_util.h>
-#include <third_party/base/no_destructor.h>
 #include <third_party/base/notreached.h>
+#include <third_party/base/numerics/clamped_math.h>
 #include <third_party/base/numerics/safe_conversions.h>
 #include <third_party/base/numerics/safe_math.h>
 #endif // PCH_LEVEL >= 3
