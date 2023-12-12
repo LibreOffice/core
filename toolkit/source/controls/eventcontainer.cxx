@@ -133,12 +133,11 @@ void ScriptEventContainer::removeByName( const OUString& Name )
     }
 
     sal_Int32 iHashResult = (*aIt).second;
-    Any aOldElement = mValues[ iHashResult ];
 
     // Fire event
     ContainerEvent aEvent;
     aEvent.Source = *this;
-    aEvent.Element = aOldElement;
+    aEvent.Element = mValues[iHashResult];
     aEvent.Accessor <<= Name;
     maContainerListeners.elementRemoved( aEvent );
 

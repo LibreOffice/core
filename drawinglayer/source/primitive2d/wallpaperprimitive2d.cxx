@@ -52,12 +52,10 @@ namespace drawinglayer::primitive2d
                         aObjectTransform.set(0, 2, getLocalObjectRange().getMinX());
                         aObjectTransform.set(1, 2, getLocalObjectRange().getMinY());
 
-                        Primitive2DReference xReference(
+                        aRetval.set(
                             new BitmapPrimitive2D(
                                 getBitmapEx(),
                                 aObjectTransform));
-
-                        aRetval = xReference;
                     }
                     else
                     {
@@ -151,11 +149,10 @@ namespace drawinglayer::primitive2d
                             aObjectTransform.set(0, 2, aTargetRange.getMinX());
                             aObjectTransform.set(1, 2, aTargetRange.getMinY());
 
-                            Primitive2DReference xReference(
+                            aRetval.set(
                                 new BitmapPrimitive2D(
                                     getBitmapEx(),
                                     aObjectTransform));
-                            aRetval = xReference;
 
                             // clip when not completely inside object range
                             bNeedsClipping = !getLocalObjectRange().isInside(aTargetRange);
@@ -188,11 +185,10 @@ namespace drawinglayer::primitive2d
                                     getLocalObjectRange().getMinimum()));
 
                             // create FillBitmapPrimitive
-                            const drawinglayer::primitive2d::Primitive2DReference xFillBitmap(
+                            aRetval.set(
                                 new drawinglayer::primitive2d::FillGraphicPrimitive2D(
                                     aObjectTransform,
                                     aFillGraphicAttribute));
-                            aRetval = xFillBitmap;
 
                             // always embed tiled fill to clipping
                             bNeedsClipping = true;

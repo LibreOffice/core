@@ -127,9 +127,8 @@ void SvxDrawPage::dispose()
     // Create an event with this as sender
     try
     {
-        uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) ) );
         css::document::EventObject aEvt;
-        aEvt.Source = xSource;
+        aEvt.Source.set(uno::Reference<uno::XInterface>::query( static_cast<lang::XComponent *>(this) ));
         // inform all listeners to release this object
         // The listener container are automatically cleared
         mrBHelper.aLC.disposeAndClear( aEvt );

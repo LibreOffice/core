@@ -1525,8 +1525,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         // return nothing, because property <TextRange> isn't
                         // valid for to-page anchored shapes
-                        uno::Any aAny;
-                        aRet = aAny;
+                        aRet = uno::Any();
                     }
                     else
                     {

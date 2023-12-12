@@ -130,7 +130,7 @@ protected:
         with a new one), this new element must pass our own internal approval, plus the approval
         given here.
     */
-    void                setElementApproval( PContainerApprove _pElementApproval ) { m_pElementApproval = _pElementApproval; }
+    void setElementApproval(const PContainerApprove& _pElementApproval ) { m_pElementApproval = _pElementApproval; }
     const PContainerApprove& getElementApproval() const { return m_pElementApproval; }
 
 protected:
