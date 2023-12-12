@@ -9,8 +9,8 @@
 
 pdfium_patches :=
 pdfium_patches += buildfix.patch.1
+pdfium_patches += buildfix-7.patch.1
 pdfium_patches += fa84e52-revert.patch.1
-pdfium_patches += ubsan.patch
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
 pdfium_patches += msvc2017.patch.1
