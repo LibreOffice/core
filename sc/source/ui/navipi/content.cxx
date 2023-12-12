@@ -24,6 +24,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svdocapt.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -38,6 +39,7 @@
 #include <navipi.hxx>
 #include <global.hxx>
 #include <docsh.hxx>
+#include <docfunc.hxx>
 #include <scmod.hxx>
 #include <rangenam.hxx>
 #include <dbdata.hxx>
@@ -368,6 +370,17 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
                 ScAddress aPos = GetNotePos( nChild );
                 pParentWindow->SetCurrentTable( aPos.Tab() );
                 pParentWindow->SetCurrentCell( aPos.Col(), aPos.Row() );
+                // Check whether the comment is currently visible and toggle its visibility
+                ScDocument* pSrcDoc = GetSourceDocument();
+                if (ScPostIt* pNote = pSrcDoc->GetNote(aPos.Col(), aPos.Row(), aPos.Tab()))
+                {
+                    bool bVisible = pNote->IsCaptionShown();
+                    // Effectivelly set the visibility of the comment
+                    GetManualOrCurrent()->GetDocFunc().ShowNote(aPos, !bVisible);
+                    // Put the note in edit mode
+                    ScTabViewShell* pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
+                    pScTabViewShell->EditNote();
+                }
             }
             break;
 
@@ -525,6 +538,13 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
     bool bDone = false;
 
+    ScContentId nType;
+    sal_uLong nChild;
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_cursor(xEntry.get()))
+        xEntry.reset();
+    GetEntryIndexes(nType, nChild, xEntry.get());
+
     switch ( rCEvt.GetCommand() )
     {
         case CommandEventId::ContextMenu:
@@ -581,6 +601,10 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     sActive = sId;
                 xDocMenu->set_active(sActive, true);
 
+                // Edit Comments entry is only visible for comments
+                if (nType != ScContentId::NOTE)
+                    xPop->set_visible("edit", false);
+
                 OUString sIdent = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
                 if (sIdent == "hyperlink")
                     pParentWindow->SetDropMode(0);
@@ -592,6 +616,20 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 {
                     OUString aName = xDocMenu->get_label(sIdent);
                     SelectDoc(aName);
+                }
+                else if (sIdent == "edit")
+                {
+                    ScAddress aPos = GetNotePos( nChild );
+                    pParentWindow->SetCurrentTable( aPos.Tab() );
+                    pParentWindow->SetCurrentCell( aPos.Col(), aPos.Row() );
+                    ScDocument* pSrcDoc = GetSourceDocument();
+                    if (pSrcDoc->GetNote(aPos.Col(), aPos.Row(), aPos.Tab()))
+                    {
+                        // Make the note visible and put it in edit mode
+                        GetManualOrCurrent()->GetDocFunc().ShowNote(aPos, true);
+                        ScTabViewShell* pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
+                        pScTabViewShell->EditNote();
+                    }
                 }
             }
             break;
