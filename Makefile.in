@@ -192,6 +192,7 @@ ifeq ($(OS),ANDROID)
 	rm -fr $(SRCDIR)/android/source/assets
 	rm -fr $(SRCDIR)/android/source/assets_fullUI
 	rm -fr $(SRCDIR)/android/source/assets_strippedUI
+	rm -fr $(SRCDIR)/android/source/res_generated
 endif
 endif
 
