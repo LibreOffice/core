@@ -2347,7 +2347,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                                    VclMessageType::Question, VclButtonsType::YesNo,
-                                                                   ScResId(STR_EDIT_EXISTING_COND_FORMATS)));
+                                                                   ScResId(STR_EDIT_EXISTING_COND_FORMATS), pTabViewShell));
                     xQueryBox->set_default_response(RET_YES);
                     bool bEditExisting = xQueryBox->run() == RET_YES;
                     if (bEditExisting)
