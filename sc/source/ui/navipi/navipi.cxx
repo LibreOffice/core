@@ -535,6 +535,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     m_xLbEntries->Refresh( ScContentId::GRAPHIC );
                     m_xLbEntries->Refresh( ScContentId::OLEOBJECT );
                     m_xLbEntries->Refresh( ScContentId::DRAWING );
+                    m_xLbEntries->Refresh( ScContentId::NOTE );
                     break;
 
                 case SfxHintId::ScAreaLinksChanged:

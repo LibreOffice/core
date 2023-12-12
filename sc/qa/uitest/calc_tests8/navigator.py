@@ -10,6 +10,7 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.calc import enter_text_to_cell
 
 class navigator(UITestCase):
 
@@ -176,6 +177,32 @@ class navigator(UITestCase):
             self.assertEqual('Drawing objects', get_state_as_dict(xDrawings)['Text'])
             self.assertEqual(len(xDrawings.getChildren()), 1)
             self.assertEqual('withname', get_state_as_dict(xDrawings.getChild('0'))['Text'])
+
+            self.xUITest.executeCommand(".uno:Sidebar")
+
+
+    def test_tdf158652(self):
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWin = xCalcDoc.getChild("grid_window")
+
+            self.xUITest.executeCommand(".uno:Sidebar")
+
+            xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "ScNavigatorPanel"}))
+
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")
+            xContentBox = xNavigatorPanel.getChild('contentbox')
+            enter_text_to_cell(xGridWin, "A1", "1")
+
+            commentText = mkPropertyValues({"Text":"CommentText"})
+            self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", commentText)
+            xComments = xContentBox.getChild("6")
+            self.assertEqual(len(xComments.getChildren()), 1)
+
+            self.xUITest.executeCommand(".uno:DeleteNote")
+            xComments = xContentBox.getChild("6")
+            self.assertEqual(len(xComments.getChildren()), 0)
 
             self.xUITest.executeCommand(".uno:Sidebar")
 
