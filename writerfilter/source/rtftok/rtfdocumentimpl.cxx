@@ -3865,11 +3865,6 @@ RTFFrame::RTFFrame(RTFParserState* pParserState)
 
 void RTFFrame::setSprm(Id nId, Id nValue)
 {
-    if (m_pDocumentImpl->getFirstRun() && !m_pDocumentImpl->isStyleSheetImport())
-    {
-        m_pDocumentImpl->checkFirstRun();
-        m_pDocumentImpl->setNeedPar(false);
-    }
     switch (nId)
     {
         case NS_ooxml::LN_CT_FramePr_w:
@@ -3907,6 +3902,12 @@ void RTFFrame::setSprm(Id nId, Id nValue)
             break;
         default:
             break;
+    }
+
+    if (m_pDocumentImpl->getFirstRun() && !m_pDocumentImpl->isStyleSheetImport() && hasProperties())
+    {
+        m_pDocumentImpl->checkFirstRun();
+        m_pDocumentImpl->setNeedPar(false);
     }
 }
 
