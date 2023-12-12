@@ -394,46 +394,6 @@ bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > const & r
     return bOk;
 }
 
-uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
-                                                                const uno::Reference< uno::XComponentContext >& rxContext,
-                                                                const uno::Reference< XInputStream >& xStream,
-                                                                const ::rtl::Reference< EncryptionData > &rData )
-{
-    if ( !rData.is() )
-        throw ZipIOException("Encrypted stream without encryption data!" );
-
-    if ( !rData->m_aKey.hasElements() )
-        throw packages::WrongPasswordException(THROW_WHERE );
-
-    uno::Reference< XSeekable > xSeek( xStream, UNO_QUERY );
-    if ( !xSeek.is() )
-        throw ZipIOException("The stream must be seekable!" );
-
-    // if we have a digest, then this file is an encrypted one and we should
-    // check if we can decrypt it or not
-    OSL_ENSURE( rData->m_aDigest.hasElements(), "Can't detect password correctness without digest!" );
-    if ( rData->m_aDigest.hasElements() )
-    {
-        sal_Int32 nSize = sal::static_int_cast< sal_Int32 >( xSeek->getLength() );
-        if ( nSize > n_ConstDigestLength + 32 )
-            nSize = n_ConstDigestLength + 32;
-
-        // skip header
-        xSeek->seek( n_ConstHeaderSize + rData->m_aInitVector.getLength() +
-                                rData->m_aSalt.getLength() + rData->m_aDigest.getLength() );
-
-        // Only want to read enough to verify the digest
-        Sequence < sal_Int8 > aReadBuffer ( nSize );
-
-        xStream->readBytes( aReadBuffer, nSize );
-
-        if ( !StaticHasValidPassword( rxContext, aReadBuffer, rData ) )
-            throw packages::WrongPasswordException(THROW_WHERE );
-    }
-
-    return new XUnbufferedStream( aMutexHolder, xStream, rData );
-}
-
 #if 0
 // for debugging purposes
 void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
@@ -668,6 +628,47 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
         xBufStream = new XBufferedStream(xSrcStream);
 
     return xBufStream;
+}
+
+uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(
+        const rtl::Reference<comphelper::RefCountedMutex>& rMutexHolder,
+        const uno::Reference<uno::XComponentContext>& rxContext,
+        const uno::Reference<XInputStream>& xStream,
+        const ::rtl::Reference<EncryptionData> &rData)
+{
+    if (!rData.is())
+        throw ZipIOException("Encrypted stream without encryption data!" );
+
+    if (!rData->m_aKey.hasElements())
+        throw packages::WrongPasswordException(THROW_WHERE);
+
+    uno::Reference<XSeekable> xSeek(xStream, UNO_QUERY);
+    if (!xSeek.is())
+        throw ZipIOException("The stream must be seekable!");
+
+    // if we have a digest, then this file is an encrypted one and we should
+    // check if we can decrypt it or not
+    OSL_ENSURE(rData->m_aDigest.hasElements(), "Can't detect password correctness without digest!");
+    if (rData->m_aDigest.hasElements())
+    {
+        sal_Int32 nSize = sal::static_int_cast<sal_Int32>(xSeek->getLength());
+        if (nSize > n_ConstDigestLength + 32)
+            nSize = n_ConstDigestLength + 32;
+
+        // skip header
+        xSeek->seek(n_ConstHeaderSize + rData->m_aInitVector.getLength() +
+                    rData->m_aSalt.getLength() + rData->m_aDigest.getLength());
+
+        // Only want to read enough to verify the digest
+        Sequence<sal_Int8> aReadBuffer(nSize);
+
+        xStream->readBytes(aReadBuffer, nSize);
+
+        if (!StaticHasValidPassword(rxContext, aReadBuffer, rData))
+            throw packages::WrongPasswordException(THROW_WHERE);
+    }
+
+    return new XUnbufferedStream(rMutexHolder, xStream, rData);
 }
 
 ZipEnumeration ZipFile::entries()
