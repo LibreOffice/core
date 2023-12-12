@@ -321,10 +321,10 @@ struct EventMultiplexerImpl
     /// Schedules tick events, if mbIsAutoMode is true
     void handleTicks();
 
-    basegfx::B2DPoint toMatrixPoint(uno::Reference<presentation::XSlideShowView> xView,
-                                    basegfx::B2DPoint pnt);
-    basegfx::B2DPoint toNormalPoint(uno::Reference<presentation::XSlideShowView> xView,
-                                    basegfx::B2DPoint pnt);
+    basegfx::B2DPoint toMatrixPoint(const uno::Reference<presentation::XSlideShowView>& xView,
+                                    const basegfx::B2DPoint& pnt);
+    basegfx::B2DPoint toNormalPoint(const uno::Reference<presentation::XSlideShowView>& xView,
+                                    const basegfx::B2DPoint& pnt);
 
     EventQueue&                         mrEventQueue;
     UnoViewContainer const&             mrViewContainer;
@@ -578,8 +578,8 @@ void EventMultiplexerImpl::handleTicks()
 }
 
 basegfx::B2DPoint
-EventMultiplexerImpl::toNormalPoint(uno::Reference<presentation::XSlideShowView> xView,
-                                    basegfx::B2DPoint pnt)
+EventMultiplexerImpl::toNormalPoint(const uno::Reference<presentation::XSlideShowView>& xView,
+                                    const basegfx::B2DPoint& pnt)
 {
     UnoViewVector::const_iterator aIter;
     const UnoViewVector::const_iterator aEnd(mrViewContainer.end());
@@ -601,8 +601,8 @@ EventMultiplexerImpl::toNormalPoint(uno::Reference<presentation::XSlideShowView>
 }
 
 basegfx::B2DPoint
-EventMultiplexerImpl::toMatrixPoint(uno::Reference<presentation::XSlideShowView> xView,
-                                    basegfx::B2DPoint pnt)
+EventMultiplexerImpl::toMatrixPoint(const uno::Reference<presentation::XSlideShowView>& xView,
+                                    const basegfx::B2DPoint& pnt)
 {
     UnoViewVector::const_iterator aIter;
     const UnoViewVector::const_iterator aEnd(mrViewContainer.end());
