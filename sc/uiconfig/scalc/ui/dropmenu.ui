@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="contextmenu">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkMenuItem" id="dragmodeitem">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="dropmenu|SCSTR_DRAGMODE">Drag Mode</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child type="submenu">
           <object class="GtkMenu" id="dragmodesubmenu">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkRadioMenuItem" id="hyperlink">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="dropmenu|hyperlink">Insert as Hyperlink</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="active">True</property>
-                <property name="draw_as_radio">True</property>
+                <property name="draw-as-radio">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="hyperlink-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="dropmenu|extended_tip|hyperlink">Inserts a hyperlink when you drag-and-drop an object from the Navigator into a document.</property>
@@ -33,10 +33,10 @@
             <child>
               <object class="GtkRadioMenuItem" id="link">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="dropmenu|link">Insert as Link</property>
-                <property name="use_underline">True</property>
-                <property name="draw_as_radio">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-as-radio">True</property>
                 <property name="group">hyperlink</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="link-atkobject">
@@ -48,10 +48,10 @@
             <child>
               <object class="GtkRadioMenuItem" id="copy">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="dropmenu|copy">Insert as Copy</property>
-                <property name="use_underline">True</property>
-                <property name="draw_as_radio">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-as-radio">True</property>
                 <property name="group">hyperlink</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="copy-atkobject">
@@ -67,15 +67,23 @@
     <child>
       <object class="GtkMenuItem" id="displayitem">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="dropmenu|SCSTR_DISPLAY">Display</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child type="submenu">
           <object class="GtkMenu" id="displaymenu">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="edit">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="dropmenu|SCSTR_EDIT">Edit Comment</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
   </object>

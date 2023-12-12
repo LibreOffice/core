@@ -28,6 +28,8 @@
 #include <svl/zformat.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/keycodes.hxx>
 #include <editeng/editview.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -507,6 +509,10 @@ void ScViewFunc::ShowNote( bool bShow )
 
 void ScViewFunc::EditNote()
 {
+    // HACK: If another text object is selected, make sure it gets unselected
+    if (FuText* pOldFuText = dynamic_cast<FuText*>(GetDrawFuncPtr()))
+        pOldFuText->KeyInput(KeyEvent(0, vcl::KeyCode(KEY_ESCAPE)));
+
     // for editing display and activate
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
