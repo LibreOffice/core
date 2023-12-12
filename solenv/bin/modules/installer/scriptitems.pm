@@ -655,25 +655,7 @@ sub replace_setup_variables
     my $updateid = $productname . "_" . $libo_version_major . "_" . $$languagestringref;
     $updateid =~ s/ /_/g;
 
-    my $updatechannel = "";
-    if ( $ENV{'UPDATE_CONFIG'} && $ENV{'UPDATE_CONFIG'} ne "")
-    {
-        open(CONFIG, glob($ENV{'UPDATE_CONFIG'}));
-        while (<CONFIG>)
-        {
-            chomp;
-            if (/^s*(\S+)=(\S+)$/)
-            {
-                my $key = $1;
-                my $val = $2;
-                if ($key eq "channel")
-                {
-                    $updatechannel = $val;
-                }
-            }
-        }
-        close(CONFIG);
-    }
+    my $updatechannel = $ENV{'ONLINEUPDATE_MAR_CHANNEL'};
 
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {

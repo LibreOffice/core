@@ -6,7 +6,6 @@ import sys
 
 import requests
 
-from config import parse_config
 from path import UpdaterPath, mkdir_p, convert_to_unix, convert_to_native
 from signing import sign_mar_file
 from tools import get_file_info, get_hash
@@ -54,9 +53,9 @@ def handle_language(lang_entries, filedir):
     return langs
 
 
-def download_mar_for_update_channel_and_platform(config, platform, temp_dir):
-    base_url = config.server_url + "update/partial-targets/1/"
-    url = base_url + platform + "/" + config.channel
+def download_mar_for_update_channel_and_platform(server_url, channel, platform, temp_dir):
+    base_url = server_url + "update/partial-targets/1/"
+    url = base_url + platform + "/" + channel
     r = requests.get(url)
     if r.status_code != 200:
         print(r.content)
@@ -110,9 +109,13 @@ def main():
     updater_path.ensure_dir_exist()
 
     mar_name_prefix = sys.argv[2]
-    update_config = sys.argv[3]
-    platform = sys.argv[4]
-    build_id = sys.argv[5]
+    server_url = sys.argv[3]
+    channel = sys.argv[4]
+    certificate_path = sys.argv[5]
+    certificate_name = sys.argv[6]
+    base_url = sys.argv[7]
+    platform = sys.argv[8]
+    build_id = sys.argv[9]
 
     current_build_path = updater_path.get_current_build_dir()
     mar_dir = updater_path.get_mar_dir()
@@ -123,9 +126,7 @@ def main():
     if sys.platform == "cygwin":
         current_build_path = add_single_dir(current_build_path)
 
-    config = parse_config(update_config)
-
-    updates = download_mar_for_update_channel_and_platform(config, platform, temp_dir)
+    updates = download_mar_for_update_channel_and_platform(server_url, channel, platform, temp_dir)
 
     data = {"partials": []}
 
@@ -134,9 +135,9 @@ def main():
         mar_file = os.path.join(update_dir, file_name)
         subprocess.call([os.path.join(current_dir_path, 'make_incremental_update.sh'), convert_to_native(mar_file),
                          convert_to_native(update["complete"]), convert_to_native(current_build_path)])
-        sign_mar_file(update_dir, config, mar_file, mar_name_prefix)
+        sign_mar_file(update_dir, certificate_path, certificate_name, mar_file, mar_name_prefix)
 
-        partial_info = {"file": get_file_info(mar_file, config.base_url), "from": build, "to": build_id,
+        partial_info = {"file": get_file_info(mar_file, base_url), "from": build, "to": build_id,
                         "languages": {}}
 
         # on Windows we don't use language packs
@@ -153,10 +154,10 @@ def main():
                 subprocess.call(
                     [os.path.join(current_dir_path, 'make_incremental_update.sh'), convert_to_native(lang_mar_file),
                      convert_to_native(lang_info), convert_to_native(language_dir)])
-                sign_mar_file(update_dir, config, lang_mar_file, mar_name_prefix)
+                sign_mar_file(update_dir, certificate_path, certificate_name, lang_mar_file, mar_name_prefix)
 
                 # add the partial language info
-                partial_info["languages"][lang] = get_file_info(lang_mar_file, config.base_url)
+                partial_info["languages"][lang] = get_file_info(lang_mar_file, base_url)
 
         data["partials"].append(partial_info)
 

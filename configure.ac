@@ -1862,13 +1862,57 @@ libo_FUZZ_ARG_ENABLE(online-update,
 libo_FUZZ_ARG_ENABLE(online-update-mar,
     AS_HELP_STRING([--enable-online-update-mar],
         [Enable the experimental Mozilla-like online update service that will
-         check for new versions of LibreOffice. Disabled by default. Requires
-         --with-update-config to be set.]),
+         check for new versions of LibreOffice. Disabled by default.]),
 ,)
 
-AC_ARG_WITH(update-config,
-    AS_HELP_STRING([--with-update-config=/tmp/update.ini],
-                   [Path to the update config ini file]))
+libo_FUZZ_ARG_WITH(online-update-mar-baseurl,
+    AS_HELP_STRING([--with-online-update-mar-baseurl=...],
+        [Set the base URL value for --enable-online-update-mar.
+         (Can be left off for debug purposes, even if that may render the feature
+         non-functional.)]),
+,)
+
+libo_FUZZ_ARG_WITH(online-update-mar-certificateder,
+    AS_HELP_STRING([--with-online-update-mar-certificateder=...],
+        [Set the certificate DER value for --enable-online-update-mar.
+         (Can be left off for debug purposes, even if that may render the feature
+         non-functional.)]),
+,)
+
+libo_FUZZ_ARG_WITH(online-update-mar-certificatename,
+    AS_HELP_STRING([--with-online-update-mar-certificatename=...],
+        [Set the certificate name value for --enable-online-update-mar.
+         (Can be left off for debug purposes, even if that may render the feature
+         non-functional.)]),
+,)
+
+libo_FUZZ_ARG_WITH(online-update-mar-certificatepath,
+    AS_HELP_STRING([--with-online-update-mar-certificatepath=...],
+        [Set the certificate path value for --enable-online-update-mar.
+         (Can be left off for debug purposes, even if that may render the feature
+         non-functional.)]),
+,)
+
+libo_FUZZ_ARG_WITH(online-update-mar-channel,
+    AS_HELP_STRING([--with-online-update-mar-channel=...],
+        [Set the channel value for --enable-online-update-mar.
+         (Can be left off for debug purposes, even if that may render the feature
+         non-functional.)]),
+,)
+
+libo_FUZZ_ARG_WITH(online-update-mar-serverurl,
+    AS_HELP_STRING([--with-online-update-mar-serverurl=...],
+        [Set the server URL value for --enable-online-update-mar.
+         (Can be left off for debug purposes, even if that may render the feature
+         non-functional.)]),
+,)
+
+libo_FUZZ_ARG_WITH(online-update-mar-uploadurl,
+    AS_HELP_STRING([--with-online-update-mar-uploadurl=...],
+        [Set the upload URL value for --enable-online-update-mar.
+         (Can be left off for debug purposes, even if that may render the feature
+         non-functional.)]),
+,)
 
 libo_FUZZ_ARG_ENABLE(extension-update,
     AS_HELP_STRING([--disable-extension-update],
@@ -13601,20 +13645,77 @@ dnl Test whether to enable mar online update service
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable mar online update])
 ENABLE_ONLINE_UPDATE_MAR=
-UPDATE_CONFIG=
 if test "$enable_online_update_mar" = yes; then
     AC_MSG_RESULT([yes])
     ENABLE_ONLINE_UPDATE_MAR="TRUE"
-    if test "$with_update_config" = ""; then
-        AC_MSG_ERROR([mar based online updater needs an update config specified with "with-update-config])
-    fi
-    UPDATE_CONFIG="$with_update_config"
     AC_DEFINE(HAVE_FEATURE_UPDATE_MAR)
 else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_ONLINE_UPDATE_MAR)
-AC_SUBST(UPDATE_CONFIG)
+
+AC_MSG_CHECKING([for mar online update baseurl])
+ONLINEUPDATE_MAR_BASEURL=$with_online_update_mar_baseurl
+if test -n "$ONLINEUPDATE_MAR_BASEURL"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ONLINEUPDATE_MAR_BASEURL)
+
+AC_MSG_CHECKING([for mar online update certificateder])
+ONLINEUPDATE_MAR_CERTIFICATEDER=$with_online_update_mar_certificateder
+if test -n "$ONLINEUPDATE_MAR_CERTIFICATEDER"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATEDER)
+
+AC_MSG_CHECKING([for mar online update certificatename])
+ONLINEUPDATE_MAR_CERTIFICATENAME=$with_online_update_mar_certificatename
+if test -n "$ONLINEUPDATE_MAR_CERTIFICATENAME"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATENAME)
+
+AC_MSG_CHECKING([for mar online update certificatepath])
+ONLINEUPDATE_MAR_CERTIFICATEPATH=$with_online_update_mar_certificatepath
+if test -n "$ONLINEUPDATE_MAR_CERTIFICATEPATH"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATEPATH)
+
+AC_MSG_CHECKING([for mar online update channel])
+ONLINEUPDATE_MAR_CHANNEL=$with_online_update_mar_channel
+if test -n "$ONLINEUPDATE_MAR_CHANNEL"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ONLINEUPDATE_MAR_CHANNEL)
+
+AC_MSG_CHECKING([for mar online update serverurl])
+ONLINEUPDATE_MAR_SERVERURL=$with_online_update_mar_serverurl
+if test -n "$ONLINEUPDATE_MAR_SERVERURL"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ONLINEUPDATE_MAR_SERVERURL)
+
+AC_MSG_CHECKING([for mar online update uploadurl])
+ONLINEUPDATE_MAR_UPLOADURL=$with_online_update_mar_uploadurl
+if test -n "$ONLINEUPDATE_MAR_UPLOADURL"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ONLINEUPDATE_MAR_UPLOADURL)
 
 
 PRIVACY_POLICY_URL="$with_privacy_policy_url"

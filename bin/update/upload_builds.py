@@ -4,7 +4,6 @@ import sys
 import os
 import subprocess
 
-from config import parse_config
 from path import convert_to_unix
 
 from tools import replace_variables_in_string
@@ -15,10 +14,10 @@ def main():
     buildid = sys.argv[2]
     platform = sys.argv[3]
     update_dir = sys.argv[4]
-    update_config = sys.argv[5]
+    upload_url_arg = sys.argv[5]
+    channel = sys.argv[6]
 
-    config = parse_config(update_config)
-    upload_url = replace_variables_in_string(config.upload_url, channel=config.channel, buildid=buildid,
+    upload_url = replace_variables_in_string(upload_url_arg, channel=channel, buildid=buildid,
                                              platform=platform)
 
     target_url, target_dir = upload_url.split(':')
