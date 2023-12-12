@@ -274,6 +274,9 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/fps/ui/explorerfiledialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/fps/ui/foldernamedialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/fps/ui/remotefilesdialog.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/filter/oox-drawingml-adj-names \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/filter/oox-drawingml-cs-presets \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/filter/vml-shape-types \
 
 ifneq ($(ENABLE_WASM_STRIP_WRITER),TRUE)
 gb_emscripten_fs_image_files += \
