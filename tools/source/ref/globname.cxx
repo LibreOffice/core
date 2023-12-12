@@ -59,27 +59,6 @@ SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
     return rStr;
 }
 
-
-bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
-{
-    if( m_aData.Data3 < rObj.m_aData.Data3 )
-        return true;
-    else if( m_aData.Data3 > rObj.m_aData.Data3 )
-        return false;
-
-    if( m_aData.Data2 < rObj.m_aData.Data2 )
-        return true;
-    else if( m_aData.Data2 > rObj.m_aData.Data2 )
-        return false;
-
-    return m_aData.Data1 < rObj.m_aData.Data1;
-}
-
-bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
-{
-    return memcmp(&m_aData, &rObj.m_aData, sizeof(m_aData)) == 0;
-}
-
 void SvGlobalName::MakeFromMemory( void const * pData )
 {
     memcpy( &m_aData, pData, sizeof( m_aData ) );

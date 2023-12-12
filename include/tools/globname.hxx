@@ -22,12 +22,16 @@
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <compare>
+
 struct SAL_WARN_UNUSED SvGUID
 {
     sal_uInt32 Data1;
     sal_uInt16 Data2;
     sal_uInt16 Data3;
     sal_uInt8  Data4[8];
+    friend constexpr auto operator<=>(const SvGUID&, const SvGUID&) = default;
+    friend constexpr bool operator==(const SvGUID&, const SvGUID&) = default;
 };
 
 class SvStream;
@@ -52,11 +56,8 @@ public:
     TOOLS_DLLPUBLIC friend SvStream & operator >> ( SvStream &, SvGlobalName & );
     TOOLS_DLLPUBLIC friend SvStream & WriteSvGlobalName( SvStream &, const SvGlobalName & );
 
-    bool          operator < ( const SvGlobalName & rObj ) const;
-
-    bool          operator == ( const SvGlobalName & rObj ) const;
-    bool          operator != ( const SvGlobalName & rObj ) const
-                      { return !(*this == rObj); }
+    friend constexpr auto operator<=>(const SvGlobalName&, const SvGlobalName&) = default;
+    friend constexpr bool operator==(const SvGlobalName&, const SvGlobalName&) = default;
 
     void          MakeFromMemory( void const * pData );
     bool          MakeId( std::u16string_view rId );
