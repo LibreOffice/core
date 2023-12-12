@@ -4,8 +4,6 @@ import json
 import sys
 import os
 
-from config import parse_config
-
 from tools import replace_variables_in_string
 
 
@@ -29,15 +27,13 @@ def update_all_url_entries(data, **kwargs):
 
 def main(argv):
     if len(argv) < 7:
-        print("Usage: create_build_config.py $PRODUCTNAME $VERSION $BUILDID $PLATFORM $TARGETDIR $UPDATE_CONFIG")
+        print("Usage: create_build_config.py $PRODUCTNAME $VERSION $BUILDID $PLATFORM $TARGETDIR $CHANNEL")
         sys.exit(1)
-
-    config = parse_config(argv[6])
 
     data = {'productName': argv[1],
             'version': argv[2],
             'buildNumber': argv[3],
-            'updateChannel': config.channel,
+            'updateChannel': argv[6],
             'platform': argv[4]
             }
 
@@ -53,7 +49,7 @@ def main(argv):
             extra_data = json.load(f)
             data.update(extra_data)
 
-    update_all_url_entries(data, channel=config.channel, platform=argv[4], buildid=argv[3], version=argv[2])
+    update_all_url_entries(data, channel=argv[6], platform=argv[4], buildid=argv[3], version=argv[2])
 
     with open(os.path.join(argv[5], "build_config.json"), "w") as f:
         json.dump(data, f, indent=4)

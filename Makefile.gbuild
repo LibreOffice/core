@@ -41,9 +41,9 @@ create-update-info:
 	rm -rf $(MAR_DIR) || true
 	rm -rf $(UPDATE_DIR) || true
 	mkdir -p $(MAR_DIR)/language
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)"
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)"
 	$(if $(filter WNT,$(OS)),, \
-		MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" \
+		MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" \
 	)
 
 upload-update-info:
@@ -51,16 +51,16 @@ upload-update-info:
 	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
 	$(eval UPDATE_DIR := $(WORKDIR)/update-info)
 	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_build_config.py "$(PRODUCTNAME)" "$(VERSION)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" "$(UPDATE_CONFIG)"
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/upload_builds.py "$(PRODUCTNAME)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" "$(UPDATE_CONFIG)"
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/upload_build_config.py "$(UPDATE_DIR)" "$(UPDATE_CONFIG)"
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_build_config.py "$(PRODUCTNAME)" "$(VERSION)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" "$(ONLINEUPDATE_MAR_CHANNEL)"
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/upload_builds.py "$(PRODUCTNAME)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" "$(ONLINEUPDATE_MAR_UPLOADURL)" "$(ONLINEUPDATE_MAR_CHANNEL)"
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/upload_build_config.py "$(UPDATE_DIR)" TODO
 
 create-partial-info:
 	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
 	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
 	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
 	$(eval MAR_NAME_PREFIX := $(PRODUCTNAME)_$(VERSION)_$(PLATFORM)_$(BUILDID))
-	MBSDIFF=$(WORKDIR)/LinkTarget/Executable/mbsdiff MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_partial_update.py "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" "$(PLATFORM)" "$(BUILDID)"
+	MBSDIFF=$(WORKDIR)/LinkTarget/Executable/mbsdiff MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_partial_update.py "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_SERVERURL)" "$(ONLINEUPDATE_MAR_CHANNEL)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" "$(PLATFORM)" "$(BUILDID)"
 
 # also possible to bypass the dependencies/the gbuild processing by just running
 # LD_LIBRARY_PATH=instdir/program make cmd cmd='ALL_LANGS="$(ALL_LANGS)" workdir/LinkTarget/Executable/pocheck'
