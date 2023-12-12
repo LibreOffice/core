@@ -495,6 +495,24 @@ DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf148035)
+{
+    loadAndSave("tdf148035.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t"_ostr,
+                       "headline");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:sz"_ostr,
+                "val"_ostr, "72");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:szCs"_ostr,
+                "val"_ostr, "72");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:u"_ostr,
+                "val"_ostr, "single");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:b"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:i"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:iCs"_ostr);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testfdo83048)
 {
     loadAndSave("fdo83048.docx");
