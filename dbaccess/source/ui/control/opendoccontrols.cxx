@@ -143,7 +143,6 @@ namespace dbaui
                 OUString sURL = rHistoryItem.sURL;
                 OUString sFilter = rHistoryItem.sFilter;
                 OUString sTitle = rHistoryItem.sTitle;
-                OUString sPassword = rHistoryItem.sPassword;
 
                 //  If the entry is a Base file then insert it into the
                 //  history list and the list box.
@@ -158,9 +157,6 @@ namespace dbaui
                     // yes, it's a Base document
                     INetURLObject aURL;
                     aURL.SetSmartURL( sURL );
-                    // The password is set only when it is not empty.
-                    if ( !sPassword.isEmpty() )
-                        aURL.SetPass( sPassword );
 
                     if ( sTitle.isEmpty() )
                         sTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous );

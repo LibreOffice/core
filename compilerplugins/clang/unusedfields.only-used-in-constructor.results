@@ -140,7 +140,7 @@ cppu/source/uno/check.cxx:267
     (anonymous namespace)::Char4 chars Char3
 cui/source/dialogs/colorpicker.cxx:748
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1246
+cui/source/factory/dlgfact.cxx:1245
     (anonymous namespace)::SvxMacroAssignDialog_Impl m_aItems SfxItemSet
 cui/source/inc/AdditionsDialog.hxx:47
     AdditionInfo sReleaseVersion OUString
@@ -160,6 +160,8 @@ cui/source/inc/tabstpge.hxx:86
     SvxTabulatorTabPage m_aCenterWin TabWin_Impl
 cui/source/inc/tabstpge.hxx:87
     SvxTabulatorTabPage m_aDezWin TabWin_Impl
+cui/source/options/optaboutconfig.hxx:55
+    CuiAboutConfigTabPage m_pParent weld::Window *
 cui/source/options/optcolor.cxx:274
     (anonymous namespace)::ColorConfigWindow_Impl::Entry m_aDefaultColor Color
 dbaccess/source/core/api/RowSet.hxx:108
@@ -186,13 +188,11 @@ dbaccess/source/core/inc/databasecontext.hxx:82
     dbaccess::ODatabaseContext m_aBasicDLL BasicDLL
 dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:79
     dbaccess::OSingleSelectQueryComposer m_aNeutralContext ::svxform::ONeutralParseContext
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2143
-    (anonymous namespace)::ViewCallback m_aCallbackWindowResult boost::property_tree::ptree
-drawinglayer/inc/texture/texture3d.hxx:54
-    drawinglayer::texture::GeoTexSvxBitmapEx maBitmapEx BitmapEx
 drawinglayer/inc/texture/texture3d.hxx:55
+    drawinglayer::texture::GeoTexSvxBitmapEx maBitmapEx BitmapEx
+drawinglayer/inc/texture/texture3d.hxx:56
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap Bitmap
-drawinglayer/inc/texture/texture3d.hxx:57
+drawinglayer/inc/texture/texture3d.hxx:58
     drawinglayer::texture::GeoTexSvxBitmapEx maTransparence Bitmap
 drawinglayer/source/tools/emfphelperdata.hxx:198
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
@@ -390,7 +390,7 @@ include/sfx2/msg.hxx:146
     SfxType23 nAttribs sal_uInt16
 include/sfx2/msg.hxx:146
     SfxType23 pType const std::type_info *
-include/svl/itemset.hxx:329
+include/svl/itemset.hxx:346
     SfxItemSetFixed m_aItems const SfxPoolItem *[NITEMS]
 include/svx/ClassificationDialog.hxx:35
     svx::ClassificationDialog maInternationalHelper SfxClassificationHelper
@@ -404,10 +404,6 @@ include/svx/imapdlg.hxx:91
     SvxIMapDlg aIMapItem SvxIMapDlgItem
 include/test/screenshot_test.hxx:36
     ScreenshotTest maParent weld::GenericDialogController
-include/unotools/lingucfg.hxx:88
-    SvtLinguOptions bIsSpellCapitalization _Bool
-include/unotools/lingucfg.hxx:94
-    SvtLinguOptions bROIsSpellCapitalization _Bool
 include/vcl/commandevent.hxx:317
     CommandGesturePanData mfX const double
 include/vcl/commandevent.hxx:318
@@ -558,7 +554,7 @@ sal/qa/osl/pipe/osl_Pipe.cxx:843
     osl_StreamPipe::recv bRes _Bool
 sal/qa/osl/pipe/osl_Pipe.cxx:843
     osl_StreamPipe::recv bRes1 _Bool
-sal/qa/osl/process/osl_process.cxx:141
+sal/qa/osl/process/osl_process.cxx:139
     Test_osl_executeProcess env_param_ const OUString
 sal/qa/osl/security/osl_Security.cxx:57
     osl_Security::ctors bRes _Bool
@@ -630,8 +626,6 @@ sc/source/filter/xml/xmltransformationi.hxx:154
     ScXMLDateTimeContext aType OUString
 sc/source/ui/inc/acredlin.hxx:51
     ScAcceptChgDlg aReOpenIdle Idle
-sc/source/ui/inc/condformateasydlg.hxx:43
-    sc::ConditionalFormatEasyDialog mpTabViewShell ScTabViewShell *
 sc/source/ui/inc/msgpool.hxx:34
     ScMessagePool aGlobalStringItem SfxStringItem
 sc/source/ui/inc/msgpool.hxx:35
@@ -668,7 +662,7 @@ sccomp/source/solver/DifferentialEvolution.hxx:34
     DifferentialEvolutionAlgorithm maRandomDevice std::random_device
 sccomp/source/solver/ParticelSwarmOptimization.hxx:55
     ParticleSwarmOptimizationAlgorithm maRandomDevice std::random_device
-scripting/source/stringresource/stringresource.cxx:1248
+scripting/source/stringresource/stringresource.cxx:1246
     stringresource::(anonymous namespace)::BinaryInput m_aData Sequence<sal_Int8>
 sd/inc/anminfo.hxx:51
     SdAnimationInfo maSecondSoundFile OUString
@@ -696,45 +690,45 @@ sd/source/ui/view/viewshel.cxx:1189
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
 sd/source/ui/view/viewshel.cxx:1190
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
     (anonymous namespace)::PDFGrammar::definition boolean rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
     (anonymous namespace)::PDFGrammar::definition comment rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
     (anonymous namespace)::PDFGrammar::definition name rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
     (anonymous namespace)::PDFGrammar::definition null_object rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
     (anonymous namespace)::PDFGrammar::definition simple_type rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
     (anonymous namespace)::PDFGrammar::definition stream rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
     (anonymous namespace)::PDFGrammar::definition stringtype rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:267
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
     (anonymous namespace)::PDFGrammar::definition array rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:267
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
     (anonymous namespace)::PDFGrammar::definition dict_begin rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:267
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
     (anonymous namespace)::PDFGrammar::definition dict_element rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:267
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
     (anonymous namespace)::PDFGrammar::definition dict_end rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:267
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
     (anonymous namespace)::PDFGrammar::definition objectref rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:267
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:270
     (anonymous namespace)::PDFGrammar::definition array_begin rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:270
     (anonymous namespace)::PDFGrammar::definition array_end rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:270
     (anonymous namespace)::PDFGrammar::definition object rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:270
     (anonymous namespace)::PDFGrammar::definition object_begin rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:270
     (anonymous namespace)::PDFGrammar::definition object_end rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:271
     (anonymous namespace)::PDFGrammar::definition trailer rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:271
     (anonymous namespace)::PDFGrammar::definition xref rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:99
     SfxAutoRedactDialog m_xDocShell SfxObjectShellLock
@@ -822,7 +816,7 @@ svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1098
     (anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::classic::rule<ScannerT>
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem SvxContourDlgItem
-svx/source/dialog/framelinkarray.cxx:517
+svx/source/dialog/framelinkarray.cxx:565
     svx::frame::(anonymous namespace)::MergedCellIterator mnFirstRow sal_Int32
 svx/source/dialog/imapwnd.hxx:88
     IMapWindow maItemInfos SfxItemInfo[1]
@@ -858,7 +852,7 @@ sw/source/core/layout/dbg_lay.cxx:181
     SwImplEnterLeave m_nAction DbgAction
 sw/source/core/text/inftxt.cxx:546
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<VirtualDevice>
-sw/source/core/text/inftxt.hxx:681
+sw/source/core/text/inftxt.hxx:683
     SwTextSlot aText OUString
 sw/source/core/text/porfld.cxx:145
     (anonymous namespace)::SwFieldSlot aText OUString
@@ -874,7 +868,7 @@ sw/source/uibase/docvw/romenu.hxx:51
     SwReadOnlyPopup m_nReadonlyBackgroundtogallery sal_uInt16
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:331
+sw/source/uibase/inc/conttree.hxx:334
     SwGlobalTree m_aDropTargetHelper SwGlobalTreeDropTarget
 sw/source/uibase/inc/olmenu.hxx:78
     SwSpellPopup m_aBuilder VclBuilder
@@ -902,7 +896,7 @@ vcl/inc/graphic/Manager.hxx:41
     vcl::graphic::Manager maSwapOutTimer Timer
 vcl/inc/headless/BitmapHelper.hxx:32
     BitmapHelper aTmpBmp SvpSalBitmap
-vcl/inc/jsdialog/jsdialogbuilder.hxx:725
+vcl/inc/jsdialog/jsdialogbuilder.hxx:728
     JSToolbar m_pPopovers std::map<sal_uInt16, weld::Widget *>
 vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
@@ -922,23 +916,23 @@ vcl/inc/svimpbox.hxx:117
     SvImpLBox m_aFctSet ImpLBSelEng
 vcl/inc/unx/genpspgraphics.h:52
     GenPspGraphics m_aCairoCommon CairoCommon
-vcl/inc/unx/i18n_ic.hxx:40
+vcl/inc/unx/i18n_ic.hxx:39
     SalI18N_InputContext maPreeditStartCallback XIMCallback
-vcl/inc/unx/i18n_ic.hxx:41
+vcl/inc/unx/i18n_ic.hxx:40
     SalI18N_InputContext maPreeditDoneCallback XIMCallback
-vcl/inc/unx/i18n_ic.hxx:42
+vcl/inc/unx/i18n_ic.hxx:41
     SalI18N_InputContext maPreeditDrawCallback XIMCallback
-vcl/inc/unx/i18n_ic.hxx:43
+vcl/inc/unx/i18n_ic.hxx:42
     SalI18N_InputContext maPreeditCaretCallback XIMCallback
-vcl/inc/unx/i18n_ic.hxx:44
+vcl/inc/unx/i18n_ic.hxx:43
     SalI18N_InputContext maCommitStringCallback XIMCallback
-vcl/inc/unx/i18n_ic.hxx:45
+vcl/inc/unx/i18n_ic.hxx:44
     SalI18N_InputContext maSwitchIMCallback XIMCallback
-vcl/inc/unx/i18n_ic.hxx:46
+vcl/inc/unx/i18n_ic.hxx:45
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/inc/unx/saldisp.hxx:102
+vcl/inc/unx/saldisp.hxx:101
     SalColormap m_aPalette std::vector<Color>
-vcl/inc/unx/saldisp.hxx:107
+vcl/inc/unx/saldisp.hxx:106
     SalColormap m_nUsed Pixel
 vcl/source/app/salvtables.cxx:246
     SalFlashAttention m_aOrigBackground Wallpaper
@@ -972,11 +966,11 @@ vcl/unx/gtk3/gtkinst.cxx:11036
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkBox *
 vcl/unx/gtk3/gtkinst.cxx:11038
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pMenuButton GtkMenuButton *
-vcl/unx/gtk3/gtkinst.cxx:20989
+vcl/unx/gtk3/gtkinst.cxx:21015
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtkinst.cxx:20995
+vcl/unx/gtk3/gtkinst.cxx:21021
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
-writerfilter/source/dmapper/PropertyMap.hxx:227
+writerfilter/source/dmapper/PropertyMap.hxx:246
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 xmloff/inc/XMLThemeContext.hxx:47
     XMLThemeColorsContext m_aColorScheme std::vector<css::util::Color>

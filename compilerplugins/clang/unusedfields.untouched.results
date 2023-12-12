@@ -22,8 +22,6 @@ connectivity/source/drivers/evoab2/EApi.h:121
     EContactAddress address_format char *
 connectivity/source/drivers/evoab2/EApi.h:125
     EContactAddress ext char *
-connectivity/source/drivers/mysqlc/mysqlc_user.hxx:22
-    connectivity::mysqlc::User m_xConnection css::uno::Reference<css::sdbc::XConnection>
 connectivity/source/drivers/mysqlc/mysqlc_view.hxx:65
     connectivity::mysqlc::View m_xConnection css::uno::Reference<css::sdbc::XConnection>
 connectivity/source/drivers/postgresql/pq_statics.hxx:105
@@ -42,22 +40,18 @@ cui/source/inc/fileextcheckdlg.hxx:29
     FileExtCheckDialog m_pPerformCheck std::unique_ptr<weld::CheckButton>
 cui/source/inc/fileextcheckdlg.hxx:30
     FileExtCheckDialog m_pOk std::unique_ptr<weld::Button>
-cui/source/options/optgdlg.hxx:201
-    OfaLanguagesTabPage m_xCurrentDocImg std::unique_ptr<weld::Widget>
+cui/source/options/optaboutconfig.hxx:55
+    CuiAboutConfigTabPage m_pParent weld::Window *
 cui/source/options/optinet2.hxx:108
     SvxSecurityTabPage m_xCertPathImg std::unique_ptr<weld::Widget>
 cui/source/options/optinet2.hxx:109
     SvxSecurityTabPage m_xCertPathLabel std::unique_ptr<weld::Label>
-cui/source/options/optsave.hxx:72
-    SvxSaveTabPage m_xDocTypeImg std::unique_ptr<weld::Widget>
-cui/source/options/optsave.hxx:75
-    SvxSaveTabPage m_xSaveAsImg std::unique_ptr<weld::Widget>
+cui/source/options/optupdt.hxx:61
+    SvxOnlineUpdateTabPage m_xEnableMar std::unique_ptr<weld::CheckButton>
 dbaccess/source/core/inc/databasecontext.hxx:82
     dbaccess::ODatabaseContext m_aBasicDLL BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2143
-    (anonymous namespace)::ViewCallback m_aCallbackWindowResult boost::property_tree::ptree
 embeddedobj/source/msole/olecomponent.hxx:50
     OleComponent m_aMutex ::osl::Mutex
 embeddedobj/source/msole/olecomponent.hxx:51
@@ -98,6 +92,8 @@ helpcompiler/inc/HelpCompiler.hxx:200
     HelpCompiler lang const std::string
 include/basegfx/DrawCommands.hxx:143
     gfx::DrawPath mpFillGradient std::shared_ptr<GradientInfo>
+include/basic/basmgr.hxx:59
+    BasicError nReason BasicErrorReason
 include/comphelper/seqstream.hxx:75
     comphelper::SequenceInputStream m_aData const css::uno::Sequence<sal_Int8>
 include/docmodel/theme/FormatScheme.hxx:373
@@ -254,10 +250,6 @@ include/svx/imapdlg.hxx:91
     SvxIMapDlg aIMapItem SvxIMapDlgItem
 include/unotest/macros_test.hxx:113
     unotest::MacrosTest mpDll std::unique_ptr<BasicDLL>
-include/unotools/lingucfg.hxx:88
-    SvtLinguOptions bIsSpellCapitalization _Bool
-include/unotools/lingucfg.hxx:94
-    SvtLinguOptions bROIsSpellCapitalization _Bool
 include/vcl/commandevent.hxx:317
     CommandGesturePanData mfX const double
 include/vcl/commandevent.hxx:318
@@ -438,9 +430,9 @@ sd/source/ui/view/viewshel.cxx:1190
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:189
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:267
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
     (anonymous namespace)::PDFGrammar::definition array rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:267
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:99
     SfxAutoRedactDialog m_xDocShell SfxObjectShellLock
@@ -512,7 +504,7 @@ sw/source/ui/envelp/swuilabimp.hxx:32
     SwLabPage m_xAddressFrame std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:331
+sw/source/uibase/inc/conttree.hxx:334
     SwGlobalTree m_aDropTargetHelper SwGlobalTreeDropTarget
 sw/source/uibase/inc/frmpage.hxx:94
     SwFramePage m_xAnchorFrame std::unique_ptr<weld::Widget>
@@ -520,10 +512,6 @@ sw/source/uibase/inc/insfnote.hxx:38
     SwInsFootNoteDlg m_xNumberFrame std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/num.hxx:47
     SwNumPositionTabPage m_xPositionFrame std::unique_ptr<weld::Widget>
-sw/source/uibase/inc/optpage.hxx:48
-    SwContentOptPage m_xVMetricImg std::unique_ptr<weld::Widget>
-sw/source/uibase/inc/optpage.hxx:59
-    SwContentOptPage m_xPostItImg std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/pagenumberdlg.hxx:31
     SwPageNumberDlg m_xCancel std::unique_ptr<weld::Button>
 sw/source/uibase/inc/swuicnttab.hxx:243
@@ -544,7 +532,7 @@ unoidl/source/unoidlprovider.cxx:676
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 uui/source/openlocked.hxx:36
     vcl::OpenLockedQueryBox mxQuestionMarkImage std::unique_ptr<weld::Image>
-vcl/inc/jsdialog/jsdialogbuilder.hxx:725
+vcl/inc/jsdialog/jsdialogbuilder.hxx:728
     JSToolbar m_pPopovers std::map<sal_uInt16, weld::Widget *>
 vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int

@@ -56,11 +56,10 @@ class BasicError
 {
 private:
     ErrCodeMsg nErrorId;
-    BasicErrorReason  nReason;
 
 public:
             BasicError( const BasicError& rErr );
-            BasicError( ErrCodeMsg nId, BasicErrorReason nR );
+            BasicError( ErrCodeMsg nId );
 
     ErrCodeMsg const & GetErrorId() const { return nErrorId; }
 };

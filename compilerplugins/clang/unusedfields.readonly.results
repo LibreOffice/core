@@ -372,7 +372,7 @@ include/svx/svdmark.hxx:141
     SdrMarkList maPointName OUString
 include/svx/svdmark.hxx:142
     SdrMarkList maGluePointName OUString
-include/svx/svdoedge.hxx:160
+include/svx/svdoedge.hxx:166
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
 include/unoidl/unoidl.hxx:445
     unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo-plugin/include/unoidl/unoidl.hxx:445:5)
@@ -398,9 +398,11 @@ include/unoidl/unoidl.hxx:455
     unoidl::ConstantValue::(anonymous union at /home/noel/libo-plugin/include/unoidl/unoidl.hxx:445:5) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories Directories
-include/vcl/bitmap.hxx:106
+include/unotools/historyoptions.hxx:59
+    SvtHistoryOptions::HistoryItem sPassword OUString
+include/vcl/bitmap.hxx:105
     BitmapSystemData mnWidth int
-include/vcl/bitmap.hxx:107
+include/vcl/bitmap.hxx:106
     BitmapSystemData mnHeight int
 include/vcl/formatter.hxx:128
     Formatter m_aStaticFormatter StaticFormatter
@@ -440,7 +442,7 @@ oox/inc/drawingml/table/tablecell.hxx:85
     oox::drawingml::table::TableCell maLinePropertiesInsideH oox::drawingml::LineProperties
 oox/inc/drawingml/table/tablecell.hxx:86
     oox::drawingml::table::TableCell maLinePropertiesInsideV oox::drawingml::LineProperties
-oox/qa/token/tokenmap-test.cxx:33
+oox/qa/token/tokenmap-test.cxx:35
     oox::TokenmapTest tokenMap TokenMap
 oox/qa/unit/vba_compression.cxx:70
     TestVbaCompression m_directories test::Directories
@@ -726,7 +728,7 @@ ucb/source/ucp/package/pkgprovider.hxx:48
     package_ucp::ContentProvider m_pPackages std::unique_ptr<Packages>
 ucb/source/ucp/webdav-curl/CurlSession.cxx:132
     (anonymous namespace)::CurlOption::(anonymous union at /home/noel/libo-plugin/ucb/source/ucp/webdav-curl/CurlSession.cxx:131:5) pValue const void *const
-ucbhelper/source/client/proxydecider.cxx:133
+ucbhelper/source/client/proxydecider.cxx:130
     ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const InternetProxyServer
 ucbhelper/source/provider/propertyvalueset.cxx:79
     ucbhelper_impl::PropertyValue aString OUString
@@ -808,7 +810,7 @@ vcl/inc/svdata.hxx:335
     ImplSVNWFData mbNoFrameJunctionForPopups _Bool
 vcl/inc/toolbox.h:110
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>
-vcl/inc/unx/saldisp.hxx:246
+vcl/inc/unx/saldisp.hxx:245
     SalDisplay m_aInvalidScreenData ScreenData
 vcl/inc/widgetdraw/WidgetDefinition.hxx:224
     vcl::WidgetDefinitionStyle maDefaultButtonTextColor Color
@@ -864,7 +866,7 @@ vcl/source/bitmap/dibtools.cxx:115
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/bitmap/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/control/roadmapwizard.cxx:64
+vcl/source/control/wizimpldata.hxx:88
     vcl::RoadmapWizardImpl aStateDescriptors StateDescriptions
 vcl/source/filter/eps/eps.cxx:116
     (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<VirtualDevice>
@@ -910,8 +912,6 @@ writerfilter/source/ooxml/OOXMLFactory.hxx:60
     writerfilter::ooxml::AttributeInfo m_nResource ResourceType
 writerfilter/source/ooxml/OOXMLFactory.hxx:61
     writerfilter::ooxml::AttributeInfo m_nRef Id
-writerperfect/inc/WPXSvInputStream.hxx:70
-    writerperfect::WPXSvInputStream mnReadBufferLength unsigned long
 xmloff/inc/MultiPropertySetHelper.hxx:85
     MultiPropertySetHelper aEmptyAny css::uno::Any
 xmloff/source/chart/SchXMLChartContext.cxx:447

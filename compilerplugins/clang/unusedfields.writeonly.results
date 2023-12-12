@@ -282,9 +282,9 @@ dbaccess/source/ui/inc/RelationController.hxx:36
     dbaui::ORelationController m_xWaitObject std::unique_ptr<weld::WaitObject>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:313
     DesktopLOKTest m_bModified _Bool
-desktop/source/app/app.cxx:1239
-    desktop::(anonymous namespace)::ExecuteGlobals pCTLLanguageOptions std::unique_ptr<SvtCTLOptions>
 desktop/source/app/app.cxx:1240
+    desktop::(anonymous namespace)::ExecuteGlobals pCTLLanguageOptions std::unique_ptr<SvtCTLOptions>
+desktop/source/app/app.cxx:1241
     desktop::(anonymous namespace)::ExecuteGlobals pPathOptions std::unique_ptr<SvtPathOptions>
 desktop/source/deployment/gui/dp_gui_extlistbox.hxx:138
     dp_gui::ExtensionBox_Impl m_vRemovedEntries std::vector<TEntry_Impl>
@@ -346,9 +346,9 @@ extensions/source/propctrlr/genericpropertyhandler.hxx:65
     pcr::GenericPropertyHandler m_xComponentIntrospectionAccess css::uno::Reference<css::beans::XIntrospectionAccess>
 extensions/source/scanner/scanner.hxx:45
     ScannerManager mpData void *
-framework/inc/services/layoutmanager.hxx:247
+framework/inc/services/layoutmanager.hxx:249
     framework::LayoutManager m_bGlobalSettings _Bool
-framework/inc/services/layoutmanager.hxx:261
+framework/inc/services/layoutmanager.hxx:263
     framework::LayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/inc/uielement/langselectionmenucontroller.hxx:69
     framework::LanguageSelectionMenuController m_xMenuDispatch_Lang css::uno::Reference<css::frame::XDispatch>
@@ -372,8 +372,6 @@ include/basegfx/DrawCommands.hxx:82
     gfx::LinearGradientInfo maMatrix basegfx::B2DHomMatrix
 include/basegfx/utils/gradienttools.hxx:54
     (anonymous namespace)::ColorToBColorConverter::(anonymous union)::(anonymous struct at /home/noel/libo-plugin/include/basegfx/utils/gradienttools.hxx:44:13) T sal_uInt8
-include/basic/basmgr.hxx:59
-    BasicError nReason BasicErrorReason
 include/basic/sbxvar.hxx:75
     SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:43:5) pData void *
 include/basic/sbxvar.hxx:247
@@ -468,7 +466,7 @@ include/sfx2/minfitem.hxx:38
     SfxMacroInfoItem aCommentText OUString
 include/sfx2/viewsh.hxx:188
     SfxViewShell m_xHelper std::shared_ptr<SfxStoringHelper>
-include/svl/poolitem.hxx:145
+include/svl/poolitem.hxx:144
     SfxPoolItem m_bDeleted _Bool
 include/svl/sigstruct.hxx:127
     SignatureInformation hasInconsistentSigningTime _Bool
@@ -552,7 +550,7 @@ include/svx/galctrl.hxx:91
     GalleryIconView mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
 include/svx/GenericCheckDialog.hxx:91
     svx::GenericCheckDialog m_aCheckEntries std::vector<std::unique_ptr<GenericCheckEntry> >
-include/svx/gridctrl.hxx:258
+include/svx/gridctrl.hxx:260
     DbGridControl m_pCursorDisposeListener std::unique_ptr<DisposeListenerGridBridge>
 include/svx/ofaitem.hxx:44
     OfaXColorListItem mxRef rtl::Reference<XColorList>
@@ -708,8 +706,6 @@ sc/inc/fillinfo.hxx:287
     ScTableInfo mDataBarInfos std::vector<std::unique_ptr<const ScDataBarInfo> >
 sc/inc/fillinfo.hxx:288
     ScTableInfo mIconSetInfos std::vector<std::unique_ptr<const ScIconSetInfo> >
-sc/inc/patattr.hxx:56
-    ScPatternAttr mxHashCode std::optional<sal_uInt32>
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:78
@@ -720,19 +716,19 @@ sc/inc/scmod.hxx:100
     ScModule m_pErrorHdl std::unique_ptr<SfxErrorHandler>
 sc/inc/tabopparams.hxx:37
     ScInterpreterTableOpParams bValid _Bool
-sc/qa/unit/subsequent_export_test.cxx:2218
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2216:18) mnRow SCROW
-sc/qa/unit/subsequent_export_test.cxx:2219
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2216:18) mnStyle SvxBorderLineStyle
-sc/qa/unit/subsequent_export_test.cxx:2220
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2216:18) mnWidth tools::Long
+sc/qa/unit/subsequent_export_test.cxx:2230
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2228:18) mnRow SCROW
+sc/qa/unit/subsequent_export_test.cxx:2231
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2228:18) mnStyle SvxBorderLineStyle
+sc/qa/unit/subsequent_export_test.cxx:2232
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2228:18) mnWidth tools::Long
 sc/source/core/data/column4.cxx:1451
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
 sc/source/core/data/column.cxx:1313
     (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
 sc/source/core/data/column.cxx:1314
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags ScCloneFlags
-sc/source/core/data/table2.cxx:4041
+sc/source/core/data/table2.cxx:4056
     (anonymous namespace)::OutlineArrayFinder mpArray ScOutlineArray *
 sc/source/filter/excel/xltoolbar.hxx:24
     TBCCmd A _Bool
@@ -800,7 +796,7 @@ sc/source/ui/inc/PivotLayoutTreeListData.hxx:37
     ScPivotLayoutTreeListData maDataItemValues std::vector<std::unique_ptr<ScItemValue> >
 sc/source/ui/inc/preview.hxx:46
     ScPreview nTabPage tools::Long
-sc/source/ui/inc/tabvwsh.hxx:125
+sc/source/ui/inc/tabvwsh.hxx:144
     ScTabViewShell xDisProvInterceptor css::uno::Reference<css::frame::XDispatchProviderInterceptor>
 sc/source/ui/inc/transobj.hxx:48
     ScTransferObj m_aDrawPersistRef SfxObjectShellRef
@@ -864,7 +860,7 @@ sd/source/ui/remotecontrol/Receiver.hxx:34
     sd::Receiver pTransmitter Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:144
     sd::sidebar::TemplatePreviewProvider msURL OUString
-sd/source/ui/slideshow/slideshowimpl.hxx:335
+sd/source/ui/slideshow/slideshowimpl.hxx:342
     sd::SlideshowImpl mpPaneHider ::std::unique_ptr<PaneHider>
 sd/source/ui/slideshow/SlideShowRestarter.hxx:72
     sd::SlideShowRestarter mpSelf ::std::shared_ptr<SlideShowRestarter>
@@ -1298,20 +1294,24 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:82
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:21000
+vcl/unx/gtk3/gtkinst.cxx:21026
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection gpointer
 vcl/unx/gtk3/hudawareness.cxx:21
     (anonymous namespace)::HudAwarenessHandle notify GDestroyNotify
-vcl/workben/vcldemo.cxx:1741
+vcl/workben/vcldemo.cxx:1739
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/DocumentProtection.hxx:50
     writerfilter::dmapper::DocumentProtection m_sRedlineProtectionKey OUString
 writerfilter/source/dmapper/DomainMapperTableHandler.cxx:244
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
-writerfilter/source/dmapper/PropertyMap.hxx:227
+writerfilter/source/dmapper/PropertyMap.hxx:246
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
+writerfilter/source/dmapper/PropertyMap.hxx:429
+    writerfilter::dmapper::SectionPropertyMap m_bRightHeader _Bool
+writerfilter/source/dmapper/PropertyMap.hxx:430
+    writerfilter::dmapper::SectionPropertyMap m_bRightFooter _Bool
 writerfilter/source/dmapper/WriteProtection.hxx:36
     writerfilter::dmapper::WriteProtection m_nCryptProviderType sal_Int32
 xmlhelp/source/cxxhelp/provider/databases.hxx:258

@@ -56,7 +56,6 @@ namespace SvtHistoryOptions
         OUString sURL;
         OUString sFilter;
         OUString sTitle;
-        OUString sPassword;
         OUString sThumbnail;
         bool isReadOnly = false;
         bool isPinned = false;

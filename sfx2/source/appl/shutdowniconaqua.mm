@@ -195,7 +195,6 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
             aRecentFile.aURL = rPickListEntry.sURL;
             aRecentFile.aFilter = rPickListEntry.sFilter;
             aRecentFile.aTitle = rPickListEntry.sTitle;
-            aRecentFile.aPassword = rPickListEntry.sPassword;
             m_pRecentFilesItems->push_back( aRecentFile );
         }
     }
