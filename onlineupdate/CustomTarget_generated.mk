@@ -13,7 +13,7 @@ onlineupdate_INC := $(call gb_CustomTarget_get_workdir,onlineupdate/generated)/o
 
 # For debug purposes, ONLINEUPDATE_MAR_CERTIFICATEDER can be empty, but gen_cert_header.py always
 # expects an existing certificate-der=... pathname, so as a hack fall back to the generated
-# update.ini itself as the pathanme of the certfiicate DER file (though that will cause
+# update.ini itself as the pathname of the certificate DER file (though that will cause
 # gen_cert_header.py to generate nonsense data, of course):
 $(call gb_CustomTarget_get_workdir,onlineupdate/generated)/update.ini: | \
         $(call gb_CustomTarget_get_workdir,onlineupdate/generated)/.dir
