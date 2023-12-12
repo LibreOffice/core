@@ -873,6 +873,7 @@ IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, v
     {
         const FontMetric& rFontMetric = (*mpFontList)[nIndex];
         DrawPreview(rFontMetric, aDestPoint, rRenderContext, true);
+        m_aLivePreviewHdl.Call(rFontMetric);
     }
     else
     {

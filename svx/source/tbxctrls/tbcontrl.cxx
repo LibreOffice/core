@@ -341,6 +341,7 @@ protected:
     bool                           bRelease;
     Reference< XFrame >            m_xFrame;
     bool            mbCheckingUnknownFont;
+    bool            mbDropDownActive;
 
     void            ReleaseFocus_Impl();
 
@@ -394,6 +395,8 @@ public:
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
+    DECL_LINK(PopupToggledHdl, weld::ComboBox&, void);
+    DECL_LINK(LivePreviewHdl, const FontMetric&, void);
     DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };
 
@@ -1726,6 +1729,7 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
     , bRelease(true)
     , m_xFrame(rFrame)
     , mbCheckingUnknownFont(false)
+    , mbDropDownActive(false)
 {
     EnableControls();
 
@@ -1734,6 +1738,8 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
     m_xWidget->connect_entry_activate(LINK(this, SvxFontNameBox_Base, ActivateHdl));
     m_xWidget->connect_focus_in(LINK(this, SvxFontNameBox_Base, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, SvxFontNameBox_Base, FocusOutHdl));
+    m_xWidget->connect_popup_toggled(LINK(this, SvxFontNameBox_Base, PopupToggledHdl));
+    m_xWidget->connect_live_preview(LINK(this, SvxFontNameBox_Base, LivePreviewHdl));
     m_xWidget->connect_get_property_tree(LINK(this, SvxFontNameBox_Base, DumpAsPropertyTreeHdl));
 
     m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS + 5);
@@ -1849,7 +1855,6 @@ bool SvxFontNameBox_Base::DoKeyInput(const KeyEvent& rKEvt)
                 ReleaseFocus_Impl();
                 bHandled = true;
             }
-            EndPreview();
             break;
     }
 
@@ -1869,6 +1874,30 @@ IMPL_LINK_NOARG(SvxFontNameBox_Base, FocusOutHdl, weld::Widget&, void)
         // send EndPreview
         EndPreview();
     }
+}
+
+IMPL_LINK(SvxFontNameBox_Base, LivePreviewHdl, const FontMetric&, rFontMetric, void)
+{
+    Sequence<PropertyValue> aArgs(1);
+
+    SvxFontItem aFontItem(rFontMetric.GetFamilyType(),
+                          rFontMetric.GetFamilyName(),
+                          rFontMetric.GetStyleName(),
+                          rFontMetric.GetPitch(),
+                          rFontMetric.GetCharSet(),
+                          SID_ATTR_CHAR_FONT);
+    PropertyValue* pArgs = aArgs.getArray();
+    aFontItem.QueryValue(pArgs[0].Value);
+    pArgs[0].Name = "CharPreviewFontName";
+    const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
+    SfxToolBoxControl::Dispatch(xProvider, ".uno:CharPreviewFontName", aArgs);
+}
+
+IMPL_LINK_NOARG(SvxFontNameBox_Base, PopupToggledHdl, weld::ComboBox&, void)
+{
+    mbDropDownActive = !mbDropDownActive;
+    if (!mbDropDownActive)
+        EndPreview();
 }
 
 void SvxFontNameBox_Impl::SetOptimalSize()
