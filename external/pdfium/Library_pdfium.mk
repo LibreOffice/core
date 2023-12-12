@@ -442,6 +442,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/dib/cfx_scanlinecompositor \
     UnpackedTarball/pdfium/core/fxge/dib/cstretchengine \
     UnpackedTarball/pdfium/core/fxge/dib/fx_dib \
+    UnpackedTarball/pdfium/core/fxge/dib/blend \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitDingbats \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitFixed \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitFixedBold \
