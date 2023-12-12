@@ -19,6 +19,7 @@
 #include <editeng/escapementitem.hxx>
 
 #include <IDocumentStatistics.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <fmtanchr.hxx>
 #include <frameformats.hxx>
 #include <wrtsh.hxx>
@@ -34,6 +35,9 @@
 #include <frmmgr.hxx>
 #include <formatflysplit.hxx>
 #include <ftnidx.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <txtfrm.hxx>
 
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase
@@ -392,6 +396,38 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlySplitFootnote)
     // Without the accompanying fix in place, this test would have failed, insert code refused to
     // have footnotes in all fly frames.
     CPPUNIT_ASSERT(!pDoc->GetFootnoteIdxs().empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitFlyAnchorSplit)
+{
+    // Given a document with a 2 pages long floating table:
+    createSwDoc("floattable-anchor-split.docx");
+
+    // When splitting the "AB" anchor text into "A" (remains as anchor text) and "B" (new text node
+    // after it):
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // Without the accompanying fix in place, this test would have failed with a layout loop.
+    pWrtShell->SplitNode();
+
+    // Then make sure the resulting layout is what we want:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    // Page 1 has the master fly:
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    // Page 1 has the follow fly:
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    // Anchor text is now just "A":
+    auto pText1 = pPage2->FindFirstBodyContent()->DynCastTextFrame();
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), pText1->GetText());
+    // New text frame is just "B":
+    auto pText2 = pText1->GetNext()->DynCastTextFrame();
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), pText2->GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

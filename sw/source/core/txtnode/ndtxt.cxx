@@ -82,6 +82,8 @@
 #include <fmtpdsc.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svl/itemiter.hxx>
+#include <undobj.hxx>
+#include <formatflysplit.hxx>
 
 using namespace ::com::sun::star;
 
@@ -459,7 +461,24 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         ResetAttr( RES_PARATR_LIST_LEVEL );
     }
 
-    if ( HasWriterListeners() && !m_Text.isEmpty() && (nTextLen / 2) < nSplitPos )
+    bool bSplitFly = false;
+    std::optional<std::vector<SwFrameFormat*>> oFlys = sw::GetFlysAnchoredAt(GetDoc(), GetIndex());
+    if (oFlys.has_value() && nSplitPos > 0)
+    {
+        // See if one of the flys is a split fly. If so, we need to keep
+        // the potentially split text frames unchanged and create a new
+        // text frame at the end.
+        for (const auto& rFly : *oFlys)
+        {
+            if (rFly->GetFlySplit().GetValue())
+            {
+                bSplitFly = true;
+                break;
+            }
+        }
+    }
+
+    if ( HasWriterListeners() && !m_Text.isEmpty() && ((nTextLen / 2) < nSplitPos || bSplitFly) )
     {
         // optimization for SplitNode: If a split is at the end of a node then
         // move the frames from the current to the new one and create new ones
