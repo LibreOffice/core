@@ -64,6 +64,7 @@ public:
     SvxRotateMode       meRotMode;
     double              mfOrientation;
 
+    bool                mbMergeOrig;
     bool                mbOverlapX;
     bool                mbOverlapY;
 
@@ -88,7 +89,7 @@ public:
     const Style& GetStyleTLBR() const { return maTLBR; }
     const Style& GetStyleBLTR() const { return maBLTR; }
 
-    bool                IsMerged() const { return mbOverlapX || mbOverlapY; }
+    bool                IsMerged() const { return mbMergeOrig || mbOverlapX || mbOverlapY; }
     bool                IsRotated() const { return mfOrientation != 0.0; }
 
     void                MirrorSelfX();
@@ -206,6 +207,7 @@ Cell::Cell() :
     mnAddBottom( 0 ),
     meRotMode(SvxRotateMode::SVX_ROTATE_MODE_STANDARD ),
     mfOrientation( 0.0 ),
+    mbMergeOrig( false ),
     mbOverlapX( false ),
     mbOverlapY( false )
 {
@@ -229,6 +231,7 @@ bool Cell::operator==(const Cell& rOther) const
         && mnAddBottom == rOther.mnAddBottom
         && meRotMode == rOther.meRotMode
         && mfOrientation == rOther.mfOrientation
+        && mbMergeOrig == rOther.mbMergeOrig
         && mbOverlapX == rOther.mbOverlapX
         && mbOverlapY == rOther.mbOverlapY;
 }
@@ -248,6 +251,7 @@ size_t Cell::hashCode() const
     o3tl::hash_combine(seed, mnAddBottom);
     o3tl::hash_combine(seed, meRotMode);
     o3tl::hash_combine(seed, mfOrientation);
+    o3tl::hash_combine(seed, mbMergeOrig);
     o3tl::hash_combine(seed, mbOverlapX);
     o3tl::hash_combine(seed, mbOverlapY);
     return seed;
@@ -352,7 +356,7 @@ struct ArrayImpl
 
     bool                HasCellRotation() const;
 
-    Cell* createOrFind(const Cell& rCell);
+    const Cell* createOrFind(const Cell& rCell);
 };
 
 static void lclSetMergedRange( ArrayImpl& rImpl, CellVec& rCells, sal_Int32 nWidth, sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow )
@@ -363,12 +367,14 @@ static void lclSetMergedRange( ArrayImpl& rImpl, CellVec& rCells, sal_Int32 nWid
         {
             const Cell* pCell = rCells[ nRow * nWidth + nCol ];
             Cell aTempCell(*pCell);
+            aTempCell.mbMergeOrig = false;
             aTempCell.mbOverlapX = nCol > nFirstCol;
             aTempCell.mbOverlapY = nRow > nFirstRow;
             rCells[ nRow * nWidth + nCol ] = rImpl.createOrFind(aTempCell);
         }
     }
     Cell aTempCell(*rCells[ nFirstRow * nWidth + nFirstCol ]);
+    aTempCell.mbMergeOrig = true;
     rCells[ nFirstRow * nWidth + nFirstCol ] = rImpl.createOrFind(aTempCell);
 }
 
@@ -399,7 +405,7 @@ ArrayImpl::~ArrayImpl()
         delete pCell;
 }
 
-Cell* ArrayImpl::createOrFind(const Cell& rCell)
+const Cell* ArrayImpl::createOrFind(const Cell& rCell)
 {
     auto it = maRegisteredCells.find(const_cast<Cell*>(&rCell));
     if (it != maRegisteredCells.end())
@@ -1140,6 +1146,20 @@ void Array::MirrorSelfX()
             Cell aTempCell(*mxImpl->GetCell(mxImpl->GetMirrorCol( nCol ), nRow));
             aTempCell.MirrorSelfX();
             aNewCells.push_back( mxImpl->createOrFind(aTempCell) );
+        }
+    }
+    for( nRow = 0; nRow < mxImpl->mnHeight; ++nRow )
+    {
+        for( nCol = 0; nCol < mxImpl->mnWidth; ++nCol )
+        {
+            if( mxImpl->GetCell( nCol, nRow )->mbMergeOrig )
+            {
+                sal_Int32 nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
+                sal_Int32 nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
+                lclSetMergedRange( *mxImpl, aNewCells, mxImpl->mnWidth,
+                    mxImpl->GetMirrorCol( nLastCol ), nRow,
+                    mxImpl->GetMirrorCol( nCol ), nLastRow );
+            }
         }
     }
     mxImpl->maCells.swap( aNewCells );
