@@ -10,13 +10,11 @@
 # Run the script in the core directory to remove all tooltip_markup
 # properties from the .ui files
 
-SED_BIN=`which sed`
-CUT_BIN=`which cut`
 LOG_FILE="modified-$(date +%s).log"
 
 removeTooltipMarkup()
 {
-    LINE=$(grep -n "<property name=\"tooltip_markup\"" $1 | $CUT_BIN -f 1 -d ':')
+    LINE=$(grep -n "<property name=\"tooltip_markup\"" $1 | cut -f 1 -d ':')
     TEXT=$(grep "<property name=\"tooltip_markup\"" $1)
     grep -v "<property name=\"tooltip_markup\"" $1 > temp && mv temp $1
     echo "removed $TEXT from $1 at line $LINE" >> $LOG_FILE
@@ -24,8 +22,8 @@ removeTooltipMarkup()
 
 changeTooltipMarkup()
 {
-   LINE=$(grep -n "<property name=\"tooltip_markup\"" $1 | $CUT_BIN -f 1 -d ':')
-   $SED_BIN "s/tooltip_markup/tooltip_text/g" $i > temp && mv temp $1
+   LINE=$(grep -n "<property name=\"tooltip_markup\"" $1 | cut -f 1 -d ':')
+   sed "s/tooltip_markup/tooltip_text/g" $i > temp && mv temp $1
    echo "renamed tooltip_markup from $1 at line $LINE" >> $LOG_FILE
 }
 

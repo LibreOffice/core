@@ -43,24 +43,13 @@ ModelineReplace="false"
 
 function SetEnvironment()
 {
-     if [ -n "$(which tail)" ] && [ -n "$(which head)" ]; then
-        {
-            headCMD=$(which head)
-            tailCMD=$(which tail)
-        }
-        else
-        {
-            echo "Missing head or tail, exiting..."
-            exit 1
-        }
+    if ! command -v tail || ! command -v head; then
+        echo "Missing head or tail, exiting..."
+        exit 1
     fi
-    if [ -n "$(which find)" ]; then
-        findCMD=$(which find)
-        else
-        {
-            echo "Missing find, exiting..."
-            exit 1
-        }
+    if ! command -v find; then
+        echo "Missing find, exiting..."
+        exit 1
     fi
 }
 
@@ -72,15 +61,15 @@ function EditFile()
 
     FileToEdit="$1"
 
-    currentFirstLine=$($headCMD -1 "$FileToEdit")
-    currentLastLine=$($tailCMD -1 "$FileToEdit")
+    currentFirstLine=$(head -1 "$FileToEdit")
+    currentLastLine=$(tail -1 "$FileToEdit")
 
     case "$ModelineReplace" in
         "true" )
             if [ "${currentFirstLine:0:6}" = "${FirstLine:0:6}" ]; then
             {
                 echo "$FirstLine" > "$FileToEdit".new
-                $tailCMD -n +2 "$FileToEdit" >> "$FileToEdit".new
+                tail -n +2 "$FileToEdit" >> "$FileToEdit".new
             }
             fi
             if [ -e "$FileToEdit.new" ]; then
@@ -90,7 +79,7 @@ function EditFile()
             fi
             if [ "${currentLastLine:0:6}" = "${LastLine:0:6}" ]; then
             {
-                $headCMD -n -1 "$FileToEdit" > "$FileToEdit".new
+                head -n -1 "$FileToEdit" > "$FileToEdit".new
                 echo "$LastLine" >> "$FileToEdit".new
             }
             fi
@@ -161,7 +150,7 @@ done
 # This gets rid of the final " -a " in the find argument list
 findArgs=(${findArgs:0:(${#findArgs}-3)})
 
-for file in $($findCMD "${findArgs[@]}"); do
+for file in $(find "${findArgs[@]}"); do
     EditFile "$file"
     echo "Completed: " "$file"
 done
