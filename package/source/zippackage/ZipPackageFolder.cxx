@@ -70,7 +70,8 @@ ZipPackageFolder::~ZipPackageFolder()
 {
 }
 
-bool ZipPackageFolder::LookForUnexpectedODF12Streams( std::u16string_view aPath )
+bool ZipPackageFolder::LookForUnexpectedODF12Streams(
+        std::u16string_view const aPath, bool const isWholesomeEncryption)
 {
     bool bHasUnexpected = false;
 
@@ -83,10 +84,14 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( std::u16string_view aPath 
                 // META-INF is not allowed to contain subfolders
                 bHasUnexpected = true;
             }
+            else if (isWholesomeEncryption && rShortName != u"META-INF")
+            {
+                bHasUnexpected = true;
+            }
             else
             {
                 OUString sOwnPath = aPath + rShortName + "/";
-                bHasUnexpected = rInfo.pFolder->LookForUnexpectedODF12Streams( sOwnPath );
+                bHasUnexpected = rInfo.pFolder->LookForUnexpectedODF12Streams(sOwnPath, isWholesomeEncryption);
             }
         }
         else
@@ -101,6 +106,10 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( std::u16string_view aPath 
                 }
 
                 // streams from META-INF with expected names are allowed not to be registered in manifest.xml
+            }
+            else if (isWholesomeEncryption && rShortName != "mimetype" && rShortName != "encrypted-package")
+            {
+                bHasUnexpected = true;
             }
             else if ( !rInfo.pStream->IsFromManifest() )
             {

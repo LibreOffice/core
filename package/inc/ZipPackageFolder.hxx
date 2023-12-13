@@ -79,7 +79,7 @@ public:
     const OUString& GetVersion() const { return m_sVersion; }
     void SetVersion( const OUString& aVersion ) { m_sVersion = aVersion; }
 
-    bool LookForUnexpectedODF12Streams( std::u16string_view aPath );
+    bool LookForUnexpectedODF12Streams(std::u16string_view aPath, bool isWholesomeEncryption);
 
     void setChildStreamsTypeByExtension( const css::beans::StringPair& aPair );
 
