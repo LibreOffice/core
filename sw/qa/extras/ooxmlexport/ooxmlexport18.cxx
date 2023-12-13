@@ -357,26 +357,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak2, "tdf153613_inlineAft
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak, "tdf153613_textboxAfterPgBreak.docx")
-{
-    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
-
-    const auto& pLayout = parseLayoutDump();
-    assertXPathContent(pLayout, "//page[2]/body/txt"_ostr, "There should be no prior carriage return.");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak2, "tdf153613_textboxAfterPgBreak2.docx")
-{
-    // same as previous example, except that it is the first paragraph in the section.
-    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
-
-    const auto& pLayout = parseLayoutDump();
-    assertXPathContent(pLayout, "//page[2]/body/txt"_ostr, "There should be no prior carriage return.");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBreak.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak3, "tdf153613_textboxAfterPgBreak3.docx")
+{
+    // both textboxes on on the second (last) page
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//page[2]/body/txt/anchored/fly"_ostr, 2);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak14, "tdf153964_topMarginAfterBreak14.docx")
