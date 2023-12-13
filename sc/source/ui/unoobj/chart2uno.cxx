@@ -3147,11 +3147,7 @@ public:
             for (sal_Int32 nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
             {
                 if (meOrigin != chart2::data::LabelOrigin_LONG_SIDE)
-                {
-                    OUString aString = ScResId(STR_ROW) +
-                                       " " + OUString::number( nRow+1 );
-                    pArr[mnCount] = aString;
-                }
+                    pArr[mnCount] = ScResId(STR_ROW) + " " + OUString::number(nRow + 1);
                 else //only indices for categories
                     pArr[mnCount] = OUString::number( mnCount+1 );
                 ++mnCount;

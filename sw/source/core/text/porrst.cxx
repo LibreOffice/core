@@ -834,7 +834,7 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
         // some |text| here
         //     [[    ]]
         if (m_nStart > 1)
-            aNewPos.AdjustX(static_cast<tools::Long>(mnHalfCharWidth) * -2 * (m_oColors.size() - 1));
+            aNewPos.AdjustX(static_cast<tools::Long>(mnHalfCharWidth) * -2 * (m_aColors.size() - 1));
     }
     else if ( m_nStart != 0 && m_nEnd != 0 )
         // both end and start boundary marks: adjust them around the bookmark position
@@ -844,7 +844,7 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
-    for ( const auto& it : m_oColors )
+    for ( const auto& it : m_aColors )
     {
         // set bold for custom colored bookmark symbol
         // and draw multiple symbols showing all custom colors
@@ -878,7 +878,7 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
 void SwBookmarkPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     OUStringBuffer aStr;
-    for ( const auto& it : m_oColors )
+    for ( const auto& it : m_aColors )
     {
         aStr.append("#" + std::get<2>(it) + " " + SwResId(STR_BOOKMARK_DEF_NAME));
         switch (std::get<0>(it))
@@ -903,10 +903,10 @@ void SwBookmarkPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rTex
     dumpAsXmlAttributes(pWriter, rText, nOffset);
     nOffset += GetLen();
 
-    if (!m_oColors.empty())
+    if (!m_aColors.empty())
     {
         OUStringBuffer aStr;
-        for (const auto& rColor : m_oColors)
+        for (const auto& rColor : m_aColors)
         {
             aStr.append("#" + std::get<2>(rColor) + " " + SwResId(STR_BOOKMARK_DEF_NAME));
             switch (std::get<0>(rColor))

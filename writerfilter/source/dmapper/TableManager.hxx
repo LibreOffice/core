@@ -168,7 +168,7 @@ class TableManager : public virtual SvRefBase
                 mTableProps.top().clear();
         }
 
-        void setTableProps(TablePropertyMapPtr pProps)
+        void setTableProps(const TablePropertyMapPtr& pProps)
         {
             if (mTableProps.size() > 0)
                 mTableProps.top() = pProps;

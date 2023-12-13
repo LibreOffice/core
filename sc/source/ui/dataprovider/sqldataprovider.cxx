@@ -51,7 +51,7 @@ SQLFetchThread::SQLFetchThread(
     , mrDocument(rDoc)
     , maID(rID)
     , maDataTransformations(std::move(rTransformations))
-    , maImportFinishedHdl(aImportFinishedHdl)
+    , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {
 }
 

@@ -249,7 +249,7 @@ public:
     void SetHyperlinkTarget(const OUString& rTarget) { m_sHyperlinkTarget = rTarget; }
     const OUString& GetHyperlinkTarget() const { return m_sHyperlinkTarget; }
 
-    void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
+    void setFFDataHandler(const FFDataHandler::Pointer_t& pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
     const FFDataHandler::Pointer_t& getFFDataHandler() const { return m_pFFDataHandler; }
 
     void setFormControlHelper(const FormControlHelper::Pointer_t& pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }

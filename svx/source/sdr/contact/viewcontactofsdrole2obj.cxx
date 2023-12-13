@@ -154,15 +154,15 @@ basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometr
 
     basegfx::B2DHomMatrix aObjectMatrix = createObjectTransform();
 
-    drawinglayer::primitive2d::Primitive2DReference xContent =
-        new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
-            GetOle2Obj(),
-            aObjectMatrix,
-            GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion());
-
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::SdrOle2Primitive2D(
-            drawinglayer::primitive2d::Primitive2DContainer { xContent },
+            drawinglayer::primitive2d::Primitive2DContainer {
+                drawinglayer::primitive2d::Primitive2DReference(
+                    new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
+                        GetOle2Obj(),
+                        aObjectMatrix,
+                        GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion()))
+            },
             aObjectMatrix,
             aAttribute));
 

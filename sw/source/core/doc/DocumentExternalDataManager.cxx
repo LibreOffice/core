@@ -21,7 +21,7 @@
 namespace sw
 {
 
-void DocumentExternalDataManager::setExternalData(::sw::tExternalDataType eType, ::sw::tExternalDataPointer pPayload)
+void DocumentExternalDataManager::setExternalData(::sw::tExternalDataType eType, const ::sw::tExternalDataPointer& pPayload)
 {
     m_externalData[eType] = pPayload;
 }

@@ -572,10 +572,11 @@ namespace drawinglayer::primitive2d
                         basegfx::B2DPolygon aMaskPolygon(basegfx::utils::createUnitPolygon());
                         aMaskPolygon.transform(rTransform);
 
-                        Primitive2DReference mask = new MaskPrimitive2D(
-                            basegfx::B2DPolyPolygon(aMaskPolygon),
-                            std::move(aRetval));
-                        aRetval = Primitive2DContainer { mask };
+                        aRetval = Primitive2DContainer {
+                            Primitive2DReference(new MaskPrimitive2D(
+                                basegfx::B2DPolyPolygon(aMaskPolygon),
+                                std::move(aRetval)))
+                        };
                     }
                     break;
                 }

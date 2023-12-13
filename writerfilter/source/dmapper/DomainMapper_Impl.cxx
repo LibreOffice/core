@@ -1147,11 +1147,10 @@ void DomainMapper_Impl::PopSdt()
             beans::PropertyValues* pItems = aItems.getArray();
             for (size_t i = 0; i < rValues.size(); ++i)
             {
-                uno::Sequence<beans::PropertyValue> aItem = {
+                pItems[i] = {
                     comphelper::makePropertyValue("DisplayText", rDisplayTexts[i]),
-                    comphelper::makePropertyValue("Value", rValues[i]),
+                    comphelper::makePropertyValue("Value", rValues[i])
                 };
-                pItems[i] = aItem;
             }
             xContentControlProps->setPropertyValue("ListItems", uno::Any(aItems));
             if (m_pSdtHelper->getControlType() == SdtControlType::dropDown)

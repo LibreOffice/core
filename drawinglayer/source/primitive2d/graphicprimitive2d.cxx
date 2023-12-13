@@ -139,10 +139,8 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
 
         if (!basegfx::fTools::equalZero(fTransparency))
         {
-            Primitive2DReference aUnifiedTransparence(
-                new UnifiedTransparencePrimitive2D(std::move(aRetval), fTransparency));
-
-            aRetval = Primitive2DContainer{ aUnifiedTransparence };
+            aRetval = Primitive2DContainer{ Primitive2DReference(
+                new UnifiedTransparencePrimitive2D(std::move(aRetval), fTransparency)) };
         }
     }
 

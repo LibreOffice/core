@@ -151,7 +151,7 @@ public:
        @param pProps    the properties of the cell
        @param bAddBefore true: add an empty cell at beginning of the row for gridBefore
      */
-    void addCell(const css::uno::Reference<css::text::XTextRange>& start, TablePropertyMapPtr pProps, bool bAddBefore = false)
+    void addCell(const css::uno::Reference<css::text::XTextRange>& start, const TablePropertyMapPtr& pProps, bool bAddBefore = false)
     {
         CellData::Pointer_t pCellData(new CellData(start, pProps));
         if (bAddBefore)
@@ -338,7 +338,7 @@ public:
        @param end     end handle of the cell
        @param pProps  properties of the cell
      */
-    void addCell(const css::uno::Reference<css::text::XTextRange>& start, TablePropertyMapPtr pProps)
+    void addCell(const css::uno::Reference<css::text::XTextRange>& start, const TablePropertyMapPtr& pProps)
     {
         mpRow->addCell(start, pProps);
     }

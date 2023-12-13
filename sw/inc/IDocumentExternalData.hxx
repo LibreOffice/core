@@ -52,7 +52,7 @@ protected:
 
 public:
     virtual void setExternalData(sw::tExternalDataType eType,
-                                 sw::tExternalDataPointer pPayload) = 0;
+                                 const sw::tExternalDataPointer& pPayload) = 0;
     virtual sw::tExternalDataPointer getExternalData(sw::tExternalDataType eType) = 0;
 };
 

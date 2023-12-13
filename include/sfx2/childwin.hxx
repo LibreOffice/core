@@ -116,7 +116,7 @@ public:
     void                Destroy();
     vcl::Window*        GetWindow() const
                         { return pWindow; }
-    void                SetController(std::shared_ptr<SfxDialogController> controller) { xController = controller; }
+    void                SetController(const std::shared_ptr<SfxDialogController>& controller) { xController = controller; }
     void                ClearController() { xController.reset(); }
     std::shared_ptr<SfxDialogController>& GetController() { return xController; }
     const std::shared_ptr<SfxDialogController>& GetController() const { return xController; }

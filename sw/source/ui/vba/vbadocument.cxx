@@ -378,9 +378,8 @@ SwVbaDocument::getAttachedTemplate()
     uno::Reference<css::document::XDocumentPropertiesSupplier> const xDocPropSupp(
             getModel(), uno::UNO_QUERY_THROW);
     uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_SET_THROW );
-    OUString sTemplateUrl = xDocProps->getTemplateURL();
 
-    xTemplate = new SwVbaTemplate( this, mxContext, sTemplateUrl );
+    xTemplate = new SwVbaTemplate( this, mxContext, xDocProps->getTemplateURL() );
     return uno::Any( xTemplate );
 }
 
