@@ -22,7 +22,7 @@ class ChildControllerWrapper : public SfxChildWindow
 {
 public:
     ChildControllerWrapper(vcl::Window* pParentP, sal_uInt16 nId,
-                           SfxBindings* pBindings, const SfxChildWinInfo* pInfo)
+                           SfxBindings* pBindings, SfxChildWinInfo* pInfo)
         : SfxChildWindow(pParentP, nId)
     {
         ScTabViewShell* pViewShell = getTabViewShell( pBindings );

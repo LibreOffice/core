@@ -67,7 +67,7 @@ namespace
     Class::Class( vcl::Window*               pParentP,                   \
                     sal_uInt16              nId,                        \
                     SfxBindings*        p,                          \
-                    const SfxChildWinInfo*  pInfo )                     \
+                    SfxChildWinInfo*  pInfo )                     \
         : SfxChildWindow(pParentP, nId)                             \
     {                                                               \
         /************************************************************************************/\
@@ -227,6 +227,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(vcl::Window* pParentP,
     {
         auto xDlg = std::make_shared<ScAcceptChgDlg>(pBindings, this, pParentP->GetFrameWeld(), &pViewShell->GetViewData());
         SetController(xDlg);
+        pInfo->nFlags = SfxChildWindowFlags::NEVERHIDE;
         xDlg->Initialize( pInfo );
     }
     else

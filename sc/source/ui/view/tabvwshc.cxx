@@ -115,7 +115,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialo
 
 std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogController(
                                 SfxBindings* pB, SfxChildWindow* pCW,
-                                const SfxChildWinInfo* pInfo,
+                                SfxChildWinInfo* pInfo,
                                 weld::Window* pParent, sal_uInt16 nSlotId)
 {
     // only open dialog when called through ScModule::SetRefDialog,
@@ -449,7 +449,10 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
     }
 
     if (xResult)
-        xResult->Initialize( pInfo );
+    {
+        pInfo->nFlags = SfxChildWindowFlags::NEVERHIDE;
+        xResult->Initialize(pInfo);
+    }
     return xResult;
 }
 

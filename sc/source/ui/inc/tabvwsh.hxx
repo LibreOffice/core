@@ -356,7 +356,7 @@ public:
     static ScTabViewShell* GetActiveViewShell();
 
     std::shared_ptr<SfxModelessDialogController> CreateRefDialogController(SfxBindings* pB, SfxChildWindow* pCW,
-                                                    const SfxChildWinInfo* pInfo,
+                                                    SfxChildWinInfo* pInfo,
                                                     weld::Window* pParent, sal_uInt16 nSlotId);
 
     void            UpdateOleZoom();

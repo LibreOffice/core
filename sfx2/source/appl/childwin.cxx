@@ -198,7 +198,7 @@ SfxChildWindow::~SfxChildWindow()
 }
 
 std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
-        vcl::Window *pParent, SfxBindings* pBindings, SfxChildWinInfo const & rInfo)
+        vcl::Window *pParent, SfxBindings* pBindings, SfxChildWinInfo & rInfo)
 {
     std::unique_ptr<SfxChildWindow> pChild;
     SfxChildWinFactory* pFact=nullptr;
@@ -239,6 +239,7 @@ std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nI
                 SfxChildWinInfo aInfo = rInfo;
                 Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
                 pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
+                rInfo.nFlags |= aInfo.nFlags;
                 Application::SetSystemWindowMode( nOldMode );
                 if ( pBindings )
                     pBindings->LEAVEREGISTRATIONS();
