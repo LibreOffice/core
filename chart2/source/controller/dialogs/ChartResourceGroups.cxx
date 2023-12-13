@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, weld::Button&, voi
     weld::GenericDialogController::runAsync(
         xDlg, [this, xDlg, aOldParameter, iOldLineTypePos](sal_Int32 nResult) {
             m_xSteppedPropertiesDialog = nullptr;
-            auto xNewDlg = getSplinePropertiesDialog();
+            auto xNewDlg = getSteppedPropertiesDialog();
 
             if (nResult == RET_OK)
             {
