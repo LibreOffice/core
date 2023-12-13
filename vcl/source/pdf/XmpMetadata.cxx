@@ -8,6 +8,10 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <pdf/XmpMetadata.hxx>
 #include <tools/XmlWriter.hxx>
 
@@ -35,8 +39,8 @@ void XmpMetadata::write()
     mpMemoryStream = std::make_unique<SvMemoryStream>(4096 /*Initial*/, 64 /*Resize*/);
 
     // Header
-    mpMemoryStream->WriteOString(
-        OStringLiteral(u8"<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n"));
+    mpMemoryStream->WriteOString(std::string_view(reinterpret_cast<char const*>(
+        u8"<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n")));
 
     {
         tools::XmlWriter aXmlWriter(mpMemoryStream.get());
