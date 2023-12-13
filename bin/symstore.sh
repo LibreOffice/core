@@ -104,7 +104,7 @@ if [ ! -d "${INSTDIR}" -o ! -d "${WORKDIR}" ]; then
     echo "INSTDIR or WORKDIR not present - script expects calling after full build"
     exit 1
 fi
-which symstore.exe > /dev/null 2>&1 || {
+command -v symstore.exe > /dev/null 2>&1 || {
     echo "symstore.exe is expected in the PATH"
     exit 1
 }

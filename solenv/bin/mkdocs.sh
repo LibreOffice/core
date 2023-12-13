@@ -94,7 +94,7 @@ function check_cmd {
 
   found=0; cmd=
   for cmd_needed in $cmds_needed; do
-    which $cmd_needed > /dev/null 2>&1 && { found=1; cmd=$cmd_needed; }
+    command -v $cmd_needed > /dev/null && { found=1; cmd=$cmd_needed; }
   done
   if [ $found = 0 ]; then
       echo "$error_msg" >&2

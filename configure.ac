@@ -225,7 +225,7 @@ add_warning()
     if test "$have_WARNINGS" = "no"; then
         echo "*************************************" > "$WARNINGS_FILE"
         have_WARNINGS="yes"
-        if which tput >/dev/null && test "`tput colors 2>/dev/null || echo 0`" -ge 8; then
+        if command -v tput >/dev/null && test "`tput colors 2>/dev/null || echo 0`" -ge 8; then
             dnl <esc> as actual byte (U+1b), [ escaped using quadrigraph @<:@
             COLORWARN='*@<:@1;33;40m WARNING @<:@0m:'
         else
@@ -246,13 +246,13 @@ mac_sanitize_path()
     mac_path="$LODE_HOME/opt/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 dnl a common but nevertheless necessary thing that may be in a fancy
 dnl path location is git, so make sure we have it
-    mac_git_path=`which git 2>/dev/null`
+    mac_git_path=`command -v git`
     if test -n "$mac_git_path" -a -x "$mac_git_path" -a "$mac_git_path" != "/usr/bin/git" ; then
         mac_path="$mac_path:`dirname $mac_git_path`"
     fi
 dnl a not so common but nevertheless quite helpful thing that may be in a fancy
 dnl path location is gpg, so make sure we find it
-    mac_gpg_path=`which gpg 2>/dev/null`
+    mac_gpg_path=`command -v gpg`
     if test -n "$mac_gpg_path" -a -x "$mac_gpg_path" -a "$mac_gpg_path" != "/usr/bin/gpg" ; then
         mac_path="$mac_path:`dirname $mac_gpg_path`"
     fi
@@ -567,13 +567,13 @@ for a in "$MAKE" "$GNUMAKE" make gmake gnumake; do
         if test $? -eq 0;  then
             if test "$build_os" = "cygwin"; then
                 if test -n "$($a -v | grep 'Built for Windows')" ; then
-                    GNUMAKE="$(cygpath -m "$(which "$(cygpath -u $a)")")"
+                    GNUMAKE="$(cygpath -m "$(command -v "$(cygpath -u $a)")")"
                     GNUMAKE_WIN_NATIVE="TRUE"
                 else
-                    GNUMAKE=`which $a`
+                    GNUMAKE=`command -v $a`
                 fi
             else
-                GNUMAKE=`which $a`
+                GNUMAKE=`command -v $a`
             fi
             break
         fi
@@ -1406,7 +1406,7 @@ if test "$_os" = "Emscripten"; then
     fi
 
     EMSCRIPTEN_ERROR=0
-    if ! which emconfigure >/dev/null 2>&1; then
+    if ! command -v emconfigure >/dev/null 2>&1; then
         AC_MSG_WARN([emconfigure must be in your \$PATH])
         EMSCRIPTEN_ERROR=1
     fi
@@ -3465,7 +3465,7 @@ if test "$_os" != "WINNT"; then
 
             fi
         else
-            GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
+            GCC_HOME=`command -v gcc | $SED -e s,/bin/gcc,,`
             GCC_HOME_SET="false"
         fi
     else
@@ -9221,7 +9221,7 @@ if test "$enable_epm" = "yes"; then
         if test -z "$RPM"; then
             AC_MSG_ERROR([not found])
         elif "$RPM" --help 2>&1 | $EGREP buildroot >/dev/null; then
-            RPM_PATH=`which $RPM`
+            RPM_PATH=`command -v $RPM`
             AC_MSG_RESULT([$RPM_PATH])
             SCPDEFS="$SCPDEFS -DWITH_RPM"
         else
@@ -9567,7 +9567,7 @@ or get and install one from https://www.nasm.us/
 Then re-run autogen.sh
 
 Note: autogen.sh will try to use /opt/lo/bin/nasm if the environment variable NASM is not already defined.
-Alternatively, you can install the 'new' nasm where ever you want and make sure that \`which nasm\` finds it.
+Alternatively, you can install the 'new' nasm where ever you want and make sure that \`command -v nasm\` finds it.
 
 _EOS
             else
@@ -14214,7 +14214,7 @@ CURL=
 
 if test "$enable_fetch_external" != "no"; then
 
-CURL=`which curl 2>/dev/null`
+CURL=`command -v curl`
 
 for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
     # wget new enough?
@@ -14803,7 +14803,7 @@ dnl this avoids a dozen javac's ganging up on your laptop to kill it.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use icerun wrapper])
 ICECREAM_RUN=
-if test "$enable_icecream" = "yes" && which icerun >/dev/null 2>&1 ; then
+if test "$enable_icecream" = "yes" && command -v icerun >/dev/null ; then
     ICECREAM_RUN=icerun
     AC_MSG_RESULT([yes])
 else
@@ -15274,7 +15274,7 @@ Copy it to the Cygwin /opt/lo/bin directory as make.exe
 Then re-run autogen.sh
 
 Note: autogen.sh will try to use /opt/lo/bin/make if the environment variable GNUMAKE is not already defined.
-Alternatively, you can install the 'new' make where ever you want and make sure that `which make` finds it.
+Alternatively, you can install the 'new' make where ever you want and make sure that `command -v make` finds it.
 
 _EOS
 fi

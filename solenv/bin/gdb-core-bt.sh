@@ -13,7 +13,7 @@ EXECUTABLE=${1}
 COREDIR=${2}
 EXITCODE=${3}
 
-if test -n "$(which gdb)"
+if command -v gdb >/dev/null
 then
     found=
     for COREFILE in "$COREDIR"/core*

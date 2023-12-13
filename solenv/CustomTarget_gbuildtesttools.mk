@@ -11,7 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,solenv/gbuildtesttools))
 
 $(call gb_CustomTarget_get_target,solenv/gbuildtesttools) :
 	echo -n "{ \"MAKE\": \"$(if $(filter WNT,$(OS)),$(shell cygpath -u $(MAKE)),$(MAKE))\"" > $@
-	echo -n ", \"BASH\": \"$(if $(filter WNT,$(OS)),$(shell cygpath -m `which bash`),bash)\"" >> $@
+	echo -n ", \"BASH\": \"$(if $(filter WNT,$(OS)),$(shell cygpath -m `command -v bash`),bash)\"" >> $@
 	echo -n ", \"GBUILDTOJSON\": \"$(call gb_Executable_get_target,gbuildtojson)\" }" >> $@
 
 # vim: set noet sw=4 ts=4:
