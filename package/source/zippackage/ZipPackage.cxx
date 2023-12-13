@@ -417,25 +417,36 @@ void ZipPackage::parseManifest()
             }
         }
 
-        if ( !bManifestParsed )
+        if (!bManifestParsed || m_xRootFolder->GetMediaType().isEmpty())
         {
             // the manifest.xml could not be successfully parsed, this is an inconsistent package
             if ( aPackageMediatype.startsWith("application/vnd.") )
             {
                 // accept only types that look similar to own mediatypes
                 m_xRootFolder->SetMediaType( aPackageMediatype );
-                m_bMediaTypeFallbackUsed = true;
+                // if there is an encrypted inner package, there is no root
+                // document, because instead there is a package, and it is not
+                // an error
+                if (!m_xRootFolder->hasByName("encrypted-package"))
+                {
+                    m_bMediaTypeFallbackUsed = true;
+                }
             }
         }
         else if ( !m_bForceRecovery )
         {
-            // the mimetype stream should contain the information from manifest.xml
-            if ( m_xRootFolder->GetMediaType() != aPackageMediatype )
+            // the mimetype stream should contain the same information as manifest.xml
+            OUString const mediaTypeXML(m_xRootFolder->hasByName("encrypted-package")
+                ? m_xRootFolder->doGetByName("encrypted-package").xPackageEntry->GetMediaType()
+                : m_xRootFolder->GetMediaType());
+            if (mediaTypeXML != aPackageMediatype)
+            {
                 throw ZipIOException(
                     THROW_WHERE
                     "mimetype conflicts with manifest.xml, \""
-                    + m_xRootFolder->GetMediaType() + "\" vs. \""
+                    + mediaTypeXML + "\" vs. \""
                     + aPackageMediatype + "\"" );
+            }
         }
 
         m_xRootFolder->removeByName( sMimetype );
@@ -1269,6 +1280,8 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         static constexpr OUStringLiteral sFullPath(u"FullPath");
         const bool bIsGpgEncrypt = m_aGpgProps.hasElements();
 
+        // note: this is always created here (needed for GPG), possibly
+        // filtered out later in ManifestExport
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
             uno::Sequence < PropertyValue > aPropSeq(
