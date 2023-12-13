@@ -138,7 +138,7 @@ class DummyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 ZipPackage::ZipPackage ( uno::Reference < XComponentContext > xContext )
 : m_aMutexHolder( new comphelper::RefCountedMutex )
 , m_nStartKeyGenerationID( xml::crypto::DigestID::SHA1 )
-, m_nChecksumDigestID( xml::crypto::DigestID::SHA1_1K )
+, m_oChecksumDigestID( xml::crypto::DigestID::SHA1_1K )
 , m_nCommonEncryptionID( xml::crypto::CipherID::BLOWFISH_CFB_8 )
 , m_bHasEncryptedEntries ( false )
 , m_bHasNonEncryptedEntries ( false )
@@ -251,11 +251,16 @@ void ZipPackage::parseManifest()
                                 pStream->SetMediaType ( sMediaType );
                                 pStream->SetFromManifest( true );
 
-                                if ( pKeyInfo && pVector && pSize && pDigest && pDigestAlg && pEncryptionAlg )
+                                if (pKeyInfo
+                                    && pVector && pSize && pEncryptionAlg
+                                    && ((pEncryptionAlg->has<sal_Int32>()
+                                            && pEncryptionAlg->get<sal_Int32>() == xml::crypto::CipherID::AES_GCM_W3C)
+                                        || (pDigest && pDigestAlg)))
                                 {
                                     uno::Sequence < sal_Int8 > aSequence;
                                     sal_Int64 nSize = 0;
-                                    sal_Int32 nDigestAlg = 0, nEncryptionAlg = 0;
+                                    ::std::optional<sal_Int32> oDigestAlg;
+                                    sal_Int32 nEncryptionAlg = 0;
 
                                     pStream->SetToBeEncrypted ( true );
 
@@ -265,11 +270,15 @@ void ZipPackage::parseManifest()
                                     *pSize >>= nSize;
                                     pStream->setSize ( nSize );
 
-                                    *pDigest >>= aSequence;
-                                    pStream->setDigest ( aSequence );
+                                    if (pDigest && pDigestAlg)
+                                    {
+                                        *pDigest >>= aSequence;
+                                        pStream->setDigest(aSequence);
 
-                                    *pDigestAlg >>= nDigestAlg;
-                                    pStream->SetImportedChecksumAlgorithm( nDigestAlg );
+                                        assert(pDigestAlg->has<sal_Int32>());
+                                        oDigestAlg.emplace(pDigestAlg->get<sal_Int32>());
+                                        pStream->SetImportedChecksumAlgorithm(oDigestAlg);
+                                    }
 
                                     *pEncryptionAlg >>= nEncryptionAlg;
                                     pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
@@ -292,16 +301,23 @@ void ZipPackage::parseManifest()
                                             || pStream->getName() == "encrypted-package"))
                                     {
                                         m_bHasEncryptedEntries = true;
-                                        m_nChecksumDigestID = nDigestAlg;
+                                        m_oChecksumDigestID = oDigestAlg;
                                         m_nCommonEncryptionID = nEncryptionAlg;
                                         m_nStartKeyGenerationID = nStartKeyAlg;
                                     }
                                 }
-                                else if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
+                                else if (pSalt && pCount
+                                    && pVector && pSize && pEncryptionAlg
+                                    && ((pEncryptionAlg->has<sal_Int32>()
+                                            && pEncryptionAlg->get<sal_Int32>() == xml::crypto::CipherID::AES_GCM_W3C)
+                                        || (pDigest && pDigestAlg)))
+
                                 {
                                     uno::Sequence < sal_Int8 > aSequence;
                                     sal_Int64 nSize = 0;
-                                    sal_Int32 nCount = 0, nDigestAlg = 0, nEncryptionAlg = 0;
+                                    ::std::optional<sal_Int32> oDigestAlg;
+                                    sal_Int32 nEncryptionAlg = 0;
+                                    sal_Int32 nCount = 0;
                                     sal_Int32 nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
 
                                     pStream->SetToBeEncrypted ( true );
@@ -318,11 +334,15 @@ void ZipPackage::parseManifest()
                                     *pSize >>= nSize;
                                     pStream->setSize ( nSize );
 
-                                    *pDigest >>= aSequence;
-                                    pStream->setDigest ( aSequence );
+                                    if (pDigest && pDigestAlg)
+                                    {
+                                        *pDigest >>= aSequence;
+                                        pStream->setDigest(aSequence);
 
-                                    *pDigestAlg >>= nDigestAlg;
-                                    pStream->SetImportedChecksumAlgorithm( nDigestAlg );
+                                        assert(pDigestAlg->has<sal_Int32>());
+                                        oDigestAlg.emplace(pDigestAlg->get<sal_Int32>());
+                                        pStream->SetImportedChecksumAlgorithm(oDigestAlg);
+                                    }
 
                                     *pEncryptionAlg >>= nEncryptionAlg;
                                     pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
@@ -344,7 +364,7 @@ void ZipPackage::parseManifest()
                                     {
                                         m_bHasEncryptedEntries = true;
                                         m_nStartKeyGenerationID = nStartKeyAlg;
-                                        m_nChecksumDigestID = nDigestAlg;
+                                        m_oChecksumDigestID = oDigestAlg;
                                         m_nCommonEncryptionID = nEncryptionAlg;
                                     }
                                 }
@@ -1736,13 +1756,18 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             else if ( rAlgorithm.Name == "ChecksumAlgorithm" )
             {
                 sal_Int32 nID = 0;
+                if (!rAlgorithm.Value.hasValue())
+                {
+                    m_oChecksumDigestID.reset();
+                    continue;
+                }
                 if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA1_1K && nID != xml::crypto::DigestID::SHA256_1K ) )
                 {
                     throw IllegalArgumentException(THROW_WHERE "Unexpected checksum algorithm is provided!", uno::Reference<uno::XInterface>(), 2);
                 }
 
-                m_nChecksumDigestID = nID;
+                m_oChecksumDigestID.emplace(nID);
             }
             else
             {
@@ -1765,7 +1790,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         // defaults) with reasonable values
         m_nStartKeyGenerationID = 0; // this is unused for PGP
         m_nCommonEncryptionID = xml::crypto::CipherID::AES_CBC_W3C_PADDING;
-        m_nChecksumDigestID = xml::crypto::DigestID::SHA512_1K;
+        m_oChecksumDigestID.emplace(xml::crypto::DigestID::SHA512_1K);
     }
     else
         throw UnknownPropertyException(aPropertyName);
@@ -1786,7 +1811,14 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         ::comphelper::SequenceAsHashMap aAlgorithms;
         aAlgorithms["StartKeyGenerationAlgorithm"] <<= m_nStartKeyGenerationID;
         aAlgorithms["EncryptionAlgorithm"] <<= m_nCommonEncryptionID;
-        aAlgorithms["ChecksumAlgorithm"] <<= m_nChecksumDigestID;
+        if (m_oChecksumDigestID)
+        {
+            aAlgorithms["ChecksumAlgorithm"] <<= *m_oChecksumDigestID;
+        }
+        else
+        {
+            aAlgorithms["ChecksumAlgorithm"];
+        }
         return Any(aAlgorithms.getAsConstNamedValueList());
     }
     if ( PropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )

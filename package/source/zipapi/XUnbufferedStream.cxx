@@ -272,6 +272,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     maCompBuffer = m_xCipherContext->convertWithCipherContext( maCompBuffer );
                     if ( mnZipCurrent == mnZipEnd )
                     {
+                        // this should throw if AEAD is in use and the tag fails to validate
                         uno::Sequence< sal_Int8 > aSuffix = m_xCipherContext->finalizeCipherContextAndDispose();
                         if ( aSuffix.hasElements() )
                         {

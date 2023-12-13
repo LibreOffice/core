@@ -78,7 +78,7 @@ class ZipPackage final : public cppu::WeakImplHelper
     OUString   m_aURL;
 
     sal_Int32         m_nStartKeyGenerationID;
-    sal_Int32         m_nChecksumDigestID;
+    ::std::optional<sal_Int32> m_oChecksumDigestID;
     sal_Int32         m_nCommonEncryptionID;
     bool          m_bHasEncryptedEntries;
     bool          m_bHasNonEncryptedEntries;
@@ -124,7 +124,7 @@ public:
 
     sal_Int32 GetStartKeyGenID() const { return m_nStartKeyGenerationID; }
     sal_Int32 GetEncAlgID() const { return m_nCommonEncryptionID; }
-    sal_Int32 GetChecksumAlgID() const { return m_nChecksumDigestID; }
+    ::std::optional<sal_Int32> GetChecksumAlgID() const { return m_oChecksumDigestID; }
     sal_Int32 GetDefaultDerivedKeySize() const {
         switch (m_nCommonEncryptionID)
         {

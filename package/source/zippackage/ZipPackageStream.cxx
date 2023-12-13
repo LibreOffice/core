@@ -85,7 +85,6 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_bIsEncrypted ( false )
 , m_nImportedStartKeyAlgorithm( 0 )
 , m_nImportedEncryptionAlgorithm( 0 )
-, m_nImportedChecksumAlgorithm( 0 )
 , m_nImportedDerivedKeySize( 0 )
 , m_nStreamMode( PACKAGE_STREAM_NOTSET )
 , m_nMagicalHackPos( 0 )
@@ -208,7 +207,7 @@ sal_Int32 ZipPackageStream::GetIVSize() const
             *m_xBaseEncryptionData,
             GetEncryptionKey(bugs),
             GetEncryptionAlgorithm(),
-            m_nImportedChecksumAlgorithm ? m_nImportedChecksumAlgorithm : m_rZipPackage.GetChecksumAlgID(),
+            m_oImportedChecksumAlgorithm ? m_oImportedChecksumAlgorithm : m_rZipPackage.GetChecksumAlgID(),
             m_nImportedDerivedKeySize ? m_nImportedDerivedKeySize : m_rZipPackage.GetDefaultDerivedKeySize(),
             GetStartKeyGenID(),
             bugs != Bugs::None);
@@ -354,6 +353,9 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     throw io::IOException(THROW_WHERE );
 }
 
+// presumably the purpose of this is to transfer encrypted streams between
+// storages, needed for password-protected macros in documents, which is
+// tragically a feature that exists
 bool ZipPackageStream::ParsePackageRawStream()
 {
     OSL_ENSURE( GetOwnSeekStream().is(), "A stream must be provided!" );
@@ -395,7 +397,14 @@ bool ZipPackageStream::ParsePackageRawStream()
                                                         + xTempEncrData->m_aDigest.getLength()
                                                         + aMediaType.getLength() * sizeof( sal_Unicode );
                     m_nImportedEncryptionAlgorithm = nEncAlgorithm;
-                    m_nImportedChecksumAlgorithm = nChecksumAlgorithm;
+                    if (nChecksumAlgorithm == 0)
+                    {
+                        m_oImportedChecksumAlgorithm.reset();
+                    }
+                    else
+                    {
+                        m_oImportedChecksumAlgorithm.emplace(nChecksumAlgorithm);
+                    }
                     m_nImportedDerivedKeySize = nDerivedKeySize;
                     m_nImportedStartKeyAlgorithm = nStartKeyGenID;
                     m_nMagicalHackSize = nMagHackSize;
@@ -617,13 +626,20 @@ bool ZipPackageStream::saveChild(
                     throw uno::RuntimeException();
 
                 pPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-                pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
+                if (xEncData->m_oCheckAlg)
+                {
+                    pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
+                }
                 pPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
                 pPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
                 pPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
                 pPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
                 pPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
-                pPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
+                if (xEncData->m_oCheckAlg)
+                {
+                    assert(xEncData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C);
+                    pPropSet[PKG_MNFST_DIGESTALG].Value <<= *xEncData->m_oCheckAlg;
+                }
                 pPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
                 pPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
             }
@@ -808,13 +824,20 @@ bool ZipPackageStream::saveChild(
                 throw uno::RuntimeException();
 
             pPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-            pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
+            if (xEncData->m_oCheckAlg)
+            {
+                pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
+            }
             pPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
             pPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
             pPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
             pPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
             pPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
-            pPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
+            if (xEncData->m_oCheckAlg)
+            {
+                assert(xEncData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C);
+                pPropSet[PKG_MNFST_DIGESTALG].Value <<= *xEncData->m_oCheckAlg;
+            }
             pPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
             pPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
 

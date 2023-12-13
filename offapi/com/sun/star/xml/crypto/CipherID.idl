@@ -46,7 +46,7 @@ constants CipherID
 
         @see https://www.w3.org/TR/xmlenc-core1/#sec-AES-GCM
 
-        @since LO 24.2
+        @since LibreOffice 24.2
      */
     const long AES_GCM_W3C = 3;
 };
