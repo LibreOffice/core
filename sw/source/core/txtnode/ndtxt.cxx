@@ -464,7 +464,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
 
     bool bSplitFly = false;
     std::optional<std::vector<SwFrameFormat*>> oFlys = sw::GetFlysAnchoredAt(GetDoc(), GetIndex());
-    if (oFlys.has_value() && nSplitPos > 0)
+    if (oFlys.has_value())
     {
         // See if one of the flys is a split fly. If so, we need to keep
         // the potentially split text frames unchanged and create a new
