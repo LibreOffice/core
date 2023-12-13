@@ -1038,8 +1038,6 @@ void SAL_CALL Desktop::disposing()
     // Safe impossible cases
     // It's a programming error if dispose is called before terminate!
 
-    // But if you just ignore the assertion (which happens in unit
-    // tests for instance in sc/qa/unit) nothing bad happens.
     assert(m_bIsShutdown && "Desktop disposed before terminating it");
 
     {
