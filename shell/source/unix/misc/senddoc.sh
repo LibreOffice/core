@@ -29,25 +29,12 @@ fi
 # do not confuse the system mail clients with OOo and Java libraries
 unset LD_LIBRARY_PATH
 
-# tries to locate the executable specified
-# as first parameter in the user's path.
-which() {
-    if [ ! -z "$1" ]; then
-        for i in $(echo "$PATH" | sed -e 's/^:/.:/g' -e 's/:$/:./g' -e 's/::/:.:/g' -e 's/:/ /g'); do
-            if [ -x "$i/$1" -a ! -d "$i/$1" ]; then
-                echo "$i/$1"
-                break;
-            fi
-        done
-    fi
-}
-
 # checks for the original mozilla start script(s)
 # and restrict the "-remote" semantics to those.
 run_mozilla() {
     # find mozilla script in PATH if necessary
     if [ "$(basename "$1")" = "$1" ]; then
-        moz=$(which "$1")
+        moz=$(command -v "$1")
     else
         moz=$1
     fi

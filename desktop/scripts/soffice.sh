@@ -77,7 +77,7 @@ test -n "$RR" && EXTRAOPT="--record"
 for arg in "$@" $EXTRAOPT ; do
     case "$arg" in
         --record)
-            if which rr >/dev/null 2>&1 ; then
+            if command -v rr >/dev/null ; then
                 # smoketest may already be recorded => ignore nested
                 RRCHECK="rr record --nested=ignore"
                 checks="c$checks"
@@ -87,7 +87,7 @@ for arg in "$@" $EXTRAOPT ; do
             fi
             ;;
         --backtrace)
-            if which gdb >/dev/null 2>&1 ; then
+            if command -v gdb >/dev/null ; then
                 GDBTRACECHECK="gdb -nx --command=$sd_prog/gdbtrace --args"
                 checks="c$checks"
             else
@@ -96,7 +96,7 @@ for arg in "$@" $EXTRAOPT ; do
             fi
             ;;
         --strace)
-            if which strace >/dev/null 2>&1 ; then
+            if command -v strace >/dev/null ; then
                 STRACECHECK="strace -o strace.log -f -tt -s 256"
                 checks="c$checks"
             else
@@ -106,7 +106,7 @@ for arg in "$@" $EXTRAOPT ; do
             ;;
          --valgrind)
             test -n "$VALGRINDCHECK" && continue;
-            if which valgrind >/dev/null 2>&1 ; then
+            if command -v valgrind >/dev/null ; then
                 # another valgrind tool might be forced via the environment variable
                 test -z "$VALGRIND" && VALGRIND="memcheck"
                 # --trace-children-skip is pretty useful but supported only with valgrind >= 3.6.0
