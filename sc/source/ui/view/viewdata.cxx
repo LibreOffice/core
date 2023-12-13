@@ -2248,6 +2248,7 @@ void ScViewData::EditGrowY( bool bInitial )
 
 void ScViewData::ResetEditView()
 {
+    LOKEditViewHistory::Update(/*bRemove: */ true);
     EditEngine* pEngine = nullptr;
     for (sal_uInt16 i=0; i<4; i++)
     {
@@ -2270,6 +2271,7 @@ void ScViewData::ResetEditView()
 
 void ScViewData::KillEditView()
 {
+    LOKEditViewHistory::Update(/*bRemove: */ true);
     for (sal_uInt16 i=0; i<4; i++)
         if (pEditView[i])
         {

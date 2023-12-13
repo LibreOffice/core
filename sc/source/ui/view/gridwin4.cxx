@@ -280,26 +280,6 @@ static void lcl_DrawHighlight( ScOutputData& rOutputData, const ScViewData& rVie
     }
 }
 
-// Calculates top-left offset to be applied based on margins and indent.
-static void lcl_GetEditAreaTLOffset(tools::Long& nOffsetX, tools::Long& nOffsetY, const ScAddress& rAddr,
-                                    const ScViewData& rViewData, ScDocument& rDoc)
-{
-    tools::Long nLeftMargin = 0;
-    tools::Long nTopMargin = 0;
-    tools::Long nIndent = 0;
-    tools::Long nDummy = 0;
-    ScEditUtil aEUtil(&rDoc, rAddr.Col(), rAddr.Row(), rAddr.Tab(),
-        Point(0, 0), nullptr, rViewData.GetPPTX(),
-        rViewData.GetPPTY(), Fraction(1.0), Fraction(1.0),
-        false /* bPrintTwips */);
-    const ScPatternAttr* pPattern = rDoc.GetPattern(rAddr);
-    if (!rDoc.IsLayoutRTL(rAddr.Tab()))
-        nIndent = aEUtil.GetIndent(pPattern);
-    aEUtil.GetMargins(pPattern, nLeftMargin, nTopMargin, nDummy, nDummy);
-    nOffsetX = nIndent + nLeftMargin;
-    nOffsetY = nTopMargin;
-}
-
 void ScGridWindow::DoInvertRect( const tools::Rectangle& rPixel )
 {
     if ( rPixel == aInvertRect )
@@ -656,24 +636,27 @@ private:
 
 namespace
 {
-int lcl_GetMultiLineHeight(EditEngine& rEditEngine)
-{
-    int nHeight = 0;
-    int nParagraphs = rEditEngine.GetParagraphCount();
-    if (nParagraphs > 1 || (nParagraphs > 0 && rEditEngine.GetLineCount(0) > 1))
-    {
-        for (int nPara = 0; nPara < nParagraphs; nPara++)
-        {
-            nHeight += rEditEngine.GetLineCount(nPara) * rEditEngine.GetLineHeight(nPara);
-        }
-    }
-
-    return nHeight;
-}
-
 tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
 {
-    return tools::Rectangle(-rRect.Right(), rRect.Top(), -rRect.Left(), rRect.Bottom());
+    return {-rRect.Right(), rRect.Top(), -rRect.Left(), rRect.Bottom()};
+}
+
+tools::Long GetSide(const tools::Rectangle& rRect, int i)
+{
+    static decltype(&tools::Rectangle::Left) GetSides[4] = {
+        &tools::Rectangle::Left, &tools::Rectangle::Top,
+        &tools::Rectangle::Right, &tools::Rectangle::Bottom
+    };
+    return (rRect.*GetSides[i])();
+}
+
+Fraction GetZoom(const ScViewData& rViewData, int i)
+{
+    static decltype(&ScViewData::GetZoomX) GetZooms[4] = {
+        &ScViewData::GetZoomX, &ScViewData::GetZoomY,
+        &ScViewData::GetZoomX, &ScViewData::GetZoomY
+    };
+    return (rViewData.*GetZooms[i])();
 }
 }
 
@@ -1095,183 +1078,195 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
-    // paint in-place editing
+    // in place editing - lok case
     if (bIsTiledRendering)
     {
         ScTabViewShell* pThisViewShell = mrViewData.GetViewShell();
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        ViewShellList aCurrentDocViewList = LOKEditViewHistory::GetSortedViewsForDoc(pThisViewShell->GetDocId());
+        tools::Rectangle aTileRectPx(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
 
-        while (pViewShell)
+        for (SfxViewShell* pVS: aCurrentDocViewList)
         {
-            bool bEnterLoop = bIsTiledRendering || pViewShell != pThisViewShell;
-            if (bEnterLoop && pViewShell->GetDocId() == pThisViewShell->GetDocId())
+            auto pTabViewShell = dynamic_cast<ScTabViewShell*>(pVS);
+            if (!pTabViewShell)
+                continue;
+
+            ScViewData& rOtherViewData = pTabViewShell->GetViewData();
+            ScSplitPos eOtherWhich = rOtherViewData.GetEditActivePart();
+
+            bool bOtherEditMode = rOtherViewData.HasEditView(eOtherWhich);
+            SCCOL nCol1 = rOtherViewData.GetEditStartCol();
+            SCROW nRow1 = rOtherViewData.GetEditStartRow();
+            SCCOL nCol2 = rOtherViewData.GetEditEndCol();
+            SCROW nRow2 = rOtherViewData.GetEditEndRow();
+
+            if (!(bOtherEditMode
+                  && ( nCol2 >= nX1 && nCol1 <= nX2 && nRow2 >= nY1 && nRow1 <= nY2 )
+                  && rOtherViewData.GetRefTabNo() == nTab))
+                continue; // only views where in place editing is occurring need to be rendered
+
+            EditView* pOtherEditView = rOtherViewData.GetEditView(eOtherWhich);
+            if (!pOtherEditView)
+                continue;
+
+            rDevice.SetLineColor();
+            // Theme colors
+            const ScPatternAttr* pPattern = rDoc.GetPattern( nCol1, nRow1, nTab );
+            Color aCellColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
+            if (aCellColor.IsTransparent())
             {
-                ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-                if (pTabViewShell)
-                {
-                    ScViewData& rOtherViewData = pTabViewShell->GetViewData();
-                    ScSplitPos eOtherWhich = rOtherViewData.GetEditActivePart();
+                const ScViewRenderingOptions& rViewRenderingOptions = pTabViewShell->GetViewRenderingData();
+                aCellColor = rViewRenderingOptions.GetDocColor();
+            }
+            rDevice.SetFillColor(aCellColor);
+            pOtherEditView->SetBackgroundColor(aCellColor);
 
-                    bool bOtherEditMode = rOtherViewData.HasEditView(eOtherWhich);
-                    SCCOL nCol1 = rOtherViewData.GetEditStartCol();
-                    SCROW nRow1 = rOtherViewData.GetEditStartRow();
-                    SCCOL nCol2 = rOtherViewData.GetEditEndCol();
-                    SCROW nRow2 = rOtherViewData.GetEditEndRow();
-                    bOtherEditMode = bOtherEditMode
-                            && ( nCol2 >= nX1 && nCol1 <= nX2 && nRow2 >= nY1 && nRow1 <= nY2 );
-                    if (bOtherEditMode && rOtherViewData.GetRefTabNo() == nTab)
-                    {
-                        EditView* pOtherEditView = rOtherViewData.GetEditView(eOtherWhich);
-                        if (pOtherEditView)
-                        {
-                            tools::Long nScreenX = aOutputData.nScrX;
-                            tools::Long nScreenY = aOutputData.nScrY;
-
-                            rDevice.SetLineColor();
-                            SfxViewShell* pSfxViewShell = SfxViewShell::Current();
-                            ScTabViewShell* pCurrentViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
-                            if (pCurrentViewShell)
-                            {
-                                const ScPatternAttr* pPattern = rDoc.GetPattern( nCol1, nRow1, nTab );
-                                Color aCellColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
-                                if (aCellColor.IsTransparent())
-                                {
-                                    const ScViewRenderingOptions& rViewRenderingOptions = pCurrentViewShell->GetViewRenderingData();
-                                    aCellColor = rViewRenderingOptions.GetDocColor();
-                                }
-                                rDevice.SetFillColor(aCellColor);
-                                pOtherEditView->SetBackgroundColor(aCellColor);
-                            }
-                            Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
-                            Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
-
-                            if (bIsTiledRendering)
-                            {
-                                EditEngine& rEditEngine = pOtherEditView->getEditEngine();
-                                aEnd.AdjustY(lcl_GetMultiLineHeight(rEditEngine));
-                            }
-
-                            if (bLokRTL)
-                            {
-                                // Transform the cell range X coordinates such that the edit cell area is
-                                // horizontally mirrored w.r.t the (combined-)tile.
-                                aStart.setX(pLokRTLCtxt->docToTilePos(aStart.X()));
-                                aEnd.setX(pLokRTLCtxt->docToTilePos(aEnd.X()));
-                            }
-
-                            // don't overwrite grid
-                            tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
-                            aEnd.AdjustX( -(2 * nLayoutSign) );
-                            aEnd.AdjustY( -2 );
-
-                            tools::Rectangle aBackground(aStart, aEnd);
-                            if (bLokRTL)
-                                aBackground.Normalize();
-
-                            // Need to draw the background in absolute coords.
-                            Point aOrigin = aOriginalMode.GetOrigin();
-                            aOrigin.setX(
-                                o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
-                                + nScreenX);
-                            aOrigin.setY(
-                                o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
-                                + nScreenY);
-                            aBackground += aOrigin;
-                            rDevice.SetMapMode(aDrawMode);
-
-                            static const double twipFactor = 15 * 1.76388889; // 26.45833335
-                            // keep into account the zoom factor
-                            aOrigin = Point((aOrigin.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
-                                            (aOrigin.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
-
-                            MapMode aNew = rDevice.GetMapMode();
-                            aNew.SetOrigin(aOrigin);
-                            rDevice.SetMapMode(aNew);
-
-                            // paint the background
-                            rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
-                            tools::Rectangle aBGAbs(aBackground);
-
-                            tools::Rectangle aEditRect(aBackground);
-                            tools::Long nOffsetX = 0, nOffsetY = 0;
-                            // Get top-left offset because of margin and indent.
-                            lcl_GetEditAreaTLOffset(nOffsetX, nOffsetY, ScAddress(nCol1, nRow1, nTab), mrViewData, rDoc);
-                            aEditRect.AdjustLeft(nOffsetX + 1);
-                            aEditRect.AdjustRight(1);
-                            aEditRect.AdjustTop(nOffsetY + 1);
-                            aEditRect.AdjustBottom(1);
-
-                            // EditView has an 'output area' which is used to clip the 'paint area' we provide below.
-                            // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
-                            // attached to the EditView, so we have to change its mapmode too (temporarily). We save the
-                            // original mapmode and 'output area' and roll them back when we finish painting to rDevice.
-                            OutputDevice& rOtherWin = pOtherEditView->GetOutputDevice();
-                            const tools::Rectangle aOrigOutputArea(pOtherEditView->GetOutputArea()); // Not in pixels.
-                            const MapMode aOrigMapMode = rOtherWin.GetMapMode();
-                            rOtherWin.SetMapMode(rDevice.GetMapMode());
-
-                            // Avoid sending wrong cursor/selection messages by the 'other' view, as the output-area is going
-                            // to be tweaked temporarily to match the current view's zoom.
-                            SuppressEditViewMessagesGuard aGuard(*pOtherEditView);
-                            comphelper::ScopeGuard aOutputGuard(
-                                [pOtherEditView, aOrigOutputArea, bLokRTL] {
-                                    if (bLokRTL && aOrigOutputArea != pOtherEditView->GetOutputArea())
-                                        pOtherEditView->SetOutputArea(aOrigOutputArea);
-                                });
-
-                            aEditRect = rDevice.PixelToLogic(aEditRect);
-                            if (bIsTiledRendering)
-                                pOtherEditView->SetOutputArea(aEditRect);
-                            else
-                                aEditRect.Intersection(pOtherEditView->GetOutputArea());
-                            pOtherEditView->Paint(aEditRect, &rDevice);
-
-                            // EditView will do the cursor notifications correctly if we're in
-                            // print-twips messaging mode.
-                            if (bIsTiledRendering && !comphelper::LibreOfficeKit::isCompatFlagSet(
-                                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
-                            {
-                                // Now we need to get relative cursor position within the editview.
-                                // This is for sending the pixel-aligned twips position of the cursor to the specific views with
-                                // the same given zoom level.
-                                tools::Rectangle aCursorRect = pOtherEditView->GetEditCursor();
-                                Point aCursPos = OutputDevice::LogicToLogic(aCursorRect.TopLeft(),
-                                        MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-
-                                const MapMode& rDevMM = rDevice.GetMapMode();
-                                MapMode aMM(MapUnit::MapTwip);
-                                aMM.SetScaleX(rDevMM.GetScaleX());
-                                aMM.SetScaleY(rDevMM.GetScaleY());
-
-                                aBGAbs.AdjustLeft(1);
-                                aBGAbs.AdjustTop(1);
-                                aCursorRect = GetOutDev()->PixelToLogic(aBGAbs, aMM);
-                                aCursorRect.setWidth(0);
-                                aCursorRect.Move(aCursPos.getX(), 0);
-                                // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
-                                InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
-                            }
-
-                            // Rollback the mapmode and 'output area'.
-                            rOtherWin.SetMapMode(aOrigMapMode);
-                            if (!bIsTiledRendering)
-                                pOtherEditView->SetOutputArea(aOrigOutputArea);
-                            rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
-                        }
-                    }
-                }
+            // edit rectangle / background
+            Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
+            Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
+            tools::Rectangle aEditRectPx(aStart, aEnd);
+            if (bLokRTL)
+            {
+                // Transform the cell range X coordinates such that the edit cell area is
+                // horizontally mirrored w.r.t the (combined-)tile.
+                aStart.setX(pLokRTLCtxt->docToTilePos(aStart.X()));
+                aEnd.setX(pLokRTLCtxt->docToTilePos(aEnd.X()));
             }
 
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
+            // don't overwrite grid
+            tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+            aEnd.AdjustX( -(2 * nLayoutSign) );
+            aEnd.AdjustY( -2 );
 
+            tools::Rectangle aBackground(aStart, aEnd);
+            if (bLokRTL)
+                aBackground.Normalize();
+            tools::Rectangle aBGAbs(aBackground);
+
+            // Need to draw the background in absolute coords.
+            Point aOriginTw = aOriginalMode.GetOrigin();
+            Point aOriginPx = o3tl::convert(aOriginTw, o3tl::Length::twip, o3tl::Length::px);
+            Point aOriginAbsPx = aOriginPx + aTileRectPx.GetPos();
+            aBackground += aOriginAbsPx;
+            rDevice.SetMapMode(aDrawMode);
+
+            // keep into account the zoom factor
+            static const double twipFactor = 15 * 1.76388889; // 26.45833335
+            Point aNewOrigin((aOriginAbsPx.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
+                             (aOriginAbsPx.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
+
+            MapMode aNewMM = rDevice.GetMapMode();
+            aNewMM.SetOrigin(aNewOrigin);
+            rDevice.SetMapMode(aNewMM);
+
+            // paint the background
+            rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
+
+            // paint text
+            const tools::Rectangle aOrigOutputAreaTw(pOtherEditView->GetOutputArea()); // Not in pixels.
+
+            tools::Rectangle aNewOutputArea;
+            // compute output area for view with a different zoom level wrt the view used for painting
+            if (!(mrViewData.GetZoomX() == rOtherViewData.GetZoomX() &&
+                  mrViewData.GetZoomY() == rOtherViewData.GetZoomY()))
+            {
+                Point aOtherStart = rOtherViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
+                Point aOtherEnd = rOtherViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
+                tools::Rectangle aOtherEditRectPx(aOtherStart, aOtherEnd);
+
+                tools::Long sides[4];
+                for (auto i: {0, 1, 2, 3})
+                {
+                    sides[i] = static_cast<tools::Long>(
+                        GetSide(aEditRectPx, i)
+                        + double(::GetZoom(mrViewData, i) / ::GetZoom(rOtherViewData, i))
+                              * (double(::GetZoom(rOtherViewData, i)) * GetSide(aOrigOutputAreaTw, i)
+                                 - GetSide(aOtherEditRectPx, i) * twipFactor)
+                              / twipFactor);
+                }
+
+                aNewOutputArea = tools::Rectangle(sides[0], sides[1], sides[2], sides[3]);
+                aNewOutputArea += aOriginAbsPx;
+            }
+            // compute output area for RTL case
+            if (bLokRTL)
+            {
+                if (aNewOutputArea.IsEmpty())
+                {
+                    // same zoom level as view used for painting
+                    aNewOutputArea = rDevice.LogicToPixel(aOrigOutputAreaTw);
+                }
+                // Transform the cell range X coordinates such that the edit cell area is
+                // horizontally mirrored w.r.t the (combined-)tile.
+                aNewOutputArea = tools::Rectangle(
+                    pLokRTLCtxt->docToTilePos(aNewOutputArea.Left() - aOriginAbsPx.X()) + aOriginAbsPx.X(),
+                    aNewOutputArea.Top(),
+                    pLokRTLCtxt->docToTilePos(aNewOutputArea.Right() - aOriginAbsPx.X()) + aOriginAbsPx.X(),
+                    aNewOutputArea.Bottom());
+                aNewOutputArea.Normalize();
+            }
+
+            if (aNewOutputArea.IsEmpty())
+            {
+                // same zoom level and not RTL: no need to change the output area before painting
+                pOtherEditView->Paint(rDevice.PixelToLogic(aTileRectPx), &rDevice);
+            }
+            else
+            {
+                // EditView has an 'output area' which is used to clip the 'paint area' we provide below.
+                // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
+                // attached to the EditView, so we have to change its mapmode too (temporarily). We save the
+                // original mapmode and 'output area' and roll them back when we finish painting to rDevice.
+                OutputDevice& rOtherWin = pOtherEditView->GetOutputDevice();
+                const MapMode aOrigMapMode = rOtherWin.GetMapMode();
+                rOtherWin.SetMapMode(rDevice.GetMapMode());
+
+                // Avoid sending wrong cursor/selection messages by the 'other' view, as the output-area is going
+                // to be tweaked temporarily to match the current view's zoom.
+                SuppressEditViewMessagesGuard aGuard(*pOtherEditView);
+
+                pOtherEditView->SetOutputArea(rDevice.PixelToLogic(aNewOutputArea));
+                pOtherEditView->Paint(rDevice.PixelToLogic(aTileRectPx), &rDevice);
+
+                // EditView will do the cursor notifications correctly if we're in
+                // print-twips messaging mode.
+                if (pTabViewShell == pThisViewShell
+                    && !comphelper::LibreOfficeKit::isCompatFlagSet(
+                        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+                {
+                    // Now we need to get relative cursor position within the editview.
+                    // This is for sending the pixel-aligned twips position of the cursor to the specific views with
+                    // the same given zoom level.
+                    tools::Rectangle aCursorRect = pEditView->GetEditCursor();
+                    Point aCursPos = o3tl::toTwips(aCursorRect.TopLeft(), o3tl::Length::mm100);
+
+                    const MapMode& rDevMM = rDevice.GetMapMode();
+                    MapMode aMM(MapUnit::MapTwip);
+                    aMM.SetScaleX(rDevMM.GetScaleX());
+                    aMM.SetScaleY(rDevMM.GetScaleY());
+
+                    aBGAbs.AdjustLeft(1);
+                    aBGAbs.AdjustTop(1);
+                    aCursorRect = GetOutDev()->PixelToLogic(aBGAbs, aMM);
+                    aCursorRect.setWidth(0);
+                    aCursorRect.Move(aCursPos.getX(), 0);
+                    // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
+                    InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
+                }
+
+                // Rollback the mapmode and 'output area'.
+                rOtherWin.SetMapMode(aOrigMapMode);
+                pOtherEditView->SetOutputArea(aOrigOutputAreaTw);
+            }
+            rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
+        }
     }
 
     // In-place editing - when the user is typing, we need to paint the text
     // using the editeng.
     // It's being done after EndDrawLayers() to get it outside the overlay
     // buffer and on top of everything.
-    if (bInPlaceEditing)
+    if (bInPlaceEditing && !bIsTiledRendering)
     {
         // get the coordinates of the area we need to clear (overpaint by
         // the background)
@@ -1284,14 +1279,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eWhich );
         Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eWhich );
 
-        if (bLokRTL)
-        {
-            // Transform the cell range X coordinates such that the edit cell area is
-            // horizontally mirrored w.r.t the (combined-)tile.
-            aStart.setX(pLokRTLCtxt->docToTilePos(aStart.X()));
-            aEnd.setX(pLokRTLCtxt->docToTilePos(aEnd.X()));
-        }
-
         // don't overwrite grid
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
         aEnd.AdjustX( -(2 * nLayoutSign) );
@@ -1299,96 +1286,20 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         // set the correct mapmode
         tools::Rectangle aBackground(aStart, aEnd);
-        if (bLokRTL)
-            aBackground.Normalize();
-        tools::Rectangle aBGAbs(aBackground);
 
-        if (bIsTiledRendering)
-        {
-            // Need to draw the background in absolute coords.
-            Point aOrigin = aOriginalMode.GetOrigin();
-            aOrigin.setX(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
-                         + nScrX);
-            aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
-                         + nScrY);
-            aBackground += aOrigin;
-            rDevice.SetMapMode(aDrawMode);
-        }
-        else
-            rDevice.SetMapMode(mrViewData.GetLogicMode());
+        // paint the background
+        rDevice.SetMapMode(mrViewData.GetLogicMode());
 
-        if (bIsTiledRendering)
-        {
-            Point aOrigin = aOriginalMode.GetOrigin();
-            aOrigin.setX(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
-                         + nScrX);
-            aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
-                         + nScrY);
-            static const double twipFactor = 15 * 1.76388889; // 26.45833335
-            // keep into account the zoom factor
-            aOrigin = Point((aOrigin.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
-                            (aOrigin.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
-            MapMode aNew = rDevice.GetMapMode();
-            aNew.SetOrigin(aOrigin);
-            rDevice.SetMapMode(aNew);
-        }
+        tools::Rectangle aLogicRect(rDevice.PixelToLogic(aBackground));
+        //tdf#100925, rhbz#1283420, Draw some text here, to get
+        //X11CairoTextRender::getCairoContext called, so that the forced read
+        //from the underlying X Drawable gets it to sync.
+        rDevice.DrawText(aLogicRect.BottomLeft(), " ");
+        rDevice.DrawRect(aLogicRect);
 
         // paint the editeng text
-        if (bIsTiledRendering)
-        {
-            // EditView has an 'output area' which is used to clip the paint area we provide below.
-            // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
-            // attached to the EditView, so we have to change its mapmode too (temporarily). We save the
-            // original mapmode and 'output area' and roll them back when we finish painting to rDevice.
-            const MapMode aOrigMapMode = GetMapMode();
-            SetMapMode(rDevice.GetMapMode());
-
-            // Avoid sending wrong cursor/selection messages by the current view, as the output-area is going
-            // to be tweaked temporarily to match other view's zoom. (This does not affect the manual
-            // cursor-messaging done in the non print-twips mode)
-            SuppressEditViewMessagesGuard aGuard(*pEditView);
-
-            // EditView will do the cursor notifications correctly if we're in
-            // print-twips messaging mode.
-            if (!comphelper::LibreOfficeKit::isCompatFlagSet(
-                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
-            {
-                // Now we need to get relative cursor position within the editview.
-                // This is for sending the pixel-aligned twips position of the cursor to the specific views with
-                // the same given zoom level.
-                tools::Rectangle aCursorRect = pEditView->GetEditCursor();
-                Point aCursPos = o3tl::toTwips(aCursorRect.TopLeft(), o3tl::Length::mm100);
-
-                const MapMode& rDevMM = rDevice.GetMapMode();
-                MapMode aMM(MapUnit::MapTwip);
-                aMM.SetScaleX(rDevMM.GetScaleX());
-                aMM.SetScaleY(rDevMM.GetScaleY());
-
-                aBGAbs.AdjustLeft(1);
-                aBGAbs.AdjustTop(1);
-                aCursorRect = GetOutDev()->PixelToLogic(aBGAbs, aMM);
-                aCursorRect.setWidth(0);
-                aCursorRect.Move(aCursPos.getX(), 0);
-                // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
-                InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
-            }
-
-            // Rollback the mapmode and 'output area'.
-            SetMapMode(aOrigMapMode);
-        }
-        else
-        {
-            // paint the background
-            tools::Rectangle aLogicRect(rDevice.PixelToLogic(aBackground));
-            //tdf#100925, rhbz#1283420, Draw some text here, to get
-            //X11CairoTextRender::getCairoContext called, so that the forced read
-            //from the underlying X Drawable gets it to sync.
-            rDevice.DrawText(aLogicRect.BottomLeft(), " ");
-            rDevice.DrawRect(aLogicRect);
-
-            tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
-            pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
-        }
+        tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
+        pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
 
         rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
 
