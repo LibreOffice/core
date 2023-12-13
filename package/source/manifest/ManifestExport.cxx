@@ -186,6 +186,10 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
         if ( pKeyInfoProperty )
         {
+            // no start-key-generation needed, our session key has
+            // max size already
+            bStoreStartKeyGeneration = false;
+
             // yeah, so that goes directly below the manifest:manifest
             // element
             OUStringBuffer aBuffer;
@@ -451,9 +455,6 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             {
                 pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
                                            sPGP_Name);
-                // no start-key-generation needed, our session key has
-                // max size already
-                bStoreStartKeyGeneration = false;
             }
             else
             {
