@@ -209,7 +209,10 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             }
             case ScanlineFormat::N8BitPal:
             {
-                if (!aBitmap.HasGreyPalette8Bit())
+                // Calling aBitmap.HasGreyPalette8Bit() hits an assert when
+                // using Skia in a debug build so query the palette through
+                // the bitmap read access object.
+                if (!pAccess->HasPalette() || !pAccess->GetPalette().IsGreyPalette8Bit())
                     colorType = PNG_COLOR_TYPE_PALETTE;
                 else
                 {
