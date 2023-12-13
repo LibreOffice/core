@@ -60,6 +60,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <osl/diagnose.h>
 #include <boost/property_tree/json_parser.hpp>
 
@@ -207,6 +208,7 @@ tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
 
 void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
 {
+    LOKEditViewHistory::Update();
     bool bNegativeX = IsNegativeX();
     if (EditViewCallbacks* pEditViewCallbacks = pImpEditView->getEditViewCallbacks())
     {
@@ -242,6 +244,8 @@ void EditView::InvalidateOtherViewWindows( const tools::Rectangle& rInvRect )
 void EditView::Invalidate()
 {
     const tools::Rectangle& rInvRect = GetInvalidateRect();
+
+    LOKEditViewHistory::Update();
     pImpEditView->InvalidateAtWindow(rInvRect);
     InvalidateOtherViewWindows(rInvRect);
 }

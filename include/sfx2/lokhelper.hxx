@@ -21,8 +21,10 @@
 #include <cstddef>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <list>
 #include <optional>
 #include <string_view>
+#include <unordered_map>
 #include <sfx2/app.hxx>
 
 #define LOK_NOTIFY_LOG_TO_CLIENT 1
@@ -262,6 +264,22 @@ class SfxLokLanguageGuard
 public:
     SfxLokLanguageGuard(SfxViewShell* pNewShell);
     ~SfxLokLanguageGuard();
+};
+
+typedef std::list<SfxViewShell*> ViewShellList;
+
+/// Used to keep track of the last N views that text edited a document through an EditView
+class SFX2_DLLPUBLIC LOKEditViewHistory
+{
+public:
+    typedef std::list<SfxViewShell*> ViewShellList;
+    typedef std::unordered_map<int, ViewShellList> EditViewHistoryMap;
+
+    static void Update(bool bRemove = false);
+    static ViewShellList GetHistoryForDoc(ViewShellDocId aDocId);
+    static ViewShellList GetSortedViewsForDoc(ViewShellDocId aDocId);
+private:
+    static EditViewHistoryMap maEditViewHistory;
 };
 
 #endif
