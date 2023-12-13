@@ -23,6 +23,7 @@
 
 #include <sal/config.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <tools/color.hxx>
 
 // predefines
 
@@ -158,6 +159,9 @@ public:
     /// Determine if to use PixelSnapHairline on target pixel device, PropertyName is 'PixelSnapHairline'
     bool getPixelSnapHairline() const;
     void setPixelSnapHairline(bool bNew);
+
+    Color getAutoColor() const;
+    void setAutoColor(Color aNew);
 
     static void setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporary);
     static bool getGlobalAntiAliasing();

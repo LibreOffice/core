@@ -39,6 +39,8 @@ namespace basegfx
     */
     class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColor : public B3DTuple
     {
+        bool bAutomatic = false;
+
     public:
         /** Create a Color with red, green and blue components from [0.0 to 1.0]
 
@@ -78,11 +80,13 @@ namespace basegfx
         double getRed() const { return mnX; }
         double getGreen() const { return mnY; }
         double getBlue() const { return mnZ; }
+        bool isAutomatic() const { return bAutomatic; }
 
         // data access write
         void setRed(double fNew) { mnX = fNew; }
         void setGreen(double fNew) { mnY = fNew; }
         void setBlue(double fNew) { mnZ = fNew; }
+        void setAutomatic(bool bNew) { bAutomatic = bNew; }
 
         /** *=operator to allow usage from BColor, too
         */

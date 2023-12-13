@@ -18,6 +18,7 @@
  */
 
 #include "PageBackground.hxx"
+#include <comphelper/lok.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <UserDefinedProperties.hxx>
@@ -51,10 +52,14 @@ const ::chart::tPropertyValueMap& StaticPageBackgroundDefaults()
 
             // override other defaults
             Color aDocColor = COL_WHITE;
-            if (SfxViewShell::Current()) {
-                aDocColor = SfxViewShell::Current()->GetColorConfigColor(svtools::DOCCOLOR);
+            if (comphelper::LibreOfficeKit::isActive()) {
+                aDocColor = COL_AUTO;
             } else {
-                SAL_WARN("chart2", "SfxViewShell::Current() returned nullptr");
+                if (SfxViewShell::Current()) {
+                    aDocColor = SfxViewShell::Current()->GetColorConfigColor(svtools::DOCCOLOR);
+                } else {
+                    SAL_WARN("chart2", "SfxViewShell::Current() returned nullptr");
+                }
             }
             ::chart::PropertyHelper::setPropertyValue( aTmp, ::chart::FillProperties::PROP_FILL_COLOR, aDocColor );
             ::chart::PropertyHelper::setPropertyValue( aTmp, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
