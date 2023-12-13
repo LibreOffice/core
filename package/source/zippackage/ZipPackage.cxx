@@ -452,7 +452,8 @@ void ZipPackage::parseManifest()
         m_xRootFolder->removeByName( sMimetype );
     }
 
-    m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams( std::u16string_view() );
+    m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams(
+        std::u16string_view(), m_xRootFolder->hasByName("encrypted-package"));
 
     bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
     if ( !m_bForceRecovery && bODF12AndNewer )
