@@ -529,6 +529,28 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDoughnutChart)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart"_ostr);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieOfPieChart)
+{
+    loadFromFile(u"xlsx/pieOfPieChart.xlsx");
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart"_ostr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:ofPieType[1]"_ostr, "val"_ostr, "pie");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarOfPieChart)
+{
+    loadFromFile(u"xlsx/barOfPieChart.xlsx");
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart"_ostr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:ofPieType[1]"_ostr, "val"_ostr, "bar");
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDisplayUnits)
 {
     loadFromFile(u"docx/DisplayUnits.docx");

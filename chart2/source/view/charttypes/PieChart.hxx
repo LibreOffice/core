@@ -102,7 +102,7 @@ class OfPieDataSrc : public PieDataSrcBase
 {
 public:
     // Minimum sensible number of data points
-    static sal_Int32 minPoints() { return 4; }
+    static constexpr sal_Int32 minPoints = 4;
 
     sal_Int32 getNPoints(const VDataSeries* pSeries,
                 enum SubPieType eType) const;

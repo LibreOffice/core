@@ -918,7 +918,7 @@ void PieChart::createShapes()
 
         // Default to regular pie if too few points for of-pie
         ::css::chart2::PieChartSubType eSubType =
-            nPointCount >= OfPieDataSrc::minPoints() ?
+            nPointCount >= OfPieDataSrc::minPoints ?
             m_eSubType :
             PieChartSubType_NONE;
 
@@ -1068,7 +1068,38 @@ void PieChart::createShapes()
     }//next x slot
 }
 
-void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
+static sal_Int32 propIndex(
+        sal_Int32 nPointIndex,
+        enum SubPieType eType,
+        const PieDataSrcBase *pDataSrc,
+        VDataSeries* pSeries)
+{
+
+    switch (eType) {
+    case SubPieType::LEFT:
+        if (nPointIndex == pDataSrc->getNPoints(pSeries,
+                    SubPieType::LEFT) - 1) {
+            return pSeries->getTotalPointCount();
+        } else {
+            return nPointIndex;
+        }
+        break;
+    case SubPieType::RIGHT:
+        return pDataSrc->getNPoints(pSeries, SubPieType::LEFT) +
+            nPointIndex - 1;
+        break;
+    case SubPieType::NONE:
+        return nPointIndex;
+        break;
+    default: // shouldn't happen
+        assert(false);
+        return 0; // suppress compile warning
+    }
+}
+
+
+void PieChart::createOneRing(
+        enum SubPieType eType,
         double fSlotX,
         ShapeParam& aParam,
         const rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget,
@@ -1187,11 +1218,9 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
                         bConcentricExplosion);
 
             // Handle coloring of the composite wedge
-            const sal_Int32 nPropIdx = (
-                    eType == SubPieType::LEFT &&
-                    nPointIndex == pDataSrc->getNPoints(pSeries, SubPieType::LEFT) - 1 ?
-                    pSeries->getTotalPointCount() :
-                    nPointIndex);
+            sal_Int32 nPropIdx = propIndex(nPointIndex, eType, pDataSrc,
+                    pSeries);
+
             ///point color:
             if (!pSeries->hasPointOwnColor(nPropIdx) && m_xColorScheme.is())
             {
@@ -1210,12 +1239,13 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
             }
 
             ///create label
-            createTextLabelShape(xTextTarget, *pSeries, nPointIndex, aParam);
+            createTextLabelShape(xTextTarget, *pSeries, nPropIdx, aParam);
 
             if(!bDoExplode)
             {
                 ShapeFactory::setShapeName( xPointShape
-                            , ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nPointIndex ) );
+                            , ObjectIdentifier::createPointCID(
+                                pSeries->getPointCID_Stub(), nPropIdx ) );
             }
             else try
             {
@@ -1242,7 +1272,8 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
                     ) );
 
                 ShapeFactory::setShapeName( xPointShape
-                            , ObjectIdentifier::createPointCID( aPointCIDStub, nPointIndex ) );
+                            , ObjectIdentifier::createPointCID( aPointCIDStub,
+                                nPropIdx ) );
             }
             catch( const uno::Exception& )
             {
@@ -1301,17 +1332,19 @@ void PieChart::createOneBar(
                     xPointProperties, aParam,
                     fBarBottom, fBarTop);
 
+        sal_Int32 nPropIdx = propIndex(nPointIndex, eType, pDataSrc, pSeries);
+
         ///point color:
-        if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
+        if (!pSeries->hasPointOwnColor(nPropIdx) && m_xColorScheme.is())
         {
             xPointShape->setPropertyValue("FillColor",
-                uno::Any(m_xColorScheme->getColorByIndex( nPointIndex )));
+                uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
         }
 
 
         if(bHasFillColorMapping)
         {
-            double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
+            double nPropVal = pSeries->getValueByProperty(nPropIdx, "FillColor");
             if(!std::isnan(nPropVal))
             {
                 xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
@@ -1319,11 +1352,11 @@ void PieChart::createOneBar(
         }
 
         ///create label
-        createTextLabelShape(xTextTarget, *pSeries, nPointIndex, aParam);
+        createTextLabelShape(xTextTarget, *pSeries, nPropIdx, aParam);
 
         ShapeFactory::setShapeName( xPointShape,
                 ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(),
-                    nPointIndex ) );
+                    nPropIdx ) );
     }//next category
 }
 
