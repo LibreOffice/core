@@ -34,6 +34,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <osl/diagnose.h>
+#include <officecfg/Office/Common.hxx>
 #include <svx/unoapi.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/canvastools.hxx>
@@ -362,7 +363,7 @@ namespace sdr::contact
         {
             if (utl::ConfigManager::IsFuzzing())
                 return true;
-            return SvtAccessibilityOptions::GetIsAllowAnimatedText();
+            return officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get();
         }
 
         // check if graphic animation is allowed.
@@ -372,7 +373,7 @@ namespace sdr::contact
                 return true;
 
             // Related tdf#156630 respect system animation setting
-            return SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() && !MiscSettings::GetUseReducedAnimation();
+            return officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get() && !MiscSettings::GetUseReducedAnimation();
         }
 
         // print?

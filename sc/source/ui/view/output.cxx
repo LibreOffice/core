@@ -26,11 +26,11 @@
 #include <tools/poly.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <svx/framelinkarray.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
@@ -170,7 +170,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bPagebreakMode( false ),
     bSolidBackground( false ),
     mbUseStyleColor( false ),
-    mbForceAutoColor( SvtAccessibilityOptions::GetIsAutomaticFontColor() ),
+    mbForceAutoColor( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get() ),
     mbSyntaxMode( false ),
     aGridColor( COL_BLACK ),
     mbShowNullValues( true ),

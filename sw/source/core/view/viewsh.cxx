@@ -57,7 +57,6 @@
 #include <ndindex.hxx>
 #include <accmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -2651,12 +2650,12 @@ void SwViewShell::ApplyAccessibilityOptions()
     }
     else
     {
-        mpAccOptions->SetAlwaysAutoColor(SvtAccessibilityOptions::GetIsAutomaticFontColor());
-        mpAccOptions->SetStopAnimatedGraphics(! SvtAccessibilityOptions::GetIsAllowAnimatedGraphics());
+        mpAccOptions->SetAlwaysAutoColor(officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
+        mpAccOptions->SetStopAnimatedGraphics(! officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get());
 
         // Form view
         // Always set this option, not only if document is read-only:
-        mpOpt->SetSelectionInReadonly(SvtAccessibilityOptions::IsSelectionInReadonly());
+        mpOpt->SetSelectionInReadonly(officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get());
     }
 }
 #endif // ENABLE_WASM_STRIP_ACCESSIBILITY

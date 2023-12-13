@@ -29,6 +29,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editund2.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svx/svxids.hrc>
 #include <unotools/useroptions.hxx>
 
@@ -551,7 +552,7 @@ void AnnotationWindow::SetColor()
         maColorLight = AnnotationManagerImpl::GetColorLight( nAuthorIdx );
     }
 
-    mpOutliner->ForceAutoColor( bHighContrast || SvtAccessibilityOptions::GetIsAutomaticFontColor() );
+    mpOutliner->ForceAutoColor( bHighContrast || officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get() );
 
     mxPopover->set_background(maColor);
     mxMenuButton->set_background(maColor);

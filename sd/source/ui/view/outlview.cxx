@@ -35,6 +35,7 @@
 #include <editeng/editeng.hxx>
 #include <xmloff/autolayout.hxx>
 #include <tools/debug.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <editeng/editobj.hxx>
 #include <editeng/editund2.hxx>
@@ -154,7 +155,7 @@ OutlineView::~OutlineView()
         EEControlBits nCntrl = mrOutliner.GetControlWord();
         mrOutliner.SetUpdateLayout(false); // otherwise there will be drawn on SetControlWord
         mrOutliner.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
-        mrOutliner.ForceAutoColor( SvtAccessibilityOptions::GetIsAutomaticFontColor() );
+        mrOutliner.ForceAutoColor( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get() );
         mrOutliner.Clear();
     }
 }

@@ -25,10 +25,10 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/unotext.hxx>
 #include <o3tl/deleter.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
 #include <svl/whiter.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <svx/svdedxv.hxx>
@@ -1307,7 +1307,8 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                 = SdrMakeOutliner(OutlinerMode::TextObject, pObj->getSdrModelFromSdrObject());
 
         {
-            mpTextEditOutliner->ForceAutoColor(SvtAccessibilityOptions::GetIsAutomaticFontColor());
+            mpTextEditOutliner->ForceAutoColor(
+                officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
         }
 
         aOldCalcFieldValueLink = mpTextEditOutliner->GetCalcFieldValueHdl();

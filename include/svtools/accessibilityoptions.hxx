@@ -35,11 +35,6 @@ public:
     virtual ~SvtAccessibilityOptions() override;
 
     // get & set config entries
-    static bool GetIsAllowAnimatedGraphics();
-    static bool GetIsAllowAnimatedText();
-    static bool GetIsAutomaticFontColor();
-    static bool IsSelectionInReadonly();
-
     static void SetVCLSettings();
 };
 

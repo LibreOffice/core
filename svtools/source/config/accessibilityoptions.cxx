@@ -194,22 +194,6 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
         sm_pSingleImplConfig = nullptr;
     }
 }
-bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics()
-{
-    return officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get();
-}
-bool SvtAccessibilityOptions::GetIsAllowAnimatedText()
-{
-    return officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get();
-}
-bool SvtAccessibilityOptions::GetIsAutomaticFontColor()
-{
-    return officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get();
-}
-bool SvtAccessibilityOptions::IsSelectionInReadonly()
-{
-    return officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get();
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

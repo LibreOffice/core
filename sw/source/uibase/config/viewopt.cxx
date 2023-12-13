@@ -35,7 +35,6 @@
 #include <crstate.hxx>
 #include <authratr.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
@@ -286,7 +285,7 @@ SwViewOption::SwViewOption() :
     }
     m_nDivisionX = m_nDivisionY = 1;
 
-    m_bSelectionInReadonly = utl::ConfigManager::IsFuzzing() || SvtAccessibilityOptions::IsSelectionInReadonly();
+    m_bSelectionInReadonly = utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get();
 
     m_bIdle = true;
 
