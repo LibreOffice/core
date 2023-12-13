@@ -115,7 +115,11 @@ void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(
     const basegfx::BColor aPolygonColor(
         maBColorModifierStack.getModifiedColor(rSource.getBColor()));
 
-    mpOutputDevice->SetFillColor(Color(aPolygonColor));
+    if (comphelper::LibreOfficeKit::isActive() && aPolygonColor.isAutomatic())
+        mpOutputDevice->SetFillColor(getViewInformation2D().getAutoColor());
+    else
+        mpOutputDevice->SetFillColor(Color(aPolygonColor));
+
     mpOutputDevice->SetLineColor();
     mpOutputDevice->DrawTransparent(maCurrentTransformation, rSource.getB2DPolyPolygon(),
                                     fTransparency);

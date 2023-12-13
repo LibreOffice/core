@@ -87,6 +87,9 @@ protected:
     // the point in time
     double mfViewTime;
 
+    // color to use for automatic color
+    Color maAutoColor;
+
     // allow to reduce DisplayQuality (e.g. sw 3d fallback renderer for interactions)
     bool mbReducedDisplayQuality : 1;
 
@@ -106,6 +109,7 @@ public:
         , maDiscreteViewport()
         , mxVisualizedPage()
         , mfViewTime(0.0)
+        , maAutoColor(COL_AUTO)
         , mbReducedDisplayQuality(false)
         , mbUseAntiAliasing(ViewInformation2D::getGlobalAntiAliasing())
         , mbPixelSnapHairline(mbUseAntiAliasing && bForwardPixelSnapHairline)
@@ -190,6 +194,9 @@ public:
         mxVisualizedPage = rNew;
     }
 
+    Color getAutoColor() const { return maAutoColor; }
+    void setAutoColor(Color aNew) { maAutoColor = aNew; }
+
     bool getReducedDisplayQuality() const { return mbReducedDisplayQuality; }
     void setReducedDisplayQuality(bool bNew) { mbReducedDisplayQuality = bNew; }
 
@@ -205,7 +212,7 @@ public:
                 && maViewTransformation == rCandidate.maViewTransformation
                 && maViewport == rCandidate.maViewport
                 && mxVisualizedPage == rCandidate.mxVisualizedPage
-                && mfViewTime == rCandidate.mfViewTime
+                && mfViewTime == rCandidate.mfViewTime && maAutoColor == rCandidate.maAutoColor
                 && mbReducedDisplayQuality == rCandidate.mbReducedDisplayQuality
                 && mbUseAntiAliasing == rCandidate.mbUseAntiAliasing
                 && mbPixelSnapHairline == rCandidate.mbPixelSnapHairline);
@@ -341,6 +348,10 @@ void ViewInformation2D::setUseAntiAliasing(bool bNew)
     if (bNew != std::as_const(mpViewInformation2D)->getUseAntiAliasing())
         mpViewInformation2D->setUseAntiAliasing(bNew);
 }
+
+Color ViewInformation2D::getAutoColor() const { return mpViewInformation2D->getAutoColor(); }
+
+void ViewInformation2D::setAutoColor(Color aNew) { mpViewInformation2D->setAutoColor(aNew); }
 
 bool ViewInformation2D::getPixelSnapHairline() const
 {
