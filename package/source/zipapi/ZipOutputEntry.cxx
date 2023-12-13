@@ -21,6 +21,7 @@
 
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/xml/crypto/CipherID.hpp>
 
 #include <osl/diagnose.h>
 
@@ -60,7 +61,11 @@ ZipOutputEntryBase::ZipOutputEntryBase(
     if (m_bEncryptCurrentEntry)
     {
         m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
-        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xContext, pStream->GetEncryptionData() );
+        if (pStream->GetEncryptionData()->m_oCheckAlg)
+        {
+            assert(pStream->GetEncryptionData()->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C);
+            m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum(m_xContext, pStream->GetEncryptionData());
+        }
     }
 }
 
@@ -118,11 +123,11 @@ void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& defla
     if ( nLength > 0 )
     {
         uno::Sequence< sal_Int8 > aTmpBuffer( deflateBuffer.getConstArray(), nLength );
-        if ( m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
+        if (m_bEncryptCurrentEntry && m_xCipherContext.is())
         {
             // Need to update our digest before encryption...
             sal_Int32 nDiff = n_ConstDigestLength - m_nDigested;
-            if ( nDiff )
+            if (m_xDigestContext.is() && nDiff)
             {
                 sal_Int32 nEat = ::std::min( nLength, nDiff );
                 uno::Sequence< sal_Int8 > aTmpSeq( aTmpBuffer.getConstArray(), nEat );
@@ -146,7 +151,7 @@ void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& defla
         }
     }
 
-    if ( !(isDeflaterFinished() && m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is()) )
+    if (!(isDeflaterFinished() && m_bEncryptCurrentEntry && m_xCipherContext.is()))
         return;
 
     // FIXME64: sequence not 64bit safe.

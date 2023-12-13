@@ -337,7 +337,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( ELEMENT_FILE_ENTRY , pAttrList);
-        if ( pVector && pSalt && pIterationCount && pDigest && pDigestAlg && pEncryptAlg && pStartKeyAlg && pDerivedKeySize )
+        if (pVector && pSalt && pIterationCount && pEncryptAlg && pStartKeyAlg && pDerivedKeySize)
         {
             // ==== Encryption Data
             rtl::Reference<::comphelper::AttributeList> pNewAttrList = new ::comphelper::AttributeList;
@@ -347,20 +347,23 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
             // ==== Digest
-            OUString sChecksumType;
-            sal_Int32 nDigestAlgID = 0;
-            *pDigestAlg >>= nDigestAlgID;
-            if ( nDigestAlgID == xml::crypto::DigestID::SHA256_1K )
-                sChecksumType = sSHA256_1k_URL;
-            else if ( nDigestAlgID == xml::crypto::DigestID::SHA1_1K )
-                sChecksumType = sSHA1_1k_Name;
-            else
-                throw uno::RuntimeException( THROW_WHERE "Unexpected digest algorithm is provided!" );
+            if (pDigest && pDigestAlg && pDigestAlg->hasValue())
+            {
+                OUString sChecksumType;
+                sal_Int32 nDigestAlgID = 0;
+                *pDigestAlg >>= nDigestAlgID;
+                if ( nDigestAlgID == xml::crypto::DigestID::SHA256_1K )
+                    sChecksumType = sSHA256_1k_URL;
+                else if ( nDigestAlgID == xml::crypto::DigestID::SHA1_1K )
+                    sChecksumType = sSHA1_1k_Name;
+                else
+                    throw uno::RuntimeException( THROW_WHERE "Unexpected digest algorithm is provided!" );
 
-            pNewAttrList->AddAttribute ( ATTRIBUTE_CHECKSUM_TYPE, sChecksumType );
-            *pDigest >>= aSequence;
-            ::comphelper::Base64::encode(aBuffer, aSequence);
-            pNewAttrList->AddAttribute ( ATTRIBUTE_CHECKSUM, aBuffer.makeStringAndClear() );
+                pNewAttrList->AddAttribute(ATTRIBUTE_CHECKSUM_TYPE, sChecksumType);
+                *pDigest >>= aSequence;
+                ::comphelper::Base64::encode(aBuffer, aSequence);
+                pNewAttrList->AddAttribute(ATTRIBUTE_CHECKSUM, aBuffer.makeStringAndClear());
+            }
 
             xHandler->startElement( ELEMENT_ENCRYPTION_DATA , pNewAttrList);
 

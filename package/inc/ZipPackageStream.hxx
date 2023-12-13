@@ -29,6 +29,8 @@
 
 #include "EncryptionData.hxx"
 
+#include <optional>
+
 #define PACKAGE_STREAM_NOTSET           0
 #define PACKAGE_STREAM_PACKAGEMEMBER    1
 #define PACKAGE_STREAM_DETECT           2
@@ -55,7 +57,7 @@ private:
 
     sal_Int32 m_nImportedStartKeyAlgorithm;
     sal_Int32 m_nImportedEncryptionAlgorithm;
-    sal_Int32 m_nImportedChecksumAlgorithm;
+    ::std::optional<sal_Int32> m_oImportedChecksumAlgorithm;
     sal_Int32 m_nImportedDerivedKeySize;
 
     sal_uInt8   m_nStreamMode;
@@ -95,7 +97,7 @@ public:
     void SetIsEncrypted (bool bNewValue) { m_bIsEncrypted = bNewValue;}
     void SetImportedStartKeyAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedStartKeyAlgorithm = nAlgorithm; }
     void SetImportedEncryptionAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedEncryptionAlgorithm = nAlgorithm; }
-    void SetImportedChecksumAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedChecksumAlgorithm = nAlgorithm; }
+    void SetImportedChecksumAlgorithm(::std::optional<sal_Int32> const& roAlgorithm) { m_oImportedChecksumAlgorithm = roAlgorithm; }
     void SetImportedDerivedKeySize( sal_Int32 nSize ) { m_nImportedDerivedKeySize = nSize; }
     void SetToBeEncrypted (bool bNewValue)
     {

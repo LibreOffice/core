@@ -70,7 +70,9 @@ class ZipFile
             const bool bUseBufferedStream = true,
             const OUString& aMediaType = OUString() );
 
-    bool hasValidPassword ( ZipEntry const & rEntry, const rtl::Reference < EncryptionData > &rData );
+    css::uno::Reference<css::io::XInputStream> checkValidPassword(
+            ZipEntry const& rEntry, rtl::Reference<EncryptionData> const& rData,
+            rtl::Reference<comphelper::RefCountedMutex> const& rMutexHolder);
 
     bool checkSizeAndCRC( const ZipEntry& aEntry );
 

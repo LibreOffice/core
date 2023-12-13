@@ -366,7 +366,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         if (UseODFWholesomeEncryption(nDefVersion))
         {
             pEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_GCM_W3C;
-            pEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
+            pEncryptionAlgs[2].Value.clear();
         }
         else
         {

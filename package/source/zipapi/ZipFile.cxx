@@ -133,8 +133,10 @@ void ZipFile::setInputStream ( const uno::Reference < XInputStream >& xNewStream
 
 uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextForChecksum( const uno::Reference< uno::XComponentContext >& xArgContext, const ::rtl::Reference< EncryptionData >& xEncryptionData )
 {
+    assert(xEncryptionData->m_oCheckAlg); // callers checked it already
+
     uno::Reference< xml::crypto::XDigestContext > xDigestContext;
-    if ( xEncryptionData->m_nCheckAlg == xml::crypto::DigestID::SHA256_1K )
+    if (*xEncryptionData->m_oCheckAlg == xml::crypto::DigestID::SHA256_1K)
     {
         uno::Reference< uno::XComponentContext > xContext = xArgContext;
         if ( !xContext.is() )
@@ -142,9 +144,11 @@ uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextFor
 
         uno::Reference< xml::crypto::XNSSInitializer > xDigestContextSupplier = xml::crypto::NSSInitializer::create( xContext );
 
-        xDigestContext.set( xDigestContextSupplier->getDigestContext( xEncryptionData->m_nCheckAlg, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
+        xDigestContext.set(xDigestContextSupplier->getDigestContext(
+                *xEncryptionData->m_oCheckAlg, uno::Sequence<beans::NamedValue>()),
+            uno::UNO_SET_THROW);
     }
-    else if ( xEncryptionData->m_nCheckAlg == xml::crypto::DigestID::SHA1_1K )
+    else if (*xEncryptionData->m_oCheckAlg == xml::crypto::DigestID::SHA1_1K)
     {
         if (xEncryptionData->m_bTryWrongSHA1)
         {
@@ -253,7 +257,7 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
     *(pHeader++) = static_cast< sal_Int8 >(( nEncAlgID >> 24 ) & 0xFF);
 
     // Then the checksum algorithm
-    sal_Int32 nChecksumAlgID = rData->m_nCheckAlg;
+    sal_Int32 nChecksumAlgID = rData->m_oCheckAlg ? *rData->m_oCheckAlg : 0;
     *(pHeader++) = static_cast< sal_Int8 >(( nChecksumAlgID >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nChecksumAlgID >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nChecksumAlgID >> 16 ) & 0xFF);
@@ -411,8 +415,7 @@ void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
 
 bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentContext >& rxContext, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
-    if (rData->m_nEncAlg == xml::crypto::CipherID::AES_GCM_W3C)
-        return true; /*TODO fails because of tag*/
+    assert(rData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C); // should not be called for AEAD
 
     if ( !rData.is() || !rData->m_aKey.hasElements() )
         return false;
@@ -465,12 +468,31 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
     return bRet;
 }
 
-bool ZipFile::hasValidPassword ( ZipEntry const & rEntry, const ::rtl::Reference< EncryptionData >& rData )
+uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
+    ZipEntry const& rEntry, ::rtl::Reference<EncryptionData> const& rData,
+    rtl::Reference<comphelper::RefCountedMutex> const& rMutex)
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-    bool bRet = false;
-    if ( rData.is() && rData->m_aKey.hasElements() )
+    if (rData.is() && rData->m_nEncAlg == xml::crypto::CipherID::AES_GCM_W3C)
+    {
+        try // the only way to find out: decrypt the whole stream, which will
+        {   // check the tag
+            uno::Reference<io::XInputStream> const xRet =
+                createStreamForZipEntry(rMutex, rEntry, rData, UNBUFF_STREAM_DATA, true);
+            // currently XBufferedStream reads the whole stream in its ctor (to
+            // verify the tag) - in case this gets changed, explicitly seek here
+            uno::Reference<io::XSeekable> const xSeek(xRet, uno::UNO_QUERY_THROW);
+            xSeek->seek(xSeek->getLength());
+            xSeek->seek(0);
+            return xRet;
+        }
+        catch (uno::Exception const&)
+        {
+            return {};
+        }
+    }
+    else if (rData.is() && rData->m_aKey.hasElements())
     {
         css::uno::Reference < css::io::XSeekable > xSeek(xStream, UNO_QUERY_THROW);
         xSeek->seek( rEntry.nOffset );
@@ -484,10 +506,14 @@ bool ZipFile::hasValidPassword ( ZipEntry const & rEntry, const ::rtl::Reference
 
         xStream->readBytes( aReadBuffer, nSize );
 
-        bRet = StaticHasValidPassword( m_xContext, aReadBuffer, rData );
+        if (StaticHasValidPassword(m_xContext, aReadBuffer, rData))
+        {
+            return createStreamForZipEntry(
+                    rMutex, rEntry, rData, UNBUFF_STREAM_DATA, true);
+        }
     }
 
-    return bRet;
+    return {};
 }
 
 namespace {
@@ -648,8 +674,30 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
-    OSL_ENSURE(rData->m_aDigest.hasElements(), "Can't detect password correctness without digest!");
-    if (rData->m_aDigest.hasElements())
+    SAL_WARN_IF(rData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C && !rData->m_aDigest.hasElements(),
+            "package", "Can't detect password correctness without digest!");
+    if (rData->m_nEncAlg == xml::crypto::CipherID::AES_GCM_W3C)
+    {
+        // skip header
+        xSeek->seek(n_ConstHeaderSize + rData->m_aInitVector.getLength()
+                + rData->m_aSalt.getLength() + rData->m_aDigest.getLength());
+
+        try
+        {   // XUnbufferedStream does not support XSeekable so wrap it
+            ::rtl::Reference<XBufferedStream> const pRet(
+                new XBufferedStream(new XUnbufferedStream(rMutexHolder, xStream, rData)));
+            // currently XBufferedStream reads the whole stream in its ctor (to
+            // verify the tag) - in case this gets changed, explicitly seek here
+            pRet->seek(pRet->getLength());
+            pRet->seek(0);
+            return pRet;
+        }
+        catch (uno::Exception const&)
+        {
+            throw packages::WrongPasswordException(THROW_WHERE);
+        }
+    }
+    else if (rData->m_aDigest.hasElements())
     {
         sal_Int32 nSize = sal::static_int_cast<sal_Int32>(xSeek->getLength());
         if (nSize > n_ConstDigestLength + 32)
@@ -691,10 +739,15 @@ uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
 
     bool bNeedRawStream = rEntry.nMethod == STORED;
 
-    // if we have a digest, then this file is an encrypted one and we should
-    // check if we can decrypt it or not
-    if ( bIsEncrypted && rData.is() && rData->m_aDigest.hasElements() )
-        bNeedRawStream = !hasValidPassword ( rEntry, rData );
+    if (bIsEncrypted && rData.is())
+    {
+        uno::Reference<XInputStream> const xRet(checkValidPassword(rEntry, rData, aMutexHolder));
+        if (xRet.is())
+        {
+            return xRet;
+        }
+        bNeedRawStream = true;
+    }
 
     return createStreamForZipEntry ( aMutexHolder,
                                     rEntry,
@@ -725,9 +778,14 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
 
         // if we have a digest, then this file is an encrypted one and we should
         // check if we can decrypt it or not
-        OSL_ENSURE( rData->m_aDigest.hasElements(), "Can't detect password correctness without digest!" );
-        if ( rData->m_aDigest.hasElements() && !hasValidPassword ( rEntry, rData ) )
-                throw packages::WrongPasswordException(THROW_WHERE );
+        SAL_WARN_IF(rData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C && !rData->m_aDigest.hasElements(),
+            "package", "Can't detect password correctness without digest!");
+        uno::Reference<XInputStream> const xRet(checkValidPassword(rEntry, rData, aMutexHolder));
+        if (!xRet.is())
+        {
+            throw packages::WrongPasswordException(THROW_WHERE);
+        }
+        return xRet;
     }
     else
         bNeedRawStream = ( rEntry.nMethod == STORED );

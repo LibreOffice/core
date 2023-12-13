@@ -164,10 +164,10 @@ void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
     } else if ( aString == SHA256_1K_URL ) {
         aSequence[PKG_MNFST_DIGESTALG].Name = gsDigestAlgProperty;
         aSequence[PKG_MNFST_DIGESTALG].Value <<= xml::crypto::DigestID::SHA256_1K;
-    } else
-        bIgnoreEncryptData = true;
+    }
+    // note: digest is now *optional* - expected not to be used with AEAD
 
-    if ( !bIgnoreEncryptData ) {
+    if (aSequence[PKG_MNFST_DIGESTALG].Value.hasValue()) {
         aString = rConvertedAttribs[ATTRIBUTE_CHECKSUM];
         uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aString);

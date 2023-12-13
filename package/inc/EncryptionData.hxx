@@ -22,6 +22,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
 
+#include <optional>
+
 class BaseEncryptionData : public cppu::OWeakObject
 {
 public:
@@ -47,16 +49,20 @@ class EncryptionData final : public BaseEncryptionData
 public:
     css::uno::Sequence < sal_Int8 > m_aKey;
     sal_Int32 m_nEncAlg;
-    sal_Int32 m_nCheckAlg;
+    ::std::optional<sal_Int32> m_oCheckAlg;
     sal_Int32 m_nDerivedKeySize;
     sal_Int32 m_nStartKeyGenID;
     bool m_bTryWrongSHA1;
 
-    EncryptionData(const BaseEncryptionData& aData, const css::uno::Sequence< sal_Int8 >& aKey, sal_Int32 nEncAlg, sal_Int32 nCheckAlg, sal_Int32 nDerivedKeySize, sal_Int32 nStartKeyGenID, bool const bTryWrongSHA1)
+    EncryptionData(const BaseEncryptionData& aData,
+        const css::uno::Sequence<sal_Int8>& aKey, sal_Int32 const nEncAlg,
+        ::std::optional<sal_Int32> const oCheckAlg,
+        sal_Int32 const nDerivedKeySize, sal_Int32 const nStartKeyGenID,
+        bool const bTryWrongSHA1)
     : BaseEncryptionData( aData )
     , m_aKey( aKey )
     , m_nEncAlg( nEncAlg )
-    , m_nCheckAlg( nCheckAlg )
+    , m_oCheckAlg( oCheckAlg )
     , m_nDerivedKeySize( nDerivedKeySize )
     , m_nStartKeyGenID( nStartKeyGenID )
     , m_bTryWrongSHA1(bTryWrongSHA1)
@@ -66,7 +72,7 @@ public:
     : BaseEncryptionData( aData )
     , m_aKey( aData.m_aKey )
     , m_nEncAlg( aData.m_nEncAlg )
-    , m_nCheckAlg( aData.m_nCheckAlg )
+    , m_oCheckAlg( aData.m_oCheckAlg )
     , m_nDerivedKeySize( aData.m_nDerivedKeySize )
     , m_nStartKeyGenID( aData.m_nStartKeyGenID )
     , m_bTryWrongSHA1(aData.m_bTryWrongSHA1)
