@@ -165,7 +165,7 @@ void createStr(const OUString& rStr, CharT** pArgs, size_t i)
     pArgs[i] = pStr;
 }
 
-CharT** createCommandLine()
+CharT** createCommandLine(int * argc)
 {
     OUString aInstallDir = Updater::getInstallationPath();
 
@@ -231,6 +231,7 @@ CharT** createCommandLine()
 
     pArgs[nArgs - 1] = nullptr;
 
+    *argc = nArgs - 1;
     return pArgs;
 }
 
@@ -297,7 +298,8 @@ bool update()
     OUString aUpdaterPath = getPathFromURL(aTempDirURL + "/" + OUString::fromUtf8(pUpdaterName));
 
     Updater::log("Calling the updater with parameters: ");
-    CharT** pArgs = createCommandLine();
+    int argc;
+    CharT** pArgs = createCommandLine(&argc);
 
     bool bSuccess = true;
     const char* pUpdaterTestReplace = std::getenv("LIBO_UPDATER_TEST_REPLACE");
@@ -311,7 +313,7 @@ bool update()
             bSuccess = false;
         }
 #elif defined(_WIN32)
-        bSuccess = WinLaunchChild((wchar_t*)aUpdaterPath.getStr(), 8, pArgs);
+        bSuccess = WinLaunchChild((wchar_t*)aUpdaterPath.getStr(), argc, pArgs);
 #endif
     }
     else
