@@ -81,6 +81,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     // find the mediatype of the document if any
     OUString aDocMediaType;
     OUString aDocVersion;
+    bool isWholesomeEncryption(false);
     const uno::Sequence<beans::PropertyValue>* pRootFolderPropSeq = nullptr;
     for (const uno::Sequence < beans::PropertyValue >& rSequence : rManList)
     {
@@ -109,12 +110,27 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
         if ( aPath == "/" )
         {
+            assert(aDocMediaType.isEmpty());
+            // unfortunately no aMediaType in some cases where non-documents
+            // are stored as StorageFormats::PACKAGE instead of sensible
+            // StorageFormats::ZIP, such as SvxXMLXTableExportComponent and
+            // SwXMLTextBlocks, which results in an empty "mimetype" etc but
+            // can't be easily fixed; try to exclude these cases by checking
+            // for aVersion, but of course then forgetting to set both version
+            // and type on an actual document can't be found :(
+            assert(!aMediaType.isEmpty() || aVersion.isEmpty());
             aDocMediaType = aMediaType;
             aDocVersion = aVersion;
             pRootFolderPropSeq = &rSequence;
-            break;
+        }
+
+        if (aPath == "encrypted-package")
+        {
+            isWholesomeEncryption = true;
+            assert(aDocMediaType.isEmpty() || aDocMediaType == aMediaType);
         }
     }
+    assert(pRootFolderPropSeq);
 
     bool bProvideDTD = false;
     bool bAcceptNonemptyVersion = false;
@@ -293,7 +309,12 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     // now write individual file entries
     for (const uno::Sequence<beans::PropertyValue>& rSequence : rManList)
     {
+        if (&rSequence == pRootFolderPropSeq && isWholesomeEncryption)
+        {
+            continue; // no root document, but embedded package => omit
+        }
         rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
+        OUString fullPath;
         OUString aString;
         const uno::Any *pVector = nullptr, *pSalt = nullptr, *pIterationCount = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
         for (const beans::PropertyValue& rValue : rSequence)
@@ -312,8 +333,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             }
             else if (rValue.Name == sFullPathProperty )
             {
-                rValue.Value >>= aString;
-                pAttrList->AddAttribute ( ATTRIBUTE_FULL_PATH, aString );
+                rValue.Value >>= fullPath;
+                pAttrList->AddAttribute(ATTRIBUTE_FULL_PATH, fullPath);
             }
             else if (rValue.Name == sSizeProperty )
             {
@@ -337,6 +358,11 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 pStartKeyAlg = &rValue.Value;
             else if (rValue.Name == sDerivedKeySizeProperty )
                 pDerivedKeySize = &rValue.Value;
+        }
+        assert(!fullPath.isEmpty());
+        if (isWholesomeEncryption)
+        {   // there may be signatures in META-INF too
+            assert(fullPath == "encrypted-package" || fullPath.startsWith("META-INF/"));
         }
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -390,6 +416,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             }
             else if (nEncAlgID == xml::crypto::CipherID::AES_GCM_W3C)
             {
+                assert(bStoreStartKeyGeneration || pKeyInfoProperty);
                 SAL_WARN_IF(nDerivedKeySize != 32, "package.manifest", "Unexpected key size is provided!");
                 if (nDerivedKeySize != 32)
                 {

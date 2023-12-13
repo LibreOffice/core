@@ -227,7 +227,13 @@ bool SvxXMLXTableExportComponent::save(
         if( !bToStorage || !xStorage.is() )
         { // local URL -> SfxMedium route
             if( bSaveAsStorage )
+            {
+                // ideally this should use a ZIP_STORAGE_FORMAT_STRING storage
+                // but changing it to that could cause problems loading the
+                // file with an old version of LO that expects to find in the
+                // user profile a PACKAGE_STORAGE_FORMAT_STRING storage
                 xSubStorage = ::comphelper::OStorageHelper::GetStorageFromURL( rURL, eCreate );
+            }
             else
             {
                 pMedium.reset(new SfxMedium( rURL, StreamMode::WRITE | StreamMode::TRUNC ));
