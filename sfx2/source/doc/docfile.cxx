@@ -678,7 +678,6 @@ bool SfxMedium::IsSkipImages() const
 
 SvStream* SfxMedium::GetInStream()
 {
-    //assert(!pImpl->xStorage); // either SvStream or Storage
     if ( pImpl->m_pInStream )
         return pImpl->m_pInStream.get();
 
@@ -749,7 +748,6 @@ void SfxMedium::CloseInStream_Impl(bool bInDestruction)
 
 SvStream* SfxMedium::GetOutStream()
 {
-    assert(!pImpl->xStorage); // either SvStream or Storage
     if ( !pImpl->m_pOutStream )
     {
         // Create a temp. file if there is none because we always
@@ -1760,7 +1758,6 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
     if ( pImpl->xStorage.is() || pImpl->m_bTriedStorage )
         return pImpl->xStorage;
 
-    assert(!pImpl->m_pOutStream /*&& !pImpl->m_pInStream*/); // either SvStream or Storage
     uno::Sequence< uno::Any > aArgs( 2 );
     auto pArgs = aArgs.getArray();
 
