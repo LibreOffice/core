@@ -1134,4 +1134,82 @@ SfxLokLanguageGuard::~SfxLokLanguageGuard()
     comphelper::LibreOfficeKit::setLocale(m_pOldShell->GetLOKLocale());
 }
 
+LOKEditViewHistory::EditViewHistoryMap LOKEditViewHistory::maEditViewHistory;
+
+
+void LOKEditViewHistory::Update(bool bRemove)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    static std::mutex aMutex;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell)
+    {
+        std::lock_guard<std::mutex> aLockGuard{aMutex};
+        int nDocId = pViewShell->GetDocId().get();
+        if (maEditViewHistory.find(nDocId) != maEditViewHistory.end())
+            maEditViewHistory[nDocId].remove(pViewShell);
+        if (!bRemove)
+        {
+            maEditViewHistory[nDocId].push_back(pViewShell);
+            if (maEditViewHistory[nDocId].size() > 10)
+                maEditViewHistory[nDocId].pop_front();
+        }
+    }
+}
+
+ViewShellList LOKEditViewHistory::GetHistoryForDoc(ViewShellDocId aDocId)
+{
+    int nDocId = aDocId.get();
+    ViewShellList aResult;
+    if (maEditViewHistory.find(nDocId) != maEditViewHistory.end())
+        aResult = maEditViewHistory.at(nDocId);
+    return aResult;
+}
+
+ ViewShellList LOKEditViewHistory::GetSortedViewsForDoc(ViewShellDocId aDocId)
+ {
+     ViewShellList aEditViewHistoryForDoc = LOKEditViewHistory::GetHistoryForDoc(aDocId);
+     // all views where document is loaded
+     ViewShellList aCurrentDocViewList;
+     // active views that are listed in the edit history
+     ViewShellList aEditedViewList;
+
+     // Populate aCurrentDocViewList and aEditedViewList
+     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+     while (pViewShell)
+     {
+         if (pViewShell->GetDocId() == aDocId)
+         {
+             if (aEditViewHistoryForDoc.empty() ||
+                 std::find(aEditViewHistoryForDoc.begin(), aEditViewHistoryForDoc.end(),
+                           pViewShell) == aEditViewHistoryForDoc.end())
+             {
+                 // append views not listed in the edit history;
+                 // the edit history is limited to 10 views,
+                 // so it could miss some view where in place editing is occurring
+                 aCurrentDocViewList.push_back(pViewShell);
+             }
+             else
+             {
+                 // view is listed in the edit history
+                 aEditedViewList.push_back(pViewShell);
+             }
+         }
+         pViewShell = SfxViewShell::GetNext(*pViewShell);
+     }
+
+     // in case some no more active view needs to be removed from the history
+     aEditViewHistoryForDoc.remove_if(
+         [&aEditedViewList](SfxViewShell* pHistoryItem) {
+             return std::find(aEditedViewList.begin(), aEditedViewList.end(), pHistoryItem) == aEditedViewList.end();
+         });
+
+     // place views belonging to the edit history at the end
+     aCurrentDocViewList.splice(aCurrentDocViewList.end(), aEditViewHistoryForDoc);
+
+     return aCurrentDocViewList;
+ }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
