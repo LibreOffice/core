@@ -372,9 +372,8 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
     uno::Sequence<sheet::DataResult>* pRowAry = aSeq.getArray();
     for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<sheet::DataResult> aColSeq( nColCount );
         //  use default values of DataResult
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = uno::Sequence<sheet::DataResult>(nColCount);
     }
 
     ScDPResultFilterContext aFilterCxt;

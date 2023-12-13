@@ -479,11 +479,12 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
             const basegfx::B2DHomMatrix aTranslateGridOffset(
                 basegfx::utils::createTranslateB2DHomMatrix(
                     rGridOffset));
-            drawinglayer::primitive2d::Primitive2DReference aEmbed(
-                new drawinglayer::primitive2d::TransformPrimitive2D(
-                    aTranslateGridOffset,
-                    std::move(xNewPrimitiveSequence)));
-            xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
+            xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
+                drawinglayer::primitive2d::Primitive2DReference(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        aTranslateGridOffset,
+                        std::move(xNewPrimitiveSequence)))
+            };
         }
     }
 

@@ -271,23 +271,25 @@ namespace drawinglayer::primitive2d
                             }
                         }
 
-                        Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
-                            std::move(aRetval),
-                            aDecTrans.getTranslate(),
-                            aDecTrans.getRotate(),
-                            aTextEffectStyle2D));
-                        aRetval = Primitive2DContainer { aNewTextEffect };
+                        aRetval = Primitive2DContainer {
+                            Primitive2DReference(new TextEffectPrimitive2D(
+                                std::move(aRetval),
+                                aDecTrans.getTranslate(),
+                                aDecTrans.getRotate(),
+                                aTextEffectStyle2D))
+                         };
                     }
                     else if(bHasOutline)
                     {
                         // create outline using an own helper primitive since this will
                         // be view-dependent
-                        Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
-                            std::move(aRetval),
-                            aDecTrans.getTranslate(),
-                            aDecTrans.getRotate(),
-                            TextEffectStyle2D::Outline));
-                        aRetval = Primitive2DContainer { aNewTextEffect };
+                        aRetval = Primitive2DContainer {
+                            Primitive2DReference(new TextEffectPrimitive2D(
+                                std::move(aRetval),
+                                aDecTrans.getTranslate(),
+                                aDecTrans.getRotate(),
+                                TextEffectStyle2D::Outline))
+                         };
                     }
 
                     if(aShadow.is())

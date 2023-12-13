@@ -94,9 +94,9 @@ protected:
     virtual css::awt::Point getPositionOffset() override { return css::awt::Point(); }
     virtual void lcl_align(const OUString& /*rText*/, bool /*bVertical*/) {}
     virtual void lcl_positivePercentage(const OUString& /*rText*/) {}
-    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
-    virtual void lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref) = 0;
-    virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
+    virtual void lcl_props(const writerfilter::Reference<Properties>::Pointer_t& ref) = 0;
+    virtual void lcl_table(Id name, const writerfilter::Reference<Table>::Pointer_t& ref) = 0;
+    virtual void lcl_substream(Id name, const writerfilter::Reference<Stream>::Pointer_t& ref) = 0;
     virtual void lcl_startGlossaryEntry() {}
     virtual void lcl_endGlossaryEntry() {}
     virtual void lcl_checkId(const sal_Int32) {}

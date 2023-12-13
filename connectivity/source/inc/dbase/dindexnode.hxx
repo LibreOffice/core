@@ -163,8 +163,8 @@ namespace connectivity::dbase
             const ODbaseIndex& GetIndex() const {return rIndex;}
 
             // Setting the child, via reference to retain the PagePos
-            void SetChild(ONDXPagePtr aCh);
-            void SetParent(ONDXPagePtr aPa);
+            void SetChild(const ONDXPagePtr& rCh);
+            void SetParent(const ONDXPagePtr& rPa);
 
             sal_uInt16 Search(const ONDXKey& rSearch);
             sal_uInt16 Search(const ONDXPage* pPage);
@@ -209,14 +209,14 @@ namespace connectivity::dbase
         inline bool ONDXPage::HasParent() const {return aParent.Is();}
         inline const ONDXPagePtr& ONDXPage::GetParent() const {return aParent;}
 
-        inline void ONDXPage::SetParent(ONDXPagePtr aPa = ONDXPagePtr())
+        inline void ONDXPage::SetParent(const ONDXPagePtr& rPa = ONDXPagePtr())
         {
-            aParent = aPa;
+            aParent = rPa;
         }
 
-        inline void ONDXPage::SetChild(ONDXPagePtr aCh = ONDXPagePtr())
+        inline void ONDXPage::SetChild(const ONDXPagePtr& rCh = ONDXPagePtr())
         {
-            aChild = aCh;
+            aChild = rCh;
             if (aChild.Is())
                 aChild->SetParent(this);
         }

@@ -159,11 +159,11 @@ private:
     virtual css::awt::Point getPositionOffset() override;
     virtual void lcl_align(const OUString& rText, bool bVertical) override;
     virtual void lcl_positivePercentage(const OUString& rText) override;
-    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) override;
+    virtual void lcl_props(const writerfilter::Reference<Properties>::Pointer_t& ref) override;
     virtual void lcl_table(Id name,
-                           writerfilter::Reference<Table>::Pointer_t ref) override;
+                           const writerfilter::Reference<Table>::Pointer_t& ref) override;
     virtual void lcl_substream(Id name,
-                               ::writerfilter::Reference<Stream>::Pointer_t ref) override;
+                               const writerfilter::Reference<Stream>::Pointer_t& ref) override;
     virtual void lcl_startGlossaryEntry() override;
     virtual void lcl_endGlossaryEntry() override;
     virtual void lcl_checkId(const sal_Int32 nId) override;

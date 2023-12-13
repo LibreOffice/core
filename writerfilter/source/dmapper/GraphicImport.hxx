@@ -119,10 +119,10 @@ public:
     virtual void lcl_endCharacterGroup() override;
     virtual void lcl_text(const sal_uInt8 * data, size_t len) override;
     virtual void lcl_utext(const sal_Unicode * data, size_t len) override;
-    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) override;
+    virtual void lcl_props(const writerfilter::Reference<Properties>::Pointer_t& ref) override;
     virtual void lcl_table(Id name,
-                           writerfilter::Reference<Table>::Pointer_t ref) override;
-    virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) override;
+                           const writerfilter::Reference<Table>::Pointer_t& ref) override;
+    virtual void lcl_substream(Id name, const writerfilter::Reference<Stream>::Pointer_t& ref) override;
     virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
     virtual void lcl_startTextBoxContent() override {};
     virtual void lcl_endTextBoxContent() override {};

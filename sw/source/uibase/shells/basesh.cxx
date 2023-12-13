@@ -835,12 +835,10 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
             break;
         }
         comphelper::SequenceAsHashMap aMap(aFields[nFieldIndex++]);
-        auto aName = aMap["Name"].get<OUString>();
-        pRefMark->GetRefName() = aName;
+        pRefMark->GetRefName() = aMap["Name"].get<OUString>();
 
-        OUString aContent = aMap["Content"].get<OUString>();
         auto pTextRefMark = const_cast<SwTextRefMark*>(pRefMark->GetTextRefMark());
-        pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aContent);
+        pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aMap["Content"].get<OUString>());
     }
 
     rWrtSh.EndAction();

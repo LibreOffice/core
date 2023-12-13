@@ -177,11 +177,12 @@ namespace dbp
                 // BoundColumn: 1
                 getContext().xObjectModel->setPropertyValue("BoundColumn", Any(sal_Int16(1)));
 
-                // build the statement to set as list source
-                OUString sStatement = "SELECT " +
-                    getSettings().sListContentField +  ", " + getSettings().sLinkedListField +
-                    " FROM " + getSettings().sListContentTable;
-                Sequence< OUString > aListSource { sStatement };
+                Sequence< OUString > aListSource {
+                    // build the statement to set as list source
+                    OUString("SELECT " +
+                        getSettings().sListContentField +  ", " + getSettings().sLinkedListField +
+                        " FROM " + getSettings().sListContentTable)
+                };
                 getContext().xObjectModel->setPropertyValue("ListSource", Any(aListSource));
             }
             else

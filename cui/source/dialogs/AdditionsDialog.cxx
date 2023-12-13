@@ -484,8 +484,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
                                                      INetURLObject::EncodeMechanism::All);
 
     //FIXME: Temporary URL - v0 is not using actual api
-    OUString rURL = "https://extensions.libreoffice.org/api/v0/" + sEncodedURLPart + ".json";
-    m_sURL = rURL;
+    m_sURL = "https://extensions.libreoffice.org/api/v0/" + sEncodedURLPart + ".json";
 
     m_xExtensionManager
         = deployment::ExtensionManager::get(::comphelper::getProcessComponentContext());

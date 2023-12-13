@@ -193,15 +193,15 @@ void FontTable::lcl_utext(const sal_Unicode*, size_t)
 {
 }
 
-void FontTable::lcl_props(writerfilter::Reference<Properties>::Pointer_t)
+void FontTable::lcl_props(const writerfilter::Reference<Properties>::Pointer_t&)
 {
 }
 
-void FontTable::lcl_table(Id, writerfilter::Reference<Table>::Pointer_t)
+void FontTable::lcl_table(Id, const writerfilter::Reference<Table>::Pointer_t&)
 {
 }
 
-void FontTable::lcl_substream(Id, ::writerfilter::Reference<Stream>::Pointer_t)
+void FontTable::lcl_substream(Id, const writerfilter::Reference<Stream>::Pointer_t&)
 {
 }
 

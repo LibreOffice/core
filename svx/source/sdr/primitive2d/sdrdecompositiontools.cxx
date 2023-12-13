@@ -450,13 +450,13 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
 
                 // create FillGradientPrimitive2D for transparence and add to new sequence
                 // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
-                const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
-                Primitive2DReference xRefB(
-                    new FillGradientPrimitive2D(
-                        aRange,
-                        rDefinitionRange,
-                        rFillGradient));
-                Primitive2DContainer aAlpha { xRefB };
+                Primitive2DContainer aAlpha {
+                    Primitive2DReference(
+                        new FillGradientPrimitive2D(
+                            basegfx::utils::getRange(rPolyPolygon),
+                            rDefinitionRange,
+                            rFillGradient))
+                };
 
                 // create TransparencePrimitive2D using alpha and content
                 return Primitive2DReference(new TransparencePrimitive2D(std::move(aContent), std::move(aAlpha)));

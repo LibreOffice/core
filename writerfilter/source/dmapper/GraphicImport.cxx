@@ -1994,38 +1994,31 @@ void GraphicImport::lcl_endParagraphGroup()
 {
 }
 
-
 void GraphicImport::lcl_startCharacterGroup()
 {
 }
-
 
 void GraphicImport::lcl_endCharacterGroup()
 {
 }
 
-
 void GraphicImport::lcl_text(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
-
 
 void GraphicImport::lcl_utext(const sal_Unicode * /*_data*/, size_t /*len*/)
 {
 }
 
-
-void GraphicImport::lcl_props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::lcl_props(const writerfilter::Reference<Properties>::Pointer_t& /*ref*/)
 {
 }
 
-
-void GraphicImport::lcl_table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
+void GraphicImport::lcl_table(Id /*name*/, const writerfilter::Reference<Table>::Pointer_t& /*ref*/)
 {
 }
 
-
-void GraphicImport::lcl_substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
+void GraphicImport::lcl_substream(Id /*name*/, const writerfilter::Reference<Stream>::Pointer_t& /*ref*/)
 {
 }
 

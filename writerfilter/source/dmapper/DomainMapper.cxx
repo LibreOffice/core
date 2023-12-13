@@ -4529,12 +4529,12 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
     }
 }
 
-void DomainMapper::lcl_props(writerfilter::Reference<Properties>::Pointer_t ref)
+void DomainMapper::lcl_props(const writerfilter::Reference<Properties>::Pointer_t& ref)
 {
     ref->resolve(*this);
 }
 
-void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
+void DomainMapper::lcl_table(Id name, const writerfilter::Reference<Table>::Pointer_t& ref)
 {
     m_pImpl->SetAnyTableImport(true);
     switch(name)
@@ -4571,7 +4571,7 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
     m_pImpl->SetAnyTableImport(false);
 }
 
-void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref)
+void DomainMapper::lcl_substream(Id rName, const writerfilter::Reference<Stream>::Pointer_t& ref)
 {
     m_pImpl->substream(rName, ref);
 }

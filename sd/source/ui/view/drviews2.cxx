@@ -289,23 +289,27 @@ private:
                 const OUString& aKey = pCustomPropertyField->GetName();
                 if (m_aKeyCreator.isMarkingTextKey(aKey))
                 {
-                    OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
-                    m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
+                    m_aResults.push_back({ svx::ClassificationType::TEXT,
+                                           svx::classification::getProperty(m_xPropertyContainer, aKey),
+                                           sBlank, sBlank });
                 }
                 else if (m_aKeyCreator.isCategoryNameKey(aKey) || m_aKeyCreator.isCategoryIdentifierKey(aKey))
                 {
-                    OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
-                    m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+                    m_aResults.push_back({ svx::ClassificationType::CATEGORY,
+                                           svx::classification::getProperty(m_xPropertyContainer, aKey),
+                                           sBlank, sBlank });
                 }
                 else if (m_aKeyCreator.isMarkingKey(aKey))
                 {
-                    OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
-                    m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
+                    m_aResults.push_back({ svx::ClassificationType::MARKING,
+                                           svx::classification::getProperty(m_xPropertyContainer, aKey),
+                                           sBlank, sBlank });
                 }
                 else if (m_aKeyCreator.isIntellectualPropertyPartKey(aKey))
                 {
-                    OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
-                    m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank });
+                    m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART,
+                                           svx::classification::getProperty(m_xPropertyContainer, aKey),
+                                           sBlank, sBlank });
                 }
             }
         }
