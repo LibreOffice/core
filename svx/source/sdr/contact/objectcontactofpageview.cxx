@@ -30,6 +30,8 @@
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svtools/colorcfg.hxx>
+#include <sfx2/viewsh.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
@@ -214,6 +216,8 @@ namespace sdr::contact
             aNewViewInformation2D.setViewport(aViewRange);
             aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(GetSdrPage()));
             aNewViewInformation2D.setViewTime(fCurrentTime);
+            if (SfxViewShell::Current())
+                aNewViewInformation2D.setAutoColor(SfxViewShell::Current()->GetColorConfigColor(svtools::DOCCOLOR));
             updateViewInformation2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;

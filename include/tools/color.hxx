@@ -417,7 +417,10 @@ public:
      */
     basegfx::BColor getBColor() const
     {
-        return basegfx::BColor(R / 255.0, G / 255.0, B / 255.0);
+        basegfx::BColor aColor(R / 255.0, G / 255.0, B / 255.0);
+        if (mValue == Color(ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF).mValue)
+            aColor.setAutomatic(true);
+        return aColor;
     }
 };
 

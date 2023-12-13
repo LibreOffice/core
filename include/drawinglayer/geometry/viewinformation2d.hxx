@@ -23,6 +23,7 @@
 
 #include <sal/config.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <tools/color.hxx>
 
 // predefines
 
@@ -160,6 +161,10 @@ public:
     void setPixelSnapHairline(bool bNew);
 
     static void forwardAntiAliasing(bool bAntiAliasing);
+
+    Color getAutoColor() const;
+    void setAutoColor(Color aNew);
+
     static void forwardPixelSnapHairline(bool bPixelSnapHairline);
 };
 
