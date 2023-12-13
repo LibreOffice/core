@@ -264,17 +264,6 @@ UUIInteractionHelper::isInformationalErrorMessageRequest(
     return xAbort.is();
 }
 
-bool
-UUIInteractionHelper::tryOtherInteractionHandler(
-    uno::Reference< task::XInteractionRequest > const & rRequest)
-{
-    InteractionHandlerDataList dataList;
-    getInteractionHandlerList(dataList);
-
-    return std::any_of(dataList.cbegin(), dataList.cend(),
-        [&](const InteractionHandlerData& rData) { return handleCustomRequest( rRequest, rData.ServiceName ); });
-}
-
 namespace
 {
 
@@ -838,10 +827,6 @@ UUIInteractionHelper::handleRequest_impl(
             // typed InteractionHandlers (ooo.Interactions)
             if ( handleTypedHandlerImplementations( rRequest ) )
                 return true;
-
-            // legacy configuration (ooo.ucb.InteractionHandlers)
-            if (tryOtherInteractionHandler( rRequest ))
-                return true;
         }
 
         // Not handled.
@@ -856,80 +841,6 @@ UUIInteractionHelper::handleRequest_impl(
         DBG_UNHANDLED_EXCEPTION("uui");
     }
     return false;
-}
-
-void
-UUIInteractionHelper::getInteractionHandlerList(
-    InteractionHandlerDataList &rdataList)
-{
-    try
-    {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProv =
-            configuration::theDefaultProvider::get( m_xContext );
-
-        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", uno::Any(OUString("/org.openoffice.ucb.InteractionHandler/InteractionHandlers"))}
-        }));
-
-        uno::Reference< uno::XInterface > xInterface(
-                xConfigProv->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess" , aArguments ) );
-
-        if ( !xInterface.is() )
-            throw uno::RuntimeException("unable to instantiate config access");
-
-        uno::Reference< container::XNameAccess > xNameAccess(
-            xInterface, uno::UNO_QUERY_THROW );
-        const uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
-
-        if ( aElems.hasElements() )
-        {
-            uno::Reference< container::XHierarchicalNameAccess >
-                                xHierNameAccess( xInterface, uno::UNO_QUERY_THROW );
-
-            // Iterate over children.
-            for ( const auto& rElem : aElems )
-            {
-                try
-                {
-                    InteractionHandlerData aInfo;
-
-                    // Obtain service name.
-                    OUString aKeyBuffer = "['" + rElem + "']/ServiceName";
-
-                    OUString aValue;
-                    if ( !( xHierNameAccess->getByHierarchicalName(
-                                aKeyBuffer ) >>= aValue ) )
-                    {
-                        OSL_FAIL( "GetInteractionHandlerList - "
-                                    "Error getting item value!" );
-                        continue;
-                    }
-
-                    aInfo.ServiceName = aValue;
-
-                    // Append info to list.
-                    rdataList.push_back( aInfo );
-                }
-                catch ( container::NoSuchElementException& )
-                {
-                    // getByHierarchicalName
-
-                    OSL_FAIL( "GetInteractionHandlerList - "
-                                "caught NoSuchElementException!" );
-                }
-            }
-        }
-    }
-    catch ( uno::RuntimeException const & )
-    {
-        throw;
-    }
-    catch ( uno::Exception const & )
-    {
-        TOOLS_WARN_EXCEPTION( "uui", "GetInteractionHandlerList" );
-    }
 }
 
 const uno::Reference< awt::XWindow>&
