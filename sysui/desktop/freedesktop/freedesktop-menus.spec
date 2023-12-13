@@ -86,7 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 
 if [ -x /opt/gnome/bin/update-desktop-database ]; then
     /opt/gnome/bin/update-desktop-database -q
-elif (which update-desktop-database); then
+elif command -v update-desktop-database; then
   update-desktop-database -q /usr/share/applications
 fi
 
@@ -99,7 +99,7 @@ if [ "$2" = "0" ] ; then
   # the triggering package gets removed
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
       /opt/gnome/bin/update-desktop-database -q
-  elif (which update-desktop-database); then
+  elif command -v update-desktop-database; then
     update-desktop-database -q /usr/share/applications
   fi
 fi
@@ -111,11 +111,11 @@ fi
 if [ "$1" = "1" ] ; then  # first install
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
     /opt/gnome/bin/update-desktop-database -q
-  elif (which update-desktop-database); then
+  elif command -v update-desktop-database; then
     update-desktop-database -q /usr/share/applications
   fi
 
-  if (which update-mime-database); then
+  if command -v update-mime-database; then
     update-mime-database /usr/share/mime
   fi
 fi
@@ -165,7 +165,7 @@ if [ -e /usr/share/icons/hicolor/icon-theme.cache ] ; then
     touch /usr/share/icons/hicolor
     if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
         /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/hicolor
-    elif (which gtk-update-icon-cache); then
+    elif command -v gtk-update-icon-cache; then
         gtk-update-icon-cache -q /usr/share/icons/hicolor
     fi
     # ignore errors (e.g. when there is a cache, but no index.theme)
@@ -329,7 +329,7 @@ fi
 
 if [ -x /opt/gnome/bin/update-desktop-database ]; then
     /opt/gnome/bin/update-desktop-database -q
-elif (which update-desktop-database); then
+elif command -v update-desktop-database; then
   update-desktop-database -q /usr/share/applications
 fi
 
@@ -348,11 +348,11 @@ fi
 if [ "$1" = 0 ] ; then # only run when erasing the package - other cases handled by the triggers
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
     /opt/gnome/bin/update-desktop-database -q
-  elif (which update-desktop-database); then
+  elif command -v update-desktop-database; then
     update-desktop-database -q
   fi
 # run always - both when upgrading as well as when erasing the package
-  if (which update-mime-database); then
+  if command -v update-mime-database; then
     update-mime-database /usr/share/mime
   fi
 fi
@@ -363,7 +363,7 @@ if [ -e /usr/share/icons/hicolor/icon-theme.cache ] ; then
   touch /usr/share/icons/hicolor
   if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
     /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/hicolor
-  elif (which gtk-update-icon-cache); then
+  elif command -v gtk-update-icon-cache; then
     gtk-update-icon-cache -q /usr/share/icons/hicolor
   fi
   # ignore errors (e.g. when there is a cache, but no index.theme)
