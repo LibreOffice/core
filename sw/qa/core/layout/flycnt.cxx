@@ -1111,20 +1111,27 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMoveMaster)
     // Given a document with a multi-page floating table on pages 1 -> 2 -> 3:
     createSwDoc("floattable-move-master.docx");
 
-    // When adding an empty para before the table, so the table gets shifted to pages 2 -> 3:
+    // When adding an empty para at the start of the anchor text of the table:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/4);
     pWrtShell->SplitNode();
 
-    // Then make sure page 1 has no flys, page 2 and 3 has the split fly and no flys on page 4:
+    // Then make sure page the fly chain is pages 1 -> 2 -> 3, still:
     SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     auto pPage1 = pLayout->Lower()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage1);
-    // Without the accompanying fix in place, this test would have failed, the start of the fly was
-    // still on page 1 instead of page 2.
-    CPPUNIT_ASSERT(!pPage1->GetSortedObjs());
+    // Without the accompanying fix in place, this test would have failed, the fly chain was pages 1
+    // -> 4 -> 2.
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = rPage1Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pPage1Fly);
+    CPPUNIT_ASSERT(!pPage1Fly->GetPrecede());
+    CPPUNIT_ASSERT(pPage1Fly->HasFollow());
     auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage2);
     CPPUNIT_ASSERT(pPage2->GetSortedObjs());
@@ -1132,7 +1139,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMoveMaster)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
     auto pPage2Fly = rPage2Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage2Fly);
-    CPPUNIT_ASSERT(!pPage2Fly->GetPrecede());
+    CPPUNIT_ASSERT(pPage2Fly->GetPrecede());
     CPPUNIT_ASSERT(pPage2Fly->HasFollow());
     auto pPage3 = pPage2->GetNext()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage3);
