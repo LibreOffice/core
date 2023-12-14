@@ -73,6 +73,17 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_1, "tdf158586_pageBreak1.rtf")
     // assertXPathContent(pLayout, "//page[2]/body/txt"_ostr, "Second page");
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
+{
+    // The anchor and align properties are sufficient to define a frame
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//anchored", 1);
+    assertXPathContent(pLayout, "//page[1]/body//txt", "1st page");
+    // assertXPathContent(pLayout, "//page[2]/body//txt"_ostr, "2nd page");
+
+    // CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
