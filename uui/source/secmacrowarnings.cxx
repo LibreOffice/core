@@ -156,7 +156,7 @@ void MacroWarning::EnableOkBtn(bool bEnable)
 {
     mxEnableBtn->set_sensitive(bEnable);
     std::locale aResLocale(Translate::Create("uui"));
-    mxEnableBtn->set_tooltip_text(bEnable ? "" : Translate::get(STR_VERIFIY_CERT, aResLocale));
+    mxEnableBtn->set_tooltip_text(bEnable ? "" : Translate::get(STR_VERIFY_CERT, aResLocale));
 }
 
 void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
