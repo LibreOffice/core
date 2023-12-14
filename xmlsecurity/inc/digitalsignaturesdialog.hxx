@@ -52,7 +52,7 @@ private:
     bool const m_bHasDocumentSignature;
     bool m_bWarningShowSignMacro;
 
-    bool m_bAdESCompliant;
+    bool m_bAdESCompliant = true;
 
     std::unique_ptr<weld::Label>       m_xHintDocFT;
     std::unique_ptr<weld::Label>       m_xHintBasicFT;
@@ -66,7 +66,6 @@ private:
     std::unique_ptr<weld::Label>       m_xSigsNotvalidatedFI;
     std::unique_ptr<weld::Image>       m_xSigsOldSignatureImg;
     std::unique_ptr<weld::Label>       m_xSigsOldSignatureFI;
-    std::unique_ptr<weld::CheckButton> m_xAdESCompliantCB;
     std::unique_ptr<weld::Button>      m_xViewBtn;
     std::unique_ptr<weld::Button>      m_xAddBtn;
     std::unique_ptr<weld::Button>      m_xRemoveBtn;
@@ -76,7 +75,6 @@ private:
     std::shared_ptr<CertificateViewer> m_xViewer;
     std::shared_ptr<weld::MessageDialog> m_xInfoBox;
 
-    DECL_LINK(AdESCompliantCheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(ViewButtonHdl, weld::Button&, void);
     DECL_LINK(AddButtonHdl, weld::Button&, void);
     DECL_LINK(RemoveButtonHdl, weld::Button&, void);
