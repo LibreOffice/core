@@ -86,7 +86,12 @@ const char* pSofficeExeName = "soffice.exe";
 
 OUString normalizePath(const OUString& rPath)
 {
-    OUString aPath =  rPath.replaceAll("//", "/");
+    OUString aPath =  rPath;
+#if defined WNT
+    aPath = aPath.replace('\\', '/');
+#endif
+
+    aPath.replaceAll("//", "/");
 
     // remove final /
     if (aPath.endsWith("/"))
@@ -108,7 +113,10 @@ OUString normalizePath(const OUString& rPath)
         aPath = aTempPath.copy(0, i) + aPath.copy(nIndex + 3);
     }
 
-    return aPath.replaceAll("\\", "/");
+#if defined WNT
+    aPath = aPath.replace('/', '\\');
+#endif
+    return aPath;
 }
 
 void CopyFileToDir(const OUString& rTempDirURL, const OUString & rFileName, const OUString& rOldDir)
