@@ -176,8 +176,11 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
         case RES_TXTATR_INETFMT:
             GetINetFormat().dumpAsXml(pWriter);
             break;
+        case RES_TXTATR_CJK_RUBY:
+            GetRuby().dumpAsXml(pWriter);
+            break;
         default:
-            SAL_WARN("sw.core", "Unhandled TXTATR");
+            SAL_WARN("sw.core", "Unhandled TXTATR: " << Which());
             break;
     }
 

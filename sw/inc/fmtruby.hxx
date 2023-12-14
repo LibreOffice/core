@@ -74,6 +74,7 @@ public:
 
     css::text::RubyAdjust GetAdjustment() const       { return m_eAdjustment; }
     void SetAdjustment( css::text::RubyAdjust nNew )  { m_eAdjustment = nNew; }
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

@@ -426,6 +426,19 @@ SwFormatRuby::~SwFormatRuby()
 {
 }
 
+void SwFormatRuby::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatRuby"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pTextAttr"), "%p", m_pTextAttr);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("ruby-text"),
+                                      BAD_CAST(m_sRubyText.toUtf8().getStr()));
+    SfxPoolItem::dumpAsXml(pWriter);
+
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwFormatRuby& SwFormatRuby::operator=( const SwFormatRuby& rAttr )
 {
     // SwFormatRuby is not shareable, so ptr compare is OK
