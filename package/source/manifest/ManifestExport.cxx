@@ -453,7 +453,14 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 *pStartKeyAlg >>= nStartKeyAlgID;
                 if ( nStartKeyAlgID == xml::crypto::DigestID::SHA256 )
                 {
-                    sStartKeyAlg = sSHA256_URL_ODF12; // TODO use SHA256_URL
+                    if (nEncAlgID == xml::crypto::CipherID::AES_GCM_W3C)
+                    {   // new encryption is incompatible anyway, use W3C URL
+                        sStartKeyAlg = SHA256_URL;
+                    }
+                    else // to interop with ODF <= 1.4 consumers use bad ODF URL
+                    {
+                        sStartKeyAlg = sSHA256_URL_ODF12;
+                    }
                     aBuffer.append( sal_Int32(32) );
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
