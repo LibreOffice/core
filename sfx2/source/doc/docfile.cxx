@@ -30,6 +30,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
@@ -1721,7 +1722,8 @@ SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const xStora
             xDecryptedInnerPackage = xStorage->openStreamElement(
                 "encrypted-package",
                 embed::ElementModes::READ | embed::ElementModes::NOCREATE);
-        assert(xDecryptedInnerPackage.is()); // just for testing? not if wrong pwd
+        // either this throws due to wrong password or IO error, or returns stream
+        assert(xDecryptedInnerPackage.is());
         // need a seekable stream => copy
         Reference<uno::XComponentContext> const xContext(::comphelper::getProcessComponentContext());
         uno::Reference<io::XStream> const xDecryptedInnerPackageStream(
@@ -1739,11 +1741,22 @@ SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const xStora
         SAL_DE BUG("AAA tempfile " << xTempFile->getResourceName());
         uno::Reference<io::XSeekable>(xDecryptedInnerPackageStream, uno::UNO_QUERY_THROW)->seek(0);
 #endif
-        // create storage, if this succeeds assume password is correct
+        // create inner storage; opening the stream should have already verified
+        // the password so any failure here is probably due to a bug
         xRet = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
             PACKAGE_STORAGE_FORMAT_STRING, xDecryptedInnerPackageStream,
             embed::ElementModes::READWRITE, xContext, false);
         assert(xRet.is());
+        // consistency check: outer and inner package must have same mimetype
+        OUString const outerMediaType(uno::Reference<beans::XPropertySet>(pImpl->xStorage,
+            uno::UNO_QUERY_THROW)->getPropertyValue("MediaType").get<OUString>());
+        OUString const innerMediaType(uno::Reference<beans::XPropertySet>(xRet,
+            uno::UNO_QUERY_THROW)->getPropertyValue("MediaType").get<OUString>());
+        if (outerMediaType.isEmpty() || outerMediaType != innerMediaType)
+        {
+            throw io::WrongFormatException("MediaType inconsistent in encrypted ODF package");
+        }
+        // success:
         pImpl->m_bODFWholesomeEncryption = true;
         pImpl->m_xODFDecryptedInnerPackageStream = xDecryptedInnerPackageStream;
         pImpl->m_xODFEncryptedOuterStorage = xStorage;
