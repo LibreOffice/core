@@ -27,10 +27,13 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <unotools/datetime.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 
 #include "secmacrowarnings.hxx"
+
+#include <strings.hrc>
 
 using namespace ::com::sun::star::security;
 using namespace ::com::sun::star;
@@ -91,7 +94,7 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, weld::Button&, void)
         return;
 
     mxAlwaysTrustCB->set_sensitive(true);
-    mxEnableBtn->set_sensitive(true);
+    EnableOkBtn(true);
 }
 
 IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, weld::Button&, void)
@@ -123,7 +126,7 @@ IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl, weld::Button&, void)
 IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, weld::Toggleable&, void)
 {
     const bool bEnable = (mnActSecLevel < 3 || mxAlwaysTrustCB->get_active());
-    mxEnableBtn->set_sensitive(bEnable);
+    EnableOkBtn(bEnable);
     mxDisableBtn->set_sensitive(!mxAlwaysTrustCB->get_active());
 }
 
@@ -141,12 +144,19 @@ void MacroWarning::InitControls()
 
         mnActSecLevel = SvtSecurityOptions::GetMacroSecurityLevel();
         if ( mnActSecLevel >= 2 )
-            mxEnableBtn->set_sensitive(false);
+            EnableOkBtn(false);
     }
     else
     {
         mxGrid->hide();
     }
+}
+
+void MacroWarning::EnableOkBtn(bool bEnable)
+{
+    mxEnableBtn->set_sensitive(bEnable);
+    std::locale aResLocale(Translate::Create("uui"));
+    mxEnableBtn->set_tooltip_text(bEnable ? "" : Translate::get(STR_VERIFIY_CERT, aResLocale));
 }
 
 void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
