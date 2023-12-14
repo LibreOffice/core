@@ -56,6 +56,12 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_0, "tdf158586_pageBreak0.rtf")
     // assertXPathContent(pLayout, "//page[1]/body/txt"_ostr, "First page");}
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf158586_0B, "tdf158586_pageBreak0B.rtf")
+{
+    // The specified page break must be lost because it is in a text frame
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf158586_1, "tdf158586_pageBreak1.rtf")
 {
     // None of the specified text frame settings initiates a real text frame - page break not lost
