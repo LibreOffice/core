@@ -1,4 +1,4 @@
-This patch is neccesary for Windows (32-bit) build.
+This patch is necessary for Windows (32-bit) build.
 
 (In Jenkins' build message)
 > icc_transform.o : error LNK2019: unresolved external symbol _cmsGetColorSpace referenced in function "public: static class std::unique_ptr<class fxcodec::IccTransform,struct std::default_delete<class fxcodec::IccTransform> > __cdecl fxcodec::IccTransform::CreateTransformSRGB(class pdfium::span<unsigned char const >)" (?CreateTransformSRGB@IccTransform@fxcodec@@SA?AV?$unique_ptr@VIccTransform@fxcodec@@U?$default_delete@VIccTransform@fxcodec@@@std@@@std@@V?$span@$$CBE@pdfium@@@Z)
@@ -21,7 +21,7 @@ This patch is neccesary for Windows (32-bit) build.
 +// LibreOffice always builds this as DLL and with the stdcall calling
 +// convention, so make this usable from outside without having to
 +// specify CMS_DLL manually whenever the library is used.
-+#if !defined(CMS_DLL_BUILD) && !defined(CMS_DLL) && !defined(_WIN64)
++#if !defined(CMS_DLL_BUILD) && !defined(CMS_DLL) && defined(_MSC_VER) && defined(_M_IX86)
 +#define CMS_DLL
 +#endif
 +
