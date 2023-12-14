@@ -1125,7 +1125,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMoveMaster)
     // Without the accompanying fix in place, this test would have failed, the fly chain was pages 1
     // -> 4 -> 2.
     CPPUNIT_ASSERT(pPage1->GetSortedObjs());
-    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
     SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
     auto pPage1Fly = rPage1Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
