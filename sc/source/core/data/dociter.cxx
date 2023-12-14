@@ -802,7 +802,7 @@ sc::FormulaGroupEntry* ScFormulaGroupIterator::next()
                     return nullptr;
             }
             ScTable *pTab = mrDoc.FetchTable(mnTab);
-            ScColumn *pCol = pTab ? pTab->FetchColumn(mnCol) : nullptr;
+            ScColumn *pCol = (pTab && pTab->IsColValid(mnCol)) ? pTab->FetchColumn(mnCol) : nullptr;
             if (pCol)
             {
                 mbNullCol = false;
