@@ -404,6 +404,8 @@ void OStorage_Impl::OpenOwnPackage()
                     aArguments.realloc( ++nArgNum );
                     pArguments = aArguments.getArray();
                     pArguments[nArgNum-1] <<= aNamedValue;
+                    if (rProp.Name == "RepairPackage")
+                        rProp.Value >>= m_bRepairPackage;
                 }
                 else if ( rProp.Name == "Password" )
                 {
@@ -1265,6 +1267,10 @@ SotElement_Impl* OStorage_Impl::FindElement( const OUString& rName )
     ReadContents();
 
     auto mapIt = m_aChildrenMap.find(rName);
+    if (mapIt == m_aChildrenMap.end() && m_bRepairPackage)
+        mapIt = std::find_if(m_aChildrenMap.begin(), m_aChildrenMap.end(),
+                             [&rName](const auto& pair)
+                             { return rName.equalsIgnoreAsciiCase(pair.first); });
     if (mapIt == m_aChildrenMap.end())
         return nullptr;
     for (auto pElement : mapIt->second)
