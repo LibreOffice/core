@@ -141,7 +141,6 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.m_bPrintReverse          = false; /*handled by print dialog now*/
     rOptions.m_bPrintProspect         = pOpt->IsPrintProspect();
     rOptions.m_bPrintProspectRTL      = pOpt->IsPrintProspectRTL();
-    // bPrintSingleJobs         <-- not set here; mail merge and or configuration
     // bModified                <-- not set here; mail merge only
     rOptions.m_bPrintBlackFont        = pOpt->IsPrintWithBlackTextColor();
     rOptions.m_bPrintHiddenText       = pOpt->IsPrintHiddenText();

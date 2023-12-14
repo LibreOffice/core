@@ -745,7 +745,6 @@ inline constexpr OUString UNO_NAME_DOCUMENT_URL = u"DocumentURL"_ustr;
 inline constexpr OUString UNO_NAME_OUTPUT_URL = u"OutputURL"_ustr;
 inline constexpr OUString UNO_NAME_OUTPUT_TYPE = u"OutputType"_ustr;
 inline constexpr OUString UNO_NAME_ESCAPE_PROCESSING = u"EscapeProcessing"_ustr;
-inline constexpr OUString UNO_NAME_SINGLE_PRINT_JOBS = u"SinglePrintJobs"_ustr;
 inline constexpr OUString UNO_NAME_FILE_NAME_FROM_COLUMN = u"FileNameFromColumn"_ustr;
 inline constexpr OUString UNO_NAME_FILE_NAME_PREFIX = u"FileNamePrefix"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_STYLE_NAMES = u"CharStyleNames"_ustr;

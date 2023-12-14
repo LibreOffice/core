@@ -180,7 +180,6 @@ class SAL_DLLPUBLIC_RTTI SwMiscConfig final : public utl::ConfigItem
     bool        m_bShowIndexPreview;          // Index/ShowPreview
     bool        m_bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
     bool        m_bNumAlignSize;              // Numbering/Graphic/KeepRatio
-    bool        m_bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
     bool        m_bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
     bool        m_bIsPasswordFromColumn;      // FormLetter/FileOutput/FilePassword/Generation
     bool        m_bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
@@ -324,9 +323,6 @@ public:
     MailTextFormats GetMailingFormats() const               { return m_aMiscConfig.m_nMailingFormats;}
     void           SetMailingFormats( MailTextFormats nSet ) { m_aMiscConfig.m_nMailingFormats = nSet;
                                                                m_aMiscConfig.SetModified();}
-
-    void        SetSinglePrintJob( bool b )     { m_aMiscConfig.m_bSinglePrintJob = b;
-                                                  m_aMiscConfig.SetModified();}
 
     bool        IsNameFromColumn() const        { return m_aMiscConfig.m_bIsNameFromColumn; }
     void        SetIsNameFromColumn( bool bSet )

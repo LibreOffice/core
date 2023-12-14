@@ -369,7 +369,6 @@ SwXMailMerge::SwXMailMerge() :
     m_nDataCommandType(sdb::CommandType::TABLE),
     m_nOutputType(MailMergeType::PRINTER),
     m_bEscapeProcessing(true),     //!! allow to process properties like "Filter", "Order", ...
-    m_bSinglePrintJobs(false),
     m_bFileNameFromColumn(false),
     m_bSendAsHTML(false),
     m_bSendAsAttachment(false),
@@ -449,7 +448,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     sal_Int32  nCurDataCommandType      = m_nDataCommandType;
     sal_Int16  nCurOutputType           = m_nOutputType;
     bool   bCurEscapeProcessing     = m_bEscapeProcessing;
-    bool   bCurSinglePrintJobs      = m_bSinglePrintJobs;
     bool   bCurFileNameFromColumn   = m_bFileNameFromColumn;
 
     SfxObjectShellRef xCurDocSh = m_xDocSh;   // the document
@@ -500,8 +498,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             bOK = rValue >>= nCurOutputType;
         else if (rName == UNO_NAME_ESCAPE_PROCESSING)
             bOK = rValue >>= bCurEscapeProcessing;
-        else if (rName == UNO_NAME_SINGLE_PRINT_JOBS)
-            bOK = rValue >>= bCurSinglePrintJobs;
         else if (rName == UNO_NAME_FILE_NAME_FROM_COLUMN)
             bOK = rValue >>= bCurFileNameFromColumn;
         else if (rName == UNO_NAME_SUBJECT)
@@ -676,10 +672,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     {
     case MailMergeType::PRINTER:
         {
-            IDocumentDeviceAccess& rIDDA = rSh.getIDocumentDeviceAccess();
-            SwPrintData aPrtData( rIDDA.getPrintData() );
-            aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
-            rIDDA.setPrintData( aPrtData );
             // #i25686# printing should not be done asynchronously to prevent dangling offices
             // when mail merge is called as command line macro
             aMergeDesc.aPrintOptions = m_aPrintSettings;
@@ -882,7 +874,6 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             case WID_DATA_COMMAND_TYPE :        pData = &m_nDataCommandType;  break;
             case WID_OUTPUT_TYPE :              pData = &m_nOutputType;  break;
             case WID_ESCAPE_PROCESSING :        pData = &m_bEscapeProcessing;  break;
-            case WID_SINGLE_PRINT_JOBS :        pData = &m_bSinglePrintJobs;  break;
             case WID_FILE_NAME_FROM_COLUMN :    pData = &m_bFileNameFromColumn;  break;
             case WID_FILE_NAME_PREFIX :         pData = &m_aFileNamePrefix;  break;
             case WID_MAIL_SUBJECT:              pData = &m_sSubject; break;
@@ -952,8 +943,6 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 bOK = rValue >>= m_nOutputType;
             else if (pData == &m_bEscapeProcessing)
                 bOK = rValue >>= m_bEscapeProcessing;
-            else if (pData == &m_bSinglePrintJobs)
-                bOK = rValue >>= m_bSinglePrintJobs;
             else if (pData == &m_bFileNameFromColumn)
                 bOK = rValue >>= m_bFileNameFromColumn;
             else if (pData == &m_aFileNamePrefix)
@@ -1033,7 +1022,6 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
         case WID_DATA_COMMAND_TYPE :        aRet <<= m_nDataCommandType;  break;
         case WID_OUTPUT_TYPE :              aRet <<= m_nOutputType;  break;
         case WID_ESCAPE_PROCESSING :        aRet <<= m_bEscapeProcessing;  break;
-        case WID_SINGLE_PRINT_JOBS :        aRet <<= m_bSinglePrintJobs;  break;
         case WID_FILE_NAME_FROM_COLUMN :    aRet <<= m_bFileNameFromColumn;  break;
         case WID_FILE_NAME_PREFIX :         aRet <<= m_aFileNamePrefix;  break;
         case WID_MAIL_SUBJECT:              aRet <<= m_sSubject; break;

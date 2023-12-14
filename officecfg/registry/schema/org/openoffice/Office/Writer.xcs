@@ -1868,14 +1868,6 @@
         <info>
           <desc>Contains other output settings.</desc>
         </info>
-        <prop oor:name="SinglePrintJob" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Print - [Section] Output -->
-          <info>
-            <desc>Controls the print output to avoid problems with duplex printing and odd page numbers.</desc>
-            <label>Create single print jobs</label>
-          </info>
-          <value>false</value>
-        </prop>
         <prop oor:name="Fax" oor:type="xs:string" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document  Print - [Section] Fax -->
           <info>
@@ -5662,13 +5654,6 @@
         <info>
           <desc>Specifies the settings for form letter output to printer.</desc>
         </info>
-        <prop oor:name="SinglePrintJobs" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Form letter - Printer output - Single print jobs-->
-          <info>
-            <desc>Prints each form letter individually with the selected printer (true).</desc>
-          </info>
-          <value>false</value>
-        </prop>
         <prop oor:name="AskForMerge" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Determines whether printing a document that contains database fields triggers a 'do you want to call mailmerge' query</desc>

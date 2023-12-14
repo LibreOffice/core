@@ -114,7 +114,6 @@ enum SwPrintSettingsPropertyHandles
     HANDLE_PRINTSET_FAX_NAME,
     HANDLE_PRINTSET_PAPER_FROM_SETUP,
     HANDLE_PRINTSET_TABLES,
-    HANDLE_PRINTSET_SINGLE_JOBS,
     HANDLE_PRINTSET_EMPTY_PAGES,
     HANDLE_PRINTSET_PROSPECT_RTL,
     HANDLE_PRINTSET_PLACEHOLDER,
@@ -200,7 +199,6 @@ static rtl::Reference<ChainablePropertySetInfo> lcl_createPrintSettingsInfo()
         { OUString( "PrintPaperFromSetup" ),  HANDLE_PRINTSET_PAPER_FROM_SETUP   , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "PrintTables" ),          HANDLE_PRINTSET_TABLES             , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "PrintTextPlaceholder"),  HANDLE_PRINTSET_PLACEHOLDER        , cppu::UnoType<bool>::get(), PROPERTY_NONE},
-        { OUString( "PrintSingleJobs" ),      HANDLE_PRINTSET_SINGLE_JOBS        , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "PrintEmptyPages" ),      HANDLE_PRINTSET_EMPTY_PAGES        , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString(), 0, css::uno::Type(), 0}
     };
@@ -347,11 +345,6 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
             mpPrtOpt->SetPrintBlackFont(tryBoolAccess(rInfo.maName, rValue));
         }
         break;
-        case HANDLE_PRINTSET_SINGLE_JOBS:
-        {
-            mpPrtOpt->SetPrintSingleJobs(tryBoolAccess(rInfo.maName, rValue));
-        }
-        break;
         case HANDLE_PRINTSET_PAPER_FROM_SETUP:
         {
             mpPrtOpt->SetPaperFromSetup(tryBoolAccess(rInfo.maName, rValue));
@@ -457,9 +450,6 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_BLACK_FONTS:
             rValue <<= mpPrtOpt->IsPrintBlackFont();
-        break;
-        case HANDLE_PRINTSET_SINGLE_JOBS:
-            rValue <<= mpPrtOpt->IsPrintSingleJobs();
         break;
         case HANDLE_PRINTSET_EMPTY_PAGES:
             rValue <<= mpPrtOpt->IsPrintEmptyPages();

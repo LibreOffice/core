@@ -1161,7 +1161,6 @@ SwMiscConfig::SwMiscConfig() :
     m_bShowIndexPreview(false),
     m_bGrfToGalleryAsLnk(true),
     m_bNumAlignSize(true),
-    m_bSinglePrintJob(false),
     m_bIsNameFromColumn(true),
     m_bIsPasswordFromColumn(false),
     m_bAskForMailMergeInPrint(true),
@@ -1183,15 +1182,14 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
             "Index/ShowPreview",                        // 2
             "Misc/GraphicToGalleryAsLink",              // 3
             "Numbering/Graphic/KeepRatio",              // 4
-            "FormLetter/PrintOutput/SinglePrintJobs",   // 5
-            "FormLetter/MailingOutput/Format",          // 6
-            "FormLetter/FileOutput/FileName/FromDatabaseField",  // 7
-            "FormLetter/FileOutput/Path",               // 8
-            "FormLetter/FileOutput/FileName/FromManualSetting",   // 9
-            "FormLetter/FileOutput/FileName/Generation",//10
-            "FormLetter/PrintOutput/AskForMerge",        //11
-            "FormLetter/FileOutput/FilePassword/FromDatabaseField",  // 12
-            "FormLetter/FileOutput/FilePassword/Generation" //13
+            "FormLetter/MailingOutput/Format",          // 5
+            "FormLetter/FileOutput/FileName/FromDatabaseField",  // 6
+            "FormLetter/FileOutput/Path",               // 7
+            "FormLetter/FileOutput/FileName/FromManualSetting",   // 8
+            "FormLetter/FileOutput/FileName/Generation",//9
+            "FormLetter/PrintOutput/AskForMerge",        //10
+            "FormLetter/FileOutput/FilePassword/FromDatabaseField",  // 11
+            "FormLetter/FileOutput/FilePassword/Generation" //12
     };
     return aNames;
 }
@@ -1216,15 +1214,14 @@ void SwMiscConfig::ImplCommit()
             case 2 : pValues[nProp] <<= m_bShowIndexPreview; break;
             case 3 : pValues[nProp] <<= m_bGrfToGalleryAsLnk; break;
             case 4 : pValues[nProp] <<= m_bNumAlignSize; break;
-            case 5 : pValues[nProp] <<= m_bSinglePrintJob; break;
-            case 6 : pValues[nProp] <<= static_cast<sal_Int32>(m_nMailingFormats); break;
-            case 7 : pValues[nProp] <<= m_sNameFromColumn;  break;
-            case 8 : pValues[nProp] <<= m_sMailingPath;     break;
-            case 9 : pValues[nProp] <<= m_sMailName;        break;
-            case 10: pValues[nProp] <<= m_bIsNameFromColumn; break;
-            case 11: pValues[nProp] <<= m_bAskForMailMergeInPrint; break;
-            case 12: pValues[nProp] <<= m_sPasswordFromColumn; break;
-            case 13: pValues[nProp] <<= m_bIsPasswordFromColumn; break;
+            case 5 : pValues[nProp] <<= static_cast<sal_Int32>(m_nMailingFormats); break;
+            case 6 : pValues[nProp] <<= m_sNameFromColumn;  break;
+            case 7 : pValues[nProp] <<= m_sMailingPath;     break;
+            case 8 : pValues[nProp] <<= m_sMailName;        break;
+            case 9: pValues[nProp] <<= m_bIsNameFromColumn; break;
+            case 10: pValues[nProp] <<= m_bAskForMailMergeInPrint; break;
+            case 11: pValues[nProp] <<= m_sPasswordFromColumn; break;
+            case 12: pValues[nProp] <<= m_bIsPasswordFromColumn; break;
         }
     }
     PutProperties(aNames, aValues);
@@ -1250,15 +1247,14 @@ void SwMiscConfig::Load()
                 case 2 : m_bShowIndexPreview = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 3 : m_bGrfToGalleryAsLnk = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 4 : m_bNumAlignSize = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 5 : m_bSinglePrintJob = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 6 : m_nMailingFormats = static_cast<MailTextFormats>(*o3tl::doAccess<sal_Int32>(pValues[nProp])); break;
-                case 7 : pValues[nProp] >>= sTmp; m_sNameFromColumn = sTmp; break;
-                case 8 : pValues[nProp] >>= sTmp; m_sMailingPath = sTmp;  break;
-                case 9 : pValues[nProp] >>= sTmp; m_sMailName = sTmp;     break;
-                case 10: m_bIsNameFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 11: pValues[nProp] >>= m_bAskForMailMergeInPrint; break;
-                case 12: pValues[nProp] >>= sTmp; m_sPasswordFromColumn = sTmp; break;
-                case 13: m_bIsPasswordFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 5 : m_nMailingFormats = static_cast<MailTextFormats>(*o3tl::doAccess<sal_Int32>(pValues[nProp])); break;
+                case 6 : pValues[nProp] >>= sTmp; m_sNameFromColumn = sTmp; break;
+                case 7 : pValues[nProp] >>= sTmp; m_sMailingPath = sTmp;  break;
+                case 8 : pValues[nProp] >>= sTmp; m_sMailName = sTmp;     break;
+                case 9: m_bIsNameFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 10: pValues[nProp] >>= m_bAskForMailMergeInPrint; break;
+                case 11: pValues[nProp] >>= sTmp; m_sPasswordFromColumn = sTmp; break;
+                case 12: m_bIsPasswordFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
             }
         }
     }

@@ -556,7 +556,6 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
         aAddPrinterAttr.m_bPrintProspectRTL   = m_xProspectCB_RTL->get_active();
         aAddPrinterAttr.m_bPaperFromSetup     = m_xPaperFromSetupCB->get_active();
         aAddPrinterAttr.m_bPrintEmptyPages    = m_xPrintEmptyPagesCB->get_active();
-        aAddPrinterAttr.m_bPrintSingleJobs    = true; // handled by vcl in new print dialog since CWS printerpullpages /*m_xSingleJobsCB->get_active()*/;
 
         if (m_xNoRB->get_active())  aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::NONE;

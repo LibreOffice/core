@@ -181,6 +181,8 @@ published service MailMerge
     /** determines whether single print jobs will be generated per output document.
 
         <p>This property is only evaluated for printer output.</p>
+
+        @deprecated since 24.8, use ::com::sun::star::view::PrintOptions::SinglePrintJobs instead.
      */
     [property] boolean SinglePrintJobs;
 

@@ -1388,7 +1388,6 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMa
                     { UNO_NAME_DAD_COMMAND_TYPE,      WID_DATA_COMMAND_TYPE,      cppu::UnoType<sal_Int32>::get(),       PROPERTY_NONE, 0},
                     { UNO_NAME_OUTPUT_TYPE,           WID_OUTPUT_TYPE,            cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, 0},
                     { UNO_NAME_ESCAPE_PROCESSING,     WID_ESCAPE_PROCESSING,      cppu::UnoType<bool>::get(),     PROPERTY_NONE, 0},
-                    { UNO_NAME_SINGLE_PRINT_JOBS,     WID_SINGLE_PRINT_JOBS,      cppu::UnoType<bool>::get(),     PROPERTY_NONE, 0},
                     { UNO_NAME_FILE_NAME_FROM_COLUMN, WID_FILE_NAME_FROM_COLUMN,  cppu::UnoType<bool>::get(),     PROPERTY_NONE, 0},
                     { UNO_NAME_FILE_NAME_PREFIX,      WID_FILE_NAME_PREFIX,       cppu::UnoType<OUString>::get(),    PROPERTY_NONE, 0},
                     { UNO_NAME_SUBJECT,               WID_MAIL_SUBJECT,           cppu::UnoType<OUString>::get(),        PROPERTY_NONE, 0},

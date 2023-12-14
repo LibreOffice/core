@@ -40,17 +40,16 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames() const
         "Page/Reversed",                //  6
         "Page/Brochure",                //  7
         "Page/BrochureRightToLeft",     //  8
-        "Output/SinglePrintJob",        //  9
-        "Output/Fax",                   // 10
-        "Papertray/FromPrinterSetup",   // 11
-        "Content/Drawing",              // 12 not in SW/Web
-        "Page/LeftPage",                // 13 not in SW/Web
-        "Page/RightPage",               // 14 not in SW/Web
-        "EmptyPages",                   // 15 not in SW/Web
-        "Content/PrintPlaceholders",    // 16 not in Sw/Web
-        "Content/PrintHiddenText"       // 17 not in Sw/Web
+        "Output/Fax",                   //  9
+        "Papertray/FromPrinterSetup",   // 10
+        "Content/Drawing",              // 11 not in SW/Web
+        "Page/LeftPage",                // 12 not in SW/Web
+        "Page/RightPage",               // 13 not in SW/Web
+        "EmptyPages",                   // 14 not in SW/Web
+        "Content/PrintPlaceholders",    // 15 not in Sw/Web
+        "Content/PrintHiddenText"       // 16 not in Sw/Web
     };
-    const int nCount = m_bIsWeb ? 12 : 18;
+    const int nCount = m_bIsWeb ? 11 : 17;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -98,15 +97,14 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
                     case  6: m_bPrintReverse      = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                     case  7: m_bPrintProspect      = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                     case  8: m_bPrintProspectRTL  = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case  9: m_bPrintSingleJobs   = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 10: pValues[nProp] >>= m_sFaxName;  break;
-                    case 11: m_bPaperFromSetup    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 12: m_bPrintDraw         = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 13: m_bPrintLeftPages    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 14: m_bPrintRightPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 15: m_bPrintEmptyPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 16: m_bPrintTextPlaceholder = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 17: m_bPrintHiddenText = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case  9: pValues[nProp] >>= m_sFaxName;  break;
+                    case 10: m_bPaperFromSetup    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 11: m_bPrintDraw         = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 12: m_bPrintLeftPages    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 13: m_bPrintRightPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 14: m_bPrintEmptyPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 15: m_bPrintTextPlaceholder = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 16: m_bPrintHiddenText = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                 }
             }
         }
@@ -145,15 +143,14 @@ void SwPrintOptions::ImplCommit()
             case  6: pValues[nProp] <<= m_bPrintReverse; break;
             case  7: pValues[nProp] <<= m_bPrintProspect; break;
             case  8: pValues[nProp] <<= m_bPrintProspectRTL; break;
-            case  9: pValues[nProp] <<= m_bPrintSingleJobs; break;
-            case 10: pValues[nProp] <<= m_sFaxName;  break;
-            case 11: pValues[nProp] <<= m_bPaperFromSetup; break;
-            case 12: pValues[nProp] <<= m_bPrintDraw; break;
-            case 13: pValues[nProp] <<= m_bPrintLeftPages; break;
-            case 14: pValues[nProp] <<= m_bPrintRightPages; break;
-            case 15: pValues[nProp] <<= m_bPrintEmptyPages; break;
-            case 16: pValues[nProp] <<= m_bPrintTextPlaceholder; break;
-            case 17: pValues[nProp] <<= m_bPrintHiddenText; break;
+            case  9: pValues[nProp] <<= m_sFaxName;  break;
+            case 10: pValues[nProp] <<= m_bPaperFromSetup; break;
+            case 11: pValues[nProp] <<= m_bPrintDraw; break;
+            case 12: pValues[nProp] <<= m_bPrintLeftPages; break;
+            case 13: pValues[nProp] <<= m_bPrintRightPages; break;
+            case 14: pValues[nProp] <<= m_bPrintEmptyPages; break;
+            case 15: pValues[nProp] <<= m_bPrintTextPlaceholder; break;
+            case 16: pValues[nProp] <<= m_bPrintHiddenText; break;
         }
     }
 

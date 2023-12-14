@@ -61,7 +61,7 @@ public:
              m_bPrintHiddenText, m_bPrintTextPlaceholder,
              m_bPrintLeftPages, m_bPrintRightPages, m_bPrintReverse, m_bPrintProspect,
              m_bPrintProspectRTL,
-             m_bPrintSingleJobs, m_bPaperFromSetup,
+             m_bPaperFromSetup,
              /// Print empty pages
              m_bPrintEmptyPages;
 
@@ -85,7 +85,6 @@ public:
         m_bPrintReverse           =
         m_bPrintProspect          =
         m_bPrintProspectRTL       =
-        m_bPrintSingleJobs        =
         m_bPrintBlackFont         =
         m_bPrintHiddenText        =
         m_bPrintTextPlaceholder   = false;
@@ -114,7 +113,6 @@ public:
         m_bPrintReverse       ==   rData.m_bPrintReverse        &&
         m_bPrintProspect      ==   rData.m_bPrintProspect       &&
         m_bPrintProspectRTL   ==   rData.m_bPrintProspectRTL    &&
-        m_bPrintSingleJobs    ==   rData.m_bPrintSingleJobs     &&
         m_bPaperFromSetup     ==   rData.m_bPaperFromSetup      &&
         m_bPrintEmptyPages    ==   rData.m_bPrintEmptyPages     &&
         m_nPrintPostIts       ==   rData.m_nPrintPostIts        &&
@@ -141,7 +139,6 @@ public:
     bool IsPrintProspectRTL() const         { return m_bPrintProspectRTL; }
     bool IsPrintPageBackground() const      { return m_bPrintPageBackground; }
     bool IsPrintBlackFont() const           { return m_bPrintBlackFont; }
-    bool IsPrintSingleJobs() const          { return m_bPrintSingleJobs; }
     SwPostItMode GetPrintPostIts() const           { return m_nPrintPostIts; }
     const OUString& GetFaxName() const      { return m_sFaxName; }
     bool IsPrintHiddenText() const          { return m_bPrintHiddenText; }
@@ -161,7 +158,6 @@ public:
     void SetPrintProspect_RTL( bool b )         { doSetModified(); m_bPrintProspectRTL = b; }
     void SetPrintPageBackground( bool b )       { doSetModified(); m_bPrintPageBackground = b; }
     void SetPrintBlackFont( bool b )            { doSetModified(); m_bPrintBlackFont = b; }
-    void SetPrintSingleJobs( bool b )           { doSetModified(); m_bPrintSingleJobs = b; }
     void SetFaxName( const OUString& rSet )     { m_sFaxName = rSet; }
     void SetPrintHiddenText( bool b )           { doSetModified(); m_bPrintHiddenText = b; }
     void SetPrintTextPlaceholder( bool b )      { doSetModified(); m_bPrintTextPlaceholder = b; }

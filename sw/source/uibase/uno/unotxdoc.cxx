@@ -2452,7 +2452,6 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     aDocPrintData.SetPrintProspect_RTL( rPrintUIOptions.IsPrintProspectRTL() );
     aDocPrintData.SetPrintPageBackground( rPrintUIOptions.IsPrintPageBackground() );
     aDocPrintData.SetPrintBlackFont( rPrintUIOptions.IsPrintWithBlackTextColor() );
-    // aDocPrintData.SetPrintSingleJobs( b ); handled by File/Print dialog itself
     // arDocPrintData.SetFaxName( s ); n/a in File/Print dialog
     aDocPrintData.SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
     aDocPrintData.SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );

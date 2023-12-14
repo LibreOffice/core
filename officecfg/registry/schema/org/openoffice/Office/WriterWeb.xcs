@@ -610,14 +610,6 @@
         <info>
           <desc>Contains output-specific settings.</desc>
         </info>
-        <prop oor:name="SinglePrintJob" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Output -->
-          <info>
-            <desc>Controls the print output.</desc>
-            <label>Create single print jobs</label>
-          </info>
-          <value>false</value>
-        </prop>
         <prop oor:name="Fax" oor:type="xs:string" oor:nillable="false">
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Fax -->
           <info>

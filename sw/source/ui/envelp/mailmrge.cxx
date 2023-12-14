@@ -131,7 +131,6 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     , m_xPrinterRB(m_xBuilder->weld_radio_button("printer"))
     , m_xMailingRB(m_xBuilder->weld_radio_button("electronic"))
     , m_xFileRB(m_xBuilder->weld_radio_button("file"))
-    , m_xSingleJobsCB(m_xBuilder->weld_check_button("singlejobs"))
     , m_xPasswordCB(m_xBuilder->weld_check_button("passwd-check"))
     , m_xSaveMergedDocumentFT(m_xBuilder->weld_label("savemergeddoclabel"))
     , m_xSaveSingleDocRB(m_xBuilder->weld_radio_button("singledocument"))
@@ -158,7 +157,6 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     , m_xFormatSwCB(m_xBuilder->weld_check_button("swriter"))
     , m_xOkBTN(m_xBuilder->weld_button("ok"))
 {
-    m_xSingleJobsCB->hide(); // not supported in since cws printerpullpages anymore
     //task #97066# mailing of form letters is currently not supported
     m_xMailingRB->hide();
     m_xSubjectFT->hide();
@@ -358,8 +356,6 @@ IMPL_LINK_NOARG(SwMailMergeDlg, ButtonHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SwMailMergeDlg, OutputTypeHdl, weld::Toggleable&, void)
 {
     bool bPrint = m_xPrinterRB->get_active();
-    m_xSingleJobsCB->set_sensitive(bPrint);
-
     m_xSaveMergedDocumentFT->set_sensitive( !bPrint );
     m_xSaveSingleDocRB->set_sensitive( !bPrint );
     m_xSaveIndividualRB->set_sensitive( !bPrint );
@@ -535,13 +531,6 @@ bool SwMailMergeDlg::ExecQryShell()
             }
         }
     }
-    IDocumentDeviceAccess& rIDDA = m_rSh.getIDocumentDeviceAccess();
-    SwPrintData aPrtData( rIDDA.getPrintData() );
-    aPrtData.SetPrintSingleJobs(m_xSingleJobsCB->get_active());
-    rIDDA.setPrintData(aPrtData);
-
-    m_pModOpt->SetSinglePrintJob(m_xSingleJobsCB->get_active());
-
     MailTextFormats nMailingMode = MailTextFormats::NONE;
 
     if (m_xFormatSwCB->get_active())

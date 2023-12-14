@@ -104,7 +104,6 @@ class SwXMailMerge final :
     sal_Int32       m_nDataCommandType;
     sal_Int16       m_nOutputType;
     bool        m_bEscapeProcessing;
-    bool        m_bSinglePrintJobs;
     bool        m_bFileNameFromColumn;
 
     OUString                                         m_sInServerPassword;
