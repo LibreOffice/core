@@ -122,6 +122,7 @@ struct OStorage_Impl
 
     bool                        m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
     bool                        m_bListCreated;
+    bool                        m_bRepairPackage = false;
 
     /// Count of registered modification listeners
     oslInterlockedCount         m_nModifiedListenerCount;
