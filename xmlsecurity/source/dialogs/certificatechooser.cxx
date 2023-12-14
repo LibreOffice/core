@@ -169,6 +169,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
 
     }
 
+    ::std::optional<int> oSelectRow;
     uno::Sequence<uno::Reference< security::XCertificate>> xCerts;
     for (auto& secContext : mxSecurityContexts)
     {
@@ -242,7 +243,9 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
                 if ( sIssuer == msPreferredKey )
                 {
                     if ( meAction == UserAction::Sign || meAction == UserAction::SelectSign )
-                        m_xCertLB->select(nRow);
+                    {
+                        oSelectRow.emplace(nRow);
+                    }
                     else if ( meAction == UserAction::Encrypt &&
                               aUserOpts.GetEncryptToSelf() )
                         mxEncryptToSelf = xCert;
@@ -254,6 +257,11 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
 
     m_xCertLB->thaw();
     m_xCertLB->unselect_all();
+
+    if (oSelectRow)
+    {
+        m_xCertLB->select(*oSelectRow);
+    }
 
     CertificateHighlightHdl(*m_xCertLB);
     mbInitialized = true;
