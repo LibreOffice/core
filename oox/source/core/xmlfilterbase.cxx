@@ -1012,7 +1012,9 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return std::make_shared<ZipStorage>( getComponentContext(), rxInStream );
+    return std::make_shared<ZipStorage>(
+        getComponentContext(), rxInStream,
+        getMediaDescriptor().getUnpackedValueOrDefault("RepairPackage", false));
 }
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
