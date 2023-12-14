@@ -74,4 +74,6 @@
     <string name="alert_cancel">Cancel·la</string>
     <string name="enter_part_name">Introduïu un nom per a la part</string>
     <string name="bmp_null">El BMP no és vàlid.</string>
+    <string name="action_delete_worksheet">Suprimeix el full</string>
+    <string name="highlight_color">Color de realçament</string>
 </resources>
