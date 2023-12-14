@@ -485,6 +485,11 @@ void ScDocument::InvalidateStreamOnSave()
 bool ScDocument::InsertTab(
     SCTAB nPos, const OUString& rName, bool bExternalDocument, bool bUndoDeleteTab )
 {
+    // auto-accept any in-process input to prevent move the cell into next sheet in online.
+    if (comphelper::LibreOfficeKit::isActive())
+        if (!SC_MOD()->IsFormulaMode())
+            SC_MOD()->InputEnterHandler();
+
     SCTAB nTabCount = GetTableCount();
     bool bValid = ValidTab(nTabCount);
     if ( !bExternalDocument )   // else test rName == "'Doc'!Tab" first
