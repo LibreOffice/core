@@ -19,16 +19,18 @@
 #include <salhelper/timer.hxx>
 
 #include <osl/thread.hxx>
-#include <osl/conditn.hxx>
 
+#include <condition_variable>
 #include <mutex>
 
 using namespace salhelper;
 
-class salhelper::TimerManager : public osl::Thread
+class salhelper::TimerManager final : public osl::Thread
 {
 public:
     TimerManager();
+
+    ~TimerManager();
 
     /// register timer
     void registerTimer(salhelper::Timer* pTimer);
@@ -48,10 +50,11 @@ protected:
 
     /// sorted-queue data
     salhelper::Timer*       m_pHead;
+    bool m_terminate;
     /// List Protection
     std::mutex                  m_Lock;
     /// Signal the insertion of a timer
-    osl::Condition              m_notEmpty;
+    std::condition_variable     m_notEmpty;
 
     /// "Singleton Pattern"
     //static salhelper::TimerManager* m_pManager;
@@ -203,12 +206,19 @@ TTimeValue Timer::getRemainingTime() const
 **/
 
 TimerManager::TimerManager() :
-    m_pHead(nullptr)
+    m_pHead(nullptr), m_terminate(false)
 {
-    m_notEmpty.reset();
-
     // start thread
     create();
+}
+
+TimerManager::~TimerManager() {
+    {
+        std::scoped_lock g(m_Lock);
+        m_terminate = true;
+    }
+    m_notEmpty.notify_all();
+    join();
 }
 
 void TimerManager::registerTimer(Timer* pTimer)
@@ -216,33 +226,40 @@ void TimerManager::registerTimer(Timer* pTimer)
     if (!pTimer)
         return;
 
-    std::lock_guard Guard(m_Lock);
-
-    // try to find one with equal or lower remaining time.
-    Timer** ppIter = &m_pHead;
-
-    while (*ppIter)
+    bool notify = false;
     {
-        if (pTimer->expiresBefore(*ppIter))
+        std::lock_guard Guard(m_Lock);
+
+        // try to find one with equal or lower remaining time.
+        Timer** ppIter = &m_pHead;
+
+        while (*ppIter)
         {
-            // next element has higher remaining time,
-            // => insert new timer before
-            break;
+            if (pTimer->expiresBefore(*ppIter))
+            {
+                // next element has higher remaining time,
+                // => insert new timer before
+                break;
+            }
+            ppIter= &((*ppIter)->m_pNext);
         }
-        ppIter= &((*ppIter)->m_pNext);
+
+        // next element has higher remaining time,
+        // => insert new timer before
+        pTimer->m_pNext= *ppIter;
+        *ppIter = pTimer;
+
+
+        if (pTimer == m_pHead)
+        {
+            notify = true;
+        }
     }
 
-    // next element has higher remaining time,
-    // => insert new timer before
-    pTimer->m_pNext= *ppIter;
-    *ppIter = pTimer;
-
-
-    if (pTimer == m_pHead)
-    {
+    if (notify) {
         // it was inserted as new head
         // signal it to TimerManager Thread
-        m_notEmpty.set();
+        m_notEmpty.notify_all();
     }
 }
 
@@ -334,27 +351,27 @@ void TimerManager::run()
 
     while (schedule())
     {
-        TTimeValue delay;
-        TTimeValue* pDelay=nullptr;
-
         {
-            std::lock_guard a_Guard(m_Lock);
+            std::unique_lock a_Guard(m_Lock);
 
             if (m_pHead != nullptr)
             {
-                delay = m_pHead->getRemainingTime();
-                pDelay=&delay;
+                TTimeValue delay = m_pHead->getRemainingTime();
+                m_notEmpty.wait_for(
+                    a_Guard,
+                    std::chrono::nanoseconds(
+                        sal_Int64(delay.Seconds) * 1'000'000'000 + delay.Nanosec),
+                    [this] { return m_terminate; });
             }
             else
             {
-                pDelay=nullptr;
+                m_notEmpty.wait(a_Guard, [this] { return m_terminate || m_pHead != nullptr; });
             }
 
-
-            m_notEmpty.reset();
+            if (m_terminate) {
+                break;
+            }
         }
-
-        m_notEmpty.wait(pDelay);
 
         checkForTimeout();
     }
