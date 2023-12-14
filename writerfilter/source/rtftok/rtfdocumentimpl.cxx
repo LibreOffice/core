@@ -3963,7 +3963,7 @@ RTFSprms RTFFrame::getSprms()
             case NS_ooxml::LN_CT_FramePr_hAnchor:
             {
                 if (m_nHoriAnchor == 0)
-                    m_nHoriAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_margin;
+                    m_nHoriAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_text;
                 pValue = new RTFValue(m_nHoriAnchor);
             }
             break;
