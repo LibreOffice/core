@@ -65,4 +65,14 @@
     <string name="action_bold">Negreta</string>
     <string name="action_underline">Subratllat</string>
     <string name="action_italic">Cursiva</string>
+    <string name="action_cancel">Cancel·la</string>
+    <string name="compress_photo_smallest_size">Mida més petita</string>
+    <string name="select_photo">Tria una foto</string>
+    <string name="select_photo_title">Trieu una imatge</string>
+    <string name="action_pwd_dialog_cancel">Cancel·la</string>
+    <string name="alert_cancel">Cancel·la</string>
+    <string name="enter_part_name">Introduïu un nom per a la part</string>
+    <string name="bmp_null">El BMP no és vàlid.</string>
+    <string name="action_delete_worksheet">Suprimeix el full</string>
+    <string name="highlight_color">Color de realçament</string>
 </resources>
