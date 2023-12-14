@@ -528,7 +528,7 @@ void SdRotationPropertyBox::updateMenu()
     mxControl->set_item_active("360", nValue == 360);
     mxControl->set_item_active("720", nValue == 720);
 
-    mxControl->set_item_active("closewise", bDirection);
+    mxControl->set_item_active("clockwise", bDirection);
     mxControl->set_item_active("counterclock", !bDirection);
 }
 
