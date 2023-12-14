@@ -364,7 +364,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBre
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak3, "tdf153613_textboxAfterPgBreak3.docx")
 {
-    // both textboxes on on the second (last) page
+    // both textboxes on the second (last) page
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     const auto& pLayout = parseLayoutDump();
