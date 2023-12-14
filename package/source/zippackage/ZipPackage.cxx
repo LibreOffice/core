@@ -41,6 +41,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
@@ -1308,7 +1309,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // for encrypted streams
             RandomPool aRandomPool;
 
-            sal_Int32 const nPBKDF2IterationCount = 100000;
+            // if there is only one KDF invocation, increase the safety margin
+            sal_Int32 const nPBKDF2IterationCount =
+                officecfg::Office::Common::Misc::ExperimentalMode::get() ? 600000 : 100000;
 
             // call saveContents ( it will recursively save sub-directories
             m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(), bIsGpgEncrypt ? 0 : nPBKDF2IterationCount, aRandomPool.get());
