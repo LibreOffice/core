@@ -4010,7 +4010,9 @@ bool RTFFrame::hasProperties() const
 {
     // tdf#153178 \dxfrtext \dfrmtxtx \dfrmtxty \wrapdefault do *not* create frame
     return m_nX != 0 || m_nY != 0 || m_nW != 0 || m_nH != 0
+           || (m_nHoriAlign && m_nHoriAlign != NS_ooxml::LN_Value_doc_ST_XAlign_left)
            || (m_nHoriAnchor && m_nHoriAnchor != NS_ooxml::LN_Value_doc_ST_HAnchor_text)
+           || (m_nVertAlign && m_nVertAlign != NS_ooxml::LN_Value_doc_ST_YAlign_inline)
            || (m_nVertAnchor && m_nVertAnchor != NS_ooxml::LN_Value_doc_ST_VAnchor_margin)
            || (m_oWrap && *m_oWrap != NS_ooxml::LN_Value_doc_ST_Wrap_auto);
 }
