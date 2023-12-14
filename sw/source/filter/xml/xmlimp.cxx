@@ -1258,7 +1258,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         "PrintRightPages",
         "PrintFaxName",
         "PrintPaperFromSetup",
-        "PrintTables",
         "PrintTextPlaceholder",
         "UpdateFromTemplate",
         "PrinterIndependentLayout",

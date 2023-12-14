@@ -56,6 +56,10 @@ published service PrintSettings
     [property] boolean PrintRightPages;
 
     /** If `TRUE`, tables are included in printing.
+     *
+     * @deprecated since 24.8.
+     *
+     * The functionality behind this property is removed.
      */
     [property] boolean PrintTables;
 

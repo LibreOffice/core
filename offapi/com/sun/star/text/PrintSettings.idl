@@ -30,6 +30,10 @@ published service PrintSettings
     [property] boolean PrintGraphics;
 
     /** determines if text tables are printed.
+     *
+     * @deprecated since 24.8.
+     *
+     * The functionality behind this property is removed.
      */
     [property] boolean PrintTables;
 

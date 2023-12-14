@@ -129,7 +129,6 @@ void SwRenderData::MakeSwPrtOptions(
 
     // get print options to use from provided properties
     rOptions.m_bPrintGraphic          = pOpt->IsPrintGraphics();
-    rOptions.m_bPrintTable            = true; // for now it was decided that tables should always be printed
     rOptions.m_bPrintDraw             = pOpt->IsPrintDrawings();
     rOptions.m_bPrintControl          = pOpt->IsPrintFormControls();
     rOptions.m_bPrintLeftPages        = pOpt->IsPrintLeftPages();

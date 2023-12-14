@@ -43,5 +43,17 @@ import lib.MultiPropertyTest;
 */
 public class _PrintSettings extends MultiPropertyTest {
 
+    /**
+    * This property returns always true.
+    */
+    public void _PrintTables() {
+        testProperty("PrintTables", new PropertyTester() {
+            @Override
+            protected Object getNewValue(String p, Object old) {
+                return Boolean.TRUE;
+            }
+        }) ;
+    }
+
 }
 

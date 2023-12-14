@@ -541,7 +541,6 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         SwAddPrinterItem aAddPrinterAttr;
         aAddPrinterAttr.m_bPrintGraphic   = m_xGrfCB->get_active();
-        aAddPrinterAttr.m_bPrintTable     = true; // always enabled since CWS printerpullgpages /*m_xTabCB->get_active();*/
         aAddPrinterAttr.m_bPrintDraw      = m_xGrfCB->get_active(); // UI merged with m_xGrfCB in CWS printerpullgpages
         aAddPrinterAttr.m_bPrintControl   = m_xCtrlFieldCB->get_active();
         aAddPrinterAttr.m_bPrintPageBackground = m_xBackgroundCB->get_active();

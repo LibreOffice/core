@@ -651,7 +651,6 @@ SwDrawViewSave::~SwDrawViewSave()
 void SwViewShell::PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExport )
  {
     mpOpt->SetGraphic  ( rOptions.m_bPrintGraphic );
-    mpOpt->SetTable    ( rOptions.m_bPrintTable );
     mpOpt->SetDraw     ( rOptions.m_bPrintDraw );
     mpOpt->SetControl  ( rOptions.m_bPrintControl );
     mpOpt->SetPageBack ( rOptions.m_bPrintPageBackground );

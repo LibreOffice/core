@@ -55,7 +55,7 @@ class SwPrintData
 
 public:
 
-    bool m_bPrintGraphic, m_bPrintTable, m_bPrintDraw, m_bPrintControl, m_bPrintPageBackground,
+    bool m_bPrintGraphic, m_bPrintDraw, m_bPrintControl, m_bPrintPageBackground,
              m_bPrintBlackFont,
              //#i81434# - printing of hidden text
              m_bPrintHiddenText, m_bPrintTextPlaceholder,
@@ -73,7 +73,6 @@ public:
         m_pRenderData        = nullptr;
 
         m_bPrintGraphic           =
-        m_bPrintTable             =
         m_bPrintDraw              =
         m_bPrintControl           =
         m_bPrintLeftPages         =
@@ -103,7 +102,6 @@ public:
     {
         return
         m_bPrintGraphic       ==   rData.m_bPrintGraphic        &&
-        m_bPrintTable         ==   rData.m_bPrintTable          &&
         m_bPrintDraw          ==   rData.m_bPrintDraw           &&
         m_bPrintControl       ==   rData.m_bPrintControl        &&
         m_bPrintPageBackground==   rData.m_bPrintPageBackground &&
@@ -127,7 +125,6 @@ public:
     void  SetRenderData( const SwRenderData *pData )            { m_pRenderData = pData; }
 
     bool IsPrintGraphic() const             { return m_bPrintGraphic; }
-    bool IsPrintTable() const               { return m_bPrintTable; }
     bool IsPrintDraw() const                { return m_bPrintDraw; }
     bool IsPrintControl() const             { return m_bPrintControl; }
     bool IsPrintLeftPage() const            { return m_bPrintLeftPages; }
@@ -145,7 +142,6 @@ public:
     bool IsPrintTextPlaceholder() const     { return m_bPrintTextPlaceholder; }
 
     void SetPrintGraphic( bool b )              { doSetModified(); m_bPrintGraphic = b; }
-    void SetPrintTable( bool b )                { doSetModified(); m_bPrintTable = b; }
     void SetPrintDraw( bool b )                 { doSetModified(); m_bPrintDraw = b; }
     void SetPrintControl( bool b )              { doSetModified(); m_bPrintControl = b; }
     void SetPrintLeftPage( bool b )             { doSetModified(); m_bPrintLeftPages = b; }
