@@ -240,8 +240,7 @@ public:
     virtual bool  GetModelPositionForViewPoint( SwPosition *, Point&,
                                SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = nullptr ) const override;
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const override;
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 #ifdef DBG_UTIL

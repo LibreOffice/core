@@ -327,7 +327,7 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_DRAWINGS:
         {
-            mpPrtOpt->SetPrintDraw(tryBoolAccess(rInfo.maName, rValue));
+            mpPrtOpt->SetPrintGraphic(tryBoolAccess(rInfo.maName, rValue));
         }
         break;
         case HANDLE_PRINTSET_CONTROLS:
@@ -440,7 +440,7 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
             rValue <<= true;
         break;
         case HANDLE_PRINTSET_DRAWINGS:
-            rValue <<= mpPrtOpt->IsPrintDraw();
+            rValue <<= mpPrtOpt->IsPrintGraphic();
         break;
         case HANDLE_PRINTSET_CONTROLS:
             rValue <<= mpPrtOpt->IsPrintControl();

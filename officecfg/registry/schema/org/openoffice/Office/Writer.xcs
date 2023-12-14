@@ -1728,14 +1728,6 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="Drawing" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
-          <info>
-            <desc>Specifies whether drawings are printed.</desc>
-            <label>Drawings</label>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="Control" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>

@@ -21,7 +21,6 @@ void TextPrinterSettings::testPrinterSettingsProperties()
                                                                    css::uno::UNO_QUERY_THROW);
 
     testBooleanProperty(xPrinterSettings, "PrintGraphics");
-    testBooleanProperty(xPrinterSettings, "PrintDrawings");
     testBooleanProperty(xPrinterSettings, "PrintLeftPages");
     testBooleanProperty(xPrinterSettings, "PrintRightPages");
     testBooleanProperty(xPrinterSettings, "PrintControls");

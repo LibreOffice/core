@@ -129,7 +129,6 @@ void SwRenderData::MakeSwPrtOptions(
 
     // get print options to use from provided properties
     rOptions.m_bPrintGraphic          = pOpt->IsPrintGraphics();
-    rOptions.m_bPrintDraw             = pOpt->IsPrintDrawings();
     rOptions.m_bPrintControl          = pOpt->IsPrintFormControls();
     rOptions.m_bPrintLeftPages        = pOpt->IsPrintLeftPages();
     rOptions.m_bPrintRightPages       = pOpt->IsPrintRightPages();
@@ -199,7 +198,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         bDefaultVal);
 
     // create a bool option for pictures/graphics AND OLE and drawing objects as well
-    bDefaultVal = rDefaultPrintData.IsPrintGraphic() || rDefaultPrintData.IsPrintDraw();
+    bDefaultVal = rDefaultPrintData.IsPrintGraphic();
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("pictures", SwResId( STR_PRINTOPTUI_PICTURES),
                                                         ".HelpID:vcl:PrintDialog:PrintPicturesAndObjects:CheckBox",
                                                         "PrintPicturesAndObjects",
@@ -407,16 +406,6 @@ bool SwPrintUIOptions::IsPrintGraphics() const
 
     bool bRes = getBoolValue( "PrintPicturesAndObjects", true );
     bRes = getBoolValue( "PrintGraphics", bRes );
-    return bRes;
-}
-
-bool SwPrintUIOptions::IsPrintDrawings() const
-{
-    // take care of different property names for the option.
-    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
-
-    bool bRes = getBoolValue( "PrintPicturesAndObjects", true );
-    bRes = getBoolValue( "PrintDrawings", bRes );
     return bRes;
 }
 

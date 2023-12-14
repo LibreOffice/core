@@ -55,7 +55,7 @@ class SwPrintData
 
 public:
 
-    bool m_bPrintGraphic, m_bPrintDraw, m_bPrintControl, m_bPrintPageBackground,
+    bool m_bPrintGraphic, m_bPrintControl, m_bPrintPageBackground,
              m_bPrintBlackFont,
              //#i81434# - printing of hidden text
              m_bPrintHiddenText, m_bPrintTextPlaceholder,
@@ -73,7 +73,6 @@ public:
         m_pRenderData        = nullptr;
 
         m_bPrintGraphic           =
-        m_bPrintDraw              =
         m_bPrintControl           =
         m_bPrintLeftPages         =
         m_bPrintRightPages        =
@@ -102,7 +101,6 @@ public:
     {
         return
         m_bPrintGraphic       ==   rData.m_bPrintGraphic        &&
-        m_bPrintDraw          ==   rData.m_bPrintDraw           &&
         m_bPrintControl       ==   rData.m_bPrintControl        &&
         m_bPrintPageBackground==   rData.m_bPrintPageBackground &&
         m_bPrintBlackFont     ==   rData.m_bPrintBlackFont      &&
@@ -125,7 +123,6 @@ public:
     void  SetRenderData( const SwRenderData *pData )            { m_pRenderData = pData; }
 
     bool IsPrintGraphic() const             { return m_bPrintGraphic; }
-    bool IsPrintDraw() const                { return m_bPrintDraw; }
     bool IsPrintControl() const             { return m_bPrintControl; }
     bool IsPrintLeftPage() const            { return m_bPrintLeftPages; }
     bool IsPrintRightPage() const           { return m_bPrintRightPages; }
@@ -142,7 +139,6 @@ public:
     bool IsPrintTextPlaceholder() const     { return m_bPrintTextPlaceholder; }
 
     void SetPrintGraphic( bool b )              { doSetModified(); m_bPrintGraphic = b; }
-    void SetPrintDraw( bool b )                 { doSetModified(); m_bPrintDraw = b; }
     void SetPrintControl( bool b )              { doSetModified(); m_bPrintControl = b; }
     void SetPrintLeftPage( bool b )             { doSetModified(); m_bPrintLeftPages = b; }
     void SetPrintRightPage( bool b )            { doSetModified(); m_bPrintRightPages = b; }
@@ -186,7 +182,6 @@ public:
     bool IsPrintRightPages() const;
     bool IsPrintEmptyPages( bool bIsPDFExport ) const;
     bool IsPrintGraphics() const;
-    bool IsPrintDrawings() const;
 };
 
 /** A class that stores temporary data that is needed for rendering the document.

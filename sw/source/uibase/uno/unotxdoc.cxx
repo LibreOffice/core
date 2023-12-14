@@ -2439,7 +2439,6 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     SwPrintData aDocPrintData( rDoc.getIDocumentDeviceAccess().getPrintData() );
 
     aDocPrintData.SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
-    aDocPrintData.SetPrintDraw( rPrintUIOptions.IsPrintDrawings() );
     aDocPrintData.SetPrintControl( rPrintUIOptions.IsPrintFormControls() );
     aDocPrintData.SetPrintLeftPage( rPrintUIOptions.IsPrintLeftPages() );
     aDocPrintData.SetPrintRightPage( rPrintUIOptions.IsPrintRightPages() );

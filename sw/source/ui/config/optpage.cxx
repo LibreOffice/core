@@ -541,7 +541,6 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         SwAddPrinterItem aAddPrinterAttr;
         aAddPrinterAttr.m_bPrintGraphic   = m_xGrfCB->get_active();
-        aAddPrinterAttr.m_bPrintDraw      = m_xGrfCB->get_active(); // UI merged with m_xGrfCB in CWS printerpullgpages
         aAddPrinterAttr.m_bPrintControl   = m_xCtrlFieldCB->get_active();
         aAddPrinterAttr.m_bPrintPageBackground = m_xBackgroundCB->get_active();
         aAddPrinterAttr.m_bPrintBlackFont = m_xBlackFontCB->get_active();
@@ -583,7 +582,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
     {
         bReadOnly = !m_bHTMLMode ? officecfg::Office::Writer::Print::Content::Graphic::isReadOnly() :
             officecfg::Office::WriterWeb::Print::Content::Graphic::isReadOnly();
-        m_xGrfCB->set_active(pAddPrinterAttr->m_bPrintGraphic || pAddPrinterAttr->m_bPrintDraw);
+        m_xGrfCB->set_active(pAddPrinterAttr->m_bPrintGraphic);
         m_xGrfCB->set_sensitive(!bReadOnly);
         m_xGrfImg->set_visible(bReadOnly);
 

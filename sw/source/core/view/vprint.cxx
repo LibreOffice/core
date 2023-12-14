@@ -512,7 +512,7 @@ bool SwViewShell::PrintOrPDFExport(
 
         ::SetSwVisArea( pViewSh2, pStPage->getFrameArea() );
 
-        pStPage->GetUpper()->PaintSwFrame( *pOutDev, pStPage->getFrameArea(), &rPrintData );
+        pStPage->GetUpper()->PaintSwFrame( *pOutDev, pStPage->getFrameArea() );
 
         SwPaintQueue::Repaint();
 
@@ -651,7 +651,7 @@ SwDrawViewSave::~SwDrawViewSave()
 void SwViewShell::PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExport )
  {
     mpOpt->SetGraphic  ( rOptions.m_bPrintGraphic );
-    mpOpt->SetDraw     ( rOptions.m_bPrintDraw );
+    mpOpt->SetDraw     ( rOptions.m_bPrintGraphic );
     mpOpt->SetControl  ( rOptions.m_bPrintControl );
     mpOpt->SetPageBack ( rOptions.m_bPrintPageBackground );
     // Font should not be black if it's a PDF Export

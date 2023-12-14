@@ -38,6 +38,8 @@ published service PrintSettings
     [property] boolean PrintTables;
 
     /** determines if shapes are printed.
+     *
+     * @deprecated since 24.8. Use PrintGraphics instead.
      */
     [property] boolean PrintDrawings;
 

@@ -41,14 +41,13 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames() const
         "Page/BrochureRightToLeft",     //  7
         "Output/Fax",                   //  8
         "Papertray/FromPrinterSetup",   //  9
-        "Content/Drawing",              // 10 not in SW/Web
-        "Page/LeftPage",                // 11 not in SW/Web
-        "Page/RightPage",               // 12 not in SW/Web
-        "EmptyPages",                   // 13 not in SW/Web
-        "Content/PrintPlaceholders",    // 14 not in Sw/Web
-        "Content/PrintHiddenText"       // 15 not in Sw/Web
+        "Page/LeftPage",                // 10 not in SW/Web
+        "Page/RightPage",               // 11 not in SW/Web
+        "EmptyPages",                   // 12 not in SW/Web
+        "Content/PrintPlaceholders",    // 13 not in Sw/Web
+        "Content/PrintHiddenText"       // 14 not in Sw/Web
     };
-    const int nCount = m_bIsWeb ? 10 : 16;
+    const int nCount = m_bIsWeb ? 10 : 15;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -97,22 +96,15 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
                     case  7: m_bPrintProspectRTL  = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                     case  8: pValues[nProp] >>= m_sFaxName;  break;
                     case  9: m_bPaperFromSetup    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 10: m_bPrintDraw         = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 11: m_bPrintLeftPages    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 12: m_bPrintRightPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 13: m_bPrintEmptyPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 14: m_bPrintTextPlaceholder = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 15: m_bPrintHiddenText = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 10: m_bPrintLeftPages    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 11: m_bPrintRightPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 12: m_bPrintEmptyPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 13: m_bPrintTextPlaceholder = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 14: m_bPrintHiddenText = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                 }
             }
         }
     }
-
-    // currently there is just one checkbox for print drawings and print graphics
-    // In the UI. (File/Print dialog and Tools/Options/.../Print)
-    // And since print graphics is the only available in Writer and WriterWeb...
-
-    m_bPrintDraw = m_bPrintGraphic;
 }
 
 SwPrintOptions::~SwPrintOptions()
@@ -142,19 +134,13 @@ void SwPrintOptions::ImplCommit()
             case  7: pValues[nProp] <<= m_bPrintProspectRTL; break;
             case  8: pValues[nProp] <<= m_sFaxName;  break;
             case  9: pValues[nProp] <<= m_bPaperFromSetup; break;
-            case 10: pValues[nProp] <<= m_bPrintDraw; break;
-            case 11: pValues[nProp] <<= m_bPrintLeftPages; break;
-            case 12: pValues[nProp] <<= m_bPrintRightPages; break;
-            case 13: pValues[nProp] <<= m_bPrintEmptyPages; break;
-            case 14: pValues[nProp] <<= m_bPrintTextPlaceholder; break;
-            case 15: pValues[nProp] <<= m_bPrintHiddenText; break;
+            case 10: pValues[nProp] <<= m_bPrintLeftPages; break;
+            case 11: pValues[nProp] <<= m_bPrintRightPages; break;
+            case 12: pValues[nProp] <<= m_bPrintEmptyPages; break;
+            case 13: pValues[nProp] <<= m_bPrintTextPlaceholder; break;
+            case 14: pValues[nProp] <<= m_bPrintHiddenText; break;
         }
     }
-
-    // currently there is just one checkbox for print drawings and print graphics
-    // In the UI. (File/Print dialog and Tools/Options/.../Print)
-    // And since print graphics is the only available in Writer and WriterWeb...
-    m_bPrintDraw = m_bPrintGraphic;
 
     PutProperties(aNames, aValues);
 }

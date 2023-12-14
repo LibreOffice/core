@@ -847,8 +847,7 @@ public:
                                  SwCursorMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
                                  SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const;
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = nullptr ) const;
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const;
 
     // HACK: shortcut between frame and formatting
     // It's your own fault if you cast void* incorrectly! In any case check

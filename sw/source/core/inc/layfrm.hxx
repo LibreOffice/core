@@ -96,8 +96,7 @@ public:
 
     SwLayoutFrame( SwFrameFormat*, SwFrame* );
 
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = nullptr ) const override;
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const override;
     const SwFrame *Lower() const { return m_pLower; }
           SwFrame *Lower()       { return m_pLower; }
     bool ContainsDeleteForbiddenLayFrame() const;

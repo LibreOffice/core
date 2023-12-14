@@ -1248,7 +1248,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         "PrintAnnotationMode",
         "PrintBlackFonts",
         "PrintControls",
-        "PrintDrawings",
         "PrintGraphics",
         "PrintHiddenText",
         "PrintLeftPages",

@@ -170,8 +170,7 @@ protected:
 
 public:
     // #i26791#
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = nullptr ) const override;
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const override;
     virtual Size ChgSize( const Size& aNewSize ) override;
     virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
