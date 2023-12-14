@@ -113,7 +113,7 @@ Dumper::Dumper( const Reference< XComponentContext >& rxContext, const Reference
 {
     if( rxContext.is() && rxInStrm.is() )
     {
-        StorageRef xStrg = std::make_shared<ZipStorage>( rxContext, rxInStrm );
+        StorageRef xStrg = std::make_shared<ZipStorage>( rxContext, rxInStrm, false );
         ConfigRef xCfg = std::make_shared<Config>( DUMP_PPTX_CONFIG_ENVVAR, rxContext, xStrg, rSysFileName );
         DumperBase::construct( xCfg );
     }

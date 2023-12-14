@@ -44,7 +44,7 @@ public:
     explicit            ZipStorage(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStream,
-                            bool bRepairStorage = false );
+                            bool bRepairStorage );
 
     explicit            ZipStorage(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,

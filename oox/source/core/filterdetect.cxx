@@ -269,9 +269,9 @@ FilterDetect::~FilterDetect()
 namespace
 {
 
-bool lclIsZipPackage( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm )
+bool lclIsZipPackage( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, bool bRepairPackage )
 {
-    ZipStorage aZipStorage( rxContext, rxInStrm );
+    ZipStorage aZipStorage(rxContext, rxInStrm, bRepairPackage);
     return aZipStorage.isStorage();
 }
 
@@ -316,9 +316,10 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( co
 
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDescriptor ) const
 {
+    const bool bRepairPackage(rMediaDescriptor.getUnpackedValueOrDefault("RepairPackage", false));
     // try the plain input stream
     Reference<XInputStream> xInputStream( rMediaDescriptor[ MediaDescriptor::PROP_INPUTSTREAM ], UNO_QUERY );
-    if( !xInputStream.is() || lclIsZipPackage( mxContext, xInputStream ) )
+    if (!xInputStream.is() || lclIsZipPackage(mxContext, xInputStream, bRepairPackage))
         return xInputStream;
 
     // check if a temporary file is passed in the 'ComponentData' property
@@ -326,7 +327,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
     if( xDecrypted.is() )
     {
         Reference<XInputStream> xDecryptedInputStream = xDecrypted->getInputStream();
-        if( lclIsZipPackage( mxContext, xDecryptedInputStream ) )
+        if (lclIsZipPackage(mxContext, xDecryptedInputStream, bRepairPackage))
             return xDecryptedInputStream;
     }
 
@@ -380,7 +381,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                         rMediaDescriptor.setComponentDataEntry( "DecryptedPackage", Any( xTempStream ) );
 
                         Reference<XInputStream> xDecryptedInputStream = xTempStream->getInputStream();
-                        if( lclIsZipPackage( mxContext, xDecryptedInputStream ) )
+                        if (lclIsZipPackage(mxContext, xDecryptedInputStream, bRepairPackage))
                             return xDecryptedInputStream;
                     }
                 }
