@@ -55,6 +55,7 @@ private:
     DECL_STATIC_LINK(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
     void                InitControls();
+    void EnableOkBtn(bool bEnable);
 
 public:
     MacroWarning(weld::Window* pParent, bool _bShowSignatures);
