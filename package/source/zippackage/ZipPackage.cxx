@@ -1788,6 +1788,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 
         // override algorithm defaults (which are some legacy ODF
         // defaults) with reasonable values
+        // note: these should be overridden by SfxObjectShell::SetupStorage()
         m_nStartKeyGenerationID = 0; // this is unused for PGP
         m_nCommonEncryptionID = xml::crypto::CipherID::AES_CBC_W3C_PADDING;
         m_oChecksumDigestID.emplace(xml::crypto::DigestID::SHA512_1K);
