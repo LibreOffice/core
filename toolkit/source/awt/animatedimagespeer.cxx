@@ -182,7 +182,7 @@ namespace toolkit
         SolarMutexGuard aGuard;
 
         VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
-        if ( pThrobber )
+        if ( !pThrobber )
         {
             VCLXWindow::setProperty( i_propertyName, i_value );
             return;
