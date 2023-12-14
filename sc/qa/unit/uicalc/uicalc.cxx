@@ -2078,6 +2078,31 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf141440)
     CPPUNIT_ASSERT_EQUAL(OUString("Note in A1"), pDoc->GetNote(ScAddress(0, 0, 0))->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158551)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell("A1", u"10");
+
+    // Copy content of A1 to B1 using Formula Add
+    goToCell("A1");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    goToCell("B1");
+    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
+        { { "Flags", uno::Any(OUString("SVD")) },
+          { "FormulaCommand", uno::Any(sal_uInt16(ScPasteFunc::ADD)) },
+          { "SkipEmptyCells", uno::Any(false) },
+          { "Transpose", uno::Any(false) },
+          { "AsLink", uno::Any(false) },
+          { "MoveMode", uno::Any(sal_uInt16(InsCellCmd::INS_NONE)) } });
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:InsertContents", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("10"), pDoc->GetString(ScAddress(1, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testKeyboardMergeRef)
 {
     createScDoc();
