@@ -214,15 +214,12 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     , m_xSigsNotvalidatedFI(m_xBuilder->weld_label("notvalidatedft"))
     , m_xSigsOldSignatureImg(m_xBuilder->weld_image("oldsignatureimg"))
     , m_xSigsOldSignatureFI(m_xBuilder->weld_label("oldsignatureft"))
-    , m_xAdESCompliantCB(m_xBuilder->weld_check_button("adescompliant"))
     , m_xViewBtn(m_xBuilder->weld_button("view"))
     , m_xAddBtn(m_xBuilder->weld_button("sign"))
     , m_xRemoveBtn(m_xBuilder->weld_button("remove"))
     , m_xStartCertMgrBtn(m_xBuilder->weld_button("start_certmanager"))
     , m_xCloseBtn(m_xBuilder->weld_button("close"))
 {
-    m_bAdESCompliant = !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
-
     auto nControlWidth = m_xSignaturesLB->get_approximate_digit_width() * 105;
     m_xSignaturesLB->set_size_request(nControlWidth, m_xSignaturesLB->get_height_rows(10));
 
@@ -240,9 +237,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     m_xSignaturesLB->connect_changed( LINK( this, DigitalSignaturesDialog, SignatureHighlightHdl ) );
     m_xSignaturesLB->connect_row_activated( LINK( this, DigitalSignaturesDialog, SignatureSelectHdl ) );
-
-    m_xAdESCompliantCB->connect_toggled( LINK( this, DigitalSignaturesDialog, AdESCompliantCheckBoxHdl ) );
-    m_xAdESCompliantCB->set_active(m_bAdESCompliant);
 
     m_xViewBtn->connect_clicked( LINK( this, DigitalSignaturesDialog, ViewButtonHdl ) );
     m_xViewBtn->set_sensitive(false);
@@ -313,9 +307,12 @@ void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed
     {
         // PDF supports AdES.
         m_bAdESCompliant = true;
-        m_xAdESCompliantCB->set_active(m_bAdESCompliant);
         return;
     }
+
+    // only ODF 1.1 wants to be non-XAdES (m_sODFVersion="1.0" for OOXML somehow?)
+    m_bAdESCompliant = !rxStore->hasByName("META-INF") // it's a Zip storage
+                    || !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
 
     maSignatureManager.setStore(rxStore);
     maSignatureManager.getSignatureHelper().SetStorage( maSignatureManager.getStore(), m_sODFVersion);
@@ -452,11 +449,6 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl, weld::TreeView&, bo
 {
     ImplShowSignaturesDetails();
     return true;
-}
-
-IMPL_LINK_NOARG(DigitalSignaturesDialog, AdESCompliantCheckBoxHdl, weld::Toggleable&, void)
-{
-    m_bAdESCompliant = m_xAdESCompliantCB->get_active();
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, ViewButtonHdl, weld::Button&, void)
