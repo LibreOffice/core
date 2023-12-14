@@ -152,6 +152,7 @@ void Throbber::initImages()
 
 void Throbber::start()
 {
+    maWaitTimer.SetTimeout(mnStepTime);
     maWaitTimer.Start();
 }
 
