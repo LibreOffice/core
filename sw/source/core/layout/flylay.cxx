@@ -1039,6 +1039,17 @@ void SwPageFrame::MoveFly( SwFlyFrame *pToMove, SwPageFrame *pDest )
     // #i28701#
     pToMove->UnlockPosition();
 
+    if (pToMove->IsFlySplitAllowed())
+    {
+        // Inserting a fly to the page affects the fly portions of the intersecting paragraphs, so
+        // update the portions of the anchor of the fly frame.
+        SwTextFrame* pAnchor = pToMove->FindAnchorCharFrame();
+        if (pAnchor)
+        {
+            pAnchor->ClearPara();
+        }
+    }
+
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
     // is additionally handled by the SwFrameNotify class.

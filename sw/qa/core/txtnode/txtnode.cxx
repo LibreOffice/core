@@ -517,7 +517,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitFlyAnchorSplit)
     CPPUNIT_ASSERT(pPage1->GetSortedObjs());
     auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage2);
-    // Page 1 has the follow fly:
+    // Page 2 has the follow fly:
     CPPUNIT_ASSERT(pPage2->GetSortedObjs());
     // Anchor text is now just "A":
     auto pText1 = pPage2->FindFirstBodyContent()->DynCastTextFrame();
@@ -525,6 +525,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitFlyAnchorSplit)
     // New text frame is just "B":
     auto pText2 = pText1->GetNext()->DynCastTextFrame();
     CPPUNIT_ASSERT_EQUAL(OUString("B"), pText2->GetText());
+
+    // Also test that the new follow anchor text frame still has a fly portion, otherwise the anchor
+    // text and the floating table would overlap:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString aPortionType
+        = getXPath(pXmlDoc, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]/child::*[1]"_ostr,
+                   "type"_ostr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: PortionType::Fly
+    // - Actual  : PortionType::Para
+    // i.e. the fly portion was missing, text overlapped.
+    CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Fly"), aPortionType);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
