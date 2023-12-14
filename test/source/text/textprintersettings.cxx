@@ -24,7 +24,6 @@ void TextPrinterSettings::testPrinterSettingsProperties()
     testBooleanProperty(xPrinterSettings, "PrintLeftPages");
     testBooleanProperty(xPrinterSettings, "PrintRightPages");
     testBooleanProperty(xPrinterSettings, "PrintControls");
-    testBooleanProperty(xPrinterSettings, "PrintReversed");
     testBooleanProperty(xPrinterSettings, "PrintControls");
     testStringProperty(xPrinterSettings, "PrintFaxName", "FaxName");
     testBooleanProperty(xPrinterSettings, "PrintProspect");

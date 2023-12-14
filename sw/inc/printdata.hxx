@@ -59,7 +59,7 @@ public:
              m_bPrintBlackFont,
              //#i81434# - printing of hidden text
              m_bPrintHiddenText, m_bPrintTextPlaceholder,
-             m_bPrintLeftPages, m_bPrintRightPages, m_bPrintReverse, m_bPrintProspect,
+             m_bPrintLeftPages, m_bPrintRightPages, m_bPrintProspect,
              m_bPrintProspectRTL,
              m_bPaperFromSetup,
              /// Print empty pages
@@ -80,7 +80,6 @@ public:
         m_bPrintEmptyPages        = true;
 
         m_bPaperFromSetup         =
-        m_bPrintReverse           =
         m_bPrintProspect          =
         m_bPrintProspectRTL       =
         m_bPrintBlackFont         =
@@ -106,7 +105,6 @@ public:
         m_bPrintBlackFont     ==   rData.m_bPrintBlackFont      &&
         m_bPrintLeftPages     ==   rData.m_bPrintLeftPages      &&
         m_bPrintRightPages    ==   rData.m_bPrintRightPages     &&
-        m_bPrintReverse       ==   rData.m_bPrintReverse        &&
         m_bPrintProspect      ==   rData.m_bPrintProspect       &&
         m_bPrintProspectRTL   ==   rData.m_bPrintProspectRTL    &&
         m_bPaperFromSetup     ==   rData.m_bPaperFromSetup      &&
@@ -126,7 +124,6 @@ public:
     bool IsPrintControl() const             { return m_bPrintControl; }
     bool IsPrintLeftPage() const            { return m_bPrintLeftPages; }
     bool IsPrintRightPage() const           { return m_bPrintRightPages; }
-    bool IsPrintReverse() const             { return m_bPrintReverse; }
     bool IsPaperFromSetup() const           { return m_bPaperFromSetup; }
     bool IsPrintEmptyPages() const          { return m_bPrintEmptyPages; }
     bool IsPrintProspect() const            { return m_bPrintProspect; }
@@ -142,7 +139,6 @@ public:
     void SetPrintControl( bool b )              { doSetModified(); m_bPrintControl = b; }
     void SetPrintLeftPage( bool b )             { doSetModified(); m_bPrintLeftPages = b; }
     void SetPrintRightPage( bool b )            { doSetModified(); m_bPrintRightPages = b; }
-    void SetPrintReverse( bool b )              { doSetModified(); m_bPrintReverse = b; }
     void SetPaperFromSetup( bool b )            { doSetModified(); m_bPaperFromSetup = b; }
     void SetPrintEmptyPages( bool b )           { doSetModified(); m_bPrintEmptyPages = b; }
     void SetPrintPostIts( SwPostItMode n )      { doSetModified(); m_nPrintPostIts = n; }

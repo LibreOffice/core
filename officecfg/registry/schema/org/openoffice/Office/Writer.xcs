@@ -1823,14 +1823,6 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="Reversed" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
-          <info>
-            <desc>Reverses the printing order.</desc>
-            <label>Reversed</label>
-          </info>
-          <value>false</value>
-        </prop>
         <prop oor:name="Brochure" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <info>

@@ -56,6 +56,10 @@ published service PrintSettings
     [property] boolean PrintControls;
 
     /** determines if the pages are printed in the reverse order, starting with the last page.
+     *
+     * @deprecated since 24.8.
+     *
+     * The functionality behind this property is removed. Use com::sun::star::view::PrintSettings::PrintReversed instead.
      */
     [property] boolean PrintReversed;
 

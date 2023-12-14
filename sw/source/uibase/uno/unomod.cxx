@@ -307,7 +307,7 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_REVERSED:
         {
-            mpPrtOpt->SetPrintReverse(tryBoolAccess(rInfo.maName, rValue));
+            // no action
         }
         break;
         case HANDLE_PRINTSET_PROSPECT:
@@ -428,7 +428,7 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
             rValue <<= mpPrtOpt->IsPrintRightPage();
         break;
         case HANDLE_PRINTSET_REVERSED:
-            rValue <<= mpPrtOpt->IsPrintReverse();
+            rValue <<= false;
         break;
         case HANDLE_PRINTSET_PROSPECT:
             rValue <<= mpPrtOpt->IsPrintProspect();

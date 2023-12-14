@@ -136,7 +136,6 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.m_bPrintEmptyPages       = pOpt->IsPrintEmptyPages( bIsPDFExport );
     // bUpdateFieldsInPrinting  <-- not set here; mail merge only
     rOptions.m_bPaperFromSetup        = pOpt->IsPaperFromSetup();
-    rOptions.m_bPrintReverse          = false; /*handled by print dialog now*/
     rOptions.m_bPrintProspect         = pOpt->IsPrintProspect();
     rOptions.m_bPrintProspectRTL      = pOpt->IsPrintProspectRTL();
     // bModified                <-- not set here; mail merge only

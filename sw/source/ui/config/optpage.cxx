@@ -549,7 +549,6 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
         aAddPrinterAttr.m_bPrintLeftPages     = m_xLeftPageCB->get_active();
         aAddPrinterAttr.m_bPrintRightPages    = m_xRightPageCB->get_active();
-        aAddPrinterAttr.m_bPrintReverse       = false; // handled by vcl itself since CWS printerpullpages /*m_xReverseCB->get_active()*/;
         aAddPrinterAttr.m_bPrintProspect      = m_xProspectCB->get_active();
         aAddPrinterAttr.m_bPrintProspectRTL   = m_xProspectCB_RTL->get_active();
         aAddPrinterAttr.m_bPaperFromSetup     = m_xPaperFromSetupCB->get_active();

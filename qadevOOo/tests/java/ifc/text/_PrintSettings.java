@@ -55,5 +55,18 @@ public class _PrintSettings extends MultiPropertyTest {
         }) ;
     }
 
+    /**
+    * This property returns always false.
+    */
+    public void _PrintReversed() {
+        testProperty("PrintReversed", new PropertyTester() {
+            @Override
+            protected Object getNewValue(String p, Object old) {
+                return Boolean.FALSE;
+            }
+        }) ;
+    }
+
+
 }
 

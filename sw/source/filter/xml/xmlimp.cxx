@@ -1253,7 +1253,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         "PrintLeftPages",
         "PrintPageBackground",
         "PrintProspect",
-        "PrintReversed",
         "PrintRightPages",
         "PrintFaxName",
         "PrintPaperFromSetup",
