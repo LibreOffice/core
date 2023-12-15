@@ -2,7 +2,6 @@
 <resources>
     <string name="calc_optimal_length">Hyd Gorau</string>
     <string name="pref_experimental_editing_summary">Galluogi’r modd golygu arbrofol. Gall fod peryglon.</string>
-    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
     <string name="app_name_settings">Gosodiadau LibreOffice Viewer</string>
     <string name="app_description">Mae LibreOffice Viewer yn ddarllenydd dogfennau yn seiliedig ar LibreOffice.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
@@ -17,12 +16,8 @@
     <string name="new_drawing">Lluniad Newydd</string>
     <string name="default_document_name">dideitl</string>
     <string name="select_file_to_open">Dewis ffeil i\'w hagor</string>
-    <string name="browser_app_name">Porwr LibreOffice</string>
-    <string name="menu_search">Chwilio</string>
-    <string name="search_not_found">Heb ganfod yr allweddair</string>
     <string name="search_find_next">Canfod Nesaf</string>
     <string name="search_find_previous">Canfod Blaenorol</string>
-    <string name="menu_preferences">Dewisiadau</string>
     <string name="title_recents">Ffeiliau diweddar</string>
     <string name="title_browser">Pob ffeil</string>
     <string name="pref_category_general">Cyffredinol</string>
@@ -31,17 +26,12 @@
     <string name="action_about">Ynghylch</string>
     <string name="action_parts">Rhannau</string>
     <string name="action_settings">Gosodiadau</string>
-    <string name="action_bold">Trwm</string>
-    <string name="action_underline">Tanlinellu</string>
-    <string name="action_italic">Italig</string>
-    <string name="action_strikeout">Taro Allan</string>
     <string name="action_keyboard">Dangos bysellfwrdd</string>
     <string name="action_save">Cadw</string>
     <string name="action_save_as">Cadw Fel...</string>
     <string name="action_fromat">Galluogi Fformat</string>
     <string name="message_saved">Cwblhawyd y cadw</string>
     <string name="message_saving">Yn cadw\'r ddogfen…</string>
-    <string name="message_save_incomplete">Cadw yn anghyflawn. A oedd newidiadau\?</string>
     <string name="password">Cyfrinair</string>
     <string name="action_undo">Dadwneud</string>
     <string name="action_redo">Ail-wneud</string>
@@ -50,7 +40,6 @@
     <string name="no_save_document">NA</string>
     <string name="action_presentation">Sioe sleidiau</string>
     <string name="action_add_slide">Ychwanegu Sleid</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">Iawn</string>
     <string name="slideshow_action_back">Nôl</string>
     <string name="calc_insert_before">Mewnosod</string>
     <string name="calc_delete">Dileu</string>
@@ -124,12 +113,9 @@
     <string name="compress_photo_no_compress">Peidio Cywasgu</string>
     <string name="UNO_commands_string_hint">Gorchymyn UNO</string>
     <string name="UNO_commands_string_value_hint">Gwerth</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard">Nid yw eich dyfais Android yn cefnogi sioe sleidiau svg o fewn ap. Rydym wedi copïo dolen y sioe sleidiau i\'r clipfwrdd. Pwyswch y botwm cartref, agor porwr gwe fodern, gludo i\'r bar cyfeiriad a phwyso mynd.</string>
     <string name="action_copy">Copïo</string>
-    <string name="directory_not_saved">Heb gadw\'r cyfeiriadur.</string>
     <string name="action_text_copied">Testun wedi\'i gopïo i\'r clipfwrdd</string>
     <string name="UNO_commands_string_type_hint">Math</string>
     <string name="alert_cancel">Diddymu</string>
-    <string name="unable_to_go_further">Methu mynd ymhellach.</string>
     <string name="unable_to_save">Methu cadw i ffeil</string>
 </resources>

@@ -4,10 +4,8 @@
     <string name="compress_photo_no_compress">Non comprimir</string>
     <string name="new_presentation">Nova presentación</string>
     <string name="app_name">Visor do LibreOffice</string>
-    <string name="message_save_incomplete">Gardado incompleto. Houbo algún cambio\?</string>
     <string name="calc_adjust_width">Axustar largura</string>
     <string name="app_name_settings">Configuración do visor do LibreOffice</string>
-    <string name="app_about_name"><b>«Beta» do Visor do LibreOffice</b></string>
     <string name="app_description">O Visor do LibreOffice é un visor de documentos baseado no LibreOffice.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">Esta versión foi fornecida por $VENDOR.</string>
@@ -21,11 +19,7 @@
     <string name="new_drawing">Novo debuxo</string>
     <string name="default_document_name">sen título</string>
     <string name="select_file_to_open">Seleccionar ficheiro para abrir</string>
-    <string name="browser_app_name">Visor do LibreOffice</string>
-    <string name="menu_search">Buscar</string>
-    <string name="search_not_found">Non se atopou a expresión</string>
     <string name="search_find_previous">Atopar anterior</string>
-    <string name="menu_preferences">Preferencias</string>
     <string name="file_icon_desc">iconadeficheiro</string>
     <string name="title_recents">Ficheiros recentes</string>
     <string name="title_browser">Todos os ficheiros</string>
@@ -35,9 +29,6 @@
     <string name="action_about">Sobre</string>
     <string name="action_parts">Partes</string>
     <string name="action_settings">Configuración</string>
-    <string name="action_bold">Grosa</string>
-    <string name="action_underline">Subliñado</string>
-    <string name="action_strikeout">Riscado</string>
     <string name="action_save">Gardar</string>
     <string name="action_save_as">Gardar como...</string>
     <string name="action_search">Buscar</string>
@@ -50,7 +41,6 @@
     <string name="no_save_document">NON</string>
     <string name="action_presentation">Presentación de diapositivas</string>
     <string name="action_add_slide">Engadir diapositiva</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">Aceptar</string>
     <string name="slideshow_action_back">Atrás</string>
     <string name="calc_insert_before">Inserir</string>
     <string name="calc_delete">Eliminar</string>
@@ -96,7 +86,6 @@
     <string name="tabhost_style">Estilo</string>
     <string name="alert_ok">Aceptar</string>
     <string name="alert_cancel">Cancelar</string>
-    <string name="unable_to_go_further">Non foi posíbel ir máis lonxe.</string>
     <string name="current_uno_command">Orde de UNO actual</string>
     <string name="display_language">Mostrar idioma</string>
     <string name="display_language_summary">Configurar o idioma predeterminado</string>
@@ -106,7 +95,6 @@
     <string name="error">Erro</string>
     <string name="enter_part_name">Introduza un nome da parte</string>
     <string name="bmp_null">BMP é nulo!</string>
-    <string name="directory_not_saved">Directorio non gardado.</string>
     <string name="page">Páxina</string>
     <string name="sheet">Folla</string>
     <string name="slide">Diapositiva</string>
@@ -121,12 +109,10 @@
     <string name="action_text_copied">Texto copiado ao portapapeis</string>
     <string name="pref_experimental_editing">Modo experimental</string>
     <string name="pref_developer_mode_summary">Activar modo de desenvolvemento, no que se poden enviar ordes de UNO dentro da app. Úseo baixo a súa responsabilidade.</string>
-    <string name="action_italic">Cursiva</string>
     <string name="message_saved">Gardar completo</string>
     <string name="password">Contrasinal</string>
     <string name="save_alert_dialog_title">Gardar o documento antes de pechar\?</string>
     <string name="action_cancel">Cancelar</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard">O dispositivo Android non admite presentacións con svg dentro da app. Copiamos a ligazón á presentación no portapapeis. Prema no botón de inicio, abra un navegador web moderno, pegue na barra de enderezos e vaia.</string>
     <string name="calc_alert_double_click_optimal_length">Suxestión: Tocar dúas veces nunha cabeceira estabelece a largura/altura ideais.</string>
     <string name="action_pwd_dialog_title">Introduza o contrasinal</string>
     <string name="select_photo_title">Seleccionar imaxe</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_settings">LibreOffice դիտակի կարգավորումներ</string>
-    <string name="app_about_name"><b>LibreOffice դիտակ \'Beta\'</b></string>
     <string name="app_description">LibreOffice Viewer-ը LibreOffice-ի վրա հիմնված փաստաթղթերի դիտիչ է:</string>
     <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">Այս թողարկումը տրամադրվել է $VENDOR -ի կողմից:</string>
@@ -13,11 +12,7 @@
     <string name="new_spreadsheet">Նոր էլ. աղյուսակ</string>
     <string name="new_drawing">Նոր նկարչություն</string>
     <string name="select_file_to_open">Բացելու համար ընտրեք նիշքը</string>
-    <string name="browser_app_name">LibreOffice զննարկիչ</string>
-    <string name="menu_search">Փնտրում</string>
-    <string name="search_not_found">Բանալի բառը չի գտնվել</string>
     <string name="search_find_previous">Գտեք նախորդը</string>
-    <string name="menu_preferences">Նախապատվություններ</string>
     <string name="file_icon_desc">նիշքի պատկերակ</string>
     <string name="title_recents">Վերջին նիշքերը</string>
     <string name="title_browser">Բոլոր նիշքերը</string>
@@ -27,10 +22,6 @@
     <string name="action_about">Մասին</string>
     <string name="action_parts">Մասեր</string>
     <string name="action_settings">Կարգավորումներ</string>
-    <string name="action_bold">Թավ</string>
-    <string name="action_underline">Ընդգծում</string>
-    <string name="action_italic">Շեղ</string>
-    <string name="action_strikeout">Գիծ քաշել</string>
     <string name="action_keyboard">Ցույց տալ ստեղնաշարը</string>
     <string name="action_save">Պահել</string>
     <string name="action_save_as">Պահել որպես...</string>
@@ -47,7 +38,6 @@
     <string name="no_save_document">ՈՉ</string>
     <string name="action_presentation">Սահիկացուցադրություն</string>
     <string name="action_add_slide">Ավելացնել սահիկ</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">ԼԱՎ</string>
     <string name="slideshow_action_back">Հետ</string>
     <string name="calc_insert_before">Զետեղել</string>
     <string name="calc_delete">Ջնջել</string>
@@ -102,7 +92,6 @@
     <string name="unable_to_save">Հնարավոր չէ պահպանել նիշքը</string>
     <string name="error">Սխալ</string>
     <string name="bmp_null">Bmp is null!</string>
-    <string name="directory_not_saved">Գրացուցակը չի պահպանվել:</string>
     <string name="page">Էջ</string>
     <string name="sheet">Թերթ</string>
     <string name="slide">Սահիկ</string>
@@ -121,15 +110,12 @@
     <string name="message_saving">Փաստաթուղթը պահվում է…</string>
     <string name="pref_developer_mode_summary">Միացրեք մշակողի ռեժիմը, որտեղ կարող եք UNO հրամաններ ուղարկել հավելվածի ներսում: Օգտագործեք ձեր սեփական ռիսկով:</string>
     <string name="message_saving_failed">Փաստաթղթի պահպանումը ձախողվեց:</string>
-    <string name="message_save_incomplete">Պահպանումը անավարտ է: Փոփոխություններ եղե՞լ են։</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard">Ձեր Android սարքը չի աջակցում ներծրագրային svg սահիկների ցուցադրում: Մենք պատճենեցինք սահիկացուցադրման հղումը սեղմատախտակին: Խնդրում ենք սեղմել գլխավոր կոճակը, բացել ժամանակակից վեբ զննարկիչը, տեղադրել հասցեագոտում և գնալ:</string>
     <string name="calc_alert_double_click_optimal_length">Հուշում. Կրկնակի հպեք վերնագրի վրա՝ սահմանում է օպտիմալ լայնությունը/բարձրությունը:</string>
     <string name="calc_optimal_length_default_text">Մուտքագրեք լրացուցիչ երկարությունը 100-րդ/մմ</string>
     <string name="compress_photo_max_quality">Առավելագույն որակ</string>
     <string name="action_text_copied">Տեքստը պատճենվեց սեղմատախտակին</string>
     <string name="select_delete_options">Ընտրեք ջնջելու ընտրանքները.</string>
     <string name="UNO_commands_string_hint">UNO հրաման</string>
-    <string name="unable_to_go_further">Անհնար է առաջ գնալ:</string>
     <string name="enter_part_name">Մուտքագրեք մասի անունը</string>
     <string name="action_rename_slide">Անվանափոխեք սահիկը</string>
 </resources>
