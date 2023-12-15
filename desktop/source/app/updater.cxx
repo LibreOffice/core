@@ -91,7 +91,7 @@ OUString normalizePath(const OUString& rPath)
     aPath = aPath.replace('\\', '/');
 #endif
 
-    aPath.replaceAll("//", "/");
+    aPath = aPath.replaceAll("//", "/");
 
     // remove final /
     if (aPath.endsWith("/"))
