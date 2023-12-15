@@ -40,6 +40,11 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DUSE_SYSTEM_LIBOPENJPEG2 \
 ))
 endif
+ifeq ($(SYSTEM_ABSEIL),TRUE)
+$(eval $(call gb_Library_add_defs,pdfium,\
+    -DUSE_SYSTEM_ABSEIL \
+))
+endif
 
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,pdfium,cpp))
