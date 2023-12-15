@@ -12243,6 +12243,15 @@ if test "$ENABLE_PDFIUM" = "TRUE"; then
         AC_CHECK_LIB([absl_bad_variant_access], [main], [],
                      [AC_MSG_ERROR([libabsl_bad_variant_access library not found.])])
         ABSEIL_LIBS="-labsl_bad_optional_access -labsl_bad_variant_access"
+	AC_MSG_CHECKING([whether abseil is >= 20230125])
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+	    #include <absl/base/config.h>
+	    #if ABSL_LTS_RELEASE_VERSION < 20230125
+	    #error Too old.
+            #endif
+	    ])],
+            [AC_MSG_RESULT([ok])],
+            [AC_MSG_ERROR([too old. Need >= 20230125])])
         AC_LANG_POP([C++])
         ABSEIL_CFLAGS=$(printf '%s' "$ABSEIL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${ABSEIL_LIBS}"
