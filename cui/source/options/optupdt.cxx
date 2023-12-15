@@ -124,6 +124,8 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
 #if HAVE_FEATURE_UPDATE_MAR
     m_xMar->show();
     m_xEnableMar->set_sensitive(!officecfg::Office::Update::Update::Enabled::isReadOnly());
+#else
+    m_xMar->hide();
 #endif
 }
 

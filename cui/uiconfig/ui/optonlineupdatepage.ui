@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkFrame" id="OptOnlineUpdatePage">
@@ -520,7 +520,6 @@
         </child>
         <child>
           <object class="GtkFrame" id="frameMar">
-            <property name="visible">False</property>
             <property name="can-focus">False</property>
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
@@ -551,6 +550,11 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
         </child>
       </object>
     </child>
