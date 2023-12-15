@@ -85,7 +85,7 @@ AxisItemConverter::AxisItemConverter(
     const rtl::Reference<::chart::ChartModel> & xChartDoc,
     ::chart::ExplicitScaleData const * pScale /* = NULL */,
     ::chart::ExplicitIncrementData const * pIncrement /* = NULL */,
-    const awt::Size* pRefSize ) :
+    const std::optional<awt::Size>& pRefSize ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_xChartDoc( xChartDoc )
 {

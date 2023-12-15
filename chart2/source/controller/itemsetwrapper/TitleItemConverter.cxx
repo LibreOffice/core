@@ -50,7 +50,7 @@ public:
     FormattedStringsConverter(
         const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
         SfxItemPool & rItemPool,
-        const awt::Size* pRefSize,
+        const std::optional<awt::Size>& pRefSize,
         const uno::Reference< beans::XPropertySet > & xParentProp );
 
 protected:
@@ -62,7 +62,7 @@ protected:
 FormattedStringsConverter::FormattedStringsConverter(
     const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
     SfxItemPool & rItemPool,
-    const awt::Size* pRefSize,
+    const std::optional<awt::Size>& pRefSize,
     const uno::Reference< beans::XPropertySet > & xParentProp ) :
         MultipleItemConverter( rItemPool )
 {
@@ -92,7 +92,7 @@ TitleItemConverter::TitleItemConverter(
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    const awt::Size* pRefSize ) :
+    const std::optional<awt::Size>& pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.emplace_back( new GraphicPropertyItemConverter(

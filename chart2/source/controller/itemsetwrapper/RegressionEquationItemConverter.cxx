@@ -49,7 +49,7 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    const awt::Size* pRefSize ) :
+    const std::optional<awt::Size>& pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.emplace_back( new GraphicPropertyItemConverter(

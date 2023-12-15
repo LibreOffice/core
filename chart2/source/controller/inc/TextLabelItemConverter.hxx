@@ -20,11 +20,12 @@
 
 #include "ItemConverter.hxx"
 
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ref.hxx>
+#include <optional>
 #include <vector>
 
-namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::frame { class XModel; }
 namespace chart { class ChartModel; }
@@ -40,7 +41,7 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         const rtl::Reference<::chart::DataSeries>& xSeries,
         SfxItemPool& rItemPool,
-        const css::awt::Size* pRefSize,
+        const std::optional<css::awt::Size>& pRefSize,
         bool bDataSeries,
         sal_Int32 nNumberFormat,
         sal_Int32 nPercentNumberFormat );

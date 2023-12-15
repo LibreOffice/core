@@ -202,7 +202,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     const rtl::Reference<::chart::ChartModel>& xChartModel,
     const uno::Reference<beans::XPropertySet>& rPropertySet,
     const rtl::Reference<DataSeries>& xSeries,
-    SfxItemPool& rItemPool, const awt::Size* pRefSize,
+    SfxItemPool& rItemPool, const std::optional<awt::Size>& pRefSize,
     bool bDataSeries, sal_Int32 nNumberFormat, sal_Int32 nPercentNumberFormat ) :
     ItemConverter(rPropertySet, rItemPool),
     mnNumberFormat(nNumberFormat),

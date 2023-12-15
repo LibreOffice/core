@@ -112,26 +112,26 @@ wrapper::ItemConverter* createItemConverter(
                     break;
             case OBJECTTYPE_TITLE:
             {
-                std::unique_ptr<awt::Size> pRefSize;
+                std::optional<awt::Size> pRefSize;
                 if (pRefSizeProvider)
-                    pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
+                    pRefSize.emplace(pRefSizeProvider->getPageSize());
 
                 pItemConverter = new wrapper::TitleItemConverter(
                     xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
                     xChartModel,
-                    pRefSize.get());
+                    pRefSize);
             }
             break;
             case OBJECTTYPE_LEGEND:
             {
-                std::unique_ptr<awt::Size> pRefSize;
+                std::optional<awt::Size> pRefSize;
                 if (pRefSizeProvider)
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+                    pRefSize.emplace( pRefSizeProvider->getPageSize() );
 
                 pItemConverter = new wrapper::LegendItemConverter(
                     xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
                     xChartModel,
-                    pRefSize.get());
+                    pRefSize);
             }
             break;
             case OBJECTTYPE_LEGEND_ENTRY:
@@ -147,9 +147,9 @@ wrapper::ItemConverter* createItemConverter(
                     break;
             case OBJECTTYPE_AXIS:
             {
-                std::unique_ptr<awt::Size> pRefSize;
+                std::optional<awt::Size> pRefSize;
                 if (pRefSizeProvider)
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+                    pRefSize.emplace( pRefSizeProvider->getPageSize() );
 
                 // the second property set contains the property CoordinateOrigin
                 // nOriginIndex is the index of the corresponding index of the
@@ -167,7 +167,7 @@ wrapper::ItemConverter* createItemConverter(
                     rDrawModel,
                     xChartModel,
                     &aExplicitScale, &aExplicitIncrement,
-                    pRefSize.get() );
+                    pRefSize );
             }
             break;
             case OBJECTTYPE_AXIS_UNITLABEL:
@@ -175,9 +175,9 @@ wrapper::ItemConverter* createItemConverter(
             case OBJECTTYPE_DATA_LABELS:
             case OBJECTTYPE_DATA_LABEL:
             {
-                std::unique_ptr<awt::Size> pRefSize;
+                std::optional<awt::Size> pRefSize;
                 if (pRefSizeProvider)
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+                    pRefSize.emplace( pRefSizeProvider->getPageSize() );
 
                 rtl::Reference<DataSeries> xSeries = ObjectIdentifier::getDataSeriesForCID(aObjectCID, xChartModel);
 
@@ -189,16 +189,16 @@ wrapper::ItemConverter* createItemConverter(
 
                 pItemConverter = new wrapper::TextLabelItemConverter(
                     xChartModel, xObjectProperties, xSeries,
-                    rDrawModel.GetItemPool(), pRefSize.get(), bDataSeries,
+                    rDrawModel.GetItemPool(), pRefSize, bDataSeries,
                     nNumberFormat, nPercentNumberFormat);
             }
             break;
             case OBJECTTYPE_DATA_SERIES:
             case OBJECTTYPE_DATA_POINT:
             {
-                std::unique_ptr<awt::Size> pRefSize;
+                std::optional<awt::Size> pRefSize;
                 if (pRefSizeProvider)
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+                    pRefSize.emplace( pRefSizeProvider->getPageSize() );
 
                 wrapper::GraphicObjectType eMapTo =
                     wrapper::GraphicObjectType::FilledDataPoint;
@@ -243,7 +243,7 @@ wrapper::ItemConverter* createItemConverter(
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
                                         xChartModel,
-                                        eMapTo, pRefSize.get(), bDataSeries, bUseSpecialFillColor, nSpecialFillColor, true,
+                                        eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor, true,
                                         nNumberFormat, nPercentNumberFormat, nPointIndex );
                 break;
             }
@@ -273,14 +273,14 @@ wrapper::ItemConverter* createItemConverter(
                 break;
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
-                std::unique_ptr<awt::Size> pRefSize;
+                std::optional<awt::Size> pRefSize;
                 if (pRefSizeProvider)
-                    pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
+                    pRefSize.emplace(pRefSizeProvider->getPageSize());
 
                 pItemConverter =  new wrapper::RegressionEquationItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
                                         xChartModel,
-                                        pRefSize.get());
+                                        pRefSize);
                 break;
             }
             case OBJECTTYPE_DATA_STOCK_RANGE:
@@ -314,13 +314,13 @@ wrapper::ItemConverter* createItemConverter(
                 break;
             case OBJECTTYPE_AXIS:
             {
-                std::unique_ptr<awt::Size> pRefSize;
+                std::optional<awt::Size> pRefSize;
                 if (pRefSizeProvider)
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+                    pRefSize.emplace( pRefSizeProvider->getPageSize() );
 
                 pItemConverter =  new wrapper::AllAxisItemConverter(
                     xChartModel, rDrawModel.GetItemPool(),
-                    rDrawModel, pRefSize.get());
+                    rDrawModel, pRefSize );
             }
             break;
             case OBJECTTYPE_GRID:

@@ -47,7 +47,7 @@ AllAxisItemConverter::AllAxisItemConverter(
     const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const awt::Size* pRefSize )
+    const std::optional<awt::Size>& pRefSize )
         : MultipleItemConverter( rItemPool )
 {
     rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
@@ -121,7 +121,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
             new ::chart::wrapper::DataPointItemConverter(
                 xChartModel, xContext, series, series, rItemPool, rDrawModel,
                 xNamedPropertyContainerFactory, GraphicObjectType::FilledDataPoint,
-                nullptr, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
+                std::nullopt, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
     }
 }
 
@@ -150,7 +150,7 @@ AllTitleItemConverter::AllTitleItemConverter(
         uno::Reference< beans::XPropertySet > xObjectProperties( xTitle );
         m_aConverters.emplace_back(
             new ::chart::wrapper::TitleItemConverter(
-                xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, nullptr));
+                xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, std::nullopt));
     }
 }
 

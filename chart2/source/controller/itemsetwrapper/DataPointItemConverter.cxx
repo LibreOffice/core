@@ -211,7 +211,7 @@ DataPointItemConverter::DataPointItemConverter(
     SdrModel& rDrawModel,
     const uno::Reference<lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
     GraphicObjectType eMapTo,
-    const awt::Size* pRefSize,
+    const std::optional<awt::Size>& pRefSize,
     bool bDataSeries,
     bool bUseSpecialFillColor,
     sal_Int32 nSpecialFillColor,

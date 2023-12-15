@@ -19,10 +19,10 @@
 #pragma once
 
 #include "ItemConverter.hxx"
-
+#include <com/sun/star/awt/Size.hpp>
+#include <optional>
 #include <vector>
 
-namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class SdrModel;
@@ -38,7 +38,7 @@ public:
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        const css::awt::Size* pRefSize );
+        const std::optional<css::awt::Size>& pRefSize );
 
     virtual ~LegendItemConverter() override;
 

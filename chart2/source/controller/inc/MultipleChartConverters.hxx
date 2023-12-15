@@ -19,9 +19,10 @@
 #pragma once
 
 #include "MultipleItemConverter.hxx"
+#include <com/sun/star/awt/Size.hpp>
 #include <rtl/ref.hxx>
+#include <optional>
 
-namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace chart { class ChartModel; }
@@ -36,7 +37,7 @@ public:
         const rtl::Reference<::chart::ChartModel> & xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const css::awt::Size* pRefSize );
+        const std::optional<css::awt::Size>& pRefSize );
 
     virtual ~AllAxisItemConverter() override;
 

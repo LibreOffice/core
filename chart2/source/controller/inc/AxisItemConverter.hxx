@@ -19,11 +19,12 @@
 #pragma once
 
 #include "ItemConverter.hxx"
+#include <com/sun/star/awt/Size.hpp>
 #include <rtl/ref.hxx>
 
+#include <optional>
 #include <vector>
 
-namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XAxis; }
 namespace com::sun::star::chart2 { class XChartDocument; }
@@ -45,7 +46,7 @@ public:
         const rtl::Reference<::chart::ChartModel> & xChartDoc,
         ExplicitScaleData const * pScale,
         ExplicitIncrementData const * pIncrement,
-        const css::awt::Size* pRefSize );
+        const std::optional<css::awt::Size>& pRefSize );
 
     virtual ~AxisItemConverter() override;
 

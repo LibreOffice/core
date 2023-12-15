@@ -20,14 +20,14 @@
 
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Sequence.h>
 
 #include <tools/color.hxx>
 #include <rtl/ref.hxx>
-
+#include <optional>
 #include <vector>
 
-namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
@@ -49,7 +49,7 @@ public:
         SdrModel& rDrawModel,
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
         GraphicObjectType eMapTo,
-        const css::awt::Size* pRefSize = nullptr,
+        const std::optional<css::awt::Size>& pRefSize = std::nullopt,
         bool bDataSeries = false,
         bool bUseSpecialFillColor = false,
         sal_Int32 nSpecialFillColor = 0,

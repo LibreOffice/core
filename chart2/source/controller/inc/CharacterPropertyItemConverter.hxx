@@ -35,7 +35,7 @@ public:
     CharacterPropertyItemConverter(
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool,
-        const css::awt::Size* pRefSize,
+        const std::optional<css::awt::Size>& pRefSize,
         OUString aRefSizePropertyName,
         const css::uno::Reference<css::beans::XPropertySet>& rRefSizePropSet = css::uno::Reference<css::beans::XPropertySet>() );
 
