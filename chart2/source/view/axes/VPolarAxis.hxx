@@ -19,12 +19,11 @@
 #pragma once
 
 #include "VAxisBase.hxx"
+#include <PlottingPositionHelper.hxx>
 #include <memory>
 
 namespace chart
 {
-
-class PolarPlottingPositionHelper;
 
 class VPolarAxis : public VAxisBase
 {
@@ -45,7 +44,7 @@ protected:
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 
 protected: //member
-    std::unique_ptr<PolarPlottingPositionHelper> m_pPosHelper;
+    PolarPlottingPositionHelper m_aPosHelper;
     std::vector< ExplicitIncrementData >   m_aIncrements;
 };
 

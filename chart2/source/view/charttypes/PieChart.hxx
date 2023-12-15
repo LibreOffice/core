@@ -21,12 +21,24 @@
 
 #include <memory>
 #include <VSeriesPlotter.hxx>
+#include <PlottingPositionHelper.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/awt/Point.hpp>
 
 namespace chart
 {
-class PiePositionHelper;
+
+class PiePositionHelper : public PolarPlottingPositionHelper
+{
+public:
+    PiePositionHelper( double fAngleDegreeOffset );
+
+    bool    getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius, bool bUseRings, double fMaxOffset ) const;
+
+public:
+    //Distance between different category rings, seen relative to width of a ring:
+    double  m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
+};
 
 class PieChart : public VSeriesPlotter
 {
@@ -110,8 +122,7 @@ struct PieLabelInfo;
                                 , PieLabelInfo const & rPieLabelInfo );
 
 private: //member
-    std::unique_ptr<PiePositionHelper>
-                          m_pPosHelper;
+    PiePositionHelper     m_aPosHelper;
     bool                  m_bUseRings;
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
 

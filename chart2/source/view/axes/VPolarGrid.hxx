@@ -20,6 +20,7 @@
 
 #include "VAxisOrGridBase.hxx"
 #include "Tickmarks.hxx"
+#include <PlottingPositionHelper.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <memory>
 
@@ -28,7 +29,6 @@ namespace chart { struct VLineProperties; }
 namespace chart
 {
 class GridProperties;
-class PolarPlottingPositionHelper;
 
 class VPolarGrid : public VAxisOrGridBase
 {
@@ -55,7 +55,7 @@ public:
 private: //member
     std::vector<
         rtl::Reference< ::chart::GridProperties > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
-    std::unique_ptr<PolarPlottingPositionHelper> m_pPosHelper;
+    PolarPlottingPositionHelper m_aPosHelper;
     std::vector< ExplicitIncrementData >   m_aIncrements;
 
     void getAllTickInfos( sal_Int32 nDimensionIndex, TickInfoArraysType& rAllTickInfos ) const;

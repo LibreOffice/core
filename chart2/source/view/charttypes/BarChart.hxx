@@ -21,10 +21,10 @@
 
 #include <memory>
 #include <VSeriesPlotter.hxx>
+#include "BarPositionHelper.hxx"
 
 namespace chart
 {
-class BarPositionHelper;
 
 class BarChart : public VSeriesPlotter
 {
@@ -109,7 +109,7 @@ private: //methods
             sal_Int32 nAttachedAxisIndex);
 
 private: //member
-    std::unique_ptr<BarPositionHelper>   m_pMainPosHelper;
+    BarPositionHelper                    m_aMainPosHelper;
     css::uno::Sequence< sal_Int32 >      m_aOverlapSequence;
     css::uno::Sequence< sal_Int32 >      m_aGapwidthSequence;
 };

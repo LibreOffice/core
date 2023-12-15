@@ -57,7 +57,6 @@ AreaChart::AreaChart( const rtl::Reference<ChartType>& xChartTypeModel
                      , bool bNoArea
                      )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, bCategoryXAxis )
-        , m_pMainPosHelper(new PlottingPositionHelper())
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel,nDimensionCount) )
@@ -65,11 +64,11 @@ AreaChart::AreaChart( const rtl::Reference<ChartType>& xChartTypeModel
         , m_nCurveResolution(20)
         , m_nSplineOrder(3)
 {
+    PlotterBase::m_pPosHelper = &m_aMainPosHelper;
+    VSeriesPlotter::m_pMainPosHelper = &m_aMainPosHelper;
+
     m_pMainPosHelper->AllowShiftXAxisPos(true);
     m_pMainPosHelper->AllowShiftZAxisPos(true);
-
-    PlotterBase::m_pPosHelper = m_pMainPosHelper.get();
-    VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper.get();
 
     try
     {

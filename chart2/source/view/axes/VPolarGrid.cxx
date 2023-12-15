@@ -42,9 +42,8 @@ VPolarGrid::VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
                        , std::vector< rtl::Reference< ::chart::GridProperties > > aGridPropertiesList )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
             , m_aGridPropertiesList( std::move(aGridPropertiesList) )
-            , m_pPosHelper( new PolarPlottingPositionHelper() )
 {
-    PlotterBase::m_pPosHelper = m_pPosHelper.get();
+    PlotterBase::m_pPosHelper = &m_aPosHelper;
 }
 
 VPolarGrid::~VPolarGrid()
@@ -204,7 +203,7 @@ void VPolarGrid::create2DRadiusGrid( const rtl::Reference<SvxShapeGroupAnyD>& xL
 
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos
-                , rAngleIncrement, rAngleScale, m_pPosHelper.get(), fLogicRadius, fLogicZ );
+                , rAngleIncrement, rAngleScale, &m_aPosHelper, fLogicRadius, fLogicZ );
             if(aPoints[0].getLength())
                 appendPointSequence( aAllPoints, aPoints );
         }

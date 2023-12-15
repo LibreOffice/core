@@ -20,11 +20,11 @@
 #pragma once
 
 #include <memory>
+#include "BarPositionHelper.hxx"
 #include <VSeriesPlotter.hxx>
 
 namespace chart
 {
-class BarPositionHelper;
 
 class CandleStickChart : public VSeriesPlotter
 {
@@ -47,7 +47,7 @@ public:
     virtual LegendSymbolStyle getLegendSymbolStyle() override;
 
 private: //member
-    std::unique_ptr<BarPositionHelper>           m_pMainPosHelper;
+    BarPositionHelper m_aMainPosHelper;
 };
 } //namespace chart
 

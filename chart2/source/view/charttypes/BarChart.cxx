@@ -46,10 +46,9 @@ using namespace ::com::sun::star::chart2;
 BarChart::BarChart( const rtl::Reference<ChartType>& xChartTypeModel
                     , sal_Int32 nDimensionCount )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
-        , m_pMainPosHelper( new BarPositionHelper() )
 {
-    PlotterBase::m_pPosHelper = m_pMainPosHelper.get();
-    VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper.get();
+    PlotterBase::m_pPosHelper = &m_aMainPosHelper;
+    VSeriesPlotter::m_pMainPosHelper = &m_aMainPosHelper;
 
     try
     {
@@ -507,14 +506,14 @@ void BarChart::createShapes()
     {
         for( auto const& rZSlot : m_aZSlots )
         {
-            BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
+            BarPositionHelper* pPosHelper = &m_aMainPosHelper;
             if( !rZSlot.empty() )
             {
                 sal_Int32 nAttachedAxisIndex = rZSlot.front().getAttachedAxisIndexForFirstSeries();
                 //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
                 pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)
-                    pPosHelper = m_pMainPosHelper.get();
+                    pPosHelper = &m_aMainPosHelper;
             }
             PlotterBase::m_pPosHelper = pPosHelper;
 
@@ -574,7 +573,7 @@ void BarChart::doZSlot(
         //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
         BarPositionHelper* pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
         if(!pPosHelper)
-            pPosHelper = m_pMainPosHelper.get();
+            pPosHelper = &m_aMainPosHelper;
 
         PlotterBase::m_pPosHelper = pPosHelper;
 

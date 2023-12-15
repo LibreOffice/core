@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <VSeriesPlotter.hxx>
+#include <PlottingPositionHelper.hxx>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 
 namespace chart
@@ -64,8 +65,7 @@ private: //methods
                 , std::vector<std::vector<css::drawing::Position3D>> &aPoly );
 
 private: //member
-    std::unique_ptr<PlottingPositionHelper>
-                                        m_pMainPosHelper;
+    PlottingPositionHelper              m_aMainPosHelper;
 
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;

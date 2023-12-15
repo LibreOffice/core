@@ -113,7 +113,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
             double fLogicAngle = pTickInfo->getUnscaledTickValue();
 
             LabelAlignment eLabelAlignment(LABEL_ALIGN_CENTER);
-            PolarLabelPositionHelper aPolarLabelPositionHelper(m_pPosHelper.get(), 2/*nDimensionCount*/, xTarget);
+            PolarLabelPositionHelper aPolarLabelPositionHelper(&m_aPosHelper, 2/*nDimensionCount*/, xTarget);
             sal_Int32 nScreenValueOffsetInRadiusDirection = m_aAxisLabelProperties.m_aMaximumSpaceForLabels.Height/15;
             awt::Point aAnchorScreenPosition2D( aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
                     eLabelAlignment, fLogicAngle, fLogicRadius, fLogicZ, nScreenValueOffsetInRadiusDirection ));
@@ -156,7 +156,7 @@ void VPolarAngleAxis::createLabels()
     if( !prepareShapeCreation() )
         return;
 
-    double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
+    double fLogicRadius = m_aPosHelper.getOuterLogicRadius();
 
     if( !m_aAxisProperties.m_bDisplayLabels )
         return;
@@ -185,12 +185,12 @@ void VPolarAngleAxis::createShapes()
     if( !prepareShapeCreation() )
         return;
 
-    double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
+    double fLogicRadius = m_aPosHelper.getOuterLogicRadius();
     double const fLogicZ = 1.0;//as defined
 
     //create axis main lines
     drawing::PointSequenceSequence aPoints(1);
-    VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, m_aAllTickInfos, m_aIncrement, m_aScale, m_pPosHelper.get(), fLogicRadius, fLogicZ );
+    VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, m_aAllTickInfos, m_aIncrement, m_aScale, &m_aPosHelper, fLogicRadius, fLogicZ );
     rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
             m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
     //because of this name this line will be used for marking the axis

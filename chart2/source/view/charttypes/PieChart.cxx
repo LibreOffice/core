@@ -20,7 +20,6 @@
 #include <BaseGFXHelper.hxx>
 #include <VLineProperties.hxx>
 #include "PieChart.hxx"
-#include <PlottingPositionHelper.hxx>
 #include <ShapeFactory.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <CommonConverters.hxx>
@@ -125,18 +124,6 @@ bool lcl_isInsidePage(const awt::Point& rPos, const awt::Size& rSize, const awt:
 
 } //end anonymous namespace
 
-class PiePositionHelper : public PolarPlottingPositionHelper
-{
-public:
-    PiePositionHelper( double fAngleDegreeOffset );
-
-    bool    getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius, bool bUseRings, double fMaxOffset ) const;
-
-public:
-    //Distance between different category rings, seen relative to width of a ring:
-    double  m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
-};
-
 PiePositionHelper::PiePositionHelper( double fAngleDegreeOffset )
         : m_fRingDistance(0.0)
 {
@@ -195,15 +182,15 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
                    , sal_Int32 nDimensionCount
                    , bool bExcludingPositioning )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
-        , m_pPosHelper( new PiePositionHelper( (m_nDimension==3) ? 0.0 : 90.0 ) )
+        , m_aPosHelper( (m_nDimension==3) ? 0.0 : 90.0 )
         , m_bUseRings(false)
         , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
         , m_fMaxOffset(std::numeric_limits<double>::quiet_NaN())
 {
-    PlotterBase::m_pPosHelper = m_pPosHelper.get();
-    VSeriesPlotter::m_pMainPosHelper = m_pPosHelper.get();
-    m_pPosHelper->m_fRadiusOffset = 0.0;
-    m_pPosHelper->m_fRingDistance = 0.0;
+    PlotterBase::m_pPosHelper = &m_aPosHelper;
+    VSeriesPlotter::m_pMainPosHelper = &m_aPosHelper;
+    m_aPosHelper.m_fRadiusOffset = 0.0;
+    m_aPosHelper.m_fRingDistance = 0.0;
 
     if( !xChartTypeModel.is() )
         return;
@@ -213,9 +200,9 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
         xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_USE_RINGS) >>= m_bUseRings; //  "UseRings"
         if( m_bUseRings )
         {
-            m_pPosHelper->m_fRadiusOffset = 1.0;
+            m_aPosHelper.m_fRadiusOffset = 1.0;
             if( nDimensionCount==3 )
-                m_pPosHelper->m_fRingDistance = 0.1;
+                m_aPosHelper.m_fRingDistance = 0.1;
         }
     }
     catch( const uno::Exception& )
@@ -231,7 +218,7 @@ PieChart::~PieChart()
 void PieChart::setScales( std::vector< ExplicitScaleData >&& rScales, bool /* bSwapXAndYAxis */ )
 {
     OSL_ENSURE(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
-    m_pPosHelper->setScales( std::move(rScales), true );
+    m_aPosHelper.setScales( std::move(rScales), true );
 }
 
 drawing::Direction3D PieChart::getPreferredDiagramAspectRatio() const
@@ -286,8 +273,8 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
             // but shift the circle origin
             double fAngle  = fStartAngle + fWidthAngle/2.0;
 
-            drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
-            drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
+            drawing::Position3D aOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
+            drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
             aOffset = aNewOrigin - aOrigin;
         }
     }
@@ -299,7 +286,7 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
         xShape = ShapeFactory::createPieSegment( xTarget
             , fStartAngle, fWidthAngle
             , fExplodedInnerRadius, fExplodedOuterRadius
-            , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() )
+            , aOffset, B3DHomMatrixToHomogenMatrix( m_aPosHelper.getUnitCartesianToScene() )
             , rParam.mfDepth );
     }
     else
@@ -307,7 +294,7 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
         xShape = ShapeFactory::createPieSegment2D( xTarget
             , fStartAngle, fWidthAngle
             , fExplodedInnerRadius, fExplodedOuterRadius
-            , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() ) );
+            , aOffset, B3DHomMatrixToHomogenMatrix( m_aPosHelper.getUnitCartesianToScene() ) );
     }
     PropertyMapper::setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     return xShape;
@@ -335,7 +322,7 @@ void PieChart::createTextLabelShape(
     ///get the required label placement type. Available placements are
     ///`AVOID_OVERLAP`, `CENTER`, `OUTSIDE` and `INSIDE`;
     sal_Int32 nLabelPlacement = rSeries.getLabelPlacement(
-        nPointIndex, m_xChartTypeModel, m_pPosHelper->isSwapXAndY());
+        nPointIndex, m_xChartTypeModel, m_aPosHelper.isSwapXAndY());
 
     ///when the placement is of `AVOID_OVERLAP` type a later rearrangement of
     ///the label position is allowed; the `createTextLabelShape` treats the
@@ -366,7 +353,7 @@ void PieChart::createTextLabelShape(
     ///the scene position of the label anchor point is calculated (see notes for
     ///`PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues`),
     ///and immediately transformed into the screen position.
-    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(),m_nDimension,m_xLogicTarget);
+    PolarLabelPositionHelper aPolarPosHelper(&m_aPosHelper,m_nDimension,m_xLogicTarget);
     awt::Point aScreenPosition2D(
         aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
         , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
@@ -375,7 +362,7 @@ void PieChart::createTextLabelShape(
     ///the screen position of the pie/donut center is calculated.
     PieLabelInfo aPieLabelInfo;
     aPieLabelInfo.aFirstPosition = basegfx::B2IVector( aScreenPosition2D.X, aScreenPosition2D.Y );
-    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, rParam.mfLogicZ+1.0 ) ) );
+    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_aPosHelper.transformUnitCircleToScene( 0.0, 0.0, rParam.mfLogicZ+1.0 ) ) );
     aPieLabelInfo.aOrigin = basegfx::B2IVector( aOrigin.X, aOrigin.Y );
 
     ///add a scaling independent Offset if requested
@@ -389,7 +376,7 @@ void PieChart::createTextLabelShape(
 
    // compute outer pie radius
     awt::Point aOuterCirclePoint = PlottingPositionHelper::transformSceneToScreenPosition(
-            m_pPosHelper->transformUnitCircleToScene(
+            m_aPosHelper.transformUnitCircleToScene(
                     0,
                     rParam.mfUnitCircleOuterRadius,
                     0 ),
@@ -407,7 +394,7 @@ void PieChart::createTextLabelShape(
         fAngleDegree += 360.0;
 
     awt::Point aOuterPosition = PlottingPositionHelper::transformSceneToScreenPosition(
-        m_pPosHelper->transformUnitCircleToScene(fAngleDegree, rParam.mfUnitCircleOuterRadius, 0),
+        m_aPosHelper.transformUnitCircleToScene(fAngleDegree, rParam.mfUnitCircleOuterRadius, 0),
         m_xLogicTarget, m_nDimension);
     aPieLabelInfo.aOuterPosition = basegfx::B2IVector(aOuterPosition.X, aOuterPosition.Y);
 
@@ -445,7 +432,7 @@ void PieChart::createTextLabelShape(
          *  First off the routine try to place the label inside the related pie slice,
          *  if this is not possible the label is placed outside.
          */
-        if (rSeries.getLabelPlacement(nPointIndex, m_xChartTypeModel, m_pPosHelper->isSwapXAndY())
+        if (rSeries.getLabelPlacement(nPointIndex, m_xChartTypeModel, m_aPosHelper.isSwapXAndY())
                 == css::chart::DataLabelPlacement::CUSTOM
             || !performLabelBestFitInnerPlacement(rParam, aPieLabelInfo))
         {
@@ -724,7 +711,7 @@ void PieChart::createShapes()
     ///orientation is reversed (always!?) and we are dealing with a donut: in
     ///such a case the `explodeable` ring is the last one.
     std::vector< VDataSeriesGroup >::size_type nExplodeableSlot = 0;
-    if( m_pPosHelper->isMathematicalOrientationRadius() && m_bUseRings )
+    if( m_aPosHelper.isMathematicalOrientationRadius() && m_bUseRings )
         nExplodeableSlot = m_aZSlots.front().size()-1;
 
     m_aLabelInfoList.clear();
@@ -759,7 +746,7 @@ void PieChart::createShapes()
         /// The angle degree offset is set by the same property of the
         /// data series.
         /// Counter-clockwise offset from the 3 o'clock position.
-        m_pPosHelper->m_fAngleDegreeOffset = pSeries->getStartingAngle();
+        m_aPosHelper.m_fAngleDegreeOffset = pSeries->getStartingAngle();
 
         ///iterate through all points to get the sum of all entries of
         ///the current data series
@@ -795,7 +782,7 @@ void PieChart::createShapes()
             double fOffset = getMaxOffset();
 
             ///compute the outer and the inner radius for the current ring slice
-            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
+            bool bIsVisible = m_aPosHelper.getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
             if( !bIsVisible )
                 continue;
 
@@ -835,10 +822,10 @@ void PieChart::createShapes()
 
                 ///see notes for `PolarPlottingPositionHelper` methods
                 ///transform to unit circle:
-                aParam.mfUnitCircleWidthAngleDegree = m_pPosHelper->getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
-                aParam.mfUnitCircleStartAngleDegree = m_pPosHelper->transformToAngleDegree( fLogicStartAngleValue );
-                aParam.mfUnitCircleInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
-                aParam.mfUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
+                aParam.mfUnitCircleWidthAngleDegree = m_aPosHelper.getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
+                aParam.mfUnitCircleStartAngleDegree = m_aPosHelper.transformToAngleDegree( fLogicStartAngleValue );
+                aParam.mfUnitCircleInnerRadius = m_aPosHelper.transformToRadius( fLogicInnerRadius );
+                aParam.mfUnitCircleOuterRadius = m_aPosHelper.transformToRadius( fLogicOuterRadius );
 
                 ///create data point
                 aParam.mfLogicZ = -1.0; // For 3D pie chart label position
@@ -881,8 +868,8 @@ void PieChart::createShapes()
 
                     double fAngle  = aParam.mfUnitCircleStartAngleDegree + aParam.mfUnitCircleWidthAngleDegree/2.0;
                     double fMaxDeltaRadius = aParam.mfUnitCircleOuterRadius-aParam.mfUnitCircleInnerRadius;
-                    drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius, aParam.mfLogicZ );
-                    drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius + fMaxDeltaRadius, aParam.mfLogicZ );
+                    drawing::Position3D aOrigin = m_aPosHelper.transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius, aParam.mfLogicZ );
+                    drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius + fMaxDeltaRadius, aParam.mfLogicZ );
 
                     sal_Int32 nOffsetPercent( static_cast<sal_Int32>(aParam.mfExplodePercentage * 100.0) );
 
@@ -1158,7 +1145,7 @@ bool PieChart::tryMoveLabels( PieLabelInfo const * pFirstBorder, PieLabelInfo co
     PieLabelInfo* p2 = pCenter->pNext;
     //return true when successful
 
-    bool bLabelOrderIsAntiClockWise = m_pPosHelper->isMathematicalOrientationAngle();
+    bool bLabelOrderIsAntiClockWise = m_aPosHelper.isMathematicalOrientationAngle();
 
     ///two loops are performed simultaneously: the outer loop iterates on
     ///`PieLabelInfo` objects in the list starting from the central element
@@ -1422,7 +1409,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // get the middle point of the arc representing the pie slice border
     double fLogicZ = rShapeParam.mfLogicZ + 1.0;
     awt::Point aMiddleArcPoint = PlottingPositionHelper::transformSceneToScreenPosition(
-            m_pPosHelper->transformUnitCircleToScene(
+            m_aPosHelper.transformUnitCircleToScene(
                     fBisectingRayAngleDeg,
                     rShapeParam.mfUnitCircleOuterRadius,
                     fLogicZ ),

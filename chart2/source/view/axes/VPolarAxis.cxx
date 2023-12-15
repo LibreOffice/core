@@ -40,9 +40,8 @@ VPolarAxis::VPolarAxis( const AxisProperties& rAxisProperties
             , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
             , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount )
             : VAxisBase( nDimensionIndex, nDimensionCount, rAxisProperties, xNumberFormatsSupplier )
-            , m_pPosHelper( new PolarPlottingPositionHelper() )
 {
-    PlotterBase::m_pPosHelper = m_pPosHelper.get();
+    PlotterBase::m_pPosHelper = &m_aPosHelper;
 }
 
 VPolarAxis::~VPolarAxis()
