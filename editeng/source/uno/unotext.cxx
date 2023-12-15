@@ -2145,6 +2145,7 @@ void SvxUnoTextBase::copyText(
         {
             pTextForwarder->CopyText( *pSourceTextForwarder );
             pEditSource->UpdateData();
+            SetSelection(pSource->GetSelection());
         }
     }
     else
