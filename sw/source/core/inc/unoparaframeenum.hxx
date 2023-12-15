@@ -31,6 +31,8 @@ class SwNodeIndex;
 class SwPaM;
 class SwFrameFormat;
 
+namespace com { namespace sun { namespace star { namespace text { class XTextContent; } } } }
+
 namespace sw
 {
     struct FrameClient final : public SwClient
@@ -69,6 +71,8 @@ struct SwXParaFrameEnumeration
 {
     static rtl::Reference<SwXParaFrameEnumeration> Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat = nullptr);
 };
+
+css::uno::Reference<css::text::XTextContent> FrameClientToXTextContent(sw::FrameClient* pClient);
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX
 

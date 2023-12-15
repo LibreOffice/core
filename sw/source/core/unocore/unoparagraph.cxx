@@ -54,6 +54,7 @@
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <editeng/unoipset.hxx>
 #include <svl/listener.hxx>
@@ -547,6 +548,23 @@ uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
             // A hack to avoid writing random list ids to ODF when they are not referred later
             // see XMLTextParagraphExport::DocumentListNodes::ShouldSkipListId
             pValues[nProp] <<= rTextNode.GetIndex().get();
+            continue;
+        }
+
+        if (pPropertyNames[nProp] == "OOXMLImport_AnchoredShapes")
+        {
+            // A hack to provide list of anchored objects fast
+            // See reanchorObjects in writerfilter/source/dmapper/DomainMapper_Impl.cxx
+            FrameClientSortList_t aFrames;
+            CollectFrameAtNode(rTextNode, aFrames, false); // Frames anchored to paragraph
+            CollectFrameAtNode(rTextNode, aFrames, true); // Frames anchored to character
+            std::vector<uno::Reference<text::XTextContent>> aRet;
+            aRet.reserve(aFrames.size());
+            for (const auto& rFrame : aFrames)
+                if (auto xContent = FrameClientToXTextContent(rFrame.pFrameClient.get()))
+                    aRet.push_back(xContent);
+
+            pValues[nProp] <<= comphelper::containerToSequence(aRet);
             continue;
         }
 
