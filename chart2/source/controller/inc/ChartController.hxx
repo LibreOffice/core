@@ -19,6 +19,7 @@
 #pragma once
 
 #include <LifeTime.hxx>
+#include <ReferenceSizeProvider.hxx>
 #include "CommandDispatchContainer.hxx"
 #include "SelectionHelper.hxx"
 
@@ -85,7 +86,7 @@ class ChartView;
 class ChartWindow;
 class DrawModelWrapper;
 class DrawViewWrapper;
-class ReferenceSizeProvider;
+class ViewElementListProvider;
 class ViewElementListProvider;
 class Diagram;
 class AccessibleChartView;
@@ -419,7 +420,7 @@ private:
     rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
     bool impl_isDisposedOrSuspended() const;
-    std::unique_ptr<ReferenceSizeProvider> impl_createReferenceSizeProvider();
+    ReferenceSizeProvider impl_createReferenceSizeProvider();
     void impl_adaptDataSeriesAutoResize();
 
     void impl_createDrawViewController();

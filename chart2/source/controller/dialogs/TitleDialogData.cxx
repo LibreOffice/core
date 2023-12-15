@@ -31,7 +31,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-TitleDialogData::TitleDialogData( std::unique_ptr<ReferenceSizeProvider> pRefSizeProvider )
+TitleDialogData::TitleDialogData( std::optional<ReferenceSizeProvider> pRefSizeProvider )
         : aPossibilityList{ true, true, true, true, true, true, true }
         , aExistenceList{ false, false, false, false, false, false, false }
         , aTextList(7)
@@ -84,7 +84,7 @@ bool TitleDialogData::writeDifferenceToModel(
             {
                 TitleHelper::createTitle(
                     static_cast< TitleHelper::eTitleType >( nN ), aTextList[nN], xChartModel, xContext,
-                    apReferenceSizeProvider.get() );
+                    apReferenceSizeProvider.has_value() ? &*apReferenceSizeProvider : nullptr );
                 bChanged = true;
             }
             else

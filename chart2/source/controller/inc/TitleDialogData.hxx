@@ -35,9 +35,9 @@ struct TitleDialogData
     css::uno::Sequence< sal_Bool > aPossibilityList;
     css::uno::Sequence< sal_Bool > aExistenceList;
     css::uno::Sequence< OUString > aTextList;
-    std::unique_ptr< ReferenceSizeProvider > apReferenceSizeProvider;
+    std::optional< ReferenceSizeProvider > apReferenceSizeProvider;
 
-    TitleDialogData(std::unique_ptr<ReferenceSizeProvider> pReferenzeSizeProvider = nullptr);
+    TitleDialogData(std::optional<ReferenceSizeProvider> pReferenzeSizeProvider = std::nullopt);
 
     void readFromModel( const rtl::Reference<::chart::ChartModel>& xChartModel );
     /* return true if anything has changed;

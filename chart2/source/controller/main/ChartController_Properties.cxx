@@ -738,13 +738,13 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         //convert properties to ItemSet
 
-        std::unique_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
+        ReferenceSizeProvider aRefSizeProv(impl_createReferenceSizeProvider());
 
         std::unique_ptr<wrapper::ItemConverter> pItemConverter(
             createItemConverter( rObjectCID, getChartModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
                                  m_xChartView.get(),
-                                 pRefSizeProv.get()));
+                                 &aRefSizeProv));
 
         if (!pItemConverter)
             return bRet;

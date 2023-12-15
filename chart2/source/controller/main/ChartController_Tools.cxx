@@ -164,18 +164,16 @@ bool lcl_deleteDataCurve(
 
 } // anonymous namespace
 
-std::unique_ptr<ReferenceSizeProvider> ChartController::impl_createReferenceSizeProvider()
+ReferenceSizeProvider ChartController::impl_createReferenceSizeProvider()
 {
     awt::Size aPageSize( ChartModelHelper::getPageSize( getChartModel() ) );
 
-    return std::make_unique<ReferenceSizeProvider>(aPageSize, getChartModel());
+    return ReferenceSizeProvider(aPageSize, getChartModel());
 }
 
 void ChartController::impl_adaptDataSeriesAutoResize()
 {
-    std::unique_ptr<ReferenceSizeProvider> pRefSizeProvider(impl_createReferenceSizeProvider());
-    if (pRefSizeProvider)
-        pRefSizeProvider->setValuesAtAllDataSeries();
+    impl_createReferenceSizeProvider().setValuesAtAllDataSeries();
 }
 
 void ChartController::executeDispatch_NewArrangement()
@@ -248,10 +246,7 @@ void ChartController::executeDispatch_ScaleText()
         m_xUndoManager );
     ControllerLockGuardUNO aCtlLockGuard( getChartModel() );
 
-    std::unique_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
-    OSL_ASSERT(pRefSizeProv);
-    if (pRefSizeProv)
-        pRefSizeProv->toggleAutoResizeState();
+    impl_createReferenceSizeProvider().toggleAutoResizeState();
 
     aUndoGuard.commit();
 }
