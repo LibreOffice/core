@@ -20,14 +20,10 @@
 
 #include <memory>
 #include <comphelper/compbase.hxx>
+#include <svx/AccessibleTextHelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
-// forward declaration of helper class from svx
-namespace accessibility
-{
-class AccessibleTextHelper;
-}
 
 namespace chart
 {
@@ -78,7 +74,7 @@ public:
     virtual css::lang::Locale SAL_CALL getLocale() override;
 
 private:
-    std::unique_ptr<::accessibility::AccessibleTextHelper> m_pTextHelper;
+    std::optional<::accessibility::AccessibleTextHelper>   m_oTextHelper;
     DrawViewWrapper *                                      m_pDrawViewWrapper;
 };
 

@@ -65,7 +65,7 @@ void AccessibleTextHelper::initialize( const OUString& aCID,
 
     SolarMutexGuard aSolarGuard;
 
-    m_pTextHelper.reset();
+    m_oTextHelper.reset();
 
     VclPtr<vcl::Window> pWindow( VCLUnoHelper::GetWindow( xWindow ));
     if( pWindow )
@@ -76,32 +76,32 @@ void AccessibleTextHelper::initialize( const OUString& aCID,
             SdrObject * pTextObj = m_pDrawViewWrapper->getNamedSdrObject( aCID );
             if( pTextObj )
             {
-                m_pTextHelper.reset( new ::accessibility::AccessibleTextHelper(std::make_unique<SvxTextEditSource>(*pTextObj, nullptr, *pView, *pWindow->GetOutDev())) );
-                m_pTextHelper->SetEventSource( xEventSource );
+                m_oTextHelper.emplace( std::make_unique<SvxTextEditSource>(*pTextObj, nullptr, *pView, *pWindow->GetOutDev()) );
+                m_oTextHelper->SetEventSource( xEventSource );
             }
         }
     }
 
-    OSL_ENSURE( m_pTextHelper, "Couldn't create text helper" );
+    OSL_ENSURE( m_oTextHelper, "Couldn't create text helper" );
 }
 
 // ____ XAccessibleContext ____
 sal_Int64 SAL_CALL AccessibleTextHelper::getAccessibleChildCount()
 {
-    if( m_pTextHelper )
+    if( m_oTextHelper )
     {
         SolarMutexGuard aSolarGuard;
-        return m_pTextHelper->GetChildCount();
+        return m_oTextHelper->GetChildCount();
     }
     return 0;
 }
 
 Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleChild( sal_Int64 i )
 {
-    if( m_pTextHelper )
+    if( m_oTextHelper )
     {
         SolarMutexGuard aSolarGuard;
-        return m_pTextHelper->GetChild( i );
+        return m_oTextHelper->GetChild( i );
     }
     return Reference< XAccessible >();
 }
