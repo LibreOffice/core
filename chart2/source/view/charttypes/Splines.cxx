@@ -24,6 +24,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <optional>
 #include <cmath>
 #include <limits>
 
@@ -569,8 +570,8 @@ void SplineCalculater::CalculateCubicSplines(
 
         // generate a spline for each coordinate. It holds the complete
         // information to calculate each point of the curve
-        std::unique_ptr<lcl_SplineCalculation> aSplineX;
-        std::unique_ptr<lcl_SplineCalculation> aSplineY;
+        std::optional<lcl_SplineCalculation> aSplineX;
+        std::optional<lcl_SplineCalculation> aSplineY;
         // lcl_SplineCalculation* aSplineZ; the z-coordinates of all points in
         // a data series are equal. No spline calculation needed, but copy
         // coordinate to output
@@ -580,15 +581,15 @@ void SplineCalculater::CalculateCubicSplines(
             pOld[ 0 ].PositionZ == pOld[nMaxIndexPoints].PositionZ &&
             nMaxIndexPoints >=2 )
         {   // periodic spline
-            aSplineX = std::make_unique<lcl_SplineCalculation>(std::move(aInputX));
-            aSplineY = std::make_unique<lcl_SplineCalculation>(std::move(aInputY));
+            aSplineX.emplace(std::move(aInputX));
+            aSplineY.emplace(std::move(aInputY));
         }
         else // generate the kind "natural spline"
         {
             double fXDerivation = std::numeric_limits<double>::infinity();
             double fYDerivation = std::numeric_limits<double>::infinity();
-            aSplineX = std::make_unique<lcl_SplineCalculation>(std::move(aInputX), fXDerivation, fXDerivation);
-            aSplineY = std::make_unique<lcl_SplineCalculation>(std::move(aInputY), fYDerivation, fYDerivation);
+            aSplineX.emplace(std::move(aInputX), fXDerivation, fXDerivation);
+            aSplineY.emplace(std::move(aInputY), fYDerivation, fYDerivation);
         }
 
         // fill result polygon with calculated values
