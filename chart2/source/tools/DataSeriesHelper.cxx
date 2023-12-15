@@ -318,7 +318,7 @@ sal_Int32 getAttachedAxisIndex( const rtl::Reference< DataSeries > & xSeries )
     {
         if( xSeries.is() )
         {
-            xSeries->getPropertyValue( "AttachedAxisIndex" ) >>= nRet;
+            xSeries->getFastPropertyValue( PROP_DATASERIES_ATTACHED_AXIS_INDEX ) >>= nRet;
         }
     }
     catch( const uno::Exception & )

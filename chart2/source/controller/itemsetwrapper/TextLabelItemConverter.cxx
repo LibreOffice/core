@@ -25,6 +25,7 @@
 #include <ChartTypeHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
+#include <DataSeriesProperties.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ItemPropertyMap.hxx>
@@ -54,6 +55,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::chart2;
 using com::sun::star::uno::Reference;
+using namespace ::chart::DataSeriesProperties;
 
 namespace chart::wrapper {
 
@@ -513,9 +515,9 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             {
                 bool bNew = static_cast<const SfxBoolItem&>(rItemSet.Get(nWhichId)).GetValue();
                 bool bOld = true;
-                if( (m_xSeries->getPropertyValue("ShowCustomLeaderLines") >>= bOld) && bOld != bNew )
+                if( (m_xSeries->getFastPropertyValue(PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES) >>= bOld) && bOld != bNew )
                 {
-                    m_xSeries->setPropertyValue("ShowCustomLeaderLines", uno::Any(bNew));
+                    m_xSeries->setFastPropertyValue(PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES, uno::Any(bNew));
                     bChanged = true;
                 }
             }
@@ -669,7 +671,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             try
             {
                 bool bValue = true;
-                if( m_xSeries->getPropertyValue( "ShowCustomLeaderLines" ) >>= bValue )
+                if( m_xSeries->getFastPropertyValue( PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES ) >>= bValue )
                     rOutItemSet.Put(SfxBoolItem(nWhichId, bValue));
             }
             catch (const uno::Exception&)
