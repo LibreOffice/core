@@ -12253,15 +12253,7 @@ if test "$ENABLE_PDFIUM" = "TRUE"; then
         AC_MSG_RESULT([external])
         SYSTEM_ABSEIL=TRUE
         AC_LANG_PUSH([C++])
-        AC_CHECK_HEADER(absl/types/bad_optional_access.h, [],
-                        [AC_MSG_ERROR(abseil headers not found.)], [])
-        AC_CHECK_HEADER(absl/types/bad_variant_access.h, [],
-                        [AC_MSG_ERROR(abseil headers not found.)], [])
-        AC_CHECK_LIB([absl_bad_optional_access], [main], [],
-                     [AC_MSG_ERROR([libabsl_bad_optional_access library not found.])])
-        AC_CHECK_LIB([absl_bad_variant_access], [main], [],
-                     [AC_MSG_ERROR([libabsl_bad_variant_access library not found.])])
-        ABSEIL_LIBS="-labsl_bad_optional_access -labsl_bad_variant_access"
+        PKG_CHECK_MODULES(ABSEIL, absl_bad_optional_access absl_bad_variant_access absl_inlined_vector )
         AC_LANG_POP([C++])
         ABSEIL_CFLAGS=$(printf '%s' "$ABSEIL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${ABSEIL_LIBS}"
