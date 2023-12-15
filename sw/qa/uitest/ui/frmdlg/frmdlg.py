@@ -115,4 +115,39 @@ class Test(UITestCase):
             # inconsistent.
             self.assertTrue(to_char_enabled)
 
+    def test_floattable_in_shape_text(self):
+        with self.ui_test.load_file(get_url_for_data_file("floattable-in-shape-text.docx")) as xComponent:
+            # Given a table in a frame, anchored in shape text (TextBox case):
+            self.xUITest.executeCommand(".uno:SelectAll")
+            # Insert frame around the selected table:
+            args = {
+                "AnchorType": 0,
+            }
+            self.xUITest.executeCommandWithParameters(".uno:InsertFrame", mkPropertyValues(args))
+            # Cut it from the body text:
+            self.xUITest.executeCommand(".uno:Cut")
+            # Select the shape:
+            xComponent.CurrentController.select(xComponent.DrawPage.getByIndex(0))
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            # Begin text edit on the shape:
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F2"}))
+            # Paste it into the shape text:
+            self.xUITest.executeCommand(".uno:Paste")
+
+            # When editing that frame:
+            visible = "true"
+            with self.ui_test.execute_dialog_through_command(".uno:FrameDialog") as xDialog:
+                xFlysplit = xDialog.getChild("flysplit")
+                visible = get_state_as_dict(xFlysplit)['Visible']
+
+            # Then make sure that the option allow split is hidden:
+            # Without the accompanying fix in place, this test would have failed with:
+            # AssertionError: 'true' != 'false'
+            # - true
+            # + false
+            # i.e. the UI allowed creating split floating tables in shape text, which is unnecessary
+            # complexity.
+            self.assertEqual(visible, "false")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -829,6 +829,31 @@ bool ContainsChain(const SwFrameFormat& rFlyFormat)
     const SwFormatChain& rChain = rFlyFormat.GetChain();
     return rChain.GetPrev() || rChain.GetNext();
 }
+
+/// Determines if rFlyFormat is anchored in a fly frame that is part of a draw-format + fly-format
+/// ("textbox") pair.
+bool InTextBox(const SwFrameFormat& rFlyFormat)
+{
+    const SwFormatAnchor& rAnchor = rFlyFormat.GetAnchor();
+    SwNode* pAnchorNode = rAnchor.GetAnchorNode();
+    if (!pAnchorNode)
+    {
+        return false;
+    }
+
+    const SwStartNode* pFlyNode = pAnchorNode->FindFlyStartNode();
+    if (!pFlyNode)
+    {
+        return false;
+    }
+
+    if (!pFlyNode->GetFlyFormat()->GetOtherTextBoxFormats())
+    {
+        return false;
+    }
+
+    return true;
+}
 }
 
 void SwFramePage::setOptimalRelWidth()
@@ -1066,6 +1091,11 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
         {
             m_xFlySplitCB->hide();
         }
+    }
+    else if (pFlyFormat && !m_bNew && InTextBox(*pFlyFormat))
+    {
+        // Disallow split flys in fly frames which form a textbox, i.e. non-editeng shape text.
+        m_xFlySplitCB->hide();
     }
 
     Init(*rSet);
