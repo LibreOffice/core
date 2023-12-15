@@ -933,8 +933,8 @@ void VDataSeries::adaptPointCache( sal_Int32 nNewPointIndex ) const
     if( m_nCurrentAttributedPoint != nNewPointIndex )
     {
         m_oLabel_AttributedPoint.reset();
-        m_apLabelPropNames_AttributedPoint.reset();
-        m_apLabelPropValues_AttributedPoint.reset();
+        m_oLabelPropNames_AttributedPoint.reset();
+        m_oLabelPropValues_AttributedPoint.reset();
         m_oSymbolProperties_AttributedPoint.reset();
         m_nCurrentAttributedPoint = nNewPointIndex;
     }
@@ -987,18 +987,18 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     if( isAttributedDataPoint( index ) )
     {
         adaptPointCache( index );
-        if (!m_apLabelPropValues_AttributedPoint)
+        if (!m_oLabelPropValues_AttributedPoint)
         {
             // Cache these properties for this point.
-            m_apLabelPropNames_AttributedPoint.reset(new tNameSequence);
-            m_apLabelPropValues_AttributedPoint.reset(new tAnySequence);
+            m_oLabelPropNames_AttributedPoint.emplace();
+            m_oLabelPropValues_AttributedPoint.emplace();
             xTextProp.set( getPropertiesOfPoint( index ));
             PropertyMapper::getTextLabelMultiPropertyLists(
-                xTextProp, *m_apLabelPropNames_AttributedPoint, *m_apLabelPropValues_AttributedPoint);
+                xTextProp, *m_oLabelPropNames_AttributedPoint, *m_oLabelPropValues_AttributedPoint);
             bDoDynamicFontResize = true;
         }
-        pPropNames = m_apLabelPropNames_AttributedPoint.get();
-        pPropValues = m_apLabelPropValues_AttributedPoint.get();
+        pPropNames = &*m_oLabelPropNames_AttributedPoint;
+        pPropValues = &*m_oLabelPropValues_AttributedPoint;
     }
     else
     {

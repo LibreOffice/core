@@ -246,8 +246,8 @@ private: //member
 
     mutable std::optional<css::chart2::DataPointLabel>
                                                   m_oLabel_AttributedPoint;
-    mutable std::unique_ptr<tNameSequence>        m_apLabelPropNames_AttributedPoint;
-    mutable std::unique_ptr<tAnySequence>         m_apLabelPropValues_AttributedPoint;
+    mutable std::optional<tNameSequence>          m_oLabelPropNames_AttributedPoint;
+    mutable std::optional<tAnySequence>           m_oLabelPropValues_AttributedPoint;
     mutable std::optional<css::chart2::Symbol>    m_oSymbolProperties_AttributedPoint;
     mutable std::optional<css::chart2::Symbol>    m_oSymbolProperties_InvisibleSymbolForSelection;
     mutable sal_Int32                             m_nCurrentAttributedPoint;
