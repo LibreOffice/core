@@ -1788,9 +1788,17 @@ bool SwXParaFrameEnumerationImpl::CreateNextObject()
     if (m_vFrames.empty())
         return false;
 
-    SwFrameFormat* const pFormat = static_cast<SwFrameFormat*>(
-            m_vFrames.front()->GetRegisteredIn());
+    m_xNextObject.set(FrameClientToXTextContent(m_vFrames.front().get()));
     m_vFrames.pop_front();
+    return m_xNextObject.is();
+}
+
+uno::Reference<text::XTextContent> FrameClientToXTextContent(sw::FrameClient* pClient)
+{
+    assert(pClient);
+
+    uno::Reference<text::XTextContent> xRet;
+    SwFrameFormat* const pFormat = static_cast<SwFrameFormat*>(pClient->GetRegisteredIn());
     // the format should be valid here, otherwise the client
     // would have been removed by PurgeFrameClients
     // check for a shape first
@@ -1799,33 +1807,32 @@ bool SwXParaFrameEnumerationImpl::CreateNextObject()
         SdrObject* pObject(nullptr);
         pFormat->CallSwClientNotify(sw::FindSdrObjectHint(pObject));
         if(pObject)
-            m_xNextObject.set(pObject->getUnoShape(), uno::UNO_QUERY);
+            xRet.set(pObject->getUnoShape(), uno::UNO_QUERY);
     }
     else
     {
         const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
         OSL_ENSURE(pIdx, "where is the index?");
-        SwNode const*const pNd =
-            m_pUnoCursor->GetDoc().GetNodes()[ pIdx->GetIndex() + 1 ];
+        SwNode const* const pNd = pIdx->GetNodes()[pIdx->GetIndex() + 1];
 
         if (!pNd->IsNoTextNode())
         {
-            m_xNextObject = static_cast<SwXFrame*>(SwXTextFrame::CreateXTextFrame(
+            xRet = static_cast<SwXFrame*>(SwXTextFrame::CreateXTextFrame(
                         *pFormat->GetDoc(), pFormat).get());
         }
         else if (pNd->IsGrfNode())
         {
-            m_xNextObject.set(SwXTextGraphicObject::CreateXTextGraphicObject(
+            xRet.set(SwXTextGraphicObject::CreateXTextGraphicObject(
                         *pFormat->GetDoc(), pFormat));
         }
         else
         {
             assert(pNd->IsOLENode());
-            m_xNextObject.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+            xRet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                         *pFormat->GetDoc(), pFormat));
         }
     }
-    return m_xNextObject.is();
+    return xRet;
 }
 
 sal_Bool SAL_CALL

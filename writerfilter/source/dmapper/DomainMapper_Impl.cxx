@@ -750,6 +750,59 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
      return sName;
  }
 
+static void reanchorObjects(const uno::Reference<uno::XInterface>& xFrom,
+                            const uno::Reference<text::XTextRange>& xTo,
+                            const uno::Reference<drawing::XDrawPage>& xDrawPage)
+{
+    std::vector<uno::Reference<text::XTextContent>> aShapes;
+    bool bFastPathDone = false;
+    if (uno::Reference<beans::XPropertySet> xProps{ xFrom, uno::UNO_QUERY })
+    {
+        try
+        {
+            // See SwXParagraph::Impl::GetPropertyValues_Impl
+            uno::Sequence<uno::Reference<text::XTextContent>> aSeq;
+            xProps->getPropertyValue(u"OOXMLImport_AnchoredShapes"_ustr) >>= aSeq;
+            aShapes.insert(aShapes.end(), aSeq.begin(), aSeq.end());
+            bFastPathDone = true;
+        }
+        catch (const uno::Exception&)
+        {
+        }
+    }
+
+    if (!bFastPathDone)
+    {
+        // Can this happen? Fallback to slow DrawPage iteration and range comparison
+        uno::Reference<text::XTextRange> xRange(xFrom, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextRangeCompare> xCompare(xRange->getText(), uno::UNO_QUERY_THROW);
+
+        const sal_Int32 count = xDrawPage->getCount();
+        for (sal_Int32 i = 0; i < count; ++i)
+        {
+            try
+            {
+                uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i),
+                                                          uno::UNO_QUERY_THROW);
+                uno::Reference<text::XTextRange> xAnchor(xShape->getAnchor(), uno::UNO_SET_THROW);
+                if (xCompare->compareRegionStarts(xAnchor, xRange) <= 0
+                    && xCompare->compareRegionEnds(xAnchor, xRange) >= 0)
+                {
+                    aShapes.push_back(xShape);
+                }
+            }
+            catch (const uno::Exception&)
+            {
+                // Can happen e.g. in compareRegion*, when the shape is in a header,
+                // and paragraph in body
+            }
+        }
+    }
+
+    for (const auto& xShape : aShapes)
+        xShape->attach(xTo);
+}
+
 void DomainMapper_Impl::RemoveLastParagraph( )
 {
     if (m_bDiscardHeaderFooter)
@@ -828,31 +881,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
                 auto xEnumeration = xEA->createEnumeration();
                 uno::Reference<text::XTextRange> xPrevParagraph(xEnumeration->nextElement(),
                                                                 uno::UNO_QUERY_THROW);
-
-                uno::Reference<text::XTextRange> xParaRange(xParagraph, uno::UNO_QUERY_THROW);
-                uno::Reference<text::XTextRangeCompare> xRegionCompare(xParaRange->getText(),
-                                                                       uno::UNO_QUERY_THROW);
-                const sal_Int32 count = xDrawPage->getCount();
-                for (sal_Int32 i = 0; i < count; ++i)
-                {
-                    try
-                    {
-                        uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i),
-                                                                  uno::UNO_QUERY_THROW);
-                        uno::Reference<text::XTextRange> xAnchor(xShape->getAnchor(),
-                                                                 uno::UNO_SET_THROW);
-                        if (xRegionCompare->compareRegionStarts(xAnchor, xParaRange) <= 0
-                            && xRegionCompare->compareRegionEnds(xAnchor, xParaRange) >= 0)
-                        {
-                            xShape->attach(xPrevParagraph);
-                        }
-                    }
-                    catch (const uno::Exception&)
-                    {
-                        // Can happen e.g. in compareRegion*, when the shape is in a header,
-                        // and paragraph in body
-                    }
-                }
+                reanchorObjects(xParagraph, xPrevParagraph, xDrawPage);
             }
 
             xParagraph->dispose();
