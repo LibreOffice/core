@@ -51,17 +51,17 @@ ChartTransferable::ChartTransferable(
     bool bDrawing)
     : m_bDrawing(bDrawing)
 {
-    std::unique_ptr<SdrExchangeView> pExchgView(std::make_unique<SdrView>( rSdrModel ));
-    SdrPageView* pPv = pExchgView->ShowSdrPage( rSdrModel.GetPage( 0 ));
+    SdrView aExchgView( rSdrModel );
+    SdrPageView* pPv = aExchgView.ShowSdrPage( rSdrModel.GetPage( 0 ));
     if( pSelectedObj )
-        pExchgView->MarkObj( pSelectedObj, pPv );
+        aExchgView.MarkObj( pSelectedObj, pPv );
     else
-        pExchgView->MarkAllObj( pPv );
-    Graphic aGraphic( pExchgView->GetMarkedObjMetaFile(true));
+        aExchgView.MarkAllObj( pPv );
+    Graphic aGraphic( aExchgView.GetMarkedObjMetaFile(true));
     m_xMetaFileGraphic.set( aGraphic.GetXGraphic());
     if ( m_bDrawing )
     {
-        m_xMarkedObjModel = pExchgView->CreateMarkedObjModel();
+        m_xMarkedObjModel = aExchgView.CreateMarkedObjModel();
     }
 }
 
