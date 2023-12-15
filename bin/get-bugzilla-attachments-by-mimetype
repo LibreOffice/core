@@ -348,7 +348,7 @@ rss_bugzillas = (
 #    ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi' ), #added for abiword
     ( 'fdo', 'http://bugs.freedesktop.org/buglist.cgi' ),
     ( 'gentoo', 'http://bugs.gentoo.org/buglist.cgi' ),
-    ( 'gnome', 'http://bugzilla.gnome.org/buglist.cgi' ), # added for gnumeric
+#    ( 'gnome', 'http://bugzilla.gnome.org/buglist.cgi' ), # added for gnumeric
     ( 'kde', 'http://bugs.kde.org/buglist.cgi' ), # added for koffice/calligra
     ( 'mandriva', 'https://qa.mandriva.com/buglist.cgi' ),
     ( 'moz', 'https://bugzilla.mozilla.org/buglist.cgi' ),
