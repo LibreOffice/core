@@ -1351,6 +1351,22 @@ int Desktop::Main()
     if ( !InitializeConfiguration() )
         return EXIT_FAILURE;
 
+    SetSplashScreenProgress(30);
+
+    // create title string
+    OUString aTitle(ReplaceStringHookProc(RID_APPTITLE));
+#ifdef DBG_UTIL
+    //include buildid in non product builds
+    aTitle += " [" + utl::Bootstrap::getBuildIdData("development") + "]";
+#endif
+
+    SetDisplayName( aTitle );
+    SetSplashScreenProgress(35);
+    pExecGlobals->pPathOptions.reset( new SvtPathOptions);
+    SetSplashScreenProgress(40);
+
+    xDesktop = css::frame::Desktop::create( xContext );
+
 #if HAVE_FEATURE_UPDATE_MAR
     const char* pUpdaterTestEnable = std::getenv("LIBO_UPDATER_TEST_ENABLE");
     if (pUpdaterTestEnable || officecfg::Office::Update::Update::Enabled::get())
@@ -1414,7 +1430,10 @@ int Desktop::Main()
             CloseSplashScreen();
             bool bSuccess = update();
             if (bSuccess)
+            {
+                xDesktop->terminate();
                 return EXIT_SUCCESS;
+            }
         }
         else if (isTimeForUpdateCheck() || pForcedUpdateCheck)
         {
@@ -1428,22 +1447,6 @@ int Desktop::Main()
         }
     }
 #endif
-
-    SetSplashScreenProgress(30);
-
-    // create title string
-    OUString aTitle(ReplaceStringHookProc(RID_APPTITLE));
-#ifdef DBG_UTIL
-    //include buildid in non product builds
-    aTitle += " [" + utl::Bootstrap::getBuildIdData("development") + "]";
-#endif
-
-    SetDisplayName( aTitle );
-    SetSplashScreenProgress(35);
-    pExecGlobals->pPathOptions.reset( new SvtPathOptions);
-    SetSplashScreenProgress(40);
-
-    xDesktop = css::frame::Desktop::create( xContext );
 
     // create service for loading SFX (still needed in startup)
     pExecGlobals->xGlobalBroadcaster = Reference < css::document::XDocumentEventListener >
