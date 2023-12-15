@@ -189,116 +189,6 @@
     </issue>
 
     <issue
-        id="MissingTranslation"
-        message="&quot;about_privacy_policy&quot; is not translated in &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;about_privacy_policy&quot;>Privacy Policy&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="16"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;create_file&quot; is not translated in &quot;de&quot; (German) or &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;create_file&quot;>Create New File&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="18"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;select_file_to_open&quot; is not translated in &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;select_file_to_open&quot;>Select file to open&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="25"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;search_find_next&quot; is not translated in &quot;de&quot; (German) or &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;search_find_next&quot;>Find Next&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="30"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;search_find_previous&quot; is not translated in &quot;de&quot; (German) or &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;search_find_previous&quot;>Find Previous&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="31"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;action_save_as&quot; is not translated in &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Save As...&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="53"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;message_saving_failed&quot; is not translated in &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;message_saving_failed&quot;>Saving the document failed.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="61"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;pdf_export_finished&quot; is not translated in &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;pdf_export_finished&quot;>PDF export finished&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="158"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;unable_to_save&quot; is not translated in &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;unable_to_save&quot;>Unable to save file&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="160"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
-        message="&quot;automatic&quot; is not translated in &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;automatic&quot;>Automatic&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="172"
-            column="13"/>
-    </issue>
-
-    <issue
         id="SetJavaScriptEnabled"
         message="Using `setJavaScriptEnabled` can introduce XSS vulnerabilities into your application, review carefully"
         errorLine1="        mWebView.getSettings().setJavaScriptEnabled(true);"
@@ -1259,160 +1149,6 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.string.app_about_name` appears to be unused"
-        errorLine1="    &lt;string name=&quot;app_about_name&quot;>&lt;b>LibreOffice Viewer \&apos;Beta\&apos;&lt;/b>&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="7"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.browser_app_name` appears to be unused"
-        errorLine1="    &lt;string name=&quot;browser_app_name&quot;>LibreOffice Browser&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="27"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.menu_search` appears to be unused"
-        errorLine1="    &lt;string name=&quot;menu_search&quot;>Search&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="28"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.search_not_found` appears to be unused"
-        errorLine1="    &lt;string name=&quot;search_not_found&quot;>Keyword not found&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="29"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.menu_preferences` appears to be unused"
-        errorLine1="    &lt;string name=&quot;menu_preferences&quot;>Preferences&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="32"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.action_bold` appears to be unused"
-        errorLine1="    &lt;string name=&quot;action_bold&quot;>Bold&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="47"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.action_underline` appears to be unused"
-        errorLine1="    &lt;string name=&quot;action_underline&quot;>Underline&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="48"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.action_italic` appears to be unused"
-        errorLine1="    &lt;string name=&quot;action_italic&quot;>Italic&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="49"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.action_strikeout` appears to be unused"
-        errorLine1="    &lt;string name=&quot;action_strikeout&quot;>Strike Out&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="50"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.message_save_incomplete` appears to be unused"
-        errorLine1="    &lt;string name=&quot;message_save_incomplete&quot;>Save incomplete. Were there any changes?&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="62"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.alert_copy_svg_slide_show_to_clipboard` appears to be unused"
-        errorLine1="    &lt;string name=&quot;alert_copy_svg_slide_show_to_clipboard&quot;>Your Android device doesn\&apos;t support in-app svg slideshow. We copied the slideshow link to clipboard. Please press home button, open a modern web browser, paste in the address bar, and go.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="77"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.alert_copy_svg_slide_show_to_clipboard_dismiss` appears to be unused"
-        errorLine1="    &lt;string name=&quot;alert_copy_svg_slide_show_to_clipboard_dismiss&quot;>OK&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="78"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.unable_to_go_further` appears to be unused"
-        errorLine1="    &lt;string name=&quot;unable_to_go_further&quot;>Unable to go further.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="154"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.directory_not_saved` appears to be unused"
-        errorLine1="    &lt;string name=&quot;directory_not_saved&quot;>Directory not saved.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/strings.xml"
-            line="164"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.layout.text_selection_handles` appears to be unused"
         errorLine1="&lt;merge xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
         errorLine2="^">
@@ -1513,22 +1249,33 @@
     <issue
         id="TypographyEllipsis"
         message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Speichern unter...&lt;/string>"
-        errorLine2="                                  ~~~~~~~~~~~~~~~~~~">
+        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Պահել որպես...&lt;/string>"
+        errorLine2="                                  ~~~~~~~~~~~~~~">
         <location
-            file="res/values-de/strings.xml"
-            line="50"
+            file="res/values-hy/strings.xml"
+            line="36"
             column="35"/>
     </issue>
 
     <issue
         id="TypographyEllipsis"
         message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Save As...&lt;/string>"
-        errorLine2="                                  ~~~~~~~~~~">
+        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Cadw Fel...&lt;/string>"
+        errorLine2="                                  ~~~~~~~~~~~">
         <location
-            file="res/values/strings.xml"
-            line="53"
+            file="res/values-cy/strings.xml"
+            line="40"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="TypographyEllipsis"
+        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
+        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Gardar como...&lt;/string>"
+        errorLine2="                                  ~~~~~~~~~~~~~~">
+        <location
+            file="res/values-gl/strings.xml"
+            line="42"
             column="35"/>
     </issue>
 
