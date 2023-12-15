@@ -41,6 +41,7 @@ public:
     SmPrintUIOptions();
 };
 
+class SmDocShell;
 
 class SmModel final : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
@@ -55,7 +56,7 @@ class SmModel final : public SfxBaseModel,
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) override;
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) override;
 public:
-    explicit SmModel( SfxObjectShell *pObjSh );
+    explicit SmModel(SmDocShell* pObjSh);
     virtual ~SmModel() noexcept override;
 
     //XInterface
@@ -90,6 +91,9 @@ public:
     virtual void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding) override;
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) override;
     virtual Size getFormulaSize() const override;
+
+private:
+    SmDocShell* GetSmDocShell() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

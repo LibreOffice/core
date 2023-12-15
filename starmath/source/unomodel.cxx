@@ -315,7 +315,7 @@ static const rtl::Reference<PropertySetInfo> & lcl_createModelPropertyInfo ()
     return PROPS_INFO;
 }
 
-SmModel::SmModel( SfxObjectShell *pObjSh )
+SmModel::SmModel(SmDocShell* pObjSh)
 : SfxBaseModel(pObjSh)
 , PropertySetHelper ( lcl_createModelPropertyInfo () )
 {
@@ -324,6 +324,8 @@ SmModel::SmModel( SfxObjectShell *pObjSh )
 SmModel::~SmModel() noexcept
 {
 }
+
+SmDocShell* SmModel::GetSmDocShell() const { return static_cast<SmDocShell*>(GetObjectShell()); }
 
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType )
 {
@@ -402,7 +404,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 {
     SolarMutexGuard aGuard;
 
-    SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
+    SmDocShell* pDocSh = GetSmDocShell();
 
     if ( nullptr == pDocSh )
         throw UnknownPropertyException();
@@ -716,7 +718,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
 void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValue )
 {
-    SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
+    SmDocShell* pDocSh = GetSmDocShell();
 
     if ( nullptr == pDocSh )
         throw UnknownPropertyException();
@@ -953,7 +955,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     if (0 != nRenderer)
         throw IllegalArgumentException();
 
-    SmDocShell *pDocSh = static_cast < SmDocShell * >( GetObjectShell() );
+    SmDocShell* pDocSh = GetSmDocShell();
     if (!pDocSh)
         throw RuntimeException();
 
@@ -994,7 +996,7 @@ void SAL_CALL SmModel::render(
     if (0 != nRenderer)
         throw IllegalArgumentException();
 
-    SmDocShell *pDocSh = static_cast < SmDocShell * >( GetObjectShell() );
+    SmDocShell* pDocSh = GetSmDocShell();
     if (!pDocSh)
         throw RuntimeException();
 
@@ -1088,22 +1090,22 @@ void SmModel::writeFormulaOoxml(
         oox::core::OoxmlVersion const version,
         oox::drawingml::DocumentType const documentType, sal_Int8 nAlign)
 {
-    static_cast<SmDocShell*>(GetObjectShell())->writeFormulaOoxml(pSerializer, version, documentType, nAlign);
+    GetSmDocShell()->writeFormulaOoxml(pSerializer, version, documentType, nAlign);
 }
 
 void SmModel::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)
 {
-    static_cast<SmDocShell*>(GetObjectShell())->writeFormulaRtf(rBuffer, nEncoding);
+    GetSmDocShell()->writeFormulaRtf(rBuffer, nEncoding);
 }
 
 void SmModel::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 {
-    static_cast< SmDocShell* >( GetObjectShell())->readFormulaOoxml( stream );
+    GetSmDocShell()->readFormulaOoxml(stream);
 }
 
 Size SmModel::getFormulaSize() const
 {
-    return o3tl::convert(static_cast< SmDocShell* >( GetObjectShell())->GetSize(), SmO3tlLengthUnit(), o3tl::Length::mm100);
+    return o3tl::convert(GetSmDocShell()->GetSize(), SmO3tlLengthUnit(), o3tl::Length::mm100);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
