@@ -1,0 +1,15 @@
+--- core/fpdfapi/page/cpdf_sampledfunc.cpp	2023-12-15 23:27:10.955659091 +0100
++++ core/fpdfapi/page/cpdf_sampledfunc.cpp	2023-12-15 23:27:43.420136476 +0100
+@@ -17,8 +17,11 @@
+ #include "core/fxcrt/compiler_specific.h"
+ #include "core/fxcrt/fx_memory_wrappers.h"
+ #include "core/fxcrt/fx_safe_types.h"
++#ifdef USE_SYSTEM_ABSEIL
++#include <absl/container/inlined_vector.h>
++#else
+ #include "third_party/abseil-cpp/absl/container/inlined_vector.h"
+-
++#endif
+ namespace {
+ 
+ // See PDF Reference 1.7, page 170, table 3.36.
