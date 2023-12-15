@@ -90,9 +90,13 @@ android {
     }
     lint {
         warningsAsErrors true
-        // don't error-out on missing translations or external updates (new translations,
-        // new gradle plugin, library versions or target API become available)
-        informational 'AndroidGradlePluginVersion', 'GradleDependency', 'MissingTranslation', 'NewerVersionAvailable', 'OldTargetApi', 'TypographyEllipsis'
+        // ignore missing translations, since these are tracked in Weblate already
+        ignore 'MissingTranslation'
+        // don't error-out on external updates (new gradle plugin, library versions
+        // or target API become available)
+        // don't error-out on TypographyEllipsis, since this can be introduced with
+        // new translations, and those are handled in Weblate
+        informational 'AndroidGradlePluginVersion', 'GradleDependency', 'NewerVersionAvailable', 'OldTargetApi', 'TypographyEllipsis'
         // don't fail on pre-existing issues
         // These should be dealt with at some point, though.
         // To update lint-baseline.xml, just remove the file and run the build again.
