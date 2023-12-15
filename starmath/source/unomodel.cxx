@@ -1103,7 +1103,7 @@ void SmModel::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 
 Size SmModel::getFormulaSize() const
 {
-    return static_cast< SmDocShell* >( GetObjectShell())->GetSize();
+    return o3tl::convert(static_cast< SmDocShell* >( GetObjectShell())->GetSize(), SmO3tlLengthUnit(), o3tl::Length::mm100);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

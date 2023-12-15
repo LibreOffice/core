@@ -35,7 +35,7 @@ class OOX_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") FormulaImExportBase
 {
 public:
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) = 0;
-    virtual Size getFormulaSize() const = 0;
+    virtual Size getFormulaSize() const = 0; // Unit is mm100
 
     virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,
             oox::core::OoxmlVersion version,
