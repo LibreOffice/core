@@ -90,8 +90,8 @@ android {
     }
     lint {
         warningsAsErrors true
-        // ignore missing translations, since these are tracked in Weblate already
-        ignore 'MissingTranslation'
+        // ignore missing or extra translations, since these are tracked/managed via Weblate
+        ignore 'ExtraTranslation', 'MissingTranslation'
         // don't error-out on external updates (new gradle plugin, library versions
         // or target API become available)
         // don't error-out on TypographyEllipsis, since this can be introduced with
@@ -101,6 +101,7 @@ android {
         // These should be dealt with at some point, though.
         // To update lint-baseline.xml, just remove the file and run the build again.
         baseline file("lint-baseline.xml")
+        // s.a. lint.xml that contains further config
     }
 }
 

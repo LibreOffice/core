@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Disable check for extra resources in translations, Weblate takes care of
+         removing these. -->
+    <issue id="UnusedResources">
+        <ignore path="res/values-*/strings.xml" />
+    </issue>
+</lint>
+
