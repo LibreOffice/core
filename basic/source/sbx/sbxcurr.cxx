@@ -22,6 +22,11 @@
 #include <basic/sberrors.hxx>
 #include <basic/sbxvar.hxx>
 #include <o3tl/string_view.hxx>
+#include <svl/numformat.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <sbintern.hxx>
+#include <runtime.hxx>
 #include "sbxconv.hxx"
 
 
@@ -85,76 +90,61 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     return aAbsStr;
 }
 
-
-static sal_Int64 ImpStringToCurrency( std::u16string_view rStr )
+static sal_Int64 ImpStringToCurrency(const rtl::OUString& rStr)
 {
-
-    sal_Int32   nFractDigit = 4;
-
-    sal_Unicode const cDeciPnt = '.';
-    sal_Unicode const c1000Sep = ',';
-
-    // lets use the existing string number conversions
-    // there is a performance impact here ( multiple string copies )
-    // but better I think than a home brewed string parser, if we need a parser
-    // we should share some existing ( possibly from calc is there a currency
-    // conversion there ? #TODO check )
-
-    std::u16string_view sTmp = o3tl::trim( rStr );
-    auto p = sTmp.begin();
-    auto pEnd = sTmp.end();
-
-    // normalise string number by removing thousand & decimal point separators
-    OUStringBuffer sNormalisedNumString( static_cast<sal_Int32>(sTmp.size()) + nFractDigit );
-
-    if ( p != pEnd && (*p == '-'  || *p == '+' ) )
-        sNormalisedNumString.append( *p++ );
-
-    while ( p != pEnd && *p >= '0' && *p <= '9' )
+    LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
+    std::shared_ptr<SvNumberFormatter> pFormatter;
+    if (GetSbData()->pInst)
     {
-        sNormalisedNumString.append( *p++ );
-        // #TODO in vba mode set runtime error when a space ( or other )
-        // illegal character is found
-        if( p != pEnd && *p == c1000Sep )
-            p++;
+        pFormatter = GetSbData()->pInst->GetNumberFormatter();
+    }
+    else
+    {
+        sal_uInt32 n; // Dummy
+        pFormatter = SbiInstance::PrepareNumberFormatter(/*date index*/ n, /*time index*/ n,
+                                                         /*date time index*/ n);
     }
 
-    bool bRoundUp = false;
+    // Passing a locale index switches IsNumberFormat() to use that locale,
+    // in case the formatter wasn't default-created with it.
+    sal_uInt32 nIndex = pFormatter->GetStandardIndex(eLangType);
 
-    if( p != pEnd && *p == cDeciPnt )
+    double fResult = 0.0;
+    bool bSuccess = pFormatter->IsNumberFormat(rStr, nIndex, fResult);
+    if (bSuccess)
     {
-        p++;
-        while( nFractDigit && p != pEnd && *p >= '0' && *p <= '9' )
+        SvNumFormatType nType = pFormatter->GetType(nIndex);
+        if (!(nType & (SvNumFormatType::CURRENCY | SvNumFormatType::NUMBER)))
         {
-            sNormalisedNumString.append( *p++ );
-            nFractDigit--;
+            bSuccess = false;
         }
-        // Consume trailing content
-        // Round up if necessary
-        if( p != pEnd && *p >= '5' && *p <= '9' )
-            bRoundUp = true;
-        while( p != pEnd && *p >= '0' && *p <= '9' )
-            p++;
     }
-    // can we raise error here ? ( previous behaviour was more forgiving )
-    // so... not sure that could break existing code, let's see if anyone
-    // complains.
 
-    if ( p != pEnd )
-        SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-    while( nFractDigit )
+    if (!bSuccess)
     {
-        sNormalisedNumString.append( '0' );
-        nFractDigit--;
+        SbxBase::SetError(ERRCODE_BASIC_CONVERSION);
     }
 
-    sal_Int64 result = o3tl::toInt64(sNormalisedNumString);
+    sal_Int64 nRes = 0;
+    const auto fShiftedResult = fResult * CURRENCY_FACTOR;
+    if (fShiftedResult + 0.5 > static_cast<double>(SAL_MAX_INT64)
+        || fShiftedResult - 0.5 < static_cast<double>(SAL_MIN_INT64))
+    {
+        nRes = SAL_MAX_INT64;
+        if (fShiftedResult - 0.5 < static_cast<double>(SAL_MIN_INT64))
+        {
+            nRes = SAL_MIN_INT64;
+        }
 
-    if ( bRoundUp )
-        ++result;
-    return result;
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+    }
+    else
+    {
+        nRes = ImpDoubleToCurrency(fResult);
+    }
+
+    return nRes;
 }
-
 
 sal_Int64 ImpGetCurrency( const SbxValues* p )
 {
