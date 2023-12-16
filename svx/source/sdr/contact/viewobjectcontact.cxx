@@ -416,15 +416,16 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                         annotIds = pPDFExtOutDevData->GetScreenAnnotIds(pSdrObj);
                     }
 
-                    drawinglayer::primitive2d::Primitive2DReference xReference(
-                        new drawinglayer::primitive2d::StructureTagPrimitive2D(
-                            eElement,
-                            bBackground,
-                            bImage,
-                            std::move(rNewPrimitiveSequence),
-                            pAnchorKey,
-                            &annotIds));
-                    rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                    rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
+                        drawinglayer::primitive2d::Primitive2DReference(
+                            new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                                eElement,
+                                bBackground,
+                                bImage,
+                                std::move(rNewPrimitiveSequence),
+                                pAnchorKey,
+                                &annotIds))
+                    };
                 }
             }
         }

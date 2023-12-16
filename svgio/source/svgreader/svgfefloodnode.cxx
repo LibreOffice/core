@@ -138,10 +138,10 @@ void SvgFeFloodNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
     const double fY(maY.solve(*this, NumberType::ycoordinate));
     const basegfx::B2DRange aRange(fX, fY, fX + fWidth, fY + fHeight);
 
-    basegfx::B2DPolyPolygon aPolygon(basegfx::utils::createPolygonFromRect(aRange));
     drawinglayer::primitive2d::Primitive2DReference xRef(
-        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(aPolygon,
-                                                                   maFloodColor.getBColor()));
+        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+            basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange)),
+            maFloodColor.getBColor()));
 
     rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
 

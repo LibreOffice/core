@@ -794,8 +794,9 @@ void SdrDragMethod::CreateOverlayGeometry(
 
         if(!aResultTransparent.empty())
         {
-            drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aResultTransparent), 0.5));
-            aResultTransparent = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparencePrimitive2D };
+            aResultTransparent = drawinglayer::primitive2d::Primitive2DContainer {
+                drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aResultTransparent), 0.5))
+            };
 
             std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(
                 new sdr::overlay::OverlayPrimitive2DSequenceObject(

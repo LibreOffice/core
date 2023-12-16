@@ -142,16 +142,15 @@ void SingleLinePrimitive2D::get2DDecomposition(
     if (getStart() == getEnd())
     {
         // single point
-        std::vector<basegfx::B2DPoint> aPoints = { getStart() };
-        Primitive2DContainer aSequence
-            = { new PointArrayPrimitive2D(std::move(aPoints), getBColor()) };
+        Primitive2DContainer aSequence = { new PointArrayPrimitive2D(
+            std::vector<basegfx::B2DPoint>{ getStart() }, getBColor()) };
         rVisitor.visit(aSequence);
     }
     else
     {
         // line
-        basegfx::B2DPolygon aPolygon{ getStart(), getEnd() };
-        Primitive2DContainer aSequence = { new PolygonHairlinePrimitive2D(aPolygon, getBColor()) };
+        Primitive2DContainer aSequence = { new PolygonHairlinePrimitive2D(
+            basegfx::B2DPolygon{ getStart(), getEnd() }, getBColor()) };
         rVisitor.visit(aSequence);
     }
 }

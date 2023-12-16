@@ -64,13 +64,13 @@ namespace sdr::overlay
                 }
 
 
-                // embed in 50% transparent paint
-                drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
-                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                        std::move(aRetval),
-                        0.5));
-
-                aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
+                aRetval = drawinglayer::primitive2d::Primitive2DContainer {
+                    // embed in 50% transparent paint
+                    drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                            std::move(aRetval),
+                            0.5))
+                };
             }
 
             return aRetval;

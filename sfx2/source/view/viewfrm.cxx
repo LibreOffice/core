@@ -2959,9 +2959,8 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 
     //seen in tdf#122598, no parent for subsequent dialog
     SfxAllItemSet aSet(rPool);
-    css::uno::Reference< css::frame::XFrame > xFrame =
-            GetFrame().GetFrameInterface();
-    aSet.Put(SfxUnoFrameItem(SID_FILLFRAME, xFrame));
+    aSet.Put(SfxUnoFrameItem(SID_FILLFRAME,
+                GetFrame().GetFrameInterface()));
     aReq.SetInternalArgs_Impl(aSet);
 
     aReq.AppendItem( SfxBoolItem(SID_RECORDMACRO,true) );

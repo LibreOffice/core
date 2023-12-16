@@ -345,12 +345,12 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
                     // embed filled to transparency (if used)
                     if(getTransparence() > 0.0)
                     {
-                        Primitive2DReference aFillTransparent(
-                            new UnifiedTransparencePrimitive2D(
-                                std::move(aRetval),
-                                getTransparence()));
-
-                        aRetval = Primitive2DContainer { aFillTransparent };
+                        aRetval = Primitive2DContainer {
+                            Primitive2DReference(
+                                new UnifiedTransparencePrimitive2D(
+                                    std::move(aRetval),
+                                    getTransparence()))
+                        };
                     }
                 }
                 else

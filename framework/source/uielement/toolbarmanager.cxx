@@ -1104,7 +1104,7 @@ void ToolBarManager::CreateControllers()
                     OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
                     sal_uInt16 nWidth = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->nWidth;
 
-                    Reference< XStatusListener > xStatusListener(
+                    xController.set(
                         ToolBarMerger::CreateController( m_xContext,
                                                          m_xFrame,
                                                          m_pToolBar,
@@ -1113,7 +1113,6 @@ void ToolBarManager::CreateControllers()
                                                          nWidth,
                                                          aControlType ).get(), UNO_QUERY );
 
-                    xController = xStatusListener;
                 }
                 else
                 {

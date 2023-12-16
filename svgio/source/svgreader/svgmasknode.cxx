@@ -175,12 +175,12 @@ namespace svgio::svgreader
             if(getTransform())
             {
                 // create embedding group element with transformation
-                drawinglayer::primitive2d::Primitive2DReference xRef(
-                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                        *getTransform(),
-                        std::move(aNewTarget)));
-
-                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer {
+                    drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                            *getTransform(),
+                            std::move(aNewTarget)))
+                };
             }
 
             // append to current target
