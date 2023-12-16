@@ -915,6 +915,7 @@ uno::Reference< XSpellAlternatives >
     SwPaM* pCursor = GetCursor();
     SwPosition aPos( *pCursor->GetPoint() );
     SwCursorMoveState eTmpState( CursorMoveState::SetOnlyText );
+    eTmpState.m_bPosMatchesBounds = true; // treat last half of character same as first half
     SwTextNode *pNode = nullptr;
     SwWrongList *pWrong = nullptr;
     if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
@@ -986,6 +987,7 @@ bool SwEditShell::GetGrammarCorrection(
     SwPaM* pCursor = GetCursor();
     SwPosition aPos( *pCursor->GetPoint() );
     SwCursorMoveState eTmpState( CursorMoveState::SetOnlyText );
+    eTmpState.m_bPosMatchesBounds = true; // treat last half of character same as first half
     SwTextNode *pNode = nullptr;
     SwGrammarMarkUp *pWrong = nullptr;
     if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
