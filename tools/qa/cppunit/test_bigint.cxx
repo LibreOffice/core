@@ -22,6 +22,8 @@
 
 #include <tools/bigint.hxx>
 
+#include <limits>
+
 namespace tools
 {
 class BigIntTest : public CppUnit::TestFixture
@@ -54,7 +56,6 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-42), static_cast<sal_Int32>(bi));
     }
 
-#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
     // positive number just fitting to sal_Int32
     {
         BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::max()));
@@ -88,7 +89,6 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(!bi.IsLong());
     }
-#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BigIntTest);
