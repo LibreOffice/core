@@ -412,14 +412,12 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::An
 
     auto pStatement = o3tl::doAccess<css::frame::DispatchStatement>(element);
 
-    css::frame::DispatchStatement aStatement(
+    m_aStatements[idx] = css::frame::DispatchStatement(
         pStatement->aCommand,
         pStatement->aTarget,
         pStatement->aArgs,
         pStatement->nFlags,
         pStatement->bIsComment);
-
-    m_aStatements[idx] = aStatement;
 }
 
 } // namespace framework

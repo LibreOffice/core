@@ -333,12 +333,12 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
                 std::make_shared<basegfx::BColorModifier_interpolate>(
                     aRGBWhite,
                     0.5);
-            drawinglayer::primitive2d::Primitive2DReference xReference(
-                new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                    std::move(xRetval),
-                    aBColorModifier));
-
-            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer{
+                drawinglayer::primitive2d::Primitive2DReference(
+                    new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                        std::move(xRetval),
+                        aBColorModifier))
+            };
         }
     }
 

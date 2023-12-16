@@ -1089,11 +1089,10 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::get
     sal_Int32 n = 0;
     for (auto const& elem : aUIElementInfoCollection)
     {
-        Sequence< PropertyValue > aUIElementInfo{
+        aElementInfoSeq[n++] = Sequence<PropertyValue> {
             comphelper::makePropertyValue("ResourceURL", elem.second.aResourceURL),
             comphelper::makePropertyValue(m_aPropUIName, elem.second.aUIName)
         };
-        aElementInfoSeq[n++] = aUIElementInfo;
     }
 
     return comphelper::containerToSequence(aElementInfoSeq);

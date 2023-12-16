@@ -620,13 +620,10 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( xDispatchProvider.is() )
         {
-            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
-                                                    aTargetURL, OUString(), 0 );
-
             ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-            pExecuteInfo->xDispatch     = xDispatch;
-            pExecuteInfo->aTargetURL    = aTargetURL;
-            pExecuteInfo->aArgs         = aArgs;
+            pExecuteInfo->xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
+            pExecuteInfo->aTargetURL = aTargetURL;
+            pExecuteInfo->aArgs = aArgs;
             Application::PostUserEvent( LINK(nullptr, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
         }
     }

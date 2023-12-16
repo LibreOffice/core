@@ -1752,11 +1752,10 @@ void Content::transfer(
     // 1) Create new child content.
 
 
-    OUString aType = xSource->isFolder()
+    ucb::ContentInfo aContentInfo;
+    aContentInfo.Type = xSource->isFolder()
             ? getContentType( m_aUri.getScheme(), true )
             : getContentType( m_aUri.getScheme(), false );
-    ucb::ContentInfo aContentInfo;
-    aContentInfo.Type = aType;
     aContentInfo.Attributes = 0;
 
     // Note: The static cast is okay here, because its sure that

@@ -118,10 +118,11 @@ namespace sdr::overlay
                 if(bInvert)
                 {
                     // embed all in invert primitive
-                    drawinglayer::primitive2d::Primitive2DReference aInvert(
-                        new drawinglayer::primitive2d::InvertPrimitive2D(
-                            std::move(aRetval)));
-                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aInvert };
+                    aRetval = drawinglayer::primitive2d::Primitive2DContainer {
+                        drawinglayer::primitive2d::Primitive2DReference(
+                            new drawinglayer::primitive2d::InvertPrimitive2D(
+                                std::move(aRetval)))
+                    };
                 }
                 else if(OverlayType::Transparent == maLastOverlayType)
                 {

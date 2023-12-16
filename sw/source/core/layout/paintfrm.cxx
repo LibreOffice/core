@@ -3115,8 +3115,7 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
     SwLineEntrySet* pLineSet = aMapIter != pLine2->end() ? &((*aMapIter).second) : nullptr;
     if ( !pLineSet )
     {
-        SwLineEntrySet aNewSet;
-        (*pLine2)[ nKey ] = aNewSet;
+        (*pLine2)[nKey] = SwLineEntrySet();
         pLineSet = &(*pLine2)[ nKey ];
     }
     SwLineEntrySet::iterator aIter = pLineSet->begin();

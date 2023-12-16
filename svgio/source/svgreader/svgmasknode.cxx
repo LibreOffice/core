@@ -242,14 +242,14 @@ namespace svgio::svgreader
                     if (SvgUnits::objectBoundingBox == maMaskContentUnits)
                     {
                         // mask is object-relative, embed in content transformation
-                        drawinglayer::primitive2d::Primitive2DReference xTransform(
-                            new drawinglayer::primitive2d::TransformPrimitive2D(
-                                basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                    aContentRange.getRange(),
-                                    aContentRange.getMinimum()),
-                                std::move(aMaskTarget)));
-
-                        aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
+                        aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer {
+                            drawinglayer::primitive2d::Primitive2DReference(
+                                new drawinglayer::primitive2d::TransformPrimitive2D(
+                                    basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                        aContentRange.getRange(),
+                                        aContentRange.getMinimum()),
+                                    std::move(aMaskTarget)))
+                        };
                     }
                     else // userSpaceOnUse
                     {

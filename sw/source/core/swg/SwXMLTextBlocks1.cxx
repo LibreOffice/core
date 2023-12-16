@@ -184,12 +184,10 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         if ( !xDocStream.is() )
             return ERR_SWG_READ_ERROR;
 
-        uno::Reference<io::XInputStream> xInputStream = xDocStream->getInputStream();
-
         // prepare ParserInputSource
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = m_aName;
-        aParserInput.aInputStream = xInputStream;
+        aParserInput.aInputStream = xDocStream->getInputStream();
 
         // get service factory
         uno::Reference< uno::XComponentContext > xContext =

@@ -336,19 +336,18 @@ namespace wmfemfhelper
     {
         drawinglayer::primitive2d::Primitive2DContainer xRetval = std::move(aTargets);
 
-
         if (!xRetval.empty() && rPropertyHolder.getClipPolyPolygonActive())
         {
             const basegfx::B2DPolyPolygon& rClipPolyPolygon = rPropertyHolder.getClipPolyPolygon();
 
             if (rClipPolyPolygon.count())
             {
-                drawinglayer::primitive2d::Primitive2DReference xMask(
-                    new drawinglayer::primitive2d::MaskPrimitive2D(
-                        rClipPolyPolygon,
-                        std::move(xRetval)));
-
-                xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xMask };
+                xRetval = drawinglayer::primitive2d::Primitive2DContainer{
+                    drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            rClipPolyPolygon,
+                            std::move(xRetval)))
+                };
             }
         }
 

@@ -110,10 +110,7 @@ void ContentResultSetWrapper::impl_initPropertySetInfo(std::unique_lock<std::mut
     if( !m_xPropertySetOrigin.is() )
         return;
 
-    Reference< XPropertySetInfo > xOrig =
-            m_xPropertySetOrigin->getPropertySetInfo();
-
-    m_xPropertySetInfo = xOrig;
+    m_xPropertySetInfo = m_xPropertySetOrigin->getPropertySetInfo();
 }
 
 void ContentResultSetWrapper::impl_EnsureNotDisposed(std::unique_lock<std::mutex>& /*rGuard*/)

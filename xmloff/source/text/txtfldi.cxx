@@ -204,9 +204,7 @@ bool XMLTextFieldImportContext::CreateField(
         Reference<XInterface> xIfc = xFactory->createInstance(rServiceName);
         if( xIfc.is() )
         {
-            Reference<XPropertySet> xTmp( xIfc, UNO_QUERY );
-
-            xField = xTmp;
+            xField.set(xIfc, UNO_QUERY);
         } else {
             return false;   // can't create instance
         }

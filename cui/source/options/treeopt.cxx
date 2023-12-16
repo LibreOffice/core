@@ -2573,8 +2573,7 @@ short OfaTreeOptionsDialog::run()
     if ( !bIsFromExtensionManager )
     {
         // collect all DictionaryList Events while the dialog is executed
-        Reference<css::linguistic2::XSearchableDictionaryList> xDictionaryList(LinguMgr::GetDictionaryList());
-        pClamp.reset( new SvxDicListChgClamp( xDictionaryList ) );
+        pClamp.reset(new SvxDicListChgClamp(LinguMgr::GetDictionaryList()));
     }
 
     return SfxOkDialogController::run();

@@ -126,11 +126,12 @@ namespace drawinglayer::primitive2d
             if(0 != mnDiscreteWidth && 0 != mnDiscreteHeight)
             {
                 const geometry::ViewInformation2D aViewInformation2D;
-                primitive2d::Primitive2DReference xEmbedRef(
-                    new primitive2d::TransformPrimitive2D(
-                        basegfx::utils::createScaleB2DHomMatrix(mnDiscreteWidth, mnDiscreteHeight),
-                        Primitive2DContainer(getChildren())));
-                primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
+                primitive2d::Primitive2DContainer xEmbedSeq {
+                    primitive2d::Primitive2DReference(
+                        new primitive2d::TransformPrimitive2D(
+                            basegfx::utils::createScaleB2DHomMatrix(mnDiscreteWidth, mnDiscreteHeight),
+                            Primitive2DContainer(getChildren())))
+                };
 
                 const BitmapEx aBitmapEx(
                     convertToBitmapEx(
@@ -244,12 +245,12 @@ namespace drawinglayer::primitive2d
                         aMaskRange.getRange(),
                         aMaskRange.getMinimum()));
 
-                Primitive2DReference xRef(
-                    new TransformPrimitive2D(
-                        aMaskTransform,
-                        std::move(aRetval)));
-
-                aRetval = Primitive2DContainer { xRef };
+                aRetval = Primitive2DContainer {
+                    Primitive2DReference(
+                        new TransformPrimitive2D(
+                            aMaskTransform,
+                            std::move(aRetval)))
+                };
             }
 
             // embed result in mask

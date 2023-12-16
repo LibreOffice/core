@@ -35,8 +35,7 @@ STLPropertySet::~STLPropertySet()
 
 void STLPropertySet::setPropertyDefaultValue( sal_Int32 nHandle, const Any& rValue )
 {
-    STLPropertyMapEntry aEntry( rValue );
-    maPropertyMap[ nHandle ] = aEntry;
+    maPropertyMap[nHandle] = STLPropertyMapEntry(rValue);
 }
 
 void STLPropertySet::setPropertyValue( sal_Int32 nHandle, const Any& rValue )

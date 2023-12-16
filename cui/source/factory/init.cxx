@@ -32,9 +32,8 @@ SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(weld::Widget* i_pParent, const 
     if (aDlg.run() == RET_OK)
     {
         sal_UCS4 cChar = aDlg.GetChar();
-        // using the new UCS4 constructor
-        OUString aOUStr( &cChar, 1 );
-        o_rResult = aOUStr;
+        // using the UCS4 constructor
+        o_rResult = OUString(&cChar, 1);
         bRet = true;
     }
     return bRet;

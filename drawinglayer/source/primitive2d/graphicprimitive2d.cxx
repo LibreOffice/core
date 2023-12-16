@@ -156,14 +156,12 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
             getGraphicAttr().GetBottomCrop()));
 
         // embed content in cropPrimitive
-        Primitive2DReference xPrimitive(
+        aRetval = Primitive2DContainer{ Primitive2DReference(
             new CropPrimitive2D(std::move(aRetval), aTransform,
                                 getGraphicAttr().GetLeftCrop() * aCropScaleFactor.getX(),
                                 getGraphicAttr().GetTopCrop() * aCropScaleFactor.getY(),
                                 getGraphicAttr().GetRightCrop() * aCropScaleFactor.getX(),
-                                getGraphicAttr().GetBottomCrop() * aCropScaleFactor.getY()));
-
-        aRetval = Primitive2DContainer{ xPrimitive };
+                                getGraphicAttr().GetBottomCrop() * aCropScaleFactor.getY())) };
     }
 
     rContainer.append(std::move(aRetval));

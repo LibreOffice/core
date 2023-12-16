@@ -1016,8 +1016,7 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
         tools::Rectangle aRect2(Point(0,0), mpAccDoc->GetBoundingBoxOnScreen().GetSize());
         aClippedPixelPaintRect = aPixelPaintRect.GetIntersection(aRect2);
     }
-    ScIAccessibleViewForwarder aViewForwarder(mpViewShell, mpAccDoc, aMapMode);
-    maShapeRanges[nRangeId].maViewForwarder = aViewForwarder;
+    maShapeRanges[nRangeId].maViewForwarder = ScIAccessibleViewForwarder(mpViewShell, mpAccDoc, aMapMode);
     for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
         uno::Reference< drawing::XShape > xShape(pObj->getUnoShape(), uno::UNO_QUERY);

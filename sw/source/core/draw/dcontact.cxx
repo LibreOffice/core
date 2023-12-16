@@ -2258,8 +2258,9 @@ namespace sdr::contact
             if(!xRetval.empty())
             {
                 // create transform primitive
-                drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::TransformPrimitive2D(aOffsetMatrix, std::move(xRetval)));
-                xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                xRetval = drawinglayer::primitive2d::Primitive2DContainer {
+                    drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::TransformPrimitive2D(aOffsetMatrix, std::move(xRetval)))
+                };
             }
 
             rVisitor.visit(xRetval);

@@ -2943,8 +2943,7 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, DeleteHdl, weld::Button&, void)
 
     sal_uInt16 nId = m_xTbSymbol->GetSelectedItemId();
 
-    OUString aSelImageText = m_xTbSymbol->GetItemText( nId );
-    uno::Sequence< OUString > URLs { aSelImageText };
+    uno::Sequence<OUString> URLs { m_xTbSymbol->GetItemText(nId) };
     m_xTbSymbol->RemoveItem(nId);
     m_xImportedImageManager->removeImages( SvxConfigPageHelper::GetImageType(), URLs );
     if ( m_xImportedImageManager->isModified() )

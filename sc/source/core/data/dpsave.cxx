@@ -533,8 +533,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         uno::Reference<sheet::XLevelsSupplier> xLevSupp(xHiers->getByIndex(nHier), uno::UNO_QUERY);
         if ( xLevSupp.is() )
         {
-            uno::Reference<container::XNameAccess> xLevelsName = xLevSupp->getLevels();
-            xLevels = new ScNameToIndexAccess( xLevelsName );
+            xLevels = new ScNameToIndexAccess(xLevSupp->getLevels());
             nLevCount = xLevels->getCount();
         }
 

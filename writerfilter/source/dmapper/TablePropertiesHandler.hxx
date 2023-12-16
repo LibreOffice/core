@@ -45,12 +45,12 @@ public:
     void SetTableManager( TableManager* pTableManager )
     {
         m_pTableManager = pTableManager;
-    };
+    }
 
-    void SetProperties( PropertyMapPtr pProperties )
+    void SetProperties(const PropertyMapPtr& pProperties)
     {
         m_pCurrentProperties = pProperties;
-    };
+    }
 
     void SetInteropGrabBag(std::vector<css::beans::PropertyValue>& rValue);
 

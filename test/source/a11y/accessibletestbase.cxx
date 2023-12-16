@@ -427,7 +427,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
                        bool bAutoClose)
             : mbWaitingForDialog(true)
             , msName(name)
-            , mCallback(callback)
+            , mCallback(std::move(callback))
             , mbAutoClose(bAutoClose)
             , maTimeoutTimer("workaround timer if we don't catch WindowActivate")
             , maIdleHandler("runs user callback in idle time")

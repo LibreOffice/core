@@ -1740,9 +1740,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                         static_cast<const SvxFontListItem* >(pLclDocShell
                                             ->GetItem( SID_ATTR_CHAR_FONTLIST ));
                 const FontList*  pList = pFontListItem->GetFontList();
-                FontMetric aFontMetric = pList->Get(
-                    sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE);
-                vcl::Font aFont(aFontMetric);
+                vcl::Font aFont(pList->Get(sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE));
                 aFormat.SetBulletFont(&aFont);
             }
             else if (pBulletFontName)

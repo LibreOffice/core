@@ -714,7 +714,7 @@ public:
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
     virtual bool DeleteSurroundingText(const Selection& rSelection) override;
-    void SetUITestFactory(FactoryFunction pFactoryFunction, void* pUserData)
+    void SetUITestFactory(const FactoryFunction& pFactoryFunction, void* pUserData)
     {
         m_pFactoryFunction = pFactoryFunction;
         m_pUserData = pUserData;

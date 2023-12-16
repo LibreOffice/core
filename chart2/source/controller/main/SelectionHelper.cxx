@@ -432,8 +432,7 @@ OUString SelectionHelper::getHitObjectCID(
 
             if( aRet == aWallCID )
             {
-                OUString aDiagramCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) );
-                aRet = aDiagramCID;
+                aRet = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) );
             }
         }
     }

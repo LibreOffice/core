@@ -196,14 +196,13 @@ SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence()
 
 drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
 {
-    drawinglayer::primitive2d::Primitive2DReference aTransformPrimitive2D(
-        new drawinglayer::primitive2d::TransformPrimitive2D(
-            rDragMethod.getCurrentTransformation(),
-            drawinglayer::primitive2d::Primitive2DContainer(maPrimitive2DSequence)));
-
-    return drawinglayer::primitive2d::Primitive2DContainer { aTransformPrimitive2D };
+    return drawinglayer::primitive2d::Primitive2DContainer {
+        drawinglayer::primitive2d::Primitive2DReference(
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                rDragMethod.getCurrentTransformation(),
+                drawinglayer::primitive2d::Primitive2DContainer(maPrimitive2DSequence)))
+    };
 }
-
 
 SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(std::vector< basegfx::B2DPoint >&& rPositions, bool bIsPointDrag)
 :   maPositions(std::move(rPositions)),

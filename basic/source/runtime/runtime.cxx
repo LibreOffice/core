@@ -1541,7 +1541,6 @@ void SbiRuntime::StepLIKE()
     SbxVariableRef refVar1 = PopVar();
     SbxVariableRef refVar2 = PopVar();
 
-    OUString pattern = VBALikeToRegexp(refVar1->GetOUString());
     OUString value = refVar2->GetOUString();
 
     i18nutil::SearchOptions2 aSearchOpt;
@@ -1549,7 +1548,7 @@ void SbiRuntime::StepLIKE()
     aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
 
     aSearchOpt.Locale = Application::GetSettings().GetLanguageTag().getLocale();
-    aSearchOpt.searchString = pattern;
+    aSearchOpt.searchString = VBALikeToRegexp(refVar1->GetOUString());
 
     bool bTextMode(true);
     bool bCompatibility = ( GetSbData()->pInst && GetSbData()->pInst->IsCompatibility() );
