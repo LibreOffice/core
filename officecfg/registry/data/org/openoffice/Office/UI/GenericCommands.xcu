@@ -2741,7 +2741,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:SpellCheckIgnoreAll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">IgnoreAll</value>
+          <value xml:lang="en-US">Ignore All</value>
         </prop>
       </node>
       <node oor:name=".uno:SpellCheckApplySuggestion" oor:op="replace">
