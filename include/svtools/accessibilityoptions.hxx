@@ -21,14 +21,10 @@
 #include <svtools/svtdllapi.h>
 #include <unotools/options.hxx>
 
-class SvtAccessibilityOptions_Impl;
-
 class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtAccessibilityOptions final :
     public utl::detail::Options
 {
 private:
-    static SvtAccessibilityOptions_Impl* sm_pSingleImplConfig;
-    static sal_Int32                     sm_nAccessibilityRefCount;
 
 public:
     SvtAccessibilityOptions();

@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
-#include <svtools/accessibilityoptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
@@ -117,10 +116,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
-        case EItem::AccessibilityOptions :
-            rItem.pItem.reset( new SvtAccessibilityOptions() );
-            break;
-
         case EItem::ColorConfig :
             rItem.pItem.reset( new ::svtools::ColorConfig() );
             break;

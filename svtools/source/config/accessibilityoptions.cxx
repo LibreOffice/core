@@ -35,60 +35,10 @@
 
 #include <mutex>
 
-#include "itemholder2.hxx"
-
 using namespace utl;
 using namespace com::sun::star::uno;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
-
-// class SvtAccessibilityOptions_Impl ---------------------------------------------
-
-class SvtAccessibilityOptions_Impl
-{
-private:
-    css::uno::Reference< css::container::XNameAccess > m_xCfg;
-    css::uno::Reference< css::beans::XPropertySet > m_xNode;
-
-public:
-    SvtAccessibilityOptions_Impl();
-};
-
-// initialization of static members --------------------------------------
-
-SvtAccessibilityOptions_Impl* SvtAccessibilityOptions::sm_pSingleImplConfig =nullptr;
-sal_Int32                     SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
-
-namespace
-{
-    std::mutex& SingletonMutex()
-    {
-        static std::mutex SINGLETON;
-        return SINGLETON;
-    }
-}
-
-
-// class SvtAccessibilityOptions_Impl ---------------------------------------------
-
-SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
-{
-    try
-    {
-        m_xCfg.set(
-            ::comphelper::ConfigurationHelper::openConfig(
-                comphelper::getProcessComponentContext(),
-                "org.openoffice.Office.Common/Accessibility",
-                ::comphelper::EConfigurationModes::Standard ),
-            css::uno::UNO_QUERY);
-        m_xNode.set(m_xCfg, css::uno::UNO_QUERY);
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-        m_xCfg.clear();
-    }
-}
 
 void SvtAccessibilityOptions::SetVCLSettings()
 {
@@ -168,31 +118,10 @@ void SvtAccessibilityOptions::SetVCLSettings()
 
 SvtAccessibilityOptions::SvtAccessibilityOptions()
 {
-    if (!utl::ConfigManager::IsFuzzing())
-    {
-        std::unique_lock aGuard( SingletonMutex() );
-        if(!sm_pSingleImplConfig)
-        {
-            sm_pSingleImplConfig = new SvtAccessibilityOptions_Impl;
-            aGuard.unlock(); // because holdConfigItem will call this constructor
-            svtools::ItemHolder2::holdConfigItem(EItem::AccessibilityOptions);
-        }
-        ++sm_nAccessibilityRefCount;
-    }
-    //StartListening( *sm_pSingleImplConfig, sal_True );
 }
 
 SvtAccessibilityOptions::~SvtAccessibilityOptions()
 {
-    //EndListening( *sm_pSingleImplConfig, sal_True );
-    std::unique_lock aGuard( SingletonMutex() );
-    if( !--sm_nAccessibilityRefCount )
-    {
-        //if( sm_pSingleImplConfig->IsModified() )
-        //  sm_pSingleImplConfig->Commit();
-        delete sm_pSingleImplConfig;
-        sm_pSingleImplConfig = nullptr;
-    }
 }
 
 
