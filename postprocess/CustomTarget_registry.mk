@@ -590,6 +590,21 @@ $(call gb_XcdTarget_get_target,main.xcd) \
 	)
 	$(call gb_Trace_EndRange,main,XCD)
 
+$(call gb_XcdTarget_get_target,registry_%.xcd) : \
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+	$(call gb_Output_announce,registry_$*,$(true),XCD,3)
+	$(call gb_Trace_StartRange,registry_$*,XCD)
+	$(call gb_Helper_abbreviate_dirs, \
+		mkdir -p $(dir $@) && \
+		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
+			$(SRCDIR)/solenv/bin/packregistry.xslt $< \
+			$(if $(filter REPORTBUILDER,$(BUILD_TYPE)),, | \
+			$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
+			$(SRCDIR)/solenv/bin/removereportbuilder.xslt - ) \
+			> $@ \
+	)
+	$(call gb_Trace_EndRange,$*,XCD)
+
 $(call gb_XcdTarget_get_target,%.xcd) : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$*,$(true),XCD,3)
