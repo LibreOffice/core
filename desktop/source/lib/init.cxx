@@ -218,7 +218,6 @@
 #include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <svl/ctloptions.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/slidesorterbaropt.hxx>
@@ -7521,7 +7520,6 @@ static void preloadData()
 #endif
     static SvtOptionsDialogOptions aDialogOptions;
     static SvtCTLOptions aSvtCTLOptions;
-    static SvtAccessibilityOptions aSvtAccessibilityOptions;
     static svtools::ColorConfig aColorConfig;
     static SvtMiscOptions aSvtMiscOptions;
     static SvtSlideSorterBarOptions aSvtSlideSorterBarOptions;
