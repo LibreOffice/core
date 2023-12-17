@@ -359,7 +359,7 @@ void Atspi2TestTree::compareObjects(const uno::Reference<accessibility::XAccessi
 
         CPPUNIT_ASSERT_EQUAL(mapRelationType(xLORelation.RelationType),
                              pAtspiRelation.getRelationType());
-        CPPUNIT_ASSERT_EQUAL(nLOTargetsCount, pAtspiRelation.getNTargets());
+        CPPUNIT_ASSERT_EQUAL(nLOTargetsCount, static_cast<sal_Int32>(pAtspiRelation.getNTargets()));
 
         if (recurseFlags & RecurseFlags::RELATIONS_TARGETS)
         {
