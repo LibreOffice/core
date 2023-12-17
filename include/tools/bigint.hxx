@@ -23,9 +23,11 @@
 #include <tools/long.hxx>
 
 #include <cassert>
+#include <compare>
+#include <limits>
 #include <string_view>
 
-#define MAX_DIGITS 8
+#define MAX_DIGITS 4
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC BigInt
 {
@@ -33,21 +35,20 @@ private:
     // we only use one of these two fields at a time
     union {
         sal_Int32       nVal;
-        sal_uInt16      nNum[MAX_DIGITS];
+        sal_uInt32      nNum[MAX_DIGITS];
     };
-    sal_uInt8       nLen        : 5;    // current length, if 0, data is in nVal, otherwise data is in nNum
-    bool            bIsNeg      : 1;    // Is Sign negative?
+    sal_uInt8       nLen;    // current length, if 0, data is in nVal, otherwise data is in nNum
+    bool            bIsNeg;    // Is Sign negative?
 
-    TOOLS_DLLPRIVATE void MakeBigInt(BigInt const &);
+    TOOLS_DLLPRIVATE BigInt MakeBig() const;
     TOOLS_DLLPRIVATE void Normalize();
-    TOOLS_DLLPRIVATE void Mult(BigInt const &, sal_uInt16);
-    TOOLS_DLLPRIVATE void Div(sal_uInt16, sal_uInt16 &);
-    TOOLS_DLLPRIVATE bool IsLess(BigInt const &) const;
+    TOOLS_DLLPRIVATE static BigInt Mult(BigInt const &, sal_uInt32);
+    TOOLS_DLLPRIVATE void Div(sal_uInt32, sal_uInt32 &);
+    TOOLS_DLLPRIVATE bool ABS_IsLessLong(BigInt const &) const;
     TOOLS_DLLPRIVATE void AddLong(BigInt &, BigInt &);
     TOOLS_DLLPRIVATE void SubLong(BigInt &, BigInt &);
     TOOLS_DLLPRIVATE void MultLong(BigInt const &, BigInt &) const;
-    TOOLS_DLLPRIVATE void DivLong(BigInt const &, BigInt &) const;
-    TOOLS_DLLPRIVATE void ModLong(BigInt const &, BigInt &) const;
+    TOOLS_DLLPRIVATE void DivLong(BigInt const &, BigInt &, BigInt * = nullptr) const;
     TOOLS_DLLPRIVATE bool ABS_IsLess(BigInt const &) const;
 
 public:
@@ -65,32 +66,42 @@ public:
     {
     }
 
-#if SAL_TYPES_SIZEOFLONG == 4
-    BigInt(int nValue)
-        : nVal(nValue)
-        , nLen(0)
-        , bIsNeg(false)
-    {
-    }
-#endif
-
     BigInt( double nVal );
     BigInt( sal_uInt32 nVal );
     BigInt( sal_Int64 nVal );
     BigInt( const BigInt& rBigInt );
     BigInt( std::u16string_view rString );
 
+    template <typename N>
+        requires(std::is_integral_v<N> && std::is_signed_v<N> && sizeof(N) <= sizeof(sal_Int32))
+    BigInt(N val)
+        : BigInt(sal_Int32(val))
+    {
+    }
+
+    template <typename N>
+        requires(std::is_integral_v<N> && std::is_unsigned_v<N> && sizeof(N) <= sizeof(sal_uInt32))
+    BigInt(N val)
+        : BigInt(sal_uInt32(val))
+    {
+    }
+
+    template <typename N>
+        requires(std::is_integral_v<N> && std::is_signed_v<N> && sizeof(N) == sizeof(sal_Int64))
+    BigInt(N val)
+        : BigInt(sal_Int64(val))
+    {
+    }
+
     operator        sal_Int16() const;
     operator        sal_uInt16() const;
     operator        sal_Int32() const;
     operator        sal_uInt32() const;
     operator        double() const;
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    operator        tools::Long() const;
-#endif
+    operator        sal_Int64() const;
 
-    bool            IsNeg() const;
-    bool            IsZero() const;
+    bool            IsNeg() const { return !IsLong() ? bIsNeg : nVal < 0; }
+    bool            IsZero() const { return IsLong() && nVal == 0; }
     bool            IsLong() const { return nLen == 0; }
 
     void            Abs();
@@ -107,20 +118,8 @@ public:
     /* Scale and round value */
     static tools::Long Scale(tools::Long nVal, tools::Long nMult, tools::Long nDiv);
 
-    friend inline   BigInt operator +( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   BigInt operator -( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   BigInt operator *( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   BigInt operator /( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   BigInt operator %( const BigInt& rVal1, const BigInt& rVal2 );
-
     TOOLS_DLLPUBLIC friend          bool operator==( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   bool operator!=( const BigInt& rVal1, const BigInt& rVal2 );
-    TOOLS_DLLPUBLIC friend          bool operator< ( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   bool operator> ( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   bool operator<=( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   bool operator>=( const BigInt& rVal1, const BigInt& rVal2 );
-
-    friend class Fraction;
+    TOOLS_DLLPUBLIC friend std::strong_ordering operator<=> ( const BigInt& rVal1, const BigInt& rVal2 );
 };
 
 inline BigInt::operator sal_Int16() const
@@ -155,16 +154,25 @@ inline BigInt::operator sal_uInt32() const
     return 0;
 }
 
-#if SAL_TYPES_SIZEOFPOINTER == 8
-inline BigInt::operator tools::Long() const
+inline BigInt::operator sal_Int64() const
 {
-    // Clamp to int32 since long is int32 on Windows.
-    if (nLen == 0)
-        return nVal;
+    constexpr sal_uInt64 maxForPosInt64 = std::numeric_limits<sal_Int64>::max();
+    constexpr sal_uInt64 maxForNegInt64 = std::numeric_limits<sal_Int64>::min();
+    switch (nLen)
+    {
+        case 0:
+            return nVal;
+        case 1:
+            return bIsNeg ? -sal_Int64(nNum[0]) : nNum[0];
+        case 2:
+            if (sal_uInt64 n = (sal_uInt64(nNum[1]) << 32) + nNum[0]; bIsNeg && n <= maxForNegInt64)
+                return -sal_Int64(n); // maxForNegInt64 will convert correctly
+            else if (!bIsNeg && n <= maxForPosInt64)
+                return n;
+    }
     assert(false && "out of range");
     return 0;
 }
-#endif
 
 inline BigInt& BigInt::operator =( sal_Int32 nValue )
 {
@@ -172,22 +180,6 @@ inline BigInt& BigInt::operator =( sal_Int32 nValue )
     nVal = nValue;
 
     return *this;
-}
-
-inline bool BigInt::IsNeg() const
-{
-    if ( nLen == 0 )
-        return (nVal < 0);
-    else
-        return bIsNeg;
-}
-
-inline bool BigInt::IsZero() const
-{
-    if ( nLen != 0 )
-        return false;
-    else
-        return (nVal == 0);
 }
 
 inline void BigInt::Abs()
@@ -231,23 +223,6 @@ inline BigInt operator%( const BigInt &rVal1, const BigInt &rVal2 )
     BigInt aErg( rVal1 );
     aErg %= rVal2;
     return aErg;
-}
-
-inline bool operator!=( const BigInt& rVal1, const BigInt& rVal2 )
-{
-    return !(rVal1 == rVal2);
-}
-
-inline bool operator>(const BigInt& rVal1, const BigInt& rVal2) { return rVal2 < rVal1; }
-
-inline bool operator<=( const BigInt& rVal1, const BigInt& rVal2 )
-{
-    return !( rVal1 > rVal2);
-}
-
-inline bool operator>=( const BigInt& rVal1, const BigInt& rVal2 )
-{
-    return !(rVal1 < rVal2);
 }
 
 #endif
