@@ -307,6 +307,7 @@ $(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_database_others
 	frameloaders/org_openoffice_comp_dbflt_DBContentLoader2 \
 ))
 
+ifeq ($(ENABLE_REPORTBUILDER),TRUE)
 # fcfg_reportbuilder
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_reportbuilder_types.xcu,filter/source/config/fragments/types,\
 	StarBaseReport \
@@ -317,6 +318,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_reportbuilder_
 	StarBaseReport \
 	StarBaseReportChart \
 ))
+endif
 
 # fcfg_writer
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\

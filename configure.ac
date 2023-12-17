@@ -12978,6 +12978,7 @@ if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
         BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
         NEED_ANT=TRUE
     fi
+    BUILD_TYPE="$BUILD_TYPE REPORTBUILDER"
 else
     AC_MSG_RESULT([no])
     ENABLE_REPORTBUILDER=
