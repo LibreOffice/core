@@ -31,10 +31,10 @@
     <string name="action_keyboard">Pokaż klawiaturę</string>
     <string name="action_save">Zapisz</string>
     <string name="action_save_as">Zapisz jako...</string>
-    <string name="action_fromat">Włącz format</string>
+    <string name="action_fromat">Włącz formatowanie</string>
     <string name="action_search">Szukaj</string>
     <string name="action_UNO_commands">Wyślij polecenie UNO</string>
-    <string name="message_saved">Zapisz ukończone</string>
+    <string name="message_saved">Zapisywanie ukończone</string>
     <string name="action_about">O aplikacji</string>
     <string name="message_saving_failed">Zapisanie dokumentu nie powiodło się.</string>
     <string name="password">Hasło</string>
@@ -111,7 +111,7 @@
     <string name="app_vendor">To wydanie zostało dostarczone przez $VENDOR.</string>
     <string name="pref_experimental_editing">Tryb eksperymentalny</string>
     <string name="message_saving">Zapisywanie dokumentu…</string>
-    <string name="message_save_incomplete">Zapisz nieukończone. Czy były jakieś zmiany\?</string>
+    <string name="message_save_incomplete">Zapisywanie nieukończone. Czy były jakieś zmiany\?</string>
     <string name="action_presentation">Pokaz slajdów</string>
     <string name="calc_insert_before">Wstaw</string>
     <string name="calc_adjust_height">Dostosuj wysokość</string>
@@ -126,7 +126,7 @@
     <string name="calc_optimal_length">Optymalna długość</string>
     <string name="app_version">Wersja: %1$s&lt;br&gt;Identyfikator kompilacji: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
     <string name="readonly_file">Ten plik jest tylko do odczytu.</string>
-    <string name="default_document_name">bez tytułu</string>
+    <string name="default_document_name">Bez tytułu</string>
     <string name="alert_copy_svg_slide_show_to_clipboard">To urządzenie z systemem Android nie obsługuje pokazu slajdów SVG w aplikacji. Skopiowaliśmy do schowka łącze do pokazu slajdów. Naciśnij przycisk ekranu głównego (Home), otwórz nowoczesną przeglądarkę internetową, wklej w pasek adresu i gotowe.</string>
     <string name="calc_alert_double_click_optimal_length">Wskazówka: dwukrotne stuknięcie nagłówka ustawia optymalną szerokość/wysokość.</string>
     <string name="calc_optimal_length_default_text">Wpisz dodatkową długość w setnych/mm</string>

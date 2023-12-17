@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_document_name">ensin títulu</string>
+    <string name="title_recents">Ficheros recién</string>
+    <string name="action_settings">Axustes</string>
+    <string name="action_undo">Desfacer</string>
+    <string name="action_redo">Refacer</string>
+    <string name="no_save_document">NON</string>
+    <string name="calc_delete">Desaniciar</string>
+    <string name="calc_hide">Anubrir</string>
+    <string name="calc_show">Amosar</string>
+    <string name="page">Páxina</string>
+    <string name="sheet">Fueya</string>
+    <string name="readonly_file">Esti ficheru ye namái de llectura.</string>
+    <string name="new_textdocument">Documentu de testu nuevu</string>
+    <string name="new_presentation">Presentación nueva</string>
+    <string name="new_spreadsheet">Fueya de cálculu nueva</string>
+    <string name="new_drawing">Dibuxu nuevu</string>
+    <string name="select_file_to_open">Esbilla\'l ficheru que quies abrir</string>
+    <string name="title_browser">Tolos ficheros</string>
+    <string name="action_about">Tocante a</string>
+    <string name="action_save">Guardar</string>
+    <string name="about_license">Amosar la llicencia</string>
+    <string name="action_keyboard">Amosar el tecláu</string>
+    <string name="action_search">Guetar</string>
+</resources>
