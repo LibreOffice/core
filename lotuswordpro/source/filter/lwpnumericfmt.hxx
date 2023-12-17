@@ -178,63 +178,60 @@ enum
 class LwpCurrencyPool
 {
 public:
-    LwpCurrencyPool(){InitCurrencySymbol();}
+    LwpCurrencyPool(){};
     OUString GetCurrencySymbol(sal_uInt16 nFormat);
     bool IsShowSpace(sal_uInt16 nFormat);
     bool IsSymbolPost(sal_uInt16 nFormat);
 
 private:
-    std::map<sal_uInt16,LwpCurrencyInfo> m_aCurrencyInfo;
-    void InitCurrencySymbol()
+    std::map<sal_uInt16,LwpCurrencyInfo> m_aCurrencyInfo
     {
-        sal_uInt16 nC=FMT_ARGENTINEANPESO;
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("A");                    //FMT_ARGENTINEANPESO       = 1,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("A$");                   //FMT_AUSTRALIANDOLLAR  = 2,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("oS",true, true);//FMT_AUSTRIANSCHILLING = 3,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("BF",true, true);//FMT_BELGIANFRANC      = 4,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R$",false, true);//FMT_BRAZILIANCRUZEIRO    = 5,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(u"\uFFE1"_ustr);                 //FMT_BRITISHPOUND      = 6,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("C$");                   //FMT_CANADIANDOLLAR        = 7,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(u"PRC\uFFE5"_ustr,false,true);   //FMT_CHINESEYUAN           = 8,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Kc",true, true);//FMT_CZECHKORUNA           = 9,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Dkr",false, true);//FMT_DANISHKRONE         = 10,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("ECU",true, true);//FMT_ECU                  = 11,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("mk",true, true);//FMT_FINNISHMARKKA     = 12,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("F",true, true);//FMT_FRENCHFRANC            = 13,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("DM",true, true);//FMT_GERMANMARK            = 14,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Dr",true, true);//FMT_GREEKDRACHMA      = 15,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("HK$");                  //FMT_HONGKONGDOLLAR        = 16,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Ft",true, true);//FMT_HUNGARIANFORINT       = 17,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rs",false, true);//FMT_INDIANRUPEE          = 18,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rp",false, true);//FMT_INDONESIANRUPIAH = 19,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(u"IR\uFFE1"_ustr);                   //FMT_IRISHPUNT         = 20,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("L.",false, true);//FMT_ITALIANLIRA          = 21,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(u"\uFFE5"_ustr);             //FMT_JAPANESEYEN           = 22,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("LF",true, true);//FMT_LUXEMBOURGFRANC       = 23,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rm",false, true);//FMT_MALAYSIANRINGGIT = 24,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Mex$");                 //FMT_MEXICANPESO           = 25,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("F",false, true);//FMT_NETHERLANDSGUILDER    = 26,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("NZ$");                  //FMT_NEWZEALANDDOLLAR  = 27,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Nkr",false, true);//FMT_NORWEGIANKRONE      = 28,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Zl",true, true);//FMT_POLISHZLOTY           = 29,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Esc.",true, true);//FMT_PORTUGUESEESCUDO    = 30,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Leu",true, true);//FMT_ROMANIANLEI          = 31,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R",true, true);//FMT_RUSSIANRUBLE       = 32,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("S$");                   //FMT_SINGAPOREDOLLAR       = 33,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Sk",true, true);//FMT_SLOVAKIANKORUNA       = 34,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("SIT",false, true);//FMT_SLOVENIANTHOLAR     = 35,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R");                    //FMT_SOUTHAFRICANRAND  = 36,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("W");                    //FMT_SOUTHKOREANWON        = 37,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Pts",true, true);//FMT_SPANISHPESETA        = 38,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Skr",true, true);//FMT_SWEDISHKRONA     = 39,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("SFr",false, true);//FMT_SWISSFRANC          = 40,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("NT$");                  //FMT_TAIWANDOLLAR      = 41,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Bt",true, true);//FMT_THAIBAHT          = 42,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("$");                    //FMT_USDOLLAR          = 43,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("OTH",false, true);//FMT_OTHERCURRENCY       = 44,
-
-        m_aCurrencyInfo[FMT_EURO]=LwpCurrencyInfo(u"\u20AC"_ustr);             //FMT_EURO              = 52
-    }
+        { FMT_ARGENTINEANPESO, LwpCurrencyInfo("A") },
+        { FMT_AUSTRALIANDOLLAR, LwpCurrencyInfo("A$") },
+        { FMT_AUSTRIANSCHILLING, LwpCurrencyInfo("oS",true, true) },
+        { FMT_BELGIANFRANC, LwpCurrencyInfo("BF",true, true) },
+        { FMT_BRAZILIANCRUZEIRO, LwpCurrencyInfo("R$",false, true) },
+        { FMT_BRITISHPOUND, LwpCurrencyInfo(u"\uFFE1"_ustr) },
+        { FMT_CANADIANDOLLAR, LwpCurrencyInfo("C$") },
+        { FMT_CHINESEYUAN, LwpCurrencyInfo(u"PRC\uFFE5"_ustr,false,true) },
+        { FMT_CZECHKORUNA, LwpCurrencyInfo("Kc",true, true) },
+        { FMT_DANISHKRONE, LwpCurrencyInfo("Dkr",false, true) },
+        { FMT_ECU, LwpCurrencyInfo("ECU",true, true) },
+        { FMT_FINNISHMARKKA, LwpCurrencyInfo("mk",true, true) },
+        { FMT_FRENCHFRANC, LwpCurrencyInfo("F",true, true) },
+        { FMT_GERMANMARK, LwpCurrencyInfo("DM",true, true) },
+        { FMT_GREEKDRACHMA, LwpCurrencyInfo("Dr",true, true) },
+        { FMT_HONGKONGDOLLAR, LwpCurrencyInfo("HK$") },
+        { FMT_HUNGARIANFORINT, LwpCurrencyInfo("Ft",true, true) },
+        { FMT_INDIANRUPEE, LwpCurrencyInfo("Rs",false, true) },
+        { FMT_INDONESIANRUPIAH, LwpCurrencyInfo("Rp",false, true) },
+        { FMT_IRISHPUNT, LwpCurrencyInfo(u"IR\uFFE1"_ustr) },
+        { FMT_ITALIANLIRA, LwpCurrencyInfo("L.",false, true) },
+        { FMT_JAPANESEYEN, LwpCurrencyInfo(u"\uFFE5"_ustr) },
+        { FMT_LUXEMBOURGFRANC, LwpCurrencyInfo("LF",true, true) },
+        { FMT_MALAYSIANRINGGIT, LwpCurrencyInfo("Rm",false, true) },
+        { FMT_MEXICANPESO, LwpCurrencyInfo("Mex$") },
+        { FMT_NETHERLANDSGUILDER, LwpCurrencyInfo("F",false, true) },
+        { FMT_NEWZEALANDDOLLAR, LwpCurrencyInfo("NZ$") },
+        { FMT_NORWEGIANKRONE, LwpCurrencyInfo("Nkr",false, true) },
+        { FMT_POLISHZLOTY, LwpCurrencyInfo("Zl",true, true) },
+        { FMT_PORTUGUESEESCUDO, LwpCurrencyInfo("Esc.",true, true) },
+        { FMT_ROMANIANLEI, LwpCurrencyInfo("Leu",true, true) },
+        { FMT_RUSSIANRUBLE, LwpCurrencyInfo("R",true, true) },
+        { FMT_SINGAPOREDOLLAR, LwpCurrencyInfo("S$") },
+        { FMT_SLOVAKIANKORUNA, LwpCurrencyInfo("Sk",true, true) },
+        { FMT_SLOVENIANTHOLAR, LwpCurrencyInfo("SIT",false, true) },
+        { FMT_SOUTHAFRICANRAND, LwpCurrencyInfo("R") },
+        { FMT_SOUTHKOREANWON, LwpCurrencyInfo("W") },
+        { FMT_SPANISHPESETA, LwpCurrencyInfo("Pts",true, true) },
+        { FMT_SWEDISHKRONA, LwpCurrencyInfo("Skr",true, true) },
+        { FMT_SWISSFRANC, LwpCurrencyInfo("SFr",false, true) },
+        { FMT_TAIWANDOLLAR, LwpCurrencyInfo("NT$") },
+        { FMT_THAIBAHT, LwpCurrencyInfo("Bt",true, true) },
+        { FMT_USDOLLAR, LwpCurrencyInfo("$") },
+        { FMT_OTHERCURRENCY, LwpCurrencyInfo("OTH",false, true) },
+        { FMT_EURO, LwpCurrencyInfo(u"\u20AC"_ustr) }
+    };
 };
 
 class LwpNumericFormat
