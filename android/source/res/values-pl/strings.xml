@@ -99,7 +99,7 @@
     <string name="highlight_color">Kolor wyróżnienia</string>
     <string name="font_color">Kolor czcionki</string>
     <string name="app_vendor">To wydanie zostało dostarczone przez $VENDOR.</string>
-    <string name="action_save_as">Zapisz jako...</string>
+    <string name="action_save_as">Zapisz jako…</string>
     <string name="action_presentation">Pokaz slajdów</string>
     <string name="calc_delete">Usuń</string>
     <string name="part_deleted">Część została usunięta.</string>

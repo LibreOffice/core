@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_settings">Impostazioni del Visualizzatore di LibreOffice</string>
+    <string name="app_credits">https://it.libreoffice.org/</string>
+    <string name="app_vendor">Versione viene fornita da $VENDOR.</string>
+    <string name="readonly_file">Questo file è di sola lettura.</string>
+    <string name="about_license">Mostra licenza</string>
+    <string name="app_name">Visualizzatore di LibreOffice</string>
+    <string name="app_description">Il Visualizzatore di LibreOffice è un visualizzatore di documenti basato su LibreOffice.</string>
+</resources>
