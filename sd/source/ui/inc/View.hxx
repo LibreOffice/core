@@ -197,8 +197,6 @@ public:
                           std::vector<OUString> &rBookmarkList,
                           const sal_uInt16 nType );
 
-    virtual void onAccessibilityOptionsChanged() override;
-
     /** returns true if we have an undo manager and there is an open list undo action */
     bool isRecordingUndo() const;
 

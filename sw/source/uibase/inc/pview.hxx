@@ -39,7 +39,6 @@ class Button;
 class SwRect;
 class DataChangedEvent;
 class CommandEvent;
-class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 
 /// Provides the VCL widget that is used for the main area of the File -> Print Preview window.

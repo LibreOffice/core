@@ -176,7 +176,7 @@ ScModule::~ScModule()
 
 void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, ConfigurationHints eHints)
 {
-    if ( p == m_pColorConfig.get() || p == m_pAccessOptions.get() )
+    if ( p == m_pColorConfig.get() )
     {
         // Test if detective objects have to be updated with new colors
         // (if the detective colors haven't been used yet, there's nothing to update)
@@ -340,11 +340,6 @@ void ScModule::DeleteCfg()
     {
         m_pColorConfig->RemoveListener(this);
         m_pColorConfig.reset();
-    }
-    if ( m_pAccessOptions )
-    {
-        m_pAccessOptions->RemoveListener(this);
-        m_pAccessOptions.reset();
     }
     if ( m_pCTLOptions )
     {

@@ -488,8 +488,6 @@ sc/inc/formulagroup.hxx:38
     sc::FormulaGroupEntry::(anonymous union at /home/noel/libo-plugin/sc/inc/formulagroup.hxx:35:5) mpCells ScFormulaCell **
 sc/inc/reordermap.hxx:20
     sc::ColRowReorderMapType maData DataType
-sc/inc/scmod.hxx:97
-    ScModule m_pAccessOptions std::unique_ptr<SvtAccessibilityOptions>
 sc/inc/scmod.hxx:98
     ScModule m_pCTLOptions std::unique_ptr<SvtCTLOptions>
 sc/inc/userlist.hxx:64
@@ -662,8 +660,6 @@ sw/inc/shellio.hxx:149
     SwReader mpStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/sw/inc/swevent.hxx:69:9) pFormat const SwFrameFormat *
-sw/inc/swmodule.hxx:91
-    SwModule m_pAccessibilityOptions std::unique_ptr<SvtAccessibilityOptions>
 sw/inc/swmodule.hxx:92
     SwModule m_pCTLOptions std::unique_ptr<SvtCTLOptions>
 sw/qa/api/SwXHeadFootText.cxx:76

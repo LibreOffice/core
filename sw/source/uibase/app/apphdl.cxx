@@ -945,11 +945,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 m_pColorConfig->RemoveListener(this);
                 m_pColorConfig.reset();
             }
-            if( m_pAccessibilityOptions )
-            {
-                m_pAccessibilityOptions->RemoveListener(this);
-                m_pAccessibilityOptions.reset();
-            }
             if( m_pCTLOptions )
             {
                 m_pCTLOptions->RemoveListener(this);
@@ -1019,32 +1014,6 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }
     }
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    else if ( pBrdCst == m_pAccessibilityOptions.get() )
-    {
-        //set Accessibility options
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while(pViewShell)
-        {
-            if(pViewShell->GetWindow())
-            {
-                auto pSwView = dynamic_cast<SwView *>( pViewShell );
-                auto pPagePreview = dynamic_cast<SwPagePreview *>( pViewShell );
-
-                if(pSwView)
-                    pSwView->ApplyAccessibilityOptions();
-                else if(pPagePreview)
-                    pPagePreview->ApplyAccessibilityOptions();
-
-                if(pSwView || pPagePreview || dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
-                {
-                    pViewShell->GetWindow()->Invalidate();
-                }
-            }
-            pViewShell = SfxViewShell::GetNext( *pViewShell );
-        }
-    }
-#endif
     else if( pBrdCst == m_pCTLOptions.get() )
     {
         const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();

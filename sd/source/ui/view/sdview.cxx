@@ -1033,47 +1033,6 @@ bool View::IsVectorizeAllowed() const
     return bRet;
 }
 
-void View::onAccessibilityOptionsChanged()
-{
-    if( !mpViewSh )
-        return;
-
-    ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
-    if( !pWindow )
-        return;
-
-    const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
-
-    if( mpViewSh->GetViewFrame() && mpViewSh->GetViewFrame()->GetDispatcher() )
-    {
-        sal_uInt16 nOutputSlot, nPreviewSlot;
-
-        if( rStyleSettings.GetHighContrastMode() )
-        {
-            nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
-        }
-        else
-        {
-            nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
-        }
-
-        if( rStyleSettings.GetHighContrastMode()
-            && officecfg::Office::Common::Accessibility::IsForPagePreviews::get() )
-        {
-            nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
-        }
-        else
-        {
-            nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
-        }
-
-        mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SfxCallMode::ASYNCHRON );
-        mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SfxCallMode::ASYNCHRON );
-    }
-
-    mpViewSh->Invalidate();
-}
-
 IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, aParam, void )
 {
     SdrObject* pObj = GetTextEditObject();

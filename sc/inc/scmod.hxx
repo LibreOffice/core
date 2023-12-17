@@ -37,7 +37,6 @@
 class KeyEvent;
 class EditView;
 class SfxErrorHandler;
-class SvtAccessibilityOptions;
 class SvtCTLOptions;
 class SvtUserOptions;
 
@@ -94,7 +93,6 @@ class SAL_DLLPUBLIC_RTTI ScModule final : public SfxModule, public SfxListener, 
     std::unique_ptr<ScNavipiCfg>      m_pNavipiCfg;
     std::unique_ptr<ScAddInCfg>       m_pAddInCfg;
     std::unique_ptr<svtools::ColorConfig>    m_pColorConfig;
-    std::unique_ptr<SvtAccessibilityOptions> m_pAccessOptions;
     std::unique_ptr<SvtCTLOptions>           m_pCTLOptions;
     std::unique_ptr<SvtUserOptions>          m_pUserOptions;
     std::unique_ptr<SfxErrorHandler>  m_pErrorHdl;

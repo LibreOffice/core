@@ -55,7 +55,6 @@ class SwViewShellImp;
 class SwPrintData;
 struct ShellResource;
 class SwRegionRects;
-class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 class SwTextFrame;
 

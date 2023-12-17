@@ -58,7 +58,6 @@ struct SwSearchOptions;
 class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
-class SvtAccessibilityOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTextNode; // #i23726#

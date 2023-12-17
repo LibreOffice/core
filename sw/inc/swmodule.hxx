@@ -52,7 +52,6 @@ class SwTransferable;
 class SwToolbarConfigItem;
 class SwAttrPool;
 namespace svtools{ class ColorConfig;}
-class SvtAccessibilityOptions;
 class SvtCTLOptions;
 class SvtUserOptions;
 enum class SwCompareMode;
@@ -88,7 +87,6 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
     std::unique_ptr<SwToolbarConfigItem> m_pWebToolbarConfig;
     std::unique_ptr<SwDBConfig>          m_pDBConfig;
     std::unique_ptr<svtools::ColorConfig>   m_pColorConfig;
-    std::unique_ptr<SvtAccessibilityOptions> m_pAccessibilityOptions;
     std::unique_ptr<SvtCTLOptions>       m_pCTLOptions;
     std::unique_ptr<SvtUserOptions>      m_pUserOptions;
 

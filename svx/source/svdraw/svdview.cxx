@@ -148,13 +148,10 @@ SdrView::SdrView(
     mbNoExtendedKeyDispatcher(false),
     mbMasterPagePaintCaching(false)
 {
-    maAccessibilityOptions.AddListener(this);
-    onAccessibilityOptionsChanged();
 }
 
 SdrView::~SdrView()
 {
-    maAccessibilityOptions.RemoveListener(this);
 }
 
 bool SdrView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
@@ -1501,18 +1498,6 @@ bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint
         SetSnapEnabled(bWasSnapEnabled);
 
     return true;
-}
-
-void SdrView::ConfigurationChanged( ::utl::ConfigurationBroadcaster*p, ConfigurationHints nHint)
-{
-    onAccessibilityOptionsChanged();
-    SdrCreateView::ConfigurationChanged(p, nHint);
-}
-
-
-/** method is called whenever the global SvtAccessibilityOptions is changed */
-void SdrView::onAccessibilityOptionsChanged()
-{
 }
 
 void SdrView::SetMasterPagePaintCaching(bool bOn)
