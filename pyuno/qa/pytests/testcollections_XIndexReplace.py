@@ -177,7 +177,6 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceSlice(self):
         assign_max = 12
         doc = self.createBlankTextDocument()
-        t = tuple(range(10))
         for j in [x for x in range(-12, 13)] + [None]:
             for k in [x for x in range(-12, 13)] + [None]:
                 key = slice(j, k)
@@ -218,7 +217,6 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceExtendedSlice(self):
         assign_max = 12
         doc = self.createBlankTextDocument()
-        t = tuple(range(10))
         for j in [x for x in range(-12, 13)] + [None]:
             for k in [x for x in range(-12, 13)] + [None]:
                 for l in [-2, -1, 2]:

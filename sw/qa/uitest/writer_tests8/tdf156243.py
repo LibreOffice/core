@@ -27,7 +27,7 @@ class tdf156243(UITestCase):
             self.assertEqual(enabled, get_state_as_dict(xCheckbox)["IsChecked"])
 
     def test_tdf156243_Autocorrect_dialog(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             try:

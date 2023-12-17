@@ -96,7 +96,7 @@ class CalcTrackedChanges(UITestCase):
 
     def test_Tdf153096(self):
 
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

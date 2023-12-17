@@ -65,7 +65,7 @@ class splitTable(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
     def test_tdf115572_remember_split_table_option(self):
-        with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")):
             # Go to second row
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")

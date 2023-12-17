@@ -15,7 +15,6 @@ class Test(UITestCase):
     def test_tab_navigation(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             with self.ui_test.execute_dialog_through_command(".uno:EditStyle") as xDialog:
 

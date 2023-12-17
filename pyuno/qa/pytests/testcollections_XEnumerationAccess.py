@@ -127,13 +127,13 @@ class TestXEnumerationAccess(CollectionsTestBase):
     #    if val in obj: ...          # Test value presence
     # For:
     #    Invalid value (dict)
-    def test_XEnumerationAccess_IfIn_String(self):
+    def test_XEnumerationAccess_IfIn_String_TypeError(self):
         # Given
         doc = self.createBlankTextDocument()
 
         # When / Then
         with self.assertRaises(TypeError):
-            result = {} in doc.Text
+            _ = {} in doc.Text
 
         doc.close(True)
 

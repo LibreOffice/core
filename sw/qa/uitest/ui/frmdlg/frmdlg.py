@@ -105,7 +105,7 @@ class Test(UITestCase):
 
     def test_insert_simple_frame(self):
         # Given a Writer document:
-        with self.ui_test.create_doc_in_start_center("writer") as xComponent:
+        with self.ui_test.create_doc_in_start_center("writer"):
             # When inserting a simple text frame (not a floating table):
             with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:
                 to_char = xDialog.getChild("tochar")

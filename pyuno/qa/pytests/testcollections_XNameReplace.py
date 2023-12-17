@@ -45,7 +45,7 @@ class TestXNameReplace(CollectionsTestBase):
     #    obj[key] = val              # Replace by key
     # For:
     #    Invalid key
-    def test_XNameReplace_ReplaceName_Invalid(self):
+    def test_XNameReplace_ReplaceName_Invalid_Key(self):
         # Given
         doc = self.createBlankTextDocument()
         event_properties = (PropertyValue(Name='Script', Value=getScriptName()),)
@@ -60,7 +60,7 @@ class TestXNameReplace(CollectionsTestBase):
     #    obj[key] = val              # Replace by key
     # For:
     #    Invalid key type
-    def test_XNameReplace_ReplaceName_Invalid(self):
+    def test_XNameReplace_ReplaceName_Invalid_Key_Type(self):
         # Given
         doc = self.createBlankTextDocument()
         event_properties = (PropertyValue(Name='Script', Value=getScriptName()),)

@@ -128,9 +128,9 @@ class tdf154521(UITestCase):
 
             xWriterEdit.executeAction("FOCUS", tuple())
 
-            xContentTree = xNavigatorPanel.getChild("contenttree")
-
 # disable flakey UITest
+#            xContentTree = xNavigatorPanel.getChild("contenttree")
+
 #            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 1")
 #            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 1")
 #            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")

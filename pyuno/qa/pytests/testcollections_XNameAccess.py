@@ -66,7 +66,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(KeyError):
-            link = drw.Links['Slide'].Links['foo']
+            _ = drw.Links['Slide'].Links['foo']
 
         drw.close(True)
 
@@ -80,7 +80,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            link = drw.Links[None]
+            _ = drw.Links[None]
 
         drw.close(True)
 
@@ -94,7 +94,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            link = drw.Links[12.34]
+            _ = drw.Links[12.34]
 
         drw.close(True)
 
@@ -108,7 +108,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            link = drw.Links[(1, 2)]
+            _ = drw.Links[(1, 2)]
 
         drw.close(True)
 
@@ -122,7 +122,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            link = drw.Links[[1, 2]]
+            _ = drw.Links[[1, 2]]
 
         drw.close(True)
 
@@ -136,7 +136,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            link = drw.Links[{'a': 'b'}]
+            _ = drw.Links[{'a': 'b'}]
 
         drw.close(True)
 

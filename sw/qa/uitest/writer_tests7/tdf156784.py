@@ -15,8 +15,6 @@ class tdf156784(UITestCase):
     def test_tdf156784(self):
         with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as self.document:
 
-            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-
             # accept all tracked changes
             self.xUITest.executeCommand(".uno:AcceptAllTrackedChanges")
 

@@ -13,7 +13,7 @@ class Test(UITestCase):
 
     def testPdfSigning(self):
         # Start Impress.
-        with self.ui_test.load_file(get_url_for_data_file("pdf-sign.pdf")) as impress_doc:
+        with self.ui_test.load_file(get_url_for_data_file("pdf-sign.pdf")):
 
             # Now use File -> Digital signatures -> Digital signatures.
             with self.ui_test.execute_dialog_through_command(".uno:Signature", close_button="close"):

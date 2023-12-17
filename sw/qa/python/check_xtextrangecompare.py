@@ -80,7 +80,7 @@ class XTextRangeCompare(unittest.TestCase):
 
         xDoc.close(True)
 
-    def test_compareRegionStarts_DiffSelection(self):
+    def test_compareRegionStarts_SameSelection(self):
         xDoc = self._uno.openEmptyWriterDoc()
 
         cursor1 = xDoc.Text.createTextCursor()

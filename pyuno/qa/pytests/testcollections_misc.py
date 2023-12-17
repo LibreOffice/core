@@ -42,7 +42,7 @@ class TestMisc(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            foo = "bar" in doc.UIConfigurationManager
+            _ = "bar" in doc.UIConfigurationManager
 
         doc.close(True)
 

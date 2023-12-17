@@ -212,7 +212,7 @@ class UITest(object):
             component.dispose()
         else:
             if component.isModified():
-                with self.execute_dialog_through_command('.uno:CloseDoc', close_button="discard") as xConfirmationDialog:
+                with self.execute_dialog_through_command('.uno:CloseDoc', close_button="discard"):
                     pass
             else:
                 self._xUITest.executeCommand(".uno:CloseDoc")

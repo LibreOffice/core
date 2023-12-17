@@ -918,6 +918,10 @@ class FuzzyTester():
         print("unexpected node: {}".format(str(node)))
 
 
+def SoftPageBreakNode():
+    raise NotImplementedError("todo")
+
+
 class TextPortionEnumerationTest(unittest.TestCase):
 
     xMSF = None
@@ -963,7 +967,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
     @unittest.skip("FIXME: insert a soft page break: not done")
     def test_soft_page_break(self):
         root = TreeNode()
-        spbk =SoftPageBreakNode()
+        spbk = SoftPageBreakNode()
         text = TextNode("abc")
         root.appendchild(spbk)
         root.appendchild(text)
@@ -2119,7 +2123,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         met2 = MetaNode(self.mkid("id"))
         try:
             inserter.insertrange(Range(0, 4, met2))
-            fail("testRangeMetaMeta: overlap left allowed")
+            self.fail("testRangeMetaMeta: overlap left allowed")
         except IllegalArgumentException:
             pass
         root = TreeNode()
@@ -2535,7 +2539,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         try:
             xMeta1.setParent(xMeta4)
-            fail("setParent(): allowed?")
+            self.fail("setParent(): allowed?")
         except NoSupportException:
             pass
         self.assertIsNone(xMeta1.getParent(), "getParent(): not None")
@@ -2592,7 +2596,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         try:
             xMeta.createTextCursorByRange(None)
-            fail("createTextCursorByRange(): None allowed?")
+            self.fail("createTextCursorByRange(): None allowed?")
         except RuntimeException:
             pass
 
@@ -2609,13 +2613,13 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         try:
             xMeta.insertString(None, "foo", False)
-            fail("insertString(): None allowed?")
+            self.fail("insertString(): None allowed?")
         except RuntimeException:
             pass
 
         try:
             xMeta.insertString(xDocTextCursor, "foo", False)
-            fail("insertString(): cursor outside allowed?")
+            self.fail("insertString(): cursor outside allowed?")
         except RuntimeException:
             pass
 
@@ -2630,14 +2634,14 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         try:
             xMeta.insertControlCharacter(None, HARD_HYPHEN, False)
-            fail("insertControlCharacter(): None allowed?")
+            self.fail("insertControlCharacter(): None allowed?")
         except IllegalArgumentException:
             pass
 
         xStart = xMeta.getStart()
         try:
             xMeta.insertControlCharacter(xDocTextCursor, HARD_HYPHEN, False)
-            fail("insertControlCharacter(): cursor outside allowed?")
+            self.fail("insertControlCharacter(): cursor outside allowed?")
         except IllegalArgumentException:
             pass
 
@@ -2654,19 +2658,19 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xMeta.setString("45")
         try:
             xMeta.insertTextContent(None, xMeta, False)
-            fail("insertTextContent(): None range allowed?")
+            self.fail("insertTextContent(): None range allowed?")
         except IllegalArgumentException:
             pass
 
         try:
             xMeta.insertTextContent(xStart, None, False)
-            fail("insertTextContent(): None content allowed?")
+            self.fail("insertTextContent(): None content allowed?")
         except IllegalArgumentException:
             pass
 
         try:
             xMeta.insertTextContent(xDocTextCursor, xMeta, False)
-            fail("insertTextContent(): cursor outside allowed?")
+            self.fail("insertTextContent(): cursor outside allowed?")
         except IllegalArgumentException:
             pass
 
@@ -2699,7 +2703,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         try:
             xMeta.removeTextContent(None)
-            fail("removeTextContent(): None content allowed?")
+            self.fail("removeTextContent(): None content allowed?")
         except RuntimeException:
             pass
 
@@ -2775,7 +2779,6 @@ class TextPortionEnumerationTest(unittest.TestCase):
         ## XTextCursor
         xMetaCursor = xMeta.createTextCursor()
         self.assertIsNotNone(xMetaCursor, "createTextCursor(): no cursor")
-        bSuccess = False
         xMetaCursor.gotoStart(False)
         xMetaCursor.gotoEnd(False)
         bSuccess = xMetaCursor.goLeft(1, False)
@@ -2790,7 +2793,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xMetaCursor.gotoRange(xEnd, False)
         try:
             xMetaCursor.gotoRange(xDocTextCursor, False)
-            fail("gotoRange(): succeeded")
+            self.fail("gotoRange(): succeeded")
         except RuntimeException:
             pass
 

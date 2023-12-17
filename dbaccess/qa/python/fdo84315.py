@@ -10,7 +10,6 @@
 import os
 import unittest
 from collections import deque
-import unohelper
 from org.libreoffice.unotest import UnoInProcess
 
 class Fdo84315(unittest.TestCase):
@@ -67,7 +66,7 @@ class Fdo84315(unittest.TestCase):
 
         xResultset = xStatement.executeQuery('SELECT "id" FROM "test_table"')
         expected_values = deque([0, 1])
-        xMeta = self.__test_Query('id', INTEGER, xResultset)
+        self.__test_Query('id', INTEGER, xResultset)
         self.__test_ResultSetInteger(xResultset, expected_values)
 
         xCon.dispose()

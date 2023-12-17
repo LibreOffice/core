@@ -8,15 +8,8 @@
 #
 
 import unittest
-import unohelper
-import os
 from org.libreoffice.unotest import UnoInProcess
 
-from com.sun.star.ui import XSidebarProvider
-from com.sun.star.ui import XDecks
-from com.sun.star.ui import XDeck
-from com.sun.star.ui import XPanels
-from com.sun.star.ui import XPanel
 
 class CheckSidebar(unittest.TestCase):
 
@@ -38,7 +31,6 @@ class CheckSidebar(unittest.TestCase):
         assert(xSidebar)
 
         xSidebar.setVisible(True)
-        isVisible = xSidebar.isVisible()
         self.assertTrue ( xSidebar.isVisible() )
 
         # TODO: does not work in unit test context 

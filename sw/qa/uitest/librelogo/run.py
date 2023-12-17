@@ -9,7 +9,6 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import type_text
-from com.sun.star.awt.FontSlant import NONE as __Slant_NONE__
 from com.sun.star.awt.FontSlant import ITALIC as __Slant_ITALIC__
 from com.sun.star.awt.FontUnderline import NONE as __Underline_NONE__
 from com.sun.star.awt.FontUnderline import SINGLE as __Underline_SINGLE__

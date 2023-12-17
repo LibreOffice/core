@@ -51,7 +51,8 @@ def parse_block(data, index):
 
 
 def parse_column(data, index):
-    column_index = struct.unpack('Q', data[index:index+8])[0]
+    # get the column index
+    struct.unpack('Q', data[index:index+8])[0]
     index += 8
     column_entries = struct.unpack('Q', data[index:index+8])[0]
     index += 8

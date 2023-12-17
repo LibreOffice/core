@@ -150,7 +150,6 @@ class Test(UITestCase):
         # Start Writer.
         with self.ui_test.create_doc_in_start_center("writer"):
             doc = self.xUITest.getTopFocusWindow()
-            editWin = doc.getChild("writer_edit")
 
             # Use Format -> Character.
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:

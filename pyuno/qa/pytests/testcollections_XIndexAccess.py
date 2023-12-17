@@ -223,7 +223,7 @@ class TestXIndexAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            present = {} in doc.Footnotes
+            _ = {} in doc.Footnotes
 
         doc.close(True);
 

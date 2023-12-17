@@ -230,9 +230,9 @@ class TestXCellRange(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(KeyError):
-            rng = sht[1:1, 3:5]
+            _ = sht[1:1, 3:5]
         with self.assertRaises(KeyError):
-            rng = sht[1:3, 3:3]
+            _ = sht[1:3, 3:3]
 
         spr.close(True)
 

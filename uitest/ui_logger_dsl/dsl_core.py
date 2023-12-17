@@ -1072,7 +1072,8 @@ class ul_Compiler:
             self.output_stream.write(str(line))
 
     def do_nothing(self, Command):
-        line = "to be added in the future"
+        # to be added in the future
+        pass
 
     def __del__(self):
         self.output_stream.close()

@@ -8,8 +8,6 @@
 #
 
 import unittest
-import unohelper
-import os
 from org.libreoffice.unotest import UnoInProcess
 import uno
 
