@@ -30,9 +30,11 @@ class BigIntTest : public CppUnit::TestFixture
 {
 public:
     void testConstructionFromLongLong();
+    void testLenB1();
 
     CPPUNIT_TEST_SUITE(BigIntTest);
     CPPUNIT_TEST(testConstructionFromLongLong);
+    CPPUNIT_TEST(testLenB1);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -89,6 +91,18 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(!bi.IsLong());
     }
+}
+
+void BigIntTest::testLenB1()
+{
+    BigInt dy(2634022912);
+    sal_Int64 md(-4177526784);
+    sal_Int64 mn(2634022912);
+    dy *= md;
+    dy -= (mn - 1) / 2;
+    dy /= mn;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(-4177526784), sal_Int64(dy));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BigIntTest);

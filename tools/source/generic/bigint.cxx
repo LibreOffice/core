@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
+#include <sal/config.h>
 
 #include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 
 #include <algorithm>
-#include <string.h>
+#include <cmath>
+#include <cstring>
+#include <span>
 
 /**
  * The range in which we can perform add/sub without fear of overflow
@@ -89,45 +91,47 @@ void BigInt::Normalize()
     }
 }
 
-BigInt BigInt::Mult( const BigInt &rVal, sal_uInt32 nMul )
+// Normalization in DivLong requires that dividend is multiplied by a number, and the resulting
+// value has 1 more 32-bit "digits". 'ret' provides enough room for that. Use of std::span gives
+// run-time index checking in debug builds.
+static std::span<sal_uInt32> Mult(std::span<const sal_uInt32> aNum, sal_uInt32 nMul, std::span<sal_uInt32> retBuf)
 {
-    assert(!rVal.IsLong());
-    BigInt ret;
+    assert(aNum.size() <= MAX_DIGITS);
+    assert(retBuf.size() >= aNum.size());
     sal_uInt64 nK = 0;
-    for ( int i = 0; i < rVal.nLen; i++ )
+    for (size_t i = 0; i < aNum.size(); i++)
     {
-        sal_uInt64 nTmp = static_cast<sal_uInt64>(rVal.nNum[i]) * nMul + nK;
+        sal_uInt64 nTmp = static_cast<sal_uInt64>(aNum[i]) * nMul + nK;
         nK = nTmp >> 32;
-        ret.nNum[i] = static_cast<sal_uInt32>(nTmp);
+        retBuf[i] = static_cast<sal_uInt32>(nTmp);
     }
 
     if ( nK )
     {
-        assert(rVal.nLen < MAX_DIGITS);
-        ret.nNum[rVal.nLen] = nK;
-        ret.nLen = rVal.nLen + 1;
+        assert(retBuf.size() > aNum.size());
+        retBuf[aNum.size()] = nK;
+        return retBuf.subspan(0, aNum.size() + 1);
     }
-    else
-        ret.nLen = rVal.nLen;
 
-    ret.bIsNeg = rVal.bIsNeg;
-    return ret;
+    return retBuf.subspan(0, aNum.size());
 }
 
-void BigInt::Div( sal_uInt32 nDiv, sal_uInt32& rRem )
+static size_t DivInPlace(std::span<sal_uInt32> aNum, sal_uInt32 nDiv, sal_uInt32& rRem)
 {
-    assert(!IsLong());
+    assert(aNum.size() > 0);
     sal_uInt64 nK = 0;
-    for ( int i = nLen - 1; i >= 0; i-- )
+    for (int i = aNum.size() - 1; i >= 0; i--)
     {
-        sal_uInt64 nTmp = nNum[i] + (nK << 32);
-        nNum[i] = nTmp / nDiv;
+        sal_uInt64 nTmp = aNum[i] + (nK << 32);
+        aNum[i] = nTmp / nDiv;
         nK            = nTmp % nDiv;
     }
     rRem = nK;
 
-    if ( nNum[nLen-1] == 0 )
-        nLen -= 1;
+    if (aNum[aNum.size() - 1] == 0)
+        return aNum.size() - 1;
+
+    return aNum.size();
 }
 
 bool BigInt::ABS_IsLessLong(const BigInt& rVal) const
@@ -276,61 +280,66 @@ void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
     }
 }
 
-void BigInt::DivLong( const BigInt& rB, BigInt& rErg, BigInt* pMod ) const
+void BigInt::DivModLong(const BigInt& rB, BigInt& rErg, bool bMod) const
 {
     assert(!IsLong() && !rB.IsLong());
+    assert(nLen >= rB.nLen);
 
-    const int nLenB1 = rB.nLen - 1;
-    const sal_uInt32 nMult = static_cast<sal_uInt32>(0x100000000 / (static_cast<sal_Int64>(rB.nNum[nLenB1]) + 1));
+    assert(rB.nNum[rB.nLen - 1] != 0);
+    sal_uInt32 nMult = static_cast<sal_uInt32>(0x100000000 / (static_cast<sal_Int64>(rB.nNum[rB.nLen - 1]) + 1));
 
-    BigInt aTmpA = Mult(*this, nMult);
-    if ( aTmpA.nLen == nLen )
+    sal_uInt32 numBuf[MAX_DIGITS + 1]; // normalized dividend
+    auto num = Mult({ nNum, nLen }, nMult, numBuf);
+    if (num.size() == nLen)
     {
-        assert(aTmpA.nLen < MAX_DIGITS);
-        aTmpA.nNum[aTmpA.nLen] = 0;
-        aTmpA.nLen++;
+        num = std::span(numBuf, nLen + 1);
+        num[nLen] = 0;
     }
 
-    BigInt aTmpB = Mult(rB, nMult);
+    sal_uInt32 denBuf[MAX_DIGITS + 1]; // normalized divisor
+    const auto den = Mult({ rB.nNum, rB.nLen }, nMult, denBuf);
+    assert(den.size() == rB.nLen);
+    const sal_uInt64 nDenMostSig = den[rB.nLen - 1];
+    assert(nDenMostSig >= 0x100000000 / 2);
+    const sal_uInt64 nDen2ndSig = rB.nLen > 1 ? den[rB.nLen - 2] : 0;
 
-    const int nLenB = rB.nLen;
-    for (int j = aTmpA.nLen - 1; j >= nLenB; j--)
+    for (size_t j = num.size() - 1; j >= den.size(); j--)
     { // guess divisor
-        sal_uInt64 nTmp = ( static_cast<sal_uInt64>(aTmpA.nNum[j]) << 32 ) + aTmpA.nNum[j - 1];
+        assert(num[j] < nDenMostSig || (num[j] == nDenMostSig && num[j - 1] == 0));
+        sal_uInt64 nTmp = ( static_cast<sal_uInt64>(num[j]) << 32 ) + num[j - 1];
         sal_uInt32 nQ;
-        if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
+        if (num[j] == nDenMostSig)
             nQ = 0xFFFFFFFF;
         else
-            nQ = static_cast<sal_uInt32>(nTmp / aTmpB.nNum[nLenB1]);
+            nQ = static_cast<sal_uInt32>(nTmp / nDenMostSig);
 
-        if ( (static_cast<sal_uInt64>(aTmpB.nNum[nLenB1 - 1]) * nQ) >
-            ((nTmp - static_cast<sal_uInt64>(aTmpB.nNum[nLenB1]) * nQ) << 32) + aTmpA.nNum[j - 2])
+        if (nDen2ndSig && (nDen2ndSig * nQ) > ((nTmp - nDenMostSig * nQ) << 32) + num[j - 2])
             nQ--;
         // Start division
         sal_uInt32 nK = 0;
-        int i;
-        for (i = 0; i < nLenB; i++)
+        size_t i;
+        for (i = 0; i < den.size(); i++)
         {
-            nTmp = static_cast<sal_uInt64>(aTmpA.nNum[j - nLenB + i])
-                   - (static_cast<sal_uInt64>(aTmpB.nNum[i]) * nQ)
+            nTmp = static_cast<sal_uInt64>(num[j - den.size() + i])
+                   - (static_cast<sal_uInt64>(den[i]) * nQ)
                    - nK;
-            aTmpA.nNum[j - nLenB + i] = static_cast<sal_uInt32>(nTmp);
+            num[j - den.size() + i] = static_cast<sal_uInt32>(nTmp);
             nK = static_cast<sal_uInt32>(nTmp >> 32);
             if ( nK )
                 nK = static_cast<sal_uInt32>(0x100000000 - nK);
         }
-        sal_uInt32& rNum( aTmpA.nNum[j - nLenB + i] );
+        sal_uInt32& rNum(num[j - den.size() + i]);
         rNum -= nK;
-        if (aTmpA.nNum[j - nLenB + i] == 0)
-            rErg.nNum[j - nLenB] = nQ;
+        if (num[j - den.size() + i] == 0)
+            rErg.nNum[j - den.size()] = nQ;
         else
         {
-            rErg.nNum[j - nLenB] = nQ - 1;
+            rErg.nNum[j - den.size()] = nQ - 1;
             nK = 0;
-            for (i = 0; i < nLenB; i++)
+            for (i = 0; i < den.size(); i++)
             {
-                nTmp = aTmpA.nNum[j - nLenB + i] + aTmpB.nNum[i] + nK;
-                aTmpA.nNum[j - nLenB + i] = static_cast<sal_uInt32>(nTmp & 0xFFFFFFFF);
+                nTmp = num[j - den.size() + i] + den[i] + nK;
+                num[j - den.size() + i] = static_cast<sal_uInt32>(nTmp & 0xFFFFFFFF);
                 if (nTmp > std::numeric_limits<sal_uInt32>::max())
                     nK = 1;
                 else
@@ -339,14 +348,17 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg, BigInt* pMod ) const
         }
     }
 
-    rErg.bIsNeg = bIsNeg != rB.bIsNeg;
-    rErg.nLen   = nLen - rB.nLen + 1;
-
-    if (pMod)
+    if (bMod)
     {
-        *pMod = aTmpA;
-        sal_uInt32 nQ;
-        pMod->Div(nMult, nQ);
+        rErg.nLen = DivInPlace(num, nMult, nMult);
+        assert(rErg.nLen <= MAX_DIGITS);
+        rErg.bIsNeg = bIsNeg;
+        std::copy_n(num.begin(), rErg.nLen, rErg.nNum);
+    }
+    else
+    {
+        rErg.bIsNeg = bIsNeg != rB.bIsNeg;
+        rErg.nLen   = nLen - rB.nLen + 1;
     }
 }
 
@@ -584,30 +596,37 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
     return *this;
 }
 
-BigInt& BigInt::operator/=( const BigInt& rVal )
+void BigInt::DivMod(const BigInt& rVal, bool bMod)
 {
     if ( rVal.nLen == 0 )
     {
         if ( rVal.nVal == 0 )
         {
             OSL_FAIL( "BigInt::operator/ --> divide by zero" );
-            return *this;
+            return;
+        }
+
+        if (rVal.nVal == 1)
+        {
+            if (bMod)
+                *this = 0;
+            return;
         }
 
         if ( nLen == 0 )
         {
             // No overflows may occur here
-            nVal /= rVal.nVal;
-            return *this;
+            nVal = bMod ? nVal % rVal.nVal : nVal / rVal.nVal;
+            return;
         }
-
-        if ( rVal.nVal == 1 )
-            return *this;
 
         if ( rVal.nVal == -1 )
         {
-            bIsNeg = !bIsNeg;
-            return *this;
+            if (bMod)
+                *this = 0;
+            else
+                bIsNeg = !bIsNeg;
+            return;
         }
 
         // Divide BigInt with an sal_uInt32
@@ -620,61 +639,34 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
         else
             nTmp = static_cast<sal_uInt32>(rVal.nVal);
 
-        Div( nTmp, nTmp );
-        Normalize();
-        return *this;
+        nLen = DivInPlace({ nNum, nLen }, nTmp, nTmp);
+        if (bMod)
+            *this = BigInt(nTmp);
+        return;
     }
 
-    if ( ABS_IsLess( rVal ) )
+    BigInt tmpA = MakeBig(), tmpB = rVal.MakeBig();
+    if (tmpA.ABS_IsLessLong(tmpB))
     {
-        *this = 0;
-        return *this;
+        if (!bMod)
+            *this = 0;
+        return;
     }
 
     // Divide BigInt with BigInt
-    MakeBig().DivLong(rVal.MakeBig(), *this);
+    tmpA.DivModLong(tmpB, *this, bMod);
+}
+
+BigInt& BigInt::operator/=( const BigInt& rVal )
+{
+    DivMod(rVal, false);
     Normalize();
     return *this;
 }
 
 BigInt& BigInt::operator%=( const BigInt& rVal )
 {
-    if ( rVal.nLen == 0 )
-    {
-        if ( rVal.nVal == 0 )
-        {
-            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
-            return *this;
-        }
-
-        if ( nLen == 0 )
-        {
-            // No overflows may occur here
-            nVal %= rVal.nVal;
-            return *this;
-        }
-
-        // Divide Bigint by int16
-        sal_uInt32 nTmp;
-        if ( rVal.nVal < 0 )
-        {
-            nTmp = static_cast<sal_uInt32>(-rVal.nVal);
-            bIsNeg = !bIsNeg;
-        }
-        else
-            nTmp = static_cast<sal_uInt32>(rVal.nVal);
-
-        Div( nTmp, nTmp );
-        *this = BigInt( nTmp );
-        return *this;
-    }
-
-    if ( ABS_IsLess( rVal ) )
-        return *this;
-
-    // Divide BigInt with BigInt
-    BigInt tmp;
-    MakeBig().DivLong(rVal.MakeBig(), tmp, this);
+    DivMod(rVal, true);
     Normalize();
     return *this;
 }

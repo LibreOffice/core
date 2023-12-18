@@ -42,13 +42,12 @@ private:
 
     TOOLS_DLLPRIVATE BigInt MakeBig() const;
     TOOLS_DLLPRIVATE void Normalize();
-    TOOLS_DLLPRIVATE static BigInt Mult(BigInt const &, sal_uInt32);
-    TOOLS_DLLPRIVATE void Div(sal_uInt32, sal_uInt32 &);
     TOOLS_DLLPRIVATE bool ABS_IsLessLong(BigInt const &) const;
     TOOLS_DLLPRIVATE void AddLong(BigInt &, BigInt &);
     TOOLS_DLLPRIVATE void SubLong(BigInt &, BigInt &);
     TOOLS_DLLPRIVATE void MultLong(BigInt const &, BigInt &) const;
-    TOOLS_DLLPRIVATE void DivLong(BigInt const &, BigInt &, BigInt * = nullptr) const;
+    TOOLS_DLLPRIVATE void DivModLong(BigInt const &, BigInt &, bool) const;
+    TOOLS_DLLPRIVATE void DivMod(BigInt const &, bool);
     TOOLS_DLLPRIVATE bool ABS_IsLess(BigInt const &) const;
 
 public:
