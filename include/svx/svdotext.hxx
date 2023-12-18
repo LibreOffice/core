@@ -25,6 +25,7 @@
 #include <svx/sdtakitm.hxx>
 #include <svx/sdtaditm.hxx>
 #include <svx/svdtrans.hxx>
+#include <svx/svdgeodata.hxx>
 #include <tools/datetime.hxx>
 #include <svl/style.hxx>
 #include <svx/svdtext.hxx>

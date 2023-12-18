@@ -22,6 +22,7 @@
 
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdgeodata.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>

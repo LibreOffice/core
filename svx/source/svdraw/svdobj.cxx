@@ -1903,13 +1903,9 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
 
     // user-defined gluepoints
     if (m_pPlusData!=nullptr && m_pPlusData->pGluePoints!=nullptr) {
-        if (rGeo.pGPL!=nullptr) {
-            *rGeo.pGPL=*m_pPlusData->pGluePoints;
-        } else {
-            rGeo.pGPL.reset( new SdrGluePointList(*m_pPlusData->pGluePoints) );
-        }
+        rGeo.moGluePoints = *m_pPlusData->pGluePoints;
     } else {
-        rGeo.pGPL.reset();
+        rGeo.moGluePoints.reset();
     }
 }
 
@@ -1926,12 +1922,12 @@ void SdrObject::RestoreGeoData(const SdrObjGeoData& rGeo)
     mnLayerID = rGeo.mnLayerID;
 
     // user-defined gluepoints
-    if (rGeo.pGPL!=nullptr) {
+    if (rGeo.moGluePoints) {
         ImpForcePlusData();
         if (m_pPlusData->pGluePoints!=nullptr) {
-            *m_pPlusData->pGluePoints=*rGeo.pGPL;
+            *m_pPlusData->pGluePoints=*rGeo.moGluePoints;
         } else {
-            m_pPlusData->pGluePoints.reset(new SdrGluePointList(*rGeo.pGPL));
+            m_pPlusData->pGluePoints.reset(new SdrGluePointList(*rGeo.moGluePoints));
         }
     } else {
         if (m_pPlusData!=nullptr && m_pPlusData->pGluePoints!=nullptr) {

@@ -76,6 +76,7 @@ class Fraction;
 enum class PointerStyle;
 class Graphic;
 class SvxShape;
+class SdrObjGeoData;
 namespace basegfx
 {
     class B2DPoint;
@@ -163,27 +164,6 @@ public:
     sal_uInt16 GetId() const { return m_nIdentifier;}
 };
 
-/**
- * All geometrical data of an arbitrary object for use in undo/redo
- */
-class SVXCORE_DLLPUBLIC SdrObjGeoData
-{
-public:
-    tools::Rectangle                   aBoundRect;
-    Point                       aAnchor;
-    std::unique_ptr<SdrGluePointList>
-                                pGPL;
-    bool                        bMovProt;
-    bool                        bSizProt;
-    bool                        bNoPrint;
-    bool                        bClosedObj;
-    bool                        mbVisible;
-    SdrLayerID                  mnLayerID;
-
-public:
-    SdrObjGeoData();
-    virtual ~SdrObjGeoData();
-};
 
 /**
  * Provides information about various ZObject properties
