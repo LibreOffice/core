@@ -1121,14 +1121,14 @@ void ToolBarManager::CreateControllers()
                         xController.set( new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
                     else
                         xController.set( new GenericToolbarController( m_xContext, m_xFrame, *m_pWeldedToolBar, aCommandURL ));
-
-                    // Accessibility support: Set toggle button role for specific commands
-                    sal_Int32 nProps = vcl::CommandInfoProvider::GetPropertiesForCommand(aCommandURL, m_aModuleIdentifier);
-                    if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
-                        m_pImpl->SetItemCheckable( nId );
                 }
             }
         }
+
+        // Accessibility support: Set toggle button role for specific commands
+        const sal_Int32 nProps = vcl::CommandInfoProvider::GetPropertiesForCommand(aCommandURL, m_aModuleIdentifier);
+        if (nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON)
+            m_pImpl->SetItemCheckable(nId);
 
         // Associate ID and controller to be able to retrieve
         // the controller from the ID later.
