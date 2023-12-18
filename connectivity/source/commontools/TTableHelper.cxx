@@ -213,7 +213,8 @@ namespace
             OUString  sField12 = xRow->getString(12)
                             ,sField13 = xRow->getString(13);
             nOrdinalPosition = xRow->getInt( 17 );  // ORDINAL_POSITION
-            _out_rColumns.push_back( ColumnDesc( sName,nField5,aField6,nField7,nField9,nField11,sField12,sField13, nOrdinalPosition ) );
+            _out_rColumns.emplace_back(sName, nField5, aField6, nField7, nField9,
+                                       nField11, sField12, sField13, nOrdinalPosition);
         }
     }
 
