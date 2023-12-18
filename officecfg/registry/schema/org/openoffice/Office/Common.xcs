@@ -820,14 +820,6 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="PaintBuffer_Writer" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Similar to PaintBuffer, but only for Writer Application.
-          PaintBuffer is the global switch.</desc>
-          <label>Writer Repaint is allowed to use Pre-Rendering Buffer</label>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="PaintBuffer_DrawImpress" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Similar to PaintBuffer, but only for Draw/Impress Applications.
