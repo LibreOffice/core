@@ -1072,7 +1072,6 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
             m_xPrefBox->set_text(*xParentEntry, "", 1);
             m_xPrefBox->set_text(*xParentEntry, "", 2);
             m_xPrefBox->set_text(*xParentEntry, "", 3);
-            m_xPrefBox->set_text_emphasis(*m_xScratchIter, rEntry.pUserData->bWasModified, -1);
             m_xPrefBox->set_sensitive(*xParentEntry, true);
         }
 
