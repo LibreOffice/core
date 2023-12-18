@@ -4117,14 +4117,6 @@
             </info>
             <value>true</value>
           </prop>
-           <prop oor:name="ApplyBulletsAfterSpace" oor:type="xs:boolean" oor:nillable="false">
-            <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply styles -->
-            <info>
-              <desc>Specifies whether a numbered or bulleted text is created automatically while typing * or - and then space</desc>
-              <label>Bulleted and numbered lists immediate after pressing space</label>
-            </info>
-            <value>false</value>
-          </prop>
           <group oor:name="ApplyNumbering">
             <info>
               <desc>Contains settings for automatic numbering.</desc>
