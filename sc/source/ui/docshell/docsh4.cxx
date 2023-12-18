@@ -112,6 +112,7 @@ using namespace ::com::sun::star;
 #include <helpids.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <svx/xdef.hxx>
 
@@ -2503,6 +2504,9 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
 
 ::sfx2::SvLinkSource* ScDocShell::DdeCreateLinkSource( const OUString& rItem )
 {
+    if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+        return nullptr;
+
     //  only check for valid item string - range is parsed again in ScServerObject ctor
 
     //  named range?

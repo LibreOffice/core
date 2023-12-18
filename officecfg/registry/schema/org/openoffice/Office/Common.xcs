@@ -2520,7 +2520,7 @@
         <prop oor:name="DisableActiveContent" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether or not to disable active content. Right now
-            only disables active embedded content (OLE).</desc>
+            only disables active embedded content (OLE) and DDE.</desc>
           </info>
           <value>false</value>
         </prop>

@@ -21,6 +21,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/urihelper.hxx>
@@ -281,6 +282,11 @@ void LinkManager::UpdateAllLinks(
     bool bUpdateGrfLinks,
     weld::Window* pParentWin )
 {
+    // when active content is disabled don't bother updating all links
+    // also (when bAskUpdate == true) don't show the pop up.
+    if(officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+        return;
+
     // First make a copy of the array in order to update links
     // links in ... no contact between them!
     std::vector<SvBaseLink*> aTmpArr;
@@ -354,8 +360,12 @@ SvLinkSourceRef LinkManager::CreateObj( SvBaseLink const * pLink )
         case SvBaseLinkObjectType::ClientOle:
             return new SvFileObject;
         case SvBaseLinkObjectType::Internal:
+            if(officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+                return SvLinkSourceRef();
             return new SvxInternalLink;
         case SvBaseLinkObjectType::ClientDde:
+            if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+                return SvLinkSourceRef();
             return new SvDDEObject;
         default:
             return SvLinkSourceRef();

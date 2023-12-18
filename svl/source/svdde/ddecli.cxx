@@ -22,6 +22,7 @@
 #include <algorithm>
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/thread.h>
 #include <comphelper/solarmutex.hxx>
 
@@ -150,12 +151,16 @@ DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
     pInst->nInstanceCli++;
     if ( !pInst->hDdeInstCli )
     {
-        pImp->nStatus = DdeInitializeW( &pInst->hDdeInstCli,
-                                        DdeInternal::CliCallback,
-                                        APPCLASS_STANDARD | APPCMD_CLIENTONLY |
-                                        CBF_FAIL_ALLSVRXACTIONS |
-                                        CBF_SKIP_REGISTRATIONS  |
-                                        CBF_SKIP_UNREGISTRATIONS, 0L );
+        pImp->nStatus = DMLERR_SYS_ERROR;
+        if ( !officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        {
+            pImp->nStatus = DdeInitializeW( &pInst->hDdeInstCli,
+                                            DdeInternal::CliCallback,
+                                            APPCLASS_STANDARD | APPCMD_CLIENTONLY |
+                                            CBF_FAIL_ALLSVRXACTIONS |
+                                            CBF_SKIP_REGISTRATIONS  |
+                                            CBF_SKIP_UNREGISTRATIONS, 0L );
+        }
     }
 
     pService = new DdeString( pInst->hDdeInstCli, rService );

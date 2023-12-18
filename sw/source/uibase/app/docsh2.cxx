@@ -1393,6 +1393,8 @@ bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& /*rMimeType*
 
 ::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const OUString& rItem )
 {
+    if(officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+        return nullptr;
     return m_xDoc->getIDocumentLinksAdministration().CreateLinkSource( rItem );
 }
 
