@@ -20,6 +20,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
@@ -422,7 +423,7 @@ private:
     Reference< XInputStream > m_input;
     bool m_bValidStream;
 
-    std::unique_ptr<MemRingBuffer> m_pBuffer;
+    std::optional<MemRingBuffer> m_oBuffer;
     std::map<sal_Int32,sal_Int32,std::less< sal_Int32 > > m_mapMarks;
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
@@ -437,7 +438,7 @@ OMarkableInputStream::OMarkableInputStream()
     , m_nCurrentPos(0)
     , m_nCurrentMark(0)
 {
-    m_pBuffer.reset( new MemRingBuffer );
+    m_oBuffer.emplace();
 }
 
 
@@ -453,7 +454,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
             *this );
     }
     std::unique_lock guard( m_mutex );
-    if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
+    if( m_mapMarks.empty() && ! m_oBuffer->getSize() ) {
         // normal read !
         nBytesRead = m_input->readBytes( aData, nBytesToRead );
     }
@@ -462,22 +463,22 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
         sal_Int32 nRead;
 
         // read enough bytes into buffer
-        if( m_pBuffer->getSize() - m_nCurrentPos < nBytesToRead  ) {
-            sal_Int32 nToRead = nBytesToRead - ( m_pBuffer->getSize() - m_nCurrentPos );
+        if( m_oBuffer->getSize() - m_nCurrentPos < nBytesToRead  ) {
+            sal_Int32 nToRead = nBytesToRead - ( m_oBuffer->getSize() - m_nCurrentPos );
             nRead = m_input->readBytes( aData , nToRead );
 
             OSL_ASSERT( aData.getLength() == nRead );
 
-            m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
+            m_oBuffer->writeAt( m_oBuffer->getSize() , aData );
 
             if( nRead < nToRead ) {
                 nBytesToRead = nBytesToRead - (nToRead-nRead);
             }
         }
 
-        OSL_ASSERT( m_pBuffer->getSize() - m_nCurrentPos >= nBytesToRead  );
+        OSL_ASSERT( m_oBuffer->getSize() - m_nCurrentPos >= nBytesToRead  );
 
-        m_pBuffer->readAt( m_nCurrentPos , aData , nBytesToRead );
+        m_oBuffer->readAt( m_nCurrentPos , aData , nBytesToRead );
 
         m_nCurrentPos += nBytesToRead;
         nBytesRead = nBytesToRead;
@@ -498,14 +499,14 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
     }
 
     std::unique_lock guard( m_mutex );
-    if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
+    if( m_mapMarks.empty() && ! m_oBuffer->getSize() ) {
         // normal read !
         nBytesRead = m_input->readSomeBytes( aData, nMaxBytesToRead );
     }
     else {
         // read from buffer
         sal_Int32 nRead = 0;
-        sal_Int32 nInBuffer = m_pBuffer->getSize() - m_nCurrentPos;
+        sal_Int32 nInBuffer = m_oBuffer->getSize() - m_nCurrentPos;
         sal_Int32 nAdditionalBytesToRead = std::min<sal_Int32>(nMaxBytesToRead-nInBuffer,m_input->available());
         nAdditionalBytesToRead = std::max<sal_Int32>(0 , nAdditionalBytesToRead );
 
@@ -519,13 +520,13 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
 
         if( nRead ) {
             aData.realloc( nRead );
-            m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
+            m_oBuffer->writeAt( m_oBuffer->getSize() , aData );
         }
 
         nBytesRead = std::min( nMaxBytesToRead , nInBuffer + nRead );
 
         // now take everything from buffer !
-        m_pBuffer->readAt( m_nCurrentPos , aData , nBytesRead );
+        m_oBuffer->readAt( m_nCurrentPos , aData , nBytesRead );
 
         m_nCurrentPos += nBytesRead;
     }
@@ -558,7 +559,7 @@ sal_Int32 OMarkableInputStream::available()
     }
 
     std::unique_lock guard( m_mutex );
-    sal_Int32 nAvail = m_input->available() + ( m_pBuffer->getSize() - m_nCurrentPos );
+    sal_Int32 nAvail = m_input->available() + ( m_oBuffer->getSize() - m_nCurrentPos );
     return nAvail;
 }
 
@@ -578,7 +579,7 @@ void OMarkableInputStream::closeInput()
     setPredecessor( Reference< XConnectable > () );
     setSuccessor( Reference< XConnectable >() );
 
-    m_pBuffer.reset();
+    m_oBuffer.reset();
     m_nCurrentPos = 0;
     m_nCurrentMark = 0;
 }
@@ -627,7 +628,7 @@ void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
 void OMarkableInputStream::jumpToFurthest()
 {
     std::unique_lock guard( m_mutex );
-    m_nCurrentPos = m_pBuffer->getSize();
+    m_nCurrentPos = m_oBuffer->getSize();
     checkMarksAndFlush();
 }
 
@@ -725,7 +726,7 @@ void OMarkableInputStream::checkMarksAndFlush()
             mark.second -= nNextFound;
         }
 
-        m_pBuffer->forgetFromStart( nNextFound );
+        m_oBuffer->forgetFromStart( nNextFound );
 
     }
     else {
