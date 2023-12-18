@@ -64,6 +64,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <svx/svdpagv.hxx>
 #include <o3tl/temporary.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <comphelper/lok.hxx>
 
@@ -485,6 +486,15 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_LINKS:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+                {
+                    std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(
+                        nullptr, VclMessageType::Warning, VclButtonsType::Ok,
+                        SvtResId(STR_WARNING_EXTERNAL_LINK_EDIT_DISABLED)));
+                    xError->run();
+                    break;
+                }
+
                 ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(pWin->GetFrameWeld(), rDoc.GetLinkManager()));
                 pDlg->Execute();
                 rBindings.Invalidate( nSlot );

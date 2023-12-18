@@ -568,6 +568,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             rBtn.set_label(ScResId(STR_ENABLE_CONTENT));
                             rBtn.set_tooltip_text(ScResId(STR_ENABLE_CONTENT_TOOLTIP));
                             rBtn.connect_clicked(LINK(this, ScDocShell, ReloadAllLinksHdl));
+
+                            // when active content is disabled the "Allow updating" button has no functionality.
+                            if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+                            {
+                                rBtn.set_tooltip_text(ScResId(STR_ENABLE_CONTENT_TOOLTIP_DISABLED));
+                                rBtn.set_sensitive(false);
+                            }
                         }
                     }
                     rReq.Done();

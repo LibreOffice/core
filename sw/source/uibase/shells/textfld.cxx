@@ -56,6 +56,8 @@
 #include <doc.hxx>
 #include <PostItMgr.hxx>
 #include <swmodule.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
 
 #include <editeng/ulspitem.hxx>
 #include <xmloff/odffields.hxx>
@@ -68,6 +70,7 @@
 #include <svx/pageitem.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <IMark.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Compatibility.hxx>
 #include <ndtxt.hxx>
 #include <translatehelper.hxx>
@@ -137,6 +140,16 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                                                 GetBaseLink();
                         if(rLink.IsVisible())
                         {
+                            if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+                            {
+                                std::unique_ptr<weld::MessageDialog> xError(
+                                    Application::CreateMessageDialog(
+                                        nullptr, VclMessageType::Warning, VclButtonsType::Ok,
+                                        SvtResId(STR_WARNING_EXTERNAL_LINK_EDIT_DISABLED)));
+                                xError->run();
+                                break;
+                            }
+
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetView().GetFrameWeld(), &rSh.GetLinkManager(), false, &rLink));
                             pDlg->Execute();
