@@ -421,9 +421,9 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //45
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //46
         "Format/Option/SetDOIAttribute",                                //47
-        "Format/ByInput/ApplyNumberingAfterSpace",                      //48
+        "Format/ByInput/ApplyBulletsAfterSpace",                        //48
     };
-    const int nCount = 48;
+    const int nCount = 49;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
