@@ -3465,7 +3465,8 @@
         <!-- UIHints: Select bitmap => context menu  convert  To polygon -->
         <info>
           <desc>Specifies the extent of background tiles that are used for
-          vectorizing [UNIT=pixel].</desc>
+          vectorizing [UNIT=pixel].
+          This setting is supposed to be saved, see https://bugs.documentfoundation.org/show_bug.cgi?id=158305</desc>
           <label>Tile extent</label>
         </info>
         <constraints>
