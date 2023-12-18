@@ -220,6 +220,10 @@ public:
                                 SfxViewShell( SfxViewFrame *pFrame, SfxViewShellFlags nFlags );
     virtual                     ~SfxViewShell() override;
 
+    /// Informs the view shell that it'll be deleted before the main loop processes the next user
+    /// input.
+    virtual void SetDying() {}
+
     SfxInPlaceClient*           GetIPClient() const;
     SfxInPlaceClient*           GetUIActiveClient() const;
     SfxInPlaceClient*           FindIPClient( const css::uno::Reference < css::embed::XEmbeddedObject >&  xObj, vcl::Window *pObjParentWin ) const;
