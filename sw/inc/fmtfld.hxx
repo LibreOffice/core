@@ -180,6 +180,11 @@ enum class SwFormatFieldHintWhich
     RESOLVED   = 5
 };
 
+/// This SfxHint subclass is produced by code that changes the doc model (e.g. SwNodes::ChgNode()),
+/// the typical which id is SwFormatFieldHintWhich::INSERTED or SwFormatFieldHintWhich::REMOVED.
+///
+/// The consumer of this hint is SwPostItMgr::Notify(), i.e. the sidebar on the right hand side of
+/// the Writer edit window that hosts the comments as post-its.
 class SW_DLLPUBLIC SwFormatFieldHint final : public SfxHint
 {
     const SwFormatField*   m_pField;
