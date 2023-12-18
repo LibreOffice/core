@@ -667,12 +667,12 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
 }
 
 // Add non-breaking space before specific punctuation marks in French text
-bool SvxAutoCorrect::FnAddNonBrkSpace(
+sal_Int32 SvxAutoCorrect::FnAddNonBrkSpace(
                                 SvxAutoCorrDoc& rDoc, std::u16string_view rTxt,
                                 sal_Int32 nEndPos,
                                 LanguageType eLang, bool& io_bNbspRunNext )
 {
-    bool bRet = false;
+    sal_Int32 nRet = -1;
 
     CharClass& rCC = GetCharClass( eLang );
 
@@ -706,7 +706,7 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
             if (nIndex + nProtocolLen <= rTxt.size())
             {
                 if (INetURLObject::CompareProtocolScheme(rTxt.substr(nIndex, nProtocolLen)) != INetProtocol::NotValid)
-                    return false;
+                    return -1;
             }
 
             // Check the presence of "://" in the word
@@ -734,7 +734,7 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
                     if ( bHasSpace )
                         rDoc.Insert( nPos, OUString(cNonBreakingSpace) );
                     io_bNbspRunNext = true;
-                    bRet = true;
+                    nRet = nPos;
                 }
                 else if ( chars.indexOf( cPrevChar ) != -1 )
                     io_bNbspRunNext = true;
@@ -748,12 +748,12 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
             if ( cPrevChar == ':' && cMaybeSpaceChar == cNonBreakingSpace )
             {
                 rDoc.Delete( nEndPos - 2, nEndPos - 1 );
-                bRet = true;
+                nRet = nEndPos - 1;
             }
         }
     }
 
-    return bRet;
+    return nRet;
 }
 
 // URL recognition
@@ -1501,10 +1501,14 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             // Hardspaces autocorrection
             if ( IsAutoCorrFlag( ACFlags::AddNonBrkSpace ) )
             {
-                if ( NeedsHardspaceAutocorr( cChar ) &&
-                    FnAddNonBrkSpace( rDoc, rTxt, nInsPos, GetDocLanguage( rDoc, nInsPos ), io_bNbspRunNext ) )
+                // WARNING ATTENTION: rTxt is an alias of the text node's OUString
+                // and its length may change (even become shorter) if FnAddNonBrkSpace succeeds!
+                sal_Int32 nUpdatedPos = -1;
+                if (NeedsHardspaceAutocorr(cChar))
+                    nUpdatedPos = FnAddNonBrkSpace( rDoc, rTxt, nInsPos, GetDocLanguage( rDoc, nInsPos ), io_bNbspRunNext );
+                if (nUpdatedPos >= 0)
                 {
-                    ;
+                    nInsPos = nUpdatedPos;
                 }
                 else if ( bIsNextRun && !IsAutoCorrectChar( cChar ) )
                 {
