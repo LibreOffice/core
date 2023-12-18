@@ -66,6 +66,14 @@ bool VCLXAccessibleMenuItem::IsSelected()
     return IsHighlighted();
 }
 
+bool VCLXAccessibleMenuItem::IsCheckable()
+{
+    if (!m_pParent)
+        return false;
+
+    const sal_uInt16 nItemId = m_pParent->GetItemId(m_nItemPos);
+    return m_pParent->IsItemCheckable(nItemId);
+}
 
 bool VCLXAccessibleMenuItem::IsChecked()
 {
@@ -107,6 +115,8 @@ void VCLXAccessibleMenuItem::FillAccessibleStateSet( sal_Int64& rStateSet )
     if ( IsSelected() )
         rStateSet |= AccessibleStateType::SELECTED;
 
+    if (IsCheckable())
+        rStateSet |= AccessibleStateType::CHECKABLE;
     if ( IsChecked() )
         rStateSet |= AccessibleStateType::CHECKED;
 }
