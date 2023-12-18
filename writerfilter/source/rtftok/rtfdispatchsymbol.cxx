@@ -124,7 +124,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             // but don't emit properties yet, since they may change till the first text token arrives
             m_bNeedPap = true;
-            if (!m_aStates.top().getFrame().inFrame())
+            if (!m_aStates.top().getFrame().hasProperties())
                 m_bNeedPar = false;
             m_bNeedFinalPar = false;
         }
