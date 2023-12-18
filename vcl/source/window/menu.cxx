@@ -907,6 +907,17 @@ void Menu::CheckItem( std::u16string_view rIdent , bool bCheck )
     CheckItem( GetItemId( rIdent ), bCheck );
 }
 
+bool Menu::IsItemCheckable(sal_uInt16 nItemId) const
+{
+    size_t nPos;
+    MenuItemData* pData = pItemList->GetData(nItemId, nPos);
+
+    if (!pData)
+        return false;
+
+    return pData->HasCheck();
+}
+
 bool Menu::IsItemChecked( sal_uInt16 nItemId ) const
 {
     size_t          nPos;

@@ -275,6 +275,7 @@ public:
 
     void CheckItem( sal_uInt16 nItemId, bool bCheck = true );
     void CheckItem( std::u16string_view rIdent, bool bCheck = true );
+    bool IsItemCheckable(sal_uInt16 nItemId) const;
     bool IsItemChecked( sal_uInt16 nItemId ) const;
 
     virtual void SelectItem(sal_uInt16 nItemId) = 0;
