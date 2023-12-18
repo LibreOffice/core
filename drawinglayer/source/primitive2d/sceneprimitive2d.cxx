@@ -618,7 +618,8 @@ namespace drawinglayer::primitive2d
             attribute::SdrLightingAttribute aSdrLightingAttribute,
             basegfx::B2DHomMatrix aObjectTransformation,
             geometry::ViewInformation3D aViewInformation3D)
-        :   mxChildren3D(std::move(aChildren3D)),
+        :   BufferedDecompositionPrimitive2D(),
+            mxChildren3D(std::move(aChildren3D)),
             maSdrSceneAttribute(std::move(aSdrSceneAttribute)),
             maSdrLightingAttribute(std::move(aSdrLightingAttribute)),
             maObjectTransformation(std::move(aObjectTransformation)),
@@ -627,6 +628,8 @@ namespace drawinglayer::primitive2d
             mfOldDiscreteSizeX(0.0),
             mfOldDiscreteSizeY(0.0)
         {
+            // activate callback to flush buffered decomposition content
+            setCallbackSeconds(45);
         }
 
         bool ScenePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

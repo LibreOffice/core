@@ -102,6 +102,8 @@ namespace drawinglayer::primitive2d
             mb3DShape(b3DShape),
             maTransform(std::move(aTransform))
         {
+            // activate callback to flush buffered decomposition content
+            setCallbackSeconds(10);
         }
 
         bool SdrCustomShapePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

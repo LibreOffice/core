@@ -22,6 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <salhelper/timer.hxx>
 
 namespace drawinglayer::geometry
 {
@@ -62,35 +63,43 @@ namespace drawinglayer::primitive2d
 class DRAWINGLAYERCORE_DLLPUBLIC BufferedDecompositionPrimitive2D : public BasePrimitive2D
 {
 private:
+    // exclusive helper for Primitive2DFlusher
+    friend void flushBufferedDecomposition(BufferedDecompositionPrimitive2D&);
+
     /// a sequence used for buffering the last create2DDecomposition() result
     Primitive2DContainer maBuffered2DDecomposition;
 
+    /// offer callback mechanism to flush buffered content timer-based
+    ::rtl::Reference<::salhelper::Timer> maCallbackTimer;
+    sal_uInt16 maCallbackSeconds;
+
     /// When a shadow wraps a list of primitives, this primitive wants to influence the transparency
     /// of the shadow.
-    sal_uInt16 mnTransparenceForShadow = 0;
+    sal_uInt16 mnTransparenceForShadow;
 
 protected:
     /** access methods to maBuffered2DDecomposition. The usage of this methods may allow
         later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
         implementations for buffering the last decomposition.
      */
-    const Primitive2DContainer& getBuffered2DDecomposition() const
-    {
-        return maBuffered2DDecomposition;
-    }
-    void setBuffered2DDecomposition(Primitive2DContainer&& rNew)
-    {
-        maBuffered2DDecomposition = std::move(rNew);
-    }
+    const Primitive2DContainer& getBuffered2DDecomposition() const;
+    void setBuffered2DDecomposition(Primitive2DContainer&& rNew);
 
     /** method which is to be used to implement the local decomposition of a 2D primitive. */
     virtual void
     create2DDecomposition(Primitive2DContainer& rContainer,
                           const geometry::ViewInformation2D& rViewInformation) const = 0;
 
+    // when changing from null (which is inactive) to a count of seconds, the
+    // callback mechanism to flush buffered content timer-based will be activated.
+    // it is protected since the idea is that this gets called in the constructor
+    // of derived classes.
+    void setCallbackSeconds(sal_uInt16 nNew) { maCallbackSeconds = nNew; }
+
 public:
     // constructor/destructor
     BufferedDecompositionPrimitive2D();
+    virtual ~BufferedDecompositionPrimitive2D();
 
     /** The getDecomposition default implementation will on demand use create2DDecomposition() if
         maBuffered2DDecomposition is empty. It will set maBuffered2DDecomposition to this obtained decomposition

@@ -22,9 +22,80 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
+namespace
+{
+class LocalCallbackTimer : public salhelper::Timer
+{
+protected:
+    drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* pCustomer;
+
+public:
+    explicit LocalCallbackTimer(
+        drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rCustomer)
+        : pCustomer(&rCustomer)
+    {
+    }
+
+protected:
+    virtual void SAL_CALL onShot() override;
+};
+
+void SAL_CALL LocalCallbackTimer::onShot() { flushBufferedDecomposition(*pCustomer); }
+}
+
 namespace drawinglayer::primitive2d
 {
-BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D() {}
+void flushBufferedDecomposition(BufferedDecompositionPrimitive2D& rTarget)
+{
+    rTarget.setBuffered2DDecomposition(Primitive2DContainer());
+}
+
+const Primitive2DContainer& BufferedDecompositionPrimitive2D::getBuffered2DDecomposition() const
+{
+    if (0 != maCallbackSeconds && maCallbackTimer.is())
+    {
+        // decomposition was used, touch
+        maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
+    }
+
+    return maBuffered2DDecomposition;
+}
+
+void BufferedDecompositionPrimitive2D::setBuffered2DDecomposition(Primitive2DContainer&& rNew)
+{
+    if (0 != maCallbackSeconds)
+    {
+        if (rNew.empty())
+        {
+            // no more decomposition, end callback
+            maCallbackTimer.clear();
+        }
+        else if (maCallbackTimer.is())
+        {
+            // decomposition changed, touch
+            maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
+        }
+        else
+        {
+            // decomposition changed, start callback
+            maCallbackTimer.set(new LocalCallbackTimer(*this));
+            maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
+            maCallbackTimer->start();
+        }
+    }
+
+    maBuffered2DDecomposition = std::move(rNew);
+}
+
+BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
+    : maBuffered2DDecomposition()
+    , maCallbackTimer()
+    , maCallbackSeconds(0)
+    , mnTransparenceForShadow(0)
+{
+}
+
+BufferedDecompositionPrimitive2D::~BufferedDecompositionPrimitive2D() {}
 
 void BufferedDecompositionPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,

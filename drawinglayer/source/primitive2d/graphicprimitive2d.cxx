@@ -174,6 +174,8 @@ GraphicPrimitive2D::GraphicPrimitive2D(basegfx::B2DHomMatrix aTransform,
     , maGraphicObject(rGraphicObject)
     , maGraphicAttr(rGraphicAttr)
 {
+    // activate callback to flush buffered decomposition content
+    setCallbackSeconds(20);
 }
 
 GraphicPrimitive2D::GraphicPrimitive2D(basegfx::B2DHomMatrix aTransform,
@@ -181,6 +183,8 @@ GraphicPrimitive2D::GraphicPrimitive2D(basegfx::B2DHomMatrix aTransform,
     : maTransform(std::move(aTransform))
     , maGraphicObject(rGraphicObject)
 {
+    // activate callback to flush buffered decomposition content
+    setCallbackSeconds(20);
 }
 
 bool GraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

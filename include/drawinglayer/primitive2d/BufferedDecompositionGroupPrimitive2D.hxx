@@ -21,6 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <salhelper/timer.hxx>
 
 namespace drawinglayer::primitive2d
 {
@@ -35,24 +36,31 @@ namespace drawinglayer::primitive2d
 class DRAWINGLAYER_DLLPUBLIC BufferedDecompositionGroupPrimitive2D : public GroupPrimitive2D
 {
 private:
+    // exclusive helper for Primitive2DFlusher
+    friend void flushBufferedDecomposition(BufferedDecompositionGroupPrimitive2D&);
+
     /// a sequence used for buffering the last create2DDecomposition() result
     Primitive2DContainer maBuffered2DDecomposition;
 
+    /// offer callback mechanism to flush buffered content timer-based
+    ::rtl::Reference<::salhelper::Timer> maCallbackTimer;
+    sal_uInt16 maCallbackSeconds;
+
 protected:
     /// identical to BufferedDecompositionPrimitive2D, see there please
-    const Primitive2DContainer& getBuffered2DDecomposition() const
-    {
-        return maBuffered2DDecomposition;
-    }
-    void setBuffered2DDecomposition(Primitive2DContainer&& rNew)
-    {
-        maBuffered2DDecomposition = std::move(rNew);
-    }
+    const Primitive2DContainer& getBuffered2DDecomposition() const;
+    void setBuffered2DDecomposition(Primitive2DContainer&& rNew);
 
     /// method which is to be used to implement the local decomposition of a 2D group primitive.
     virtual void
     create2DDecomposition(Primitive2DContainer& rContainer,
                           const geometry::ViewInformation2D& rViewInformation) const = 0;
+
+    // when changing from null (which is inactive) to a count of seconds, the
+    // callback mechanism to flush buffered content timer-based will be activated.
+    // it is protected since the idea is that this gets called in the constructor
+    // of derived classes.
+    void setCallbackSeconds(sal_uInt16 nNew) { maCallbackSeconds = nNew; }
 
 public:
     /// constructor/destructor. For GroupPrimitive2D we need the child parameter, too.

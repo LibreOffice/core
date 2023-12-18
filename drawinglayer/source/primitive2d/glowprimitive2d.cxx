@@ -43,6 +43,8 @@ GlowPrimitive2D::GlowPrimitive2D(const Color& rGlowColor, double fRadius,
     , mfLastDiscreteGlowRadius(0.0)
     , maLastClippedRange()
 {
+    // activate callback to flush buffered decomposition content
+    setCallbackSeconds(15);
 }
 
 bool GlowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

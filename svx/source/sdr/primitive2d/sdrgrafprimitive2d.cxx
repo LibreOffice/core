@@ -133,6 +133,9 @@ SdrGrafPrimitive2D::SdrGrafPrimitive2D(
     , maGraphicObject(rGraphicObject)
     , maGraphicAttr(rGraphicAttr)
 {
+    // activate callback to flush buffered decomposition content
+    setCallbackSeconds(20);
+
     // reset some values from GraphicAttr which are part of transformation already
     maGraphicAttr.SetRotation(0_deg10);
 }
