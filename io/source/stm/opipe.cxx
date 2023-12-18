@@ -34,6 +34,7 @@
 
 #include <limits>
 #include <memory>
+#include <optional>
 #include <string.h>
 
 using namespace ::osl;
@@ -93,7 +94,7 @@ private:
 
     osl::Condition m_conditionBytesAvail;
     Mutex          m_mutexAccess;
-    std::unique_ptr<MemFIFO> m_pFIFO;
+    std::optional<MemFIFO> m_oFIFO;
 };
 
 }
@@ -102,7 +103,7 @@ OPipeImpl::OPipeImpl()
     : m_nBytesToSkip(0 )
     , m_bOutputStreamClosed(false )
     , m_bInputStreamClosed( false )
-    , m_pFIFO( new MemFIFO )
+    , m_oFIFO( std::in_place )
 {
 }
 
@@ -120,7 +121,7 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
                     "Pipe::readBytes NotConnectedException",
                     *this );
             }
-            sal_Int32 nOccupiedBufferLen = m_pFIFO->getSize();
+            sal_Int32 nOccupiedBufferLen = m_oFIFO->getSize();
 
             if( m_bOutputStreamClosed && nBytesToRead > nOccupiedBufferLen )
             {
@@ -134,7 +135,7 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
             }
             else {
                 // necessary bytes are available
-                m_pFIFO->read( aData , nBytesToRead );
+                m_oFIFO->read( aData , nBytesToRead );
                 return nBytesToRead;
             }
         } // end guarded section
@@ -156,11 +157,11 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
                     "Pipe::readSomeBytes NotConnectedException",
                     *this );
             }
-            if( m_pFIFO->getSize() )
+            if( m_oFIFO->getSize() )
             {
-                sal_Int32 nSize = std::min( nMaxBytesToRead , m_pFIFO->getSize() );
+                sal_Int32 nSize = std::min( nMaxBytesToRead , m_oFIFO->getSize() );
                 aData.realloc( nSize );
-                m_pFIFO->read( aData , nSize );
+                m_oFIFO->read( aData , nSize );
                 return nSize;
             }
 
@@ -196,8 +197,8 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
     }
     m_nBytesToSkip += nBytesToSkip;
 
-    nBytesToSkip = std::min( m_pFIFO->getSize() , m_nBytesToSkip );
-    m_pFIFO->skip( nBytesToSkip );
+    nBytesToSkip = std::min( m_oFIFO->getSize() , m_nBytesToSkip );
+    m_oFIFO->skip( nBytesToSkip );
     m_nBytesToSkip -= nBytesToSkip;
 }
 
@@ -211,7 +212,7 @@ sal_Int32 OPipeImpl::available()
             "Pipe::available NotConnectedException",
             *this );
     }
-    return m_pFIFO->getSize();
+    return m_oFIFO->getSize();
 }
 
 void OPipeImpl::closeInput()
@@ -220,7 +221,7 @@ void OPipeImpl::closeInput()
 
     m_bInputStreamClosed = true;
 
-    m_pFIFO.reset();
+    m_oFIFO.reset();
 
     // readBytes may throw an exception
     m_conditionBytesAvail.set();
@@ -260,11 +261,11 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
     {
         Sequence< sal_Int8 > seqCopy( nLen - m_nBytesToSkip );
         memcpy( seqCopy.getArray() , &( aData.getConstArray()[m_nBytesToSkip] ) , nLen-m_nBytesToSkip );
-        m_pFIFO->write( seqCopy );
+        m_oFIFO->write( seqCopy );
     }
     else
     {
-        m_pFIFO->write( aData );
+        m_oFIFO->write( aData );
     }
     m_nBytesToSkip = 0;
 
