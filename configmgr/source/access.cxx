@@ -2209,7 +2209,7 @@ css::beans::Property Access::asProperty() {
          (nillable ? css::beans::PropertyAttribute::MAYBEVOID : 0) |
          (getRootAccess()->isUpdate() && removable
           ? css::beans::PropertyAttribute::REMOVABLE : 0) |
-         (!getRootAccess()->isUpdate() || p->getFinalized() != Data::NO_LAYER
+         (!getRootAccess()->isUpdate() || isFinalized()
           ? css::beans::PropertyAttribute::READONLY : 0))); //TODO: MAYBEDEFAULT
 }
 
