@@ -1553,6 +1553,35 @@ endif # SYSTEM_OPENSSL
 endif # ENABLE_OPENSSL
 
 
+ifneq ($(SYSTEM_ARGON2),)
+
+define gb_LinkTarget__use_argon2
+$(call gb_LinkTarget_set_include,$(1),\
+	$(ARGON2_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ARGON2_LIBS))
+
+endef
+
+else # !SYSTEM_ARGON2
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	argon2 \
+))
+
+define gb_LinkTarget__use_argon2
+$(call gb_LinkTarget_set_include,$(1),\
+	$(ARGON2_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ARGON2_LIBS))
+$(call gb_LinkTarget_use_package,$(1),argon2)
+endef
+
+endif # SYSTEM_ARGON2
+
+
 ifneq ($(SYSTEM_CDR),)
 
 define gb_LinkTarget__use_cdr

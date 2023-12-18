@@ -11203,6 +11203,14 @@ if test "$build_crypto" = yes; then
     fi
 fi
 
+ARGON2_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/argon2/include"
+if test "$COM" = "MSC"; then
+    ARGON2_LIBS_internal="${WORKDIR}/UnpackedTarball/argon2/vs2015/build/Argon2OptDll.lib"
+else
+    ARGON2_LIBS_internal="${WORKDIR}/UnpackedTarball/argon2/libargon2.a"
+fi
+libo_CHECK_SYSTEM_MODULE([argon2],[ARGON2],[libargon2])
+
 dnl ===================================================================
 dnl Check for system redland
 dnl ===================================================================
