@@ -294,6 +294,25 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testSwitchBetweenImages)
     CPPUNIT_ASSERT_GREATEREQUAL(1, pInterceptor->m_nDisabled);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testPrintPreview)
+{
+    // Given a normal Writer view, in half-destroyed state, similar to what
+    // SfxViewFrame::SwitchToViewShell_Impl() does in practice:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwView* pView = pDocShell->GetView();
+    FmFormShell* pFormShell = pView->GetFormShell();
+    pView->SetFormShell(reinterpret_cast<FmFormShell*>(-1));
+    pView->SetDying();
+
+    // When selecting a shell, similar to what happens the doc size changes:
+    // Then make sure we don't crash:
+    pView->SelectShell();
+
+    // Restore the state and shut down.
+    pView->SetFormShell(pFormShell);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
