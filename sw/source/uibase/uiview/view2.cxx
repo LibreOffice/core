@@ -120,6 +120,8 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
 
 #include <PostItMgr.hxx>
 
@@ -2454,6 +2456,15 @@ void SwView::InsFrameMode(sal_uInt16 nCols)
 /// show "edit link" dialog
 void SwView::EditLinkDlg()
 {
+    if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+    {
+        std::unique_ptr<weld::MessageDialog> xError(
+            Application::CreateMessageDialog(nullptr, VclMessageType::Warning, VclButtonsType::Ok,
+                                             SvtResId(STR_WARNING_EXTERNAL_LINK_EDIT_DISABLED)));
+        xError->run();
+        return;
+    }
+
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetViewFrame().GetFrameWeld(), &GetWrtShell().GetLinkManager(), bWeb));
