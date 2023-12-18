@@ -30,7 +30,7 @@ public:
     void HideHelpBtn();
     void SetEntryMessageType(weld::EntryMessageType aType);
     void SetTooltip(const OUString& rStr);
-    void setCheckEntry(std::function<bool(OUString)> aFunc);
+    void setCheckEntry(const std::function<bool(OUString)>& rFunc);
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX

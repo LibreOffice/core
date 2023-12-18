@@ -268,12 +268,12 @@ namespace svgio::svgreader
                     // embed content to a ModifiedColorPrimitive2D since the definitions
                     // how content is used as alpha is special for Svg
                     {
-                        drawinglayer::primitive2d::Primitive2DReference xInverseMask(
-                            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                                std::move(aMaskTarget),
-                                std::make_shared<basegfx::BColorModifier_luminance_to_alpha>()));
-
-                        aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xInverseMask };
+                        aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer {
+                            drawinglayer::primitive2d::Primitive2DReference(
+                                new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                                    std::move(aMaskTarget),
+                                    std::make_shared<basegfx::BColorModifier_luminance_to_alpha>()))
+                        };
                     }
 
                     // prepare new content

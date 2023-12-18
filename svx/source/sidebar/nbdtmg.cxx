@@ -730,8 +730,7 @@ void OutlineTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
         if( eNumType == SVX_NUM_CHAR_SPECIAL)
         {
             sal_UCS4 cChar = aFmt.GetBulletChar();
-            OUString sChar(&cChar, 1);
-            _pSet->sBulletChar = sChar;
+            _pSet->sBulletChar = OUString(&cChar, 1);
             if ( aFmt.GetBulletFont() )
                 _pSet->sBulletFont = aFmt.GetBulletFont()->GetFamilyName();
             _pSet->nNumberType = eNumType;

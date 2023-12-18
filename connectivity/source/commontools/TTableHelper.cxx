@@ -200,21 +200,17 @@ namespace
     void lcl_collectColumnDescs_throw( const Reference< XResultSet >& _rxResult, std::vector< ColumnDesc >& _out_rColumns )
     {
         Reference< XRow > xRow( _rxResult, UNO_QUERY_THROW );
-        OUString sName;
-        OrdinalPosition nOrdinalPosition( 0 );
         while ( _rxResult->next() )
         {
-            sName = xRow->getString( 4 );           // COLUMN_NAME
-            sal_Int32       nField5 = xRow->getInt(5);
-            OUString aField6 = xRow->getString(6);
-            sal_Int32       nField7 = xRow->getInt(7)
-                        ,   nField9 = xRow->getInt(9)
-                        ,   nField11= xRow->getInt(11);
-            OUString  sField12 = xRow->getString(12)
-                            ,sField13 = xRow->getString(13);
-            nOrdinalPosition = xRow->getInt( 17 );  // ORDINAL_POSITION
-            _out_rColumns.emplace_back(sName, nField5, aField6, nField7, nField9,
-                                       nField11, sField12, sField13, nOrdinalPosition);
+            _out_rColumns.emplace_back(xRow->getString(4), // COLUMN_NAME,
+                                       xRow->getInt(5),
+                                       xRow->getString(6),
+                                       xRow->getInt(7),
+                                       xRow->getInt(9),
+                                       xRow->getInt(11),
+                                       xRow->getString(12),
+                                       xRow->getString(13),
+                                       xRow->getInt(17));  // ORDINAL_POSITION
         }
     }
 

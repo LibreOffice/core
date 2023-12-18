@@ -553,9 +553,9 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OUString&, rIdent, void)
         SvxConfigEntry* pEntry
             = weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry));
 
-        css::uno::Reference<css::graphic::XGraphic> backup = pEntry->GetBackupGraphic();
-
-        css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq{ backup };
+        css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq{
+            pEntry->GetBackupGraphic()
+        };
 
         css::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
 

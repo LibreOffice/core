@@ -51,9 +51,9 @@ void InputDialog::SetTooltip(const OUString& rStr)
     m_xOk->set_tooltip_text(rStr);
 }
 
-void InputDialog::setCheckEntry(std::function<bool(OUString)> aFunc)
+void InputDialog::setCheckEntry(const std::function<bool(OUString)>& rFunc)
 {
-    mCheckEntry = aFunc;
+    mCheckEntry = rFunc;
     m_xEntry->connect_changed(LINK(this, InputDialog, EntryChangedHdl));
 }
 

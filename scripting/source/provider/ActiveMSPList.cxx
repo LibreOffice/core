@@ -275,19 +275,16 @@ ActiveMSPList::createNonDocMSPs()
     OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
 
     Sequence< Any > args{ Any(userDirString) };
-    Reference< provider::XScriptProvider > userMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
     // should check if provider reference is valid
-    m_hMsps[ userDirString ] = userMsp;
+    m_hMsps[ userDirString ].set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
 
     args = { Any(shareDirString) };
-    Reference< provider::XScriptProvider > shareMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
     // should check if provider reference is valid
-    m_hMsps[ shareDirString ] = shareMsp;
+    m_hMsps[ shareDirString ].set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
 
     args = { Any(bundledDirString) };
-    Reference< provider::XScriptProvider > bundledMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
     // should check if provider reference is valid
-    m_hMsps[ bundledDirString ] = bundledMsp;
+    m_hMsps[ bundledDirString ].set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
 }
 
 } // namespace func_provider
