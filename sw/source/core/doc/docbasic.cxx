@@ -36,16 +36,16 @@
 
 using namespace ::com::sun::star::uno;
 
-static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
+static std::optional<Sequence<Any>> lcl_docbasic_convertArgs( SbxArray& rArgs )
 {
-    Sequence<Any> *pRet = nullptr;
+    std::optional<Sequence<Any>> oRet;
 
     sal_uInt32 nCount = rArgs.Count();
     if( nCount > 1 )
     {
         nCount--;
-        pRet = new Sequence<Any>( nCount );
-        Any *pUnoArgs = pRet->getArray();
+        oRet.emplace( nCount );
+        Any *pUnoArgs = oRet->getArray();
         for( sal_uInt32 i=0; i<nCount; i++ )
         {
             SbxVariable* pVar = rArgs.Get(i + 1);
@@ -70,7 +70,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
         }
     }
 
-    return pRet;
+    return oRet;
 }
 
 void SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
@@ -99,17 +99,17 @@ void SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
         break;
     case EXTENDED_STYPE:
         {
-            std::unique_ptr<Sequence<Any> > pUnoArgs;
+            std::optional<Sequence<Any> > oUnoArgs;
             if( pArgs )
             {
                 // better to rename the local function to lcl_translateBasic2Uno and
                 // a much shorter routine can be found in sfx2/source/doc/objmisc.cxx
-                pUnoArgs.reset(lcl_docbasic_convertArgs( *pArgs ));
+                oUnoArgs = lcl_docbasic_convertArgs( *pArgs );
             }
 
-            if (!pUnoArgs)
+            if (!oUnoArgs)
             {
-                pUnoArgs.reset(new Sequence< Any > (0));
+                oUnoArgs.emplace(0);
             }
 
             // TODO - return value is not handled
@@ -120,7 +120,7 @@ void SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
             SAL_INFO("sw", "SwDoc::ExecMacro URL is " << rMacro.GetMacName() );
 
             mpDocShell->CallXScript(
-                rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
+                rMacro.GetMacName(), *oUnoArgs, aRet, aOutArgsIndex, aOutArgs);
 
             break;
         }
