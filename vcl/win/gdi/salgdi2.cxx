@@ -166,10 +166,10 @@ void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSal
 #endif
         )
     {
-        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        WinSalBitmap aWinSalBitmap;
         SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSalBitmap);
-        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
-        mpImpl->drawBitmap(rPosAry, *pWinSalBitmap);
+        convertToWinSalBitmap(rConstBitmap, aWinSalBitmap);
+        mpImpl->drawBitmap(rPosAry, aWinSalBitmap);
     }
     else
     {
@@ -187,16 +187,15 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
 #endif
         )
     {
-        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        WinSalBitmap aWinSalBitmap;
         SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSSalBitmap);
-        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
+        convertToWinSalBitmap(rConstBitmap, aWinSalBitmap);
 
-
-        std::unique_ptr<WinSalBitmap> pWinTransparentSalBitmap(new WinSalBitmap());
+        WinSalBitmap aWinTransparentSalBitmap;
         SalBitmap& rConstTransparentBitmap = const_cast<SalBitmap&>(rSTransparentBitmap);
-        convertToWinSalBitmap(rConstTransparentBitmap, *pWinTransparentSalBitmap);
+        convertToWinSalBitmap(rConstTransparentBitmap, aWinTransparentSalBitmap);
 
-        mpImpl->drawBitmap(rPosAry, *pWinSalBitmap, *pWinTransparentSalBitmap);
+        mpImpl->drawBitmap(rPosAry, aWinSalBitmap, aWinTransparentSalBitmap);
     }
     else
     {

@@ -209,14 +209,14 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap()
 {
     std::shared_ptr<Gdiplus::Bitmap> pRetval;
     WinSalBitmap* pSalRGB = this;
-    std::unique_ptr<WinSalBitmap> pExtraWinSalRGB;
+    std::optional<WinSalBitmap> pExtraWinSalRGB;
 
     if(!pSalRGB->ImplGethDIB())
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
-        pExtraWinSalRGB.reset(new WinSalBitmap());
+        pExtraWinSalRGB.emplace();
         pExtraWinSalRGB->Create(*pSalRGB, vcl::bitDepthToPixelFormat(pSalRGB->GetBitCount()));
-        pSalRGB = pExtraWinSalRGB.get();
+        pSalRGB = &*pExtraWinSalRGB;
     }
 
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
@@ -291,14 +291,14 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
 {
     std::shared_ptr<Gdiplus::Bitmap> pRetval;
     WinSalBitmap* pSalRGB = this;
-    std::unique_ptr<WinSalBitmap> pExtraWinSalRGB;
+    std::optional<WinSalBitmap> pExtraWinSalRGB;
 
     if(!pSalRGB->ImplGethDIB())
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
-        pExtraWinSalRGB.reset(new WinSalBitmap());
+        pExtraWinSalRGB.emplace();
         pExtraWinSalRGB->Create(*pSalRGB, vcl::bitDepthToPixelFormat(pSalRGB->GetBitCount()));
-        pSalRGB = pExtraWinSalRGB.get();
+        pSalRGB = &*pExtraWinSalRGB;
     }
 
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
@@ -318,14 +318,14 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     }
 
     WinSalBitmap* pSalA = const_cast< WinSalBitmap* >(&rAlphaSource);
-    std::unique_ptr<WinSalBitmap> pExtraWinSalA;
+    std::optional<WinSalBitmap> pExtraWinSalA;
 
     if(!pSalA->ImplGethDIB())
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
-        pExtraWinSalA.reset(new WinSalBitmap());
+        pExtraWinSalA.emplace();
         pExtraWinSalA->Create(*pSalA, vcl::bitDepthToPixelFormat(pSalA->GetBitCount()));
-        pSalA = pExtraWinSalA.get();
+        pSalA = &*pExtraWinSalA;
     }
 
     BitmapBuffer* pA = pSalA->AcquireBuffer(BitmapAccessMode::Read);

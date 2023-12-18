@@ -531,12 +531,12 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
     {
         HGLOBAL     hDrawDIB;
         HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
-        std::unique_ptr<WinSalBitmap> xTmpSalBmp;
+        std::optional<WinSalBitmap> xTmpSalBmp;
         bool        bPrintDDB = ( bPrinter && hDrawDDB );
 
         if( bPrintDDB )
         {
-            xTmpSalBmp.reset(new WinSalBitmap);
+            xTmpSalBmp.emplace();
             xTmpSalBmp->Create(rSalBitmap, vcl::bitDepthToPixelFormat(rSalBitmap.GetBitCount()));
             hDrawDIB = xTmpSalBmp->ImplGethDIB();
         }
