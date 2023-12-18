@@ -315,18 +315,6 @@
         <info>
           <desc>Specifies the driver settings for the evolution database driver.</desc>
         </info>
-        <group oor:name="EvolutionPreferences">
-          <info>
-            <desc>Specifies the evolution preferences.</desc>
-          </info>
-          <prop oor:name="FullPathExportingCommand" oor:type="xs:string" oor:nillable="false">
-            <info>
-              <desc>Specifies the evolution full path exporting command name.</desc>
-            </info>
-            <value/>
-            <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-          </prop>
-        </group>
         <group oor:name="ColumnAliases">
           <info>
             <desc>Specifies the column alias names used.</desc>

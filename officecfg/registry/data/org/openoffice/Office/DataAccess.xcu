@@ -429,11 +429,6 @@
   </node>
   <node oor:name="DriverSettings">
     <node oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver">
-      <node oor:name="EvolutionPreferences">
-        <prop oor:name="FullPathExportingCommand">
-          <value>file:///usr/share/evolution/*/evolution-addressbook-export</value>
-        </prop>
-      </node>
       <node oor:name="ColumnAliases">
         <prop oor:name="FirstName">
           <value>given_name</value>
