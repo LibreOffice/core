@@ -336,47 +336,6 @@
           <value>false</value>
         </prop>
       </group>
-      <group oor:name="CrossFading">
-        <info>
-          <desc>Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object's attributes).</desc>
-        </info>
-        <prop oor:name="Steps" oor:type="xs:short" oor:nillable="false">
-          <!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
-          <info>
-            <desc>Specifies the number of intermediate morphing steps between two objects.</desc>
-            <label>Steps</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="1">
-              <info>
-                <desc>Specifies that there has to be at least one morphing step.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="256">
-              <info>
-                <desc>Specifies that there may be at least this many morphing steps.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>16</value>
-        </prop>
-        <prop oor:name="Orientation" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
-          <info>
-            <desc>Indicates whether two objects to be morphed shall have the same orientation.</desc>
-            <label>Orientation</label>
-          </info>
-          <value>true</value>
-        </prop>
-        <prop oor:name="Attributes" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
-          <info>
-            <desc>Indicates whether to consider objects' attributes (e.g. colors) when morphing one object into another.</desc>
-            <label>Attributes</label>
-          </info>
-          <value>true</value>
-        </prop>
-      </group>
       <group oor:name="DefaultObjectSize">
         <!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Click -->
         <info>
