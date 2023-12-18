@@ -1337,8 +1337,6 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     return RTFError::OK;
 }
 
-bool RTFFrame::inFrame() const { return m_nW > 0 || m_nH > 0 || m_nX > 0 || m_nY > 0; }
-
 void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 {
     sal_uInt8 sValue[] = { nValue };
@@ -2952,7 +2950,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
         case Destination::SHAPE:
             m_bNeedFinalPar = true;
             m_bNeedCr = m_bNeedCrOrig;
-            if (rState.getFrame().inFrame())
+            if (rState.getFrame().hasProperties())
             {
                 // parBreak() modifies m_aStates.top() so we can't apply resetFrame() directly on aState
                 resetFrame();
@@ -3615,7 +3613,7 @@ RTFError RTFDocumentImpl::popState()
 
     checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
     RTFParserState aState(m_aStates.top());
-    m_bWasInFrame = aState.getFrame().inFrame();
+    m_bWasInFrame = aState.getFrame().hasProperties();
 
     // dmapper expects some content in header/footer, so if there would be nothing, add an empty paragraph.
     if (m_pTokenizer->getGroup() == 1 && m_bFirstRun)
