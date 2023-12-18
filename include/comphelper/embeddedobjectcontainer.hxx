@@ -182,7 +182,10 @@ public:
     */
     bool             SetPersistentEntries(const css::uno::Reference< css::embed::XStorage >& _xStorage,bool _bClearModifiedFlag = true);
 
+    // if DisableActiveContent configuration option is set, this always returns false
     bool getUserAllowsLinkUpdate() const;
+
+    // if DisableActiveContent configuration option is set, this has no effect
     void setUserAllowsLinkUpdate(bool bNew);
 };
 
