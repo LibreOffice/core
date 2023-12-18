@@ -46,6 +46,8 @@
 #include <cppuhelper/weakref.hxx>
 #include <sal/log.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <algorithm>
 #include <unordered_map>
 
@@ -1492,6 +1494,8 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
 
 bool EmbeddedObjectContainer::getUserAllowsLinkUpdate() const
 {
+    if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+        return false;
     return pImpl->mbUserAllowsLinkUpdate;
 }
 

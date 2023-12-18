@@ -33,6 +33,7 @@
 #include <tools/debug.hxx>
 #include <svl/svdde.hxx>
 #include <osl/diagnose.h>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -301,6 +302,9 @@ void SvBaseLink::clearStreamToLoadFrom()
 
 bool SvBaseLink::Update()
 {
+    if(officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+        return false;
+
     if( isClientType(mnObjType) )
     {
         AddNextRef();
