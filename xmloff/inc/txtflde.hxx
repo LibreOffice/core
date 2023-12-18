@@ -32,6 +32,7 @@
 #include <map>
 #include <set>
 #include <memory>
+#include <optional>
 #include <string_view>
 
 #include "txtfld.hxx"
@@ -154,10 +155,10 @@ class XMLTextFieldExport final
     SvXMLExport& rExport;
 
     /// store used text field master names (NULL means: don't collect)
-    std::unique_ptr< ::std::map<
+    std::optional< ::std::map<
             css::uno::Reference< css::text::XText >,
             ::std::set< OUString > > >
-        pUsedMasters;
+        moUsedMasters;
 
 public:
 

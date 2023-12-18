@@ -760,7 +760,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
 
     // add field master to list of used field masters (if desired)
-    if (nullptr != pUsedMasters)
+    if (moUsedMasters)
     {
         Reference<XDependentTextField> xDepField(rTextField, UNO_QUERY);
         if (xDepField.is())
@@ -770,14 +770,14 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
             Reference<XText> xOurText = GetToplevelText(rTextField->getAnchor()->getText());
 
             std::map<Reference<XText>, std::set<OUString> >::iterator aMapIter =
-                pUsedMasters->find(xOurText);
+                moUsedMasters->find(xOurText);
 
             // insert a list for our XText (if necessary)
-            if (aMapIter == pUsedMasters->end())
+            if (aMapIter == moUsedMasters->end())
             {
                 std::set<OUString> aSet;
-                (*pUsedMasters)[xOurText] = aSet;
-                aMapIter = pUsedMasters->find(xOurText);
+                (*moUsedMasters)[xOurText] = aSet;
+                aMapIter = moUsedMasters->find(xOurText);
             }
 
             // insert this text field master
@@ -1973,18 +1973,18 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     if (rText.is())
     {
         // export only used masters
-        DBG_ASSERT(nullptr != pUsedMasters,
+        DBG_ASSERT(moUsedMasters.has_value(),
                    "field masters must be recorded in order to be "
                    "written out separately" );
-        if (nullptr != pUsedMasters)
+        if (moUsedMasters)
         {
             std::map<Reference<XText>, std::set<OUString> > ::iterator aMapIter =
-                pUsedMasters->find(rText);
-            if (aMapIter != pUsedMasters->end())
+                moUsedMasters->find(rText);
+            if (aMapIter != moUsedMasters->end())
             {
                 // found the set of used field masters
                 aFieldMasters = comphelper::containerToSequence(aMapIter->second);
-                pUsedMasters->erase(rText);
+                moUsedMasters->erase(rText);
             }
             // else: XText not found -> ignore
         }
@@ -2244,11 +2244,11 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 void XMLTextFieldExport::SetExportOnlyUsedFieldDeclarations(
     bool bExportOnlyUsed)
 {
-    pUsedMasters.reset();
+    moUsedMasters.reset();
 
     // create used masters set (if none is used)
     if (bExportOnlyUsed)
-        pUsedMasters.reset( new std::map<Reference<XText>, std::set<OUString> > );
+        moUsedMasters.emplace();
 }
 
 void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
