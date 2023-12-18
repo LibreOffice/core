@@ -266,7 +266,7 @@
               <object class="GtkComboBox" id="combo_box_enable">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="model">liststore1</property>
+                <property name="model">liststore4</property>
                 <property name="has-entry">True</property>
                 <property name="entry-text-column">0</property>
                 <property name="id-column">1</property>
@@ -608,6 +608,29 @@ t ever since the 1500s, when an unknown printer took a galley of type and scramb
  software like Aldus PageMaker including versions of Lorem Ipsum.</property>
   </object>
   <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="no">Test 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">Test 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">Test 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">Test 4</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">Test 5</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore4">
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
