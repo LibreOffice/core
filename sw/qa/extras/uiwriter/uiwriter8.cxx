@@ -2794,6 +2794,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158459)
     CPPUNIT_ASSERT_EQUAL(OUString("abdf"), pTextNode->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158703)
+{
+    // Given a document with French text, consisting of a word and several spaces:
+    createSwDoc("tdf158703.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+
+    // Typing ":" after the spaces should start auto-correction, which is expected to
+    // remove the spaces, and insert an NBSP instead. It must not crash.
+    emulateTyping(*pTextDoc, u":");
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Foo\u00A0:"), getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

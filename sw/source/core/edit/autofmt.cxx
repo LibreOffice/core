@@ -2098,8 +2098,8 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                         : LANGUAGE_SYSTEM;
 
                     SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
-                    if (pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext))
-                        --nPos;
+                    if (sal_Int32 nUpdatedPos = pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext); nUpdatedPos >= 0)
+                        nPos = TextFrameIndex(nUpdatedPos);
                 }
                 break;
 
@@ -2176,7 +2176,8 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
             if ( m_aFlags.bAddNonBrkSpace && nPos < TextFrameIndex(pText->getLength()) )
             {
                 SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
-                pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext);
+                if (sal_Int32 nUpdatedPos = pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext); nUpdatedPos >= 0)
+                    nPos = TextFrameIndex(nUpdatedPos);
             }
 
             if( ( m_aFlags.bChgOrdinalNumber &&
