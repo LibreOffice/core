@@ -707,6 +707,12 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         return true;
     }
 
+    if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
+    {
+        // Terminate possible InPlace mode
+        return GetView().Escape();
+    }
+
     if (!SmViewShell::IsInlineEditEnabled())
         return GetView().KeyInput(rKEvt);
 
