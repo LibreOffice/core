@@ -42,14 +42,14 @@
 class SVXCORE_DLLPUBLIC XColorEntry final : public XPropertyEntry
 {
 private:
-    Color   aColor;
+    Color   m_aColor;
 
 public:
     XColorEntry(const Color& rColor, const OUString& rName);
 
     const Color& GetColor() const
     {
-        return aColor;
+        return m_aColor;
     }
 };
 

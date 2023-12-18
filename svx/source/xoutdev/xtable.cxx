@@ -32,7 +32,7 @@ using namespace com::sun::star;
 
 XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 :   XPropertyEntry(rName),
-    aColor(rColor)
+    m_aColor(rColor)
 {
 }
 
