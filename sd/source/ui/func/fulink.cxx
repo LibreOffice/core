@@ -28,6 +28,10 @@
 #include <ViewShell.hxx>
 #include <app.hrc>
 
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
+#include <officecfg/Office/Common.hxx>
+
 class SfxRequest;
 
 namespace sd {
@@ -52,6 +56,15 @@ rtl::Reference<FuPoor> FuLink::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuLink::DoExecute( SfxRequest& )
 {
+    if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+    {
+        std::unique_ptr<weld::MessageDialog> xError(
+            Application::CreateMessageDialog(nullptr, VclMessageType::Warning, VclButtonsType::Ok,
+                                             SvtResId(STR_WARNING_EXTERNAL_LINK_EDIT_DISABLED)));
+        xError->run();
+        return;
+    }
+
     sfx2::LinkManager* pLinkManager = mpDoc->GetLinkManager();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
