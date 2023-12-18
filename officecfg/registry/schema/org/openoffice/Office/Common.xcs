@@ -3432,7 +3432,8 @@
         <!-- UIHints: Select bitmap =&gt; context menu  convert  To polygon -->
         <info>
           <desc>Specifies the number of pixels that you want to combine as a
-          single pixel when creating a vector graphic.</desc>
+          single pixel when creating a vector graphic.
+          This setting is supposed to be saved, see https://bugs.documentfoundation.org/show_bug.cgi?id=158305</desc>
           <label>Point reduction</label>
         </info>
         <constraints>
