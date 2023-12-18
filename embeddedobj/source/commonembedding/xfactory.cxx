@@ -23,9 +23,11 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include "xfactory.hxx"
 #include <commonembobj.hxx>
@@ -41,6 +43,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                                                     const uno::Sequence< beans::PropertyValue >& aMediaDescr,
                                                                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active embedded content is disabled!");
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),
@@ -118,6 +122,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         const uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active embedded content is disabled!");
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),
@@ -169,6 +175,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             const OUString& sEntName,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active embedded content is disabled!");
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
@@ -212,6 +220,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     // the initialization is completely controlled by user
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active embedded content is disabled!");
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -257,6 +267,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             const uno::Sequence< beans::PropertyValue >& aMediaDescr,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active embedded content is disabled!");
     uno::Reference< uno::XInterface > xResult;
 
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
@@ -302,6 +314,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                                 const uno::Sequence< beans::PropertyValue >& lArguments,
                                                 const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active embedded content is disabled!");
     uno::Reference< uno::XInterface > xResult;
 
     // the initialization is completely controlled by user
@@ -381,6 +395,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
             const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
             const uno::Sequence< beans::PropertyValue >& /*lObjArgs*/ )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active embedded content is disabled!");
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
     if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
