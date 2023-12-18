@@ -121,6 +121,26 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
     CPPUNIT_ASSERT_EQUAL(OUString("aaabbbccc"), pTextNode->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf68364InsertConditionalFieldWithTwoDots)
+{
+    // Create an empty document
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Insert a conditional field containing exactly two dots for its condition
+    SwFieldMgr aFieldMgr(pWrtShell);
+    SwInsertField_Data aFieldData(SwFieldTypesEnum::ConditionalText, 0, "true", "19.12.2023", 0);
+    CPPUNIT_ASSERT(aFieldMgr.InsertField(aFieldData));
+    pWrtShell->SttEndDoc(true);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 19.12.2023
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("19.12.2023"),
+                         pWrtShell->GetCurField()->ExpandField(true, nullptr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkSelection)
 {
     // Given a document with a single selected word:
