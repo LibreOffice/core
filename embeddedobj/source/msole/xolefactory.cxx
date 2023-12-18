@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include "xolefactory.hxx"
@@ -29,6 +30,8 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 
@@ -41,6 +44,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                                                     const uno::Sequence< beans::PropertyValue >& aMedDescr,
                                                                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active OLE content is disabled!");
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),
@@ -101,6 +106,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
         const uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active OLE content is disabled!");
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),
@@ -133,6 +140,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                             const OUString& sEntName,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active OLE content is disabled!");
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),
@@ -164,6 +173,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                             const uno::Sequence< beans::PropertyValue >& aMediaDescr,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
+        throw lang::NoSupportException("Active OLE content is disabled!");
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),
@@ -198,6 +209,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
+    if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+        throw lang::NoSupportException("Active OLE content is disabled!");
     // the initialization is completely controlled by user
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
