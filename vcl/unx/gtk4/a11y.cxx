@@ -10,6 +10,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
@@ -20,6 +21,7 @@
 #if GTK_CHECK_VERSION(4, 9, 0)
 
 #include "a11y.hxx"
+#include "gtkaccessibleeventlistener.hxx"
 
 #define OOO_TYPE_FIXED (ooo_fixed_get_type())
 #define OOO_FIXED(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), OOO_TYPE_FIXED, OOoFixed))
@@ -615,6 +617,16 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
         gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
                                        fCurrentValue, GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, fMinValue,
                                        GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, fMaxValue, -1);
+    }
+
+    // register event listener
+    css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> xBroadcaster(
+        xContext, css::uno::UNO_QUERY);
+    if (xBroadcaster.is())
+    {
+        css::uno::Reference<css::accessibility::XAccessibleEventListener> xListener(
+            new GtkAccessibleEventListener(ret));
+        xBroadcaster->addAccessibleEventListener(xListener);
     }
 
     return ret;
