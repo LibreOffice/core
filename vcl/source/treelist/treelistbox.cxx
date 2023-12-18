@@ -3465,6 +3465,8 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, sal_In
             rStateSet |= AccessibleStateType::EXPANDED;
     }
 
+    if (nTreeFlags & SvTreeFlags::CHKBTN)
+        rStateSet |= AccessibleStateType::CHECKABLE;
     if ( GetCheckButtonState( pEntry ) == SvButtonState::Checked )
         rStateSet |= AccessibleStateType::CHECKED;
     if ( IsEntryVisible( pEntry ) )

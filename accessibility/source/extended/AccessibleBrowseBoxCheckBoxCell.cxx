@@ -57,6 +57,7 @@ namespace accessibility
         sal_Int64 nStateSet = AccessibleBrowseBoxCell::implCreateStateSet();
         if( isAlive() )
         {
+            nStateSet |= AccessibleStateType::CHECKABLE;
             mpBrowseBox->FillAccessibleStateSetForCell(
                 nStateSet, getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
             if ( m_eState == TRISTATE_TRUE )

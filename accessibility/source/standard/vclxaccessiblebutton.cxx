@@ -78,6 +78,9 @@ void VCLXAccessibleButton::FillAccessibleStateSet( sal_Int64& rStateSet )
 
     rStateSet |= AccessibleStateType::FOCUSABLE;
 
+    if (pButton->isToggleButton())
+        rStateSet |= AccessibleStateType::CHECKABLE;
+
     if ( pButton->GetState() == TRISTATE_TRUE )
         rStateSet |= AccessibleStateType::CHECKED;
 

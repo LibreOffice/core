@@ -64,6 +64,9 @@ void QtAccessibleEventListener::HandleStateChangedEvent(
         case AccessibleStateType::BUSY:
             aState.busy = true;
             break;
+        case AccessibleStateType::CHECKABLE:
+            aState.checkable = true;
+            break;
         case AccessibleStateType::CHECKED:
             aState.checked = true;
             break;

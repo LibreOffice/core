@@ -46,6 +46,8 @@ service AccessibleMenu
             <ul>
             <li>com::sun::star::accessibility::AccessibleStateType::ARMED
                 is set if the object is highlighted.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::CHECKABLE
+                is set if the object is checkable, i.e. can be checked.</li>
             <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
                 is set if the object is currently checked.</li>
             <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC

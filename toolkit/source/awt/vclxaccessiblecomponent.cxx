@@ -497,6 +497,7 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( sal_Int64& rStateSet )
 
 MUST BE SET FROM DERIVED CLASSES:
 
+CHECKABLE
 CHECKED
 COLLAPSED
 EXPANDED

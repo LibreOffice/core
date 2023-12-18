@@ -127,6 +127,7 @@ void VCLXAccessibleCheckBox::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
+    rStateSet |= AccessibleStateType::CHECKABLE;
     rStateSet |= AccessibleStateType::FOCUSABLE;
 
     if ( IsChecked() )

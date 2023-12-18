@@ -99,6 +99,7 @@ void VCLXAccessibleRadioButton::FillAccessibleStateSet( sal_Int64& rStateSet )
     VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
     if ( pVCLXRadioButton )
     {
+        rStateSet |= AccessibleStateType::CHECKABLE;
         rStateSet |= AccessibleStateType::FOCUSABLE;
         if ( pVCLXRadioButton->getState() )
             rStateSet |= AccessibleStateType::CHECKED;

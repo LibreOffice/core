@@ -76,6 +76,8 @@ service AccessibleTreeListBoxEntry
            <li>com::sun::star::accessibility::AccessibleStateType::COLLAPSED
                is set when it is collapsed.</li>
            <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
+               is set when it is checkable.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
                is set when it is checked.</li>
            <li>com::sun::star::accessibility::AccessibleStateType::SELECTABLE
                is always set.</li>
