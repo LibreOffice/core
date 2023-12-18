@@ -1389,9 +1389,6 @@ void SwHiddenTextField::Evaluate(SwDoc& rDoc)
                     GetLanguage(), m_aContent, &fNumber );
                 m_bValid = true;
             }
-            else if( !sDBName.isEmpty() && !sDataSource.isEmpty() &&
-                     !sDataTableOrQuery.isEmpty() )
-                m_bValid = true;
         }
 #endif
     }
