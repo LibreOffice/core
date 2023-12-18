@@ -2089,7 +2089,7 @@ void StringConstant::handleStringCtor(
                 if (!first) {
                     StringRef s(
                         compiler.getSourceManager().getCharacterData(loc2), n);
-                    while (s.startswith("\\\n")) {
+                    while (compat::starts_with(s, "\\\n")) {
                         s = s.drop_front(2);
                         while (!s.empty()
                                && (s.front() == ' ' || s.front() == '\t'
@@ -2099,7 +2099,7 @@ void StringConstant::handleStringCtor(
                             s = s.drop_front(1);
                         }
                     }
-                    if (!(s.empty() || s.startswith("/*") || s.startswith("//")
+                    if (!(s.empty() || compat::starts_with(s, "/*") || compat::starts_with(s, "//")
                           || s == "\\"))
                     {
                         break;
@@ -2115,7 +2115,7 @@ void StringConstant::handleStringCtor(
                 unsigned n = Lexer::MeasureTokenLength(
                     l, compiler.getSourceManager(), compiler.getLangOpts());
                 StringRef s(compiler.getSourceManager().getCharacterData(l), n);
-                while (s.startswith("\\\n")) {
+                while (compat::starts_with(s, "\\\n")) {
                     s = s.drop_front(2);
                     while (!s.empty()
                            && (s.front() == ' ' || s.front() == '\t'
@@ -2125,7 +2125,7 @@ void StringConstant::handleStringCtor(
                         s = s.drop_front(1);
                     }
                 }
-                if (!(s.empty() || s.startswith("/*") || s.startswith("//")
+                if (!(s.empty() || compat::starts_with(s, "/*") || compat::starts_with(s, "//")
                       || s == "\\"))
                 {
                     break;

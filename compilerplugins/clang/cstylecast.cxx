@@ -319,10 +319,9 @@ bool CStyleCast::isConstCast(QualType from, QualType to) {
 
 bool CStyleCast::isFromCIncludeFile(SourceLocation spellingLocation) const {
     return !compiler.getSourceManager().isInMainFile(spellingLocation)
-        && (StringRef(
-                compiler.getSourceManager().getPresumedLoc(spellingLocation)
-                .getFilename())
-            .endswith(".h"));
+        && compat::ends_with(
+            StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename()),
+            ".h");
 }
 
 bool CStyleCast::isSharedCAndCppCode(SourceLocation location) const {
@@ -346,7 +345,7 @@ bool CStyleCast::isLastTokenOfImmediateMacroBodyExpansion(
     auto const spell = compiler.getSourceManager().getSpellingLoc(loc);
     auto name = Lexer::getImmediateMacroName(
         loc, compiler.getSourceManager(), compiler.getLangOpts());
-    while (name.startswith("\\\n")) {
+    while (compat::starts_with(name, "\\\n")) {
         name = name.drop_front(2);
         while (!name.empty()
                && (name.front() == ' ' || name.front() == '\t' || name.front() == '\n'

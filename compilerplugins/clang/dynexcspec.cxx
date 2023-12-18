@@ -13,6 +13,7 @@
 
 #include "clang/AST/Comment.h"
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // Remove dynamic exception specifications.  See the mail thread starting at
@@ -115,7 +116,7 @@ public:
                         auto s = StringRef(
                             compiler.getSourceManager().getCharacterData(prev),
                             n);
-                        while (s.startswith("\\\n")) {
+                        while (compat::starts_with(s, "\\\n")) {
                             s = s.drop_front(2);
                             while (!s.empty()
                                    && (s.front() == ' ' || s.front() == '\t'
@@ -126,7 +127,7 @@ public:
                             }
                         }
                         if (!s.empty() && s != "\\") {
-                            if (s.startswith("//")) {
+                            if (compat::starts_with(s, "//")) {
                                 beg = source.getBegin();
                             }
                             break;

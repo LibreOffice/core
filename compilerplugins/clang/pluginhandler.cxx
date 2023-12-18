@@ -15,6 +15,7 @@
 
 #include "config_clang.h"
 
+#include "compat.hxx"
 #include "plugin.hxx"
 #include "pluginhandler.hxx"
 
@@ -318,7 +319,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
     llvm::TimeTraceScope mainTimeScope("LOPluginMain", StringRef(""));
     if( context.getDiagnostics().hasErrorOccurred())
         return;
-    if (mainFileName.endswith(".ii"))
+    if (compat::ends_with(mainFileName, ".ii"))
     {
         report(DiagnosticsEngine::Fatal,
             "input file has suffix .ii: \"%0\"\nhighly suspicious, probably ccache generated, this will break warning suppressions; export CCACHE_CPP2=1 to prevent this") << mainFileName;
@@ -353,11 +354,11 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         const char* pathWarning = NULL;
         bool bSkip = false;
         StringRef const name = e->getName();
-        if( name.startswith(WORKDIR "/") )
+        if( compat::starts_with(name, WORKDIR "/") )
             pathWarning = "modified source in workdir/ : %0";
-        else if( strcmp( SRCDIR, BUILDDIR ) != 0 && name.startswith(BUILDDIR "/") )
+        else if( strcmp( SRCDIR, BUILDDIR ) != 0 && compat::starts_with(name, BUILDDIR "/") )
             pathWarning = "modified source in build dir : %0";
-        else if( name.startswith(SRCDIR "/") )
+        else if( compat::starts_with(name, SRCDIR "/") )
             ; // ok
         else
         {

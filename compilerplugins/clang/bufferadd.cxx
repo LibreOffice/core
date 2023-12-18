@@ -15,6 +15,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
@@ -344,7 +345,7 @@ bool BufferAdd::isSideEffectFree(Expr const* expr)
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
                 // allowlist some known-safe methods
-                if (name.endswith("ResId") || name == "GetXMLToken")
+                if (compat::ends_with(name, "ResId") || name == "GetXMLToken")
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
             }

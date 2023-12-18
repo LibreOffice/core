@@ -260,9 +260,9 @@ bool FieldCanBeLocal::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
     {
         if (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator()
             || (cxxMethodDecl->getIdentifier()
-                && (cxxMethodDecl->getName().startswith("Clone")
-                    || cxxMethodDecl->getName().startswith("clone")
-                    || cxxMethodDecl->getName().startswith("createClone"))))
+                && (compat::starts_with(cxxMethodDecl->getName(), "Clone")
+                    || compat::starts_with(cxxMethodDecl->getName(), "clone")
+                    || compat::starts_with(cxxMethodDecl->getName(), "createClone"))))
             insideMoveOrCopyOrCloneDeclParent = cxxMethodDecl->getParent();
         // these are similar in that they tend to simply enumerate all the fields of an object without putting
         // them to some useful purpose

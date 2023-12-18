@@ -266,9 +266,10 @@ private:
     bool isFromCIncludeFile(SourceLocation spellingLocation) const
     {
         return !compiler.getSourceManager().isInMainFile(spellingLocation)
-               && (StringRef(
-                       compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename())
-                       .endswith(".h"));
+               && compat::ends_with(StringRef(compiler.getSourceManager()
+                                                  .getPresumedLoc(spellingLocation)
+                                                  .getFilename()),
+                                    ".h");
     }
 
     bool isSharedCAndCppCode(SourceLocation location) const

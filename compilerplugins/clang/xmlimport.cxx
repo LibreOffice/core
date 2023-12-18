@@ -12,6 +12,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "config_clang.h"
 #include <iostream>
 #include <unordered_map>
@@ -369,7 +370,8 @@ bool XmlImport::isXmlTokEnum(const Expr* expr)
     auto enumConstant = dyn_cast<EnumConstantDecl>(declRefExpr->getDecl());
     if (!enumConstant)
         return false;
-    return enumConstant->getIdentifier() && enumConstant->getName().startswith("XML_TOK_");
+    return enumConstant->getIdentifier()
+           && compat::starts_with(enumConstant->getName(), "XML_TOK_");
 }
 
 bool XmlImport::isUInt16(const Expr* expr)

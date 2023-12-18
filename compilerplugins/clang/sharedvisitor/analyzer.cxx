@@ -25,6 +25,7 @@
 #include "config_clang.h"
 #include "../check.hxx"
 #include "../check.cxx"
+#include "../compat.hxx"
 
 using namespace clang;
 using namespace llvm;
@@ -125,7 +126,7 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
             continue;
         if( method->isStatic() || method->getAccess() != AS_public )
             continue;
-        if( method->getName().startswith( "Visit" ))
+        if( compat::starts_with(method->getName(), "Visit" ))
         {
             if( method->getNumParams() == 1 )
             {
@@ -144,7 +145,7 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
                 abort();
             }
         }
-        else if( method->getName().startswith( "Traverse" ))
+        else if( compat::starts_with(method->getName(), "Traverse" ))
         {
             if( method->getNumParams() == 1 )
             {
@@ -159,13 +160,13 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
                 abort();
             }
         }
-        else if( method->getName().startswith( "PreTraverse" ))
+        else if( compat::starts_with(method->getName(), "PreTraverse" ))
         {
             TraverseFunctionInfo traverseInfo = findOrCreateTraverseFunctionInfo( method->getName().substr( 3 ));
             traverseInfo.hasPre = true;
             traverseFunctions.insert( std::move( traverseInfo ));
         }
-        else if( method->getName().startswith( "PostTraverse" ))
+        else if( compat::starts_with(method->getName(), "PostTraverse" ))
         {
                 TraverseFunctionInfo traverseInfo = findOrCreateTraverseFunctionInfo( method->getName().substr( 4 ));
                 traverseInfo.hasPost = true;
@@ -175,7 +176,7 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
             std::cout << "ShouldVisitTemplateInstantiations:1" << std::endl;
         else if (method->getName() == "shouldVisitImplicitCode")
             std::cout << "ShouldVisitImplicitCode:1" << std::endl;
-        else if( method->getName().startswith( "WalkUp" ))
+        else if( compat::starts_with(method->getName(), "WalkUp" ))
         {
             std::cerr << "WalkUp function not supported for shared visitor: " << decl->getName().str()
                  << "::" << method->getName().str() << std::endl;

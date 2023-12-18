@@ -55,7 +55,7 @@ private:
                 loc, compiler.getSourceManager(), compiler.getLangOpts());
             StringRef s(compiler.getSourceManager().getCharacterData(loc), n);
             //TODO: see compilerplugins/clang/override.cxx:
-            if (s.startswith("\\\n")) {
+            if (compat::starts_with(s, "\\\n")) {
                 s = s.drop_front(2);
             }
             if (s == "inline") {
@@ -87,7 +87,7 @@ private:
                 StringRef s(
                     compiler.getSourceManager().getCharacterData(loc), n2);
                 //TODO: see compilerplugins/clang/override.cxx:
-                if (s.startswith("\\\n")) {
+                if (compat::starts_with(s, "\\\n")) {
                     s = s.drop_front(2);
                 }
                 if (!s.empty()) {

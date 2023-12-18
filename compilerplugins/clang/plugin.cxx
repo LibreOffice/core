@@ -203,7 +203,7 @@ bool Plugin::suppressWarningAt(SourceLocation location) const {
                 if (isDebugMode()) {
                     report(DiagnosticsEngine::Fatal, "failed to getSpelling", prev);
                 }
-            } else if (!spell.startswith("/*")) {
+            } else if (!compat::starts_with(spell, "/*")) {
                 continue;
             }
         }
@@ -441,7 +441,7 @@ StringRef Plugin::getFilenameOfLocation(SourceLocation spellingLocation) const
             return fn;
         }
 #if !defined _WIN32
-        assert(fn.startswith("/") || fn == "<stdin>");
+        assert(compat::starts_with(fn, "/") || fn == "<stdin>");
 #endif
         s_Mode = fn == "<stdin>" ? STDIN : GOOD;
         return getFilenameOfLocation(spellingLocation);
@@ -862,9 +862,8 @@ bool RewritePlugin::wouldRewriteWorkdir(SourceLocation loc)
     if (loc.isInvalid() || loc.isMacroID()) {
         return false;
     }
-    return
-        getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(loc))
-        .startswith(WORKDIR "/");
+    return compat::starts_with(
+        getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(loc)), WORKDIR "/");
 }
 
 bool RewritePlugin::reportEditFailure( SourceLocation loc )
@@ -918,7 +917,7 @@ bool hasPathnamePrefix(StringRef pathname, StringRef prefix)
 {
     return checkPathname(
         pathname, prefix,
-        [](StringRef p, StringRef a) { return p.startswith(a); });
+        [](StringRef p, StringRef a) { return compat::starts_with(p, a); });
 }
 
 bool isSamePathname(StringRef pathname, StringRef other)

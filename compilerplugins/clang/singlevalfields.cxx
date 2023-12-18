@@ -291,7 +291,7 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
         if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()))
            return;
         if (methodDecl && methodDecl->getIdentifier()
-            && (methodDecl->getName().startswith("Clone") || methodDecl->getName().startswith("clone")))
+            && (compat::starts_with(methodDecl->getName(), "Clone") || compat::starts_with(methodDecl->getName(), "clone")))
            return;
         auto cxxConstructorDecl = dyn_cast<CXXConstructorDecl>(parentFunction);
         if (cxxConstructorDecl && cxxConstructorDecl->isCopyOrMoveConstructor())

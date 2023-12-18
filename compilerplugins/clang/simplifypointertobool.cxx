@@ -19,6 +19,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 
 /**
   Simplify boolean expressions involving smart pointers e.g.
@@ -262,7 +263,7 @@ private:
             auto const s = StringRef(compiler.getSourceManager().getCharacterData(start),
                                      Lexer::MeasureTokenLength(start, compiler.getSourceManager(),
                                                                compiler.getLangOpts()));
-            if (s.empty() || s.startswith("\\\n"))
+            if (s.empty() || compat::starts_with(s, "\\\n"))
             {
                 continue;
             }
@@ -279,7 +280,7 @@ private:
             auto const s = StringRef(compiler.getSourceManager().getCharacterData(start1),
                                      Lexer::MeasureTokenLength(start1, compiler.getSourceManager(),
                                                                compiler.getLangOpts()));
-            if (!(s.empty() || s.startswith("\\\n")))
+            if (!(s.empty() || compat::starts_with(s, "\\\n")))
             {
                 break;
             }

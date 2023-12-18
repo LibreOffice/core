@@ -17,6 +17,7 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/Specifiers.h"
 #include "llvm/ADT/StringExtras.h"
+#include "llvm/ADT/StringRef.h"
 #include "llvm/Support/FileSystem.h"
 
 #include "config_clang.h"
@@ -60,6 +61,22 @@ inline std::string toString(llvm::APSInt const & i, unsigned radix) {
     return llvm::toString(i, radix);
 #else
     return i.toString(radix);
+#endif
+}
+
+inline bool starts_with(llvm::StringRef s, llvm::StringRef Prefix) {
+#if CLANG_VERSION >= 160000
+    return s.starts_with(Prefix);
+#else
+    return s.startswith(Prefix);
+#endif
+}
+
+inline bool ends_with(llvm::StringRef s, llvm::StringRef Suffix) {
+#if CLANG_VERSION >= 160000
+    return s.ends_with(Suffix);
+#else
+    return s.endswith(Suffix);
 #endif
 }
 

@@ -19,6 +19,7 @@
 #include "config_clang.h"
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "functionaddress.hxx"
 #include "plugin.hxx"
 
@@ -871,10 +872,9 @@ bool FakeBool::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
 
 bool FakeBool::isFromCIncludeFile(SourceLocation spellingLocation) const {
     return !compiler.getSourceManager().isInMainFile(spellingLocation)
-        && (StringRef(
-                compiler.getSourceManager().getPresumedLoc(spellingLocation)
-                .getFilename())
-            .endswith(".h"));
+        && compat::ends_with(
+            StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename()),
+            ".h");
 }
 
 bool FakeBool::isSharedCAndCppCode(SourceLocation location) const {

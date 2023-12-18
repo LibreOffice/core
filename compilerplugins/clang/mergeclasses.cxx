@@ -87,14 +87,15 @@ public:
 bool ignoreClass(StringRef s)
 {
     // ignore stuff in the standard library, and UNO stuff we can't touch.
-    if (s.startswith("rtl::") || s.startswith("sal::") || s.startswith("com::sun::")
-        || s.startswith("std::") || s.startswith("boost::")
+    if (compat::starts_with(s, "rtl::") || compat::starts_with(s, "sal::")
+        || compat::starts_with(s, "com::sun::") || compat::starts_with(s, "std::")
+        || compat::starts_with(s, "boost::")
         || s == "OString" || s == "OUString" || s == "bad_alloc")
     {
         return true;
     }
     // ignore instantiations of pointers and arrays
-    if (s.endswith("*") || s.endswith("]")) {
+    if (compat::ends_with(s, "*") || compat::ends_with(s, "]")) {
         return true;
     }
     return false;

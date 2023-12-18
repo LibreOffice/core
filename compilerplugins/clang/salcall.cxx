@@ -371,7 +371,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
             assert(SM.isMacroBodyExpansion(startLoc));
             auto const startLoc2 = compat::getImmediateExpansionRange(SM, startLoc).second;
             auto name = Lexer::getImmediateMacroName(startLoc, SM, compiler.getLangOpts());
-            while (name.startswith("\\\n"))
+            while (compat::starts_with(name, "\\\n"))
             {
                 name = name.drop_front(2);
                 while (!name.empty()
@@ -413,7 +413,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         if (SM.isMacroBodyExpansion(endLoc))
         {
             auto name = Lexer::getImmediateMacroName(endLoc, SM, compiler.getLangOpts());
-            while (name.startswith("\\\n"))
+            while (compat::starts_with(name, "\\\n"))
             {
                 name = name.drop_front(2);
                 while (!name.empty()
@@ -506,8 +506,8 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
                     // in the first line and include the intervening spaces and (part of? looks like an
                     // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
                     // when looking backwards here, without even trying to look at their content:
-                    if (!(s.empty() || s.startswith("/*") || s.startswith("//")
-                          || s.startswith("\\\n")))
+                    if (!(s.empty() || compat::starts_with(s, "/*") || compat::starts_with(s, "//")
+                          || compat::starts_with(s, "\\\n")))
                     {
                         break;
                     }
@@ -532,8 +532,8 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
                     // in the first line and include the intervening spaces and (part of? looks like an
                     // error in Clang) "barbaz", so just skip any tokens starting with backslash-newline
                     // when looking backwards here, without even trying to look at their content:
-                    if (!(s.empty() || s.startswith("/*") || s.startswith("//")
-                          || s.startswith("\\\n")))
+                    if (!(s.empty() || compat::starts_with(s, "/*") || compat::starts_with(s, "//")
+                          || compat::starts_with(s, "\\\n")))
                     {
                         break;
                     }
@@ -568,7 +568,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         {
             unsigned n = Lexer::MeasureTokenLength(loc, SM, compiler.getLangOpts());
             auto s = StringRef(compiler.getSourceManager().getCharacterData(loc), n);
-            while (s.startswith("\\\n"))
+            while (compat::starts_with(s, "\\\n"))
             {
                 s = s.drop_front(2);
                 while (!s.empty()
