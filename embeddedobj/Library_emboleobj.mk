@@ -10,6 +10,10 @@
 
 $(eval $(call gb_Library_Library,emboleobj))
 
+$(eval $(call gb_Library_use_custom_headers,emboleobj,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_set_componentfile,emboleobj,embeddedobj/source/msole/emboleobj$(if $(filter WNT,$(OS)),.windows),services))
 
 $(eval $(call gb_Library_set_include,emboleobj,\
