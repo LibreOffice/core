@@ -78,6 +78,8 @@ service AccessibleToolBoxItem
                is set if the object is displayed on the screen.</li>
            <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
                is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::CHECKABLE
+               is set if the tool box item is checkable, i.e. it can be checked.</li>
            <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
                is set if the tool box item is checked.</li>
            </ul>

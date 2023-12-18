@@ -417,6 +417,9 @@ OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 nCombinedSt
             case accessibility::AccessibleStateType::BUSY:
                 name = "BUSY";
                 break;
+            case accessibility::AccessibleStateType::CHECKABLE:
+                name = "CHECKABLE";
+                break;
             case accessibility::AccessibleStateType::CHECKED:
                 name = "CHECKED";
                 break;

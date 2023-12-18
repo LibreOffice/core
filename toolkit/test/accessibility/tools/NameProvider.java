@@ -99,6 +99,7 @@ public class NameProvider
         maStateMap.put (Integer.valueOf(AccessibleStateType.ACTIVE), "ACTIVE");
         maStateMap.put (Integer.valueOf(AccessibleStateType.ARMED), "ARMED");
         maStateMap.put (Integer.valueOf(AccessibleStateType.BUSY), "BUSY");
+        maStateMap.put (Integer.valueOf(AccessibleStateType.CHECKABLE), "CHECKABLE");
         maStateMap.put (Integer.valueOf(AccessibleStateType.CHECKED), "CHECKED");
         maStateMap.put (Integer.valueOf(AccessibleStateType.DEFUNC), "DEFUNC");
         maStateMap.put (Integer.valueOf(AccessibleStateType.EDITABLE), "EDITABLE");

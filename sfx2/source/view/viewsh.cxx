@@ -433,21 +433,21 @@ OUString truncateText(OUString& sText, sal_Int32 nNewLength)
 
 std::string stateSetToString(::sal_Int64 stateSet)
 {
-    static const std::string states[34] = {
+    static const std::string states[35] = {
             "ACTIVE", "ARMED", "BUSY", "CHECKED", "DEFUNC",
             "EDITABLE", "ENABLED", "EXPANDABLE", "EXPANDED", "FOCUSABLE",
             "FOCUSED", "HORIZONTAL", "ICONIFIED", "INDETERMINATE", "MANAGES_DESCENDANTS",
             "MODAL", "MULTI_LINE", "MULTI_SELECTABLE", "OPAQUE", "PRESSED",
             "RESIZABLE", "SELECTABLE", "SELECTED", "SENSITIVE", "SHOWING",
             "SINGLE_LINE", "STALE", "TRANSIENT", "VERTICAL", "VISIBLE",
-            "MOVEABLE", "DEFAULT", "OFFSCREEN", "COLLAPSE"
+            "MOVEABLE", "DEFAULT", "OFFSCREEN", "COLLAPSE", "CHECKABLE"
     };
 
     if (stateSet == 0)
         return "INVALID";
     ::sal_Int64 state = 1;
     std::string s;
-    for (int i = 0; i < 34; ++i)
+    for (int i = 0; i < 35; ++i)
     {
         if (stateSet & state)
         {

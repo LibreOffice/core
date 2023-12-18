@@ -45,6 +45,8 @@ service AccessibleRadioButton
             </li>
         <li>States: The states supported by this service are
             <ul>
+            <li>com::sun::star::accessibility::AccessibleStateType::CHECKABLE
+                is always set.</li>
             <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
                 is set if the object is currently checked.</li>
             <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
