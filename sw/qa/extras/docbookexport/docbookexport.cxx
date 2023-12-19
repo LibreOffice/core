@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+namespace
+{
 class DocbookExportTest : public SwModelTestBase
 {
 public:
@@ -34,7 +36,7 @@ DECLARE_DOCBOOKEXPORT_TEST(testtdf91095, "tdf91095.docx")
     CPPUNIT_ASSERT(pDoc);
 }
 
-
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

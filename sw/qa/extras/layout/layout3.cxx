@@ -42,6 +42,8 @@
 #include <dcontact.hxx>
 #include <frameformats.hxx>
 
+namespace
+{
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter3 : public SwModelTestBase
 {
@@ -127,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf120287)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
 }
 
-static auto getXPathIntAttributeValue(xmlXPathContextPtr pXmlXpathCtx, char const* const pXPath)
+auto getXPathIntAttributeValue(xmlXPathContextPtr pXmlXpathCtx, char const* const pXPath)
     -> sal_Int32
 {
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(pXPath), pXmlXpathCtx);
@@ -1743,7 +1745,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testWriterImageNoCapture)
     CPPUNIT_ASSERT_LESS(nPageLeft, nImageLeft);
 }
 
-static SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
+SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
 {
     SwRootFrame* pRoot = pWrtShell->GetLayout();
     SwPageFrame* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
@@ -2123,6 +2125,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf152307)
     CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), nTabBottom < nFooterTop);
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

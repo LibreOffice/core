@@ -13,6 +13,8 @@
 
 #include <IndexingExport.hxx>
 
+namespace
+{
 class IndexingExportTest : public SwModelTestBase
 {
 public:
@@ -312,6 +314,7 @@ void IndexingExportTest::testIndexingExport_Header_Footer()
     assertXPathContent(pXmlDoc, "/indexing/paragraph[4]"_ostr, "Paragraph 2");
 }
 
+} // end of anonymous namespace
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexingExportTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 

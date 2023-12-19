@@ -34,6 +34,8 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -1128,6 +1130,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
         "is-legal"_ostr, "true");
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,6 +35,8 @@ using namespace css;
   Split these tests into their own file because they are really really slow
 */
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -833,6 +835,7 @@ DECLARE_RTFEXPORT_TEST(testTdf148515, "tdf148515.rtf")
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraph(2), 1), "CharHeight"));
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

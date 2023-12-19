@@ -32,6 +32,8 @@
 
 using namespace css;
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -780,6 +782,8 @@ DECLARE_RTFEXPORT_TEST(testTdf158762, "tdf158762.rtf")
         CPPUNIT_ASSERT(xLevels.is());
     }
 }
+
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

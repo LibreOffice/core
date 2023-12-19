@@ -36,6 +36,8 @@
 
 using namespace css;
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -84,6 +86,7 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
     // CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

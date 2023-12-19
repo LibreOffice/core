@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+namespace
+{
 class TxtEncExportTest : public SwModelTestBase
 {
 public:
@@ -94,6 +96,7 @@ DECLARE_TXTENCEXPORT_TEST(testBulletsHidden, "bullets.odt", "UTF8,,,,,false", Tx
     CPPUNIT_ASSERT_EQUAL(aExpected, aData);
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

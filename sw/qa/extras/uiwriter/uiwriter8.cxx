@@ -40,6 +40,8 @@
 #include <itabenum.hxx>
 #include <officecfg/Office/Common.hxx>
 
+namespace
+{
 /// 8th set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest8 : public SwModelTestBase
 {
@@ -2859,6 +2861,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158703)
     CPPUNIT_ASSERT_EQUAL(u"Foo\u00A0:"_ustr, getParagraph(1)->getString());
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

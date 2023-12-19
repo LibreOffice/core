@@ -12,6 +12,8 @@
 
 #include <test/htmltesttools.hxx>
 
+namespace
+{
 class XHtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
 public:
@@ -182,6 +184,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf66305)
         != -1);
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

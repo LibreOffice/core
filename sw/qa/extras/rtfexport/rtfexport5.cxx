@@ -29,6 +29,8 @@
 
 using namespace css;
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -779,6 +781,7 @@ DECLARE_RTFEXPORT_TEST(testFdo83204, "fdo83204.rtf")
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

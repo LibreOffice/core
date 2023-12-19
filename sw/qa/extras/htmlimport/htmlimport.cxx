@@ -32,6 +32,8 @@
 #include <frameformats.hxx>
 #include <unotxdoc.hxx>
 
+namespace
+{
 class HtmlImportTest : public SwModelTestBase
 {
     public:
@@ -611,6 +613,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf155011)
     // Must not crash / fail asserts
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

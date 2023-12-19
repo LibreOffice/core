@@ -18,6 +18,8 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -1040,6 +1042,7 @@ CPPUNIT_TEST_FIXTURE(Test, testtdf158044)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:shadow[1]"_ostr);
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

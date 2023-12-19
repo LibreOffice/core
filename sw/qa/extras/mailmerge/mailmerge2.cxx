@@ -43,11 +43,13 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 
+namespace
+{
 /**
  * Maps database URIs to the registered database names for quick lookups
  */
 typedef std::map<OUString, OUString> DBuriMap;
-static DBuriMap aDBuriMap;
+DBuriMap aDBuriMap;
 
 class MMTest2 : public SwModelTestBase
 {
@@ -723,6 +725,7 @@ DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1"
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xParaA1, "CharFontName"));
 }
 
+} // end of anonymous namespace
 namespace com::sun::star::table {
 
 static std::ostream& operator<<(std::ostream& rStream, table::BorderLine const& rLine)

@@ -61,6 +61,8 @@
 #include <ndtxt.hxx>
 #include <fmtautofmt.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -1819,6 +1821,7 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
 }
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,6 +66,8 @@
 #include <vcl/TypeSerializer.hxx>
 #include <comphelper/scopeguard.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -766,7 +768,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeSdt)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), "CharKerning"));
 }
 
-static void lcl_countTextFrames(const css::uno::Reference< lang::XComponent >& xComponent,
+void lcl_countTextFrames(const css::uno::Reference< lang::XComponent >& xComponent,
    sal_Int32 nExpected )
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(xComponent, uno::UNO_QUERY);
@@ -1238,7 +1240,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionColumns)
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
 }
 
-static OString dateTimeToString( const util::DateTime& dt )
+OString dateTimeToString( const util::DateTime& dt )
 {
     return DateTimeToOString( DateTime( Date( dt.Day, dt.Month, dt.Year ), tools::Time( dt.Hours, dt.Minutes, dt.Seconds )));
 }
@@ -1879,6 +1881,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeTextHighlight)
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

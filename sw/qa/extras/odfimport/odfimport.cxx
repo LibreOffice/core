@@ -67,6 +67,8 @@
 #include <urlmon.h>
 #endif
 
+namespace
+{
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
 
@@ -666,7 +668,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo55814)
     CPPUNIT_ASSERT_EQUAL(OUString("Hide==\"Yes\""), getProperty<OUString>(xSections->getByIndex(0), "Condition"));
 }
 
-static void lcl_CheckShape(
+void lcl_CheckShape(
     uno::Reference<drawing::XShape> const& xShape, OUString const& rExpected)
 {
     uno::Reference<container::XNamed> const xNamed(xShape, uno::UNO_QUERY);
@@ -1394,7 +1396,7 @@ CPPUNIT_TEST_FIXTURE(Test, testForcepoint108)
 
 #ifdef _WIN32
 template <class T>
-static void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> const & aDesktop,
+void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> const & aDesktop,
                              const OUString& sFileName, sal_Int32 configValue, sal_Int32 zoneId,
                              bool expectedResult)
 {
@@ -1534,5 +1536,6 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyTrailingSpans)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(184, height2, 1); // allow a bit of room for rounding just in case
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

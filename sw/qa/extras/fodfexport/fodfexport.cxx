@@ -11,6 +11,8 @@
 #include <o3tl/string_view.hxx>
 #include <vcl/graph.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -74,6 +76,7 @@ DECLARE_FODFEXPORT_TEST(testSvgImageRoundtrip, "SvgImageTest.fodt")
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Svg, pVectorGraphicData->getType());
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

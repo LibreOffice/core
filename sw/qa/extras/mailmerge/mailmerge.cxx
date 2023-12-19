@@ -36,11 +36,13 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 
+namespace
+{
 /**
  * Maps database URIs to the registered database names for quick lookups
  */
 typedef std::map<OUString, OUString> DBuriMap;
-static DBuriMap aDBuriMap;
+DBuriMap aDBuriMap;
 
 class MMTest : public SwModelTestBase
 {
@@ -740,8 +742,6 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118113, "tdf118113.odt", "tdf118113.ods", "t
 }
 
 
-namespace
-{
 constexpr char const* const EmptyValuesLegacyData[][8]
     = { { "Heading", "Title: ", "First Name: firstname1", "Last Name: lastname1",
           "Title:  First Name: firstname1", "First Name: firstname1 Last Name: lastname1",
@@ -771,7 +771,7 @@ constexpr char const* const EmptyValuesNewData[][8]
           "Title:  First Name:  Last Name: lastname4", "Trailing text" },
         { "Heading", "Title: title5", "Title: title5 First Name: ",
           "Title: title5 First Name:  Last Name: ", "Trailing text" } };
-}
+
 
 // The following four tests (testEmptyValuesLegacyODT, testEmptyValuesNewODT, (testEmptyValuesLegacyFODT, testEmptyValuesNewFODT)
 // check that for native documents without "EmptyDbFieldHidesPara" compatibility option, all paragraphs are exported visible,
@@ -946,6 +946,6 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf62364, "tdf62364.odt", "10-testing-addresses
     }
 }
 
-
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

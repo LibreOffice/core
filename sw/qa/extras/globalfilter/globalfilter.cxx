@@ -39,6 +39,8 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <unotools/mediadescriptor.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -262,7 +264,7 @@ void Test::testImageWithSpecialID()
 }
 
 /// Gives the first embedded or linked image in a document.
-static uno::Reference<drawing::XShape> lcl_getShape(const uno::Reference<lang::XComponent>& xComponent, bool bEmbedded)
+uno::Reference<drawing::XShape> lcl_getShape(const uno::Reference<lang::XComponent>& xComponent, bool bEmbedded)
 {
     uno::Reference<drawing::XShape> xShape;
 
@@ -354,9 +356,6 @@ void Test::testGraphicShape()
     }
 }
 
-namespace
-{
-
 std::vector<uno::Reference<graphic::XGraphic>>
     lcl_getGraphics(const uno::Reference<lang::XComponent>& xComponent)
 {
@@ -376,8 +375,6 @@ std::vector<uno::Reference<graphic::XGraphic>>
     }
 
     return aGraphics;
-}
-
 }
 
 void Test::testMultipleIdenticalGraphics()
@@ -841,7 +838,7 @@ void Test::testSkipImages()
 }
 #endif
 
-static auto verifyNestedFieldmark(OUString const& rTestName,
+auto verifyNestedFieldmark(OUString const& rTestName,
         uno::Reference<lang::XComponent> const& xComponent) -> void
 {
     SwDoc const*const pDoc(dynamic_cast<SwXTextDocument&>(*xComponent).GetDocShell()->GetDoc());
@@ -2260,6 +2257,7 @@ void Test::testSvgImageSupport()
     }
 }
 
+} // end of anonymous namespace
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

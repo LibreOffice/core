@@ -99,7 +99,6 @@ uno::Reference<text::XTextContent>& PasteListener::GetTextGraphicObject()
 {
     return m_xTextGraphicObject;
 }
-}
 
 /// Test to assert UNO API call results of Writer.
 class SwUnoWriter : public SwModelTestBase
@@ -282,8 +281,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURLBitmap)
     CPPUNIT_ASSERT(xGraphic.is());
 }
 
-static bool ensureAutoTextExistsByTitle(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
-                                        std::u16string_view autoTextName)
+bool ensureAutoTextExistsByTitle(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
+                                 std::u16string_view autoTextName)
 {
     const uno::Sequence<OUString> aTitles(autoTextGroup->getTitles());
     for (const auto& rTitle : aTitles)
@@ -294,8 +293,8 @@ static bool ensureAutoTextExistsByTitle(const uno::Reference<text::XAutoTextGrou
     return false;
 }
 
-static bool ensureAutoTextExistsByName(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
-                                       std::u16string_view autoTextName)
+bool ensureAutoTextExistsByName(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
+                                std::u16string_view autoTextName)
 {
     const uno::Sequence<OUString> aTitles(autoTextGroup->getElementNames());
     for (const auto& rTitle : aTitles)
@@ -1201,6 +1200,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
     CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

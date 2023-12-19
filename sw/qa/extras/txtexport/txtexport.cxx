@@ -17,6 +17,8 @@
 
 #include <formatlinebreak.hxx>
 
+namespace
+{
 class TxtExportTest : public SwModelTestBase
 {
 public:
@@ -139,6 +141,7 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testClearingBreakExport)
     CPPUNIT_ASSERT_EQUAL("foo\nbar" SAL_NEWLINE_STRING ""_ostr, aActual);
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

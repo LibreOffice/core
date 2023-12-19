@@ -17,6 +17,8 @@
 #include <wrtsh.hxx>
 #include <rtl/ustrbuf.hxx>
 
+namespace
+{
 class TxtImportTest : public SwModelTestBase
 {
 public:
@@ -231,6 +233,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
     CPPUNIT_ASSERT_EQUAL(aResStr, aPara);
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

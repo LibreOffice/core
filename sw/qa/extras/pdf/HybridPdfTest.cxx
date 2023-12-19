@@ -11,6 +11,8 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 
+namespace
+{
 class HybridPdfTest : public SwModelTestBase
 {
 public:
@@ -69,6 +71,7 @@ void HybridPdfTest::testHybridWithAdditionalStreamsAndAttachedFile()
                          getParagraph(1)->getString());
 }
 
+} // end of anonymous namespace
 CPPUNIT_TEST_SUITE_REGISTRATION(HybridPdfTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 

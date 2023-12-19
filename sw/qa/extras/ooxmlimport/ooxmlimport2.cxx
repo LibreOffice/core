@@ -45,6 +45,8 @@
 #include <flyfrms.hxx>
 #include <tabfrm.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -1267,6 +1269,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154370)
 }
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

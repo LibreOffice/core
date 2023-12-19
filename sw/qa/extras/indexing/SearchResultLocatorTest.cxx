@@ -13,6 +13,8 @@
 
 #include <SearchResultLocator.hxx>
 
+namespace
+{
 class SearchResultLocatorTest : public SwModelTestBase
 {
 public:
@@ -179,6 +181,7 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjectsUsingJsonPaylo
 #endif
 }
 
+} // end of anonymous namespace
 CPPUNIT_TEST_SUITE_REGISTRATION(SearchResultLocatorTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

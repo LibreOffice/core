@@ -11,6 +11,8 @@
 
 #include <config_features.h>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -26,5 +28,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFeatureTextBold) { createSwDoc("feature_text_bold
 
 CPPUNIT_TEST_FIXTURE(Test, testFeatureTextItalic) { createSwDoc("feature_text_italic.odt"); }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,6 +36,8 @@
 
 using namespace css;
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -751,6 +753,7 @@ DECLARE_RTFEXPORT_TEST(testTdf153681, "tdf153681.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

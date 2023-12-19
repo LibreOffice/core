@@ -66,6 +66,8 @@
 #include <rootfrm.hxx>
 #include <o3tl/string_view.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -118,7 +120,7 @@ DECLARE_ODFEXPORT_TEST(testTdf144319, "tdf144319.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("{ y ^ 2 { nitalic m p } = left ( { x ^ 3 + 7 } right ) { nitalic m p } }"), formula5);
 }
 
-static void testTdf43569_CheckIfFieldParse()
+void testTdf43569_CheckIfFieldParse()
 {
     {
         OUString paramCondition;
@@ -2703,6 +2705,6 @@ CPPUNIT_TEST_FIXTURE(Test, testImageMimetype)
     assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@draw:mime-type='image/svg+xml']"_ostr);
 }
 
-
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

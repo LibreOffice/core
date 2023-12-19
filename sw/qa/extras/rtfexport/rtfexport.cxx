@@ -35,6 +35,8 @@
 
 using namespace css;
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -827,6 +829,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo32613)
                          getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

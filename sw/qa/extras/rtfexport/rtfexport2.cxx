@@ -34,6 +34,8 @@
 
 #include <bordertest.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -956,6 +958,7 @@ DECLARE_RTFEXPORT_TEST(testFdo51916, "fdo51916.rtf")
     // Complex nested table caused a crash.
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

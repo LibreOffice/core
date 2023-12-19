@@ -185,7 +185,6 @@ OLE1Reader::OLE1Reader(SvStream& rStream)
     rStream.ReadUInt32(nData); // PresentationDataSize
     m_nPresentationDataSize = nData;
 }
-}
 
 /// Covers sw/source/filter/html/wrthtml.cxx and related fixes.
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
@@ -3032,6 +3031,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoBrClearForImageWrap)
         0);
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

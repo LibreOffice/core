@@ -29,6 +29,8 @@
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -277,6 +279,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142003)
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

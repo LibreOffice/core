@@ -33,6 +33,8 @@
 #include <formatflysplit.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -194,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCExport)
     CPPUNIT_ASSERT(!pFly->GetAttrSet().GetWrapInfluenceOnObjPos().GetAllowOverlap());
 }
 
-static bool IsFirstLine(const SwTextNode* pTextNode)
+bool IsFirstLine(const SwTextNode* pTextNode)
 {
     const SfxPoolItem* pItem = pTextNode->GetNoCondAttr(RES_MARGIN_FIRSTLINE, false);
     return !!pItem;
@@ -258,6 +260,7 @@ DECLARE_WW8EXPORT_TEST(testTdf104704_mangledFooter, "tdf104704_mangledFooter.odt
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
