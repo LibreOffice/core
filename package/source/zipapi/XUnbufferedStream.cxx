@@ -85,7 +85,7 @@ XUnbufferedStream::XUnbufferedStream(
         throw ZipIOException("Integer-overflow");
 
     bool bHaveEncryptData = rData.is() && rData->m_aInitVector.hasElements() &&
-        ((rData->m_aSalt.hasElements() && rData->m_nIterationCount != 0)
+        ((rData->m_aSalt.hasElements() && (rData->m_oPBKDFIterationCount || rData->m_oArgon2Args))
          ||
          rData->m_aKey.hasElements());
     bool bMustDecrypt = nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted;

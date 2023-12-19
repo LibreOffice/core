@@ -48,6 +48,14 @@ interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
                     error; it should take values from
                     com::sun::star::xml:crypto::DigestID.
             </dd>
+            <dt>KeyDerivationFunction</dt>
+            <dd>
+                    specifies the algorithm that was used to derive the
+                    encryption key from the password; it is applied to
+                    the result of the StartKeyGenerationAlgorithm;
+                    it should take values from
+                    com::sun::star::xml:crypto::KDFID.
+            </dd>
             <dt>EncryptionAlgorithm</dt>
             <dd>
                     specifies the algorithm that should be used to

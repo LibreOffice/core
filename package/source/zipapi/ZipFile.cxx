@@ -34,6 +34,7 @@
 #include <comphelper/bytereader.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/threadpool.hxx>
 #include <rtl/digest.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
@@ -43,6 +44,8 @@
 #include <iterator>
 #include <utility>
 #include <vector>
+
+#include <argon2.h>
 
 #include "blowfishcontext.hxx"
 #include "sha1context.hxx"
@@ -173,12 +176,44 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
     }
 
     uno::Sequence< sal_Int8 > aDerivedKey( xEncryptionData->m_nDerivedKeySize );
-    if ( !xEncryptionData->m_nIterationCount &&
-         xEncryptionData->m_nDerivedKeySize == xEncryptionData->m_aKey.getLength() )
+    if (!xEncryptionData->m_oPBKDFIterationCount && !xEncryptionData->m_oArgon2Args
+        && xEncryptionData->m_nDerivedKeySize == xEncryptionData->m_aKey.getLength())
     {
         // gpg4libre: no need to derive key, m_aKey is already
         // usable as symmetric session key
         aDerivedKey = xEncryptionData->m_aKey;
+    }
+    else if (xEncryptionData->m_oArgon2Args)
+    {
+        // apparently multiple lanes cannot be processed in parallel (the
+        // implementation will clamp), but it doesn't make sense to have more
+        // threads than CPUs
+        uint32_t const threads(::comphelper::ThreadPool::getPreferredConcurrency());
+        // need to use context to set a fixed version
+        argon2_context context = {
+            .out = reinterpret_cast<uint8_t *>(aDerivedKey.getArray()),
+            .outlen = ::sal::static_int_cast<uint32_t>(aDerivedKey.getLength()),
+            .pwd = reinterpret_cast<uint8_t *>(xEncryptionData->m_aKey.getArray()),
+            .pwdlen = ::sal::static_int_cast<uint32_t>(xEncryptionData->m_aKey.getLength()),
+            .salt = reinterpret_cast<uint8_t *>(xEncryptionData->m_aSalt.getArray()),
+            .saltlen = ::sal::static_int_cast<uint32_t>(xEncryptionData->m_aSalt.getLength()),
+            .secret = nullptr, .secretlen = 0,
+            .ad = nullptr, .adlen = 0,
+            .t_cost = ::sal::static_int_cast<uint32_t>(::std::get<0>(*xEncryptionData->m_oArgon2Args)),
+            .m_cost = ::sal::static_int_cast<uint32_t>(::std::get<1>(*xEncryptionData->m_oArgon2Args)),
+            .lanes = ::sal::static_int_cast<uint32_t>(::std::get<2>(*xEncryptionData->m_oArgon2Args)),
+            .threads = threads,
+            .version = ARGON2_VERSION_13,
+            .allocate_cbk = nullptr, .free_cbk = nullptr,
+            .flags = ARGON2_DEFAULT_FLAGS
+        };
+        // libargon2 validates all the arguments so don't need to do it here
+        int const rc = argon2id_ctx(&context);
+        if (rc != ARGON2_OK)
+        {
+            SAL_WARN("package", "argon2id_ctx failed to derive key: " << argon2_error_message(rc));
+            throw ZipIOException("argon2id_ctx failed to derive key");
+        }
     }
     else if ( rtl_Digest_E_None != rtl_digest_PBKDF2( reinterpret_cast< sal_uInt8* >( aDerivedKey.getArray() ),
                         aDerivedKey.getLength(),
@@ -186,7 +221,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
                         xEncryptionData->m_aKey.getLength(),
                         reinterpret_cast< const sal_uInt8 * > ( xEncryptionData->m_aSalt.getConstArray() ),
                         xEncryptionData->m_aSalt.getLength(),
-                        xEncryptionData->m_nIterationCount ) )
+                        *xEncryptionData->m_oPBKDFIterationCount) )
     {
         throw ZipIOException("Can not create derived key!" );
     }
@@ -236,11 +271,29 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
     *(pHeader++) = ( n_ConstCurrentVersion >> 8 ) & 0xFF;
 
     // Then the iteration Count
-    sal_Int32 nIterationCount = rData->m_nIterationCount;
+    sal_Int32 const nIterationCount = rData->m_oPBKDFIterationCount ? *rData->m_oPBKDFIterationCount : 0;
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 24 ) & 0xFF);
+
+    sal_Int32 const nArgon2t = rData->m_oArgon2Args ? ::std::get<0>(*rData->m_oArgon2Args) : 0;
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2t >> 0) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2t >> 8) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2t >> 16) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2t >> 24) & 0xFF);
+
+    sal_Int32 const nArgon2m = rData->m_oArgon2Args ? ::std::get<1>(*rData->m_oArgon2Args) : 0;
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2m >> 0) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2m >> 8) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2m >> 16) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2m >> 24) & 0xFF);
+
+    sal_Int32 const nArgon2p = rData->m_oArgon2Args ? ::std::get<2>(*rData->m_oArgon2Args) : 0;
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2p >> 0) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2p >> 8) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2p >> 16) & 0xFF);
+    *(pHeader++) = static_cast<sal_Int8>((nArgon2p >> 24) & 0xFF);
 
     // FIXME64: need to handle larger sizes
     // Then the size:
@@ -334,7 +387,38 @@ bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > const & r
             nCount |= ( pBuffer[nPos++] & 0xFF ) << 8;
             nCount |= ( pBuffer[nPos++] & 0xFF ) << 16;
             nCount |= ( pBuffer[nPos++] & 0xFF ) << 24;
-            rData->m_nIterationCount = nCount;
+            if (nCount != 0)
+            {
+                rData->m_oPBKDFIterationCount.emplace(nCount);
+            }
+            else
+            {
+                rData->m_oPBKDFIterationCount.reset();
+            }
+
+            sal_Int32 nArgon2t = pBuffer[nPos++] & 0xFF;
+            nArgon2t |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            nArgon2t |= ( pBuffer[nPos++] & 0xFF ) << 16;
+            nArgon2t |= ( pBuffer[nPos++] & 0xFF ) << 24;
+
+            sal_Int32 nArgon2m = pBuffer[nPos++] & 0xFF;
+            nArgon2m |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            nArgon2m |= ( pBuffer[nPos++] & 0xFF ) << 16;
+            nArgon2m |= ( pBuffer[nPos++] & 0xFF ) << 24;
+
+            sal_Int32 nArgon2p = pBuffer[nPos++] & 0xFF;
+            nArgon2p |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            nArgon2p |= ( pBuffer[nPos++] & 0xFF ) << 16;
+            nArgon2p |= ( pBuffer[nPos++] & 0xFF ) << 24;
+
+            if (nArgon2t != 0 && nArgon2m != 0 && nArgon2p != 0)
+            {
+                rData->m_oArgon2Args.emplace(nArgon2t, nArgon2m, nArgon2p);
+            }
+            else
+            {
+                rData->m_oArgon2Args.reset();
+            }
 
             rSize  =   pBuffer[nPos++] & 0xFF;
             rSize |= ( pBuffer[nPos++] & 0xFF ) << 8;

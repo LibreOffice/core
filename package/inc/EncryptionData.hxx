@@ -23,6 +23,7 @@
 #include <cppuhelper/weak.hxx>
 
 #include <optional>
+#include <tuple>
 
 class BaseEncryptionData : public cppu::OWeakObject
 {
@@ -30,17 +31,20 @@ public:
     css::uno::Sequence< sal_Int8 > m_aSalt;
     css::uno::Sequence< sal_Int8 > m_aInitVector;
     css::uno::Sequence< sal_Int8 > m_aDigest;
-    sal_Int32 m_nIterationCount;
+    ::std::optional<sal_Int32> m_oPBKDFIterationCount;
+    ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> m_oArgon2Args;
 
     BaseEncryptionData()
-    : m_nIterationCount ( 0 ){}
+    {
+    }
 
     BaseEncryptionData( const BaseEncryptionData& aData )
     : cppu::OWeakObject()
     , m_aSalt( aData.m_aSalt )
     , m_aInitVector( aData.m_aInitVector )
     , m_aDigest( aData.m_aDigest )
-    , m_nIterationCount( aData.m_nIterationCount )
+    , m_oPBKDFIterationCount(aData.m_oPBKDFIterationCount)
+    , m_oArgon2Args(aData.m_oArgon2Args)
     {}
 };
 

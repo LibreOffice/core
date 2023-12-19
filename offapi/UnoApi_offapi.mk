@@ -4276,6 +4276,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml/crypto,\
 	CipherID \
 	DigestID \
+	KDFID \
 	SecurityOperationStatus \
 	XCertificateCreator \
 	XCipherContext \

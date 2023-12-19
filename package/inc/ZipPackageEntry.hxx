@@ -29,6 +29,8 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>
+#include <optional>
+#include <tuple>
 
 typedef void* rtlRandomPool;
 class ZipOutputStream;
@@ -66,7 +68,8 @@ public:
                             std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
                             ZipOutputStream & rZipOut,
                             const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
-                            sal_Int32 nPBKDF2IterationCount,
+                            ::std::optional<sal_Int32> oPBKDF2IterationCount,
+                            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args,
                             const rtlRandomPool &rRandomPool ) = 0;
 
     void clearParent()

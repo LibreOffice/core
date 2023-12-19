@@ -31,6 +31,7 @@ const sal_Int32 n_ConstDigestLength = 1024;
 const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 
 // the constants related to the manifest.xml entries
+// these primarily exist so that ManifestImport can directly write into Sequence
 #define PKG_MNFST_FULLPATH 0 //FullPath (Put full-path property first for MBA)
 #define PKG_MNFST_VERSION 1 //Version
 #define PKG_MNFST_MEDIATYPE 2 //MediaType
@@ -44,9 +45,11 @@ const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 #define PKG_MNFST_STARTALG 9 //StartKeyAlgorithm
 #define PKG_MNFST_DIGESTALG 10 //DigestAlgorithm
 #define PKG_MNFST_DERKEYSIZE 11 //DerivedKeySize
+#define PKG_MNFST_KDF 12 // KeyDerivationFunction
+#define PKG_MNFST_ARGON2ARGS 13 // Argon2 arguments
 
 #define PKG_SIZE_NOENCR_MNFST 3
-#define PKG_SIZE_ENCR_MNFST 12
+#define PKG_SIZE_ENCR_MNFST 14 // max size
 
 // the properties related constants
 inline constexpr OUString ENCRYPTION_KEY_PROPERTY = u"EncryptionKey"_ustr;

@@ -110,6 +110,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
      $oslibs \
+     $WORKDIR/UnpackedTarball/argon2/libargon2.a \
      $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
      $WORKDIR/UnpackedTarball/liblangtag/liblangtag/.libs/*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \

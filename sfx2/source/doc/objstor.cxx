@@ -58,6 +58,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/xml/crypto/KDFID.hpp>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -336,7 +337,8 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     {
         { "StartKeyGenerationAlgorithm", css::uno::Any(xml::crypto::DigestID::SHA1) },
         { "EncryptionAlgorithm", css::uno::Any(xml::crypto::CipherID::BLOWFISH_CFB_8) },
-        { "ChecksumAlgorithm", css::uno::Any(xml::crypto::DigestID::SHA1_1K) }
+        { "ChecksumAlgorithm", css::uno::Any(xml::crypto::DigestID::SHA1_1K) },
+        { "KeyDerivationFunction", css::uno::Any(xml::crypto::KDFID::PBKDF2) },
     };
 
     if (nDefVersion >= SvtSaveOptions::ODFSVER_012)
@@ -367,6 +369,10 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         {
             pEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_GCM_W3C;
             pEncryptionAlgs[2].Value.clear();
+            if (!getenv("LO_ARGON2_DISABLE"))
+            {
+                pEncryptionAlgs[3].Value <<= xml::crypto::KDFID::Argon2id;
+            }
         }
         else
         {

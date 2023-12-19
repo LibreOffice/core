@@ -25,7 +25,10 @@
 
    Header signature  4 bytes
    Version number    2 bytes
-   Iteration count   4 bytes
+   PBKDF2 Iteration count   4 bytes
+   Argon2 t_cost     4 bytes
+   Argon2 m_cost     4 bytes
+   Argon2 lanes      4 bytes
    Size              4 bytes
    EncAlgorithm      4 bytes
    DigestAlgorithm   4 bytes
@@ -43,8 +46,8 @@
 */
 const sal_uInt32 n_ConstHeader = 0x05024d4dL; // "MM\002\005"
 const sal_Int32 n_ConstHeaderSize
-    = 38; // + salt length + iv length + digest length + mediatype length
-const sal_Int16 n_ConstCurrentVersion = 1;
+    = 50; // + salt length + iv length + digest length + mediatype length
+const sal_Int16 n_ConstCurrentVersion = 2;
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

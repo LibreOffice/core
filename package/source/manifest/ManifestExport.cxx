@@ -20,6 +20,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <com/sun/star/xml/crypto/KDFID.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -317,6 +318,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         OUString fullPath;
         OUString aString;
         const uno::Any *pVector = nullptr, *pSalt = nullptr, *pIterationCount = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
+        uno::Any const* pKDF = nullptr;
+        uno::Any const* pArgon2Args = nullptr;
         for (const beans::PropertyValue& rValue : rSequence)
         {
             if (rValue.Name == sMediaTypeProperty )
@@ -358,6 +361,11 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 pStartKeyAlg = &rValue.Value;
             else if (rValue.Name == sDerivedKeySizeProperty )
                 pDerivedKeySize = &rValue.Value;
+            else if (rValue.Name == "KeyDerivationFunction") {
+                pKDF = &rValue.Value;
+            } else if (rValue.Name == "Argon2Args") {
+                pArgon2Args = &rValue.Value;
+            }
         }
         assert(!fullPath.isEmpty());
         if (isWholesomeEncryption)
@@ -367,7 +375,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( ELEMENT_FILE_ENTRY , pAttrList);
-        if (pVector && pSalt && pIterationCount && pEncryptAlg && pStartKeyAlg && pDerivedKeySize)
+        if (pVector && pEncryptAlg && pDerivedKeySize && pKDF
+            && ((pSalt && pStartKeyAlg && (pIterationCount || pArgon2Args))
+                || pKeyInfoProperty))
         {
             // ==== Encryption Data
             rtl::Reference<::comphelper::AttributeList> pNewAttrList = new ::comphelper::AttributeList;
@@ -487,24 +497,41 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
             if (pKeyInfoProperty)
             {
+                assert(pKDF->get<sal_Int32>() == xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P);
                 pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
                                            sPGP_Name);
             }
             else
             {
-                pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
-                                           sPBKDF2_Name);
+                if (pKDF->get<sal_Int32>() == xml::crypto::KDFID::Argon2id)
+                {
+                    pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
+                                               ARGON2ID_URL_LO);
+
+                    uno::Sequence<sal_Int32> args;
+                    *pArgon2Args >>= args;
+                    assert(args.getLength() == 3);
+                    pNewAttrList->AddAttribute(ATTRIBUTE_ARGON2_T_LO, OUString::number(args[0]));
+                    pNewAttrList->AddAttribute(ATTRIBUTE_ARGON2_M_LO, OUString::number(args[1]));
+                    pNewAttrList->AddAttribute(ATTRIBUTE_ARGON2_P_LO, OUString::number(args[2]));
+                }
+                else
+                {
+                    assert(pKDF->get<sal_Int32>() == xml::crypto::KDFID::PBKDF2);
+                    pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
+                                               sPBKDF2_Name);
+
+                    sal_Int32 nCount = 0;
+                    *pIterationCount >>= nCount;
+                    aBuffer.append(nCount);
+                    pNewAttrList->AddAttribute(ATTRIBUTE_ITERATION_COUNT, aBuffer.makeStringAndClear());
+                }
 
                 if (bStoreStartKeyGeneration)
                 {
                     aBuffer.append(nDerivedKeySize);
                     pNewAttrList->AddAttribute ( ATTRIBUTE_KEY_SIZE, aBuffer.makeStringAndClear() );
                 }
-
-                sal_Int32 nCount = 0;
-                *pIterationCount >>= nCount;
-                aBuffer.append(nCount);
-                pNewAttrList->AddAttribute ( ATTRIBUTE_ITERATION_COUNT, aBuffer.makeStringAndClear() );
 
                 *pSalt >>= aSequence;
                 ::comphelper::Base64::encode(aBuffer, aSequence);

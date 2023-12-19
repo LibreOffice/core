@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <com/sun/star/xml/crypto/KDFID.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/base64.hxx>
 #include <comphelper/sequence.hxx>
@@ -189,7 +190,6 @@ void ManifestImport::doAlgorithm(StringHashMap &rConvertedAttribs)
         aSequence[PKG_MNFST_ENCALG].Name = gsEncryptionAlgProperty;
         aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::AES_GCM_W3C;
         SAL_INFO_IF(nDerivedKeySize != 0 && nDerivedKeySize != 32, "package.manifest", "Unexpected derived key length!");
-        SAL_WARN_IF(nDerivedKeySize != 0 && nDerivedKeySize != 32, "package.manifest", "Unexpected derived key length!");
         nDerivedKeySize = 32;
     } else if (aString == AESGCM192_URL) {
         aSequence[PKG_MNFST_ENCALG].Name = gsEncryptionAlgProperty;
@@ -234,16 +234,45 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
         return;
 
     OUString aString = rConvertedAttribs[ATTRIBUTE_KEY_DERIVATION_NAME];
-    if ( aString == PBKDF2_NAME || aString == PBKDF2_URL ) {
+    if (aString == PBKDF2_NAME || aString == PBKDF2_URL
+        || aString == ARGON2ID_URL || aString == ARGON2ID_URL_LO)
+    {
+        aSequence[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+        if (aString == ARGON2ID_URL || aString == ARGON2ID_URL_LO)
+        {
+            aSequence[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::Argon2id;
+
+            aString = rConvertedAttribs[ATTRIBUTE_ARGON2_T_LO];
+            sal_Int32 const t(aString.toInt32());
+            aString = rConvertedAttribs[ATTRIBUTE_ARGON2_M_LO];
+            sal_Int32 const m(aString.toInt32());
+            aString = rConvertedAttribs[ATTRIBUTE_ARGON2_P_LO];
+            sal_Int32 const p(aString.toInt32());
+            if (0 < t && 0 < m && 0 < p)
+            {
+                aSequence[PKG_MNFST_ARGON2ARGS].Name = "Argon2Args";
+                aSequence[PKG_MNFST_ARGON2ARGS].Value <<= uno::Sequence{t,m,p};
+            }
+            else
+            {
+                SAL_INFO("package.manifest", "invalid argon2 arguments");
+                bIgnoreEncryptData = true;
+            }
+        }
+        else
+        {
+            aSequence[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::PBKDF2;
+
+            aString = rConvertedAttribs[ATTRIBUTE_ITERATION_COUNT];
+            aSequence[PKG_MNFST_ITERATION].Name = gsIterationCountProperty;
+            aSequence[PKG_MNFST_ITERATION].Value <<= aString.toInt32();
+        }
+
         aString = rConvertedAttribs[ATTRIBUTE_SALT];
         uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aString);
         aSequence[PKG_MNFST_SALT].Name = gsSaltProperty;
         aSequence[PKG_MNFST_SALT].Value <<= aDecodeBuffer;
-
-        aString = rConvertedAttribs[ATTRIBUTE_ITERATION_COUNT];
-        aSequence[PKG_MNFST_ITERATION].Name = gsIterationCountProperty;
-        aSequence[PKG_MNFST_ITERATION].Value <<= aString.toInt32();
 
         aString = rConvertedAttribs[ATTRIBUTE_KEY_SIZE];
         if ( aString.getLength() ) {
@@ -258,8 +287,12 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
         aSequence[PKG_MNFST_DERKEYSIZE].Name = gsDerivedKeySizeProperty;
         aSequence[PKG_MNFST_DERKEYSIZE].Value <<= nDerivedKeySize;
     } else if ( bPgpEncryption ) {
-        if ( aString != "PGP" )
+        if (aString == "PGP") {
+            aSequence[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+            aSequence[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P;
+        } else {
             bIgnoreEncryptData = true;
+        }
     } else
         bIgnoreEncryptData = true;
 }
