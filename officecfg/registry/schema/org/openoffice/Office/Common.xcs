@@ -2532,6 +2532,14 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="DisablePythonRuntime" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether or not to disable Python Runtime Environment.
+            Extensions and macros that utilize Python will not function when disabled.
+            </desc>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="CheckDocumentEvents" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Warn on load when a document binds an event to a macro</desc>
