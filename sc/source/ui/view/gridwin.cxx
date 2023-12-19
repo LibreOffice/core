@@ -5090,6 +5090,7 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
     if ( comphelper::LibreOfficeKit::isActive() )
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+
         if (nX1 < 0)
             nX1 = pViewShell->GetLOKStartHeaderCol() + 1;
         if (nY1 < 0)
@@ -5109,6 +5110,11 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
         nY2 = nY1 + mrViewData.VisibleCellsY( eVWhich );
     }
 
+    UpdateFormulaRange(nX1, nY1, nX2, nY2);
+}
+
+void ScGridWindow::UpdateFormulaRange(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
+{
     if (nX2 < nX1) nX2 = nX1;
     if (nY2 < nY1) nY2 = nY1;
 
