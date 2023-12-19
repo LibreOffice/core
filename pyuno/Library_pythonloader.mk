@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,pythonloader))
 
+$(eval $(call gb_Library_use_custom_headers,pythonloader,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_set_componentfile,pythonloader,pyuno/source/loader/pythonloader,pyuno))
 
 $(eval $(call gb_Library_set_include,pythonloader,\
@@ -22,6 +26,7 @@ $(eval $(call gb_Library_use_api,pythonloader,\
 ))
 
 $(eval $(call gb_Library_use_libraries,pythonloader,\
+	comphelper \
     cppu \
     cppuhelper \
     pyuno \
