@@ -153,10 +153,17 @@ void SwNumRule::RemoveTextNode( SwTextNode& rTextNode )
 {
     tTextNodeList::iterator aIter =
         std::find( maTextNodeList.begin(), maTextNodeList.end(), &rTextNode );
+    if ( aIter == maTextNodeList.end() )
+        return;
 
-    if ( aIter != maTextNodeList.end() )
+    maTextNodeList.erase( aIter );
+
+    // Just in case we remove a node after we have marked the rule invalid, but before we have validated the tree
+    if (mbInvalidRuleFlag)
     {
-        maTextNodeList.erase( aIter );
+        SwList* pList = rTextNode.GetDoc().getIDocumentListsAccess().getListByName( rTextNode.GetListId() );
+        if (pList)
+            pList->InvalidateListTree();
     }
 }
 
@@ -1051,23 +1058,6 @@ void SwNumRule::SetInvalidRule(bool bFlag)
     if (mbInvalidRuleFlag == bFlag)
         return;
 
-    if (bFlag)
-    {
-        o3tl::sorted_vector< SwList* > aLists;
-        for ( const SwTextNode* pTextNode : maTextNodeList )
-        {
-            // #i111681# - applying patch from cmc
-            SwList* pList = pTextNode->GetDoc().getIDocumentListsAccess().getListByName( pTextNode->GetListId() );
-            OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue.");
-            if ( pList )
-            {
-                aLists.insert( pList );
-            }
-        }
-        for ( auto aList : aLists )
-            aList->InvalidateListTree();
-    }
-
     mbInvalidRuleFlag = bFlag;
 }
 
@@ -1168,8 +1158,13 @@ void SwNumRule::Validate(const SwDoc& rDoc)
     o3tl::sorted_vector< SwList* > aLists;
     for ( const SwTextNode* pTextNode : maTextNodeList )
     {
-        aLists.insert( pTextNode->GetDoc().getIDocumentListsAccess().getListByName( pTextNode->GetListId() ) );
+        SwList* pList = pTextNode->GetDoc().getIDocumentListsAccess().getListByName( pTextNode->GetListId() );
+        aLists.insert( pList );
     }
+
+    for ( auto aList : aLists )
+        aList->InvalidateListTree();
+
     for ( auto aList : aLists )
         aList->ValidateListTree(rDoc);
 
