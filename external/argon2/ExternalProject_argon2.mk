@@ -31,7 +31,7 @@ $(call gb_ExternalProject_get_state_target,argon2,build):
 			$(gb_MSBUILD_CONFIG_AND_PLATFORM) \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
-		$(if $(CROSS_COMPILING),,&& time vs2015/build/Argon2OptTestCI.exe) \
+		$(if $(CROSS_COMPILING),,&& vs2015/build/Argon2OptTestCI.exe) \
 	)
 	$(call gb_Trace_EndRange,argon2,EXTERNAL)
 
@@ -42,10 +42,10 @@ else # $(COM)
 $(call gb_ExternalProject_get_state_target,argon2,build):
 	$(call gb_Trace_StartRange,argon2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		CFLAGS="$(CFLAGS) $(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden)" \
+		CFLAGS="$(CFLAGS) $(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden) -fPIC" \
 		MAKEFLAGS= $(MAKE) \
 			OPTTARGET=$(if $(filter X86_64,$(CPUNAME)),x86-64,forcefail) \
-		$(if $(CROSS_COMPILING),,&& time $(MAKE) test) \
+		$(if $(CROSS_COMPILING),,&& $(MAKE) test) \
 	)
 	$(call gb_Trace_EndRange,argon2,EXTERNAL)
 
