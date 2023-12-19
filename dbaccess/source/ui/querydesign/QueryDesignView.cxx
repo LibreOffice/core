@@ -1136,8 +1136,7 @@ namespace
             if ( !aGroupByStr.isEmpty() )
             {
                 aGroupByStr = aGroupByStr.replaceAt(aGroupByStr.getLength()-1,1, u" " );
-                OUString aGroupByStr2 = " GROUP BY " + aGroupByStr;
-                aGroupByStr = aGroupByStr2;
+                aGroupByStr = " GROUP BY " + aGroupByStr;
             }
         }
         catch(SQLException&)

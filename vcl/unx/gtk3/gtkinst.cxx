@@ -7057,7 +7057,8 @@ public:
         }
     }
 
-    virtual bool runAsync(std::shared_ptr<weld::DialogController> rDialogController, const std::function<void(sal_Int32)>& func) override
+    virtual bool runAsync(const std::shared_ptr<weld::DialogController>& rDialogController,
+                          const std::function<void(sal_Int32)>& func) override
     {
         assert(!m_nResponseSignalId && !m_nCancelSignalId && !m_nSignalDeleteId);
 

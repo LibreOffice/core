@@ -603,7 +603,7 @@ class VCL_DLLPUBLIC Dialog : virtual public Window
 {
 private:
     friend DialogController;
-    virtual bool runAsync(std::shared_ptr<DialogController>,
+    virtual bool runAsync(std::shared_ptr<DialogController> const& rxOwner,
                           const std::function<void(sal_Int32)>& func)
         = 0;
 

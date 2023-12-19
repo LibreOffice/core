@@ -4113,9 +4113,8 @@ void RTL_Impl_CreateUnoValue( SbxArray& rPar )
         bool bSuccess = implGetTypeByName( aValTypeName, aType );
         if( bSuccess )
         {
-            Any aTypeAny( aType );
             SbxVariableRef refVar = rPar.Get(0);
-            SbxObjectRef xUnoAnyObject = new SbUnoAnyObject( aTypeAny );
+            SbxObjectRef xUnoAnyObject = new SbUnoAnyObject(Any(aType));
             refVar->PutObject( xUnoAnyObject.get() );
         }
         return;

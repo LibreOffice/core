@@ -1771,11 +1771,11 @@ SalInstanceDialog::SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBui
     }
 }
 
-bool SalInstanceDialog::runAsync(std::shared_ptr<weld::DialogController> aOwner,
+bool SalInstanceDialog::runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                                  const std::function<void(sal_Int32)>& rEndDialogFn)
 {
     VclAbstractDialog::AsyncContext aCtx;
-    aCtx.mxOwnerDialogController = aOwner;
+    aCtx.mxOwnerDialogController = rxOwner;
     aCtx.maEndDialogFn = rEndDialogFn;
     VclButtonBox* pActionArea = m_xDialog->get_action_area();
     if (pActionArea)

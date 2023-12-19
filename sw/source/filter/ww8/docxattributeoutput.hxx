@@ -286,21 +286,21 @@ public:
     /// Output style.
     virtual void ParagraphStyle( sal_uInt16 nStyle ) override;
 
-    virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    void TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
-    virtual void TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner ) override;
-    virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
+    virtual void TableInfoCell( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableInfoRow( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableDefinition( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableDefaultBorders( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    void TableDefaultCellMargins( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner );
+    virtual void TableBackgrounds( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableRowRedline( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableCellRedline( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableHeight( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableCanSplit( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableBidi( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableVerticalCell( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableNodeInfoInner( const ww8::WW8TableNodeInfoInner::Pointer_t& pNodeInfoInner ) override;
+    virtual void TableOrientation( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
+    virtual void TableSpacing( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner ) override;
     virtual void TableRowEnd( sal_uInt32 nDepth ) override;
 
     /// Start of the styles table.

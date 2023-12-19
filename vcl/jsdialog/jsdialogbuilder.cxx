@@ -1379,10 +1379,10 @@ int JSDialog::run()
     return ret;
 }
 
-bool JSDialog::runAsync(std::shared_ptr<weld::DialogController> aOwner,
+bool JSDialog::runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                         const std::function<void(sal_Int32)>& rEndDialogFn)
 {
-    bool ret = SalInstanceDialog::runAsync(aOwner, rEndDialogFn);
+    bool ret = SalInstanceDialog::runAsync(rxOwner, rEndDialogFn);
     sendFullUpdate();
     return ret;
 }
@@ -1402,10 +1402,10 @@ int JSAssistant::run()
     return ret;
 }
 
-bool JSAssistant::runAsync(std::shared_ptr<weld::DialogController> aOwner,
+bool JSAssistant::runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                            const std::function<void(sal_Int32)>& rEndDialogFn)
 {
-    bool ret = SalInstanceDialog::runAsync(aOwner, rEndDialogFn);
+    bool ret = SalInstanceDialog::runAsync(rxOwner, rEndDialogFn);
     sendFullUpdate();
     return ret;
 }
@@ -1855,10 +1855,10 @@ int JSMessageDialog::run()
     return bRet;
 }
 
-bool JSMessageDialog::runAsync(std::shared_ptr<weld::DialogController> aOwner,
+bool JSMessageDialog::runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                                const std::function<void(sal_Int32)>& rEndDialogFn)
 {
-    bool bRet = SalInstanceMessageDialog::runAsync(aOwner, rEndDialogFn);
+    bool bRet = SalInstanceMessageDialog::runAsync(rxOwner, rEndDialogFn);
 
     RememberMessageDialog();
     sendFullUpdate();

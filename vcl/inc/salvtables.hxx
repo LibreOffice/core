@@ -527,7 +527,7 @@ private:
 public:
     SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                           const std::function<void(sal_Int32)>& rEndDialogFn) override;
 
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,

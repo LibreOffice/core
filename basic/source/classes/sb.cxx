@@ -1586,9 +1586,8 @@ void StarBASIC::MakeErrorText( ErrCode nId, std::u16string_view aMsg )
     }
     else if( nOldID != 0 )
     {
-        OUString aStdMsg = "Error " + OUString::number(nOldID) +
-                           ": No error text available!";
-        GetSbData()->aErrMsg = aStdMsg;
+        GetSbData()->aErrMsg = "Error " + OUString::number(nOldID) +
+                               ": No error text available!";
     }
     else
     {

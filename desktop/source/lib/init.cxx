@@ -3257,7 +3257,7 @@ public:
     virtual void SAL_CALL flush() override;
     virtual void SAL_CALL close() override;
     virtual OUString SAL_CALL getDescription() override;
-    void setBridge(Reference<XBridge>);
+    void setBridge(const Reference<XBridge>&);
     void* getContext();
     inline static int g_connectionCount = 0;
 
@@ -3316,7 +3316,7 @@ void FunctionBasedURPConnection::close()
 
 OUString FunctionBasedURPConnection::getDescription() { return ""; }
 
-void FunctionBasedURPConnection::setBridge(Reference<XBridge> xBridge) { m_URPBridge = xBridge; }
+void FunctionBasedURPConnection::setBridge(const Reference<XBridge>& xBridge) { m_URPBridge = xBridge; }
 }
 
 static void*

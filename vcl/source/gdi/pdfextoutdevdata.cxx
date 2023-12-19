@@ -829,8 +829,7 @@ void PDFExtOutDevData::SetAlternateText( const OUString& rText )
 
 void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType )
 {
-    std::shared_ptr< PDFWriter::AnyWidget > pClone( rControlType.Clone() );
-    mpPageSyncData->PushAction( mrOutDev, vcl::CreateControl{ pClone } );
+    mpPageSyncData->PushAction(mrOutDev, vcl::CreateControl{ rControlType.Clone() });
 }
 
 void PDFExtOutDevData::BeginGroup()

@@ -1984,7 +1984,7 @@ void WW8Export::RestoreData()
     MSWordExportBase::RestoreData();
 }
 
-void WW8AttributeOutput::TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableInfoCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     sal_uInt32 nDepth = pTableTextNodeInfoInner->getDepth();
 
@@ -2004,7 +2004,7 @@ void WW8AttributeOutput::TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pT
     }
 }
 
-void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableInfoRow(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     sal_uInt32 nDepth = pTableTextNodeInfoInner->getDepth();
 
@@ -2102,7 +2102,7 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
     return nFlags;
 }
 
-void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableVerticalCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine * pTabLine = pTabBox->GetUpper();
@@ -2138,7 +2138,7 @@ void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
     }
 }
 
-void WW8AttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableCanSplit(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner )
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine * pTabLine = pTabBox->GetUpper();
@@ -2158,7 +2158,7 @@ void WW8AttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_rWW8Export.m_pO->push_back( nCantSplit );
 }
 
-void WW8AttributeOutput::TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableBidi(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
     const SwFrameFormat * pFrameFormat = pTable->GetFrameFormat();
@@ -2170,15 +2170,15 @@ void WW8AttributeOutput::TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTable
     }
 }
 
-void WW8AttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
+void WW8AttributeOutput::TableRowRedline(const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
 }
 
-void WW8AttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
+void WW8AttributeOutput::TableCellRedline(const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
 }
 
-void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableHeight(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine * pTabLine = pTabBox->GetUpper();
@@ -2203,7 +2203,7 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
 
 }
 
-void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableOrientation(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
 
@@ -2265,7 +2265,7 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
     }
 }
 
-void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+void WW8AttributeOutput::TableSpacing(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
     const SwTableFormat* pTableFormat = pTable->GetFrameFormat();
@@ -2418,7 +2418,7 @@ void WW8AttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
     }
 }
 
-void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableDefinition(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
 
@@ -2640,7 +2640,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * p
     rRelBoxSize = bRelBoxSize;
 }
 
-void WW8AttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableDefaultBorders( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner )
 {
     // This function name is misleading because it is not a table default, but a row default,
     // and it also only sets default cell margins (aka border padding).
@@ -2754,7 +2754,7 @@ void WW8AttributeOutput::TableCellBorders(
     }
 }
 
-void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void WW8AttributeOutput::TableBackgrounds(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable * pTab = pTableTextNodeInfoInner->getTable();
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
@@ -4412,7 +4412,7 @@ void WW8Export::WriteHyperlinkData( const sw::mark::IFieldmark& /*rFieldmark*/ )
     //@TODO implement me !!!
 }
 
-void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner )
+void WW8AttributeOutput::TableNodeInfoInner(const ww8::WW8TableNodeInfoInner::Pointer_t& pNodeInfoInner)
 {
     SVBT16 nStyle;
     ShortToSVBT16( m_rWW8Export.m_nStyleBeforeFly, nStyle );

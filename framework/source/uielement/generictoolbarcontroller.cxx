@@ -155,9 +155,6 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
 
     css::util::URL aTargetURL;
 
-    // Add key modifier to argument list
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier) };
-
     // handle also command aliases
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(m_aCommandURL,
         vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
@@ -171,7 +168,9 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
     ExecuteInfo* pExecuteInfo = new ExecuteInfo;
     pExecuteInfo->xDispatch     = xDispatch;
     pExecuteInfo->aTargetURL    = aTargetURL;
-    pExecuteInfo->aArgs         = aArgs;
+    // Add key modifier to argument list
+    pExecuteInfo->aArgs = { comphelper::makePropertyValue("KeyModifier", KeyModifier) };
+
     Application::PostUserEvent( LINK(nullptr, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
 }
 

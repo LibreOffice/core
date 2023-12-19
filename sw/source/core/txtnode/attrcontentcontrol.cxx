@@ -661,11 +661,10 @@ void SwContentControlListItem::ItemsToAny(const std::vector<SwContentControlList
     for (size_t i = 0; i < rItems.size(); ++i)
     {
         const SwContentControlListItem& rItem = rItems[i];
-        uno::Sequence<beans::PropertyValue> aItem = {
+        pRet[i] = {
             comphelper::makePropertyValue("DisplayText", rItem.m_aDisplayText),
             comphelper::makePropertyValue("Value", rItem.m_aValue),
         };
-        pRet[i] = aItem;
     }
 
     rVal <<= aRet;

@@ -510,7 +510,7 @@ public:
     virtual void response(int response) override;
     virtual weld::Button* weld_widget_for_response(int response) override;
     virtual int run() override;
-    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                           const std::function<void(sal_Int32)>& rEndDialogFn) override;
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
                           const std::function<void(sal_Int32)>& func) override;
@@ -527,7 +527,7 @@ public:
     virtual void response(int response) override;
     virtual weld::Button* weld_widget_for_response(int response) override;
     virtual int run() override;
-    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                           const std::function<void(sal_Int32)>& rEndDialogFn) override;
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
                           const std::function<void(sal_Int32)>& func) override;
@@ -696,7 +696,7 @@ public:
 
     virtual int run() override;
     // TODO: move to dialog class so we will not send json when built but on run
-    bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
+    bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                   const std::function<void(sal_Int32)>& rEndDialogFn) override;
 
     bool runAsync(std::shared_ptr<Dialog> const& rxSelf,

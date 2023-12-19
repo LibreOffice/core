@@ -662,7 +662,7 @@ void RtfAttributeOutput::ParagraphStyle(sal_uInt16 nStyle)
 }
 
 void RtfAttributeOutput::TableInfoCell(
-    ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_INTBL);
     if (m_nTableDepth > 1)
@@ -673,7 +673,8 @@ void RtfAttributeOutput::TableInfoCell(
     m_bWroteCellInfo = true;
 }
 
-void RtfAttributeOutput::TableInfoRow(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfo*/)
+void RtfAttributeOutput::TableInfoRow(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfo*/)
 {
     /* noop */
 }
@@ -788,7 +789,7 @@ void RtfAttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
 }
 
 void RtfAttributeOutput::TableDefinition(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     InitTableHelper(pTableTextNodeInfoInner);
 
@@ -858,7 +859,7 @@ void RtfAttributeOutput::TableDefinition(
 }
 
 void RtfAttributeOutput::TableDefaultBorders(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     /*
      * The function name is a bit misleading: given that we write borders
@@ -905,7 +906,7 @@ void RtfAttributeOutput::TableDefaultBorders(
 }
 
 void RtfAttributeOutput::TableBackgrounds(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     const SwTableBox* pTableBox = pTableTextNodeInfoInner->getTableBox();
@@ -941,16 +942,17 @@ void RtfAttributeOutput::TableBackgrounds(
 }
 
 void RtfAttributeOutput::TableRowRedline(
-    ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
 }
 
 void RtfAttributeOutput::TableCellRedline(
-    ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
 }
 
-void RtfAttributeOutput::TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+void RtfAttributeOutput::TableHeight(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine* pTabLine = pTabBox->GetUpper();
@@ -982,7 +984,7 @@ void RtfAttributeOutput::TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTabl
 }
 
 void RtfAttributeOutput::TableCanSplit(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine* pTabLine = pTabBox->GetUpper();
@@ -994,7 +996,8 @@ void RtfAttributeOutput::TableCanSplit(
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_TRKEEP);
 }
 
-void RtfAttributeOutput::TableBidi(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+void RtfAttributeOutput::TableBidi(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     const SwFrameFormat* pFrameFormat = pTable->GetFrameFormat();
@@ -1006,7 +1009,7 @@ void RtfAttributeOutput::TableBidi(ww8::WW8TableNodeInfoInner::Pointer_t pTableT
 }
 
 void RtfAttributeOutput::TableVerticalCell(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
     SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()].get();
@@ -1046,7 +1049,8 @@ void RtfAttributeOutput::TableVerticalCell(
     }
 }
 
-void RtfAttributeOutput::TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner)
+void RtfAttributeOutput::TableNodeInfoInner(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pNodeInfoInner)
 {
     // This is called when the nested table ends in a cell, and there's no
     // paragraph behind that; so we must check for the ends of cell, rows,
@@ -1055,7 +1059,7 @@ void RtfAttributeOutput::TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_
 }
 
 void RtfAttributeOutput::TableOrientation(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     SwFrameFormat* pFormat = pTable->GetFrameFormat();
@@ -1084,7 +1088,7 @@ void RtfAttributeOutput::TableOrientation(
 }
 
 void RtfAttributeOutput::TableSpacing(
-    ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
     SAL_INFO("sw.rtf", "TODO: " << __func__);
 }

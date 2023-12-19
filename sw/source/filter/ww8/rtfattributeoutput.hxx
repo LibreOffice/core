@@ -122,22 +122,32 @@ public:
     /// Output style.
     void ParagraphStyle(sal_uInt16 nStyle) override;
 
-    void TableInfoCell(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableInfoRow(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TablePositioning(SwFrameFormat* pFlyFormat);
     void
-    TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableBackgrounds(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableRowRedline(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableCellRedline(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableCanSplit(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableBidi(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableVerticalCell(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner) override;
-    void TableOrientation(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
-    void TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner) override;
+    TableInfoCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void
+    TableInfoRow(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void
+    TableDefinition(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void TablePositioning(SwFrameFormat* pFlyFormat);
+    void TableDefaultBorders(
+        const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void
+    TableBackgrounds(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void
+    TableRowRedline(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void
+    TableCellRedline(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void TableHeight(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void
+    TableCanSplit(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void TableBidi(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void TableVerticalCell(
+        const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void TableNodeInfoInner(const ww8::WW8TableNodeInfoInner::Pointer_t& pNodeInfoInner) override;
+    void
+    TableOrientation(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
+    void
+    TableSpacing(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
     void TableRowEnd(sal_uInt32 nDepth) override;
 
     /// Start of the styles table.

@@ -46,8 +46,7 @@ FeatureParser::FeatureParser(std::u16string_view rFontName)
         }
         else
         {
-            OString sFeature = OUStringToOString(sToken, RTL_TEXTENCODING_ASCII_US);
-            FeatureSetting aFeature(sFeature);
+            FeatureSetting aFeature(OUStringToOString(sToken, RTL_TEXTENCODING_ASCII_US));
             if (aFeature.m_nTag != 0)
                 m_aFeatures.push_back(aFeature);
         }

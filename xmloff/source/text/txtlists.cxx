@@ -117,9 +117,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
         mpProcessedLists = std::make_unique<tMapForLists>();
     }
 
-    ::std::pair< OUString, OUString >
-                                aListData( sListStyleName, sContinueListId );
-    (*mpProcessedLists)[ sListId ] = aListData;
+    (*mpProcessedLists)[ sListId ] = std::make_pair(sListStyleName, sContinueListId);
 
     msLastProcessedListId = sListId;
     msListStyleOfLastProcessedList = sListStyleName;

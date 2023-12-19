@@ -163,16 +163,17 @@ void CollectFloatingTableAttributes(DocxExport& rExport, const ww8::Frame& rFram
 }
 
 void DocxAttributeOutput::TableInfoCell(
-    ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
 }
 
-void DocxAttributeOutput::TableInfoRow(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfo*/)
+void DocxAttributeOutput::TableInfoRow(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfo*/)
 {
 }
 
 void DocxAttributeOutput::TableDefinition(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     bool const bEcma = GetExport().GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
 
@@ -529,14 +530,14 @@ void DocxAttributeOutput::TableDefinition(
 }
 
 void DocxAttributeOutput::TableDefaultBorders(
-    ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
     // Table defaults should only be created IF m_aTableStyleConf contents haven't come from a table style.
     // Previously this function wrote out Cell A1 as the table default, causing problems with no benefit.
 }
 
 void DocxAttributeOutput::TableDefaultCellMargins(
-    ww8::WW8TableNodeInfoInner::Pointer_t const& pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();
@@ -547,7 +548,7 @@ void DocxAttributeOutput::TableDefaultCellMargins(
 }
 
 void DocxAttributeOutput::TableBackgrounds(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     const SwTableBox* pTableBox = pTableTextNodeInfoInner->getTableBox();
@@ -622,7 +623,7 @@ void DocxAttributeOutput::TableBackgrounds(
 }
 
 void DocxAttributeOutput::TableRowRedline(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine* pTabLine = pTabBox->GetUpper();
@@ -699,7 +700,7 @@ void DocxAttributeOutput::TableRowRedline(
 }
 
 void DocxAttributeOutput::TableCellRedline(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
 
@@ -768,7 +769,8 @@ void DocxAttributeOutput::TableCellRedline(
     }
 }
 
-void DocxAttributeOutput::TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+void DocxAttributeOutput::TableHeight(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine* pTabLine = pTabBox->GetUpper();
@@ -799,7 +801,7 @@ void DocxAttributeOutput::TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTab
 }
 
 void DocxAttributeOutput::TableCanSplit(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine* pTabLine = pTabBox->GetUpper();
@@ -812,7 +814,8 @@ void DocxAttributeOutput::TableCanSplit(
         m_pSerializer->singleElementNS(XML_w, XML_cantSplit, FSNS(XML_w, XML_val), "true");
 }
 
-void DocxAttributeOutput::TableBidi(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+void DocxAttributeOutput::TableBidi(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     const SwFrameFormat* pFrameFormat = pTable->GetFrameFormat();
@@ -824,7 +827,7 @@ void DocxAttributeOutput::TableBidi(ww8::WW8TableNodeInfoInner::Pointer_t pTable
 }
 
 void DocxAttributeOutput::TableVerticalCell(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();
@@ -863,7 +866,8 @@ void DocxAttributeOutput::TableVerticalCell(
     }
 }
 
-void DocxAttributeOutput::TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner)
+void DocxAttributeOutput::TableNodeInfoInner(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pNodeInfoInner)
 {
     // This is called when the nested table ends in a cell, and there's no
     // paragraph behind that; so we must check for the ends of cell, rows,
@@ -873,14 +877,14 @@ void DocxAttributeOutput::TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer
 }
 
 void DocxAttributeOutput::TableOrientation(
-    ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
     SAL_INFO("sw.ww8", "TODO: DocxAttributeOutput::TableOrientation( "
                        "ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )");
 }
 
 void DocxAttributeOutput::TableSpacing(
-    ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+    const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
     SAL_INFO("sw.ww8", "TODO: DocxAttributeOutput::TableSpacing( "
                        "ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )");

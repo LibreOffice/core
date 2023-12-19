@@ -1063,9 +1063,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
                 {
                     xProp->setPropertyValue("HasSubTitle", uno::Any(true) );
                 }
-                uno::Reference< drawing::XShape > xTitleShape = xDoc->getSubTitle();
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
-                                                   maSubTitle, xTitleShape );
+                                                   maSubTitle, xDoc->getSubTitle() );
             }
             break;
         case XML_ELEMENT(CHART, XML_LEGEND):

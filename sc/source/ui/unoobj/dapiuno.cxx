@@ -2484,8 +2484,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         }
         OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
-        OUString aGroupName = pGroupDimension->CreateGroupName( ScResId(STR_PIVOT_GROUP) );
-        ScDPSaveGroupItem aGroup( aGroupName );
+        ScDPSaveGroupItem aGroup(pGroupDimension->CreateGroupName(ScResId(STR_PIVOT_GROUP)));
         for (const OUString& aEntryName : rItems)
         {
             if ( pBaseGroupDim )

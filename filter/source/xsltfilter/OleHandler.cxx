@@ -70,10 +70,9 @@ namespace XSLT
 
         //create a com.sun.star.embed.OLESimpleStorage from the temp stream
         Sequence<Any> args{ Any(xSeek) };
-        Reference<XNameContainer> cont(
+        m_storage.set(
              Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW)
                  ->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", args), UNO_QUERY);
-        m_storage = cont;
     }
 
     OString

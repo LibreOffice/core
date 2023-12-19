@@ -1151,12 +1151,11 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
     for (const std::unique_ptr<SfxMedium>& pMed : aMedList)
     {
         // tdf#127978 - don't URL encode filename for navigator's tooltip
-        OUString sFileName
+        pFileNames[nPos++]
             = pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)
             + OUStringChar(sfx2::cTokenSeparator)
             + pMed->GetFilter()->GetFilterName()
             + OUStringChar(sfx2::cTokenSeparator);
-        pFileNames[nPos++] = sFileName;
     }
     InsertRegion( &*m_oDocContent, aFileNames );
     m_oDocContent.reset();

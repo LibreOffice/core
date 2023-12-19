@@ -104,22 +104,19 @@ namespace logging
                 ::sal::static_int_cast< sal_Int16 >( aDateTime.NanoSeconds / 10000000 ) );
             OUString sTime = OUString::createFromAscii( buffer );
 
-            OUString sDateTime = sDate + "." + sTime;
-
             oslProcessIdentifier aProcessId = 0;
             oslProcessInfo info;
             info.Size = sizeof (oslProcessInfo);
             if ( osl_getProcessInfo ( nullptr, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
                 aProcessId = info.Ident;
-            OUString aPID = OUString::number( aProcessId );
 
             Variable const aVariables[] =
             {
                 {std::u16string_view(u"$(loggername)"), sLoggerName},
                 {std::u16string_view(u"$(date)"), sDate},
                 {std::u16string_view(u"$(time)"), sTime},
-                {std::u16string_view(u"$(datetime)"), sDateTime},
-                {std::u16string_view(u"$(pid)"), aPID}
+                {std::u16string_view(u"$(datetime)"), sDate + "." + sTime },
+                {std::u16string_view(u"$(pid)"), OUString::number(aProcessId)}
             };
 
             for (Variable const & aVariable : aVariables)

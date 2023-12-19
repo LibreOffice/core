@@ -515,8 +515,7 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
             {
                 // insert 'empty' action reference if there is no action associated with
                 // the current smart tag type:
-                Reference< smarttags::XSmartTagAction > xActionLib;
-                ActionReference aActionRef( xActionLib, 0 );
+                ActionReference aActionRef(Reference<smarttags::XSmartTagAction>(), 0);
 
                 // add recognizer/action pair to map
                 maSmartTagMap.insert( SmartTagMapElement( aSmartTagName, aActionRef ));

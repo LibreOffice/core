@@ -65,8 +65,7 @@ AccessibleGridControlTable::getAccessibleChild( sal_Int64 nChildIndex )
     }
     if(!m_aCellVector[nChildIndex].is())
     {
-        rtl::Reference<AccessibleGridControlTableCell> pCell = new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount());
-        m_aCellVector[nChildIndex] = pCell;
+        m_aCellVector[nChildIndex].set(new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount()));
     }
     return m_aCellVector[nChildIndex];
 }

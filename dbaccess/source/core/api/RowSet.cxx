@@ -1650,8 +1650,7 @@ void ORowSet::impl_ensureStatement_throw()
 
         // append information about what we were actually going to execute
         OUString sInfo(m_sErrorString.replaceFirst("$command$", sCommandToExecute));
-        css::uno::Any aAppend = SQLExceptionInfo::createException(SQLExceptionInfo::TYPE::SQLContext, sInfo, OUString(), 0);
-        pLastExceptionInChain->NextException = aAppend;
+        pLastExceptionInChain->NextException = SQLExceptionInfo::createException(SQLExceptionInfo::TYPE::SQLContext, sInfo, OUString(), 0);
 
         // propagate
         throw;
