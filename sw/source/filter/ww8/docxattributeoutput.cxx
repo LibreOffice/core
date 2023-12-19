@@ -7429,11 +7429,10 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
             xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
         }
         xOutStream->closeOutput();
-        OString relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
+        EmbeddedFontRef ref;
+        ref.relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
             oox::getRelationship(Relationship::FONT),
             Concat2View("fonts/font" + OUString::number( m_nextFontId ) + ".odttf") ), RTL_TEXTENCODING_UTF8 );
-        EmbeddedFontRef ref;
-        ref.relId = relId;
         ref.fontKey = fontKeyStr;
         m_FontFilesMap[ fontUrl ] = ref;
         ++m_nextFontId;

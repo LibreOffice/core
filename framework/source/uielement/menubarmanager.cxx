@@ -1527,11 +1527,10 @@ void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sI
     Reference< XStatusListener > xSubMenuManager( pSubMenuManager );
     m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
 
-    Reference< XDispatch > xDispatch;
     std::unique_ptr<MenuItemHandler> pMenuItemHandler(new MenuItemHandler(
                                                 _nItemId,
                                                 pSubMenuManager,
-                                                xDispatch ));
+                                                Reference<XDispatch>() ));
     pMenuItemHandler->aMenuItemURL = _sItemCommand;
     m_aMenuItemHandlerVector.push_back( std::move(pMenuItemHandler) );
 }

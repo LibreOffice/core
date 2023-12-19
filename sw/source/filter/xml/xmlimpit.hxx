@@ -64,7 +64,7 @@ public:
     virtual void finished(SfxItemSet & rSet,
                           SvXMLUnitConverter const& rUnitConverter) const;
 
-    virtual void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
+    virtual void setMapEntries(const SvXMLItemMapEntriesRef& rMapEntries);
     inline const SvXMLItemMapEntriesRef& getMapEntries() const;
 
     /** This method is called for every item that should be set based

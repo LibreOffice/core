@@ -82,18 +82,15 @@ public:
     virtual void handleElementItem( const SvXMLItemMapEntry& rEntry,
                                     const SfxPoolItem& rItem ) const;
 
-    inline void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
+    void setMapEntries(const SvXMLItemMapEntriesRef& rMapEntries)
+    {
+        mrMapEntries = rMapEntries;
+    }
 
     static bool QueryXMLValue( const SfxPoolItem& rItem,
                                  OUString& rValue, sal_uInt16 nMemberId,
                                  const SvXMLUnitConverter& rUnitConverter );
 };
-
-inline void
-SvXMLExportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
-{
-    mrMapEntries = rMapEntries;
-}
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLEXPIT_HXX
 

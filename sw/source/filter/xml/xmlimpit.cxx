@@ -72,9 +72,9 @@ SvXMLImportItemMapper::~SvXMLImportItemMapper()
 }
 
 void
-SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
+SvXMLImportItemMapper::setMapEntries(const SvXMLItemMapEntriesRef& rMapEntries)
 {
-    mrMapEntries = std::move(rMapEntries);
+    mrMapEntries = rMapEntries;
 }
 
 // fills the given itemset with the attributes in the given list

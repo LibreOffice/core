@@ -134,8 +134,7 @@ uno::Any
 SwVbaBookmarks::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< container::XNamed > xNamed( aSource, uno::UNO_QUERY_THROW );
-    OUString aName = xNamed->getName();
-    return uno::Any( uno::Reference< word::XBookmark > ( new SwVbaBookmark( getParent(), mxContext, mxModel, aName ) ) );
+    return uno::Any(uno::Reference<word::XBookmark>(new SwVbaBookmark(getParent(), mxContext, mxModel, xNamed->getName())));
 }
 
 void SwVbaBookmarks::removeBookmarkByName( const OUString& rName )

@@ -3871,9 +3871,8 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
         if ( aLongs[nKey] > nKey+1 )
             break;
 
-    OUString aRevName = "Version" + OUString::number( nKey + 1 );
+    rRevision.Identifier = "Version" + OUString::number( nKey + 1 );
     pImpl->aVersions.realloc( nLength+1 );
-    rRevision.Identifier = aRevName;
     pImpl->aVersions.getArray()[nLength] = rRevision;
 }
 

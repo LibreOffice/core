@@ -5422,8 +5422,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     // insert position at every cursor movement!
     if( !rMyView.GetDocShell()->IsReadOnly() )
     {
-        vcl::Font aFont;
-        SetInputContext( InputContext( aFont, InputContextFlags::Text |
+        SetInputContext( InputContext(vcl::Font(), InputContextFlags::Text |
                                             InputContextFlags::ExtText ) );
     }
 }

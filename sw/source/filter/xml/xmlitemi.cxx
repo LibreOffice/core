@@ -66,7 +66,7 @@ public:
     virtual void finished(SfxItemSet & rSet,
                           SvXMLUnitConverter const& rUnitConverter) const override;
 
-    virtual void setMapEntries( SvXMLItemMapEntriesRef rMapEntries ) override;
+    virtual void setMapEntries(const SvXMLItemMapEntriesRef& rMapEntries) override;
 
 private:
     void Reset();
@@ -95,7 +95,7 @@ void SwXMLImportTableItemMapper_Impl::Reset()
 }
 
 void SwXMLImportTableItemMapper_Impl::setMapEntries(
-        SvXMLItemMapEntriesRef rMapEntries )
+        const SvXMLItemMapEntriesRef& rMapEntries)
 {
     Reset();
     SvXMLImportItemMapper::setMapEntries(rMapEntries);
