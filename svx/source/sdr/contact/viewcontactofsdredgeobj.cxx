@@ -43,7 +43,7 @@ namespace sdr::contact
             // what to do when no EdgeTrack is provided (HitTest and selectability) ?
             OSL_ENSURE(0 != aEdgeTrack.count(), "Connectors with no geometry are not allowed (!)");
 
-            // ckeck attributes
+            // check attributes
             const SfxItemSet& rItemSet = GetEdgeObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineEffectsTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineEffectsTextAttribute(

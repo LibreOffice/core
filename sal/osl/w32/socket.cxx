@@ -1229,7 +1229,7 @@ sal_Bool SAL_CALL osl_isReceiveReady (
     return (select(pSocket->m_Socket + 1,       /* no of sockets to monitor */
                    &fds,                        /* check read operations */
                    nullptr,                     /* check write ops */
-                   nullptr,                     /* ckeck for OOB */
+                   nullptr,                     /* check for OOB */
                    pTimeout ? &tv : nullptr)==1); /* use timeout? */
 }
 
@@ -1258,7 +1258,7 @@ sal_Bool SAL_CALL osl_isSendReady (
     return (select(pSocket->m_Socket + 1,       /* no of sockets to monitor */
                    nullptr,                     /* check read operations */
                    &fds,                        /* check write ops */
-                   nullptr,                     /* ckeck for OOB */
+                   nullptr,                     /* check for OOB */
                    pTimeout ? &tv : nullptr)==1); /* use timeout? */
 }
 
@@ -1284,7 +1284,7 @@ sal_Bool SAL_CALL osl_isExceptionPending (
     return (select(pSocket->m_Socket + 1,       /* no of sockets to monitor */
                    nullptr,                     /* check read operations */
                    nullptr,                     /* check write ops */
-                   &fds,                        /* ckeck for OOB */
+                   &fds,                        /* check for OOB */
                    pTimeout ? &tv : nullptr)==1); /* use timeout? */
 }
 

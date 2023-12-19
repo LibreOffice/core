@@ -51,7 +51,7 @@ namespace drawinglayer::primitive2d
     Implement a view-dependent get2DDecomposition doing the following steps:
     (a) Locally extract needed parameters from ViewInformation2D to new, local parameters
         (this may be a complete local copy of ViewInformation2D)
-    (b) If a buffered decomposition exists, ckeck if one of the new local parameters
+    (b) If a buffered decomposition exists, check if one of the new local parameters
         differs from the corresponding locally remembered (as member) ones. If yes,
         clear maBuffered2DDecomposition
     (d) call baseclass::get2DDecomposition which will use create2DDecomposition
