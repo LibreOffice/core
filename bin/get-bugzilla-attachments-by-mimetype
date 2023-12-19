@@ -423,6 +423,14 @@ class manage_threads(threading.Thread):
                 # Then let the queue know we are done with this job
                 (uri, mimetype, prefix, extension) = jobs.get(True, 6)
                 try:
+                    # set thread name for easier debugging, if process
+                    # ctl package is available
+                    import prctl
+                    prctl.set_name(prefix[:3] + ': ' + mimetype[-10:])
+                except ImportError:
+                    pass
+
+                try:
                     get_through_rss_query(uri, mimetype, prefix, extension)
                 finally:
                     jobs.task_done()
