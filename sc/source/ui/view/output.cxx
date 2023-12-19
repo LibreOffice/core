@@ -2572,8 +2572,9 @@ void ScOutputData::AddPDFNotes()
                     // use origin's pCell for NotePtr test below
                 }
 
-                if ( mpDoc->GetNote(nMergeX, nMergeY, nTab) && ( bIsMerged ||
-                        ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
+                const ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
+
+                if ( pNote && ( bIsMerged || ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     tools::Long nNoteWidth = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
                     tools::Long nNoteHeight = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTY );
@@ -2592,7 +2593,6 @@ void ScOutputData::AddPDFNotes()
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
                     {
                         tools::Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
-                        const ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
 
                         vcl::PDFNote aNote;
 
