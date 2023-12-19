@@ -20,7 +20,7 @@
     <string name="action_settings">Nastavitve</string>
     <string name="title_recents">Nedavne datoteke</string>
     <string name="message_saved">Shranjevanje dokončano</string>
-    <string name="action_save_as">Shrani kot ...</string>
+    <string name="action_save_as">Shrani kot …</string>
     <string name="action_about">O programu</string>
     <string name="pref_developer_mode">Razvijalski način</string>
     <string name="action_keyboard">Pokaži tipkovnico</string>

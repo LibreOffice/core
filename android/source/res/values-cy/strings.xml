@@ -28,7 +28,7 @@
     <string name="action_settings">Gosodiadau</string>
     <string name="action_keyboard">Dangos bysellfwrdd</string>
     <string name="action_save">Cadw</string>
-    <string name="action_save_as">Cadw Fel...</string>
+    <string name="action_save_as">Cadw Fel…</string>
     <string name="action_fromat">Galluogi Fformat</string>
     <string name="message_saved">Cwblhawyd y cadw</string>
     <string name="message_saving">Yn cadw\'r ddogfen…</string>

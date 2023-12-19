@@ -7,4 +7,11 @@
     <string name="about_license">Mostra licenza</string>
     <string name="app_name">Visualizzatore di LibreOffice</string>
     <string name="app_description">Il Visualizzatore di LibreOffice è un visualizzatore di documenti basato su LibreOffice.</string>
+    <string name="about_notice">Mostra avviso</string>
+    <string name="new_textdocument">Nuovo documento di testo</string>
+    <string name="new_presentation">Nuova presentazione</string>
+    <string name="new_spreadsheet">Nuovo foglio di calcolo</string>
+    <string name="new_drawing">Nuovo disegno</string>
+    <string name="default_document_name">senza titolo</string>
+    <string name="select_file_to_open">Seleziona file da aprire</string>
 </resources>
