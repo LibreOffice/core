@@ -374,7 +374,6 @@ novellattach = 'https://bugzilla.novell.com/attachment.cgi?id='
 
 class manage_threads(threading.Thread):
     def run(self):
-        #print(threading.current_thread().get_ident())
         while 1:
             # Try to receive a job from queue
             try:
