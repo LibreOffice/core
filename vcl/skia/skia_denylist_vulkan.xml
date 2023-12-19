@@ -48,6 +48,9 @@
         <entry os="windows" vendor="nvidia"> <!-- tdf#153538: GeForce GTX 1070 Ti -->
             <device id="0x1b82"/>
         </entry>
+        <entry os="windows" vendor="nvidia"> <!-- tdf#158739 : GeForce RTX 4050 (546.132.0) -->
+            <device id="0x28e1"/>
+        </entry>
         <entry os="windows" vendor="nvidia"> <!-- tdf#156986: GeForce RTX 4070 (536.396.0) -->
             <device id="0x2786"/>
         </entry>
