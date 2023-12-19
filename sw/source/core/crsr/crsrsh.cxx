@@ -4144,6 +4144,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     SwPosition aPos( *pCursor->GetPoint() );
     Point aPt( rPt );
     SwCursorMoveState eTmpState( CursorMoveState::SetOnlyText );
+    eTmpState.m_bPosMatchesBounds = true; // treat last half of character same as first half
     SwSpecialPos aSpecialPos;
     eTmpState.m_pSpecialPos = &aSpecialPos;
     SwTextNode *pNode;
