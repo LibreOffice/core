@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <sal/log.hxx>
 
@@ -144,8 +145,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown
 
     SAL_INFO("extensions.olebridge", "OneInstanceOleWrapper::CreateInstance(" << riid << ")");
 
-    HRESULT ret = ResultFromScode(E_UNEXPECTED);
+    if (officecfg::Office::Common::Security::Scripting::DisableOLEAutomation::get())
+    {
+        return ResultFromScode(E_NOINTERFACE);
+    }
 
+    HRESULT ret = ResultFromScode(E_UNEXPECTED);
     const Reference<XInterface>& xInst = m_xInstFunction();
     if (xInst.is())
     {
