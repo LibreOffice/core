@@ -1537,6 +1537,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 {
                     uno::Any aRules( pList->GetNumberingRules( ) );
                     rContext->Insert( PROP_NUMBERING_RULES, aRules );
+                    rContext->Erase( PROP_NUMBERING_STYLE_NAME);
                     PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
                     if (pContext)
                     {
