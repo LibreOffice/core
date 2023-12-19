@@ -435,6 +435,7 @@ public:
     TextSelectionMessage m_aTextSelectionResult;
     OString m_sInvalidateHeader;
     OString m_sInvalidateSheetGeometry;
+    OString m_aHyperlinkClicked;
     OString m_ShapeSelection;
     TestLokCallbackWrapper m_callbackWrapper;
 
@@ -569,6 +570,11 @@ public:
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             m_aInvalidateCursorResult.parseMessage(pPayload);
+        }
+        break;
+        case LOK_CALLBACK_HYPERLINK_CLICKED:
+        {
+            m_aHyperlinkClicked = pPayload;
         }
         break;
         case LOK_CALLBACK_TEXT_SELECTION:
@@ -3111,6 +3117,28 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     // Switch back to first view and make sure it's the same
     SfxLokHelper::setView(nFirstViewId);
     CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
+{
+    // Given a document that has 2 views:
+    createDoc("empty.ods");
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+
+    // When clicking on a link in view 2, but switching to view 1 before processing async events:
+    ScGlobal::OpenURL(/*aUrl=*/u"http://www.example.com/"_ustr, /*aTarget=*/u""_ustr,
+                      /*bIgnoreSettings=*/true);
+    SfxLokHelper::setView(nView1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure view 2 gets the callback, not view 1:
+    // Without the accompanying fix in place, this test would have failed, view 1 got the hyperlink
+    // callback.
+    CPPUNIT_ASSERT(aView1.m_aHyperlinkClicked.isEmpty());
+    CPPUNIT_ASSERT(!aView2.m_aHyperlinkClicked.isEmpty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
