@@ -36,6 +36,8 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <officecfg/Office/Common.hxx>
+
 // apparently PATH_MAX is not standard and not defined by MSVC
 #ifndef PATH_MAX
 #ifdef _MAX_PATH
@@ -242,6 +244,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 pyuno_Loader_get_implementation(
     css::uno::XComponentContext* ctx , css::uno::Sequence<css::uno::Any> const&)
 {
+    if (officecfg::Office::Common::Security::Scripting::DisablePythonRuntime::get())
+        return nullptr;
+
     // tdf#114815 init python only once, via single-instace="true" in pythonloader.component
     pythonInit();
 
