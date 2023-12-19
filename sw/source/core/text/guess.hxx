@@ -46,7 +46,7 @@ public:
 
     // true, if current portion still fits to current line
     bool Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
-                    const sal_uInt16 nHeight );
+                    const sal_uInt16 nHeight, sal_Int32 nSpacesInLine = 0 );
     bool AlternativeSpelling( const SwTextFormatInfo &rInf, const TextFrameIndex nPos );
 
     SwHangingPortion* GetHangingPortion() const { return m_pHanging.get(); }

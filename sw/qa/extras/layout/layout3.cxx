@@ -236,6 +236,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
                 "portion"_ostr,
                 // This was "...et ", not "...et magnis "
                 "consequat arcu ut diam tempor luctus. Cum sociis natoque penatibus et magnis ");
+
+    // tdf#158776 don't shrink line 11 of paragraph 4
+    assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[11]"_ostr,
+                "portion"_ostr,
+                // This was "...quis curcus ", not "...quis "
+                "venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158419)

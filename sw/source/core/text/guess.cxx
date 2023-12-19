@@ -50,7 +50,7 @@ bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || c
 // returns true if no line break has to be performed
 // otherwise possible break or hyphenation position is determined
 bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
-                            const sal_uInt16 nPorHeight )
+                            const sal_uInt16 nPorHeight, sal_Int32 nSpacesInLine )
 {
     m_nCutPos = rInf.GetIdx();
 
@@ -80,15 +80,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
 
-    // allow shrinking, i.e. more text in justified lines, depending on the justification algorithm
-    if ( rAdjust == SvxAdjust::Block && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
-         // tdf#158436 avoid shrinking at underflow, e.g. no-break space
-         // after a very short word resulted endless loop
-         !rInf.IsUnderflow() )
+    // allow up to 20% shrinking of the spaces
+    if ( nSpacesInLine )
     {
-        // allow up to 2% shrinking of the line
-        nLineWidth = nLineWidth / 0.98 + rInf.X() / 0.98 - rInf.X();
+        static constexpr OUStringLiteral STR_BLANK = u" ";
+        sal_Int16 nSpaceWidth = rInf.GetTextSize(STR_BLANK).Width();
+        nLineWidth += nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth);
     }
 
     // tdf#104668 space chars at the end should be cut if the compatibility option is enabled
