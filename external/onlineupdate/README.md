@@ -33,3 +33,12 @@ updater.
 * The `update` directory is inside of the user profile resulting in recursive copying.
 * During the replacement request the updater log is in the user profile, which changes location from
 the actual location to a backup location.
+
+## Executable_test_updater_dialog
+
+To run that manual test, do
+```
+$ cp instdir/program/updater.ini workdir/LinkTarget/Executable/test_updater_dialog.ini
+$ workdir/LinkTarget/Executable/test_updater_dialog
+$ rm workdir/LinkTarget/Executable/test_updater_dialog.ini
+```
