@@ -78,4 +78,6 @@ $(eval $(call gb_Executable_add_defs,update_service, \
 
 $(eval $(call gb_Executable_set_warnings_disabled,update_service))
 
+$(eval $(call gb_Executable_add_default_nativeres,update_service))
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */

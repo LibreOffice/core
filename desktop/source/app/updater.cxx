@@ -32,6 +32,7 @@
 #include <osl/file.hxx>
 #include <rtl/process.h>
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 
 #include <curl/curl.h>
 
@@ -173,17 +174,14 @@ void createStr(const OUString& rStr, CharT** pArgs, size_t i)
     pArgs[i] = pStr;
 }
 
-CharT** createCommandLine(int * argc)
+CharT** createCommandLine(OUString const & argv0, int * argc)
 {
     OUString aInstallDir = Updater::getInstallationPath();
 
     size_t nCommandLineArgs = rtl_getAppCommandArgCount();
     size_t nArgs = 8 + nCommandLineArgs;
     CharT** pArgs = new CharT*[nArgs];
-    {
-        OUString aUpdaterName = OUString::fromUtf8(pUpdaterName);
-        createStr(aUpdaterName, pArgs, 0);
-    }
+    createStr(argv0, pArgs, 0);
     {
         // directory with the patch log
         OUString aPatchDir = Updater::getPatchDirURL();
@@ -307,7 +305,7 @@ bool update()
 
     Updater::log("Calling the updater with parameters: ");
     int argc;
-    CharT** pArgs = createCommandLine(&argc);
+    CharT** pArgs = createCommandLine(aUpdaterPath, &argc);
 
     bool bSuccess = true;
     const char* pUpdaterTestReplace = std::getenv("LIBO_UPDATER_TEST_REPLACE");
@@ -676,8 +674,10 @@ void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash
         throw invalid_hash(rHash, aHash);
     }
 
-    OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
+    OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/updates/");
     rtl::Bootstrap::expandMacros(aPatchDirURL);
+    osl::Directory::create(aPatchDirURL);
+    aPatchDirURL += "0/";
     osl::Directory::create(aPatchDirURL);
 
     OUString aDestFile = aPatchDirURL + aFileName;
@@ -764,6 +764,14 @@ void update_checker()
                         comphelper::ConfigurationChanges::create());
                 officecfg::Office::Update::Update::SeeAlso::set(aSeeAlsoURL, batch);
                 batch->commit();
+                OUString const statUrl = Updater::getPatchDirURL() + "update.status";
+                SvFileStream stat(statUrl, StreamMode::WRITE | StreamMode::TRUNC);
+                stat.WriteOString("pending-service");
+                stat.Flush();
+                if (auto const e = stat.GetError()) {
+                    Updater::log("Writing <" + statUrl + "> failed with " + e.toString());
+                }
+                stat.Close();
             }
         }
     }
@@ -796,7 +804,7 @@ void update_checker()
 
 OUString Updater::getUpdateInfoLog()
 {
-    OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/updating.log");
+    OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/updates/updating.log");
     rtl::Bootstrap::expandMacros(aUpdateInfoURL);
 
     return aUpdateInfoURL;
@@ -804,7 +812,7 @@ OUString Updater::getUpdateInfoLog()
 
 OUString Updater::getPatchDirURL()
 {
-    OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
+    OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/updates/0/");
     rtl::Bootstrap::expandMacros(aPatchDirURL);
 
     return aPatchDirURL;
