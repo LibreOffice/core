@@ -302,7 +302,30 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     }
 
     SwTextGuess aGuess;
-    const bool bFull = !aGuess.Guess( *this, rInf, Height() );
+    bool bFull = !aGuess.Guess( *this, rInf, Height() );
+
+    // tdf#158776 for the last full text portion, call Guess() again to allow more text in the
+    // adjusted line by shrinking spaces using the know space count from the first Guess() call
+    const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
+    if ( bFull && rAdjust == SvxAdjust::Block &&
+         rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
+         // tdf#158436 avoid shrinking at underflow, e.g. no-break space after a
+         // very short word resulted endless loop
+         !rInf.IsUnderflow() )
+    {
+        sal_Int32 nSpacesInLine(0);
+        for (sal_Int32 i = sal_Int32(rInf.GetLineStart()); i < sal_Int32(aGuess.BreakPos()); ++i)
+        {
+            sal_Unicode cChar = rInf.GetText()[i];
+            if ( cChar == CH_BLANK )
+                ++nSpacesInLine;
+        }
+
+        // call with an extra space: shrinking can result a new word in the line
+        // and a new space before that, which is also a shrank space
+        bFull = !aGuess.Guess( *this, rInf, Height(), nSpacesInLine + 1 );
+    }
 
     // these are the possible cases:
     // A Portion fits to current line
