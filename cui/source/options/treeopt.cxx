@@ -1734,14 +1734,13 @@ void OfaTreeOptionsDialog::generalOptions(const std::vector<sal_uInt16>& vPageId
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 
-#if !HAVE_FEATURE_UPDATE_MAR
-            // Disable Online Update page if service not installed
+            // Disable Online Update page if neither mode is available
             if( RID_SVXPAGE_ONLINEUPDATE == nPageId
-                && !SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateEnabled() )
+                && !(SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateAvailable()
+                     || SvxOnlineUpdateTabPage::isMarOnlineUpdateAvailable()) )
             {
                 continue;
             }
-#endif
 
             // Disable Basic IDE options, if experimental features are not enabled
             if( RID_SVXPAGE_BASICIDE_OPTIONS == nPageId )
