@@ -860,7 +860,7 @@ DECLARE_WW8EXPORT_TEST(testPresetDash, "tdf127166_prstDash_Word97.doc")
         CPPUNIT_ASSERT_MESSAGE("LineDash differ", bIsEqual);
     }
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure that there is no tabstop in the first paragraph (despite chapter numbering's setting)
     // This is a pre-emptive test to ensure something visibly correct is not broken.
     assertXPath(pLayout, "//body/txt[1]//SwFixPortion"_ostr, 0);

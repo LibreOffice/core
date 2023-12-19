@@ -82,7 +82,7 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_0, "tdf158586_pageBreak0.rtf")
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 
     // There should be no empty paragraph at the start
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//anchored"_ostr, 1);
     assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
 }
@@ -94,7 +94,7 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_0B, "tdf158586_pageBreak0B.rtf")
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 
     // There should be no empty paragraph at the start
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//anchored"_ostr, 1);
     assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
 }
@@ -106,7 +106,7 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_1, "tdf158586_pageBreak1.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 
     // There should be no empty carriage return at the start of the second page
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // on import there is a section on page 2; on reimport there is no section
     // (probably not an important difference?)
     assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, "Second page");
@@ -119,7 +119,7 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_1header, "tdf158586_pageBreak1_header.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 
     // There should be no empty carriage return at the start of the second page
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // on import there is a section on page 2; on reimport there is no section
     // (probably not an important difference?)
     assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, "Second page");
@@ -128,7 +128,7 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_1header, "tdf158586_pageBreak1_header.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
 {
     // The anchor and align properties are sufficient to define a frame
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//anchored"_ostr, 1);
     assertXPathContent(pLayout, "//page[1]/body//txt"_ostr, "1st page");
     assertXPathContent(pLayout, "//page[2]/body//txt"_ostr, "2nd page");
@@ -141,7 +141,7 @@ DECLARE_RTFEXPORT_TEST(testTdf158983, "fdo55504-1-min.rtf")
     // the problem was that the page break was missing and the shapes were
     // all anchored to the same node
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "/root/page[1]/body/section/txt"_ostr, 1);
     assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/fly"_ostr, 1);
     // Word shows these shapes anchored in the fly, not body, but at least they are not lost

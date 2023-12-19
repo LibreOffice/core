@@ -87,7 +87,7 @@ DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAf
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//page[1]//anchored"_ostr, 1);
 }
 
@@ -97,7 +97,7 @@ DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak2, "tdf153613_anchoredA
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
@@ -108,7 +108,7 @@ DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak4, "tdf153613_anchoredA
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//page[1]//anchored"_ostr, 1);
 }
 
@@ -119,7 +119,7 @@ DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak5, "tdf153613_anchoredA
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//page[1]//anchored"_ostr, 1);
 }
 
@@ -129,7 +129,7 @@ DECLARE_RTFEXPORT_TEST(testTdf153613_inlineAfterPgBreak, "tdf153613_inlineAfterP
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
@@ -140,7 +140,7 @@ DECLARE_RTFEXPORT_TEST(testTdf153613_inlineAfterPgBreak2, "tdf153613_inlineAfter
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL(OUString("x"), getXPathContent(pLayout, "//page[1]/body/txt[2]"_ostr));
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }

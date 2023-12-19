@@ -600,7 +600,7 @@ DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf148720)
 {
     loadAndReload("tdf148720.odt");
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
 
     const OString sShapeXPaths[] =
     {
@@ -1098,7 +1098,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149313, "tdf149313.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148360, "tdf148360.docx")
 {
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
 
     // Ensure first element is a tab
     assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]"_ostr, "type"_ostr, "PortionType::TabLeft");

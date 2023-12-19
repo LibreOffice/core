@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116265)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure that there is a tabstop in the pseudo-numbering (numbering::NONE followed by tabstop)
     assertXPath(pLayout, "//SwFixPortion"_ostr, 1);
 }
@@ -1481,7 +1481,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
             CPPUNIT_ASSERT(rProp.Value.get<OUString>().isEmpty());
     }
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure that there is a tabstop in the pseudo-numbering (numbering::NONE followed by tabstop)
     assertXPath(pLayout, "//SwFixPortion"_ostr, 1);
 }
@@ -1608,7 +1608,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153196)
 {
     createSwDoc("tdf153196.rtf");
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
 
     CPPUNIT_ASSERT_EQUAL(4, getPages());
 

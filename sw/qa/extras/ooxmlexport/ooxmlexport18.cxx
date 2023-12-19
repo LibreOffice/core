@@ -131,7 +131,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153042_largeTab, "tdf153042_largeTab.docx")
     if (isExported())
         return;
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure a large tabstop is used in the pseudo-numbering (numbering::NONE followed by tabstop)
     assertXPath(pLayout, "//SwFixPortion"_ostr, "width"_ostr, "1701");
 }
@@ -147,7 +147,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
     if (isExported())
         return;
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure a miniscule tab is used in the pseudo-numbering (numbering::NONE followed by tabstop)
     assertXPath(pLayout, "//SwFixPortion"_ostr, "width"_ostr, "10");
 }
@@ -205,7 +205,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105035_framePrB, "tdf105035_framePrB.docx")
 {
     // The paragraphs have different frame definitions, so they must be in separate frames,
     // and the frames must not overlap - even though their vertical positions are identical.
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     sal_Int32 n1stFlyBottom
         = getXPath(pLayout, "//page[1]//anchored/fly[1]/infos/bounds"_ostr, "bottom"_ostr).toInt32();
     sal_Int32 n2ndFlyTop
@@ -222,7 +222,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105035_framePrC, "tdf105035_framePrC.docx")
 {
     // The paragraphs have different frame definitions, so they must be in separate frames,
     // and the frames DO overlap this time.
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     sal_Int32 n1stFlyTop
         = getXPath(pLayout, "//page[1]//anchored/fly[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
     sal_Int32 n2ndFlyTop
@@ -307,21 +307,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrTextDirection, "tdf154703_framePrT
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
 {
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // An anchored TO character image anchors before the page break.
     assertXPath(pLayout, "//page[1]//anchored"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak2, "tdf153613_anchoredAfterPgBreak2.docx")
 {
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // An anchored TO character image, followed by more characters moves to the following page
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak3, "tdf153613_anchoredAfterPgBreak3.docx")
 {
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // An anchored TO character image, with setting splitPgBreakAndParaMark moves to the following page
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
@@ -333,14 +333,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak6, "tdf153613_anchore
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL(OUString("y"), getXPathContent(pLayout, "//page[2]/body/txt[1]"_ostr));
     assertXPath(pLayout, "//page[1]//anchored"_ostr, 1); // DID YOU FIX ME? This should be page[2]
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak, "tdf153613_inlineAfterPgBreak.docx")
 {
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // An inline AS character image moves to the following page when after the page break.
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
@@ -352,7 +352,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak2, "tdf153613_inlineAft
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL(OUString("x"), getXPathContent(pLayout, "//page[1]/body/txt[2]"_ostr));
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
@@ -367,7 +367,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak3, "tdf153613_textboxA
     // both textboxes on the second (last) page
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "//page[2]/body/txt/anchored/fly"_ostr, 2);
 }
 
@@ -576,7 +576,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151912, "tdf151912.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
 {
-    const auto& pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
 
     // Ensure we load field value from external XML correctly (it was "HERUNTERLADEN")
     assertXPathContent(pLayout, "/root/page[1]/body/txt[1]"_ostr, "Placeholder -> *ABC*");

@@ -543,7 +543,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    const auto pLayoutXML1 = parseLayoutDump();
+    xmlDocUniquePtr pLayoutXML1 = parseLayoutDump();
 
     for (auto nFly = 1; nFly < 8; ++nFly)
     {
@@ -602,7 +602,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
     }
 
     dumpLayout(mxComponent);
-    const auto pLayoutXML2 = parseLayoutDump();
+    xmlDocUniquePtr pLayoutXML2 = parseLayoutDump();
 
     for (auto nFly = 1; nFly < 8; ++nFly)
     {
