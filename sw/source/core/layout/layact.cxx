@@ -2185,7 +2185,7 @@ bool SwLayIdle::isJobEnabled(IdleJobType eJob, const SwViewShell* pViewShell)
         case IdleJobType::SMART_TAGS:
         {
             const SwDoc* pDoc = pViewShell->GetDoc();
-            if (!pDoc->GetDocShell()->IsHelpDocument() || pDoc->isXForms() || !SwSmartTagMgr::Get().IsSmartTagsEnabled())
+            if (pDoc->GetDocShell()->IsHelpDocument() || pDoc->isXForms() || !SwSmartTagMgr::Get().IsSmartTagsEnabled())
                 return false;
             return true;
         }
