@@ -50,6 +50,7 @@
 #include <svx/statusitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
@@ -71,6 +72,7 @@
 #include <svl/ptitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/errinf.hxx>
+#include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/svdview.hxx>
 #include <swtypes.hxx>
@@ -307,6 +309,14 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
     {
         pFilter = &GraphicFilter::GetGraphicFilter();
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        INetURLObject aURL(rPath);
+        if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
+            SfxLokHelper::sendNetworkAccessError("insert");
+    }
+
     aResult = GraphicFilter::LoadGraphic( rPath, rFilter, aGraphic, pFilter );
 
     if( ERRCODE_NONE == aResult )

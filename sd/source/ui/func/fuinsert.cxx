@@ -36,6 +36,7 @@
 
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 #include <svtools/insdlg.hxx>
@@ -57,6 +58,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/charthelper.hxx>
 #include <svx/svxids.hrc>
+
+#include <tools/hostfilter.hxx>
+#include <tools/urlobj.hxx>
 
 #include <sdresid.hxx>
 #include <View.hxx>
@@ -127,6 +131,13 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         if ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
             bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            INetURLObject aURL(aFileName);
+            if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
+                SfxLokHelper::sendNetworkAccessError("insert");
+        }
+
         nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
     }
     else
@@ -186,8 +197,9 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             }
         }
     }
-    else
+    else if (!comphelper::LibreOfficeKit::isActive())
     {
+        // TODO: enable in LOK, it contains synchronous error window without LOKNotifier
         SdGRFFilter::HandleGraphicFilterError( nError, GraphicFilter::GetGraphicFilter().GetLastError() );
     }
 }
