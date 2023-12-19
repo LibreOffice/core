@@ -55,7 +55,10 @@ DECLARE_RTFEXPORT_TEST(testZoom, "zoom.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo38176, "fdo38176.rtf") { CPPUNIT_ASSERT_EQUAL(9, getLength()); }
+DECLARE_RTFEXPORT_TEST(testFdo38176, "fdo38176.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(u"foo ‑­bar"_ustr, getBodyText());
+}
 
 DECLARE_RTFEXPORT_TEST(testFdo49683, "fdo49683.rtf")
 {
@@ -484,7 +487,7 @@ DECLARE_RTFEXPORT_TEST(testFdo61507, "fdo61507.rtf")
     CPPUNIT_ASSERT_EQUAL(u"\u00C9\u00C1\u0150\u0170\u222D"_ustr, xDocumentProperties->getTitle());
 
     // Only "Hello.", no additional characters.
-    CPPUNIT_ASSERT_EQUAL(6, getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello."), getBodyText());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo30983, "fdo30983.rtf")
