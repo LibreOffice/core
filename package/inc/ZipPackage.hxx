@@ -79,6 +79,7 @@ class ZipPackage final : public cppu::WeakImplHelper
 
     sal_Int32         m_nStartKeyGenerationID;
     ::std::optional<sal_Int32> m_oChecksumDigestID;
+    sal_Int32         m_nKeyDerivationFunctionID;
     sal_Int32         m_nCommonEncryptionID;
     bool          m_bHasEncryptedEntries;
     bool          m_bHasNonEncryptedEntries;

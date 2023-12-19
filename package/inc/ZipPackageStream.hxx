@@ -29,7 +29,6 @@
 
 #include "EncryptionData.hxx"
 
-#include <optional>
 
 #define PACKAGE_STREAM_NOTSET           0
 #define PACKAGE_STREAM_PACKAGEMEMBER    1
@@ -115,8 +114,14 @@ public:
     { m_xBaseEncryptionData->m_aSalt = rNewSalt;}
     void setDigest (const css::uno::Sequence < sal_Int8 >& rNewDigest )
     { m_xBaseEncryptionData->m_aDigest = rNewDigest;}
-    void setIterationCount (const sal_Int32 nNewCount)
-    { m_xBaseEncryptionData->m_nIterationCount = nNewCount;}
+    void setIterationCount(::std::optional<sal_Int32> const oNewCount)
+    {
+        m_xBaseEncryptionData->m_oPBKDFIterationCount = oNewCount;
+    }
+    void setArgon2Args(::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args)
+    {
+        m_xBaseEncryptionData->m_oArgon2Args = oArgon2Args;
+    }
     void setSize (const sal_Int64 nNewSize);
 
     ZipPackageStream( ZipPackage & rNewPackage,
@@ -133,7 +138,8 @@ public:
                             std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
                             ZipOutputStream & rZipOut,
                             const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
-                            sal_Int32 nPBKDF2IterationCount,
+                            ::std::optional<sal_Int32> oPBKDF2IterationCount,
+                            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args,
                             const rtlRandomPool &rRandomPool ) override;
 
     void setZipEntryOnLoading( const ZipEntry &rInEntry);

@@ -57,6 +57,7 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/xml/crypto/KDFID.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
@@ -140,6 +141,7 @@ ZipPackage::ZipPackage ( uno::Reference < XComponentContext > xContext )
 : m_aMutexHolder( new comphelper::RefCountedMutex )
 , m_nStartKeyGenerationID( xml::crypto::DigestID::SHA1 )
 , m_oChecksumDigestID( xml::crypto::DigestID::SHA1_1K )
+, m_nKeyDerivationFunctionID(xml::crypto::KDFID::PBKDF2)
 , m_nCommonEncryptionID( xml::crypto::CipherID::BLOWFISH_CFB_8 )
 , m_bHasEncryptedEntries ( false )
 , m_bHasNonEncryptedEntries ( false )
@@ -207,6 +209,8 @@ void ZipPackage::parseManifest()
                     {
                         OUString sPath, sMediaType, sVersion;
                         const Any *pSalt = nullptr, *pVector = nullptr, *pCount = nullptr, *pSize = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptionAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
+                        uno::Any const* pKDF = nullptr;
+                        uno::Any const* pArgon2Args = nullptr;
                         for ( const PropertyValue& rValue : rSequence )
                         {
                             if ( rValue.Name == sPropFullPath )
@@ -235,6 +239,11 @@ void ZipPackage::parseManifest()
                                 pDerivedKeySize = &( rValue.Value );
                             else if ( rValue.Name == sKeyInfo )
                                 pKeyInfo = &( rValue.Value );
+                            else if (rValue.Name == "KeyDerivationFunction") {
+                                pKDF = &rValue.Value;
+                            } else if (rValue.Name == "Argon2Args") {
+                                pArgon2Args = &rValue.Value;
+                            }
                         }
 
                         if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
@@ -254,6 +263,7 @@ void ZipPackage::parseManifest()
 
                                 if (pKeyInfo
                                     && pVector && pSize && pEncryptionAlg
+                                    && pKDF && pKDF->has<sal_Int32>() && pKDF->get<sal_Int32>() == xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P
                                     && ((pEncryptionAlg->has<sal_Int32>()
                                             && pEncryptionAlg->get<sal_Int32>() == xml::crypto::CipherID::AES_GCM_W3C)
                                         || (pDigest && pDigestAlg)))
@@ -289,7 +299,8 @@ void ZipPackage::parseManifest()
                                     pStream->SetToBeCompressed ( true );
                                     pStream->SetToBeEncrypted ( true );
                                     pStream->SetIsEncrypted ( true );
-                                    pStream->setIterationCount(0);
+                                    pStream->setIterationCount(::std::optional<sal_Int32>());
+                                    pStream->setArgon2Args(::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>>());
 
                                     // clamp to default SHA256 start key magic value,
                                     // c.f. ZipPackageStream::GetEncryptionKey()
@@ -303,12 +314,16 @@ void ZipPackage::parseManifest()
                                     {
                                         m_bHasEncryptedEntries = true;
                                         m_oChecksumDigestID = oDigestAlg;
+                                        m_nKeyDerivationFunctionID = xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P;
                                         m_nCommonEncryptionID = nEncryptionAlg;
                                         m_nStartKeyGenerationID = nStartKeyAlg;
                                     }
                                 }
-                                else if (pSalt && pCount
+                                else if (pSalt
                                     && pVector && pSize && pEncryptionAlg
+                                    && pKDF && pKDF->has<sal_Int32>()
+                                    && ((pKDF->get<sal_Int32>() == xml::crypto::KDFID::PBKDF2 && pCount)
+                                        || (pKDF->get<sal_Int32>() == xml::crypto::KDFID::Argon2id && pArgon2Args))
                                     && ((pEncryptionAlg->has<sal_Int32>()
                                             && pEncryptionAlg->get<sal_Int32>() == xml::crypto::CipherID::AES_GCM_W3C)
                                         || (pDigest && pDigestAlg)))
@@ -317,6 +332,7 @@ void ZipPackage::parseManifest()
                                     uno::Sequence < sal_Int8 > aSequence;
                                     sal_Int64 nSize = 0;
                                     ::std::optional<sal_Int32> oDigestAlg;
+                                    sal_Int32 nKDF = 0;
                                     sal_Int32 nEncryptionAlg = 0;
                                     sal_Int32 nCount = 0;
                                     sal_Int32 nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
@@ -329,8 +345,23 @@ void ZipPackage::parseManifest()
                                     *pVector >>= aSequence;
                                     pStream->setInitialisationVector ( aSequence );
 
-                                    *pCount >>= nCount;
-                                    pStream->setIterationCount ( nCount );
+                                    *pKDF >>= nKDF;
+
+                                    if (pCount)
+                                    {
+                                        *pCount >>= nCount;
+                                        pStream->setIterationCount(::std::optional<sal_Int32>(nCount));
+                                    }
+
+                                    if (pArgon2Args)
+                                    {
+                                        uno::Sequence<sal_Int32> args;
+                                        *pArgon2Args >>= args;
+                                        assert(args.getLength() == 3);
+                                        ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgs;
+                                        oArgs.emplace(args[0], args[1], args[2]);
+                                        pStream->setArgon2Args(oArgs);
+                                    }
 
                                     *pSize >>= nSize;
                                     pStream->setSize ( nSize );
@@ -365,6 +396,7 @@ void ZipPackage::parseManifest()
                                     {
                                         m_bHasEncryptedEntries = true;
                                         m_nStartKeyGenerationID = nStartKeyAlg;
+                                        m_nKeyDerivationFunctionID = nKDF;
                                         m_oChecksumDigestID = oDigestAlg;
                                         m_nCommonEncryptionID = nEncryptionAlg;
                                     }
@@ -1309,12 +1341,25 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // for encrypted streams
             RandomPool aRandomPool;
 
-            // if there is only one KDF invocation, increase the safety margin
-            sal_Int32 const nPBKDF2IterationCount =
-                officecfg::Office::Common::Misc::ExperimentalMode::get() ? 600000 : 100000;
+            ::std::optional<sal_Int32> oPBKDF2IterationCount;
+            ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args;
 
-            // call saveContents ( it will recursively save sub-directories
-            m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(), bIsGpgEncrypt ? 0 : nPBKDF2IterationCount, aRandomPool.get());
+            if (!bIsGpgEncrypt)
+            {
+                if (m_nKeyDerivationFunctionID == xml::crypto::KDFID::PBKDF2)
+                {   // if there is only one KDF invocation, increase the safety margin
+                    oPBKDF2IterationCount.emplace(officecfg::Office::Common::Misc::ExperimentalMode::get() ? 600000 : 100000);
+                }
+                else
+                {
+                    assert(m_nKeyDerivationFunctionID == xml::crypto::KDFID::Argon2id);
+                    oArgon2Args.emplace(3, (1<<16), 4);
+                }
+            }
+
+            // call saveContents - it will recursively save sub-directories
+            m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(),
+                oPBKDF2IterationCount, oArgon2Args, aRandomPool.get());
         }
 
         if( m_nFormat == embed::StorageFormats::PACKAGE )
@@ -1757,6 +1802,18 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 
                 m_nStartKeyGenerationID = nID;
             }
+            else if (rAlgorithm.Name == "KeyDerivationFunction")
+            {
+                sal_Int32 nID = 0;
+                if (!(rAlgorithm.Value >>= nID)
+                  || (nID != xml::crypto::KDFID::PBKDF2
+                      && nID != xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P
+                      && nID != xml::crypto::KDFID::Argon2id))
+                {
+                    throw IllegalArgumentException(THROW_WHERE "Unexpected key derivation function provided!", uno::Reference<uno::XInterface>(), 2);
+                }
+                m_nKeyDerivationFunctionID = nID;
+            }
             else if ( rAlgorithm.Name == "EncryptionAlgorithm" )
             {
                 sal_Int32 nID = 0;
@@ -1807,6 +1864,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         // defaults) with reasonable values
         // note: these should be overridden by SfxObjectShell::SetupStorage()
         m_nStartKeyGenerationID = 0; // this is unused for PGP
+        m_nKeyDerivationFunctionID = xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P;
         m_nCommonEncryptionID = xml::crypto::CipherID::AES_CBC_W3C_PADDING;
         m_oChecksumDigestID.emplace(xml::crypto::DigestID::SHA512_1K);
     }
@@ -1828,6 +1886,7 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     {
         ::comphelper::SequenceAsHashMap aAlgorithms;
         aAlgorithms["StartKeyGenerationAlgorithm"] <<= m_nStartKeyGenerationID;
+        aAlgorithms["KeyDerivationFunction"] <<= m_nKeyDerivationFunctionID;
         aAlgorithms["EncryptionAlgorithm"] <<= m_nCommonEncryptionID;
         if (m_oChecksumDigestID)
         {

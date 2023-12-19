@@ -35,6 +35,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <com/sun/star/xml/crypto/KDFID.hpp>
 
 #include <CRC32.hxx>
 #include <ZipOutputEntry.hxx>
@@ -450,7 +451,8 @@ bool ZipPackageStream::saveChild(
         std::vector < uno::Sequence < beans::PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
         const uno::Sequence < sal_Int8 >& rEncryptionKey,
-        sal_Int32 nPBKDF2IterationCount,
+        ::std::optional<sal_Int32> const oPBKDF2IterationCount,
+        ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args,
         const rtlRandomPool &rRandomPool)
 {
     bool bSuccess = true;
@@ -600,7 +602,8 @@ bool ZipPackageStream::saveChild(
 
                 setInitialisationVector ( aVector );
                 setSalt ( aSalt );
-                setIterationCount(nPBKDF2IterationCount);
+                setIterationCount(oPBKDF2IterationCount);
+                setArgon2Args(oArgon2Args);
             }
 
             // last property is digest, which is inserted later if we didn't have
@@ -611,8 +614,29 @@ bool ZipPackageStream::saveChild(
             pPropSet[PKG_MNFST_INIVECTOR].Value <<= m_xBaseEncryptionData->m_aInitVector;
             pPropSet[PKG_MNFST_SALT].Name = "Salt";
             pPropSet[PKG_MNFST_SALT].Value <<= m_xBaseEncryptionData->m_aSalt;
-            pPropSet[PKG_MNFST_ITERATION].Name = "IterationCount";
-            pPropSet[PKG_MNFST_ITERATION].Value <<= m_xBaseEncryptionData->m_nIterationCount;
+            if (m_xBaseEncryptionData->m_oArgon2Args)
+            {
+                pPropSet[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+                pPropSet[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::Argon2id;
+                pPropSet[PKG_MNFST_ARGON2ARGS].Name = "Argon2Args";
+                uno::Sequence<sal_Int32> const args{
+                    ::std::get<0>(*m_xBaseEncryptionData->m_oArgon2Args),
+                    ::std::get<1>(*m_xBaseEncryptionData->m_oArgon2Args),
+                    ::std::get<2>(*m_xBaseEncryptionData->m_oArgon2Args) };
+                pPropSet[PKG_MNFST_ARGON2ARGS].Value <<= args;
+            }
+            else if (m_xBaseEncryptionData->m_oPBKDFIterationCount)
+            {
+                pPropSet[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+                pPropSet[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::PBKDF2;
+                pPropSet[PKG_MNFST_ITERATION].Name = "IterationCount";
+                pPropSet[PKG_MNFST_ITERATION].Value <<= *m_xBaseEncryptionData->m_oPBKDFIterationCount;
+            }
+            else
+            {
+                pPropSet[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+                pPropSet[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P;
+            }
 
             // Need to store the uncompressed size in the manifest
             OSL_ENSURE( m_nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!" );
@@ -625,19 +649,16 @@ bool ZipPackageStream::saveChild(
                 if ( !xEncData.is() )
                     throw uno::RuntimeException();
 
-                pPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-                if (xEncData->m_oCheckAlg)
-                {
-                    pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
-                }
                 pPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
                 pPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
                 pPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
                 pPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
-                pPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
                 if (xEncData->m_oCheckAlg)
                 {
                     assert(xEncData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C);
+                    pPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+                    pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
+                    pPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
                     pPropSet[PKG_MNFST_DIGESTALG].Value <<= *xEncData->m_oCheckAlg;
                 }
                 pPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
@@ -823,19 +844,22 @@ bool ZipPackageStream::saveChild(
             if ( !xEncData.is() )
                 throw uno::RuntimeException();
 
-            pPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-            if (xEncData->m_oCheckAlg)
-            {
-                pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
-            }
+            // very confusing: half the encryption properties are
+            // unconditionally added above and the other half conditionally;
+            // assert that we have the expected group and not duplicates
+            assert(std::any_of(aPropSet.begin(), aPropSet.end(), [](auto const& it){ return it.Name == "Salt"; }));
+            assert(!std::any_of(aPropSet.begin(), aPropSet.end(), [](auto const& it){ return it.Name == sEncryptionAlgProperty; }));
+
             pPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
             pPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
             pPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
             pPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
-            pPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
             if (xEncData->m_oCheckAlg)
             {
                 assert(xEncData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C);
+                pPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+                pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
+                pPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
                 pPropSet[PKG_MNFST_DIGESTALG].Value <<= *xEncData->m_oCheckAlg;
             }
             pPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;

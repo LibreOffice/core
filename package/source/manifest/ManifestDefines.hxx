@@ -70,6 +70,9 @@ inline constexpr OUString ELEMENT_KEY_DERIVATION = u"manifest:key-derivation"_us
 inline constexpr OUString ATTRIBUTE_KEY_DERIVATION_NAME  = u"manifest:key-derivation-name"_ustr;
 inline constexpr OUString ATTRIBUTE_SALT  = u"manifest:salt"_ustr;
 inline constexpr OUString ATTRIBUTE_ITERATION_COUNT = u"manifest:iteration-count"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_T_LO= u"loext:argon2-iterations"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_M_LO= u"loext:argon2-memory"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_P_LO= u"loext:argon2-lanes"_ustr;
 
 /// OFFICE-3708: wrong URL cited in ODF 1.2 and used since OOo 3.4 beta
 inline constexpr OUString SHA256_URL_ODF12 = u"http://www.w3.org/2000/09/xmldsig#sha256"_ustr;
@@ -93,5 +96,7 @@ inline constexpr OUString AESGCM256_URL = u"http://www.w3.org/2009/xmlenc11#aes2
 inline constexpr OUString PBKDF2_NAME = u"PBKDF2"_ustr;
 inline constexpr OUString PGP_NAME = u"PGP"_ustr;
 inline constexpr OUString PBKDF2_URL = u"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#pbkdf2"_ustr;
+inline constexpr OUString ARGON2ID_URL = u"urn:oasis:names:tc:opendocument:xmlns:manifest:1.5#argon2id"_ustr;
+inline constexpr OUString ARGON2ID_URL_LO = u"urn:org:documentfoundation:names:experimental:office:manifest:argon2id"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -231,7 +231,8 @@ bool ZipPackageFolder::saveChild(
         std::vector < uno::Sequence < PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
         const uno::Sequence < sal_Int8 >& rEncryptionKey,
-        sal_Int32 nPBKDF2IterationCount,
+        ::std::optional<sal_Int32> const oPBKDF2IterationCount,
+        ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args,
         const rtlRandomPool &rRandomPool)
 {
     uno::Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
@@ -250,7 +251,7 @@ bool ZipPackageFolder::saveChild(
     else
         aPropSet.realloc( 0 );
 
-    saveContents( sTempName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool);
+    saveContents(sTempName, rManList, rZipOut, rEncryptionKey, oPBKDF2IterationCount, oArgon2Args, rRandomPool);
 
     // folder can have a mediatype only in package format
     if ( aPropSet.hasElements() && ( m_nFormat == embed::StorageFormats::PACKAGE ) )
@@ -264,7 +265,8 @@ void ZipPackageFolder::saveContents(
         std::vector < uno::Sequence < PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
         const uno::Sequence < sal_Int8 >& rEncryptionKey,
-        sal_Int32 nPBKDF2IterationCount,
+        ::std::optional<sal_Int32> const oPBKDF2IterationCount,
+        ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args,
         const rtlRandomPool &rRandomPool ) const
 {
     if ( maContents.empty() && !rPath.isEmpty() && m_nFormat != embed::StorageFormats::OFOPXML )
@@ -300,8 +302,8 @@ void ZipPackageFolder::saveContents(
         if ( aIter != maContents.end() && !(*aIter).second.bFolder )
         {
             bMimeTypeStreamStored = true;
-            if( !aIter->second.pStream->saveChild(
-                rPath + aIter->first, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool ))
+            if (!aIter->second.pStream->saveChild(rPath + aIter->first, rManList, rZipOut,
+                    rEncryptionKey, oPBKDF2IterationCount, oArgon2Args, rRandomPool))
             {
                 throw uno::RuntimeException( THROW_WHERE );
             }
@@ -314,16 +316,16 @@ void ZipPackageFolder::saveContents(
         {
             if (rInfo.bFolder)
             {
-                if( !rInfo.pFolder->saveChild(
-                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool ))
+                if (!rInfo.pFolder->saveChild(rPath + rShortName, rManList, rZipOut,
+                        rEncryptionKey, oPBKDF2IterationCount, oArgon2Args, rRandomPool))
                 {
                     throw uno::RuntimeException( THROW_WHERE );
                 }
             }
             else
             {
-                if( !rInfo.pStream->saveChild(
-                    rPath + rShortName, rManList, rZipOut, rEncryptionKey, nPBKDF2IterationCount, rRandomPool ))
+                if (!rInfo.pStream->saveChild(rPath + rShortName, rManList, rZipOut,
+                        rEncryptionKey, oPBKDF2IterationCount, oArgon2Args, rRandomPool))
                 {
                     throw uno::RuntimeException( THROW_WHERE );
                 }
