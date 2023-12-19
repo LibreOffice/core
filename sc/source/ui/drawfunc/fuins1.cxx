@@ -22,6 +22,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <editeng/sizeitem.hxx>
 #include <sal/log.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdograf.hxx>
@@ -47,6 +48,9 @@
 #include <strings.hrc>
 #include <globstr.hrc>
 #include <comphelper/lok.hxx>
+
+#include <tools/hostfilter.hxx>
+#include <tools/urlobj.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -278,6 +282,13 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
         const SfxPoolItem* pItem;
         if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
             bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            INetURLObject aURL(aFileName);
+            if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
+                SfxLokHelper::sendNetworkAccessError("insert");
+        }
 
         Graphic aGraphic;
         ErrCode nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );

@@ -1075,13 +1075,13 @@ VclPtr<vcl::Window> SfxLokHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
     return {};
 }
 
-void SfxLokHelper::sendNetworkAccessError()
+void SfxLokHelper::sendNetworkAccessError(std::string_view rAction)
 {
     tools::JsonWriter aWriter;
     aWriter.put("code", static_cast<sal_uInt32>(
         ErrCode(ErrCodeArea::Inet, sal_uInt16(ErrCodeClass::Access))));
     aWriter.put("kind", "network");
-    aWriter.put("cmd", "paste");
+    aWriter.put("cmd", rAction);
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell)

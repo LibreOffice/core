@@ -1325,7 +1325,7 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     {
         INetURLObject aURL(pImage->aURL);
         if (HostFilter::isForbidden(aURL.GetHost()))
-            SfxLokHelper::sendNetworkAccessError();
+            SfxLokHelper::sendNetworkAccessError("paste");
     }
 
     sal_uInt16 nFormat;
