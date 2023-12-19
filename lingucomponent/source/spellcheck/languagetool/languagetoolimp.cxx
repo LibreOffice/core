@@ -437,6 +437,8 @@ std::string LanguageToolGrammarChecker::makeDudenHttpRequest(std::string_view aU
     if (!curl)
         return {}; // empty string
 
+    ::InitCurl_easy(curl.get());
+
     std::string sResponseBody;
     struct curl_slist* pList = nullptr;
     SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
