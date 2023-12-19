@@ -1811,12 +1811,6 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                     }
                     nLength = TextFrameIndex(0);
                 }
-                else if (bFieldInfo && nLength == pPor->GetLen() &&
-                         (! pPor->GetNextPortion() ||
-                          ! pPor->GetNextPortion()->IsPostItsPortion()))
-                {
-                    --nLength;
-                }
 
                 // set cursor bidi level
                 if ( pCMS )

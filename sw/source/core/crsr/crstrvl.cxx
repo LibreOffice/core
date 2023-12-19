@@ -1462,6 +1462,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
     aTmpState.m_bExactOnly = !( IsAttrAtPos::Outline & rContentAtPos.eContentAtPos );
     aTmpState.m_bContentCheck = bool(IsAttrAtPos::ContentCheck & rContentAtPos.eContentAtPos);
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
+    aTmpState.m_bPosMatchesBounds = true; // treat last half of character same as first half
 
     SwSpecialPos aSpecialPos;
     aTmpState.m_pSpecialPos = ( IsAttrAtPos::SmartTag & rContentAtPos.eContentAtPos ) ?
