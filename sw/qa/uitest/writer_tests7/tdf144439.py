@@ -40,6 +40,28 @@ class tdf144439(UITestCase):
             self.assertEqual(Para1.String, "List item")
             self.assertEqual(Para1.getPropertyValue("ListLabelString"), "1.1.")
 
+            # this section is checking tdf#154864 - Changing starting number of numbered list does nothing
+            #
+
+            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
+                # Select custom tab
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "5")
+
+                # Select numbering
+                xNumFmt = xDialog.getChild("numfmtlb")
+                select_by_text(xNumFmt, "1, 2, 3, ...")
+
+                # Increase "start at"
+                xStartAt = xDialog.getChild("startat")
+                xStartAt.executeAction("UP", tuple())
+                xStartAt.executeAction("UP", tuple())
+
+            Paragraphs = document.Text.createEnumeration()
+            Para1 = Paragraphs.nextElement()
+            self.assertEqual(Para1.String, "List item")
+            self.assertEqual(Para1.getPropertyValue("ListLabelString"), "1.3.")
+
     def test_tdf144439_outline(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
