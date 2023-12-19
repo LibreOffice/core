@@ -769,6 +769,17 @@ DECLARE_RTFEXPORT_TEST(testTdf153195, "tdf153195.rtf")
                                  getProperty<sal_Int32>(xTables->getByIndex(1), "LeftMargin"), 10);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf158762, "tdf158762.rtf")
+{
+    for (int paragraph = 3; paragraph < 6; ++paragraph)
+    {
+        uno::Reference<text::XTextRange> xPara(getParagraph(paragraph));
+        uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xLevels(
+            properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xLevels.is());
+    }
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
