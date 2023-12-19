@@ -214,6 +214,11 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
             case css::accessibility::AccessibleRole::SHAPE:
                 eRole = GTK_ACCESSIBLE_ROLE_IMG;
                 break;
+            case css::accessibility::AccessibleRole::COMMENT:
+#if GTK_CHECK_VERSION(4, 13, 4)
+                eRole = GTK_ACCESSIBLE_ROLE_COMMENT;
+                break;
+#endif
             default:
                 SAL_WARN("vcl.gtk",
                          "unmapped GtkAccessibleRole: " << xContext->getAccessibleRole());
