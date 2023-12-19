@@ -574,7 +574,7 @@ public:
      * Open the specified URL.
      * @param bIgnoreSettings - If true, ignore security settings (Ctrl-Click) and just open the URL.
      */
-    static void OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgnoreSettings = false);
+    SC_DLLPUBLIC static void OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgnoreSettings = false);
     /// Whether the URL can be opened according to current security options (Click/Ctrl-Click)
     static bool                 ShouldOpenURL();
     SC_DLLPUBLIC static OUString            GetAbsDocName( const OUString& rFileName,
