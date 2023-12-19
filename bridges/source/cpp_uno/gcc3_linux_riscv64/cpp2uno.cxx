@@ -34,8 +34,6 @@
 #include <cstring>
 #include <typeinfo>
 
-using namespace com::sun::star::uno;
-
 //#define BRIDGE_DEBUG
 
 #ifdef BRIDGE_DEBUG
@@ -45,6 +43,8 @@ using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;
 #endif
+
+using namespace com::sun::star::uno;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
@@ -110,11 +110,9 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
            pRegisterReturn);
     printf("In cpp2uno_call, gpreg = %p, fpreg = %p, ovrflw = %p\n", gpreg, fpreg, ovrflw);
 #endif
+
     unsigned int nr_gpr = 0;
     unsigned int nr_fpr = 0;
-
-    char* gpreg_t = reinterpret_cast<char*>(gpreg);
-    char* fpreg_t = reinterpret_cast<char*>(fpreg);
 
 #ifdef BRIDGE_DEBUG
     fprintf(stdout, "cpp2uno_call:begin\n");
@@ -151,6 +149,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
     }
 
     // pop this
+    // TODO: Is it really essential to pop?
     gpreg++;
     nr_gpr++;
 
@@ -344,28 +343,19 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
 
             TYPELIB_DANGER_RELEASE(pParamTypeDescr);
         }
-        void* retout = nullptr; // avoid false -Werror=maybe-uninitialized
+        //void* retout = nullptr; // avoid false -Werror=maybe-uninitialized
         // return
         sal_Int32 returnType = 0;
         if (pReturnTypeDescr)
         {
-            char* pReturn = reinterpret_cast<char*>(pRegisterReturn);
             if (!bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTypeDescr))
             {
+                const bool isSigned = true;
                 switch (pReturnTypeDescr == nullptr ? typelib_TypeClass_VOID
                                                     : pReturnTypeDescr->eTypeClass)
                 {
-                    case typelib_TypeClass_HYPER:
-                    case typelib_TypeClass_UNSIGNED_HYPER:
-                    case typelib_TypeClass_ENUM:
-                    case typelib_TypeClass_CHAR:
-                    case typelib_TypeClass_SHORT:
-                    case typelib_TypeClass_UNSIGNED_SHORT:
-                    case typelib_TypeClass_BOOLEAN:
-                    case typelib_TypeClass_BYTE:
-                        std::memcpy(pReturn, pUnoReturn, 8);
-                        break;
-                    // Sometimes we need to return a 32 bit integer into a 64 bit integer.
+                    // Sometimes we need to return a smaller type into a larger type.
+                    //
                     // For example, in pyuno.cxx:PyUNO_bool(), an int(32bit) is returned
                     // in type Py_ssize_t(64bit)
                     // We assume that this 32bit int was put in low 32 bit of register a0.
@@ -375,52 +365,57 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
                     // This bug occurs when build pyuno with gcc-12 with -O2.
                     // https://bugs.documentfoundation.org/show_bug.cgi?id=155937
                     //
-                    // So we need to clean the high 32 bit in bridge.
+                    // So we need to clean the higher bits in bridge.
+                    case typelib_TypeClass_BOOLEAN:
+                        abi_riscv64::extIntBits(pRegisterReturn,
+                                                reinterpret_cast<sal_uInt64*>(pUnoReturn),
+                                                !isSigned, 1);
+                        break;
+                    case typelib_TypeClass_BYTE:
+                        abi_riscv64::extIntBits(pRegisterReturn,
+                                                reinterpret_cast<sal_uInt64*>(pUnoReturn), isSigned,
+                                                1);
+                        break;
+                    case typelib_TypeClass_CHAR:
+                    case typelib_TypeClass_UNSIGNED_SHORT:
+                        abi_riscv64::extIntBits(pRegisterReturn,
+                                                reinterpret_cast<sal_uInt64*>(pUnoReturn),
+                                                !isSigned, 2);
+                        break;
+                    case typelib_TypeClass_SHORT:
+                        abi_riscv64::extIntBits(pRegisterReturn,
+                                                reinterpret_cast<sal_uInt64*>(pUnoReturn), isSigned,
+                                                2);
+                        break;
                     case typelib_TypeClass_UNSIGNED_LONG:
-                        std::memset(pReturn + 4, 0x0, 4);
-                        std::memcpy(pReturn, pUnoReturn, 4);
+                        abi_riscv64::extIntBits(pRegisterReturn,
+                                                reinterpret_cast<sal_uInt64*>(pUnoReturn),
+                                                !isSigned, 4);
                         break;
                     case typelib_TypeClass_LONG:
-                        if (*reinterpret_cast<sal_uInt32*>(pUnoReturn) & 0x80000000)
-                            std::memset(pReturn + 4, 0xFF, 4);
-                        else
-                            std::memset(pReturn + 4, 0x0, 4);
-                        std::memcpy(pReturn, pUnoReturn, 4);
+                        abi_riscv64::extIntBits(pRegisterReturn,
+                                                reinterpret_cast<sal_uInt64*>(pUnoReturn), isSigned,
+                                                4);
+                        break;
+                    // TODO: check the source of the enum type.
+                    case typelib_TypeClass_ENUM:
+                    case typelib_TypeClass_UNSIGNED_HYPER:
+                    case typelib_TypeClass_HYPER:
+                        std::memcpy(reinterpret_cast<char*>(pRegisterReturn), pUnoReturn, 8);
                         break;
                     case typelib_TypeClass_FLOAT:
-                        std::memcpy(pReturn, pUnoReturn, 4);
-                        std::memset(pReturn + 4, 0xFF, 4);
+                        std::memcpy(reinterpret_cast<char*>(pRegisterReturn), pUnoReturn, 4);
+                        std::memset(reinterpret_cast<char*>(pRegisterReturn) + 4, 0xFF, 4);
                         break;
                     case typelib_TypeClass_DOUBLE:
-                        std::memcpy(pReturn, pUnoReturn, 8);
+                        std::memcpy(reinterpret_cast<char*>(pRegisterReturn), pUnoReturn, 8);
                         break;
                     case typelib_TypeClass_STRUCT:
                     case typelib_TypeClass_EXCEPTION:
-                    {
-                        std::memcpy(pReturn, pUnoReturn, 16);
-                        sal_Int32 nGreg = 0;
-                        sal_Int32 nFreg = 0;
-                        abi_riscv64::countnGreg(
-                            nGreg, nFreg,
-                            reinterpret_cast<typelib_CompoundTypeDescription const*>(
-                                pReturnTypeDescr));
-                        if (pReturnTypeDescr->nSize <= 8 && nFreg == 2 && nGreg == 0)
-                        {
-                            std::memcpy(pReturn + 8, pReturn + 4, 4);
-                            std::memset(pReturn + 4, 0xFF, 4);
-                            std::memset(pReturn + 12, 0xFF, 4);
-                        }
-                        else if (nGreg == 1 && nFreg == 1)
-                        {
-                            returnType = 1;
-                            if (pReturnTypeDescr->nSize <= 8)
-                            {
-                                std::memcpy(pReturn + 8, pReturn + 4, 4);
-                                std::memset(pReturn + 12, 0xFF, 4);
-                            }
-                        }
-                    }
-                    break;
+                        abi_riscv64::splitUNOStruct(
+                            pReturnTypeDescr, reinterpret_cast<sal_uInt64*>(pRegisterReturn),
+                            reinterpret_cast<sal_uInt64*>(pUnoReturn), returnType);
+                        break;
                     case typelib_TypeClass_VOID:
                         break;
                     default:
@@ -595,6 +590,7 @@ sal_Int32 cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, voi
                         }
                         TYPELIB_DANGER_RELEASE(pTD);
                     }
+                    [[fallthrough]];
                 } // else perform queryInterface()
                 default:
 #ifdef BRIDGE_DEBUG
@@ -722,8 +718,7 @@ unsigned char* codeSnippet(unsigned char* code, sal_Int32 functionIndex, sal_Int
 }
 }
 
-void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const* bptr,
-                                                        unsigned char const* eptr)
+void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const*, unsigned char const*)
 {
     asm volatile("fence" :::);
 }

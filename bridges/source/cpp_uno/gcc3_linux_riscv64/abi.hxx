@@ -11,13 +11,24 @@
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 
+//#define BRI_DEBUG
+
+#ifdef BRI_DEBUG
+#include <cstdio>
+#define BRIDGE_LOG(...) fprintf(stdout, __VA_ARGS__)
+#else
+#define BRIDGE_LOG(format, args...)
+#endif
+
 namespace abi_riscv64
 {
-void countnGreg(sal_Int32& nGreg, sal_Int32& nFreg,
-                const typelib_CompoundTypeDescription* pTypeDescr);
+void fillUNOStruct(const typelib_TypeDescription* pTypeDescr, sal_Int64* gret, double* fret,
+                   void* pRegisterReturn);
 
-void fillStruct(const typelib_TypeDescription* pTypeDescr, sal_Int64* gret, double* fret,
-                void* pRegisterReturn);
+void splitUNOStruct(const typelib_TypeDescription* pTypeDescr, sal_uInt64* pTarget,
+                    sal_uInt64* pSource, sal_Int32& returnType);
+
+void extIntBits(sal_uInt64* outData, const sal_uInt64* inData, bool isSigned, sal_uInt32 dataBytes);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
