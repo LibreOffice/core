@@ -52,7 +52,8 @@ using namespace ::css;
 
 SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optonlineupdatepage.ui", "OptOnlineUpdatePage", &rSet)
-    , m_showTraditionalOnlineUpdate(isTraditionalOnlineUpdateEnabled())
+    , m_showTraditionalOnlineUpdate(isTraditionalOnlineUpdateAvailable())
+    , m_showMarOnlineUpdate(isMarOnlineUpdateAvailable())
     , m_xNeverChecked(m_xBuilder->weld_label("neverchecked"))
     , m_xAutoCheckCheckBox(m_xBuilder->weld_check_button("autocheck"))
     , m_xAutoCheckImg(m_xBuilder->weld_widget("lockautocheck"))
@@ -121,12 +122,12 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
         m_xPrivacyPolicyButton->hide();
     }
 
-#if HAVE_FEATURE_UPDATE_MAR
-    m_xMar->show();
-    m_xEnableMar->set_sensitive(!officecfg::Office::Update::Update::Enabled::isReadOnly());
-#else
-    m_xMar->hide();
-#endif
+    if (m_showMarOnlineUpdate) {
+        m_xMar->show();
+        m_xEnableMar->set_sensitive(!officecfg::Office::Update::Update::Enabled::isReadOnly());
+    } else {
+        m_xMar->hide();
+    }
 }
 
 SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
@@ -325,14 +326,12 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
             xChangesBatch->commitChanges();
     }
 
-#if HAVE_FEATURE_UPDATE_MAR
-    if (m_xEnableMar->get_state_changed_from_saved()) {
+    if (m_showMarOnlineUpdate && m_xEnableMar->get_state_changed_from_saved()) {
         auto batch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Update::Update::Enabled::set(m_xEnableMar->get_active(), batch);
         batch->commit();
         bModified = true;
     }
-#endif
 
     return bModified;
 }
@@ -400,10 +399,10 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
         m_xAutoDownloadCheckBox->save_state();
     }
 
-#if HAVE_FEATURE_UPDATE_MAR
-    m_xEnableMar->set_active(officecfg::Office::Update::Update::Enabled::get());
-    m_xEnableMar->save_state();
-#endif
+    if (m_showMarOnlineUpdate) {
+        m_xEnableMar->set_active(officecfg::Office::Update::Update::Enabled::get());
+        m_xEnableMar->save_state();
+    }
 }
 
 void SvxOnlineUpdateTabPage::FillUserData()
@@ -493,7 +492,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, weld::Button&, void)
     }
 }
 
-bool SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateEnabled() {
+bool SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateAvailable() {
     try
     {
         css::uno::Reference < css::uno::XInterface > xService( setup::UpdateCheck::create( ::comphelper::getProcessComponentContext() ) );
@@ -504,6 +503,14 @@ bool SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateEnabled() {
     {
     }
     return false;
+}
+
+bool SvxOnlineUpdateTabPage::isMarOnlineUpdateAvailable() {
+#if HAVE_FEATURE_UPDATE_MAR
+    return officecfg::Office::Common::Misc::ExperimentalMode::get();
+#else
+    return false;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

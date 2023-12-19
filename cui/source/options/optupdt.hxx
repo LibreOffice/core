@@ -29,6 +29,7 @@ class SvxOnlineUpdateTabPage : public SfxTabPage
 {
 private:
     bool m_showTraditionalOnlineUpdate;
+    bool m_showMarOnlineUpdate;
 
     OUString       m_aNeverChecked;
     OUString       m_aLastCheckedTemplate;
@@ -79,7 +80,8 @@ public:
     virtual void            Reset( const SfxItemSet* rSet ) override;
     virtual void            FillUserData() override;
 
-    static bool isTraditionalOnlineUpdateEnabled();
+    static bool isTraditionalOnlineUpdateAvailable();
+    static bool isMarOnlineUpdateAvailable();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
