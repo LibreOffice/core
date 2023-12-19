@@ -15,5 +15,9 @@
     <string name="new_spreadsheet">Nuovo foglio di calcolo</string>
     <string name="new_drawing">Nuovo disegno</string>
     <string name="default_document_name">senza titolo</string>
-    <string name="select_file_to_open">Seleziona il file da aprire</string>
+    <string name="select_file_to_open">Seleziona file da aprire</string>
+    <string name="browser_app_name">Navigatore di LibreOffice</string>
+    <string name="menu_search">Cerca</string>
+    <string name="search_not_found">Parola chiave non trovata</string>
+    <string name="menu_preferences">Preferenze</string>
 </resources>
