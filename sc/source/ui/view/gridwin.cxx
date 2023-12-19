@@ -5101,6 +5101,23 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
             nY2 = pViewShell->GetLOKEndHeaderRow();
 
         if (nX1 < 0 || nY1 < 0) return;
+
+        // Consider frozen ranges not in main pane range as candidates
+        // for update
+        SCCOLROW nFreezeCol = mrViewData.GetLOKSheetFreezeIndex(true);
+        SCCOLROW nFreezeRow = mrViewData.GetLOKSheetFreezeIndex(false);
+        if ((nFreezeCol || nFreezeRow) && (nX1 || nY1))
+        {
+            // top left
+            if (nFreezeCol && nFreezeRow)
+                UpdateFormulaRange(0, 0, nFreezeCol, nFreezeRow);
+            // bottom left
+            if (nFreezeCol && nX1)
+                UpdateFormulaRange(0, nY1, nFreezeCol, nY2);
+            // top right
+            if (nFreezeRow && nY1)
+                UpdateFormulaRange(nX1, 0, nX2, nFreezeRow);
+        }
     }
     else
     {

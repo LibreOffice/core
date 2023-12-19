@@ -3435,6 +3435,49 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForSplitPanes)
+{
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
+    ScModelObj* pModelObj = createDoc("split.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    // view
+    ViewCallback aView;
+
+    // move way over to the right where BP:20 exists, enough so that rows A and B
+    // would scroll off the page and not be visible, if they were not frozen
+    pModelObj->setClientVisibleArea(tools::Rectangle(73050, 0, 94019, 7034));
+    Scheduler::ProcessEventsToIdle();
+
+    ScAddress aBP20(67, 19, 0); // BP:20
+
+    pView->SetCursor(aBP20.Col(), aBP20.Row());
+    Scheduler::ProcessEventsToIdle();
+
+    aView.m_bInvalidateTiles = false;
+    aView.m_aInvalidations.clear();
+
+    lcl_typeCharsInCell("X", aBP20.Col(), aBP20.Row(), pView, pModelObj); // Type 'X' in A1
+
+    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+
+    // missing before fix
+    tools::Rectangle aTopLeftPane(0, 500, 3817, 742);
+    bool bFoundTopLeftPane =
+        std::find(aView.m_aInvalidations.begin(), aView.m_aInvalidations.end(), aTopLeftPane) != aView.m_aInvalidations.end();
+    CPPUNIT_ASSERT_MESSAGE("The cell visible in the top left pane should be redrawn", bFoundTopLeftPane);
+
+    // missing before fix
+    tools::Rectangle aBottomLeftPane(0, 500, 3817, 3242);
+    bool bFoundBottomLeftPane =
+        std::find(aView.m_aInvalidations.begin(), aView.m_aInvalidations.end(), aBottomLeftPane) != aView.m_aInvalidations.end();
+    CPPUNIT_ASSERT_MESSAGE("The cell visible in the bottom left pane should be redrawn", bFoundBottomLeftPane);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
