@@ -135,7 +135,7 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=6 n-rows=1 -->
+              <!-- n-columns=8 n-rows=1 -->
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -143,19 +143,6 @@
                 <property name="margin-top">6</property>
                 <property name="hexpand">True</property>
                 <property name="column-spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="optappearancepage|label3">_Scheme:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">colorschemelb</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkButton" id="save">
                     <property name="label" translatable="yes" context="optappearancepage|save">_Save</property>
@@ -170,7 +157,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">2</property>
+                    <property name="left-attach">3</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -188,7 +175,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">3</property>
+                    <property name="left-attach">4</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -204,7 +191,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
+                    <property name="left-attach">2</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -218,7 +205,7 @@
                     <property name="mnemonic-widget">autocolorlb</property>
                   </object>
                   <packing>
-                    <property name="left-attach">4</property>
+                    <property name="left-attach">6</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -234,7 +221,46 @@
                     </items>
                   </object>
                   <packing>
+                    <property name="left-attach">7</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockautocolorlb">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
                     <property name="left-attach">5</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="optappearancepage|label3">_Scheme:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">colorschemelb</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockcolorschemelb">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>

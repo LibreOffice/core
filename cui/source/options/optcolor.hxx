@@ -32,7 +32,9 @@ class SvxColorOptionsTabPage : public SfxTabPage
     ImplSVEvent* m_nSizeAllocEventId;
 
     std::unique_ptr<weld::ComboBox> m_xAutoColorLB;
+    std::unique_ptr<weld::Widget> m_xAutoColorImg;
     std::unique_ptr<weld::ComboBox> m_xColorSchemeLB;
+    std::unique_ptr<weld::Widget> m_xColorSchemeImg;
     std::unique_ptr<weld::Button> m_xSaveSchemePB;
     std::unique_ptr<weld::Button> m_xDeleteSchemePB;
     std::unique_ptr<ColorConfigCtrl_Impl> m_xColorConfigCT;

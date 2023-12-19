@@ -21,6 +21,8 @@
 
 #include <bitset>
 
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/debug.hxx>
 #include <editeng/editids.hrc>
 #include <svtools/colorcfg.hxx>
@@ -36,6 +38,8 @@
 #include <strings.hrc>
 #include <svtools/miscopt.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/ExtendedColorScheme.hxx>
+#include <officecfg/Office/UI.hxx>
 using namespace ::com::sun::star;
 using namespace ::svtools;
 
@@ -87,6 +91,8 @@ struct
     OUString pColor;
     // has checkbox?
     bool bCheckBox;
+    //prop name
+    std::u16string_view sPropName;
 }
 const vEntryInfo[] =
 {
@@ -98,67 +104,67 @@ const vEntryInfo[] =
 
     // The list of these entries (enum ColorConfigEntry) are in colorcfg.hxx.
 
-    { Group_General, IDS(doccolor) },
-    { Group_General, IDS_CB(docboundaries) },
-    { Group_General, IDS(appback) },
-    { Group_General, IDS_CB(objboundaries) },
-    { Group_General, IDS_CB(tblboundaries) },
-    { Group_General, IDS(font) },
-    { Group_General, IDS_CB(unvisitedlinks) },
-    { Group_General, IDS_CB(visitedlinks) },
-    { Group_General, IDS(autospellcheck) },
-    { Group_General, IDS(grammarcheck) },
-    { Group_General, IDS(smarttags) },
-    { Group_General, IDS_CB(shadows) },
+    { Group_General, IDS(doccolor), std::u16string_view(u"/DocColor") },
+    { Group_General, IDS_CB(docboundaries), std::u16string_view(u"/DocBoundaries") },
+    { Group_General, IDS(appback), std::u16string_view(u"/AppBackground") },
+    { Group_General, IDS_CB(objboundaries), std::u16string_view(u"/ObjectBoundaries") },
+    { Group_General, IDS_CB(tblboundaries), std::u16string_view(u"/TableBoundaries") },
+    { Group_General, IDS(font), std::u16string_view(u"/FontColor") },
+    { Group_General, IDS_CB(unvisitedlinks), std::u16string_view(u"/Links") },
+    { Group_General, IDS_CB(visitedlinks), std::u16string_view(u"/LinksVisited") },
+    { Group_General, IDS(autospellcheck), std::u16string_view(u"/Spell") },
+    { Group_General, IDS(grammarcheck), std::u16string_view(u"/Grammar") },
+    { Group_General, IDS(smarttags), std::u16string_view(u"/SmartTags") },
+    { Group_General, IDS_CB(shadows), std::u16string_view(u"/Shadow") },
 
-    { Group_Writer,  IDS(writergrid) },
-    { Group_Writer,  IDS_CB(field) },
-    { Group_Writer,  IDS_CB(index) },
-    { Group_Writer,  IDS(direct) },
-    { Group_Writer,  IDS(script) },
-    { Group_Writer,  IDS_CB(section) },
-    { Group_Writer,  IDS(hdft) },
-    { Group_Writer,  IDS(pagebreak) },
+    { Group_Writer,  IDS(writergrid), std::u16string_view(u"/WriterTextGrid") },
+    { Group_Writer,  IDS_CB(field), std::u16string_view(u"/WriterFieldShadings") },
+    { Group_Writer,  IDS_CB(index), std::u16string_view(u"/WriterIdxShadings") },
+    { Group_Writer,  IDS(direct), std::u16string_view(u"/WriterDirectCursor") },
+    { Group_Writer,  IDS(script), std::u16string_view(u"/WriterScriptIndicator") },
+    { Group_Writer,  IDS_CB(section), std::u16string_view(u"/WriterSectionBoundaries") },
+    { Group_Writer,  IDS(hdft), std::u16string_view(u"/WriterHeaderFooterMark") },
+    { Group_Writer,  IDS(pagebreak), std::u16string_view(u"/WriterPageBreaks") },
 
-    { Group_Html,    IDS(sgml) },
-    { Group_Html,    IDS(htmlcomment) },
-    { Group_Html,    IDS(htmlkeyword) },
-    { Group_Html,    IDS(unknown) },
+    { Group_Html,    IDS(sgml), std::u16string_view(u"/HTMLSGML") },
+    { Group_Html,    IDS(htmlcomment), std::u16string_view(u"/HTMLComment") },
+    { Group_Html,    IDS(htmlkeyword), std::u16string_view(u"/HTMLKeyword") },
+    { Group_Html,    IDS(unknown), std::u16string_view(u"/HTMLUnknown") },
 
-    { Group_Calc,    IDS(calcgrid) },
-    { Group_Calc,    IDS(brk) },
-    { Group_Calc,    IDS(brkmanual) },
-    { Group_Calc,    IDS(brkauto) },
-    { Group_Calc,    IDS_CB(hiddencolrow) },
-    { Group_Calc,    IDS_CB(textoverflow) },
-    { Group_Calc,    IDS(comments) },
-    { Group_Calc,    IDS(det) },
-    { Group_Calc,    IDS(deterror) },
-    { Group_Calc,    IDS(ref) },
-    { Group_Calc,    IDS(notes) },
-    { Group_Calc,    IDS(values) },
-    { Group_Calc,    IDS(formulas) },
-    { Group_Calc,    IDS(text) },
-    { Group_Calc,    IDS(protectedcells) },
+    { Group_Calc,    IDS(calcgrid), std::u16string_view(u"/CalcGrid") },
+    { Group_Calc,    IDS(brk), std::u16string_view(u"/CalcPageBreak") },
+    { Group_Calc,    IDS(brkmanual), std::u16string_view(u"/CalcPageBreakManual") },
+    { Group_Calc,    IDS(brkauto), std::u16string_view(u"/CalcPageBreakAutomatic") },
+    { Group_Calc,    IDS_CB(hiddencolrow), std::u16string_view(u"/CalcHiddenColRow") },
+    { Group_Calc,    IDS_CB(textoverflow), std::u16string_view(u"/CalcTextOverflow") },
+    { Group_Calc,    IDS(comments), std::u16string_view(u"/CalcComments") },
+    { Group_Calc,    IDS(det), std::u16string_view(u"/CalcDetective") },
+    { Group_Calc,    IDS(deterror), std::u16string_view(u"/CalcDetectiveError") },
+    { Group_Calc,    IDS(ref), std::u16string_view(u"/CalcReference") },
+    { Group_Calc,    IDS(notes), std::u16string_view(u"/CalcNotesBackground") },
+    { Group_Calc,    IDS(values), std::u16string_view(u"/CalcValue") },
+    { Group_Calc,    IDS(formulas), std::u16string_view(u"/CalcFormula") },
+    { Group_Calc,    IDS(text), std::u16string_view(u"/CalcText") },
+    { Group_Calc,    IDS(protectedcells), std::u16string_view(u"/CalcProtectedBackground") },
 
-    { Group_Draw,    IDS(drawgrid) },
+    { Group_Draw,    IDS(drawgrid), std::u16string_view(u"/DrawGrid") },
 
-    { Group_Basic,   IDS(basiceditor) },
-    { Group_Basic,   IDS(basicid) },
-    { Group_Basic,   IDS(basiccomment) },
-    { Group_Basic,   IDS(basicnumber) },
-    { Group_Basic,   IDS(basicstring) },
-    { Group_Basic,   IDS(basicop) },
-    { Group_Basic,   IDS(basickeyword) },
-    { Group_Basic,   IDS(error) },
+    { Group_Basic,   IDS(basiceditor), std::u16string_view(u"/BASICEditor") },
+    { Group_Basic,   IDS(basicid), std::u16string_view(u"/BASICIdentifier") },
+    { Group_Basic,   IDS(basiccomment), std::u16string_view(u"/BASICComment") },
+    { Group_Basic,   IDS(basicnumber), std::u16string_view(u"/BASICNumber") },
+    { Group_Basic,   IDS(basicstring), std::u16string_view(u"/BASICString") },
+    { Group_Basic,   IDS(basicop), std::u16string_view(u"/BASICOperator") },
+    { Group_Basic,   IDS(basickeyword), std::u16string_view(u"/BASICKeyword") },
+    { Group_Basic,   IDS(error), std::u16string_view(u"/BASICError") },
 
-    { Group_Sql,     IDS(sqlid) },
-    { Group_Sql,     IDS(sqlnumber) },
-    { Group_Sql,     IDS(sqlstring) },
-    { Group_Sql,     IDS(sqlop) },
-    { Group_Sql,     IDS(sqlkeyword) },
-    { Group_Sql,     IDS(sqlparam) },
-    { Group_Sql,     IDS(sqlcomment) }
+    { Group_Sql,     IDS(sqlid), std::u16string_view(u"/SQLIdentifier") },
+    { Group_Sql,     IDS(sqlnumber), std::u16string_view(u"/SQLNumber") },
+    { Group_Sql,     IDS(sqlstring), std::u16string_view(u"/SQLString") },
+    { Group_Sql,     IDS(sqlop), std::u16string_view(u"/SQLOperator") },
+    { Group_Sql,     IDS(sqlkeyword), std::u16string_view(u"/SQLKeyword") },
+    { Group_Sql,     IDS(sqlparam), std::u16string_view(u"/SQLParameter") },
+    { Group_Sql,     IDS(sqlcomment), std::u16string_view(u"/SQLComment") }
 
     #undef IDS
 };
@@ -258,8 +264,10 @@ private:
         void SetLinks(Link<weld::Toggleable&,void> const&,
                       Link<ColorListBox&,void> const&,
                       Link<weld::Widget&,void> const&);
-        void Update (ColorConfigValue const&);
-        void Update (ExtendedColorConfigValue const&);
+        void Update (ColorConfigValue const&, const std::u16string_view&,
+            css::uno::Reference<css::configuration::XReadWriteAccess> const&);
+        void Update (ExtendedColorConfigValue const&, const std::u16string_view&,
+            css::uno::Reference<css::configuration::XReadWriteAccess> const&);
         void ColorChanged (ColorConfigValue&);
         void ColorChanged (ExtendedColorConfigValue&);
 
@@ -273,6 +281,8 @@ private:
         // default color
         Color m_aDefaultColor;
     };
+
+    css::uno::Reference<css::configuration::XReadWriteAccess> m_xReadWriteAccess;
 
 private:
     weld::Window* m_pTopLevel;
@@ -363,22 +373,54 @@ void ColorConfigWindow_Impl::Entry::SetLinks(Link<weld::Toggleable&,void> const&
 }
 
 // updates a default color config entry
-void ColorConfigWindow_Impl::Entry::Update(ColorConfigValue const& rValue)
+void ColorConfigWindow_Impl::Entry::Update(ColorConfigValue const& rValue, const std::u16string_view& rConfigPath,
+    css::uno::Reference<css::configuration::XReadWriteAccess> const& xReadWriteAccess)
 {
     Color aColor(rValue.nColor);
     m_xColorList->SelectEntry(aColor);
+
+    bool bReadOnly = false;
+    OUString aConfigPath = OUString::Concat(rConfigPath) + "/Color";
+    if (xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath))
+    {
+        css::beans::Property aProperty = xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath);
+        bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+    }
+    m_xColorList->set_sensitive(!bReadOnly);
+
     if (weld::Toggleable* pCheckBox = dynamic_cast<weld::Toggleable*>(m_xText.get()))
+    {
+        bReadOnly = false;
         pCheckBox->set_active(rValue.bIsVisible);
+
+        aConfigPath = OUString::Concat(rConfigPath) + "/IsVisible";
+        if (xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath))
+        {
+            css::beans::Property aProperty = xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath);
+            bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+        }
+        pCheckBox->set_sensitive(!bReadOnly);
+    }
 }
 
 // updates an extended color config entry
-void ColorConfigWindow_Impl::Entry::Update(ExtendedColorConfigValue const& rValue)
+void ColorConfigWindow_Impl::Entry::Update(ExtendedColorConfigValue const& rValue, const std::u16string_view& rConfigPath,
+    css::uno::Reference<css::configuration::XReadWriteAccess> const& xReadWriteAccess)
 {
     Color aColor(rValue.getColor());
     if (rValue.getColor() == rValue.getDefaultColor())
         m_xColorList->SelectEntry(COL_AUTO);
     else
         m_xColorList->SelectEntry(aColor);
+
+    bool bReadOnly = false;
+    OUString aConfigPath = OUString::Concat(rConfigPath) + rValue.getName() + "/Color";
+    if (xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath))
+    {
+        css::beans::Property aProperty = xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath);
+        bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+    }
+    m_xColorList->set_sensitive(!bReadOnly);
 }
 
 // color of a default entry has changed
@@ -407,6 +449,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(weld::Window* pTopLevel, weld::Co
     , m_xWidget1(m_xBuilder->weld_widget("docboundaries"))
     , m_xWidget2(m_xBuilder->weld_widget("docboundaries_lb"))
 {
+    css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+
     CreateEntries();
 }
 
@@ -509,11 +554,17 @@ void ColorConfigWindow_Impl::Update (
     EditableExtendedColorConfig const* pExtConfig)
 {
     // updating default entries
+    std::optional<OUString> aUIColorSchemeName = officecfg::Office::UI::ColorScheme::CurrentColorScheme::get();
+    OUString aUIColorSchemePath = officecfg::Office::UI::ColorScheme::ColorSchemes::path() + u"/" + aUIColorSchemeName.value();
+
     for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
     {
+        OUString sPath = aUIColorSchemePath + vEntryInfo[i].sPropName;
         ColorConfigEntry const aColorEntry = static_cast<ColorConfigEntry>(i);
         vEntries[i]->Update(
-            pConfig->GetColorValue(aColorEntry)
+            pConfig->GetColorValue(aColorEntry),
+            sPath,
+            m_xReadWriteAccess
         );
     }
 
@@ -523,10 +574,14 @@ void ColorConfigWindow_Impl::Update (
     for (unsigned j = 0; j != nExtCount; ++j)
     {
         OUString sComponentName = pExtConfig->GetComponentName(j);
+        aUIColorSchemePath = officecfg::Office::ExtendedColorScheme::ExtendedColorScheme::ColorSchemes::path() + u"/" +
+            aUIColorSchemeName.value() + u"/" + sComponentName + u"/Entries/";
         unsigned const nColorCount = pExtConfig->GetComponentColorCount(sComponentName);
         for (unsigned k = 0; i != vEntries.size() && k != nColorCount; ++i, ++k)
             vEntries[i]->Update(
-                pExtConfig->GetComponentColorConfigValue(sComponentName, k)
+                pExtConfig->GetComponentColorConfigValue(sComponentName, k),
+                aUIColorSchemePath,
+                m_xReadWriteAccess
             );
     }
 }
@@ -746,7 +801,9 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::Dia
     , bFillItemSetCalled(false)
     , m_nSizeAllocEventId(nullptr)
     , m_xAutoColorLB(m_xBuilder->weld_combo_box("autocolorlb"))
+    , m_xAutoColorImg(m_xBuilder->weld_widget("lockautocolorlb"))
     , m_xColorSchemeLB(m_xBuilder->weld_combo_box("colorschemelb"))
+    , m_xColorSchemeImg(m_xBuilder->weld_widget("lockcolorschemelb"))
     , m_xSaveSchemePB(m_xBuilder->weld_button("save"))
     , m_xDeleteSchemePB(m_xBuilder->weld_button("delete"))
     , m_xColorConfigCT(new ColorConfigCtrl_Impl(pController->getDialog(), *m_xBuilder))
@@ -850,6 +907,13 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
 
     m_xAutoColorLB->set_active( MiscSettings::GetAppColorMode() );
 
+    bool bReadOnly = officecfg::Office::ExtendedColorScheme::ExtendedColorScheme::CurrentColorScheme::isReadOnly() ||
+        officecfg::Office::UI::ColorScheme::CurrentColorScheme::isReadOnly();
+    m_xAutoColorLB->set_sensitive(!bReadOnly);
+    m_xSaveSchemePB->set_sensitive(!bReadOnly);
+    m_xDeleteSchemePB->set_sensitive(!bReadOnly);
+    m_xAutoColorImg->set_visible(bReadOnly);
+
     OUString sUser = GetUserData();
     //has to be called always to speed up accessibility tools
     m_xColorConfigCT->SetScrollPosition(sUser.toInt32());
@@ -857,9 +921,14 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
     const uno::Sequence< OUString >  aSchemes = pColorConfig->GetSchemeNames();
     for(const OUString& s : aSchemes)
         m_xColorSchemeLB->append_text(lcl_SchemeIdToTranslatedName(s));
+
     m_xColorSchemeLB->set_active_text(lcl_SchemeIdToTranslatedName(pColorConfig->GetCurrentSchemeName()));
+    m_xColorSchemeLB->set_sensitive(!officecfg::Office::Common::Misc::ApplicationAppearance::isReadOnly());
+    m_xColorSchemeImg->set_visible(officecfg::Office::Common::Misc::ApplicationAppearance::isReadOnly());
     m_xColorSchemeLB->save_value();
-    m_xDeleteSchemePB->set_sensitive( aSchemes.getLength() > 1 );
+
+    m_xDeleteSchemePB->set_sensitive( aSchemes.getLength() > 1 &&
+        !officecfg::Office::ExtendedColorScheme::ExtendedColorScheme::CurrentColorScheme::isReadOnly() );
     UpdateColorConfig();
 }
 
