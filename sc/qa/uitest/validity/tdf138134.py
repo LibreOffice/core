@@ -41,13 +41,13 @@ class DetectiveCircle(UITestCase):
 
             self.xUITest.executeCommand(".uno:ShowInvalid")
 
-            detectiveCircle1 = document.Sheets.getByName("Sheet1").DrawPage.getCount()
+            detectiveCircle1 = len(document.Sheets.getByName("Sheet1").DrawPage)
             #There should be 1 detective circle object!
             self.assertEqual(detectiveCircle1, 1)
 
             enter_text_to_cell(gridwin, "A1", "2")
 
-            detectiveCircle2 = document.Sheets.getByName("Sheet1").DrawPage.getCount()
+            detectiveCircle2 = len(document.Sheets.getByName("Sheet1").DrawPage)
             #There should not be a detective circle object!
             self.assertEqual(detectiveCircle2, 0)
 

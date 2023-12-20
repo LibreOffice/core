@@ -15,11 +15,11 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf46561(UITestCase):
     def check_header_texts(self, master="", first="", left="", right=""):
         # Get the current header style and its text contents
-        xPageStyle = self.document.getStyleFamilies().getByIndex(2)
-        xHeaderText = xPageStyle.getByIndex(0).HeaderText.String
-        xHeaderTextFirst = xPageStyle.getByIndex(0).HeaderTextFirst.String
-        xHeaderTextLeft = xPageStyle.getByIndex(0).HeaderTextLeft.String
-        xHeaderTextRight = xPageStyle.getByIndex(0).HeaderTextRight.String
+        xPageStyle = self.document.getStyleFamilies()[2]
+        xHeaderText = xPageStyle[0].HeaderText.String
+        xHeaderTextFirst = xPageStyle[0].HeaderTextFirst.String
+        xHeaderTextLeft = xPageStyle[0].HeaderTextLeft.String
+        xHeaderTextRight = xPageStyle[0].HeaderTextRight.String
 
         # Check the current values
         self.assertEqual(master, xHeaderText)

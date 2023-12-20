@@ -23,8 +23,8 @@ class tdf139511(UITestCase):
 
                 self.xUITest.executeCommand(".uno:InsertTable?Columns:short=4&Rows:short=4")
 
-                self.assertEqual(3885, document.DrawPages[0].getByIndex(2).BoundRect.Height)
-                self.assertEqual(14136, document.DrawPages[0].getByIndex(2).BoundRect.Width)
+                self.assertEqual(3885, document.DrawPages[0][2].BoundRect.Height)
+                self.assertEqual(14136, document.DrawPages[0][2].BoundRect.Width)
 
                 with self.ui_test.execute_dialog_through_command(".uno:TransformDialog") as xDialog:
 
@@ -44,8 +44,8 @@ class tdf139511(UITestCase):
 
                 # Without the fix in place, this test would have failed with
                 # AssertionError: 5037 != 8036
-                self.assertEqual(5037, document.DrawPages[0].getByIndex(2).BoundRect.Height)
-                self.assertEqual(10037, document.DrawPages[0].getByIndex(2).BoundRect.Width)
+                self.assertEqual(5037, document.DrawPages[0][2].BoundRect.Height)
+                self.assertEqual(10037, document.DrawPages[0][2].BoundRect.Width)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -54,7 +54,7 @@ class Test(UITestCase):
             editWin = doc.getChild("impress_win")
 
             # Set theme colors.
-            drawPage = component.getDrawPages().getByIndex(0)
+            drawPage = component.getDrawPages()[0]
             master = drawPage.MasterPage
             theme = mkPropertyValues({
                 "Name": "nameA",
@@ -98,8 +98,8 @@ class Test(UITestCase):
                 colorSet.executeAction("CHOOSE", mkPropertyValues({"POS": "16"}))
 
             # Then make sure the doc model has the correct color theme index:
-            drawPage = component.getDrawPages().getByIndex(0)
-            shape = drawPage.getByIndex(0)
+            drawPage = component.getDrawPages()[0]
+            shape = drawPage[0]
             paragraphs = shape.createEnumeration()
             paragraph = paragraphs.nextElement()
             portions = paragraph.createEnumeration()

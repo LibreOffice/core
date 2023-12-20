@@ -62,8 +62,8 @@ class CheckStyle(unittest.TestCase):
         with self.assertRaises(NoSuchElementException):
             xFamily.getByName("foobarbaz")
 
-        with self.assertRaises(IndexOutOfBoundsException):
-            xFamily.getByIndex(-1)
+        with self.assertRaises(IndexError):
+            xFamily[len(xFamily) + 1]
 
         for sStylename in xFamily.ElementNames:
             self.assertTrue(xFamily.hasByName(sStylename))

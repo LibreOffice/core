@@ -26,7 +26,7 @@ class insertCaption(UITestCase):
                 xHeight.executeAction("UP", tuple())
 
 
-            self.assertEqual(document.TextFrames.getCount(), 1)
+            self.assertEqual(len(document.TextFrames), 1)
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
 

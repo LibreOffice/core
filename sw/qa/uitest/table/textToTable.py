@@ -24,13 +24,13 @@ class textToTable(UITestCase):
                 semicolons = xDialog.getChild("semicolons")
                 semicolons.executeAction("CLICK", tuple())
             #verify
-            self.assertEqual(document.TextTables.getCount(), 1)
+            self.assertEqual(len(document.TextTables), 1)
             tables = document.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 1)
             self.assertEqual(len(tables[0].getColumns()), 3)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextTables.getCount(), 0)
+            self.assertEqual(len(document.TextTables), 0)
             self.assertEqual(document.Text.String[0:5], "A;B;C")
 
 
@@ -48,13 +48,13 @@ class textToTable(UITestCase):
                 headingcb = xDialog.getChild("headingcb")
                 headingcb.executeAction("CLICK", tuple())
             #verify
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
             tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 4)
             self.assertEqual(len(tables[0].getColumns()), 3)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(writer_doc.TextTables.getCount(), 0)
+            self.assertEqual(len(writer_doc.TextTables), 0)
             self.assertEqual(writer_doc.Text.String[0:5], "A:B:C")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

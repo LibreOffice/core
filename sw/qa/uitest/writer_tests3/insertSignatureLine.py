@@ -31,7 +31,7 @@ class insertSignatureLine(UITestCase):
                 xInstructions.executeAction("TYPE", mkPropertyValues({"TEXT":"Instructions"}))
 
             #check the signature Line in the document
-            element = document.DrawPage.getByIndex(0)
+            element = document.DrawPage[0]
             self.assertEqual(element.SignatureLineSuggestedSignerName, "Name")
             self.assertEqual(element.SignatureLineSuggestedSignerTitle, "Title")
             self.assertEqual(element.SignatureLineSuggestedSignerEmail, "Email")

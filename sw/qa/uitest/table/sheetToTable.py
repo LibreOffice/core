@@ -22,7 +22,7 @@ class sheetToTable(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
             self.xUITest.executeCommand(".uno:Paste")
             #verify (don't copy hidden cells)
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
             table = writer_doc.getTextTables()[0]
             # This was 3 (copied hidden row)
             self.assertEqual(len(table.getRows()), 2)
@@ -48,7 +48,7 @@ class sheetToTable(UITestCase):
             self.xUITest.executeCommand(".uno:Paste")
 
             #verify also tdf#124646 (don't copy hidden cells)
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
             table = writer_doc.getTextTables()[0]
             # This was 3 (copied hidden row)
             self.assertEqual(len(table.getRows()), 2)
@@ -78,7 +78,7 @@ class sheetToTable(UITestCase):
 
             self.xUITest.executeCommand(".uno:Paste")
 
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
             table = writer_doc.getTextTables()[0]
             self.assertEqual(len(table.getRows()), 4)
             self.assertEqual(table.getCellByName("A1").getString(), "Test 1")
@@ -106,7 +106,7 @@ class sheetToTable(UITestCase):
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 0 != 1
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
             table = writer_doc.getTextTables()[0]
             self.assertEqual(len(table.getRows()), 4)
             self.assertEqual(table.getCellByName("A1").getString(), "Test 1")
@@ -140,7 +140,7 @@ class sheetToTable(UITestCase):
             # This was freezing
             self.xUITest.executeCommand(".uno:Paste")
 
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
             table = writer_doc.getTextTables()[0]
             self.assertEqual(len(table.getRows()), 4)
             self.assertEqual(table.getCellByName("A1").getString(), "Test 1")

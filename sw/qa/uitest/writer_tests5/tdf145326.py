@@ -70,7 +70,7 @@ class Tdf145326(UITestCase):
                 self.assertTrue(sBreakLink not in xMainWin.getChildren())
                 self.assertTrue("writer_edit" in xMainWin.getChildren())
 
-                self.assertEqual(doc2.TextTables.getCount(), 1)
+                self.assertEqual(len(doc2.TextTables), 1)
                 table = doc2.getTextTables()[0]
 
                 self.assertEqual(len(table.getRows()), 7)

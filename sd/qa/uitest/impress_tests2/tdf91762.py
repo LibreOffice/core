@@ -25,12 +25,12 @@ class tdf91762(UITestCase):
                 self.assertEqual('5', get_state_as_dict(xDialog.getChild('columns'))['Text'])
                 self.assertEqual('2', get_state_as_dict(xDialog.getChild('rows'))['Text'])
 
-            self.assertEqual(1961, document.DrawPages[0].getByIndex(1).BoundRect.Height)
-            self.assertEqual(25198, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertEqual(1923, document.DrawPages[0].getByIndex(1).Size.Height)
+            self.assertEqual(1961, document.DrawPages[0][1].BoundRect.Height)
+            self.assertEqual(25198, document.DrawPages[0][1].Size.Width)
+            self.assertEqual(1923, document.DrawPages[0][1].Size.Height)
 
-            self.assertEqual(1400, document.DrawPages[0].getByIndex(1).Position.X)
-            self.assertEqual(3685, document.DrawPages[0].getByIndex(1).Position.Y)
+            self.assertEqual(1400, document.DrawPages[0][1].Position.X)
+            self.assertEqual(3685, document.DrawPages[0][1].Position.Y)
 
             xDoc = self.xUITest.getTopFocusWindow()
             xEdit = xDoc.getChild("impress_win")
@@ -39,7 +39,7 @@ class tdf91762(UITestCase):
                 xEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
             # tdf#138011: Without the fix in place, it will be much lower
-            self.assertEqual(5466, document.DrawPages[0].getByIndex(1).BoundRect.Height)
+            self.assertEqual(5466, document.DrawPages[0][1].BoundRect.Height)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

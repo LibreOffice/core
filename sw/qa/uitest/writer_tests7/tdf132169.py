@@ -33,8 +33,7 @@ class tdf132169(UITestCase):
 
                 xLineMetric.executeAction("UP", tuple())
 
-                drawPage = writer_doc.getDrawPages().getByIndex(0)
-                shape = drawPage.getByIndex(0)
+                shape = writer_doc.getDrawPages()[0][0]
 
                 #Without the fix in place, it would have been 310
                 self.assertEqual(shape.LineWidth, 176)

@@ -47,7 +47,7 @@ class tdf148437(UITestCase):
             xCell = get_cell_by_position(document, 0, 0, 0)
             self.assertEqual(xCell.getString(), "LibreOffice Document Foundation")
             xTextFields = xCell.getTextFields()
-            self.assertEqual(xTextFields.getCount(), 1)
-            self.assertEqual(xTextFields.getByIndex(0).URL, "https://www.documentfoundation.org/")
+            self.assertEqual(len(xTextFields), 1)
+            self.assertEqual(xTextFields[0].URL, "https://www.documentfoundation.org/")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

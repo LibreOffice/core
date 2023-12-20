@@ -17,10 +17,10 @@ class findReplace(UITestCase):
             # check current slide is 1
             self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)
 
-            self.assertEqual("First first first", impress_doc.DrawPages[0].getByIndex(1).String)
-            self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
-            self.assertEqual("Third", impress_doc.DrawPages[2].getByIndex(1).String)
-            self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
+            self.assertEqual("First first first", impress_doc.DrawPages[0][1].String)
+            self.assertEqual("second", impress_doc.DrawPages[1][1].String)
+            self.assertEqual("Third", impress_doc.DrawPages[2][1].String)
+            self.assertEqual("Text size 16", impress_doc.DrawPages[3][1].String)
 
             # search for string "second"
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
@@ -41,10 +41,10 @@ class findReplace(UITestCase):
                 #verify we moved to slide 3
                 self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 3)  #3rd slide
 
-            self.assertEqual("First first first", impress_doc.DrawPages[0].getByIndex(1).String)
-            self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
-            self.assertEqual("Third", impress_doc.DrawPages[2].getByIndex(1).String)
-            self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
+            self.assertEqual("First first first", impress_doc.DrawPages[0][1].String)
+            self.assertEqual("second", impress_doc.DrawPages[1][1].String)
+            self.assertEqual("Third", impress_doc.DrawPages[2][1].String)
+            self.assertEqual("Text size 16", impress_doc.DrawPages[3][1].String)
 
             # now open dialog and verify find="third" (remember last value);
             # replace value with "First" (click match case) with word "Replace"
@@ -80,11 +80,11 @@ class findReplace(UITestCase):
                 matchcase = xDialog.getChild("matchcase")
                 matchcase.executeAction("CLICK", tuple())  # uncheck match case
 
-                self.assertEqual("Replace first first", impress_doc.DrawPages[0].getByIndex(1).String)
-                self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
+                self.assertEqual("Replace first first", impress_doc.DrawPages[0][1].String)
+                self.assertEqual("second", impress_doc.DrawPages[1][1].String)
                 # tdf#145868 - Third was search for earlier, but never should have been replaced
-                self.assertEqual("Third", impress_doc.DrawPages[2].getByIndex(1).String)
-                self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
+                self.assertEqual("Third", impress_doc.DrawPages[2][1].String)
+                self.assertEqual("Text size 16", impress_doc.DrawPages[3][1].String)
 
                 replaceterm = xDialog.getChild("replaceterm")
                 replaceterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -97,9 +97,9 @@ class findReplace(UITestCase):
 
             # tdf#122788: Without the fix in place, this test would have failed with
             # AssertionError: 'Replace aaa aaa' != 'Replace first first'
-            self.assertEqual("Replace aaa aaa", impress_doc.DrawPages[0].getByIndex(1).String)
-            self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
-            self.assertEqual("Third", impress_doc.DrawPages[2].getByIndex(1).String)
-            self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
+            self.assertEqual("Replace aaa aaa", impress_doc.DrawPages[0][1].String)
+            self.assertEqual("second", impress_doc.DrawPages[1][1].String)
+            self.assertEqual("Third", impress_doc.DrawPages[2][1].String)
+            self.assertEqual("Text size 16", impress_doc.DrawPages[3][1].String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

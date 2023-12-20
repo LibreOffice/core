@@ -21,7 +21,7 @@ class Test(UITestCase):
             doc = self.xUITest.getTopFocusWindow()
             editWin = doc.getChild("impress_win")
             # Set theme colors.
-            drawPage = component.getDrawPages().getByIndex(0)
+            drawPage = component.getDrawPages()[0]
             master = drawPage.MasterPage
             theme = mkPropertyValues({
                 "Name": "nameA",
@@ -59,7 +59,7 @@ class Test(UITestCase):
                 colorSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "4"}))
 
             # Then make sure the doc model is updated accordingly:
-            shape = drawPage.getByIndex(0)
+            shape = drawPage[0]
             # Without the accompanying fix in place, this test would have failed with:
             # AssertionError: -1 != 3
             # i.e. the theme metadata of the selected fill color was lost.

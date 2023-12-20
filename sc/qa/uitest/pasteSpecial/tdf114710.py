@@ -39,6 +39,6 @@ class tdf114710(UITestCase):
 
 
             # Without the fix in place, this test would have crashed here
-            self.assertEqual(1, writer_document.GraphicObjects.getCount())
+            self.assertEqual(1, len(writer_document.GraphicObjects))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -22,7 +22,7 @@ class XSelectionChangeListenerExtended(unohelper.Base, XSelectionChangeListener)
         global selectionChangedResult
         selection = event.Source.getSelection()
         if selection.supportsService("com.sun.star.text.TextRanges"):
-            textRange = selection.getByIndex(0)
+            textRange = selection[0]
             if textRange.getString() == "foo":
                 selectionChangedResult = 1
             else:

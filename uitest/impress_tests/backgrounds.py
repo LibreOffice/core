@@ -19,91 +19,91 @@ class ImpressBackgrounds(UITestCase):
     def checkDefaultBackground(self, btn):
         document = self.ui_test.get_component()
         if btn == 'btnnone':
-            self.assertEqual(document.DrawPages.getByIndex(0).Background, None)
+            self.assertEqual(document.DrawPages[0].Background, None)
         elif btn == 'btncolor':
             self.assertEqual(
-              hex(document.DrawPages.getByIndex(0).Background.FillColor), '0x729fcf')
+              hex(document.DrawPages[0].Background.FillColor), '0x729fcf')
             self.assertEqual(
-              hex(document.DrawPages.getByIndex(0).Background.FillColor), '0x729fcf')
+              hex(document.DrawPages[0].Background.FillColor), '0x729fcf')
         elif btn == 'btngradient':
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.Style, LINEAR)
+              document.DrawPages[0].Background.FillGradient.Style, LINEAR)
             self.assertEqual(
-              hex(document.DrawPages.getByIndex(0).Background.FillGradient.StartColor), '0xdde8cb')
+              hex(document.DrawPages[0].Background.FillGradient.StartColor), '0xdde8cb')
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.Angle, 300)
+              document.DrawPages[0].Background.FillGradient.Angle, 300)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.Border, 0)
+              document.DrawPages[0].Background.FillGradient.Border, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.XOffset, 0)
+              document.DrawPages[0].Background.FillGradient.XOffset, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.YOffset, 0)
+              document.DrawPages[0].Background.FillGradient.YOffset, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.StartIntensity, 100)
+              document.DrawPages[0].Background.FillGradient.StartIntensity, 100)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.EndIntensity, 100)
+              document.DrawPages[0].Background.FillGradient.EndIntensity, 100)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradientName, 'Pastel Bouquet')
+              document.DrawPages[0].Background.FillGradientName, 'Pastel Bouquet')
         elif btn == 'btnhatch':
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatch.Style, SINGLE )
+              document.DrawPages[0].Background.FillHatch.Style, SINGLE )
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatch.Color, 0)
+              document.DrawPages[0].Background.FillHatch.Color, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatch.Distance, 102)
+              document.DrawPages[0].Background.FillHatch.Distance, 102)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatch.Angle, 0)
+              document.DrawPages[0].Background.FillHatch.Angle, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatchName, 'Black 0 Degrees')
+              document.DrawPages[0].Background.FillHatchName, 'Black 0 Degrees')
         elif btn == 'btnbitmap':
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapMode, REPEAT)
+              document.DrawPages[0].Background.FillBitmapMode, REPEAT)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapPositionOffsetX, 0)
+              document.DrawPages[0].Background.FillBitmapPositionOffsetX, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapPositionOffsetY, 0)
+              document.DrawPages[0].Background.FillBitmapPositionOffsetY, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapRectanglePoint, MIDDLE_MIDDLE)
+              document.DrawPages[0].Background.FillBitmapRectanglePoint, MIDDLE_MIDDLE)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapStretch, False)
+              document.DrawPages[0].Background.FillBitmapStretch, False)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapTile, True)
+              document.DrawPages[0].Background.FillBitmapTile, True)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapOffsetX, 0)
+              document.DrawPages[0].Background.FillBitmapOffsetX, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapOffsetY, 0)
+              document.DrawPages[0].Background.FillBitmapOffsetY, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapLogicalSize, True)
+              document.DrawPages[0].Background.FillBitmapLogicalSize, True)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapSizeX, 2540)
+              document.DrawPages[0].Background.FillBitmapSizeX, 2540)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapSizeY, 2540)
-            self.assertEqual(document.DrawPages.getByIndex(0).Background.FillBitmapName, 'Painted White')
+              document.DrawPages[0].Background.FillBitmapSizeY, 2540)
+            self.assertEqual(document.DrawPages[0].Background.FillBitmapName, 'Painted White')
         elif btn == 'btnpattern':
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapMode, REPEAT)
+              document.DrawPages[0].Background.FillBitmapMode, REPEAT)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapPositionOffsetX, 0)
+              document.DrawPages[0].Background.FillBitmapPositionOffsetX, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapPositionOffsetY, 0)
+              document.DrawPages[0].Background.FillBitmapPositionOffsetY, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapRectanglePoint, MIDDLE_MIDDLE)
+              document.DrawPages[0].Background.FillBitmapRectanglePoint, MIDDLE_MIDDLE)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapStretch, True)
+              document.DrawPages[0].Background.FillBitmapStretch, True)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapTile, True)
+              document.DrawPages[0].Background.FillBitmapTile, True)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapOffsetX, 0)
+              document.DrawPages[0].Background.FillBitmapOffsetX, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapOffsetY, 0)
+              document.DrawPages[0].Background.FillBitmapOffsetY, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapLogicalSize, True)
+              document.DrawPages[0].Background.FillBitmapLogicalSize, True)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapSizeX, 0)
+              document.DrawPages[0].Background.FillBitmapSizeX, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapSizeY, 0)
+              document.DrawPages[0].Background.FillBitmapSizeY, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillBitmapName, '5 Percent')
+              document.DrawPages[0].Background.FillBitmapName, '5 Percent')
 
 
     def test_background_dialog(self):

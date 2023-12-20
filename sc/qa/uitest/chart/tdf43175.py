@@ -27,7 +27,7 @@ class Tdf43175(UITestCase):
 
             aSheetNames = ['Blad1', 'Blad2', 'Blad1_2', 'Blad2_2']
 
-            self.assertEqual(4, document.Sheets.getCount())
+            self.assertEqual(4, len(document.Sheets))
             for i in range(4):
                 self.assertEqual(aSheetNames[i], document.Sheets[i].Name)
 

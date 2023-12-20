@@ -22,13 +22,13 @@ class splitTable(UITestCase):
 
                 copyheading = xDialog.getChild("copyheading")
                 copyheading.executeAction("CLICK", tuple())
-            self.assertEqual(writer_doc.TextTables.getCount(), 2)
+            self.assertEqual(len(writer_doc.TextTables), 2)
             tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
             self.assertEqual(len(tables[1].getRows()), 5)
             #undo -> verify 1 tables
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
 
         #dialog Split table, check Custom heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
@@ -39,13 +39,13 @@ class splitTable(UITestCase):
 
                 customheading = xDialog.getChild("customheading")
                 customheading.executeAction("CLICK", tuple())
-            self.assertEqual(writer_doc.TextTables.getCount(), 2)
+            self.assertEqual(len(writer_doc.TextTables), 2)
             tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
             self.assertEqual(len(tables[1].getRows()), 4)
             #undo -> verify 1 tables
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
 
         #dialog Split table, check No heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
@@ -56,13 +56,13 @@ class splitTable(UITestCase):
 
                 noheading = xDialog.getChild("noheading")
                 noheading.executeAction("CLICK", tuple())
-            self.assertEqual(writer_doc.TextTables.getCount(), 2)
+            self.assertEqual(len(writer_doc.TextTables), 2)
             tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
             self.assertEqual(len(tables[1].getRows()), 4)
             #undo -> verify 1 tables
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
 
     def test_tdf115572_remember_split_table_option(self):
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")):

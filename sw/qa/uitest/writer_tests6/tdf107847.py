@@ -27,7 +27,7 @@ class tdf107847(UITestCase):
                 select_pos(xTabs, "7")
                 select_pos(xTabs, "8")   #tab Macro
 
-            self.assertEqual(document.TextFrames.getCount(), 1)
+            self.assertEqual(len(document.TextFrames), 1)
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextFrames.getCount(), 0)
+            self.assertEqual(len(document.TextFrames), 0)
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

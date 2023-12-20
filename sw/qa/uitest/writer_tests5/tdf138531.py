@@ -35,7 +35,7 @@ class Tdf138531(UITestCase):
                 formatProperty = mkPropertyValues({"SelectedFormat": 59})
                 self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
 
-                self.assertEqual(1, writer_doc.TextTables.getCount())
+                self.assertEqual(1, len(writer_doc.TextTables))
                 table = writer_doc.getTextTables()[0]
                 self.assertEqual("First", table.getCellByName("A1").getString())
                 self.assertEqual("Second", table.getCellByName("A2").getString())

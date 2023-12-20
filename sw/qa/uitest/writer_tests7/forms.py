@@ -132,8 +132,7 @@ class Forms(UITestCase):
 
                 self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-                drawPage = document.getDrawPages().getByIndex(0)
-                shape = drawPage.getByIndex(0)
+                shape = document.getDrawPages()[0][0]
                 self.assertEqual(13996, shape.getSize().Width)
                 self.assertEqual(2408, shape.getSize().Height)
 

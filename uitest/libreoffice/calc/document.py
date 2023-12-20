@@ -12,7 +12,7 @@ def get_sheet_from_doc(document, index=None, name=None):
     index -- the 0-based index of the sheet (may not be used together with name)
     name -- the name of the sheet (may not be used together with index)
     """
-    return document.getSheets().getByIndex(index)
+    return document.getSheets()[index]
 
 def get_cell_by_position(document, tab, column, row):
     """ Get the cell object through its position in a document
@@ -35,7 +35,7 @@ def get_column(document, column, tab = 0):
     column -- The 0-based column number
     """
     sheet = get_sheet_from_doc(document, tab)
-    return sheet.getColumns().getByIndex(column)
+    return sheet.getColumns()[column]
 
 def get_row(document, row, tab = 0):
     """ Get the row object through the row index
@@ -46,7 +46,7 @@ def get_row(document, row, tab = 0):
     column -- The 0-based row number
     """
     sheet = get_sheet_from_doc(document, tab)
-    return sheet.getRows().getByIndex(row)
+    return sheet.getRows()[row]
 
 def is_row_hidden(document, row, tab = 0):
     """ Check whether a row object is hidden

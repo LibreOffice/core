@@ -30,8 +30,7 @@ class SvxTableControllerTest(UITestCase):
                 shadowCheckbox.executeAction("CLICK", tuple())
 
             # Check if the shadow was enabled.
-            drawPage = component.getDrawPages().getByIndex(0)
-            shape = drawPage.getByIndex(0)
+            shape = component.getDrawPages()[0][0]
             # Without the accompanying fix in place, this test would have failed with:
             # AssertionError: False != True
             # i.e. the table still had no shadow.

@@ -20,7 +20,7 @@ class tdf106899(UITestCase):
 
             # Update the alphabetical index and check if it contains the utf8 index entry
             xDocumentIndexes = document.DocumentIndexes
-            self.assertEqual(xDocumentIndexes.getCount(), 1)
+            self.assertEqual(len(xDocumentIndexes), 1)
             self.assertEqual(xDocumentIndexes.hasByName("Alphabetical Index1"), True)
             xDocumentIndex = xDocumentIndexes.getByName("Alphabetical Index1")
             xIndexAnchor = xDocumentIndex.getAnchor()

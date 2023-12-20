@@ -19,6 +19,6 @@ class tdf124896(UITestCase):
             pass
 
         #verify; no crashes
-        self.assertEqual(calc_doc.Sheets.getCount(), 2)
+        self.assertEqual(len(calc_doc.Sheets), 2)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

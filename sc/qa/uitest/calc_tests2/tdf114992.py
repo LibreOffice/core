@@ -16,8 +16,8 @@ class tdf114992(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf114992.ods")) as calc_doc:
             self.xUITest.executeCommand(".uno:Remove")
 
-            self.assertEqual(calc_doc.Sheets.getCount(), 1)
+            self.assertEqual(len(calc_doc.Sheets), 1)
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(calc_doc.Sheets.getCount(), 2)
+            self.assertEqual(len(calc_doc.Sheets), 2)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

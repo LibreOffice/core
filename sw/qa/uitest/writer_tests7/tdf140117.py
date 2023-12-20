@@ -24,10 +24,10 @@ class tdf140117(UITestCase):
 
                     self.xUITest.executeCommand(".uno:JumpToHeader")
 
-                    xPageSytle = document.getStyleFamilies().getByIndex(2)
-                    xHeaderText = xPageSytle.getByIndex(0).HeaderText.String
-                    xHeaderLeftText = xPageSytle.getByIndex(0).HeaderTextLeft.String
-                    xHeaderRightText = xPageSytle.getByIndex(0).HeaderTextRight.String
+                    xPageSytle = document.getStyleFamilies()[2]
+                    xHeaderText = xPageSytle[0].HeaderText.String
+                    xHeaderLeftText = xPageSytle[0].HeaderTextLeft.String
+                    xHeaderRightText = xPageSytle[0].HeaderTextRight.String
 
                     # Option "same content on left and right pages" is false,
                     # insert text "XXXX" before actual header text "left" on page 2

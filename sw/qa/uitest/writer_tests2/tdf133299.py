@@ -31,7 +31,7 @@ class tdf133299(UITestCase):
 
             self.xUITest.executeCommand(".uno:Paste")
 
-            xShape = calc_document.Sheets.getByIndex(0).DrawPage.getByIndex(0)
+            xShape = calc_document.Sheets[0].DrawPage[0]
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 'ScCellObj' != 'ScTableSheetObj'

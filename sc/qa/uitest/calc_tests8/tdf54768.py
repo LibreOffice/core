@@ -26,7 +26,7 @@ class tdf54768(UITestCase):
 
             # tdf#155863: Without the fix in place, the image stays cropped,
             #             but stretches to the size of original image
-            self.assertEqual(7988, document.DrawPages[0].getByIndex(0).Size.Width)
-            self.assertEqual(3005, document.DrawPages[0].getByIndex(0).Size.Height)
+            self.assertEqual(7988, document.DrawPages[0][0].Size.Width)
+            self.assertEqual(3005, document.DrawPages[0][0].Size.Height)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

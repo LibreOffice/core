@@ -20,7 +20,7 @@ class tdf126168(UITestCase):
             #3) Press OK in Frame dialog
             with self.ui_test.execute_dialog_through_command(".uno:InsertFrame"):
                 pass
-            self.assertEqual(document.TextFrames.getCount(), 1)
+            self.assertEqual(len(document.TextFrames), 1)
             #New Style from Selection  [uno:StyleNewByExample]
             with self.ui_test.execute_dialog_through_command(".uno:StyleNewByExample") as xDialog:
                 #5) Enter a name in the Create Style dialog and press OK
@@ -30,7 +30,7 @@ class tdf126168(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
             self.xUITest.executeCommand(".uno:Undo")
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.TextFrames.getCount(), 0)
+            self.assertEqual(len(document.TextFrames), 0)
             #7) shift+ctrl+z 3 times
             self.xUITest.executeCommand(".uno:Redo")
             self.xUITest.executeCommand(".uno:Redo")

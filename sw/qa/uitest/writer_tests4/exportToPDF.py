@@ -70,6 +70,6 @@ class exportToPDF(UITestCase):
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
-                self.assertEqual("Hello World", document.DrawPages[0].getByIndex(0).String)
+                self.assertEqual("Hello World", document.DrawPages[0][0].String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

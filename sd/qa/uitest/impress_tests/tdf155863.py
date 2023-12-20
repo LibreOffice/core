@@ -28,7 +28,7 @@ class tdf155863(UITestCase):
             self.xUITest.executeCommand(".uno:OriginalSize")
 
             # tdf#155863: Without the fix in place, the image will be distorted due to the wrong size.
-            self.assertEqual(3597, document.DrawPages[0].getByIndex(0).Size.Width)
-            self.assertEqual(3998, document.DrawPages[0].getByIndex(0).Size.Height)
+            self.assertEqual(3597, document.DrawPages[0][0].Size.Width)
+            self.assertEqual(3998, document.DrawPages[0][0].Size.Height)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

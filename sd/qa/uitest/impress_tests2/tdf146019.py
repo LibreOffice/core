@@ -28,8 +28,7 @@ class tdf146019(UITestCase):
             # Before the fix, a dialog was displayed at this point
 
             # Check the shape is rotated, height > width
-            drawPage = document.getDrawPages().getByIndex(0)
-            shape = drawPage.getByIndex(2)
+            shape = document.getDrawPages()[0][2]
             self.assertEqual(8996, shape.getSize().Width)
             self.assertEqual(11745, shape.getSize().Height)
 

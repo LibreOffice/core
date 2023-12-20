@@ -16,7 +16,7 @@ class tdf142847(UITestCase):
             document = self.ui_test.get_component()
 
             # get the shape
-            shape = document.DrawPage.getByIndex(0)
+            shape = document.DrawPage[0]
 
             # get the textbox
             frame = shape.getText()

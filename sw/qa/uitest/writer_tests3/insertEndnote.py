@@ -22,14 +22,14 @@ class insertEndnote(UITestCase):
             type_text(xWriterEdit, "LibreOffice")
 
             self.assertEqual(document.Endnotes[0].String, "LibreOffice")
-            self.assertEqual(document.Endnotes.getCount(), 1)
+            self.assertEqual(len(document.Endnotes), 1)
             self.xUITest.executeCommand(".uno:Undo")
             self.assertEqual(document.Endnotes[0].String, "")
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.Endnotes.getCount(), 0)
+            self.assertEqual(len(document.Endnotes), 0)
             self.xUITest.executeCommand(".uno:Redo")
             self.assertEqual(document.Endnotes[0].String, "")
-            self.assertEqual(document.Endnotes.getCount(), 1)
+            self.assertEqual(len(document.Endnotes), 1)
             self.xUITest.executeCommand(".uno:Redo")
             self.assertEqual(document.Endnotes[0].String, "LibreOffice")
 

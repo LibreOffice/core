@@ -35,7 +35,7 @@ class Tdf147935(UITestCase):
                 # Without the fix in place, this test would have failed because the warning message
                 # "A table with no rows or no cells cannot be inserted" would have been displayed
 
-                self.assertEqual(1, writer_doc.TextTables.getCount())
+                self.assertEqual(1, len(writer_doc.TextTables))
                 table = writer_doc.getTextTables()[0]
                 self.assertEqual("DDE", table.getCellByName("A1").getString())
 

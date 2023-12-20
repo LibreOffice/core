@@ -127,7 +127,7 @@ class Test(UITestCase):
             # Cut it from the body text:
             self.xUITest.executeCommand(".uno:Cut")
             # Select the shape:
-            xComponent.CurrentController.select(xComponent.DrawPage.getByIndex(0))
+            xComponent.CurrentController.select(xComponent.DrawPage[0])
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             # Begin text edit on the shape:

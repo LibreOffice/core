@@ -27,8 +27,7 @@ class tdf137803(UITestCase):
                 TSB_AUTOGROW_SIZE.executeAction("CLICK",tuple())
 
             # get the shape
-            drawPage = document.getDrawPages().getByIndex(0)
-            shape = drawPage.getByIndex(0)
+            shape = document.getDrawPages()[0][0]
 
             # and the textbox
             frame = shape.getText()

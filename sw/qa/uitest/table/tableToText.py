@@ -21,10 +21,10 @@ class tableToText(UITestCase):
                 tabs.executeAction("CLICK", tuple())
             #verify
             self.assertEqual(writer_doc.Text.String[0:3], "a\ta")
-            self.assertEqual(writer_doc.TextTables.getCount(), 0)
+            self.assertEqual(len(writer_doc.TextTables), 0)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
 
             #dialog Table to text - Paragraph; verify
             with self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText") as xDialog:
@@ -32,10 +32,10 @@ class tableToText(UITestCase):
                 paragraph.executeAction("CLICK", tuple())
             #verify
             self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:4], "a\na\n")
-            self.assertEqual(writer_doc.TextTables.getCount(), 0)
+            self.assertEqual(len(writer_doc.TextTables), 0)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
 
             #dialog Table to text - Semicolons; verify
             with self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText") as xDialog:
@@ -43,10 +43,10 @@ class tableToText(UITestCase):
                 semicolons.executeAction("CLICK", tuple())
             #verify
             self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:6], "a;a\n;\n")
-            self.assertEqual(writer_doc.TextTables.getCount(), 0)
+            self.assertEqual(len(writer_doc.TextTables), 0)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
 
             #dialog Table to text - other; verify
             with self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText") as xDialog:
@@ -58,9 +58,9 @@ class tableToText(UITestCase):
                 othered.executeAction("TYPE", mkPropertyValues({"TEXT":":"}))
             #verify
             self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:6], "a:a\n:\n")
-            self.assertEqual(writer_doc.TextTables.getCount(), 0)
+            self.assertEqual(len(writer_doc.TextTables), 0)
             #undo
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            self.assertEqual(len(writer_doc.TextTables), 1)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

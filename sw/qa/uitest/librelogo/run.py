@@ -59,7 +59,7 @@ class LibreLogoTest(UITestCase):
             # drawing, ie. in this example, three line shapes
             # instead of a single one. See its fix in
             # commit 502e8785085f9e8b54ee383080442c2dcaf95b15)
-            self.assertEqual(document.DrawPage.getCount(), 2)
+            self.assertEqual(len(document.DrawPage), 2)
 
             # check formatting by "magic wand"
             self.logo("__translate__")
@@ -98,7 +98,7 @@ x 3 ; draw only a few levels
                 pass
             # new shape + previous two ones = 3
 # disable unreliable test. Depending on how busy the machine is, this may produce 3 or 4
-#            self.assertEqual(document.DrawPage.getCount(), 3)
+#            self.assertEqual(len(document.DrawPage), 3)
 
    def check_label(self, hasCustomLock):
         sLock = "CLEARSCREEN "
@@ -119,8 +119,8 @@ x 3 ; draw only a few levels
                 pass
 
             # turtle and text shape
-            self.assertEqual(document.DrawPage.getCount(), 2)
-            textShape = document.DrawPage.getByIndex(1)
+            self.assertEqual(len(document.DrawPage), 2)
+            textShape = document.DrawPage[1]
             # text in the text shape
             self.assertEqual(textShape.getString(), "Hello, World!")
 
@@ -133,8 +133,8 @@ x 3 ; draw only a few levels
                 pass
 
             # turtle and text shape
-            self.assertEqual(document.DrawPage.getCount(), 2)
-            textShape = document.DrawPage.getByIndex(1)
+            self.assertEqual(len(document.DrawPage), 2)
+            textShape = document.DrawPage[1]
             # text in the text shape
             self.assertEqual(textShape.getString(), "Hello, World!")
             # check portion formatting
@@ -184,8 +184,8 @@ x 3 ; draw only a few levels
                 pass
 
             # turtle and text shape
-            self.assertEqual(document.DrawPage.getCount(), 2)
-            textShape = document.DrawPage.getByIndex(1)
+            self.assertEqual(len(document.DrawPage), 2)
+            textShape = document.DrawPage[1]
             # text in the text shape
             self.assertEqual(textShape.getString(), "x, x, x, x, x...")
             # check portion formatting
@@ -240,8 +240,8 @@ x 3 ; draw only a few levels
                 pass
 
             # turtle and text shape
-            self.assertEqual(document.DrawPage.getCount(), 2)
-            textShape = document.DrawPage.getByIndex(1)
+            self.assertEqual(len(document.DrawPage), 2)
+            textShape = document.DrawPage[1]
             # text in the text shape
             self.assertEqual(textShape.getString(), "x, x, x, x, x, x...")
             # check portion formatting
@@ -290,8 +290,8 @@ x 3 ; draw only a few levels
                 pass
 
             # turtle and text shape
-            self.assertEqual(document.DrawPage.getCount(), 2)
-            textShape = document.DrawPage.getByIndex(1)
+            self.assertEqual(len(document.DrawPage), 2)
+            textShape = document.DrawPage[1]
             # text in the text shape
             self.assertEqual(textShape.getString(), "a smcp 11 11...")
             # check portion formatting

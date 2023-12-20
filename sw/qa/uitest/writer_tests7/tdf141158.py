@@ -30,8 +30,8 @@ class TestTdf141158(UITestCase):
             xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "2"}))
             self.xUITest.executeCommand(".uno:JumpToHeader")
             # get the text of the header
-            xPageSytle = document.getStyleFamilies().getByIndex(2)
-            xHeaderLeftText = xPageSytle.getByIndex(0).HeaderTextLeft.String
+            xPageSytle = document.getStyleFamilies()[2]
+            xHeaderLeftText = xPageSytle[0].HeaderTextLeft.String
             # without the fix in place it was "Right Header" (lost hidden left header),
             # with the fix it should pass...
             self.assertEqual("Left Header", xHeaderLeftText)

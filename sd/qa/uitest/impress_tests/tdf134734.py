@@ -42,18 +42,12 @@ class TestClass(UITestCase):
                 btncolor = DrawPageDialog.getChild("btncolor")
                 btncolor.executeAction("CLICK",tuple())
 
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillStyle, SOLID)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderLeft, 1016)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderRight, 762)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderTop, 508)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderBottom, 254)
-            self.assertEqual(
-              document.MasterPages.getByIndex(0).BackgroundFullSize, False)
+            self.assertEqual(document.DrawPages[0].Background.FillStyle, SOLID)
+            self.assertEqual(document.DrawPages[0].BorderLeft, 1016)
+            self.assertEqual(document.DrawPages[0].BorderRight, 762)
+            self.assertEqual(document.DrawPages[0].BorderTop, 508)
+            self.assertEqual(document.DrawPages[0].BorderBottom, 254)
+            self.assertEqual(document.MasterPages[0].BackgroundFullSize, False)
 
             # check it
             with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
@@ -63,18 +57,12 @@ class TestClass(UITestCase):
                 self.assertEqual(get_state_as_dict(checkBackgroundFullSize)["Selected"], "false")
                 checkBackgroundFullSize.executeAction("CLICK",tuple())
 
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillStyle, SOLID)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderLeft, 1016)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderRight, 762)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderTop, 508)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderBottom, 254)
-            self.assertEqual(
-              document.MasterPages.getByIndex(0).BackgroundFullSize, True)
+            self.assertEqual(document.DrawPages[0].Background.FillStyle, SOLID)
+            self.assertEqual(document.DrawPages[0].BorderLeft, 1016)
+            self.assertEqual(document.DrawPages[0].BorderRight, 762)
+            self.assertEqual(document.DrawPages[0].BorderTop, 508)
+            self.assertEqual(document.DrawPages[0].BorderBottom, 254)
+            self.assertEqual(document.MasterPages[0].BackgroundFullSize, True)
 
             # uncheck it again
             with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
@@ -84,18 +72,12 @@ class TestClass(UITestCase):
                 self.assertEqual(get_state_as_dict(checkBackgroundFullSize)["Selected"], "true")
                 checkBackgroundFullSize.executeAction("CLICK",tuple())
 
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillStyle, SOLID)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderLeft, 1016)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderRight, 762)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderTop, 508)
-            self.assertEqual(
-              document.DrawPages.getByIndex(0).BorderBottom, 254)
-            self.assertEqual(
-              document.MasterPages.getByIndex(0).BackgroundFullSize, False)
+            self.assertEqual(document.DrawPages[0].Background.FillStyle, SOLID)
+            self.assertEqual(document.DrawPages[0].BorderLeft, 1016)
+            self.assertEqual(document.DrawPages[0].BorderRight, 762)
+            self.assertEqual(document.DrawPages[0].BorderTop, 508)
+            self.assertEqual(document.DrawPages[0].BorderBottom, 254)
+            self.assertEqual(document.MasterPages[0].BackgroundFullSize, False)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

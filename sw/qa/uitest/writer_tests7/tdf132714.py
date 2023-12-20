@@ -33,8 +33,8 @@ class tdf132714(UITestCase):
             self.xUITest.executeCommand(".uno:DeleteTable")
 
             # select embedded chart
-            self.assertEqual(1, document.EmbeddedObjects.Count)
-            document.CurrentController.select(document.getEmbeddedObjects().getByIndex(0))
+            self.assertEqual(1, len(document.EmbeddedObjects))
+            document.CurrentController.select(document.getEmbeddedObjects()[0])
             self.assertEqual("SwXTextEmbeddedObject", document.CurrentSelection.getImplementationName())
 
             xChartMainTop = self.xUITest.getTopFocusWindow()
@@ -76,8 +76,8 @@ class tdf132714(UITestCase):
             self.xUITest.executeCommand(".uno:DeleteTable")
 
             # select embedded chart
-            self.assertEqual(1, document.EmbeddedObjects.Count)
-            document.CurrentController.select(document.getEmbeddedObjects().getByIndex(0))
+            self.assertEqual(1, len(document.EmbeddedObjects))
+            document.CurrentController.select(document.EmbeddedObjects[0])
             self.assertEqual("SwXTextEmbeddedObject", document.CurrentSelection.getImplementationName())
 
             xChartMainTop = self.xUITest.getTopFocusWindow()

@@ -21,29 +21,29 @@ class calcSheetDelete(UITestCase):
             xGridWindow = xCalcDoc.getChild("grid_window")
 
             xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "L12"}))
-            nrSheets = document.Sheets.getCount()  #default number
+            nrSheets = len(document.Sheets)  #default number
 
             with self.ui_test.execute_dialog_through_command(".uno:Insert"):
                 pass
 
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
+            self.assertEqual(len(document.Sheets), nrSheets + 1)
 
             self.xUITest.executeCommand(".uno:Remove")
             xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
             xToolkit.processEventsToIdle()
 
-            self.assertEqual(document.Sheets.getCount(), nrSheets)
+            self.assertEqual(len(document.Sheets), nrSheets)
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
+            self.assertEqual(len(document.Sheets), nrSheets + 1)
             self.xUITest.executeCommand(".uno:Redo")
-            self.assertEqual(document.Sheets.getCount(), nrSheets)
+            self.assertEqual(len(document.Sheets), nrSheets)
 
 
     def test_tdf43078_insert_and_delete_sheet_insert_text(self):
 
         with self.ui_test.create_doc_in_start_center("calc") as document:
 
-            nrSheets = document.Sheets.getCount()  #default number of sheets
+            nrSheets = len(document.Sheets)  #default number of sheets
 
             with self.ui_test.execute_dialog_through_command(".uno:Insert"):
                 pass
@@ -53,7 +53,7 @@ class calcSheetDelete(UITestCase):
             xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
             xToolkit.processEventsToIdle()
 
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 2)
+            self.assertEqual(len(document.Sheets), nrSheets + 2)
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(xGridWindow, "B2", "abcd")
@@ -61,23 +61,23 @@ class calcSheetDelete(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
                 pass
 
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
+            self.assertEqual(len(document.Sheets), nrSheets + 1)
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 2)
+            self.assertEqual(len(document.Sheets), nrSheets + 2)
             self.xUITest.executeCommand(".uno:Redo")
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
+            self.assertEqual(len(document.Sheets), nrSheets + 1)
 
 
     def test_delete_more_sheets_at_once(self):
 
         with self.ui_test.create_doc_in_start_center("calc") as document:
-            nrSheets = document.Sheets.getCount()  #default number
+            nrSheets = len(document.Sheets)  #default number
             i = 0
             while i < 6:
                 with self.ui_test.execute_dialog_through_command(".uno:Insert"):
                     pass
                 i = i + 1
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 6)
+            self.assertEqual(len(document.Sheets), nrSheets + 6)
 
             i = 0
             while i < 5:
@@ -88,17 +88,17 @@ class calcSheetDelete(UITestCase):
 
             xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
             xToolkit.processEventsToIdle()
-            self.assertEqual(document.Sheets.getCount(), nrSheets)
+            self.assertEqual(len(document.Sheets), nrSheets)
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 6)
+            self.assertEqual(len(document.Sheets), nrSheets + 6)
             self.xUITest.executeCommand(".uno:Redo")
-            self.assertEqual(document.Sheets.getCount(), nrSheets)
+            self.assertEqual(len(document.Sheets), nrSheets)
 
 
     def test_tdf105105_delete_lots_of_sheets_at_once(self):
 
         with self.ui_test.create_doc_in_start_center("calc") as document:
-            nrSheets = document.Sheets.getCount()  #default number
+            nrSheets = len(document.Sheets)  #default number
             i = 0
             while i < 100:
                 with self.ui_test.execute_dialog_through_command(".uno:Insert"):
@@ -106,7 +106,7 @@ class calcSheetDelete(UITestCase):
                 i = i + 1
             xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
             xToolkit.processEventsToIdle()
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 100)
+            self.assertEqual(len(document.Sheets), nrSheets + 100)
 
             i = 0
             while i < 99:
@@ -115,10 +115,10 @@ class calcSheetDelete(UITestCase):
 
             self.xUITest.executeCommand(".uno:Remove")
 
-            self.assertEqual(document.Sheets.getCount(), nrSheets)
+            self.assertEqual(len(document.Sheets), nrSheets)
             self.xUITest.executeCommand(".uno:Undo")
-            self.assertEqual(document.Sheets.getCount(), nrSheets + 100)
+            self.assertEqual(len(document.Sheets), nrSheets + 100)
             self.xUITest.executeCommand(".uno:Redo")
-            self.assertEqual(document.Sheets.getCount(), nrSheets)
+            self.assertEqual(len(document.Sheets), nrSheets)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

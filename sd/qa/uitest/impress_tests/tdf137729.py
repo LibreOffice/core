@@ -34,18 +34,18 @@ class tdf137729(UITestCase):
 
 
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatch.Style, SINGLE )
+              document.DrawPages[0].Background.FillHatch.Style, SINGLE )
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatch.Color, 0)
+              document.DrawPages[0].Background.FillHatch.Color, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatch.Distance, 152)
+              document.DrawPages[0].Background.FillHatch.Distance, 152)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatch.Angle, 0)
+              document.DrawPages[0].Background.FillHatch.Angle, 0)
 
             # Without the patch in place, this test would have failed with
             # AssertionError: '' != 'hatch'
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillHatchName, 'hatch')
+              document.DrawPages[0].Background.FillHatchName, 'hatch')
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

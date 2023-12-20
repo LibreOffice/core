@@ -34,26 +34,26 @@ class tdf125449(UITestCase):
 
 
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.Style, LINEAR)
+              document.DrawPages[0].Background.FillGradient.Style, LINEAR)
             self.assertEqual(
-              hex(document.DrawPages.getByIndex(0).Background.FillGradient.StartColor), '0xdde8cb')
+              hex(document.DrawPages[0].Background.FillGradient.StartColor), '0xdde8cb')
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.Angle, 450)
+              document.DrawPages[0].Background.FillGradient.Angle, 450)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.Border, 0)
+              document.DrawPages[0].Background.FillGradient.Border, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.XOffset, 0)
+              document.DrawPages[0].Background.FillGradient.XOffset, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.YOffset, 0)
+              document.DrawPages[0].Background.FillGradient.YOffset, 0)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.StartIntensity, 100)
+              document.DrawPages[0].Background.FillGradient.StartIntensity, 100)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.EndIntensity, 100)
+              document.DrawPages[0].Background.FillGradient.EndIntensity, 100)
 
             # Without the patch in place, this test would have failed with
             # AssertionError: '' != 'gradient'
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradientName, 'gradient')
+              document.DrawPages[0].Background.FillGradientName, 'gradient')
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

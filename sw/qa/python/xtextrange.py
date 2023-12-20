@@ -91,11 +91,11 @@ class TestXTextRange(unittest.TestCase):
     def test_textRangesCompare(self):
         doc = self._uno.getDoc()
         # Bookmark in body text
-        bookmark1 = doc.getBookmarks().getByIndex(0).getAnchor()
+        bookmark1 = doc.getBookmarks()[0].getAnchor()
 
         # Bookmarks in table
-        bookmark2 = doc.getBookmarks().getByIndex(1).getAnchor()
-        bookmark3 = doc.getBookmarks().getByIndex(2).getAnchor()
+        bookmark2 = doc.getBookmarks()[1].getAnchor()
+        bookmark3 = doc.getBookmarks()[2].getAnchor()
 
         res = doc.Text.compareRegionStarts(bookmark1, bookmark2)
         self.assertEqual(res, 1)

@@ -114,10 +114,10 @@ class tdf156611(UITestCase):
                 # 1. run: "eeee" last hyperlink insertion overwritten the whole cell text with "eeee"
                 # 2. run: "aaa cccc eeee" as every hyperlink insertion only overwritten the actually selected text
                 xTextFields = xCell.getTextFields()
-                self.assertEqual(xTextFields.getCount(), i+1)
-                self.assertEqual(xTextFields.getByIndex(i).URL, "https://aWrongLink/")
+                self.assertEqual(len(xTextFields), i+1)
+                self.assertEqual(xTextFields[i].URL, "https://aWrongLink/")
                 if (i==1):
-                    self.assertEqual(xTextFields.getByIndex(0).URL, "https://www.documentfoundation.org/")
+                    self.assertEqual(xTextFields[0].URL, "https://www.documentfoundation.org/")
                 # 1. run: only the last inserted hyperlink will remain: "https://aWrongLink/"
                 # 2. run: both links will be in the cell
 

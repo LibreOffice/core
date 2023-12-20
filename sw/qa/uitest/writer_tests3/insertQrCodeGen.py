@@ -28,7 +28,7 @@ class insertQrCode(UITestCase):
                 xBorder.executeAction("DOWN", tuple())
 
             # check the QR code in the document
-            element = document.DrawPage.getByIndex(0)
+            element = document.DrawPage[0]
             self.assertEqual(element.BarCodeProperties.Payload, "www.libreoffice.org")
             self.assertEqual(element.BarCodeProperties.ErrorCorrection, 1)
             self.assertEqual(element.BarCodeProperties.Border, 1)

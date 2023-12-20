@@ -43,8 +43,8 @@ class tdf80043(UITestCase):
             xCell = get_cell_by_position(document, 0, 0, 0)
             self.assertEqual(xCell.getString(), "LibreOffice")
             xTextFields = xCell.getTextFields()
-            self.assertEqual(xTextFields.getCount(), 1)
-            self.assertEqual(xTextFields.getByIndex(0).URL, "http://www.libreoffice.org/")
+            self.assertEqual(len(xTextFields), 1)
+            self.assertEqual(xTextFields[0].URL, "http://www.libreoffice.org/")
 
             # Reopen hyperlink dialog and check the target and the indication of the hyperlink
             with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
@@ -88,8 +88,8 @@ class tdf80043(UITestCase):
             xCell = get_cell_by_position(document, 0, 0, 0)
             self.assertEqual(xCell.getString(), "LibreOffice")
             xTextFields = xCell.getTextFields()
-            self.assertEqual(xTextFields.getCount(), 1)
-            self.assertEqual(xTextFields.getByIndex(0).URL, "http://www.libreoffice.org/")
+            self.assertEqual(len(xTextFields), 1)
+            self.assertEqual(xTextFields[0].URL, "http://www.libreoffice.org/")
 
             # Reopen hyperlink dialog and check the target and the indication of the hyperlink
             with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
@@ -137,8 +137,8 @@ class tdf80043(UITestCase):
             xCell = get_cell_by_position(document, 0, 0, 0)
             self.assertEqual(xCell.getString(), "LibreOffice Document Foundation")
             xTextFields = xCell.getTextFields()
-            self.assertEqual(xTextFields.getCount(), 1)
-            self.assertEqual(xTextFields.getByIndex(0).URL, "http://www.libreoffice.org/")
+            self.assertEqual(len(xTextFields), 1)
+            self.assertEqual(xTextFields[0].URL, "http://www.libreoffice.org/")
 
             # Move focus to ensure cell is not in edit mode
             xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
@@ -161,8 +161,8 @@ class tdf80043(UITestCase):
             xCell = get_cell_by_position(document, 0, 0, 0)
             self.assertEqual(xCell.getString(), "LibreOffice Document Foundation")
             xTextFields = xCell.getTextFields()
-            self.assertEqual(xTextFields.getCount(), 1)
-            self.assertEqual(xTextFields.getByIndex(0).URL, "https://www.documentfoundation.org/")
+            self.assertEqual(len(xTextFields), 1)
+            self.assertEqual(xTextFields[0].URL, "https://www.documentfoundation.org/")
 
     def test_tdf80043_link_link_cell(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
@@ -213,9 +213,9 @@ class tdf80043(UITestCase):
             xCell = get_cell_by_position(document, 0, 0, 0)
             self.assertEqual(xCell.getString(), "LibreOffice Document Foundation")
             xTextFields = xCell.getTextFields()
-            self.assertEqual(xTextFields.getCount(), 2)
-            self.assertEqual(xTextFields.getByIndex(0).URL, "http://www.libreoffice.org/")
-            self.assertEqual(xTextFields.getByIndex(1).URL, "https://www.documentfoundation.org/")
+            self.assertEqual(len(xTextFields), 2)
+            self.assertEqual(xTextFields[0].URL, "http://www.libreoffice.org/")
+            self.assertEqual(xTextFields[1].URL, "https://www.documentfoundation.org/")
 
             # Move focus to ensure cell is not in edit mode
             xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
@@ -237,7 +237,7 @@ class tdf80043(UITestCase):
             xCell = get_cell_by_position(document, 0, 0, 0)
             self.assertEqual(xCell.getString(), "LibreOffice Document Foundation")
             xTextFields = xCell.getTextFields()
-            self.assertEqual(xTextFields.getCount(), 1)
-            self.assertEqual(xTextFields.getByIndex(0).URL, "https://wiki.documentfoundation.org/Main_Page")
+            self.assertEqual(len(xTextFields), 1)
+            self.assertEqual(xTextFields[0].URL, "https://wiki.documentfoundation.org/Main_Page")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

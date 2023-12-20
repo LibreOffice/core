@@ -19,8 +19,8 @@ class tdf127900(UITestCase):
 
         with self.ui_test.load_file(get_url_for_data_file("tdf127900.fodp")) as doc:
 
-            xMasterLang = doc.MasterPages.getByIndex(0).getByIndex(1).CharLocale.Language
-            xSlideLang = doc.DrawPages.getByIndex(1).getByIndex(1).CharLocale.Language
+            xMasterLang = doc.MasterPages[0][1].CharLocale.Language
+            xSlideLang = doc.DrawPages[1][1].CharLocale.Language
 
             self.assertEqual(xMasterLang, xSlideLang)
 
@@ -35,8 +35,8 @@ class tdf127900(UITestCase):
 
                 select_pos(xDlg.getChild("cbWestLanguage"), "10")
 
-            xMasterLang = doc.MasterPages.getByIndex(0).getByIndex(1).CharLocale.Language
-            xSlideLang = doc.DrawPages.getByIndex(1).getByIndex(1).CharLocale.Language
+            xMasterLang = doc.MasterPages[0][1].CharLocale.Language
+            xSlideLang = doc.DrawPages[1][1].CharLocale.Language
 
             self.assertEqual(xMasterLang, xSlideLang)
 

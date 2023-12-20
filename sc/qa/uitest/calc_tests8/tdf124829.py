@@ -21,6 +21,6 @@ class tdf124829(UITestCase):
                 self.xUITest.executeCommand(".uno:Undo")
 
             #verify; no crashes
-            self.assertEqual(calc_doc.Sheets.getCount(), 6)
+            self.assertEqual(len(calc_doc.Sheets), 6)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

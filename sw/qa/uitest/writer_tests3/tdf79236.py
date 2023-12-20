@@ -24,13 +24,13 @@ class tdf79236(UITestCase):
 
             self.xUITest.executeCommand(".uno:SelectAll")
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaLeftMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaRightMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaTopMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaBottomMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaFirstLineIndent, 0)
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).String, "Test for tdf79236")
+            self.assertEqual(document.CurrentSelection[0].String, "Test for tdf79236")
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xParagraphDlg:
 
@@ -59,11 +59,11 @@ class tdf79236(UITestCase):
                     xTopSpnBtn.executeAction("UP", tuple())
 
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 1016)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 1016)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 1016)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 1016)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaLeftMargin, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaRightMargin, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaTopMargin, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaBottomMargin, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaFirstLineIndent, 1016)
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xParagraphDlg:
 
@@ -90,29 +90,29 @@ class tdf79236(UITestCase):
                     xTopSpnBtn.executeAction("DOWN", tuple())
 
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaLeftMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaRightMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaTopMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaBottomMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaFirstLineIndent, 0)
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 1016)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 1016)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 1016)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 1016)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaLeftMargin, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaRightMargin, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaTopMargin, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaBottomMargin, 1016)
+            self.assertEqual(document.CurrentSelection[0].ParaFirstLineIndent, 1016)
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 0)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaLeftMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaRightMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaTopMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaBottomMargin, 0)
+            self.assertEqual(document.CurrentSelection[0].ParaFirstLineIndent, 0)
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).String, "Test for tdf79236")
+            self.assertEqual(document.CurrentSelection[0].String, "Test for tdf79236")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

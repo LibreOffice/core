@@ -16,7 +16,7 @@ class tdf141557(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf141557.docx")):
             document = self.ui_test.get_component()
 
-            self.assertEqual(AS_CHARACTER, document.DrawPage.getByIndex(0).AnchorType)
+            self.assertEqual(AS_CHARACTER, document.DrawPage[0].AnchorType)
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
@@ -29,6 +29,6 @@ class tdf141557(UITestCase):
 
 
             # Without the fix in place, at this point crash occurs.
-            self.assertEqual(AT_PARAGRAPH, document.DrawPage.getByIndex(0).AnchorType)
+            self.assertEqual(AT_PARAGRAPH, document.DrawPage[0].AnchorType)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

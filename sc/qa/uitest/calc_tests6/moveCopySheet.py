@@ -22,7 +22,7 @@ class moveCopySheet(UITestCase):
                 newName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                 newName.executeAction("TYPE", mkPropertyValues({"TEXT":"newName"}))
             #verify, the file has 2 sheets; first one "newName" is selected
-            self.assertEqual(document.Sheets.getCount(), 2)
+            self.assertEqual(len(document.Sheets), 2)
             # dialog move/copy sheet ; Copy is selected; Select move and -move to end position - ; New Name = moveName
             with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
                 xMoveButton = xDialog.getChild("move")
@@ -38,7 +38,7 @@ class moveCopySheet(UITestCase):
                 newName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                 newName.executeAction("TYPE", mkPropertyValues({"TEXT":"moveName"}))
             # Verify, the file has 2 sheets; first one is "Sheet1" ; second one is "moveName"
-            self.assertEqual(document.Sheets.getCount(), 2)
+            self.assertEqual(len(document.Sheets), 2)
 
             self.assertEqual(document.Sheets[0].Name, "Sheet1")
             self.assertEqual(document.Sheets[1].Name, "moveName")
@@ -47,7 +47,7 @@ class moveCopySheet(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:Move", close_button="cancel"):
                 pass
 
-            self.assertEqual(document.Sheets.getCount(), 2)
+            self.assertEqual(len(document.Sheets), 2)
             self.assertEqual(document.Sheets[0].Name, "Sheet1")
             self.assertEqual(document.Sheets[1].Name, "moveName")
 
@@ -60,7 +60,7 @@ class moveCopySheet(UITestCase):
                 self.assertEqual(get_state_as_dict(newName)["Text"], sheetName)
 
 
-            self.assertEqual(document.Sheets.getCount(), 3)
+            self.assertEqual(len(document.Sheets), 3)
             self.assertEqual(document.Sheets[0].Name, sheetName)
             self.assertEqual(document.Sheets[1].Name, "Sheet1")
             self.assertEqual(document.Sheets[2].Name, "moveName")

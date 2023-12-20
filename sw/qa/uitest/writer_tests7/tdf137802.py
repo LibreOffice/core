@@ -20,8 +20,8 @@ class tdf137802(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            self.assertEqual(document.DrawPage.getCount(), 2)
-            self.assertEqual(AT_PARAGRAPH, document.DrawPage.getByIndex(0).AnchorType)
+            self.assertEqual(len(document.DrawPage), 2)
+            self.assertEqual(AT_PARAGRAPH, document.DrawPage[0].AnchorType)
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
@@ -33,9 +33,9 @@ class tdf137802(UITestCase):
                 xDialog.getChild('topage').executeAction("CLICK", tuple())
 
 
-            self.assertEqual(AT_PAGE, document.DrawPage.getByIndex(0).AnchorType)
+            self.assertEqual(AT_PAGE, document.DrawPage[0].AnchorType)
 
-            self.assertEqual(document.DrawPage.getCount(), 2)
+            self.assertEqual(len(document.DrawPage), 2)
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
@@ -55,23 +55,23 @@ class tdf137802(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "SHIFT+LEFT"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
 
-            self.assertEqual(document.DrawPage.getCount(), 1)
+            self.assertEqual(len(document.DrawPage), 1)
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
             self.xUITest.executeCommand(".uno:Delete")
 
-            self.assertEqual(document.DrawPage.getCount(), 0)
+            self.assertEqual(len(document.DrawPage), 0)
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(document.DrawPage.getCount(), 1)
+            self.assertEqual(len(document.DrawPage), 1)
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(document.DrawPage.getCount(), 2)
+            self.assertEqual(len(document.DrawPage), 2)
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(AT_PARAGRAPH, document.DrawPage.getByIndex(0).AnchorType)
+            self.assertEqual(AT_PARAGRAPH, document.DrawPage[0].AnchorType)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
