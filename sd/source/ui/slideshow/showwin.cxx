@@ -129,7 +129,7 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
     {
         bool bFakeKeyPress = rKEvt.GetKeyCode().GetFullCode() == 0;
         // Ignore workaround of https://gitlab.gnome.org/GNOME/gtk/issues/1785
-        // See calls to GtkSalFrame::makeFakeKeyPress (Fixed in GTK 2.34)
+        // See calls to GtkSalFrame::makeFakeKeyPress (Fixed in GTK 3.24)
         if (!bFakeKeyPress)
             RestartShow();
         bReturn = true;
