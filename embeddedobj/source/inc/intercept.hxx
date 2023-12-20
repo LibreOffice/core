@@ -28,6 +28,9 @@
 
 
 class StatusChangeListenerContainer;
+
+namespace embeddedobj
+{
 class DocumentHolder;
 
 class Interceptor : public ::cppu::WeakImplHelper< css::frame::XDispatchProviderInterceptor,
@@ -36,7 +39,7 @@ class Interceptor : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider
 {
 public:
 
-    Interceptor( DocumentHolder* pDocHolder );
+    Interceptor( embeddedobj::DocumentHolder* pDocHolder );
     virtual ~Interceptor() override;
 
     void DisconnectDocHolder();
@@ -104,7 +107,7 @@ private:
 
     osl::Mutex   m_aMutex;
 
-    DocumentHolder*   m_pDocHolder;
+    embeddedobj::DocumentHolder*   m_pDocHolder;
 
     css::uno::Reference< css::frame::XDispatchProvider > m_xSlaveDispatchProvider;
     css::uno::Reference< css::frame::XDispatchProvider > m_xMasterDispatchProvider;
@@ -113,5 +116,7 @@ private:
 
     std::unique_ptr<StatusChangeListenerContainer>    m_pStatCL;
 };
+
+} // namespace embeddedobj
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

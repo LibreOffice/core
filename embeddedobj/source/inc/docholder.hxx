@@ -38,6 +38,9 @@
 #include <rtl/ref.hxx>
 
 class OCommonEmbeddedObject;
+
+namespace embeddedobj
+{
 class Interceptor;
 
 class DocumentHolder :
@@ -196,5 +199,7 @@ public:
     virtual void SAL_CALL activated(  ) override;
     virtual void SAL_CALL deactivated(  ) override;
 };
+
+} // namespace embeddedobj
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

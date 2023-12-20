@@ -148,6 +148,8 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
     xTargetMenu->insertByIndex( nTargetIndex, uno::Any( aTargetProps ) );
 }
 
+namespace embeddedobj
+{
 
 DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContext,
                                 OCommonEmbeddedObject* pEmbObj )
@@ -1279,5 +1281,7 @@ void SAL_CALL DocumentHolder::deactivated(  )
     // deactivation is too unspecific to be useful; usually we only trigger code from activation
     // so UIDeactivation is actively triggered by the container
 }
+
+} // namespace embeddedobj
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

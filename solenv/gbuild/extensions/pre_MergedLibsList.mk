@@ -32,6 +32,8 @@ gb_MERGE_LIBRARY_LIST := \
 	drawinglayercore \
 	drawinglayer \
 	editeng \
+	embobj \
+	emboleobj \
 	emfio \
 	$(if $(filter WNT,$(OS)),emser) \
 	evtatt \
@@ -97,6 +99,7 @@ gb_MERGE_LIBRARY_LIST := \
 	vbahelper \
 	vcl \
 	vclcanvas \
+	xsec_xmlsec \
 	xmlfa \
 	xmlfd \
 	xmlscript \

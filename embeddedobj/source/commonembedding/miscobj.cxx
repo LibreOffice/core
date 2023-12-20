@@ -118,7 +118,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     if ( !m_xContext.is() )
         throw uno::RuntimeException();
 
-    m_xDocHolder = new DocumentHolder( m_xContext, this );
+    m_xDocHolder = new embeddedobj::DocumentHolder( m_xContext, this );
 
     // parse configuration entries
     // TODO/LATER: in future UI names can be also provided here
