@@ -221,4 +221,9 @@ bool QtData::noNativeControls()
     return bNoNative;
 }
 
+bool QtData::noWeldedWidgets()
+{
+    static const bool bNoWeldedWidgets = (getenv("SAL_VCL_QT_NO_WELDED_WIDGETS") != nullptr);
+    return bNoWeldedWidgets;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

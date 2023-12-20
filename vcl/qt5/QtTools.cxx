@@ -25,6 +25,8 @@
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
 
 #include <QtGui/QImage>
 
@@ -118,6 +120,95 @@ QImage toQImage(const Image& rImage)
     }
 
     return aImage;
+}
+
+QMessageBox::Icon vclMessageTypeToQtIcon(VclMessageType eType)
+{
+    QMessageBox::Icon eRet = QMessageBox::Information;
+    switch (eType)
+    {
+        case VclMessageType::Info:
+            eRet = QMessageBox::Information;
+            break;
+        case VclMessageType::Warning:
+            eRet = QMessageBox::Warning;
+            break;
+        case VclMessageType::Question:
+            eRet = QMessageBox::Question;
+            break;
+        case VclMessageType::Error:
+            eRet = QMessageBox::Critical;
+            break;
+        case VclMessageType::Other:
+            eRet = QMessageBox::Information;
+            break;
+    }
+    return eRet;
+}
+
+QString vclMessageTypeToQtTitle(VclMessageType eType)
+{
+    QString title;
+    switch (eType)
+    {
+        case VclMessageType::Info:
+            title = toQString(GetStandardInfoBoxText());
+            break;
+        case VclMessageType::Warning:
+            title = toQString(GetStandardWarningBoxText());
+            break;
+        case VclMessageType::Question:
+            title = toQString(GetStandardQueryBoxText());
+            break;
+        case VclMessageType::Error:
+            title = toQString(GetStandardErrorBoxText());
+            break;
+        case VclMessageType::Other:
+            title = toQString(Application::GetDisplayName());
+            break;
+    }
+    return title;
+}
+
+QMessageBox::StandardButtons vclButtonsTypeToQtButton(VclButtonsType eButtonType)
+{
+    QMessageBox::StandardButtons buttons = QMessageBox::NoButton;
+    switch (eButtonType)
+    {
+        case VclButtonsType::NONE:
+            buttons = QMessageBox::NoButton;
+            break;
+        case VclButtonsType::Ok:
+            buttons = QMessageBox::Ok;
+            break;
+        case VclButtonsType::Close:
+            buttons = QMessageBox::Close;
+            break;
+        case VclButtonsType::Cancel:
+            buttons = QMessageBox::Cancel;
+            break;
+        case VclButtonsType::YesNo:
+            buttons = QMessageBox::Yes | QMessageBox::No;
+            break;
+        case VclButtonsType::OkCancel:
+            buttons = QMessageBox::Ok | QMessageBox::Cancel;
+            break;
+            // Add more cases based on our needs
+    }
+    return buttons;
+}
+
+int qtResponseTypeToVclResponseType(int ret)
+{
+    if (ret == QDialog::Accepted)
+    {
+        ret = RET_OK;
+    }
+    else
+    {
+        ret = RET_CANCEL;
+    }
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

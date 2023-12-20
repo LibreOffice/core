@@ -92,6 +92,11 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtGraphics_Text \
     vcl/qt5/QtInstance \
     vcl/qt5/QtInstance_Print \
+    vcl/qt5/QtInstanceContainer \
+    vcl/qt5/QtInstanceDialog \
+    vcl/qt5/QtInstanceMessageDialog \
+    vcl/qt5/QtInstanceWidget \
+    vcl/qt5/QtInstanceWindow \
     vcl/qt5/QtMainWindow \
     vcl/qt5/QtMenu \
     vcl/qt5/QtObject \

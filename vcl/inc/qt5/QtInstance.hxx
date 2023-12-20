@@ -34,6 +34,7 @@
 #include <vector>
 
 #include "QtFilePicker.hxx"
+#include <salinst.hxx>
 
 class QtFrame;
 class QtTimer;
@@ -143,6 +144,10 @@ public:
 
     virtual bool DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool AnyInput(VclInputFlags nType) override;
+    virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
+                                                     VclMessageType eMessageType,
+                                                     VclButtonsType eButtonType,
+                                                     const OUString& rPrimaryMessage) override;
 
 // so we fall back to the default abort, instead of duplicating it...
 #ifndef EMSCRIPTEN

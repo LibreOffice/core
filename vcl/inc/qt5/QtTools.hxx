@@ -26,12 +26,14 @@
 #include <QtCore/QSize>
 #include <QtCore/QString>
 #include <QtGui/QImage>
+#include <QtWidgets/QMessageBox>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -150,6 +152,11 @@ sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers);
 sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons);
 
 QImage toQImage(const Image& rImage);
+
+QMessageBox::Icon vclMessageTypeToQtIcon(VclMessageType eType);
+QString vclMessageTypeToQtTitle(VclMessageType eType);
+QMessageBox::StandardButtons vclButtonsTypeToQtButton(VclButtonsType eButtonType);
+int qtResponseTypeToVclResponseType(int ret);
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,

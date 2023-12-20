@@ -35,6 +35,8 @@
 #include <QtSystem.hxx>
 #include <QtTimer.hxx>
 #include <QtVirtualDevice.hxx>
+#include <QtInstanceWidget.hxx>
+#include <QtInstanceMessageDialog.hxx>
 
 #include <headless/svpvd.hxx>
 
@@ -44,6 +46,7 @@
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
+#include <QtWidgets/QMessageBox>
 
 #include <vclpluginapi.h>
 #include <tools/debug.hxx>
@@ -746,6 +749,27 @@ void QtInstance::setActivePopup(QtFrame* pFrame)
 {
     assert(!pFrame || pFrame->isPopup());
     m_pActivePopup = pFrame;
+}
+
+weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
+                                                     VclMessageType eMessageType,
+                                                     VclButtonsType eButtonsType,
+                                                     const OUString& rPrimaryMessage)
+{
+    if (QtData::noWeldedWidgets())
+    {
+        return SalInstance::CreateMessageDialog(pParent, eMessageType, eButtonsType,
+                                                rPrimaryMessage);
+    }
+    else
+    {
+        QMessageBox* pMessageBox = new QMessageBox();
+        pMessageBox->setText(toQString(rPrimaryMessage));
+        pMessageBox->setIcon(vclMessageTypeToQtIcon(eMessageType));
+        pMessageBox->setWindowTitle(vclMessageTypeToQtTitle(eMessageType));
+        pMessageBox->setStandardButtons(vclButtonsTypeToQtButton(eButtonsType));
+        return new QtInstanceMessageDialog(pMessageBox);
+    }
 }
 
 extern "C" {

@@ -1,0 +1,49 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include "QtInstanceContainer.hxx"
+
+class QtInstanceWindow : public QtInstanceContainer, public virtual weld::Window
+{
+    virtual void set_title(const OUString&) override;
+    virtual OUString get_title() const override;
+    virtual void window_move(int, int) override;
+    virtual void set_modal(bool) override;
+    virtual bool get_modal() const override;
+    virtual bool get_resizable() const override;
+    virtual Size get_size() const override;
+    virtual Point get_position() const override;
+    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override;
+    virtual void set_centered_on_parent(bool) override;
+
+    virtual bool has_toplevel_focus() const override;
+    virtual void present() override;
+
+    virtual void change_default_widget(weld::Widget*, weld::Widget*) override;
+    virtual bool is_default_widget(const weld::Widget*) const override;
+
+    virtual void set_window_state(const OUString&) override;
+    virtual OUString get_window_state(vcl::WindowDataMask) const override;
+
+    virtual css::uno::Reference<css::awt::XWindow> GetXWindow() override;
+
+    virtual SystemEnvData get_system_data() const override;
+
+    virtual void resize_to_request() override;
+
+    virtual weld::ScreenShotCollection collect_screenshot_data() override;
+
+    virtual VclPtr<VirtualDevice> screenshot() override;
+
+    virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() override;
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

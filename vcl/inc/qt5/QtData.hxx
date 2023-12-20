@@ -42,6 +42,8 @@ public:
     QCursor& getCursor(PointerStyle ePointerStyle);
 
     static bool noNativeControls();
+
+    static bool noWeldedWidgets();
 };
 
 inline QtData* GetQtData() { return static_cast<QtData*>(GetSalData()); }
