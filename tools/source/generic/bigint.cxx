@@ -276,7 +276,7 @@ void BigInt::MultBig(const BigInt& rB, BigInt& rRes) const
     }
 }
 
-void BigInt::DivModBig(const BigInt& rB, BigInt& rRes, bool bMod) const
+void BigInt::DivModBig(const BigInt& rB, BigInt* pDiv, BigInt* pMod) const
 {
     assert(IsBig() && rB.IsBig());
     assert(nLen >= rB.nLen);
@@ -298,6 +298,9 @@ void BigInt::DivModBig(const BigInt& rB, BigInt& rRes, bool bMod) const
     const sal_uInt64 nDenMostSig = den[rB.nLen - 1];
     assert(nDenMostSig >= 0x100000000 / 2);
     const sal_uInt64 nDen2ndSig = rB.nLen > 1 ? den[rB.nLen - 2] : 0;
+
+    BigInt aTmp;
+    BigInt& rRes = pDiv ? *pDiv : aTmp;
 
     for (size_t j = num.size() - 1; j >= den.size(); j--)
     { // guess divisor
@@ -344,17 +347,19 @@ void BigInt::DivModBig(const BigInt& rB, BigInt& rRes, bool bMod) const
         }
     }
 
-    if (bMod)
+    if (pMod)
     {
-        rRes.nLen = DivInPlace(num, nMult, nMult);
-        assert(rRes.nLen <= MAX_DIGITS);
-        rRes.bIsNeg = bIsNeg;
-        std::copy_n(num.begin(), rRes.nLen, rRes.nNum);
+        pMod->nLen = DivInPlace(num, nMult, nMult);
+        assert(pMod->nLen <= MAX_DIGITS);
+        pMod->bIsNeg = bIsNeg;
+        std::copy_n(num.begin(), pMod->nLen, pMod->nNum);
+        pMod->Normalize();
     }
-    else
+    if (pDiv) // rRes references pDiv
     {
-        rRes.bIsNeg = bIsNeg != rB.bIsNeg;
-        rRes.nLen = nLen - rB.nLen + 1;
+        pDiv->bIsNeg = bIsNeg != rB.bIsNeg;
+        pDiv->nLen = nLen - rB.nLen + 1;
+        pDiv->Normalize();
     }
 }
 
@@ -566,8 +571,9 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
     return *this;
 }
 
-void BigInt::DivMod(const BigInt& rVal, bool bMod)
+void BigInt::DivMod(const BigInt& rVal, BigInt* pDiv, BigInt* pMod) const
 {
+    assert(pDiv || pMod); // Avoid useless calls
     if (!rVal.IsBig())
     {
         if ( rVal.nVal == 0 )
@@ -578,66 +584,99 @@ void BigInt::DivMod(const BigInt& rVal, bool bMod)
 
         if (rVal.nVal == 1)
         {
-            if (bMod)
-                *this = 0;
+            if (pDiv)
+            {
+                *pDiv = *this;
+                pDiv->Normalize();
+            }
+            if (pMod)
+                *pMod = 0;
             return;
         }
 
         if (!IsBig())
         {
             // No overflows may occur here
-            nVal = bMod ? nVal % rVal.nVal : nVal / rVal.nVal;
+            const sal_Int32 nDiv = nVal / rVal.nVal; // Compilers usually optimize adjacent
+            const sal_Int32 nMod = nVal % rVal.nVal; // / and % into a single instruction
+            if (pDiv)
+                *pDiv = nDiv;
+            if (pMod)
+                *pMod = nMod;
             return;
         }
 
         if ( rVal.nVal == -1 )
         {
-            if (bMod)
-                *this = 0;
-            else
-                bIsNeg = !bIsNeg;
+            if (pDiv)
+            {
+                *pDiv = *this;
+                pDiv->bIsNeg = !bIsNeg;
+                pDiv->Normalize();
+            }
+            if (pMod)
+                *pMod = 0;
             return;
         }
 
         // Divide BigInt with an sal_uInt32
         sal_uInt32 nTmp;
+        bool bNegate;
         if ( rVal.nVal < 0 )
         {
             nTmp = static_cast<sal_uInt32>(-rVal.nVal);
-            bIsNeg = !bIsNeg;
+            bNegate = true;
         }
         else
+        {
             nTmp = static_cast<sal_uInt32>(rVal.nVal);
+            bNegate = false;
+        }
 
-        nLen = DivInPlace({ nNum, nLen }, nTmp, nTmp);
-        if (bMod)
-            *this = BigInt(nTmp);
+        BigInt aTmp;
+        BigInt& rDiv = pDiv ? *pDiv : aTmp;
+        rDiv = *this;
+        rDiv.nLen = DivInPlace({ rDiv.nNum, rDiv.nLen }, nTmp, nTmp);
+        if (pDiv)
+        {
+            if (bNegate)
+                pDiv->bIsNeg = !pDiv->bIsNeg;
+            pDiv->Normalize();
+        }
+        if (pMod)
+        {
+            *pMod = BigInt(nTmp);
+        }
         return;
     }
 
     BigInt tmpA = MakeBig(), tmpB = rVal.MakeBig();
     if (tmpA.ABS_IsLessBig(tmpB))
     {
-        if (!bMod)
-            *this = 0;
+        // First store *this to *pMod, then nullify *pDiv, to handle 'pDiv == this' case
+        if (pMod)
+        {
+            *pMod = *this;
+            pMod->Normalize();
+        }
+        if (pDiv)
+            *pDiv = 0;
         return;
     }
 
     // Divide BigInt with BigInt
-    tmpA.DivModBig(tmpB, *this, bMod);
+    tmpA.DivModBig(tmpB, pDiv, pMod);
 }
 
 BigInt& BigInt::operator/=( const BigInt& rVal )
 {
-    DivMod(rVal, false);
-    Normalize();
+    DivMod(rVal, this, nullptr);
     return *this;
 }
 
 BigInt& BigInt::operator%=( const BigInt& rVal )
 {
-    DivMod(rVal, true);
-    Normalize();
+    DivMod(rVal, nullptr, this);
     return *this;
 }
 

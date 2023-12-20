@@ -56,10 +56,9 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
         return rLocaleDataWrapper.getCurr( static_cast<tools::Long>(rNumber), nDigits, rCurrSymbol, bShowThousandSep );
 
     BigInt aTmp( ImplPower10( nDigits ) );
-    BigInt aInteger(rNumber.Abs());
-    BigInt aFraction(aInteger);
-    aInteger  /= aTmp;
-    aFraction %= aTmp;
+    BigInt aInteger;
+    BigInt aFraction;
+    rNumber.Abs().DivMod(aTmp, &aInteger, &aFraction);
     if ( !aInteger.IsZero() )
     {
         aFraction += aTmp;
@@ -71,9 +70,7 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
     OUStringBuffer aTemplate(rLocaleDataWrapper.getCurr( static_cast<tools::Long>(aFraction), nDigits, rCurrSymbol, bShowThousandSep ));
     while( !aInteger.IsZero() )
     {
-        aFraction  = aInteger;
-        aFraction %= aTmp;
-        aInteger  /= aTmp;
+        aInteger.DivMod(aTmp, &aInteger, &aFraction);
         if( !aInteger.IsZero() )
             aFraction += aTmp;
 

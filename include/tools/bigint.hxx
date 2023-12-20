@@ -46,8 +46,7 @@ private:
     TOOLS_DLLPRIVATE void AddBig(BigInt& rB, BigInt& rRes);
     TOOLS_DLLPRIVATE void SubBig(BigInt& rB, BigInt& rRes);
     TOOLS_DLLPRIVATE void MultBig(BigInt const& rB, BigInt& rRes) const;
-    TOOLS_DLLPRIVATE void DivModBig(BigInt const& rB, BigInt& rRes, bool bMod) const;
-    TOOLS_DLLPRIVATE void DivMod(BigInt const& rVal, bool bMod);
+    TOOLS_DLLPRIVATE void DivModBig(BigInt const& rB, BigInt* pDiv, BigInt* pMod) const;
 
 public:
     BigInt()
@@ -112,6 +111,8 @@ public:
     BigInt&         operator %=( const BigInt& rVal );
 
     BigInt&         operator  =( sal_Int32 nValue );
+
+    void DivMod(BigInt const& rVal, BigInt* pDiv, BigInt* pMod) const;
 
     /* Scale and round value */
     static tools::Long Scale(tools::Long nVal, tools::Long nMult, tools::Long nDiv);
