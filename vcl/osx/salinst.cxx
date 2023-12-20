@@ -733,6 +733,7 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
 
     unsigned/*NSUInteger*/ nEventMask = 0;
     if( nType & VclInputFlags::MOUSE)
+    {
         nEventMask |=
             NSEventMaskLeftMouseDown    | NSEventMaskRightMouseDown    | NSEventMaskOtherMouseDown    |
             NSEventMaskLeftMouseUp      | NSEventMaskRightMouseUp      | NSEventMaskOtherMouseUp      |
@@ -740,6 +741,18 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
             NSEventMaskScrollWheel      |
             // NSEventMaskMouseMoved    |
             NSEventMaskMouseEntered     | NSEventMaskMouseExited;
+
+        // Related: tdf#155266 stop delaying painting timer while swiping
+        // After fixing several flushing issues in tdf#155266, scrollbars
+        // still will not redraw until swiping has ended or paused when
+        // using Skia/Raster or Skia disabled. So, stop the delay by only
+        // including NSEventMaskScrollWheel if the current event type is
+        // not NSEventTypeScrollWheel.
+        NSEvent* pCurrentEvent = [NSApp currentEvent];
+        if( pCurrentEvent && [pCurrentEvent type] == NSEventTypeScrollWheel )
+            nEventMask &= ~NSEventMaskScrollWheel;
+    }
+
     if( nType & VclInputFlags::KEYBOARD)
         nEventMask |= NSEventMaskKeyDown | NSEventMaskKeyUp | NSEventMaskFlagsChanged;
     if( nType & VclInputFlags::OTHER)
