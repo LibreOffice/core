@@ -626,7 +626,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
     }
 
     bool bSuccess = false;
-    const SfxPoolItem* pItem = nullptr;
+    SfxPoolItemHolder aItem;
     MapUnit eMapUnit( MapUnit::Map100thMM );
 
     // Extra scope so that aInternalSet is destroyed before
@@ -665,12 +665,12 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                     if (xSet->Count())
                     {
                         // execute with arguments - call directly
-                        pItem = pDispatcher->Execute(GetId(), nCall, &*xSet, &aInternalSet, nModifier);
-                        if ( pItem != nullptr )
+                        aItem = pDispatcher->Execute(GetId(), nCall, &*xSet, &aInternalSet, nModifier);
+                        if (nullptr != aItem.getItem())
                         {
-                            if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pItem))
+                            if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(aItem.getItem()))
                                 bSuccess = pBoolItem->GetValue();
-                            else if ( !pItem->isVoidItem() )
+                            else if ( !aItem.getItem()->isVoidItem() )
                                 bSuccess = true;  // all other types are true
                         }
                         // else bSuccess = false look to line 664 it is false
@@ -686,8 +686,8 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                         aReq.SetModifier( nModifier );
                         aReq.SetInternalArgs_Impl(aInternalSet);
                         pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
-                        pItem = aReq.GetReturnValue();
-                        bSuccess = aReq.IsDone() || pItem != nullptr;
+                        aItem = aReq.GetReturnValue();
+                        bSuccess = aReq.IsDone() || nullptr != aItem.getItem();
                     }
                 }
                 else
@@ -702,10 +702,10 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
             TransformParameters( GetId(), lNewArgs, aSet );
 
             if ( aSet.Count() )
-                pItem = pDispatcher->Execute(GetId(), nCall, &aSet, &aInternalSet, nModifier);
+                aItem = pDispatcher->Execute(GetId(), nCall, &aSet, &aInternalSet, nModifier);
             else
                 // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
-                pItem = pDispatcher->Execute(GetId(), nCall, nullptr, &aInternalSet, nModifier);
+                aItem = pDispatcher->Execute(GetId(), nCall, nullptr, &aInternalSet, nModifier);
 
             // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
             if (SfxApplication* pApp = SfxApplication::Get())
@@ -713,13 +713,13 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 SfxDispatcher* pAppDispat = pApp->GetAppDispatcher_Impl();
                 if ( pAppDispat )
                 {
-                    const SfxPoolItem* pState=nullptr;
-                    SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
-                    StateChangedAtToolBoxControl( GetId(), eState, pState );
+                    SfxPoolItemHolder aResult;
+                    SfxItemState eState(pDispatcher->QueryState(GetId(), aResult));
+                    StateChangedAtToolBoxControl(GetId(), eState, aResult.getItem());
                 }
             }
 
-            bSuccess = (pItem != nullptr);
+            bSuccess = (nullptr != aItem.getItem());
         }
     }
 
@@ -733,12 +733,12 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         aEvent.State = css::frame::DispatchResultState::FAILURE;
 
     aEvent.Source = static_cast<css::frame::XDispatch*>(pDispatch);
-    if ( bSuccess && pItem && !pItem->isVoidItem() )
+    if ( bSuccess && nullptr != aItem.getItem() && !aItem.getItem()->isVoidItem() )
     {
         sal_uInt16 nSubId( 0 );
         if ( eMapUnit == MapUnit::MapTwip )
             nSubId |= CONVERT_TWIPS;
-        pItem->QueryValue( aEvent.Result, static_cast<sal_uInt8>(nSubId) );
+        aItem.getItem()->QueryValue( aEvent.Result, static_cast<sal_uInt8>(nSubId) );
     }
 
     rListener->dispatchFinished( aEvent );

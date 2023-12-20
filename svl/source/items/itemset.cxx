@@ -52,23 +52,49 @@ size_t getUsedSfxPoolItemHolderCount() { return nUsedSfxPoolItemHolderCount; }
 // fallback flag 'ITEM_CLASSIC_MODE'
 static bool g_bItemClassicMode(getenv("ITEM_CLASSIC_MODE"));
 
-SfxPoolItemHolder::SfxPoolItemHolder(SfxItemPool& rPool, const SfxPoolItem* pItem)
-: m_pPool(&rPool),
-  m_pItem(pItem)
+// I thought about this constructor a while, but when there is no
+// Item we need no cleanup at destruction (what we would need the
+// Pool for), so it is OK and makes default construction easier
+// when no Pool is needed. The other constructors guanantee that
+// there *cannot* be a state with Item set and Pool not set. IF
+// you change this class, ALWAYS ensure that this can not happen (!)
+SfxPoolItemHolder::SfxPoolItemHolder()
+: m_pPool(nullptr)
+, m_pItem(nullptr)
+#ifdef DBG_UTIL
+, m_bDeleted(false)
+#endif
+{
+#ifdef DBG_UTIL
+    nAllocatedSfxPoolItemHolderCount++;
+    nUsedSfxPoolItemHolderCount++;
+#endif
+}
+
+SfxPoolItemHolder::SfxPoolItemHolder(SfxItemPool& rPool, const SfxPoolItem* pItem, bool bPassingOwnership)
+: m_pPool(&rPool)
+, m_pItem(pItem)
+#ifdef DBG_UTIL
+, m_bDeleted(false)
+#endif
 {
 #ifdef DBG_UTIL
     nAllocatedSfxPoolItemHolderCount++;
     nUsedSfxPoolItemHolderCount++;
 #endif
     if (nullptr != m_pItem)
-        m_pItem = implCreateItemEntry(*m_pPool, m_pItem, m_pItem->Which(), false);
+        m_pItem = implCreateItemEntry(*m_pPool, m_pItem, m_pItem->Which(), bPassingOwnership);
 }
 
 SfxPoolItemHolder::SfxPoolItemHolder(const SfxPoolItemHolder& rHolder)
-: m_pPool(rHolder.m_pPool),
-  m_pItem(rHolder.m_pItem)
+: m_pPool(rHolder.m_pPool)
+, m_pItem(rHolder.m_pItem)
+#ifdef DBG_UTIL
+, m_bDeleted(false)
+#endif
 {
 #ifdef DBG_UTIL
+    assert(!rHolder.isDeleted() && "Destructed instance used (!)");
     nAllocatedSfxPoolItemHolderCount++;
     nUsedSfxPoolItemHolderCount++;
 #endif
@@ -79,14 +105,20 @@ SfxPoolItemHolder::SfxPoolItemHolder(const SfxPoolItemHolder& rHolder)
 SfxPoolItemHolder::~SfxPoolItemHolder()
 {
 #ifdef DBG_UTIL
+    assert(!isDeleted() && "Destructed instance used (!)");
     nAllocatedSfxPoolItemHolderCount--;
 #endif
     if (nullptr != m_pItem)
         implCleanupItemEntry(*m_pPool, m_pItem);
+#ifdef DBG_UTIL
+    m_bDeleted = true;
+#endif
 }
 
 const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& rHolder)
 {
+    assert(!isDeleted() && "Destructed instance used (!)");
+    assert(!rHolder.isDeleted() && "Destructed instance used (!)");
     if (this == &rHolder || *this == rHolder)
         return *this;
 
@@ -104,6 +136,8 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
 
 bool SfxPoolItemHolder::operator==(const SfxPoolItemHolder &rHolder) const
 {
+    assert(!isDeleted() && "Destructed instance used (!)");
+    assert(!rHolder.isDeleted() && "Destructed instance used (!)");
     return m_pPool == rHolder.m_pPool && areSfxPoolItemPtrsEqual(m_pItem, rHolder.m_pItem);
 }
 

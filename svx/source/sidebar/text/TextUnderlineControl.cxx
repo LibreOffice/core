@@ -23,6 +23,7 @@
 #include <TextUnderlinePopup.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/udlnitem.hxx>
+#include <svl/itemset.hxx>
 #include <helpids.h>
 
 namespace svx {
@@ -101,8 +102,9 @@ Color GetUnderlineColor()
 {
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
-        const SvxUnderlineItem* pUnderlineItem;
-        pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_UNDERLINE, pUnderlineItem);
+        SfxPoolItemHolder aResult;
+        pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_UNDERLINE, aResult);
+        const SvxUnderlineItem* pUnderlineItem(static_cast<const SvxUnderlineItem*>(aResult.getItem()));
 
         if (pUnderlineItem)
             return pUnderlineItem->GetColor();

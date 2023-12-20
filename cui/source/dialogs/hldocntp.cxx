@@ -274,12 +274,12 @@ IMPL_STATIC_LINK(SvxHyperlinkNewDocTp, DispatchDocument, void*, p, void)
         SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
 
         // open url
-        const SfxPoolItem* pReturn = xExecuteInfo->pDispatcher->ExecuteList(
-                SID_OPENDOC, SfxCallMode::SYNCHRON,
-                { &aName, &aFlags, &aFrame, &aReferer });
+        const SfxPoolItemHolder aResult(xExecuteInfo->pDispatcher->ExecuteList(
+            SID_OPENDOC, SfxCallMode::SYNCHRON,
+            { &aName, &aFlags, &aFrame, &aReferer }));
 
         // save new doc
-        const SfxViewFrameItem *pItem = dynamic_cast<const SfxViewFrameItem*>( pReturn  );  // SJ: pReturn is NULL if the Hyperlink
+        const SfxViewFrameItem *pItem = dynamic_cast<const SfxViewFrameItem*>(aResult.getItem());  // aResult is NULL if the Hyperlink
         if ( pItem )                                                            // creation is cancelled #106216#
         {
             pViewFrame = pItem->GetFrame();

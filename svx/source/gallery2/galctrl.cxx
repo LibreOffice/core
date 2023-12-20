@@ -34,6 +34,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <bitmaps.hlst>
+#include <svl/itemset.hxx>
 
 GalleryPreview::GalleryPreview(GalleryBrowser2* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : mxScrolledWindow(std::move(xScrolledWindow))

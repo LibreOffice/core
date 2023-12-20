@@ -106,9 +106,9 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
     if ( mxUndoManager.is() )
         mxUndoManager->enterUndoContext( "" );
 
-    const SvxSizeItem* pSizeItem;
-    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pSizeItem);
-    mpPageSizeItem.reset( pSizeItem->Clone() );
+    SfxPoolItemHolder aResult;
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, aResult);
+    mpPageSizeItem.reset(static_cast<const SvxSizeItem*>(aResult.getItem())->Clone());
 
     // Prevent accidental toggling of page orientation
     if ((mpPageSizeItem->GetWidth() > mpPageSizeItem->GetHeight()) == bLandscape)
@@ -118,13 +118,11 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
         return;
     }
 
-    const SvxLongLRSpaceItem* pLRSpaceItem;
-    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pLRSpaceItem);
-    mpPageLRMarginItem.reset( pLRSpaceItem->Clone() );
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, aResult);
+    mpPageLRMarginItem.reset(static_cast<const SvxLongLRSpaceItem*>(aResult.getItem())->Clone());
 
-    const SvxLongULSpaceItem* pULSpaceItem;
-    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pULSpaceItem);
-    mpPageULMarginItem.reset( pULSpaceItem->Clone() );
+    pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, aResult);
+    mpPageULMarginItem.reset(static_cast<const SvxLongULSpaceItem*>(aResult.getItem())->Clone());
 
     {
         // set new page orientation

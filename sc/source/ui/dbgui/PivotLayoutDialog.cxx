@@ -484,10 +484,10 @@ void ScPivotLayoutDialog::ApplyChanges()
 
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     SfxCallMode const nCallMode = SfxCallMode::SLOT | SfxCallMode::RECORD;
-    const SfxPoolItem* pResult = pDispatcher->ExecuteList(SID_PIVOT_TABLE,
-            nCallMode, { &aPivotItem });
+    const SfxPoolItemHolder aResult(pDispatcher->ExecuteList(SID_PIVOT_TABLE,
+            nCallMode, { &aPivotItem }));
 
-    if (pResult != nullptr)
+    if (nullptr != aResult.getItem())
     {
         // existing pivot table might have moved to a new range or a new sheet
         if ( pOldDPObj != nullptr  )

@@ -484,8 +484,8 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
             if ( pViewFrame )
             {
                 // TODO/LATER: currently the application guards against the reentrance problem
-                const SfxPoolItem* pItem = pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
-                const SfxBoolItem* pResult = dynamic_cast<const SfxBoolItem*>( pItem  );
+                const SfxPoolItemHolder aItem(pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC ));
+                const SfxBoolItem* pResult(dynamic_cast<const SfxBoolItem*>(aItem.getItem()));
                 bResult = ( pResult && pResult->GetValue() );
                 if ( bResult )
                     aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );

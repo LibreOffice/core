@@ -21,6 +21,7 @@
 #include <svtools/ctrltool.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/itemset.hxx>
 
 #define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
 
@@ -78,8 +79,9 @@ void SwWatermarkDialog::InitFields()
     m_xOKButton->connect_clicked(LINK(this, SwWatermarkDialog, OKButtonHdl));
 
     // Get watermark properties
-    const SfxWatermarkItem* pWatermark;
-    SfxItemState eState = m_rBindings.GetDispatcher()->QueryState( SID_WATERMARK, pWatermark );
+    SfxPoolItemHolder aResult;
+    const SfxItemState eState(m_rBindings.GetDispatcher()->QueryState(SID_WATERMARK, aResult));
+    const SfxWatermarkItem* pWatermark(static_cast<const SfxWatermarkItem*>(aResult.getItem()));
 
     if( !(eState >= SfxItemState::DEFAULT && pWatermark && pWatermark->Which() == SID_WATERMARK))
         return;

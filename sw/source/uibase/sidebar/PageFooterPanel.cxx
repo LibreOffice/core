@@ -19,6 +19,7 @@
 #include <sal/config.h>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/svdtrans.hxx>

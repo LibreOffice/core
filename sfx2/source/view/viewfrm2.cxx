@@ -183,7 +183,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
         case SID_ACTIVATE:
         {
             MakeActive_Impl( true );
-            rReq.SetReturnValue( SfxObjectItem( 0, this ) );
+            rReq.SetReturnValue(SfxObjectItem(0, this));
             break;
         }
 
@@ -207,9 +207,10 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, &GetFrame() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, "_blank" ) );
             SfxGetpApp()->ExecuteSlot( aReq );
-            const SfxViewFrameItem* pItem = dynamic_cast<const SfxViewFrameItem*>( aReq.GetReturnValue()  );
-            if ( pItem )
-                rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
+
+            const SfxViewFrameItem* pItem(dynamic_cast<const SfxViewFrameItem*>(aReq.GetReturnValue().getItem()));
+            if (nullptr != pItem)
+                rReq.SetReturnValue(SfxFrameItem(0, pItem->GetFrame()));
             break;
         }
 
@@ -252,7 +253,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                     }
                 }
 
-                rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bClosed ));
+                rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), bClosed));
             }
             return;
         }

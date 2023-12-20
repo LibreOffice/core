@@ -25,6 +25,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/rotmodit.hxx>
 #include <svtools/unitconv.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

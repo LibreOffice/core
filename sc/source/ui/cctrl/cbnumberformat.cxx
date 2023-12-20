@@ -24,6 +24,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <sc.hrc>
 
 ScNumberFormat::ScNumberFormat(vcl::Window* pParent)

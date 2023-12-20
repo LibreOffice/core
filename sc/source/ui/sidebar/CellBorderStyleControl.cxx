@@ -25,6 +25,7 @@
 #include <svx/svxids.hrc>
 #include <vcl/settings.hxx>
 #include <editeng/lineitem.hxx>
+#include <svl/itemset.hxx>
 #include <memory>
 
 namespace sc::sidebar {

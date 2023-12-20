@@ -68,8 +68,8 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
             aInternalSet.Put(SfxUnoFrameItem(SID_FILLFRAME, xCurrentFrame));
 
         aReq.SetInternalArgs_Impl(aInternalSet);
-        const SfxPoolItem* pResult = SW_MOD()->ExecuteSlot( aReq );
-        if ( pResult )
+        const SfxPoolItemHolder& rResult(SW_MOD()->ExecuteSlot(aReq));
+        if (nullptr != rResult.getItem())
             aState = frame::DispatchResultState::SUCCESS;
         else
             aState = frame::DispatchResultState::FAILURE;

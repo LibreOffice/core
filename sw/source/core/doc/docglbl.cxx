@@ -506,7 +506,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     aReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
     if(pFilter)
         aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
-    const SfxBoolItem *pRet = static_cast<const SfxBoolItem*>(mpDocShell->ExecuteSlot( aReq ));
+    const SfxPoolItemHolder& rResult(mpDocShell->ExecuteSlot(aReq));
+    const SfxBoolItem *pRet(static_cast<const SfxBoolItem*>(rResult.getItem()));
 
     return pRet && pRet->GetValue();
 }

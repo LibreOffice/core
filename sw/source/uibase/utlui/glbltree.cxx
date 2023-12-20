@@ -704,18 +704,19 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
         SfxStringItem aFactory(SID_NEWDOCDIRECT,
                         SwDocShell::Factory().GetFilterContainer()->GetName());
 
-        const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
-                        rDispatch.ExecuteList(SID_NEWDOCDIRECT,
-                            SfxCallMode::SYNCHRON, { &aFactory }));
+        SfxPoolItemHolder aResult(
+            rDispatch.ExecuteList(SID_NEWDOCDIRECT,
+            SfxCallMode::SYNCHRON, { &aFactory }));
+        const SfxFrameItem* pItem(static_cast<const SfxFrameItem*>(aResult.getItem()));
 
         // save at
         SfxFrame* pFrame = pItem ? pItem->GetFrame() : nullptr;
         SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
         if (pViewFrame)
         {
-            const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(
-                    pViewFrame->GetDispatcher()->Execute(
-                            SID_SAVEASDOC, SfxCallMode::SYNCHRON ));
+            aResult = pViewFrame->GetDispatcher()->Execute(
+                    SID_SAVEASDOC, SfxCallMode::SYNCHRON );
+            const SfxBoolItem* pBool(static_cast<const SfxBoolItem*>(aResult.getItem()));
             SfxObjectShell& rObj = *pViewFrame->GetObjectShell();
             const SfxMedium* pMedium = rObj.GetMedium();
             OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri));

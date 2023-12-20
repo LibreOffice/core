@@ -41,6 +41,7 @@ class SfxModule;
 class Point;
 struct SfxDispatcher_Impl;
 class VCLXPopupMenu;
+class SfxPoolItemHolder;
 
 namespace com::sun::star::awt { class XPopupMenu; }
 namespace vcl { class Window; }
@@ -104,24 +105,24 @@ public:
 
                         ~SfxDispatcher();
 
-    const SfxPoolItem*  Execute( sal_uInt16 nSlot,
+    SfxPoolItemHolder   Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall = SfxCallMode::SLOT,
                                  const SfxPoolItem **pArgs = nullptr,
                                  sal_uInt16 nModi = 0,
                                  const SfxPoolItem **pInternalArgs = nullptr);
 
-    const SfxPoolItem*  Execute(sal_uInt16 nSlot,
+    SfxPoolItemHolder   Execute(sal_uInt16 nSlot,
                                 SfxCallMode nCall,
                                 SfxItemSet const * pArgs,
                                 SfxItemSet const * pInternalArgs,
                                 sal_uInt16 nModi);
 
-    const SfxPoolItem*  ExecuteList(sal_uInt16 nSlot,
+    SfxPoolItemHolder   ExecuteList(sal_uInt16 nSlot,
                                     SfxCallMode nCall,
                                     std::initializer_list<SfxPoolItem const*> args,
                                     std::initializer_list<SfxPoolItem const*> internalargs = std::initializer_list<SfxPoolItem const*>());
 
-    const SfxPoolItem*  Execute( sal_uInt16 nSlot,
+    SfxPoolItemHolder   Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall,
                                  const SfxItemSet &rArgs );
 
@@ -152,12 +153,7 @@ public:
     void                HideUI( bool bHide = true );
     ToolbarId           GetObjectBarId( sal_uInt16 nPos ) const;
 
-    SfxItemState        QueryState( sal_uInt16 nSID, const SfxPoolItem* &rpState );
-    template<class T>
-    SfxItemState        QueryState( TypedWhichId<T> nSID, const T* &rpState )
-    {
-        return QueryState(sal_uInt16(nSID), reinterpret_cast<SfxPoolItem const*&>(rpState));
-    }
+    SfxItemState        QueryState( sal_uInt16 nSID, SfxPoolItemHolder& rState );
     SfxItemState        QueryState( sal_uInt16 nSID, css::uno::Any& rAny );
 
     void                SetDisableFlags( SfxDisableFlags nFlags );

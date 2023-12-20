@@ -495,7 +495,6 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     , m_nSerialNumber(nUsedSfxPoolItemCount)
 #endif
     , m_bIsVoidItem(false)
-    , m_bDeleteOnIdle(false)
     , m_bStaticDefault(false)
     , m_bPoolDefault(false)
     , m_bRegisteredAtPool(false)

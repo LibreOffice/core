@@ -43,6 +43,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <svl/itemset.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
@@ -512,19 +513,19 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
     DeletionWatcher aDeleted(*this);
     sal_uInt16 nModi = pModifier ? *pModifier : 0;
-    const SfxPoolItem* pItem = rDispatcher.Execute(
+    const SfxPoolItemHolder aResult(rDispatcher.Execute(
         nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-        pItems, nModi );
+        pItems, nModi));
 
     // Dialog can be destroyed while in Execute() because started
     // subdialogs are not modal to it (#i97888#).
-    if ( !pItem || aDeleted )
+    if ( nullptr == aResult.getItem() || aDeleted )
         return false;
 
     if ((nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId)
         && rStyleList.EnableExecute())
     {
-        const SfxUInt16Item *pFilterItem = dynamic_cast< const SfxUInt16Item* >(pItem);
+        const SfxUInt16Item* pFilterItem(dynamic_cast<const SfxUInt16Item*>(aResult.getItem()));
         assert(pFilterItem);
         SfxStyleSearchBits nFilterFlags = static_cast<SfxStyleSearchBits>(pFilterItem->GetValue()) & ~SfxStyleSearchBits::UserDefined;
         if(nFilterFlags == SfxStyleSearchBits::Auto)       // User Template?

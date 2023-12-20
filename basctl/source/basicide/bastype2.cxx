@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <svl/itemset.hxx>
 
 #include <initializer_list>
 #include <memory>

@@ -46,15 +46,23 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxPoolItemHolder
 {
     SfxItemPool*            m_pPool;
     const SfxPoolItem*      m_pItem;
+#ifdef DBG_UTIL
+    bool                    m_bDeleted;
+#endif
 public:
-    SfxPoolItemHolder(SfxItemPool&, const SfxPoolItem* = nullptr);
+    SfxPoolItemHolder();
+    SfxPoolItemHolder(SfxItemPool&, const SfxPoolItem*, bool bPassingOwnership = false);
     SfxPoolItemHolder(const SfxPoolItemHolder&);
     ~SfxPoolItemHolder();
 
+#ifdef DBG_UTIL
+    bool isDeleted() const { return m_bDeleted; }
+#endif
+
     const SfxPoolItemHolder& operator=(const SfxPoolItemHolder&);
     bool operator==(const SfxPoolItemHolder &) const;
-    SfxItemPool& getPool() const { return *m_pPool; }
-    const SfxPoolItem* getItem() const { return m_pItem; }
+    SfxItemPool& getPool() const { assert(!isDeleted() && "Destructed instance used (!)"); return *m_pPool; }
+    const SfxPoolItem* getItem() const { assert(!isDeleted() && "Destructed instance used (!)"); return m_pItem; }
     sal_uInt16 Which() const { if(nullptr != m_pItem) return m_pItem->Which(); return 0; }
 };
 

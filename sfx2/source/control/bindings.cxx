@@ -35,7 +35,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <itemdel.hxx>
 
 //Includes below due to nInReschedule
 #include <sfx2/bindings.hxx>
@@ -856,10 +855,10 @@ void SfxBindings::Release( SfxControllerItem& rItem )
 }
 
 
-const SfxPoolItem* SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolItem** ppItems )
+SfxPoolItemHolder SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolItem** ppItems )
 {
     if( !nId || !pDispatcher )
-        return nullptr;
+        return SfxPoolItemHolder();
 
     return Execute_Impl( nId, ppItems, 0, SfxCallMode::SYNCHRON, nullptr );
 }
@@ -869,11 +868,11 @@ bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallM
     if( !nId || !pDispatcher )
         return false;
 
-    const SfxPoolItem* pRet = Execute_Impl( nId, ppItems, 0, nCallMode, nullptr );
-    return ( pRet != nullptr );
+    const SfxPoolItemHolder aRet(Execute_Impl(nId, ppItems, 0, nCallMode, nullptr));
+    return (nullptr != aRet.getItem());
 }
 
-const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
+SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
                         const SfxPoolItem **ppInternalArgs, bool bGlobalOnly )
 {
     SfxStateCache *pCache = GetStateCache( nId );
@@ -915,15 +914,13 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
         // cache binds to an external dispatch provider
         sal_Int16 eRet = pCache->Dispatch( aReq.GetArgs(), nCallMode == SfxCallMode::SYNCHRON );
-        std::unique_ptr<SfxPoolItem> pPool;
+        SfxPoolItem* pPoolItem(nullptr);
         if ( eRet == css::frame::DispatchResultState::DONTKNOW )
-            pPool.reset( new SfxVoidItem( nId ) );
+            pPoolItem = new SfxVoidItem( nId );
         else
-            pPool.reset( new SfxBoolItem( nId, eRet == css::frame::DispatchResultState::SUCCESS) );
+            pPoolItem = new SfxBoolItem( nId, eRet == css::frame::DispatchResultState::SUCCESS);
 
-        auto pTemp = pPool.get();
-        DeleteItemOnIdle( std::move(pPool) );
-        return pTemp;
+        return SfxPoolItemHolder(rPool, pPoolItem, true);
     }
 
     // slot is handled internally by SfxDispatcher
@@ -936,7 +933,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
     const SfxSlotServer* pServer = pCache->GetSlotServer( rDispatcher, pImpl->xProv );
     if ( !pServer )
     {
-        return nullptr;
+        return SfxPoolItemHolder();
     }
     else
     {
@@ -946,7 +943,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
     if ( bGlobalOnly )
         if ( dynamic_cast< const SfxModule *>( pShell ) == nullptr && dynamic_cast< const SfxApplication *>( pShell ) == nullptr && dynamic_cast< const SfxViewFrame *>( pShell ) == nullptr )
-            return nullptr;
+            return SfxPoolItemHolder();
 
     SfxItemPool &rPool = pShell->GetPool();
     SfxRequest aReq( nId, nCallMode, rPool );
@@ -964,15 +961,12 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
     Execute_Impl( aReq, pSlot, pShell );
 
-    const SfxPoolItem* pRet = aReq.GetReturnValue();
-    if ( !pRet )
-    {
-        std::unique_ptr<SfxPoolItem> pVoid(new SfxVoidItem( nId ));
-        pRet = pVoid.get();
-        DeleteItemOnIdle( std::move(pVoid) );
-    }
+    const SfxPoolItemHolder& rRetval(aReq.GetReturnValue());
 
-    return pRet;
+    if (nullptr == rRetval.getItem())
+        return SfxPoolItemHolder(rPool, new SfxVoidItem( nId ), true);
+
+    return rRetval;
 }
 
 void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell* pShell )
@@ -1596,17 +1590,18 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
     // Then test at the dispatcher to check if the returned items from
     // there are always DELETE_ON_IDLE, a copy of it has to be made in
     // order to allow for transition of ownership.
-    const SfxPoolItem *pItem = nullptr;
-    SfxItemState eState = pDispatcher->QueryState( nSlot, pItem );
-    if ( eState == SfxItemState::SET )
+    SfxPoolItemHolder aResult;
+    const SfxItemState eState(pDispatcher->QueryState(nSlot, aResult));
+
+    if (SfxItemState::SET == eState)
     {
-        DBG_ASSERT( pItem, "SfxItemState::SET but no item!" );
-        if ( pItem )
-            rpState.reset(pItem->Clone());
+        DBG_ASSERT( aResult.getItem(), "SfxItemState::SET but no item!" );
+        if ( nullptr != aResult.getItem() )
+            rpState.reset(aResult.getItem()->Clone());
     }
-    else if ( eState == SfxItemState::DEFAULT && pItem )
+    else if (SfxItemState::DEFAULT == eState && nullptr != aResult.getItem())
     {
-        rpState.reset(pItem->Clone());
+        rpState.reset(aResult.getItem()->Clone());
     }
 
     return eState;

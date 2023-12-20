@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/numfmtsh.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

@@ -1424,11 +1424,12 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
             {
-                const SfxUInt16Item* pItem = nullptr;
-                SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
+                SfxPoolItemHolder aResult;
+                const SfxItemState aState(pViewFrame->GetDispatcher()->QueryState(SID_ATTR_YEAR2000, aResult));
+                const SfxUInt16Item* pItem(static_cast<const SfxUInt16Item*>(aResult.getItem()));
 
                 // miscellaneous - Year2000
-                if( SfxItemState::DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
+                if(SfxItemState::DEFAULT <= aState && nullptr != pItem)
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, pItem->GetValue() ) );
                 else
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, officecfg::Office::Common::DateFormat::TwoDigitYear::get() ) );
@@ -1474,20 +1475,28 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
             {
-                const SvxLanguageItem* pLangItem = nullptr;
-                SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pLangItem))
-                    pRet->Put(*pLangItem, SID_ATTR_LANGUAGE);
-                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pLangItem))
-                    pRet->Put(*pLangItem, SID_ATTR_CHAR_CJK_LANGUAGE);
-                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pLangItem))
-                    pRet->Put(*pLangItem, SID_ATTR_CHAR_CTL_LANGUAGE);
+                SfxPoolItemHolder aResult;
+                SfxDispatcher* pDispatch(pViewFrame->GetDispatcher());
+
+                SfxItemState aState(pDispatch->QueryState(SID_ATTR_LANGUAGE, aResult));
+                if(SfxItemState::DEFAULT <= aState)
+                    pRet->Put(*aResult.getItem(), SID_ATTR_LANGUAGE);
+
+                aState = pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, aResult);
+                if(SfxItemState::DEFAULT <= aState)
+                    pRet->Put(*aResult.getItem(), SID_ATTR_CHAR_CJK_LANGUAGE);
+
+                aState = pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, aResult);
+                if(SfxItemState::DEFAULT <= aState)
+                    pRet->Put(*aResult.getItem(), SID_ATTR_CHAR_CTL_LANGUAGE);
 
                 pRet->Put(aHyphen);
-                const SfxPoolItem* pItem = nullptr;
-                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
+
+                aState = pDispatch->QueryState(SID_AUTOSPELL_CHECK, aResult);
+                if(SfxItemState::DEFAULT <= aState)
                 {
-                    pRet->Put(std::unique_ptr<SfxPoolItem>(pItem->Clone()));
+                    pRet->Put(*aResult.getItem()); // allow share/refcounting
+                    // pRet->Put(std::unique_ptr<SfxPoolItem>(aResult.getItem()->Clone()));
                 }
                 else
                 {

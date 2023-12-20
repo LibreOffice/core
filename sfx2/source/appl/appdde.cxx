@@ -144,12 +144,11 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, true);
 
             SfxBoolItem aSilent(SID_SILENT, true);
-            SfxDispatcher* pDispatcher = SfxGetpApp()->GetDispatcher_Impl();
-            const SfxPoolItem* pRet = pDispatcher->ExecuteList(SID_OPENDOC,
-                    SfxCallMode::SYNCHRON,
-                    { &aName, &aNewView, &aSilent });
+            const SfxPoolItemHolder aResult(SfxGetpApp()->GetDispatcher_Impl()->ExecuteList(SID_OPENDOC,
+                SfxCallMode::SYNCHRON,
+                { &aName, &aNewView, &aSilent }));
 
-            if( auto const item = dynamic_cast< const SfxViewFrameItem *>( pRet );
+            if( auto const item = dynamic_cast< const SfxViewFrameItem *>(aResult.getItem());
                 item &&
                 item->GetFrame() &&
                 nullptr != ( pShell = item->GetFrame()->GetObjectShell() ) )

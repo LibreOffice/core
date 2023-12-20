@@ -50,6 +50,7 @@ class SfxRepeatTarget;
 class SfxBindings;
 class SfxModule;
 class SfxUndoManager;
+class SfxPoolItemHolder;
 
 /**
     Id for <SfxInterface>s, gives a quasi-static access to the interface
@@ -231,7 +232,7 @@ public:
 
         <SfxShell::ExecuteSlot(SfxRequest&)>
         */
-    const SfxPoolItem*          GetSlotState( sal_uInt16 nSlotId, const SfxInterface *pIF = nullptr, SfxItemSet *pStateSet = nullptr );
+    SfxPoolItemHolder GetSlotState( sal_uInt16 nSlotId, const SfxInterface *pIF = nullptr, SfxItemSet *pStateSet = nullptr );
 
     /**
         This method allows you to forward a <SfxRequest> to the specified
@@ -263,7 +264,7 @@ public:
 
         <SfxShell::GetSlotState(sal_uInt16,const SfxInterface*,SfxItemSet*)>
         */
-    const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = nullptr );
+    const SfxPoolItemHolder& ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = nullptr );
 
     /**
         Asynchronous ExecuteSlot for the RELOAD

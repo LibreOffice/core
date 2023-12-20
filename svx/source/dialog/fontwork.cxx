@@ -37,6 +37,7 @@
 #include <svx/svxids.hrc>
 #include <bitmaps.hlst>
 #include <svx/fontwork.hxx>
+#include <svl/itemset.hxx>
 
 #define WIDTH_CHARS 10
 

@@ -25,6 +25,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <svl/itemset.hxx>
 
 using namespace css;
 using namespace css::uno;

@@ -2882,14 +2882,14 @@ void ScViewFunc::MoveTable(
         SfxStringItem aItem( SID_FILE_NAME, "private:factory/" + STRING_SCAPP );
         SfxStringItem aTarget( SID_TARGETNAME, "_blank" );
 
-        const SfxPoolItem* pRetItem = GetViewData().GetDispatcher().ExecuteList(
-                    SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON,
-                    { &aItem, &aTarget });
-        if ( pRetItem )
+        const SfxPoolItemHolder aResult(GetViewData().GetDispatcher().ExecuteList(
+            SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON,
+            { &aItem, &aTarget }));
+        if (nullptr != aResult.getItem())
         {
-            if ( auto pObjectItem = dynamic_cast<const SfxObjectItem*>(pRetItem) )
+            if ( auto pObjectItem = dynamic_cast<const SfxObjectItem*>(aResult.getItem()) )
                 pDestShell = dynamic_cast<ScDocShell*>( pObjectItem->GetShell()  );
-            else if ( auto pViewFrameItem = dynamic_cast<const SfxViewFrameItem*>( pRetItem) )
+            else if ( auto pViewFrameItem = dynamic_cast<const SfxViewFrameItem*>(aResult.getItem()))
             {
                 SfxViewFrame* pFrm = pViewFrameItem->GetFrame();
                 if (pFrm)

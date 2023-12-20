@@ -26,6 +26,7 @@
 #include <sfx2/dispatch.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <svl/itemset.hxx>
 #include <hintids.hxx>
 #include <strings.hrc>
 #include <uitool.hxx>

@@ -1000,9 +1000,9 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;
             case SID_AUTOSPELL_CHECK:
             {
-                const SfxPoolItem* pState = m_rView.GetSlotState(nWhich);
-                if (pState)
-                    rSet.Put(SfxBoolItem(nWhich, static_cast<const SfxBoolItem*>(pState)->GetValue()));
+                const SfxPoolItemHolder aResult(m_rView.GetSlotState(nWhich));
+                if (nullptr != aResult.getItem())
+                    rSet.Put(SfxBoolItem(nWhich, static_cast<const SfxBoolItem*>(aResult.getItem())->GetValue()));
                 else
                     rSet.DisableItem( nWhich );
                 break;
