@@ -527,15 +527,16 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     pNewAttrList->AddAttribute(ATTRIBUTE_ITERATION_COUNT, aBuffer.makeStringAndClear());
                 }
 
-                if (bStoreStartKeyGeneration)
-                {
-                    aBuffer.append(nDerivedKeySize);
-                    pNewAttrList->AddAttribute ( ATTRIBUTE_KEY_SIZE, aBuffer.makeStringAndClear() );
-                }
-
                 *pSalt >>= aSequence;
                 ::comphelper::Base64::encode(aBuffer, aSequence);
                 pNewAttrList->AddAttribute ( ATTRIBUTE_SALT, aBuffer.makeStringAndClear() );
+            }
+
+            // ODF 1.3 specifies the default as 16 so have to write it for PGP
+            if (bStoreStartKeyGeneration || pKeyInfoProperty)
+            {
+                aBuffer.append(nDerivedKeySize);
+                pNewAttrList->AddAttribute(ATTRIBUTE_KEY_SIZE, aBuffer.makeStringAndClear());
             }
 
             xHandler->ignorableWhitespace(sWhiteSpace);
