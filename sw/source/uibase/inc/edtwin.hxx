@@ -59,6 +59,8 @@ class SwTextFrame;
 class SW_DLLPUBLIC SwEditWin final : public vcl::DocWindow,
                 public DropTargetHelper, public DragSourceHelper
 {
+    friend class SwEditWinUIObject;
+
     static  QuickHelpData* s_pQuickHlpData;
 
     static  tools::Long    s_nDDStartPosX;
