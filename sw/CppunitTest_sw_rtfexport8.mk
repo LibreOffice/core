@@ -11,4 +11,8 @@
 
 $(eval $(call sw_rtfexport_test,8))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_rtfexport8,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
