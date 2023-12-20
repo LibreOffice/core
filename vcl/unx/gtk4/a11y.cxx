@@ -22,6 +22,7 @@
 
 #include "a11y.hxx"
 #include "gtkaccessibleeventlistener.hxx"
+#include "gtkaccessibleregistry.hxx"
 
 #define OOO_TYPE_FIXED (ooo_fixed_get_type())
 #define OOO_FIXED(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), OOO_TYPE_FIXED, OOoFixed))
@@ -383,15 +384,6 @@ applyObjectAttributes(GtkAccessible* pGtkAccessible,
 #define LO_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), LO_TYPE_ACCESSIBLE, LoAccessible))
 // #define LO_IS_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), LO_TYPE_ACCESSIBLE))
 
-struct LoAccessible
-{
-    GObject parent_instance;
-    GdkDisplay* display;
-    GtkAccessible* parent;
-    GtkATContext* at_context;
-    css::uno::Reference<css::accessibility::XAccessible> uno_accessible;
-};
-
 struct LoAccessibleClass
 {
     GObjectClass parent_class;
@@ -590,7 +582,7 @@ static void lo_accessible_class_init(LoAccessibleClass* klass)
     g_object_class_override_property(object_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
 }
 
-static LoAccessible*
+LoAccessible*
 lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
                   const css::uno::Reference<css::accessibility::XAccessible>& rAccessible)
 {
@@ -684,7 +676,8 @@ static GtkAccessible* lo_accessible_get_first_accessible_child(GtkAccessible* se
     if (!xFirstChild)
         return nullptr;
 
-    LoAccessible* child_accessible = lo_accessible_new(pAccessible->display, self, xFirstChild);
+    LoAccessible* child_accessible
+        = GtkAccessibleRegistry::getLOAccessible(xFirstChild, pAccessible->display, self);
     return GTK_ACCESSIBLE(g_object_ref(child_accessible));
 }
 
@@ -711,8 +704,8 @@ static GtkAccessible* lo_accessible_get_next_accessible_sibling(GtkAccessible* s
     if (!xNextChild)
         return nullptr;
 
-    LoAccessible* child_accessible
-        = lo_accessible_new(pAccessible->display, pAccessible->parent, xNextChild);
+    LoAccessible* child_accessible = GtkAccessibleRegistry::getLOAccessible(
+        xNextChild, pAccessible->display, pAccessible->parent);
     return GTK_ACCESSIBLE(g_object_ref(child_accessible));
 }
 
@@ -846,8 +839,8 @@ static GtkAccessible* get_first_accessible_child(GtkAccessible* accessible)
         return nullptr;
     css::uno::Reference<css::accessibility::XAccessible> xFirstChild(
         xContext->getAccessibleChild(0));
-    LoAccessible* child_accessible
-        = lo_accessible_new(gtk_widget_get_display(GTK_WIDGET(pFixed)), accessible, xFirstChild);
+    LoAccessible* child_accessible = GtkAccessibleRegistry::getLOAccessible(
+        xFirstChild, gtk_widget_get_display(GTK_WIDGET(pFixed)), accessible);
     return GTK_ACCESSIBLE(g_object_ref(child_accessible));
 }
 

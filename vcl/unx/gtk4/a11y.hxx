@@ -10,13 +10,26 @@
 #pragma once
 
 #include <gtk/gtk.h>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 
 //TODO: Silence various loplugin:external and loplugin:unreffun in (WIP?) a11y.cxx for now:
-struct LoAccessible;
 struct LoAccessibleClass;
 struct OOoFixed;
 struct OOoFixedClass;
 GType lo_accessible_get_type();
 GtkWidget* ooo_fixed_new();
+
+struct LoAccessible
+{
+    GObject parent_instance;
+    GdkDisplay* display;
+    GtkAccessible* parent;
+    GtkATContext* at_context;
+    css::uno::Reference<css::accessibility::XAccessible> uno_accessible;
+};
+
+LoAccessible*
+lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
+                  const css::uno::Reference<css::accessibility::XAccessible>& rAccessible);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

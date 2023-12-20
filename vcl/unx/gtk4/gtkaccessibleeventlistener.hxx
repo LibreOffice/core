@@ -15,7 +15,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cppuhelper/implbase.hxx>
 
-struct LoAccessible;
+#include "a11y.hxx"
 
 class GtkAccessibleEventListener final
     : public cppu::WeakImplHelper<css::accessibility::XAccessibleEventListener>
