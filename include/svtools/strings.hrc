@@ -263,6 +263,7 @@
 #define STR_FIELD_CALENDAR                      NC_("STR_FIELD_CALENDAR", "Calendar")
 #define STR_FIELD_INVITE                        NC_("STR_FIELD_INVITE", "Invite")
 
+#define STR_WARNING_ACTIVE_CONTENT_DISABLED     NC_("STR_WARNING_ACTIVE_CONTENT_DISABLED", "Active content is disabled.")
 #define STR_SVT_DEFAULT_SERVICE_LABEL           NC_("STR_SVT_DEFAULT_SERVICE_LABEL", "$user$'s $service$")
 
 #define STR_WARNING_JAVANOTFOUND                NC_("STR_WARNING_JAVANOTFOUND", "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME. %FAQLINK")

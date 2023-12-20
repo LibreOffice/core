@@ -32,6 +32,8 @@
 #include <unotools/moduleoptions.hxx>
 #include <svtools/insdlg.hxx>
 #include <svtools/embedhlp.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
 #include <svx/svxdlg.hxx>
 #include <comphelper/classids.hxx>
 #include <svx/svdpagv.hxx>
@@ -57,6 +59,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <svtools/dialogclosedlistener.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <PivotTableDataProvider.hxx>
 #include <chart2uno.hxx>
@@ -252,6 +255,14 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
         switch ( nSlot )
         {
             case SID_INSERT_OBJECT :
+                if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+                {
+                    std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(
+                        nullptr, VclMessageType::Warning, VclButtonsType::Ok,
+                        SvtResId(STR_WARNING_ACTIVE_CONTENT_DISABLED)));
+                    xError->run();
+                    break;
+                }
                 aServerLst.FillInsertObjects();
                 aServerLst.Remove( ScDocShell::Factory().GetClassId() );   // Do not show Starcalc
                 //TODO/LATER: currently no inserting of ClassId into SfxRequest!

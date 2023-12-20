@@ -89,6 +89,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/unit_conversion.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <PostItMgr.hxx>
 #include <FrameControlsManager.hxx>
@@ -100,6 +101,8 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 #include <svtools/embedhlp.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
 #include <svx/postattr.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -433,6 +436,15 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
             {
                 case SID_INSERT_OBJECT:
                 {
+                    if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+                    {
+                        std::unique_ptr<weld::MessageDialog> xError(
+                            Application::CreateMessageDialog(
+                                nullptr, VclMessageType::Warning, VclButtonsType::Ok,
+                                SvtResId(STR_WARNING_ACTIVE_CONTENT_DISABLED)));
+                        xError->run();
+                        break;
+                    }
                     aServerList.FillInsertObjects();
                     aServerList.Remove( SwDocShell::Factory().GetClassId() );
                     [[fallthrough]];
