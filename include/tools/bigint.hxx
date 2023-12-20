@@ -187,7 +187,16 @@ inline BigInt BigInt::Abs() const
     if (IsBig())
         aRes.bIsNeg = false;
     else if ( nVal < 0 )
-        aRes.nVal = -nVal;
+    {
+        if (nVal == std::numeric_limits<sal_Int32>::min())
+        {
+            aRes.nNum[0] = -sal_Int64(std::numeric_limits<sal_Int32>::min());
+            aRes.nLen = 1;
+            aRes.bIsNeg = false;
+        }
+        else
+            aRes.nVal = -nVal;
+    }
     return aRes;
 }
 
