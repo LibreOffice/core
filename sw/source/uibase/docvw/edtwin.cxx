@@ -4897,7 +4897,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else
             {
-                SwContentAtPos aFieldAtPos ( IsAttrAtPos::Field );
+                SwContentAtPos aFieldAtPos ( IsAttrAtPos::Field | IsAttrAtPos::FormControl );
                 if ( !rSh.IsInSelect() && rSh.TestCurrPam( aDocPt ) &&
                      !rSh.GetContentAtPos( aDocPt, aFieldAtPos ) )
                 {
@@ -5023,6 +5023,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                         rCheckboxFm.SetChecked(!rCheckboxFm.IsChecked());
                                         rCheckboxFm.Invalidate();
                                         rSh.InvalidateWindows( SwRect(m_rView.GetVisArea()) );
+                                    }
+                                    else if ( fieldBM->GetFieldname( ) == ODF_FORMTEXT )
+                                    {
+                                        rSh.GotoFieldmark( aContentAtPos.aFnd.pFieldmark, true );
                                     }
                                 }
                             }

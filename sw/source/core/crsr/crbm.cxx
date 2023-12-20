@@ -302,15 +302,18 @@ sw::mark::IFieldmark* SwCursorShell::GetFieldmarkBefore(bool bLoop)
     return getIDocumentMarkAccess()->getFieldmarkBefore(pos, bLoop);
 }
 
-bool SwCursorShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
+bool SwCursorShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark, bool completeSelection)
 {
     if(pMark==nullptr) return false;
 
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
     aCursorSt.SetCursorToMark(pMark);
-    aCursorSt.m_pCursor->GetPoint()->AdjustContent(+1);
-    aCursorSt.m_pCursor->GetMark()->AdjustContent(-1);
+    if (!completeSelection || aCursorSt.m_pCursor->HasReadonlySel(false, false))
+    {
+        aCursorSt.m_pCursor->GetPoint()->AdjustContent(+1);
+        aCursorSt.m_pCursor->GetMark()->AdjustContent(-1);
+    }
 
     if(aCursorSt.RollbackIfIllegal()) return false;
 
