@@ -794,7 +794,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             auto pRequest = std::make_shared<SfxRequest>(rReq);
             rReq.Ignore(); // the 'old' request is not relevant any more
             auto xDlg = std::make_shared<ManageLanguageDialog>(pCurWin ? pCurWin->GetFrameWeld() : nullptr, m_pCurLocalizationMgr);
-            weld::DialogController::runAsync(xDlg, [=](sal_Int32 /*nResult*/){
+            weld::DialogController::runAsync(xDlg, [pRequest](sal_Int32 /*nResult*/){
                     pRequest->Done();
                 });
         }

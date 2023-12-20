@@ -492,7 +492,7 @@ void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
             pObj,
             bHasMarked));
 
-    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, pRequest, pView, bHasMarked](sal_Int32 nResult){
         if ( nResult == RET_OK )
         {
             if( bHasMarked )
@@ -524,7 +524,7 @@ void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
         pWin, &aNewAttr,
         rViewData.GetDocument().GetDrawLayer(), true, false));
 
-    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, pRequest, pView, bHasMarked](sal_Int32 nResult){
         if ( nResult == RET_OK )
         {
             if( bHasMarked )
