@@ -1345,12 +1345,13 @@ void SAL_CALL ColorPicker::setDialogTitle( const OUString& )
 void SAL_CALL ColorPicker::startExecuteModal( const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener )
 {
     std::shared_ptr<ColorPickerDialog> xDlg = std::make_shared<ColorPickerDialog>(Application::GetFrameWeld(mxParent), mnColor, mnMode);
-    weld::DialogController::runAsync(xDlg, [this, xDlg, xListener] (sal_Int32 nResult) {
+    rtl::Reference<ColorPicker> xThis(this);
+    weld::DialogController::runAsync(xDlg, [xThis, xDlg, xListener] (sal_Int32 nResult) {
         if (nResult)
-            mnColor = xDlg->GetColor();
+            xThis->mnColor = xDlg->GetColor();
 
         sal_Int16 nRet = static_cast<sal_Int16>(nResult);
-        css::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
+        css::ui::dialogs::DialogClosedEvent aEvent( *xThis, nRet );
         xListener->dialogClosed( aEvent );
     });
 }
