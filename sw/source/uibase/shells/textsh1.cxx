@@ -2337,8 +2337,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case FN_INSERT_TABLE:
             if ( rSh.CursorInsideInputField()
-                 || rSh.GetTableFormat()
-                 || (rSh.GetFrameType(nullptr,true) & FrameTypeFlags::FOOTNOTE) )
+                 || rSh.GetTableFormat() )
             {
                 rSet.DisableItem( nWhich );
             }

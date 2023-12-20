@@ -3066,9 +3066,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
     const SfxItemSet* pArgs = _rRequest.GetArgs();
     SwWrtShell& rSh = GetShell();
 
-    if ( rSh.GetFrameType( nullptr, true ) & FrameTypeFlags::FOOTNOTE )
-        return;
-
     SwView &rTempView = GetView(); // Because GetView() does not work after the shell exchange
     bool bHTMLMode = 0 != (::GetHtmlMode(rTempView.GetDocShell())&HTMLMODE_ON);
     bool bCallEndUndo = false;
