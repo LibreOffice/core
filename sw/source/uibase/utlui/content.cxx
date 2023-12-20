@@ -121,6 +121,8 @@
 
 #include <docufld.hxx>
 
+#include <svl/fstathelper.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -593,7 +595,8 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 if(ContentTypeId::GRAPHIC == m_nContentType)
                 {
                     OUString sLink;
-                    m_pWrtShell->GetGrfNms( &sLink, nullptr, static_cast<const SwFlyFrameFormat*>( pFrameFormat));
+                    SwDoc::GetGrfNms(*static_cast<const SwFlyFrameFormat*>(pFrameFormat), &sLink,
+                                     nullptr);
                     pCnt = new SwGraphicContent(this, sFrameName, INetURLObject::decode(sLink,
                                            INetURLObject::DecodeMechanism::Unambiguous), nYPos);
                 }
@@ -2179,8 +2182,21 @@ void SwContentTree::InsertContent(const weld::TreeIter& rParent)
         OUString sId(weld::toId(pCnt));
         insert(&rParent, sEntry, sId, false, xChild.get());
         m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
-        if (bGraphic && !static_cast<const SwGraphicContent*>(pCnt)->GetLink().isEmpty())
-            m_xTreeView->set_image(*xChild, RID_BMP_NAVI_GRAPHIC_LINK);
+        if (bGraphic)
+        {
+            const OUString& rsURL = static_cast<const SwGraphicContent*>(pCnt)->GetLink();
+            if (!rsURL.isEmpty())
+            {
+                if (FStatHelper::IsDocument(rsURL))
+                {
+                    m_xTreeView->set_image(*xChild, RID_BMP_NAVI_GRAPHIC_LINK);
+                }
+                else
+                {
+                    m_xTreeView->set_image(*xChild, RID_BMP_NAVI_GRAPHIC_BROKENLINK);
+                }
+            }
+        }
     }
 }
 
