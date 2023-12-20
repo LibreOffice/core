@@ -140,6 +140,23 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     bool bCheckButtons = static_cast<int>(nTreeFlags & SvTreeFlags::CHKBTN);
 
+    bool isRadioButton = false;
+    if (pCheckButtonData)
+    {
+        isRadioButton = pCheckButtonData -> IsRadio();
+    }
+
+    OUString checkboxtype;
+    if (bCheckButtons)
+    {
+        checkboxtype = "checkbox";
+        if(isRadioButton)
+        {
+            checkboxtype = "radio";
+        }
+    }
+
+    rJsonWriter.put("checkboxtype", checkboxtype);
     auto entriesNode = rJsonWriter.startArray("entries");
     lcl_DumpEntryAndSiblings(rJsonWriter, First(), this, bCheckButtons);
 }
