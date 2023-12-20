@@ -225,6 +225,10 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
                                   sal_uInt16 nRows, sal_uInt16 nCols )
 {
     SwPosition* pPos = GetCursor()->GetPoint();
+    // Do not try to insert table into Footnotes/Endnotes! tdf#76007 prevents that.
+    if (pPos->GetNode() < pPos->GetNodes().GetEndOfInserts()
+        && pPos->GetNode().GetIndex() >= pPos->GetNodes().GetEndOfInserts().StartOfSectionIndex())
+        return;
 
     StartAllAction();
 
