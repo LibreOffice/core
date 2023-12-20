@@ -405,15 +405,16 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
     m_pColorDlg = std::make_unique<SvColorDialog>();
     m_pColorDlg->SetColor(rInitialColor);
     m_pColorDlg->SetMode(svtools::ColorPickerMode::Modify);
-    m_pColorDlg->ExecuteAsync(pParent, [this, aCommandCopy] (sal_Int32 nResult) {
+    std::shared_ptr<PaletteManager> xSelf(shared_from_this());
+    m_pColorDlg->ExecuteAsync(pParent, [xSelf, aCommandCopy] (sal_Int32 nResult) {
         if (nResult == RET_OK)
         {
-            Color aLastColor = m_pColorDlg->GetColor();
+            Color aLastColor = xSelf->m_pColorDlg->GetColor();
             OUString sColorName = "#" + aLastColor.AsRGBHexString().toAsciiUpperCase();
             NamedColor aNamedColor(aLastColor, sColorName);
-            SetSplitButtonColor(aNamedColor);
-            AddRecentColor(aLastColor, sColorName);
-            maColorSelectFunction(aCommandCopy, aNamedColor);
+            xSelf->SetSplitButtonColor(aNamedColor);
+            xSelf->AddRecentColor(aLastColor, sColorName);
+            xSelf->maColorSelectFunction(aCommandCopy, aNamedColor);
         }
     });
 }
