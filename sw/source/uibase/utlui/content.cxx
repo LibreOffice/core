@@ -5738,10 +5738,10 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
 
     m_pActiveShell->AssureStdMode();
 
-    std::optional<std::unique_ptr<SwPosition>> oPosition;
+    std::optional<SwPosition> oPosition;
     if (m_bSelectTo)
-        oPosition.emplace(new SwPosition(m_pActiveShell->GetCursor()->GetPoint()->nNode,
-                                         m_pActiveShell->GetCursor()->GetPoint()->nContent));
+        oPosition.emplace(m_pActiveShell->GetCursor()->GetPoint()->nNode,
+                          m_pActiveShell->GetCursor()->GetPoint()->nContent);
 
     switch(m_nLastSelType = pCnt->GetParent()->GetType())
     {
@@ -5881,8 +5881,8 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         m_pActiveShell->AssureStdMode();
 
         m_pActiveShell->SetMark();
-        m_pActiveShell->GetCursor()->GetMark()->nNode = oPosition.value()->nNode;
-        m_pActiveShell->GetCursor()->GetMark()->nContent = oPosition.value()->nContent;
+        m_pActiveShell->GetCursor()->GetMark()->nNode = oPosition->nNode;
+        m_pActiveShell->GetCursor()->GetMark()->nContent = oPosition->nContent;
         m_pActiveShell->UpdateCursor();
 
         m_pActiveShell->GetView().GetEditWin().GrabFocus();
