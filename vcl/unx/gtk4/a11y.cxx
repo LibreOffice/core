@@ -296,11 +296,7 @@ static void applyStates(GtkAccessible* pGtkAccessible,
         pGtkAccessible, GTK_ACCESSIBLE_STATE_BUSY,
         bool(nStates & com::sun::star::accessibility::AccessibleStateType::BUSY),
         GTK_ACCESSIBLE_STATE_DISABLED,
-        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::ENABLED)),
-        GTK_ACCESSIBLE_STATE_EXPANDED,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::EXPANDED),
-        GTK_ACCESSIBLE_STATE_SELECTED,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::SELECTED), -1);
+        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::ENABLED)), -1);
 
     // when explicitly setting any value for GTK_ACCESSIBLE_STATE_CHECKED,
     // Gtk will also report ATSPI_STATE_CHECKABLE on the AT-SPI layer
@@ -312,6 +308,20 @@ static void applyStates(GtkAccessible* pGtkAccessible,
         else if (nStates & com::sun::star::accessibility::AccessibleStateType::CHECKED)
             eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
         gtk_accessible_update_state(pGtkAccessible, GTK_ACCESSIBLE_STATE_CHECKED, eState, -1);
+    }
+
+    if (nStates & com::sun::star::accessibility::AccessibleStateType::EXPANDABLE)
+    {
+        gtk_accessible_update_state(
+            pGtkAccessible, GTK_ACCESSIBLE_STATE_EXPANDED,
+            bool(nStates & com::sun::star::accessibility::AccessibleStateType::EXPANDED), -1);
+    }
+
+    if (nStates & com::sun::star::accessibility::AccessibleStateType::SELECTABLE)
+    {
+        gtk_accessible_update_state(
+            pGtkAccessible, GTK_ACCESSIBLE_STATE_SELECTED,
+            bool(nStates & com::sun::star::accessibility::AccessibleStateType::SELECTED), -1);
     }
 
     const sal_Int16 nRole = xContext->getAccessibleRole();
