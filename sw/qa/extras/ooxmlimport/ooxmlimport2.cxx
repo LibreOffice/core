@@ -1190,7 +1190,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141969)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf154370)
 {
-    // Import a file with pargraph and character styles containing toggle properties applied to the end of
+    // Import a file with paragraph and character styles containing toggle properties applied to the end of
     // the paragraphs. Should result in hard attributes resetting the properties
     createSwDoc("tdf154370.docx");
     {
