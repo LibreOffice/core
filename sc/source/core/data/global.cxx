@@ -879,17 +879,8 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
     SfxBoolItem aBrowsing( SID_BROWSE, true );
 
     // No SID_SILENT anymore
-    SfxCallMode nCall = SfxCallMode::RECORD;
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        nCall |= SfxCallMode::SYNCHRON;
-    }
-    else
-    {
-        nCall |= SfxCallMode::ASYNCHRON;
-    }
     pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
-            nCall,
+            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
             { &aUrl, &aTarget, &aFrm, &aReferer, &aNewView, &aBrowsing });
 }
 
