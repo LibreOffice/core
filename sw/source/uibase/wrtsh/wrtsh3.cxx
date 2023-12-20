@@ -221,10 +221,10 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
     return bRet;
 }
 
-bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
+bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark, bool completeSelection)
 {
     (this->*m_fnKillSel)( nullptr, false );
-    bool bRet = SwCursorShell::GotoFieldmark(pMark);
+    bool bRet = SwCursorShell::GotoFieldmark(pMark, completeSelection);
     if( bRet && IsSelFrameMode() )
     {
         UnSelectFrame();

@@ -1321,7 +1321,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             aBulletOverlay = rInf.GetText().copy( nCopyStart, nCopyLen );
 
             for( sal_Int32 i = 0; i < aBulletOverlay.getLength(); ++i )
-                if( CH_BLANK == aBulletOverlay[ i ] )
+            {
+                const sal_Unicode replaceChar = aBulletOverlay[ i ];
+                if( CH_BLANK == replaceChar || CH_EN_SPACE == replaceChar )
                 {
                     /* fdo#72488 Hack: try to see if the space is zero width
                      * and don't bother with inserting a bullet in this case.
@@ -1329,17 +1331,18 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ((i + nCopyStart + 1 >= sal_Int32(rInf.GetLen())) ||
                         aKernArray[i + nCopyStart] != aKernArray[ i + nCopyStart + 1])
                     {
-                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, rtl::OUStringChar(CH_BULLET));
+                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, rtl::OUStringChar(CH_BLANK == replaceChar ? CH_BULLET : CH_DEGREE));
                     }
                     else
                     {
-                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, rtl::OUStringChar(CH_BLANK));
+                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, rtl::OUStringChar(replaceChar));
                     }
                 }
                 else
                 {
                     aBulletOverlay = aBulletOverlay.replaceAt(i, 1, rtl::OUStringChar(CH_BLANK));
                 }
+            }
         }
 
         TextFrameIndex nCnt(rInf.GetText().getLength());
