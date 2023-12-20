@@ -35,12 +35,15 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/msgpool.hxx>
 #include <tools/json_writer.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
 using namespace com::sun::star;
 
 namespace {
+bool g_bSettingView(false);
+
 /// Used to disable callbacks.
 /// Needed to avoid recursion when switching views,
 /// which can cause clients to invoke LOKit API and
@@ -165,8 +168,16 @@ void SfxLokHelper::destroyView(int nId)
     }
 }
 
+bool SfxLokHelper::isSettingView()
+{
+    return g_bSettingView;
+}
+
 void SfxLokHelper::setView(int nId)
 {
+    g_bSettingView = true;
+    comphelper::ScopeGuard g([] { g_bSettingView = false; });
+
     SfxApplication* pApp = SfxApplication::Get();
     if (pApp == nullptr)
         return;

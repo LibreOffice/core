@@ -305,10 +305,23 @@ void ViewShell::Activate(bool bIsMDIActivate)
         // thus, the Navigator will also get a current status
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         if (GetDispatcher() != nullptr)
+        {
+            SfxCallMode nCall = SfxCallMode::RECORD;
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                // Make sure the LOK case doesn't dispatch async events while switching views, that
+                // would lead to a loop, see SfxHintPoster::DoEvent_Impl().
+                nCall |= SfxCallMode::SYNCHRON;
+            }
+            else
+            {
+                nCall |= SfxCallMode::ASYNCHRON;
+            }
             GetDispatcher()->ExecuteList(
                 SID_NAVIGATOR_INIT,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                nCall,
                 { &aItem });
+        }
 
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=nullptr);

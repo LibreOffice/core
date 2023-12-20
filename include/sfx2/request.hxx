@@ -120,6 +120,11 @@ public:
     /** Return the window that should be used as the parent for any dialogs this request creates
     */
     weld::Window* GetFrameWeld() const;
+
+    void SetLokViewId(int nId);
+
+    int GetLokViewId() const;
+
 private:
     const SfxRequest&   operator=(const SfxRequest &) = delete;
 };
