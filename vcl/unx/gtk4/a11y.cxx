@@ -565,8 +565,16 @@ static void lo_accessible_range_init(GtkAccessibleRangeInterface* iface)
 }
 #endif
 
+// silence loplugin:unreffun
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 G_DEFINE_TYPE_WITH_CODE(LoAccessible, lo_accessible, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_ACCESSIBLE, lo_accessible_accessible_init))
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 static void lo_accessible_class_init(LoAccessibleClass* klass)
 {
@@ -854,8 +862,16 @@ static void ooo_fixed_accessible_init(GtkAccessibleInterface* iface)
     //    iface->get_platform_state = get_platform_state;
 }
 
+// silence loplugin:unreffun
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 G_DEFINE_TYPE_WITH_CODE(OOoFixed, ooo_fixed, GTK_TYPE_FIXED,
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_ACCESSIBLE, ooo_fixed_accessible_init))
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 static void ooo_fixed_class_init(OOoFixedClass* /*klass*/) {}
 

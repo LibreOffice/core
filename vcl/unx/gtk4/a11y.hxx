@@ -16,9 +16,7 @@ struct LoAccessible;
 struct LoAccessibleClass;
 struct OOoFixed;
 struct OOoFixedClass;
-static inline gpointer lo_accessible_get_instance_private(LoAccessible*);
 GType lo_accessible_get_type();
-static inline gpointer ooo_fixed_get_instance_private(OOoFixed*);
 GtkWidget* ooo_fixed_new();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
