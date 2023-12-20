@@ -20,8 +20,10 @@
 #include <hintpost.hxx>
 
 #include <sfx2/request.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <comphelper/lok.hxx>
 
 SfxHintPoster::SfxHintPoster(std::function<void(std::unique_ptr<SfxRequest>)> aLink)
     : m_Link(std::move(aLink))
@@ -32,6 +34,19 @@ SfxHintPoster::~SfxHintPoster() {}
 
 void SfxHintPoster::Post(std::unique_ptr<SfxRequest> pHintToPost)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Store the LOK view at the time of posting, so we can restore it later.
+        if (SfxLokHelper::isSettingView())
+        {
+            // This would be bad, setView() should not trigger new posted hints, otherwise this will
+            // never end if the view doesn't match when we execute the posted hint.
+            SAL_WARN("sfx.notify", "SfxHintPoster::Post: posting new hint during setting a view");
+        }
+
+        pHintToPost->SetLokViewId(SfxLokHelper::getView());
+    }
+
     Application::PostUserEvent((LINK(this, SfxHintPoster, DoEvent_Impl)), pHintToPost.release());
     AddFirstRef();
 }
@@ -40,7 +55,29 @@ IMPL_LINK(SfxHintPoster, DoEvent_Impl, void*, pPostedHint, void)
 {
     auto pRequest = static_cast<SfxRequest*>(pPostedHint);
     if (m_Link)
+    {
+        bool bSetView = false;
+        int nOldId = -1;
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            int nNewId = pRequest->GetLokViewId();
+            nOldId = SfxLokHelper::getView();
+            if (nNewId != -1 && nNewId != nOldId)
+            {
+                // The current view ID is not the one that was active when posting the hint, switch
+                // to it.
+                SfxLokHelper::setView(nNewId);
+                bSetView = true;
+            }
+        }
+
         m_Link(std::unique_ptr<SfxRequest>(pRequest));
+
+        if (bSetView)
+        {
+            SfxLokHelper::setView(nOldId);
+        }
+    }
     else
         delete pRequest;
     ReleaseRef();

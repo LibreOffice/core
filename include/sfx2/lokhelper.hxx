@@ -93,6 +93,8 @@ public:
     static void destroyView(int nId);
     /// Set a view shell as current one.
     static void setView(int nId);
+    /// Determines if a call to setView() is in progress or not.
+    static bool isSettingView();
     /// Set the edit mode for a document with callbacks disabled.
     static void setEditMode(int nMode, vcl::ITiledRenderable* pDoc);
     /// Get view shell with id
