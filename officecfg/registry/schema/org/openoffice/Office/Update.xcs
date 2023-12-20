@@ -41,7 +41,7 @@
             <info>
                 <desc>The URL that is used for the update check</desc>
             </info>
-            <value>http://vm195.documentfoundation.org/</value>
+            <value>https://update-mar.libreoffice.org/</value>
         </prop>
         <prop oor:name="UpdateChannel" oor:type="xs:string" oor:nillable="false">
             <info>
