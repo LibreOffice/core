@@ -47,9 +47,10 @@ const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 #define PKG_MNFST_DERKEYSIZE 11 //DerivedKeySize
 #define PKG_MNFST_KDF 12 // KeyDerivationFunction
 #define PKG_MNFST_ARGON2ARGS 13 // Argon2 arguments
+#define PKG_MNFST_KEYINFO 14 // PGP KeyInfo
 
 #define PKG_SIZE_NOENCR_MNFST 3
-#define PKG_SIZE_ENCR_MNFST 14 // max size
+#define PKG_SIZE_ENCR_MNFST 15 // max size
 
 // the properties related constants
 inline constexpr OUString ENCRYPTION_KEY_PROPERTY = u"EncryptionKey"_ustr;

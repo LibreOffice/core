@@ -445,11 +445,11 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
         return;
 
     if ( aConvertedName == ELEMENT_FILE_ENTRY && aStack.back().m_bValid ) {
-        // root folder gets KeyInfo entry if any, for PGP encryption
-        if (!bIgnoreEncryptData && !aKeys.empty() && aSequence[PKG_MNFST_FULLPATH].Value.get<OUString>() == "/" )
+        // the first entry gets KeyInfo element if any, for PGP encryption
+        if (!bIgnoreEncryptData && !aKeys.empty() && rManVector.empty())
         {
-            aSequence[PKG_SIZE_NOENCR_MNFST].Name = "KeyInfo";
-            aSequence[PKG_SIZE_NOENCR_MNFST].Value <<= comphelper::containerToSequence(aKeys);
+            aSequence[PKG_MNFST_KEYINFO].Name = "KeyInfo";
+            aSequence[PKG_MNFST_KEYINFO].Value <<= comphelper::containerToSequence(aKeys);
         }
         std::erase_if(aSequence, isEmpty);
 
