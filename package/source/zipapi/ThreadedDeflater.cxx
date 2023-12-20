@@ -76,21 +76,21 @@ ThreadedDeflater::~ThreadedDeflater() COVERITY_NOEXCEPT_FALSE { clear(); }
 
 void ThreadedDeflater::deflateWrite(
     const css::uno::Reference<css::io::XInputStream>& xInStream,
-    std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)> aProcessInputFunc,
-    std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)> aProcessOutputFunc)
+    const std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)>& rProcessInputFunc,
+    const std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)>& rProcessOutputFunc)
 {
     sal_Int64 nThreadCount = comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount();
     sal_Int64 batchSize = MaxBlockSize * nThreadCount;
     inBuffer.realloc(batchSize);
     prevDataBlock.realloc(MaxBlockSize);
     outBuffers.resize(nThreadCount);
-    maProcessOutputFunc = aProcessOutputFunc;
+    maProcessOutputFunc = rProcessOutputFunc;
     bool firstTask = true;
 
     while (xInStream->available() > 0)
     {
         sal_Int64 inputBytes = xInStream->readBytes(inBuffer, batchSize);
-        aProcessInputFunc(inBuffer, inputBytes);
+        rProcessInputFunc(inBuffer, inputBytes);
         totalIn += inputBytes;
         int sequence = 0;
         bool lastBatch = xInStream->available() <= 0;

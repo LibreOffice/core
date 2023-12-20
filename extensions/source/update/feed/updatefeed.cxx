@@ -449,15 +449,13 @@ UpdateInformationProvider::load(const OUString& rURL)
     uno::Reference< ucb::XCommandProcessor > xCommandProcessor(m_xUniversalContentBroker->queryContent(xId), uno::UNO_QUERY_THROW);
     rtl::Reference< ActiveDataSink > aSink(new ActiveDataSink());
 
-    // Disable KeepAlive in webdav - don't want millions of office
-    // instances phone home & clog up servers
-    uno::Sequence< beans::NamedValue > aProps { { "KeepAlive", uno::Any(false) } };
-
     ucb::OpenCommandArgument3 aOpenArgument;
     aOpenArgument.Mode = ucb::OpenMode::DOCUMENT;
     aOpenArgument.Priority = 32768;
     aOpenArgument.Sink = *aSink;
-    aOpenArgument.OpeningFlags = aProps;
+    // Disable KeepAlive in webdav - don't want millions of office
+    // instances phone home & clog up servers
+    aOpenArgument.OpeningFlags = { { "KeepAlive", uno::Any(false) } };
 
     ucb::Command aCommand;
     aCommand.Name = "open";
