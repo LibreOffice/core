@@ -42,7 +42,7 @@ const sal_Int32 MY_MINLONG  = -MY_MAXLONG;
 
 BigInt BigInt::MakeBig() const
 {
-    if (!IsLong())
+    if (IsBig())
     {
         BigInt ret(*this);
         while ( ret.nLen > 1 && ret.nNum[ret.nLen-1] == 0 )
@@ -67,8 +67,7 @@ BigInt BigInt::MakeBig() const
 
 void BigInt::Normalize()
 {
-    // nLen == 0 means that the active union member is nVal, otherwise nNum
-    if ( nLen != 0 )
+    if (IsBig())
     {
         while ( nLen > 1 && nNum[nLen-1] == 0 )
             nLen--;
@@ -96,7 +95,6 @@ void BigInt::Normalize()
 // run-time index checking in debug builds.
 static std::span<sal_uInt32> Mult(std::span<const sal_uInt32> aNum, sal_uInt32 nMul, std::span<sal_uInt32> retBuf)
 {
-    assert(aNum.size() <= MAX_DIGITS);
     assert(retBuf.size() >= aNum.size());
     sal_uInt64 nK = 0;
     for (size_t i = 0; i < aNum.size(); i++)
@@ -134,24 +132,23 @@ static size_t DivInPlace(std::span<sal_uInt32> aNum, sal_uInt32 nDiv, sal_uInt32
     return aNum.size();
 }
 
-bool BigInt::ABS_IsLessLong(const BigInt& rVal) const
+bool BigInt::ABS_IsLessBig(const BigInt& rVal) const
 {
-    assert(!IsLong() && !rVal.IsLong());
+    assert(IsBig() && rVal.IsBig());
     if ( rVal.nLen < nLen)
         return false;
     if ( rVal.nLen > nLen )
         return true;
 
-    int i;
-    for ( i = nLen - 1; i > 0 && nNum[i] == rVal.nNum[i]; i-- )
-    {
-    }
+    int i = nLen - 1;
+    while (i > 0 && nNum[i] == rVal.nNum[i])
+        --i;
     return nNum[i] < rVal.nNum[i];
 }
 
-void BigInt::AddLong( BigInt& rB, BigInt& rErg )
+void BigInt::AddBig(BigInt& rB, BigInt& rRes)
 {
-    assert(!IsLong() && !rB.IsLong());
+    assert(IsBig() && rB.IsBig());
     if ( bIsNeg == rB.bIsNeg )
     {
         int  i;
@@ -180,34 +177,33 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
                 k = 1;
             else
                 k = 0;
-            rErg.nNum[i] = static_cast<sal_uInt32>(nZ);
+            rRes.nNum[i] = static_cast<sal_uInt32>(nZ);
         }
         // If an overflow occurred, add to solution
         if (k)
         {
             assert(i < MAX_DIGITS);
-            rErg.nNum[i] = 1;
+            rRes.nNum[i] = 1;
             len++;
         }
         // Set length and sign
-        rErg.nLen   = len;
-        rErg.bIsNeg = bIsNeg;
+        rRes.nLen = len;
+        rRes.bIsNeg = bIsNeg;
     }
     // If one of the values is negative, perform subtraction instead
     else
     {
         bIsNeg = !bIsNeg;
-        rB.SubLong(*this, rErg);
+        rB.SubBig(*this, rRes);
         bIsNeg = !bIsNeg;
     }
 }
 
-void BigInt::SubLong( BigInt& rB, BigInt& rErg )
+void BigInt::SubBig(BigInt& rB, BigInt& rRes)
 {
-    assert(!IsLong() && !rB.IsLong());
+    assert(IsBig() && rB.IsBig());
     if ( bIsNeg == rB.bIsNeg )
     {
-        int  i;
         char len;
 
         // if length of the two values differ, fill remaining positions
@@ -215,74 +211,74 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
         if (nLen >= rB.nLen)
         {
             len = nLen;
-            for (i = rB.nLen; i < len; i++)
+            for (int i = rB.nLen; i < len; i++)
                 rB.nNum[i] = 0;
         }
         else
         {
             len = rB.nLen;
-            for (i = nLen; i < len; i++)
+            for (int i = nLen; i < len; i++)
                 nNum[i] = 0;
         }
 
-        const bool bThisIsLess = ABS_IsLessLong(rB);
+        const bool bThisIsLess = ABS_IsLessBig(rB);
         BigInt& rGreater = bThisIsLess ? rB : *this;
         BigInt& rSmaller = bThisIsLess ? *this : rB;
 
         sal_Int64 k = 0;
-        for (i = 0; i < len; i++)
+        for (int i = 0; i < len; i++)
         {
             sal_Int64 nZ = static_cast<sal_Int64>(rGreater.nNum[i]) - static_cast<sal_Int64>(rSmaller.nNum[i]) + k;
             if (nZ < 0)
                 k = -1;
             else
                 k = 0;
-            rErg.nNum[i] = static_cast<sal_uInt32>(nZ);
+            rRes.nNum[i] = static_cast<sal_uInt32>(nZ);
         }
 
         // if a < b, revert sign
-        rErg.bIsNeg = bThisIsLess ? !bIsNeg : bIsNeg;
-        rErg.nLen   = len;
+        rRes.bIsNeg = bThisIsLess ? !bIsNeg : bIsNeg;
+        rRes.nLen   = len;
     }
     // If one of the values is negative, perform addition instead
     else
     {
         bIsNeg = !bIsNeg;
-        AddLong(rB, rErg);
+        AddBig(rB, rRes);
         bIsNeg = !bIsNeg;
-        rErg.bIsNeg = bIsNeg;
+        rRes.bIsNeg = bIsNeg;
     }
 }
 
-void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
+void BigInt::MultBig(const BigInt& rB, BigInt& rRes) const
 {
-    assert(!IsLong() && !rB.IsLong());
+    assert(IsBig() && rB.IsBig());
 
-    rErg.bIsNeg = bIsNeg != rB.bIsNeg;
-    rErg.nLen   = nLen + rB.nLen;
-    assert(rErg.nLen <= MAX_DIGITS);
+    rRes.bIsNeg = bIsNeg != rB.bIsNeg;
+    rRes.nLen = nLen + rB.nLen;
+    assert(rRes.nLen <= MAX_DIGITS);
 
-    int i;
-    for (i = 0; i < rErg.nLen; i++)
-        rErg.nNum[i] = 0;
+    for (int i = 0; i < rRes.nLen; i++)
+        rRes.nNum[i] = 0;
 
     for (int j = 0; j < rB.nLen; j++)
     {
         sal_uInt64 k = 0;
+        int i;
         for (i = 0; i < nLen; i++)
         {
             sal_uInt64 nZ = static_cast<sal_uInt64>(nNum[i]) * static_cast<sal_uInt64>(rB.nNum[j]) +
-                 static_cast<sal_uInt64>(rErg.nNum[i + j]) + k;
-            rErg.nNum[i + j] = static_cast<sal_uInt32>(nZ);
+                 static_cast<sal_uInt64>(rRes.nNum[i + j]) + k;
+            rRes.nNum[i + j] = static_cast<sal_uInt32>(nZ);
             k = nZ >> 32;
         }
-        rErg.nNum[i + j] = k;
+        rRes.nNum[i + j] = k;
     }
 }
 
-void BigInt::DivModLong(const BigInt& rB, BigInt& rErg, bool bMod) const
+void BigInt::DivModBig(const BigInt& rB, BigInt& rRes, bool bMod) const
 {
-    assert(!IsLong() && !rB.IsLong());
+    assert(IsBig() && rB.IsBig());
     assert(nLen >= rB.nLen);
 
     assert(rB.nNum[rB.nLen - 1] != 0);
@@ -331,10 +327,10 @@ void BigInt::DivModLong(const BigInt& rB, BigInt& rErg, bool bMod) const
         sal_uInt32& rNum(num[j - den.size() + i]);
         rNum -= nK;
         if (num[j - den.size() + i] == 0)
-            rErg.nNum[j - den.size()] = nQ;
+            rRes.nNum[j - den.size()] = nQ;
         else
         {
-            rErg.nNum[j - den.size()] = nQ - 1;
+            rRes.nNum[j - den.size()] = nQ - 1;
             nK = 0;
             for (i = 0; i < den.size(); i++)
             {
@@ -350,37 +346,16 @@ void BigInt::DivModLong(const BigInt& rB, BigInt& rErg, bool bMod) const
 
     if (bMod)
     {
-        rErg.nLen = DivInPlace(num, nMult, nMult);
-        assert(rErg.nLen <= MAX_DIGITS);
-        rErg.bIsNeg = bIsNeg;
-        std::copy_n(num.begin(), rErg.nLen, rErg.nNum);
+        rRes.nLen = DivInPlace(num, nMult, nMult);
+        assert(rRes.nLen <= MAX_DIGITS);
+        rRes.bIsNeg = bIsNeg;
+        std::copy_n(num.begin(), rRes.nLen, rRes.nNum);
     }
     else
     {
-        rErg.bIsNeg = bIsNeg != rB.bIsNeg;
-        rErg.nLen   = nLen - rB.nLen + 1;
+        rRes.bIsNeg = bIsNeg != rB.bIsNeg;
+        rRes.nLen = nLen - rB.nLen + 1;
     }
-}
-
-bool BigInt::ABS_IsLess( const BigInt& rB ) const
-{
-    if (nLen != 0 || rB.nLen != 0)
-        return MakeBig().ABS_IsLessLong(rB.MakeBig());
-
-    if ( nVal < 0 )
-        return nVal > (rB.nVal < 0 ? rB.nVal : -rB.nVal);
-    else
-        return nVal < (rB.nVal < 0 ? -rB.nVal : rB.nVal);
-}
-
-BigInt::BigInt( const BigInt& rBigInt )
-    : nLen(0)
-    , bIsNeg(false)
-{
-    if ( rBigInt.nLen != 0 )
-        memcpy( static_cast<void*>(this), static_cast<const void*>(&rBigInt), sizeof( BigInt ) );
-    else
-        nVal = rBigInt.nVal;
 }
 
 BigInt::BigInt( std::u16string_view rString )
@@ -407,7 +382,7 @@ BigInt::BigInt( std::u16string_view rString )
         *this += *p - '0';
         p++;
     }
-    if ( nLen != 0 )
+    if (IsBig())
         bIsNeg = bNeg;
     else if( bNeg )
         nVal = -nVal;
@@ -447,7 +422,7 @@ BigInt::BigInt( double nValue )
 
         nLen = i;
 
-        if ( i < 3 )
+        if ( i < 2 )
             Normalize();
     }
 }
@@ -480,19 +455,14 @@ BigInt::BigInt( sal_Int64 nValue )
     }
     else
     {
-        sal_uInt64 nUValue = static_cast<sal_uInt64>(bIsNeg ? -nValue : nValue);
-        for (int i = 0; (i != sizeof(sal_uInt64) / 4) && (nUValue != 0); ++i)
-        {
-            nNum[i] = static_cast<sal_uInt32>(nUValue);
-            nUValue = nUValue >> 32;
-            ++nLen;
-        }
+        for (sal_uInt64 n = static_cast<sal_uInt64>(bIsNeg ? -nValue : nValue); n != 0; n >>= 32)
+            nNum[nLen++] = static_cast<sal_uInt32>(n);
     }
 }
 
 BigInt::operator double() const
 {
-    if (IsLong())
+    if (!IsBig())
         return static_cast<double>(nVal);
     else
     {
@@ -518,7 +488,7 @@ BigInt& BigInt::operator=( const BigInt& rBigInt )
     if (this == &rBigInt)
         return *this;
 
-    if ( rBigInt.nLen != 0 )
+    if (rBigInt.IsBig())
         memcpy( static_cast<void*>(this), static_cast<const void*>(&rBigInt), sizeof( BigInt ) );
     else
     {
@@ -530,7 +500,7 @@ BigInt& BigInt::operator=( const BigInt& rBigInt )
 
 BigInt& BigInt::operator+=( const BigInt& rVal )
 {
-    if ( nLen == 0 && rVal.nLen == 0 )
+    if (!IsBig() && !rVal.IsBig())
     {
         if( nVal <= MY_MAXLONG && rVal.nVal <= MY_MAXLONG
             && nVal >= MY_MINLONG && rVal.nVal >= MY_MINLONG )
@@ -547,14 +517,14 @@ BigInt& BigInt::operator+=( const BigInt& rVal )
     }
 
     BigInt aTmp2 = rVal.MakeBig();
-    MakeBig().AddLong(aTmp2, *this);
+    MakeBig().AddBig(aTmp2, *this);
     Normalize();
     return *this;
 }
 
 BigInt& BigInt::operator-=( const BigInt& rVal )
 {
-    if ( nLen == 0 && rVal.nLen == 0 )
+    if (!IsBig() && !rVal.IsBig())
     {
         if ( nVal <= MY_MAXLONG && rVal.nVal <= MY_MAXLONG &&
              nVal >= MY_MINLONG && rVal.nVal >= MY_MINLONG )
@@ -571,7 +541,7 @@ BigInt& BigInt::operator-=( const BigInt& rVal )
     }
 
     BigInt aTmp2 = rVal.MakeBig();
-    MakeBig().SubLong(aTmp2, *this);
+    MakeBig().SubBig(aTmp2, *this);
     Normalize();
     return *this;
 }
@@ -581,7 +551,7 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
     static const sal_Int32 MY_MAXSHORT = 0x00007fff;
     static const sal_Int32 MY_MINSHORT = -MY_MAXSHORT;
 
-    if ( nLen == 0 && rVal.nLen == 0
+    if (!IsBig() && !rVal.IsBig()
          && nVal <= MY_MAXSHORT && rVal.nVal <= MY_MAXSHORT
          && nVal >= MY_MINSHORT && rVal.nVal >= MY_MINSHORT )
          // TODO: not optimal !!! W.P.
@@ -590,7 +560,7 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
     }
     else
     {
-        rVal.MakeBig().MultLong(MakeBig(), *this);
+        rVal.MakeBig().MultBig(MakeBig(), *this);
         Normalize();
     }
     return *this;
@@ -598,7 +568,7 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
 
 void BigInt::DivMod(const BigInt& rVal, bool bMod)
 {
-    if ( rVal.nLen == 0 )
+    if (!rVal.IsBig())
     {
         if ( rVal.nVal == 0 )
         {
@@ -613,7 +583,7 @@ void BigInt::DivMod(const BigInt& rVal, bool bMod)
             return;
         }
 
-        if ( nLen == 0 )
+        if (!IsBig())
         {
             // No overflows may occur here
             nVal = bMod ? nVal % rVal.nVal : nVal / rVal.nVal;
@@ -646,7 +616,7 @@ void BigInt::DivMod(const BigInt& rVal, bool bMod)
     }
 
     BigInt tmpA = MakeBig(), tmpB = rVal.MakeBig();
-    if (tmpA.ABS_IsLessLong(tmpB))
+    if (tmpA.ABS_IsLessBig(tmpB))
     {
         if (!bMod)
             *this = 0;
@@ -654,7 +624,7 @@ void BigInt::DivMod(const BigInt& rVal, bool bMod)
     }
 
     // Divide BigInt with BigInt
-    tmpA.DivModLong(tmpB, *this, bMod);
+    tmpA.DivModBig(tmpB, *this, bMod);
 }
 
 BigInt& BigInt::operator/=( const BigInt& rVal )
@@ -673,7 +643,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
 
 bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 {
-    if (rVal1.IsLong() && rVal2.IsLong())
+    if (!rVal1.IsBig() && !rVal2.IsBig())
         return rVal1.nVal == rVal2.nVal;
 
     BigInt nA = rVal1.MakeBig(), nB = rVal2.MakeBig();
@@ -683,7 +653,7 @@ bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 
 std::strong_ordering operator<=>(const BigInt& rVal1, const BigInt& rVal2)
 {
-    if (rVal1.IsLong() && rVal2.IsLong())
+    if (!rVal1.IsBig() && !rVal2.IsBig())
         return rVal1.nVal <=> rVal2.nVal;
 
     BigInt nA = rVal1.MakeBig(), nB = rVal2.MakeBig();

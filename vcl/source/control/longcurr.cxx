@@ -56,11 +56,9 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
         return rLocaleDataWrapper.getCurr( static_cast<tools::Long>(rNumber), nDigits, rCurrSymbol, bShowThousandSep );
 
     BigInt aTmp( ImplPower10( nDigits ) );
-    BigInt aInteger( rNumber );
-    aInteger.Abs();
+    BigInt aInteger(rNumber.Abs());
+    BigInt aFraction(aInteger);
     aInteger  /= aTmp;
-    BigInt aFraction( rNumber );
-    aFraction.Abs();
     aFraction %= aTmp;
     if ( !aInteger.IsZero() )
     {

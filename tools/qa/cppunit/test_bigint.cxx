@@ -45,7 +45,7 @@ void BigIntTest::testConstructionFromLongLong()
         BigInt bi(static_cast<sal_Int64>(42));
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
-        CPPUNIT_ASSERT(bi.IsLong());
+        CPPUNIT_ASSERT(!bi.IsBig());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(42), static_cast<sal_Int32>(bi));
     }
 
@@ -54,7 +54,7 @@ void BigIntTest::testConstructionFromLongLong()
         BigInt bi(static_cast<sal_Int64>(-42));
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
-        CPPUNIT_ASSERT(bi.IsLong());
+        CPPUNIT_ASSERT(!bi.IsBig());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-42), static_cast<sal_Int32>(bi));
     }
 
@@ -63,7 +63,7 @@ void BigIntTest::testConstructionFromLongLong()
         BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::max()));
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
-        CPPUNIT_ASSERT(bi.IsLong());
+        CPPUNIT_ASSERT(!bi.IsBig());
         CPPUNIT_ASSERT_EQUAL(std::numeric_limits<sal_Int32>::max(), static_cast<sal_Int32>(bi));
     }
 
@@ -72,7 +72,7 @@ void BigIntTest::testConstructionFromLongLong()
         BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::min()));
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
-        CPPUNIT_ASSERT(bi.IsLong());
+        CPPUNIT_ASSERT(!bi.IsBig());
         CPPUNIT_ASSERT_EQUAL(std::numeric_limits<sal_Int32>::min(), static_cast<sal_Int32>(bi));
     }
 
@@ -81,7 +81,7 @@ void BigIntTest::testConstructionFromLongLong()
         BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::max()) + 1);
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
-        CPPUNIT_ASSERT(!bi.IsLong());
+        CPPUNIT_ASSERT(bi.IsBig());
     }
 
     // negative number not fitting to sal_Int32
@@ -89,7 +89,7 @@ void BigIntTest::testConstructionFromLongLong()
         BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::min()) - 1);
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
-        CPPUNIT_ASSERT(!bi.IsLong());
+        CPPUNIT_ASSERT(bi.IsBig());
     }
 }
 

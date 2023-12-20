@@ -40,15 +40,14 @@ private:
     sal_uInt8       nLen;    // current length, if 0, data is in nVal, otherwise data is in nNum
     bool            bIsNeg;    // Is Sign negative?
 
-    TOOLS_DLLPRIVATE BigInt MakeBig() const;
-    TOOLS_DLLPRIVATE void Normalize();
-    TOOLS_DLLPRIVATE bool ABS_IsLessLong(BigInt const &) const;
-    TOOLS_DLLPRIVATE void AddLong(BigInt &, BigInt &);
-    TOOLS_DLLPRIVATE void SubLong(BigInt &, BigInt &);
-    TOOLS_DLLPRIVATE void MultLong(BigInt const &, BigInt &) const;
-    TOOLS_DLLPRIVATE void DivModLong(BigInt const &, BigInt &, bool) const;
-    TOOLS_DLLPRIVATE void DivMod(BigInt const &, bool);
-    TOOLS_DLLPRIVATE bool ABS_IsLess(BigInt const &) const;
+    TOOLS_DLLPRIVATE BigInt MakeBig() const; // Create a BigInt with minimal non-0 nLen
+    TOOLS_DLLPRIVATE void Normalize(); // Use nVal if possible, otherwise use minimal nLen
+    TOOLS_DLLPRIVATE bool ABS_IsLessBig(BigInt const& rVal) const;
+    TOOLS_DLLPRIVATE void AddBig(BigInt& rB, BigInt& rRes);
+    TOOLS_DLLPRIVATE void SubBig(BigInt& rB, BigInt& rRes);
+    TOOLS_DLLPRIVATE void MultBig(BigInt const& rB, BigInt& rRes) const;
+    TOOLS_DLLPRIVATE void DivModBig(BigInt const& rB, BigInt& rRes, bool bMod) const;
+    TOOLS_DLLPRIVATE void DivMod(BigInt const& rVal, bool bMod);
 
 public:
     BigInt()
@@ -68,7 +67,7 @@ public:
     BigInt( double nVal );
     BigInt( sal_uInt32 nVal );
     BigInt( sal_Int64 nVal );
-    BigInt( const BigInt& rBigInt );
+    BigInt(const BigInt& rBigInt) = default;
     BigInt( std::u16string_view rString );
 
     template <typename N>
@@ -99,11 +98,11 @@ public:
     operator        double() const;
     operator        sal_Int64() const;
 
-    bool            IsNeg() const { return !IsLong() ? bIsNeg : nVal < 0; }
-    bool            IsZero() const { return IsLong() && nVal == 0; }
-    bool            IsLong() const { return nLen == 0; }
+    bool            IsNeg() const { return IsBig() ? bIsNeg : nVal < 0; }
+    bool            IsZero() const { return !IsBig() && nVal == 0; }
+    bool            IsBig() const { return nLen != 0; }
 
-    void            Abs();
+    BigInt Abs() const;
 
     BigInt&         operator  =( const BigInt& rVal );
     BigInt&         operator +=( const BigInt& rVal );
@@ -123,7 +122,7 @@ public:
 
 inline BigInt::operator sal_Int16() const
 {
-    if ( nLen == 0 && nVal >= SAL_MIN_INT16 && nVal <= SAL_MAX_INT16 )
+    if (!IsBig() && nVal >= SAL_MIN_INT16 && nVal <= SAL_MAX_INT16)
         return static_cast<sal_Int16>(nVal);
     assert(false && "out of range");
     return 0;
@@ -131,7 +130,7 @@ inline BigInt::operator sal_Int16() const
 
 inline BigInt::operator sal_uInt16() const
 {
-    if ( nLen == 0 && nVal >= 0 && nVal <= SAL_MAX_UINT16 )
+    if (!IsBig() && nVal >= 0 && nVal <= SAL_MAX_UINT16)
         return static_cast<sal_uInt16>(nVal);
     assert(false && "out of range");
     return 0;
@@ -139,7 +138,7 @@ inline BigInt::operator sal_uInt16() const
 
 inline BigInt::operator sal_Int32() const
 {
-    if (nLen == 0)
+    if (!IsBig())
         return nVal;
     assert(false && "out of range");
     return 0;
@@ -147,7 +146,7 @@ inline BigInt::operator sal_Int32() const
 
 inline BigInt::operator sal_uInt32() const
 {
-    if ( nLen == 0 && nVal >= 0 )
+    if (!IsBig() && nVal >= 0)
         return static_cast<sal_uInt32>(nVal);
     assert(false && "out of range");
     return 0;
@@ -181,47 +180,49 @@ inline BigInt& BigInt::operator =( sal_Int32 nValue )
     return *this;
 }
 
-inline void BigInt::Abs()
+inline BigInt BigInt::Abs() const
 {
-    if ( nLen != 0 )
-        bIsNeg = false;
+    BigInt aRes(*this);
+    if (IsBig())
+        aRes.bIsNeg = false;
     else if ( nVal < 0 )
-        nVal = -nVal;
+        aRes.nVal = -nVal;
+    return aRes;
 }
 
 inline BigInt operator+( const BigInt &rVal1, const BigInt &rVal2 )
 {
-    BigInt aErg( rVal1 );
-    aErg += rVal2;
-    return aErg;
+    BigInt aRes( rVal1 );
+    aRes += rVal2;
+    return aRes;
 }
 
 inline BigInt operator-( const BigInt &rVal1, const BigInt &rVal2 )
 {
-    BigInt aErg( rVal1 );
-    aErg -= rVal2;
-    return aErg;
+    BigInt aRes( rVal1 );
+    aRes -= rVal2;
+    return aRes;
 }
 
 inline BigInt operator*( const BigInt &rVal1, const BigInt &rVal2 )
 {
-    BigInt aErg( rVal1 );
-    aErg *= rVal2;
-    return aErg;
+    BigInt aRes( rVal1 );
+    aRes *= rVal2;
+    return aRes;
 }
 
 inline BigInt operator/( const BigInt &rVal1, const BigInt &rVal2 )
 {
-    BigInt aErg( rVal1 );
-    aErg /= rVal2;
-    return aErg;
+    BigInt aRes( rVal1 );
+    aRes /= rVal2;
+    return aRes;
 }
 
 inline BigInt operator%( const BigInt &rVal1, const BigInt &rVal2 )
 {
-    BigInt aErg( rVal1 );
-    aErg %= rVal2;
-    return aErg;
+    BigInt aRes( rVal1 );
+    aRes %= rVal2;
+    return aRes;
 }
 
 #endif
