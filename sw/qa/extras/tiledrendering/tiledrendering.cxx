@@ -2288,8 +2288,9 @@ namespace {
     void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, TypedWhichId<SfxStringListItem> nWhich, bool bValue)
     {
         uno::Sequence<OUString> aSeq;
-        const SfxStringListItem* pListItem = nullptr;
-        pViewShell->GetDispatcher()->QueryState(nWhich, pListItem);
+        SfxPoolItemHolder aResult;
+        pViewShell->GetDispatcher()->QueryState(nWhich, aResult);
+        const SfxStringListItem* pListItem(static_cast<const SfxStringListItem*>(aResult.getItem()));
         CPPUNIT_ASSERT(pListItem);
         pListItem->GetStringList(aSeq);
         if (bValue)

@@ -312,10 +312,11 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
         SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
         SfxBoolItem aHidden( SID_HIDDEN, true );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
-        const SfxObjectItem* pItem = static_cast<const SfxObjectItem*>(
+        const SfxPoolItemHolder aResult(
             pView->GetViewFrame().GetDispatcher()->ExecuteList(SID_OPENDOC,
-                SfxCallMode::SYNCHRON,
-                { &aURL, &aHidden, &aReferer, &aTargetFrameName }));
+            SfxCallMode::SYNCHRON,
+            { &aURL, &aHidden, &aReferer, &aTargetFrameName }));
+        const SfxObjectItem* pItem(static_cast<const SfxObjectItem*>(aResult.getItem()));
         SfxShell* pShell = pItem ? pItem->GetShell() : nullptr;
 
         if(pShell)
@@ -338,9 +339,10 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
     else
     {
         SfxStringItem aFactory(SID_NEWDOCDIRECT, SwDocShell::Factory().GetFilterContainer()->GetName());
-        const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
-            pView->GetViewFrame().GetDispatcher()->ExecuteList(
-                SID_NEWDOCDIRECT, SfxCallMode::SYNCHRON, { &aFactory }));
+        const SfxPoolItemHolder aResult(pView->GetViewFrame().GetDispatcher()->ExecuteList(
+            SID_NEWDOCDIRECT,
+            SfxCallMode::SYNCHRON, { &aFactory }));
+        const SfxFrameItem* pItem(static_cast<const SfxFrameItem*>(aResult.getItem()));
         SfxFrame* pFrame = pItem ? pItem->GetFrame() : nullptr;
         SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
         pNewView = pViewFrame ? dynamic_cast<SwView*>( pViewFrame->GetViewShell() ) : nullptr;

@@ -131,17 +131,16 @@ class SVL_DLLPUBLIC SfxPoolItem
 
     // bitfield for flags (instead of SfxItemKind)
     bool        m_bIsVoidItem : 1;          // bit 0
-    bool        m_bDeleteOnIdle : 1;        // bit 1
-    bool        m_bStaticDefault : 1;       // bit 2
-    bool        m_bPoolDefault : 1;         // bit 3
-    bool        m_bRegisteredAtPool : 1;    // bit 4
-    bool        m_bExceptionalSCItem : 1;     // bit 5
-    bool        m_bIsSetItem : 1;           // bit 6
+    bool        m_bStaticDefault : 1;       // bit 1
+    bool        m_bPoolDefault : 1;         // bit 2
+    bool        m_bRegisteredAtPool : 1;    // bit 3
+    bool        m_bExceptionalSCItem : 1;   // bit 4
+    bool        m_bIsSetItem : 1;           // bit 5
 
 protected:
 #ifdef DBG_UTIL
     // this flag will make debugging item stuff much simpler
-    bool        m_bDeleted : 1;             // bit 7
+    bool        m_bDeleted : 1;             // bit 6
 #endif
 
 private:
@@ -153,7 +152,6 @@ private:
 
 protected:
     void setIsVoidItem() { m_bIsVoidItem = true; }
-    void setDeleteOnIdle() { m_bDeleteOnIdle = true; }
     void setStaticDefault() { m_bStaticDefault = true; }
     void setPoolDefault() { m_bPoolDefault = true; }
     void setRegisteredAtPool(bool bNew) { m_bRegisteredAtPool = bNew; }
@@ -173,7 +171,6 @@ public:
 #endif
 
     bool isVoidItem() const { return m_bIsVoidItem; }
-    bool isDeleteOnIdle() const { return m_bDeleteOnIdle; }
     bool isStaticDefault() const { return m_bStaticDefault; }
     bool isPoolDefault() const { return m_bPoolDefault; }
     bool isRegisteredAtPool() const { return m_bRegisteredAtPool; }

@@ -23,6 +23,7 @@
 #include <svx/xflftrit.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <svl/itemset.hxx>
 
 
 using namespace css;
@@ -90,9 +91,9 @@ void AreaPropertyPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 void AreaPropertyPanel::setFillUseBackground(const XFillStyleItem* pStyleItem,
                                              const XFillUseSlideBackgroundItem& rItem)
 {
-    const SfxPoolItem* pItem = nullptr;
+    SfxPoolItemHolder aResult;
     auto pDispatcher = GetBindings()->GetDispatcher();
-    auto state = pDispatcher->QueryState(SID_ATTR_FILL_USE_SLIDE_BACKGROUND, pItem);
+    auto state = pDispatcher->QueryState(SID_ATTR_FILL_USE_SLIDE_BACKGROUND, aResult);
     // FillUseSlideBackground is only available in Impress
     if (state == SfxItemState::DISABLED)
     {

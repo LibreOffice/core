@@ -666,7 +666,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(), aCmisProperties,
                     IsUseUserData(), IsUseThumbnailSave() );
-                if ( !GetSlotState( SID_DOCTEMPLATE ) )
+                const SfxPoolItemHolder aSlotState(GetSlotState(SID_DOCTEMPLATE));
+                if (nullptr == aSlotState.getItem())
                     // templates not supported
                     aDocInfoItem.SetTemplate(false);
 
@@ -1067,12 +1068,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SfxViewShell::Current()->SetStoringHelper(xHelper);
 
                 QueryHiddenInformation(bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving);
+                SfxPoolItemHolder aItem;
+                if (SID_DIRECTEXPORTDOCASPDF == nId)
+                    aItem = GetSlotState(SID_MAIL_PREPAREEXPORT);
+                const SfxBoolItem* pItem(dynamic_cast<const SfxBoolItem*>(aItem.getItem()));
 
-                const SfxBoolItem *pItem = nId != SID_DIRECTEXPORTDOCASPDF ? nullptr :
-                    dynamic_cast<const SfxBoolItem*>( GetSlotState(SID_MAIL_PREPAREEXPORT) );
                 // Fetch value from the pool item early, because GUIStoreModel() can free the pool
                 // item as part of spinning the main loop if a dialog is opened.
-                bool bMailPrepareExport = pItem && pItem->GetValue();
+                const bool bMailPrepareExport(nullptr != pItem && pItem->GetValue());
                 if (bMailPrepareExport)
                 {
                     SfxRequest aRequest(SID_MAIL_PREPAREEXPORT, SfxCallMode::SYNCHRON, GetPool());

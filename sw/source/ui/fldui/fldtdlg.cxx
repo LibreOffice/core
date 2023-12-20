@@ -113,10 +113,10 @@ void SwFieldDlg::Close()
 {
     if (m_bClosing)
         return;
-    const SfxPoolItem* pResult = m_pBindings->GetDispatcher()->
+    const SfxPoolItemHolder aResult(m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
-        SfxCallMode::SYNCHRON|SfxCallMode::RECORD);
-    if (!pResult)
+        SfxCallMode::SYNCHRON|SfxCallMode::RECORD));
+    if (nullptr == aResult.getItem())
     {
         // If Execute action did fail for whatever reason, this means that request
         // to close did fail or wasn't delivered to SwTextShell::ExecField().

@@ -262,9 +262,9 @@ void SwView::GetState(SfxItemSet &rSet)
                 if( !m_pShell )
                     SelectShell();
 
-                const SfxPoolItem* pState = m_pShell->GetSlotState(SID_UNDO);
-                if(pState)
-                    rSet.Put(*pState);
+                const SfxPoolItemHolder aResult(m_pShell->GetSlotState(SID_UNDO));
+                if(nullptr != aResult.getItem())
+                    rSet.Put(*aResult.getItem());
                 else
                     rSet.DisableItem(nWhich);
             }
@@ -570,14 +570,14 @@ void SwView::GetState(SfxItemSet &rSet)
                     }
                 }
                 //these slots are either re-mapped to text or object alignment
-                const SfxPoolItem* pState = nullptr;
+                SfxPoolItemHolder aResult;
                 if(nAlias)
-                    GetViewFrame().GetDispatcher()->QueryState( nAlias, pState );
-                if(pState)
+                    GetViewFrame().GetDispatcher()->QueryState(nAlias, aResult);
+                if(nullptr != aResult.getItem())
                 {
                     if (!(m_nSelectionType & SelectionType::DrawObject))
                     {
-                        rSet.Put(pState->CloneSetWhich(nWhich));
+                        rSet.Put(aResult.getItem()->CloneSetWhich(nWhich));
                     }
                 }
                 else

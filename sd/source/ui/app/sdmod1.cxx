@@ -322,17 +322,17 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     // state of SID_OPENDOC is determined by the base class
     if (rItemSet.GetItemState(SID_OPENDOC) != SfxItemState::UNKNOWN)
     {
-        const SfxPoolItem* pItem = SfxGetpApp()->GetSlotState(SID_OPENDOC, SfxGetpApp()->GetInterface());
-        if (pItem)
-            rItemSet.Put(*pItem);
+        const SfxPoolItemHolder aItem(SfxGetpApp()->GetSlotState(SID_OPENDOC, SfxGetpApp()->GetInterface()));
+        if (nullptr != aItem.getItem())
+            rItemSet.Put(*aItem.getItem());
     }
 
     // state of SID_OPENHYPERLINK is determined by the base class
     if (rItemSet.GetItemState(SID_OPENHYPERLINK) != SfxItemState::UNKNOWN)
     {
-        const SfxPoolItem* pItem = SfxGetpApp()->GetSlotState(SID_OPENHYPERLINK, SfxGetpApp()->GetInterface());
-        if (pItem)
-            rItemSet.Put(*pItem);
+        const SfxPoolItemHolder aItem(SfxGetpApp()->GetSlotState(SID_OPENHYPERLINK, SfxGetpApp()->GetInterface()));
+        if (nullptr != aItem.getItem())
+            rItemSet.Put(*aItem.getItem());
     }
 
     if( SfxItemState::DEFAULT == rItemSet.GetItemState( SID_AUTOSPELL_CHECK ) )

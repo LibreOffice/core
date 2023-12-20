@@ -588,9 +588,9 @@ void LayoutMenu::ShowContextMenu(const Point* pPos)
 
     // Disable the SID_INSERTPAGE_LAYOUT_MENU item when
     // the document is read-only.
-    const SfxPoolItem* pItem = nullptr;
+    SfxPoolItemHolder aResult;
     const SfxItemState aState (
-        mrBase.GetViewFrame().GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
+        mrBase.GetViewFrame().GetDispatcher()->QueryState(SID_INSERTPAGE, aResult));
     if (aState == SfxItemState::DISABLED)
         xMenu->set_sensitive("insert", false);
 

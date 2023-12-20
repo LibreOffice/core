@@ -33,6 +33,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/itemset.hxx>
 
 SFX_IMPL_MODELESSDIALOGCONTOLLER(SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDOW);
 

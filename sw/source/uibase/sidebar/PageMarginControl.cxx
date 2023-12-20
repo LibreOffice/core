@@ -55,8 +55,9 @@ namespace
     {
         if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         {
-            const SfxUInt16Item* pItem = nullptr;
-            SfxItemState eState = pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem);
+            SfxPoolItemHolder aResult;
+            const SfxItemState eState(pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, aResult));
+            const SfxUInt16Item* pItem(static_cast<const SfxUInt16Item*>(aResult.getItem()));
             if (pItem && eState >= SfxItemState::DEFAULT)
                 return static_cast<FieldUnit>(pItem->GetValue());
         }
@@ -128,13 +129,20 @@ PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pP
     const SvxLongULSpaceItem* pULItem = nullptr;
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
-        const SvxPageItem* pPageItem;
-        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
+        SfxPoolItemHolder aResult;
+        pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE, aResult);
+        const SvxPageItem* pPageItem(static_cast<const SvxPageItem*>(aResult.getItem()));
         bLandscape = pPageItem->IsLandscape();
         m_bMirrored = pPageItem->GetPageUsage() == SvxPageUsage::Mirror;
-        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pSize );
-        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_LRSPACE, pLRItem );
-        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_ULSPACE, pULItem );
+
+        pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, aResult);
+        pSize = static_cast<const SvxSizeItem*>(aResult.getItem());
+
+        pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, aResult);
+        pLRItem = static_cast<const SvxLongLRSpaceItem*>(aResult.getItem());
+
+        pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, aResult);
+        pULItem = static_cast<const SvxLongULSpaceItem*>(aResult.getItem());
     }
 
     if ( pLRItem )

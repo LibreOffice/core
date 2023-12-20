@@ -43,6 +43,7 @@
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <o3tl/string_view.hxx>
+#include <svl/itemset.hxx>
 
 #include "rlrcitem.hxx"
 #include <memory>

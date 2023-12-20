@@ -43,6 +43,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/itemset.hxx>
 
 using namespace css::uno;
 using namespace css::frame;

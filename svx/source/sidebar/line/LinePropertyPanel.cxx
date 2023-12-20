@@ -26,6 +26,7 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <svl/itemset.hxx>
 
 using namespace css;
 using namespace css::uno;

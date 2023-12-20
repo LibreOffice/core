@@ -297,9 +297,9 @@ IMPL_LINK_NOARG(SfxVersionDialog, SelectHdl_Impl, weld::TreeView&, void)
     m_xOpenButton->set_sensitive(bEnable);
     m_xViewButton->set_sensitive(bEnable);
 
-    const SfxPoolItem *pDummy=nullptr;
-    m_pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_MERGE, pDummy );
-    SfxItemState eState = m_pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_COMPARE, pDummy );
+    SfxPoolItemHolder aResult;
+    m_pViewFrame->GetDispatcher()->QueryState(SID_DOCUMENT_MERGE, aResult);
+    SfxItemState eState = m_pViewFrame->GetDispatcher()->QueryState(SID_DOCUMENT_COMPARE, aResult);
     m_xCompareButton->set_sensitive(bEnable && eState >= SfxItemState::DEFAULT);
 }
 

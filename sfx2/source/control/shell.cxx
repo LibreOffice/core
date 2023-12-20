@@ -27,7 +27,6 @@
 #include <svl/setitem.hxx>
 #include <svl/voiditem.hxx>
 #include <svl/undo.hxx>
-#include <itemdel.hxx>
 #include <svtools/asynclink.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/lok.hxx>
@@ -435,7 +434,7 @@ void SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
     }
 }
 
-const SfxPoolItem* SfxShell::ExecuteSlot
+const SfxPoolItemHolder& SfxShell::ExecuteSlot
 (
     SfxRequest          &rReq,  // the relayed <SfxRequest>
     const SfxInterface* pIF     // default = 0 means get virtually
@@ -459,7 +458,7 @@ const SfxPoolItem* SfxShell::ExecuteSlot
     return rReq.GetReturnValue();
 }
 
-const SfxPoolItem* SfxShell::GetSlotState
+SfxPoolItemHolder SfxShell::GetSlotState
 (
     sal_uInt16              nSlotId,    // Slot-Id to the Slots in question
     const SfxInterface* pIF,        // default = 0 means get virtually
@@ -505,29 +504,27 @@ const SfxPoolItem* SfxShell::GetSlotState
     }
 
     // Evaluate Item and item status and possibly maintain them in pStateSet
-    std::unique_ptr<SfxPoolItem> pRetItem;
     if ( !bItemStateSet || eState <= SfxItemState::DISABLED )
     {
         if ( pStateSet )
             pStateSet->DisableItem(nSlotId);
-        return nullptr;
+        return SfxPoolItemHolder();
     }
-    else if ( bItemStateSet && eState == SfxItemState::DONTCARE )
+
+    if ( bItemStateSet && eState == SfxItemState::DONTCARE )
     {
         if ( pStateSet )
             pStateSet->ClearItem(nSlotId);
-        pRetItem.reset( new SfxVoidItem(0) );
+        return SfxPoolItemHolder(rPool, new SfxVoidItem(0), true);
     }
-    else // bItemStateSet && eState >= SfxItemState::DEFAULT
-    {
-        if ( pStateSet && pStateSet->Put( *pItem ) )
-            return &pStateSet->Get( pItem->Which() );
-        pRetItem.reset(pItem->Clone());
-    }
-    auto pTemp = pRetItem.get();
-    DeleteItemOnIdle(std::move(pRetItem));
 
-    return pTemp;
+    // bItemStateSet && eState >= SfxItemState::DEFAULT
+    if ( pStateSet && pStateSet->Put( *pItem ) )
+    {
+        return SfxPoolItemHolder(rPool, &pStateSet->Get(pItem->Which()));
+    }
+
+    return SfxPoolItemHolder(rPool, pItem);
 }
 
 static SFX_EXEC_STUB(SfxShell, VerbExec)

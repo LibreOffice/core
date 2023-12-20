@@ -33,6 +33,7 @@
 #include <vcl/window.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
+#include <svl/itemset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 

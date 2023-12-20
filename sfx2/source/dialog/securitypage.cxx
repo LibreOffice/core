@@ -51,12 +51,11 @@ namespace
         SfxViewShell* pViewSh = SfxViewShell::Current();
         if (pViewSh)
         {
-            const SfxBoolItem* pItem;
-            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            SfxItemState nState = pDisp->QueryState( _nSlot, pItem );
+            SfxPoolItemHolder aResult;
+            const SfxItemState nState(pViewSh->GetDispatcher()->QueryState(_nSlot, aResult));
             bRet = SfxItemState::DEFAULT <= nState;
             if (bRet)
-                _rValue = pItem->GetValue();
+                _rValue = static_cast<const SfxBoolItem*>(aResult.getItem())->GetValue();
         }
         return bRet;
     }
@@ -266,11 +265,12 @@ void SfxSecurityPage_Impl::Reset_Impl()
         SfxViewShell* pViewSh = SfxViewShell::Current();
         if (pViewSh)
         {
-            const SfxUInt16Item* pItem;
-            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            if (SfxItemState::DEFAULT <= pDisp->QueryState( SID_HTML_MODE, pItem ))
+            SfxPoolItemHolder aResult;
+
+            if (SfxItemState::DEFAULT <= pViewSh->GetDispatcher()->QueryState(SID_HTML_MODE, aResult))
             {
-                sal_uInt16 nMode = pItem->GetValue();
+                const SfxUInt16Item* pItem(static_cast<const SfxUInt16Item*>(aResult.getItem()));
+                const sal_uInt16 nMode(pItem->GetValue());
                 bIsHTMLDoc = ( ( nMode & HTMLMODE_ON ) != 0 );
             }
         }

@@ -21,6 +21,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <avmedia/MediaControlBase.hxx>
+#include <svl/itemset.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

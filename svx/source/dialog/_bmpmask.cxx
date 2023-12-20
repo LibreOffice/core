@@ -22,6 +22,7 @@
 #include <vcl/virdev.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 

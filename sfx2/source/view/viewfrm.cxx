@@ -1011,9 +1011,9 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
     else if ( GetViewShell() )
     {
         // The SW has its own undo in the View
-        const SfxPoolItem *pRet = GetViewShell()->ExecuteSlot( rReq );
-        if ( pRet )
-            bOK = static_cast<const SfxBoolItem*>(pRet)->GetValue();
+        const SfxPoolItemHolder& rResult(GetViewShell()->ExecuteSlot(rReq));
+        if (nullptr != rResult.getItem())
+            bOK = static_cast<const SfxBoolItem*>(rResult.getItem())->GetValue();
     }
 
     rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bOK ) );
@@ -2968,10 +2968,10 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
     aReq.SetInternalArgs_Impl(aSet);
 
     aReq.AppendItem( SfxBoolItem(SID_RECORDMACRO,true) );
-    const SfxPoolItem* pRet = SfxGetpApp()->ExecuteSlot( aReq );
+    const SfxPoolItemHolder& rResult(SfxGetpApp()->ExecuteSlot(aReq));
     OUString aScriptURL;
-    if ( pRet )
-        aScriptURL = static_cast<const SfxStringItem*>(pRet)->GetValue();
+    if (nullptr != rResult.getItem())
+        aScriptURL = static_cast<const SfxStringItem*>(rResult.getItem())->GetValue();
     if ( !aScriptURL.isEmpty() )
     {
         // parse scriptURL
@@ -3524,8 +3524,8 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_HYPERLINK_DIALOG )
         {
-            const SfxPoolItem* pDummy = nullptr;
-            SfxItemState eState = GetDispatcher()->QueryState( SID_HYPERLINK_SETLINK, pDummy );
+            SfxPoolItemHolder aDummy;
+            SfxItemState eState = GetDispatcher()->QueryState(SID_HYPERLINK_SETLINK, aDummy);
             if ( SfxItemState::DISABLED == eState )
                 rState.DisableItem(nSID);
             else

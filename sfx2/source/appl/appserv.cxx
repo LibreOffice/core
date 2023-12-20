@@ -494,7 +494,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( pObjSh->IsModified() && !pObjSh->isSaveLocked())
                 {
                     pObjSh->ExecuteSlot( aReq );
-                    const SfxBoolItem *pItem = dynamic_cast<const SfxBoolItem*>( aReq.GetReturnValue()  );
+                    const SfxBoolItem* pItem(dynamic_cast<const SfxBoolItem*>(aReq.GetReturnValue().getItem()));
                     if ( !pItem || !pItem->GetValue() )
                         bOK = false;
                 }
@@ -945,8 +945,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     // Show/Hide the Notebookbar
                     const SfxStringItem pItem(SID_NOTEBOOKBAR, aNewName);
                     pViewFrame->GetDispatcher()->ExecuteList(SID_NOTEBOOKBAR, SfxCallMode::SYNCHRON, {&pItem});
-                    const SfxPoolItem *pNbItem;
-                    pViewFrame->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pNbItem);
+                    SfxPoolItemHolder aNbItem;
+                    pViewFrame->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, aNbItem);
 
                     // Show toolbars
                     for ( const OUString& rName : std::as_const(aMandatoryToolbars) )
@@ -1254,11 +1254,11 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case SID_ZOOM_ENTIRE_PAGE:
                 case SID_ZOOM_PAGE_WIDTH:
                     {
-                        SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+                        SfxObjectShell* pCurrentShell(SfxObjectShell::Current());
 
-                        const SfxPoolItem *pItem;
-                        SfxItemState aState = pCurrentShell ?
-                            pCurrentShell->GetDispatcher()->QueryState(SID_ATTR_ZOOM, pItem) : SfxItemState::DISABLED;
+                        SfxPoolItemHolder aResult;
+                        const SfxItemState aState(pCurrentShell ?
+                            pCurrentShell->GetDispatcher()->QueryState(SID_ATTR_ZOOM, aResult) : SfxItemState::DISABLED);
                         if ( aState == SfxItemState::DISABLED )
                             rSet.DisableItem( nWhich );
                     }

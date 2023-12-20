@@ -424,14 +424,14 @@ void SvxSearchDialog::Construct_Impl()
 
     // Get attribute sets only once in constructor()
     const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
-    const SvxSetItem* pSrchSetItem =
-        static_cast<const SvxSetItem*>( rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs ) );
+    SfxPoolItemHolder aResult(rBindings.GetDispatcher()->Execute(FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs));
+    const SvxSetItem* pSrchSetItem(static_cast<const SvxSetItem*>(aResult.getItem()));
 
     if ( pSrchSetItem )
         InitAttrList_Impl( &pSrchSetItem->GetItemSet(), nullptr );
 
-    const SvxSetItem* pReplSetItem =
-        static_cast<const SvxSetItem*>( rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs ) );
+    aResult = rBindings.GetDispatcher()->Execute(FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs);
+    const SvxSetItem* pReplSetItem(static_cast<const SvxSetItem*>(aResult.getItem()));
 
     if ( pReplSetItem )
         InitAttrList_Impl( nullptr, &pReplSetItem->GetItemSet() );
@@ -900,14 +900,14 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
             {
                 // Get attribute sets, if it not has been done already
                 const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
-                const SvxSetItem* pSrchSetItem =
-                    static_cast<const SvxSetItem*>(rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs ));
+                SfxPoolItemHolder aResult(rBindings.GetDispatcher()->Execute(FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs));
+                const SvxSetItem* pSrchSetItem(static_cast<const SvxSetItem*>(aResult.getItem()));
 
                 if ( pSrchSetItem )
                     InitAttrList_Impl( &pSrchSetItem->GetItemSet(), nullptr );
 
-                const SvxSetItem* pReplSetItem =
-                    static_cast<const SvxSetItem*>( rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs ) );
+                aResult = rBindings.GetDispatcher()->Execute(FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs);
+                const SvxSetItem* pReplSetItem(static_cast<const SvxSetItem*>(aResult.getItem()));
 
                 if ( pReplSetItem )
                     InitAttrList_Impl( nullptr, &pReplSetItem->GetItemSet() );

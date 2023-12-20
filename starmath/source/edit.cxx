@@ -30,6 +30,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>

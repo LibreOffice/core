@@ -52,6 +52,7 @@ class Timer;
 class SfxWorkWindow;
 struct SfxFoundCache_Impl;
 class SfxFoundCacheArr_Impl;
+class SfxPoolItemHolder;
 
 enum class SfxCallMode : sal_uInt16
 {
@@ -99,7 +100,7 @@ friend class SfxBindings_Impl;
     sal_uInt16       nRegLevel;      // Lock-Level while Reconfig
 
 private:
-    SAL_DLLPRIVATE const SfxPoolItem*  Execute_Impl( sal_uInt16 nSlot, const SfxPoolItem **pArgs, sal_uInt16 nModi,
+    SAL_DLLPRIVATE SfxPoolItemHolder Execute_Impl( sal_uInt16 nSlot, const SfxPoolItem **pArgs, sal_uInt16 nModi,
                                     SfxCallMode nCall, const SfxPoolItem **pInternalArgs, bool bGlobalOnly=false);
     SAL_DLLPRIVATE void SetSubBindings_Impl( SfxBindings* );
     SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // Update SlotServer
@@ -155,7 +156,7 @@ public:
 
     sal_uInt16       QuerySlotId( const css::util::URL& aURL );
 
-    const SfxPoolItem*  ExecuteSynchron( sal_uInt16 nSlot,
+    SfxPoolItemHolder ExecuteSynchron( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr);
     bool             Execute( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr,

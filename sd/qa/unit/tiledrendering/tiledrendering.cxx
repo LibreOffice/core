@@ -1217,7 +1217,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoLimiting)
         SfxRequest aReq2(SID_UNDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
         aReq2.AppendItem(SfxUInt16Item(SID_UNDO, 1));
         pViewShell2->ExecuteSlot(aReq2);
-        const auto* pReturnValue = aReq2.GetReturnValue();
+        const auto* pReturnValue = aReq2.GetReturnValue().getItem();
         CPPUNIT_ASSERT(!pReturnValue);
     }
 
@@ -1249,7 +1249,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoLimiting)
         SfxRequest aReq2(SID_UNDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
         aReq2.AppendItem(SfxUInt16Item(SID_UNDO, 1));
         pViewShell2->ExecuteSlot(aReq2);
-        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aReq2.GetReturnValue());
+        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aReq2.GetReturnValue().getItem());
         CPPUNIT_ASSERT(pUInt32Item);
         CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     }

@@ -786,11 +786,11 @@ const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
     return nullptr;
 }
 
-const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
+SfxPoolItemHolder SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
         SfxItemSet const * pArgs, SfxItemSet const * pInternalArgs, sal_uInt16 nModi)
 {
     if ( IsLocked() )
-        return nullptr;
+        return SfxPoolItemHolder();
 
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
@@ -813,7 +813,8 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
         Execute_( *pShell, *pSlot, aReq, nCall );
         return aReq.GetReturnValue();
     }
-    return nullptr;
+
+    return SfxPoolItemHolder();
 }
 
 /** Method to execute a <SfxSlot>s over the Slot-Id.
@@ -830,11 +831,11 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
                             Or a NULL-Pointer, when the function was not
                             executed (for example canceled by the user).
 */
-const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
+SfxPoolItemHolder SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
         const SfxPoolItem **pArgs, sal_uInt16 nModi, const SfxPoolItem **pInternalArgs)
 {
     if ( IsLocked() )
-        return nullptr;
+        return SfxPoolItemHolder();
 
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
@@ -859,10 +860,10 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
             pReq->SetInternalArgs_Impl( aSet );
         }
         Execute_( *pShell, *pSlot, *pReq, eCall );
-        const SfxPoolItem* pRet = pReq->GetReturnValue();
-        return pRet;
+        return pReq->GetReturnValue();
     }
-    return nullptr;
+
+    return SfxPoolItemHolder();
 }
 
 /** Method to execute a <SfxSlot>s over the Slot-Id.
@@ -878,11 +879,11 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
                             Or a NULL-Pointer, when the function was not
                             executed (for example canceled by the user).
 */
-const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
+SfxPoolItemHolder SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
         const SfxItemSet &rArgs)
 {
     if ( IsLocked() )
-        return nullptr;
+        return SfxPoolItemHolder();
 
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
@@ -899,7 +900,8 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
         Execute_( *pShell, *pSlot, aReq, eCall );
         return aReq.GetReturnValue();
     }
-    return nullptr;
+
+    return SfxPoolItemHolder();
 }
 
 /** Method to execute a <SfxSlot>s over the Slot-Id.
@@ -928,12 +930,12 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
             &SfxBoolItem( SID_DOC_READONLY, sal_False ),
         });
 */
-const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCall,
+SfxPoolItemHolder SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCall,
         std::initializer_list<SfxPoolItem const*> args,
         std::initializer_list<SfxPoolItem const*> internalargs)
 {
     if ( IsLocked() )
-        return nullptr;
+        return SfxPoolItemHolder();
 
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
@@ -963,7 +965,8 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCal
        Execute_( *pShell, *pSlot, aReq, eCall );
        return aReq.GetReturnValue();
     }
-    return nullptr;
+
+    return SfxPoolItemHolder();
 }
 
 /** Helper method to receive the asynchronously executed <SfxRequest>s.
@@ -1122,8 +1125,8 @@ void SfxDispatcher::Update_Impl( bool bForce )
 
     if ( SfxViewShell::Current() && SfxViewShell::Current()->GetDispatcher() )
     {
-        const SfxPoolItem *pItem;
-        SfxViewShell::Current()->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pItem);
+        SfxPoolItemHolder aItem;
+        SfxViewShell::Current()->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, aItem);
     }
 }
 
@@ -1967,14 +1970,14 @@ void SfxDispatcher::SetQuietMode_Impl( bool bOn )
         pBindings->InvalidateAll(true);
 }
 
-SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, const SfxPoolItem* &rpState )
+SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, SfxPoolItemHolder& rState )
 {
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
     if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, false, true ) )
     {
-        rpState = pShell->GetSlotState(nSlot);
-        if ( !rpState )
+        rState = pShell->GetSlotState(nSlot);
+        if ( nullptr == rState.getItem() )
             return SfxItemState::DISABLED;
         else
             return SfxItemState::DEFAULT;
@@ -1989,20 +1992,20 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
     const SfxSlot *pSlot = nullptr;
     if ( GetShellAndSlot_Impl( nSID, &pShell, &pSlot, false, true ) )
     {
-        const SfxPoolItem* pItem = pShell->GetSlotState( nSID );
-        if ( !pItem )
+        SfxPoolItemHolder aItem(pShell->GetSlotState(nSID));
+        if (nullptr == aItem.getItem())
             return SfxItemState::DISABLED;
         else
         {
             css::uno::Any aState;
-            if ( !pItem->isVoidItem() )
+            if ( !aItem.getItem()->isVoidItem() )
             {
                 sal_uInt16 nSubId( 0 );
                 SfxItemPool& rPool = pShell->GetPool();
                 sal_uInt16 nWhich = rPool.GetWhich( nSID );
                 if ( rPool.GetMetric( nWhich ) == MapUnit::MapTwip )
                     nSubId |= CONVERT_TWIPS;
-                pItem->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );
+                aItem.getItem()->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );
             }
             rAny = aState;
 

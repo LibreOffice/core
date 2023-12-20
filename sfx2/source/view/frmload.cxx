@@ -301,9 +301,9 @@ OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInter
     return sFilterName;
 }
 
-bool lcl_getDispatchResult( const SfxPoolItem* _pResult )
+bool lcl_getDispatchResult(const SfxPoolItemHolder& rResult)
 {
-    if ( !_pResult )
+    if (nullptr == rResult.getItem())
         return false;
 
     // default must be set to true, because some return values
@@ -312,7 +312,7 @@ bool lcl_getDispatchResult( const SfxPoolItem* _pResult )
 
     // On the other side some special slots return a boolean state,
     // which can be set to FALSE.
-    const SfxBoolItem *pItem = dynamic_cast<const SfxBoolItem*>( _pResult  );
+    const SfxBoolItem* pItem(dynamic_cast<const SfxBoolItem*>(rResult.getItem()));
     if ( pItem )
         bSuccess = pItem->GetValue();
 
@@ -326,7 +326,7 @@ bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlo
     aRequest.AppendItem( SfxUnoFrameItem( SID_FILLFRAME, i_rxFrame ) );
     if ( i_bHidden )
         aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, true ) );
-    return lcl_getDispatchResult( SfxGetpApp()->ExecuteSlot( aRequest ) );
+    return lcl_getDispatchResult(SfxGetpApp()->ExecuteSlot(aRequest));
 }
 
 

@@ -683,10 +683,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         OUString sPath = aDlgHelper.GetPath();
                         SfxStringItem aName(SID_FILE_NAME, sPath);
                         SfxStringItem aFilter(SID_FILTER_NAME, pHtmlFlt->GetName());
-                        const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(
-                                rViewFrame.GetDispatcher()->ExecuteList(
-                                        SID_SAVEASDOC, SfxCallMode::SYNCHRON,
-                                        { &aName, &aFilter }));
+                        const SfxPoolItemHolder aResult(
+                            rViewFrame.GetDispatcher()->ExecuteList(
+                            SID_SAVEASDOC, SfxCallMode::SYNCHRON,
+                            { &aName, &aFilter }));
+                        const SfxBoolItem* pBool(static_cast<const SfxBoolItem*>(aResult.getItem()));
                         if(!pBool || !pBool->GetValue())
                             break;
                     }

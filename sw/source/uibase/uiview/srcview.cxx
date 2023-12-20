@@ -311,7 +311,8 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 pMed = pDocShell->GetMedium();
             else
             {
-                const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pDocShell->ExecuteSlot(rReq, pDocShell->GetInterface()));
+                const SfxPoolItemHolder& rResult(pDocShell->ExecuteSlot(rReq, pDocShell->GetInterface()));
+                const SfxBoolItem* pItem(static_cast<const SfxBoolItem*>(rResult.getItem()));
                 if(pItem && pItem->GetValue())
                     pMed = pDocShell->GetMedium();
             }

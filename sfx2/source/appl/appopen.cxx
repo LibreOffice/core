@@ -327,15 +327,15 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
         SfxStringItem aReferer( SID_REFERER, "private:user" );
         SfxStringItem aFlags( SID_OPTIONS, "T" );
         SfxBoolItem aHidden( SID_HIDDEN, true );
-        const SfxPoolItem *pRet = GetDispatcher_Impl()->ExecuteList(
+        const SfxPoolItemHolder aRet(GetDispatcher_Impl()->ExecuteList(
             SID_OPENDOC, SfxCallMode::SYNCHRON,
-            { &aName, &aHidden, &aReferer, &aFlags } );
-        const SfxObjectItem *pObj = dynamic_cast<const SfxObjectItem*>( pRet  );
+            { &aName, &aHidden, &aReferer, &aFlags } ));
+        const SfxObjectItem* pObj(dynamic_cast<const SfxObjectItem*>(aRet.getItem()));
         if ( pObj )
             xDoc = dynamic_cast<SfxObjectShell*>( pObj->GetShell()  );
         else
         {
-            const SfxViewFrameItem *pView = dynamic_cast<const SfxViewFrameItem*>( pRet  );
+            const SfxViewFrameItem* pView(dynamic_cast<const SfxViewFrameItem*>(aRet.getItem()));
             if ( pView )
             {
                 SfxViewFrame *pFrame = pView->GetFrame();
@@ -435,9 +435,9 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         aReq.AppendItem( *pDefaultNameItem );
 
     SfxGetpApp()->ExecuteSlot( aReq );
-    const SfxViewFrameItem* pItem = dynamic_cast<const SfxViewFrameItem*>( aReq.GetReturnValue()  );
-    if ( pItem )
-        rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
+    const SfxViewFrameItem* pItem(dynamic_cast<const SfxViewFrameItem*>(aReq.GetReturnValue().getItem()));
+    if (nullptr != pItem)
+        rReq.SetReturnValue(SfxFrameItem(0, pItem->GetFrame()));
 }
 
 void SfxApplication::NewDocDirectState_Impl( SfxItemSet &rSet )
@@ -534,8 +534,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     else
     {
         SfxCallMode eMode = SfxCallMode::SYNCHRON;
-
-        const SfxPoolItem *pRet=nullptr;
+        SfxPoolItemHolder aRet;
         SfxStringItem aReferer( SID_REFERER, "private:user" );
         SfxStringItem aTarget( SID_TARGETNAME, "_default" );
         if ( !aTemplateFileName.isEmpty() )
@@ -545,18 +544,18 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
             SfxStringItem aTemplRegionName( SID_TEMPLATE_REGIONNAME, aTemplateRegion );
-            pRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
+            aRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
                 {&aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName});
         }
         else
         {
             SfxStringItem aName( SID_FILE_NAME, "private:factory" );
-            pRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
+            aRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
                     { &aName, &aTarget, &aReferer } );
         }
 
-        if ( pRet )
-            rReq.SetReturnValue( *pRet );
+        if ( nullptr != aRet.getItem() )
+            rReq.SetReturnValue( *aRet.getItem() );
     }
 }
 
@@ -1132,7 +1131,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     if (pLinkItem)
     {
-        const SfxPoolItem* pRetValue = rReq.GetReturnValue();
+        const SfxPoolItem* pRetValue(rReq.GetReturnValue().getItem());
         if (pRetValue)
         {
             pLinkItem->GetValue().Call(pRetValue);

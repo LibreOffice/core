@@ -25,6 +25,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svxids.hrc>
 #include <tools/json_writer.hxx>
 

@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 
 #include "SmElementsPanel.hxx"
 #include <starmath.hrc>

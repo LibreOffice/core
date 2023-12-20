@@ -19,6 +19,7 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
+#include <svl/itemset.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

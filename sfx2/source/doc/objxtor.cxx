@@ -568,30 +568,30 @@ bool SfxObjectShell::PrepareClose
         if ( RET_YES == nRet )
         {
             // Save by each Dispatcher
-            const SfxPoolItem *pPoolItem;
+            SfxPoolItemHolder aPoolItem;
             if (IsReadOnly())
             {
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                 const SfxPoolItem* ppArgs[] = { &aWarnItem, nullptr };
-                pPoolItem = pFrame->GetBindings().ExecuteSynchron(SID_SAVEASDOC, ppArgs);
+                aPoolItem = pFrame->GetBindings().ExecuteSynchron(SID_SAVEASDOC, ppArgs);
             }
             else if (IsSaveVersionOnClose())
             {
                 SfxStringItem aItem( SID_DOCINFO_COMMENTS, SfxResId(STR_AUTOMATICVERSION) );
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                 const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, nullptr };
-                pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
+                aPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
             else
             {
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                 const SfxPoolItem* ppArgs[] = { &aWarnItem, nullptr };
-                pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
+                aPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
 
-            if ( !pPoolItem || pPoolItem->isVoidItem() )
+            if ( nullptr == aPoolItem.getItem() || aPoolItem.getItem()->isVoidItem() )
                 return false;
-            if ( auto pBoolItem = dynamic_cast< const SfxBoolItem *>( pPoolItem ) )
+            if ( auto pBoolItem = dynamic_cast< const SfxBoolItem *>( aPoolItem.getItem() ) )
                 if ( !pBoolItem->GetValue() )
                     return false;
         }

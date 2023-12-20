@@ -22,6 +22,7 @@
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdshcitm.hxx>
 #include <comphelper/lok.hxx>
+#include <svl/itemset.hxx>
 
 using namespace css;
 using namespace css::uno;

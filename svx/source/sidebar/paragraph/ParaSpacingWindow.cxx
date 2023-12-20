@@ -24,6 +24,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 
 using namespace svx;
 

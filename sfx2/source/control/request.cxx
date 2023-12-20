@@ -32,7 +32,6 @@
 #include <tools/debug.hxx>
 
 #include <svl/itempool.hxx>
-#include <itemdel.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -59,7 +58,7 @@ struct SfxRequest_Impl: public SfxListener
     SfxRequest*     pAnti;       // Owner because of dying pool
     OUString        aTarget;     // if possible from target object set by App
     SfxItemPool*    pPool;       // ItemSet build with this pool
-    std::unique_ptr<SfxPoolItem> pRetVal; // Return value belongs to itself
+    SfxPoolItemHolder aRetVal; // Return value belongs to itself
     SfxShell*       pShell;      // run from this shell
     const SfxSlot*  pSlot;       // executed Slot
     sal_uInt16      nModifier;   // which Modifier was pressed?
@@ -124,8 +123,6 @@ SfxRequest::~SfxRequest()
 
     // Clear object
     pArgs.reset();
-    if ( pImpl->pRetVal )
-        DeleteItemOnIdle(std::move(pImpl->pRetVal));
 }
 
 
@@ -420,14 +417,16 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
 
 void SfxRequest::SetReturnValue(const SfxPoolItem &rItem)
 {
-    DBG_ASSERT(!pImpl->pRetVal, "Set Return value multiple times?");
-    pImpl->pRetVal.reset(rItem.Clone());
+    DBG_ASSERT(nullptr == pImpl->aRetVal.getItem(), "Set Return value multiple times?");
+    DBG_ASSERT(nullptr != pImpl->pPool, "Missing SfxItemPool (!)");
+    if (nullptr != pImpl->pPool)
+        pImpl->aRetVal = SfxPoolItemHolder(*pImpl->pPool, &rItem);
 }
 
 
-const SfxPoolItem* SfxRequest::GetReturnValue() const
+const SfxPoolItemHolder& SfxRequest::GetReturnValue() const
 {
-    return pImpl->pRetVal.get();
+    return pImpl->aRetVal;
 }
 
 

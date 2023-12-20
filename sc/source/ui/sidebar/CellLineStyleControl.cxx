@@ -27,6 +27,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
+#include <svl/itemset.hxx>
 #include <scresid.hxx>
 #include <strings.hrc>
 

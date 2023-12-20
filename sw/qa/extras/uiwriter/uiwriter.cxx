@@ -886,8 +886,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkDOCX)
     createSwDoc("watermark.docx");
     SwDoc* const pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
-    const SfxWatermarkItem* pWatermark;
-    SfxItemState eState = pDocShell->GetViewShell()->GetViewFrame().GetDispatcher()->QueryState(SID_WATERMARK, pWatermark);
+    SfxPoolItemHolder aResult;
+    SfxItemState eState = pDocShell->GetViewShell()->GetViewFrame().GetDispatcher()->QueryState(SID_WATERMARK, aResult);
+    const SfxWatermarkItem* pWatermark(static_cast<const SfxWatermarkItem*>(aResult.getItem()));
 
     CPPUNIT_ASSERT(eState >= SfxItemState::DEFAULT);
     CPPUNIT_ASSERT(pWatermark);

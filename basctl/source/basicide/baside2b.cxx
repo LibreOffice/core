@@ -70,6 +70,7 @@
 #include "textwindowpeer.hxx"
 #include "uiobject.hxx"
 #include <basegfx/utils/zoomtools.hxx>
+#include <svl/itemset.hxx>
 
 namespace basctl
 {

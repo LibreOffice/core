@@ -369,11 +369,11 @@ bool SfxManageStyleSheetPage::Execute_Impl(
 
     pItems[ nCount++ ] = nullptr;
 
-    const SfxPoolItem* pItem = rDispatcher.Execute(
+    const SfxPoolItemHolder aResult(rDispatcher.Execute(
         nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-        pItems );
+        pItems ));
 
-    return pItem != nullptr;
+    return nullptr != aResult.getItem();
 
 }
 

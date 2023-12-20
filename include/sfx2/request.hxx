@@ -95,7 +95,7 @@ public:
 
     void                ReleaseArgs();
     void                SetReturnValue(const SfxPoolItem &);
-    const SfxPoolItem*  GetReturnValue() const;
+    const SfxPoolItemHolder& GetReturnValue() const;
 
     static css::uno::Reference< css::frame::XDispatchRecorder > GetMacroRecorder(const SfxViewFrame& rFrame);
     static bool         HasMacroRecorder(const SfxViewFrame& rFrame);

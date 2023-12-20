@@ -399,7 +399,6 @@
 #include <eventsupplier.hxx>
 #include <helper.hxx>
 #include <helpids.h>
-#include <itemdel.hxx>
 #include <nochaos.hxx>
 #include <objshimp.hxx>
 #include <openflag.hxx>
