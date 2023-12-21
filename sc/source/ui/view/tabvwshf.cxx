@@ -163,8 +163,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         }
                     }
 
-                    std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
-                    pDlg->StartExecuteAsync([this, pDlg, pReq](sal_Int32 nResult){
+                    std::shared_ptr<SfxRequest> xReq = std::make_shared<SfxRequest>(rReq);
+                    pDlg->StartExecuteAsync([this, pDlg, xReq = std::move(xReq)](sal_Int32 nResult){
                         std::vector<OUString> sTables;
                         if (RET_OK == nResult)
                         {
@@ -172,11 +172,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             for (auto a : aSelectedRows)
                             {
                                 OUString sTable = pDlg->GetEntry(a);
-                                pReq->AppendItem( SfxStringItem( FID_TABLE_SHOW, sTable ) );
+                                xReq->AppendItem( SfxStringItem( FID_TABLE_SHOW, sTable ) );
                                 sTables.push_back(sTable);
                             }
                             ShowTable( sTables );
-                            pReq->Done();
+                            xReq->Done();
                         }
                         pDlg->disposeOnce();
                     });

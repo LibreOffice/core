@@ -110,15 +110,15 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
     assert(pDlg && "there must be a dialog at this point");
 
-    auto pRequest = std::make_shared<SfxRequest>(rReq);
+    auto xRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
 
-    pDlg->StartExecuteAsync([bWelded, pDlg, pRequest, this](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([bWelded, pDlg, xRequest=std::move(xRequest), this](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
-            pRequest->Done(*(pDlg->GetOutputItemSet()));
+            xRequest->Done(*(pDlg->GetOutputItemSet()));
             // Page margin is already calculated at this point.
-            setUndo(mpView, pRequest->GetArgs(), false);
+            setUndo(mpView, xRequest->GetArgs(), false);
         }
 
         // deferred until the dialog ends

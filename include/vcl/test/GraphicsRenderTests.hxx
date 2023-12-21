@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -154,7 +154,8 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testDrawOpenBezierWithPolyLineB2D();
     static OUString returnTestStatus(vcl::test::TestResult const result);
     void runALLTests();
-    void appendTestResult(OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap = Bitmap());
+    void appendTestResult(const OUString& rTestName, const OUString& rTestStatus,
+                          const Bitmap& rTestBitmap = Bitmap());
 
 public:
     std::vector<VclTestResult>& getTestResults();
@@ -166,3 +167,5 @@ public:
     {
     }
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

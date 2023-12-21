@@ -561,10 +561,10 @@ void PresenterScreen::RequestShutdownPresenterScreen()
         // asynchronously.  The view and pane factories can only by disposed
         // after that.  Therefore, set up a listener and wait for the
         // restoration.
-        rtl::Reference<PresenterScreen> pSelf (this);
+        rtl::Reference<PresenterScreen> xSelf(this);
         PresenterFrameworkObserver::RunOnUpdateEnd(
             xCC,
-            [pSelf](bool){ return pSelf->ShutdownPresenterScreen(); });
+            [xSelf=std::move(xSelf)](bool){ return xSelf->ShutdownPresenterScreen(); });
         xCC->update();
     }
 }

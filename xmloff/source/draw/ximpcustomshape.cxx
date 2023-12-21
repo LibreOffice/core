@@ -1250,10 +1250,9 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                         EquationHashMap::iterator aHashIter( aH.find( aEquationName ) );
                         if ( aHashIter != aH.end() )
                             nIndex = (*aHashIter).second;
-                        OUString aNew = rEquation.subView( 0, nIndexOf + 1 ) +
+                        rEquation = rEquation.subView( 0, nIndexOf + 1 ) +
                             OUString::number( nIndex ) +
                             rEquation.subView( nIndexOf + aEquationName.getLength() + 1 );
-                        rEquation = aNew;
                     }
                     nIndexOf++;
                 }

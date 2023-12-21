@@ -198,9 +198,9 @@ void AnimationCommandNode::activate_st()
     }
 
     // deactivate ASAP:
-    auto self(getSelf());
+    std::shared_ptr<BaseNode> self(getSelf());
     scheduleDeactivationEvent(
-        makeEvent( [self] () { self->deactivate(); },
+        makeEvent( [self=std::move(self)] () { self->deactivate(); },
                    "AnimationCommandNode::deactivate" ) );
 }
 

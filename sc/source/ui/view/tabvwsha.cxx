@@ -615,10 +615,10 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);
 
-    auto pRequest = std::make_shared<SfxRequest>(rReq);
+    auto xRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
 
-    pDlg->StartExecuteAsync([pDlg, pOldSet, pRequest, this](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, pOldSet, xRequest=std::move(xRequest), this](sal_Int32 nResult){
         bInFormatDialog = false;
 
         if ( nResult == RET_OK )
@@ -631,7 +631,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
 
             ApplyAttributes(*pOutSet, *pOldSet);
 
-            pRequest->Done(*pOutSet);
+            xRequest->Done(*pOutSet);
         }
 
         pDlg->disposeOnce();

@@ -4876,8 +4876,9 @@ void INetURLObject::SetExtension(std::u16string_view rTheExtension)
 OUString INetURLObject::CutExtension()
 {
     OUString aTheExtension(getExtension(LAST_SEGMENT, false));
-    return removeExtension(LAST_SEGMENT, false)
-        ? aTheExtension : OUString();
+    if (removeExtension(LAST_SEGMENT, false))
+        return aTheExtension;
+    return OUString();
 }
 
 bool INetURLObject::IsExoticProtocol() const

@@ -282,7 +282,7 @@ public:
 
        @param ref    reference to the properties
      */
-    virtual void props(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+    virtual void props(const writerfilter::Reference<Properties>::Pointer_t& ref) = 0;
 
     /**
        Receives table.
@@ -290,7 +290,7 @@ public:
        @param name     name of the table
        @param ref      reference to the table
      */
-    virtual void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) = 0;
+    virtual void table(Id name, const writerfilter::Reference<Table>::Pointer_t& ref) = 0;
 
     /**
         Receives a substream.
@@ -298,7 +298,7 @@ public:
         @param name    name of the substream
         @param ref     reference to the substream
     */
-    virtual void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
+    virtual void substream(Id name, const writerfilter::Reference<Stream>::Pointer_t& ref) = 0;
 
     /**
        Debugging: Receives information about current point in stream.

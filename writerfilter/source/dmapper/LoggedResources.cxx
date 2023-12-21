@@ -235,7 +235,7 @@ void LoggedStream::positivePercentage(const OUString& rText)
 #endif
 }
 
-void LoggedStream::props(writerfilter::Reference<Properties>::Pointer_t ref)
+void LoggedStream::props(const writerfilter::Reference<Properties>::Pointer_t& ref)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("props");
@@ -248,7 +248,7 @@ void LoggedStream::props(writerfilter::Reference<Properties>::Pointer_t ref)
 #endif
 }
 
-void LoggedStream::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
+void LoggedStream::table(Id name, const writerfilter::Reference<Table>::Pointer_t& ref)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("table");
@@ -262,7 +262,7 @@ void LoggedStream::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 #endif
 }
 
-void LoggedStream::substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref)
+void LoggedStream::substream(Id name, const writerfilter::Reference<Stream>::Pointer_t& ref)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("substream");

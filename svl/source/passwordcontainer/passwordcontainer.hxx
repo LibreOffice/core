@@ -58,12 +58,12 @@ class NamePasswordRecord
     OUString                    m_aPersistentPassword;
     OUString                    m_aPersistentIV;
 
-    void InitArrays( bool bHasMemoryList, ::std::vector< OUString >&& aMemoryList,
+    void InitArrays( bool bHasMemoryList, const std::vector<OUString>& rMemoryList,
                      bool bHasPersistentList, const OUString& aPersistentList, const OUString& aPersistentIV )
     {
         m_bHasMemoryPasswords = bHasMemoryList;
         if ( bHasMemoryList )
-            m_aMemoryPasswords = aMemoryList;
+            m_aMemoryPasswords = rMemoryList;
 
         m_bHasPersistentPassword = bHasPersistentList;
         if ( bHasPersistentList )
@@ -96,7 +96,7 @@ public:
         , m_bHasMemoryPasswords( false )
         , m_bHasPersistentPassword( false )
     {
-        InitArrays( aRecord.m_bHasMemoryPasswords, std::vector(aRecord.m_aMemoryPasswords),
+        InitArrays( aRecord.m_bHasMemoryPasswords, aRecord.m_aMemoryPasswords,
                     aRecord.m_bHasPersistentPassword, aRecord.m_aPersistentPassword, aRecord.m_aPersistentIV );
     }
 
@@ -109,7 +109,7 @@ public:
             m_aMemoryPasswords.clear();
             m_aPersistentPassword.clear();
             m_aPersistentIV.clear();
-            InitArrays( aRecord.m_bHasMemoryPasswords, std::vector(aRecord.m_aMemoryPasswords),
+            InitArrays( aRecord.m_bHasMemoryPasswords, aRecord.m_aMemoryPasswords,
                         aRecord.m_bHasPersistentPassword, aRecord.m_aPersistentPassword, aRecord.m_aPersistentIV );
         }
         return *this;

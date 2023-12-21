@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -2482,10 +2482,10 @@ void GraphicsRenderTests::runALLTests()
     testDrawOpenBezierWithPolyLineB2D();
 }
 
-void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
-                                           Bitmap aTestBitmap)
+void GraphicsRenderTests::appendTestResult(const OUString& rTestName, const OUString& rTestStatus,
+                                           const Bitmap& rTestBitmap)
 {
-    m_aTestResult.push_back(VclTestResult(aTestName, aTestStatus, aTestBitmap));
+    m_aTestResult.push_back(VclTestResult(rTestName, rTestStatus, rTestBitmap));
 }
 
 std::vector<VclTestResult>& GraphicsRenderTests::getTestResults() { return m_aTestResult; }
@@ -2593,3 +2593,5 @@ void GraphicsRenderTests::run(bool storeResultBitmap)
     }
     logFile.WriteOString(OUStringToOString(writeResult, RTL_TEXTENCODING_UTF8));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

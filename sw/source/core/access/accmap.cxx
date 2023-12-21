@@ -1942,9 +1942,9 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
             {
                 ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
                             ::accessibility::ShapeTypeHandler::Instance();
-                uno::Reference < XAccessible > xParent( pParentImpl );
+
                 ::accessibility::AccessibleShapeInfo aShapeInfo(
-                        xShape, xParent, this );
+                        xShape, uno::Reference<XAccessible>(pParentImpl), this );
 
                 pAcc = rShapeTypeHandler.CreateAccessibleObject(
                             aShapeInfo, mpShapeMap->GetInfo() );

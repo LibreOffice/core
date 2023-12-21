@@ -84,8 +84,7 @@ ScaleData AxisHelper::createDefaultScale()
 
 void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
 {
-    uno::Any aEmpty;
-    rScaleData.Minimum = rScaleData.Maximum = rScaleData.Origin = aEmpty;
+    rScaleData.Minimum = rScaleData.Maximum = rScaleData.Origin = uno::Any();
     rScaleData.Scaling = nullptr;
     ScaleData aDefaultScale( createDefaultScale() );
     rScaleData.IncrementData = aDefaultScale.IncrementData;

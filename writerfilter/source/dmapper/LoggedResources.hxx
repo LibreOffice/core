@@ -67,9 +67,9 @@ public:
     void positionOffset(const OUString& rText, bool bVertical) override;
     void align(const OUString& rText, bool bVertical) override;
     void positivePercentage(const OUString& rText) override;
-    void props(writerfilter::Reference<Properties>::Pointer_t ref) override;
-    void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) override;
-    void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) override;
+    void props(const writerfilter::Reference<Properties>::Pointer_t& ref) override;
+    void table(Id name, const writerfilter::Reference<Table>::Pointer_t& ref) override;
+    void substream(Id name, const writerfilter::Reference<Stream>::Pointer_t& ref) override;
     void info(const std::string& info) override;
     void startGlossaryEntry() override;
     void endGlossaryEntry() override;
