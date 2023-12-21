@@ -114,7 +114,11 @@ static PyRef getObjectFromLoaderModule( const char * func )
     return object;
 }
 
+#if PY_VERSION_HEX >= 0x03080000
+static void setPythonHome ( const OUString & pythonHome, PyConfig * config )
+#else
 static void setPythonHome ( const OUString & pythonHome )
+#endif
 {
     OUString systemPythonHome;
     osl_getSystemPathFromFileURL( pythonHome.pData, &(systemPythonHome.pData) );
@@ -138,9 +142,11 @@ static void setPythonHome ( const OUString & pythonHome )
         PyErr_SetString(PyExc_SystemError, "python home path is too long");
         return;
     }
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    Py_SetPythonHome(wide); // deprecated since python 3.11
-SAL_WNODEPRECATED_DECLARATIONS_POP
+#if PY_VERSION_HEX >= 0x03080000
+    config->home = wide;
+#else
+    Py_SetPythonHome(wide);
+#endif
 }
 
 static void prependPythonPath( std::u16string_view pythonPathBootstrap )
@@ -192,11 +198,17 @@ void pythonInit() {
     if ( Py_IsInitialized()) // may be inited by getComponentContext() already
         return;
 
+#if PY_VERSION_HEX >= 0x03080000
+    PyConfig config;
+#endif
     OUString pythonPath;
     OUString pythonHome;
     OUString path( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("pythonloader.uno" ));
     rtl::Bootstrap::expandMacros(path); //TODO: detect failure
     rtl::Bootstrap bootstrap(path);
+#if PY_VERSION_HEX >= 0x03080000
+    PyConfig_InitPythonConfig( &config );
+#endif
 
     // look for pythonhome
     bootstrap.getFrom( "PYUNO_LOADER_PYTHONHOME", pythonHome );
@@ -205,7 +217,11 @@ void pythonInit() {
     // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
     // sadly, there is no api for setting the pythonpath, we have to use the environment variable
     if( !pythonHome.isEmpty() )
+#if PY_VERSION_HEX >= 0x03080000
+        setPythonHome( pythonHome, &config );
+#else
         setPythonHome( pythonHome );
+#endif
 
     if( !pythonPath.isEmpty() )
         prependPythonPath( pythonPath );
