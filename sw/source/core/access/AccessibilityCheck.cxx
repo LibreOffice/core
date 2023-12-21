@@ -931,10 +931,12 @@ public:
             return;
 
         // Check if it's a real caption
-        const SwNode* aStartFly = pCurrent->FindFlyStartNode();
-        if (aStartFly
-            && aStartFly->GetFlyFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
-            return;
+        if (const SwNode* pStartFly = pCurrent->FindFlyStartNode())
+        {
+            const SwFrameFormat* pFormat = pStartFly->GetFlyFormat();
+            if (!pFormat || pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+                return;
+        }
 
         auto aIter = SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti>(*pTextNode);
         auto nCount = 0;
