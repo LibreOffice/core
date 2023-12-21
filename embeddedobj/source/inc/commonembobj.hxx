@@ -254,6 +254,8 @@ private:
 
     int ShowMsgDialog(TranslateId Msg, const OUString& sFileName);
 
+    bool getAllowLinkUpdate() const;
+
 protected:
     void SetInplaceActiveState();
 

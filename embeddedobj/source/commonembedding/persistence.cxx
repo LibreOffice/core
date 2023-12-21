@@ -362,8 +362,43 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
     return xDocument;
 }
 
+bool OCommonEmbeddedObject::getAllowLinkUpdate() const
+{
+    // assume we can update if we can't determine a parent
+    bool bAllowLinkUpdate(true);
+
+    try
+    {
+        uno::Reference<container::XChild> xParent(m_xParent, uno::UNO_QUERY);
+        while (xParent)
+        {
+            uno::Reference<container::XChild> xGrandParent(xParent->getParent(), uno::UNO_QUERY);
+            if (!xGrandParent)
+                break;
+            xParent = xGrandParent;
+        }
+
+        uno::Reference<beans::XPropertySet> xPropSet(xParent, uno::UNO_QUERY);
+        if (xPropSet.is())
+        {
+            uno::Any aAny = xPropSet->getPropertyValue("AllowLinkUpdate");
+            aAny >>= bAllowLinkUpdate;
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    SAL_WARN_IF(!bAllowLinkUpdate, "embeddedobj.common", "getAllowLinkUpdate is false");
+
+    return bAllowLinkUpdate;
+}
+
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 {
+    if (!getAllowLinkUpdate())
+        return nullptr;
+
     sal_Int32 nLen = m_bLinkHasPassword ? 3 : 2;
     uno::Sequence< beans::PropertyValue > aArgs( m_aDocMediaDescriptor.getLength() + nLen );
     auto pArgs = aArgs.getArray();
