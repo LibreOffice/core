@@ -280,8 +280,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     if (bHasHint)
         RemoveHintWindow();
 
-    // tdf#100584 - arrange sheets depending on the RTL settings
-    bool bLayoutRTL = AllSettings::GetLayoutRTL();
+    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
     tools::Long nTotalWidth = rSize.Width();
     if ( bLayoutRTL )
         nTotalWidth += 2*rOffset.X();
