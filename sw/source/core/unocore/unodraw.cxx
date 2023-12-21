@@ -1408,12 +1408,12 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     // If this property is an anchor change, and there is a group shape with textboxes
                     // do anchor sync in time unless the anchor sync in the porfly will cause crash during
                     // layout calculation (When importing an inline shape in docx via dmapper).
-                    if (pFormat->Which() == RES_DRAWFRMFMT && pFormat->GetOtherTextBoxFormats()
-                        && pFormat->GetOtherTextBoxFormats()->GetTextBoxCount()
-                               > o3tl::make_unsigned(1))
+                    if (pFormat->Which() == RES_DRAWFRMFMT && pFormat->GetOtherTextBoxFormats())
+                    {
                         SwTextBoxHelper::synchronizeGroupTextBoxProperty(
                             SwTextBoxHelper::changeAnchor, pFormat,
                             SdrObject::getSdrObjectFromXShape(mxShape));
+                    }
                 }
                 else
                     pFormat->SetFormatAttr(aSet);
