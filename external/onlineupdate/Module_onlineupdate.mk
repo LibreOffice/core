@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,onlineupdate,\
 	StaticLibrary_updatehelper \
 	$(if $(filter WNT,$(OS)),\
 		Executable_update_service \
+		Library_install_updateservice \
 		WinResTarget_updater )\
 	Executable_test_updater_dialog \
 	Executable_mar \

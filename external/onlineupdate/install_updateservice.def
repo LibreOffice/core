@@ -1,0 +1,4 @@
+LIBRARY "install_updateservice.dll"
+EXPORTS
+    InstallUpdateservice
+    UninstallUpdateservice

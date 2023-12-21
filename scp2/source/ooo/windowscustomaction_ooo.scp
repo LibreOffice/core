@@ -16,6 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "config_features.h"
 #include "macros.inc"
 
 WindowsCustomAction gid_Customaction_Regallmsdocdll
@@ -244,3 +245,25 @@ WindowsCustomAction gid_Customaction_prep_reg_dlls
     Inbinarytable = 1;
     Assignment1 = ("InstallExecuteSequence", "", "behind_CostFinalize");
 End
+
+#if HAVE_FEATURE_UPDATE_MAR
+
+WindowsCustomAction gid_Customaction_install_updateservice
+    Name = "install_updateservice";
+    Typ = "65";
+    Source = "install_updateservice.dll";
+    Target = "InstallUpdateservice";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+End
+
+WindowsCustomAction gid_Customaction_uninstall_updateservice
+    Name = "uninstall_updateservice";
+    Typ = "65";
+    Source = "install_updateservice.dll";
+    Target = "UninstallUpdateservice";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "MigrateFeatureStates");
+End
+
+#endif

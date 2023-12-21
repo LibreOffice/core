@@ -743,6 +743,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinaryta
 		sdqsmsi \
 		sellangmsi \
 		sn_tools \
+		$(if $(ENABLE_ONLINE_UPDATE_MAR),install_updateservice) \
 	) \
 ))
 
