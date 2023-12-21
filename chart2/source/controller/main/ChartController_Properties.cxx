@@ -736,8 +736,10 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         std::unique_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
 
+        rtl::Reference<::chart::ChartModel> xChartDoc(getChartModel());
+
         std::unique_ptr<wrapper::ItemConverter> pItemConverter(
-            createItemConverter( rObjectCID, getChartModel(), m_xCC,
+            createItemConverter( rObjectCID, xChartDoc, m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
                                  comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView),
                                  pRefSizeProv.get()));
@@ -754,24 +756,24 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         //prepare dialog
         ObjectPropertiesDialogParameter aDialogParameter( rObjectCID );
-        aDialogParameter.init( getChartModel() );
+        aDialogParameter.init(xChartDoc);
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get() );
 
         SolarMutexGuard aGuard;
         SchAttribTabDlg aDlg(
                 GetChartFrame(), &aItemSet, &aDialogParameter,
                 &aViewElementListProvider,
-                getChartModel() );
+                xChartDoc );
 
         if(aDialogParameter.HasSymbolProperties())
         {
             uno::Reference< beans::XPropertySet > xObjectProperties =
-                ObjectIdentifier::getObjectPropertySet( rObjectCID, getChartModel() );
-            wrapper::DataPointItemConverter aSymbolItemConverter( getChartModel(), m_xCC
-                                        , xObjectProperties, ObjectIdentifier::getDataSeriesForCID( rObjectCID, getChartModel() )
+                ObjectIdentifier::getObjectPropertySet( rObjectCID, xChartDoc );
+            wrapper::DataPointItemConverter aSymbolItemConverter( xChartDoc, m_xCC
+                                        , xObjectProperties, ObjectIdentifier::getDataSeriesForCID( rObjectCID, xChartDoc )
                                         , m_pDrawModelWrapper->getSdrModel().GetItemPool()
                                         , m_pDrawModelWrapper->getSdrModel()
-                                        , getChartModel()
+                                        , xChartDoc
                                         , wrapper::GraphicObjectType::FilledDataPoint );
 
             SfxItemSet aSymbolShapeProperties(aSymbolItemConverter.CreateEmptyItemSet() );
@@ -785,7 +787,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         if( aDialogParameter.HasStatisticProperties() )
         {
             aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
-                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(), m_xChartView, rObjectCID ) );
+                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( xChartDoc, m_xChartView, rObjectCID ) );
         }
 
         //open the dialog
@@ -794,7 +796,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
             const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
             if(pOutItemSet)
             {
-                ControllerLockGuardUNO aCLGuard( getChartModel());
+                ControllerLockGuardUNO aCLGuard(xChartDoc);
                 (void)pItemConverter->ApplyItemSet(*pOutItemSet); //model should be changed now
                 bRet = true;
             }
