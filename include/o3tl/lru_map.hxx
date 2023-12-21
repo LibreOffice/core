@@ -118,7 +118,7 @@ private:
         else
         {
             // This must leave at least one item (it's called from insert).
-            while (this->mCurrentSize > mMaxSize && mLruList.size() > 1)
+            while (this->mCurrentSize > mMaxSize && mLruMap.size() > 1)
                 removeOldestItem();
         }
     }
@@ -129,7 +129,7 @@ private:
         if constexpr (!std::is_void_v<ValueSize>)
         {
             // This must leave at least one item (it's called from insert).
-            while (this->mCurrentSize > mMaxSize && mLruList.size() > 1)
+            while (this->mCurrentSize > mMaxSize && mLruMap.size() > 1)
                 removeOldestItem();
         }
     }
