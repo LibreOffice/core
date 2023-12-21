@@ -11,4 +11,8 @@
 
 $(eval $(call sw_uiwriter_test,9))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_uiwriter9,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
