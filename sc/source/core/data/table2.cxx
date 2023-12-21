@@ -1324,6 +1324,13 @@ void ScTable::CopyToTable(
     const bool bToUndoDoc = pDestTab->rDocument.IsUndo();
     const bool bFromUndoDoc = rDocument.IsUndo();
 
+    if (bToUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB) && nCol2 >= aCol.size())
+    {
+        // tdf#154044: Copy also the default column data
+        aDefaultColData.AttrArray().CopyArea(nRow1, nRow2, 0,
+                                             pDestTab->aDefaultColData.AttrArray());
+    }
+
     if ((bToUndoDoc || bFromUndoDoc) && (nFlags & InsertDeleteFlags::CONTENTS) && mpRangeName)
     {
         // Copying formulas may create sheet-local named expressions on the
@@ -1349,6 +1356,16 @@ void ScTable::CopyToTable(
         for (SCCOL i = nCol1; i <= ClampToAllocatedColumns(nCol2); i++)
             aCol[i].CopyToColumn(rCxt, nRow1, nRow2, bToUndoDoc ? nFlags : nTempFlags, bMarked,
                                  pDestTab->CreateColumnIfNotExists(i), pMarkData, bAsLink, bGlobalNamesToLocal);
+        // tdf#154044: Restore from the default column data
+        if (bFromUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB) && nCol2 >= aCol.size())
+        {
+            aDefaultColData.AttrArray().CopyArea(nRow1, nRow2, 0,
+                                                 pDestTab->aDefaultColData.AttrArray());
+            SCCOL nMaxSetDefault = pDestTab->ClampToAllocatedColumns(nCol2);
+            for (SCCOL i = aCol.size(); i <= nMaxSetDefault; i++)
+                aDefaultColData.AttrArray().CopyArea(nRow1, nRow2, 0,
+                                                     pDestTab->aCol[i].AttrArray());
+        }
     }
 
     if (!bColRowFlags)      // Column widths/Row heights/Flags

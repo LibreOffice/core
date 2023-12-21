@@ -8,6 +8,7 @@
  */
 
 #include "../helper/qahelper.hxx"
+#include <editeng/brushitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -30,8 +31,10 @@
 #include <inputopt.hxx>
 #include <postit.hxx>
 #include <rangeutl.hxx>
+#include <scitems.hxx>
 #include <scmod.hxx>
 #include <tabvwsh.hxx>
+#include <undomanager.hxx>
 #include <viewdata.hxx>
 
 using namespace ::com::sun::star;
@@ -3135,6 +3138,83 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMouseMergeRef)
         const OUString* pInput = pViewShell->GetEditString();
         CPPUNIT_ASSERT(pInput);
         CPPUNIT_ASSERT_EQUAL(OUString("=A1:A10"), *pInput);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154044)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    auto getBackColor = [pDoc](SCCOL c) {
+        const ScPatternAttr* pattern = pDoc->GetPattern(c, 0, 0);
+        const SvxBrushItem& brush = pattern->GetItemSet().Get(ATTR_BACKGROUND);
+        return brush.GetColor();
+    };
+
+    CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, pDoc->GetAllocatedColumnsCount(0));
+    for (SCCOL i = 0; i <= pDoc->MaxCol(); ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_AUTO, getBackColor(i));
+    }
+
+    // Set the background color of A1:CV1
+    auto aColorArg(
+        comphelper::InitPropertySequence({ { "BackgroundColor", uno::Any(COL_LIGHTBLUE) } }));
+    goToCell("A1:CV1");
+    dispatchCommand(mxComponent, ".uno:BackgroundColor", aColorArg);
+
+    // Partial row range allocates necessary columns
+    CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
+
+    // Check that settings are applied
+    for (SCCOL i = 0; i < 100; ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_LIGHTBLUE, getBackColor(i));
+    }
+
+    // Undo
+    SfxUndoManager* pUndoMgr = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    // Check that all the cells have restored the setting
+    for (SCCOL i = 0; i < 100; ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        // Without the fix in place, this would fail with
+        // - Expected: rgba[ffffff00]
+        // - Actual  : rgba[0000ffff]
+        // - i=1
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_AUTO, getBackColor(i));
+    }
+
+    // Also check the whole row selection case - it is handled specially: columns are not allocated.
+    // See commit 3db91487e57277f75d64d95d06d4ddcc29f1c4e0 (set properly attributes for cells in
+    // unallocated Calc columns, 2022-03-04).
+    goToCell("A1:" + pDoc->MaxColAsString() + "1");
+    dispatchCommand(mxComponent, ".uno:BackgroundColor", aColorArg);
+
+    // Check that settings are applied
+    for (SCCOL i = 0; i <= pDoc->MaxCol(); ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_LIGHTBLUE, getBackColor(i));
+    }
+
+    // Undo
+    pUndoMgr->Undo();
+
+    // No additional columns have been allocated for whole-row range
+    CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
+
+    // Check that all the cells have restored the setting
+    for (SCCOL i = 0; i <= pDoc->MaxCol(); ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_AUTO, getBackColor(i));
     }
 }
 
