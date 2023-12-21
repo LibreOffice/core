@@ -24,7 +24,14 @@
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wunused-macros"
+#endif
+// see TODO below
+#define NSS_PKCS11_2_0_COMPAT 1
+
 #include "ciphercontext.hxx"
+#include <nss.h> // for NSS_VMINOR
 #include <pk11pub.h>
 
 constexpr size_t nAESGCMIVSize = 12;
@@ -58,7 +65,10 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
     {
         // TODO: when runtime requirements are raised to NSS 3.52, replace this
         // according to https://fedoraproject.org/wiki/Changes/NssGCMParams
-        xResult->m_pSecParam = SECITEM_AllocItem(nullptr, nullptr, sizeof(CK_NSS_GCM_PARAMS));
+#if NSS_VMINOR >= 52
+        static_assert(sizeof(CK_GCM_PARAMS) == sizeof(CK_NSS_GCM_PARAMS));
+#endif
+        xResult->m_pSecParam = SECITEM_AllocItem(nullptr, nullptr, sizeof(/*CK_NSS_GCM_PARAMS*/CK_GCM_PARAMS));
         if (!xResult->m_pSecParam)
         {
             SAL_WARN("xmlsecurity.nss", "SECITEM_AllocItem failed");
@@ -66,7 +76,7 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
         }
         assert(aInitializationVector.getLength() == nAESGCMIVSize);
         xResult->m_AESGCMIV = aInitializationVector;
-        CK_NSS_GCM_PARAMS * pParams = reinterpret_cast<CK_NSS_GCM_PARAMS*>(xResult->m_pSecParam->data);
+        auto *const pParams = reinterpret_cast</*CK_NSS_GCM_PARAMS*/CK_GCM_PARAMS*>(xResult->m_pSecParam->data);
         pParams->pIv = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(xResult->m_AESGCMIV.getConstArray()));
         pParams->ulIvLen = sal::static_int_cast<unsigned>(xResult->m_AESGCMIV.getLength());
         pParams->pAAD = nullptr;
