@@ -55,7 +55,7 @@ static bool g_bItemClassicMode(getenv("ITEM_CLASSIC_MODE"));
 // I thought about this constructor a while, but when there is no
 // Item we need no cleanup at destruction (what we would need the
 // Pool for), so it is OK and makes default construction easier
-// when no Pool is needed. The other constructors guanantee that
+// when no Pool is needed. The other constructors guarantee that
 // there *cannot* be a state with Item set and Pool not set. IF
 // you change this class, ALWAYS ensure that this can not happen (!)
 SfxPoolItemHolder::SfxPoolItemHolder()
