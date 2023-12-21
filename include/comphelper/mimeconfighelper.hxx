@@ -104,7 +104,8 @@ public:
 
     OUString UpdateMediaDescriptorWithFilterName(
                         css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
-                        bool bIgnoreType );
+                        bool bIgnoreType,
+                        bool bAllowDeepFilterDetection = true );
     OUString UpdateMediaDescriptorWithFilterName(
                         css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
                         css::uno::Sequence< css::beans::NamedValue >& aObject );
