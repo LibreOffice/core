@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module sheet {
 
 
 /**
-    @since LibreOffice 24.2
+    @since LibreOffice 24.8
  */
 interface XSheetRange: com::sun::star::uno::XInterface
 {
