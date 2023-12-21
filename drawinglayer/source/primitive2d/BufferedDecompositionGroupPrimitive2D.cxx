@@ -66,17 +66,21 @@ void BufferedDecompositionGroupPrimitive2D::setBuffered2DDecomposition(Primitive
 {
     if (0 != maCallbackSeconds)
     {
-        if (rNew.empty())
+        if (maCallbackTimer.is())
         {
-            // no more decomposition, end callback
-            maCallbackTimer.clear();
+            if (rNew.empty())
+            {
+                // no more decomposition, end callback
+                maCallbackTimer->stop();
+                maCallbackTimer.clear();
+            }
+            else
+            {
+                // decomposition changed, touch
+                maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
+            }
         }
-        else if (maCallbackTimer.is())
-        {
-            // decomposition changed, touch
-            maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
-        }
-        else
+        else if (!rNew.empty())
         {
             // decomposition changed, start callback
             maCallbackTimer.set(new LocalCallbackTimer(*this));
@@ -94,6 +98,16 @@ BufferedDecompositionGroupPrimitive2D::BufferedDecompositionGroupPrimitive2D(
     , maCallbackTimer()
     , maCallbackSeconds(0)
 {
+}
+
+BufferedDecompositionGroupPrimitive2D::~BufferedDecompositionGroupPrimitive2D()
+{
+    if (maCallbackTimer.is())
+    {
+        // no more decomposition, end callback
+        maCallbackTimer->stop();
+        maCallbackTimer.clear();
+    }
 }
 
 void BufferedDecompositionGroupPrimitive2D::get2DDecomposition(

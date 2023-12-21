@@ -65,6 +65,7 @@ protected:
 public:
     /// constructor/destructor. For GroupPrimitive2D we need the child parameter, too.
     BufferedDecompositionGroupPrimitive2D(Primitive2DContainer&& aChildren);
+    virtual ~BufferedDecompositionGroupPrimitive2D();
 
     /// identical to BufferedDecompositionPrimitive2D, see there please
     virtual void
