@@ -29,7 +29,6 @@ $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 ifeq ($(COM),MSC)
-ifneq ($(ENABLE_DBGUTIL),TRUE)
 	EXCLUDELIST=$(shell $(gb_MKTEMP)) && \
 	cat $(SRCDIR)/postprocess/signing/no_signing.txt > $$EXCLUDELIST && \
 	echo "$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_filename,$(lib)))" | tr ' ' '\n' >> $$EXCLUDELIST && \
@@ -48,7 +47,7 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 			$(INSTDIR)/program/*.com \
 			$(INSTDIR)/program/soffice.bin \
 			$(INSTDIR)/program/unopkg.bin \
-			$(INSTDIR)/program/pyuno.pyd \
+			$(INSTDIR)/program/pyuno$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/bin/*.exe \
 			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/*.dll \
 			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/*.pyd \
@@ -57,9 +56,6 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 			$(INSTDIR)/sdk/cli/*.dll \
 			$(INSTDIR)/sdk/bin/*.exe \
 	&& rm $$EXCLUDELIST && touch $@
-else
-	@echo "Doing nothing on non product builds ..."
-endif
 else
 	@echo "Nothing to do, signing is Windows (MSC) only."
 endif
