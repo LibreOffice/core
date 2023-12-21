@@ -56,6 +56,7 @@ inline constexpr OUString sUNO_Prop_UserDefinedAttributes = u"UserDefinedAttribu
 inline constexpr OUString sUNO_Prop_BookmarkURL = u"BookmarkURL"_ustr;
 inline constexpr OUString sUNO_Prop_RuntimeUID = u"RuntimeUID"_ustr;
 inline constexpr OUString sUNO_Prop_HasValidSignatures = u"HasValidSignatures"_ustr;
+inline constexpr OUString sUNO_Prop_AllowLinkUpdate = u"AllowLinkUpdate"_ustr;
 inline constexpr OUString sUNO_Prop_InteropGrabBag = u"InteropGrabBag"_ustr;
 inline constexpr OUString sUNO_Prop_Theme = u"Theme"_ustr;
 

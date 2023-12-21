@@ -180,6 +180,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
         { SC_UNO_WILDCARDSENABLED,        PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),                         0, 0},
         { SC_UNO_RUNTIMEUID,              0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
         { SC_UNO_HASVALIDSIGNATURES,      0, cppu::UnoType<bool>::get(),                                             beans::PropertyAttribute::READONLY, 0},
+        { SC_UNO_ALLOWLINKUPDATE,         0, cppu::UnoType<bool>::get(),                                             beans::PropertyAttribute::READONLY, 0},
         { SC_UNO_ISLOADED,                0, cppu::UnoType<bool>::get(),                                             0, 0},
         { SC_UNO_ISUNDOENABLED,           0, cppu::UnoType<bool>::get(),                                             0, 0},
         { SC_UNO_RECORDCHANGES,           0, cppu::UnoType<bool>::get(),                                             0, 0},
@@ -3005,6 +3006,11 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         else if ( aPropertyName == SC_UNO_HASVALIDSIGNATURES )
         {
             aRet <<= hasValidSignatures();
+        }
+        else if ( aPropertyName == SC_UNO_ALLOWLINKUPDATE)
+        {
+            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pDocShell->getEmbeddedObjectContainer();
+            aRet <<= rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
         }
         else if ( aPropertyName == SC_UNO_ISLOADED )
         {

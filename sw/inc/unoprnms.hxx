@@ -804,6 +804,7 @@ inline constexpr OUString UNO_NAME_PARA_STYLE_CONDITIONS = u"ParaStyleConditions
 inline constexpr OUString UNO_NAME_ROLE = u"Role"_ustr;
 inline constexpr OUString UNO_NAME_FIELD_CODE = u"FieldCode"_ustr;
 inline constexpr OUString UNO_NAME_HAS_VALID_SIGNATURES = u"HasValidSignatures"_ustr;
+inline constexpr OUString UNO_NAME_ALLOW_LINK_UPDATE = u"AllowLinkUpdate"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_AUTO_STYLE_NAME = u"CharAutoStyleName"_ustr;
 inline constexpr OUString UNO_NAME_PARA_AUTO_STYLE_NAME = u"ParaAutoStyleName"_ustr;
 inline constexpr OUString UNO_NAME_LAYOUT_SIZE = u"LayoutSize"_ustr;

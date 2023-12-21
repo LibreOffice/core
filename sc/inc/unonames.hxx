@@ -529,6 +529,7 @@ inline constexpr OUString SC_UNO_BASICLIBRARIES           = u"BasicLibraries"_us
 inline constexpr OUString SC_UNO_DIALOGLIBRARIES          = u"DialogLibraries"_ustr;
 inline constexpr OUString SC_UNO_RUNTIMEUID               = u"RuntimeUID"_ustr;
 inline constexpr OUString SC_UNO_HASVALIDSIGNATURES       = u"HasValidSignatures"_ustr;
+inline constexpr OUString SC_UNO_ALLOWLINKUPDATE          = u"AllowLinkUpdate"_ustr;
 inline constexpr OUString SC_UNO_ISLOADED                 = u"IsLoaded"_ustr;
 inline constexpr OUString SC_UNO_ISUNDOENABLED            = u"IsUndoEnabled"_ustr;
 inline constexpr OUString SC_UNO_ISADJUSTHEIGHTENABLED    = u"IsAdjustHeightEnabled"_ustr;

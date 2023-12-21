@@ -2133,6 +2133,12 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_INTEROP_GRAB_BAG:
              getGrabBagItem(aAny);
         break;
+        case WID_DOC_ALLOW_LINK_UPDATE:
+        {
+            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = m_pDocShell->getEmbeddedObjectContainer();
+            aAny <<= rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
+        }
+        break;
 
         default:
         {

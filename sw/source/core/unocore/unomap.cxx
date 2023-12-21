@@ -668,6 +668,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMa
                     { UNO_NAME_LOCK_UPDATES,        WID_DOC_LOCK_UPDATES,     cppu::UnoType<bool>::get(), PROPERTY_NONE,   0},
                     { u"UndocumentedWriterfilterHack"_ustr, WID_DOC_WRITERFILTER,     cppu::UnoType<bool>::get(), PROPERTY_NONE,   0},
                     { UNO_NAME_HAS_VALID_SIGNATURES,  WID_DOC_HAS_VALID_SIGNATURES, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY,   0},
+                    { UNO_NAME_ALLOW_LINK_UPDATE,  WID_DOC_ALLOW_LINK_UPDATE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY,   0},
                     { UNO_NAME_BUILDID, WID_DOC_BUILDID, cppu::UnoType<OUString>::get(), 0, 0},
                     { UNO_NAME_DOC_INTEROP_GRAB_BAG, WID_DOC_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
                     { UNO_NAME_DEFAULT_PAGE_MODE,  WID_DOC_DEFAULT_PAGE_MODE,  cppu::UnoType<bool>::get(), PROPERTY_NONE,  0},

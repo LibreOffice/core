@@ -236,13 +236,14 @@ const sal_uInt16 WID_MODEL_DIALOGLIBS         = 12;
 const sal_uInt16 WID_MODEL_FONTS              = 13;
 const sal_uInt16 WID_MODEL_INTEROPGRABBAG     = 14;
 const sal_uInt16 WID_MODEL_THEME = 15;
+const sal_uInt16 WID_MODEL_ALLOWLINKUPDATE    = 16;
 
 static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
     // Attention: the first parameter HAS TO BE sorted!!!
     const static SfxItemPropertyMapEntry aDrawModelPropertyMap_Impl[] =
     {
-        { u"BuildId"_ustr,                      WID_MODEL_BUILDID,            ::cppu::UnoType<OUString>::get(),                      0, 0},
+        { u"BuildId"_ustr,                WID_MODEL_BUILDID,            ::cppu::UnoType<OUString>::get(),                      0, 0},
         { sUNO_Prop_CharLocale,           WID_MODEL_LANGUAGE,           ::cppu::UnoType<lang::Locale>::get(),                                  0, 0},
         { sUNO_Prop_TabStop,              WID_MODEL_TABSTOP,            ::cppu::UnoType<sal_Int32>::get(),                                     0, 0},
         { sUNO_Prop_VisibleArea,          WID_MODEL_VISAREA,            ::cppu::UnoType<awt::Rectangle>::get(),                                0, 0},
@@ -250,11 +251,12 @@ static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { sUNO_Prop_ForbiddenCharacters,  WID_MODEL_FORBCHARS,          cppu::UnoType<i18n::XForbiddenCharacters>::get(), beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_AutomContFocus,       WID_MODEL_CONTFOCUS,          cppu::UnoType<bool>::get(),                                                 0, 0},
         { sUNO_Prop_ApplyFrmDsgnMode,     WID_MODEL_DSGNMODE,           cppu::UnoType<bool>::get(),                                                 0, 0},
-        { u"BasicLibraries"_ustr,               WID_MODEL_BASICLIBS,          cppu::UnoType<script::XLibraryContainer>::get(),  beans::PropertyAttribute::READONLY, 0},
-        { u"DialogLibraries"_ustr,              WID_MODEL_DIALOGLIBS,         cppu::UnoType<script::XLibraryContainer>::get(),  beans::PropertyAttribute::READONLY, 0},
+        { u"BasicLibraries"_ustr,         WID_MODEL_BASICLIBS,          cppu::UnoType<script::XLibraryContainer>::get(),  beans::PropertyAttribute::READONLY, 0},
+        { u"DialogLibraries"_ustr,        WID_MODEL_DIALOGLIBS,         cppu::UnoType<script::XLibraryContainer>::get(),  beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_RuntimeUID,           WID_MODEL_RUNTIMEUID,         ::cppu::UnoType<OUString>::get(),                      beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_HasValidSignatures,   WID_MODEL_HASVALIDSIGNATURES, ::cppu::UnoType<sal_Bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
-        { u"Fonts"_ustr,                        WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
+        { sUNO_Prop_AllowLinkUpdate,      WID_MODEL_ALLOWLINKUPDATE,    ::cppu::UnoType<sal_Bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
+        { u"Fonts"_ustr,                  WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_InteropGrabBag,       WID_MODEL_INTEROPGRABBAG,     cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { sUNO_Prop_Theme,                WID_MODEL_THEME,              cppu::UnoType<util::XTheme>::get(),       0, 0},
     };
@@ -1371,6 +1373,12 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         case WID_MODEL_HASVALIDSIGNATURES:
             aAny <<= hasValidSignatures();
             break;
+        case WID_MODEL_ALLOWLINKUPDATE:
+        {
+            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = mpDocShell->getEmbeddedObjectContainer();
+            aAny <<= rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
+            break;
+        }
         case WID_MODEL_FONTS:
             {
                 uno::Sequence<uno::Any> aSeq;
