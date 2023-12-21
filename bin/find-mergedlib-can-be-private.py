@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 #
 # Generate a custom linker script/map file for the --enabled-mergedlibs merged library
 # which reduces the startup time and enables further optimisations with --enable-lto because 60% or more
@@ -79,7 +79,7 @@ with subprocess_nm.stdout as txt:
     # 0000000000036ed0 T flash_component_getFactory
     line_regex = re.compile(r'^[0-9a-fA-F]+ T ')
     for line in txt:
-        line = line.strip()
+        line = line.strip().decode("utf-8")
         if line_regex.match(line):
             exported_symbols.add(line.split(" ")[2])
 subprocess_nm.terminate()
@@ -89,7 +89,7 @@ subprocess_find = subprocess.Popen("(find instdir/program/ -type f; ls ./workdir
         stdout=subprocess.PIPE, shell=True)
 with subprocess_find.stdout as txt:
     for line in txt:
-        sharedlib = line.strip()
+        sharedlib = line.strip().decode("utf-8")
         s = sharedlib[sharedlib.find("/lib") + 4 : len(sharedlib) - 3]
         if s in merged_libs: continue
         # look for imported symbols
@@ -103,7 +103,7 @@ with subprocess_find.stdout as txt:
             # We are looking for lines something like (noting that one of them uses spaces, and the other tabs)
             # 0000000000000000      DF *UND*  0000000000000000     _ZN16FilterConfigItem10WriteInt32ERKN3rtl8OUStringEi
             for line2 in txt2:
-                line2 = line2.strip()
+                line2 = line2.strip().decode("utf-8")
                 if line2.find("*UND*") == -1: continue
                 tokens = line2.split(" ")
                 sym = tokens[len(tokens)-1].strip()
@@ -119,7 +119,7 @@ print("no symbols that can be made internal = " + str(len(intersec_symbols)))
 # i.e. we can mark the whole class as hidden
 
 def extract_class(sym):
-    filtered_sym = subprocess.check_output(["c++filt", sym]).strip()
+    filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
     if filtered_sym.startswith("vtable for "):
         classname = filtered_sym[11:]
         return classname
