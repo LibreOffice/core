@@ -715,7 +715,9 @@ void TabBar::ImplFormat()
     const size_t nItemListSize = mpImpl->maItemList.size();
     for (size_t nItemIndex = 0; nItemIndex < nItemListSize; nItemIndex++)
     {
-        auto& rItem = mpImpl->maItemList[nItemIndex];
+        // tdf#100584 - arrange sheets depending on the RTL settings
+        auto& rItem = mbMirrored ? mpImpl->maItemList[nItemListSize - nItemIndex - 1]
+                                 : mpImpl->maItemList[nItemIndex];
 
         // At all non-visible tabs an empty rectangle is set
         if ((nItemIndex + 1 < mnFirstPos) || (x > mnLastOffX))
