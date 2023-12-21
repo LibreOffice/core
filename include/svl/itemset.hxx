@@ -46,7 +46,7 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxPoolItemHolder
 {
     SfxItemPool*            m_pPool;
     const SfxPoolItem*      m_pItem;
-#ifdef DBG_UTIL
+#ifndef NDEBUG
     bool                    m_bDeleted;
 #endif
 public:
@@ -55,7 +55,7 @@ public:
     SfxPoolItemHolder(const SfxPoolItemHolder&);
     ~SfxPoolItemHolder();
 
-#ifdef DBG_UTIL
+#ifndef NDEBUG
     bool isDeleted() const { return m_bDeleted; }
 #endif
 
