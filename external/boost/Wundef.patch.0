@@ -1,0 +1,55 @@
+--- boost/config/workaround.hpp
++++ boost/config/workaround.hpp
+@@ -264,6 +264,10 @@
+ #else
+ #define BOOST_CLANG_VERSION_WORKAROUND_GUARD 0
+ #endif
++
++#if !defined BOOST_LIBSTDCXX_VERSION_WORKAROUND_GUARD
++#define BOOST_LIBSTDCXX_VERSION_WORKAROUND_GUARD 0
++#endif
+ 
+ // Always define to zero, if it's used it'll be defined my MPL:
+ #define BOOST_MPL_CFG_GCC_WORKAROUND_GUARD 0
+--- boost/locale/detail/facet_id.hpp
++++ boost/locale/detail/facet_id.hpp
+@@ -12,7 +12,7 @@
+ 
+ /// \cond INTERNAL
+ namespace boost { namespace locale { namespace detail {
+-#if BOOST_CLANG_VERSION >= 40900
++#if defined BOOST_CLANG_VERSION && BOOST_CLANG_VERSION >= 40900
+ #    pragma clang diagnostic push
+ #    pragma clang diagnostic ignored "-Wundefined-var-template"
+ #endif
+@@ -25,7 +25,7 @@
+     struct BOOST_LOCALE_DECL facet_id {
+         static std::locale::id id;
+     };
+-#if BOOST_CLANG_VERSION >= 40900
++#if defined BOOST_CLANG_VERSION && BOOST_CLANG_VERSION >= 40900
+ #    pragma clang diagnostic pop
+ #endif
+ }}} // namespace boost::locale::detail
+--- boost/math/tools/config.hpp
++++ boost/math/tools/config.hpp
+@@ -147,7 +147,7 @@
+ #endif
+ 
+ // C++23
+-#if __cplusplus > 202002L || _MSVC_LANG > 202002L
++#if __cplusplus > 202002L || (defined _MSVC_LANG && _MSVC_LANG > 202002L)
+ #  if __GNUC__ >= 13
+      // libstdc++3 only defines to/from_chars for std::float128_t when one of these defines are set
+      // otherwise we're right out of luck...
+--- boost/math/tools/promotion.hpp
++++ boost/math/tools/promotion.hpp
+@@ -27,7 +27,7 @@
+ #include <type_traits>
+ 
+ #if defined __has_include
+-#  if __cplusplus > 202002L || _MSVC_LANG > 202002L 
++#  if __cplusplus > 202002L || (defined _MSVC_LANG && _MSVC_LANG > 202002L) 
+ #    if __has_include (<stdfloat>)
+ #    include <stdfloat>
+ #    endif

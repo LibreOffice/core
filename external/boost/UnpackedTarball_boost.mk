@@ -32,11 +32,9 @@ boost_patches += msvc2017.patch.0
 
 boost_patches += boost-ios.patch.0
 
-# <https://github.com/boostorg/phoenix/pull/116> "Avoid boost::phoenix::placeholders::uarg1..10 ODR
-# violations":
-boost_patches += 0001-Avoid-boost-phoenix-placeholders-uarg1.10-ODR-violat.patch.2
-
 boost_patches += boost.file_iterator.sharing_win.patch
+
+boost_patches += Wundef.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 

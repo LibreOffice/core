@@ -1,21 +1,13 @@
 diff -ru boost.orig/boost/libs/locale/src/encoding/codepage.cpp boost/boost/libs/locale/src/encoding/codepage.cpp
 --- foo/misc/boost.orig/libs/locale/src/encoding/codepage.cpp
 +++ foo/misc/boost/libs/locale/src/boost/locale/encoding/codepage.cpp
-@@ -8,6 +8,7 @@
- #include <boost/locale/hold_ptr.hpp>
- #include <memory>
- #include <string>
-+#include <string.h>
- 
- #include "boost/locale/encoding/conv.hpp"
- #if BOOST_LOCALE_USE_WIN32_API
-@@ -58,6 +58,9 @@
-                 return cvt->convert(begin, end);
- #endif
- #endif
-+            // ensures we get a sensible warning in boost's gettext results about a real mismatch.
-+            if (to_charset && from_charset && !strcmp(to_charset, from_charset))
-+                return std::string(begin, end - begin);
-             throw invalid_charset_error(std::string(to_charset) + " or " + from_charset);
+@@ -52,6 +52,9 @@
          }
+ #endif
+ #endif
++        // ensures we get a sensible warning in boost's gettext results about a real mismatch.
++        if (to_charset == from_charset)
++            return std::string(begin, end - begin);
+         throw invalid_charset_error(std::string(to_charset) + " or " + from_charset);
+     }
  

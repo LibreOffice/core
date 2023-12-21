@@ -1,51 +1,51 @@
 diff -ru boost.orig/boost/libs/locale/src/encoding/codepage.cpp boost/boost/libs/locale/src/encoding/codepage.cpp
 --- foo/misc/boost.orig/libs/locale/src/encoding/codepage.cpp
 +++ foo/misc/boost/libs/locale/src/boost/locale/encoding/codepage.cpp
-@@ -39,6 +39,7 @@
-                                     const char* from_charset,
-                                     method_type how)
-         {
+@@ -29,6 +29,7 @@
+                         const std::string& from_charset,
+                         method_type how)
+     {
 +#if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
-             hold_ptr<converter_between> cvt;
  #ifdef BOOST_LOCALE_WITH_ICONV
-             cvt.reset(new iconv_between());
-@@ -55,6 +56,7 @@
-             if(cvt->open(to_charset, from_charset, how))
-                 return cvt->convert(begin, end);
+         {
+             impl::iconv_between cvt;
+@@ -50,6 +51,7 @@
+                 return cvt.convert(begin, end);
+         }
  #endif
 +#endif
-             throw invalid_charset_error(std::string(to_charset) + " or " + from_charset);
-         }
+         throw invalid_charset_error(std::string(to_charset) + " or " + from_charset);
+     }
  
-@@ -65,6 +67,7 @@
-         template<typename CharType>
-         std::basic_string<CharType> convert_to(const char* begin, const char* end, const char* charset, method_type how)
-         {
+@@ -56,6 +58,7 @@
+     template<typename CharType>
+     std::basic_string<CharType> to_utf(const char* begin, const char* end, const std::string& charset, method_type how)
+     {
 +#if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
-             hold_ptr<converter_to_utf<CharType>> cvt;
  #ifdef BOOST_LOCALE_WITH_ICONV
-             cvt.reset(new iconv_to_utf<CharType>());
-@@ -81,6 +84,7 @@
-             if(cvt->open(charset, how))
-                 return cvt->convert(begin, end);
+         {
+             impl::iconv_to_utf<CharType> cvt;
+@@ -77,6 +80,7 @@
+                 return cvt.convert(begin, end);
+         }
  #endif
 +#endif
-             throw invalid_charset_error(charset);
-         }
+         throw invalid_charset_error(charset);
+     }
  
-@@ -91,6 +95,7 @@
-         template<typename CharType>
-         std::string convert_from(const CharType* begin, const CharType* end, const char* charset, method_type how)
-         {
+@@ -83,6 +87,7 @@
+     template<typename CharType>
+     std::string from_utf(const CharType* begin, const CharType* end, const std::string& charset, method_type how)
+     {
 +#if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
-             hold_ptr<converter_from_utf<CharType>> cvt;
  #ifdef BOOST_LOCALE_WITH_ICONV
-             cvt.reset(new iconv_from_utf<CharType>());
-@@ -107,6 +112,7 @@
-             if(cvt->open(charset, how))
-                 return cvt->convert(begin, end);
+         {
+             impl::iconv_from_utf<CharType> cvt;
+@@ -104,6 +109,7 @@
+                 return cvt.convert(begin, end);
+         }
  #endif
 +#endif
-             throw invalid_charset_error(charset);
-         }
+         throw invalid_charset_error(charset);
+     }
  

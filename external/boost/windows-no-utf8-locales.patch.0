@@ -2,22 +2,18 @@ Don't ever attempt to initialise a std::locale with a UTF-8 locale on Windows -*
 
 --- libs/locale/src/boost/locale/std/std_backend.cpp
 +++ libs/locale/src/boost/locale/std/std_backend.cpp
-@@ -86,6 +86,7 @@
- #endif
-                 utf_mode_ = utf8_support::none;
+@@ -138,10 +138,14 @@
+                 } else
+                     name_ = "C";
              } else {
-+                #if !defined(BOOST_WINDOWS)
++#if !defined(BOOST_WINDOWS)
                  if(loadable(lid)) {
                      name_ = lid;
-                     utf_mode_ = utf8_support::native_with_wide;
-@@ -98,8 +99,8 @@
-                     utf_mode_ = utf8_support::from_wide;
- #endif
-                 }
--#if defined(BOOST_WINDOWS)
--                else if(loadable(win_name))
-+                #else
-+                if(loadable(win_name))
-                 {
-                     name_ = win_name;
-                     utf_mode_ = utf8_support::from_wide;
+                     utf_mode_ = utf8_support::native;
+                 } else {
++#else
++                {
++#endif
+                     std::vector<std::string> alt_names;
+                     if(l_win)
+                         alt_names.push_back(l_win.name);
