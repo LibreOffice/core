@@ -1112,12 +1112,15 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
     {
         OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
         pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
-        pOut->SetFillColor( GetOpt().GetFieldShadingsColor() );
+        if( m_pFnt->GetHighlightColor() != COL_TRANSPARENT )
+            pOut->SetFillColor(m_pFnt->GetHighlightColor());
+        else
+            pOut->SetFillColor(GetOpt().GetFieldShadingsColor());
         pOut->SetLineColor();
         pOut->DrawRect( aIntersect.SVRect() );
         pOut->Pop();
     }
-    const int delta=10;
+    const int delta = 25;
     tools::Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
     m_pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
     m_pOut->SetLineColor( Color(0, 0, 0));
