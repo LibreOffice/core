@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158785)
     CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
 }
 
-} // end of anonymouse namespace
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
