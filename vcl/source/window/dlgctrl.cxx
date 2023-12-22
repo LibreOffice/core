@@ -941,7 +941,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 }
             }
         }
-        else if (aKeyCode.IsMod2()) // tdf#151385
+        else
         {
             sal_Unicode c = rKEvt.GetCharCode();
             if ( c )
@@ -952,8 +952,13 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                     GetFocusFlags nGetFocusFlags = GetFocusFlags::Mnemonic;
                     if ( pSWindow == ::ImplFindAccelWindow( this, i, c, nFormStart, nFormEnd ) )
                         nGetFocusFlags |= GetFocusFlags::UniqueMnemonic;
-                    pSWindow->ImplControlFocus( nGetFocusFlags );
-                    return true;
+                    // tdf#157649 Allow omitting the Alt key when focus is in the dialog action area:
+                    bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pSWindow->GetParent()) != nullptr;
+                    if ((bIsButtonBox && pSWindow->GetParent()->HasChildPathFocus(true)) || aKeyCode.IsMod2())
+                    {
+                        pSWindow->ImplControlFocus( nGetFocusFlags );
+                        return true;
+                    }
                 }
             }
         }
