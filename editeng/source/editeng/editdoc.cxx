@@ -1862,34 +1862,6 @@ void ContentAttribs::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-
-ItemList::ItemList() : CurrentItem( 0 )
-{
-}
-
-const SfxPoolItem* ItemList::First()
-{
-    CurrentItem = 0;
-    return aItemPool.empty() ? nullptr : aItemPool[ 0 ];
-}
-
-const SfxPoolItem* ItemList::Next()
-{
-    if ( CurrentItem + 1 < static_cast<sal_Int32>(aItemPool.size()) )
-    {
-        ++CurrentItem;
-        return aItemPool[ CurrentItem ];
-    }
-    return nullptr;
-}
-
-void ItemList::Insert( const SfxPoolItem* pItem )
-{
-    aItemPool.push_back( pItem );
-    CurrentItem = aItemPool.size() - 1;
-}
-
-
 EditDoc::EditDoc( SfxItemPool* pPool ) :
     nLastCache(0),
     pItemPool(pPool ? pPool : new EditEngineItemPool()),
