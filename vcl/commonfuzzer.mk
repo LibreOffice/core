@@ -44,6 +44,7 @@ fuzzer_externals = \
     hunspell \
     zlib \
     zxcvbn-c \
+    argon2 \
 
 fuzzer_statics = \
      findsofficepath \
