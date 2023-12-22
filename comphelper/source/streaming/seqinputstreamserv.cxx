@@ -196,9 +196,8 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< css::
     uno::Reference< io::XInputStream > xInputStream(
                     static_cast< ::cppu::OWeakObject* >( new ::comphelper::SequenceInputStream( aSeq ) ),
                     uno::UNO_QUERY_THROW );
-    uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY_THROW );
+    m_xSeekable.set(xInputStream, uno::UNO_QUERY_THROW);
     m_xInputStream = xInputStream;
-    m_xSeekable = xSeekable;
     m_bInitialized = true;
 }
 
