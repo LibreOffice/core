@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cstddef>
 #include <limits>
 #include <memory>
@@ -51,18 +52,17 @@ extern "C" wchar_t* wcsncpy(wchar_t* strDest, wchar_t const* strSource, std::siz
 
 namespace
 {
-bool getInstallLocation(MSIHANDLE handle, std::wstring* installLocation)
+bool getProperty(MSIHANDLE handle, wchar_t const* name, std::wstring* value)
 {
     DWORD n = 0;
-    if (MsiGetPropertyW(handle, L"INSTALLLOCATION", const_cast<wchar_t*>(L""), &n)
-            != ERROR_MORE_DATA
+    if (MsiGetPropertyW(handle, name, const_cast<wchar_t*>(L""), &n) != ERROR_MORE_DATA
         || n == std::numeric_limits<DWORD>::max())
     {
         return false;
     }
     ++n;
     auto buf = std::make_unique<wchar_t[]>(n);
-    if (MsiGetPropertyW(handle, L"INSTALLLOCATION", buf.get(), &n) != ERROR_SUCCESS)
+    if (MsiGetPropertyW(handle, name, buf.get(), &n) != ERROR_SUCCESS)
     {
         return false;
     }
@@ -70,7 +70,7 @@ bool getInstallLocation(MSIHANDLE handle, std::wstring* installLocation)
     {
         --n;
     }
-    installLocation->assign(buf.get(), n);
+    value->assign(buf.get(), n);
     return true;
 }
 
@@ -78,14 +78,20 @@ typedef std::unique_ptr<void, decltype(&CloseHandle)> CloseHandleGuard;
 
 CloseHandleGuard guard(HANDLE handle) { return CloseHandleGuard(handle, CloseHandle); }
 
-bool runExecutable(std::wstring const& installLocation, wchar_t const* commandLine)
+bool runExecutable(std::wstring const& installLocation, wchar_t const* argument)
 {
+    std::wstring cmdline(L"\"");
+    cmdline += installLocation;
+    cmdline += L"\\program\\update_service.exe\" ";
+    cmdline += argument;
+    auto const n = cmdline.size() + 1;
+    auto const buf = std::make_unique<wchar_t[]>(n);
+    std::copy_n(cmdline.data(), n, buf.get());
     STARTUPINFOW si{};
     si.cb = sizeof(si);
     PROCESS_INFORMATION pi{};
-    if (!CreateProcessW((installLocation + L"\\program\\update_service.exe").c_str(),
-                        const_cast<LPWSTR>(commandLine), nullptr, nullptr, FALSE, CREATE_NO_WINDOW,
-                        nullptr, nullptr, &si, &pi))
+    if (!CreateProcessW(nullptr, buf.get(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr,
+                        nullptr, &si, &pi))
     {
         return false;
     }
@@ -106,74 +112,114 @@ bool runExecutable(std::wstring const& installLocation, wchar_t const* commandLi
     }
     return true;
 }
-}
 
-extern "C" __declspec(dllexport) UINT __stdcall InstallUpdateservice(MSIHANDLE handle)
+bool writeRegistry(std::wstring const& installLocation)
 {
-    std::wstring loc;
-    if (!getInstallLocation(handle, &loc))
+    WCHAR path[MAX_PATH + 1];
+    if (!CalculateRegistryPathFromFilePath(installLocation.c_str(), path))
     {
         return false;
     }
-    if (!runExecutable(loc, L"install"))
-    {
-        return ERROR_INVALID_FUNCTION;
-    }
-    WCHAR maintenanceServiceKey[MAX_PATH + 1];
-    if (!CalculateRegistryPathFromFilePath(loc.c_str(), maintenanceServiceKey))
-    {
-        return ERROR_INVALID_FUNCTION;
-    }
     HKEY key;
-    if (RegCreateKeyExW(HKEY_LOCAL_MACHINE, (std::wstring(maintenanceServiceKey) + L"\\0").c_str(),
-                        0, nullptr, REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_WOW64_64KEY, nullptr,
-                        &key, nullptr)
+    if (RegCreateKeyExW(HKEY_LOCAL_MACHINE, (std::wstring(path) + L"\\0").c_str(), 0, nullptr,
+                        REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_WOW64_64KEY, nullptr, &key,
+                        nullptr)
         != ERROR_SUCCESS)
     {
-        return ERROR_INVALID_FUNCTION;
+        return false;
     }
+    auto ok = true;
     if (RegSetValueExW(key, L"issuer", 0, REG_SZ,
                        reinterpret_cast<BYTE const*>(L"Certum Code Signing 2021 CA"),
                        sizeof L"Certum Code Signing 2021 CA")
         != ERROR_SUCCESS)
     {
-        return ERROR_INVALID_FUNCTION;
+        ok = false;
     }
     if (RegSetValueExW(key, L"name", 0, REG_SZ,
                        reinterpret_cast<BYTE const*>(L"The Document Foundation"),
                        sizeof L"The Document Foundation")
         != ERROR_SUCCESS)
     {
-        return ERROR_INVALID_FUNCTION;
+        ok = false;
     }
     if (RegCloseKey(key) != ERROR_SUCCESS)
     {
-        return ERROR_INVALID_FUNCTION;
+        ok = false;
     }
-    return ERROR_SUCCESS;
+    return ok;
+}
+
+bool deleteRegistry(std::wstring const& installLocation)
+{
+    WCHAR path[MAX_PATH + 1];
+    if (!CalculateRegistryPathFromFilePath(installLocation.c_str(), path))
+    {
+        return false;
+    }
+    if (RegDeleteTreeW(HKEY_LOCAL_MACHINE, path) != ERROR_SUCCESS)
+    {
+        return false;
+    }
+    return true;
+}
+}
+
+extern "C" __declspec(dllexport) UINT __stdcall PrepareUpdateservice(MSIHANDLE handle)
+{
+    std::wstring loc;
+    if (!getProperty(handle, L"INSTALLLOCATION", &loc))
+    {
+        return ERROR_INSTALL_FAILURE;
+    }
+    auto ok = true;
+    if (MsiSetPropertyW(handle, L"install_updateservice", loc.c_str()) != ERROR_SUCCESS)
+    {
+        ok = false;
+    }
+    if (MsiSetPropertyW(handle, L"uninstall_updateservice", loc.c_str()) != ERROR_SUCCESS)
+    {
+        ok = false;
+    }
+    return ok ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
+}
+
+extern "C" __declspec(dllexport) UINT __stdcall InstallUpdateservice(MSIHANDLE handle)
+{
+    std::wstring loc;
+    if (!getProperty(handle, L"CustomActionData", &loc))
+    {
+        return ERROR_INSTALL_FAILURE;
+    }
+    auto ok = true;
+    if (!runExecutable(loc, L"install"))
+    {
+        ok = false;
+    }
+    if (!writeRegistry(loc))
+    {
+        ok = false;
+    }
+    return ok ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
 }
 
 extern "C" __declspec(dllexport) UINT __stdcall UninstallUpdateservice(MSIHANDLE handle)
 {
     std::wstring loc;
-    if (!getInstallLocation(handle, &loc))
+    if (!getProperty(handle, L"CustomActionData", &loc))
     {
-        return false;
+        return ERROR_INSTALL_FAILURE;
     }
+    auto ok = true;
     if (!runExecutable(loc, L"uninstall"))
     {
-        return ERROR_INVALID_FUNCTION;
+        ok = false;
     }
-    WCHAR maintenanceServiceKey[MAX_PATH + 1];
-    if (!CalculateRegistryPathFromFilePath(loc.c_str(), maintenanceServiceKey))
+    if (!deleteRegistry(loc))
     {
-        return ERROR_INVALID_FUNCTION;
+        ok = false;
     }
-    if (RegDeleteTreeW(HKEY_LOCAL_MACHINE, maintenanceServiceKey) != ERROR_SUCCESS)
-    {
-        return ERROR_INVALID_FUNCTION;
-    }
-    return ERROR_SUCCESS;
+    return ok ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
