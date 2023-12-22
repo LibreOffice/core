@@ -107,13 +107,13 @@ namespace abp
 #endif
 
         // Items are displayed in list order
-        m_aAllTypes.push_back( ButtonItem( m_xEvolution.get(), AST_EVOLUTION, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_xEvolutionGroupwise.get(), AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_xEvolutionLdap.get(), AST_EVOLUTION_LDAP, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_xThunderbird.get(), AST_THUNDERBIRD, true ) );
-        m_aAllTypes.push_back( ButtonItem( m_xKab.get(), AST_KAB, bHaveKab ) );
-        m_aAllTypes.push_back( ButtonItem( m_xMacab.get(), AST_MACAB, bHaveMacab ) );
-        m_aAllTypes.push_back( ButtonItem( m_xOther.get(), AST_OTHER, true ) );
+        m_aAllTypes.emplace_back(m_xEvolution.get(), AST_EVOLUTION, bHaveEvolution);
+        m_aAllTypes.emplace_back(m_xEvolutionGroupwise.get(), AST_EVOLUTION_GROUPWISE, bHaveEvolution);
+        m_aAllTypes.emplace_back(m_xEvolutionLdap.get(), AST_EVOLUTION_LDAP, bHaveEvolution);
+        m_aAllTypes.emplace_back(m_xThunderbird.get(), AST_THUNDERBIRD, true);
+        m_aAllTypes.emplace_back(m_xKab.get(), AST_KAB, bHaveKab);
+        m_aAllTypes.emplace_back(m_xMacab.get(), AST_MACAB, bHaveMacab);
+        m_aAllTypes.emplace_back(m_xOther.get(), AST_OTHER, true);
 
         Link<weld::Toggleable&,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
         for (auto const& elem : m_aAllTypes)

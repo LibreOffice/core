@@ -139,14 +139,14 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
     bool isDirectDownload = false;
     m_aNameAccess.getValue(IS_DIRECT_DOWNLOAD) >>= isDirectDownload;
 
-    rInfo.Sources.push_back( DownloadSource( isDirectDownload, getStringValue(DOWNLOAD_URL) ) );
+    rInfo.Sources.emplace_back(isDirectDownload, getStringValue(DOWNLOAD_URL));
 
     for(sal_Int32 n=1; n < 6; ++n )
     {
         OUString aUStr = getStringValue(
             OString(OString::Concat(RELEASE_NOTE) + OString::number(n)).getStr());
         if( !aUStr.isEmpty() )
-            rInfo.ReleaseNotes.push_back(ReleaseNote(static_cast<sal_Int8>(n), aUStr));
+            rInfo.ReleaseNotes.emplace_back(static_cast<sal_Int8>(n), aUStr);
     }
 }
 

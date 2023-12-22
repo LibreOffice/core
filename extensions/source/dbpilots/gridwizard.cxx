@@ -121,14 +121,14 @@ namespace dbp
             {
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    aColumnServiceNames.push_back(OUString("CheckBox"));
+                    aColumnServiceNames.emplace_back("CheckBox");
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
                 case DataType::INTEGER:
-                    aColumnServiceNames.push_back(OUString("NumericField"));
+                    aColumnServiceNames.emplace_back("NumericField");
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
@@ -137,31 +137,31 @@ namespace dbp
                 case DataType::DOUBLE:
                 case DataType::NUMERIC:
                 case DataType::DECIMAL:
-                    aColumnServiceNames.push_back(OUString("FormattedField"));
+                    aColumnServiceNames.emplace_back("FormattedField");
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::DATE:
-                    aColumnServiceNames.push_back(OUString("DateField"));
+                    aColumnServiceNames.emplace_back("DateField");
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TIME:
-                    aColumnServiceNames.push_back(OUString("TimeField"));
+                    aColumnServiceNames.emplace_back("TimeField");
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TIMESTAMP:
-                    aColumnServiceNames.push_back(OUString("DateField"));
+                    aColumnServiceNames.emplace_back("DateField");
                     aColumnLabelPostfixes.push_back(compmodule::ModuleRes(RID_STR_DATEPOSTFIX));
 
                     aFormFieldNames.push_back(*pSelectedFields);
-                    aColumnServiceNames.push_back(OUString("TimeField"));
+                    aColumnServiceNames.emplace_back("TimeField");
                     aColumnLabelPostfixes.push_back(compmodule::ModuleRes(RID_STR_TIMEPOSTFIX));
                     break;
 
                 default:
-                    aColumnServiceNames.push_back(OUString("TextField"));
+                    aColumnServiceNames.emplace_back("TextField");
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
             }
         }

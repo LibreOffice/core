@@ -163,7 +163,7 @@ checkForUpdates(
                         OUString aType = xParent->getAttribute("type");
                         bool bIsDirect = !aType.equalsIgnoreAsciiCase("text/html");
 
-                        o_rUpdateInfo.Sources.push_back( DownloadSource(bIsDirect, xNode2->getNodeValue()) );
+                        o_rUpdateInfo.Sources.emplace_back(bIsDirect, xNode2->getNodeValue());
                     }
                 }
 
