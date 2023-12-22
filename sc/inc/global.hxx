@@ -26,6 +26,7 @@
 #include <tools/ref.hxx>
 #include <sal/types.h>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <com/sun/star/sheet/CellFlags.hpp>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
@@ -145,21 +146,22 @@ namespace o3tl {
     template<> struct typed_flags<ScBreakType> : is_typed_flags<ScBreakType, 0x03> {};
 }
 
-enum class InsertDeleteFlags : sal_uInt16
+enum class InsertDeleteFlags : sal_Int32
 {
     NONE             = 0x0000,
-    VALUE            = 0x0001,   /// Numeric values (and numeric results if InsertDeleteFlags::FORMULA is not set).
-    DATETIME         = 0x0002,   /// Dates, times, datetime values.
-    STRING           = 0x0004,   /// Strings (and string results if InsertDeleteFlags::FORMULA is not set).
-    NOTE             = 0x0008,   /// Cell notes.
-    FORMULA          = 0x0010,   /// Formula cells.
-    HARDATTR         = 0x0020,   /// Hard cell attributes.
-    STYLES           = 0x0040,   /// Cell styles.
-    OBJECTS          = 0x0080,   /// Drawing objects.
-    EDITATTR         = 0x0100,   /// Rich-text attributes.
+    VALUE            = css::sheet::CellFlags::VALUE,      /// 0x0001 Numeric values (and numeric results if InsertDeleteFlags::FORMULA is not set).
+    DATETIME         = css::sheet::CellFlags::DATETIME,   /// 0x0002 Dates, times, datetime values.
+    STRING           = css::sheet::CellFlags::STRING,     /// 0x0004 Strings (and string results if InsertDeleteFlags::FORMULA is not set).
+    NOTE             = css::sheet::CellFlags::ANNOTATION, /// 0x0008 Cell notes.
+    FORMULA          = css::sheet::CellFlags::FORMULA,    /// 0x0010 Formula cells.
+    HARDATTR         = css::sheet::CellFlags::HARDATTR,   /// 0x0020 Hard cell attributes.
+    STYLES           = css::sheet::CellFlags::STYLES,     /// 0x0040 Cell styles.
+    OBJECTS          = css::sheet::CellFlags::OBJECTS,    /// 0x0080 Drawing objects.
+    EDITATTR         = css::sheet::CellFlags::EDITATTR,   /// 0x0100 Rich-text attributes.
+    /// No value yet for css::sheet::CellFlags::FORMATTED (0x0200)
     OUTLINE          = 0x0800,   /// Sheet / outlining (grouping) information
     SPARKLINES       = 0x4000,   /// Sparklines in a cell.
-    NOCAPTIONS       = 0x0200,   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
+    NOCAPTIONS       = 0x8000,   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
     ADDNOTES         = 0x0400,   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
     SPECIAL_BOOLEAN  = 0x1000,
     FORGETCAPTIONS   = 0x2000,   /// Internal use only (d&d undo): do not delete caption objects of cell notes.
@@ -172,10 +174,9 @@ enum class InsertDeleteFlags : sal_uInt16
 };
 namespace o3tl
 {
-    template<> struct typed_flags<InsertDeleteFlags> : is_typed_flags<InsertDeleteFlags, 0x7fff> {};
+    template<> struct typed_flags<InsertDeleteFlags> : is_typed_flags<InsertDeleteFlags, 0xfdff> {};
 }
-// This doesn't work at the moment, perhaps when we have constexpr we can modify InsertDeleteFlags to make it work.
-//static_assert((InsertDeleteFlags::ATTRIB & InsertDeleteFlags::CONTENTS) == InsertDeleteFlags::NONE, "these must match");
+static_assert((InsertDeleteFlags::ATTRIB & InsertDeleteFlags::CONTENTS) == InsertDeleteFlags::NONE, "these must match");
 
 
 enum class ScPasteFunc {
