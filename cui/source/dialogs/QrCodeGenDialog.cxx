@@ -19,6 +19,7 @@
 #include <vcl/svapp.hxx>
 
 #if ENABLE_ZXING
+#include <ZXVersion.h>
 #include <rtl/strbuf.hxx>
 
 #ifdef __GNUC__
@@ -38,9 +39,7 @@
 #include <BitMatrixIO.h>
 #endif
 
-#if __has_include(<Utf.h>)
-#include <Utf.h>
-#else
+#if ZXING_VERSION_MAJOR < 2
 #include <TextUtfEncoding.h>
 #endif
 
@@ -153,8 +152,8 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
     ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString(GetBarCodeType(aQRType));
     auto writer = ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);
     writer.setEncoding(ZXing::CharacterSet::UTF8);
-#if __has_include(<Utf.h>)
-    ZXing::BitMatrix bitmatrix = writer.encode(ZXing::FromUtf8(QRText), 0, 0);
+#if ZXING_VERSION_MAJOR >= 2
+    ZXing::BitMatrix bitmatrix = writer.encode(QRText, 0, 0);
 #else
     ZXing::BitMatrix bitmatrix = writer.encode(ZXing::TextUtfEncoding::FromUtf8(QRText), 0, 0);
 #endif
