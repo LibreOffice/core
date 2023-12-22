@@ -4109,7 +4109,7 @@ void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
         return;
 
     SwPaM* pCursor = GetCursor();
-    SwPosition aPos( *pCursor->GetPoint() );
+    SwPosition aPos(*pCursor->Start());
     SwTextNode *pNode = aPos.GetNode().GetTextNode();
     if ( !pNode || pNode->IsInProtectSect() )
         return;
