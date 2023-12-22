@@ -113,4 +113,17 @@
     <string name="no_camera_found">ਕੋਈ ਕੈਮਰਾ ਨਹੀਂ ਲੱਭਿਆ</string>
     <string name="compress_photo_title">ਕੀ ਤੁਸੀਂ ਫੋਟੋ ਨੂੰ ਕੰਪਰੈੱਸ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ\?</string>
     <string name="select_insert_options">ਸ਼ਾਮਲ ਕਰਨ ਦੀਆਂ ਚੋਣਾਂ ਚੁਣੋ:</string>
+    <string name="part_name_changed">ਪਾਰਟ ਦਾ ਨਾਂ ਬਦਲਿਆ ਜਾ ਚੁੱਕਾ ਹੈ।</string>
+    <string name="action_UNO_commands">UNO ਕਮਾਂਡ ਭੇਜੋ</string>
+    <string name="UNO_commands_string_type_hint">ਕਿਸਮ</string>
+    <string name="current_uno_command">ਮੌਜੂਦਾ UNO ਕਮਾਂਡ</string>
+    <string name="bmp_null">bmp ਨਲ ਹੈ!</string>
+    <string name="part_deleted">ਪਾਰਟ ਨੂੰ ਹਟਾਇਆ ਜਾ ਚੁੱਕਾ ਹੈ।</string>
+    <string name="printing_not_supported">ਤੁਹਾਡਾ ਡਿਵਾਈਸ ਪਰਿੰਟ ਕਰਨ ਲਈ ਸਹਾਇਕ ਨਹੀਂ ਹੈ</string>
+    <string name="UNO_commands_string_parent_value_hint">ਮੁੱਢਲਾ ਮੁੱਲ</string>
+    <string name="directory_not_saved">ਡਾਇਰੈਕਟਰੀ ਸੰਭਾਲੀ ਨਹੀਂ ਗਈ ਹੈ।</string>
+    <string name="name_already_used">ਦਿੱਤਾ ਨਾਂ ਪਹਿਲਾਂ ਹੀ ਵਰਤਿਆ ਗਿਆ ਹੈ।</string>
+    <string name="UNO_commands_string_hint">UNO ਕਮਾਂਡ</string>
+    <string name="UNO_commands_string_value_hint">ਮੁੱਲ</string>
+    <string name="about_moreinfo">ਹੋਰ ਜਾਣਕਾਰੀ</string>
 </resources>
