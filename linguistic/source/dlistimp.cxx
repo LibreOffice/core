@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -586,7 +587,10 @@ void DicList::CreateDicList()
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
-    std::locale loc(Translate::Create("svt"));
+    const LanguageTag tag = comphelper::LibreOfficeKit::isActive()
+                                ? LanguageTag("en-US")
+                                : SvtSysLocale().GetUILanguageTag();
+    std::locale loc(Translate::Create("svt", tag));
     uno::Reference< XDictionary > xIgnAll(
             createDictionary( Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc), LinguLanguageToLocale( LANGUAGE_NONE ),
                               DictionaryType_POSITIVE, OUString() ) );
