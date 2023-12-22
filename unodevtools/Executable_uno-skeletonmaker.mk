@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Executable_Executable,uno-skeletonmaker))
 
-$(eval $(call gb_Executable_use_external,uno-skeletonmaker,boost_headers))
-
 $(eval $(call gb_Executable_set_include,uno-skeletonmaker,\
     -I$(SRCDIR)/unodevtools/inc \
     $$(INCLUDE) \

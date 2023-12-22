@@ -689,10 +689,10 @@ static OString generateClassDefinition(std::ostream& o,
          "    virtual ~" << classname << "() {}\n\n";
 
     if (options.componenttype == 2) {
-        o << "    typedef boost::unordered_map< ::sal_Int32, OUString, "
-            "boost::hash<::sal_Int32> > ParamMap;\n"
-            "    typedef boost::unordered_map< OUString, ParamMap, "
-            "OUStringHash > FunctionMap;\n\n"
+        o << "    typedef std::map< ::sal_Int32, OUString "
+            "> ParamMap;\n"
+            "    typedef std::map< OUString, ParamMap "
+            "> FunctionMap;\n\n"
             "    OUString SAL_CALL getAddinProperty(const OUString & "
             "funcName, const OUString & paramName, const char * propName) "
             "throw (css::uno::RuntimeException);\n\n";
@@ -1146,7 +1146,7 @@ void generateCalcAddin(ProgramOptions const & options,
             "#include \"com/sun/star/container/XNameAccess.hpp\"\n"
             "#include \"com/sun/star/container/XHierarchicalNameAccess.hpp\"\n\n"
             "#include \"rtl/ustrbuf.hxx\"\n\n"
-            "#include <boost/unordered_map.hpp>\n"
+            "#include <map>\n"
             "#include <set>\n";
 
         // namespace
