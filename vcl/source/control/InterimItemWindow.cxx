@@ -187,6 +187,11 @@ void InterimItemWindow::Draw(OutputDevice* pDevice, const Point& rPos,
     m_xContainer->draw(*pDevice, rPos, GetSizePixel());
 }
 
+void InterimItemWindow::SetPriority(TaskPriority nPriority)
+{
+    m_aLayoutIdle.SetPriority(nPriority);
+}
+
 void InterimItemWindow::ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos)
 {
     Draw(pTargetOutDev, rPos, SystemTextColorFlags::NONE);
