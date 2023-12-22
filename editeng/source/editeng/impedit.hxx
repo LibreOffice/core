@@ -181,11 +181,13 @@ struct ConvInfo
 
 struct FormatterFontMetric
 {
-    sal_uInt16 nMaxAscent;
-    sal_uInt16 nMaxDescent;
+    sal_uInt16 nMaxAscent = 0;
+    sal_uInt16 nMaxDescent = 0;
 
-    FormatterFontMetric() : nMaxAscent(0), nMaxDescent(0) { /* nMinLeading = 0xFFFF; */ }
-    sal_uInt16  GetHeight() const       { return nMaxAscent+nMaxDescent; }
+    sal_uInt16 GetHeight() const
+    {
+        return nMaxAscent + nMaxDescent;
+    }
 };
 
 class IdleFormattter : public Idle
