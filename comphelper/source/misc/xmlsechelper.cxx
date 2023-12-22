@@ -130,7 +130,7 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
                 if (!bInValue)
                 {
                     OSL_ASSERT(!sType.empty());
-                    retVal.push_back(std::make_pair(OUString(sType), sbufValue.makeStringAndClear()));
+                    retVal.emplace_back(OUString(sType), sbufValue.makeStringAndClear());
                     sType = {};
                     //The next char is the start of the new type
                     nTypeNameStart = i + 1;
@@ -153,7 +153,7 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
         if (sbufValue.getLength())
         {
             OSL_ASSERT(!sType.empty());
-            retVal.push_back(std::make_pair(OUString(sType), sbufValue.makeStringAndClear()));
+            retVal.emplace_back(OUString(sType), sbufValue.makeStringAndClear());
         }
         return retVal;
     }
