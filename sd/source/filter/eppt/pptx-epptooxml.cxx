@@ -196,7 +196,7 @@ struct PPTXLayoutInfo
 
 }
 
-const PPTXLayoutInfo aLayoutInfo[EPP_LAYOUT_SIZE] =
+const PPTXLayoutInfo aLayoutInfo[OOXML_LAYOUT_SIZE] =
 {
     { 0, "Title Slide", "title" },
     { 1, "Title and text", "tx" },
