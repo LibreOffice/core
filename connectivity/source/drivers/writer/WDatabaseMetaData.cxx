@@ -93,11 +93,12 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
         const OUString& rName = aTableNames[nTable];
         if (match(tableNamePattern, rName, '\0'))
         {
-            ODatabaseMetaDataResultSet::ORow aRow{ nullptr, nullptr, nullptr };
-            aRow.reserve(6);
-            aRow.push_back(new ORowSetValueDecorator(rName));
-            aRow.push_back(new ORowSetValueDecorator(aTable));
-            aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+            ODatabaseMetaDataResultSet::ORow aRow{ nullptr,
+                                                   nullptr,
+                                                   nullptr,
+                                                   new ORowSetValueDecorator(rName),
+                                                   new ORowSetValueDecorator(aTable),
+                                                   ODatabaseMetaDataResultSet::getEmptyValue() };
             aRows.push_back(aRow);
         }
     }
