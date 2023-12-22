@@ -1579,8 +1579,7 @@ void Document::init()
     m_xParagraphs->reserve(static_cast< Paragraphs::size_type >(nCount));
         // numeric overflow is harmless here
     for (::sal_uInt32 i = 0; i < nCount; ++i)
-        m_xParagraphs->push_back(ParagraphInfo(static_cast< ::sal_Int32 >(
-                                       m_rEngine.GetTextHeight(i))));
+        m_xParagraphs->emplace_back(m_rEngine.GetTextHeight(i));
             // XXX  numeric overflow
     m_nViewOffset = static_cast< ::sal_Int32 >(
         m_rView.GetStartDocPos().Y()); // XXX  numeric overflow
