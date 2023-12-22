@@ -352,7 +352,7 @@ void Container::append(
     }
 
     int index = m_values.size();
-    m_values.push_back( Any( descriptor ) );
+    m_values.emplace_back(descriptor);
     m_name2index[name] = index;
 
     fire( InsertedBroadcaster( *this, name, Any( descriptor ) ) );

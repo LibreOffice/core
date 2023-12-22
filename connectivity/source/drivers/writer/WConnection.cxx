@@ -213,7 +213,7 @@ uno::Reference<sdbc::XStatement> SAL_CALL OWriterConnection::createStatement()
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     uno::Reference<sdbc::XStatement> xReturn = new component::OComponentStatement(this);
-    m_aStatements.push_back(uno::WeakReferenceHelper(xReturn));
+    m_aStatements.emplace_back(xReturn);
     return xReturn;
 }
 
@@ -226,7 +226,7 @@ uno::Reference<sdbc::XPreparedStatement>
     rtl::Reference<component::OComponentPreparedStatement> pStmt
         = new component::OComponentPreparedStatement(this);
     pStmt->construct(sql);
-    m_aStatements.push_back(uno::WeakReferenceHelper(*pStmt));
+    m_aStatements.emplace_back(*pStmt);
     return pStmt;
 }
 

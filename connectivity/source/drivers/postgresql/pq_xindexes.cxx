@@ -164,7 +164,7 @@ void Indexes::refresh()
                 st.PRIVATE_COLUMN_INDEXES, Any( columnNames ));
 
             {
-                m_values.push_back( Any( prop ) );
+                m_values.emplace_back(prop);
                 map[ currentIndexName ] = index;
                 ++index;
             }

@@ -60,7 +60,7 @@ uno::Reference<sdbc::XConnection>
 
     rtl::Reference<OWriterConnection> pCon = new OWriterConnection(this);
     pCon->construct(url, info);
-    m_xConnections.push_back(uno::WeakReferenceHelper(*pCon));
+    m_xConnections.emplace_back(*pCon);
 
     return pCon;
 }

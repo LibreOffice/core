@@ -317,7 +317,7 @@ void Columns::refresh()
 //                     name ) );
 
             {
-                m_values.push_back( Any( prop ) );
+                m_values.emplace_back(prop);
                 map[ name ] = columnIndex;
                 ++columnIndex;
             }

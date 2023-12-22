@@ -416,7 +416,7 @@ void splitSQL( const OString & sql, std::vector< OString > &vec )
         {
             if( '"' == c )
             {
-                vec.push_back( OString( &sql.getStr()[start], i-start+1  ) );
+                vec.emplace_back( &sql.getStr()[start], i-start+1 );
                 start = i + 1;
                 doubleQuote = false;
             }
@@ -431,7 +431,7 @@ void splitSQL( const OString & sql, std::vector< OString > &vec )
             }
             else if( '\'' == c )
             {
-                vec.push_back( OString( &sql.getStr()[start], i - start +1 ) );
+                vec.emplace_back( &sql.getStr()[start], i - start +1 );
                 start = i + 1; // leave single quotes !
                 singleQuote = false;
             }
@@ -440,20 +440,20 @@ void splitSQL( const OString & sql, std::vector< OString > &vec )
         {
             if( '"' == c )
             {
-                vec.push_back( OString( &sql.getStr()[start], i - start ) );
+                vec.emplace_back( &sql.getStr()[start], i - start );
                 doubleQuote = true;
                 start = i;
             }
             else if( '\'' == c )
             {
-                vec.push_back( OString( &sql.getStr()[start], i - start ) );
+                vec.emplace_back( &sql.getStr()[start], i - start );
                 singleQuote = true;
                 start = i;
             }
         }
     }
     if( start < i )
-        vec.push_back( OString( &sql.getStr()[start] , i - start ) );
+        vec.emplace_back( &sql.getStr()[start] , i - start );
 
 //     for( i = 0 ; i < vec.size() ; i ++ )
 //         printf( "%s!" , vec[i].getStr() );
@@ -476,7 +476,7 @@ void tokenizeSQL( const OString & sql, std::vector< OString > &vec  )
         {
             if( '"' == c )
             {
-                vec.push_back( OString( &sql.getStr()[start], i-start  ) );
+                vec.emplace_back( &sql.getStr()[start], i-start );
                 start = i + 1;
                 doubleQuote = false;
             }
@@ -485,7 +485,7 @@ void tokenizeSQL( const OString & sql, std::vector< OString > &vec  )
         {
             if( '\'' == c )
             {
-                vec.push_back( OString( &sql.getStr()[start], i - start +1 ) );
+                vec.emplace_back( &sql.getStr()[start], i - start +1 );
                 start = i + 1; // leave single quotes !
                 singleQuote = false;
             }
@@ -508,15 +508,15 @@ void tokenizeSQL( const OString & sql, std::vector< OString > &vec  )
                     start ++;   // skip additional whitespace
                 else
                 {
-                    vec.push_back( OString( &sql.getStr()[start], i - start  ) );
+                    vec.emplace_back( &sql.getStr()[start], i - start );
                     start = i +1;
                 }
             }
             else if( ',' == c || isOperator( c ) || '(' == c || ')' == c )
             {
                 if( i - start )
-                    vec.push_back( OString( &sql.getStr()[start], i - start ) );
-                vec.push_back( OString( &sql.getStr()[i], 1 ) );
+                    vec.emplace_back( &sql.getStr()[start], i - start );
+                vec.emplace_back( &sql.getStr()[i], 1 );
                 start = i + 1;
             }
             else if( '.' == c )
@@ -529,15 +529,15 @@ void tokenizeSQL( const OString & sql, std::vector< OString > &vec  )
                 else
                 {
                     if( i - start )
-                        vec.push_back( OString( &sql.getStr()[start], i - start ) );
-                    vec.push_back( "."_ostr );
+                        vec.emplace_back( &sql.getStr()[start], i - start );
+                    vec.emplace_back( "." );
                     start = i + 1;
                 }
             }
         }
     }
     if( start < i )
-        vec.push_back( OString( &sql.getStr()[start] , i - start ) );
+        vec.emplace_back( &sql.getStr()[start] , i - start );
 
 //     for( i = 0 ; i < vec.size() ; i ++ )
 //         printf( "%s!" , vec[i].getStr() );
@@ -644,7 +644,7 @@ std::vector< Any > parseArray( std::u16string_view str )
             if( brackets == 0 )
             {
                 if( !current.isEmpty() || doubleQuotedValue )
-                    elements.push_back( Any( current.makeStringAndClear() ) );
+                    elements.emplace_back( current.makeStringAndClear() );
             }
             else
             {
@@ -673,7 +673,7 @@ std::vector< Any > parseArray( std::u16string_view str )
         else if( ',' == c && brackets == 1)
         {
             doubleQuotedValue = false;
-            elements.push_back( Any( current.makeStringAndClear() ) );
+            elements.emplace_back( current.makeStringAndClear() );
         }
         else if( isWhitespace( c ) )
         {

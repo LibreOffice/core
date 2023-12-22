@@ -158,31 +158,25 @@ Sequence<PropertyValue> lcl_convertProperties(T_DRIVERTYPE _eType,
 
     if (_eType == T_DRIVERTYPE::Odbc)
     {
-        aProps.push_back(PropertyValue("Silent", 0, Any(true), PropertyState_DIRECT_VALUE));
-        aProps.push_back(
-            PropertyValue("PreventGetVersionColumns", 0, Any(true), PropertyState_DIRECT_VALUE));
+        aProps.emplace_back("Silent", 0, Any(true), PropertyState_DIRECT_VALUE);
+        aProps.emplace_back("PreventGetVersionColumns", 0, Any(true), PropertyState_DIRECT_VALUE);
     }
     else if (_eType == T_DRIVERTYPE::Jdbc)
     {
         if (!jdc)
         {
-            aProps.push_back(PropertyValue("JavaDriverClass", 0,
-                                           Any(OUString("com.mysql.jdbc.Driver")),
-                                           PropertyState_DIRECT_VALUE));
+            aProps.emplace_back("JavaDriverClass", 0, Any(OUString("com.mysql.jdbc.Driver")),
+                                PropertyState_DIRECT_VALUE);
         }
     }
     else
     {
-        aProps.push_back(
-            PropertyValue("PublicConnectionURL", 0, Any(_sUrl), PropertyState_DIRECT_VALUE));
+        aProps.emplace_back("PublicConnectionURL", 0, Any(_sUrl), PropertyState_DIRECT_VALUE);
     }
-    aProps.push_back(
-        PropertyValue("IsAutoRetrievingEnabled", 0, Any(true), PropertyState_DIRECT_VALUE));
-    aProps.push_back(PropertyValue("AutoRetrievingStatement", 0,
-                                   Any(OUString("SELECT LAST_INSERT_ID()")),
-                                   PropertyState_DIRECT_VALUE));
-    aProps.push_back(
-        PropertyValue("ParameterNameSubstitution", 0, Any(true), PropertyState_DIRECT_VALUE));
+    aProps.emplace_back("IsAutoRetrievingEnabled", 0, Any(true), PropertyState_DIRECT_VALUE);
+    aProps.emplace_back("AutoRetrievingStatement", 0, Any(OUString("SELECT LAST_INSERT_ID()")),
+                        PropertyState_DIRECT_VALUE);
+    aProps.emplace_back("ParameterNameSubstitution", 0, Any(true), PropertyState_DIRECT_VALUE);
     return Sequence<PropertyValue>(aProps.data(), aProps.size());
 }
 }
@@ -266,9 +260,9 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
                 auto pMetaConnection = comphelper::getFromUnoTunnel<OMetaConnection>(xConnection);
                 if (pMetaConnection)
                     pMetaConnection->setURL(url);
-                m_aConnections.push_back(
-                    TWeakPair(WeakReferenceHelper(xConnection),
-                              TWeakConnectionPair(WeakReferenceHelper(), pMetaConnection)));
+                m_aConnections.emplace_back(
+                    WeakReferenceHelper(xConnection),
+                    TWeakConnectionPair(WeakReferenceHelper(), pMetaConnection));
             }
         }
     }
@@ -300,18 +294,17 @@ ODriverDelegator::getPropertyInfo(const OUString& url, const Sequence<PropertyVa
     const T_DRIVERTYPE eType = lcl_getDriverType(url);
     if (eType == T_DRIVERTYPE::Jdbc)
     {
-        aDriverInfo.push_back(DriverPropertyInfo("JavaDriverClass", "The JDBC driver class name.",
-                                                 true, getJavaDriverClass(info),
-                                                 Sequence<OUString>()));
+        aDriverInfo.emplace_back("JavaDriverClass", "The JDBC driver class name.", true,
+                                 getJavaDriverClass(info), Sequence<OUString>());
     }
     else if (eType == T_DRIVERTYPE::Native)
     {
-        aDriverInfo.push_back(DriverPropertyInfo(
-            "LocalSocket", "The file path of a socket to connect to a local MySQL server.", false,
-            OUString(), Sequence<OUString>()));
-        aDriverInfo.push_back(DriverPropertyInfo(
-            "NamedPipe", "The name of a pipe to connect to a local MySQL server.", false,
-            OUString(), Sequence<OUString>()));
+        aDriverInfo.emplace_back("LocalSocket",
+                                 "The file path of a socket to connect to a local MySQL server.",
+                                 false, OUString(), Sequence<OUString>());
+        aDriverInfo.emplace_back("NamedPipe",
+                                 "The name of a pipe to connect to a local MySQL server.", false,
+                                 OUString(), Sequence<OUString>());
     }
 
     return Sequence<DriverPropertyInfo>(aDriverInfo.data(), aDriverInfo.size());

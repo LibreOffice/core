@@ -130,7 +130,7 @@ void KeyColumns::refresh()
             }
 
             {
-                m_values.push_back( Any( prop ) );
+                m_values.emplace_back(prop);
                 map[ name ] = columnIndex;
                 ++columnIndex;
             }

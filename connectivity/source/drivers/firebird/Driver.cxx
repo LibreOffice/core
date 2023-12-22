@@ -151,7 +151,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     rtl::Reference<Connection> pCon = new Connection();
     pCon->construct(url, info);
 
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.emplace_back(*pCon);
 
     return pCon;
 }

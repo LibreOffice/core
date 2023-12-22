@@ -525,7 +525,7 @@ void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLP
                 {
                     const OSQLParseNode * pCol = pColumnCommalist->getChild(i);
                     // add twice because the column must exists in both tables
-                    m_pImpl->m_aJoinConditions.push_back( TNodePair(pCol,pCol) );
+                    m_pImpl->m_aJoinConditions.emplace_back(pCol,pCol);
                 }
             }
         }

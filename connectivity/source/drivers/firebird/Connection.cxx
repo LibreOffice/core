@@ -358,7 +358,7 @@ Reference< XBlob> Connection::createBlob(ISC_QUAD const * pBlobId)
                                           &m_aTransactionHandle,
                                           *pBlobId);
 
-    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    m_aStatements.emplace_back(xReturn);
     return xReturn;
 }
 
@@ -371,7 +371,7 @@ Reference< XClob> Connection::createClob(ISC_QUAD const * pBlobId)
                                           &m_aTransactionHandle,
                                           *pBlobId);
 
-    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    m_aStatements.emplace_back(xReturn);
     return xReturn;
 }
 
@@ -402,7 +402,7 @@ Reference< XStatement > SAL_CALL Connection::createStatement( )
     // create a statement
     // the statement can only be executed once
     Reference< XStatement > xReturn = new OStatement(this);
-    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    m_aStatements.emplace_back(xReturn);
     return xReturn;
 }
 
@@ -418,7 +418,7 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
         buildTypeInfo();
 
     Reference< XPreparedStatement > xReturn = new OPreparedStatement(this, _sSql);
-    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    m_aStatements.emplace_back(xReturn);
 
     return xReturn;
 }

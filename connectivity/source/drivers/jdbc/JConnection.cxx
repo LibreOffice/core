@@ -166,7 +166,7 @@ bool loadClass(
             // JVM that are not easily undone).  If the pushed ClassMapEntry is
             // not used after all (return false, etc.) it will be pruned on next
             // call because its classLoader/classObject are null:
-            classMapData.map.push_back( ClassMapEntry( classPath, name ) );
+            classMapData.map.emplace_back(classPath, name);
             i = std::prev(classMapData.map.end());
         }
 
@@ -437,7 +437,7 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  )
     SDBThreadAttach t;
     rtl::Reference<java_sql_Statement> pStatement = new java_sql_Statement( t.pEnv, *this );
     Reference< XStatement > xStmt = pStatement;
-    m_aStatements.push_back( WeakReferenceHelper( xStmt ) );
+    m_aStatements.emplace_back(xStmt);
 
     m_aLogger.log( LogLevel::FINE, STR_LOG_CREATED_STATEMENT_ID, pStatement->getStatementObjectID() );
     return xStmt;
@@ -453,7 +453,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
 
     rtl::Reference<java_sql_PreparedStatement> pStatement = new java_sql_PreparedStatement( t.pEnv, *this, sql );
     Reference< XPreparedStatement > xReturn( pStatement );
-    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    m_aStatements.emplace_back(xReturn);
 
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_STATEMENT_ID, pStatement->getStatementObjectID() );
     return xReturn;
@@ -469,7 +469,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
 
     rtl::Reference<java_sql_CallableStatement> pStatement = new java_sql_CallableStatement( t.pEnv, *this, sql );
     Reference< XPreparedStatement > xStmt( pStatement );
-    m_aStatements.push_back(WeakReferenceHelper(xStmt));
+    m_aStatements.emplace_back(xStmt);
 
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_CALL_ID, pStatement->getStatementObjectID() );
     return xStmt;
