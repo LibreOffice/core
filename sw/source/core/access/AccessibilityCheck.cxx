@@ -132,7 +132,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
                                           sfx::AccessibilityIssueID::LINKED_GRAPHIC);
                 pIssue->setDoc(pNoTextNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::LINKED);
-                pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+                pIssue->setObjectID(pFrameFormat->GetName());
                 pIssue->setNode(pNoTextNode);
                 pIssue->setAdditionalInfo({ aSystemPath });
             }
@@ -161,7 +161,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
                                           sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
                 pIssue->setDoc(pNoTextNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::GRAPHIC);
-                pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+                pIssue->setObjectID(pFrameFormat->GetName());
                 pIssue->setNode(pNoTextNode);
             }
         }
@@ -1226,14 +1226,20 @@ public:
             return;
 
         // If a node is in fly and if it is not anchored as char, throw warning.
-        const SwNode* startFly = pCurrent->FindFlyStartNode();
-        if (startFly
-            && startFly->GetFlyFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+        const SwNode* pStartFly = pCurrent->FindFlyStartNode();
+        if (!pStartFly)
+            return;
+
+        const SwFrameFormat* pFormat = pStartFly->GetFlyFormat();
+        if (!pFormat)
+            return;
+
+        if (pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
         {
             SwNodeIndex aCurrentIdx(*pCurrent);
-            SwNodeIndex aIdx(*startFly);
+            SwNodeIndex aIdx(*pStartFly);
             SwNode* pFirstTextNode = &aIdx.GetNode();
-            SwNodeOffset nEnd = startFly->EndOfSectionIndex();
+            SwNodeOffset nEnd = pStartFly->EndOfSectionIndex();
             while (aIdx < nEnd)
             {
                 if (pFirstTextNode->IsContentNode() && pFirstTextNode->IsTextNode())
@@ -1242,7 +1248,7 @@ public:
                     {
                         auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_FLOATING_TEXT));
                         pIssue->setIssueObject(IssueObject::TEXTFRAME);
-                        pIssue->setObjectID(startFly->GetFlyFormat()->GetName());
+                        pIssue->setObjectID(pFormat->GetName());
                         pIssue->setDoc(pCurrent->GetDoc());
                         pIssue->setNode(pCurrent);
                     }
