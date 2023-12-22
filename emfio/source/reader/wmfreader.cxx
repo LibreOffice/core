@@ -1051,7 +1051,7 @@ namespace emfio
                     //PALETTEENTRY: Values, Blue, Green, Red
                     mpInputStream->ReadUInt32( nPalleteEntry );
                     SAL_INFO("emfio", "\t\t " << i << ". Palette entry: " << std::setw(10) << std::showbase <<std::hex << nPalleteEntry << std::dec );
-                    aPaletteColors.push_back(Color(static_cast<sal_uInt8>(nPalleteEntry), static_cast<sal_uInt8>(nPalleteEntry >> 8), static_cast<sal_uInt8>(nPalleteEntry >> 16)));
+                    aPaletteColors.emplace_back(static_cast<sal_uInt8>(nPalleteEntry), static_cast<sal_uInt8>(nPalleteEntry >> 8), static_cast<sal_uInt8>(nPalleteEntry >> 16));
                 }
                 CreateObject(std::make_unique<WinMtfPalette>( aPaletteColors ));
             }

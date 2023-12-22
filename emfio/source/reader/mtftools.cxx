@@ -332,13 +332,13 @@ namespace emfio
             if(nPositive >= nNegative)
             {
                 // correction intended, it is probably an old imported file
-                maPositiveIdentifiedCases.push_back(std::pair<rtl::Reference<MetaFontAction>, double>(maCurrentMetaFontAction, fAverage));
+                maPositiveIdentifiedCases.emplace_back(maCurrentMetaFontAction, fAverage);
             }
             else
             {
                 // correction not favorable in the majority of cases for this Font, still
                 // remember to have a weight in the last decision for correction
-                maNegativeIdentifiedCases.push_back(std::pair<rtl::Reference<MetaFontAction>, double>(maCurrentMetaFontAction, fAverage));
+                maNegativeIdentifiedCases.emplace_back(maCurrentMetaFontAction, fAverage);
             }
         }
 

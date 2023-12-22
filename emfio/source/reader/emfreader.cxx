@@ -959,7 +959,7 @@ namespace emfio
                         {
                             sal_Int32 nX, nY;
                             *mpInputStream >> nX >> nY;
-                            aPoints.push_back(Point(nX, nY));
+                            aPoints.emplace_back(nX, nY);
                         }
                         aPointTypes.reserve(std::min<size_t>(nPointsCount, mpInputStream->remainingSize()));
                         for (sal_uInt32 i = 0; i < nPointsCount && mpInputStream->good(); i++)
