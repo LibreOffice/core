@@ -139,7 +139,7 @@ private:
 
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
-    LayoutInfo mLayoutInfo[EPP_LAYOUT_SIZE];
+    LayoutInfo mLayoutInfo[OOXML_LAYOUT_SIZE];
     std::vector< ::sax_fastparser::FSHelperPtr > mpSlidesFSArray;
     sal_Int32 mnLayoutFileIdMax;
 
