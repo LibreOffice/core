@@ -50,7 +50,6 @@ bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE );
 
-class ContentNode;
 class EditDoc;
 
 struct ScriptTypePosInfo
