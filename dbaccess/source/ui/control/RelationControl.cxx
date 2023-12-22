@@ -223,7 +223,7 @@ namespace dbaui
             OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
             if ( rLines.size() <= o3tl::make_unsigned(nRow) )
             {
-                rLines.push_back(new OConnectionLineData());
+                rLines.emplace_back();
                 nRow = rLines.size() - 1;
                 // add new past-rLines row
                 m_ops.emplace_back(INSERT, make_pair(nRow+1, nRow+2));

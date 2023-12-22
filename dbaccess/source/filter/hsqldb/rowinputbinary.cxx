@@ -244,7 +244,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
     {
         if (checkNull())
         {
-            aData.push_back(Any());
+            aData.emplace_back();
             continue;
         }
 
@@ -257,28 +257,28 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
-                aData.push_back(Any(readString()));
+                aData.emplace_back(readString());
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
             {
                 sal_Int16 value = 0;
                 m_pStream->ReadInt16(value);
-                aData.push_back(Any(value));
+                aData.emplace_back(value);
             }
             break;
             case DataType::INTEGER:
             {
                 sal_Int32 value = 0;
                 m_pStream->ReadInt32(value);
-                aData.push_back(Any(value));
+                aData.emplace_back(value);
             }
             break;
             case DataType::BIGINT:
             {
                 sal_Int64 value = 0;
                 m_pStream->ReadInt64(value);
-                aData.push_back(Any(value));
+                aData.emplace_back(value);
             }
             break;
             case DataType::REAL:
@@ -288,7 +288,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
                 double value = 0;
                 m_pStream->ReadDouble(value);
                 // FIXME double is not necessarily 4 bytes
-                aData.push_back(Any(value));
+                aData.emplace_back(value);
             }
             break;
             case DataType::NUMERIC:
@@ -306,7 +306,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
 
                 OUString sNum = lcl_makeStringFromBigint(std::move(aBytes));
                 Sequence<Any> result{ Any(lcl_putDot(sNum, nScale)), Any(nScale) };
-                aData.push_back(Any(result));
+                aData.emplace_back(result);
             }
             break;
             case DataType::DATE:
@@ -319,7 +319,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
 
                 css::util::Date loDate(asDate.day(), asDate.month(),
                                        asDate.year()); // day, month, year
-                aData.push_back(Any(loDate));
+                aData.emplace_back(loDate);
             }
             break;
             case DataType::TIME:
@@ -338,7 +338,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
                 const sal_uInt16 nMins = valueInSecs / 60;
                 const sal_uInt16 nSecs = valueInSecs % 60;
                 css::util::Time time((value % 1000) * 1000000, nSecs, nMins, nHours, true);
-                aData.push_back(Any(time));
+                aData.emplace_back(time);
             }
             break;
             case DataType::TIMESTAMP:
@@ -361,18 +361,18 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
                 dateTime.Day = asDate.day();
                 dateTime.Month = asDate.month();
                 dateTime.Year = asDate.year();
-                aData.push_back(Any(dateTime));
+                aData.emplace_back(dateTime);
             }
             break;
             case DataType::BOOLEAN:
             {
                 sal_uInt8 nBool = 0;
                 m_pStream->ReadUChar(nBool);
-                aData.push_back(Any(static_cast<bool>(nBool)));
+                aData.emplace_back(static_cast<bool>(nBool));
             }
             break;
             case DataType::OTHER:
-                aData.push_back(Any{}); // TODO
+                aData.emplace_back(); // TODO
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -383,7 +383,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
 
                 Sequence<sal_Int8> aBytes(nSize);
                 m_pStream->ReadBytes(aBytes.getArray(), nSize);
-                aData.push_back(Any(aBytes));
+                aData.emplace_back(aBytes);
             }
             break;
 
