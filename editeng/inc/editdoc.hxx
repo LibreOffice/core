@@ -31,6 +31,7 @@
 #include <tools/lineend.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include "TextPortion.hxx"
+#include "ItemList.hxx"
 
 #include <cstddef>
 #include <memory>
@@ -103,30 +104,7 @@ public:
     void AppendCharAttrib(EditCharAttrib* pNew);
 };
 
-
-
 typedef std::vector<Color> SvxColorList;
-
-
-
-
-class ItemList
-{
-private:
-    typedef std::vector<const SfxPoolItem*> DummyItemList;
-    DummyItemList aItemPool;
-    sal_Int32  CurrentItem;
-
-public:
-    ItemList();
-    const SfxPoolItem*  First();
-    const SfxPoolItem*  Next();
-    sal_Int32           Count() const { return aItemPool.size(); };
-    void                Insert( const SfxPoolItem* pItem );
-    void                Clear() { aItemPool.clear(); };
-};
-
-
 
 class ContentAttribs
 {
