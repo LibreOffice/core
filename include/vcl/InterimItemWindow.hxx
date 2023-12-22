@@ -34,6 +34,8 @@ public:
     virtual void Draw(OutputDevice* pDevice, const Point& rPos,
                       SystemTextColorFlags nFlags) override;
 
+    void SetPriority(TaskPriority nPriority);
+
 protected:
     // bAllowCycleFocusOut of true allows focus to be moved out of the Control
     // via tab key into a parent window or sibling window, false means focus

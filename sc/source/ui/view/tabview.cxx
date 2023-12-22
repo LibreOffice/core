@@ -232,6 +232,20 @@ void ScTabView::InitScrollBar(ScrollAdaptor& rScrollBar, tools::Long nMaxVal, co
     rScrollBar.SetMouseReleaseHdl(LINK(this, ScTabView, EndScrollHdl));
 
     rScrollBar.EnableRTL( aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() ) );
+
+    // Related: tdf#155266 Eliminate delayed scrollbar redrawing when swiping
+    // By default, the layout idle timer in the InterimWindowItem class
+    // is set to TaskPriority::RESIZE. That is too high of a priority as
+    // it appears that other timers are drawing after the scrollbar has been
+    // redrawn.
+    // As a result, when swiping, the content moves fluidly but the scrollbar
+    // thumb does not move until after swiping stops or pauses. Then, after a
+    // short lag, the scrollbar thumb finally "jumps" to the expected
+    // position.
+    // So, to fix this scrollbar "stickiness" when swiping, setting the
+    // priority to TaskPriority::POST_PAINT causes the scrollbar to be
+    // redrawn after any competing timers.
+    rScrollBar.SetPriority(TaskPriority::POST_PAINT);
 }
 
 //  Scroll-Timer
