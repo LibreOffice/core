@@ -37,7 +37,7 @@ extern "C" {
 #include "JpegReader.hxx"
 #include "JpegWriter.hxx"
 #include <memory>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #ifdef _MSC_VER
@@ -91,7 +91,7 @@ static void emitMessage (j_common_ptr cinfo, int msg_level)
         // limit (initially using ImageMagick's current limit of 1000), then
         // bail.
         constexpr int WarningLimit = 1000;
-        static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        static bool bFuzzing = comphelper::IsFuzzing();
         // ofz#50452 due to Timeouts, just abandon fuzzing on any
         // JWRN_NOT_SEQUENTIAL
         if (bFuzzing && cinfo->err->msg_code == JWRN_NOT_SEQUENTIAL)
@@ -211,7 +211,7 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
     tools::Long nWidth = rContext.cinfo.output_width;
     tools::Long nHeight = rContext.cinfo.output_height;
 
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
     {
         tools::Long nResult = 0;
         if (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000)

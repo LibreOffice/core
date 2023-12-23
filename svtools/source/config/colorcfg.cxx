@@ -194,7 +194,7 @@ ColorConfig_Impl::ColorConfig_Impl() :
     uno::Sequence < OUString > aNames(1);
     EnableNotification( aNames );
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         Load(OUString());
 
     ::Application::AddEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
@@ -356,7 +356,7 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, 
 
 ColorConfig::ColorConfig()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     std::unique_lock aGuard( ColorMutex_Impl() );
     if ( !m_pImpl )
@@ -371,7 +371,7 @@ ColorConfig::ColorConfig()
 
 ColorConfig::~ColorConfig()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     std::unique_lock aGuard( ColorMutex_Impl() );
     m_pImpl->RemoveListener(this);

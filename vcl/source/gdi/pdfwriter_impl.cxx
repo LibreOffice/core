@@ -1230,7 +1230,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_nNextFID( 1 ),
-        m_aPDFBmpCache(utl::ConfigManager::IsFuzzing() ? 15 :
+        m_aPDFBmpCache(comphelper::IsFuzzing() ? 15 :
             officecfg::Office::Common::VCL::PDFExportImageCacheSize::get()),
         m_nCurrentPage( -1 ),
         m_nCatalogObject(0),

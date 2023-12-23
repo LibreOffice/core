@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <XPropertyTable.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/pathoptions.hxx>
 
 #include <svx/strings.hrc>
@@ -32,7 +32,7 @@ XColorListRef XColorList::CreateStdColorList()
 {
     return XPropertyList::AsColorList(
         XPropertyList::CreatePropertyList(
-            XPropertyListType::Color, !utl::ConfigManager::IsFuzzing() ?
+            XPropertyListType::Color, !comphelper::IsFuzzing() ?
                                           SvtPathOptions().GetPalettePath() :
                                           "", ""));
 }

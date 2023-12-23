@@ -59,7 +59,7 @@
 #include <xlchart.hxx>
 #include <xltracer.hxx>
 #include <xltools.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/useroptions.hxx>
 #include <root.hxx>
 
@@ -109,7 +109,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mnScTab( 0 ),
     mbExport( bExport )
 {
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         maUserName = SvtUserOptions().GetLastName();
     if (maUserName.isEmpty())
         maUserName = "Calc";

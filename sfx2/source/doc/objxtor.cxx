@@ -45,6 +45,7 @@
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -733,7 +734,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
 #if HAVE_FEATURE_SCRIPTING
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         try
         {
@@ -1074,7 +1075,7 @@ SfxObjectShell* SfxObjectShell::GetParentShell(const css::uno::Reference<css::un
 void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 {
     pImpl->bInitialized = true;
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     if ( i_fromInitNew )
     {

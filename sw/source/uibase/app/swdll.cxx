@@ -30,7 +30,7 @@
 #include <dobjfac.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/unique_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
@@ -87,7 +87,7 @@ SwDLL::SwDLL()
         return;
 
     std::unique_ptr<SvtModuleOptions> xOpt;
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         xOpt.reset(new SvtModuleOptions);
     SfxObjectFactory* pDocFact = nullptr;
     SfxObjectFactory* pGlobDocFact = nullptr;
@@ -137,7 +137,7 @@ SwDLL::SwDLL()
     // register your controllers here
     RegisterControls();
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         // replace SvxAutocorrect with SwAutocorrect
         SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();

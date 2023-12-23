@@ -9,7 +9,7 @@
 
 #include <sal/config.h>
 #include "helper/qahelper.hxx"
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
 #include <global.hxx>
@@ -70,7 +70,7 @@ public:
 
     virtual void setUp() override
     {
-        utl::ConfigManager::EnableFuzzing();
+        comphelper::EnableFuzzing();
         ScDLL::Init();
         ScGlobal::Init();
     }

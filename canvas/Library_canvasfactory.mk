@@ -31,10 +31,10 @@ $(eval $(call gb_Library_use_external,canvasfactory,boost_headers))
 $(eval $(call gb_Library_use_sdk_api,canvasfactory))
 
 $(eval $(call gb_Library_use_libraries,canvasfactory,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
-	utl \
 	vcl \
 ))
 

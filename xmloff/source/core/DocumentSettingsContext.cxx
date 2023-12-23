@@ -313,7 +313,7 @@ void XMLDocumentSettingsContext::endFastElement(sal_Int32 )
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( maConfigProps >>= aSeqConfigProps )
     {
-        if (!utl::ConfigManager::IsFuzzing() && !officecfg::Office::Common::Save::Document::LoadPrinter::get())
+        if (!comphelper::IsFuzzing() && !officecfg::Office::Common::Save::Document::LoadPrinter::get())
         {
             auto aSeqConfigPropsRange = asNonConstRange(aSeqConfigProps);
             sal_Int32 i = aSeqConfigProps.getLength() - 1;

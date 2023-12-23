@@ -588,7 +588,7 @@ void PrintFontManager::countFontconfigFonts()
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
     FcFontSet* pFSet = rWrapper.getFontSet();
-    const bool bMinimalFontset = utl::ConfigManager::IsFuzzing();
+    const bool bMinimalFontset = comphelper::IsFuzzing();
     if( pFSet )
     {
         SAL_INFO("vcl.fonts", "found " << pFSet->nfont << " entries in fontconfig fontset");

@@ -18,7 +18,7 @@
  */
 
 
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
@@ -300,7 +300,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
 
 void DXF2GDIMetaFile::DrawLine(const Point& rA, const Point& rB)
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     GDIMetaFile* pMetaFile = pVirDev->GetConnectMetaFile();
     assert(pMetaFile);
@@ -820,7 +820,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     }
 
     pVirDev->EnableOutput(false);
-    if (!utl::ConfigManager::IsFuzzing()) // for fuzzing don't bother recording the drawing
+    if (!comphelper::IsFuzzing()) // for fuzzing don't bother recording the drawing
         rMTF.Record(pVirDev);
 
     aActLineColor = pVirDev->GetLineColor();

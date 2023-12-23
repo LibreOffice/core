@@ -23,7 +23,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
 
@@ -394,7 +394,7 @@ void PhysicalFontCollection::ImplInitMatchData() const
         return;
     mbMatchData = true;
 
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     // calculate MatchData for all entries
@@ -845,7 +845,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
     PhysicalFontFamily* pFoundData = nullptr;
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
         LanguageTag aLanguageTag("en");
@@ -1136,7 +1136,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
 
     // use font fallback
     const utl::FontNameAttr* pFontAttr = nullptr;
-    if (!aSearchName.isEmpty() && !utl::ConfigManager::IsFuzzing())
+    if (!aSearchName.isEmpty() && !comphelper::IsFuzzing())
     {
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
@@ -1160,7 +1160,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     if( rFSD.IsMicrosoftSymbolEncoded() )
     {
         LanguageTag aDefaultLanguageTag("en");
-        if (utl::ConfigManager::IsFuzzing())
+        if (comphelper::IsFuzzing())
             aSearchName = "OpenSymbol";
         else
             aSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
@@ -1195,7 +1195,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         }
 
         const utl::FontNameAttr* pTempFontAttr = nullptr;
-        if (!utl::ConfigManager::IsFuzzing())
+        if (!comphelper::IsFuzzing())
         {
             // use a font name from font fallback list to determine font attributes
             // get fallback info using FontSubstConfiguration and

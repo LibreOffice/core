@@ -181,7 +181,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SetCalcFieldValueHdl( &rOutliner );
 
     // set linguistic options
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         const SvtLinguConfig    aLinguConfig;
         SvtLinguOptions         aOptions;
@@ -1102,7 +1102,7 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
 
 void SdDrawDocument::InitLayoutVector()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     const Reference<css::uno::XComponentContext> xContext(
@@ -1140,7 +1140,7 @@ void SdDrawDocument::InitLayoutVector()
 
 void SdDrawDocument::InitObjectVector()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     const Reference<css::uno::XComponentContext> xContext(

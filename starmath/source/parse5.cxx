@@ -22,7 +22,7 @@
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <i18nlangtag/lang.h>
 #include <tools/lineend.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/syslocale.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
@@ -1594,7 +1594,7 @@ std::unique_ptr<SmBlankNode> SmParser5::DoBlank()
 
     // Ignore trailing spaces, if corresponding option is set
     if (m_aCurToken.eType == TNEWLINE
-        || (m_aCurToken.eType == TEND && !utl::ConfigManager::IsFuzzing()
+        || (m_aCurToken.eType == TEND && !comphelper::IsFuzzing()
             && SM_MOD()->GetConfig()->IsIgnoreSpacesRight()))
     {
         pBlankNode->Clear();

@@ -29,7 +29,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <formulacell.hxx>
 #include <document.hxx>
@@ -327,7 +327,7 @@ void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     nDefWidth = static_cast<sal_uInt16>( TWIPS_PER_CHAR * nDefWidth );
 
-    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    const bool bFuzzing = comphelper::IsFuzzing();
 
     // instead of default, set all Cols in SC by hand
     for (SCCOL nCol = 0 ; nCol <= rContext.rDoc.MaxCol() ; nCol++)

@@ -23,12 +23,13 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <comphelper/propertysequence.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -89,7 +90,7 @@ DefaultFontConfiguration& DefaultFontConfiguration::get()
 
 DefaultFontConfiguration::DefaultFontConfiguration()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     // create configuration hierarchical access name
     try
@@ -301,7 +302,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
     maSubstHash( 300 ),
     maLanguageTag("en")
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     try
     {

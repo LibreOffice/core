@@ -29,7 +29,7 @@
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <tools/stream.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <docoptio.hxx>
 #include <scdll.hxx>
 #include <memory>
@@ -155,7 +155,7 @@ ScQProReader::ScQProReader(SvStream* pStream)
     , mnOffset(0)
     , mpStream(pStream)
     , mbEndOfFile(false)
-    , mnMaxTab(utl::ConfigManager::IsFuzzing() ? 128 : MAXTAB)
+    , mnMaxTab(comphelper::IsFuzzing() ? 128 : MAXTAB)
 {
     if( mpStream )
     {

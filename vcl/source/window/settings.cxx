@@ -226,7 +226,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl ) c
     aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetGroupFont( aFont );
 
-    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static const bool bFuzzing = comphelper::IsFuzzing();
     if (!bFuzzing)
     {
         static const char* pEnvHC = getenv( "SAL_FORCE_HC" );

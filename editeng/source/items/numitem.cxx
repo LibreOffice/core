@@ -46,7 +46,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/GenericTypeSerializer.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <libxml/xmlwriter.h>
 #include <editeng/unonrule.hxx>
 #include <sal/log.hxx>
@@ -107,7 +107,7 @@ SvxNumberType::~SvxNumberType()
 
 OUString SvxNumberType::GetNumStr( sal_Int32 nNo ) const
 {
-    LanguageTag aLang = utl::ConfigManager::IsFuzzing() ?
+    LanguageTag aLang = comphelper::IsFuzzing() ?
         LanguageTag("en-US") :
         Application::GetSettings().GetLanguageTag();
     return GetNumStr( nNo, aLang.getLocale() );

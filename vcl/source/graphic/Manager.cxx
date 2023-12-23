@@ -33,7 +33,7 @@ namespace
 void setupConfigurationValuesIfPossible(sal_Int64& rMemoryLimit,
                                         std::chrono::seconds& rAllowedIdleTime, bool& bSwapEnabled)
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     try

@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <o3tl/any.hxx>
 #include <tools/UnitConversion.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <usrpref.hxx>
@@ -54,7 +54,7 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
     m_bApplyCharUnit(false)
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
     {
         m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric = FieldUnit::CM;
         // match defaults

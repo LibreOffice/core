@@ -35,7 +35,7 @@
 #include <osl/diagnose.h>
 #include <vcl/virdev.hxx>
 #include <o3tl/safeint.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
 
@@ -1006,7 +1006,7 @@ namespace emfio
 
     void MtfTools::IntersectClipRect( const tools::Rectangle& rRect )
     {
-        if (utl::ConfigManager::IsFuzzing())
+        if (comphelper::IsFuzzing())
             return;
         mbClipNeedsUpdate=true;
         if ((rRect.Left()-rRect.Right()==0) && (rRect.Top()-rRect.Bottom()==0))
@@ -1020,7 +1020,7 @@ namespace emfio
 
     void MtfTools::ExcludeClipRect( const tools::Rectangle& rRect )
     {
-        if (utl::ConfigManager::IsFuzzing())
+        if (comphelper::IsFuzzing())
             return;
         mbClipNeedsUpdate=true;
         tools::Polygon aPoly( rRect );
@@ -1030,7 +1030,7 @@ namespace emfio
 
     void MtfTools::MoveClipRegion( const Size& rSize )
     {
-        if (utl::ConfigManager::IsFuzzing())
+        if (comphelper::IsFuzzing())
             return;
         mbClipNeedsUpdate=true;
         maClipPath.moveClipRegion( ImplMap( rSize ) );
@@ -1038,7 +1038,7 @@ namespace emfio
 
     void MtfTools::SetClipPath( const tools::PolyPolygon& rPolyPolygon, RegionMode eClippingMode, bool bIsMapped )
     {
-        if (utl::ConfigManager::IsFuzzing())
+        if (comphelper::IsFuzzing())
             return;
         mbClipNeedsUpdate = true;
         tools::PolyPolygon aPolyPolygon(rPolyPolygon);

@@ -25,7 +25,7 @@
 #include <comphelper/threadpool.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fract.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
@@ -1228,7 +1228,7 @@ ErrCode GraphicFilter::readPSD(SvStream & rStream, Graphic & rGraphic)
 ErrCode GraphicFilter::readPCD(SvStream & rStream, Graphic & rGraphic)
 {
     std::unique_ptr<FilterConfigItem> pFilterConfigItem;
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
         pFilterConfigItem = std::make_unique<FilterConfigItem>(aFilterConfigPath);

@@ -229,7 +229,7 @@ tools::Long PaperInfo::sloppyFitPageDimension(tools::Long nDimension)
 
 PaperInfo PaperInfo::getSystemDefaultPaper()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return PaperInfo(PAPER_A4);
 
     OUString aLocaleStr = officecfg::Setup::L10N::ooSetupSystemLocale::get();

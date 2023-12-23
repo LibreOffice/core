@@ -41,7 +41,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -127,7 +127,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if( !xServiceManager.is() )
             Application::Abort( "Failed to bootstrap" );
         comphelper::setProcessServiceFactory( xServiceManager );
-        utl::ConfigManager::EnableFuzzing();
+        comphelper::EnableFuzzing();
 
         // initialise unconfigured UCB:
         css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(comphelper::getProcessServiceFactory()->

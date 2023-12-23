@@ -21,7 +21,7 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -1257,7 +1257,7 @@ bool SmMathConfig::IsAutoCloseBrackets() const
 
 sal_Int16 SmMathConfig::GetDefaultSmSyntaxVersion() const
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return nDefaultSmSyntaxVersion;
     if (!pOther)
         const_cast<SmMathConfig*>(this)->LoadOther();
@@ -1309,7 +1309,7 @@ void SmMathConfig::SetDefaultSmSyntaxVersion( sal_Int16 nVal )
 
 bool SmMathConfig::IsInlineEditEnable() const
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
     if (!pOther)
         const_cast<SmMathConfig*>(this)->LoadOther();
@@ -1330,7 +1330,7 @@ void SmMathConfig::SetInlineEditEnable( bool bVal )
 
 bool SmMathConfig::IsIgnoreSpacesRight() const
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
     if (!pOther)
         const_cast<SmMathConfig*>(this)->LoadOther();

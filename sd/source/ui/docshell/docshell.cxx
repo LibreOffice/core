@@ -105,7 +105,7 @@ void DrawDocShell::Construct( bool bClipboard )
     pUndoManager->SetDocShell(this);
     mpUndoManager = std::move(pUndoManager);
 
-    if (!utl::ConfigManager::IsFuzzing()
+    if (!comphelper::IsFuzzing()
         && officecfg::Office::Common::Undo::Steps::get() < 1)
     {
         mpUndoManager->EnableUndo(false); // tdf#108863 disable if 0 steps

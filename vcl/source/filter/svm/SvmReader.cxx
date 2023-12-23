@@ -21,7 +21,7 @@
 #include <osl/thread.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/rendercontext/DrawTextFlags.hxx>
@@ -791,7 +791,7 @@ rtl::Reference<MetaAction> SvmReader::TextRectHandler(const ImplMetaReadData* pD
     pAction->SetRect(aRect);
 
     DrawTextFlags nFlags(static_cast<DrawTextFlags>(nTmp));
-    const static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    const static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
         nFlags = nFlags & ~DrawTextFlags::MultiLine;
 

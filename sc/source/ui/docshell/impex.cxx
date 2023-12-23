@@ -58,7 +58,7 @@
 #include <scresid.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/svlibrary.h>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <editeng/editobj.hxx>
@@ -102,7 +102,7 @@ enum class SylkVersion
 // Whole document without Undo
 ScImportExport::ScImportExport( ScDocument& r )
     : pDocSh( r.GetDocumentShell() ), rDoc( r ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!comphelper::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
@@ -117,7 +117,7 @@ ScImportExport::ScImportExport( ScDocument& r )
 ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
     : pDocSh( r.GetDocumentShell() ), rDoc( r ),
       aRange( rPt ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!comphelper::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
@@ -133,7 +133,7 @@ ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
 ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
     : pDocSh( r.GetDocumentShell() ), rDoc( r ),
       aRange( rRange ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!comphelper::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
@@ -150,7 +150,7 @@ ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
 // If a View exists, the TabNo of the view will be used.
 ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
     : pDocSh( r.GetDocumentShell() ), rDoc( r ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!comphelper::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
@@ -2304,7 +2304,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     sal_uInt32 nKey;
                     sal_Int32 nCheckPos;
 
-                    if (aCode.getLength() > 2048 && utl::ConfigManager::IsFuzzing())
+                    if (aCode.getLength() > 2048 && comphelper::IsFuzzing())
                     {
                         // consider an excessive length as a failure when fuzzing
                         nCheckPos = 1;

@@ -33,7 +33,7 @@
 #include <SwStyleNameMapper.hxx>
 
 // Needed to load default bullet list configuration
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/configitem.hxx>
 
 #include <numrule.hxx>
@@ -1623,7 +1623,7 @@ namespace numfunc
 
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode()
     {
-        if (utl::ConfigManager::IsFuzzing())
+        if (comphelper::IsFuzzing())
             return SvxNumberFormat::LABEL_ALIGNMENT;
 
         SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode;

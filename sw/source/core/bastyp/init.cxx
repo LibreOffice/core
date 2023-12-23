@@ -129,7 +129,7 @@
 #include <tools/globname.hxx>
 #include <tox.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/mapmod.hxx>
@@ -672,7 +672,7 @@ void InitCore()
 
     pGlobalOLEExcludeList = new std::vector<SvGlobalName>;
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         const SvxSwAutoFormatFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
         SwDoc::s_pAutoCompleteWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
@@ -743,7 +743,7 @@ void SwCalendarWrapper::LoadDefaultCalendar( LanguageType eLang )
 
 LanguageType GetAppLanguage()
 {
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         return Application::GetSettings().GetLanguageTag().getLanguageType();
     return LANGUAGE_ENGLISH_US;
 }

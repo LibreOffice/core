@@ -31,7 +31,7 @@
 #include <svx/svdmodel.hxx>
 #include <svl/asiancfg.hxx>
 #include <unotools/compatibility.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <drawdoc.hxx>
 #include <swmodule.hxx>
 #include <linkenum.hxx>
@@ -116,7 +116,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     // Note: Any non-hidden compatibility flag should obtain its default
     // by asking SvtCompatibilityOptions, see below.
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         const SvtCompatibilityOptions aOptions;
         mbParaSpaceMax                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddSpacing );

@@ -21,7 +21,7 @@
 #include <svx/drawitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xtable.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <docsh.hxx>
 #include <drawdoc.hxx>
 #include <swtypes.hxx>
@@ -64,7 +64,7 @@ void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawDocum
                     {
                         pSwDocShell->PutItem(SvxColorListItem(xColorList, SID_COLOR_TABLE));
                     }
-                    else if (!utl::ConfigManager::IsFuzzing())
+                    else if (!comphelper::IsFuzzing())
                     {
                         // there wasn't one, get the standard and set to the
                         // docshell and then to the drawdocument

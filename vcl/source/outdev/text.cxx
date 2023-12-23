@@ -23,7 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/lineend.hxx>
 #include <tools/debug.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/metaact.hxx>
@@ -1339,7 +1339,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     {
         if (nStyle & DrawTextFlags::Clip)
             return;
-        static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        static bool bFuzzing = comphelper::IsFuzzing();
         SAL_WARN_IF(bFuzzing, "vcl", "skipping negative rectangle of: " << nWidth << " x " << nHeight);
         if (bFuzzing)
             return;

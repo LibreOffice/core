@@ -3640,7 +3640,7 @@ sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear ) const
 // static
 sal_uInt16 SvNumberFormatter::GetYear2000Default()
 {
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         return officecfg::Office::Common::DateFormat::TwoDigitYear::get();
     return 1930;
 }

@@ -17,7 +17,7 @@
 
 OUString utl_getLocaleForGlobalDefaultEncoding()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return "en-US";
     // First try document default language
     OUString result(officecfg::Office::Linguistic::General::DefaultLocale::get());

@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 
+#include <comphelper/configuration.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -490,7 +491,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
 
     impl_appendComponentTitle   (sTitle, xComponent);
 #ifndef MACOSX
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         // fdo#70376: We want the window title to contain just the
         // document name (from the above "component title").

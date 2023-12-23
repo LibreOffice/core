@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -417,7 +417,7 @@ void OutputDevice::RemoveFontsSubstitute()
 vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLang,
                                         GetDefaultFontFlags nFlags, const OutputDevice* pOutDev )
 {
-    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static bool bFuzzing = comphelper::IsFuzzing();
     static bool bAbortOnFontSubstitute = [] {
         const char* pEnv = getenv("SAL_NON_APPLICATION_FONT_USE");
         return pEnv && strcmp(pEnv, "abort") == 0;
@@ -544,7 +544,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
             {
                 if( !pOutDev )
                 {
-                    SAL_WARN_IF(!utl::ConfigManager::IsFuzzing(), "vcl.gdi", "No default window has been set for the application - we really shouldn't be able to get here");
+                    SAL_WARN_IF(!comphelper::IsFuzzing(), "vcl.gdi", "No default window has been set for the application - we really shouldn't be able to get here");
                     aFont.SetFamilyName( aSearch.getToken( 0, ';' ) );
                 }
                 else
@@ -716,7 +716,7 @@ bool OutputDevice::ImplNewFont() const
 
     // decide if antialiasing is appropriate
     bool bNonAntialiased(GetAntialiasing() & AntialiasingFlags::DisableText);
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         bNonAntialiased |= bool(rStyleSettings.GetDisplayOptions() & DisplayOptions::AADisable);

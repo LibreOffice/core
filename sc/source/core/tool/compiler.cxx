@@ -4450,7 +4450,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if ( cSymbol[0] < 128 )
     {
         bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
-        if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') && !utl::ConfigManager::IsFuzzing())
+        if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') && !comphelper::IsFuzzing())
         {
             bMayBeFuncName = officecfg::Office::Common::Misc::ExperimentalMode::get();
         }

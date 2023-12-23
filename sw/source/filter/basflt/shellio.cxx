@@ -85,7 +85,7 @@ void SwAsciiOptions::Reset()
     m_eCharSet = ::osl_getThreadTextEncoding();
     m_nLanguage = LANGUAGE_SYSTEM;
     m_bIncludeBOM = true;
-    m_bIncludeHidden = !utl::ConfigManager::IsFuzzing() && officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::get();
+    m_bIncludeHidden = !comphelper::IsFuzzing() && officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::get();
 }
 
 ErrCodeMsg SwReader::Read( const Reader& rOptions )

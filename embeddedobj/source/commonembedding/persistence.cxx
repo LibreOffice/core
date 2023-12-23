@@ -54,7 +54,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/securityoptions.hxx>
 
@@ -485,7 +485,7 @@ OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
     if ( aFilterName.isEmpty() )
     {
         OUString sDocumentServiceName = GetDocumentServiceName();
-        if (utl::ConfigManager::IsFuzzing() && nVersion == SOFFICE_FILEFORMAT_CURRENT &&
+        if (comphelper::IsFuzzing() && nVersion == SOFFICE_FILEFORMAT_CURRENT &&
             sDocumentServiceName == "com.sun.star.chart2.ChartDocument")
         {
             return "chart8";

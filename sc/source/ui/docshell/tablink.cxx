@@ -34,7 +34,7 @@
 #include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <tablink.hxx>
@@ -433,7 +433,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
     std::shared_ptr<const SfxFilter> pSfxFilter;
     auto pMedium = std::make_unique<SfxMedium>( rFileName, StreamMode::STD_READ );
-    if (pMedium->GetErrorIgnoreWarning() == ERRCODE_NONE && !utl::ConfigManager::IsFuzzing())
+    if (pMedium->GetErrorIgnoreWarning() == ERRCODE_NONE && !comphelper::IsFuzzing())
     {
         if ( bWithInteraction )
             pMedium->UseInteractionHandler(true);   // #i73992# no longer called from GuessFilter

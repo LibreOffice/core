@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 // Global data of the DrawingEngine
 SdrGlobalData::SdrGlobalData()
 {
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         svx::ExtrusionBar::RegisterInterface();
         svx::FontworkBar::RegisterInterface();
@@ -84,7 +84,7 @@ SdrGlobalData & GetSdrGlobalData() {
 
 OLEObjCache::OLEObjCache()
 {
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
 // This limit is only useful on 32-bit windows, where we can run out of virtual memory (see tdf#95579)
 // For everything else, we are better off keeping it in main memory rather than using our hacky page-out thing

@@ -98,7 +98,7 @@
 #include <svx/rubydialog.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <avmedia/mediaplayer.hxx>
@@ -155,7 +155,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
         StartListening( *SfxGetpApp() );
     }
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         // init color configuration
         // member <pColorConfig> is created and the color configuration is applied
@@ -211,13 +211,13 @@ void SwDLL::RegisterFactories()
 {
     // These Id's must not be changed. Through these Id's the View (resume Documentview)
     // is created by Sfx.
-    if (utl::ConfigManager::IsFuzzing() || SvtModuleOptions().IsWriter())
+    if (comphelper::IsFuzzing() || SvtModuleOptions().IsWriter())
         SwView::RegisterFactory         ( SFX_INTERFACE_SFXDOCSH );
 
 #if HAVE_FEATURE_DESKTOP
     SwWebView::RegisterFactory        ( SFX_INTERFACE_SFXMODULE );
 
-    if (utl::ConfigManager::IsFuzzing() || SvtModuleOptions().IsWriter())
+    if (comphelper::IsFuzzing() || SvtModuleOptions().IsWriter())
     {
         SwSrcView::RegisterFactory      ( SfxInterfaceId(6) );
         SwPagePreview::RegisterFactory  ( SfxInterfaceId(7) );

@@ -52,7 +52,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -2761,7 +2761,7 @@ void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
 
 OUString ScExternalRefManager::getOwnDocumentName() const
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return "file:///tmp/document";
 
     ScDocShell* pShell = mrDoc.GetDocumentShell();

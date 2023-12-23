@@ -53,10 +53,10 @@ ScDrawView::ScDrawView(
 {
     SetNegativeX(comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(nTab));
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Calc::get());
+    SetBufferedOverlayAllowed(!comphelper::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Calc::get());
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_Calc::get());
+    SetBufferedOutputAllowed(!comphelper::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_Calc::get());
 
     Construct();
 }

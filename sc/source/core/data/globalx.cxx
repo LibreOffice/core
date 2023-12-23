@@ -32,7 +32,7 @@
 
 #include <com/sun/star/i18n/OrdinalSuffix.hpp>
 #include <comphelper/processfactory.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 namespace com::sun::star::ucb { class XCommandEnvironment; }
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::ucb;
 
 void ScGlobal::InitAddIns()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     // multi paths separated by semicolons

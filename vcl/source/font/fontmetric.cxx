@@ -178,7 +178,7 @@ FontMetricData::FontMetricData( const vcl::font::FontSelectPattern& rFontSelData
 
 bool FontMetricData::ShouldNotUseUnderlineMetrics() const
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
 
     css::uno::Sequence<OUString> rNoUnderlineMetricsList(
@@ -396,7 +396,7 @@ bool FontMetricData::ShouldUseWinMetrics(int nAscent, int nDescent, int nTypoAsc
                                              int nTypoDescent, int nWinAscent,
                                              int nWinDescent) const
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
 
     OUString aFontIdentifier(

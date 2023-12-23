@@ -47,7 +47,7 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/helpers.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include "bitmap.hxx"
 #include "elements.hxx"
@@ -110,7 +110,7 @@ bool CGMImpressOutAct::ImplInitPage()
 
 bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
     uno::Reference< uno::XInterface > xNewShape( maXMultiServiceFactory->createInstance( rType ) );
     maXShape.set( xNewShape, uno::UNO_QUERY );
@@ -390,7 +390,7 @@ void CGMImpressOutAct::InsertPage()
         maXDrawPage = maXDrawPages->insertNewByIndex(0xffff);
         if ( !ImplInitPage() )
             mpCGM->mbStatus = false;
-        if (mnCurrentPage > MAX_PAGES_FOR_FUZZING && utl::ConfigManager::IsFuzzing())
+        if (mnCurrentPage > MAX_PAGES_FOR_FUZZING && comphelper::IsFuzzing())
         {
             // ofz#21753 that's enough pages for fuzzing, we're not doing anything productive now
             mpCGM->mbStatus = false;

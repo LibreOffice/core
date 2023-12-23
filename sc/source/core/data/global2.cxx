@@ -19,7 +19,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/numformat.hxx>
@@ -291,7 +291,7 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
     if (!pShell || !pShell->HasName())
     {   // maybe relative to document path working directory
         INetURLObject aObj;
-        if (!utl::ConfigManager::IsFuzzing())
+        if (!comphelper::IsFuzzing())
         {
             aObj.SetSmartURL(SvtPathOptions().GetWorkPath());
             aObj.setFinalSlash();       // it IS a path

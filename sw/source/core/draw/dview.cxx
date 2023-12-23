@@ -122,10 +122,10 @@ SwDrawView::SwDrawView(
     SetPrintPreview( rI.GetShell()->IsPreview() );
 
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Writer::get());
+    SetBufferedOverlayAllowed(!comphelper::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Writer::get());
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_DrawImpress::get());
+    SetBufferedOutputAllowed(!comphelper::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_DrawImpress::get());
 }
 
 // #i99665#

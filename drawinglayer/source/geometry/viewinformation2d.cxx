@@ -227,7 +227,7 @@ ViewInformation2D::ViewInformation2D()
     if (!bForwardsAreInitialized)
     {
         bForwardsAreInitialized = true;
-        if (!utl::ConfigManager::IsFuzzing())
+        if (!comphelper::IsFuzzing())
         {
             bForwardPixelSnapHairline
                 = officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
@@ -356,8 +356,7 @@ void ViewInformation2D::setPixelSnapHairline(bool bNew)
 static std::atomic<bool>& globalAntiAliasing()
 {
     static std::atomic<bool> g_GlobalAntiAliasing
-        = utl::ConfigManager::IsFuzzing()
-          || officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
+        = comphelper::IsFuzzing() || officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
     return g_GlobalAntiAliasing;
 }
 

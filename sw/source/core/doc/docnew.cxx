@@ -33,6 +33,7 @@
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -370,7 +371,7 @@ SwDoc::SwDoc()
     }
     mnRsidRoot = mnRsid;
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         // Make sure that in case the document language is not set, then we don't return
         // LANGUAGE_DONTKNOW, but the UI locale.

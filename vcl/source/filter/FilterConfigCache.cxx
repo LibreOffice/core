@@ -21,7 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <tools/svlibrary.h>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/processfactory.hxx>
@@ -263,7 +263,7 @@ void FilterConfigCache::ImplInitSmart()
 FilterConfigCache::FilterConfigCache(bool bConfig)
 {
     if (bConfig)
-        bConfig = !utl::ConfigManager::IsFuzzing();
+        bConfig = !comphelper::IsFuzzing();
     if (bConfig)
         ImplInit();
     else

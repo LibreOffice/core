@@ -21,7 +21,7 @@
 
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/fmobjfac.hxx>
 #include <svx/objfac3d.hxx>
@@ -87,7 +87,7 @@ using namespace ::com::sun::star;
 // Register all Factories
 void SdDLL::RegisterFactorys()
 {
-    if (utl::ConfigManager::IsFuzzing() || SvtModuleOptions().IsImpress())
+    if (comphelper::IsFuzzing() || SvtModuleOptions().IsImpress())
     {
         ::sd::ImpressViewShellBase::RegisterFactory (
             ::sd::IMPRESS_FACTORY_ID);
@@ -110,7 +110,7 @@ void SdDLL::RegisterFactorys()
                 ::sd::PRESENTATION_FACTORY_ID);
         }
     }
-    if (!utl::ConfigManager::IsFuzzing() && SvtModuleOptions().IsDraw())
+    if (!comphelper::IsFuzzing() && SvtModuleOptions().IsDraw())
     {
         ::sd::GraphicViewShellBase::RegisterFactory (::sd::DRAW_FACTORY_ID);
     }
@@ -223,24 +223,24 @@ void SdDLL::Init()
     SfxObjectFactory* pDrawFact = nullptr;
     SfxObjectFactory* pImpressFact = nullptr;
 
-    if (utl::ConfigManager::IsFuzzing() || SvtModuleOptions().IsImpress())
+    if (comphelper::IsFuzzing() || SvtModuleOptions().IsImpress())
         pImpressFact = &::sd::DrawDocShell::Factory();
 
-    if (!utl::ConfigManager::IsFuzzing() && SvtModuleOptions().IsDraw())
+    if (!comphelper::IsFuzzing() && SvtModuleOptions().IsDraw())
         pDrawFact = &::sd::GraphicDocShell::Factory();
 
     auto pUniqueModule = std::make_unique<SdModule>(pImpressFact, pDrawFact);
     SdModule* pModule = pUniqueModule.get();
     SfxApplication::SetModule(SfxToolsModule::Draw, std::move(pUniqueModule));
 
-    if (!utl::ConfigManager::IsFuzzing() && SvtModuleOptions().IsImpress())
+    if (!comphelper::IsFuzzing() && SvtModuleOptions().IsImpress())
     {
         // Register the Impress shape types in order to make the shapes accessible.
         ::accessibility::RegisterImpressShapeTypes ();
         ::sd::DrawDocShell::Factory().SetDocumentServiceName( "com.sun.star.presentation.PresentationDocument" );
     }
 
-    if (!utl::ConfigManager::IsFuzzing() && SvtModuleOptions().IsDraw())
+    if (!comphelper::IsFuzzing() && SvtModuleOptions().IsDraw())
     {
         ::sd::GraphicDocShell::Factory().SetDocumentServiceName( "com.sun.star.drawing.DrawingDocument" );
     }
@@ -262,7 +262,7 @@ void SdDLL::Init()
 
     // register your exotic remote controls here
 #ifdef ENABLE_SDREMOTE
-    if (!utl::ConfigManager::IsFuzzing() && !Application::IsHeadlessModeEnabled())
+    if (!comphelper::IsFuzzing() && !Application::IsHeadlessModeEnabled())
         RegisterRemotes();
 #endif
 }

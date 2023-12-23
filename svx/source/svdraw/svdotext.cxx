@@ -54,7 +54,7 @@
 #include <sal/log.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/temporary.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 
@@ -1428,7 +1428,7 @@ namespace
     bool IsAutoGrow(const SdrTextObj& rObj)
     {
         bool bAutoGrow = rObj.IsAutoGrowHeight() || rObj.IsAutoGrowWidth();
-        return bAutoGrow && !utl::ConfigManager::IsFuzzing();
+        return bAutoGrow && !comphelper::IsFuzzing();
     }
 }
 

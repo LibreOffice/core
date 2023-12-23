@@ -223,7 +223,7 @@ bool MediaDescriptor::addInputStream()
 /*-----------------------------------------------*/
 bool MediaDescriptor::addInputStreamOwnLock()
 {
-    const bool bLock = !utl::ConfigManager::IsFuzzing()
+    const bool bLock = !comphelper::IsFuzzing()
         && officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::get();
     return impl_addInputStream(bLock);
 }

@@ -58,7 +58,7 @@
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <math.h>
 #include <vcl/metric.hxx>
@@ -4545,7 +4545,7 @@ const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 // text numeral setting:
 LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang)
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return LANGUAGE_ENGLISH_US;
 
     // #114278# Also setting up digit language from Svt options

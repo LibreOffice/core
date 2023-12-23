@@ -33,7 +33,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/poly.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 namespace
 {
@@ -987,7 +987,7 @@ void vcl::Region::Intersect( const vcl::Region& rRegion )
             return;
         }
 
-        static size_t gPointLimit = !utl::ConfigManager::IsFuzzing() ? SAL_MAX_SIZE : 8192;
+        static size_t gPointLimit = !comphelper::IsFuzzing() ? SAL_MAX_SIZE : 8192;
         size_t nPointLimit(gPointLimit);
         const basegfx::B2DPolyPolygon aClip(
             basegfx::utils::clipPolyPolygonOnPolyPolygon(
@@ -1579,7 +1579,7 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
                     if (nPolygons > 128)
                     {
                         SAL_WARN("vcl.gdi", "suspiciously high no of polygons in clip:" << nPolygons);
-                        if (utl::ConfigManager::IsFuzzing())
+                        if (comphelper::IsFuzzing())
                             aNewPoly.Clear();
                     }
                     rRegion.mpPolyPolygon = aNewPoly;

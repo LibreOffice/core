@@ -431,7 +431,7 @@ void SvtCTLOptions::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
 
 SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return SvtCTLOptions::NUMERALS_ARABIC;
     return static_cast<SvtCTLOptions::TextNumerals>(officecfg::Office::Common::I18N::CTL::CTLTextNumerals::get());
 }

@@ -33,7 +33,7 @@
 
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
@@ -127,7 +127,7 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponent
 
 void JobExecutor::initListeners()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     // read the list of all currently registered events inside configuration.

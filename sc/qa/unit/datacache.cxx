@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include "helper/qahelper.hxx"
 
 #include <global.hxx>
@@ -33,7 +33,7 @@ public:
 public:
     ScCacheTest()
     {
-        utl::ConfigManager::EnableFuzzing();
+        comphelper::EnableFuzzing();
         ScDLL::Init();
         ScGlobal::Init();
     }

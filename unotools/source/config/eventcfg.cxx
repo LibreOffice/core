@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/eventcfg.hxx>
 #include <unotools/configmgr.hxx>
@@ -371,7 +372,7 @@ sal_Bool SAL_CALL GlobalEventConfig::hasElements(  )
 
 OUString GlobalEventConfig::GetEventName( GlobalEventId nIndex )
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return OUString();
     static rtl::Reference<GlobalEventConfig> createImpl(new GlobalEventConfig);
     return GlobalEventConfig::m_pImpl->GetEventName( nIndex );

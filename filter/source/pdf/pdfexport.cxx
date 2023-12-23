@@ -499,7 +499,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 }
             }
 
-            if (!utl::ConfigManager::IsFuzzing())
+            if (!comphelper::IsFuzzing())
             {
                 // getting the string for the producer
                 OUString aProducerOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();

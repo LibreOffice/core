@@ -20,7 +20,7 @@
 #include <osl/diagnose.h>
 #include <tools/line.hxx>
 #include <tools/helpers.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <vcl/hatch.hxx>
 #include <vcl/metaact.hxx>
@@ -184,7 +184,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         // Single hatch
         aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
         CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
-        if (utl::ConfigManager::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
+        if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
             return;
 
         if (aInc.Width() <= 0 && aInc.Height() <= 0)
@@ -204,7 +204,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         {
             // Double hatch
             CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1 );
-            if (utl::ConfigManager::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
+            if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
                 return;
 
             do
@@ -219,7 +219,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             {
                 // Triple hatch
                 CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1 );
-                if (utl::ConfigManager::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
+                if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
                     return;
 
                 do

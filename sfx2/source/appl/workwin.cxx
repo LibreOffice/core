@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 #include <config_feature_desktop.h>
+#include <comphelper/configuration.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
@@ -1162,7 +1163,7 @@ css::uno::Reference< css::frame::XFrame > SfxWorkWindow::GetFrameInterface()
 
 void SfxWorkWindow::UpdateObjectBars_Impl2()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     // Lock SplitWindows (which means suppressing the Resize-Reaction of the

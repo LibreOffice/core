@@ -175,19 +175,4 @@ void utl::ConfigManager::doStoreConfigItems() {
     }
 }
 
-static bool bIsFuzzing = false;
-
-#if !defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
-bool utl::ConfigManager::IsFuzzing()
-{
-    return bIsFuzzing;
-}
-#endif
-
-void utl::ConfigManager::EnableFuzzing()
-{
-    bIsFuzzing = true;
-    LanguageTag::disable_lt_tag_parse();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,7 @@
 #include "precompile.h"
 
 #include <comphelper/newarray.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
 #include <tools/long.hxx>
 
@@ -291,7 +291,7 @@ bool TxtBox::Read(HWPFile & hwpf)
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
 
-    if (ncell > 4096 && utl::ConfigManager::IsFuzzing()) {
+    if (ncell > 4096 && comphelper::IsFuzzing()) {
         // cut off at an arbitrary size to speed up fuzzing
         return hwpf.SetState(HWP_InvalidFileFormat);
     }

@@ -19,12 +19,12 @@
 
 #include <optutil.hxx>
 #include <global.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 bool ScOptionsUtil::IsMetricSystem()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return true;
 
     //TODO: which language should be used here - system language or installed office language?

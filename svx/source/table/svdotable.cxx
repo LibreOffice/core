@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <com/sun/star/style/XStyle.hpp>
@@ -755,7 +755,7 @@ sal_Int32 SdrTableObjImpl::getRowCount() const
 
 void SdrTableObjImpl::LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool bFitHeight )
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     if(!mpLayouter)
         return;

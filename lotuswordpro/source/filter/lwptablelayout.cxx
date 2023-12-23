@@ -81,7 +81,7 @@
 #include <xfilter/xfparastyle.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -803,7 +803,7 @@ void LwpTableLayout::ParseTable()
         pTableHeading->GetStartEndRow(nStartHeadRow,nEndHeadRow);
         if (nStartHeadRow == 0)
         {
-            if (utl::ConfigManager::IsFuzzing() && nEndHeadRow - nStartHeadRow > 128)
+            if (comphelper::IsFuzzing() && nEndHeadRow - nStartHeadRow > 128)
             {
                 SAL_WARN("lwp", "truncating HeadingRow for fuzzing performance");
                 nEndHeadRow = nStartHeadRow + 128;

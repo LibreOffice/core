@@ -32,7 +32,7 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <o3tl/string_view.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/dialmgr.hxx>
@@ -243,7 +243,7 @@ Gallery* Gallery::GetGalleryInstance()
 {
     // note: this would deadlock if it used osl::Mutex::getGlobalMutex()
     static Gallery *const s_pGallery(
-        utl::ConfigManager::IsFuzzing() ? nullptr :
+        comphelper::IsFuzzing() ? nullptr :
             new Gallery(SvtPathOptions().GetGalleryPath()));
 
     return s_pGallery;

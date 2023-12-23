@@ -32,7 +32,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <sax/tools/converter.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -407,7 +407,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_ELEMENT(TABLE, XML_NUMBER_ROWS_SPANNED):
             m_nRowSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
-            if (m_nRowSpan > 8192 || (m_nRowSpan > 256 && utl::ConfigManager::IsFuzzing()))
+            if (m_nRowSpan > 8192 || (m_nRowSpan > 256 && comphelper::IsFuzzing()))
             {
                 SAL_INFO("sw.xml", "ignoring huge table:number-rows-spanned " << m_nRowSpan);
                 m_nRowSpan = 1;
@@ -808,7 +808,7 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
             case XML_ELEMENT(STYLE,  XML_NUMBER_ROWS_REPEATED):
             {
                 m_nRowRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
-                if (m_nRowRepeat > 8192 || (m_nRowRepeat > 256 && utl::ConfigManager::IsFuzzing()))
+                if (m_nRowRepeat > 8192 || (m_nRowRepeat > 256 && comphelper::IsFuzzing()))
                 {
                     SAL_INFO("sw.xml", "ignoring huge table:number-rows-repeated " << m_nRowRepeat);
                     m_nRowRepeat = 1;

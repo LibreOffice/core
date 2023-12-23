@@ -654,7 +654,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
         return pBaseURLItem->GetValue();
 
     OUString aBaseURL;
-    if (!utl::ConfigManager::IsFuzzing() && GetContent().is())
+    if (!comphelper::IsFuzzing() && GetContent().is())
     {
         try
         {

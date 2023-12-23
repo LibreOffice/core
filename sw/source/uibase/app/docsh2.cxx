@@ -1438,7 +1438,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
 
 void SwDocShell::SetModified( bool bSet )
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     SfxObjectShell::SetModified( bSet );
     if( !IsEnableSetModified())

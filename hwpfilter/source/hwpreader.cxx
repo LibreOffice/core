@@ -30,7 +30,7 @@
 #include <tools/stream.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include "fontmap.hxx"
 #include "formula.h"
@@ -958,7 +958,7 @@ void HwpReader::makeMasterStyles()
     PageSetting *pPrevSet = nullptr;
     PageSetting *pPage = nullptr;
 
-    if (nMax > 512 && utl::ConfigManager::IsFuzzing())
+    if (nMax > 512 && comphelper::IsFuzzing())
     {
         SAL_WARN("filter.hwp", "too many pages: " << nMax << " clip to " << 512);
         nMax = 512;
@@ -1476,7 +1476,7 @@ void HwpReader::makePageStyle()
      HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
      int pmCount = hwpfile.getColumnCount();
 
-     if (pmCount > 512 && utl::ConfigManager::IsFuzzing())
+     if (pmCount > 512 && comphelper::IsFuzzing())
      {
          SAL_WARN("filter.hwp", "too many pages: " << pmCount << " clip to " << 512);
          pmCount = 512;

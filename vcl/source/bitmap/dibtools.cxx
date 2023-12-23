@@ -30,7 +30,7 @@
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/GenericTypeSerializer.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
@@ -535,7 +535,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         const tools::Long nWidth(rHeader.nWidth);
         const tools::Long nHeight(rHeader.nHeight);
         tools::Long nResult = 0;
-        if (utl::ConfigManager::IsFuzzing() && (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000))
+        if (comphelper::IsFuzzing() && (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000))
             return false;
 
         if (bRLE)

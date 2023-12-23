@@ -23,7 +23,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/pathoptions.hxx>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
@@ -1042,7 +1042,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
 
 void SwTableAutoFormatTable::Load()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     OUString sNm(AUTOTABLE_FORMAT_NAME);
     SvtPathOptions aOpt;
@@ -1055,7 +1055,7 @@ void SwTableAutoFormatTable::Load()
 
 bool SwTableAutoFormatTable::Save() const
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
     SvtPathOptions aPathOpt;
     const OUString sNm( aPathOpt.GetUserConfigPath() + "/" + AUTOTABLE_FORMAT_NAME );

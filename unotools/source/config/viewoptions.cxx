@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <utility>
@@ -51,7 +52,7 @@ SvtViewOptions::SvtViewOptions( EViewType eType, OUString sViewName )
         case EViewType::Window: m_sListName = "Windows"; break;
         default: assert(false);
     }
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     try

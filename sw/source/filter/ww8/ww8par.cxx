@@ -30,7 +30,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/random.h>
@@ -4342,7 +4342,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_bCareFirstParaEndInToc(false)
     , m_bCareLastParaEndInToc(false)
     , m_bNotifyMacroEventRead(false)
-    , m_bFuzzing(utl::ConfigManager::IsFuzzing())
+    , m_bFuzzing(comphelper::IsFuzzing())
 {
     m_pStrm->SetEndian( SvStreamEndian::LITTLE );
     m_aApos.push_back(false);

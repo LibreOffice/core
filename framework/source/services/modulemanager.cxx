@@ -36,7 +36,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <utility>
 
 namespace {
@@ -128,7 +128,7 @@ private:
 ModuleManager::ModuleManager(css::uno::Reference< css::uno::XComponentContext >  xContext)
     : m_xContext(std::move(xContext))
 {
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         m_xCFG.set( comphelper::ConfigurationHelper::openConfig(
                     m_xContext, "/org.openoffice.Setup/Office/Factories",

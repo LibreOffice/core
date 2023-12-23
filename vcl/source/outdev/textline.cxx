@@ -23,7 +23,7 @@
 #include <tools/helpers.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/lru_map.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
@@ -276,7 +276,7 @@ void OutputDevice::ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY,
                                          Color aColor,
                                          bool bIsAbove )
 {
-    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing && nWidth > 10000)
     {
         SAL_WARN("vcl.gdi", "drawLine, skipping suspicious WaveTextLine of length: "
@@ -352,7 +352,7 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
                                              Color aColor,
                                              bool bIsAbove )
 {
-    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing && nWidth > 100000)
     {
         SAL_WARN("vcl.gdi", "drawLine, skipping suspicious TextLine of length: "

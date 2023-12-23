@@ -46,7 +46,7 @@
 #include <tools/bigint.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vector>
@@ -548,7 +548,7 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
         mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool.get());
         mpGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
         mpGlobalItemPool->FreezeIdRanges();
-        if (utl::ConfigManager::IsFuzzing())
+        if (comphelper::IsFuzzing())
             mpGlobalItemPool->acquire();
         else
         {
@@ -975,7 +975,7 @@ const tools::Rectangle& SdrObject::GetLastBoundRect() const
 void SdrObject::RecalcBoundRect()
 {
     // #i101680# suppress BoundRect calculations on import(s)
-    if ((getSdrModelFromSdrObject().isLocked()) || utl::ConfigManager::IsFuzzing())
+    if ((getSdrModelFromSdrObject().isLocked()) || comphelper::IsFuzzing())
         return;
 
     auto const& rRectangle = getOutRectangle();
@@ -1010,7 +1010,7 @@ void SdrObject::RecalcBoundRect()
 
 void SdrObject::BroadcastObjectChange() const
 {
-    if ((getSdrModelFromSdrObject().isLocked()) || utl::ConfigManager::IsFuzzing())
+    if ((getSdrModelFromSdrObject().isLocked()) || comphelper::IsFuzzing())
         return;
 
     bool bPlusDataBroadcast(m_pPlusData && m_pPlusData->pBroadcast);
@@ -2419,7 +2419,7 @@ rtl::Reference<SdrObject> SdrObject::ImpConvertToContourObj(bool bForceLineDash)
             }
 
             // check for fill rsults
-            if (!aExtractedLineFills.empty() && !utl::ConfigManager::IsFuzzing())
+            if (!aExtractedLineFills.empty() && !comphelper::IsFuzzing())
             {
                 // merge to a single tools::PolyPolygon (OR)
                 aMergedLineFillPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(std::move(aExtractedLineFills));

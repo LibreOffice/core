@@ -69,9 +69,9 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <comphelper/configuration.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/configmgr.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/json_writer.hxx>
@@ -1137,7 +1137,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
                 mpWindowImpl->meAlwaysInputMode   = pParent->mpWindowImpl->meAlwaysInputMode;
             }
 
-            if (!utl::ConfigManager::IsFuzzing())
+            if (!comphelper::IsFuzzing())
             {
                 // we don't want to call the WindowOutputDevice override of this because
                 // it calls back into us.
@@ -1152,7 +1152,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     mpWindowImpl->mxOutDev->mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
     mpWindowImpl->mxOutDev->mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         const StyleSettings& rStyleSettings = mpWindowImpl->mxOutDev->moSettings->GetStyleSettings();
         mpWindowImpl->mxOutDev->maFont = rStyleSettings.GetAppFont();

@@ -1769,7 +1769,7 @@ void SwDoc::EnsureNumberFormatter()
         LanguageType eLang = LANGUAGE_SYSTEM;
         mpNumberFormatter = new SvNumberFormatter(comphelper::getProcessComponentContext(), eLang);
         mpNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
-        if (!utl::ConfigManager::IsFuzzing())
+        if (!comphelper::IsFuzzing())
             mpNumberFormatter->SetYear2000(
                 officecfg::Office::Common::DateFormat::TwoDigitYear::get());
     };

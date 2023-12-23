@@ -419,7 +419,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     ScViewOptions aViewOpt = pScMod->GetViewOptions();
     aDocOpt.SetAutoSpell( bAutoSpell );
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         // two-digit year entry from Tools->Options->General
         aDocOpt.SetYear2000(officecfg::Office::Common::DateFormat::TwoDigitYear::get());

@@ -28,7 +28,7 @@
 #include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unordered_map>
 
 namespace {
@@ -61,7 +61,7 @@ struct ScDocumentImportImpl
         mrDoc(rDoc),
         maListenCxt(rDoc),
         mnDefaultScriptNumeric(SvtScriptType::UNKNOWN),
-        mbFuzzing(utl::ConfigManager::IsFuzzing())
+        mbFuzzing(comphelper::IsFuzzing())
     {}
 
     bool isValid( size_t nTab, size_t nCol )
@@ -411,7 +411,7 @@ void ScDocumentImport::setMatrixCells(
     if (!pBlockPos)
         return;
 
-    if (utl::ConfigManager::IsFuzzing()) //just too slow
+    if (comphelper::IsFuzzing()) //just too slow
         return;
 
     sc::CellStoreType& rCells = pTab->aCol[rBasePos.Col()].maCells;

@@ -138,7 +138,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
     if (!pFormatter)
         pFormatter = mpDoc->GetFormatTable();
     bool bNumbersEnglishUS = false;
-    if (pFormatter->GetLanguage() == LANGUAGE_SYSTEM && !utl::ConfigManager::IsFuzzing())
+    if (pFormatter->GetLanguage() == LANGUAGE_SYSTEM && !comphelper::IsFuzzing())
     {
         // Automatic language option selected.  Check for the global 'use US English' option.
         bNumbersEnglishUS = officecfg::Office::Common::Filter::HTML::Import::NumbersEnglishUS::get();

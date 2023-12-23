@@ -56,9 +56,8 @@ std::shared_ptr<const TextLayoutCache> TextLayoutCache::Create(OUString const& r
                           FastStringCompareEqual, TextLayoutCacheCost>
         Cache;
     static vcl::DeleteOnDeinit<Cache> cache(
-        !utl::ConfigManager::IsFuzzing()
-            ? officecfg::Office::Common::Cache::Font::TextRunsCacheSize::get()
-            : 100);
+        !comphelper::IsFuzzing() ? officecfg::Office::Common::Cache::Font::TextRunsCacheSize::get()
+                                 : 100);
     if (Cache* map = cache.get())
     {
         auto it = map->find(rString);

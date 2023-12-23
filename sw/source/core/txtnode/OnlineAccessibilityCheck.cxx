@@ -73,7 +73,7 @@ OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
     , m_nAccessibilityIssues(0)
     , m_bInitialCheck(false)
     , m_bOnlineCheckStatus(
-          !utl::ConfigManager::IsFuzzing()
+          !comphelper::IsFuzzing()
               ? officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get()
               : false)
 {
@@ -181,7 +181,7 @@ void OnlineAccessibilityCheck::initialCheck()
 void OnlineAccessibilityCheck::updateCheckerActivity()
 {
     bool bOnlineCheckStatus
-        = !utl::ConfigManager::IsFuzzing()
+        = !comphelper::IsFuzzing()
           && officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
 
     if (bOnlineCheckStatus != m_bOnlineCheckStatus)
@@ -296,7 +296,7 @@ void OnlineAccessibilityCheck::clearAccessibilityIssuesFromAllNodes()
 
 void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode, bool bIssueObjectNameChanged)
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     bool bOnlineCheckStatus
@@ -316,7 +316,7 @@ void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode, bool bIssueObjectNam
 
 void OnlineAccessibilityCheck::resetAndQueueDocumentLevel()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
 
     bool bOnlineCheckStatus

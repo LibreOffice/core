@@ -106,7 +106,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             SwTransferable::InitOle( this );
 
         // set forbidden characters if necessary
-        const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        const bool bFuzzing = comphelper::IsFuzzing();
         if (!bFuzzing)
         {
             SvxAsianConfig aAsian;
@@ -649,7 +649,7 @@ void SwDocShell::SubInitNew()
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
 
-    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    const bool bFuzzing = comphelper::IsFuzzing();
     if (!bFuzzing)
         SvtLinguConfig().GetOptions(aLinguOpt);
 

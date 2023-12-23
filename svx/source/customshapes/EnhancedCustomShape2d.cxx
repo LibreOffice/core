@@ -43,7 +43,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/sdshitm.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
@@ -705,7 +705,7 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
     else
         m_fYRatio = 1.0;
 
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
     {
         if (fabs(m_fXScale) > 100000)
         {

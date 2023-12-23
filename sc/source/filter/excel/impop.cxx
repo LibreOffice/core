@@ -28,7 +28,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svxids.hrc>
 #include <svl/numformat.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -97,7 +97,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     mnLastRecId(0),
     mbBiff2HasXfs(false),
     mbBiff2HasXfsValid(false),
-    mbFuzzing(utl::ConfigManager::IsFuzzing())
+    mbFuzzing(comphelper::IsFuzzing())
 {
     nBdshtTab = 0;
 

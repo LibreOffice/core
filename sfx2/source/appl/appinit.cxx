@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <basic/sbdef.hxx>
+#include <comphelper/configuration.hxx>
 #include <tools/svlibrary.h>
 #include <svtools/soerr.hxx>
 #include <unotools/configmgr.hxx>
@@ -194,7 +195,7 @@ void SfxApplication::Initialize_Impl()
         RID_BASIC_START, ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale());
 #endif
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         SolarMutexGuard aGuard;
         //ensure instantiation of listener that manages the internal recently-used

@@ -27,7 +27,7 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <tiffio.h>
 
@@ -129,7 +129,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 
     Animation aAnimation;
 
-    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    const bool bFuzzing = comphelper::IsFuzzing();
     uint64_t nTotalPixelsRequired = 0;
 
     do

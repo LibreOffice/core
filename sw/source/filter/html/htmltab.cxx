@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <hintids.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/flagguard.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -2312,7 +2313,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     // Step 1: needed layout structures are created (including tables in tables)
     CreateLayoutInfo();
 
-    if (!utl::ConfigManager::IsFuzzing()) // skip slow path for fuzzing
+    if (!comphelper::IsFuzzing()) // skip slow path for fuzzing
     {
         // Step 2: the minimal and maximal column width is calculated
         // (including tables in tables). Since we don't have boxes yet,
@@ -2934,7 +2935,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 break;
             case HtmlOptionId::ROWSPAN:
                 m_nRowSpan = o3tl::narrowing<sal_uInt16>(rOption.GetNumber());
-                if (m_nRowSpan > 8192 || (m_nRowSpan > 256 && utl::ConfigManager::IsFuzzing()))
+                if (m_nRowSpan > 8192 || (m_nRowSpan > 256 && comphelper::IsFuzzing()))
                 {
                     SAL_INFO("sw.html", "ignoring huge ROWSPAN " << m_nRowSpan);
                     m_nRowSpan = 1;

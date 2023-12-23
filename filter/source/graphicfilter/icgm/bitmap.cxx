@@ -19,7 +19,7 @@
 
 
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <memory>
 
@@ -375,7 +375,7 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescriptor& rDest )
 {
     ++mpCGM->mnBitmapInserts;
-    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static const bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
         if (rDest.mxBitmap.GetSizePixel().Height() + rSource.mnY > SAL_MAX_UINT16)

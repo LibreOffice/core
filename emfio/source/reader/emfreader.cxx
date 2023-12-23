@@ -26,7 +26,7 @@
 #include <o3tl/sprintf.hxx>
 #include <tools/stream.hxx>
 #include <memory>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 #include <rtl/bootstrap.hxx>
@@ -386,7 +386,7 @@ bool ImplReadRegion( basegfx::B2DPolyPolygon& rPolyPoly, SvStream& rStream, sal_
         rPolyPoly.append( basegfx::utils::createPolygonFromRect( ::basegfx::B2DRectangle( nLeft, nTop, nRight, nBottom ) ) );
         SAL_INFO("emfio", "\t\t" << i << " Left: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
     }
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         rPolyPoly = basegfx::utils::solveCrossovers(rPolyPoly);
         rPolyPoly = basegfx::utils::stripNeutralPolygons(rPolyPoly);

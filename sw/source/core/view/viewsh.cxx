@@ -2641,7 +2641,7 @@ SwAccessibleMap* SwViewShell::GetAccessibleMap()
 
 void SwViewShell::ApplyAccessibilityOptions()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return;
     if (mpOpt->IsPagePreview() && !officecfg::Office::Common::Accessibility::IsForPagePreviews::get())
     {

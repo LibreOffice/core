@@ -92,7 +92,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -3460,7 +3460,7 @@ void FmXFormShell::CreateExternalView_Lock()
 
 void FmXFormShell::implAdjustConfigCache_Lock()
 {
-    const bool bFuzzing(utl::ConfigManager::IsFuzzing());
+    const bool bFuzzing(comphelper::IsFuzzing());
     if (bFuzzing)
         return;
 

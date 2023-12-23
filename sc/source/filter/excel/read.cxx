@@ -42,7 +42,7 @@
 #include <imp_op.hxx>
 #include <excimp8.hxx>
 
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <memory>
 
@@ -776,7 +776,7 @@ ErrCode ImportExcel::Read()
         pProgress.reset();
 
         GetDocImport().finalize();
-        if (!utl::ConfigManager::IsFuzzing())
+        if (!comphelper::IsFuzzing())
             AdjustRowHeight();
         PostDocLoad();
 

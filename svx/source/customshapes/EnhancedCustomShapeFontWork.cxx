@@ -51,7 +51,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/string.hxx>
 
 using namespace com::sun::star;
@@ -1148,7 +1148,7 @@ rtl::Reference<SdrObject> EnhancedCustomShapeFontWork::CreateFontWork(
     rtl::Reference<SdrObject> pRet;
 
     // calculating scaling factor is too slow
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return pRet;
 
     tools::PolyPolygon aOutlines2d( GetOutlinesFromShape2d( pShape2d ) );

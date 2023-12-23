@@ -20,7 +20,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/gen.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/hash_combine.hxx>
@@ -477,7 +477,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNor
     TypeSerializer aSerializer(rIStm);
     aSerializer.readSize(rImplFont.maAverageFontSize);
 
-    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static const bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
         if (rImplFont.maAverageFontSize.Width() > 8192)

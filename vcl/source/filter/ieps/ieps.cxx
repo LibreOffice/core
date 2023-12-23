@@ -26,7 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -781,7 +781,7 @@ bool ImportEpsGraphic( SvStream & rStream, Graphic & rGraphic)
                     GDIMetaFile aMtf;
 
                     // if there is no preview -> try with gs to make one
-                    if (!bHasPreview && !utl::ConfigManager::IsFuzzing())
+                    if (!bHasPreview && !comphelper::IsFuzzing())
                     {
                         bHasPreview = RenderAsEMF(aBuf.getData(), nBytesRead, aGraphic);
                         if (!bHasPreview)

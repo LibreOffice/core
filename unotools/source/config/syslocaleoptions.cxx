@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -550,7 +551,7 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
     {
         pImpl = std::make_shared<SvtSysLocaleOptions_Impl>();
         g_pSysLocaleOptions = pImpl;
-        if (!utl::ConfigManager::IsFuzzing())
+        if (!comphelper::IsFuzzing())
             ItemHolder1::holdConfigItem(EItem::SysLocaleOptions);
     }
     pImpl->AddListener(this);

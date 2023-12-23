@@ -15,7 +15,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <osl/endian.h>
 #include <vcl/BitmapWriteAccess.hxx>
@@ -357,7 +357,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
     Size prefSize;
     BitmapScopedWriteAccess pWriteAccessInstance;
     BitmapScopedWriteAccess pWriteAccessAlphaInstance;
-    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    const bool bFuzzing = comphelper::IsFuzzing();
     const bool bSupportsBitmap32 = bFuzzing || ImplGetSVData()->mpDefInst->supportsBitmap32();
     const bool bOnlyCreateBitmap
         = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::OnlyCreateBitmap);
@@ -772,7 +772,7 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
     // try to get it using libpng.
     // https://en.wikipedia.org/wiki/Portable_Network_Graphics#File_format
     // Each chunk is: 4 bytes length, 4 bytes type, <length> bytes, 4 bytes crc
-    bool ignoreCrc = utl::ConfigManager::IsFuzzing();
+    bool ignoreCrc = comphelper::IsFuzzing();
     for (;;)
     {
         sal_uInt32 length(0), type(0), crc(0);

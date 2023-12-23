@@ -26,7 +26,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/pgrditem.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
@@ -725,7 +725,7 @@ SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageTyp
         rOut( rOutp ), nOldLanguageType( rOutp.GetDigitLanguage() )
 {
     LanguageType eLang = eCurLang;
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         eLang = LANGUAGE_ENGLISH_US;
     else
     {

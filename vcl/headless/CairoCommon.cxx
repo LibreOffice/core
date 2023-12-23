@@ -29,7 +29,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2irange.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
 #include <osl/module.h>
 
@@ -334,7 +334,7 @@ SystemDependentData_CairoPath::SystemDependentData_CairoPath(size_t nSizeMeasure
     , mbNoJoin(bNoJoin)
     , mbAntiAlias(bAntiAlias)
 {
-    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static const bool bFuzzing = comphelper::IsFuzzing();
 
     // tdf#129845 only create a copy of the path when nSizeMeasure is
     // bigger than some decent threshold
@@ -992,7 +992,7 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
         return true;
     }
 
-    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static const bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
         const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyLine));

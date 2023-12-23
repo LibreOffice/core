@@ -114,11 +114,11 @@ SfxApplication* SfxApplication::GetOrCreate()
 #if HAVE_FEATURE_XMLHELP || defined(EMSCRIPTEN)
         bool bHelpTip = officecfg::Office::Common::Help::Tip::get();
         bool bExtendedHelpTip = officecfg::Office::Common::Help::ExtendedTip::get();
-        if (!utl::ConfigManager::IsFuzzing() && bHelpTip)
+        if (!comphelper::IsFuzzing() && bHelpTip)
             Help::EnableQuickHelp();
         else
             Help::DisableQuickHelp();
-        if (!utl::ConfigManager::IsFuzzing() && bHelpTip && bExtendedHelpTip)
+        if (!comphelper::IsFuzzing() && bHelpTip && bExtendedHelpTip)
             Help::EnableBalloonHelp();
         else
             Help::DisableBalloonHelp();

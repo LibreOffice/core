@@ -327,7 +327,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     }
 
     SvtSaveOptions::ODFSaneDefaultVersion nDefVersion = SvtSaveOptions::ODFSVER_013;
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         nDefVersion = GetODFSaneDefaultVersion();
     }
@@ -506,7 +506,7 @@ bool SfxObjectShell::DoInitNew()
             pArgs[nLength].Name = "Title";
             pArgs[nLength].Value <<= GetTitle( SFX_TITLE_DETECT );
             xModel->attachResource( OUString(), aArgs );
-            if (!utl::ConfigManager::IsFuzzing())
+            if (!comphelper::IsFuzzing())
                 impl_addToModelCollection(xModel);
         }
 
@@ -1001,7 +1001,7 @@ bool SfxObjectShell::DoSave()
         if (IsOwnStorageFormat(*GetMedium()))
         {
             SvtSaveOptions::ODFSaneDefaultVersion nDefVersion = SvtSaveOptions::ODFSVER_013;
-            if (!utl::ConfigManager::IsFuzzing())
+            if (!comphelper::IsFuzzing())
             {
                 nDefVersion = GetODFSaneDefaultVersion();
             }
@@ -1187,7 +1187,7 @@ bool SfxObjectShell::SaveTo_Impl
     }
 
     SvtSaveOptions::ODFSaneDefaultVersion nVersion(SvtSaveOptions::ODFSVER_LATEST_EXTENDED);
-    if (bOwnTarget && !utl::ConfigManager::IsFuzzing())
+    if (bOwnTarget && !comphelper::IsFuzzing())
     {
         nVersion = GetODFSaneDefaultVersion();
     }
@@ -3379,7 +3379,7 @@ uno::Reference< embed::XStorage > const & SfxObjectShell::GetStorage()
 
             SetupStorage( pImpl->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             pImpl->m_bCreateTempStor = false;
-            if (!utl::ConfigManager::IsFuzzing())
+            if (!comphelper::IsFuzzing())
                 SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::StorageChanged, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
         }
         catch( uno::Exception& )
@@ -3894,7 +3894,7 @@ void SfxObjectShell::SetMacroCallsSeenWhileLoading()
 
 bool SfxObjectShell::GetMacroCallsSeenWhileLoading() const
 {
-    if (utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Security::Scripting::CheckDocumentEvents::get())
+    if (comphelper::IsFuzzing() || officecfg::Office::Common::Security::Scripting::CheckDocumentEvents::get())
         return pImpl->m_bMacroCallsSeenWhileLoading;
     return false;
 }

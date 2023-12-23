@@ -36,7 +36,7 @@
 #include <osl/diagnose.h>
 #include <officecfg/Office/Common.hxx>
 #include <svx/unoapi.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <comphelper/lok.hxx>
@@ -361,7 +361,7 @@ namespace sdr::contact
         // check if text animation is allowed.
         bool ObjectContactOfPageView::IsTextAnimationAllowed() const
         {
-            if (utl::ConfigManager::IsFuzzing())
+            if (comphelper::IsFuzzing())
                 return true;
             return officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get();
         }
@@ -369,7 +369,7 @@ namespace sdr::contact
         // check if graphic animation is allowed.
         bool ObjectContactOfPageView::IsGraphicAnimationAllowed() const
         {
-            if (utl::ConfigManager::IsFuzzing())
+            if (comphelper::IsFuzzing())
                 return true;
 
             // Related tdf#156630 respect system animation setting

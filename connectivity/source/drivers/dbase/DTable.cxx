@@ -41,7 +41,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/string.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
@@ -1383,7 +1383,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 
 bool ODbaseTable::HasMemoFields() const
 {
-    return m_aHeader.type > dBaseIV && !utl::ConfigManager::IsFuzzing();
+    return m_aHeader.type > dBaseIV && !comphelper::IsFuzzing();
 }
 
 // creates in principle dBase III file format

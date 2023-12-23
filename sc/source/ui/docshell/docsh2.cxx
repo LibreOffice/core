@@ -24,7 +24,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <orcusfilters.hxx>
 #include <config_folders.h>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/unit_conversion.hxx>
 
@@ -111,13 +111,13 @@ void ScDocShell::InitItems()
         // Other modifications after creation of the DrawLayer
         pDrawLayer->SetNotifyUndoActionHdl( std::bind( &ScDocFunc::NotifyDrawUndo, m_pDocFunc.get(), std::placeholders::_1 ) );
     }
-    else if (!utl::ConfigManager::IsFuzzing())
+    else if (!comphelper::IsFuzzing())
     {
         //  always use global color table instead of local copy
         PutItem( SvxColorListItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ) );
     }
 
-    if (utl::ConfigManager::IsFuzzing() ||
+    if (comphelper::IsFuzzing() ||
         (m_pDocument->GetForbiddenCharacters() && m_pDocument->IsValidAsianCompression() && m_pDocument->IsValidAsianKerning()))
         return;
 

@@ -192,6 +192,16 @@ private:
 
 }
 
+// Avoid using the config layer and rely on defaults which is only useful
+// for special test tool targets (typically fuzzing) where start-up speed
+// is of the essence
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+constexpr bool IsFuzzing() { return true; }
+#else
+COMPHELPER_DLLPUBLIC bool IsFuzzing();
+#endif
+COMPHELPER_DLLPUBLIC void EnableFuzzing();
+
 /// A type-safe wrapper around a (non-localized) configuration property.
 ///
 /// Automatically generated headers for the various configuration properties
@@ -211,6 +221,8 @@ template< typename T, typename U > struct ConfigurationProperty
     /// For nillable properties, U is of type std::optional<U'>.
     static U get()
     {
+        if (comphelper::IsFuzzing())
+            return U();
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
         css::uno::Any a(

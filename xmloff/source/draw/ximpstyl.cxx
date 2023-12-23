@@ -53,7 +53,7 @@
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <XMLNumberStylesImport.hxx>
 #include <XMLThemeContext.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -1339,7 +1339,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
             if (nNewMasterPageCount + 1 > nMasterPageCount)
             {
                 // arbitrary limit to master pages when fuzzing to avoid deadend timeouts
-                if (nMasterPageCount >= 64 && utl::ConfigManager::IsFuzzing())
+                if (nMasterPageCount >= 64 && comphelper::IsFuzzing())
                     return nullptr;
 
                 // new page, create and insert

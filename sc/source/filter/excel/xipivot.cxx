@@ -30,7 +30,7 @@
 #include <svl/numformat.hxx>
 #include <sal/log.hxx>
 #include <sot/storage.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <document.hxx>
 #include <formulacell.hxx>
@@ -1411,7 +1411,7 @@ void XclImpPivotTable::Convert()
     if( !mxPCache || !mxPCache->IsValid() )
         return;
 
-    if (utl::ConfigManager::IsFuzzing()) //just too slow
+    if (comphelper::IsFuzzing()) //just too slow
         return;
 
     ScDPSaveData aSaveData;

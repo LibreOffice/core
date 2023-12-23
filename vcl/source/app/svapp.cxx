@@ -32,7 +32,7 @@
 #include <tools/stream.hxx>
 #include <tools/json_writer.hxx>
 
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -691,7 +691,7 @@ void InitSettings(ImplSVData* pSVData)
     assert(!pSVData->maAppData.mxSettings && "initialization should not happen twice!");
 
     pSVData->maAppData.mxSettings.emplace();
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
         pSVData->maAppData.mxSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );

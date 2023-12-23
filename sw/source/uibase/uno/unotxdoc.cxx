@@ -2535,7 +2535,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // #122919# Force field update before PDF export, but after layout init (tdf#121962)
             bool bStateChanged = false;
             // check configuration: shall update of printing information in DocInfo set the document to "modified"?
-            if (pRenderDocShell->IsEnableSetModified() && !utl::ConfigManager::IsFuzzing() && !officecfg::Office::Common::Print::PrintingModifiesDocument::get())
+            if (pRenderDocShell->IsEnableSetModified() && !comphelper::IsFuzzing() && !officecfg::Office::Common::Print::PrintingModifiesDocument::get())
             {
                 pRenderDocShell->EnableSetModified( false );
                 bStateChanged = true;

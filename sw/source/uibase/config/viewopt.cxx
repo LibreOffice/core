@@ -272,7 +272,7 @@ SwViewOption::SwViewOption() :
         ViewOptFlags2::ResolvedPostits |
         ViewOptFlags2::AnyRuler;
 
-    if (!utl::ConfigManager::IsFuzzing() && MeasurementSystem::Metric != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
+    if (!comphelper::IsFuzzing() && MeasurementSystem::Metric != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
     {
         m_aSnapSize.setWidth(720);   // 1/2"
         m_aSnapSize.setHeight(720);   // 1/2"
@@ -285,7 +285,7 @@ SwViewOption::SwViewOption() :
     }
     m_nDivisionX = m_nDivisionY = 1;
 
-    m_bSelectionInReadonly = utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get();
+    m_bSelectionInReadonly = comphelper::IsFuzzing() || officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get();
 
     m_bIdle = true;
 
@@ -607,7 +607,7 @@ rtl::Reference<comphelper::ConfigurationListener> const & getWCOptionListener()
 
 bool SwViewOption::IsIgnoreProtectedArea()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
     static comphelper::ConfigurationListenerProperty<bool> gIgnoreProtectedArea(getWCOptionListener(), "IgnoreProtectedArea");
     return gIgnoreProtectedArea.get();

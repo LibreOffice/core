@@ -43,7 +43,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -109,7 +109,7 @@ void DocumentDrawModelManager::InitDrawModel()
     mpDrawModel->InsertPage( pMasterPage.get() );
     SAL_INFO( "sw.doc", "after create DrawDocument" );
     SdrOutliner& rOutliner = mpDrawModel->GetDrawOutliner();
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
         css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpell = ::GetSpellChecker();

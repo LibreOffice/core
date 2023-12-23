@@ -66,7 +66,7 @@
 #include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <unicode/ubidi.h>
 #include <algorithm>
@@ -130,7 +130,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mbLastTryMerge(false),
     mbReplaceLeadingSingleQuotationMark(true),
     mbSkipOutsideFormat(false),
-    mbFuzzing(utl::ConfigManager::IsFuzzing()),
+    mbFuzzing(comphelper::IsFuzzing()),
     mbNbspRunNext(false)
 {
     maStatus.GetControlWord() =  EEControlBits::USECHARATTRIBS | EEControlBits::DOIDLEFORMAT |

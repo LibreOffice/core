@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <tools/UnitConversion.hxx>
 #include <vcl/outdev.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -79,7 +79,7 @@ SwStdFontConfig::SwStdFontConfig() :
 {
     SvtLinguOptions aLinguOpt;
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         SvtLinguConfig().GetOptions( aLinguOpt );
 
     LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
@@ -159,7 +159,7 @@ bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
     bool bSame = false;
     SvtLinguOptions aLinguOpt;
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         SvtLinguConfig().GetOptions(aLinguOpt);
 
     LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
@@ -278,7 +278,7 @@ void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
         return;
 
     SvtLinguOptions aLinguOpt;
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         SvtLinguConfig().GetOptions( aLinguOpt );
 
     LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),

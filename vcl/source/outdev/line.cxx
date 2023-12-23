@@ -22,7 +22,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <tools/debug.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
@@ -222,7 +222,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
 void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )
 {
-    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static const bool bFuzzing = comphelper::IsFuzzing();
     const bool bTryB2d(RasterOp::OverPaint == GetRasterOp() && IsLineColor());
     basegfx::B2DPolyPolygon aFillPolyPolygon;
     const bool bDashUsed(LineStyle::Dash == rInfo.GetStyle());
@@ -262,7 +262,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             // but one that is at least as good as ImplSubdivideBezier was.
             // There, Polygon::AdaptiveSubdivide was used with default parameter
             // 1.0 as quality index.
-            static int nRecurseLimit = utl::ConfigManager::IsFuzzing() ? 10 : 30;
+            static int nRecurseLimit = comphelper::IsFuzzing() ? 10 : 30;
             aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0, nRecurseLimit);
         }
 

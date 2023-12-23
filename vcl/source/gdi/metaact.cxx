@@ -31,7 +31,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/TypeSerializer.hxx>
 
@@ -465,7 +465,7 @@ MetaPolyLineAction::MetaPolyLineAction( tools::Polygon aPoly, LineInfo aLineInfo
 
 static bool AllowDim(tools::Long nDim)
 {
-    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
         if (nDim > 0x20000000 || nDim < -0x20000000)
@@ -891,7 +891,7 @@ MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
 
 static bool AllowScale(const Size& rSource, const Size& rDest)
 {
-    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
         constexpr int nMaxScaleWhenFuzzing = 128;

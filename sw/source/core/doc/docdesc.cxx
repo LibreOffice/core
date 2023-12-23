@@ -54,7 +54,7 @@
 #include <SwUndoPageDesc.hxx>
 #include <pagedeschint.hxx>
 #include <tgrditem.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/syslocale.hxx>
 #include <svx/swframetypes.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -93,7 +93,7 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
         nMinRight = nMinTop = nMinBottom = o3tl::toTwips(1, o3tl::Length::cm);
         nMinLeft = o3tl::toTwips(2, o3tl::Length::cm);
     }
-    else if (!utl::ConfigManager::IsFuzzing() && MeasurementSystem::Metric == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
+    else if (!comphelper::IsFuzzing() && MeasurementSystem::Metric == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
     {
         nMinTop = nMinBottom = nMinLeft = nMinRight = o3tl::toTwips(2, o3tl::Length::cm);
     }

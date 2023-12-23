@@ -27,7 +27,7 @@
 #include <svl/itempool.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <comphelper/string.hxx>
 
@@ -629,7 +629,7 @@ SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
 
     aAttrStack.push_back( std::move(xNew) );
 
-    if (aAttrStack.size() > 96 && utl::ConfigManager::IsFuzzing())
+    if (aAttrStack.size() > 96 && comphelper::IsFuzzing())
         throw std::range_error("ecStackOverflow");
 
     bNewGroup = false;

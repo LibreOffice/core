@@ -31,7 +31,7 @@
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/TaskStopwatch.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/idle.hxx>
@@ -661,7 +661,7 @@ Task::~Task() COVERITY_NOEXCEPT_FALSE
             mpSchedulerData->mpTask = nullptr;
     }
     else
-        assert(nullptr == mpSchedulerData || utl::ConfigManager::IsFuzzing());
+        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

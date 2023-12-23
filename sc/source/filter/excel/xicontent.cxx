@@ -32,7 +32,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/editobj.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <stringutil.hxx>
 #include <cellform.hxx>
 #include <cellvalue.hxx>
@@ -422,7 +422,7 @@ void XclImpHyperlink::InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, c
         SCROW nScRow1, nScRow2;
         aScRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
 
-        if (utl::ConfigManager::IsFuzzing())
+        if (comphelper::IsFuzzing())
         {
             SCROW nRows = nScRow2 - nScRow1;
             if (nRows > 1024)
@@ -933,7 +933,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 
 void XclImpValidationManager::Apply()
 {
-    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    const bool bFuzzing = comphelper::IsFuzzing();
     size_t nPatterns = 0;
 
     ScDocument& rDoc = GetRoot().GetDoc();

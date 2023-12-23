@@ -11,11 +11,11 @@
 #include <tools/extendapplicationenvironment.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <unotools/configmgr.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
@@ -120,7 +120,7 @@ void CommonInitialize(int *argc, char ***argv)
     if( !xServiceManager.is() )
         Application::Abort( "Failed to bootstrap" );
     comphelper::setProcessServiceFactory( xServiceManager );
-    utl::ConfigManager::EnableFuzzing();
+    comphelper::EnableFuzzing();
     Application::EnableHeadlessMode(false);
     InitVCL();
 

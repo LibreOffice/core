@@ -38,7 +38,7 @@
 #include <o3tl/functional.hxx>
 #include <o3tl/string_view.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -113,7 +113,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     m_bCacheHasUseAcceleratedEntry(),
     m_bCacheHasUseAAEntry()
 {
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         try
         {

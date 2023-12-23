@@ -23,7 +23,7 @@
 #include <o3tl/safeint.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <rtl/ref.hxx>
 #include <map>
 #include <sal/log.hxx>
@@ -191,7 +191,7 @@ bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
         try
         {
             css::uno::Reference<css::ui::XUIConfigurationManager> xCfgMgr;
-            if (!utl::ConfigManager::IsFuzzing())
+            if (!comphelper::IsFuzzing())
             {
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::theModuleUIConfigurationManagerSupplier::get(xContext) );

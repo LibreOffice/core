@@ -47,7 +47,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svx/svdotable.hxx>
 #include <cell.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 
 // SvxTextEditSourceImpl
@@ -508,7 +508,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                 const_cast<EditEngine*>(&(mpOutliner->GetEditEngine()))->EnableUndo( false );
             }
 
-            if (!utl::ConfigManager::IsFuzzing())
+            if (!comphelper::IsFuzzing())
             {
                 if ( !m_xLinguServiceManager.is() )
                 {

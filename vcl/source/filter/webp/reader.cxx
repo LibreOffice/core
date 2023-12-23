@@ -24,7 +24,7 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <salinst.hxx>
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <svdata.hxx>
 #include <comphelper/scopeguard.hxx>
 
@@ -72,7 +72,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     if (width > SAL_MAX_INT32 / 8 || height > SAL_MAX_INT32 / 8)
         return false; // avoid overflows later
 
-    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    const bool bFuzzing = comphelper::IsFuzzing();
     const bool bSupportsBitmap32 = bFuzzing || ImplGetSVData()->mpDefInst->supportsBitmap32();
 
     Bitmap bitmap;

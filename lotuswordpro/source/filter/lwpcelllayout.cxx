@@ -67,7 +67,7 @@
 #include <lwpglobalmgr.hxx>
 
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfcell.hxx>
@@ -820,7 +820,7 @@ void LwpConnectedCellLayout::Read()
     cnumcols = static_cast<sal_uInt8>(numcols);
 
     m_nRealrowspan = cnumrows;
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         m_nRealrowspan = std::min<sal_uInt16>(m_nRealrowspan, 128);
     m_nRealcolspan = cnumcols;
 

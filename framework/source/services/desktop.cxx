@@ -58,7 +58,7 @@
 #include <sal/log.hxx>
 #include <comphelper/errcode.hxx>
 #include <vcl/threadex.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 namespace framework{
 
@@ -673,7 +673,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
     if ( aURL.Protocol.equalsIgnoreAsciiCase(".uno:") )
         aCommand = aURL.Path;
 
-    if (!m_xCommandOptions && !utl::ConfigManager::IsFuzzing())
+    if (!m_xCommandOptions && !comphelper::IsFuzzing())
         m_xCommandOptions.reset(new SvtCommandOptions);
 
     // Make std::unordered_map lookup if the current URL is in the disabled list

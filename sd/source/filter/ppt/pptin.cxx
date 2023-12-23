@@ -19,7 +19,7 @@
 
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
@@ -581,7 +581,7 @@ bool ImplSdPPTImport::Import()
     // create master pages:
 
     std::unique_ptr<SfxProgress> xStbMgr;
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         xStbMgr.reset(new SfxProgress(pDocShell,
                         SdResId( STR_POWERPOINT_IMPORT),
@@ -1956,7 +1956,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                         if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd ) )
                         {
                             OUString aGalleryDir;
-                            if (utl::ConfigManager::IsFuzzing())
+                            if (comphelper::IsFuzzing())
                                 osl_getTempDirURL(&aGalleryDir.pData);
                             else
                                 aGalleryDir = SvtPathOptions().GetGalleryPath();

@@ -22,7 +22,7 @@
 #include <svl/zformat.hxx>
 #include <formula/token.hxx>
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 
@@ -273,7 +273,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         SAL_WARN("sc", "ScDocument::InsertMatrixFormula: No table marked");
         return;
     }
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
     {
         // just too slow
         if (nCol2 - nCol1 > 64)

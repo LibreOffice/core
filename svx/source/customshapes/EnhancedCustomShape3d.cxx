@@ -58,7 +58,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -406,7 +406,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
         basegfx::B2DPolyPolygon aTotalPolyPoly;
         SdrObjListIter aIter( *pShape2d, SdrIterMode::DeepNoGroups );
         const bool bMultipleSubObjects(aIter.Count() > 1);
-        const bool bFuzzing(utl::ConfigManager::IsFuzzing());
+        const bool bFuzzing(comphelper::IsFuzzing());
 
         while( aIter.IsMore() )
         {

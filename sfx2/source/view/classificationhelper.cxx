@@ -940,7 +940,7 @@ const OUString& SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY()
 
 SfxClassificationPolicyType SfxClassificationHelper::getPolicyType()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return SfxClassificationPolicyType::IntellectualProperty;
     sal_Int32 nPolicyTypeNumber = officecfg::Office::Common::Classification::Policy::get();
     auto eType = static_cast<SfxClassificationPolicyType>(nPolicyTypeNumber);

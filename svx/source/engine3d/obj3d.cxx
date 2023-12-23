@@ -39,7 +39,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/e3dsceneupdater.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 using namespace com::sun::star;
 
@@ -284,7 +284,7 @@ E3dScene* E3dObject::getRootE3dSceneFromE3dObject() const
 basegfx::B3DRange E3dObject::RecalcBoundVolume() const
 {
     basegfx::B3DRange aRetval;
-    if (utl::ConfigManager::IsFuzzing()) // skip slow path for fuzzing
+    if (comphelper::IsFuzzing()) // skip slow path for fuzzing
         return aRetval;
 
     const sdr::contact::ViewContactOfE3d* pVCOfE3D = dynamic_cast< const sdr::contact::ViewContactOfE3d* >(&GetViewContact());
@@ -549,7 +549,7 @@ SdrObjKind E3dCompoundObject::GetObjIdentifier() const
 
 void E3dCompoundObject::RecalcSnapRect()
 {
-    if (utl::ConfigManager::IsFuzzing()) // skip slow path for fuzzing
+    if (comphelper::IsFuzzing()) // skip slow path for fuzzing
         return;
 
     const uno::Sequence< beans::PropertyValue > aEmptyParameters;

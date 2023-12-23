@@ -111,7 +111,7 @@ bool IsReadOnly( EOption eOption )
 
 std::vector< OUString > GetSecureURLs()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return {};
     std::vector<OUString> aRet = comphelper::sequenceToContainer<std::vector<OUString>>(
             officecfg::Office::Common::Security::Scripting::SecureURL::get());
@@ -182,12 +182,12 @@ bool isTrustedLocationUriForUpdatingLinks(OUString const & uri)
 
 sal_Int32 GetMacroSecurityLevel()
 {
-    return utl::ConfigManager::IsFuzzing() ? 3 : officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::get();
+    return comphelper::IsFuzzing() ? 3 : officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::get();
 }
 
 void SetMacroSecurityLevel( sal_Int32 _nLevel )
 {
-    if (utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::isReadOnly())
+    if (comphelper::IsFuzzing() || officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::isReadOnly())
         return;
 
     if( _nLevel > 3 || _nLevel < 0 )
@@ -200,7 +200,7 @@ void SetMacroSecurityLevel( sal_Int32 _nLevel )
 
 bool IsMacroDisabled()
 {
-    return utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
+    return comphelper::IsFuzzing() || officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
 }
 
 std::vector< SvtSecurityOptions::Certificate > GetTrustedAuthors()
@@ -293,7 +293,7 @@ void SetTrustedAuthors( const std::vector< Certificate >& rAuthors )
 
 bool IsOptionSet( EOption eOption )
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
     bool    bSet = false;
     switch(eOption)

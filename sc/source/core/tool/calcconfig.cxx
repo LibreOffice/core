@@ -14,7 +14,7 @@
 #include <formula/opcode.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <calcconfig.hxx>
 
@@ -68,7 +68,7 @@ ForceCalculationType ScCalcConfig::getForceCalculationType()
 
 bool ScCalcConfig::isOpenCLEnabled()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
     static ForceCalculationType force = getForceCalculationType();
     if( force != ForceCalculationNone )
@@ -79,7 +79,7 @@ bool ScCalcConfig::isOpenCLEnabled()
 
 bool ScCalcConfig::isThreadingEnabled()
 {
-    if (utl::ConfigManager::IsFuzzing())
+    if (comphelper::IsFuzzing())
         return false;
     static ForceCalculationType force = getForceCalculationType();
     if( force != ForceCalculationNone )

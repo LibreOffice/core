@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <o3tl/temporary.hxx>
 
 #include <vcl/unohelp.hxx>
@@ -47,7 +47,7 @@
 GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
     : m_GlyphItems(rFont)
     , mpVertGlyphs(nullptr)
-    , mbFuzzing(utl::ConfigManager::IsFuzzing())
+    , mbFuzzing(comphelper::IsFuzzing())
 {
 }
 

@@ -153,7 +153,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHel
     , mbAddExtLeading(false)
     , mbInDestruction(false)
 {
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
     {
         mnCharCompressType = static_cast<CharCompressType>(
             officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get());
@@ -195,7 +195,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHel
     m_pChainingOutliner = SdrMakeOutliner( OutlinerMode::TextObject, *this );
     ImpSetOutlinerDefaults(m_pChainingOutliner.get(), true);
 
-    ImpCreateTables(bDisablePropertyFiles || utl::ConfigManager::IsFuzzing());
+    ImpCreateTables(bDisablePropertyFiles || comphelper::IsFuzzing());
 
     mpImpl->initTheme();
 }
@@ -627,7 +627,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
     SvxFontItem aSvxFontItemCJK(EE_CHAR_FONTINFO_CJK);
     SvxFontItem aSvxFontItemCTL(EE_CHAR_FONTINFO_CTL);
     LanguageType nLanguage;
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!comphelper::IsFuzzing())
         nLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     else
         nLanguage = LANGUAGE_ENGLISH_US;

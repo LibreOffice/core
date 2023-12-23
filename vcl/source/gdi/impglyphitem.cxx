@@ -235,9 +235,8 @@ void SalLayoutGlyphsCache::clear() { mCachedGlyphs.clear(); }
 SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
 {
     static vcl::DeleteOnDeinit<SalLayoutGlyphsCache> cache(
-        !utl::ConfigManager::IsFuzzing()
-            ? officecfg::Office::Common::Cache::Font::GlyphsCacheSize::get()
-            : 20000);
+        !comphelper::IsFuzzing() ? officecfg::Office::Common::Cache::Font::GlyphsCacheSize::get()
+                                 : 20000);
     return cache.get();
 }
 

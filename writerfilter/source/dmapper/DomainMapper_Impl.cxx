@@ -335,7 +335,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext(std::move( xContext )),
-        m_bForceGenericFields(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
+        m_bForceGenericFields(!comphelper::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
         m_bIsDecimalComma( false ),
         m_bSetUserFieldContent( false ),
         m_bSetCitation( false ),
@@ -439,7 +439,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
-    m_bUsingEnhancedFields = !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
+    m_bUsingEnhancedFields = !comphelper::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
 
     m_pSdtHelper = new SdtHelper(*this, m_xComponentContext);
 
