@@ -109,7 +109,8 @@ void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
     }
 }
 
-void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
+void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType,
+                                     const VclPtr<vcl::Window>& pWindow,
                                      std::unique_ptr<jsdialog::ActionDataMap> pData)
 {
     std::scoped_lock aGuard(m_aQueueMutex);

@@ -278,9 +278,8 @@ protected:
 
     void UpdateCollectionIndex( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
     {
-        css::uno::Reference< css::container::XNameAccess > xNameAccess( xIndexAccess, css::uno::UNO_QUERY_THROW );
+        m_xNameAccess.set(xIndexAccess, css::uno::UNO_QUERY_THROW);
         m_xIndexAccess = xIndexAccess;
-        m_xNameAccess = xNameAccess;
     }
 
 public:

@@ -4408,9 +4408,8 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, con
         if (xPF.is())
         {
             // same comment as in UnoControl::ImplSetPeerProperty - see there
-            OUString sText( Text );
-            ImplCheckLocalize( sText );
-            xPF->setString( sText );
+            ImplCheckLocalize( Text );
+            xPF->setString( Text );
             xPF->setMasks( EditMask, LiteralMask );
         }
     }

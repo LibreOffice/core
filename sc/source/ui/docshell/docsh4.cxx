@@ -2021,7 +2021,7 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                                                                                 nResId));
                         auto xRequest = std::make_shared<SfxRequest>(rReq);
                         rReq.Ignore(); // the 'old' request is not relevant any more
-                        pDlg->StartExecuteAsync([this, pDlg, pStyleSheet, xRequest](sal_Int32 nResult){
+                        pDlg->StartExecuteAsync([this, pDlg, pStyleSheet, xRequest=std::move(xRequest)](sal_Int32 nResult){
                             if ( nResult == RET_OK )
                             {
                                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();

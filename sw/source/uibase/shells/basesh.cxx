@@ -2971,16 +2971,16 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 auto const& pTheme = pModel->getTheme();
                 if (pTheme)
                 {
-                    std::shared_ptr<svx::IThemeColorChanger> pChanger(new sw::ThemeColorChanger(pDocumentShell));
+                    std::shared_ptr<svx::IThemeColorChanger> xChanger(new sw::ThemeColorChanger(pDocumentShell));
                     auto pDialog = std::make_shared<svx::ThemeDialog>(pMDI, pTheme.get());
-                    weld::DialogController::runAsync(pDialog, [pDialog, pChanger](sal_uInt32 nResult) {
+                    weld::DialogController::runAsync(pDialog, [pDialog, xChanger=std::move(xChanger)](sal_uInt32 nResult) {
                         if (RET_OK != nResult)
                             return;
 
                         auto pColorSet = pDialog->getCurrentColorSet();
                         if (pColorSet)
                         {
-                            pChanger->apply(pColorSet);
+                            xChanger->apply(pColorSet);
                             if (comphelper::LibreOfficeKit::isActive())
                             {
                                 svx::ThemeColorPaletteManager aManager(pColorSet);

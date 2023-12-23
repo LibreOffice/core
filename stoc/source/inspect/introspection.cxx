@@ -2298,8 +2298,8 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             //aMethName = rxMethod->getName();
                             //aListenerName = aMethName.Copy( 3, aMethName.Len()-8-3 );
                             //Reference<XIdlClass> xListenerClass = reflection->forName( aListenerName );
-                            Type aListenerType( TypeClass_INTERFACE, xListenerClass->getName() );
-                            pAccess->maSupportedListenerSeq[ iAllSupportedListener ] = aListenerType;
+                            pAccess->maSupportedListenerSeq[ iAllSupportedListener ] =
+                                Type(TypeClass_INTERFACE, xListenerClass->getName());
                             iAllSupportedListener++;
                         }
                     }

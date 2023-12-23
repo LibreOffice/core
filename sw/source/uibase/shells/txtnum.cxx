@@ -197,17 +197,17 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         if ( pPageItem )
             pDlg->SetCurPageId( pPageItem->GetValue() );
 
-        auto pRequest = std::make_shared<SfxRequest>(rReq);
+        auto xRequest = std::make_shared<SfxRequest>(rReq);
         rReq.Ignore(); // the 'old' request is not relevant any more
 
-        pDlg->StartExecuteAsync([pDlg, pNumRuleAtCurrentSelection, pRequest, this](sal_Int32 nResult){
+        pDlg->StartExecuteAsync([pDlg, pNumRuleAtCurrentSelection, xRequest=std::move(xRequest), this](sal_Int32 nResult){
             if (RET_OK == nResult)
             {
                 const SvxNumBulletItem* pBulletItem = pDlg->GetOutputItemSet()->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
                 if (pBulletItem)
                 {
-                    pRequest->AppendItem(*pBulletItem);
-                    pRequest->Done();
+                    xRequest->AppendItem(*pBulletItem);
+                    xRequest->Done();
                     SvxNumRule& rSetRule = const_cast<SvxNumRule&>(pBulletItem->GetNumRule());
                     rSetRule.UnLinkGraphics();
                     SwNumRule aSetRule(pNumRuleAtCurrentSelection != nullptr
@@ -226,8 +226,8 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 else if (pNumRuleAtCurrentSelection == nullptr
                          && (pBulletItem = pDlg->GetInputItemSet()->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false)))
                 {
-                    pRequest->AppendItem(*pBulletItem);
-                    pRequest->Done();
+                    xRequest->AppendItem(*pBulletItem);
+                    xRequest->Done();
                     const SvxNumRule& rSetRule = pBulletItem->GetNumRule();
                     SwNumRule aSetRule(
                         GetShell().GetUniqueNumRuleName(),

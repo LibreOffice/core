@@ -121,7 +121,7 @@ public:
 
     void clearQueue();
     void forceUpdate();
-    void sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
+    void sendMessage(jsdialog::MessageType eType, const VclPtr<vcl::Window>& pWindow,
                      std::unique_ptr<jsdialog::ActionDataMap> pData = nullptr);
 
 private:

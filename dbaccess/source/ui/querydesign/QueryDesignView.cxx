@@ -656,8 +656,7 @@ namespace
                     if  ( field->isAggregateFunction() )
                     {
                         OSL_ENSURE(!field->GetFunction().isEmpty(),"Function name must not be empty! ;-(");
-                        OUStringBuffer aTmpStr2( field->GetFunction() + "(" + aTmpStr + ")");
-                        aTmpStr = aTmpStr2;
+                        aTmpStr = field->GetFunction() + "(" + aTmpStr + ")";
                     }
 
                     if (!rFieldAlias.isEmpty()                         &&

@@ -624,7 +624,7 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
     std::vector<ValueAndFormat> aLabelVector { ValueAndFormat(aLabel.makeStringAndClear()) };
 
     rtl::Reference<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument,
-                                               sLabelID, std::move(aLabelVector)));
+                                               std::move(sLabelID), std::move(aLabelVector)));
     pSequence->setRole("values-y");
     xDataSequence = pSequence;
     return xDataSequence;

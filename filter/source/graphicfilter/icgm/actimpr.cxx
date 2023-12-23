@@ -387,8 +387,7 @@ void CGMImpressOutAct::InsertPage()
 {
     if ( mnCurrentPage )    // one side is always existing, therefore the first side will be left out
     {
-        uno::Reference< drawing::XDrawPage > xPage = maXDrawPages->insertNewByIndex( 0xffff );
-        maXDrawPage = xPage;
+        maXDrawPage = maXDrawPages->insertNewByIndex(0xffff);
         if ( !ImplInitPage() )
             mpCGM->mbStatus = false;
         if (mnCurrentPage > MAX_PAGES_FOR_FUZZING && utl::ConfigManager::IsFuzzing())

@@ -828,9 +828,9 @@ private:
     void paragraphPropertiesToTree(boost::property_tree::ptree& aPayloadTree, bool force = false) const;
     void paragraphPropertiesToJson(std::string& aPayload, bool force = false) const;
     bool updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
-                             bool force, std::string msg = "");
+                             bool force, const std::string& msg = "");
     void updateAndNotifyParagraph(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
-                                  bool force, std::string msg = "");
+                                  bool force, const std::string& msg = "");
     void resetParagraphInfo();
     void onFocusedParagraphInWriterTable(const uno::Reference<accessibility::XAccessibleTable>& xTable,
                                          sal_Int64& nChildIndex,
@@ -1163,7 +1163,7 @@ void LOKDocumentFocusListener::disposing( const lang::EventObject& aEvent )
 }
 
 bool LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
-                                                   bool force, std::string msg)
+                                                   bool force, const std::string& msg)
 {
     if (!xAccText.is())
         return false;
@@ -1218,7 +1218,7 @@ bool LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
 
 void LOKDocumentFocusListener::updateAndNotifyParagraph(
         const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
-        bool force, std::string msg)
+        bool force, const std::string& msg)
 {
     if (updateParagraphInfo(xAccText, force, msg))
         notifyFocusedParagraphChanged(force);

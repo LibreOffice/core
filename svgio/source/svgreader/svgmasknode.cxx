@@ -256,12 +256,12 @@ namespace svgio::svgreader
                         // #i124852#
                         if(pTransform)
                         {
-                            drawinglayer::primitive2d::Primitive2DReference xTransform(
-                                new drawinglayer::primitive2d::TransformPrimitive2D(
-                                    *pTransform,
-                                    std::move(aMaskTarget)));
-
-                            aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
+                            aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer {
+                                drawinglayer::primitive2d::Primitive2DReference(
+                                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                                        *pTransform,
+                                        std::move(aMaskTarget)))
+                            };
                         }
                     }
 

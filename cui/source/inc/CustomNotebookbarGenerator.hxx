@@ -35,8 +35,8 @@ public:
     static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName);
     static void modifyCustomizedUIFile(const Sequence<OUString>& sUIItemProperties);
     static void createCustomizedUIFile();
-    static void setCustomizedUIItem(Sequence<OUString> sUIItemProperties,
-                                    OUString sNotebookbarConfigType);
+    static void setCustomizedUIItem(const Sequence<OUString>& rUIItemProperties,
+                                    const OUString& rNotebookbarConfigType);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

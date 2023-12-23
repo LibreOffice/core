@@ -265,16 +265,16 @@ Sequence<OUString> CustomNotebookbarGenerator::getCustomizedUIItem(OUString sNot
     return aValues;
 }
 
-void CustomNotebookbarGenerator::setCustomizedUIItem(Sequence<OUString> sUIItemProperties,
-                                                     OUString sNotebookbarConfigType)
+void CustomNotebookbarGenerator::setCustomizedUIItem(const Sequence<OUString>& rUIItemProperties,
+                                                     const OUString& rNotebookbarConfigType)
 {
     OUString aPath = getAppNameRegistryPath();
     const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(), aPath,
                                                true);
     const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
-    const utl::OConfigurationNode aModeNode(aModesNode.openNode(sNotebookbarConfigType));
+    const utl::OConfigurationNode aModeNode(aModesNode.openNode(rNotebookbarConfigType));
 
-    css::uno::Any aUIItemProperties(sUIItemProperties);
+    css::uno::Any aUIItemProperties(rUIItemProperties);
     aModeNode.setNodeValue("UIItemProperties", aUIItemProperties);
     aAppNode.commit();
 }

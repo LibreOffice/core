@@ -201,9 +201,8 @@ namespace svt::uno
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
         auto xPage = std::make_unique<EmptyPage>(pPageContainer, this);
-        auto pController = std::make_shared<WizardPageController>(xPage->GetContainer(), m_xController, nPageId);
-
-        m_aPageControllers[xPage.get()] = pController;
+        m_aPageControllers[xPage.get()] =
+            std::make_shared<WizardPageController>(xPage->GetContainer(), m_xController, nPageId);
 
         return xPage;
     }

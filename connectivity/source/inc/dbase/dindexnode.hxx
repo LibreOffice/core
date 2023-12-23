@@ -246,7 +246,7 @@ namespace connectivity::dbase
             ONDXKey&       GetKey()         { return aKey;}
 
             // Setting the child, via reference to retain the PagePos
-            void            SetChild(ONDXPagePtr aCh = ONDXPagePtr(), ONDXPage* = nullptr);
+            void            SetChild(const ONDXPagePtr& rCh = ONDXPagePtr(), ONDXPage* = nullptr);
 
             void Write(SvStream &rStream, const ONDXPage& rPage) const;
             void Read(SvStream &rStream, ODbaseIndex const &);
@@ -293,9 +293,9 @@ namespace connectivity::dbase
             return !operator > (rKey);
         }
 
-        inline void ONDXNode::SetChild(ONDXPagePtr aCh, ONDXPage* pParent)
+        inline void ONDXNode::SetChild(const ONDXPagePtr& rCh, ONDXPage* pParent)
         {
-            aChild = aCh;
+            aChild = rCh;
             if (aChild.Is())
                 aChild->SetParent(pParent);
         }
