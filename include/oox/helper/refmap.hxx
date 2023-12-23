@@ -48,17 +48,17 @@ public:
 public:
     /** Returns true, if the object associated to the passed key exists.
         Returns false, if the key exists but points to an empty reference. */
-    bool                has( key_type nKey ) const
+    bool                has(const key_type& rKey) const
                         {
-                            const mapped_type* pxRef = getRef( nKey );
+                            const mapped_type* pxRef = getRef(rKey);
                             return pxRef && pxRef->get();
                         }
 
     /** Returns a reference to the object associated to the passed key, or an
         empty reference on error. */
-    mapped_type         get( key_type nKey ) const
+    mapped_type         get(const key_type& rKey) const
                         {
-                            if( const mapped_type* pxRef = getRef( nKey ) ) return *pxRef;
+                            if( const mapped_type* pxRef = getRef(rKey) ) return *pxRef;
                             return mapped_type();
                         }
 
@@ -129,9 +129,9 @@ private:
         void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( rValue.first, *rValue.second ); }
     };
 
-    const mapped_type* getRef( key_type nKey ) const
+    const mapped_type* getRef(const key_type& rKey) const
     {
-        typename container_type::const_iterator aIt = this->find( nKey );
+        typename container_type::const_iterator aIt = this->find(rKey);
         return (aIt == this->end()) ? nullptr : &aIt->second;
     }
 };
