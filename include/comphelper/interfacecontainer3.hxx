@@ -63,7 +63,8 @@ public:
     OInterfaceIteratorHelper3(OInterfaceContainerHelper3<ListenerT>& rCont_)
         : rCont(rCont_)
         , maData(rCont.maData)
-        , nRemain(maData->size())
+        // const_cast so we don't trigger make_unique via o3tl::cow_wrapper::operator->
+        , nRemain(std::as_const(maData)->size())
     {
     }
 
@@ -96,12 +97,12 @@ template <class ListenerT>
 const css::uno::Reference<ListenerT>& OInterfaceIteratorHelper3<ListenerT>::next()
 {
     nRemain--;
-    return (*maData)[nRemain];
+    return (*std::as_const(maData))[nRemain];
 }
 
 template <class ListenerT> void OInterfaceIteratorHelper3<ListenerT>::remove()
 {
-    rCont.removeInterface((*maData)[nRemain]);
+    rCont.removeInterface((*std::as_const(maData))[nRemain]);
 }
 
 /**
