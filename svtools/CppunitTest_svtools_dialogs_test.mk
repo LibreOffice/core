@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svtools_dialogs_test, \
 $(eval $(call gb_CppunitTest_use_sdk_api,svtools_dialogs_test))
 
 $(eval $(call gb_CppunitTest_set_include,svtools_dialogs_test,\
-    -I$(SRCDIR)/svtools/source/inc \
     -I$(SRCDIR)/svtools/inc \
     $$(INCLUDE) \
 ))

@@ -5264,7 +5264,6 @@ include/framework/desktop.hxx
 include/framework/documentundoguard.hxx
 include/framework/framecontainer.hxx
 include/framework/framelistanalyzer.hxx
-include/framework/gate.hxx
 include/framework/generictoolbarcontroller.hxx
 include/framework/imutex.hxx
 include/framework/sfxhelperfunctions.hxx
@@ -7552,7 +7551,6 @@ sal/osl/w32/time.cxx
 sal/qa/ByteSequence/ByteSequence.cxx
 sal/qa/OStringBuffer/rtl_OStringBuffer.cxx
 sal/qa/OStringBuffer/rtl_String_Const.h
-sal/qa/OStringBuffer/rtl_String_Utils_Const.h
 sal/qa/inc/valueequal.hxx
 sal/qa/osl/condition/osl_Condition.cxx
 sal/qa/osl/file/osl_File.cxx
@@ -14124,7 +14122,6 @@ vcl/headless/svpvd.cxx
 vcl/inc/IconThemeSelector.hxx
 vcl/inc/IPrioritable.hxx
 vcl/inc/ResampleKernel.hxx
-vcl/inc/WidgetThemeLibraryTypes.hxx
 vcl/inc/bitmap/bmpfast.hxx
 vcl/inc/accel.hxx
 vcl/inc/accmgr.hxx
@@ -15150,7 +15147,6 @@ writerfilter/source/ooxml/OOXMLFastContextHandler.cxx
 writerfilter/source/ooxml/OOXMLFastContextHandler.hxx
 writerfilter/source/ooxml/OOXMLFastDocumentHandler.cxx
 writerfilter/source/ooxml/OOXMLFastDocumentHandler.hxx
-writerfilter/source/ooxml/OOXMLFastHelper.hxx
 writerfilter/source/ooxml/OOXMLParserState.cxx
 writerfilter/source/ooxml/OOXMLPropertySet.cxx
 writerfilter/source/ooxml/OOXMLStreamImpl.cxx
