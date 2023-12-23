@@ -5883,6 +5883,7 @@ if test "$cross_compiling" = "yes"; then
 
     # filter permitted build targets
     PERMITTED_BUILD_TARGETS="
+        ARGON2
         AVMEDIA
         BOOST
         BZIP2
