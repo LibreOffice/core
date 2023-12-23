@@ -21,7 +21,7 @@
 
 #include <mutex>
 
-#include "gate.hxx"
+#include <framework/gate.hxx>
 
 namespace framework{
 
