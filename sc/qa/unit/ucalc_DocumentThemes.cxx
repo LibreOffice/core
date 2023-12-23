@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme)
     auto eBackgroundThemeType = model::ThemeColorType::Accent5;
     auto eCellTextThemeType = model::ThemeColorType::Accent2;
 
-    ScPatternAttr aNewPattern(m_pDoc->GetPool());
+    ScPatternAttr aNewPattern(m_pDoc->getCellAttributeHelper());
     {
         model::ComplexColor aComplexColor;
         aComplexColor.setThemeColor(eBackgroundThemeType);

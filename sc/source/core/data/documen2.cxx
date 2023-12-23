@@ -90,6 +90,7 @@
 #include <drwlayer.hxx>
 #include <sharedstringpoolpurge.hxx>
 #include <dociter.hxx>
+#include <docpool.hxx>
 #include <config_features.h>
 
 using namespace com::sun::star;
@@ -111,7 +112,21 @@ ScSheetLimits ScSheetLimits::CreateDefault()
         return ScSheetLimits(MAXCOL, MAXROW);
 }
 
+CellAttributeHelper& ScDocument::getCellAttributeHelper() const
+{
+    if (!mpCellAttributeHelper)
+    {
+        assert(!IsClipOrUndo() && "CellAttributeHelper needs to be shared using SharePooledResources, not created (!)");
+        SfxItemPool* pPool(const_cast<ScDocument*>(this)->GetPool());
+        assert(nullptr != pPool && "No SfxItemPool for this ScDocument (!)");
+        mpCellAttributeHelper.reset(new CellAttributeHelper(*pPool));
+    }
+
+    return *mpCellAttributeHelper;
+}
+
 ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
+        mpCellAttributeHelper(),
         mpCellStringPool(std::make_shared<svl::SharedStringPool>(ScGlobal::getCharClass())),
         mpDocLinkMgr(new sc::DocumentLinkManager(pDocShell)),
         mbFormulaGroupCxtBlockDiscard(false),
@@ -216,6 +231,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
     {
         pChartListenerCollection = nullptr;
     }
+
     pDBCollection.reset( new ScDBCollection(*this) );
     pSelectionAttr = nullptr;
     apTemporaryChartLock.reset( new ScTemporaryChartLock(this) );
@@ -503,7 +519,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
         mpNoteEngine->EnableUndo( false );
         mpNoteEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         ApplyAsianEditSettings( *mpNoteEngine );
-        const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
+        const SfxItemSet& rItemSet(getCellAttributeHelper().getDefaultCellAttribute().GetItemSet());
         SfxItemSet aEEItemSet( mpNoteEngine->GetEmptyItemSet() );
         ScPatternAttr::FillToEditItemSet( aEEItemSet, rItemSet );
         mpNoteEngine->SetDefaults( std::move(aEEItemSet) );      // edit engine takes ownership

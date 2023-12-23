@@ -373,7 +373,9 @@ XclExpStringRef lclCreateFormattedString(
 
     // font buffer and cell item set
     XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
-    const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
+    const SfxItemSet& rItemSet = pCellAttr ?
+        pCellAttr->GetItemSet() :
+        rRoot.GetDoc().getCellAttributeHelper().getDefaultCellAttribute().GetItemSet();
 
     // process all script portions
     sal_Int32 nPortionPos = 0;
@@ -587,7 +589,9 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     bool bOldUpdateMode = rEE.SetUpdateLayout( true );
 
     // default items
-    const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
+    const SfxItemSet& rItemSet = pCellAttr ?
+        pCellAttr->GetItemSet() :
+        rRoot.GetDoc().getCellAttributeHelper().getDefaultCellAttribute().GetItemSet();
     auto pEEItemSet = std::make_unique<SfxItemSet>( rEE.GetEmptyItemSet() );
     ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
     rEE.SetDefaults( std::move(pEEItemSet) );      // edit engine takes ownership

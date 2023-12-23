@@ -1131,15 +1131,29 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
 
         //  default font must be set, independently of document
         //  -> use global pool from module
+        std::unique_ptr<CellAttributeHelper> pTmp;
+        const ScPatternAttr* pCellAttributeDefault(nullptr);
+
+        if (nullptr != mpDocSh)
+        {
+            // we can use default CellAttribute from ScDocument
+            pCellAttributeDefault = &mpDocSh->GetDocument().getCellAttributeHelper().getDefaultCellAttribute();
+        }
+        else
+        {
+            // no access to ScDocument, use temporary CellAttributeHelper.
+            // also see ScHeaderFooterTextData::GetTextForwarder for more comments
+            pTmp.reset(new CellAttributeHelper(SC_MOD()->GetPool()));
+            pCellAttributeDefault = &pTmp->getDefaultCellAttribute();
+        }
 
         SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
-        const ScPatternAttr& rPattern = SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
-        rPattern.FillEditItemSet( &aDefaults );
+        pCellAttributeDefault->FillEditItemSet( &aDefaults );
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
-        aDefaults.Put( rPattern.GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
-        aDefaults.Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
-        aDefaults.Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
         aDefaults.Put( SvxAdjustItem( meAdjust, EE_PARA_JUST ) );
         pHdrEngine->SetDefaults( aDefaults );
 

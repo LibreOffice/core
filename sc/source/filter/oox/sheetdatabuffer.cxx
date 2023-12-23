@@ -508,7 +508,7 @@ void SheetDataBuffer::finalizeImport()
             nScRow++;
         }
         if ( !pDefPattern || nScRow == rDoc.MaxRow() )
-            pDefPattern = rDoc.GetDefPattern();
+            pDefPattern = &rDoc.getCellAttributeHelper().getDefaultCellAttribute();
 
         Xf::AttrList aAttrs(pDefPattern);
         for ( const auto& rRowStyle : rRowStyles )
@@ -523,11 +523,10 @@ void SheetDataBuffer::finalizeImport()
         {
             ScAttrEntry aEntry;
             aEntry.nEndRow = rDoc.MaxRow();
-            aEntry.pPattern = pDefPattern;
-            rDoc.GetPool()->DirectPutItemInPool(*aEntry.pPattern);
+            aEntry.setScPatternAttr(pDefPattern, false);
             aAttrs.maAttrs.push_back(aEntry);
 
-            if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
+            if (!sc::NumFmtUtil::isLatinScript(*aEntry.getScPatternAttr(), rDoc))
                 aAttrs.mbLatinNumFmtOnly = false;
         }
 

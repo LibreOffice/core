@@ -345,9 +345,10 @@ private:
     std::unique_ptr<ScEditDataArray> mpDataArray;
     ScDocumentUniquePtr pUndoDoc;
     bool            bMulti;
-    ScPatternAttr*  pApplyPattern;
-    SvxBoxItem*     pLineOuter;
-    SvxBoxInfoItem* pLineInner;
+    const CellAttributeHolder aApplyPattern;
+
+    SfxPoolItemHolder   maLineOuter;
+    SfxPoolItemHolder   maLineInner;
 
     void            DoChange( const bool bUndo );
     void            ChangeEditData( const bool bUndo );

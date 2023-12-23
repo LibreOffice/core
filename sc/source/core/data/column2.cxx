@@ -109,7 +109,7 @@ tools::Long ScColumn::GetNeededSize(
         return bInPrintTwips ? nMeasure : static_cast<tools::Long>(nMeasure * fScale);
     };
 
-    const ScPatternAttr* pPattern = rOptions.pPattern;
+    const ScPatternAttr* pPattern = rOptions.aPattern.getScPatternAttr();
     if (!pPattern)
         pPattern = pAttrArray->GetPattern( nRow );
 
@@ -193,7 +193,7 @@ tools::Long ScColumn::GetNeededSize(
         // result may set a number format. In which case there's also the
         // General format not set anymore...
         bool bMayInvalidatePattern = (aCell.getType() == CELLTYPE_FORMULA);
-        const ScPatternAttr* pOldPattern = pPattern;
+        const CellAttributeHolder aOldPattern(pPattern);
         bool bNumeric = aCell.hasNumeric();
         if (bMayInvalidatePattern)
         {
@@ -203,7 +203,7 @@ tools::Long ScColumn::GetNeededSize(
         }
         if (bNumeric)
         {
-            if (!bMayInvalidatePattern || SfxPoolItem::areSame(pPattern, pOldPattern))
+            if (!bMayInvalidatePattern || ScPatternAttr::areSame(pPattern, aOldPattern.getScPatternAttr()))
                 bBreak = false;
             else
             {
@@ -772,7 +772,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
             // Or again in case there was a leading sep=";" row or two header
             // rows..
             const ScPatternAttr* pNextPattern = GetPattern( ++nRow );
-            if (!SfxPoolItem::areSame(pNextPattern, pPattern))
+            if (!ScPatternAttr::areSame(pNextPattern, pPattern))
                 nFormat = pNextPattern->GetNumberFormat( pFormatter );
         }
         OUString aLongStr;
@@ -829,8 +829,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                         nScript = ScGlobal::GetDefaultScriptType();
 
                     const ScPatternAttr* pPattern = GetPattern(nRow);
-                    aOptions.pPattern = pPattern;
-                    aOptions.bGetFont = (!SfxPoolItem::areSame(pPattern, pOldPattern) || nScript != SvtScriptType::NONE);
+                    aOptions.aPattern.setScPatternAttr(pPattern);
+                    aOptions.bGetFont = (!ScPatternAttr::areSame(pPattern, pOldPattern) || nScript != SvtScriptType::NONE);
                     pOldPattern = pPattern;
                     sal_uInt16 nThis = static_cast<sal_uInt16>(GetNeededSize(
                         nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern));
@@ -893,7 +893,7 @@ void ScColumn::GetOptimalHeight(
 {
     ScDocument& rDocument = GetDoc();
     RowHeightsArray& rHeights = rCxt.getHeightArray();
-    ScAttrIterator aIter( pAttrArray.get(), nStartRow, nEndRow, rDocument.GetDefPattern() );
+    ScAttrIterator aIter( pAttrArray.get(), nStartRow, nEndRow, &rDocument.getCellAttributeHelper().getDefaultCellAttribute() );
 
     SCROW nStart = -1;
     SCROW nEnd = -1;
@@ -1068,8 +1068,8 @@ void ScColumn::GetOptimalHeight(
 
                         if (rCxt.isForceAutoSize() || !(rDocument.GetRowFlags(nRow, nTab) & CRFlags::ManualSize) )
                         {
-                            aOptions.pPattern = pPattern;
-                            const ScPatternAttr* pOldPattern = pPattern;
+                            aOptions.aPattern.setScPatternAttr(pPattern);
+                            const CellAttributeHolder aOldPattern(pPattern);
                             sal_uInt16 nHeight = static_cast<sal_uInt16>(
                                 std::min(
                                     GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
@@ -1078,8 +1078,9 @@ void ScColumn::GetOptimalHeight(
                                     double(std::numeric_limits<sal_uInt16>::max())));
                             if (nHeight > rHeights.GetValue(nRow))
                                 rHeights.SetValue(nRow, nRow, nHeight);
+
                             // Pattern changed due to calculation? => sync.
-                            if (!SfxPoolItem::areSame(pPattern, pOldPattern))
+                            if (!ScPatternAttr::areSame(pPattern, aOldPattern.getScPatternAttr()))
                             {
                                 pPattern = aIter.Resync( nRow, nStart, nEnd);
                                 nNextEnd = 0;

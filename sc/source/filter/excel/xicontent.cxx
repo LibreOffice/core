@@ -942,7 +942,7 @@ void XclImpValidationManager::Apply()
         DVItem& rItem = *rxDVItem;
         // set the handle ID
         sal_uInt32 nHandle = rDoc.AddValidationEntry( rItem.maValidData );
-        ScPatternAttr aPattern( rDoc.GetPool() );
+        ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
         // apply all ranges

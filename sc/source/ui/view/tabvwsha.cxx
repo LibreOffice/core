@@ -1203,7 +1203,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                             // style pointer to names before erase,
                             // otherwise cells will get invalid pointer
                             //!!! As it happens, a method that does it for a particular style
-                            rDoc.StylesToNames();
+                            rDoc.getCellAttributeHelper().AllStylesToNames();
                             bConvertBack = true;
                             pStylePool->Remove(pStyleSheet);
                         }
@@ -1219,9 +1219,9 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                         if ( bConvertBack )
                             // Name to style pointer
-                            rDoc.UpdStlShtPtrsFrmNms();
+                            rDoc.getCellAttributeHelper().UpdateAllStyleSheets(rDoc);
                         else
-                            rDoc.GetPool()->CellStyleCreated( aStyleName, rDoc );
+                            rDoc.getCellAttributeHelper().CellStyleCreated(rDoc, aStyleName);
 
                         // Adopt attribute and use style
                         pStyleSheet->GetItemSet().Put( aAttrSet );
@@ -1598,7 +1598,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                                                 pNew->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
                         }
 
-                        rDoc.GetPool()->CellStyleCreated( pStyleSheet->GetName(), rDoc );
+                        rDoc.getCellAttributeHelper().CellStyleCreated(rDoc, pStyleSheet->GetName());
                     }
                     else if ( SfxStyleFamily::Page == eFam )
                     {

@@ -958,7 +958,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     {   // set number format if incompatible
         // MarkData was already MarkToSimple'ed in PasteFromClip
         const ScRange& aRange = rMark.GetMarkArea();
-        ScPatternAttr aPattern( rDoc.GetPool() );
+        ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
         aPattern.GetItemSet().Put( *pItem );
         SvNumFormatType nNewType = rDoc.GetFormatTable()->GetType( pItem->GetValue() );
         rDoc.ApplyPatternIfNumberformatIncompatible( aRange, rMark,
@@ -2379,7 +2379,7 @@ void ScViewFunc::ExtendScenario()
         //  Undo: apply attributes
 
     ScDocument& rDoc = GetViewData().GetDocument();
-    ScPatternAttr aPattern( rDoc.GetPool() );
+    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
     aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
     aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
     ApplySelectionPattern(aPattern);

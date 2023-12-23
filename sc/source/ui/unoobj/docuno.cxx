@@ -1031,8 +1031,7 @@ static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
 {
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    const ScPatternAttr *pAttr = rDoc.GetDefPattern();
-    const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+    const SfxPoolItem& rItem(rDoc.getCellAttributeHelper().getDefaultCellAttribute().GetItem(ATTR_BACKGROUND));
     const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
     const Color& rColor = rBackground.GetColor();
 

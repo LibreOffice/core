@@ -332,6 +332,10 @@ void ScDocument::SharePooledResources( const ScDocument* pSrcDoc )
     ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     mxPoolHelper = pSrcDoc->mxPoolHelper;
     mpCellStringPool = pSrcDoc->mpCellStringPool;
+
+    // force lazy creation/existance in source document *before* sharing
+    pSrcDoc->getCellAttributeHelper();
+    mpCellAttributeHelper = pSrcDoc->mpCellAttributeHelper;
 }
 
 void ScDocument::UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize )

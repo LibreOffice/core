@@ -19,35 +19,33 @@
 #pragma once
 
 #include "scdllapi.h"
+#include "patattr.hxx"
 #include <vector>
 
-class SfxItemPool;
+class CellAttributeHelper;
 class SfxItemSet;
 class SfxPoolItem;
-class ScPatternAttr;
 
 class ScItemPoolCache
 {
     struct SfxItemModifyImpl
     {
-        const ScPatternAttr  *pOrigItem;
-        ScPatternAttr        *pPoolItem;
+        const CellAttributeHolder aOriginal;
+        const CellAttributeHolder aModified;
+        SfxItemModifyImpl(const CellAttributeHolder& a, const CellAttributeHolder &b) : aOriginal(a), aModified(b) {}
     };
 
-    SfxItemPool             *pPool;
-    std::vector<SfxItemModifyImpl>
-                             m_aCache;
-    const SfxItemSet        *pSetToPut;
-    const SfxPoolItem       *pItemToPut;
+    CellAttributeHelper&        rHelper;
+    std::vector<SfxItemModifyImpl> m_aCache;
+    const SfxItemSet*           pSetToPut;
+    const SfxPoolItemHolder     aItemToPut;
 
 public:
-                            ScItemPoolCache( SfxItemPool *pPool,
-                                              const SfxPoolItem *pPutItem );
-                            ScItemPoolCache( SfxItemPool *pPool,
-                                              const SfxItemSet *pPutSet );
-                            ~ScItemPoolCache();
+    ScItemPoolCache( CellAttributeHelper& rHelper, const SfxPoolItem& rPutItem );
+    ScItemPoolCache( CellAttributeHelper& rHelper, const SfxItemSet& rPutSet );
+    ~ScItemPoolCache();
 
-    const ScPatternAttr&    ApplyTo( const ScPatternAttr& rSetItem );
+    const CellAttributeHolder& ApplyTo( const CellAttributeHolder& rSetItem );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

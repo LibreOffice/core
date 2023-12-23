@@ -5017,29 +5017,28 @@ bool ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
     return false;
 }
 
-const ScPatternAttr* ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPatternAttr> pAttr )
+void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const CellAttributeHolder& rHolder )
 {
     if (ScTable* pTable = FetchTable(nTab))
-        return pTable->SetPattern(nCol, nRow, std::move(pAttr));
-    return nullptr;
+        pTable->SetPattern(nCol, nRow, rHolder);
 }
 
-const ScPatternAttr* ScDocument::SetPattern( const ScAddress& rPos, std::unique_ptr<ScPatternAttr> pAttr )
+void ScDocument::SetPattern( const ScAddress& rPos, const CellAttributeHolder& rHolder )
 {
-    return SetPattern(rPos.Col(), rPos.Row(), rPos.Tab(), std::move(pAttr));
+    SetPattern(rPos.Col(), rPos.Row(), rPos.Tab(), rHolder);
 }
 
 void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr )
 {
     if (ScTable* pTable = FetchTable(nTab))
-        pTable->SetPattern(nCol, nRow, rAttr);
+        pTable->SetPattern(nCol, nRow, CellAttributeHolder(&rAttr));
 }
 
 void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
 {
     SCTAB nTab = rPos.Tab();
     if (ScTable* pTable = FetchTable(nTab))
-     pTable->SetPattern(rPos, rAttr);
+        pTable->SetPattern(rPos, rAttr);
 }
 
 std::unique_ptr<ScPatternAttr> ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool bDeep )
@@ -5075,14 +5074,14 @@ std::unique_ptr<ScPatternAttr> ScDocument::CreateSelectionPattern( const ScMarkD
     OSL_ENSURE( aState.pItemSet, "SelectionPattern Null" );
     if (aState.pItemSet)
     {
-        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( std::move(*aState.pItemSet) ));
+        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr(getCellAttributeHelper(), &aState.pItemSet.value()));
         if (aState.mbValidPatternId)
             pPattern->SetPAKey(aState.mnPatternId);
 
         return pPattern;
     }
     else
-        return std::unique_ptr<ScPatternAttr>(new ScPatternAttr( GetPool() )); // empty
+        return std::unique_ptr<ScPatternAttr>(new ScPatternAttr(getCellAttributeHelper())); // empty
 }
 
 const ScPatternAttr* ScDocument::GetSelectionPattern( const ScMarkData& rMark )
@@ -5522,9 +5521,10 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 
                 bool bHorOverlapped;
                 if ( pAttrArray.Count() )
-                    bHorOverlapped = pAttrArray.mvData[nIndex].pPattern->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
+                    bHorOverlapped = pAttrArray.mvData[nIndex].getScPatternAttr()->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
                 else
-                    bHorOverlapped = GetDefPattern()->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
+                    bHorOverlapped = getCellAttributeHelper().getDefaultCellAttribute().GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
+
                 if ( bHorOverlapped )
                 {
                     SCROW nEndRowSeg = (pAttrArray.Count()) ? pAttrArray.mvData[nIndex].nEndRow : MaxRow();
@@ -5912,14 +5912,14 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
     }
     else
     {
-        ScItemPoolCache aCache( mxPoolHelper->GetDocPool(), pSet );
+        ScItemPoolCache aCache( getCellAttributeHelper(), *pSet );
         SCTAB nMax = GetTableCount();
         for (const auto& rTab : rMark)
         {
             if (rTab >= nMax)
                 break;
             if (maTabs[rTab])
-                maTabs[rTab]->ApplySelectionCache( &aCache, rMark, pDataArray, pIsChanged );
+                maTabs[rTab]->ApplySelectionCache( aCache, rMark, pDataArray, pIsChanged );
         }
     }
 }
@@ -6072,11 +6072,6 @@ void ScDocument::DeleteSelectionTab(
     }
 }
 
-ScPatternAttr* ScDocument::GetDefPattern() const
-{
-    return const_cast<ScPatternAttr*>(&mxPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN));
-}
-
 ScDocumentPool* ScDocument::GetPool()
 {
     return mxPoolHelper ? mxPoolHelper->GetDocPool() : nullptr;
@@ -6125,32 +6120,6 @@ void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCCOL nMovX, 
 }
 
 //  Data operations
-
-void ScDocument::UpdStlShtPtrsFrmNms()
-{
-    ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
-
-    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_PATTERN))
-    {
-        auto pPattern = const_cast<ScPatternAttr*>(dynamic_cast<const ScPatternAttr*>(pItem));
-        if (pPattern)
-            pPattern->UpdateStyleSheet(*this);
-    }
-    const_cast<ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet(*this);
-}
-
-void ScDocument::StylesToNames()
-{
-    ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
-
-    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_PATTERN))
-    {
-        auto pPattern = const_cast<ScPatternAttr*>(dynamic_cast<const ScPatternAttr*>(pItem));
-        if (pPattern)
-            pPattern->StyleToName();
-    }
-    const_cast<ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN)).StyleToName();
-}
 
 sal_uInt64 ScDocument::GetCellCount() const
 {

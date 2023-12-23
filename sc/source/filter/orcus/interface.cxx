@@ -1255,7 +1255,7 @@ void ScOrcusSheet::set_format(os::row_t row, os::col_t col, size_t xf_index)
 {
     SAL_INFO("sc.orcus.style", "set format: " << xf_index);
 
-    ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
+    ScPatternAttr aPattern(mrDoc.getDoc().getCellAttributeHelper());
     mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
     mrDoc.getDoc().ApplyPattern(col, row, mnTab, aPattern);
 }
@@ -1264,7 +1264,7 @@ void ScOrcusSheet::set_format(os::row_t row_start, os::col_t col_start,
         os::row_t row_end, os::col_t col_end, size_t xf_index)
 {
     SAL_INFO("sc.orcus.style", "set format range: " << xf_index);
-    ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
+    ScPatternAttr aPattern(mrDoc.getDoc().getCellAttributeHelper());
     mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
     mrDoc.getDoc().ApplyPatternAreaTab(col_start, row_start, col_end, row_end, mnTab, aPattern);
 }
@@ -1272,7 +1272,7 @@ void ScOrcusSheet::set_format(os::row_t row_start, os::col_t col_start,
 void ScOrcusSheet::set_column_format(
     os::col_t col, os::col_t col_span, std::size_t xf_index)
 {
-    ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
+    ScPatternAttr aPattern(mrDoc.getDoc().getCellAttributeHelper());
     mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
 
     mrDoc.getDoc().ApplyPatternAreaTab(
@@ -1281,7 +1281,7 @@ void ScOrcusSheet::set_column_format(
 
 void ScOrcusSheet::set_row_format(os::row_t row, std::size_t xf_index)
 {
-    ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
+    ScPatternAttr aPattern(mrDoc.getDoc().getCellAttributeHelper());
     mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
 
     mrDoc.getDoc().ApplyPatternAreaTab(

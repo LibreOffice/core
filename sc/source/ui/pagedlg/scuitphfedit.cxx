@@ -80,8 +80,8 @@ ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pCont
 
     //! use default style from current document?
     //! if font color is used, header/footer background color must be set
-
-    ScPatternAttr aPatAttr( rCoreAttrs.GetPool() );
+    const CellAttributeHelper aTempHelper(*rCoreAttrs.GetPool());
+    const ScPatternAttr& rDefaultCellAttribute(aTempHelper.getDefaultCellAttribute());
 
     m_xLbDefined->connect_popup_toggled( LINK( this, ScHFEditPage, ListToggleHdl_Impl) );
     m_xLbDefined->connect_changed( LINK( this, ScHFEditPage, ListHdl_Impl ) );
@@ -109,9 +109,9 @@ ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pCont
         m_xWndLeftWnd->set_grid_left_attach(nOldRightAttach);
         m_xWndRightWnd->set_grid_left_attach(nOldLeftAttach);
     }
-    m_xWndLeft->SetFont( aPatAttr );
-    m_xWndCenter->SetFont( aPatAttr );
-    m_xWndRight->SetFont( aPatAttr );
+    m_xWndLeft->SetFont( rDefaultCellAttribute );
+    m_xWndCenter->SetFont( rDefaultCellAttribute );
+    m_xWndRight->SetFont( rDefaultCellAttribute );
 
     m_xWndLeft->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
     m_xWndCenter->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );

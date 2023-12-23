@@ -1609,7 +1609,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     m_pDoc->SetString(10, 17, srcSheet, "=SUM(Range_aCa5_aCa10)");
 
     // add patterns
-    ScPatternAttr aCellBlueColor(m_pDoc->GetPool());
+    ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
     aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(1, 2, 1, 4, srcSheet, aCellBlueColor);
 
@@ -1624,12 +1624,12 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     CPPUNIT_ASSERT_MESSAGE("SrcSheet.B6 has no pattern", !pItem);
 
     // row 2 on empty cell
-    ScPatternAttr aCellGreenColor(m_pDoc->GetPool());
+    ScPatternAttr aCellGreenColor(m_pDoc->getCellAttributeHelper());
     aCellGreenColor.GetItemSet().Put(SvxBrushItem(COL_GREEN, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(5, 4, 5, 4, srcSheet, aCellGreenColor);
 
     // row 4 for multi range row selection
-    ScPatternAttr aCellRedColor(m_pDoc->GetPool());
+    ScPatternAttr aCellRedColor(m_pDoc->getCellAttributeHelper());
     aCellRedColor.GetItemSet().Put(SvxBrushItem(COL_RED, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(3, 6, 4, 6, srcSheet, aCellRedColor);
 
@@ -9345,7 +9345,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
     m_pDoc->SetString(ScAddress(1, 4, 0), "E");
 
     // Set the background color of B1:B5 to blue.
-    ScPatternAttr aCellBackColor(m_pDoc->GetPool());
+    ScPatternAttr aCellBackColor(m_pDoc->getCellAttributeHelper());
     aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(1, 0, 1, 4, 0, aCellBackColor);
 
@@ -10723,7 +10723,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoBackgroundColor)
     m_pDoc->SetValue(ScAddress(3, 4, 0), 3.0); // D5
 
     // Add patterns
-    ScPatternAttr aCellBlueColor(m_pDoc->GetPool());
+    ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
     aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(0, 3, m_pDoc->MaxCol(), 3, 0, aCellBlueColor);
 

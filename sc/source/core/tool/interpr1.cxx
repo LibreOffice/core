@@ -2416,7 +2416,7 @@ void ScInterpreter::ScCell()
 
             pPrinter->SetMapMode(MapMode(MapUnit::MapTwip));
             // font color doesn't matter here
-            mrDoc.GetDefPattern()->fillFontOnly(aDefFont, pPrinter);
+            mrDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aDefFont, pPrinter);
             pPrinter->SetFont(aDefFont);
             tools::Long nZeroWidth = pPrinter->GetTextWidth( OUString( '0' ) );
             assert(nZeroWidth != 0);

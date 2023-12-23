@@ -18,94 +18,61 @@
  */
 
 
-#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svl/setitem.hxx>
 #include <poolcach.hxx>
 #include <tools/debug.hxx>
 #include <patattr.hxx>
 
-ScItemPoolCache::ScItemPoolCache( SfxItemPool *pItemPool,
-                                    const SfxPoolItem *pPutItem ):
-    pPool(pItemPool),
-    pSetToPut( nullptr ),
-    pItemToPut( &pItemPool->DirectPutItemInPool(*pPutItem) )
+ScItemPoolCache::ScItemPoolCache(CellAttributeHelper& _rHelper, const SfxPoolItem& rPutItem)
+: rHelper(_rHelper)
+, pSetToPut(nullptr)
+, aItemToPut(_rHelper.GetPool(), &rPutItem)
 {
-    DBG_ASSERT(pItemPool, "No Pool provided");
 }
 
-
-ScItemPoolCache::ScItemPoolCache( SfxItemPool *pItemPool,
-                                    const SfxItemSet *pPutSet ):
-    pPool(pItemPool),
-    pSetToPut( pPutSet ),
-    pItemToPut( nullptr )
+ScItemPoolCache::ScItemPoolCache(CellAttributeHelper& _rHelper, const SfxItemSet& rPutSet)
+: rHelper(_rHelper)
+, pSetToPut(&rPutSet)
+, aItemToPut()
 {
-    DBG_ASSERT(pItemPool, "No Pool provided");
 }
-
 
 ScItemPoolCache::~ScItemPoolCache()
 {
-    for (const SfxItemModifyImpl & rImpl : m_aCache) {
-        pPool->DirectRemoveItemFromPool( *rImpl.pPoolItem );
-        pPool->DirectRemoveItemFromPool( *rImpl.pOrigItem );
-    }
-
-    if ( pItemToPut )
-        pPool->DirectRemoveItemFromPool( *pItemToPut );
 }
 
-
-const ScPatternAttr& ScItemPoolCache::ApplyTo( const ScPatternAttr &rOrigItem )
+const CellAttributeHolder& ScItemPoolCache::ApplyTo(const CellAttributeHolder& rOrigItem)
 {
-    DBG_ASSERT( pPool == rOrigItem.GetItemSet().GetPool(), "invalid Pool" );
-    DBG_ASSERT( IsDefaultItem( &rOrigItem ) || IsPooledItem( &rOrigItem ),
-                "original not in pool" );
+    const ScPatternAttr* pAttr(rOrigItem.getScPatternAttr());
+    if (nullptr == pAttr)
+        return rOrigItem;
+
+    DBG_ASSERT(&rHelper.GetPool() == pAttr->GetItemSet().GetPool(), "invalid Pool (!)");
 
     // Find whether this Transformations ever occurred
     for (const SfxItemModifyImpl & rMapEntry : m_aCache)
     {
-        // use Item PtrCompare OK
-        if ( areSfxPoolItemPtrsEqual(rMapEntry.pOrigItem, &rOrigItem) )
+        // ptr compare: same used rOrigItem?
+        if (rMapEntry.aOriginal.getScPatternAttr() == pAttr)
         {
-            // Did anything change at all? use Item PtrCompare OK
-            if ( !areSfxPoolItemPtrsEqual(rMapEntry.pPoolItem, &rOrigItem) )
-            {
-                rMapEntry.pPoolItem->AddRef(2); // One for the cache
-                pPool->DirectPutItemInPool( rOrigItem );    //FIXME: AddRef?
-            }
-            return *rMapEntry.pPoolItem;
+            return rMapEntry.aModified;
         }
     }
 
     // Insert the new attributes in a new Set
-    std::unique_ptr<ScPatternAttr> pNewItem(rOrigItem.Clone());
-    if ( pItemToPut )
+    ScPatternAttr* pNewItem(new ScPatternAttr(*pAttr));
+
+    if (nullptr != aItemToPut.getItem())
     {
-        pNewItem->GetItemSet().Put( *pItemToPut );
-        DBG_ASSERT( areSfxPoolItemPtrsEqual(&pNewItem->GetItemSet().Get( pItemToPut->Which() ), pItemToPut),
-                    "wrong item in temporary set" );
+        pNewItem->GetItemSet().Put(*aItemToPut.getItem());
     }
     else
-        pNewItem->GetItemSet().Put( *pSetToPut );
-    const ScPatternAttr* pNewPoolItem = &pPool->DirectPutItemInPool( std::move(pNewItem) );
+    {
+        pNewItem->GetItemSet().Put(*pSetToPut);
+    }
 
-    // Adapt refcount; one each for the cache
-    pNewPoolItem->AddRef( !areSfxPoolItemPtrsEqual(pNewPoolItem, &rOrigItem) ? 2 : 1 );
-    pPool->DirectPutItemInPool( rOrigItem );    //FIXME: AddRef?
-
-    // Add the transformation to the cache
-    SfxItemModifyImpl aModify;
-    aModify.pOrigItem = &rOrigItem;
-    aModify.pPoolItem = const_cast<ScPatternAttr*>(pNewPoolItem);
-    m_aCache.push_back( aModify );
-
-    DBG_ASSERT( !pItemToPut ||
-                areSfxPoolItemPtrsEqual(&pNewPoolItem->GetItemSet().Get( pItemToPut->Which() ), pItemToPut),
-                "wrong item in resulting set" );
-
-    return *pNewPoolItem;
+    m_aCache.emplace_back(rOrigItem, CellAttributeHolder(pNewItem, true));
+    return m_aCache.back().aModified;
 }
 
 

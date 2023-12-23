@@ -356,6 +356,14 @@ public:
     };
 
 private:
+    // needs to be shared to allow the bIsClip/bIsUndo mechanism to
+    // do the right thing (SCDOCMODE_CLIP, SCDOCMODE_UNDO)
+    mutable std::shared_ptr<CellAttributeHelper> mpCellAttributeHelper;
+
+public:
+    SC_DLLPUBLIC CellAttributeHelper& getCellAttributeHelper() const;
+
+private:
     rtl::Reference<ScPoolHelper> mxPoolHelper;
 
     std::shared_ptr<svl::SharedStringPool> mpCellStringPool;
@@ -1939,8 +1947,8 @@ public:
                                          SCTAB nTab, ScMF nFlags );
 
     SC_DLLPUBLIC void    SetPattern( const ScAddress&, const ScPatternAttr& rAttr );
-    SC_DLLPUBLIC const ScPatternAttr* SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPatternAttr> pAttr );
-    SC_DLLPUBLIC const ScPatternAttr* SetPattern( const ScAddress& rPos, std::unique_ptr<ScPatternAttr> pAttr );
+    SC_DLLPUBLIC void    SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const CellAttributeHolder& rHolder );
+    SC_DLLPUBLIC void    SetPattern( const ScAddress& rPos, const CellAttributeHolder& rHolder );
     SC_DLLPUBLIC void    SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr );
 
     void                 AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
@@ -2090,7 +2098,6 @@ public:
     void            StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SCTAB nTab );
     void            ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SCTAB nTab );
 
-    SC_DLLPUBLIC ScPatternAttr*     GetDefPattern() const;
     SC_DLLPUBLIC ScDocumentPool*    GetPool();
     SC_DLLPUBLIC ScStyleSheetPool*  GetStyleSheetPool() const;
     void GetUnprotectedCells( ScRangeList& rRange, SCTAB nTab ) const;
@@ -2141,9 +2148,6 @@ public:
     SC_DLLPUBLIC tools::Rectangle       GetMMRect( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC ScRange         GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool bHiddenAsZero = true ) const;
-
-    void                         UpdStlShtPtrsFrmNms();
-    void                         StylesToNames();
 
     SC_DLLPUBLIC void            CopyStdStylesFrom( const ScDocument& rSrcDoc );
 

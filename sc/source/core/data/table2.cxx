@@ -439,7 +439,7 @@ void ScTable::DeleteArea(
 
         if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
         {
-            ScPatternAttr aPattern(rDocument.GetPool());
+            ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
             aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
@@ -476,11 +476,10 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
 
     if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
     {
-        ScDocumentPool* pPool = rDocument.GetPool();
-        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aSet( *pPool );
+        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aSet(*rDocument.GetPool());
         aSet.Put( ScProtectionAttr( false ) );
-        ScItemPoolCache aCache( pPool, &aSet );
-        ApplySelectionCache( &aCache, rMark );
+        ScItemPoolCache aCache(rDocument.getCellAttributeHelper(), aSet );
+        ApplySelectionCache( aCache, rMark );
     }
 
     // TODO: In the future we may want to check if the table has been
@@ -773,7 +772,7 @@ void ScTable::CopyFromClip(
     // Do not set protected cell in a protected sheet
     if (IsProtected() && (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB))
     {
-        ScPatternAttr aPattern(rDocument.GetPool());
+        ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
         aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
         ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
     }
@@ -1057,7 +1056,8 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
     std::unique_ptr<ScAttrIterator> pAttrIter(aCol[nCol].CreateAttrIterator( nRow1, nRow2 ));
     while ( (pPattern = pAttrIter->Next( nAttrRow1, nAttrRow2 )) != nullptr )
     {
-            if ( !IsDefaultItem( pPattern ) )
+            // ptr compare OK, was so before
+            if (&rDocument.getCellAttributeHelper().getDefaultCellAttribute() != pPattern)
             {
                 const SfxItemSet& rSet = pPattern->GetItemSet();
                 if ( rSet.GetItemState( ATTR_MERGE, false ) == SfxItemState::DEFAULT &&
@@ -2932,13 +2932,11 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
 
 namespace
 {
-    std::vector<ScAttrEntry> duplicateScAttrEntries(ScDocument& rDocument, const std::vector<ScAttrEntry>& rOrigData)
+    std::vector<ScAttrEntry> duplicateScAttrEntries(const std::vector<ScAttrEntry>& rOrigData)
     {
+        // this can now just be copied, will do the right thing with the
+        // ref-counted ScAttrEntry instances
         std::vector<ScAttrEntry> aData(rOrigData);
-        for (size_t nIdx = 0; nIdx < aData.size(); ++nIdx)
-        {
-            aData[nIdx].pPattern = &rDocument.GetPool()->DirectPutItemInPool(*aData[nIdx].pPattern);
-        }
         return aData;
     }
 }
@@ -2954,7 +2952,7 @@ void ScTable::SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttr
             // If we would like set all columns to same attrs, then change only attrs for not existing columns
             nEndCol = aCol.size() - 1;
             for (SCCOL i = nStartCol; i <= nEndCol; i++)
-                aCol[i].SetAttrEntries(duplicateScAttrEntries(rDocument, vNewData));
+                aCol[i].SetAttrEntries(duplicateScAttrEntries(vNewData));
             aDefaultColData.SetAttrEntries(std::move(vNewData));
         }
         else
@@ -2967,7 +2965,7 @@ void ScTable::SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttr
     {
         CreateColumnIfNotExists( nEndCol );
         for (SCCOL i = nStartCol; i < nEndCol; i++) // all but last need a copy
-            aCol[i].SetAttrEntries(duplicateScAttrEntries(rDocument, vNewData));
+            aCol[i].SetAttrEntries(duplicateScAttrEntries(vNewData));
         aCol[nEndCol].SetAttrEntries( std::move(vNewData));
     }
 }
@@ -3021,7 +3019,7 @@ void ScTable::RemoveCondFormatData( const ScRangeList& rRangeList, sal_uInt32 nI
 void  ScTable::SetPatternAreaCondFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
         const ScPatternAttr& rAttr, const ScCondFormatIndexes& rCondFormatIndexes )
 {
-    CreateColumnIfNotExists(nCol).SetPatternArea( nStartRow, nEndRow, rAttr);
+    CreateColumnIfNotExists(nCol).SetPatternArea( nStartRow, nEndRow, CellAttributeHolder(&rAttr));
 
     for (const auto& rIndex : rCondFormatIndexes)
     {
@@ -3217,11 +3215,10 @@ void ScTable::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
         CreateColumnIfNotExists(rPos.Col()).SetPattern(rPos.Row(), rAttr);
 }
 
-const ScPatternAttr* ScTable::SetPattern( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPatternAttr> pAttr )
+void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const CellAttributeHolder& rHolder )
 {
     if (ValidColRow(nCol,nRow))
-        return CreateColumnIfNotExists(nCol).SetPattern(nRow, std::move(pAttr));
-    return nullptr;
+        CreateColumnIfNotExists(nCol).SetPattern(nRow, rHolder);
 }
 
 void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
@@ -3236,7 +3233,7 @@ void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )
         CreateColumnIfNotExists(nCol).ApplyAttr( nRow, rAttr );
 }
 
-void ScTable::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark,
+void ScTable::ApplySelectionCache( ScItemPoolCache& rCache, const ScMarkData& rMark,
                                    ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     if(!rMark.GetTableSelect(nTab))
@@ -3248,7 +3245,7 @@ void ScTable::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rM
         lastChangeCol = rMark.GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
         if( lastChangeCol >= 0 )
             CreateColumnIfNotExists(lastChangeCol); // Allocate needed different columns before changing the default.
-        aDefaultColData.ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged, GetDoc().MaxCol());
+        aDefaultColData.ApplySelectionCache( rCache, rMark, pDataArray, pIsChanged, GetDoc().MaxCol());
     }
     else // need to allocate all columns affected
     {
@@ -3257,7 +3254,7 @@ void ScTable::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rM
     }
 
     for (SCCOL i=0; i <= lastChangeCol; i++)
-        aCol[i].ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged );
+        aCol[i].ApplySelectionCache( rCache, rMark, pDataArray, pIsChanged );
 }
 
 void ScTable::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )

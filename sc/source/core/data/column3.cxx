@@ -2046,7 +2046,7 @@ void ScColumn::MixData(
 
 std::unique_ptr<ScAttrIterator> ScColumnData::CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const
 {
-    return std::make_unique<ScAttrIterator>( pAttrArray.get(), nStartRow, nEndRow, GetDoc().GetDefPattern() );
+    return std::make_unique<ScAttrIterator>( pAttrArray.get(), nStartRow, nEndRow, &GetDoc().getCellAttributeHelper().getDefaultCellAttribute() );
 }
 
 namespace {
@@ -2097,7 +2097,7 @@ namespace {
 void applyTextNumFormat( ScColumn& rCol, SCROW nRow, SvNumberFormatter* pFormatter )
 {
     sal_uInt32 nFormat = pFormatter->GetStandardFormat(SvNumFormatType::TEXT);
-    ScPatternAttr aNewAttrs(rCol.GetDoc().GetPool());
+    ScPatternAttr aNewAttrs(rCol.GetDoc().getCellAttributeHelper());
     SfxItemSet& rSet = aNewAttrs.GetItemSet();
     rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     rCol.ApplyPattern(nRow, aNewAttrs);
@@ -2995,7 +2995,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
     FormulaToValueHandler aFunc;
     sc::CellStoreType::const_iterator itPos = maCells.begin();
 
-    ScAttrIterator aAttrIter( pAttrArray.get(), nStartRow, nEndRow, GetDoc().GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), nStartRow, nEndRow, &GetDoc().getCellAttributeHelper().getDefaultCellAttribute() );
     SCROW nTop = -1;
     SCROW nBottom = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nTop, nBottom );

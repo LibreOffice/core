@@ -1224,7 +1224,7 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         return;
 
     const SfxItemSet& rEditAttr = aTester.GetAttribs();
-    ScPatternAttr aPattern( rDoc.GetPool() );
+    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
     aPattern.GetFromEditItemSet( &rEditAttr );
     aPattern.DeleteUnchanged( rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() ) );
     aPattern.GetItemSet().ClearItem( ATTR_HOR_JUSTIFY );    // wasn't removed above if no edit object
@@ -2770,7 +2770,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         // #i51445# old merge flag attributes must be deleted also for single cells,
         // not only for whole columns/rows
 
-        ScPatternAttr aPattern( rDoc.GetPool() );
+        ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
         aPattern.GetItemSet().Put( ScMergeFlagAttr() );
 
         rDoc.ApplyPatternArea( nExtendStartCol, nExtendStartRow, nMergeTestEndCol, nMergeTestEndRow, aMark, aPattern );
@@ -5096,7 +5096,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, Sc
         }
 
         const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetDefaultItem( ATTR_MERGE );
-        ScPatternAttr aPattern( rDoc.GetPool() );
+        ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
         aPattern.GetItemSet().Put( rDefAttr );
         rDoc.ApplyPatternAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
                                    aRange.aEnd.Col(), aRange.aEnd.Row(), nTab,

@@ -67,24 +67,38 @@ struct ScLineFlags
 struct ScMergePatternState
 {
     std::optional<SfxItemSet> pItemSet;
-    const ScPatternAttr* pOld1;     ///< existing objects, temporary
-    const ScPatternAttr* pOld2;
+    CellAttributeHolder aOld1;     ///< existing objects, temporary
+    CellAttributeHolder aOld2;
 
     bool mbValidPatternId;
     sal_uInt64 mnPatternId;
 
-    ScMergePatternState() : pOld1(nullptr), pOld2(nullptr),
+    ScMergePatternState() : aOld1(), aOld2(),
                         mbValidPatternId(true), mnPatternId(0) {}
 };
 
 // we store an array of these where the pattern applies to all rows up till nEndRow
-struct ScAttrEntry
+class ScAttrEntry
 {
+    CellAttributeHolder     aPattern;
+
+public:
+    ScAttrEntry()
+    : aPattern()
+    , nEndRow(0)
+    {}
+
     SCROW                   nEndRow;
-    const ScPatternAttr*    pPattern;
+
+    const CellAttributeHolder& getCellAttributeHolder() const { return aPattern; }
+    void setCellAttributeHolder(const CellAttributeHolder& rNew) { aPattern = rNew; }
+
+    const ScPatternAttr* getScPatternAttr() const { return aPattern.getScPatternAttr(); }
+    void setScPatternAttr(const ScPatternAttr* pNew, bool bPassingOwnership = false) { aPattern.setScPatternAttr(pNew, bPassingOwnership); }
+
     bool operator==( const ScAttrEntry& other ) const
     {
-        return nEndRow == other.nEndRow && SfxPoolItem::areSame(pPattern, other.pPattern);
+        return nEndRow == other.nEndRow && CellAttributeHolder::areSame(&aPattern, &other.aPattern);
     }
 };
 
@@ -125,7 +139,7 @@ public:
 #if DEBUG_SC_TESTATTRARRAY
     void    TestData() const;
 #endif
-    void    Reset( const ScPatternAttr* pPattern);
+    void    Reset(const CellAttributeHolder& rPattern);
     bool    Concat(SCSIZE nPos);
 
     const ScPatternAttr* GetPattern( SCROW nRow ) const;
@@ -144,18 +158,12 @@ public:
     void    ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight);
 
-    void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool = false )
-    { SetPatternAreaImpl(nRow, nRow, pPattern, bPutToPool, nullptr, /*bPassingOwnership*/false); }
-    const ScPatternAttr* SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> pPattern, bool bPutToPool = false )
-    { return SetPatternAreaImpl(nRow, nRow, pPattern.release(), bPutToPool, nullptr, /*bPassingOwnership*/true); }
-    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, std::unique_ptr<ScPatternAttr> pPattern,
-                            bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr)
-    { SetPatternAreaImpl(nStartRow, nEndRow, pPattern.release(), bPutToPool, pDataArray, /*bPassingOwnership*/true); }
-    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
-                            bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr)
-    { SetPatternAreaImpl(nStartRow, nEndRow, pPattern, bPutToPool, pDataArray, /*bPassingOwnership*/false); }
+    void    SetPattern( SCROW nRow, const CellAttributeHolder& rPattern )
+    { SetPatternAreaImpl(nRow, nRow, rPattern, nullptr); }
+    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const CellAttributeHolder& rPattern, ScEditDataArray* pDataArray = nullptr)
+    { SetPatternAreaImpl(nStartRow, nEndRow, rPattern, pDataArray); }
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
-    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, ScItemPoolCache* pCache,
+    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, ScItemPoolCache& rCache,
                             ScEditDataArray* pDataArray = nullptr, bool* const pIsChanged = nullptr );
     void    SetAttrEntries(std::vector<ScAttrEntry> && vNewData);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
@@ -196,8 +204,7 @@ public:
     void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
     bool    IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
-    void    SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
-                                    const ScPatternAttr* pWantedPattern, bool bDefault );
+    void    SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow, const CellAttributeHolder& rWantedPattern );
     void    CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray );
 
     bool    IsEmpty() const;
@@ -227,9 +234,8 @@ public:
     SCSIZE  Count( SCROW nRow1, SCROW nRow2 ) const;
 
 private:
-    const ScPatternAttr* SetPatternAreaImpl( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
-                            bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr,
-                            bool bPassingPatternOwnership = false );
+    const ScPatternAttr* SetPatternAreaImpl(
+        SCROW nStartRow, SCROW nEndRow, const CellAttributeHolder& rPattern, ScEditDataArray* pDataArray = nullptr);
 };
 
 //                              Iterator for attributes
@@ -287,7 +293,7 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
     {
         rTop = nRow;
         rBottom = std::min( pArray->mvData[nPos].nEndRow, nEndRow );
-        pRet = pArray->mvData[nPos].pPattern;
+        pRet = pArray->mvData[nPos].getScPatternAttr();
         nRow = rBottom + 1;
         ++nPos;
     }

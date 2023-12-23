@@ -228,12 +228,12 @@ static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
 
 void ScDocShell::LoadStyles( SfxObjectShell &rSource )
 {
-    m_pDocument->StylesToNames();
+    m_pDocument->getCellAttributeHelper().AllStylesToNames();
 
     SfxObjectShell::LoadStyles(rSource);
     lcl_AdjustPool( GetStyleSheetPool() );      // adjust SetItems
 
-    m_pDocument->UpdStlShtPtrsFrmNms();
+    m_pDocument->getCellAttributeHelper().UpdateAllStyleSheets(*m_pDocument);
 
     UpdateAllRowHeights();
 

@@ -134,7 +134,6 @@ class SVL_DLLPUBLIC SfxPoolItem
     bool        m_bStaticDefault : 1;       // bit 1
     bool        m_bPoolDefault : 1;         // bit 2
     bool        m_bRegisteredAtPool : 1;    // bit 3
-    bool        m_bExceptionalSCItem : 1;   // bit 4
     bool        m_bIsSetItem : 1;           // bit 5
 
 protected:
@@ -155,7 +154,6 @@ protected:
     void setStaticDefault() { m_bStaticDefault = true; }
     void setPoolDefault() { m_bPoolDefault = true; }
     void setRegisteredAtPool(bool bNew) { m_bRegisteredAtPool = bNew; }
-    void setExceptionalSCItem() { m_bExceptionalSCItem = true; }
     void setIsSetItem() { m_bIsSetItem = true; }
 
 public:
@@ -174,7 +172,6 @@ public:
     bool isStaticDefault() const { return m_bStaticDefault; }
     bool isPoolDefault() const { return m_bPoolDefault; }
     bool isRegisteredAtPool() const { return m_bRegisteredAtPool; }
-    bool isExceptionalSCItem() const { return m_bExceptionalSCItem; }
     bool isSetItem() const { return m_bIsSetItem; }
 
     // version that allows nullptrs

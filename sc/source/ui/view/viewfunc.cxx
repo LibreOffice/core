@@ -627,7 +627,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     const SvNumberformat* pEntry = pFormatter->GetEntry( nIndex);
                     const LanguageType nLang = (pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge);
                     const sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, nLang);
-                    ScPatternAttr aPattern( rDoc.GetPool());
+                    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
                     aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
                     ScMarkData aMark(rDoc.GetSheetLimits());
                     aMark.SelectTable( i, true);
@@ -1005,8 +1005,9 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet& rDialogSet,
         return;
     }
 
-    ScPatternAttr aOldAttrs(( SfxItemSet(rOldSet) ));
-    ScPatternAttr aNewAttrs(( SfxItemSet(rDialogSet) ));
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScPatternAttr aOldAttrs(rDoc.getCellAttributeHelper(), &rOldSet);
+    ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper(), &rDialogSet);
     aNewAttrs.DeleteUnchanged( &aOldAttrs );
 
     if ( rDialogSet.GetItemState( ATTR_VALUE_FORMAT ) == SfxItemState::SET )
@@ -1115,8 +1116,8 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem, bool bAdjustBlockHeigh
         return;
     }
 
-    ScPatternAttr aNewAttrs(
-        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *GetViewData().GetDocument().GetPool() ) );
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper());
 
     aNewAttrs.GetItemSet().Put( rAttrItem );
     //  if justify is set (with Buttons), always indentation 0
@@ -1426,7 +1427,7 @@ void ScViewFunc::ApplyUserItemSet( const SfxItemSet& rItemSet )
         return;
     }
 
-    ScPatternAttr aNewAttrs( GetViewData().GetDocument().GetPool() );
+    ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
     SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
     rNewSet.Put( rItemSet, false );
     ApplySelectionPattern( aNewAttrs );
@@ -2781,7 +2782,7 @@ void ScViewFunc::SetNumberFormat( SvNumFormatType nFormatType, sal_uLong nAdd )
     ScDocument&         rDoc = rViewData.GetDocument();
     SvNumberFormatter*  pNumberFormatter = rDoc.GetFormatTable();
     LanguageType        eLanguage = ScGlobal::eLnge;
-    ScPatternAttr       aNewAttrs( rDoc.GetPool() );
+    ScPatternAttr       aNewAttrs(rDoc.getCellAttributeHelper());
 
     //  always take language from cursor position, even if there is a selection
 
@@ -2837,7 +2838,7 @@ void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
 
     if ( bOk )          // valid format?
     {
-        ScPatternAttr aNewAttrs( rDoc.GetPool() );
+        ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper());
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
         rSet.Put( SvxLanguageItem( eLanguage, ATTR_LANGUAGE_FORMAT ) );
@@ -2970,7 +2971,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 
     if (!bError)
     {
-        ScPatternAttr aNewAttrs( rDoc.GetPool() );
+        ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper());
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
         //  ATTR_LANGUAGE_FORMAT not

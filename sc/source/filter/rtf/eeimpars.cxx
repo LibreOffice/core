@@ -143,7 +143,6 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         // Automatic language option selected.  Check for the global 'use US English' option.
         bNumbersEnglishUS = officecfg::Office::Common::Filter::HTML::Import::NumbersEnglishUS::get();
     }
-    ScDocumentPool* pDocPool = mpDoc->GetPool();
     ScRangeName* pRangeNames = mpDoc->GetRangeName();
     for ( size_t i = 0, n = mpParser->ListSize(); i < n; ++i )
     {
@@ -218,7 +217,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             }
 
             // Set attributes
-            auto pAttr = std::make_unique<ScPatternAttr>( pDocPool );
+            ScPatternAttr* pAttr(new ScPatternAttr(mpDoc->getCellAttributeHelper()));
             pAttr->GetFromEditItemSet( &aSet );
             SfxItemSet* pAttrItemSet = &pAttr->GetItemSet();
             if (!aNumStr.isEmpty())
@@ -325,7 +324,9 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             const ScStyleSheet* pStyleSheet =
                 mpDoc->GetPattern( nCol, nRow, nTab )->GetStyleSheet();
             pAttr->SetStyleSheet( const_cast<ScStyleSheet*>(pStyleSheet) );
-            auto rAttrItemSet2 = mpDoc->SetPattern( nCol, nRow, nTab, std::move(pAttr) )->GetItemSet();
+            CellAttributeHolder aHolder(pAttr, true);
+            mpDoc->SetPattern( nCol, nRow, nTab, aHolder);
+            const SfxItemSet& rAttrItemSet2(aHolder.getScPatternAttr()->GetItemSet());
 
             // Add data
             if (bSimple)

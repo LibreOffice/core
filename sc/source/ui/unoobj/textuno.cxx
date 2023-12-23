@@ -172,16 +172,33 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
         pHdrEngine->SetRefMapMode(MapMode(MapUnit::MapTwip));
 
         //  default font must be set, independently of document
-        //  -> use global pool from module
+        ScDocShell* pDocSh(dynamic_cast<ScDocShell*>(SfxObjectShell::Current()));
+        std::unique_ptr<CellAttributeHelper> pTmp;
+        const ScPatternAttr* pCellAttributeDefault(nullptr);
+
+        if (nullptr != pDocSh)
+        {
+            // we can use default CellAttribute from ScDocument
+            pCellAttributeDefault = &pDocSh->GetDocument().getCellAttributeHelper().getDefaultCellAttribute();
+        }
+        else
+        {
+            // no access to ScDocument, use temporary default CellAttributeHelper
+            // was: "use global pool from module" which is usually ScMessagePool
+            // and gets set in ScTabViewObj::SelectionChanged() by
+            // ScFormatShell::ScFormatShell which  calls
+            //    SetPool( &pTabViewShell->GetPool() );
+            pTmp.reset(new CellAttributeHelper(SC_MOD()->GetPool()));
+            pCellAttributeDefault = &pTmp->getDefaultCellAttribute();
+        }
 
         SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
-        const ScPatternAttr& rPattern = SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
-        rPattern.FillEditItemSet( &aDefaults );
+        pCellAttributeDefault->FillEditItemSet( &aDefaults );
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
-        aDefaults.Put( rPattern.GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
-        aDefaults.Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) ) ;
-        aDefaults.Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) ) ;
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
         pHdrEngine->SetDefaults( aDefaults );
 
         ScHeaderFieldData aData;

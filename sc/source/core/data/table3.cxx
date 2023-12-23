@@ -238,9 +238,9 @@ public:
         const sc::CellTextAttr* mpAttr;
         const ScPostIt* mpNote;
         std::vector<SdrObject*> maDrawObjects;
-        const ScPatternAttr* mpPattern;
+        CellAttributeHolder maPattern;
 
-        Cell() : mpAttr(nullptr), mpNote(nullptr),  mpPattern(nullptr) {}
+        Cell() : mpAttr(nullptr), mpNote(nullptr),  maPattern() {}
     };
 
     struct Row
@@ -441,7 +441,7 @@ void initDataRows(
                 rCell.maDrawObjects = aRowDrawObjects[nRow];
 
             if (!bUniformPattern && bPattern)
-                rCell.mpPattern = rCol.GetPattern(nRow);
+                rCell.maPattern.setScPatternAttr(rCol.GetPattern(nRow));
         }
     }
 
@@ -543,7 +543,7 @@ namespace {
 
 struct SortedColumn
 {
-    typedef mdds::flat_segment_tree<SCROW, const ScPatternAttr*> PatRangeType;
+    typedef mdds::flat_segment_tree<SCROW, CellAttributeHolder> PatRangeType;
 
     sc::CellStoreType maCells;
     sc::CellTextAttrStoreType maCellTextAttrs;
@@ -565,9 +565,9 @@ struct SortedColumn
         maPatterns(0, rSheetLimits.GetMaxRowCount(), nullptr),
         miPatternPos(maPatterns.begin()) {}
 
-    void setPattern( SCROW nRow, const ScPatternAttr* pPat )
+    void setPattern( SCROW nRow, const CellAttributeHolder& rPat )
     {
-        miPatternPos = maPatterns.insert(miPatternPos, nRow, nRow+1, pPat).first;
+        miPatternPos = maPatterns.insert(miPatternPos, nRow, nRow+1, rPat).first;
     }
 };
 
@@ -611,10 +611,10 @@ struct PatternSpan
 {
     SCROW mnRow1;
     SCROW mnRow2;
-    const ScPatternAttr* mpPattern;
+    CellAttributeHolder maPattern;
 
-    PatternSpan( SCROW nRow1, SCROW nRow2, const ScPatternAttr* pPat ) :
-        mnRow1(nRow1), mnRow2(nRow2), mpPattern(pPat) {}
+    PatternSpan( SCROW nRow1, SCROW nRow2, const CellAttributeHolder& rPat ) :
+        mnRow1(nRow1), mnRow2(nRow2), maPattern(rPat) {}
 };
 
 }
@@ -809,8 +809,8 @@ void fillSortedColumnArray(
             // Add cell anchored images
             aSortedCols.at(j)->maCellDrawObjects.push_back(rCell.maDrawObjects);
 
-            if (rCell.mpPattern)
-                aSortedCols.at(j)->setPattern(nRow, rCell.mpPattern);
+            if (rCell.maPattern)
+                aSortedCols.at(j)->setPattern(nRow, rCell.maPattern);
         }
 
         if (!bOnlyDataAreaExtras && pArray->IsKeepQuery())
@@ -1186,19 +1186,12 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol
         {
             // Get all row spans where the pattern is not NULL.
             std::vector<PatternSpan> aSpans =
-                sc::toSpanArrayWithValue<SCROW,const ScPatternAttr*,PatternSpan>(
+                sc::toSpanArrayWithValue<SCROW, CellAttributeHolder, PatternSpan>(
                     aSortedCols[i]->maPatterns);
 
             for (const auto& rSpan : aSpans)
             {
-                assert(rSpan.mpPattern); // should never be NULL.
-                rDocument.GetPool()->DirectPutItemInPool(*rSpan.mpPattern);
-            }
-
-            for (const auto& rSpan : aSpans)
-            {
-                aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, *rSpan.mpPattern);
-                rDocument.GetPool()->DirectRemoveItemFromPool(*rSpan.mpPattern);
+                aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, rSpan.maPattern);
             }
         }
 
@@ -1387,19 +1380,12 @@ void ScTable::SortReorderByRowRefUpdate(
         {
             // Get all row spans where the pattern is not NULL.
             std::vector<PatternSpan> aSpans =
-                sc::toSpanArrayWithValue<SCROW,const ScPatternAttr*,PatternSpan>(
+                sc::toSpanArrayWithValue<SCROW, CellAttributeHolder, PatternSpan>(
                     aSortedCols[i]->maPatterns);
 
             for (const auto& rSpan : aSpans)
             {
-                assert(rSpan.mpPattern); // should never be NULL.
-                rDocument.GetPool()->DirectPutItemInPool(*rSpan.mpPattern);
-            }
-
-            for (const auto& rSpan : aSpans)
-            {
-                aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, *rSpan.mpPattern);
-                rDocument.GetPool()->DirectRemoveItemFromPool(*rSpan.mpPattern);
+                aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, rSpan.maPattern);
             }
         }
 
@@ -2045,11 +2031,11 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
     if ( pPattern->GetItemSet().GetItemState( ATTR_VALUE_FORMAT, false )
             == SfxItemState::SET )
     {
-        auto pNewPattern = std::make_unique<ScPatternAttr>( *pPattern );
+        ScPatternAttr* pNewPattern(new ScPatternAttr( *pPattern ));
         SfxItemSet& rSet = pNewPattern->GetItemSet();
         rSet.ClearItem( ATTR_VALUE_FORMAT );
         rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
-        pTab->SetPattern( nCol, nRow, std::move(pNewPattern) );
+        pTab->SetPattern( nCol, nRow, CellAttributeHolder(pNewPattern, true) );
     }
 }
 

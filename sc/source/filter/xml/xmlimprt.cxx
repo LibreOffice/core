@@ -605,8 +605,8 @@ void ScXMLImport::ExamineDefaultStyle()
         // #i62435# after inserting the styles, check if the default style has a latin-script-only
         // number format (then, value cells can be pre-initialized with western script type)
 
-        const ScPatternAttr* pDefPattern = pDoc->GetDefPattern();
-        if (pDefPattern && sc::NumFmtUtil::isLatinScript(*pDefPattern, *pDoc))
+        const ScPatternAttr& rDefPattern(pDoc->getCellAttributeHelper().getDefaultCellAttribute());
+        if (sc::NumFmtUtil::isLatinScript(rDefPattern, *pDoc))
             mpDocImport->setDefaultNumericScript(SvtScriptType::LATIN);
     }
 }

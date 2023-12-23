@@ -473,12 +473,12 @@ void ScDocument::FillInfo(
                         if ( pThisAttrArr->Count() )
                         {
                             nThisRow = pThisAttrArr->mvData[nIndex].nEndRow;              // End of range
-                            pPattern = pThisAttrArr->mvData[nIndex].pPattern;
+                            pPattern = pThisAttrArr->mvData[nIndex].getScPatternAttr();
                         }
                         else
                         {
                             nThisRow = MaxRow();
-                            pPattern = GetDefPattern();
+                            pPattern = &getCellAttributeHelper().getDefaultCellAttribute();
                         }
 
                         const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);

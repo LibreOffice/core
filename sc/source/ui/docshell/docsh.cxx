@@ -629,7 +629,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
             //  (for ConvertFrom, InitNew is called before)
             m_pDocument->MakeTable(0);
             m_pDocument->GetStyleSheetPool()->CreateStandardStyles();
-            m_pDocument->UpdStlShtPtrsFrmNms();
+            m_pDocument->getCellAttributeHelper().UpdateAllStyleSheets(*m_pDocument);
 
             /* Create styles that are imported through Orcus */
 

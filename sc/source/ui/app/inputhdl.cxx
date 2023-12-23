@@ -2541,7 +2541,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(),
                                                               aCursorPos.Row(),
                                                               aCursorPos.Tab() );
-            if (!SfxPoolItem::areSame(pPattern, pLastPattern))
+            if (!ScPatternAttr::areSame(pPattern, pLastPattern))
             {
                 // Percent format?
                 const SfxItemSet& rAttrSet = pPattern->GetItemSet();
@@ -3292,7 +3292,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
             if ( pCommonAttrs )
             {
                 ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
-                pCellAttrs = std::make_unique<ScPatternAttr>(rDoc.GetPool());
+                pCellAttrs = std::make_unique<ScPatternAttr>(rDoc.getCellAttributeHelper());
                 pCellAttrs->GetFromEditItemSet( &*pCommonAttrs );
             }
         }

@@ -100,7 +100,8 @@ struct ScInterpreterContext;
 
 struct ScNeededSizeOptions
 {
-    const ScPatternAttr* pPattern;
+    CellAttributeHolder aPattern;
+
     bool                bFormula;
     bool                bSkipMerged;
     bool                bGetFont;
@@ -144,7 +145,7 @@ public:
 
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
-    SCROW       ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
+    SCROW       ApplySelectionCache( ScItemPoolCache& rCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
                                      SCCOL nCol );
     void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                   ScEditDataArray* pDataArray = nullptr,
@@ -541,9 +542,9 @@ public:
 
     void        ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr );
     void        ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
-    const ScPatternAttr* SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> );
-    void        SetPattern( SCROW nRow, const ScPatternAttr& );
-    void        SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& );
+    void        SetPattern( SCROW nRow, const CellAttributeHolder& rHolder );
+    void        SetPattern( SCROW nRow, const ScPatternAttr& rPattern );
+    void        SetPatternArea( SCROW nStartRow, SCROW nEndRow, const CellAttributeHolder& );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, SvNumFormatType nNewType );
 
@@ -575,7 +576,7 @@ public:
 
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
-    SCROW       ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged );
+    SCROW       ApplySelectionCache( ScItemPoolCache& rCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged );
     void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
@@ -1031,20 +1032,19 @@ inline void ScColumn::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt
     pAttrArray->ClearItems( nStartRow, nEndRow, pWhich );
 }
 
-inline const ScPatternAttr* ScColumn::SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> pPatAttr )
+inline void ScColumn::SetPattern( SCROW nRow, const CellAttributeHolder& rHolder )
 {
-    return pAttrArray->SetPattern( nRow, std::move(pPatAttr), true/*bPutToPool*/ );
+    return pAttrArray->SetPattern( nRow, rHolder );
 }
 
-inline void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
+inline void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPattern )
 {
-    pAttrArray->SetPattern( nRow, &rPatAttr, true/*bPutToPool*/ );
+    pAttrArray->SetPattern( nRow, CellAttributeHolder(&rPattern) );
 }
 
-inline void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
-                                const ScPatternAttr& rPatAttr )
+inline void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow, const CellAttributeHolder& rHolder )
 {
-    pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, true/*bPutToPool*/ );
+    pAttrArray->SetPatternArea( nStartRow, nEndRow, rHolder );
 }
 
 inline void ScColumnData::SetAttrEntries(std::vector<ScAttrEntry> && vNewData)

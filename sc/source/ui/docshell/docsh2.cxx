@@ -61,7 +61,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     if (ScStyleSheetPool* pStyleSheetPool = m_pDocument->GetStyleSheetPool())
     {
         pStyleSheetPool->CreateStandardStyles();
-        m_pDocument->UpdStlShtPtrsFrmNms();
+        m_pDocument->getCellAttributeHelper().UpdateAllStyleSheets(*m_pDocument);
 
         /* Create styles that are imported through Orcus */
 

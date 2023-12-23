@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf143979)
         sal_uInt32 nFormat;
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
         pFormatter->PutEntry(aCode, nCheckPos, nType, nFormat);
-        ScPatternAttr aNewAttrs(pDoc->GetPool());
+        ScPatternAttr aNewAttrs(pDoc->getCellAttributeHelper());
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
         pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
@@ -1418,7 +1418,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testWholeRowBold)
         ScDocument* pDoc = getScDoc();
 
         // Make entire second row bold.
-        ScPatternAttr boldAttr(pDoc->GetPool());
+        ScPatternAttr boldAttr(pDoc->getCellAttributeHelper());
         boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
         pDoc->ApplyPatternAreaTab(0, 1, pDoc->MaxCol(), 1, 0, boldAttr);
     }

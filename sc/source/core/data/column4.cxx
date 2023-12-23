@@ -135,7 +135,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
 
             if (rCxt.isTableProtected())
             {
-                ScPatternAttr aPattern(rDocument.GetPool());
+                ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
                 aPattern.GetItemSet().Put(ScProtectionAttr(false));
                 ApplyPatternArea(aRange.mnRow1, aRange.mnRow2, aPattern);
             }
@@ -230,7 +230,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
 
             if (rCxt.isTableProtected())
             {
-                ScPatternAttr aPattern(rDocument.GetPool());
+                ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
                 aPattern.GetItemSet().Put(ScProtectionAttr(false));
                 ApplyPatternArea(nRow1, nRow2, aPattern);
             }
@@ -265,10 +265,13 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     {
         if (!rCxt.isSkipEmptyCells() || rSrcCell.getType() != CELLTYPE_NONE)
         {
-            const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
-                    rCxt.getSingleCellPattern(nColOffset)->PutInPool( &rDocument, rCxt.getClipDoc()));
+            CellAttributeHolder aNewPattern;
+            if (bSameDocPool)
+                aNewPattern.setScPatternAttr(rCxt.getSingleCellPattern(nColOffset));
+            else
+                aNewPattern = rCxt.getSingleCellPattern(nColOffset)->MigrateToDocument( &rDocument, rCxt.getClipDoc());
 
-            pAttrArray->SetPatternArea(nRow1, nRow2, pAttr, true);
+            pAttrArray->SetPatternArea(nRow1, nRow2, aNewPattern);
         }
     }
 
@@ -1248,10 +1251,9 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
         {
             const ScPatternAttr* pPat1 = GetPattern(nRow);
             const ScPatternAttr* pPat2 = rOther.GetPattern(nRow);
-            if (!SfxPoolItem::areSame(pPat1, pPat2))
+            if (!ScPatternAttr::areSame(pPat1, pPat2))
             {
-                if (pPat1->GetRefCount() == 1)
-                    pPat1 = &rOther.GetDoc().GetPool()->DirectPutItemInPool(*pPat1);
+                CellAttributeHolder aTemp(pPat1);
                 SetPattern(nRow, *pPat2);
                 rOther.SetPattern(nRow, *pPat1);
             }

@@ -499,8 +499,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         GetOutDev()->SetFillColor(aBackColor);
         GetOutDev()->DrawRect(tools::Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
 
-        const ScPatternAttr& rDefPattern =
-                rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN);
+        const ScPatternAttr& rDefPattern(rDoc.getCellAttributeHelper().getDefaultCellAttribute());
 
         std::unique_ptr<ScEditEngineDefaulter> pEditEng(
             new ScEditEngineDefaulter(EditEngine::CreatePool().get(), true));

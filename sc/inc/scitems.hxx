@@ -162,48 +162,46 @@ constexpr TypedWhichId<ScCondFormatItem> ATTR_CONDITIONAL (154);
 constexpr TypedWhichId<SfxStringItem> ATTR_HYPERLINK (155);
 
 constexpr sal_uInt16 ATTR_PATTERN_END(155);     // end cell-attribute-pattern
-
-constexpr TypedWhichId<ScPatternAttr> ATTR_PATTERN (156);
                                         // page attributes
-constexpr TypedWhichId<SvxLRSpaceItem> ATTR_LRSPACE (157);    // editor: PageDesc-TabPage
-constexpr TypedWhichId<SvxULSpaceItem> ATTR_ULSPACE (158);
-constexpr TypedWhichId<SvxPageItem> ATTR_PAGE (159);
-constexpr TypedWhichId<SvxPaperBinItem> ATTR_PAGE_PAPERBIN (160);
-constexpr TypedWhichId<SvxSizeItem> ATTR_PAGE_SIZE (161);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_HORCENTER (162);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_VERCENTER (163);
+constexpr TypedWhichId<SvxLRSpaceItem> ATTR_LRSPACE (156);    // editor: PageDesc-TabPage
+constexpr TypedWhichId<SvxULSpaceItem> ATTR_ULSPACE (157);
+constexpr TypedWhichId<SvxPageItem> ATTR_PAGE (158);
+constexpr TypedWhichId<SvxPaperBinItem> ATTR_PAGE_PAPERBIN (159);
+constexpr TypedWhichId<SvxSizeItem> ATTR_PAGE_SIZE (160);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_HORCENTER (161);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_VERCENTER (162);
 
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_ON (164);     // editor: header/footer-page
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_DYNAMIC (165);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_SHARED (166);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_SHARED_FIRST (167);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_ON (163);     // editor: header/footer-page
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_DYNAMIC (164);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_SHARED (165);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_SHARED_FIRST (166);
 
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NOTES (168);     // editor: table
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_GRID (169);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_HEADERS (170);
-constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_CHARTS (171);
-constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_OBJECTS (172);
-constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_DRAWINGS (173);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_TOPDOWN (174);
-constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALE (175);
-constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALETOPAGES (176);
-constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_FIRSTPAGENO (177);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NOTES (167);     // editor: table
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_GRID (168);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_HEADERS (169);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_CHARTS (170);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_OBJECTS (171);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_DRAWINGS (172);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_TOPDOWN (173);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALE (174);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALETOPAGES (175);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_FIRSTPAGENO (176);
 
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERLEFT (178);     // contents of header/
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERLEFT (179);     // footer (left)
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERRIGHT (180);    // contents of header/
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERRIGHT (181);    // footer (right)
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERFIRST (182);    // contents of header/
-constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERFIRST (183);    // footer (first page)
-constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_HEADERSET (184);     // the corresponding sets
-constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_FOOTERSET (185);
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERLEFT (177);     // contents of header/
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERLEFT (178);     // footer (left)
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERRIGHT (179);    // contents of header/
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERRIGHT (180);    // footer (right)
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERFIRST (181);    // contents of header/
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERFIRST (182);    // footer (first page)
+constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_HEADERSET (183);     // the corresponding sets
+constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_FOOTERSET (184);
 
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_FORMULAS (186);
-constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NULLVALS (187);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_FORMULAS (185);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NULLVALS (186);
 
-constexpr TypedWhichId<ScPageScaleToItem> ATTR_PAGE_SCALETO (188);     // #i8868# scale printout to width/height
+constexpr TypedWhichId<ScPageScaleToItem> ATTR_PAGE_SCALETO (187);     // #i8868# scale printout to width/height
 
-constexpr TypedWhichId<SfxBoolItem> ATTR_HIDDEN (189);
+constexpr TypedWhichId<SfxBoolItem> ATTR_HIDDEN (188);
 
 constexpr sal_uInt16 ATTR_ENDINDEX(ATTR_HIDDEN);        // end of pool-range
 

@@ -191,7 +191,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 SfxItemSet aItemSet( GetPool() );
 
-                ScPatternAttr aNewAttrs( GetViewData().GetDocument().GetPool() );
+                ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
                 SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
                 rNewSet.Put( aItemSet, false );
 
@@ -214,7 +214,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 SfxItemSet aItemSet( GetPool() );
 
-                ScPatternAttr aNewAttrs( GetViewData().GetDocument().GetPool() );
+                ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
                 SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
                 rNewSet.Put( aItemSet, false );
                 rDoc.ApplySelectionPattern( aNewAttrs, aPreviewMark );
@@ -345,7 +345,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     if ( nOldFormat != nNewFormat )
                     {
                         const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
-                        ScPatternAttr aNewAttrs( rDoc.GetPool() );
+                        ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper());
                         SfxItemSet& rSet = aNewAttrs.GetItemSet();
                         LanguageType eNewLang = pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
                         if ( eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW )
@@ -1924,7 +1924,7 @@ void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
             bool bVert = (nSlot == SID_TEXTDIRECTION_TOP_TO_BOTTOM);
-            ScPatternAttr aAttr( GetViewData().GetDocument().GetPool() );
+            ScPatternAttr aAttr(GetViewData().GetDocument().getCellAttributeHelper());
             SfxItemSet& rItemSet = aAttr.GetItemSet();
             rItemSet.Put( ScVerticalStackCell( bVert ) );
             rItemSet.Put( SfxBoolItem( ATTR_VERTICAL_ASIAN, bVert ) );

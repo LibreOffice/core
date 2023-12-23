@@ -152,7 +152,7 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     if ( pClipDoc->HasAttrib( 0,0,nSrcTab, pClipDoc->MaxCol(), pClipDoc->MaxRow(),nSrcTab,
                                 HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
     {
-        ScPatternAttr aPattern( pSrcDoc->GetPool() );
+        ScPatternAttr aPattern(pSrcDoc->getCellAttributeHelper());
         aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
         aPattern.GetItemSet().Put( ScMergeFlagAttr() );
         pClipDoc->ApplyPatternAreaTab( 0,0, pClipDoc->MaxCol(), pClipDoc->MaxRow(), nSrcTab, aPattern );

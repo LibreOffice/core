@@ -74,7 +74,7 @@ static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrAr
     const ScPatternAttr* pPattern = pNewArr->GetPatternRange( nRowStart, nRowEnd, nRow );
     if( !pPattern )
     {
-        pPattern = rDoc.GetDefPattern();
+        pPattern = &rDoc.getCellAttributeHelper().getDefaultCellAttribute();
         nRowEnd = rDoc.MaxRow();
     }
 
@@ -1402,11 +1402,11 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             {
                 pNextEnd[nPos] = rDoc.MaxRow();
                 assert( pNextEnd[nPos] >= nRow && "Sequence out of order" );
-                ppPatterns[nPos] = rDoc.GetDefPattern();
+                ppPatterns[nPos] = &rDoc.getCellAttributeHelper().getDefaultCellAttribute();
             }
             else if ( nIndex < pArray.Count() )
             {
-                const ScPatternAttr* pPattern = pArray.mvData[nIndex].pPattern;
+                const ScPatternAttr* pPattern = pArray.mvData[nIndex].getScPatternAttr();
                 SCROW nThisEnd = pArray.mvData[nIndex].nEndRow;
                 pNextEnd[nPos] = nThisEnd;
                 assert( pNextEnd[nPos] >= nRow && "Sequence out of order" );
@@ -1424,7 +1424,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             nMinNextEnd = pNextEnd[nPos];
 
         // store positions of ScHorizontalAttrIterator elements (minimizing expensive ScPatternAttr comparisons)
-        if (i > nStartCol && !SfxPoolItem::areSame(ppPatterns[nThisHead], ppPatterns[nPos]))
+        if (i > nStartCol && !ScPatternAttr::areSame(ppPatterns[nThisHead], ppPatterns[nPos]))
         {
            pHorizEnd[nThisHead] = i - 1;
            nThisHead = nPos; // start position of the next horizontal group

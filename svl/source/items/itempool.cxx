@@ -78,7 +78,6 @@ size_t getRemainingDirectlyPooledSfxPoolItemCount() { return nRemainingDirectlyP
 // due to ImpEditEngine::WriteRTF
 //  EE_CHAR_COLOR ok
 // due to ScDocumentPool::StyleDeleted
-//  ATTR_PATTERN ok
 // due to ScDocument::UpdateFontCharSet()
 // due to ScXMLFontAutoStylePool_Impl
 //  ATTR_FONT ok
@@ -794,10 +793,6 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 
 const SfxPoolItem& SfxItemPool::DirectPutItemInPoolImpl(const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership)
 {
-    // CAUTION: Do not register the problematic pool default
-    if (rItem.isExceptionalSCItem() && GetMasterPool()->newItem_UseDirect(rItem))
-        return rItem;
-
 #ifdef DBG_UTIL
     nAllDirectlyPooledSfxPoolItemCount++;
     nRemainingDirectlyPooledSfxPoolItemCount++;
@@ -816,29 +811,12 @@ const SfxPoolItem& SfxItemPool::DirectPutItemInPoolImpl(const SfxPoolItem& rItem
 
 void SfxItemPool::DirectRemoveItemFromPool(const SfxPoolItem& rItem)
 {
-    // CAUTION: Do not remove the problematic pool default
-    if (rItem.isExceptionalSCItem() && GetMasterPool()->newItem_UseDirect(rItem))
-        return;
-
 #ifdef DBG_UTIL
     nRemainingDirectlyPooledSfxPoolItemCount--;
 #endif
 
     // make sure to use 'master'-pool, that's the one used by SfxItemSets
     implCleanupItemEntry(*GetMasterPool(), &rItem);
-}
-
-void SfxItemPool::newItem_Callback(const SfxPoolItem& rItem) const
-{
-    if (!IsInRange(rItem.Which()) && pImpl->mpSecondary)
-        pImpl->mpSecondary->newItem_Callback(rItem);
-}
-
-bool SfxItemPool::newItem_UseDirect(const SfxPoolItem& rItem) const
-{
-    if (!IsInRange(rItem.Which()) && pImpl->mpSecondary)
-        return pImpl->mpSecondary->newItem_UseDirect(rItem);
-    return false;
 }
 
 const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const

@@ -398,7 +398,7 @@ void ScDrawLayer::CreateDefaultStyles()
 
     // text formatting
     SfxItemSet aEditSet(GetItemPool());
-    ScPatternAttr::FillToEditItemSet(aEditSet, pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN).GetItemSet());
+    ScPatternAttr::FillToEditItemSet(aEditSet, pDoc->getCellAttributeHelper().getDefaultCellAttribute().GetItemSet());
 
     pSet->Put(aEditSet.Get(EE_CHAR_FONTINFO));
     pSet->Put(aEditSet.Get(EE_CHAR_FONTINFO_CJK));

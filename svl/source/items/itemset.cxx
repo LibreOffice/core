@@ -47,7 +47,7 @@ size_t getAllocatedSfxPoolItemHolderCount() { return nAllocatedSfxPoolItemHolder
 size_t getUsedSfxPoolItemHolderCount() { return nUsedSfxPoolItemHolderCount; }
 #endif
 // NOTE: Only needed for one Item in SC (see notes below for
-// ScPatternAttr/ATTR_PATTERN). Still keep it so that when errors
+// ScPatternAttr). Still keep it so that when errors
 // come up to this change be able to quickly check using the
 // fallback flag 'ITEM_CLASSIC_MODE'
 static bool g_bItemClassicMode(getenv("ITEM_CLASSIC_MODE"));
@@ -266,11 +266,6 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         // just use pSource which equals INVALID_POOL_ITEM
         return pSource;
 
-    if (pSource->isExceptionalSCItem() && rPool.GetMasterPool()->newItem_UseDirect(*pSource))
-        // exceptional handling for *some* items, see SC
-        // (do not copy item: use directly, it is a pool default)
-        return pSource;
-
     // CAUTION: static default items are not *that* static as it seems
     // (or: should be). If they are freed with the Pool (see
     // ::ReleaseDefaults) they will be deleted. Same is true for
@@ -373,7 +368,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     //   'StaticDefault' and gets changed (..?)
 
     // only do this if classic mode or required (calls from Pool::Direct*)
-    while(g_bItemClassicMode || pSource->isExceptionalSCItem())
+    while(g_bItemClassicMode)
     {
         if (!pTargetPool->Shareable_Impl(nIndex))
             // not shareable, so no need to search for identical item
@@ -424,29 +419,20 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // increase RefCnt 0->1
     pSource->AddRef();
 
-    // Unfortunately e,g, SC does 'special' things for some new Items,
-    // so we need to give the opportunity for this. To limit this to
-    // the needed cases, use m_bExceptionalSCItem flag at item
-    if (pSource->isExceptionalSCItem())
-        pMasterPool->newItem_Callback(*pSource);
-
     // try to register @Pool (only needed if not yet registered)
     if (!pSource->isRegisteredAtPool())
     {
-        bool bRegisterAtPool(pSource->isExceptionalSCItem());
+        bool bRegisterAtPool(false);
 
-        if (!bRegisterAtPool)
+        if (g_bItemClassicMode)
         {
-            if (g_bItemClassicMode)
-            {
-                // in classic mode register only/all shareable items
-                bRegisterAtPool = pTargetPool->Shareable_Impl(nIndex);
-            }
-            else
-            {
-                // in new mode register only/all items marked as need to be registered
-                bRegisterAtPool = pTargetPool->NeedsPoolRegistration_Impl(nIndex);
-            }
+            // in classic mode register only/all shareable items
+            bRegisterAtPool = pTargetPool->Shareable_Impl(nIndex);
+        }
+        else
+        {
+            // in new mode register only/all items marked as need to be registered
+            bRegisterAtPool = pTargetPool->NeedsPoolRegistration_Impl(nIndex);
         }
 
         if (bRegisterAtPool)
@@ -464,11 +450,6 @@ void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource)
 
     if (IsInvalidItem(pSource))
         // nothing to do for invalid item entries
-        return;
-
-    if (pSource->isExceptionalSCItem() && rPool.GetMasterPool()->newItem_UseDirect(*pSource))
-        // exceptional handling for *some* items, see SC
-        // do not delete Item, it is a pool default
         return;
 
     if (0 == pSource->Which())

@@ -452,7 +452,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         //  don't set cell protection attribute if table is protected
         if (rDoc.IsTabProtected(nTab))
         {
-            ScPatternAttr aPattern(pImportDoc->GetPool());
+            ScPatternAttr aPattern(pImportDoc->getCellAttributeHelper());
             aPattern.GetItemSet().Put( ScProtectionAttr( false,false,false,false ) );
             pImportDoc->ApplyPatternAreaTab( 0,0,rDoc.MaxCol(),rDoc.MaxRow(), nTab, aPattern );
         }

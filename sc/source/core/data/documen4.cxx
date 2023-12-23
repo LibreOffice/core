@@ -739,8 +739,7 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
             nMax = nKey;
     }
 
-    // might be called from ScPatternAttr::PutInPool; thus clone (real copy)
-
+    // might be called from ScPatternAttr::MigrateToDocument; thus clone (real copy)
     sal_uLong nNewKey = nMax + 1;
     std::unique_ptr<ScValidationData> pInsert(rNew.Clone(this));
     pInsert->SetKey( nNewKey );

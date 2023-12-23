@@ -375,7 +375,7 @@ void ScDocShell::CalcOutputFactor()
     OUString aTestString(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
     tools::Long nPrinterWidth = 0;
-    const ScPatternAttr* pPattern = &m_pDocument->GetPool()->GetDefaultItem(ATTR_PATTERN);
+    const ScPatternAttr& rPattern(m_pDocument->getCellAttributeHelper().getDefaultCellAttribute());
 
     vcl::Font aDefFont;
     OutputDevice* pRefDev = GetRefDevice();
@@ -383,7 +383,7 @@ void ScDocShell::CalcOutputFactor()
     vcl::Font aOldFont = pRefDev->GetFont();
 
     pRefDev->SetMapMode(MapMode(MapUnit::MapPixel));
-    pPattern->fillFontOnly(aDefFont, pRefDev); // font color doesn't matter here
+    rPattern.fillFontOnly(aDefFont, pRefDev); // font color doesn't matter here
     pRefDev->SetFont(aDefFont);
     nPrinterWidth = pRefDev->PixelToLogic(Size(pRefDev->GetTextWidth(aTestString), 0), MapMode(MapUnit::Map100thMM)).Width();
     pRefDev->SetFont(aOldFont);
@@ -391,7 +391,7 @@ void ScDocShell::CalcOutputFactor()
 
     ScopedVclPtrInstance< VirtualDevice > pVirtWindow( *Application::GetDefaultDevice() );
     pVirtWindow->SetMapMode(MapMode(MapUnit::MapPixel));
-    pPattern->fillFontOnly(aDefFont, pVirtWindow); // font color doesn't matter here
+    rPattern.fillFontOnly(aDefFont, pVirtWindow); // font color doesn't matter here
     pVirtWindow->SetFont(aDefFont);
     double nWindowWidth = pVirtWindow->GetTextWidth(aTestString) / ScGlobal::nScreenPPTX;
     nWindowWidth = o3tl::convert(nWindowWidth, o3tl::Length::twip, o3tl::Length::mm100);

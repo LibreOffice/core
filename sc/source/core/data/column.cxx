@@ -76,7 +76,7 @@ bool IsAmbiguousScriptNonZero( SvtScriptType nScript )
 }
 
 ScNeededSizeOptions::ScNeededSizeOptions() :
-    pPattern(nullptr), bFormula(false), bSkipMerged(true), bGetFont(true), bTotalSize(false)
+    aPattern(), bFormula(false), bSkipMerged(true), bGetFont(true), bTotalSize(false)
 {
 }
 
@@ -341,7 +341,7 @@ const ScPatternAttr* ScColumnData::GetMostUsedPattern( SCROW nStartRow, SCROW nE
     const ScPatternAttr* pMaxPattern = nullptr;
     size_t nMaxCount = 0;
 
-    ScAttrIterator aAttrIter( pAttrArray.get(), nStartRow, nEndRow, GetDoc().GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), nStartRow, nEndRow, &GetDoc().getCellAttributeHelper().getDefaultCellAttribute() );
     const ScPatternAttr* pPattern;
     SCROW nAttrRow1 = 0, nAttrRow2 = 0;
 
@@ -375,13 +375,13 @@ sal_uInt32 ScColumnData::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
     return nFormat;
 }
 
-SCROW ScColumn::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
+SCROW ScColumn::ApplySelectionCache( ScItemPoolCache& rCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
                                      bool* const pIsChanged )
 {
-    return ScColumnData::ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged, nCol );
+    return ScColumnData::ApplySelectionCache( rCache, rMark, pDataArray, pIsChanged, nCol );
 }
 
-SCROW ScColumnData::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
+SCROW ScColumnData::ApplySelectionCache( ScItemPoolCache& rCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
                                          bool* const pIsChanged, SCCOL nCol )
 {
     SCROW nTop = 0;
@@ -393,7 +393,7 @@ SCROW ScColumnData::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkDa
         ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
         while (aMultiIter.Next( nTop, nBottom ))
         {
-            pAttrArray->ApplyCacheArea( nTop, nBottom, pCache, pDataArray, pIsChanged );
+            pAttrArray->ApplyCacheArea( nTop, nBottom, rCache, pDataArray, pIsChanged );
             bFound = true;
         }
     }
@@ -468,31 +468,31 @@ void ScColumn::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rM
 void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
-    ScItemPoolCache aCache( GetDoc().GetPool(), pSet );
+    ScItemPoolCache aCache( GetDoc().getCellAttributeHelper(), *pSet );
 
-    const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
+    const CellAttributeHolder aPattern(pAttrArray->GetPattern( nRow ));
 
     //  true = keep old content
 
-    const ScPatternAttr& rNewPattern = aCache.ApplyTo( *pPattern );
+    const CellAttributeHolder& rNewPattern = aCache.ApplyTo( aPattern );
 
-    if (!SfxPoolItem::areSame(rNewPattern, *pPattern))
-      pAttrArray->SetPattern( nRow, &rNewPattern );
+    if (!CellAttributeHolder::areSame(&rNewPattern, &aPattern))
+        pAttrArray->SetPattern( nRow, rNewPattern );
 }
 
 void ScColumnData::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                  ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
-    ScItemPoolCache aCache( GetDoc().GetPool(), pSet );
-    pAttrArray->ApplyCacheArea( nStartRow, nEndRow, &aCache, pDataArray, pIsChanged );
+    ScItemPoolCache aCache( GetDoc().getCellAttributeHelper(), *pSet );
+    pAttrArray->ApplyCacheArea( nStartRow, nEndRow, aCache, pDataArray, pIsChanged );
 }
 
 void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScPatternAttr& rPattern, SvNumFormatType nNewType )
 {
     const SfxItemSet* pSet = &rPattern.GetItemSet();
-    ScItemPoolCache aCache( GetDoc().GetPool(), pSet );
+    ScItemPoolCache aCache( GetDoc().getCellAttributeHelper(), *pSet );
     SvNumberFormatter* pFormatter = GetDoc().GetFormatTable();
     SCROW nEndRow = rRange.aEnd.Row();
     for ( SCROW nRow = rRange.aStart.Row(); nRow <= nEndRow; nRow++ )
@@ -508,7 +508,7 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         {
             SCROW nNewRow1 = std::max( nRow1, nRow );
             SCROW nNewRow2 = std::min( nRow2, nEndRow );
-            pAttrArray->ApplyCacheArea( nNewRow1, nNewRow2, &aCache );
+            pAttrArray->ApplyCacheArea( nNewRow1, nNewRow2, aCache );
             nRow = nNewRow2;
         }
     }
@@ -517,9 +517,9 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
 void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle )
 {
     const ScPatternAttr* pPattern = pAttrArray->GetPattern(nRow);
-    std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
+    ScPatternAttr* pNewPattern(new ScPatternAttr(*pPattern));
     pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(rStyle));
-    pAttrArray->SetPattern(nRow, std::move(pNewPattern), true);
+    pAttrArray->SetPattern(nRow, CellAttributeHolder(pNewPattern, true));
 }
 
 void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark)
@@ -572,7 +572,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
     SCROW nBottom;
     while (bEqual && aMultiIter.Next( nTop, nBottom ))
     {
-        ScAttrIterator aAttrIter( pAttrArray.get(), nTop, nBottom, rDocument.GetDefPattern() );
+        ScAttrIterator aAttrIter( pAttrArray.get(), nTop, nBottom, &rDocument.getCellAttributeHelper().getDefaultCellAttribute() );
         SCROW nRow;
         SCROW nDummy;
         while (bEqual)
@@ -600,7 +600,7 @@ const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRo
     const ScStyleSheet* pStyle = nullptr;
     const ScStyleSheet* pNewStyle;
 
-    ScAttrIterator aAttrIter( pAttrArray.get(), nRow1, nRow2, GetDoc().GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), nRow1, nRow2, &GetDoc().getCellAttributeHelper().getDefaultCellAttribute() );
     SCROW nRow;
     SCROW nDummy;
     while (bEqual)
@@ -623,17 +623,14 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
     //  in order to only create a new SetItem, we don't need SfxItemPoolCache.
     //TODO: Warning: ScItemPoolCache seems to create too many Refs for the new SetItem ??
 
-    ScDocumentPool* pDocPool = GetDoc().GetPool();
+    const ScPatternAttr* pOldPattern(pAttrArray->GetPattern(nRow));
+    ScPatternAttr* pNewPattern(new ScPatternAttr(*pOldPattern));
+    pNewPattern->GetItemSet().Put(rAttr);
 
-    const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
-    ScPatternAttr aTemp(*pOldPattern);
-    aTemp.GetItemSet().Put(rAttr);
-    const ScPatternAttr* pNewPattern = &pDocPool->DirectPutItemInPool( aTemp );
-
-    if (!SfxPoolItem::areSame( pNewPattern, pOldPattern ))
-        pAttrArray->SetPattern( nRow, pNewPattern );
+    if (!ScPatternAttr::areSame( pNewPattern, pOldPattern ))
+        pAttrArray->SetPattern( nRow, CellAttributeHolder(pNewPattern, true) );
     else
-        pDocPool->DirectRemoveItemFromPool( *pNewPattern );       // free up resources
+        delete pNewPattern;
 }
 
 ScRefCellValue ScColumn::GetCellValue( SCROW nRow ) const
@@ -1623,12 +1620,10 @@ void ScColumn::CopyToColumn(
             // e.g. DIF and RTF Clipboard-Import
             for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
             {
-                const ScStyleSheet* pStyle =
-                    rColumn.pAttrArray->GetPattern( nRow )->GetStyleSheet();
-                const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
-                std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pPattern ));
-                pNewPattern->SetStyleSheet( const_cast<ScStyleSheet*>(pStyle) );
-                rColumn.pAttrArray->SetPattern( nRow, std::move(pNewPattern), true );
+                const ScStyleSheet* pStyle(rColumn.pAttrArray->GetPattern( nRow )->GetStyleSheet());
+                ScPatternAttr* pNewPattern(new ScPatternAttr(*pAttrArray->GetPattern(nRow)));
+                pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(pStyle));
+                rColumn.pAttrArray->SetPattern(nRow, CellAttributeHolder(pNewPattern, true));
             }
         }
         else
@@ -1700,7 +1695,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 {
     //  This is the scenario table, the data is copied into it
     ScDocument& rDocument = GetDoc();
-    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc().MaxRow(), rDocument.GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc().MaxRow(), &rDocument.getCellAttributeHelper().getDefaultCellAttribute() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
@@ -1729,7 +1724,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 {
     //  This is the scenario table, the data is copied to the other
     ScDocument& rDocument = GetDoc();
-    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc().MaxRow(), rDocument.GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc().MaxRow(), &rDocument.getCellAttributeHelper().getDefaultCellAttribute() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
@@ -1754,7 +1749,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 bool ScColumn::TestCopyScenarioTo( const ScColumn& rDestCol ) const
 {
     bool bOk = true;
-    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc().MaxRow(), GetDoc().GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc().MaxRow(), &GetDoc().getCellAttributeHelper().getDefaultCellAttribute() );
     SCROW nStart = 0, nEnd = 0;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern && bOk)
@@ -1772,7 +1767,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
 {
     ScRange aRange( nCol, 0, nTab );
 
-    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc().MaxRow(), GetDoc().GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc().MaxRow(), &GetDoc().getCellAttributeHelper().getDefaultCellAttribute() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)

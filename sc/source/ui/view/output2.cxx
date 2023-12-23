@@ -1025,7 +1025,7 @@ static bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAtt
 {
     OSL_ENSURE( pNewPattern, "pNewPattern" );
 
-    if ( SfxPoolItem::areSame( pNewPattern, rpOldPattern ) )
+    if ( ScPatternAttr::areSame( pNewPattern, rpOldPattern ) )
         return false;
     else if ( !rpOldPattern )
         return true;
@@ -1714,7 +1714,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                     if (nScript == SvtScriptType::NONE)
                         nScript = ScGlobal::GetDefaultScriptType();
 
-                    if ( !SfxPoolItem::areSame(pPattern, pOldPattern) || pCondSet != pOldCondSet ||
+                    if ( !ScPatternAttr::areSame(pPattern, pOldPattern) || pCondSet != pOldCondSet ||
                          nScript != nOldScript || mbSyntaxMode )
                     {
                         if ( StringDiffer(pOldPattern,pPattern) ||
@@ -2488,7 +2488,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     // syntax highlighting mode is ignored here
     // StringDiffer doesn't look at hyphenate, language items
 
-    if (SfxPoolItem::areSame(mpPattern, mpOldPattern) && mpCondSet == mpOldCondSet && mpPreviewFontSet == mpOldPreviewFontSet )
+    if (ScPatternAttr::areSame(mpPattern, mpOldPattern) && mpCondSet == mpOldCondSet && mpPreviewFontSet == mpOldPreviewFontSet )
         return;
 
     Color nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
@@ -4701,7 +4701,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             // syntax mode is ignored here...
 
                             // StringDiffer doesn't look at hyphenate, language items
-                            if ( !SfxPoolItem::areSame(pPattern, pOldPattern) || pCondSet != pOldCondSet )
+                            if ( !ScPatternAttr::areSame(pPattern, pOldPattern) || pCondSet != pOldCondSet )
                             {
                                 auto pSet = std::make_unique<SfxItemSet>( mxOutputEditEngine->GetEmptyItemSet() );
                                 pPattern->FillEditItemSet( pSet.get(), pCondSet );

@@ -352,31 +352,23 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
         aRange      ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
         mpDataArray(new ScEditDataArray),
         pUndoDoc    ( std::move(pNewUndoDoc) ),
-        bMulti      ( bNewMulti )
+        bMulti      ( bNewMulti ),
+        aApplyPattern( pNewApply ),
+        maLineOuter(*pDocShell->GetDocument().GetPool(), pNewOuter),
+        maLineInner(*pDocShell->GetDocument().GetPool(), pNewInner)
 {
-    ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pApplyPattern = const_cast<ScPatternAttr*>(&pPool->DirectPutItemInPool( *pNewApply ));
-    pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>( &pPool->DirectPutItemInPool( *pNewOuter ) ) : nullptr;
-    pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>( &pPool->DirectPutItemInPool( *pNewInner ) ) : nullptr;
     aRangeCover = pRangeCover ? *pRangeCover : aRange;
 }
 
 ScUndoSelectionAttr::~ScUndoSelectionAttr()
 {
-    ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pPool->DirectRemoveItemFromPool(*pApplyPattern);
-    if (pLineOuter)
-        pPool->DirectRemoveItemFromPool(*pLineOuter);
-    if (pLineInner)
-        pPool->DirectRemoveItemFromPool(*pLineInner);
-
     pUndoDoc.reset();
 }
 
 OUString ScUndoSelectionAttr::GetComment() const
 {
     //"Attribute" "/Lines"
-    return ScResId( pLineOuter ? STR_UNDO_SELATTRLINES : STR_UNDO_SELATTR );
+    return ScResId( maLineOuter.getItem() ? STR_UNDO_SELATTRLINES : STR_UNDO_SELATTR );
 }
 
 ScEditDataArray* ScUndoSelectionAttr::GetDataArray()
@@ -410,11 +402,13 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
     else        // only for Redo
     {
         aMarkData.MarkToMulti();
-        rDoc.ApplySelectionPattern( *pApplyPattern, aMarkData );
+        rDoc.ApplySelectionPattern( *aApplyPattern.getScPatternAttr(), aMarkData );
         aMarkData.MarkToSimple();
 
-        if (pLineOuter)
-            rDoc.ApplySelectionFrame(aMarkData, *pLineOuter, pLineInner);
+        if (maLineOuter.getItem())
+            rDoc.ApplySelectionFrame(aMarkData,
+                *static_cast<const SvxBoxItem*>(maLineOuter.getItem()),
+                static_cast<const SvxBoxInfoItem*>(maLineInner.getItem()));
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -469,10 +463,12 @@ void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
         ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
-        if (pLineOuter)
-            rViewShell.ApplyPatternLines(*pApplyPattern, *pLineOuter, pLineInner);
+        if (maLineOuter.getItem())
+            rViewShell.ApplyPatternLines(*aApplyPattern.getScPatternAttr(),
+                *static_cast<const SvxBoxItem*>(maLineOuter.getItem()),
+                static_cast<const SvxBoxInfoItem*>(maLineInner.getItem()));
         else
-            rViewShell.ApplySelectionPattern( *pApplyPattern );
+            rViewShell.ApplySelectionPattern( *aApplyPattern.getScPatternAttr() );
     }
 }
 

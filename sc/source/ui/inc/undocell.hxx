@@ -58,13 +58,13 @@ private:
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
-    ScPatternAttr*  pOldPattern;
-    ScPatternAttr*  pNewPattern;
-    ScPatternAttr*  pApplyPattern;
+    const CellAttributeHolder aOldPattern;
+    const CellAttributeHolder aNewPattern;
+    const CellAttributeHolder aApplyPattern;
     std::unique_ptr<EditTextObject> pOldEditData;
     std::unique_ptr<EditTextObject> pNewEditData;
 
-    void            DoChange( const ScPatternAttr* pWhichPattern, const std::unique_ptr<EditTextObject>& pEditData ) const;
+    void            DoChange( const CellAttributeHolder& rWhichPattern, const std::unique_ptr<EditTextObject>& pEditData ) const;
 };
 
 class ScUndoEnterData: public ScSimpleUndo

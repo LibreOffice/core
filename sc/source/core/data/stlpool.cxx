@@ -120,7 +120,8 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
         OSL_ENSURE( SfxStyleSearchBits::UserDefined & pStyle->GetMask(),
                     "SfxStyleSearchBits::UserDefined not set!" );
 
-        static_cast<ScDocumentPool&>(rPool).StyleDeleted(static_cast<ScStyleSheet*>(pStyle));
+        assert(nullptr != pDoc);
+        pDoc->getCellAttributeHelper().CellStyleDeleted(static_cast<ScStyleSheet&>(*pStyle));
         SfxStyleSheetPool::Remove(pStyle);
     }
 }

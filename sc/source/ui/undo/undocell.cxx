@@ -80,21 +80,16 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     nCol( nNewCol ),
     nRow( nNewRow ),
     nTab( nNewTab ),
+    aOldPattern( pOldPat ),
+    aNewPattern( pNewPat ),
+    aApplyPattern( pApplyPat ),
     pOldEditData( static_cast<EditTextObject*>(nullptr) ),
     pNewEditData( static_cast<EditTextObject*>(nullptr) )
 {
-    ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pNewPattern = const_cast<ScPatternAttr*>( &pPool->DirectPutItemInPool( *pNewPat ) );
-    pOldPattern = const_cast<ScPatternAttr*>( &pPool->DirectPutItemInPool( *pOldPat ) );
-    pApplyPattern = const_cast<ScPatternAttr*>( &pPool->DirectPutItemInPool( *pApplyPat ) );
 }
 
 ScUndoCursorAttr::~ScUndoCursorAttr()
 {
-    ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pPool->DirectRemoveItemFromPool(*pNewPattern);
-    pPool->DirectRemoveItemFromPool(*pOldPattern);
-    pPool->DirectRemoveItemFromPool(*pApplyPattern);
 }
 
 OUString ScUndoCursorAttr::GetComment() const
@@ -109,11 +104,11 @@ void ScUndoCursorAttr::SetEditData( std::unique_ptr<EditTextObject> pOld, std::u
     pNewEditData = std::move(pNew);
 }
 
-void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const std::unique_ptr<EditTextObject>& pEditData ) const
+void ScUndoCursorAttr::DoChange( const CellAttributeHolder& rWhichPattern, const std::unique_ptr<EditTextObject>& pEditData ) const
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     ScAddress aPos(nCol, nRow, nTab);
-    rDoc.SetPattern( nCol, nRow, nTab, *pWhichPattern );
+    rDoc.SetPattern( nCol, nRow, nTab, rWhichPattern );
 
     if (rDoc.GetCellType(aPos) == CELLTYPE_EDIT && pEditData)
         rDoc.SetEditText(aPos, *pEditData, nullptr);
@@ -126,7 +121,7 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const std::
         pViewShell->AdjustBlockHeight();
     }
 
-    const SfxItemSet& rApplySet = pApplyPattern->GetItemSet();
+    const SfxItemSet& rApplySet = aApplyPattern.getScPatternAttr()->GetItemSet();
     bool bPaintExt = ( rApplySet.GetItemState( ATTR_SHADOW ) != SfxItemState::DEFAULT ||
                        rApplySet.GetItemState( ATTR_CONDITIONAL ) != SfxItemState::DEFAULT );
     bool bPaintRows = ( rApplySet.GetItemState( ATTR_HOR_JUSTIFY ) != SfxItemState::DEFAULT );
@@ -142,21 +137,21 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const std::
 void ScUndoCursorAttr::Undo()
 {
     BeginUndo();
-    DoChange(pOldPattern, pOldEditData);
+    DoChange(aOldPattern, pOldEditData);
     EndUndo();
 }
 
 void ScUndoCursorAttr::Redo()
 {
     BeginRedo();
-    DoChange(pNewPattern, pNewEditData);
+    DoChange(aNewPattern, pNewEditData);
     EndRedo();
 }
 
 void ScUndoCursorAttr::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->ApplySelectionPattern( *pApplyPattern );
+        pViewTarget->GetViewShell()->ApplySelectionPattern( *aApplyPattern.getScPatternAttr() );
 }
 
 bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -252,9 +247,9 @@ void ScUndoEnterData::Undo()
                             SfxUInt32Item(ATTR_VALUE_FORMAT, rVal.mnFormat));
         else
         {
-            auto pPattern = std::make_unique<ScPatternAttr>(*rDoc.GetPattern(maPos.Col(), maPos.Row(), rVal.mnTab));
+            ScPatternAttr* pPattern(new ScPatternAttr(*rDoc.GetPattern(maPos.Col(), maPos.Row(), rVal.mnTab)));
             pPattern->GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
-            rDoc.SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, std::move(pPattern));
+            rDoc.SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, CellAttributeHolder(pPattern, true));
         }
         pDocShell->PostPaintCell(maPos.Col(), maPos.Row(), rVal.mnTab);
     }

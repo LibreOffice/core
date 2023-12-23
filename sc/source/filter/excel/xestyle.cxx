@@ -2810,12 +2810,11 @@ XclExpXFBuffer::FindKey XclExpXFBuffer::ToFindKey(XclExpXF const & rRec)
 sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int16 nScript,
         sal_uInt32 nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak )
 {
-    const ScPatternAttr* pDefPattern = GetDoc().GetDefPattern();
     if( !pPattern )
-        pPattern = pDefPattern;
+        pPattern = &GetDoc().getCellAttributeHelper().getDefaultCellAttribute();
 
     // special handling for default cell formatting
-    if( SfxPoolItem::areSame(pPattern, pDefPattern) && !bForceLineBreak &&
+    if ( pPattern->isDefault() && !bForceLineBreak &&
         (nForceScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) &&
         (nForceXclFont == EXC_FONT_NOTFOUND) )
     {

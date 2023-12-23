@@ -247,8 +247,6 @@ public:
 
 protected:
     const SfxPoolItem&      DirectPutItemInPoolImpl( const SfxPoolItem&, sal_uInt16 nWhich = 0, bool bPassingOwnership = false );
-    virtual void newItem_Callback(const SfxPoolItem& rItem) const;
-    virtual bool newItem_UseDirect(const SfxPoolItem& rItem) const;
 
 private:
     const SfxItemPool&              operator=(const SfxItemPool &) = delete;

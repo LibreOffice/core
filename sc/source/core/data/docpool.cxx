@@ -28,6 +28,7 @@
 #include <vcl/settings.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
+#include <svl/voiditem.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -145,7 +146,6 @@ SfxItemInfo const  aItemInfos[] =
     { 0,                                    false, true },    // ATTR_VALIDDATA
     { 0,                                    false, true },    // ATTR_CONDITIONAL
     { 0,                                    false, true },    // ATTR_HYPERLINK
-    { 0,                                    true,  true },    // ATTR_PATTERN
     { SID_ATTR_LRSPACE,                     false, true },    // ATTR_LRSPACE
     { SID_ATTR_ULSPACE,                     false, true },    // ATTR_ULSPACE
     { SID_ATTR_PAGE,                        false, true },    // ATTR_PAGE
@@ -184,12 +184,8 @@ static_assert(
     SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1, "these must match");
 
 ScDocumentPool::ScDocumentPool()
-
-    :   SfxItemPool ( "ScDocumentPool",
-                        ATTR_STARTINDEX, ATTR_ENDINDEX,
-                        aItemInfos, nullptr ),
-    mvPoolDefaults(ATTR_ENDINDEX-ATTR_STARTINDEX+1),
-    mnCurrentMaxKey(0)
+: SfxItemPool ( "ScDocumentPool", ATTR_STARTINDEX, ATTR_ENDINDEX, aItemInfos, nullptr )
+, mvPoolDefaults(ATTR_ENDINDEX-ATTR_STARTINDEX+1)
 {
 
     LanguageType nDefLang, nCjkLang, nCtlLang;
@@ -274,20 +270,6 @@ ScDocumentPool::ScDocumentPool()
     mvPoolDefaults[ ATTR_VALIDDATA       - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_VALIDDATA, 0 );
     mvPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new ScCondFormatItem;
     mvPoolDefaults[ ATTR_HYPERLINK       - ATTR_STARTINDEX ] = new SfxStringItem( ATTR_HYPERLINK, OUString() ) ;
-
-    // GetRscString only works after ScGlobal::Init (indicated by the EmptyBrushItem)
-    // TODO: Write additional method ScGlobal::IsInit() or somesuch
-    //       or detect whether this is the Secondary Pool for a MessagePool
-    if ( ScGlobal::GetEmptyBrushItem() )
-
-        mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] =
-            new ScPatternAttr( SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *this ),
-                               ScResId(STR_STYLENAME_STANDARD) );
-    else
-        mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] =
-            new ScPatternAttr( SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *this ),
-                               STRING_STANDARD ); // FIXME: without name?
-
     mvPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
     mvPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );
     mvPoolDefaults[ ATTR_PAGE            - ATTR_STARTINDEX ] = new SvxPageItem( ATTR_PAGE );
@@ -334,51 +316,6 @@ ScDocumentPool::~ScDocumentPool()
     {
         ClearRefCount( *mvPoolDefaults[i] );
         delete mvPoolDefaults[i];
-    }
-}
-
-void ScDocumentPool::newItem_Callback(const SfxPoolItem& rItem) const
-{
-    if (ATTR_PATTERN == rItem.Which() && 1 == rItem.GetRefCount())
-    {
-        const_cast<ScDocumentPool*>(this)->mnCurrentMaxKey++;
-        const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(rItem)).SetPAKey(mnCurrentMaxKey);
-    }
-}
-
-bool ScDocumentPool::newItem_UseDirect(const SfxPoolItem& rItem) const
-{
-    // I have evaluated that this is currently needed for ATTR_PATTERN/ScPatternAttr to work,
-    // so this needs to stay at ptr-compare
-    return (ATTR_PATTERN == rItem.Which() && areSfxPoolItemPtrsEqual(&rItem, mvPoolDefaults[ATTR_PATTERN - ATTR_STARTINDEX]));
-}
-
-void ScDocumentPool::StyleDeleted( const ScStyleSheet* pStyle )
-{
-    for (const SfxPoolItem* pItem : GetItemSurrogates( ATTR_PATTERN ))
-    {
-        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(dynamic_cast<const ScPatternAttr*>(pItem));
-        if ( pPattern && pPattern->GetStyleSheet() == pStyle )
-            pPattern->StyleToName();
-    }
-}
-
-void ScDocumentPool::CellStyleCreated( std::u16string_view rName, const ScDocument& rDoc )
-{
-    // If a style was created, don't keep any pattern with its name string in the pool,
-    // because it would compare equal to a pattern with a pointer to the new style.
-    // Calling StyleSheetChanged isn't enough because the pool may still contain items
-    // for undo or clipboard content.
-
-    for (const SfxPoolItem* pItem : GetItemSurrogates( ATTR_PATTERN ))
-    {
-        auto pPattern = const_cast<ScPatternAttr*>(dynamic_cast<const ScPatternAttr*>(pItem));
-        if ( pPattern && pPattern->GetStyleSheet() == nullptr )
-        {
-            const OUString* pStyleName = pPattern->GetStyleName();
-            if ( pStyleName && *pStyleName == rName )
-                pPattern->UpdateStyleSheet(rDoc); // find and store style pointer
-        }
     }
 }
 

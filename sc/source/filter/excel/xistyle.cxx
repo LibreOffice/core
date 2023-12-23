@@ -1249,7 +1249,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
         return *mpPattern;
 
     // create new pattern attribute set
-    mpPattern.reset( new ScPatternAttr( GetDoc().GetPool() ) );
+    mpPattern.reset( new ScPatternAttr(GetDoc().getCellAttributeHelper()) );
     SfxItemSet& rItemSet = mpPattern->GetItemSet();
     XclImpXF* pParentXF = IsCellXF() ? GetXFBuffer().GetXF( mnParent ) : nullptr;
 
@@ -1376,7 +1376,7 @@ void XclImpXF::ApplyPatternToAttrVector(
 
     if (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        ScPatternAttr aNumPat(rDoc.GetPool());
+        ScPatternAttr aNumPat(rDoc.getCellAttributeHelper());
         GetNumFmtBuffer().FillScFmtToItemSet(aNumPat.GetItemSet(), nForceScNumFmt);
         rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
@@ -1399,13 +1399,13 @@ void XclImpXF::ApplyPatternToAttrVector(
         // Fill this gap with the default pattern.
         ScAttrEntry aEntry;
         aEntry.nEndRow = nRow1 - 1;
-        aEntry.pPattern = rDoc.GetDefPattern();
+        aEntry.setScPatternAttr(&rDoc.getCellAttributeHelper().getDefaultCellAttribute());
         rAttrs.push_back(aEntry);
     }
 
     ScAttrEntry aEntry;
     aEntry.nEndRow = nRow2;
-    aEntry.pPattern = &rDoc.GetPool()->DirectPutItemInPool(rPat);
+    aEntry.setScPatternAttr(&rPat, false);
     rAttrs.push_back(aEntry);
 }
 
@@ -2022,7 +2022,7 @@ void XclImpXFRangeBuffer::Finalize()
             {
                 ScAttrEntry aEntry;
                 aEntry.nEndRow = rDoc.MaxRow();
-                aEntry.pPattern = rDoc.GetDefPattern();
+                aEntry.setScPatternAttr(&rDoc.getCellAttributeHelper().getDefaultCellAttribute());
                 aAttrs.push_back(aEntry);
             }
 

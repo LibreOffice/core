@@ -68,62 +68,272 @@
 #include <comphelper/lok.hxx>
 #include <tabvwsh.hxx>
 
+CellAttributeHelper::CellAttributeHelper(SfxItemPool& rSfxItemPool)
+: mrSfxItemPool(rSfxItemPool)
+, mpDefaultCellAttribute(nullptr)
+, maRegisteredCellAttributes()
+, mpLastHit(nullptr)
+, mnCurrentMaxKey(0)
+{
+}
+
+CellAttributeHelper::~CellAttributeHelper()
+{
+    delete mpDefaultCellAttribute;
+}
+
+const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& rCandidate, bool bPassingOwnership) const
+{
+    if (&rCandidate == &getDefaultCellAttribute())
+        return &rCandidate;
+
+    assert(rCandidate.pCellAttributeHelper == this && "WRONG CellAttributeHelper in ScPatternAttr (!)");
+
+    if (rCandidate.isRegistered())
+    {
+        assert(!bPassingOwnership && "Trying to register an already registered CellAttribute with ownership change (!)");
+        rCandidate.mnRefCount++;
+        return &rCandidate;
+    }
+
+    if (nullptr != mpLastHit && ScPatternAttr::areSame(mpLastHit, &rCandidate))
+    {
+        // hit for single-entry cache, make use of it
+        mpLastHit->mnRefCount++;
+        if (bPassingOwnership)
+            delete &rCandidate;
+        return mpLastHit;
+    }
+
+    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
+    {
+        if (ScPatternAttr::areSame(pCheck, &rCandidate))
+        {
+            pCheck->mnRefCount++;
+            if (bPassingOwnership)
+                delete &rCandidate;
+            mpLastHit = pCheck;
+            return pCheck;
+        }
+    }
+
+    const ScPatternAttr* pCandidate(bPassingOwnership ? &rCandidate : new ScPatternAttr(rCandidate));
+    pCandidate->mnRefCount++;
+    const_cast<ScPatternAttr*>(pCandidate)->SetPAKey(mnCurrentMaxKey++);
+    maRegisteredCellAttributes.insert(pCandidate);
+    mpLastHit = pCandidate;
+    return pCandidate;
+}
+
+void CellAttributeHelper::doUnregister(const ScPatternAttr& rCandidate)
+{
+    if (&rCandidate == &getDefaultCellAttribute())
+        return;
+
+    assert(rCandidate.isRegistered());
+    rCandidate.mnRefCount--;
+
+    if (0 != rCandidate.mnRefCount)
+        return;
+
+    if (mpLastHit == &rCandidate)
+        mpLastHit = nullptr;
+
+    maRegisteredCellAttributes.erase(&rCandidate);
+    delete &rCandidate;
+}
+
+const ScPatternAttr& CellAttributeHelper::getDefaultCellAttribute() const
+{
+    // *have* to create on-demand due to mrScDocument.GetPool() *can* be nullptr
+    // since mxPoolHelper is *only* created for SCDOCMODE_DOCUMENT and
+    // SCDOCMODE_FUNCTIONACCESS (!)
+    if (!mpDefaultCellAttribute)
+    {
+        // GetRscString only works after ScGlobal::Init (indicated by the EmptyBrushItem)
+        // TODO: Write additional method ScGlobal::IsInit() or somesuch
+        //       or detect whether this is the Secondary Pool for a MessagePool
+        if (ScGlobal::GetEmptyBrushItem())
+        {
+            const OUString aInitialStyle(ScResId(STR_STYLENAME_STANDARD));
+            mpDefaultCellAttribute = new ScPatternAttr(
+                *const_cast<CellAttributeHelper*>(this),
+                nullptr, // no SfxItemSet
+                &aInitialStyle);
+        }
+        else
+        {
+            mpDefaultCellAttribute = new ScPatternAttr(*const_cast<CellAttributeHelper*>(this));
+        }
+    }
+    return *mpDefaultCellAttribute;
+}
+
+void CellAttributeHelper::CellStyleDeleted(const ScStyleSheet& rStyle)
+{
+    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
+    {
+        if (&rStyle == pCheck->GetStyleSheet())
+            const_cast<ScPatternAttr*>(pCheck)->StyleToName();
+    }
+}
+
+void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, std::u16string_view rName)
+{
+    // If a style was created, don't keep any pattern with its name string in the pool,
+    // because it would compare equal to a pattern with a pointer to the new style.
+    // Calling StyleSheetChanged isn't enough because the pool may still contain items
+    // for undo or clipboard content.
+    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
+    {
+        if (nullptr == pCheck->GetStyleSheet() && rName == *pCheck->GetStyleName())
+            const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc); // find and store style pointer
+    }
+}
+
+void CellAttributeHelper::UpdateAllStyleSheets(ScDocument& rDoc)
+{
+    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
+        const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc);
+
+    // force existance, then access
+    getDefaultCellAttribute();
+    mpDefaultCellAttribute->UpdateStyleSheet(rDoc);
+}
+
+void CellAttributeHelper::AllStylesToNames()
+{
+    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
+        const_cast<ScPatternAttr*>(pCheck)->StyleToName();
+
+    // force existance, then access
+    getDefaultCellAttribute();
+    mpDefaultCellAttribute->StyleToName();
+}
+
+CellAttributeHolder::CellAttributeHolder(const ScPatternAttr* pNew, bool bPassingOwnership)
+: mpScPatternAttr(nullptr)
+{
+    if (nullptr != pNew)
+        mpScPatternAttr = pNew->getCellAttributeHelper().registerAndCheck(*pNew, bPassingOwnership);
+}
+
+CellAttributeHolder::CellAttributeHolder(const CellAttributeHolder& rHolder)
+: mpScPatternAttr(nullptr)
+{
+    if (rHolder.getScPatternAttr())
+        mpScPatternAttr = rHolder.getScPatternAttr()->getCellAttributeHelper().registerAndCheck(*rHolder.getScPatternAttr(), false);
+}
+
+CellAttributeHolder::~CellAttributeHolder()
+{
+    if (nullptr != mpScPatternAttr)
+        mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr);
+}
+
+const CellAttributeHolder& CellAttributeHolder::operator=(const CellAttributeHolder& rHolder)
+{
+    if (nullptr != mpScPatternAttr)
+        mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr);
+
+    mpScPatternAttr = nullptr;
+
+    if (rHolder.getScPatternAttr())
+        mpScPatternAttr = rHolder.getScPatternAttr()->getCellAttributeHelper().registerAndCheck(*rHolder.getScPatternAttr(), false);
+
+    return *this;
+}
+
+bool CellAttributeHolder::operator==(const CellAttributeHolder& rHolder) const
+{
+    // here we have registered entries, so no need to test for equality
+    return mpScPatternAttr == rHolder.mpScPatternAttr;
+}
+
+void CellAttributeHolder::setScPatternAttr(const ScPatternAttr* pNew, bool bPassingOwnership)
+{
+    if (nullptr != mpScPatternAttr)
+        mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr);
+
+    mpScPatternAttr = nullptr;
+
+    if (nullptr != pNew)
+        mpScPatternAttr = pNew->getCellAttributeHelper().registerAndCheck(*pNew, bPassingOwnership);
+}
+
+bool CellAttributeHolder::areSame(const CellAttributeHolder* p1, const CellAttributeHolder* p2)
+{
+    if (p1 == p2)
+        // pointer compare, this handles already
+        // nullptr and if indeed handed over twice
+        return true;
+
+    if (nullptr == p1 || nullptr == p2)
+        // one ptr is nullptr, not both, that would
+        // have triggered above
+        return false;
+
+    // return content compare using operator== at last
+    return *p1 == *p2;
+}
+
+#ifdef DBG_UTIL
+static size_t nUsedScPatternAttr(0);
+#endif
+
 const WhichRangesContainer aScPatternAttrSchema(svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>);
 
-ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName )
-    :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
-        pName       ( rStyleName ),
-        pStyle      ( nullptr ),
-        mnPAKey(0)
+ScPatternAttr::ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pItemSet, const OUString* pStyleName)
+: maLocalSfxItemSet(rHelper.GetPool(), aScPatternAttrSchema)
+, pName()
+, mxVisible()
+, pStyle(nullptr)
+, pCellAttributeHelper(&rHelper)
+, mnPAKey(0)
+, mnRefCount(0)
+#ifdef DBG_UTIL
+, m_nSerialNumber(nUsedScPatternAttr++)
+, m_bDeleted(false)
+#endif
 {
-    setExceptionalSCItem();
+    if (nullptr != pStyleName)
+        pName = *pStyleName;
 
     // We need to ensure that ScPatternAttr is using the correct WhichRange,
     // see comments in commit message. This does transfers the items with
     // minimized overhead, too
-    if (GetItemSet().GetRanges() != aScPatternAttrSchema)
-        GetItemSet().SetRanges(aScPatternAttrSchema);
+    if (nullptr != pItemSet)
+    {
+        // CAUTION: Use bInvalidAsDefault == false for the ::Put,
+        // we *need* to take over also Items/Slots in state
+        // SfxItemState::DONTCARE aka IsInvalidItem, this is a precious
+        // value/information e.g. in ScDocument::CreateSelectionPattern
+        maLocalSfxItemSet.Put(*pItemSet, false);
+    }
 }
 
-ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet )
-    :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
-        pStyle      ( nullptr ),
-        mnPAKey(0)
+ScPatternAttr::ScPatternAttr(const ScPatternAttr& rPatternAttr)
+: maLocalSfxItemSet(rPatternAttr.maLocalSfxItemSet)
+, pName(rPatternAttr.pName)
+, mxVisible()
+, pStyle(rPatternAttr.pStyle)
+, pCellAttributeHelper(rPatternAttr.pCellAttributeHelper)
+, mnPAKey(rPatternAttr.mnPAKey)
+, mnRefCount(0)
+#ifdef DBG_UTIL
+, m_nSerialNumber(nUsedScPatternAttr++)
+, m_bDeleted(false)
+#endif
 {
-    setExceptionalSCItem();
-
-    // We need to ensure that ScPatternAttr is using the correct WhichRange,
-    // see comments in commit message. This does transfers the items with
-    // minimized overhead, too
-    if (GetItemSet().GetRanges() != aScPatternAttrSchema)
-        GetItemSet().SetRanges(aScPatternAttrSchema);
 }
 
-ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :   SfxSetItem  ( ATTR_PATTERN, SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *pItemPool ) ),
-        pStyle      ( nullptr ),
-        mnPAKey(0)
+ScPatternAttr::~ScPatternAttr()
 {
-    setExceptionalSCItem();
-}
-
-ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
-    :   SfxSetItem  ( rPatternAttr ),
-        pName       ( rPatternAttr.pName ),
-        pStyle      ( rPatternAttr.pStyle ),
-        mnPAKey(rPatternAttr.mnPAKey)
-{
-    setExceptionalSCItem();
-}
-
-ScPatternAttr* ScPatternAttr::Clone( SfxItemPool *pPool ) const
-{
-    ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().CloneAsValue(true, pPool) );
-
-    pPattern->pStyle = pStyle;
-    pPattern->pName = pName;
-
-    return pPattern;
+#ifdef DBG_UTIL
+    m_bDeleted = true;
+#endif
+    // should no longer be referenced, complain if not so
+    assert(!isRegistered());
 }
 
 static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
@@ -139,37 +349,26 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 
 constexpr size_t compareSize = ATTR_PATTERN_END - ATTR_PATTERN_START + 1;
 
-bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
+bool ScPatternAttr::operator==(const ScPatternAttr& rCmp) const
 {
     // check if same incarnation
     if (this == &rCmp)
         return true;
 
-    // check SfxPoolItem base class
-    if (!SfxPoolItem::operator==(rCmp) )
-        return false;
-
     // check everything except the SfxItemSet from base class SfxSetItem
-    const ScPatternAttr& rOther(static_cast<const ScPatternAttr&>(rCmp));
-    if (!StrCmp(GetStyleName(), rOther.GetStyleName()))
+    if (!StrCmp(GetStyleName(), rCmp.GetStyleName()))
         return false;
 
     // here we need to compare the SfxItemSet. We *know* that these are
     // all simple (one range, same range)
-    const SfxItemSet& rSet1(GetItemSet());
-    const SfxItemSet& rSet2(rOther.GetItemSet());
+    const SfxItemSet& rSet1(maLocalSfxItemSet);
+    const SfxItemSet& rSet2(rCmp.maLocalSfxItemSet);
 
     // the former method 'FastEqualPatternSets' mentioned:
     //   "Actually test_tdf133629 from UITest_calc_tests9 somehow manages to have
     //   a different range (and I don't understand enough why), so better be safe and compare fully."
     // in that case the hash code above would already fail, too
-    if (rSet1.TotalCount() != compareSize || rSet2.TotalCount() != compareSize)
-    {
-        // assert this for now, should not happen. If it does, look for it and evtl.
-        // enable SfxItemSet::operator== below
-        assert(false);
-        return rSet1 == rSet2;
-    }
+    assert(rSet1.TotalCount() == compareSize && rSet2.TotalCount() == compareSize);
 
     // check pools, do not accept different pools
     if (rSet1.GetPool() != rSet2.GetPool())
@@ -178,6 +377,10 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
     // check count of set items, has to be equal
     if (rSet1.Count() != rSet2.Count())
         return false;
+
+    // both have no items, done
+    if (0 == rSet1.Count())
+        return true;
 
     // compare each item separately
     const SfxPoolItem **ppItem1(rSet1.GetItems_Impl());
@@ -196,6 +399,22 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
     }
 
     return true;
+}
+
+bool ScPatternAttr::areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2)
+{
+    if (pItem1 == pItem2)
+        // pointer compare, this handles already
+        // nullptr and if indeed handed over twice
+        return true;
+
+    if (nullptr == pItem1 || nullptr == pItem2)
+        // one ptr is nullptr, not both, that would
+        // have triggered above
+        return false;
+
+    // return content compare using operator== at last
+    return *pItem1 == *pItem2;
 }
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
@@ -1134,15 +1353,13 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
     return pDestStyle;
 }
 
-ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const
+CellAttributeHolder ScPatternAttr::MigrateToDocument( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const
 {
     const SfxItemSet* pSrcSet = &GetItemSet();
-
-    ScPatternAttr aDestPattern( pDestDoc->GetPool() );
-    SfxItemSet* pDestSet = &aDestPattern.GetItemSet();
+    ScPatternAttr* pDestPattern(new ScPatternAttr(pDestDoc->getCellAttributeHelper()));
+    SfxItemSet* pDestSet(&pDestPattern->GetItemSet());
 
     // Copy cell pattern style to other document:
-
     if ( pDestDoc != pSrcDoc )
     {
         OSL_ENSURE( pStyle, "Missing Pattern-Style! :-/" );
@@ -1155,7 +1372,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
                                                             pDestDoc->GetStyleSheetPool(),
                                                             pDestDoc->GetFormatExchangeList() );
 
-        aDestPattern.SetStyleSheet( static_cast<ScStyleSheet*>(pStyleCpy) );
+        pDestPattern->SetStyleSheet( static_cast<ScStyleSheet*>(pStyleCpy) );
     }
 
     for ( sal_uInt16 nAttrId = ATTR_PATTERN_START; nAttrId <= ATTR_PATTERN_END; nAttrId++ )
@@ -1203,8 +1420,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
         }
     }
 
-    ScPatternAttr* pPatternAttr = const_cast<ScPatternAttr*>( &pDestDoc->GetPool()->DirectPutItemInPool(aDestPattern) );
-    return pPatternAttr;
+    return CellAttributeHolder(pDestPattern, true);
 }
 
 bool ScPatternAttr::IsVisible() const

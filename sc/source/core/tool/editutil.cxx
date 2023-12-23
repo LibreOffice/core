@@ -741,7 +741,8 @@ ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
         : ScFieldEditEngine( pDoc, pDoc->GetEnginePool() )
 {
     SetEditTextObjectPool( pDoc->GetEditPool() );
-    Init(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
+    const ScPatternAttr& rScPatternAttr(pDoc->getCellAttributeHelper().getDefaultCellAttribute());
+    Init(rScPatternAttr);
 }
 
 ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,

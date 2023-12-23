@@ -135,16 +135,16 @@ bool ScConversionEngineBase::FindNextConversionCell()
                     // Set the new string and update the language with the cell.
                     mrDoc.SetString(aPos, aNewStr);
 
-                    const ScPatternAttr* pAttr = mrDoc.GetPattern(aPos);
-                    std::unique_ptr<ScPatternAttr> pNewAttr;
+                    const ScPatternAttr* pAttr(mrDoc.GetPattern(aPos));
+                    ScPatternAttr* pNewAttr(nullptr);
 
-                    if (pAttr)
-                        pNewAttr = std::make_unique<ScPatternAttr>(*pAttr);
+                    if (nullptr != pAttr)
+                        pNewAttr = new ScPatternAttr(*pAttr);
                     else
-                        pNewAttr = std::make_unique<ScPatternAttr>(mrDoc.GetPool());
+                        pNewAttr = new ScPatternAttr(mrDoc.getCellAttributeHelper());
 
                     pNewAttr->GetItemSet().Put(SvxLanguageItem(aLang.nLang, EE_CHAR_LANGUAGE), ATTR_FONT_LANGUAGE);
-                    mrDoc.SetPattern(aPos, std::move(pNewAttr));
+                    mrDoc.SetPattern(aPos, CellAttributeHolder(pNewAttr, true));
                 }
 
                 if (mpRedoDoc && !bEmptyCell)
@@ -209,7 +209,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
             {
                 // GetPattern may implicitly allocates the column if not exists,
                 pPattern = mrDoc.GetPattern( nNewCol, nNewRow, mnStartTab );
-                if( pPattern && !SfxPoolItem::areSame(pPattern, pLastPattern) )
+                if( pPattern && !ScPatternAttr::areSame(pPattern, pLastPattern) )
                 {
                     pPattern->FillEditItemSet( &aEditDefaults );
                     SetDefaults( aEditDefaults );

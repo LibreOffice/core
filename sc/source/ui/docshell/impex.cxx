@@ -1038,7 +1038,7 @@ static bool lcl_PutString(
                 // This is only necessary for ScDocumentImport,
                 // ScDocument::SetTextCell() forces it by ScSetStringParam.
                 sal_uInt32 nFormat = rDoc.GetFormatTable()->GetStandardFormat(SvNumFormatType::TEXT);
-                ScPatternAttr aNewAttrs(rDoc.GetPool());
+                ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper());
                 SfxItemSet& rSet = aNewAttrs.GetItemSet();
                 rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
                 rDoc.ApplyPattern(nCol, nRow, nTab, aNewAttrs);

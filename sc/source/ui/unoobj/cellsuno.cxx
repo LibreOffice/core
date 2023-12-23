@@ -1869,7 +1869,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
         {
             if ( IsScItemWid( pEntry->nWID ) )
             {
-                const ScPatternAttr* pPattern = rDoc.GetDefPattern();
+                const ScPatternAttr* pPattern(&rDoc.getCellAttributeHelper().getDefaultCellAttribute());
                 if ( pPattern )
                 {
                     const SfxItemSet& rSet = pPattern->GetItemSet();
@@ -1903,7 +1903,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                     case SC_WID_UNO_TBLBORD:
                     case SC_WID_UNO_TBLBORD2:
                         {
-                            const ScPatternAttr* pPattern = rDoc.GetDefPattern();
+                            const ScPatternAttr* pPattern(&rDoc.getCellAttributeHelper().getDefaultCellAttribute());
                             if ( pPattern )
                             {
                                 if (pEntry->nWID == SC_WID_UNO_TBLBORD2)
@@ -2278,7 +2278,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                             sal_uInt32 nIndex = rDoc.AddValidationEntry( *pNewData );
                             pNewData.reset();
 
-                            ScPatternAttr aPattern( rDoc.GetPool() );
+                            ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
                             aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
                             pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, true );
                         }
@@ -2548,7 +2548,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
                 {
                     pOldPattern.reset(new ScPatternAttr( *GetCurrentAttrsDeep() ));
                     pOldPattern->GetItemSet().ClearInvalidItems();
-                    pNewPattern.reset(new ScPatternAttr( rDoc.GetPool() ));
+                    pNewPattern.reset(new ScPatternAttr(rDoc.getCellAttributeHelper()));
                 }
 
                 //  collect items in pNewPattern, apply with one call after the loop
@@ -2684,7 +2684,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                     {
                         pOldPattern.reset(new ScPatternAttr( *GetCurrentAttrsDeep() ));
                         pOldPattern->GetItemSet().ClearInvalidItems();
-                        pNewPattern.reset(new ScPatternAttr( rDoc.GetPool() ));
+                        pNewPattern.reset(new ScPatternAttr(rDoc.getCellAttributeHelper()));
                     }
 
                     //  collect items in pNewPattern, apply with one call after the loop
@@ -5884,7 +5884,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
             sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat(*pFormatter, nOldFormat, aRes.mnFormatType);
             if (nNewFormat != nOldFormat)
             {
-                ScPatternAttr aPattern( rDoc.GetPool() );
+                ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
                 // ATTR_LANGUAGE_FORMAT remains unchanged
                 rFunc.ApplyAttributes( *GetMarkData(), aPattern, true );
@@ -7630,7 +7630,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
     }
 
     //  Scenario ranges are tagged with attribute
-    ScPatternAttr aPattern( rDoc.GetPool() );
+    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
     aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
     aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
     pDocSh->GetDocFunc().ApplyAttributes( aMarkData, aPattern, true );

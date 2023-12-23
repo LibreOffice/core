@@ -1006,7 +1006,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if ( bVertical && nISrcStart == nISrcEnd && !bHasFiltered )
                 {
                     //  set all attributes at once (en bloc)
-                    if (pNewPattern || !SfxPoolItem::areSame(pSrcPattern, rDocument.GetDefPattern()))
+                    if (pNewPattern || !pSrcPattern->isDefault())
                     {
                         //  Default is already present (DeleteArea)
                         SCROW nY1 = static_cast<SCROW>(std::min( nIStart, nIEnd ));
@@ -1037,7 +1037,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     DeleteArea(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
                             static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), InsertDeleteFlags::AUTOFILL);
 
-                if ( !SfxPoolItem::areSame(pSrcPattern, aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) ) )
+                if ( !ScPatternAttr::areSame(pSrcPattern, aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) ) )
                 {
                     // Transfer template too
                     //TODO: Merge ApplyPattern to AttrArray ??
@@ -2697,7 +2697,7 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
     std::unique_ptr<ScPatternAttr> pPatternAttrs[16];
     for (sal_uInt8 i = 0; i < 16; ++i)
     {
-        pPatternAttrs[i].reset(new ScPatternAttr(rDocument.GetPool()));
+        pPatternAttrs[i].reset(new ScPatternAttr(rDocument.getCellAttributeHelper()));
         pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), rDocument);
     }
 

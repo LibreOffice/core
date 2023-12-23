@@ -510,21 +510,19 @@ void ScGlobal::SetClipDocName( const OUString& rNew )
     aStrClipDocName = rNew;
 }
 
-void ScGlobal::InitTextHeight(const SfxItemPool* pPool)
+void ScGlobal::InitTextHeight(SfxItemPool& rPool)
 {
-    if (!pPool)
-    {
-        OSL_FAIL("ScGlobal::InitTextHeight: No Pool");
-        return;
-    }
-
-    const ScPatternAttr& rPattern = pPool->GetDefaultItem(ATTR_PATTERN);
+    // this gets handed over the m_pMessagePool in ScModule::ScModule, so
+    // the previously used item ScPatternAttr is unchanged. This allows to
+    // just use an temporary incarnation of a CellAttributeHelper here
+    const CellAttributeHelper aTempHelper(rPool);
+    const ScPatternAttr& rDefaultCellAttribute(aTempHelper.getDefaultCellAttribute());
 
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     ScopedVclPtrInstance< VirtualDevice > pVirtWindow( *pDefaultDev );
     pVirtWindow->SetMapMode(MapMode(MapUnit::MapPixel));
     vcl::Font aDefFont;
-    rPattern.fillFontOnly(aDefFont, pVirtWindow); // Font color doesn't matter here
+    rDefaultCellAttribute.fillFontOnly(aDefFont, pVirtWindow); // Font color doesn't matter here
     pVirtWindow->SetFont(aDefFont);
     sal_uInt16 nTest = static_cast<sal_uInt16>(
         pVirtWindow->PixelToLogic(Size(0, pVirtWindow->GetTextHeight()), MapMode(MapUnit::MapTwip)).Height());
@@ -532,7 +530,7 @@ void ScGlobal::InitTextHeight(const SfxItemPool* pPool)
     if (nTest > nDefFontHeight)
         nDefFontHeight = nTest;
 
-    const SvxMarginItem& rMargin = rPattern.GetItem(ATTR_MARGIN);
+    const SvxMarginItem& rMargin(rDefaultCellAttribute.GetItem(ATTR_MARGIN));
 
     nTest = static_cast<sal_uInt16>(nDefFontHeight + rMargin.GetTopMargin()
                                     + rMargin.GetBottomMargin() - STD_ROWHEIGHT_DIFF);

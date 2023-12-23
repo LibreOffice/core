@@ -791,7 +791,7 @@ sal_uLong lclGetCellFormat( const ScDocument& rDoc, const ScAddress& rPos )
 {
     const ScPatternAttr* pPattern = rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() );
     if( !pPattern )
-        pPattern = rDoc.GetDefPattern();
+        pPattern = &rDoc.getCellAttributeHelper().getDefaultCellAttribute();
     return pPattern->GetNumberFormat( rDoc.GetFormatTable() );
 }
 

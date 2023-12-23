@@ -389,7 +389,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                 {
                     //! ResetAttrib at document !!!
 
-                    ScPatternAttr aPattern( rSrcDoc.GetPool() );
+                    ScPatternAttr aPattern( rSrcDoc.getCellAttributeHelper() );
                     aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
                     aPattern.GetItemSet().Put( ScMergeFlagAttr() );
                     aClipDoc.ApplyPatternAreaTab( 0,0, rDoc.MaxCol(),rDoc.MaxRow(), nSrcTab, aPattern );

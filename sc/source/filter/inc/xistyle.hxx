@@ -29,7 +29,7 @@
 class ScPatternAttr;
 
 struct XclRange;
-struct ScAttrEntry;
+class ScAttrEntry;
 enum class SvxBoxItemLine;
 
 /* ============================================================================

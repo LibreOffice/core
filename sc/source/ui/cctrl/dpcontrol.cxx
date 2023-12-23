@@ -138,7 +138,7 @@ void ScDPFieldButton::draw()
         {
             //  use ScPatternAttr::GetFont only for font size
             vcl::Font aAttrFont;
-            mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN).fillFontOnly(aAttrFont, mpOutDev, &maZoomY);
+            mpDoc->getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aAttrFont, mpOutDev, &maZoomY);
             aTextFont.SetFontSize(aAttrFont.GetFontSize());
         }
         mpOutDev->SetFont(aTextFont);

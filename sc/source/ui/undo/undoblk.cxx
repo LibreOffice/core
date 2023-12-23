@@ -475,7 +475,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                     aWorkRange.aEnd.SetRow(rDoc.MaxRow());
                 ScMarkData aMarkData(rDoc.GetSheetLimits());
                 aMarkData.SelectOneTable( aWorkRange.aStart.Tab() );
-                ScPatternAttr aPattern( rDoc.GetPool() );
+                ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
                 aPattern.GetItemSet().Put( ScMergeFlagAttr() );
                 rDoc.ApplyPatternArea( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(),
                     aWorkRange.aEnd.Col(),   aWorkRange.aEnd.Row(),
@@ -2308,7 +2308,7 @@ void ScUndoRemoveMerge::Redo()
             ScRange aRange = rOption.getSingleRange(nTab);
 
             const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetDefaultItem( ATTR_MERGE );
-            ScPatternAttr aPattern( rDoc.GetPool() );
+            ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
             aPattern.GetItemSet().Put( rDefAttr );
             rDoc.ApplyPatternAreaTab( rOption.mnStartCol, rOption.mnStartRow,
                     rOption.mnEndCol, rOption.mnEndRow, nTab,

@@ -603,7 +603,7 @@ public:
     static void             InitAddIns();
     SC_DLLPUBLIC static void Clear();                    // at the end of the program
 
-    static void             InitTextHeight(const SfxItemPool* pPool);
+    static void             InitTextHeight(SfxItemPool& rPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return xEmptyBrushItem.get(); }
     static SvxBrushItem*    GetButtonBrushItem();
 

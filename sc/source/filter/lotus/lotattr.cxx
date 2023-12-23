@@ -88,7 +88,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         return *((*iter)->pPattAttr);
 
     // generate new Pattern Attribute
-    ScPatternAttr*  pNewPatt = new ScPatternAttr(pDocPool);
+    ScPatternAttr*  pNewPatt = new ScPatternAttr(mrContext.rDoc.getCellAttributeHelper());
 
     SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
     ENTRY *pCurrent = new ENTRY( std::unique_ptr<ScPatternAttr>(pNewPatt) );
@@ -189,7 +189,7 @@ void LotAttrCol::SetAttr( const ScDocument* pDoc, const SCROW nRow, const ScPatt
 
     if(iterLast != aEntries.rend())
     {
-        if( ( (*iterLast)->nLastRow == nRow - 1 ) && SfxPoolItem::areSame( &rAttr, (*iterLast)->pPattAttr ) )
+        if( ( (*iterLast)->nLastRow == nRow - 1 ) && ScPatternAttr::areSame( &rAttr, (*iterLast)->pPattAttr ) )
             (*iterLast)->nLastRow = nRow;
         else
         {

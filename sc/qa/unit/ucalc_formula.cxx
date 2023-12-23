@@ -4257,8 +4257,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateValidity)
     sal_uInt32 nIndex = m_pDoc->AddValidationEntry(aData);
     SfxUInt32Item aItem(ATTR_VALIDDATA, nIndex);
 
-    ScPatternAttr aNewAttrs(
-        SfxItemSet(*m_pDoc->GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>));
+    ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
     aNewAttrs.GetItemSet().Put(aItem);
 
     m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);

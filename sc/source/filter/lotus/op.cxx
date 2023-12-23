@@ -535,7 +535,7 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 {
     sal_uInt16 nCode;
 
-    ScPatternAttr aPattern(rContext.rDoc.GetPool());
+    ScPatternAttr aPattern(rContext.rDoc.getCellAttributeHelper());
     SfxItemSet& rItemSet = aPattern.GetItemSet();
 
     r.ReadUInt16( nCode );

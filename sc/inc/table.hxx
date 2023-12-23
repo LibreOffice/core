@@ -780,7 +780,7 @@ public:
     void        SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttrEntry> && vNewData);
 
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr );
-    const ScPatternAttr* SetPattern( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPatternAttr> );
+    void        SetPattern( SCCOL nCol, SCROW nRow, const CellAttributeHolder& rHolder );
     void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, SvNumFormatType nNewType );
@@ -810,7 +810,7 @@ public:
     bool        ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScMF nFlags );
     bool        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScMF nFlags );
 
-    void        ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = nullptr, bool* const pIsChanged = nullptr );
+    void        ApplySelectionCache( ScItemPoolCache& rCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = nullptr, bool* const pIsChanged = nullptr );
     void        DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );

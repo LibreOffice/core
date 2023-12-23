@@ -168,9 +168,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         sal_uLong nStdFormat = 0;
         if ( nMode == SC_DDE_DEFAULT )
         {
-            ScPatternAttr* pDefPattern = rDoc.GetDefPattern();     // contains standard template
-            if ( pDefPattern )
-                nStdFormat = pDefPattern->GetNumberFormat( pFormatter );
+            nStdFormat = rDoc.getCellAttributeHelper().getDefaultCellAttribute().GetNumberFormat( pFormatter );
         }
         else if ( nMode == SC_DDE_ENGLISH )
             nStdFormat = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);

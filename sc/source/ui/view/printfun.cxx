@@ -1741,7 +1741,8 @@ void ScPrintFunc::MakeEditEngine()
         //  Default-Set for alignment
         pEditDefaults.reset( new SfxItemSet( pEditEngine->GetEmptyItemSet() ) );
 
-        const ScPatternAttr& rPattern = rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN);
+        const ScPatternAttr& rPattern(rDoc.getCellAttributeHelper().getDefaultCellAttribute());
+
         rPattern.FillEditItemSet( pEditDefaults.get() );
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
@@ -1908,7 +1909,7 @@ tools::Long ScPrintFunc::DoNotes( tools::Long nNoteStart, bool bDoPrint, ScPrevi
 
     vcl::Font aMarkFont;
     ScAutoFontColorMode eColorMode = bUseStyleColor ? ScAutoFontColorMode::Display : ScAutoFontColorMode::Print;
-    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN).fillFont(aMarkFont, eColorMode);
+    rDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFont(aMarkFont, eColorMode);
     pDev->SetFont(aMarkFont);
     tools::Long nMarkLen = pDev->GetTextWidth("GW99999:");
     // without Space-Char, because it rarely arrives there
@@ -2320,7 +2321,7 @@ void ScPrintFunc::PrintPage( tools::Long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX
             pDev->SetMapMode(aOffsetMode);
         }
 
-        ScPatternAttr aPattern( rDoc.GetPool() );
+        ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
         vcl::Font aFont;
         ScAutoFontColorMode eColorMode = bUseStyleColor ? ScAutoFontColorMode::Display : ScAutoFontColorMode::Print;
         aPattern.fillFont(aFont, eColorMode, pDev);

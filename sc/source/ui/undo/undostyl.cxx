@@ -143,7 +143,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         pStyle = &pStlPool->Make( aNewName, eStyleFamily, SfxStyleSearchBits::UserDefined );
 
         if ( eStyleFamily == SfxStyleFamily::Para )
-            rDoc.GetPool()->CellStyleCreated( aNewName, rDoc );
+            rDoc.getCellAttributeHelper().CellStyleCreated(rDoc, aNewName);
     }
 
     if ( pStyle )

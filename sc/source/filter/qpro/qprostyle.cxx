@@ -40,7 +40,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     if (nStyle >= maxsize)
         return;
 
-    ScPatternAttr aPattern(pDoc->GetPool());
+    ScPatternAttr aPattern(pDoc->getCellAttributeHelper());
     SfxItemSet& rItemSet = aPattern.GetItemSet();
 
     sal_uInt8 nTmp = maAlign[ nStyle ];

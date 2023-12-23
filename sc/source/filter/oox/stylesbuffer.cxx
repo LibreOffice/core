@@ -2140,7 +2140,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     }
     if ( !pCachedPattern && nNumFmtId >= 0 )
     {
-        ScPatternAttr aNumPat(rDoc.GetPool());
+        ScPatternAttr aNumPat(rDoc.getCellAttributeHelper());
         mnScNumFmt = getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId, false );
         rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
@@ -2166,24 +2166,24 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
         // Fill this gap with the default pattern.
         ScAttrEntry aEntry;
         aEntry.nEndRow = nRow1 - 1;
-        aEntry.pPattern = &rDoc.GetPool()->DirectPutItemInPool(*rAttrs.mpDefPattern);
+        aEntry.setScPatternAttr(rAttrs.mpDefPattern, false);
         rAttrs.maAttrs.push_back(aEntry);
 
         // Check if the default pattern is 'General'.
-        if (!rDocImport.isLatinScript(*aEntry.pPattern))
+        if (!rDocImport.isLatinScript(*aEntry.getScPatternAttr()))
             rAttrs.mbLatinNumFmtOnly = false;
     }
 
     ScAttrEntry aEntry;
     aEntry.nEndRow = nRow2;
-    aEntry.pPattern = &rDoc.GetPool()->DirectPutItemInPool(rPat);
+    aEntry.setScPatternAttr(&rPat, false);
     // Put the allocated pattern to cache
     if (!pCachedPattern)
-        rCache.add(nXfId, nNumFmtId, const_cast<ScPatternAttr*>(aEntry.pPattern));
+        rCache.add(nXfId, nNumFmtId, const_cast<ScPatternAttr*>(aEntry.getScPatternAttr()));
 
     rAttrs.maAttrs.push_back(aEntry);
 
-    if (!rDocImport.isLatinScript(*aEntry.pPattern))
+    if (!rDocImport.isLatinScript(*aEntry.getScPatternAttr()))
         rAttrs.mbLatinNumFmtOnly = false;
 }
 
@@ -2218,7 +2218,7 @@ Xf::createPattern( bool bSkipPoolDefs )
 {
     if( mpPattern )
         return *mpPattern;
-    mpPattern.reset( new ::ScPatternAttr( getScDocument().GetPool() ) );
+    mpPattern.reset( new ::ScPatternAttr(getScDocument().getCellAttributeHelper()) );
     SfxItemSet& rItemSet = mpPattern->GetItemSet();
     /*  Enables the used flags, if the formatting attributes differ from the
         style XF. In cell XFs Excel uses the cell attributes, if they differ

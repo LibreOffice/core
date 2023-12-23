@@ -261,7 +261,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<tools::Long>& 
                 continue;
         }
 
-        ScPatternAttr aNewAttrs( rDoc.GetPool() );
+        ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper());
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat) );
         rDoc.ApplyPatternAreaTab(i, 0, i, rDoc.MaxRow(), 0, aNewAttrs);
