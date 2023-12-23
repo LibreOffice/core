@@ -306,7 +306,7 @@ namespace svxform
 
         // tdf#154535 create the OXFormsDescriptor on-demand so we don't cause an unwanted
         // Binding to be created unless we are forced to.
-        auto fnCreateFormsDescriptor = [this, szName, xNode, xPropSet](){
+        auto fnCreateFormsDescriptor = [this, szName=std::move(szName), xNode=std::move(xNode), xPropSet=std::move(xPropSet)](){
             OXFormsDescriptor desc;
             desc.szName = szName;
             if (xNode) {

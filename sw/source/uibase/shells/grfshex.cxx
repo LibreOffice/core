@@ -80,7 +80,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
             css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(GetView().GetViewFrame().GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
 
             rtl::Reference<avmedia::PlayerListener> xPlayerListener(new avmedia::PlayerListener(
-                [xDispatchProvider, aURL, bLink](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+                [xDispatchProvider=std::move(xDispatchProvider), aURL, bLink](const css::uno::Reference<css::media::XPlayer>& rPlayer){
                     css::awt::Size aSize = rPlayer->getPreferredPlayerWindowSize();
                     avmedia::MediaWindow::dispatchInsertAVMedia(xDispatchProvider, aSize, aURL, bLink);
                 }));
