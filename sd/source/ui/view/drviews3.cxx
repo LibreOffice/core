@@ -307,7 +307,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             VclPtr<AbstractHeaderFooterDialog> pDlg(pFact->CreateHeaderFooterDialog(this, pWin ? pWin->GetFrameWeld() : nullptr, GetDoc(), mpActualPage));
             auto xRequest = std::make_shared<SfxRequest>(rReq);
             rReq.Ignore(); // the 'old' request is not relevant any more
-            pDlg->StartExecuteAsync([this, pDlg, xRequest](sal_Int32 /*nResult*/){
+            pDlg->StartExecuteAsync([this, pDlg, xRequest=std::move(xRequest)](sal_Int32 /*nResult*/){
                 GetActiveWindow()->Invalidate();
                 UpdatePreview( mpActualPage );
 

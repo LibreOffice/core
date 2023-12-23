@@ -89,7 +89,7 @@ void AnimationAudioNode::activate_st()
         // deactivate ASAP:
         auto self(getSelf());
         scheduleDeactivationEvent(
-            makeEvent( [self] () { self->deactivate(); },
+            makeEvent( [self=std::move(self)] () { self->deactivate(); },
                                     "AnimationAudioNode::deactivate without delay") );
     }
 }
@@ -188,13 +188,13 @@ bool AnimationAudioNode::handleAnimationEvent(
 
 void AnimationAudioNode::checkPlayingStatus()
 {
-    auto self(getSelf());
+    auto xSelf(getSelf());
     double nDuration = mpPlayer->getDuration();
     if (!mpPlayer->isPlaying() || nDuration < 0.0)
         nDuration = 0.0;
 
     scheduleDeactivationEvent(
-        makeDelay( [self] () { self->deactivate(); },
+        makeDelay( [xSelf=std::move(xSelf)] () { xSelf->deactivate(); },
             nDuration,
             "AnimationAudioNode::deactivate with delay") );
 }

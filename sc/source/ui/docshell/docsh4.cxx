@@ -1858,9 +1858,10 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                         VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg(GetActiveDialogParent(), *pStyleSheet, true));
 
-                        auto pRequest = std::make_shared<SfxRequest>(rReq);
+                        auto xRequest = std::make_shared<SfxRequest>(rReq);
                         rReq.Ignore(); // the 'old' request is not relevant any more
-                        pDlg->StartExecuteAsync([this, pDlg, pRequest, pStyleSheet, aOldData, aOldName, &rStyleSet, nCurTab, &rCaller, bUndo](sal_Int32 nResult){
+                        pDlg->StartExecuteAsync([this, pDlg, xRequest=std::move(xRequest), pStyleSheet, aOldData,
+                                                 aOldName, &rStyleSet, nCurTab, &rCaller, bUndo](sal_Int32 nResult) {
                             if ( nResult == RET_OK )
                             {
                                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
@@ -1896,7 +1897,7 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                                 }
 
                                 PageStyleModified( aNewName, false );
-                                pRequest->Done();
+                                xRequest->Done();
                             }
                             pDlg->disposeOnce();
                         });

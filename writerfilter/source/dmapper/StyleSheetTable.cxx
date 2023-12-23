@@ -800,7 +800,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 }
 
 
-void StyleSheetTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref)
+void StyleSheetTable::lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref)
 {
     //create a new style entry
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");

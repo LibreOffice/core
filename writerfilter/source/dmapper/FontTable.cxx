@@ -150,7 +150,7 @@ void FontTable::resolveSprm(Sprm & r_Sprm)
         pProperties->resolve(*this);
 }
 
-void FontTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref)
+void FontTable::lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref)
 {
     //create a new font entry
     SAL_WARN_IF( m_pImpl->pCurrentEntry, "writerfilter.dmapper", "current entry has to be NULL here" );

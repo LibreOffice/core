@@ -608,7 +608,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
-            std::shared_ptr<SwTableRep> pTableRep(::lcl_TableParamToItemSet(aCoreSet, rSh));
+            std::shared_ptr<SwTableRep> xTableRep(::lcl_TableParamToItemSet(aCoreSet, rSh));
 
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTableAttr(aCoreSet);
@@ -627,13 +627,14 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 if (pItem)
                     pDlg->SetCurPageId(static_cast<const SfxStringItem *>(pItem)->GetValue());
 
-                auto pRequest = std::make_shared<SfxRequest>(rReq);
+                auto xRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
                 const bool bTableMode = rSh.IsTableMode();
                 SwPaM* pCursor = bTableMode ? rSh.GetTableCrs() : rSh.GetCursor(); // tdf#142165 use table cursor if in table mode
                 auto vCursors = CopyPaMRing(*pCursor); // tdf#135636 make a copy to use at later apply
-                pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh, vCursors, bTableMode](sal_Int32 nResult){
+                pDlg->StartExecuteAsync([pDlg, xRequest=std::move(xRequest), xTableRep=std::move(xTableRep),
+                                         &rBindings, &rSh, vCursors=std::move(vCursors), bTableMode](sal_Int32 nResult){
                     if (RET_OK == nResult)
                     {
                         if (!bTableMode && rSh.IsTableMode()) // tdf#140977 drop current table-cursor if setting a replacement
@@ -650,8 +651,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
                         //to record FN_INSERT_TABLE correctly
-                        pRequest->SetSlot(FN_FORMAT_TABLE_DLG);
-                        pRequest->Done(*pOutSet);
+                        xRequest->SetSlot(FN_FORMAT_TABLE_DLG);
+                        xRequest->Done(*pOutSet);
 
                         ItemSetToTableParam(*pOutSet, rSh);
                     }

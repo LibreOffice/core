@@ -135,7 +135,7 @@ public:
     void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
 protected:
-    virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+    virtual void lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref) = 0;
 
 private:
 #ifdef DBG_UTIL

@@ -3591,7 +3591,7 @@ void DomainMapper::processDeferredCharacterProperties(
     }
 }
 
-void DomainMapper::lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref)
+void DomainMapper::lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref)
 {
     ref->resolve(*this);
 }

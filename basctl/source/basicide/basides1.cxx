@@ -791,11 +791,11 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
         case SID_BASICIDE_MANAGE_LANG:
         {
-            auto pRequest = std::make_shared<SfxRequest>(rReq);
+            auto xRequest = std::make_shared<SfxRequest>(rReq);
             rReq.Ignore(); // the 'old' request is not relevant any more
             auto xDlg = std::make_shared<ManageLanguageDialog>(pCurWin ? pCurWin->GetFrameWeld() : nullptr, m_pCurLocalizationMgr);
-            weld::DialogController::runAsync(xDlg, [pRequest](sal_Int32 /*nResult*/){
-                    pRequest->Done();
+            weld::DialogController::runAsync(xDlg, [xRequest=std::move(xRequest)](sal_Int32 /*nResult*/){
+                    xRequest->Done();
                 });
         }
         break;

@@ -363,7 +363,7 @@ void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce)
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow,
+void JSDialogSender::sendAction(const VclPtr<vcl::Window>& pWindow,
                                 std::unique_ptr<jsdialog::ActionDataMap> pData)
 {
     if (!mpIdleNotify)
@@ -373,7 +373,7 @@ void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow,
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, const OUString& rParentId,
+void JSDialogSender::sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& rParentId,
                                const OUString& rCloseId)
 {
     if (!mpIdleNotify)

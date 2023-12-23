@@ -501,8 +501,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
                             n == SFX_SPLITWINDOWS_RIGHT ? SfxChildAlignment::RIGHT :
                             n == SFX_SPLITWINDOWS_TOP ? SfxChildAlignment::TOP :
                                 SfxChildAlignment::BOTTOM );
-        VclPtr<SfxSplitWindow> pSplitWin = VclPtr<SfxSplitWindow>::Create(pWorkWin, eAlign, this, true );
-        pSplit[n] = pSplitWin;
+        pSplit[n] = VclPtr<SfxSplitWindow>::Create(pWorkWin, eAlign, this, true );
     }
 
     nOrigMode = SfxVisibilityFlags::Standard;

@@ -476,7 +476,7 @@ void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
     const SdrObject*    pObj        = nullptr;
     const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
-    std::shared_ptr<SfxRequest> pRequest = std::make_shared<SfxRequest>(rReq);
+    std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
 
     if( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -492,7 +492,7 @@ void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
             pObj,
             bHasMarked));
 
-    pDlg->StartExecuteAsync([pDlg, pRequest, pView, bHasMarked](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, xRequest=std::move(xRequest), pView, bHasMarked](sal_Int32 nResult){
         if ( nResult == RET_OK )
         {
             if( bHasMarked )
@@ -501,7 +501,7 @@ void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
                 pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
             pView->InvalidateAttribs();
-            pRequest->Done();
+            xRequest->Done();
         }
         pDlg->disposeOnce();
     });
@@ -512,7 +512,7 @@ void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
     ScDrawView* pView       = rViewData.GetScDrawView();
     bool        bHasMarked  = pView->AreObjectsMarked();
 
-    std::shared_ptr<SfxRequest> pRequest = std::make_shared<SfxRequest>(rReq);
+    std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
@@ -524,7 +524,7 @@ void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
         pWin, &aNewAttr,
         rViewData.GetDocument().GetDrawLayer(), true, false));
 
-    pDlg->StartExecuteAsync([pDlg, pRequest, pView, bHasMarked](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, xRequest=std::move(xRequest), pView, bHasMarked](sal_Int32 nResult){
         if ( nResult == RET_OK )
         {
             if( bHasMarked )
@@ -533,7 +533,7 @@ void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
                 pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
             pView->InvalidateAttribs();
-            pRequest->Done();
+            xRequest->Done();
         }
         pDlg->disposeOnce();
     });

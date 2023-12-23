@@ -83,8 +83,9 @@ namespace drawinglayer::primitive2d
                     aTransform.translate(aDestRange.getMinX(), aDestRange.getMinY());
 
                     // add transform primitive
-                    Primitive2DReference aScaled(new TransformPrimitive2D(aTransform, std::move(xRetval)));
-                    xRetval = Primitive2DContainer { aScaled };
+                    xRetval = Primitive2DContainer {
+                        Primitive2DReference(new TransformPrimitive2D(aTransform, std::move(xRetval))) // Scaled
+                    };
                 }
             }
 

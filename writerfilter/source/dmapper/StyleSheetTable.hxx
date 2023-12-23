@@ -117,7 +117,7 @@ private:
     virtual void lcl_sprm(Sprm & sprm) override;
 
     // Table
-    virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) override;
+    virtual void lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref) override;
 
     void applyDefaults(bool bParaProperties);
 

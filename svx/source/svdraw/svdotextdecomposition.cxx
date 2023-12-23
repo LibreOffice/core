@@ -352,8 +352,7 @@ namespace
         if(rInfo.mbEndOfBullet)
         {
             // embed in TextHierarchyBulletPrimitive2D
-            drawinglayer::primitive2d::Primitive2DReference aNewReference(pNewPrimitive);
-            drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference } ;
+            drawinglayer::primitive2d::Primitive2DContainer aNewSequence { pNewPrimitive };
             pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
         }
 

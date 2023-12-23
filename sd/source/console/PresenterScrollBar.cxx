@@ -749,10 +749,10 @@ void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Ar
         Execute();
 
         // Schedule repeated executions.
-        auto pThis(shared_from_this());
+        auto xSelf(shared_from_this());
         mnMousePressRepeaterTaskId = PresenterTimer::ScheduleRepeatedTask (
             mpScrollBar->GetComponentContext(),
-            [pThis] (TimeValue const&) { return pThis->Callback(); },
+            [xSelf=std::move(xSelf)] (TimeValue const&) { return xSelf->Callback(); },
             500000000,
             250000000);
     }

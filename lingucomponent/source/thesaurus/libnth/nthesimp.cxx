@@ -377,8 +377,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                             cTerm = sTerm;
                             break;
                     }
-                    OUString aAlt( cTerm + catst);
-                    pStr[i] = aAlt;
+                    pStr[i] = OUString( cTerm + catst);
                 }
                 rtl::Reference<Meaning> pMn = new Meaning(aRTerm);
                 OUString dTerm(pe->defn,strlen(pe->defn),eEnc );

@@ -210,10 +210,11 @@ Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 Key
     OUString aSpinfieldText = m_pSpinfieldControl->get_entry_text();
 
     // Add key modifier to argument list
-    auto aArgs0 = comphelper::makePropertyValue("KeyModifier", KeyModifier);
-    auto aArgs1 = comphelper::makePropertyValue("Value", m_bFloat ? Any(aSpinfieldText.toDouble())
-                                                                  : Any(aSpinfieldText.toInt32()));
-    return { aArgs0, aArgs1 };
+    return {
+        comphelper::makePropertyValue("KeyModifier", KeyModifier),
+        comphelper::makePropertyValue("Value", m_bFloat ? Any(aSpinfieldText.toDouble())
+                                                        : Any(aSpinfieldText.toInt32()))
+    };
 }
 
 void SpinfieldToolbarController::Modify()

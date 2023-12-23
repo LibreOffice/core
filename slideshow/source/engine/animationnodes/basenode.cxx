@@ -462,7 +462,7 @@ bool BaseNode::resolve()
         if (aBegin.hasValue()) {
             auto self(mpSelf);
             mpCurrentEvent = generateEvent(
-                aBegin, [self] () { self->activate(); },
+                aBegin, [self=std::move(self)] () { self->activate(); },
                 maContext, mnStartDelay );
         }
         else {
@@ -474,7 +474,7 @@ bool BaseNode::resolve()
             // timeout into account
             auto self(mpSelf);
             mpCurrentEvent = makeDelay(
-                [self] () { self->activate(); },
+                [self=std::move(self)] () { self->activate(); },
                 mnStartDelay,
                 "AnimationNode::activate with delay");
             maContext.mrEventQueue.addEvent( mpCurrentEvent );

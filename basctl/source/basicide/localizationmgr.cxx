@@ -579,8 +579,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );
                             }
 
-                            OUString aPropIdStr = aEsc + aPureIdStr;
-                            pIdStrings[i] = aPropIdStr;
+                            pIdStrings[i] = aEsc + aPureIdStr;
                         }
                         xPropertySet->setPropertyValue( aPropName, Any(aIdStrings) );
                     }

@@ -43,7 +43,7 @@ void SequentialTimeContainer::activate_st()
         // deactivate ASAP:
         auto self(getSelf());
         scheduleDeactivationEvent(
-            makeEvent( [self] () { self->deactivate(); },
+            makeEvent( [self=std::move(self)] () { self->deactivate(); },
                  "SequentialTimeContainer::deactivate") );
     }
     else // use default

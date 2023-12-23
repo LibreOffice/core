@@ -495,8 +495,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( const Reference< XFastAtt
         }
     }
 
-    SvXMLImportContextRef xThis( this );
-    return new XMLProxyContext( GetImport(), xThis );
+    return new XMLProxyContext( GetImport(), SvXMLImportContextRef(this) );
 }
 
 SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )

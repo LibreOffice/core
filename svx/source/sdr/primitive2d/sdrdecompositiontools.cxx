@@ -659,8 +659,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 if(0.0 != aAnimationList.getDuration())
                 {
                     // create content sequence
-                    Primitive2DReference xRefA(pNew);
-                    Primitive2DContainer aContent { xRefA };
+                    Primitive2DContainer aContent { Primitive2DReference(pNew) };
 
                     // create and add animated switch primitive
                     return Primitive2DReference(new AnimatedBlinkPrimitive2D(aAnimationList, std::move(aContent)));
