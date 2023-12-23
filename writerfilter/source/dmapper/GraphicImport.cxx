@@ -489,16 +489,16 @@ void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
 {
     switch (nVal)
     {
-    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides:
         m_pImpl->m_nWrap = text::WrapTextMode_PARALLEL;
         break;
-    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left:
         m_pImpl->m_nWrap = text::WrapTextMode_LEFT;
         break;
-    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right:
         m_pImpl->m_nWrap = text::WrapTextMode_RIGHT;
         break;
-    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest:
         m_pImpl->m_nWrap = text::WrapTextMode_DYNAMIC;
         break;
     default:;
@@ -633,7 +633,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_OfficeArtExtension_Decorative_val:
             m_pImpl->m_bDecorative = true;
         break;
-        case NS_ooxml::LN_CT_Hyperlink_URL://90682;
+        case NS_ooxml::LN_CT_Hyperlink_URL:
             m_pImpl->m_sHyperlinkURL = rValue.getString();
         break;
         case NS_ooxml::LN_blip: //the binary graphic data in a shape
@@ -695,14 +695,14 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_EffectExtent_b:
             m_pImpl->m_oEffectExtentBottom = nIntValue;
             break;
-        case NS_ooxml::LN_CT_NonVisualDrawingProps_id:// 90650;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_id:
             //id of the object - ignored
         break;
-        case NS_ooxml::LN_CT_NonVisualDrawingProps_name:// 90651;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_name:
             //name of the object
             m_pImpl->m_sName = rValue.getString();
         break;
-        case NS_ooxml::LN_CT_NonVisualDrawingProps_descr:// 90652;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_descr:
             //alternative text
             m_pImpl->m_sAlternativeText = rValue.getString();
         break;
@@ -713,47 +713,47 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_NonVisualDrawingProps_hidden:
             m_pImpl->m_bHidden = (nIntValue == 1);
         break;
-        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noChangeAspect://90644;
+        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noChangeAspect:
             //disallow aspect ratio change - ignored
         break;
-        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noMove:// 90645;
+        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noMove:
             m_pImpl->m_bPositionProtected = true;
         break;
-        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noResize: // 90646;
+        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noResize:
             m_pImpl->m_bSizeProtected = true;
         break;
-        case NS_ooxml::LN_CT_Anchor_distT: // 90983;
-        case NS_ooxml::LN_CT_Anchor_distB: // 90984;
-        case NS_ooxml::LN_CT_Anchor_distL: // 90985;
-        case NS_ooxml::LN_CT_Anchor_distR: // 90986;
+        case NS_ooxml::LN_CT_Anchor_distT:
+        case NS_ooxml::LN_CT_Anchor_distB:
+        case NS_ooxml::LN_CT_Anchor_distL:
+        case NS_ooxml::LN_CT_Anchor_distR:
         {
             m_pImpl->m_nShapeOptionType = nName;
             ProcessShapeOptions(rValue);
         }
         break;
-        case NS_ooxml::LN_CT_Anchor_simplePos_attr: // 90987;
+        case NS_ooxml::LN_CT_Anchor_simplePos_attr:
             m_pImpl->m_bUseSimplePos = nIntValue > 0;
         break;
-        case NS_ooxml::LN_CT_Anchor_relativeHeight: // 90988;
+        case NS_ooxml::LN_CT_Anchor_relativeHeight:
             m_pImpl->m_zOrder = nIntValue;
         break;
-        case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
+        case NS_ooxml::LN_CT_Anchor_behindDoc:
             if (nIntValue > 0)
             {
                 m_pImpl->m_bOpaque = false;
                 m_pImpl->m_bBehindDoc = true;
             }
         break;
-        case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
+        case NS_ooxml::LN_CT_Anchor_locked:
         break;
-        case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
+        case NS_ooxml::LN_CT_Anchor_layoutInCell:
             // Starting in MSO 2013, anchors are ALWAYS considered to be laid out in table cell.
             m_pImpl->m_bCompatForcedLayoutInCell = !nIntValue
                 && m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14
                 && m_pImpl->m_rDomainMapper.IsInTable();
             m_pImpl->m_bLayoutInCell = m_pImpl->m_bCompatForcedLayoutInCell || nIntValue;
         break;
-        case NS_ooxml::LN_CT_Anchor_hidden: // 90992; - ignored
+        case NS_ooxml::LN_CT_Anchor_hidden:
         break;
         case NS_ooxml::LN_CT_Anchor_allowOverlap:
             m_pImpl->m_bAllowOverlap = nIntValue != 0;
@@ -768,17 +768,17 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             m_pImpl->m_sAnchorId = aString.makeStringAndClear().toAsciiUpperCase();
         }
         break;
-        case NS_ooxml::LN_CT_Point2D_x: // 90405;
+        case NS_ooxml::LN_CT_Point2D_x:
             m_pImpl->m_nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             m_pImpl->m_nHoriRelation = text::RelOrientation::PAGE_FRAME;
             m_pImpl->m_nHoriOrient = text::HoriOrientation::NONE;
         break;
-        case NS_ooxml::LN_CT_Point2D_y: // 90406;
+        case NS_ooxml::LN_CT_Point2D_y:
             m_pImpl->m_nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             m_pImpl->m_nVertRelation = text::RelOrientation::PAGE_FRAME;
             m_pImpl->m_nVertOrient = text::VertOrientation::NONE;
         break;
-        case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
+        case NS_ooxml::LN_CT_WrapTight_wrapText:
             m_pImpl->m_bContour = true;
             m_pImpl->m_bContourOutside = true;
 
@@ -792,7 +792,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             handleWrapTextValue(rValue.getInt());
 
             break;
-        case NS_ooxml::LN_CT_WrapSquare_wrapText: //90928;
+        case NS_ooxml::LN_CT_WrapSquare_wrapText:
             handleWrapTextValue(rValue.getInt());
             break;
         case NS_ooxml::LN_shape:
@@ -1519,24 +1519,24 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
 
     switch(nSprmId)
     {
-        case NS_ooxml::LN_CT_Inline_extent: // 90911;
-        case NS_ooxml::LN_CT_Inline_effectExtent: // 90912;
-        case NS_ooxml::LN_CT_Inline_docPr: // 90913;
-        case NS_ooxml::LN_CT_Inline_cNvGraphicFramePr: // 90914;
-        case NS_ooxml::LN_CT_NonVisualGraphicFrameProperties_graphicFrameLocks:// 90657
-        case NS_ooxml::LN_CT_Inline_a_graphic:// 90915
-        case NS_ooxml::LN_CT_Anchor_simplePos_elem: // 90975;
-        case NS_ooxml::LN_CT_Anchor_extent: // 90978;
-        case NS_ooxml::LN_CT_Anchor_effectExtent: // 90979;
-        case NS_ooxml::LN_EG_WrapType_wrapSquare: // 90945;
-        case NS_ooxml::LN_EG_WrapType_wrapTight: // 90946;
+        case NS_ooxml::LN_CT_Inline_extent:
+        case NS_ooxml::LN_CT_Inline_effectExtent:
+        case NS_ooxml::LN_CT_Inline_docPr:
+        case NS_ooxml::LN_CT_Inline_cNvGraphicFramePr:
+        case NS_ooxml::LN_CT_NonVisualGraphicFrameProperties_graphicFrameLocks:
+        case NS_ooxml::LN_CT_Inline_a_graphic:
+        case NS_ooxml::LN_CT_Anchor_simplePos_elem:
+        case NS_ooxml::LN_CT_Anchor_extent:
+        case NS_ooxml::LN_CT_Anchor_effectExtent:
+        case NS_ooxml::LN_EG_WrapType_wrapSquare:
+        case NS_ooxml::LN_EG_WrapType_wrapTight:
         case NS_ooxml::LN_EG_WrapType_wrapThrough:
-        case NS_ooxml::LN_CT_Anchor_docPr: // 90980;
+        case NS_ooxml::LN_CT_Anchor_docPr:
         case NS_ooxml::LN_CT_NonVisualDrawingProps_extLst:
-        case NS_ooxml::LN_CT_Anchor_cNvGraphicFramePr: // 90981;
-        case NS_ooxml::LN_CT_Anchor_a_graphic: // 90982;
-        case NS_ooxml::LN_CT_WrapPath_start: // 90924;
-        case NS_ooxml::LN_CT_WrapPath_lineTo: // 90925;
+        case NS_ooxml::LN_CT_Anchor_cNvGraphicFramePr:
+        case NS_ooxml::LN_CT_Anchor_a_graphic:
+        case NS_ooxml::LN_CT_WrapPath_start:
+        case NS_ooxml::LN_CT_WrapPath_lineTo:
         case NS_ooxml::LN_graphic_graphic:
         case NS_ooxml::LN_pic_pic:
         case NS_ooxml::LN_dgm_relIds:
@@ -1589,7 +1589,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 m_pImpl->m_aInteropGrabBag["CT_WrapPath"] <<= m_pImpl->mpWrapPolygon->getPointSequenceSequence();
             }
             break;
-        case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
+        case NS_ooxml::LN_CT_Anchor_positionH:
         {
             // Use a special handler for the positioning
             auto pHandler = std::make_shared<PositionHandler>( m_pImpl->m_rPositionOffsets, m_pImpl->m_rAligns );
@@ -1617,7 +1617,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             }
         }
         break;
-        case NS_ooxml::LN_CT_Anchor_positionV: // 90977;
+        case NS_ooxml::LN_CT_Anchor_positionV:
         {
             // Use a special handler for the positioning
             auto pHandler = std::make_shared<PositionHandler>( m_pImpl->m_rPositionOffsets, m_pImpl->m_rAligns);
@@ -1673,7 +1673,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             // reference.
             m_pImpl->m_rPositivePercentages.pop();
             break;
-        case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
+        case NS_ooxml::LN_EG_WrapType_wrapNone:
             //depending on the behindDoc attribute text wraps through behind or in front of the object
             m_pImpl->m_nWrap = text::WrapTextMode_THROUGH;
 
@@ -1684,13 +1684,13 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             m_pImpl->m_nRightMargin = 0;
             m_pImpl->m_nBottomMargin = 0;
         break;
-        case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
+        case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom:
             // tdf#137850: Word >= 2013 seems to ignore bBehindDoc except for wrapNone, but older versions honour it.
             if (m_pImpl->m_bBehindDoc && m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14)
                  m_pImpl->m_bOpaque = true;
             m_pImpl->m_nWrap = text::WrapTextMode_NONE;
         break;
-        case NS_ooxml::LN_CT_GraphicalObject_graphicData:// 90660;
+        case NS_ooxml::LN_CT_GraphicalObject_graphicData:
             {
                 m_pImpl->m_bIsGraphic = true;
 
@@ -1699,7 +1699,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                     pProperties->resolve(*this);
             }
         break;
-        case NS_ooxml::LN_CT_NonVisualDrawingProps_a_hlinkClick: // 90689;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_a_hlinkClick:
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties )
