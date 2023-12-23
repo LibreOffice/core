@@ -1164,12 +1164,14 @@ bool operator != ( const EditPaM& r1, const EditPaM& r2 )
     return !( r1 == r2 );
 }
 
-ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
+ContentNode::ContentNode( SfxItemPool& rPool )
+    : maContentAttribs( rPool )
 {
 }
 
-ContentNode::ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs ) :
-    maString(rStr), aContentAttribs(rContentAttribs)
+ContentNode::ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs )
+    : maString(rStr)
+    , maContentAttribs(rContentAttribs)
 {
 }
 
@@ -1183,7 +1185,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
         return;
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(aCharAttribList);
+    CharAttribList::DbgCheckAttribs(maCharAttribList);
 #endif
 
     // Since features are treated differently than normal character attributes,
@@ -1195,7 +1197,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
     bool bExpandedEmptyAtIndexNull = false;
 
     std::size_t nAttr = 0;
-    CharAttribList::AttribsType& rAttribs = aCharAttribList.GetAttribs();
+    CharAttribList::AttribsType& rAttribs = maCharAttribList.GetAttribs();
     EditCharAttrib* pAttrib = GetAttrib(rAttribs, nAttr);
     while ( pAttrib )
     {
@@ -1227,7 +1229,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
                 // and if not in exclude list!
                 // Otherwise, a UL will go on until a new ULDB, expanding both
 //              if ( !pAttrib->IsFeature() && !rExclList.FindAttrib( pAttrib->Which() ) )
-                if ( !pAttrib->IsFeature() && !aCharAttribList.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
+                if ( !pAttrib->IsFeature() && !maCharAttribList.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
                 {
                     if ( !pAttrib->IsEdge() )
                         pAttrib->Expand( nNew );
@@ -1261,7 +1263,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
                             sal_uInt16 nW = pAttrib->GetItem()->Which();
                             for ( std::size_t nA = 0; nA < nAttr; nA++ )
                             {
-                                const EditCharAttrib& r = *aCharAttribList.GetAttribs()[nA];
+                                const EditCharAttrib& r = *maCharAttribList.GetAttribs()[nA];
                                 if ( ( r.GetStart() == 0 ) && ( r.GetItem()->Which() == nW ) )
                                 {
                                     bExpand = false;
@@ -1305,7 +1307,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
     }
 
     if ( bResort )
-        aCharAttribList.ResortAttribs();
+        maCharAttribList.ResortAttribs();
 
     if (mpWrongList)
     {
@@ -1314,7 +1316,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
     }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(aCharAttribList);
+    CharAttribList::DbgCheckAttribs(maCharAttribList);
 #endif
 }
 
@@ -1324,7 +1326,7 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
         return;
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(aCharAttribList);
+    CharAttribList::DbgCheckAttribs(maCharAttribList);
 #endif
 
     // Since features are treated differently than normal character attributes,
@@ -1333,7 +1335,7 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
     sal_Int32 nEndChanges = nIndex+nDeleted;
 
     std::size_t nAttr = 0;
-    CharAttribList::AttribsType& rAttribs = aCharAttribList.GetAttribs();
+    CharAttribList::AttribsType& rAttribs = maCharAttribList.GetAttribs();
     EditCharAttrib* pAttrib = GetAttrib(rAttribs, nAttr);
     while ( pAttrib )
     {
@@ -1395,7 +1397,7 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
         else
         {
             if ( pAttrib->IsEmpty() )
-                aCharAttribList.SetHasEmptyAttribs(true);
+                maCharAttribList.SetHasEmptyAttribs(true);
             nAttr++;
         }
 
@@ -1403,13 +1405,13 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
     }
 
     if ( bResort )
-        aCharAttribList.ResortAttribs();
+        maCharAttribList.ResortAttribs();
 
     if (mpWrongList)
         mpWrongList->TextDeleted(nIndex, nDeleted);
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(aCharAttribList);
+    CharAttribList::DbgCheckAttribs(maCharAttribList);
 #endif
 }
 
@@ -1418,8 +1420,8 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
     assert(pPrevNode);
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(aCharAttribList);
-    CharAttribList::DbgCheckAttribs(pPrevNode->aCharAttribList);
+    CharAttribList::DbgCheckAttribs(maCharAttribList);
+    CharAttribList::DbgCheckAttribs(pPrevNode->maCharAttribList);
 #endif
 
     sal_Int32 nCut = pPrevNode->Len();
@@ -1437,11 +1439,11 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         else if ( pAttrib->GetEnd() == nCut )
         {
             // must be copied as an empty attributes.
-            if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !aCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 ) )
+            if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !maCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 ) )
             {
                 EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
                 assert(pNewAttrib);
-                aCharAttribList.InsertAttrib( pNewAttrib );
+                maCharAttribList.InsertAttrib( pNewAttrib );
             }
             nAttr++;
         }
@@ -1451,7 +1453,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
             // kept! Has to be copied and changed.
             EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, pAttrib->GetEnd()-nCut );
             assert(pNewAttrib);
-            aCharAttribList.InsertAttrib( pNewAttrib );
+            maCharAttribList.InsertAttrib( pNewAttrib );
             pAttrib->GetEnd() = nCut;
             nAttr++;
         }
@@ -1459,7 +1461,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         {
             // Move all attributes in the current node (this)
             CharAttribList::AttribsType::iterator it = rPrevAttribs.begin() + nAttr;
-            aCharAttribList.InsertAttrib(it->release());
+            maCharAttribList.InsertAttrib(it->release());
             rPrevAttribs.erase(it);
             pAttrib->MoveBackward( nCut );
         }
@@ -1467,8 +1469,8 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
     }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(aCharAttribList);
-    CharAttribList::DbgCheckAttribs(pPrevNode->aCharAttribList);
+    CharAttribList::DbgCheckAttribs(maCharAttribList);
+    CharAttribList::DbgCheckAttribs(pPrevNode->maCharAttribList);
 #endif
 }
 
@@ -1479,8 +1481,8 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
     sal_Int32 nNewStart = maString.getLength();
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(aCharAttribList);
-    CharAttribList::DbgCheckAttribs(pNextNode->aCharAttribList);
+    CharAttribList::DbgCheckAttribs(maCharAttribList);
+    CharAttribList::DbgCheckAttribs(pNextNode->maCharAttribList);
 #endif
 
     std::size_t nAttr = 0;
@@ -1494,7 +1496,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
         {
             // Attributes can possibly be summarized as:
             std::size_t nTmpAttr = 0;
-            EditCharAttrib* pTmpAttrib = GetAttrib( aCharAttribList.GetAttribs(), nTmpAttr );
+            EditCharAttrib* pTmpAttrib = GetAttrib( maCharAttribList.GetAttribs(), nTmpAttr );
             while ( !bMelted && pTmpAttrib )
             {
                 ++nTmpAttr;
@@ -1515,11 +1517,11 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
                         else if (0 == pTmpAttrib->GetLen())
                         {
                             --nTmpAttr; // to cancel earlier increment...
-                            aCharAttribList.Remove(nTmpAttr);
+                            maCharAttribList.Remove(nTmpAttr);
                         }
                     }
                 }
-                pTmpAttrib = GetAttrib( aCharAttribList.GetAttribs(), nTmpAttr );
+                pTmpAttrib = GetAttrib( maCharAttribList.GetAttribs(), nTmpAttr );
             }
         }
 
@@ -1528,7 +1530,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
             pAttrib->GetStart() = pAttrib->GetStart() + nNewStart;
             pAttrib->GetEnd() = pAttrib->GetEnd() + nNewStart;
             CharAttribList::AttribsType::iterator it = rNextAttribs.begin() + nAttr;
-            aCharAttribList.InsertAttrib(it->release());
+            maCharAttribList.InsertAttrib(it->release());
             rNextAttribs.erase(it);
         }
         pAttrib = GetAttrib(rNextAttribs, nAttr);
@@ -1537,15 +1539,15 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
     rNextAttribs.clear();
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(aCharAttribList);
-    CharAttribList::DbgCheckAttribs(pNextNode->aCharAttribList);
+    CharAttribList::DbgCheckAttribs(maCharAttribList);
+    CharAttribList::DbgCheckAttribs(pNextNode->maCharAttribList);
 #endif
 }
 
 void ContentNode::CreateDefFont()
 {
     // First use the information from the style ...
-    SfxStyleSheet* pS = aContentAttribs.GetStyleSheet();
+    SfxStyleSheet* pS = maContentAttribs.GetStyleSheet();
     if ( pS )
         CreateFont( GetCharAttribs().GetDefFont(), pS->GetItemSet() );
 
@@ -1556,7 +1558,7 @@ void ContentNode::CreateDefFont()
 
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle )
 {
-    aContentAttribs.SetStyleSheet( pS );
+    maContentAttribs.SetStyleSheet( pS );
 
 
     // First use the information from the style ...
@@ -1568,7 +1570,7 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyl
 
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, bool bRecalcFont )
 {
-    aContentAttribs.SetStyleSheet( pS );
+    maContentAttribs.SetStyleSheet( pS );
     if ( bRecalcFont )
         CreateDefFont();
 }
@@ -1771,8 +1773,8 @@ void ContentNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ContentNode"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maString"), BAD_CAST(maString.toUtf8().getStr()));
-    aContentAttribs.dumpAsXml(pWriter);
-    aCharAttribList.dumpAsXml(pWriter);
+    maContentAttribs.dumpAsXml(pWriter);
+    maCharAttribList.dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -1786,8 +1788,8 @@ void ContentNode::checkAndDeleteEmptyAttribs() const
 }
 
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
-: pStyle(nullptr)
-, aAttribSet( rPool )
+: mpStyle(nullptr)
+, maAttribSet( rPool )
 {
 }
 
@@ -1815,30 +1817,30 @@ SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
 
 void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
 {
-    bool bStyleChanged = ( pStyle != pS );
-    pStyle = pS;
+    bool bStyleChanged = ( mpStyle != pS );
+    mpStyle = pS;
     // Only when other style sheet, not when current style sheet modified
-    if ( !(pStyle && bStyleChanged) )
+    if ( !(mpStyle && bStyleChanged) )
         return;
 
     // Selectively remove the attributes from the paragraph formatting
     // which are specified in the style, so that the attributes of the
     // style can have an affect.
-    const SfxItemSet& rStyleAttribs = pStyle->GetItemSet();
+    const SfxItemSet& rStyleAttribs = mpStyle->GetItemSet();
     for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
         // Don't change bullet on/off
         if ( ( nWhich != EE_PARA_BULLETSTATE ) && ( rStyleAttribs.GetItemState( nWhich ) == SfxItemState::SET ) )
-            aAttribSet.ClearItem( nWhich );
+            maAttribSet.ClearItem( nWhich );
     }
 }
 
 const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich ) const
 {
     // Hard paragraph attributes take precedence!
-    const SfxItemSet* pTakeFrom = &aAttribSet;
-    if ( pStyle && ( aAttribSet.GetItemState( nWhich, false ) != SfxItemState::SET  ) )
-        pTakeFrom = &pStyle->GetItemSet();
+    const SfxItemSet* pTakeFrom = &maAttribSet;
+    if ( mpStyle && ( maAttribSet.GetItemState( nWhich, false ) != SfxItemState::SET  ) )
+        pTakeFrom = &mpStyle->GetItemSet();
 
     return pTakeFrom->Get( nWhich );
 }
@@ -1846,9 +1848,9 @@ const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich ) const
 bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
 {
     bool bHasItem = false;
-    if ( aAttribSet.GetItemState( nWhich, false ) == SfxItemState::SET  )
+    if ( maAttribSet.GetItemState( nWhich, false ) == SfxItemState::SET  )
         bHasItem = true;
-    else if ( pStyle && pStyle->GetItemSet().GetItemState( nWhich ) == SfxItemState::SET )
+    else if ( mpStyle && mpStyle->GetItemSet().GetItemState( nWhich ) == SfxItemState::SET )
         bHasItem = true;
 
     return bHasItem;
@@ -1857,8 +1859,8 @@ bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
 void ContentAttribs::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ContentAttribs"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("style"), "%s", pStyle->GetName().toUtf8().getStr());
-    aAttribSet.dumpAsXml(pWriter);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("style"), "%s", mpStyle->GetName().toUtf8().getStr());
+    maAttribSet.dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -2665,7 +2667,7 @@ struct LessByStart
 }
 
 CharAttribList::CharAttribList()
-: bHasEmptyAttribs(false)
+: mbHasEmptyAttribs(false)
 {
 }
 
@@ -2691,21 +2693,21 @@ void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
 #endif
 
     if ( pAttrib->IsEmpty() )
-        bHasEmptyAttribs = true;
+        mbHasEmptyAttribs = true;
 
     bool bInsert(true);
-    for (sal_Int32 i = 0, n = aAttribs.size(); i < n; ++i)
+    for (sal_Int32 i = 0, n = maAttribs.size(); i < n; ++i)
     {
-        const EditCharAttrib& rCurAttrib = *aAttribs[i];
+        const EditCharAttrib& rCurAttrib = *maAttribs[i];
         if (rCurAttrib.GetStart() > nStart)
         {
-            aAttribs.insert(aAttribs.begin()+i, std::unique_ptr<EditCharAttrib>(pAttrib));
+            maAttribs.insert(maAttribs.begin()+i, std::unique_ptr<EditCharAttrib>(pAttrib));
             bInsert = false;
             break;
         }
     }
 
-    if (bInsert) aAttribs.push_back(std::unique_ptr<EditCharAttrib>(pAttrib));
+    if (bInsert) maAttribs.push_back(std::unique_ptr<EditCharAttrib>(pAttrib));
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     CharAttribList::DbgCheckAttribs(*this);
@@ -2714,7 +2716,7 @@ void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
 
 void CharAttribList::ResortAttribs()
 {
-    std::sort(aAttribs.begin(), aAttribs.end(), LessByStart());
+    std::sort(maAttribs.begin(), maAttribs.end(), LessByStart());
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     CharAttribList::DbgCheckAttribs(*this);
@@ -2726,18 +2728,18 @@ void CharAttribList::OptimizeRanges()
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     CharAttribList::DbgCheckAttribs(*this);
 #endif
-    for (sal_Int32 i = 0; i < static_cast<sal_Int32>(aAttribs.size()); ++i)
+    for (sal_Int32 i = 0; i < static_cast<sal_Int32>(maAttribs.size()); ++i)
     {
-        EditCharAttrib& rAttr = *aAttribs[i];
-        for (sal_Int32 nNext = i+1; nNext < static_cast<sal_Int32>(aAttribs.size()); ++nNext)
+        EditCharAttrib& rAttr = *maAttribs[i];
+        for (sal_Int32 nNext = i+1; nNext < static_cast<sal_Int32>(maAttribs.size()); ++nNext)
         {
-            EditCharAttrib& rNext = *aAttribs[nNext];
+            EditCharAttrib& rNext = *maAttribs[nNext];
             if (!rAttr.IsFeature() && rNext.GetStart() == rAttr.GetEnd() && rNext.Which() == rAttr.Which())
             {
                 if (*rNext.GetItem() == *rAttr.GetItem())
                 {
                     rAttr.GetEnd() = rNext.GetEnd();
-                    aAttribs.erase(aAttribs.begin()+nNext);
+                    maAttribs.erase(maAttribs.begin()+nNext);
                 }
                 break;  // only 1 attr with same which can start here.
             }
@@ -2754,17 +2756,17 @@ void CharAttribList::OptimizeRanges()
 
 sal_Int32 CharAttribList::Count() const
 {
-    return aAttribs.size();
+    return maAttribs.size();
 }
 
 const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const
 {
     // Backwards, if one ends where the next starts.
     // => The starting one is the valid one ...
-    AttribsType::const_reverse_iterator it = std::find_if(aAttribs.rbegin(), aAttribs.rend(),
+    AttribsType::const_reverse_iterator it = std::find_if(maAttribs.rbegin(), maAttribs.rend(),
         [&nWhich, &nPos](const AttribsType::value_type& rxAttr) {
             return rxAttr->Which() == nWhich && rxAttr->IsIn(nPos); });
-    if (it != aAttribs.rend())
+    if (it != maAttribs.rend())
     {
         const EditCharAttrib& rAttr = **it;
         return &rAttr;
@@ -2776,10 +2778,10 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     // Backwards, if one ends where the next starts.
     // => The starting one is the valid one ...
-    AttribsType::reverse_iterator it = std::find_if(aAttribs.rbegin(), aAttribs.rend(),
+    AttribsType::reverse_iterator it = std::find_if(maAttribs.rbegin(), maAttribs.rend(),
         [&nWhich, &nPos](AttribsType::value_type& rxAttr) {
             return rxAttr->Which() == nWhich && rxAttr->IsIn(nPos); });
-    if (it != aAttribs.rend())
+    if (it != maAttribs.rend())
     {
         EditCharAttrib& rAttr = **it;
         return &rAttr;
@@ -2790,7 +2792,7 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const
 {
     assert(nWhich);
-    for (auto const& attrib : aAttribs)
+    for (auto const& attrib : maAttribs)
     {
         const EditCharAttrib& rAttr = *attrib;
         if (rAttr.GetStart() >= nFromPos && rAttr.Which() == nWhich)
@@ -2801,7 +2803,7 @@ const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int
 
 bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
 {
-    return std::any_of(aAttribs.rbegin(), aAttribs.rend(),
+    return std::any_of(maAttribs.rbegin(), maAttribs.rend(),
         [&nStartPos, &nEndPos](const AttribsType::value_type& rxAttr) {
             return rxAttr->GetStart() < nEndPos && rxAttr->GetEnd() > nStartPos; });
 }
@@ -2824,29 +2826,29 @@ public:
 
 void CharAttribList::Remove(const EditCharAttrib* p)
 {
-    AttribsType::iterator it = std::find_if(aAttribs.begin(), aAttribs.end(), FindByAddress(p));
-    if (it != aAttribs.end())
-        aAttribs.erase(it);
+    AttribsType::iterator it = std::find_if(maAttribs.begin(), maAttribs.end(), FindByAddress(p));
+    if (it != maAttribs.end())
+        maAttribs.erase(it);
 }
 
 void CharAttribList::Remove(sal_Int32 nPos)
 {
-    if (nPos >= static_cast<sal_Int32>(aAttribs.size()))
+    if (nPos >= static_cast<sal_Int32>(maAttribs.size()))
         return;
 
-    aAttribs.erase(aAttribs.begin()+nPos);
+    maAttribs.erase(maAttribs.begin()+nPos);
 }
 
 void CharAttribList::SetHasEmptyAttribs(bool b)
 {
-    bHasEmptyAttribs = b;
+    mbHasEmptyAttribs = b;
 }
 
 bool CharAttribList::HasBoundingAttrib( sal_Int32 nBound ) const
 {
     // Backwards, if one ends where the next starts.
     // => The starting one is the valid one ...
-    AttribsType::const_reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
+    AttribsType::const_reverse_iterator it = maAttribs.rbegin(), itEnd = maAttribs.rend();
     for (; it != itEnd; ++it)
     {
         const EditCharAttrib& rAttr = **it;
@@ -2861,10 +2863,10 @@ bool CharAttribList::HasBoundingAttrib( sal_Int32 nBound ) const
 
 EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
-    if ( !bHasEmptyAttribs )
+    if ( !mbHasEmptyAttribs )
         return nullptr;
 
-    for (const std::unique_ptr<EditCharAttrib>& rAttr : aAttribs)
+    for (const std::unique_ptr<EditCharAttrib>& rAttr : maAttribs)
     {
         if (rAttr->GetStart() == nPos && rAttr->GetEnd() == nPos && rAttr->Which() == nWhich)
             return rAttr.get();
@@ -2891,28 +2893,28 @@ const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
 {
     // First, find the first attribute that starts at or after specified position.
     AttribsType::const_iterator it =
-        std::find_if(aAttribs.begin(), aAttribs.end(), FindByStartPos(nPos));
+        std::find_if(maAttribs.begin(), maAttribs.end(), FindByStartPos(nPos));
 
-    if (it == aAttribs.end())
+    if (it == maAttribs.end())
         // All attributes are before the specified position.
         return nullptr;
 
     // And find the first attribute with feature.
-    it = std::find_if(it, aAttribs.end(), [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsFeature(); } );
-    return it == aAttribs.end() ? nullptr : it->get();
+    it = std::find_if(it, maAttribs.end(), [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsFeature(); } );
+    return it == maAttribs.end() ? nullptr : it->get();
 }
 
 void CharAttribList::DeleteEmptyAttribs()
 {
-    std::erase_if(aAttribs, [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsEmpty(); } );
-    bHasEmptyAttribs = false;
+    std::erase_if(maAttribs, [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsEmpty(); } );
+    mbHasEmptyAttribs = false;
 }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
 void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
 {
     std::set<std::pair<sal_Int32, sal_uInt16>> zero_set;
-    for (const std::unique_ptr<EditCharAttrib>& rAttr : rAttribs.aAttribs)
+    for (const std::unique_ptr<EditCharAttrib>& rAttr : rAttribs.maAttribs)
     {
         assert(rAttr->GetStart() <= rAttr->GetEnd());
         assert(!rAttr->IsFeature() || rAttr->GetLen() == 1);
@@ -2929,7 +2931,7 @@ void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
 void CharAttribList::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("CharAttribList"));
-    for (auto const & i : aAttribs) {
+    for (auto const & i : maAttribs) {
         i->dumpAsXml(pWriter);
     }
     (void)xmlTextWriterEndElement(pWriter);

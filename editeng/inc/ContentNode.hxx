@@ -37,8 +37,8 @@ class SvxTabStop;
 class ContentAttribs
 {
 private:
-    SfxStyleSheet* pStyle;
-    SfxItemSetFixed<EE_PARA_START, EE_CHAR_END> aAttribSet;
+    SfxStyleSheet* mpStyle;
+    SfxItemSetFixed<EE_PARA_START, EE_CHAR_END> maAttribSet;
 
 public:
     ContentAttribs(SfxItemPool& rItemPool);
@@ -46,10 +46,10 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     SvxTabStop FindTabStop(sal_Int32 nCurPos, sal_uInt16 nDefTab);
-    SfxItemSet& GetItems() { return aAttribSet; }
-    const SfxItemSet& GetItems() const { return aAttribSet; }
-    const SfxStyleSheet* GetStyleSheet() const { return pStyle; }
-    SfxStyleSheet* GetStyleSheet() { return pStyle; }
+    SfxItemSet& GetItems() { return maAttribSet; }
+    const SfxItemSet& GetItems() const { return maAttribSet; }
+    const SfxStyleSheet* GetStyleSheet() const { return mpStyle; }
+    SfxStyleSheet* GetStyleSheet() { return mpStyle; }
     void SetStyleSheet(SfxStyleSheet* pS);
 
     const SfxPoolItem& GetItem(sal_uInt16 nWhich) const;
@@ -66,9 +66,9 @@ public:
     typedef std::vector<std::unique_ptr<EditCharAttrib>> AttribsType;
 
 private:
-    AttribsType aAttribs;
-    SvxFont aDefFont; // faster than ever from the pool!
-    bool bHasEmptyAttribs;
+    AttribsType maAttribs;
+    SvxFont maDefFont; // faster than ever from the pool!
+    bool mbHasEmptyAttribs;
 
 public:
     CharAttribList();
@@ -91,15 +91,15 @@ public:
 
     void InsertAttrib(EditCharAttrib* pAttrib);
 
-    SvxFont& GetDefFont() { return aDefFont; }
+    SvxFont& GetDefFont() { return maDefFont; }
 
-    bool HasEmptyAttribs() const { return bHasEmptyAttribs; }
+    bool HasEmptyAttribs() const { return mbHasEmptyAttribs; }
     void SetHasEmptyAttribs(bool b);
     bool HasBoundingAttrib(sal_Int32 nBound) const;
     bool HasAttrib(sal_Int32 nStartPos, sal_Int32 nEndPos) const;
 
-    AttribsType& GetAttribs() { return aAttribs; }
-    const AttribsType& GetAttribs() const { return aAttribs; }
+    AttribsType& GetAttribs() { return maAttribs; }
+    const AttribsType& GetAttribs() const { return maAttribs; }
 
     void Remove(const EditCharAttrib* p);
     void Remove(sal_Int32 nPos);
@@ -113,8 +113,8 @@ class ContentNode
 {
 private:
     OUString maString;
-    ContentAttribs aContentAttribs;
-    CharAttribList aCharAttribList;
+    ContentAttribs maContentAttribs;
+    CharAttribList maCharAttribList;
     std::unique_ptr<WrongList> mpWrongList;
 
     void UnExpandPosition(sal_Int32& rStartPos, bool bBiasStart);
@@ -128,10 +128,10 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
-    ContentAttribs& GetContentAttribs() { return aContentAttribs; }
-    const ContentAttribs& GetContentAttribs() const { return aContentAttribs; }
-    CharAttribList& GetCharAttribs() { return aCharAttribList; }
-    const CharAttribList& GetCharAttribs() const { return aCharAttribList; }
+    ContentAttribs& GetContentAttribs() { return maContentAttribs; }
+    const ContentAttribs& GetContentAttribs() const { return maContentAttribs; }
+    CharAttribList& GetCharAttribs() { return maCharAttribList; }
+    const CharAttribList& GetCharAttribs() const { return maCharAttribList; }
 
     void ExpandAttribs(sal_Int32 nIndex, sal_Int32 nNewChars);
     void CollapseAttribs(sal_Int32 nIndex, sal_Int32 nDelChars);
@@ -140,7 +140,7 @@ public:
 
     void SetStyleSheet(SfxStyleSheet* pS, bool bRecalcFont = true);
     void SetStyleSheet(SfxStyleSheet* pS, const SvxFont& rFontFromStyle);
-    SfxStyleSheet* GetStyleSheet() { return aContentAttribs.GetStyleSheet(); }
+    SfxStyleSheet* GetStyleSheet() { return maContentAttribs.GetStyleSheet(); }
 
     void CreateDefFont();
 
