@@ -919,8 +919,8 @@ bool Bitmap::ReplaceMask(const AlphaMask& rMask, const Color& rReplaceColor)
         const sal_uInt16 nActColors = pAcc->GetPaletteEntryCount();
         const sal_uInt16 nMaxColors = 1 << pAcc->GetBitCount();
 
-        aReplace
-            = UpdatePaletteForNewColor(pAcc, nActColors, nMaxColors, nHeight, nWidth, aReplace);
+        aReplace = UpdatePaletteForNewColor(pAcc, nActColors, nMaxColors, nHeight, nWidth,
+                                            BitmapColor(rReplaceColor));
     }
     else
         aReplace = rReplaceColor;
