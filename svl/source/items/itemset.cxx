@@ -61,7 +61,7 @@ static bool g_bItemClassicMode(getenv("ITEM_CLASSIC_MODE"));
 SfxPoolItemHolder::SfxPoolItemHolder()
 : m_pPool(nullptr)
 , m_pItem(nullptr)
-#ifdef DBG_UTIL
+#ifndef NDEBUG
 , m_bDeleted(false)
 #endif
 {
