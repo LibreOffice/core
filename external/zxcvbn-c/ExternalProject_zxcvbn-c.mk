@@ -9,6 +9,8 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,zxcvbn-c))
 
+$(eval $(call gb_Library_set_warnings_disabled,zxcvbn-c))
+
 $(eval $(call gb_ExternalProject_register_targets,zxcvbn-c,\
 	generate-dictionary-nodes \
 ))
