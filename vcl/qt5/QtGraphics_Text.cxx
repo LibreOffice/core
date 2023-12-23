@@ -85,7 +85,7 @@ bool QtGraphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) c
 
 void QtGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
 {
-    static const bool bUseFontconfig = (nullptr == getenv("SAL_VCL_QT5_NO_FONTCONFIG"));
+    static const bool bUseFontconfig = (nullptr == getenv("SAL_VCL_QT_NO_FONTCONFIG"));
 
     if (pPFC->Count())
         return;
