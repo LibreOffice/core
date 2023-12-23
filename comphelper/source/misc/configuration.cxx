@@ -183,6 +183,9 @@ css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(OUStrin
     std::scoped_lock aGuard(maMutex);
     if (mbDisposed)
         throw css::lang::DisposedException();
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+    return css::uno::Any();
+#else
     // Cache the configuration access, since some of the keys are used in hot code.
     auto it = maPropertyCache.find(path);
     if( it != maPropertyCache.end())
@@ -198,6 +201,7 @@ css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(OUStrin
     css::uno::Any property = access->getByName(childName);
     maPropertyCache.emplace(path, property);
     return property;
+#endif
 }
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(
