@@ -66,7 +66,7 @@ will be used to write the log under `instdir/uitest/`.
 
 * `QT_SCALE_FACTOR=2` - for HiDPI testing (also supports float)
 * `SAL_VCL_QT5_NO_FONTCONFIG` - ignore fontconfig provided font substitutions
-* `SAL_VCL_QT5_NO_NATIVE` - disable `QStyle`'d controls
+* `SAL_VCL_QT_NO_NATIVE` - disable `QStyle`'d controls
 * `SAL_VCL_QT_USE_QFONT` - use `QFont` for text layout and rendering (default is to use cairo)
 
 ## Mac

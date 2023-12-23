@@ -217,10 +217,7 @@ bool QtData::ErrorTrapPop(bool /*bIgnoreError*/) { return false; }
 
 bool QtData::noNativeControls()
 {
-    static const bool bNoNative
-        = ((nullptr != getenv("SAL_VCL_QT5_NO_NATIVE")) && (nullptr != ImplGetSVData())
-           && ImplGetSVData()->maAppData.mxToolkitName
-           && ImplGetSVData()->maAppData.mxToolkitName->match("qt5"));
+    static const bool bNoNative = (getenv("SAL_VCL_QT_NO_NATIVE") != nullptr);
     return bNoNative;
 }
 
