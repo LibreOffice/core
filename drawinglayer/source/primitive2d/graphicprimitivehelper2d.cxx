@@ -358,6 +358,7 @@ namespace drawinglayer::primitive2d
             AnimatedGraphicPrimitive2D(
                 const Graphic& rGraphic,
                 basegfx::B2DHomMatrix aTransform);
+            virtual ~AnimatedGraphicPrimitive2D();
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -419,6 +420,23 @@ namespace drawinglayer::primitive2d
             {
                 maBufferedPrimitives.resize(maAnimation.Count());
             }
+        }
+
+        AnimatedGraphicPrimitive2D::~AnimatedGraphicPrimitive2D()
+        {
+            // Related: tdf#158807 mutex must be locked when disposing a VirtualDevice
+            // If the following .ppt document is opened in a debug build
+            // and the document is left open for a minute or two without
+            // changing any content, this destructor will be called on a
+            // non-main thread with the mutex unlocked:
+            //   https://bugs.documentfoundation.org/attachment.cgi?id=46801
+            // This hits an assert in VirtualDevice::ReleaseGraphics() so
+            // explicitly lock the mutex and explicitly dispose and clear
+            // the VirtualDevice instances variables.
+            const SolarMutexGuard aSolarGuard;
+
+            maVirtualDevice.disposeAndClear();
+            maVirtualDeviceMask.disposeAndClear();
         }
 
         bool AnimatedGraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
