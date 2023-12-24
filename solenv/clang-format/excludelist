@@ -3387,6 +3387,7 @@ editeng/source/accessibility/AccessibleSelectionBase.cxx
 editeng/source/accessibility/AccessibleStaticTextBase.cxx
 editeng/source/accessibility/AccessibleStringWrap.cxx
 editeng/source/editeng/ContentNode.cxx
+editeng/source/editeng/EditLine.cxx
 editeng/source/editeng/editattr.cxx
 editeng/source/editeng/editdbg.cxx
 editeng/source/editeng/editdoc.cxx

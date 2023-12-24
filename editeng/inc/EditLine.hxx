@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <vector>
+#include <sal/types.h>
+#include <tools/gen.hxx>
+
 class ParaPortion;
 
 class EditLine
