@@ -37,7 +37,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes" context="searchresults|ShowBox">Enable the dialog again at Tools &gt; Options &gt; Calc &gt; View</property>
+                <property name="tooltip_text" translatable="yes" context="searchresults|ShowBox_Tooltip">Enable the dialog again at Tools - Options - %PRODUCTNAME Calc - View</property>
                 <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>

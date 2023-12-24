@@ -33,7 +33,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="FileExtCheck|Checkbox_Tooltip">Enable the dialog again at Tools &gt; Options &gt; General</property>
+                <property name="tooltip-text" translatable="yes" context="FileExtCheck|Checkbox_Tooltip">Enable the dialog again at Tools - Options - %PRODUCTNAME - General</property>
                 <property name="use-underline">True</property>
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
