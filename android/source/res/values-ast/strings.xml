@@ -83,7 +83,7 @@
     <string name="compress_photo_medium_size">Tamañu mediu</string>
     <string name="compress_photo_max_quality">Calidá máxima</string>
     <string name="select_photo">Esbilla una foto</string>
-    <string name="compress_photo_no_compress">Non comprimir</string>
+    <string name="compress_photo_no_compress">Nun comprimir</string>
     <string name="compress_photo_title">¿Quies comprimir la foto\?</string>
     <string name="action_copy">Copia</string>
     <string name="action_paste">Apegar</string>

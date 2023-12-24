@@ -48,5 +48,11 @@
     <string name="password">Password</string>
     <string name="action_redo">Ripeti</string>
     <string name="action_undo">Annulla</string>
-    <string name="save_alert_dialog_title">Salvare il documento prima di chiudere\?</string>
+    <string name="save_alert_dialog_title">Salvare il documento prima di chiuderlo\?</string>
+    <string name="save_document">SALVA</string>
+    <string name="no_save_document">NO</string>
+    <string name="action_presentation">Presentazione</string>
+    <string name="action_add_slide">Aggiungi diapositiva</string>
+    <string name="action_cancel">Annulla</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Quest dispositivo Android non supporta le presentazioni svg in-app. Il collegamento alla presentazione è stato copiato negli appunti. Premere il pulsante Home, aprire un browser Web, incollare nella barra degli indirizzi e premere invio.</string>
 </resources>
