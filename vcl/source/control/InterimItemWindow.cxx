@@ -189,7 +189,15 @@ void InterimItemWindow::Draw(OutputDevice* pDevice, const Point& rPos,
 
 void InterimItemWindow::SetPriority(TaskPriority nPriority)
 {
+    // Eliminate warning when changing timer's priority
+    // Task::SetPriority() expects the timer to be stopped while
+    // changing the timer's priority.
+    bool bActive = m_aLayoutIdle.IsActive();
+    if (bActive)
+        m_aLayoutIdle.Stop();
     m_aLayoutIdle.SetPriority(nPriority);
+    if (bActive)
+        m_aLayoutIdle.Start();
 }
 
 void InterimItemWindow::ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos)
