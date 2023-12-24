@@ -80,7 +80,7 @@ rtl_str_hash_new (sal_uInt32 nSize)
 
     pHash->nEntries = 0;
     pHash->nSize = getNextSize (nSize);
-    pHash->pData = static_cast<rtl_uString **>(calloc (sizeof (rtl_uString *), pHash->nSize));
+    pHash->pData = static_cast< rtl_uString ** >(calloc(pHash->nSize, sizeof(rtl_uString *)));
 
     return pHash;
 }

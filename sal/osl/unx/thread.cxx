@@ -610,7 +610,7 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
 
     if (pEntry == nullptr)
     {
-        pEntry = static_cast<HashEntry*>(calloc(sizeof(HashEntry), 1));
+        pEntry = static_cast<HashEntry*>(calloc(1, sizeof(HashEntry)));
 
         pEntry->Handle = hThread;
 
