@@ -19,8 +19,12 @@
 
 #pragma once
 
+#include "EditLine.hxx"
+
+#include <memory>
 #include <vector>
 #include <sal/types.h>
+#include <tools/debug.hxx>
 
 class EditLineList
 {
@@ -28,18 +32,43 @@ class EditLineList
     LinesType maLines;
 
 public:
-    EditLineList();
-    ~EditLineList();
+    EditLineList() = default;
 
-    void Reset();
-    void DeleteFromLine(sal_Int32 nDelFrom);
-    sal_Int32 FindLine(sal_Int32 nChar, bool bInclEnd);
-    sal_Int32 Count() const;
-    const EditLine& operator[](sal_Int32 nPos) const;
-    EditLine& operator[](sal_Int32 nPos);
+    void Reset() { maLines.clear(); }
 
-    void Append(EditLine* p);
-    void Insert(sal_Int32 nPos, EditLine* p);
+    void DeleteFromLine(sal_Int32 nDelFrom)
+    {
+        assert(nDelFrom <= (static_cast<sal_Int32>(maLines.size()) - 1));
+        LinesType::iterator it = maLines.begin();
+        std::advance(it, nDelFrom);
+        maLines.erase(it, maLines.end());
+    }
+
+    sal_Int32 FindLine(sal_Int32 nChar, bool bInclEnd)
+    {
+        sal_Int32 n = maLines.size();
+        for (sal_Int32 i = 0; i < n; ++i)
+        {
+            const EditLine& rLine = *maLines[i];
+            if ((bInclEnd && (rLine.GetEnd() >= nChar)) || (rLine.GetEnd() > nChar))
+            {
+                return i;
+            }
+        }
+
+        DBG_ASSERT(!bInclEnd, "Line not found: FindLine");
+        return n - 1;
+    }
+
+    sal_Int32 Count() const { return maLines.size(); }
+    const EditLine& operator[](sal_Int32 nPos) const { return *maLines[nPos]; }
+    EditLine& operator[](sal_Int32 nPos) { return *maLines[nPos]; }
+
+    void Append(EditLine* p) { maLines.push_back(std::unique_ptr<EditLine>(p)); }
+    void Insert(sal_Int32 nPos, EditLine* p)
+    {
+        maLines.insert(maLines.begin() + nPos, std::unique_ptr<EditLine>(p));
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

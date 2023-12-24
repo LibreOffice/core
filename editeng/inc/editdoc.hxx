@@ -33,7 +33,6 @@
 #include "TextPortion.hxx"
 #include "ItemList.hxx"
 #include "ContentNode.hxx"
-#include "EditLine.hxx"
 #include "EditLineList.hxx"
 
 #include <cstddef>
