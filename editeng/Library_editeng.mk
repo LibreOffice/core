@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,editeng,\
+    editeng/source/editeng/ContentNode \
     editeng/source/editeng/editattr \
     editeng/source/editeng/editdata \
     editeng/source/editeng/editdbg \
