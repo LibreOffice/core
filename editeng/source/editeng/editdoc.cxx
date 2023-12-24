@@ -890,15 +890,6 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
     }
 }
 
-EditPaM::EditPaM() : pNode(nullptr), nIndex(0) {}
-EditPaM::EditPaM(ContentNode* p, sal_Int32 n) : pNode(p), nIndex(n) {}
-
-
-void EditPaM::SetNode(ContentNode* p)
-{
-    pNode = p;
-}
-
 bool EditPaM::DbgIsBuggy( EditDoc const & rDoc ) const
 {
     return !pNode ||
@@ -958,17 +949,6 @@ void EditSelection::Adjust( const EditDoc& rNodes )
         aStartPaM = aEndPaM;
         aEndPaM = aTmpPaM;
     }
-}
-
-bool operator == ( const EditPaM& r1, const EditPaM& r2 )
-{
-    return ( r1.GetNode() == r2.GetNode() ) &&
-           ( r1.GetIndex() == r2.GetIndex() );
-}
-
-bool operator != ( const EditPaM& r1, const EditPaM& r2 )
-{
-    return !( r1 == r2 );
 }
 
 EditDoc::EditDoc( SfxItemPool* pPool ) :

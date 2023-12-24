@@ -26,24 +26,28 @@ class EditDoc;
 class EditPaM
 {
 private:
-    ContentNode* pNode;
-    sal_Int32 nIndex;
+    ContentNode* pNode = nullptr;
+    sal_Int32 nIndex = 0;
 
 public:
-    EditPaM();
-    EditPaM(ContentNode* p, sal_Int32 n);
+    EditPaM() = default;
+    EditPaM(ContentNode* p, sal_Int32 n)
+        : pNode(p)
+        , nIndex(n)
+    {
+    }
 
     const ContentNode* GetNode() const { return pNode; }
     ContentNode* GetNode() { return pNode; }
-    void SetNode(ContentNode* p);
+    void SetNode(ContentNode* p) { pNode = p; }
 
     sal_Int32 GetIndex() const { return nIndex; }
     void SetIndex(sal_Int32 n) { nIndex = n; }
 
     bool DbgIsBuggy(EditDoc const& rDoc) const;
 
-    friend bool operator==(const EditPaM& r1, const EditPaM& r2);
-    friend bool operator!=(const EditPaM& r1, const EditPaM& r2);
+    bool operator==(const EditPaM& rOther) const = default;
+
     bool operator!() const { return !pNode && !nIndex; }
 };
 
