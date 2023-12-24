@@ -66,6 +66,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158785)
     aLogicR.AdjustX(1);
     pWrtShell->GetContentAtPos(aLogicR, aContentAtPos);
     CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
+
+    /*
+     * tdf#111969: the beginning of the hyperlink should allow the right-click menu to remove it
+     */
+    // move cursor (with no selection) to the start of the hyperlink - after the N-dash
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    aLogicL = pWrtShell->GetCharRect().Center();
+    aLogicR = aLogicL;
+
+    // sanity check - we really are right in front of the hyperlink
+    aLogicL.AdjustX(-1);
+    aContentAtPos = IsAttrAtPos::InetAttr;
+    pWrtShell->GetContentAtPos(aLogicL, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
+    aLogicR.AdjustX(1);
+    aContentAtPos = IsAttrAtPos::InetAttr;
+    pWrtShell->GetContentAtPos(aLogicR, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::InetAttr, aContentAtPos.eContentAtPos);
+
+    // Remove the hyperlink
+    dispatchCommand(mxComponent, ".uno:RemoveHyperlink", {});
+
+    // The test: was the hyperlink actually removed?
+    aContentAtPos = IsAttrAtPos::InetAttr;
+    pWrtShell->GetContentAtPos(aLogicR, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969)

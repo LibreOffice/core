@@ -74,7 +74,9 @@
 #include <cellatr.hxx>
 #include <edtwin.hxx>
 #include <fldmgr.hxx>
+#include <ndtxt.hxx>
 #include <strings.hrc>
+#include <txatbase.hxx>
 #include <paratr.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
@@ -1389,7 +1391,27 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         break;
         case SID_EDIT_HYPERLINK:
+        {
+            if (!rWrtSh.HasSelection())
+            {
+                SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
+                rWrtSh.GetCurAttr(aSet);
+                if (SfxItemState::SET > aSet.GetItemState(RES_TXTATR_INETFMT))
+                {
+                    // Didn't find a hyperlink to edit yet.
+
+                    // If the cursor is just before an unselected hyperlink,
+                    // the dialog will not know that it should edit that hyperlink,
+                    // so in this case, first select it so the dialog will find the hyperlink.
+                    // The dialog would leave the hyperlink selected anyway after a successful edit
+                    // (although it isn't normally selected after a cancel, but oh well).
+                    if (!rWrtSh.SelectTextAttr(RES_TXTATR_INETFMT))
+                        break;
+                }
+            }
+
             GetView().GetViewFrame().SetChildWindow(SID_HYPERLINK_DIALOG, true);
+        }
         break;
         case SID_REMOVE_HYPERLINK:
         {
@@ -1837,17 +1859,32 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
         rWrtSh.GetCurAttr(aSet);
-        if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
-        {
-            const SwFormatINetFormat& rINetFormat = aSet.Get(RES_TXTATR_INETFMT);
 
+        const SwFormatINetFormat* pINetFormat = nullptr;
+        if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
+            pINetFormat = &aSet.Get(RES_TXTATR_INETFMT);
+        else if (!rWrtSh.HasSelection())
+        {
+            // is the cursor at the beginning of a hyperlink?
+            const SwTextNode* pTextNd = rWrtSh.GetCursor()->GetPointNode().GetTextNode();
+            if (pTextNd)
+            {
+                const sal_Int32 nIndex = rWrtSh.GetCursor()->Start()->GetContentIndex();
+                const SwTextAttr* pINetFmt = pTextNd->GetTextAttrAt(nIndex, RES_TXTATR_INETFMT);
+                if (pINetFmt && !pINetFmt->GetINetFormat().GetValue().isEmpty())
+                    pINetFormat = &pINetFmt->GetINetFormat();
+            }
+        }
+
+        if (pINetFormat)
+        {
             if (nSlot == SID_OPEN_HYPERLINK)
             {
-                rWrtSh.ClickToINetAttr(rINetFormat);
+                rWrtSh.ClickToINetAttr(*pINetFormat);
             }
             else if (nSlot == SID_COPY_HYPERLINK_LOCATION)
             {
-                OUString hyperlinkLocation = rINetFormat.GetValue();
+                OUString hyperlinkLocation = pINetFormat->GetValue();
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
                 vcl::unohelper::TextDataObject::CopyStringTo(hyperlinkLocation, xClipboard, SfxViewShell::Current());
             }
@@ -2541,26 +2578,53 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             case SID_EDIT_HYPERLINK:
                 {
-                    SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
-                    rSh.GetCurAttr(aSet);
-                    if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT ) || rSh.HasReadonlySel())
+                    if (!rSh.HasReadonlySel())
                     {
-                        rSet.DisableItem(nWhich);
+                        SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
+                        rSh.GetCurAttr(aSet);
+                        if (SfxItemState::SET <= aSet.GetItemState(RES_TXTATR_INETFMT))
+                            break;
+
+                        // is the cursor at the beginning of a hyperlink?
+                        const SwTextNode* pTextNd = rSh.GetCursor()->GetPointNode().GetTextNode();
+                        if (pTextNd && !rSh.HasSelection())
+                        {
+                            const sal_Int32 nIndex = rSh.GetCursor()->Start()->GetContentIndex();
+                            const SwTextAttr* pINetFmt
+                                = pTextNd->GetTextAttrAt(nIndex, RES_TXTATR_INETFMT);
+                            if (pINetFmt && !pINetFmt->GetINetFormat().GetValue().isEmpty())
+                                break;
+                        }
                     }
+                    rSet.DisableItem(nWhich);
                 }
             break;
             case SID_REMOVE_HYPERLINK:
             {
-                SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
-                rSh.GetCurAttr(aSet);
-
-                // If a hyperlink is selected, either alone or along with other text...
-                if ((aSet.GetItemState(RES_TXTATR_INETFMT) < SfxItemState::SET &&
-                    aSet.GetItemState(RES_TXTATR_INETFMT) != SfxItemState::DONTCARE) ||
-                    rSh.HasReadonlySel())
+                if (!rSh.HasReadonlySel())
                 {
-                    rSet.DisableItem(nWhich);
+                    SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
+                    rSh.GetCurAttr(aSet);
+
+                    // If a hyperlink is selected, either alone or along with other text...
+                    if (SfxItemState::SET <= aSet.GetItemState(RES_TXTATR_INETFMT)
+                        || aSet.GetItemState(RES_TXTATR_INETFMT) == SfxItemState::DONTCARE)
+                    {
+                        break;
+                    }
+
+                    // is the cursor at the beginning of a hyperlink?
+                    const SwTextNode* pTextNd = rSh.GetCursor()->GetPointNode().GetTextNode();
+                    if (pTextNd && !rSh.HasSelection())
+                    {
+                        const sal_Int32 nIndex = rSh.GetCursor()->Start()->GetContentIndex();
+                        const SwTextAttr* pINetFmt
+                            = pTextNd->GetTextAttrAt(nIndex, RES_TXTATR_INETFMT);
+                        if (pINetFmt && !pINetFmt->GetINetFormat().GetValue().isEmpty())
+                            break;
+                    }
                 }
+                rSet.DisableItem(nWhich);
             }
             break;
             case SID_TRANSLITERATE_HALFWIDTH:
@@ -2594,8 +2658,19 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
                 rSh.GetCurAttr(aSet);
+                if (SfxItemState::SET <= aSet.GetItemState(RES_TXTATR_INETFMT, false))
+                    break;
 
-                bool bAuthorityFieldURL = false;
+                // is the cursor at the beginning of a hyperlink?
+                const SwTextNode* pTextNd = rSh.GetCursor()->GetPointNode().GetTextNode();
+                if (pTextNd && !rSh.HasSelection())
+                {
+                    const sal_Int32 nIndex = rSh.GetCursor()->Start()->GetContentIndex();
+                    const SwTextAttr* pINetFmt = pTextNd->GetTextAttrAt(nIndex, RES_TXTATR_INETFMT);
+                    if (pINetFmt && !pINetFmt->GetINetFormat().GetValue().isEmpty())
+                        break;
+                }
+
                 SwField* pField = rSh.GetCurField();
                 if (pField && pField->GetTyp()->Which() == SwFieldIds::TableOfAuthorities)
                 {
@@ -2605,12 +2680,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         || targetType == SwAuthorityField::TargetType::UseTargetURL)
                     {
                         // Check if the Bibliography entry has a target URL
-                        bAuthorityFieldURL = rAuthorityField.GetAbsoluteURL().getLength() > 0;
+                        if (rAuthorityField.GetAbsoluteURL().getLength() > 0)
+                            break;
                     }
                 }
-                if (SfxItemState::SET > aSet.GetItemState(RES_TXTATR_INETFMT, false)
-                    && !bAuthorityFieldURL)
-                    rSet.DisableItem(nWhich);
+
+                rSet.DisableItem(nWhich);
             }
             break;
             case FN_OPEN_LOCAL_URL:
