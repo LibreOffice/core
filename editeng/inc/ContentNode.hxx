@@ -37,7 +37,7 @@ class SvxTabStop;
 class ContentAttribs
 {
 private:
-    SfxStyleSheet* mpStyle;
+    SfxStyleSheet* mpStyle = nullptr;
     SfxItemSetFixed<EE_PARA_START, EE_CHAR_END> maAttribSet;
 
 public:
@@ -68,12 +68,9 @@ public:
 private:
     AttribsType maAttribs;
     SvxFont maDefFont; // faster than ever from the pool!
-    bool mbHasEmptyAttribs;
+    bool mbHasEmptyAttribs = false;
 
 public:
-    CharAttribList();
-    ~CharAttribList();
-
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     void DeleteEmptyAttribs();
@@ -122,7 +119,7 @@ private:
 public:
     ContentNode(SfxItemPool& rItemPool);
     ContentNode(const OUString& rStr, const ContentAttribs& rContentAttribs);
-    ~ContentNode();
+
     ContentNode(const ContentNode&) = delete;
     ContentNode& operator=(const ContentNode&) = delete;
 

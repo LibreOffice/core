@@ -40,10 +40,6 @@ ContentNode::ContentNode( const OUString& rStr, const ContentAttribs& rContentAt
 {
 }
 
-ContentNode::~ContentNode()
-{
-}
-
 void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
 {
     if ( !nNew )
@@ -653,11 +649,9 @@ void ContentNode::checkAndDeleteEmptyAttribs() const
 }
 
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
-: mpStyle(nullptr)
-, maAttribSet( rPool )
+    : maAttribSet(rPool)
 {
 }
-
 
 SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
 {
@@ -739,15 +733,6 @@ struct LessByStart
     }
 };
 
-}
-
-CharAttribList::CharAttribList()
-: mbHasEmptyAttribs(false)
-{
-}
-
-CharAttribList::~CharAttribList()
-{
 }
 
 void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
