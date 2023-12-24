@@ -34,6 +34,7 @@
 #include "ItemList.hxx"
 #include "ContentNode.hxx"
 #include "EditLine.hxx"
+#include "EditLineList.hxx"
 
 #include <cstddef>
 #include <memory>
@@ -158,28 +159,6 @@ public:
     void Remove(sal_Int32 nPos);
     sal_Int32 GetPos(const TextPortion* p) const;
 };
-
-class EditLineList
-{
-    typedef std::vector<std::unique_ptr<EditLine> > LinesType;
-    LinesType maLines;
-
-public:
-            EditLineList();
-            ~EditLineList();
-
-    void Reset();
-    void DeleteFromLine(sal_Int32 nDelFrom);
-    sal_Int32 FindLine(sal_Int32 nChar, bool bInclEnd);
-    sal_Int32 Count() const;
-    const EditLine& operator[](sal_Int32 nPos) const;
-    EditLine& operator[](sal_Int32 nPos);
-
-    void Append(EditLine* p);
-    void Insert(sal_Int32 nPos, EditLine* p);
-};
-
-
 
 class ParaPortion
 {
