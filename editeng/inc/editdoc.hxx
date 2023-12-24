@@ -35,6 +35,7 @@
 #include "ContentNode.hxx"
 #include "EditLineList.hxx"
 #include "EditPaM.hxx"
+#include "EditSelection.hxx"
 
 #include <cstddef>
 #include <memory>
@@ -236,40 +237,6 @@ public:
     static void DbgCheck(ParaPortionList const&, EditDoc const& rDoc);
 #endif
 };
-
-
-
-class EditSelection
-{
-private:
-    EditPaM         aStartPaM;
-    EditPaM         aEndPaM;
-
-public:
-                    EditSelection();    // No constructor and destructor
-                                        // are automatically executed correctly!
-                    EditSelection( const EditPaM& rStartAndAnd );
-                    EditSelection( const EditPaM& rStart, const EditPaM& rEnd );
-
-    EditPaM&        Min()               { return aStartPaM; }
-    EditPaM&        Max()               { return aEndPaM; }
-
-    const EditPaM&  Min() const         { return aStartPaM; }
-    const EditPaM&  Max() const         { return aEndPaM; }
-
-    bool            HasRange() const    { return aStartPaM != aEndPaM; }
-    bool            IsInvalid() const { return !aStartPaM || !aEndPaM; }
-    bool            DbgIsBuggy( EditDoc const & rDoc ) const;
-
-    void            Adjust( const EditDoc& rNodes );
-
-    EditSelection&  operator = ( const EditPaM& r );
-    bool            operator == ( const EditSelection& r ) const
-                    { return ( aStartPaM == r.aStartPaM ) && ( aEndPaM == r.aEndPaM ); }
-    bool            operator != ( const EditSelection& r ) const { return !( r == *this ); }
-};
-
-
 
 class DeletedNodeInfo
 {
