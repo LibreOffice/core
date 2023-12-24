@@ -18,14 +18,12 @@
  */
 #pragma once
 
-// the Solaris compiler apparently needs the following include:
-#include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
 
 class SvXMLExport;
 namespace com::sun::star {
     namespace uno { template<typename T> class Reference; }
     namespace xml::dom { class XDocument; }
-    namespace xml::dom { class XNode; }
 }
 
 void exportDom( SvXMLExport&, const css::uno::Reference<css::xml::dom::XDocument>& );

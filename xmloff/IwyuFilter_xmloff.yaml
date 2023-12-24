@@ -1,25 +1,15 @@
 ---
 assumeFilename: xmloff/source/core/xmlexp.cxx
 excludelist:
+    xmloff/inc/DomExport.hxx:
+    # Needed for css shortcut
+    - sal/types.h
     xmloff/inc/XMLImageMapExport.hxx:
     # Needed for css shortcut
     - sal/types.h
     xmloff/inc/XMLTextColumnsExport.hxx:
     # Needed for css shortcut
     - sal/types.h
-    xmloff/source/chart/PropertyMap.hxx:
-    # Needed for constants used in arrays
-    - xmloff/maptype.hxx
-    - xmloff/xmlnamespace.hxx
-    - xmloff/xmlement.hxx
-    - com/sun/star/chart/ChartAxisArrangeOrderType.hpp
-    - com/sun/star/chart/ChartAxisLabelPosition.hpp
-    - com/sun/star/chart/ChartAxisMarkPosition.hpp
-    - com/sun/star/chart/ErrorBarStyle.hpp
-    - com/sun/star/chart/ChartSolidType.hpp
-    - com/sun/star/chart/ChartDataRowSource.hpp
-    - com/sun/star/chart/DataLabelPlacement.hpp
-    - com/sun/star/chart/MissingValueTreatment.hpp
     xmloff/source/forms/logging.hxx:
     # Used after #ifdef TIMELOG
     - stack

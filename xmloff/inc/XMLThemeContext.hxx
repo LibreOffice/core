@@ -7,12 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <utility>
-#include <xmloff/xmlprcon.hxx>
+#include <xmloff/xmlictxt.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 
 #include <docmodel/theme/ColorSet.hxx>
 

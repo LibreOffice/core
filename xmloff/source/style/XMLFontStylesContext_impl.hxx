@@ -20,6 +20,7 @@
 #pragma once
 
 #include <xmloff/xmlstyle.hxx>
+#include <xmloff/XMLFontStylesContext.hxx>
 
 namespace com::sun::star::io {
     class XOutputStream;

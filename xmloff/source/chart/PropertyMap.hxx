@@ -18,19 +18,8 @@
  */
 #pragma once
 
-#include <xmloff/maptype.hxx>
-#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/contextid.hxx>
-#include <xmloff/xmlement.hxx>
-#include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
-#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
-#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
-#include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/chart/ChartSolidType.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 // custom types
 #define XML_SCH_TYPE_AXIS_ARRANGEMENT       ( XML_SCH_TYPES_START + 0 )

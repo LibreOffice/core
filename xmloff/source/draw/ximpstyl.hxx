@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svl/zforlist.hxx>
+#include <svl/numformat.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlnumfi.hxx>
@@ -29,9 +29,6 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <memory>
 #include <vector>
-
-class SvNumberFormatter;
-class SvXMLNumFmtHelper;
 
 // special style:style context inside style:page-master context
 

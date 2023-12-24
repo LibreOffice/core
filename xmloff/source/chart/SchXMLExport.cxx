@@ -67,6 +67,7 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/TimeIncrement.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>

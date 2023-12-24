@@ -33,8 +33,10 @@
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <comphelper/attributelist.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/shapeimport.hxx>
+#include <xmloff/xmlement.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/prhdlfac.hxx>
@@ -42,8 +44,16 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
 #include <com/sun/star/chart/ChartDataCaption.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart/ChartSolidType.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>

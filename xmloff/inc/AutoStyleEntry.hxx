@@ -13,7 +13,6 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <xmloff/dllapi.h>
 #include <utility>
 #include <vector>
 

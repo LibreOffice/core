@@ -8,6 +8,8 @@
  */
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUString PROP_ = u""_ustr;
 inline constexpr OUString PROP_AdjustBlue = u"AdjustBlue"_ustr;
 inline constexpr OUString PROP_AdjustContrast = u"AdjustContrast"_ustr;

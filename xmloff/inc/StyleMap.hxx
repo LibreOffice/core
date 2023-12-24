@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <unordered_map>

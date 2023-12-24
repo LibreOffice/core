@@ -24,6 +24,7 @@
  */
 #include <comphelper/propertyvalue.hxx>
 #include <txtflde.hxx>
+#include <txtfld.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/namespacemap.hxx>

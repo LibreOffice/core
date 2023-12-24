@@ -9,12 +9,9 @@
 
 #pragma once
 
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <cppuhelper/implbase.hxx>
 #include <sax/fastattribs.hxx>
 #include <xmloff/token/tokens.hxx>
 #include <sal/log.hxx>
-#include <xmloff/dllapi.h>
 
 namespace xmloff::token {
 

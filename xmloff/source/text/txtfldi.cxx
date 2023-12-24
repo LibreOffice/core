@@ -29,6 +29,7 @@
 
 #include <cassert>
 
+#include <txtfld.hxx>
 #include <txtfldi.hxx>
 #include <txtvfldi.hxx>
 #include <utility>

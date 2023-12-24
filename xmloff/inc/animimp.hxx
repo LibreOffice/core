@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

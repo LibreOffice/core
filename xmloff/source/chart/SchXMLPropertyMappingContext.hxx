@@ -11,7 +11,6 @@
 
 #include "transporttypes.hxx"
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/SchXMLImportHelper.hxx>
 
 namespace com::sun::star {
     namespace chart2 {

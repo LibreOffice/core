@@ -24,7 +24,6 @@
 #include "transporttypes.hxx"
 
 #include <com/sun/star/chart/XDiagram.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 class SchXMLAxisContext : public SvXMLImportContext
 {

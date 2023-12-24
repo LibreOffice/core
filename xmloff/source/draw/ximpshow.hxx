@@ -21,7 +21,6 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
-#include <memory>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

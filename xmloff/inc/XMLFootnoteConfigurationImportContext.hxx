@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include <xmloff/xmlstyle.hxx>
 
 namespace com::sun::star {

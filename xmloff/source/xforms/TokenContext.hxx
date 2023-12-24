@@ -20,14 +20,11 @@
 #pragma once
 
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmltkmap.hxx>
+#include <sax/fastattribs.hxx>
 
 namespace com::sun::star {
-    namespace xml::sax { class XFastAttributeList; }
     namespace uno { template<typename T> class Reference; }
 }
-
-class SvXMLImport;
 
 /** handle attributes through an SvXMLTokenMap */
 class TokenContext : public SvXMLImportContext

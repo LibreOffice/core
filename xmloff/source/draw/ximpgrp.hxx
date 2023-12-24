@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include "ximpshap.hxx"
 

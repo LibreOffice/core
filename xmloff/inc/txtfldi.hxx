@@ -30,11 +30,10 @@
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/XMLEventsImportContext.hxx>
 #include <xmloff/txtimp.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vector>
-#include "txtfld.hxx"
 
 namespace com::sun::star {
     namespace xml::sax { class XAttributeList; }

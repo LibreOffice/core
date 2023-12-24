@@ -27,7 +27,6 @@
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <map>
-#include <vector>
 
 namespace xmloff
 {

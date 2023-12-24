@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
 class XMLHints_Impl;

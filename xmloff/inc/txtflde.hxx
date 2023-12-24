@@ -35,19 +35,15 @@
 #include <optional>
 #include <string_view>
 
-#include "txtfld.hxx"
-
 class SvXMLExport;
 struct XMLPropertyState;
 
 namespace com::sun::star {
     namespace util { struct DateTime; }
-    namespace util { struct Date; }
     namespace text { class XTextField; }
     namespace text { class XText; }
     namespace beans { class XPropertySet; }
     namespace beans { class XPropertySetInfo; }
-    namespace frame { class XModel; }
     namespace uno { template<typename A> class Sequence; }
 }
 

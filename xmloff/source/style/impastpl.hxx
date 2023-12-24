@@ -23,21 +23,15 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <set>
-#include <memory>
 #include <utility>
 #include <vector>
-
-#include <comphelper/stl_types.hxx>
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <AutoStyleEntry.hxx>
 
 class SvXMLAutoStylePoolP;
-class XMLAutoStylePoolParent;
 struct XMLAutoStyleFamily;
-class SvXMLExportPropertyMapper;
-class SvXMLExport;
 enum class XmlStyleFamily;
 
 // Properties of a pool

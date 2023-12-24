@@ -18,8 +18,6 @@
  */
 #pragma once
 
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/xmlictxt.hxx>
 

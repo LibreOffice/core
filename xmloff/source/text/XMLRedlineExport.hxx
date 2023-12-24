@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <vector>
-#include <memory>
 #include <map>
 
 class SvXMLExport;

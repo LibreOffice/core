@@ -21,10 +21,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ref.hxx>
 #include <xmloff/xmlimp.hxx>
 
 namespace xmloff
