@@ -34,6 +34,7 @@
 #include "ItemList.hxx"
 #include "ContentNode.hxx"
 #include "EditLineList.hxx"
+#include "EditPaM.hxx"
 
 #include <cstddef>
 #include <memory>
@@ -106,30 +107,6 @@ public:
 };
 
 typedef std::vector<Color> SvxColorList;
-
-class EditPaM
-{
-private:
-    ContentNode* pNode;
-    sal_Int32    nIndex;
-
-public:
-    EditPaM();
-    EditPaM(ContentNode* p, sal_Int32 n);
-
-    const ContentNode* GetNode() const { return pNode;}
-    ContentNode* GetNode() { return pNode;}
-    void SetNode(ContentNode* p);
-
-    sal_Int32  GetIndex() const         { return nIndex; }
-    void       SetIndex( sal_Int32 n )  { nIndex = n; }
-
-    bool       DbgIsBuggy( EditDoc const & rDoc ) const;
-
-    friend bool operator == ( const EditPaM& r1, const EditPaM& r2 );
-    friend bool operator != ( const EditPaM& r1, const EditPaM& r2 );
-    bool operator !() const { return !pNode && !nIndex; }
-};
 
 enum class DeleteMode {
     Simple, RestOfWord, RestOfContent
