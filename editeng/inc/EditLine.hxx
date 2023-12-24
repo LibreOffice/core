@@ -29,22 +29,29 @@ public:
 private:
     CharPosArrayType aPositions;
     std::vector<sal_Bool> aKashidaPositions;
-    sal_Int32 nTxtWidth;
-    sal_Int32 nStartPosX;
-    sal_Int32 nStart; // could be replaced by nStartPortion
-    sal_Int32 nEnd; // could be replaced by nEndPortion
-    sal_Int32 nStartPortion;
-    sal_Int32 nEndPortion;
-    sal_uInt16 nHeight; //  Total height of the line
-    sal_uInt16 nTxtHeight; // Pure Text height
-    sal_uInt16 nMaxAscent;
-    bool bHangingPunctuation : 1;
-    bool bInvalid : 1; // for skillful formatting
+    sal_Int32 nTxtWidth = 0;
+    sal_Int32 nStartPosX = 0;
+    sal_Int32 nStart = 0; // could be replaced by nStartPortion
+    sal_Int32 nEnd = 0; // could be replaced by nEndPortion
+    sal_Int32 nStartPortion = 0;
+    sal_Int32 nEndPortion = 0;
+    sal_uInt16 nHeight = 0; //  Total height of the line
+    sal_uInt16 nTxtHeight = 0; // Pure Text height
+    sal_uInt16 nMaxAscent = 0;
+    bool bHangingPunctuation : 1 = false;
+    bool bInvalid : 1 = true; // for skillful formatting
 
 public:
-    EditLine();
-    EditLine(const EditLine&);
-    ~EditLine();
+    EditLine() = default;
+    EditLine(const EditLine& rEditLine)
+        : nStart(rEditLine.nStart)
+        , nEnd(rEditLine.nEnd)
+        , nStartPortion(rEditLine.nStartPortion)
+        , nEndPortion(rEditLine.nEndPortion)
+        , bHangingPunctuation(rEditLine.bHangingPunctuation)
+        , bInvalid(true)
+    {
+    }
 
     bool IsIn(sal_Int32 nIndex) const { return ((nIndex >= nStart) && (nIndex < nEnd)); }
 
@@ -103,8 +110,27 @@ public:
 
     EditLine* Clone() const;
 
-    EditLine& operator=(const EditLine& rLine);
-    friend bool operator==(const EditLine& r1, const EditLine& r2);
+    EditLine& operator=(const EditLine& rLine)
+    {
+        nEnd = rLine.nEnd;
+        nStart = rLine.nStart;
+        nEndPortion = rLine.nEndPortion;
+        nStartPortion = rLine.nStartPortion;
+        return *this;
+    }
+
+    bool operator==(const EditLine& rLine) const
+    {
+        return nStart == rLine.nStart && nEnd == rLine.nEnd && nStartPortion == rLine.nStartPortion
+               && nEndPortion == rLine.nEndPortion;
+    }
 };
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     EditLine const& rLine)
+{
+    return stream << "EditLine(" << rLine.GetStart() << ", " << rLine.GetEnd() << ")";
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

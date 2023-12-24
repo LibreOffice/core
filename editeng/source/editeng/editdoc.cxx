@@ -890,42 +890,6 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
     }
 }
 
-EditLine::EditLine() :
-    nTxtWidth(0),
-    nStartPosX(0),
-    nStart(0),
-    nEnd(0),
-    nStartPortion(0),   // to be able to tell the difference between a line
-                        // without Portions from one with the Portion number 0
-    nEndPortion(0),
-    nHeight(0),
-    nTxtHeight(0),
-    nMaxAscent(0),
-    bHangingPunctuation(false),
-    bInvalid(true)
-{
-}
-
-EditLine::EditLine( const EditLine& r ) :
-    nTxtWidth(0),
-    nStartPosX(0),
-    nStart(r.nStart),
-    nEnd(r.nEnd),
-    nStartPortion(r.nStartPortion),
-    nEndPortion(r.nEndPortion),
-    nHeight(0),
-    nTxtHeight(0),
-    nMaxAscent(0),
-    bHangingPunctuation(r.bHangingPunctuation),
-    bInvalid(true)
-{
-}
-
-EditLine::~EditLine()
-{
-}
-
-
 EditLine* EditLine::Clone() const
 {
     EditLine* pL = new EditLine;
@@ -942,33 +906,6 @@ EditLine* EditLine::Clone() const
 
     return pL;
 }
-
-bool operator == ( const EditLine& r1,  const EditLine& r2  )
-{
-    if ( r1.nStart != r2.nStart )
-        return false;
-
-    if ( r1.nEnd != r2.nEnd )
-        return false;
-
-    if ( r1.nStartPortion != r2.nStartPortion )
-        return false;
-
-    if ( r1.nEndPortion != r2.nEndPortion )
-        return false;
-
-    return true;
-}
-
-EditLine& EditLine::operator = ( const EditLine& r )
-{
-    nEnd = r.nEnd;
-    nStart = r.nStart;
-    nEndPortion = r.nEndPortion;
-    nStartPortion = r.nStartPortion;
-    return *this;
-}
-
 
 void EditLine::SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH )
 {

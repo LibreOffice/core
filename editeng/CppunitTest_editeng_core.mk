@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,editeng_core, \
     editeng/qa/unit/core-test \
     editeng/qa/unit/ESelectionTest \
     editeng/qa/unit/EPaMTest \
+    editeng/qa/unit/EditLineTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,editeng_core,editeng))
