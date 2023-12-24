@@ -59,7 +59,14 @@ void SAL_CALL rtl_byte_sequence_reference2One(
         }
         else
         {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 14
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Walloc-size"
+#endif
             pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE ));
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 14
+#pragma GCC diagnostic pop
+#endif
         }
 
         if ( pNew != nullptr )
