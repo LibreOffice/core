@@ -371,7 +371,15 @@ CPPUNIT_TEST_FIXTURE(Test, testMathRuns)
 {
     loadAndReload("math-runs.rtf");
     // was [](){}, i.e. first curly bracket had an incorrect position
-    CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"),
+    CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] \\( \\) \\}"),
+                         getFormula(getRun(getParagraph(1), 1)));
+}
+
+// Saving left and right for parentheses when importing not from the m:t tag (rtf)
+CPPUNIT_TEST_FIXTURE(Test, testTdf158023_rtf)
+{
+    loadAndReload("tdf158023.rtf");
+    CPPUNIT_ASSERT_EQUAL(OUString("left [a right ] left (b right ) left lbrace c right rbrace"),
                          getFormula(getRun(getParagraph(1), 1)));
 }
 

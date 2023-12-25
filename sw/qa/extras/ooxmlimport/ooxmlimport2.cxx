@@ -697,6 +697,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119200)
     CPPUNIT_ASSERT_EQUAL(u" size 12{ func \u2287 } {}"_ustr, getFormula(getRun(xPara, 7)));
 }
 
+// Checking a formula where the closing brackets
+// come first, and then the opening ones
+CPPUNIT_TEST_FIXTURE(Test, testTdf158023Import)
+{
+    auto verify = [this]() {
+        auto xPara = getParagraph(1);
+        CPPUNIT_ASSERT_EQUAL(u"\\) sqrt {\\)2\\(} \\("_ustr, getFormula(getRun(xPara, 1)));
+    };
+    auto verifyReload = [this]() {
+        auto xPara = getParagraph(1);
+        CPPUNIT_ASSERT_EQUAL(u"\\) sqrt {\\) 2 \\(} \\("_ustr, getFormula(getRun(xPara, 1)));
+    };
+
+    createSwDoc("tdf158023_import.docx");
+    verify();
+
+    saveAndReload("Office Open XML Text");
+    verifyReload();
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf115094)
 {
     createSwDoc("tdf115094.docx");

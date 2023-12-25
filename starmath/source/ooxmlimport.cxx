@@ -602,9 +602,9 @@ OUString SmOoxmlImport::handleR()
             {
                 XmlStream::Tag rtag = m_rStream.ensureOpeningTag( M_TOKEN( t ));
                 if( rtag.attribute( OOX_TOKEN( xml, space )) != "preserve" )
-                    text.append(o3tl::trim(rtag.text));
+                    text.append(o3tl::trim(rtag.text.replaceAll("(", "\\(").replaceAll(")", "\\)")));
                 else
-                    text.append(rtag.text);
+                    text.append(rtag.text.replaceAll("(", "\\(").replaceAll(")", "\\)"));
                 m_rStream.ensureClosingTag( M_TOKEN( t ));
                 break;
             }
