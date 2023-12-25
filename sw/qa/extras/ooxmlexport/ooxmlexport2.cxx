@@ -261,7 +261,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 CPPUNIT_TEST_FIXTURE(Test, testMathEscape)
 {
     loadAndReload("math-escape.docx");
-    CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] \\( \\) \\}"), getFormula(getRun(getParagraph(1), 1)));
+}
+
+// Saving left and right for parentheses when importing not from the m:t tag (docx)
+CPPUNIT_TEST_FIXTURE(Test, testTdf158023Export)
+{
+    loadAndReload("tdf158023_export.docx");
+    CPPUNIT_ASSERT_EQUAL(OUString("left [ right ] left ( right ) left lbrace  right rbrace"), getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo51034)
