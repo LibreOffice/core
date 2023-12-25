@@ -193,19 +193,15 @@ namespace drawinglayer::animation
 
         bool AnimationEntryList::operator==(const AnimationEntry& rCandidate) const
         {
-            const AnimationEntryList* pCompare = dynamic_cast< const AnimationEntryList* >(&rCandidate);
+            const AnimationEntryList* pCompare = dynamic_cast<const AnimationEntryList*>(&rCandidate);
 
-            if(pCompare && mfDuration == pCompare->mfDuration)
+            if (pCompare && mfDuration == pCompare->mfDuration) 
             {
-                for(size_t a(0); a < maEntries.size(); a++)
-                {
-                    if(!(*maEntries[a] == *pCompare->maEntries[a]))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                return std::equal(maEntries.cbegin(), maEntries.cend(),
+                                pCompare->maEntries.cbegin(), pCompare->maEntries.cend(),
+                                [](const auto& lhs, const auto& rhs) {
+                                     return *lhs == *rhs; 
+                                });
             }
 
             return false;
