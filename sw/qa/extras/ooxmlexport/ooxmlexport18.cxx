@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 
 
@@ -770,6 +771,25 @@ CPPUNIT_TEST_FIXTURE(Test, testSvgExtensionsSupport)
     assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext", "uri",
                 "{96DAC541-7B7A-43D3-8B79-37D633B846F1}");
     assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext/asvg:svgBlip", "embed", "rId3");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
+{
+    // Given a table immediately followed by a section break
+    loadFromURL(u"section_break_after_table.docx");
+
+    // Check that the import doesn't produce an extra empty paragraph before a page break
+    CPPUNIT_ASSERT_EQUAL(2, getPages()); // was 3
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs()); // was 3
+    uno::Reference<text::XTextTable>(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+    getParagraph(2, "Next page"); // was empty, with the 3rd being "Next page"
+
+    saveAndReload(OUString::createFromAscii(mpFilter));
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    uno::Reference<text::XTextTable>(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+    getParagraph(2, "Next page");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
