@@ -336,7 +336,7 @@ public:
         @since LibreOffice 7.7
     */
 
-    static void setAllowedPaths(const OUString &rPaths)
+    static void setAllowedPaths(const ::rtl::OUString& rPaths)
     {
         osl_setAllowedPaths(rPaths.pData);
     }
@@ -360,7 +360,7 @@ public:
 
        @since LibreOffice 7.7
     */
-    static bool isForbidden(const OUString &rPath, int nFlags)
+    static bool isForbidden(const ::rtl::OUString& rPath, int nFlags)
     {
         return osl_isForbiddenPath(rPath.pData, nFlags);
     }
