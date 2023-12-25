@@ -74,7 +74,7 @@ SfxPoolItemHolder::SfxPoolItemHolder()
 SfxPoolItemHolder::SfxPoolItemHolder(SfxItemPool& rPool, const SfxPoolItem* pItem, bool bPassingOwnership)
 : m_pPool(&rPool)
 , m_pItem(pItem)
-#ifdef DBG_UTIL
+#ifndef NDEBUG
 , m_bDeleted(false)
 #endif
 {
@@ -89,7 +89,7 @@ SfxPoolItemHolder::SfxPoolItemHolder(SfxItemPool& rPool, const SfxPoolItem* pIte
 SfxPoolItemHolder::SfxPoolItemHolder(const SfxPoolItemHolder& rHolder)
 : m_pPool(rHolder.m_pPool)
 , m_pItem(rHolder.m_pItem)
-#ifdef DBG_UTIL
+#ifndef NDEBUG
 , m_bDeleted(false)
 #endif
 {
