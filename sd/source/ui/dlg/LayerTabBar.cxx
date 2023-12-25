@@ -179,7 +179,12 @@ void LayerTabBar::BringLayerObjectsToAttention(const sal_uInt16 nPageId)
             {
                 SdrObject* pObj = aIter.Next();
                 assert(pObj != nullptr);
-                if (pObj && (aLayerName == rLayerAdmin.GetLayerPerID(pObj->GetLayer())->GetName()))
+                if (!pObj)
+                    continue;
+                const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID(pObj->GetLayer());
+                if (!pSdrLayer)
+                    continue;
+                if (aLayerName == pSdrLayer->GetName())
                 {
                     ::tools::Rectangle aRect(pObj->GetLogicRect());
                     if (!aRect.IsEmpty())
