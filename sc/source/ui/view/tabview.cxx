@@ -1216,6 +1216,52 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                     else
                         nDelta = 0;
                 }
+                else if ( bHoriz )
+                {
+                    // tdf#135478 Reduce sensitivity of horizontal scrollwheel
+                    // Problem: at least on macOS, swipe events are very
+                    // precise. So, when swiping at a slight angle off of
+                    // vertical, swipe events will include a small amount
+                    // of horizontal movement. Since horizontal swipe units
+                    // are measured in cell widths, these small amounts of
+                    // horizontal movement results in shifting many columns
+                    // to the right or left while swiping almost vertically.
+                    // So my hacky fix is to reduce the amount of horizontal
+                    // swipe events to roughly match the "visual distance"
+                    // of vertical swipe events.
+                    // The reduction factor is arbitrary but is set to
+                    // roughly the ratio of default cell width divided by
+                    // default cell height. This hacky fix isn't a perfect
+                    // fix, but hopefully it reduces the amount of
+                    // unexpected horizontal shifting while swiping
+                    // vertically to a tolerable amount for most users.
+                    // Note: the potential downside of doing this is that
+                    // some users might find horizontal swiping to be
+                    // slower than they are used to. If that becomes an
+                    // issue for enough users, the reduction factor may
+                    // need to be lowered to find a good balance point.
+                    static const sal_uInt16 nHScrollReductionFactor = 8;
+                    if ( pScroll == aHScrollLeft.get() )
+                    {
+                        mnPendingaHScrollLeftDelta += nDelta;
+                        nDelta = 0;
+                        if ( abs(mnPendingaHScrollLeftDelta) > nHScrollReductionFactor )
+                        {
+                            nDelta = mnPendingaHScrollLeftDelta / nHScrollReductionFactor;
+                            mnPendingaHScrollLeftDelta = mnPendingaHScrollLeftDelta % nHScrollReductionFactor;
+                        }
+                    }
+                    else if ( pScroll == aHScrollRight.get() )
+                    {
+                        mnPendingaHScrollRightDelta += nDelta;
+                        nDelta = 0;
+                        if ( abs(mnPendingaHScrollRightDelta) > nHScrollReductionFactor )
+                        {
+                            nDelta = mnPendingaHScrollRightDelta / nHScrollReductionFactor;
+                            mnPendingaHScrollRightDelta = mnPendingaHScrollRightDelta % nHScrollReductionFactor;
+                        }
+                    }
+                }
 
                 nPrevDragPos = nScrollPos;
             }
