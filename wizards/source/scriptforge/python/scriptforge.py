@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#     Copyright 2020-2022 Jean-Pierre LEDURE, Rafael LIMA, Alain ROMEDENNE
+#     Copyright 2020-2024 Jean-Pierre LEDURE, Rafael LIMA, Alain ROMEDENNE
 
 # =====================================================================================================================
 # ===           The ScriptForge library and its associated libraries are part of the LibreOffice project.           ===
@@ -108,7 +108,7 @@ class ScriptForge(object, metaclass = _Singleton):
     # Class constants
     # #########################################################################
     library = 'ScriptForge'
-    Version = '24.2'  # Actual version number
+    Version = '24.8'  # Version number of the LibreOffice release containing the actual file
     #
     # Basic dispatcher for Python scripts (@scope#library.module.function)
     basicdispatcher = '@application#ScriptForge.SF_PythonHelper._PythonDispatcher'
