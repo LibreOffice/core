@@ -2093,7 +2093,7 @@ void SdImportTest2::testMasterSlides()
                                                                        uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages());
     CPPUNIT_ASSERT(xMasterPages.is());
-    CPPUNIT_ASSERT_EQUAL(7, xMasterPages->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), xMasterPages->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
