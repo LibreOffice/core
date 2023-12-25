@@ -3897,10 +3897,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                 case 0x0c: //page break
                     // page breaks aren't supported in footnotes and endnotes
                     if (!m_pImpl->IsInFootOrEndnote())
-                    {
                         m_pImpl->deferBreak(PAGE_BREAK);
-                        m_pImpl->SetIsDummyParaAddedForTableInSectionPage(false);
-                    }
                     return;
                 case 0x0e: //column break
                     m_pImpl->deferBreak(COLUMN_BREAK);
@@ -4403,7 +4400,6 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                             && !bIsColumnBreak
                             && !m_pImpl->GetIsLastSectionGroup() // testContSectionPageBreak
                             && !m_pImpl->GetParaHadField()
-                            && (!m_pImpl->GetIsDummyParaAddedForTableInSectionPage())
                             && !m_pImpl->GetIsPreviousParagraphFramed()
                             && !m_pImpl->HasTopAnchoredObjects()
                             && !m_pImpl->IsParaWithInlineObject());
@@ -4423,15 +4419,6 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
             finishParagraph(bRemove, bNoNumbering);
             if (bRemove)
                 m_pImpl->RemoveLastParagraph();
-
-            // When the table is closed and the section's initial dummy paragraph has been processed
-            // then any following sectPr paragraph in the section must be eligible for removal.
-            if (!bRemove && m_pImpl->GetIsDummyParaAddedForTableInSectionPage() && !IsInTable()
-                && !m_pImpl->GetFootnoteContext() && !m_pImpl->IsInComments() && !IsInHeaderFooter()
-                && !IsInShape())
-            {
-               m_pImpl->SetIsDummyParaAddedForTableInSectionPage(false);
-            }
 
             m_pImpl->SetParaSectpr(false);
         }

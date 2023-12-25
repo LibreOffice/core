@@ -29,6 +29,7 @@
 #include "TagLogger.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -380,7 +381,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstParaInSection( true ),
         m_bIsFirstParaInSectionAfterRedline( true ),
         m_bDummyParaAddedForTableInSection( false ),
-        m_bDummyParaAddedForTableInSectionPage( false ),
         m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
@@ -979,12 +979,6 @@ void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
     m_bDummyParaAddedForTableInSection = bIsAdded;
-    m_bDummyParaAddedForTableInSectionPage = bIsAdded;
-}
-
-void DomainMapper_Impl::SetIsDummyParaAddedForTableInSectionPage( bool bIsAdded )
-{
-    m_bDummyParaAddedForTableInSectionPage = bIsAdded;
 }
 
 
@@ -3519,6 +3513,86 @@ void DomainMapper_Impl::adjustLastPara(sal_Int8 nAlign)
     pLastPara->Insert(PROP_PARA_ADJUST, uno::Any(nAlign), true);
 }
 
+static void checkAndAddPropVal(const OUString& prop, const css::uno::Any& val,
+                               std::vector<OUString>& props, std::vector<css::uno::Any>& values)
+{
+    // Avoid well-known reasons for exceptions when setting property values
+    if (!val.hasValue())
+        return;
+    if (prop == "CharAutoStyleName" || prop == "ParaAutoStyleName")
+        return;
+    if (prop == "CharStyleName" || prop == "DropCapCharStyleName")
+        if (OUString val_string; (val >>= val_string) && val_string.isEmpty())
+            return;
+
+    props.push_back(prop);
+    values.push_back(val);
+}
+
+static void copyAllProps(const css::uno::Reference<css::uno::XInterface>& from,
+                         const css::uno::Reference<css::uno::XInterface>& to)
+{
+    css::uno::Reference<css::beans::XPropertySet> xFromProps(from, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::beans::XPropertySetInfo> xFromInfo(xFromProps->getPropertySetInfo(),
+                                                                css::uno::UNO_SET_THROW);
+    css::uno::Sequence<css::beans::Property> rawProps(xFromInfo->getProperties());
+    std::vector<OUString> props;
+    props.reserve(rawProps.getLength());
+    for (const auto& prop : rawProps)
+        if ((prop.Attributes & css::beans::PropertyAttribute::READONLY) == 0)
+            props.push_back(prop.Name);
+    std::vector<css::uno::Any> values;
+    values.reserve(props.size());
+    if (css::uno::Reference<css::beans::XMultiPropertySet> xFromMulti{ xFromProps,
+                                                                       css::uno::UNO_QUERY })
+    {
+        const auto propsSeq = comphelper::containerToSequence(props);
+        const auto valuesSeq = xFromMulti->getPropertyValues(propsSeq);
+        assert(propsSeq.getLength() == valuesSeq.getLength());
+        props.clear();
+        for (size_t i = 0; i < propsSeq.size(); ++i)
+            checkAndAddPropVal(propsSeq[i], valuesSeq[i], props, values);
+    }
+    else
+    {
+        std::vector<OUString> filtered_props;
+        filtered_props.reserve(props.size());
+        for (const auto& prop : props)
+            checkAndAddPropVal(prop, xFromProps->getPropertyValue(prop), filtered_props, values);
+        filtered_props.swap(props);
+    }
+    assert(props.size() == values.size());
+
+    css::uno::Reference<css::beans::XPropertySet> xToProps(to, css::uno::UNO_QUERY_THROW);
+    if (css::uno::Reference<css::beans::XMultiPropertySet> xToMulti{ xToProps,
+                                                                     css::uno::UNO_QUERY })
+    {
+        try
+        {
+            xToMulti->setPropertyValues(comphelper::containerToSequence(props),
+                                        comphelper::containerToSequence(values));
+            return;
+        }
+        catch (css::uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
+        }
+        // Fallback to property-by-property iteration
+    }
+
+    for (size_t i = 0; i < props.size(); ++i)
+    {
+        try
+        {
+            xToProps->setPropertyValue(props[i], values[i]);
+        }
+        catch (css::uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
+        }
+    }
+}
+
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                                     uno::Reference< text::XTextRange > const & xBefore )
 {
@@ -3538,40 +3612,33 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                 xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
             else
                 xCursor->gotoEnd( true );
-            //the paragraph after this new section is already inserted
-            xCursor->goLeft(1, true);
-            css::uno::Reference<css::text::XTextRange> xTextRange(xCursor, css::uno::UNO_QUERY_THROW);
+            // The paragraph after this new section is already inserted. The previous node may be a
+            // table; then trying to go left would skip the whole table. Split the trailing
+            // paragraph; let the section span over the first of the two resulting paragraphs;
+            // destroy the last section's paragraph afterwards.
+            css::uno::Reference<css::text::XTextRange> xEndPara = xCursor->getEnd();
+            xTextAppend->insertControlCharacter(
+                xEndPara, css::text::ControlCharacter::PARAGRAPH_BREAK, false);
+            css::uno::Reference<css::text::XTextRange> xNewPara = xCursor->getEnd();
+            xCursor->gotoPreviousParagraph(true);
+            xEndPara = xCursor->getEnd();
+            // xEndPara may already have properties (like page break); make sure to apply them
+            // to the newly appended paragraph, which will be kept in the end.
+            copyAllProps(xEndPara, xNewPara);
 
-            if (css::uno::Reference<css::text::XDocumentIndexesSupplier> xIndexSupplier{
-                    GetTextDocument(), css::uno::UNO_QUERY })
+            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY_THROW );
+            xSection->attach(xCursor);
+
+            // Remove the extra paragraph (last inside the section)
+            if (uno::Reference<container::XEnumerationAccess> xEA{ xEndPara, uno::UNO_QUERY })
             {
-                css::uno::Reference<css::text::XTextRangeCompare> xCompare(
-                    xTextAppend, css::uno::UNO_QUERY);
-                const auto xIndexAccess = xIndexSupplier->getDocumentIndexes();
-                for (sal_Int32 i = xIndexAccess->getCount(); i > 0; --i)
+                if (uno::Reference<lang::XComponent> xParagraph{
+                        xEA->createEnumeration()->nextElement(), uno::UNO_QUERY })
                 {
-                    if (css::uno::Reference<css::text::XDocumentIndex> xIndex{
-                            xIndexAccess->getByIndex(i - 1), css::uno::UNO_QUERY })
-                    {
-                        const auto xIndexTextRange = xIndex->getAnchor();
-                        if (xCompare->compareRegionStarts(xTextRange, xIndexTextRange) == 0
-                            && xCompare->compareRegionEnds(xTextRange, xIndexTextRange) == 0)
-                        {
-                            // The boundaries coincide with an index: trying to attach a section
-                            // to the range will insert the section inside the index. goRight will
-                            // extend the range outside of the index, so that created section will
-                            // be around it. Alternatively we could return index section itself
-                            // instead : xRet.set(xIndex, uno::UNO_QUERY) - to set its properties,
-                            // like columns/fill.
-                            xCursor->goRight(1, true);
-                            break;
-                        }
-                    }
+                    xParagraph->dispose();
                 }
             }
 
-            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY_THROW );
-            xSection->attach( xTextRange );
             xRet.set(xSection, uno::UNO_QUERY );
         }
         catch(const uno::Exception&)
