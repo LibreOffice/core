@@ -31,7 +31,7 @@
     <string name="action_parts">Zatiak</string>
     <string name="action_keyboard">Erakutsi teklatua</string>
     <string name="action_save">Gorde</string>
-    <string name="action_save_as">Gorde honela...</string>
+    <string name="action_save_as">Gorde honela…</string>
     <string name="action_fromat">Gaitu formatua</string>
     <string name="message_saved">Gorde da</string>
     <string name="message_saving">Dokumentua gordetzen…</string>

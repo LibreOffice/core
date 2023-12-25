@@ -131,4 +131,12 @@
     <string name="action_rename_slide">Slaytı yeniden adlandır</string>
     <string name="about_privacy_policy">Gizlilik Politikası</string>
     <string name="action_save_as">Farklı Kaydet…</string>
+    <string name="automatic">Otomatik</string>
+    <string name="create_file">Yeni Dosya Oluştur</string>
+    <string name="search_find_next">Sonrakini Bul</string>
+    <string name="search_find_previous">Öncekini Bul</string>
+    <string name="pdf_export_finished">PDF dışa aktarıldı</string>
+    <string name="unable_to_save">Dosya kaydedilemiyor</string>
+    <string name="message_saving_failed">Belge kaydedilemedi.</string>
+    <string name="select_file_to_open">Açılacak dosyayı seçin</string>
 </resources>

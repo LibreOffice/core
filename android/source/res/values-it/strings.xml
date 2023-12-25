@@ -14,4 +14,32 @@
     <string name="new_drawing">Nuovo disegno</string>
     <string name="default_document_name">senza titolo</string>
     <string name="select_file_to_open">Seleziona file da aprire</string>
+    <string name="app_version">Versione: %1$s&lt;br&gt;ID Build: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
+    <string name="title_recents">File recenti</string>
+    <string name="title_browser">Tutti i file</string>
+    <string name="pref_category_general">Generale</string>
+    <string name="pref_experimental_editing">Modalità sperimentale</string>
+    <string name="pref_experimental_editing_summary">Attiva la modalità di modifica sperimentale a tuo rischio e sotto la tua responsabilità.</string>
+    <string name="pref_developer_mode">Modalità sviluppatore</string>
+    <string name="pref_developer_mode_summary">Attiva la modalità sviluppatore per inviare comandi UNO direttamente dall\'app. Il suo uso è a tuo rischio e sotto la tua responsabilità.</string>
+    <string name="action_about">Informazioni</string>
+    <string name="action_parts">Parti</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_keyboard">Mostra tastiera</string>
+    <string name="action_search">Cerca</string>
+    <string name="action_UNO_commands">Invia comando UNO</string>
+    <string name="message_saved">Salvataggio completato</string>
+    <string name="message_saving">Salvataggio del documento…</string>
+    <string name="message_saving_failed">Impossibile salvare il documento.</string>
+    <string name="password">Password</string>
+    <string name="action_undo">Annulla</string>
+    <string name="action_redo">Ripeti</string>
+    <string name="save_document">SALVA</string>
+    <string name="action_cancel">Annulla</string>
+    <string name="no_save_document">NO</string>
+    <string name="action_presentation">Presentazione</string>
+    <string name="action_add_slide">Aggiungi diapositiva</string>
+    <string name="action_save">Salva</string>
+    <string name="action_fromat">Attiva formato</string>
+    <string name="save_alert_dialog_title">Salvare il documento prima di chiuderlo\?</string>
 </resources>

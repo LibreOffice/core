@@ -136,4 +136,7 @@
     <string name="font_color">Schriftfarbe</string>
     <string name="action_rename_slide">Folie umbenennen</string>
     <string name="automatic">Automatisch</string>
+    <string name="create_file">Neue Datei erstellen</string>
+    <string name="search_find_next">Nächste suchen</string>
+    <string name="search_find_previous">Vorherige suchen</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_save_as">...ਵਜੋਂ ਸੰਭਾਲੋ</string>
+    <string name="action_save_as">…ਵਜੋਂ ਸੰਭਾਲੋ</string>
     <string name="compress_photo_medium_size">ਮੱਧਮ ਆਕਾਰ</string>
     <string name="app_description">LibreOffice ਦਰਸ਼ਕ LibreOffice ਉੱਤੇ ਅਧਾਰਿਤ ਦਸਤਾਵੇਜ਼ ਦਰਸ਼ਕ ਹੈ।</string>
     <string name="app_credits">https://www.libreoffice.org</string>
@@ -105,4 +105,14 @@
     <string name="calc_optimal_length">ਅਨੁਕੂਲ ਲੰਬਾਈ</string>
     <string name="calc_optimal_height">ਉਚਾਈ ਅਨੁਕੂਲ ਕਰੋ</string>
     <string name="compress_photo_title">ਕੀ ਤੁਸੀਂ ਫੋਟੋ ਨੂੰ ਕੰਪਰੈੱਸ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ\?</string>
+    <string name="action_UNO_commands">UNO ਕਮਾਂਡ ਭੇਜੋ</string>
+    <string name="UNO_commands_string_hint">UNO ਕਮਾਂਡ</string>
+    <string name="UNO_commands_string_type_hint">ਕਿਸਮ</string>
+    <string name="UNO_commands_string_value_hint">ਮੁੱਲ</string>
+    <string name="UNO_commands_string_parent_value_hint">ਮੁੱਢਲਾ ਮੁੱਲ</string>
+    <string name="current_uno_command">ਮੌਜੂਦਾ UNO ਕਮਾਂਡ</string>
+    <string name="name_already_used">ਦਿੱਤਾ ਨਾਂ ਪਹਿਲਾਂ ਹੀ ਵਰਤਿਆ ਗਿਆ ਹੈ।</string>
+    <string name="part_name_changed">ਪਾਰਟ ਦਾ ਨਾਂ ਬਦਲਿਆ ਜਾ ਚੁੱਕਾ ਹੈ।</string>
+    <string name="part_deleted">ਪਾਰਟ ਨੂੰ ਹਟਾਇਆ ਜਾ ਚੁੱਕਾ ਹੈ।</string>
+    <string name="bmp_null">bmp ਨਲ ਹੈ!</string>
 </resources>
