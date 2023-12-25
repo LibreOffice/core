@@ -1042,6 +1042,25 @@ CPPUNIT_TEST_FIXTURE(Test, testtdf158044)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:shadow[1]"_ostr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
+{
+    // Given a table immediately followed by a section break
+    load(createFileURL(u"section_break_after_table.docx"));
+
+    // Check that the import doesn't produce an extra empty paragraph before a page break
+    CPPUNIT_ASSERT_EQUAL(2, getPages()); // was 3
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs()); // was 3
+    uno::Reference<text::XTextTable>(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+    getParagraph(2, u"Next page"_ustr); // was empty, with the 3rd being "Next page"
+
+    saveAndReload(mpFilter);
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    uno::Reference<text::XTextTable>(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+    getParagraph(2, u"Next page"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
