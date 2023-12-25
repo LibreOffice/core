@@ -1095,7 +1095,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 
         if( dX != 0.0 )
         {
-            aEvent.mnDelta = static_cast<tools::Long>(floor(dX));
+            aEvent.mnDelta = static_cast<tools::Long>(dX < 0 ? floor(dX) : ceil(dX));
             aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -1105,7 +1105,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ))
         {
-            aEvent.mnDelta = static_cast<tools::Long>(floor(dY));
+            aEvent.mnDelta = static_cast<tools::Long>(dY < 0 ? floor(dY) : ceil(dY));
             aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -1154,7 +1154,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 
         if( dX != 0.0 )
         {
-            aEvent.mnDelta = static_cast<tools::Long>(floor(dX));
+            aEvent.mnDelta = static_cast<tools::Long>(dX < 0 ? floor(dX) : ceil(dX));
             aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -1168,7 +1168,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ) )
         {
-            aEvent.mnDelta = static_cast<tools::Long>(floor(dY));
+            aEvent.mnDelta = static_cast<tools::Long>(dY < 0 ? floor(dY) : ceil(dY));
             aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
