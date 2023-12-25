@@ -406,7 +406,7 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
     m_pColorDlg->SetColor(rInitialColor);
     m_pColorDlg->SetMode(svtools::ColorPickerMode::Modify);
     std::shared_ptr<PaletteManager> xSelf(shared_from_this());
-    m_pColorDlg->ExecuteAsync(pParent, [xSelf, aCommandCopy] (sal_Int32 nResult) {
+    m_pColorDlg->ExecuteAsync(pParent, [xSelf=std::move(xSelf), aCommandCopy] (sal_Int32 nResult) {
         if (nResult == RET_OK)
         {
             Color aLastColor = xSelf->m_pColorDlg->GetColor();

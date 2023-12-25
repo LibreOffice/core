@@ -1346,7 +1346,7 @@ void SAL_CALL ColorPicker::startExecuteModal( const css::uno::Reference< css::ui
 {
     std::shared_ptr<ColorPickerDialog> xDlg = std::make_shared<ColorPickerDialog>(Application::GetFrameWeld(mxParent), mnColor, mnMode);
     rtl::Reference<ColorPicker> xThis(this);
-    weld::DialogController::runAsync(xDlg, [xThis, xDlg, xListener] (sal_Int32 nResult) {
+    weld::DialogController::runAsync(xDlg, [xThis=std::move(xThis), xDlg, xListener] (sal_Int32 nResult) {
         if (nResult)
             xThis->mnColor = xDlg->GetColor();
 
