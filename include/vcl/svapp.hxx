@@ -219,6 +219,8 @@ enum class DialogCancelMode {
     Fatal     ///< cancel any dialogs by std::abort
 };
 
+VCL_DLLPUBLIC class Application* GetpApp();
+
 /**
  @brief Base class used mainly for the LibreOffice Desktop class.
 
@@ -1313,7 +1315,7 @@ public:
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                                    const ILibreOfficeKitNotifier* pNotifier = nullptr);
+                                                    const ILibreOfficeKitNotifier* pNotifier = GetpApp());
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 
@@ -1417,8 +1419,6 @@ public:
     SolarMutexReleaser(): mnReleased(Application::ReleaseSolarMutex()) {}
     ~SolarMutexReleaser() { Application::AcquireSolarMutex( mnReleased ); }
 };
-
-VCL_DLLPUBLIC Application* GetpApp();
 
 // returns true if vcl is already initialized
 VCL_DLLPUBLIC bool IsVCLInit();
