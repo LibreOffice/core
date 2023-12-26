@@ -277,7 +277,7 @@ private:
                 // Get Weight of current paragraph
                 OUString sWeightProperty = getWeightString(rEditText.GetParaAttribs(nCurrentParagraph));
                 // Insert new paragraph into collection
-                m_aResults.push_back({ svx::ClassificationType::PARAGRAPH, sWeightProperty, sBlank, sBlank });
+                m_aResults.emplace_back(svx::ClassificationType::PARAGRAPH, sWeightProperty, sBlank, sBlank);
             }
 
             const SvxFieldItem* pFieldItem = findField(rSection);
@@ -289,27 +289,27 @@ private:
                 const OUString& aKey = pCustomPropertyField->GetName();
                 if (m_aKeyCreator.isMarkingTextKey(aKey))
                 {
-                    m_aResults.push_back({ svx::ClassificationType::TEXT,
+                    m_aResults.emplace_back(svx::ClassificationType::TEXT,
                                            svx::classification::getProperty(m_xPropertyContainer, aKey),
-                                           sBlank, sBlank });
+                                           sBlank, sBlank);
                 }
                 else if (m_aKeyCreator.isCategoryNameKey(aKey) || m_aKeyCreator.isCategoryIdentifierKey(aKey))
                 {
-                    m_aResults.push_back({ svx::ClassificationType::CATEGORY,
+                    m_aResults.emplace_back(svx::ClassificationType::CATEGORY,
                                            svx::classification::getProperty(m_xPropertyContainer, aKey),
-                                           sBlank, sBlank });
+                                           sBlank, sBlank);
                 }
                 else if (m_aKeyCreator.isMarkingKey(aKey))
                 {
-                    m_aResults.push_back({ svx::ClassificationType::MARKING,
+                    m_aResults.emplace_back(svx::ClassificationType::MARKING,
                                            svx::classification::getProperty(m_xPropertyContainer, aKey),
-                                           sBlank, sBlank });
+                                           sBlank, sBlank);
                 }
                 else if (m_aKeyCreator.isIntellectualPropertyPartKey(aKey))
                 {
-                    m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART,
+                    m_aResults.emplace_back(svx::ClassificationType::INTELLECTUAL_PROPERTY_PART,
                                            svx::classification::getProperty(m_xPropertyContainer, aKey),
-                                           sBlank, sBlank });
+                                           sBlank, sBlank);
                 }
             }
         }
