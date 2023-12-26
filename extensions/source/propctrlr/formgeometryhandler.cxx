@@ -739,22 +739,22 @@ namespace pcr
         if ( _event.PropertyName == "Position" )
         {
             css::awt::Point aPos = m_xShape->getPosition();
-            aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONX, Any( aPos.X ) ) );
-            aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONY, Any( aPos.Y ) ) );
+            aEventTranslations.emplace_back(PROPERTY_POSITIONX, Any( aPos.X ));
+            aEventTranslations.emplace_back(PROPERTY_POSITIONY, Any( aPos.Y ));
         }
         else if ( _event.PropertyName == "Size" )
         {
             css::awt::Size aSize = m_xShape->getSize();
-            aEventTranslations.push_back( EventTranslation( PROPERTY_WIDTH, Any( aSize.Width ) ) );
-            aEventTranslations.push_back( EventTranslation( PROPERTY_HEIGHT, Any( aSize.Height ) ) );
+            aEventTranslations.emplace_back(PROPERTY_WIDTH, Any( aSize.Width ));
+            aEventTranslations.emplace_back(PROPERTY_HEIGHT, Any( aSize.Height ));
         }
         else if ( _event.PropertyName == PROPERTY_ANCHOR_TYPE )
         {
-            aEventTranslations.push_back( EventTranslation( PROPERTY_TEXT_ANCHOR_TYPE, _event.NewValue ) );
+            aEventTranslations.emplace_back(PROPERTY_TEXT_ANCHOR_TYPE, _event.NewValue);
         }
         else if ( _event.PropertyName == PROPERTY_ANCHOR )
         {
-            aEventTranslations.push_back( EventTranslation( PROPERTY_SHEET_ANCHOR_TYPE, _event.NewValue ) );
+            aEventTranslations.emplace_back(PROPERTY_SHEET_ANCHOR_TYPE, _event.NewValue);
         }
 
         PropertyChangeEvent aTranslatedEvent( _event );
