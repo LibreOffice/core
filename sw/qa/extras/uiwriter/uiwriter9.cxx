@@ -68,6 +68,92 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158785)
     CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969)
+{
+    // given a document with a field surrounded by N-dashes (–date–)
+    createSwDoc("tdf111969_field.fodt");
+    SwDoc& rDoc = *getSwDoc();
+    SwWrtShell* pWrtShell = rDoc.GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // go to the end of the field
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // get last point that will be part of the field (current position 1pt wide).
+    Point aLogicL(pWrtShell->GetCharRect().Center());
+    Point aLogicR(aLogicL);
+
+    // sanity check - we really are at the right edge of the field
+    aLogicR.AdjustX(1);
+    SwContentAtPos aContentAtPos(IsAttrAtPos::Field);
+    pWrtShell->GetContentAtPos(aLogicR, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
+    aLogicL.AdjustX(-1);
+    aContentAtPos = IsAttrAtPos::Field;
+    pWrtShell->GetContentAtPos(aLogicL, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::Field, aContentAtPos.eContentAtPos);
+
+    // the test: simulate a right-click of a mouse which sets the cursor and then acts on that pos.
+    pWrtShell->SwCursorShell::SetCursor(aLogicL, false, /*Block=*/false, /*FieldInfo=*/true);
+    CPPUNIT_ASSERT(pWrtShell->GetCurField(true));
+
+    /*
+     * An edge case at the start of a field - don't start the field menu on the first N-dash
+     */
+    // go to the start of the field
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // get first point that will be part of the field (current position 1pt wide).
+    aLogicL = pWrtShell->GetCharRect().Center();
+    aLogicR = aLogicL;
+
+    // sanity check - we really are at the left edge of the field
+    aLogicR.AdjustX(1);
+    aContentAtPos = IsAttrAtPos::Field;
+    pWrtShell->GetContentAtPos(aLogicR, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::Field, aContentAtPos.eContentAtPos);
+    aLogicL.AdjustX(-1);
+    aContentAtPos = IsAttrAtPos::Field;
+    pWrtShell->GetContentAtPos(aLogicL, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
+
+    // the test: simulate a right-click of a mouse (at the end-edge of the N-dash)
+    // which sets the cursor and then acts on that pos.
+    pWrtShell->SwCursorShell::SetCursor(aLogicL, false, /*Block=*/false, /*FieldInfo=*/true);
+    CPPUNIT_ASSERT(!pWrtShell->GetCurField(true));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969B)
+{
+    // given a document with a field surrounded by two N-dashes (––date––)
+    createSwDoc("tdf111969_fieldB.fodt");
+    SwDoc& rDoc = *getSwDoc();
+    SwWrtShell* pWrtShell = rDoc.GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // go to the start of the field
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    // get first point that will be part of the field (current position 1pt wide).
+    Point aLogicL(pWrtShell->GetCharRect().Center());
+    Point aLogicR(aLogicL);
+
+    // sanity check - we really are at the left edge of the field
+    aLogicR.AdjustX(1);
+    SwContentAtPos aContentAtPos(IsAttrAtPos::Field);
+    pWrtShell->GetContentAtPos(aLogicR, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::Field, aContentAtPos.eContentAtPos);
+    aLogicL.AdjustX(-1);
+    aContentAtPos = IsAttrAtPos::Field;
+    pWrtShell->GetContentAtPos(aLogicL, aContentAtPos);
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
+
+    // the test: simulate a right-click of a mouse (at the end-edge of the second N-dash)
+    // which sets the cursor and then acts on that pos.
+    pWrtShell->SwCursorShell::SetCursor(aLogicL, false, /*Block=*/false, /*FieldInfo=*/true);
+    //CPPUNIT_ASSERT(!pWrtShell->GetCurField(true));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

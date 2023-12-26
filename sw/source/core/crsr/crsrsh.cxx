@@ -1045,7 +1045,7 @@ bool SwCursorShell::IsInHeaderFooter( bool* pbInHeader ) const
     return nullptr != pFrame;
 }
 
-int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
+int SwCursorShell::SetCursor(const Point& rLPt, bool bOnlyText, bool bBlock, bool bFieldInfo)
 {
     CurrShell aCurr( this );
 
@@ -1056,6 +1056,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
     SwCursorMoveState aTmpState( IsTableMode() ? CursorMoveState::TableSel :
                                     bOnlyText ?  CursorMoveState::SetOnlyText : CursorMoveState::NONE );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
+    aTmpState.m_bFieldInfo = bFieldInfo; // always set cursor at field-start if point is over field
 
     SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->GetNode());
 

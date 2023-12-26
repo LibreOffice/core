@@ -401,7 +401,15 @@ public:
     //  return values:
     //      CRSR_POSCHG: when cursor was corrected from SPoint by the layout
     //      CRSR_POSOLD: when the cursor was not changed
-    int SetCursor( const Point &rPt, bool bOnlyText = false, bool bBlock = true );
+    /**
+     * @param bFieldInfo
+     * false: Over the last half of the character, place cursor behind it. This is used when
+     *        the cursor is actually being moved by the user to the closest valid point.
+     *  true: Place the cursor at the start of the character/field. This is used when setting
+     *        the cursor is done in order to get at the properties under the mouse pointer.
+     */
+    int SetCursor(const Point& rPt, bool bOnlyText = false, bool bBlock = true,
+                  bool bFieldInfo = false);
 
     /*
      * Notification that the visible area was changed. m_aVisArea is reset, then

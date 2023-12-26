@@ -6160,7 +6160,9 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         // create only temporary move context because otherwise
         // the query against the content form doesn't work!!!
         SwMvContext aMvContext( &rSh );
-        rSh.CallSetCursor(&aDocPos, false);
+        if (rSh.HasSelection())
+            rSh.ResetSelect(&aDocPos, false);
+        rSh.SwCursorShell::SetCursor(aDocPos, false, /*Block=*/false, /*FieldInfo=*/true);
     }
     if( !bOverURLGrf )
     {
