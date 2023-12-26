@@ -72,7 +72,7 @@ public:
      If there is no suitable mapping available NULL will
      be returned.
   */
-  const NSString* openOfficeToSystemFlavor(const css::datatransfer::DataFlavor& oooDataFlavor, bool& rbInternal) const;
+  const NSString* openOfficeToSystemFlavor(const css::datatransfer::DataFlavor& oooDataFlavor, bool& rbInternal, bool bIsSystemClipboard = false) const;
 
   /* Select the best available image data type
      If there is no suitable mapping available NULL will
@@ -98,7 +98,7 @@ public:
      Only those DataFlavors for which a suitable mapping to a system
      type exist will be contained in the returned types array.
    */
-  NSArray* flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors) const;
+  NSArray* flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors, bool bIsSystemClipboard = false) const;
 
   /* Translate an NSArray of system types into a sequence of DataFlavors.
      Only those types for which a suitable mapping to a DataFlavor
