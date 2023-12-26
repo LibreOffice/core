@@ -1033,7 +1033,17 @@ typedef enum
      *
      * Payload is the log to be sent
      */
-    LOK_CALLBACK_CORE_LOG = 70
+    LOK_CALLBACK_CORE_LOG = 70,
+
+    /**
+     * Tooltips shown in the documents, like redline author and date.
+     *
+     *  {
+     *      "text": "text of tooltip",
+     *      "rectangle": "x, y, width, height"
+     *  }
+     */
+    LOK_CALLBACK_TOOLTIP = 71,
 
 }
 LibreOfficeKitCallbackType;
@@ -1205,6 +1215,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_A11Y_SELECTION_CHANGED";
     case LOK_CALLBACK_CORE_LOG:
         return "LOK_CALLBACK_CORE_LOG";
+    case LOK_CALLBACK_TOOLTIP:
+        return "LOK_CALLBACK_TOOLTIP";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

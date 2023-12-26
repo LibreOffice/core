@@ -896,6 +896,9 @@ namespace
         case VclEventId::WindowMouseMove:
             pLOKEv->mpWindow->SetLastMousePos(pLOKEv->maMouseEvent.GetPosPixel());
             pLOKEv->mpWindow->MouseMove(pLOKEv->maMouseEvent);
+            pLOKEv->mpWindow->RequestHelp(HelpEvent{
+                pLOKEv->mpWindow->OutputToScreenPixel(pLOKEv->maMouseEvent.GetPosPixel()),
+                HelpEventMode::QUICK }); // If needed, HelpEventMode should be taken from a config
             break;
         case VclEventId::ExtTextInput:
         case VclEventId::EndExtTextInput:
