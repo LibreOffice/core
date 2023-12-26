@@ -149,7 +149,7 @@ void FormulaHelper::FillArgStrings( std::u16string_view rFormula,
             nEnd = GetArgStart( rFormula, nFuncPos, i+1 );
 
             if ( nEnd != nStart )
-                _rArgs.push_back(OUString(rFormula.substr( nStart, nEnd-1-nStart )));
+                _rArgs.emplace_back(rFormula.substr( nStart, nEnd-1-nStart ));
             else
             {
                 _rArgs.emplace_back();
@@ -160,7 +160,7 @@ void FormulaHelper::FillArgStrings( std::u16string_view rFormula,
         {
             nEnd = GetFunctionEnd( rFormula, nFuncPos )-1;
             if ( nStart < nEnd )
-                _rArgs.push_back( OUString(rFormula.substr( nStart, nEnd-nStart )) );
+                _rArgs.emplace_back(rFormula.substr( nStart, nEnd-nStart ));
             else
                 _rArgs.emplace_back();
         }
