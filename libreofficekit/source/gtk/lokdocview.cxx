@@ -1497,6 +1497,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
     case LOK_CALLBACK_A11Y_SELECTION_CHANGED:
     case LOK_CALLBACK_CORE_LOG:
+    case LOK_CALLBACK_TOOLTIP:
     {
         // TODO: Implement me
         break;
