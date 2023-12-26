@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/Command.hpp>
 #include <com/sun/star/ui/XStatusbarItem.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/statusbarcontroller.hxx>
@@ -299,38 +300,19 @@ void StatusBarManager::CreateControllers()
         AddonStatusbarItemData *pItemData = static_cast< AddonStatusbarItemData *>( m_pStatusBar->GetItemData( nId ) );
         uno::Reference< ui::XStatusbarItem > xStatusbarItem = new StatusbarItem( m_pStatusBar, nId, aCommandURL );
 
-        beans::PropertyValue aPropValue;
-        std::vector< uno::Any > aPropVector;
+        std::vector< uno::Any > aPropVector
+        {
+            uno::Any(comphelper::makePropertyValue("CommandURL", aCommandURL)),
+            uno::Any(comphelper::makePropertyValue("ModuleIdentifier", u""_ustr)),
+            uno::Any(comphelper::makePropertyValue("Frame", m_xFrame)),
 
-        aPropValue.Name     = "CommandURL";
-        aPropValue.Value    <<= aCommandURL;
-        aPropVector.push_back( uno::Any( aPropValue ) );
+            // TODO remove this
+            uno::Any(comphelper::makePropertyValue("ServiceManager", uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW))),
 
-        aPropValue.Name     = "ModuleIdentifier";
-        aPropValue.Value    <<= OUString();
-        aPropVector.push_back( uno::Any( aPropValue ) );
-
-        aPropValue.Name     = "Frame";
-        aPropValue.Value    <<= m_xFrame;
-        aPropVector.push_back( uno::Any( aPropValue ) );
-
-        // TODO remove this
-        aPropValue.Name     = "ServiceManager";
-        aPropValue.Value    <<= uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        aPropVector.push_back( uno::Any( aPropValue ) );
-
-        aPropValue.Name     = "ParentWindow";
-        aPropValue.Value    <<= xStatusbarWindow;
-        aPropVector.push_back( uno::Any( aPropValue ) );
-
-        // TODO still needing with the css::ui::XStatusbarItem?
-        aPropValue.Name     = "Identifier";
-        aPropValue.Value    <<= nId;
-        aPropVector.push_back( uno::Any( aPropValue ) );
-
-        aPropValue.Name     = "StatusbarItem";
-        aPropValue.Value    <<= xStatusbarItem;
-        aPropVector.push_back( uno::Any( aPropValue ) );
+            uno::Any(comphelper::makePropertyValue("ParentWindow", xStatusbarWindow)),
+            uno::Any(comphelper::makePropertyValue("Identifier", nId)),
+            uno::Any(comphelper::makePropertyValue("StatusbarItem", xStatusbarItem))
+        };
 
         uno::Sequence< uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
 
