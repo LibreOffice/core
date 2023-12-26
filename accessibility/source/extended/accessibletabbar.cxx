@@ -175,7 +175,7 @@ namespace accessibility
 
     OUString AccessibleTabBar::getImplementationName()
     {
-        return "com.sun.star.comp.svtools.AccessibleTabBar";
+        return u"com.sun.star.comp.svtools.AccessibleTabBar"_ustr;
     }
 
 
@@ -187,7 +187,7 @@ namespace accessibility
 
     Sequence< OUString > AccessibleTabBar::getSupportedServiceNames()
     {
-        return  { "com.sun.star.awt.AccessibleTabBar" };
+        return  { u"com.sun.star.awt.AccessibleTabBar"_ustr };
     }
 
 

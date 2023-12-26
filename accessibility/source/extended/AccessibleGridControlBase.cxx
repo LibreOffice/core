@@ -260,7 +260,7 @@ sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
 
 Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceNames()
 {
-    return { "com.sun.star.accessibility.AccessibleContext" };
+    return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
 }
 // internal virtual methods
 

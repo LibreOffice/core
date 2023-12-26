@@ -136,7 +136,7 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleCheckBoxCell::getImplementationName()
     {
-        return "com.sun.star.comp.svtools.TableCheckBoxCell";
+        return u"com.sun.star.comp.svtools.TableCheckBoxCell"_ustr;
     }
 
     sal_Int64 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()

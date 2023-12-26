@@ -66,13 +66,13 @@ bool VCLXAccessibleMenu::IsPopupMenuOpen()
 
 OUString VCLXAccessibleMenu::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleMenu";
+    return u"com.sun.star.comp.toolkit.AccessibleMenu"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessibleMenu::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleMenu" };
+    return { u"com.sun.star.awt.AccessibleMenu"_ustr };
 }
 
 

@@ -293,13 +293,13 @@ void VCLXAccessibleTabControl::disposing()
 
 OUString VCLXAccessibleTabControl::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleTabControl";
+    return u"com.sun.star.comp.toolkit.AccessibleTabControl"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessibleTabControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleTabControl" };
+    return { u"com.sun.star.awt.AccessibleTabControl"_ustr };
 }
 
 

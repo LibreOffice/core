@@ -27,12 +27,12 @@ using namespace ::com::sun::star;
 
 OUString VCLXAccessibleFixedHyperlink::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleFixedHyperlink";
+    return u"com.sun.star.comp.toolkit.AccessibleFixedHyperlink"_ustr;
 }
 
 uno::Sequence<OUString> VCLXAccessibleFixedHyperlink::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleFixedHyperlink" };
+    return { u"com.sun.star.awt.AccessibleFixedHyperlink"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

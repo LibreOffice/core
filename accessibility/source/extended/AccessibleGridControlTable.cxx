@@ -293,7 +293,7 @@ void SAL_CALL AccessibleGridControlTable::release() noexcept
 
 OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
 {
-    return "com.sun.star.accessibility.AccessibleGridControlTable";
+    return u"com.sun.star.accessibility.AccessibleGridControlTable"_ustr;
 }
 
 void AccessibleGridControlTable::dispose()

@@ -81,13 +81,13 @@ void VCLXAccessibleScrollBar::FillAccessibleStateSet( sal_Int64& rStateSet )
 
 OUString VCLXAccessibleScrollBar::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleScrollBar";
+    return u"com.sun.star.comp.toolkit.AccessibleScrollBar"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleScrollBar" };
+    return { u"com.sun.star.awt.AccessibleScrollBar"_ustr };
 }
 
 

@@ -194,7 +194,7 @@ void VCLXAccessibleStatusBarItem::disposing()
 
 OUString VCLXAccessibleStatusBarItem::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleStatusBarItem";
+    return u"com.sun.star.comp.toolkit.AccessibleStatusBarItem"_ustr;
 }
 
 
@@ -206,7 +206,7 @@ sal_Bool VCLXAccessibleStatusBarItem::supportsService( const OUString& rServiceN
 
 Sequence< OUString > VCLXAccessibleStatusBarItem::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleStatusBarItem" };
+    return { u"com.sun.star.awt.AccessibleStatusBarItem"_ustr };
 }
 
 

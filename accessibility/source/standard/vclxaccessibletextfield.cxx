@@ -90,14 +90,14 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 
 OUString VCLXAccessibleTextField::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleTextField";
+    return u"com.sun.star.comp.toolkit.AccessibleTextField"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessibleTextField::getSupportedServiceNames()
 {
     return comphelper::concatSequences(VCLXAccessibleTextComponent::getSupportedServiceNames(),
-                                       Sequence<OUString>{"com.sun.star.accessibility.AccessibleTextField"});
+                                       Sequence<OUString>{u"com.sun.star.accessibility.AccessibleTextField"_ustr});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

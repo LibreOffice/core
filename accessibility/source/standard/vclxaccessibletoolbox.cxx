@@ -583,13 +583,13 @@ void SAL_CALL VCLXAccessibleToolBox::disposing()
 // XServiceInfo
 OUString VCLXAccessibleToolBox::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleToolBox";
+    return u"com.sun.star.comp.toolkit.AccessibleToolBox"_ustr;
 }
 
 Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames()
 {
     return comphelper::concatSequences(VCLXAccessibleComponent::getSupportedServiceNames(),
-                                       Sequence<OUString>{"com.sun.star.accessibility.AccessibleToolBox"});
+                                       Sequence<OUString>{u"com.sun.star.accessibility.AccessibleToolBox"_ustr});
 }
 
 // XAccessibleContext

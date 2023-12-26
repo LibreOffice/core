@@ -42,13 +42,13 @@ bool VCLXAccessiblePopupMenu::IsFocused()
 
 OUString VCLXAccessiblePopupMenu::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessiblePopupMenu";
+    return u"com.sun.star.comp.toolkit.AccessiblePopupMenu"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessiblePopupMenu" };
+    return { u"com.sun.star.awt.AccessiblePopupMenu"_ustr };
 }
 
 

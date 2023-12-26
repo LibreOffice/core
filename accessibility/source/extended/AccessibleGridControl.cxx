@@ -181,7 +181,7 @@ void SAL_CALL AccessibleGridControl::grabFocus()
 
 OUString SAL_CALL AccessibleGridControl::getImplementationName()
 {
-    return "com.sun.star.accessibility.AccessibleGridControl";
+    return u"com.sun.star.accessibility.AccessibleGridControl"_ustr;
 }
 
 

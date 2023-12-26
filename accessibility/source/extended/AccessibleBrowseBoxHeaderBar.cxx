@@ -291,7 +291,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::release() noexcept
 
 OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationName()
 {
-    return "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar";
+    return u"com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar"_ustr;
 }
 
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationId()

@@ -251,13 +251,13 @@ void VCLXAccessibleStatusBar::disposing()
 
 OUString VCLXAccessibleStatusBar::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleStatusBar";
+    return u"com.sun.star.comp.toolkit.AccessibleStatusBar"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleStatusBar" };
+    return { u"com.sun.star.awt.AccessibleStatusBar"_ustr };
 }
 
 

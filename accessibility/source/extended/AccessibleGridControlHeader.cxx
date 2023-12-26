@@ -182,7 +182,7 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
 
 OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
 {
-    return "com.sun.star.accessibility.AccessibleGridControlHeader";
+    return u"com.sun.star.accessibility.AccessibleGridControlHeader"_ustr;
 }
 
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()

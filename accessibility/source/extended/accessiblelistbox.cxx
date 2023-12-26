@@ -251,14 +251,14 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleListBox::getImplementationName()
     {
-        return "com.sun.star.comp.svtools.AccessibleTreeListBox";
+        return u"com.sun.star.comp.svtools.AccessibleTreeListBox"_ustr;
     }
 
     Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames()
     {
-        return {"com.sun.star.accessibility.AccessibleContext",
-                "com.sun.star.accessibility.AccessibleComponent",
-                "com.sun.star.awt.AccessibleTreeListBox"};
+        return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
+                u"com.sun.star.accessibility.AccessibleComponent"_ustr,
+                u"com.sun.star.awt.AccessibleTreeListBox"_ustr};
     }
 
     sal_Bool SAL_CALL AccessibleListBox::supportsService( const OUString& _rServiceName )

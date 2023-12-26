@@ -168,13 +168,13 @@ void VCLXAccessibleEdit::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nE
 
 OUString VCLXAccessibleEdit::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleEdit";
+    return u"com.sun.star.comp.toolkit.AccessibleEdit"_ustr;
 }
 
 
 Sequence< OUString > VCLXAccessibleEdit::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleEdit" };
+    return { u"com.sun.star.awt.AccessibleEdit"_ustr };
 }
 
 

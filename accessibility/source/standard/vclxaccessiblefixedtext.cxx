@@ -42,12 +42,12 @@ void VCLXAccessibleFixedText::FillAccessibleStateSet(sal_Int64& rStateSet)
 
 OUString VCLXAccessibleFixedText::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleFixedText";
+    return u"com.sun.star.comp.toolkit.AccessibleFixedText"_ustr;
 }
 
 Sequence<OUString> VCLXAccessibleFixedText::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleFixedText" };
+    return { u"com.sun.star.awt.AccessibleFixedText"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

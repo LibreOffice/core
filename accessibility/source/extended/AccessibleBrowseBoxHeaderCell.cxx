@@ -108,7 +108,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
 */
 OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
 {
-    return "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell";
+    return u"com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell"_ustr;
 }
 
 namespace

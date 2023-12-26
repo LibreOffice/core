@@ -216,14 +216,14 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getImplementationName()
     {
-        return "com.sun.star.comp.svtools.AccessibleIconChoiceControlEntry";
+        return u"com.sun.star.comp.svtools.AccessibleIconChoiceControlEntry"_ustr;
     }
 
     Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrlEntry::getSupportedServiceNames()
     {
-        return {"com.sun.star.accessibility.AccessibleContext",
-                "com.sun.star.accessibility.AccessibleComponent",
-                "com.sun.star.awt.AccessibleIconChoiceControlEntry"};
+        return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
+                u"com.sun.star.accessibility.AccessibleComponent"_ustr,
+                u"com.sun.star.awt.AccessibleIconChoiceControlEntry"_ustr};
     }
 
     sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::supportsService( const OUString& _rServiceName )

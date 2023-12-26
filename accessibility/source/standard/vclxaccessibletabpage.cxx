@@ -236,7 +236,7 @@ void VCLXAccessibleTabPage::disposing()
 
 OUString VCLXAccessibleTabPage::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleTabPage";
+    return u"com.sun.star.comp.toolkit.AccessibleTabPage"_ustr;
 }
 
 
@@ -248,7 +248,7 @@ sal_Bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > VCLXAccessibleTabPage::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AccessibleTabPage" };
+    return { u"com.sun.star.awt.AccessibleTabPage"_ustr };
 }
 
 

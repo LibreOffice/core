@@ -155,7 +155,7 @@ namespace accessibility
     */
     OUString SAL_CALL AccessibleGridControlTableCell::getImplementationName()
     {
-        return "com.sun.star.accessibility.AccessibleGridControlTableCell";
+        return u"com.sun.star.accessibility.AccessibleGridControlTableCell"_ustr;
     }
 
     /** @return  The count of visible children. */
