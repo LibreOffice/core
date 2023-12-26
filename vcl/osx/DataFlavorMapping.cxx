@@ -545,7 +545,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDat
     return oOOFlavor;
 }
 
-const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oOOFlavor, bool& rbInternal) const
+const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oOOFlavor, bool& rbInternal, bool bIsSystemClipboard ) const
 {
     const NSString* sysFlavor = nullptr;
     rbInternal = false;
@@ -554,6 +554,25 @@ const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oO
     {
         if (oOOFlavor.MimeType.startsWith(OUString::createFromAscii(flavorMap[i].OOoFlavor)))
         {
+            // tdf#151679 Do not push FLAVOR_LINK to macOS general pasteboard
+            // When copying text from a Writer document and the FLAVOR_LINK
+            // flavor is pasted, Writer will edit the copied text in order
+            // to create a bookmark for DDE.
+            // The problem is that many macOS clipboard managers fetch *all*
+            // available flavors that are available in the macOS general
+            // pasteboard instead of just one flavor and this triggers the
+            // FLAVOR_LINK flavor's unusual editing behavor in Writer every
+            // time the user copies Writer text.
+            // Users have reported in tdf#1515679 that on macOS, Microsoft
+            // Writer, Excel, and PowerPoint do not recognize this flavor
+            // like is done on Windows so, in theory, we can just filter out
+            // this flavor when adding flavors to the macOS general pasteboard.
+            // With this change, the FLAVOR_LINK flavor will still be visible
+            // when copying and pasting within a single LibreOffice instance
+            // as well as when dragging from LibreOffice to other applications.
+            if (bIsSystemClipboard && !strcmp(FLAVOR_LINK, flavorMap[i].OOoFlavor))
+                return nullptr;
+
             if (flavorMap[i].SystemFlavor != nil)
                 sysFlavor = flavorMap[i].SystemFlavor;
             else
@@ -695,7 +714,7 @@ bool DataFlavorMapper::isValidMimeContentType(const OUString& contentType) const
   return result;
 }
 
-NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors) const
+NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors, bool bIsSystemClipboard) const
 {
   sal_uInt32 nFlavors = flavors.getLength();
   NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 1];
@@ -710,7 +729,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<c
       }
       else
       {
-          const NSString* str = openOfficeToSystemFlavor(flavors[i], bNeedDummyInternalFlavor);
+          const NSString* str = openOfficeToSystemFlavor(flavors[i], bNeedDummyInternalFlavor, bIsSystemClipboard);
 
           if (str != nullptr)
           {

@@ -158,7 +158,7 @@ void SAL_CALL AquaClipboard::setContents(
     uno::Reference<datatransfer::clipboard::XClipboardOwner> const & xClipboardOwner)
 {
     NSArray* types = xTransferable.is() ?
-        mpDataFlavorMapper->flavorSequenceToTypesArray(xTransferable->getTransferDataFlavors()) :
+        mpDataFlavorMapper->flavorSequenceToTypesArray(xTransferable->getTransferDataFlavors(), true) :
         [NSArray array];
 
     osl::ClearableMutexGuard aGuard(m_aMutex);
