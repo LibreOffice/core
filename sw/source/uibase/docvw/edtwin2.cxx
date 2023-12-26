@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <vcl/help.hxx>
+#include <tools/json_writer.hxx>
 #include <tools/urlobj.hxx>
 #include <fmtrfmrk.hxx>
 #include <svl/urihelper.hxx>
@@ -53,6 +54,8 @@
 #include <ndtxt.hxx>
 #include <comphelper/lok.hxx>
 #include <authfld.hxx>
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon, bool bTableChange )
 {
@@ -105,6 +108,16 @@ OUString SwEditWin::ClipLongToolTip(const OUString& rText)
     if (nTextWidth > nMaxWidth)
         sDisplayText = GetOutDev()->GetEllipsisString(sDisplayText, nMaxWidth, DrawTextFlags::CenterEllipsis);
     return sDisplayText;
+}
+
+static OString getTooltipPayload(const OUString& tooltip, const SwRect& rect)
+{
+    tools::JsonWriter writer;
+    {
+        writer.put("text", tooltip);
+        writer.put("rectangle", rect.SVRect().toString());
+    }
+    return writer.extractAsOString();
 }
 
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
@@ -405,28 +418,36 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             if (!sText.isEmpty())
             {
-                tools::Rectangle aRect( aFieldRect.SVRect() );
-                Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
-                aRect.SetLeft( aPt.X() );
-                aRect.SetTop( aPt.Y() );
-                aPt = OutputToScreenPixel( LogicToPixel( aRect.BottomRight() ));
-                aRect.SetRight( aPt.X() );
-                aRect.SetBottom( aPt.Y() );
-
-                // tdf#136336 ensure tooltip area surrounds the current mouse position with at least a pixel margin
-                aRect.Union(tools::Rectangle(rEvt.GetMousePosPixel(), Size(1, 1)));
-                aRect.AdjustLeft(-1);
-                aRect.AdjustRight(1);
-                aRect.AdjustTop(-1);
-                aRect.AdjustBottom(1);
-
-                if( bBalloon )
-                    Help::ShowBalloon( this, rEvt.GetMousePosPixel(), aRect, sText );
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    m_rView.libreOfficeKitViewCallback(
+                        LOK_CALLBACK_TOOLTIP, getTooltipPayload(sText, aFieldRect).getStr());
+                }
                 else
                 {
-                    // the show the help
-                    OUString sDisplayText(ClipLongToolTip(sText));
-                    Help::ShowQuickHelp(this, aRect, sDisplayText, nStyle);
+                    tools::Rectangle aRect(aFieldRect.SVRect());
+                    Point aPt(OutputToScreenPixel(LogicToPixel(aRect.TopLeft())));
+                    aRect.SetLeft(aPt.X());
+                    aRect.SetTop(aPt.Y());
+                    aPt = OutputToScreenPixel(LogicToPixel(aRect.BottomRight()));
+                    aRect.SetRight(aPt.X());
+                    aRect.SetBottom(aPt.Y());
+
+                    // tdf#136336 ensure tooltip area surrounds the current mouse position with at least a pixel margin
+                    aRect.Union(tools::Rectangle(rEvt.GetMousePosPixel(), Size(1, 1)));
+                    aRect.AdjustLeft(-1);
+                    aRect.AdjustRight(1);
+                    aRect.AdjustTop(-1);
+                    aRect.AdjustBottom(1);
+
+                    if (bBalloon)
+                        Help::ShowBalloon(this, rEvt.GetMousePosPixel(), aRect, sText);
+                    else
+                    {
+                        // the show the help
+                        OUString sDisplayText(ClipLongToolTip(sText));
+                        Help::ShowQuickHelp(this, aRect, sDisplayText, nStyle);
+                    }
                 }
             }
 

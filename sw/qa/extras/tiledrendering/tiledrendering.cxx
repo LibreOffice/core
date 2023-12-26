@@ -112,6 +112,11 @@ protected:
     OString m_aFormFieldButton;
     OString m_aContentControl;
     OString m_ShapeSelection;
+    struct
+    {
+        std::string text;
+        std::string rect;
+    } m_aTooltip;
     TestLokCallbackWrapper m_callbackWrapper;
 };
 
@@ -292,6 +297,15 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         case LOK_CALLBACK_GRAPHIC_SELECTION:
             {
                 m_ShapeSelection = OString(pPayload);
+            }
+            break;
+        case LOK_CALLBACK_TOOLTIP:
+            {
+                std::stringstream aStream(pPayload);
+                boost::property_tree::ptree aTree;
+                boost::property_tree::read_json(aStream, aTree);
+                m_aTooltip.text = aTree.get_child("text").get_value<std::string>();
+                m_aTooltip.rect = aTree.get_child("rectangle").get_value<std::string>();
             }
             break;
     }
@@ -4084,6 +4098,37 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineTooltip)
+{
+    SwXTextDocument* pXTextDoc = createDoc();
+    SwWrtShell* pWrtShell = pXTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+    pWrtShell->SetRedlineFlagsAndCheckInsMode(RedlineFlags::On | RedlineFlags::ShowMask);
+    uno::Reference<text::XText> xText(pXTextDoc->getText(), uno::UNO_SET_THROW);
+    xText->insertString(xText->getEnd(), "test", /*bAbsorb=*/false);
+
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT(pShellCursor);
+
+    pWrtShell->EndOfSection(/*bSelect=*/false);
+    Point aEnd = pShellCursor->GetSttPos();
+    pWrtShell->StartOfSection(/*bSelect=*/false);
+    Point aStart = pShellCursor->GetSttPos();
+    Point aMiddle((aStart.getX() + aEnd.getX()) / 2, (aStart.getY() + aEnd.getY()) / 2);
+    pXTextDoc->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, aMiddle.getX(), aMiddle.getY(), 1, 0, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(OString(m_aTooltip.text).startsWith("Inserted: "));
+
+    std::vector<OUString> vec = comphelper::string::split(OUString::fromUtf8(m_aTooltip.rect), ',');
+    CPPUNIT_ASSERT_EQUAL(size_t(4), vec.size());
+    CPPUNIT_ASSERT(vec[0].toInt32() != 0);
+    CPPUNIT_ASSERT(vec[1].toInt32() != 0);
+    CPPUNIT_ASSERT(vec[2].toInt32() != 0);
+    CPPUNIT_ASSERT(vec[3].toInt32() != 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

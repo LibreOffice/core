@@ -1864,6 +1864,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_GRAPHIC_SELECTION:
             case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             case LOK_CALLBACK_INVALIDATE_TILES:
+            case LOK_CALLBACK_TOOLTIP:
                 if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
                 break;
@@ -1891,6 +1892,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
             case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
             case LOK_CALLBACK_COLOR_PALETTES:
+            case LOK_CALLBACK_TOOLTIP:
             {
                 if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
@@ -1900,28 +1902,26 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             // These are safe to use the latest state and ignore previous
             // ones (if any) since the last overrides previous ones,
             // but only if the view is the same.
+            case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+                // deleting the duplicate of visible cursor message can cause hyperlink popup not to show up on second/or more click on the same place.
+                // If the hyperlink is not empty we can bypass that to show the popup
+                if (aCallbackData.getPayload().find("\"hyperlink\":\"\"") == std::string::npos
+                    && aCallbackData.getPayload().find("\"hyperlink\": {}") == std::string::npos)
+                    break;
+                [[fallthrough]];
             case LOK_CALLBACK_CELL_VIEW_CURSOR:
             case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
             case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-            case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             case LOK_CALLBACK_TEXT_VIEW_SELECTION:
             case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
             case LOK_CALLBACK_CALC_FUNCTION_LIST:
             case LOK_CALLBACK_FORM_FIELD_BUTTON:
             {
-                // deleting the duplicate of visible cursor message can cause hyperlink popup not to show up on second/or more click on the same place.
-                // If the hyperlink is not empty we can bypass that to show the popup
-                const bool hyperLinkException = type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
-                    aCallbackData.getPayload().find("\"hyperlink\":\"\"") == std::string::npos &&
-                    aCallbackData.getPayload().find("\"hyperlink\": {}") == std::string::npos;
-                if(!hyperLinkException)
-                {
-                    const int nViewId = aCallbackData.getViewId();
-                    removeAll(type, [nViewId] (const CallbackData& elemData) {
-                            return (nViewId == elemData.getViewId());
-                        }
-                    );
-                }
+                const int nViewId = aCallbackData.getViewId();
+                removeAll(type, [nViewId] (const CallbackData& elemData) {
+                        return (nViewId == elemData.getViewId());
+                    }
+                );
             }
             break;
 
