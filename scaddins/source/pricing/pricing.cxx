@@ -75,7 +75,7 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
 void sca::pricing::InitScaFuncDataList(ScaFuncDataList& rList)
 {
     for (const auto & nIndex : pFuncDataArr)
-        rList.push_back(ScaFuncData(nIndex));
+        rList.emplace_back(nIndex);
 }
 
 // entry points for service registration / instantiation

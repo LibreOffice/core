@@ -1368,7 +1368,7 @@ sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 void InitFuncDataList(FuncDataList& rList)
 {
     for(const auto & rFuncData : pFuncDatas)
-        rList.push_back(FuncData(rFuncData));
+        rList.emplace_back(rFuncData);
 }
 
 SortedIndividualInt32List::SortedIndividualInt32List()
