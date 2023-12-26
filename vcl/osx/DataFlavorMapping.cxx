@@ -561,7 +561,7 @@ const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oO
             // The problem is that many macOS clipboard managers fetch *all*
             // available flavors that are available in the macOS general
             // pasteboard instead of just one flavor and this triggers the
-            // FLAVOR_LINK flavor's unusual editing behavor in Writer every
+            // FLAVOR_LINK flavor's unusual editing behavior in Writer every
             // time the user copies Writer text.
             // Users have reported in tdf#1515679 that on macOS, Microsoft
             // Writer, Excel, and PowerPoint do not recognize this flavor
