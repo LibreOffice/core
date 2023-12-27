@@ -140,6 +140,14 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL AquaClipboard::getContents(
 {
     osl::MutexGuard aGuard(m_aMutex);
 
+    // tdf#144124 Detect if ownership has been lost
+    // The shortcut assumes that lost ownership notifications from the
+    // system clipboard will happen elsewhere. They do under normal
+    // conditions, but do not when some clipboard managers are running.
+    // So, explicitly check ownership to catch such cases.
+    if (mIsSystemPasteboard)
+        applicationDidBecomeActive(nullptr);
+
     // Shortcut: If we are clipboard owner already we don't need
     // to drag the data through the system clipboard
     if (mXClipboardContent.is())
