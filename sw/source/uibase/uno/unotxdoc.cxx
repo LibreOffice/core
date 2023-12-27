@@ -381,8 +381,16 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
 {
 }
 
+void SwXTextDocument::ThrowIfInvalid() const
+{
+    if (!m_bObjectValid)
+        throw DisposedException(u"SwXTextDocument not valid"_ustr,
+                                const_cast<SwXTextDocument*>(this)->getXWeak());
+}
+
 SwDoc& SwXTextDocument::GetDocOrThrow() const
 {
+    ThrowIfInvalid();
     if (SwDoc* pDoc = m_pDocShell->GetDoc())
         return *pDoc;
     throw css::lang::NotInitializedException(
@@ -427,7 +435,7 @@ SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
 
 void SwXTextDocument::GetNumberFormatter()
 {
-    if(!IsValid())
+    if (!m_bObjectValid)
         return;
 
     if(!m_xNumFormatAgg.is())
@@ -463,8 +471,7 @@ Reference< XText >  SwXTextDocument::getText()
 rtl::Reference< SwXBodyText > SwXTextDocument::getBodyText()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!m_xBodyText.is())
     {
         m_xBodyText = new SwXBodyText(m_pDocShell->GetDoc());
@@ -475,15 +482,13 @@ rtl::Reference< SwXBodyText > SwXTextDocument::getBodyText()
 void SwXTextDocument::reformat()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 }
 
 void SwXTextDocument::lockControllers()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     maActionArr.emplace_front(new UnoActionContext(m_pDocShell->GetDoc()));
 }
@@ -517,7 +522,7 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection()
 {
     SolarMutexGuard aGuard;
     Reference< XInterface >  xRef;
-    if(IsValid())
+    if (m_bObjectValid)
     {
         SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
         while(pView && pView->GetObjectShell() != m_pDocShell)
@@ -575,7 +580,7 @@ void SwXTextDocument::close( sal_Bool bDeliverOwnership )
         m_pDocShell->CallAutomationDocumentEventSinks( "Close", aArgs );
     }
     SolarMutexGuard aGuard;
-    if(IsValid() && m_pHiddenViewFrame)
+    if (m_bObjectValid && m_pHiddenViewFrame)
         lcl_DisposeView( m_pHiddenViewFrame, m_pDocShell);
     SfxBaseModel::close(bDeliverOwnership);
 }
@@ -593,8 +598,7 @@ void SwXTextDocument::removeEventListener(const Reference< lang::XEventListener 
 Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     if(!mxXLineNumberingProperties.is())
     {
@@ -606,8 +610,7 @@ Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
 Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXChapterNumbering.is())
     {
         mxXChapterNumbering = new SwXChapterNumbering(*m_pDocShell);
@@ -618,8 +621,7 @@ Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules()
 Reference< XIndexAccess >  SwXTextDocument::getNumberingRules()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXNumberingRules.is() )
     {
         mxXNumberingRules = new SwXNumberingRulesCollection( m_pDocShell->GetDoc() );
@@ -630,8 +632,7 @@ Reference< XIndexAccess >  SwXTextDocument::getNumberingRules()
 Reference< XIndexAccess >  SwXTextDocument::getFootnotes()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXFootnotes.is())
     {
         mxXFootnotes = new SwXFootnotes(false, m_pDocShell->GetDoc());
@@ -643,8 +644,7 @@ Reference< XPropertySet >  SAL_CALL
         SwXTextDocument::getFootnoteSettings()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXFootnoteSettings.is())
     {
         mxXFootnoteSettings = new SwXFootnoteProperties(m_pDocShell->GetDoc());
@@ -655,8 +655,7 @@ Reference< XPropertySet >  SAL_CALL
 Reference< XIndexAccess >  SwXTextDocument::getEndnotes()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXEndnotes.is())
     {
         mxXEndnotes = new SwXFootnotes(true, m_pDocShell->GetDoc());
@@ -667,8 +666,7 @@ Reference< XIndexAccess >  SwXTextDocument::getEndnotes()
 Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXEndnoteSettings.is())
     {
         mxXEndnoteSettings = new SwXEndnoteProperties(m_pDocShell->GetDoc());
@@ -679,8 +677,7 @@ Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings()
 Reference< XIndexAccess >  SwXTextDocument::getContentControls()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXContentControls.is())
     {
         mxXContentControls = new SwXContentControls(m_pDocShell->GetDoc());
@@ -695,10 +692,7 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
 
 SwUnoCursor* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCursor)
 {
-    getText();
-    XText *const pText = m_xBodyText.get();
-    SwXBodyText* pBText = static_cast<SwXBodyText*>(pText);
-    rtl::Reference<SwXTextCursor> pXTextCursor = pBText->CreateTextCursor(true);
+    rtl::Reference<SwXTextCursor> pXTextCursor = getBodyText()->CreateTextCursor(true);
     xCursor.set( static_cast<text::XWordCursor*>(pXTextCursor.get()) );
 
     auto& rUnoCursor(pXTextCursor->GetCursor());
@@ -709,13 +703,14 @@ SwUnoCursor* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & x
 sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor > & xDesc)
 {
     SolarMutexGuard aGuard;
-    SwXTextSearch* pSearch;
-    if (!IsValid() || !(pSearch = dynamic_cast<SwXTextSearch*>(xDesc.get())))
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
+    auto* pSearch = dynamic_cast<SwXTextSearch*>(xDesc.get());
+    if (!pSearch)
+        throw DisposedException("", getXWeak());
 
     Reference< XTextCursor >  xCursor;
     auto pUnoCursor(CreateCursorForSearch(xCursor));
-    int eRanges(FindRanges::InBody|FindRanges::InSelAll);
+    FindRanges eRanges(FindRanges::InBody|FindRanges::InSelAll);
 
     i18nutil::SearchOptions2 aSearchOpt;
     pSearch->FillSearchOptions( aSearchOpt );
@@ -742,7 +737,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         bool bCancel;
         nResult = pUnoCursor->FindAttrs(aSearch, !pSearch->m_bStyles,
                     eStart, eEnd, bCancel,
-                    static_cast<FindRanges>(eRanges),
+                    eRanges,
                     !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr,
                     &aReplace );
     }
@@ -754,7 +749,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         bool bCancel;
         nResult = pUnoCursor->FindFormat(*pSearchColl,
                     eStart, eEnd, bCancel,
-                    static_cast<FindRanges>(eRanges), pReplaceColl );
+                    eRanges, pReplaceColl );
 
     }
     else
@@ -763,7 +758,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         bool bCancel;
         nResult = pUnoCursor->Find_Text(aSearchOpt, false/*bSearchInNotes*/,
             eStart, eEnd, bCancel,
-            static_cast<FindRanges>(eRanges),
+            eRanges,
             true );
     }
     return nResult;
@@ -783,8 +778,9 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                                      sal_Int32& nResult,
                                      Reference< XInterface > const & xLastResult)
 {
+    ThrowIfInvalid();
     const auto pSearch = dynamic_cast<SwXTextSearch*>(xDesc.get());
-    if(!IsValid() || !pSearch)
+    if (!pSearch)
         return nullptr;
 
     auto pUnoCursor(CreateCursorForSearch(xCursor));
@@ -944,8 +940,7 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
 {
     SolarMutexGuard aGuard;
     Sequence< beans::PropertyValue > aSeq(9);
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     beans::PropertyValue* pArray = aSeq.getArray();
     SwPagePreviewPrtData aData;
@@ -1020,8 +1015,7 @@ static OUString lcl_CreateOutlineString(const size_t nIndex, const SwDoc* pDoc)
 void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue >& aSettings)
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     SwPagePreviewPrtData aData;
     SwDoc& rDoc = GetDocOrThrow();
@@ -1092,8 +1086,7 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
 void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOptions)
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *m_pDocShell, SfxInterfaceId(7) );
     SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SfxCallMode::SYNCHRON,
@@ -1171,8 +1164,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
 Reference< XNameAccess >  SwXTextDocument::getReferenceMarks()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXReferenceMarks.is())
     {
         mxXReferenceMarks = new SwXReferenceMarks(m_pDocShell->GetDoc());
@@ -1183,8 +1175,7 @@ Reference< XNameAccess >  SwXTextDocument::getReferenceMarks()
 Reference< XEnumerationAccess >  SwXTextDocument::getTextFields()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXTextFieldTypes.is())
     {
         mxXTextFieldTypes = new SwXTextFieldTypes(m_pDocShell->GetDoc());
@@ -1195,8 +1186,7 @@ Reference< XEnumerationAccess >  SwXTextDocument::getTextFields()
 Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXTextFieldMasters.is())
     {
         mxXTextFieldMasters = new SwXTextFieldMasters(m_pDocShell->GetDoc());
@@ -1207,8 +1197,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters()
 Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXEmbeddedObjects.is())
     {
         mxXEmbeddedObjects = new SwXTextEmbeddedObjects(m_pDocShell->GetDoc());
@@ -1219,8 +1208,7 @@ Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects()
 Reference< XNameAccess >  SwXTextDocument::getBookmarks()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXBookmarks.is())
     {
         mxXBookmarks = new SwXBookmarks(m_pDocShell->GetDoc());
@@ -1231,8 +1219,7 @@ Reference< XNameAccess >  SwXTextDocument::getBookmarks()
 Reference< XNameAccess >  SwXTextDocument::getTextSections()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXTextSections.is())
     {
         mxXTextSections = new SwXTextSections(m_pDocShell->GetDoc());
@@ -1243,8 +1230,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextSections()
 Reference< XNameAccess >  SwXTextDocument::getTextTables()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXTextTables.is())
     {
         mxXTextTables = new SwXTextTables(m_pDocShell->GetDoc());
@@ -1255,8 +1241,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextTables()
 Reference< XNameAccess >  SwXTextDocument::getGraphicObjects()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXGraphicObjects.is())
     {
         mxXGraphicObjects = new SwXTextGraphicObjects(m_pDocShell->GetDoc());
@@ -1267,8 +1252,7 @@ Reference< XNameAccess >  SwXTextDocument::getGraphicObjects()
 Reference< XNameAccess >  SwXTextDocument::getTextFrames()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXTextFrames.is())
     {
         mxXTextFrames = new SwXTextFrames(m_pDocShell->GetDoc());
@@ -1279,8 +1263,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFrames()
 Reference< XNameAccess >  SwXTextDocument::getStyleFamilies()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXStyleFamilies.is())
     {
         mxXStyleFamilies = new SwXStyleFamilies(*m_pDocShell);
@@ -1291,8 +1274,7 @@ Reference< XNameAccess >  SwXTextDocument::getStyleFamilies()
 uno::Reference< style::XAutoStyles > SwXTextDocument::getAutoStyles(  )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!mxXAutoStyles.is())
     {
         mxXAutoStyles = new SwXAutoStyles(*m_pDocShell);
@@ -1304,8 +1286,7 @@ uno::Reference< style::XAutoStyles > SwXTextDocument::getAutoStyles(  )
 Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
     if(!m_xDrawPage.is())
     {
         SwDoc& rDoc = GetDocOrThrow();
@@ -1400,7 +1381,7 @@ void SwXTextDocument::Invalidate()
     }
     InitNewDoc();
     m_pDocShell = nullptr;
-    lang::EventObject const ev(static_cast<SwXTextDocumentBaseClass &>(*this));
+    lang::EventObject const ev(getXWeak());
     std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_RefreshListeners.disposeAndClear(aGuard, ev);
 }
@@ -1418,33 +1399,29 @@ void    SwXTextDocument::InitNewDoc()
     // first invalidate all collections, then delete references and Set to zero
     if(mxXTextTables.is())
     {
-        XNameAccess* pTables = mxXTextTables.get();
-        static_cast<SwXTextTables*>(pTables)->Invalidate();
+        mxXTextTables->Invalidate();
         mxXTextTables.clear();
     }
 
     if(mxXTextFrames.is())
     {
-        XNameAccess* pFrames = mxXTextFrames.get();
-        static_cast<SwXTextFrames*>(pFrames)->Invalidate();
+        mxXTextFrames->Invalidate();
         mxXTextFrames.clear();
     }
 
     if(mxXGraphicObjects.is())
     {
-        XNameAccess* pFrames = mxXGraphicObjects.get();
-        static_cast<SwXTextGraphicObjects*>(pFrames)->Invalidate();
+        mxXGraphicObjects->Invalidate();
         mxXGraphicObjects.clear();
     }
 
     if(mxXEmbeddedObjects.is())
     {
-        XNameAccess* pOLE = mxXEmbeddedObjects.get();
-        static_cast<SwXTextEmbeddedObjects*>(pOLE)->Invalidate();
+        mxXEmbeddedObjects->Invalidate();
         mxXEmbeddedObjects.clear();
     }
 
-    m_xBodyText = nullptr;
+    m_xBodyText.clear();
 
     if(m_xNumFormatAgg.is())
     {
@@ -1461,22 +1438,19 @@ void    SwXTextDocument::InitNewDoc()
 
     if(mxXTextFieldTypes.is())
     {
-        XEnumerationAccess* pT = mxXTextFieldTypes.get();
-        static_cast<SwXTextFieldTypes*>(pT)->Invalidate();
+        mxXTextFieldTypes->Invalidate();
         mxXTextFieldTypes.clear();
     }
 
     if(mxXTextFieldMasters.is())
     {
-        XNameAccess* pT = mxXTextFieldMasters.get();
-        static_cast<SwXTextFieldMasters*>(pT)->Invalidate();
+        mxXTextFieldMasters->Invalidate();
         mxXTextFieldMasters.clear();
     }
 
     if(mxXTextSections.is())
     {
-        XNameAccess* pSect = mxXTextSections.get();
-        static_cast<SwXTextSections*>(pSect)->Invalidate();
+        mxXTextSections->Invalidate();
         mxXTextSections.clear();
     }
 
@@ -1491,102 +1465,87 @@ void    SwXTextDocument::InitNewDoc()
 
     if ( mxXNumberingRules.is() )
     {
-        XIndexAccess* pNum = mxXNumberingRules.get();
-        static_cast<SwXNumberingRulesCollection*>(pNum)->Invalidate();
+        mxXNumberingRules->Invalidate();
         mxXNumberingRules.clear();
     }
 
     if(mxXFootnotes.is())
     {
-        XIndexAccess* pFootnote = mxXFootnotes.get();
-        static_cast<SwXFootnotes*>(pFootnote)->Invalidate();
+        mxXFootnotes->Invalidate();
         mxXFootnotes.clear();
     }
 
     if(mxXEndnotes.is())
     {
-        XIndexAccess* pFootnote = mxXEndnotes.get();
-        static_cast<SwXFootnotes*>(pFootnote)->Invalidate();
+        mxXEndnotes->Invalidate();
         mxXEndnotes.clear();
     }
 
     if(mxXContentControls.is())
     {
-        XIndexAccess* pContentControls = mxXContentControls.get();
-        static_cast<SwXContentControls*>(pContentControls)->Invalidate();
+        mxXContentControls->Invalidate();
         mxXContentControls.clear();
     }
 
     if(mxXDocumentIndexes.is())
     {
-        XIndexAccess* pIdxs = mxXDocumentIndexes.get();
-        static_cast<SwXDocumentIndexes*>(pIdxs)->Invalidate();
+        mxXDocumentIndexes->Invalidate();
         mxXDocumentIndexes.clear();
     }
 
     if(mxXStyleFamilies.is())
     {
-        XNameAccess* pStyles = mxXStyleFamilies.get();
-        static_cast<SwXStyleFamilies*>(pStyles)->Invalidate();
+        mxXStyleFamilies->Invalidate();
         mxXStyleFamilies.clear();
     }
     if(mxXAutoStyles.is())
     {
-        XNameAccess* pStyles = mxXAutoStyles.get();
-        static_cast<SwXAutoStyles*>(pStyles)->Invalidate();
+        mxXAutoStyles->Invalidate();
         mxXAutoStyles.clear();
     }
 
     if(mxXBookmarks.is())
     {
-        XNameAccess* pBm = mxXBookmarks.get();
-        static_cast<SwXBookmarks*>(pBm)->Invalidate();
+        mxXBookmarks->Invalidate();
         mxXBookmarks.clear();
     }
 
     if(mxXChapterNumbering.is())
     {
-        XIndexReplace* pCh = mxXChapterNumbering.get();
-        static_cast<SwXChapterNumbering*>(pCh)->Invalidate();
+        mxXChapterNumbering->Invalidate();
         mxXChapterNumbering.clear();
     }
 
     if(mxXFootnoteSettings.is())
     {
-        XPropertySet* pFntSet = mxXFootnoteSettings.get();
-        static_cast<SwXFootnoteProperties*>(pFntSet)->Invalidate();
+        mxXFootnoteSettings->Invalidate();
         mxXFootnoteSettings.clear();
     }
 
     if(mxXEndnoteSettings.is())
     {
-        XPropertySet* pEndSet = mxXEndnoteSettings.get();
-        static_cast<SwXEndnoteProperties*>(pEndSet)->Invalidate();
+        mxXEndnoteSettings->Invalidate();
         mxXEndnoteSettings.clear();
     }
 
     if(mxXLineNumberingProperties.is())
     {
-        XPropertySet* pLine = mxXLineNumberingProperties.get();
-        static_cast<SwXLineNumberingProperties*>(pLine)->Invalidate();
+        mxXLineNumberingProperties->Invalidate();
         mxXLineNumberingProperties.clear();
     }
     if(mxXReferenceMarks.is())
     {
-        XNameAccess* pMarks = mxXReferenceMarks.get();
-        static_cast<SwXReferenceMarks*>(pMarks)->Invalidate();
+        mxXReferenceMarks->Invalidate();
         mxXReferenceMarks.clear();
     }
     if(mxLinkTargetSupplier.is())
     {
-        XNameAccess* pAccess = mxLinkTargetSupplier.get();
-        static_cast<SwXLinkTargetSupplier*>(pAccess)->Invalidate();
+        mxLinkTargetSupplier->Invalidate();
         mxLinkTargetSupplier.clear();
     }
     if(mxXRedlines.is())
     {
-        XEnumerationAccess* pMarks = mxXRedlines.get();
-        static_cast<SwXRedlines*>(pMarks)->Invalidate();
+        mxXRedlines->Invalidate();
         mxXRedlines.clear();
     }
     if(mxPropertyHelper.is())
@@ -1601,8 +1560,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     css::uno::Sequence<css::uno::Any> const * arguments)
 {
     SolarMutexGuard aGuard;
-    if (!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     const SwServiceType nType = SwXServiceProvider::GetProviderType(rServiceName);
     if (nType != SwServiceType::Invalid)
@@ -1654,7 +1612,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     if (rServiceName == "com.sun.star.chart2.data.DataProvider")
     {
         return Reference<XInterface>(
-            static_cast<chart2::data::XDataProvider *>(
+            cppu::getXWeak(
                 m_pDocShell->getIDocumentChartDataProviderAccess().
                 GetChartDataProvider()));
     }
@@ -1767,8 +1725,7 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames()
 Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     if(!mxXDocumentIndexes.is())
     {
@@ -1786,8 +1743,7 @@ Reference< XPropertySetInfo >  SwXTextDocument::getPropertySetInfo()
 void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any& aValue)
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
 
@@ -1975,8 +1931,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
 Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     if (rPropertyName == "ODFExport_ListNodes")
     {
@@ -2201,7 +2156,7 @@ void SwXTextDocument::NotifyRefreshListeners()
 {
     // why does SwBaseShell not just call refresh? maybe because it's rSh is
     // (sometimes) a different shell than GetWrtShell()?
-    lang::EventObject const ev(static_cast<SwXTextDocumentBaseClass &>(*this));
+    lang::EventObject const ev(getXWeak());
     std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_RefreshListeners.notifyEach(aGuard,
             & util::XRefreshListener::refreshed, ev);
@@ -2210,8 +2165,7 @@ void SwXTextDocument::NotifyRefreshListeners()
 void SwXTextDocument::refresh()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     SwViewShell *pViewShell = m_pDocShell->GetWrtShell();
     NotifyRefreshListeners();
@@ -2242,8 +2196,7 @@ void SAL_CALL SwXTextDocument::removeRefreshListener(
 void SwXTextDocument::updateLinks(  )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     SwDoc& rDoc = GetDocOrThrow();
     sfx2::LinkManager& rLnkMan = rDoc.getIDocumentLinksAdministration().GetLinkManager();
@@ -2258,8 +2211,7 @@ void SwXTextDocument::updateLinks(  )
 PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
@@ -2281,8 +2233,7 @@ Sequence< PropertyState > SAL_CALL SwXTextDocument::getPropertyStates( const Seq
 void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
@@ -2296,8 +2247,7 @@ void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyNa
 Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
@@ -2473,11 +2423,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-    {
-        throw DisposedException( OUString(),
-                static_cast< XTextDocument* >(this) );
-    }
+    ThrowIfInvalid();
 
     const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" );
     bool bIsSwSrcView = false;
@@ -2653,10 +2599,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-    {
-        throw DisposedException("", static_cast< XTextDocument* >(this));
-    }
+    ThrowIfInvalid();
 
     const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" );
     bool bIsSwSrcView = false;
@@ -2921,11 +2864,7 @@ void SAL_CALL SwXTextDocument::render(
         const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-    {
-        throw DisposedException( OUString(),
-                static_cast< XTextDocument* >(this) );
-    }
+    ThrowIfInvalid();
 
     // due to #110067# (document page count changes sometimes during
     // PDF export/printing) we can not check for the upper bound properly.
@@ -3082,18 +3021,14 @@ Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocShell )
-        throw DisposedException( OUString(), static_cast< XTextDocument* >( this ) );
+        throw DisposedException(OUString(), getXWeak());
     return GetDocOrThrow().getXForms();
 }
 
 uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlatParagraphIterator(::sal_Int32 nTextMarkupType, sal_Bool bAutomatic)
 {
     SolarMutexGuard aGuard;
-    if (!IsValid())
-    {
-        throw DisposedException("SwXTextDocument not valid",
-                static_cast<XTextDocument*>(this));
-    }
+    ThrowIfInvalid();
 
     return SwUnoCursorHelper::CreateFlatParagraphIterator(
             GetDocOrThrow(), nTextMarkupType, bAutomatic);
@@ -3102,8 +3037,7 @@ uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlat
 uno::Reference< util::XCloneable > SwXTextDocument::createClone(  )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+    ThrowIfInvalid();
 
     // create a new document - hidden - copy the storage and return it
     // SfxObjectShellRef is used here, since the model should control object lifetime after creation
@@ -3123,7 +3057,7 @@ void SwXTextDocument::addPasteEventListener(const uno::Reference<text::XPasteLis
 {
     SolarMutexGuard aGuard;
 
-    if (IsValid() && xListener.is())
+    if (m_bObjectValid && xListener.is())
         m_pDocShell->GetWrtShell()->GetPasteListeners().addInterface(xListener);
 }
 
@@ -3132,7 +3066,7 @@ void SwXTextDocument::removePasteEventListener(
 {
     SolarMutexGuard aGuard;
 
-    if (IsValid() && xListener.is())
+    if (m_bObjectValid && xListener.is())
         m_pDocShell->GetWrtShell()->GetPasteListeners().removeInterface(xListener);
 }
 

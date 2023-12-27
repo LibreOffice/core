@@ -84,6 +84,27 @@ class SwPrintData;
 class SwRenderData;
 class SwViewShell;
 class SfxItemPropertySet;
+class SwXTextTables;
+class SwXTextFrames;
+class SwXTextGraphicObjects;
+class SwXTextEmbeddedObjects;
+class SwXTextFieldTypes;
+class SwXTextFieldMasters;
+class SwXTextSections;
+class SwXNumberingRulesCollection;
+class SwXFootnotes;
+class SwXContentControls;
+class SwXDocumentIndexes;
+class SwXStyleFamilies;
+class SwXAutoStyles;
+class SwXBookmarks;
+class SwXChapterNumbering;
+class SwXFootnoteProperties;
+class SwXEndnoteProperties;
+class SwXLineNumberingProperties;
+class SwXReferenceMarks;
+class SwXLinkTargetSupplier;
+class SwXRedlines;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -153,29 +174,29 @@ private:
     rtl::Reference<SwXBodyText>                                 m_xBodyText;
     css::uno::Reference< css::uno::XAggregation >               m_xNumFormatAgg;
 
-    css::uno::Reference< css::container::XIndexAccess >         mxXNumberingRules;
-    css::uno::Reference< css::container::XIndexAccess >         mxXFootnotes;
-    css::uno::Reference< css::beans::XPropertySet >             mxXFootnoteSettings;
-    css::uno::Reference< css::container::XIndexAccess >         mxXEndnotes;
-    css::uno::Reference< css::beans::XPropertySet >             mxXEndnoteSettings;
-    css::uno::Reference< css::container::XIndexAccess >         mxXContentControls;
-    css::uno::Reference< css::container::XNameAccess >          mxXReferenceMarks;
-    css::uno::Reference< css::container::XEnumerationAccess >   mxXTextFieldTypes;
-    css::uno::Reference< css::container::XNameAccess >          mxXTextFieldMasters;
-    css::uno::Reference< css::container::XNameAccess >          mxXTextSections;
-    css::uno::Reference< css::container::XNameAccess >          mxXBookmarks;
-    css::uno::Reference< css::container::XNameAccess >          mxXTextTables;
-    css::uno::Reference< css::container::XNameAccess >          mxXTextFrames;
-    css::uno::Reference< css::container::XNameAccess >          mxXGraphicObjects;
-    css::uno::Reference< css::container::XNameAccess >          mxXEmbeddedObjects;
-    css::uno::Reference< css::container::XNameAccess >          mxXStyleFamilies;
-    mutable css::uno::Reference< css::style::XAutoStyles >      mxXAutoStyles;
-    css::uno::Reference< css::container::XIndexReplace >        mxXChapterNumbering;
-    css::uno::Reference< css::container::XIndexAccess >         mxXDocumentIndexes;
+    rtl::Reference<SwXNumberingRulesCollection>                 mxXNumberingRules;
+    rtl::Reference<SwXFootnotes>                                mxXFootnotes;
+    rtl::Reference<SwXFootnoteProperties>                       mxXFootnoteSettings;
+    rtl::Reference<SwXFootnotes>                                mxXEndnotes;
+    rtl::Reference<SwXEndnoteProperties>                        mxXEndnoteSettings;
+    rtl::Reference<SwXContentControls>                          mxXContentControls;
+    rtl::Reference<SwXReferenceMarks>                           mxXReferenceMarks;
+    rtl::Reference<SwXTextFieldTypes>                           mxXTextFieldTypes;
+    rtl::Reference<SwXTextFieldMasters>                         mxXTextFieldMasters;
+    rtl::Reference<SwXTextSections>                             mxXTextSections;
+    rtl::Reference<SwXBookmarks>                                mxXBookmarks;
+    rtl::Reference<SwXTextTables>                               mxXTextTables;
+    rtl::Reference<SwXTextFrames>                               mxXTextFrames;
+    rtl::Reference<SwXTextGraphicObjects>                       mxXGraphicObjects;
+    rtl::Reference<SwXTextEmbeddedObjects>                      mxXEmbeddedObjects;
+    rtl::Reference<SwXStyleFamilies>                            mxXStyleFamilies;
+    mutable rtl::Reference<SwXAutoStyles>                       mxXAutoStyles;
+    rtl::Reference<SwXChapterNumbering>                         mxXChapterNumbering;
+    rtl::Reference<SwXDocumentIndexes>                          mxXDocumentIndexes;
 
-    css::uno::Reference< css::beans::XPropertySet >             mxXLineNumberingProperties;
-    css::uno::Reference< css::container::XNameAccess >          mxLinkTargetSupplier;
-    css::uno::Reference< css::container::XEnumerationAccess >   mxXRedlines;
+    rtl::Reference<SwXLineNumberingProperties>                  mxXLineNumberingProperties;
+    rtl::Reference<SwXLinkTargetSupplier>                       mxLinkTargetSupplier;
+    rtl::Reference<SwXRedlines>                                 mxXRedlines;
 
     //temporary frame to enable PDF export if no valid view is available
     SfxViewFrame*                                   m_pHiddenViewFrame;
@@ -211,6 +232,7 @@ private:
 
     virtual ~SwXTextDocument() override;
 
+    void ThrowIfInvalid() const;
     SwDoc& GetDocOrThrow() const;
 
 public:
@@ -474,7 +496,6 @@ public:
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
-    bool                    IsValid() const {return m_bObjectValid;}
 
     void                        InitNewDoc();
 
