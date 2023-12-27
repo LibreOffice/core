@@ -36,6 +36,8 @@
 
 using namespace css;
 
+namespace
+{
 class Test : public SwModelTestBase
 {
 public:
@@ -106,6 +108,18 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf158826_extraCR, "tdf158826_extraCR.rtf")
+{
+    // Note: this is a hand-minimized sample, and very likely doesn't follow RTF { } rules...
+
+    // The page break defined before the document content should not cause a page break
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // There is a two-column floating table [that SHOULD be getParagraphOrTable(1)]
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY_THROW);
+}
+
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
