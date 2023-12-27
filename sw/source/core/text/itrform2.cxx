@@ -1327,25 +1327,20 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     Seek( rInf.GetIdx() );
     SwTextPortion *pPor = WhichTextPor( rInf );
 
+    TextFrameIndex nNextChg(rInf.GetText().getLength());
+
     // until next attribute change:
     const TextFrameIndex nNextAttr = GetNextAttr();
-    TextFrameIndex nNextChg = std::min(nNextAttr, TextFrameIndex(rInf.GetText().getLength()));
-
     // end of script type:
     const TextFrameIndex nNextScript = m_pScriptInfo->NextScriptChg(rInf.GetIdx());
-    nNextChg = std::min( nNextChg, nNextScript );
-
     // end of direction:
     const TextFrameIndex nNextDir = m_pScriptInfo->NextDirChg(rInf.GetIdx());
-    nNextChg = std::min( nNextChg, nNextDir );
-
     // hidden change (potentially via bookmark):
     const TextFrameIndex nNextHidden = m_pScriptInfo->NextHiddenChg(rInf.GetIdx());
-    nNextChg = std::min( nNextChg, nNextHidden );
-
     // bookmarks
     const TextFrameIndex nNextBookmark = m_pScriptInfo->NextBookmark(rInf.GetIdx());
-    nNextChg = std::min(nNextChg, nNextBookmark);
+
+    nNextChg = std::min({ nNextChg, nNextAttr, nNextScript, nNextDir, nNextHidden, nNextBookmark });
 
     // Turbo boost:
     // We assume that font characters are not larger than twice
@@ -1364,13 +1359,12 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     CalcAscent( rInf, pPor );
 
     const SwFont* pTmpFnt = rInf.GetFont();
-    sal_Int32 nExpect = std::min( sal_Int32( pTmpFnt->GetHeight() ),
-                             sal_Int32( pPor->GetAscent() ) ) / 8;
-    if ( !nExpect )
-        nExpect = 1;
-    nExpect = sal_Int32(rInf.GetIdx()) + (rInf.GetLineWidth() / nExpect);
-    if (TextFrameIndex(nExpect) > rInf.GetIdx() && nNextChg > TextFrameIndex(nExpect))
-        nNextChg = TextFrameIndex(std::min(nExpect, rInf.GetText().getLength()));
+    auto nCharWidthGuess = std::min(pTmpFnt->GetHeight(), pPor->GetAscent()) / 8;
+    if (!nCharWidthGuess)
+        nCharWidthGuess = 1;
+    auto nExpect = rInf.GetIdx() + TextFrameIndex(rInf.GetLineWidth() / nCharWidthGuess);
+    if (nExpect > rInf.GetIdx() && nNextChg > nExpect)
+        nNextChg = nExpect;
 
     // we keep an invariant during method calls:
     // there are no portion ending characters like hard spaces
