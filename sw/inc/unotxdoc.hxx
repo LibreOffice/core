@@ -210,6 +210,9 @@ private:
     virtual SdrModel& getSdrModelFromUnoModel() const override;
 
     virtual ~SwXTextDocument() override;
+
+    SwDoc& GetDocOrThrow() const;
+
 public:
     SwXTextDocument(SwDocShell* pShell);
 

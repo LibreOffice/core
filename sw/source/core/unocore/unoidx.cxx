@@ -2337,11 +2337,8 @@ SwXDocumentIndexes::getCount()
 {
     SolarMutexGuard aGuard;
 
-    if(!IsValid())
-        throw uno::RuntimeException();
-
     sal_uInt32 nRet = 0;
-    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    const SwSectionFormats& rFormats = GetDoc().GetSections();
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         const SwSection* pSect = rFormats[ n ]->GetSection();
@@ -2359,12 +2356,10 @@ SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
 
-    if(!IsValid())
-        throw uno::RuntimeException();
-
     sal_Int32 nIdx = 0;
 
-    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    auto& rDoc = GetDoc();
+    const SwSectionFormats& rFormats = rDoc.GetSections();
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         SwSection* pSect = rFormats[ n ]->GetSection();
@@ -2374,7 +2369,7 @@ SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
         {
            const uno::Reference< text::XDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
-                   *GetDoc(), static_cast<SwTOXBaseSection *>(pSect));
+                   rDoc, static_cast<SwTOXBaseSection *>(pSect));
            uno::Any aRet;
            aRet <<= xTmp;
            return aRet;
@@ -2389,10 +2384,8 @@ SwXDocumentIndexes::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
 
-    if(!IsValid())
-        throw uno::RuntimeException();
-
-    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    auto& rDoc = GetDoc();
+    const SwSectionFormats& rFormats = rDoc.GetSections();
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         SwSection* pSect = rFormats[ n ]->GetSection();
@@ -2403,7 +2396,7 @@ SwXDocumentIndexes::getByName(const OUString& rName)
         {
            const uno::Reference< text::XDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
-                   *GetDoc(), static_cast<SwTOXBaseSection *>(pSect));
+                   rDoc, static_cast<SwTOXBaseSection *>(pSect));
            uno::Any aRet;
            aRet <<= xTmp;
            return aRet;
@@ -2417,10 +2410,7 @@ SwXDocumentIndexes::getElementNames()
 {
     SolarMutexGuard aGuard;
 
-    if(!IsValid())
-        throw uno::RuntimeException();
-
-    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    const SwSectionFormats& rFormats = GetDoc().GetSections();
     sal_Int32 nCount = 0;
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
@@ -2452,10 +2442,7 @@ SwXDocumentIndexes::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
 
-    if(!IsValid())
-        throw uno::RuntimeException();
-
-    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    const SwSectionFormats& rFormats = GetDoc().GetSections();
     for( size_t n = 0; n < rFormats.size(); ++n )
     {
         SwSection const*const pSect = rFormats[ n ]->GetSection();

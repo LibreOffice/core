@@ -1424,24 +1424,14 @@ sal_Int32 SwXContentControls::getCount()
 {
     SolarMutexGuard aGuard;
 
-    if (!IsValid())
-    {
-        throw uno::RuntimeException();
-    }
-
-    return GetDoc()->GetContentControlManager().GetCount();
+    return GetDoc().GetContentControlManager().GetCount();
 }
 
 uno::Any SwXContentControls::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
 
-    if (!IsValid())
-    {
-        throw uno::RuntimeException();
-    }
-
-    SwContentControlManager& rManager = GetDoc()->GetContentControlManager();
+    SwContentControlManager& rManager = GetDoc().GetContentControlManager();
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= rManager.GetCount())
     {
         throw lang::IndexOutOfBoundsException();
@@ -1462,12 +1452,7 @@ sal_Bool SwXContentControls::hasElements()
 {
     SolarMutexGuard aGuard;
 
-    if (!IsValid())
-    {
-        throw uno::RuntimeException();
-    }
-
-    return !GetDoc()->GetContentControlManager().IsEmpty();
+    return !GetDoc().GetContentControlManager().IsEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

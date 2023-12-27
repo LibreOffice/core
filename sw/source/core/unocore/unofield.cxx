@@ -2727,8 +2727,6 @@ static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
 uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
-    if(!GetDoc())
-        throw uno::RuntimeException();
 
     OUString sName(rName), sTypeName;
     const SwFieldIds nResId = lcl_GetIdByName( sName, sTypeName );
@@ -2738,14 +2736,15 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
             css::uno::Reference<css::uno::XInterface>());
 
     sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
-    SwFieldType* pType = GetDoc()->getIDocumentFieldsAccess().GetFieldType(nResId, sName, true);
+    auto& rDoc = GetDoc();
+    SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFieldType(nResId, sName, true);
     if(!pType)
         throw container::NoSuchElementException(
             "SwXTextFieldMasters::getByName(" + rName + ")",
             css::uno::Reference<css::uno::XInterface>());
 
     uno::Reference<beans::XPropertySet> const xRet(
-            SwXFieldMaster::CreateXFieldMaster(GetDoc(), pType));
+            SwXFieldMaster::CreateXFieldMaster(&rDoc, pType));
     return uno::Any(xRet);
 }
 
@@ -2786,10 +2785,8 @@ bool SwXTextFieldMasters::getInstanceName(
 uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
 {
     SolarMutexGuard aGuard;
-    if(!GetDoc())
-        throw uno::RuntimeException();
 
-    const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    const SwFieldTypes* pFieldTypes = GetDoc().getIDocumentFieldsAccess().GetFieldTypes();
     const size_t nCount = pFieldTypes->size();
 
     std::vector<OUString> aFieldNames;
@@ -2810,8 +2807,6 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
 sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
-    if(!GetDoc())
-        throw uno::RuntimeException();
 
     OUString sName(rName), sTypeName;
     const SwFieldIds nResId = lcl_GetIdByName( sName, sTypeName );
@@ -2819,7 +2814,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName)
     if( SwFieldIds::Unknown != nResId )
     {
         sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
-        bRet = nullptr != GetDoc()->getIDocumentFieldsAccess().GetFieldType(nResId, sName, true);
+        bRet = nullptr != GetDoc().getIDocumentFieldsAccess().GetFieldType(nResId, sName, true);
     }
     return bRet;
 }
@@ -2882,9 +2877,7 @@ void SwXTextFieldTypes::Invalidate()
 uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw uno::RuntimeException();
-    return new SwXFieldEnumeration(*GetDoc());
+    return new SwXFieldEnumeration(GetDoc());
 }
 
 uno::Type  SwXTextFieldTypes::getElementType()
@@ -2904,11 +2897,10 @@ void SAL_CALL SwXTextFieldTypes::refresh()
 {
     {
         SolarMutexGuard aGuard;
-        if (!IsValid())
-            throw uno::RuntimeException();
-        UnoActionContext aContext(GetDoc());
-        GetDoc()->getIDocumentStatistics().UpdateDocStat( false, true );
-        GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
+        auto& rDoc = GetDoc();
+        UnoActionContext aContext(&rDoc);
+        rDoc.getIDocumentStatistics().UpdateDocStat(false, true);
+        rDoc.getIDocumentFieldsAccess().UpdateFields(false);
     }
     // call refresh listeners (without SolarMutex locked)
     lang::EventObject const event(getXWeak());
