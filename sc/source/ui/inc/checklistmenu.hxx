@@ -36,6 +36,8 @@ struct ScCheckListMember
     OUString                 maRealName;
     double                   mnValue; // number value of filter condition
     bool                     mbVisible;
+    bool                     mbMarked;
+    bool                     mbCheck;
     bool                     mbHiddenByOtherFilter;
     bool                     mbDate;
     bool                     mbLeaf;
@@ -139,7 +141,7 @@ public:
     void addMember(const OUString& rName, const double nVal, bool bVisible, bool bHiddenByOtherFilter,
                    bool bValue = false);
     void clearMembers();
-    size_t initMembers(int nMaxMemberWidth = -1);
+    size_t initMembers(int nMaxMemberWidth = -1, bool bUnlock=false);
     void setConfig(const Config& rConfig);
 
     bool isAllSelected() const;
@@ -231,6 +233,7 @@ private:
 
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(TriStateHdl, weld::Toggleable&, void);
+    DECL_LINK(LockCheckedHdl, weld::Toggleable&, void);
 
     void Check(const weld::TreeIter* pIter);
 
@@ -279,6 +282,7 @@ private:
     weld::TreeView* mpChecks;
 
     std::unique_ptr<weld::CheckButton> mxChkToggleAll;
+    std::unique_ptr<weld::CheckButton> mxChkLockChecked;
     std::unique_ptr<weld::Button> mxBtnSelectSingle;
     std::unique_ptr<weld::Button> mxBtnUnselectSingle;
 

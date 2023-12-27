@@ -474,6 +474,8 @@ ScCheckListMenuControl::Config::Config() :
 ScCheckListMember::ScCheckListMember()
     : mnValue(0.0)
     , mbVisible(true)
+    , mbMarked(false)
+    , mbCheck(true)
     , mbHiddenByOtherFilter(false)
     , mbDate(false)
     , mbLeaf(false)
@@ -504,6 +506,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     , mxListChecks(mxBuilder->weld_tree_view("check_list_box"))
     , mxTreeChecks(mxBuilder->weld_tree_view("check_tree_box"))
     , mxChkToggleAll(mxBuilder->weld_check_button("toggle_all"))
+    , mxChkLockChecked(mxBuilder->weld_check_button("lock_checked"))
     , mxBtnSelectSingle(mxBuilder->weld_button("select_current"))
     , mxBtnUnselectSingle(mxBuilder->weld_button("unselect_current"))
     , mxButtonBox(mxBuilder->weld_box("buttonbox"))
@@ -536,6 +539,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     mxListChecks->connect_popup_menu(LINK(this, ScCheckListMenuControl, CommandHdl));
     mxTreeChecks->connect_popup_menu(LINK(this, ScCheckListMenuControl, CommandHdl));
     mxChkToggleAll->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
+    mxChkLockChecked->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxBtnSelectSingle->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxBtnUnselectSingle->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxBtnOk->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
@@ -601,6 +605,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     mxListChecks->connect_toggled(LINK(this, ScCheckListMenuControl, CheckHdl));
     mxListChecks->connect_key_press(LINK(this, ScCheckListMenuControl, KeyInputHdl));
     mxChkToggleAll->connect_toggled(LINK(this, ScCheckListMenuControl, TriStateHdl));
+    mxChkLockChecked->connect_toggled(LINK(this, ScCheckListMenuControl, LockCheckedHdl));
     mxBtnSelectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
     mxBtnUnselectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
 
@@ -745,6 +750,104 @@ IMPL_LINK(ScCheckListMenuControl, ButtonHdl, weld::Button&, rBtn, void)
     }
 }
 
+namespace
+{
+    void insertMember(weld::TreeView& rView, const weld::TreeIter& rIter, const ScCheckListMember& rMember, bool bChecked, bool bLock=false)
+    {
+        OUString aLabel = rMember.maName;
+        if (aLabel.isEmpty())
+            aLabel = ScResId(STR_EMPTYDATA);
+        rView.set_toggle(rIter, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+        rView.set_text(rIter, aLabel, 0);
+
+        if (bLock)
+            rView.set_sensitive(rIter, !rMember.mbHiddenByOtherFilter && !rMember.mbMarked);
+        else
+            rView.set_sensitive(rIter, !rMember.mbHiddenByOtherFilter);
+    }
+
+    void loadSearchedMembers(std::vector<int>& rSearchedMembers, std::vector<ScCheckListMember>& rMembers,
+                             const OUString& rSearchText, bool bLock=false)
+    {
+        const OUString aSearchText = ScGlobal::getCharClass().lowercase( rSearchText );
+
+        for (size_t i = 0; i < rMembers.size(); ++i)
+        {
+            assert(!rMembers[i].mbDate);
+
+            OUString aLabelDisp = rMembers[i].maName;
+            if ( aLabelDisp.isEmpty() )
+                aLabelDisp = ScResId( STR_EMPTYDATA );
+
+            bool bPartialMatch = ScGlobal::getCharClass().lowercase( aLabelDisp ).indexOf( aSearchText ) != -1;
+
+            if (!bPartialMatch)
+                continue;
+            if (!bLock || (!rMembers[i].mbMarked && !rMembers[i].mbHiddenByOtherFilter))
+                rSearchedMembers.push_back(i);
+        }
+
+        if (bLock)
+            for (size_t i = 0; i < rMembers.size(); ++i)
+                if (rMembers[i].mbMarked && !rMembers[i].mbHiddenByOtherFilter)
+                    rSearchedMembers.push_back(i);
+
+    }
+}
+
+IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
+{
+    // assume all members are checked
+    for (auto& aMember : maMembers)
+        aMember.mbCheck = true;
+
+    // go over the members visible in the popup, and remember which one is
+    // checked, and which one is not
+    mpChecks->all_foreach([this](weld::TreeIter& rEntry){
+        if (mpChecks->get_toggle(rEntry) == TRISTATE_TRUE)
+        {
+            for (auto& aMember : maMembers)
+                if (aMember.maName == mpChecks->get_text(rEntry))
+                    aMember.mbMarked = true;
+        }
+        else
+        {
+            for (auto& aMember : maMembers)
+                if (aMember.maName == mpChecks->get_text(rEntry))
+                    aMember.mbCheck = false;
+        }
+
+        return false;
+    });
+
+    mpChecks->freeze();
+    mpChecks->clear();
+    mpChecks->thaw();
+
+    OUString aSearchText = mxEdSearch->get_text();
+    if (aSearchText.isEmpty())
+    {
+        initMembers(-1, !mxChkLockChecked->get_active());
+    }
+    else
+    {
+        std::vector<int> aShownIndexes;
+        loadSearchedMembers(aShownIndexes, maMembers, aSearchText, true);
+        std::vector<int> aFixedWidths { mnCheckWidthReq };
+
+        // insert the members, remember whether checked or unchecked.
+        mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes](weld::TreeIter& rIter, int i) {
+            size_t nIndex = aShownIndexes[i];
+            insertMember(*mpChecks, rIter, maMembers[nIndex], maMembers[nIndex].mbCheck, mxChkLockChecked->get_active());
+        }, nullptr, &aFixedWidths);
+    }
+
+    // unmarking should happen after the members are inserted
+    if (!mxChkLockChecked->get_active())
+        for (auto& aMember : maMembers)
+            aMember.mbMarked = false;
+}
+
 IMPL_LINK_NOARG(ScCheckListMenuControl, TriStateHdl, weld::Toggleable&, void)
 {
     switch (mePrevToggleAllState)
@@ -765,19 +868,6 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, TriStateHdl, weld::Toggleable&, void)
     }
 
     mePrevToggleAllState = mxChkToggleAll->get_state();
-}
-
-namespace
-{
-    void insertMember(weld::TreeView& rView, const weld::TreeIter& rIter, const ScCheckListMember& rMember, bool bChecked)
-    {
-        OUString aLabel = rMember.maName;
-        if (aLabel.isEmpty())
-            aLabel = ScResId(STR_EMPTYDATA);
-        rView.set_toggle(rIter, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
-        rView.set_text(rIter, aLabel, 0);
-        rView.set_sensitive(rIter, !rMember.mbHiddenByOtherFilter);
-    }
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, ComboChangedHdl, weld::ComboBox&, void)
@@ -876,29 +966,13 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SearchEditTimeoutHdl, Timer*, void)
             nSelCount = initMembers();
         else
         {
-            std::vector<size_t> aShownIndexes;
-
-            for (size_t i = 0; i < nEnableMember; ++i)
-            {
-                assert(!maMembers[i].mbDate);
-
-                OUString aLabelDisp = maMembers[i].maName;
-                if ( aLabelDisp.isEmpty() )
-                    aLabelDisp = ScResId( STR_EMPTYDATA );
-
-                bool bPartialMatch = ScGlobal::getCharClass().lowercase( aLabelDisp ).indexOf( aSearchText ) != -1;
-
-                if (!bPartialMatch)
-                    continue;
-
-                aShownIndexes.push_back(i);
-            }
-
+            std::vector<int> aShownIndexes;
+            loadSearchedMembers(aShownIndexes, maMembers, aSearchText, mxChkLockChecked->get_active());
             std::vector<int> aFixedWidths { mnCheckWidthReq };
             // tdf#122419 insert in the fastest order, this might be backwards.
             mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &nSelCount](weld::TreeIter& rIter, int i) {
                 size_t nIndex = aShownIndexes[i];
-                insertMember(*mpChecks, rIter, maMembers[nIndex], true);
+                insertMember(*mpChecks, rIter, maMembers[nIndex], true, mxChkLockChecked->get_active());
                 ++nSelCount;
             }, nullptr, &aFixedWidths);
         }
@@ -1115,6 +1189,8 @@ void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal,
     aMember.mbLeaf = true;
     aMember.mbValue = bValue;
     aMember.mbVisible = bVisible;
+    aMember.mbMarked = false;
+    aMember.mbCheck = true;
     aMember.mbHiddenByOtherFilter = bHiddenByOtherFilter;
     aMember.mxParent.reset();
     maMembers.emplace_back(std::move(aMember));
@@ -1357,7 +1433,7 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     return false;
 }
 
-size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
+size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth, bool bUnlock)
 {
     size_t n = maMembers.size();
     size_t nEnableMember = std::count_if(maMembers.begin(), maMembers.end(),
@@ -1373,10 +1449,12 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
         // tdf#134038 insert in the fastest order, this might be backwards so only do it for
         // the !mbHasDates case where no entry depends on another to exist before getting
         // inserted. We cannot retain pre-existing treeview content, only clear and fill it.
-        mpChecks->bulk_insert_for_each(n, [this, &nVisMemCount](weld::TreeIter& rIter, int i) {
+        mpChecks->bulk_insert_for_each(n, [this, &nVisMemCount, &bUnlock](weld::TreeIter& rIter, int i) {
             assert(!maMembers[i].mbDate);
-            insertMember(*mpChecks, rIter, maMembers[i], maMembers[i].mbVisible);
-            if (maMembers[i].mbVisible)
+            bool bCheck = ((mxChkLockChecked->get_active() || bUnlock) ? maMembers[i].mbMarked : maMembers[i].mbVisible);
+            insertMember(*mpChecks, rIter, maMembers[i], bCheck, mxChkLockChecked->get_active());
+
+            if (bCheck)
                 ++nVisMemCount;
         }, nullptr, &aFixedWidths);
     }
