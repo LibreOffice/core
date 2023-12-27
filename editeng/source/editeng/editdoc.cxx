@@ -902,29 +902,6 @@ bool EditSelection::DbgIsBuggy( EditDoc const & rDoc ) const
     return aStartPaM.DbgIsBuggy( rDoc ) || aEndPaM.DbgIsBuggy( rDoc );
 }
 
-EditSelection::EditSelection()
-{
-}
-
-EditSelection::EditSelection( const EditPaM& rStartAndAnd ) :
-    aStartPaM(rStartAndAnd),
-    aEndPaM(rStartAndAnd)
-{
-}
-
-EditSelection::EditSelection( const EditPaM& rStart, const EditPaM& rEnd ) :
-    aStartPaM(rStart),
-    aEndPaM(rEnd)
-{
-}
-
-EditSelection& EditSelection::operator = ( const EditPaM& rPaM )
-{
-    aStartPaM = rPaM;
-    aEndPaM = rPaM;
-    return *this;
-}
-
 void EditSelection::Adjust( const EditDoc& rNodes )
 {
     DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index out of range in Adjust(1)" );

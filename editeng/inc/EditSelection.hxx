@@ -28,10 +28,19 @@ private:
     EditPaM aEndPaM;
 
 public:
-    EditSelection();
+    EditSelection() = default;
 
-    EditSelection(const EditPaM& rStartAndAnd);
-    EditSelection(const EditPaM& rStart, const EditPaM& rEnd);
+    EditSelection(const EditPaM& rStartAndEnd)
+        : aStartPaM(rStartAndEnd)
+        , aEndPaM(rStartAndEnd)
+    {
+    }
+
+    EditSelection(const EditPaM& rStart, const EditPaM& rEnd)
+        : aStartPaM(rStart)
+        , aEndPaM(rEnd)
+    {
+    }
 
     EditPaM& Min() { return aStartPaM; }
     EditPaM& Max() { return aEndPaM; }
@@ -45,12 +54,14 @@ public:
 
     void Adjust(const EditDoc& rNodes);
 
-    EditSelection& operator=(const EditPaM& r);
-    bool operator==(const EditSelection& r) const
+    EditSelection& operator=(const EditPaM& rPaM)
     {
-        return (aStartPaM == r.aStartPaM) && (aEndPaM == r.aEndPaM);
+        aStartPaM = rPaM;
+        aEndPaM = rPaM;
+        return *this;
     }
-    bool operator!=(const EditSelection& r) const { return !(r == *this); }
+
+    bool operator==(const EditSelection& rOther) const = default;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
