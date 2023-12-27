@@ -44,19 +44,19 @@ const SvEventDescription* sw_GetSupportedMacroItems();
 class SwUnoCollection
 {
     SwDoc*      m_pDoc;
-    bool    m_bObjectValid;
 
     public:
         SwUnoCollection(SwDoc* p) :
-            m_pDoc(p),
-            m_bObjectValid(true){}
+            m_pDoc(p){}
 
     virtual ~SwUnoCollection() {}
 
     virtual void                Invalidate();
-    bool                        IsValid() const {return m_bObjectValid;}
 
-    SwDoc*          GetDoc() const {return m_pDoc;}
+protected:
+    bool IsValid() const { return m_pDoc; }
+
+    SwDoc& GetDoc() const;
 };
 
 /** entries in this enum are mapped in an array in unocoll.cxx */

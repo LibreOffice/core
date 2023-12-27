@@ -49,31 +49,26 @@ SwXRedlines::~SwXRedlines()
 sal_Int32 SwXRedlines::getCount(  )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw uno::RuntimeException();
-    const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& rRedTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     return rRedTable.size();
 }
 
 uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw uno::RuntimeException();
-    const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    auto& rDoc = GetDoc();
+    const SwRedlineTable& rRedTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
     if ((nIndex < 0) || (rRedTable.size() <= o3tl::make_unsigned(nIndex)))
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[nIndex], *GetDoc() );
+    uno::Reference<beans::XPropertySet> xRet = SwXRedlines::GetObject(*rRedTable[nIndex], rDoc);
     return uno::Any(xRet);
 }
 
 uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw uno::RuntimeException();
-    return uno::Reference< container::XEnumeration >(new SwXRedlineEnumeration(*GetDoc()));
+    return uno::Reference< container::XEnumeration >(new SwXRedlineEnumeration(GetDoc()));
 }
 
 uno::Type SwXRedlines::getElementType(  )
@@ -84,9 +79,7 @@ uno::Type SwXRedlines::getElementType(  )
 sal_Bool SwXRedlines::hasElements(  )
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw uno::RuntimeException();
-    const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& rRedTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     return !rRedTable.empty();
 }
 

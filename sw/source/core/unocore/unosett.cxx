@@ -1049,6 +1049,8 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     m_pPropertySet(GetNumberingRulesSet()),
     m_bOwnNumRuleCreated(false)
 {
+    if (!m_pDocShell->GetDoc())
+        throw uno::RuntimeException("Unitialized shell passed to SwXNumberingRules constructor");
     m_pImpl->StartListening(GetPageDescNotifier(m_pDocShell->GetDoc()));
 }
 
