@@ -212,7 +212,7 @@ void LangSelectionStatusbarController::LangMenu(
 
     if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
     {
-        if (bWriter)
+        if (bWriter || bCalc)
             aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
         else
             aBuff.append( ".uno:LanguageStatus?Language:string=Default_" );

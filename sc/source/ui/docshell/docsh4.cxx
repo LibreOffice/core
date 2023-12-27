@@ -1290,7 +1290,35 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     aLangText = aLangText.replaceAt( nPos, aParagraphLangPrefix.getLength(), u"" );
                 }
 
-                if (bSelection || bParagraph)
+                if (bSelection)
+                {
+                    ScTabViewShell* pViewShell = GetBestViewShell();
+                    const LanguageType nLangType = SvtLanguageTable::GetLanguageType(aLangText);
+                    const SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType);
+
+                    if (pViewShell)
+                    {
+                        const ScPatternAttr* pSelAttrs = pViewShell->GetSelectionPattern();
+                        if (pSelAttrs)
+                        {
+                            const SfxItemSet& rOldSet = pSelAttrs->GetItemSet();
+                            auto pNewSet = std::make_shared<SfxItemSet>(rOldSet);
+
+                            if (nScriptType == SvtScriptType::LATIN)
+                                pNewSet->Put(SvxLanguageItem(nLangType,
+                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_LANGUAGE)));
+                            if (nScriptType == SvtScriptType::COMPLEX)
+                                pNewSet->Put(SvxLanguageItem(nLangType,
+                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE)));
+                            if (nScriptType == SvtScriptType::ASIAN)
+                                pNewSet->Put(SvxLanguageItem(nLangType,
+                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE)));
+
+                            pViewShell->ApplyAttributes(*pNewSet, rOldSet);
+                        }
+                    }
+                }
+                else if (bParagraph)
                 {
                     ScViewData* pViewData = GetViewData();
                     if (!pViewData)
