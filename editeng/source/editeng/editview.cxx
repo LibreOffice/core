@@ -1087,10 +1087,11 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
         {
             OUString aAlternate( pAlt[nW] );
-            xPopupMenu->append(OUString::number(MN_ALTSTART + nW), aAlternate);
-            xAutoMenu->append(OUString::number(MN_AUTOSTART + nW), aAlternate);
+            OUString sId(OUString::number(MN_ALTSTART + nW));
+            xPopupMenu->insert(nW, sId, aAlternate, nullptr, nullptr, nullptr, TRISTATE_INDET);
+            xAutoMenu->append(sId, aAlternate);
         }
-        xPopupMenu->append_separator("separator2");
+        xPopupMenu->insert_separator(nWords, "separator2");
     }
     else
     {
