@@ -517,9 +517,9 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
     Width( Width() - nBlankSize );
     rInf.X( rInf.X() - nBlankSize );
     SetLen( GetLen() - nHoleLen );
-    SwLinePortion *pHole = new SwHolePortion( *this );
-    static_cast<SwHolePortion *>( pHole )->SetBlankWidth( nBlankSize );
-    static_cast<SwHolePortion *>( pHole )->SetLen( nHoleLen );
+    SwHolePortion* pHole = new SwHolePortion(*this);
+    pHole->SetBlankWidth(nBlankSize);
+    pHole->SetLen(nHoleLen);
     Insert( pHole );
 
 }
