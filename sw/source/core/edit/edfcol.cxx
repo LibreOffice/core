@@ -981,7 +981,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     {
         const OUString aValue = svx::classification::getProperty(xPropertyContainer, aCreator.makeCategoryNameKey());
         if (!aValue.isEmpty())
-            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+            aResult.emplace_back(svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank);
 
         return aResult;
     }
@@ -1008,7 +1008,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
 
         OUString sWeight = (aAny.get<float>() >= awt::FontWeight::BOLD) ? OUString("BOLD") : OUString("NORMAL");
 
-        aResult.push_back({ svx::ClassificationType::PARAGRAPH, sWeight, sBlank, sBlank });
+        aResult.emplace_back(svx::ClassificationType::PARAGRAPH, sWeight, sBlank, sBlank);
 
         // Process portions
         while (xTextPortions->hasMoreElements())
@@ -1032,33 +1032,33 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
             {
                 const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
+                    aResult.emplace_back(svx::ClassificationType::TEXT, aValue, sBlank, sBlank);
             }
             else if (aCreator.isCategoryNameKey(aName))
             {
                 const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+                    aResult.emplace_back(svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank);
                 bFoundClassificationCategory = true;
             }
             else if (aCreator.isCategoryIdentifierKey(aName))
             {
                 const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::CATEGORY, sBlank, sBlank, aValue });
+                    aResult.emplace_back(svx::ClassificationType::CATEGORY, sBlank, sBlank, aValue);
                 bFoundClassificationCategory = true;
             }
             else if (aCreator.isMarkingKey(aName))
             {
                 const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
+                    aResult.emplace_back(svx::ClassificationType::MARKING, aValue, sBlank, sBlank);
             }
             else if (aCreator.isIntellectualPropertyPartKey(aName))
             {
                 const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank });
+                    aResult.emplace_back(svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank);
             }
         }
     }
@@ -1067,7 +1067,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     {
         const OUString aValue = svx::classification::getProperty(xPropertyContainer, aCreator.makeCategoryNameKey());
         if (!aValue.isEmpty())
-            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+            aResult.emplace_back(svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank);
     }
 
     return aResult;
@@ -1323,23 +1323,23 @@ static std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification
         static constexpr OUString sBlank(u""_ustr);
         if (aKeyCreator.isMarkingTextKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
+            aResult.emplace_back(svx::ClassificationType::TEXT, aValue, sBlank, sBlank);
         }
         else if (aKeyCreator.isCategoryNameKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+            aResult.emplace_back(svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank);
         }
         else if (aKeyCreator.isCategoryIdentifierKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::CATEGORY, sBlank, sBlank, aValue });
+            aResult.emplace_back(svx::ClassificationType::CATEGORY, sBlank, sBlank, aValue);
         }
         else if (aKeyCreator.isMarkingKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
+            aResult.emplace_back(svx::ClassificationType::MARKING, aValue, sBlank, sBlank);
         }
         else if (aKeyCreator.isIntellectualPropertyPartKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank, sBlank });
+            aResult.emplace_back(svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank, sBlank);
         }
     }
 
@@ -1972,27 +1972,27 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 
                     if (aKeyCreator.isMarkingTextKey(sName))
                     {
-                        aResults.push_back({ svx::ClassificationType::TEXT, sValue, sValue, sBlank });
+                        aResults.emplace_back(svx::ClassificationType::TEXT, sValue, sValue, sBlank);
                     }
                     else if (aKeyCreator.isCategoryNameKey(sName))
                     {
                         const auto it3 = aStatements.find(ParagraphClassificationAbbrRDFName);
                         const OUString sAbbreviatedName = (it3 != aStatements.end() && !it3->second.isEmpty() ? it3->second : sValue);
-                        aResults.push_back({ svx::ClassificationType::CATEGORY, sValue, sAbbreviatedName, sBlank });
+                        aResults.emplace_back(svx::ClassificationType::CATEGORY, sValue, sAbbreviatedName, sBlank);
                     }
                     else if (aKeyCreator.isCategoryIdentifierKey(sName))
                     {
                         const auto it3 = aStatements.find(ParagraphClassificationAbbrRDFName);
                         const OUString sAbbreviatedName = (it3 != aStatements.end() && !it3->second.isEmpty() ? it3->second : sValue);
-                        aResults.push_back({ svx::ClassificationType::CATEGORY, sBlank, sAbbreviatedName, sValue });
+                        aResults.emplace_back(svx::ClassificationType::CATEGORY, sBlank, sAbbreviatedName, sValue);
                     }
                     else if (aKeyCreator.isMarkingKey(sName))
                     {
-                        aResults.push_back({ svx::ClassificationType::MARKING, sValue, sValue, sBlank });
+                        aResults.emplace_back(svx::ClassificationType::MARKING, sValue, sValue, sBlank);
                     }
                     else if (aKeyCreator.isIntellectualPropertyPartKey(sName))
                     {
-                        aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, sValue, sValue, sBlank });
+                        aResults.emplace_back(svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, sValue, sValue, sBlank);
                     }
                 }
                 while (nIndex >= 0);

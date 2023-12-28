@@ -473,7 +473,7 @@ void SwXMLCellStyleContext::AddDataFormat()
     if (aIter != GetProperties().end())
         aIter->maValue <<= nNumberFormat;
     else
-        GetProperties().push_back(XMLPropertyState(nIndex, Any(nNumberFormat)));
+        GetProperties().emplace_back(nIndex, Any(nNumberFormat));
 }
 
 void SwXMLCellStyleContext::FillPropertySet(const css::uno::Reference<css::beans::XPropertySet>& rPropSet)

@@ -4654,7 +4654,7 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
 
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
-    m_aTableStyleConfs.push_back({});
+    m_aTableStyleConfs.emplace_back();
 
     // In case any paragraph SDT's are open, close them here.
     EndParaSdtBlock();

@@ -270,7 +270,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                             "Wrong format of header");
                     if(sHeader.size() > 2)
                     {
-                        m_pCSVData->aDBColumnHeaders.push_back( OUString(sHeader.substr(1, sHeader.size() -2)));
+                        m_pCSVData->aDBColumnHeaders.emplace_back(sHeader.substr(1, sHeader.size() -2));
                     }
                 }
                 while (nIndex > 0);

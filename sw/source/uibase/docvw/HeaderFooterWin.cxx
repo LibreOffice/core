@@ -142,8 +142,7 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
         aFillColor = rSettings.GetDialogColor().getBColor();
         aLineColor = rSettings.GetDialogTextColor().getBColor();
 
-        rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
-                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aFillColor)));
+        rSeq.emplace_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aFillColor));
     }
     else
     {
@@ -154,13 +153,11 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
 
         FillGradientAttribute aFillAttrs(css::awt::GradientStyle_LINEAR, 0.0, 0.0, 0.0, nAngle,
             basegfx::BColorStops(aLighterColor, aFillColor));
-        rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
-                            new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, std::move(aFillAttrs))));
+        rSeq.emplace_back(new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, std::move(aFillAttrs)));
     }
 
     // Create the border lines primitive
-    rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
-                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPolygon), aLineColor)));
+    rSeq.emplace_back(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPolygon), aLineColor));
 }
 
 SwHeaderFooterDashedLine::SwHeaderFooterDashedLine(SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader)
@@ -372,10 +369,9 @@ void SwHeaderFooterWin::PaintButton()
                                             aFontSize.getX(), aFontSize.getY(),
                                             double(aTextPos.X()), double(aTextPos.Y())));
 
-    aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
-                    new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+    aSeq.emplace_back(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_sLabel, 0, m_sLabel.getLength(),
-                        std::vector<double>(), {}, std::move(aFontAttr), css::lang::Locale(), aLineColor)));
+                        std::vector<double>(), {}, std::move(aFontAttr), css::lang::Locale(), aLineColor));
 
     // Create the 'plus' or 'arrow' primitive
     B2DRectangle aSignArea(B2DPoint(aRect.Right() - BUTTON_WIDTH, 0.0),
@@ -423,9 +419,8 @@ void SwHeaderFooterWin::PaintButton()
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         aSignColor = COL_WHITE.getBColor();
 
-    aSeq.push_back( drawinglayer::primitive2d::Primitive2DReference(
-                                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                        B2DPolyPolygon(aSign), aSignColor)) );
+    aSeq.emplace_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                        B2DPolyPolygon(aSign), aSignColor) );
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;

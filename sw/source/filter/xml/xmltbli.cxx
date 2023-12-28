@@ -1357,7 +1357,7 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
         m_xColumnDefaultCellStyleNames.emplace();
         sal_uLong nCount = m_aColumnWidths.size() - 1;
         while( nCount-- )
-            m_xColumnDefaultCellStyleNames->push_back(OUString());
+            m_xColumnDefaultCellStyleNames->emplace_back();
     }
 
     if(pDfltCellStyleName)

@@ -205,7 +205,7 @@ void SwHTMLParser::FinishFootEndNote()
             m_pPam->GetPoint()->GetContentIndex() - 1, RES_TXTATR_FTN ) );
     // In header and footer no footnotes can be inserted.
     if (pTextFootnote)
-        m_pFootEndNoteImpl->aTextFootnotes.push_back(SwHTMLTextFootnote(m_pFootEndNoteImpl->sName,pTextFootnote));
+        m_pFootEndNoteImpl->aTextFootnotes.emplace_back(m_pFootEndNoteImpl->sName,pTextFootnote);
     m_pFootEndNoteImpl->sName.clear();
     m_pFootEndNoteImpl->sContent.clear();
     m_pFootEndNoteImpl->bFixed = false;
