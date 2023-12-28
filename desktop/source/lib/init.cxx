@@ -220,7 +220,6 @@
 #include <svl/ctloptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/slidesorterbaropt.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -7522,7 +7521,6 @@ static void preloadData()
     static SvtCTLOptions aSvtCTLOptions;
     static svtools::ColorConfig aColorConfig;
     static SvtMiscOptions aSvtMiscOptions;
-    static SvtSlideSorterBarOptions aSvtSlideSorterBarOptions;
     static SvtCommandOptions aSvtCommandOptions;
     static SvtCompatibilityOptions aSvtCompatibilityOptions;
     static SvtFilterOptions aSvtFilterOptions;

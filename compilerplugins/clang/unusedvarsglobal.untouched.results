@@ -26,8 +26,6 @@ desktop/source/lib/init.cxx:7379
     svtools::ColorConfig aColorConfig
 desktop/source/lib/init.cxx:7380
     SvtMiscOptions aSvtMiscOptions
-desktop/source/lib/init.cxx:7381
-    SvtSlideSorterBarOptions aSvtSlideSorterBarOptions
 desktop/source/lib/init.cxx:7382
     SvtCommandOptions aSvtCommandOptions
 desktop/source/lib/init.cxx:7383

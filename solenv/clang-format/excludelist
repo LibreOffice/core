@@ -5719,7 +5719,6 @@ include/svtools/rtftoken.h
 include/svtools/ruler.hxx
 include/svtools/scriptedtext.hxx
 include/svtools/sfxecode.hxx
-include/svtools/slidesorterbaropt.hxx
 include/svtools/soerr.hxx
 include/svtools/statusbarcontroller.hxx
 include/svtools/stringtransfer.hxx
@@ -11082,7 +11081,6 @@ svtools/source/config/itemholder2.hxx
 svtools/source/config/miscopt.cxx
 svtools/source/config/optionsdrawinglayer.cxx
 svtools/source/config/printoptions.cxx
-svtools/source/config/slidesorterbaropt.cxx
 svtools/source/config/test/test.cxx
 svtools/source/control/accessibleruler.cxx
 svtools/source/control/accessibleruler.hxx
