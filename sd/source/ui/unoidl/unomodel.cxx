@@ -33,6 +33,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Impress.hxx>
 #include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -71,7 +72,6 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdpagv.hxx>
 #include <svtools/unoimap.hxx>
-#include <svtools/slidesorterbaropt.hxx>
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/eeitem.hxx>
@@ -2631,10 +2631,10 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     // format
     auto xChanges = comphelper::ConfigurationChanges::create();
     officecfg::Office::Common::Save::Document::WarnAlienFormat::set(false, xChanges);
-    xChanges->commit();
 
-    if (!getenv("LO_TESTNAME"))
-        SvtSlideSorterBarOptions().SetVisibleImpressView(true);
+    if (!getenv("LO_TESTNAME") || !comphelper::LibreOfficeKit::isActive())
+        officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::set(true,xChanges);
+    xChanges->commit();
 }
 
 void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)

@@ -19,8 +19,10 @@
 
 #include "SlideSorterModule.hxx"
 
+#include <comphelper/lok.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <officecfg/Office/Impress.hxx>
 #include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
@@ -29,7 +31,6 @@
 
 #include <strings.hrc>
 #include <sdresid.hxx>
-#include <svtools/slidesorterbaropt.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -80,17 +81,17 @@ SlideSorterModule::SlideSorterModule (
 
     UpdateViewTabBar(nullptr);
 
-    if (SvtSlideSorterBarOptions().GetVisibleImpressView())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::get().has_value() && (!getenv("LO_TESTNAME") || !comphelper::LibreOfficeKit::isActive()))
         AddActiveMainView(FrameworkHelper::msImpressViewURL);
-    if (SvtSlideSorterBarOptions().GetVisibleOutlineView())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::OutlineView::get())
         AddActiveMainView(FrameworkHelper::msOutlineViewURL);
-    if (SvtSlideSorterBarOptions().GetVisibleNotesView())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::NotesView::get())
         AddActiveMainView(FrameworkHelper::msNotesViewURL);
-    if (SvtSlideSorterBarOptions().GetVisibleHandoutView())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::HandoutView::get())
         AddActiveMainView(FrameworkHelper::msHandoutViewURL);
-    if (SvtSlideSorterBarOptions().GetVisibleSlideSorterView())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::SlideSorterView::get().has_value() && !comphelper::LibreOfficeKit::isActive())
         AddActiveMainView(FrameworkHelper::msSlideSorterURL);
-    if (SvtSlideSorterBarOptions().GetVisibleDrawView())
+    if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::DrawView::get())
         AddActiveMainView(FrameworkHelper::msDrawViewURL);
 
     mxConfigurationController->addConfigurationChangeListener(
@@ -105,12 +106,14 @@ SlideSorterModule::~SlideSorterModule()
 
 void SlideSorterModule::SaveResourceState()
 {
-    SvtSlideSorterBarOptions().SetVisibleImpressView(IsResourceActive(FrameworkHelper::msImpressViewURL));
-    SvtSlideSorterBarOptions().SetVisibleOutlineView(IsResourceActive(FrameworkHelper::msOutlineViewURL));
-    SvtSlideSorterBarOptions().SetVisibleNotesView(IsResourceActive(FrameworkHelper::msNotesViewURL));
-    SvtSlideSorterBarOptions().SetVisibleHandoutView(IsResourceActive(FrameworkHelper::msHandoutViewURL));
-    SvtSlideSorterBarOptions().SetVisibleSlideSorterView(IsResourceActive(FrameworkHelper::msSlideSorterURL));
-    SvtSlideSorterBarOptions().SetVisibleDrawView(IsResourceActive(FrameworkHelper::msDrawViewURL));
+    auto xChanges = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::set(IsResourceActive(FrameworkHelper::msImpressViewURL),xChanges);
+    officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::OutlineView::set(IsResourceActive(FrameworkHelper::msOutlineViewURL),xChanges);
+    officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::NotesView::set(IsResourceActive(FrameworkHelper::msNotesViewURL),xChanges);
+    officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::HandoutView::set(IsResourceActive(FrameworkHelper::msHandoutViewURL),xChanges);
+    officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::SlideSorterView::set(IsResourceActive(FrameworkHelper::msSlideSorterURL),xChanges);
+    officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::DrawView::set(IsResourceActive(FrameworkHelper::msDrawViewURL),xChanges);
+    xChanges->commit();
 }
 
 void SAL_CALL SlideSorterModule::notifyConfigurationChange (
