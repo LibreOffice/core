@@ -1032,35 +1032,33 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
                 }
             }
         }
-        else if (pNode) // !pAttr && pNode means the node changed
+        // !pAttr && pNode means the node changed
+        if (startPos.first->GetIndex() < pNode->GetIndex())
         {
-            if (startPos.first->GetIndex() < pNode->GetIndex())
+            break; // only one node initially
+        }
+        if (startPos.first->GetIndex() == pNode->GetIndex())
+        {
+            iterAtStartOfNode.Assign(iter);
+            if (SfxItemState::SET == pNode->GetSwAttrSet().GetItemState(
+                        RES_CHRATR_ROTATE, true, &pNodeRotateItem) &&
+                pNodeRotateItem->GetValue())
             {
-                break; // only one node initially
+                pActiveRotateItem = pNodeRotateItem;
             }
-            if (startPos.first->GetIndex() == pNode->GetIndex())
+            else
             {
-                iterAtStartOfNode.Assign(iter);
-                if (SfxItemState::SET == pNode->GetSwAttrSet().GetItemState(
-                            RES_CHRATR_ROTATE, true, &pNodeRotateItem) &&
-                    pNodeRotateItem->GetValue())
-                {
-                    pActiveRotateItem = pNodeRotateItem;
-                }
-                else
-                {
-                    pNodeRotateItem = nullptr;
-                }
-                if (SfxItemState::SET == startPos.first->GetSwAttrSet().GetItemState(
-                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem) &&
-                    pNodeTwoLinesItem->GetValue())
-                {
-                    pActiveTwoLinesItem = pNodeTwoLinesItem;
-                }
-                else
-                {
-                    pNodeTwoLinesItem = nullptr;
-                }
+                pNodeRotateItem = nullptr;
+            }
+            if (SfxItemState::SET == startPos.first->GetSwAttrSet().GetItemState(
+                        RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem) &&
+                pNodeTwoLinesItem->GetValue())
+            {
+                pActiveTwoLinesItem = pNodeTwoLinesItem;
+            }
+            else
+            {
+                pNodeTwoLinesItem = nullptr;
             }
         }
     }
