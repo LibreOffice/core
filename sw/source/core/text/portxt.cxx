@@ -360,7 +360,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             new SwKernPortion( *this, nKern );
     }
     // special case: hanging portion
-    else if( bFull && aGuess.GetHangingPortion() )
+    else if( aGuess.GetHangingPortion() )
     {
         Width( aGuess.BreakWidth() );
         SetLen( aGuess.BreakPos() - rInf.GetIdx() );
@@ -431,6 +431,11 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 pNew->Width(0);
                 pNew->ExtraBlankWidth( aGuess.ExtraBlankWidth() );
                 Insert( pNew );
+
+                // UAX #14 Unicode Line Breaking Algorithm Non-tailorable Line breaking rule LB6:
+                // https://www.unicode.org/reports/tr14/#LB6 Do not break before hard line breaks
+                if (rInf.GetChar(aGuess.BreakStart()) == CH_BREAK)
+                    bFull = false; // Keep following SwBreakPortion in the same line
             }
         }
         else    // case C2, last exit

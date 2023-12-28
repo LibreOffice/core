@@ -2125,6 +2125,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf152307)
     CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), nTabBottom < nFooterTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158900)
+{
+    // Given a document with a single paragraph, having some long space runs and line breaks
+    createSwDoc("space+break.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Make sure there is only one page, one paragraph, and four lines
+    assertXPath(pXmlDoc, "/root/page"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion"_ostr, 1);
+    // Without the fix in place, this would fail: there used to be 5 lines
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout"_ostr, 4);
+    // Check that the second line has correct portions
+    // Without the fix in place, this would fail: the line had only 2 portions (text + hole),
+    // and the break was on a separate third line
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*"_ostr, 3);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[1]"_ostr, "type"_ostr,
+                u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[2]"_ostr, "type"_ostr,
+                u"PortionType::Hole"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[3]"_ostr, "type"_ostr,
+                u"PortionType::Break"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
