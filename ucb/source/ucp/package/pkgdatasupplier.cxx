@@ -208,7 +208,7 @@ bool DataSupplier::getResultImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt
             // Assemble URL for child.
             OUString aURL = assembleChildURL( aName );
 
-            m_aResults.push_back( ResultListEntry( aURL ) );
+            m_aResults.emplace_back(aURL);
 
             if ( nPos == nIndex )
             {
@@ -288,7 +288,7 @@ sal_uInt32 DataSupplier::totalCount()
             // Assemble URL for child.
             OUString aURL = assembleChildURL( aName );
 
-            m_aResults.push_back( ResultListEntry( aURL ) );
+            m_aResults.emplace_back(aURL);
         }
         catch ( container::NoSuchElementException const & )
         {
