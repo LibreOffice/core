@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(ESelectionTest, testLess)
     // Obviously not less
     CPPUNIT_ASSERT_EQUAL(false, ESelection(0, 2, 0, 2) < ESelection(0, 1, 0, 1));
 
-    // Equal at a point therfore not strictly "<"
+    // Equal at a point therefore not strictly "<"
     CPPUNIT_ASSERT_EQUAL(false, ESelection(0, 0, 0, 0) < ESelection(0, 0, 0, 1));
 
     // Strictly "<"
@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(ESelectionTest, testGreater)
     // Obviously not greater
     CPPUNIT_ASSERT_EQUAL(false, ESelection(0, 1, 0, 1) > ESelection(0, 2, 0, 2));
 
-    // Equal at a point therfore not strictly ">"
+    // Equal at a point therefore not strictly ">"
     CPPUNIT_ASSERT_EQUAL(false, ESelection(0, 0, 0, 1) > ESelection(0, 0, 0, 0));
 
     // Strictly ">"
