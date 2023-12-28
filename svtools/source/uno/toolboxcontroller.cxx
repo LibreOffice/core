@@ -541,7 +541,7 @@ void ToolboxController::bindListener()
 
                 listener.second = xDispatch;
 
-                aDispatchVector.push_back( Listener( aTargetURL, xDispatch ) );
+                aDispatchVector.emplace_back(aTargetURL, xDispatch);
             }
         }
     }

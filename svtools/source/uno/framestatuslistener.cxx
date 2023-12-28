@@ -241,7 +241,7 @@ void FrameStatusListener::bindListener()
                 }
                 listener.second = xDispatch;
 
-                aDispatchVector.push_back( Listener( std::move(aTargetURL), xDispatch ) );
+                aDispatchVector.emplace_back(std::move(aTargetURL), xDispatch);
             }
         }
     }
