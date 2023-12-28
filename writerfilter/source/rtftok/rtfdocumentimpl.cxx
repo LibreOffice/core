@@ -589,8 +589,9 @@ void RTFDocumentImpl::checkNeedPap()
             NS_ooxml::LN_Value_ST_StyleType_paragraph));
 
         // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
+        const bool bIsInFrame = m_aStates.top().getFrame().hasProperties();
         bool hasBreakBeforeFrame
-            = m_aStates.top().getFrame().hasProperties()
+            = bIsInFrame
               && m_aStates.top().getParagraphSprms().find(NS_ooxml::LN_CT_PPrBase_pageBreakBefore);
         if (hasBreakBeforeFrame)
         {
@@ -601,7 +602,7 @@ void RTFDocumentImpl::checkNeedPap()
         if (hasBreakBeforeFrame)
             dispatchSymbol(RTFKeyword::PAR);
 
-        if (m_aStates.top().getFrame().hasProperties())
+        if (bIsInFrame)
         {
             writerfilter::Reference<Properties>::Pointer_t const pFrameProperties(
                 new RTFReferenceProperties(RTFSprms(), m_aStates.top().getFrame().getSprms()));
