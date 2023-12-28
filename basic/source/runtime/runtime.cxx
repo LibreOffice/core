@@ -81,6 +81,8 @@ using namespace com::sun::star::script;
 
 using namespace ::com::sun::star;
 
+#if HAVE_FEATURE_SCRIPTING
+
 static void lcl_clearImpl( SbxVariableRef const & refVar, SbxDataType const & eType );
 static void lcl_eraseImpl( SbxVariableRef const & refVar, bool bVBAEnabled );
 
@@ -376,6 +378,8 @@ SbiDllMgr* SbiInstance::GetDllMgr()
     return pDllMgr.get();
 }
 
+#endif
+
 // #39629 create NumberFormatter with the help of a static method now
 std::shared_ptr<SvNumberFormatter> const & SbiInstance::GetNumberFormatter()
 {
@@ -468,6 +472,7 @@ std::shared_ptr<SvNumberFormatter> SbiInstance::PrepareNumberFormatter( sal_uInt
     return pNumberFormatter;
 }
 
+#if HAVE_FEATURE_SCRIPTING
 
 // Let engine run. If Flags == BasicDebugFlags::Continue, take Flags over
 
@@ -4761,5 +4766,7 @@ void SbiRuntime::StepSTATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxDataType t = static_cast<SbxDataType>(nOp2 & 0xffff);
     StepSTATIC_Impl( aName, t, nOp2 );
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
