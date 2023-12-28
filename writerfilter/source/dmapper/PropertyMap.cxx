@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <string_view>
-#include <unordered_set>
 
 #include "PropertyMap.hxx"
 #include "TagLogger.hxx"
@@ -66,6 +65,10 @@
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <utility>
+
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_set.h>
 
 using namespace com::sun::star;
 
@@ -1399,12 +1402,12 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
     const uno::Sequence<beans::Property> propertyList(pagePropertiesInfo->getProperties());
 
     // Ignore write-only properties.
-    static const std::unordered_set<OUString> staticDenylist = {
-        "FooterBackGraphicURL", "BackGraphicURL", "HeaderBackGraphicURL",
-        "HeaderIsOn", "FooterIsOn",
-        "HeaderIsShared", "FooterIsShared", "FirstIsShared",
-        "HeaderText", "HeaderTextLeft", "HeaderTextFirst",
-        "FooterText", "FooterTextLeft", "FooterTextFirst" };
+    static constexpr frozen::unordered_set<std::u16string_view, 14> staticDenylist = {
+        u"FooterBackGraphicURL", u"BackGraphicURL", u"HeaderBackGraphicURL",
+        u"HeaderIsOn", u"FooterIsOn",
+        u"HeaderIsShared", u"FooterIsShared", u"FirstIsShared",
+        u"HeaderText", u"HeaderTextLeft", u"HeaderTextFirst",
+        u"FooterText", u"FooterTextLeft", u"FooterTextFirst" };
 
     for (const auto& rProperty : propertyList)
     {
