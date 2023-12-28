@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libvisio))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libvisio, \
     external/libvisio/ubsan.patch \
+    external/libvisio/tdf-77915-fix-import-of-default-shape-fill-color.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
