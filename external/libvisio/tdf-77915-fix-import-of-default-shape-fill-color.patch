@@ -1,0 +1,13 @@
+--- src/lib/VSDStyles.h
++++ src/lib/VSDStyles.h
+@@ -129,7 +129,9 @@ struct VSDOptionalFillStyle
+     ASSIGN_OPTIONAL(style.qsFillColour, qsFillColour);
+     ASSIGN_OPTIONAL(style.qsShadowColour, qsShadowColour);
+     ASSIGN_OPTIONAL(style.qsFillMatrix, qsFillMatrix);
+-    ASSIGN_OPTIONAL(style.fgColour, fgColour);
++    // Colour 'Blue, Variant 1' is special. It is the default,
++    // and it is not saved explicitely in the VSDX file.
++    ASSIGN_OPTIONAL(style.fgColour, fgColour);else fgColour = Colour(0x5b, 0x9b, 0xd5, 0);
+     ASSIGN_OPTIONAL(style.bgColour, bgColour);
+     ASSIGN_OPTIONAL(style.shadowFgColour, shadowFgColour);
+   }
