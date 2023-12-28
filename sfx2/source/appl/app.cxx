@@ -510,6 +510,7 @@ void SfxApplication::MacroOrganizer(weld::Window* pParent, const uno::Reference<
 #if !HAVE_FEATURE_SCRIPTING
     (void) pParent;
     (void) nTabId;
+    (void) xDocFrame;
 #else
 
 #ifndef DISABLE_DYNLOADING
