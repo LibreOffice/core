@@ -36,7 +36,7 @@ public:
     void registerTimer(salhelper::Timer* pTimer);
 
     /// unregister timer
-    void unregisterTimer(salhelper::Timer const * pTimer);
+    void unregisterTimer(salhelper::Timer * pTimer);
 
     /// lookup timer
     bool lookupTimer(const salhelper::Timer* pTimer);
@@ -226,6 +226,8 @@ void TimerManager::registerTimer(Timer* pTimer)
     if (!pTimer)
         return;
 
+    pTimer->acquire();
+
     bool notify = false;
     {
         std::lock_guard Guard(m_Lock);
@@ -263,25 +265,33 @@ void TimerManager::registerTimer(Timer* pTimer)
     }
 }
 
-void TimerManager::unregisterTimer(Timer const * pTimer)
+void TimerManager::unregisterTimer(Timer * pTimer)
 {
     if (!pTimer)
         return;
 
-    // lock access
-    std::lock_guard Guard(m_Lock);
-
-    Timer** ppIter = &m_pHead;
-
-    while (*ppIter)
+    auto found = false;
     {
-        if (pTimer == (*ppIter))
+        // lock access
+        std::lock_guard Guard(m_Lock);
+
+        Timer** ppIter = &m_pHead;
+
+        while (*ppIter)
         {
-            // remove timer from list
-            *ppIter = (*ppIter)->m_pNext;
-            return;
+            if (pTimer == (*ppIter))
+            {
+                // remove timer from list
+                *ppIter = (*ppIter)->m_pNext;
+                found = true;
+                break;
+            }
+            ppIter= &((*ppIter)->m_pNext);
         }
-        ppIter= &((*ppIter)->m_pNext);
+    }
+
+    if (found) {
+        pTimer->release();
     }
 }
 
@@ -319,8 +329,6 @@ void TimerManager::checkForTimeout()
 
     // remove expired timer
     m_pHead = pTimer->m_pNext;
-
-    pTimer->acquire();
 
     aLock.unlock();
 
