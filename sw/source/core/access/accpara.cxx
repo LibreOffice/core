@@ -500,7 +500,7 @@ rtl::Reference<SwXTextPortion> SwAccessibleParagraph::CreateUnoPortion(
     *pUnoCursor->GetMark() = pFrame->MapViewToModelPos(nEnd);
 
     // create a (dummy) text portion to be returned
-    uno::Reference<text::XText> aEmpty;
+    uno::Reference<SwXText> aEmpty;
     return new SwXTextPortion ( pUnoCursor.get(), aEmpty, PORTION_TEXT);
 }
 

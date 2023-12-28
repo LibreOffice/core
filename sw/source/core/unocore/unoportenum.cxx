@@ -89,11 +89,11 @@ namespace
 
     struct SwXBookmarkPortion_Impl
     {
-        Reference<XTextContent>     xBookmark;
+        rtl::Reference<SwXBookmark> xBookmark;
         BkmType                     nBkmType;
         const SwPosition            aPosition;
 
-        SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent> xMark,
+        SwXBookmarkPortion_Impl(rtl::Reference<SwXBookmark> xMark,
                 const BkmType nType, SwPosition _aPosition)
         : xBookmark (std::move( xMark ))
         , nBkmType  ( nType )
@@ -373,7 +373,7 @@ lcl_FillFieldMarkArray(std::deque<sal_Int32> & rFieldMarks, SwUnoCursor const & 
 
 static rtl::Reference<SwXTextPortion>
 lcl_ExportFieldMark(
-        uno::Reference< text::XText > const & i_xParentText,
+        uno::Reference< SwXText > const & i_xParentText,
         SwUnoCursor * const pUnoCursor,
         const SwTextNode * const pTextNode )
 {
@@ -445,18 +445,14 @@ lcl_ExportFieldMark(
 
 static rtl::Reference<SwXTextPortion>
 lcl_CreateRefMarkPortion(
-    Reference<XText> const& xParent,
+    uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     const SwTextAttr & rAttr, const bool bEnd)
 {
     SwDoc& rDoc = pUnoCursor->GetDoc();
     SwFormatRefMark& rRefMark = const_cast<SwFormatRefMark&>(
             static_cast<const SwFormatRefMark&>(rAttr.GetAttr()));
-    Reference<XTextContent> xContent;
-    if (!xContent.is())
-    {
-        xContent = SwXReferenceMark::CreateXReferenceMark(rDoc, &rRefMark);
-    }
+    rtl::Reference<SwXReferenceMark> xContent = SwXReferenceMark::CreateXReferenceMark(rDoc, &rRefMark);
 
     rtl::Reference<SwXTextPortion> pPortion;
     if (!bEnd)
@@ -476,7 +472,7 @@ lcl_CreateRefMarkPortion(
 static void
 lcl_InsertRubyPortion(
     TextRangeList_t & rPortions,
-    Reference<XText> const& xParent,
+    uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     const SwTextAttr & rAttr, const bool bEnd)
 {
@@ -488,14 +484,14 @@ lcl_InsertRubyPortion(
 
 static rtl::Reference<SwXTextPortion>
 lcl_CreateTOXMarkPortion(
-    Reference<XText> const& xParent,
+    uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     SwTextAttr & rAttr, const bool bEnd)
 {
     SwDoc& rDoc = pUnoCursor->GetDoc();
     SwTOXMark & rTOXMark = static_cast<SwTOXMark&>(rAttr.GetAttr());
 
-    const Reference<XTextContent> xContent =
+    const rtl::Reference<SwXDocumentIndexMark> xContent =
         SwXDocumentIndexMark::CreateXDocumentIndexMark(rDoc, & rTOXMark);
 
     rtl::Reference<SwXTextPortion> pPortion;
@@ -568,7 +564,7 @@ lcl_CreateContentControlPortion(const css::uno::Reference<SwXText>& xParent,
  */
 static void lcl_ExportBookmark(
     TextRangeList_t & rPortions,
-    Reference<XText> const& xParent,
+    uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     SwXBookmarkPortion_ImplList& rBkmArr,
     const sal_Int32 nIndex,
@@ -628,7 +624,7 @@ static void lcl_ExportBookmark(
 
 static void lcl_ExportSoftPageBreak(
     TextRangeList_t & rPortions,
-    Reference<XText> const& xParent,
+    uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     SwSoftPageBreakList& rBreakArr,
     const sal_Int32 nIndex)
@@ -925,7 +921,7 @@ lcl_ExportHints(
                                 break;
                             pPortion = new SwXTextPortion(
                                 pUnoCursor, xParent, PORTION_FOOTNOTE);
-                            Reference<XFootnote> xContent =
+                            rtl::Reference<SwXFootnote> xContent =
                                 SwXFootnotes::GetObject(rDoc, pAttr->GetFootnote());
                             pPortion->SetFootnote(xContent);
                         }
@@ -1126,7 +1122,7 @@ static void lcl_FillSoftPageBreakArray(
 
 static void lcl_ExportRedline(
     TextRangeList_t & rPortions,
-    Reference<XText> const& xParent,
+    uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     SwXRedlinePortion_ImplList& rRedlineArr,
     const sal_Int32 nIndex)
@@ -1157,7 +1153,7 @@ static void lcl_ExportRedline(
 
 static void lcl_ExportBkmAndRedline(
     TextRangeList_t & rPortions,
-    Reference<XText> const & xParent,
+    uno::Reference<SwXText> const & xParent,
     const SwUnoCursor * const pUnoCursor,
     SwXBookmarkPortion_ImplList& rBkmArr,
     SwXRedlinePortion_ImplList& rRedlineArr,
@@ -1195,7 +1191,7 @@ static void lcl_ExportBkmAndRedline(
  */
 static void lcl_ExportAnnotationStarts(
     TextRangeList_t & rPortions,
-    Reference<XText> const & xParent,
+    uno::Reference<SwXText> const & xParent,
     const SwUnoCursor * const pUnoCursor,
     SwAnnotationStartPortion_ImplList& rAnnotationStartArr,
     const sal_Int32 nIndex,
@@ -1264,7 +1260,7 @@ static void lcl_ExtractFramePositions(FrameClientSortList_t& rFrames, sal_Int32 
  */
 static sal_Int32 lcl_ExportFrames(
     TextRangeList_t & rPortions,
-    Reference<XText> const & i_xParent,
+    uno::Reference<SwXText> const & i_xParent,
     SwUnoCursor const * const i_pUnoCursor,
     FrameClientSortList_t & i_rFrames,
     sal_Int32 const i_nCurrentIndex)

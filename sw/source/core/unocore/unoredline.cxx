@@ -157,7 +157,7 @@ sal_Bool SwXRedlineText::hasElements(  )
 
 SwXRedlinePortion::SwXRedlinePortion(SwRangeRedline const& rRedline,
         SwUnoCursor const*const pPortionCursor,
-        uno::Reference< text::XText > const& xParent, bool const bStart)
+        uno::Reference< SwXText > const& xParent, bool const bStart)
     : SwXTextPortion(pPortionCursor, xParent,
             bStart ? PORTION_REDLINE_START : PORTION_REDLINE_END)
     , m_rRedline(rRedline)

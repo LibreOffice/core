@@ -62,7 +62,7 @@ void SwXTextPortion::init(const SwUnoCursor* pPortionCursor)
 
 SwXTextPortion::SwXTextPortion(
     const SwUnoCursor* pPortionCursor,
-        uno::Reference< text::XText > xParent,
+        uno::Reference< SwXText > xParent,
         SwTextPortionType eType)
     : m_pPropSet(aSwMapProvider.GetPropertySet(
         (PORTION_REDLINE_START == eType ||
@@ -84,7 +84,7 @@ SwXTextPortion::SwXTextPortion(
 
 SwXTextPortion::SwXTextPortion(
     const SwUnoCursor* pPortionCursor,
-    uno::Reference< text::XText > xParent,
+    uno::Reference< SwXText > xParent,
     SwFrameFormat& rFormat )
     : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
@@ -101,7 +101,7 @@ SwXTextPortion::SwXTextPortion(
 SwXTextPortion::SwXTextPortion(
     const SwUnoCursor* pPortionCursor,
     SwTextRuby const& rAttr,
-    uno::Reference< text::XText >  xParent,
+    uno::Reference< SwXText >  xParent,
     bool bIsEnd )
     : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
@@ -284,28 +284,28 @@ void SwXTextPortion::GetPropertyValue(
         case FN_UNO_CONTROL_CHARACTER: // obsolete!
         break;
         case FN_UNO_DOCUMENT_INDEX_MARK:
-            rVal <<= m_xTOXMark;
+            rVal <<= uno::Reference<css::text::XTextContent>(m_xTOXMark);
         break;
         case FN_UNO_REFERENCE_MARK:
-            rVal <<= m_xRefMark;
+            rVal <<= uno::Reference<css::text::XTextContent>(m_xRefMark);
         break;
         case FN_UNO_BOOKMARK:
-            rVal <<= m_xBookmark;
+            rVal <<= uno::Reference<css::text::XTextContent>(m_xBookmark);
         break;
         case FN_UNO_FOOTNOTE:
-            rVal <<= m_xFootnote;
+            rVal <<= uno::Reference<css::text::XFootnote>(m_xFootnote);
         break;
         case FN_UNO_TEXT_FIELD:
             rVal <<= m_xTextField;
         break;
         case FN_UNO_META:
-            rVal <<= m_xMeta;
+            rVal <<= uno::Reference<css::text::XTextContent>(m_xMeta);
         break;
         case FN_UNO_LINEBREAK:
-            rVal <<= m_xLineBreak;
+            rVal <<= uno::Reference<css::text::XTextContent>(m_xLineBreak);
             break;
         case FN_UNO_CONTENT_CONTROL:
-            rVal <<= m_xContentControl;
+            rVal <<= uno::Reference<css::text::XTextContent>(m_xContentControl);
             break;
         case FN_UNO_IS_COLLAPSED:
         {
