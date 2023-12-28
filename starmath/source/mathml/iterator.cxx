@@ -16,8 +16,6 @@
 
 namespace mathml
 {
-static inline void deleteElement(SmMlElement* aSmMlElement, void*) { delete aSmMlElement; }
-
 static inline void cloneElement(SmMlElement* aSmMlElement, void* aData)
 {
     // Prepare data
@@ -58,7 +56,7 @@ void SmMlIteratorFree(SmMlElement* pMlElementTree)
     {
         SmMlIteratorFree(pMlElementTree->getSubElement(i));
     }
-    deleteElement(pMlElementTree, nullptr);
+    delete pMlElementTree;
 }
 
 SmMlElement* SmMlIteratorCopy(SmMlElement* pMlElementTree)
