@@ -357,7 +357,7 @@ void ClassificationDialog::readRecentlyUsed()
                         }
                         aWalker.parent();
 
-                        aResults.push_back({ eType, sString, sAbbreviatedString, sIdentifier });
+                        aResults.emplace_back(eType, sString, sAbbreviatedString, sIdentifier);
                     }
                 }
                 aWalker.next();
@@ -541,7 +541,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
                 sWeightProperty = "BOLD";
             // Insert into collection
             OUString sBlank;
-            aClassificationResults.push_back({ ClassificationType::PARAGRAPH, sWeightProperty, sBlank, sBlank });
+            aClassificationResults.emplace_back(ClassificationType::PARAGRAPH, sWeightProperty, sBlank, sBlank);
         }
 
         const SvxFieldItem* pFieldItem = findField(rSection);
@@ -554,12 +554,12 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
             if (pClassificationField)
             {
-                aClassificationResults.push_back({ pClassificationField->meType, pClassificationField->msFullClassName,
-                                                   pClassificationField->msDescription, pClassificationField->msIdentifier });
+                aClassificationResults.emplace_back(pClassificationField->meType, pClassificationField->msFullClassName,
+                                                   pClassificationField->msDescription, pClassificationField->msIdentifier);
             }
             else
             {
-                aClassificationResults.push_back({ ClassificationType::TEXT, sDisplayString, sDisplayString, OUString() });
+                aClassificationResults.emplace_back(ClassificationType::TEXT, sDisplayString, sDisplayString, OUString());
             }
         }
     }

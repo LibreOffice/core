@@ -437,7 +437,7 @@ static void GetTextAreaOutline(
                                     aDXArry[a],
                                     aFont.GetFontHeight()
                                 )));
-                            aCharacterData.vOutlines.push_back(tools::PolyPolygon(tools::Polygon(aPolygon)));
+                            aCharacterData.vOutlines.emplace_back(tools::Polygon(aPolygon));
                         }
                     }
                     else
@@ -450,7 +450,7 @@ static void GetTextAreaOutline(
                                 aDXArry.empty() ? 10 : aDXArry.back(),
                                 aFont.GetFontHeight()
                             )));
-                        aCharacterData.vOutlines.push_back(tools::PolyPolygon(tools::Polygon(aPolygon)));
+                        aCharacterData.vOutlines.emplace_back(tools::Polygon(aPolygon));
                     }
 
 

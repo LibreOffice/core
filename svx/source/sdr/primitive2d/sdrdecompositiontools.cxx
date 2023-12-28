@@ -849,9 +849,9 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
             Primitive2DContainer aRetval;
             for (const auto& xChild : rContentForShadow)
             {
-                aRetval.push_back(Primitive2DReference(
+                aRetval.emplace_back(
                     new ShadowPrimitive2D(aShadowOffset, rShadow.getColor(), rShadow.getBlur(),
-                                            Primitive2DContainer({ xChild }))));
+                                            Primitive2DContainer({ xChild })));
                 if (rShadow.getTransparence() != 0.0)
                 {
                     Primitive2DContainer aTempContent{ aRetval.back() };
