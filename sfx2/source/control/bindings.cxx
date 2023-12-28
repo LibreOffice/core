@@ -869,7 +869,7 @@ bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallM
         return false;
 
     const SfxPoolItemHolder aRet(Execute_Impl(nId, ppItems, 0, nCallMode, nullptr));
-    return (nullptr != aRet.getItem());
+    return aRet.is();
 }
 
 SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
@@ -963,7 +963,7 @@ SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem**
 
     const SfxPoolItemHolder& rRetval(aReq.GetReturnValue());
 
-    if (nullptr == rRetval.getItem())
+    if (!rRetval)
         return SfxPoolItemHolder(rPool, new SfxVoidItem( nId ), true);
 
     return rRetval;
@@ -1596,10 +1596,10 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
     if (SfxItemState::SET == eState)
     {
         DBG_ASSERT( aResult.getItem(), "SfxItemState::SET but no item!" );
-        if ( nullptr != aResult.getItem() )
+        if (aResult)
             rpState.reset(aResult.getItem()->Clone());
     }
-    else if (SfxItemState::DEFAULT == eState && nullptr != aResult.getItem())
+    else if (SfxItemState::DEFAULT == eState && aResult)
     {
         rpState.reset(aResult.getItem()->Clone());
     }

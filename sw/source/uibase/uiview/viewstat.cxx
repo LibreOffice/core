@@ -263,7 +263,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     SelectShell();
 
                 const SfxPoolItemHolder aResult(m_pShell->GetSlotState(SID_UNDO));
-                if(nullptr != aResult.getItem())
+                if(aResult)
                     rSet.Put(*aResult.getItem());
                 else
                     rSet.DisableItem(nWhich);
@@ -573,7 +573,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 SfxPoolItemHolder aResult;
                 if(nAlias)
                     GetViewFrame().GetDispatcher()->QueryState(nAlias, aResult);
-                if(nullptr != aResult.getItem())
+                if(aResult)
                 {
                     if (!(m_nSelectionType & SelectionType::DrawObject))
                     {

@@ -373,8 +373,7 @@ bool SfxManageStyleSheetPage::Execute_Impl(
         nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
         pItems ));
 
-    return nullptr != aResult.getItem();
-
+    return aResult.is();
 }
 
 IMPL_LINK(SfxManageStyleSheetPage, GetFocusHdl, weld::Widget&, rControl, void)

@@ -1977,7 +1977,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, SfxPoolItemHolder& rSt
     if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, false, true ) )
     {
         rState = pShell->GetSlotState(nSlot);
-        if ( nullptr == rState.getItem() )
+        if (!rState)
             return SfxItemState::DISABLED;
         else
             return SfxItemState::DEFAULT;
@@ -1993,7 +1993,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
     if ( GetShellAndSlot_Impl( nSID, &pShell, &pSlot, false, true ) )
     {
         SfxPoolItemHolder aItem(pShell->GetSlotState(nSID));
-        if (nullptr == aItem.getItem())
+        if (!aItem)
             return SfxItemState::DISABLED;
         else
         {

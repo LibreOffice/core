@@ -667,7 +667,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(), aCmisProperties,
                     IsUseUserData(), IsUseThumbnailSave() );
                 const SfxPoolItemHolder aSlotState(GetSlotState(SID_DOCTEMPLATE));
-                if (nullptr == aSlotState.getItem())
+                if (!aSlotState)
                     // templates not supported
                     aDocInfoItem.SetTemplate(false);
 

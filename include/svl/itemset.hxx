@@ -61,8 +61,14 @@ public:
 
     const SfxPoolItemHolder& operator=(const SfxPoolItemHolder&);
     bool operator==(const SfxPoolItemHolder &) const;
+
     SfxItemPool& getPool() const { assert(!isDeleted() && "Destructed instance used (!)"); return *m_pPool; }
     const SfxPoolItem* getItem() const { assert(!isDeleted() && "Destructed instance used (!)"); return m_pItem; }
+
+    bool operator!() const { return nullptr == m_pItem; }
+    explicit operator bool() const { return nullptr != m_pItem; }
+    bool is() const { return nullptr != m_pItem; }
+
     sal_uInt16 Which() const { if(nullptr != m_pItem) return m_pItem->Which(); return 0; }
 };
 

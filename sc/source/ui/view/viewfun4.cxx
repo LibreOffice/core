@@ -590,7 +590,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
         const SfxPoolItemHolder aResult(GetViewData().GetDispatcher().ExecuteList(
             SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
             { &aMediaURLItem }));
-        return (nullptr != aResult.getItem());
+        return aResult.is();
     }
 #endif
 
@@ -621,7 +621,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
             const SfxPoolItemHolder aResult(rDispatcher.ExecuteList(SID_OPENDOC,
                 SfxCallMode::ASYNCHRON,
                 { &aFileNameItem, &aFilterItem, &aTargetItem}));
-            return (nullptr != aResult.getItem());
+            return aResult.is();
         }
     }
 

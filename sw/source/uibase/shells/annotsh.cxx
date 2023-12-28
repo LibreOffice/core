@@ -801,7 +801,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_AUTOSPELL_CHECK:
             {
                 const SfxPoolItemHolder aResult(m_rView.GetSlotState(nWhich));
-                if (nullptr != aResult.getItem())
+                if (aResult)
                     rSet.Put(SfxBoolItem(nWhich, static_cast<const SfxBoolItem*>(aResult.getItem())->GetValue()));
                 else
                     rSet.DisableItem( nWhich );

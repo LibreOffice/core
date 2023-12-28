@@ -1231,7 +1231,7 @@ sal_Bool SwXTextViewCursor::screenDown()
     SfxRequest aReq(FN_PAGEDOWN, SfxCallMode::SLOT, m_pView->GetPool());
     m_pView->Execute(aReq);
     const SfxPoolItemHolder& rResult(aReq.GetReturnValue());
-    bRet = nullptr != rResult.getItem() && static_cast<const SfxBoolItem*>(rResult.getItem())->GetValue();
+    bRet = rResult && static_cast<const SfxBoolItem*>(rResult.getItem())->GetValue();
 
     return bRet;
 }
@@ -1246,7 +1246,7 @@ sal_Bool SwXTextViewCursor::screenUp()
     SfxRequest aReq(FN_PAGEUP, SfxCallMode::SLOT, m_pView->GetPool());
     m_pView->Execute(aReq);
     const SfxPoolItemHolder& rResult(aReq.GetReturnValue());
-    bRet = nullptr != rResult.getItem() && static_cast<const SfxBoolItem*>(rResult.getItem())->GetValue();
+    bRet = rResult && static_cast<const SfxBoolItem*>(rResult.getItem())->GetValue();
 
     return bRet;
 }

@@ -303,7 +303,7 @@ OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInter
 
 bool lcl_getDispatchResult(const SfxPoolItemHolder& rResult)
 {
-    if (nullptr == rResult.getItem())
+    if (!rResult)
         return false;
 
     // default must be set to true, because some return values

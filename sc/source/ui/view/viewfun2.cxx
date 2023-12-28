@@ -2885,7 +2885,8 @@ void ScViewFunc::MoveTable(
         const SfxPoolItemHolder aResult(GetViewData().GetDispatcher().ExecuteList(
             SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON,
             { &aItem, &aTarget }));
-        if (nullptr != aResult.getItem())
+
+        if (aResult)
         {
             if ( auto pObjectItem = dynamic_cast<const SfxObjectItem*>(aResult.getItem()) )
                 pDestShell = dynamic_cast<ScDocShell*>( pObjectItem->GetShell()  );

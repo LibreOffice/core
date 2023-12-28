@@ -487,7 +487,7 @@ void ScPivotLayoutDialog::ApplyChanges()
     const SfxPoolItemHolder aResult(pDispatcher->ExecuteList(SID_PIVOT_TABLE,
             nCallMode, { &aPivotItem }));
 
-    if (nullptr != aResult.getItem())
+    if (aResult)
     {
         // existing pivot table might have moved to a new range or a new sheet
         if ( pOldDPObj != nullptr  )

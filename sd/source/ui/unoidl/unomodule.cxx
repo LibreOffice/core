@@ -49,7 +49,7 @@ void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     {
         SfxRequest aReq( pSlot, aArgs, SfxCallMode::SYNCHRON, SD_MOD()->GetPool() );
         const SfxPoolItemHolder aResult(SD_MOD()->ExecuteSlot(aReq));
-        if (nullptr != aResult.getItem())
+        if (aResult)
             aState = frame::DispatchResultState::SUCCESS;
         else
             aState = frame::DispatchResultState::FAILURE;

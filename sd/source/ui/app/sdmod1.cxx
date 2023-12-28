@@ -323,7 +323,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     if (rItemSet.GetItemState(SID_OPENDOC) != SfxItemState::UNKNOWN)
     {
         const SfxPoolItemHolder aItem(SfxGetpApp()->GetSlotState(SID_OPENDOC, SfxGetpApp()->GetInterface()));
-        if (nullptr != aItem.getItem())
+        if (aItem)
             rItemSet.Put(*aItem.getItem());
     }
 
@@ -331,7 +331,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     if (rItemSet.GetItemState(SID_OPENHYPERLINK) != SfxItemState::UNKNOWN)
     {
         const SfxPoolItemHolder aItem(SfxGetpApp()->GetSlotState(SID_OPENHYPERLINK, SfxGetpApp()->GetInterface()));
-        if (nullptr != aItem.getItem())
+        if (aItem)
             rItemSet.Put(*aItem.getItem());
     }
 

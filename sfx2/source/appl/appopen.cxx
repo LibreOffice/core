@@ -534,7 +534,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     else
     {
         SfxCallMode eMode = SfxCallMode::SYNCHRON;
-        SfxPoolItemHolder aRet;
+        SfxPoolItemHolder aResult;
         SfxStringItem aReferer( SID_REFERER, "private:user" );
         SfxStringItem aTarget( SID_TARGETNAME, "_default" );
         if ( !aTemplateFileName.isEmpty() )
@@ -544,18 +544,18 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
             SfxStringItem aTemplRegionName( SID_TEMPLATE_REGIONNAME, aTemplateRegion );
-            aRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
+            aResult = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
                 {&aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName});
         }
         else
         {
             SfxStringItem aName( SID_FILE_NAME, "private:factory" );
-            aRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
+            aResult = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,
                     { &aName, &aTarget, &aReferer } );
         }
 
-        if ( nullptr != aRet.getItem() )
-            rReq.SetReturnValue( *aRet.getItem() );
+        if (aResult)
+            rReq.SetReturnValue( *aResult.getItem() );
     }
 }
 

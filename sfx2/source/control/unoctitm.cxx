@@ -666,7 +666,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                     {
                         // execute with arguments - call directly
                         aItem = pDispatcher->Execute(GetId(), nCall, &*xSet, &aInternalSet, nModifier);
-                        if (nullptr != aItem.getItem())
+                        if (aItem)
                         {
                             if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(aItem.getItem()))
                                 bSuccess = pBoolItem->GetValue();
@@ -687,7 +687,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                         aReq.SetInternalArgs_Impl(aInternalSet);
                         pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
                         aItem = aReq.GetReturnValue();
-                        bSuccess = aReq.IsDone() || nullptr != aItem.getItem();
+                        bSuccess = aReq.IsDone() || aItem;
                     }
                 }
                 else
@@ -719,7 +719,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 }
             }
 
-            bSuccess = (nullptr != aItem.getItem());
+            bSuccess = aItem.is();
         }
     }
 
@@ -733,7 +733,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         aEvent.State = css::frame::DispatchResultState::FAILURE;
 
     aEvent.Source = static_cast<css::frame::XDispatch*>(pDispatch);
-    if ( bSuccess && nullptr != aItem.getItem() && !aItem.getItem()->isVoidItem() )
+    if ( bSuccess && aItem && !aItem.getItem()->isVoidItem() )
     {
         sal_uInt16 nSubId( 0 );
         if ( eMapUnit == MapUnit::MapTwip )

@@ -519,7 +519,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
     // Dialog can be destroyed while in Execute() because started
     // subdialogs are not modal to it (#i97888#).
-    if ( nullptr == aResult.getItem() || aDeleted )
+    if (!aResult || aDeleted )
         return false;
 
     if ((nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId)

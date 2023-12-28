@@ -1158,7 +1158,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
         pView->GetViewFrame().GetDispatcher()->
                     Execute(SID_UNDO, SfxCallMode::SYNCHRON);
         const SfxPoolItemHolder aResult(pView->GetSlotState(SID_UNDO));
-        m_pTPView->EnableUndo(nullptr != aResult.getItem());
+        m_pTPView->EnableUndo(aResult.is());
     }
 
     Activate();

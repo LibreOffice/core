@@ -1012,7 +1012,7 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
     {
         // The SW has its own undo in the View
         const SfxPoolItemHolder& rResult(GetViewShell()->ExecuteSlot(rReq));
-        if (nullptr != rResult.getItem())
+        if (rResult)
             bOK = static_cast<const SfxBoolItem*>(rResult.getItem())->GetValue();
     }
 
@@ -2969,7 +2969,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
     aReq.AppendItem( SfxBoolItem(SID_RECORDMACRO,true) );
     const SfxPoolItemHolder& rResult(SfxGetpApp()->ExecuteSlot(aReq));
     OUString aScriptURL;
-    if (nullptr != rResult.getItem())
+    if (rResult)
         aScriptURL = static_cast<const SfxStringItem*>(rResult.getItem())->GetValue();
     if ( !aScriptURL.isEmpty() )
     {
