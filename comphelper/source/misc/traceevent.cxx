@@ -40,15 +40,16 @@ std::mutex g_aMutex;
 
 void TraceEvent::addRecording(const OUString& sObject)
 {
-    std::lock_guard aGuard(g_aMutex);
-
-    g_aRecording.emplace_back(sObject);
-
-    if (s_nBufferSize > 0 && g_aRecording.size() >= s_nBufferSize)
+    bool bEmitCallback;
     {
-        if (s_pBufferFullCallback != nullptr)
-            (*s_pBufferFullCallback)();
+        std::lock_guard aGuard(g_aMutex);
+
+        g_aRecording.emplace_back(sObject);
+
+        bEmitCallback = s_nBufferSize > 0 && g_aRecording.size() >= s_nBufferSize;
     }
+    if (bEmitCallback && s_pBufferFullCallback != nullptr)
+        (*s_pBufferFullCallback)();
 }
 
 void TraceEvent::addInstantEvent(const char* sName, const std::map<OUString, OUString>& args)
