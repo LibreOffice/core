@@ -3723,14 +3723,11 @@ OUString SwXTextDocument::hyperlinkInfoAtPosition(int x, int y)
 
         if (pWrtShell->GetContentAtPos(point, aContentAtPos))
         {
-            OUString url = static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)->GetValue();
-            return url;
+            return static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)->GetValue();
         }
-        else
-            return OUString();
     }
-    else
-        return OUString();
+
+    return OUString();
 }
 
 uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
