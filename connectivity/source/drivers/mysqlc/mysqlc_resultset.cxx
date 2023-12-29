@@ -139,8 +139,8 @@ void OResultSet::ensureFieldInfoFetched()
     MYSQL_FIELD* pFields = mysql_fetch_fields(m_pResult);
     m_aFields.reserve(nFieldCount);
     for (unsigned i = 0; i < nFieldCount; ++i)
-        m_aFields.push_back(OUString{
-            pFields[i].name, static_cast<sal_Int32>(strlen(pFields[i].name)), m_encoding });
+        m_aFields.emplace_back(pFields[i].name, static_cast<sal_Int32>(strlen(pFields[i].name)),
+                               m_encoding);
 }
 
 void OResultSet::fetchResult()
@@ -156,11 +156,11 @@ void OResultSet::fetchResult()
     {
         MYSQL_ROW data = mysql_fetch_row(m_pResult);
         unsigned long* lengths = mysql_fetch_lengths(m_pResult);
-        m_aRows.push_back(DataFields{});
+        m_aRows.emplace_back();
         // MYSQL_ROW is char**, array of strings
         for (std::size_t col = 0; col < m_aFields.size(); ++col)
         {
-            m_aRows.back().push_back(OString{ data[col], static_cast<sal_Int32>(lengths[col]) });
+            m_aRows.back().emplace_back(data[col], static_cast<sal_Int32>(lengths[col]));
         }
     }
     unsigned errorNum = mysql_errno(m_pMysql);

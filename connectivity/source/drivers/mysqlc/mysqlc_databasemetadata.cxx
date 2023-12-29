@@ -733,18 +733,18 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         std::vector<Any> aRow{ Any() }; // 0. element is unused
 
         // catalog name
-        aRow.push_back(Any(xRow->getString(1)));
+        aRow.emplace_back(xRow->getString(1));
         // schema name
-        aRow.push_back(Any(xRow->getString(2)));
+        aRow.emplace_back(xRow->getString(2));
         // table name
-        aRow.push_back(Any(xRow->getString(3)));
+        aRow.emplace_back(xRow->getString(3));
         // column name
-        aRow.push_back(Any(xRow->getString(4)));
+        aRow.emplace_back(xRow->getString(4));
         // data type
         OUString sDataType = xRow->getString(5);
-        aRow.push_back(Any(mysqlc_sdbc_driver::mysqlStrToOOOType(sDataType)));
+        aRow.emplace_back(mysqlc_sdbc_driver::mysqlStrToOOOType(sDataType));
         // type name
-        aRow.push_back(Any(sDataType)); // TODO
+        aRow.emplace_back(sDataType); // TODO
         // column size
         sal_Int32 nColumnSize = 0;
         OUString sColumnType = xRow->getString(14);
@@ -763,34 +763,34 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
             nColumnSize = xRow->getShort(7); // numeric precision
         else
             nColumnSize = nCharMaxLen;
-        aRow.push_back(Any(nColumnSize));
-        aRow.push_back(Any()); // buffer length - unused
+        aRow.emplace_back(nColumnSize);
+        aRow.emplace_back(); // buffer length - unused
         // decimal digits (scale)
-        aRow.push_back(Any(xRow->getShort(8)));
+        aRow.emplace_back(xRow->getShort(8));
         // num_prec_radix
-        aRow.push_back(Any(sal_Int32(10)));
+        aRow.emplace_back(sal_Int32(10));
         // nullable
         OUString sIsNullable = xRow->getString(13);
         if (xRow->wasNull())
-            aRow.push_back(Any(ColumnValue::NULLABLE_UNKNOWN));
+            aRow.emplace_back(ColumnValue::NULLABLE_UNKNOWN);
         else if (sIsNullable.equalsIgnoreAsciiCase("YES"))
-            aRow.push_back(Any(ColumnValue::NULLABLE));
+            aRow.emplace_back(ColumnValue::NULLABLE);
         else
-            aRow.push_back(Any(ColumnValue::NO_NULLS));
+            aRow.emplace_back(ColumnValue::NO_NULLS);
         // remarks
-        aRow.push_back(Any(xRow->getString(9)));
+        aRow.emplace_back(xRow->getString(9));
         // default
-        aRow.push_back(Any(xRow->getString(10)));
+        aRow.emplace_back(xRow->getString(10));
 
-        aRow.push_back(Any{}); // sql_data_type - unused
-        aRow.push_back(Any{}); // sql_datetime_sub - unused
+        aRow.emplace_back(); // sql_data_type - unused
+        aRow.emplace_back(); // sql_datetime_sub - unused
 
         // character octet length
-        aRow.push_back(Any(xRow->getString(11)));
+        aRow.emplace_back(xRow->getString(11));
         // ordinal position
-        aRow.push_back(Any(xRow->getString(12)));
+        aRow.emplace_back(xRow->getString(12));
         // is nullable
-        aRow.push_back(Any(sIsNullable));
+        aRow.emplace_back(sIsNullable);
         aRows.push_back(aRow);
     }
     lcl_setRows_throw(xResultSet, 1, aRows);
