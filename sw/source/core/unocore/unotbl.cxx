@@ -36,6 +36,7 @@
 #include <unomid.h>
 #include <unomap.hxx>
 #include <unotbl.hxx>
+#include <unosection.hxx>
 #include <section.hxx>
 #include <unocrsr.hxx>
 #include <hints.hxx>
@@ -1015,7 +1016,8 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             if(!pSectionNode)
                 return uno::Any();
             SwSection& rSect = pSectionNode->GetSection();
-            return uno::Any(SwXTextSections::GetObject(*rSect.GetFormat()));
+            rtl::Reference< SwXTextSection > xSect = SwXTextSections::GetObject(*rSect.GetFormat());
+            return uno::Any(uno::Reference< text::XTextSection >(xSect));
         }
         break;
         case FN_UNO_CELL_NAME:
@@ -2885,9 +2887,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     if(pSectionNode)
                     {
                         SwSection& rSect = pSectionNode->GetSection();
-                        uno::Reference< text::XTextSection >  xSect =
+                        rtl::Reference< SwXTextSection > xSect =
                                         SwXTextSections::GetObject( *rSect.GetFormat() );
-                        aRet <<= xSect;
+                        aRet <<= uno::Reference< text::XTextSection >(xSect);
                     }
                 }
                 break;

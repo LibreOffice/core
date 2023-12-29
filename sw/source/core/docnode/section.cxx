@@ -973,7 +973,7 @@ bool SwSectionFormat::IsInContent() const
 uno::Reference< rdf::XMetadatable >
 SwSectionFormat::MakeUnoObject()
 {
-    uno::Reference<rdf::XMetadatable> xMeta;
+    rtl::Reference<SwXTextSection> xMeta;
     SwSection *const pSection( GetSection() );
     if (pSection)
     {

@@ -29,6 +29,7 @@
 #include <redline.hxx>
 #include <section.hxx>
 #include <unoprnms.hxx>
+#include <unosection.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
@@ -411,7 +412,8 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             {
                 SwSectionNode* pSectNode = pNode->GetSectionNode();
                 OSL_ENSURE(pSectNode, "No section node!");
-                xRet = SwXTextSections::GetObject( *pSectNode->GetSection().GetFormat() );
+                rtl::Reference< SwXTextSection > xSect = SwXTextSections::GetObject( *pSectNode->GetSection().GetFormat() );
+                xRet = uno::Reference< text::XTextSection >(xSect);
             }
             break;
             case SwNodeType::Table :

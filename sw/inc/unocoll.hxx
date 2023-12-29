@@ -39,6 +39,7 @@ class SwFormatFootnote;
 class SwSectionFormat;
 struct SvEventDescription;
 class SwXFootnote;
+class SwXTextSection;
 
 const SvEventDescription* sw_GetSupportedMacroItems();
 
@@ -393,7 +394,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static css::uno::Reference< css::text::XTextSection> GetObject( SwSectionFormat& rFormat );
+    static rtl::Reference<SwXTextSection> GetObject( SwSectionFormat& rFormat );
 };
 
 class SwXBookmarks final : public SwCollectionBaseClass,

@@ -45,6 +45,7 @@
 #include <unoidx.hxx>
 #include <unofield.hxx>
 #include <unotbl.hxx>
+#include <unosection.hxx>
 #include <unosett.hxx>
 #include <unoframe.hxx>
 #include <unocrsr.hxx>
@@ -636,8 +637,8 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             {
                 if( pAny )
                 {
-                    uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFormat() );
-                    *pAny <<= xSect;
+                    rtl::Reference< SwXTextSection > xSect = SwXTextSections::GetObject( *pSect->GetFormat() );
+                    *pAny <<= uno::Reference< XTextSection >(xSect);
                 }
             }
             else
