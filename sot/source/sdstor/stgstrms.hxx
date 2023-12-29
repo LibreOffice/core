@@ -148,7 +148,7 @@ public:
 class StgTmpStrm : public SvMemoryStream
 {
     OUString m_aName;
-    SvFileStream* m_pStrm;
+    std::unique_ptr<SvFileStream> m_pStrm;
     using SvMemoryStream::GetData;
     virtual std::size_t GetData( void* pData, std::size_t nSize ) override;
     virtual std::size_t PutData( const void* pData, std::size_t nSize ) override;
