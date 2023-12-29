@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "ParagraphPortionList.hxx"
 #include "editattr.hxx"
 #include "edtspell.hxx"
 #include "eerdll2.hxx"
@@ -37,7 +38,6 @@
 #include "EditLineList.hxx"
 #include "EditPaM.hxx"
 #include "EditSelection.hxx"
-#include "ParagraphPortion.hxx"
 
 #include <cstddef>
 #include <memory>
@@ -80,37 +80,6 @@ typedef std::vector<Color> SvxColorList;
 
 enum class DeleteMode {
     Simple, RestOfWord, RestOfContent
-};
-
-class ParaPortionList
-{
-    mutable sal_Int32 nLastCache;
-    std::vector<std::unique_ptr<ParaPortion>> maPortions;
-public:
-                    ParaPortionList();
-                    ~ParaPortionList();
-
-    void            Reset();
-    tools::Long GetYOffset(const ParaPortion* pPPortion) const;
-    sal_Int32 FindParagraph(tools::Long nYOffset) const;
-
-    const ParaPortion* SafeGetObject(sal_Int32 nPos) const;
-    ParaPortion* SafeGetObject(sal_Int32 nPos);
-
-    sal_Int32 GetPos(const ParaPortion* p) const;
-    ParaPortion* operator[](sal_Int32 nPos);
-    const ParaPortion* operator[](sal_Int32 nPos) const;
-
-    std::unique_ptr<ParaPortion> Release(sal_Int32 nPos);
-    void Remove(sal_Int32 nPos);
-    void Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p);
-    void Append(std::unique_ptr<ParaPortion> p);
-    sal_Int32 Count() const;
-
-#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    // temporary:
-    static void DbgCheck(ParaPortionList const&, EditDoc const& rDoc);
-#endif
 };
 
 class DeletedNodeInfo
