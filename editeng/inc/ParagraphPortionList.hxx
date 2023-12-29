@@ -27,12 +27,11 @@ class EditDoc;
 
 class ParaPortionList
 {
-    mutable sal_Int32 nLastCache;
+    mutable sal_Int32 nLastCache = 0;
     std::vector<std::unique_ptr<ParaPortion>> maPortions;
 
 public:
-    ParaPortionList();
-    ~ParaPortionList();
+    ParaPortionList() = default;
 
     void Reset();
     tools::Long GetYOffset(const ParaPortion* pPPortion) const;

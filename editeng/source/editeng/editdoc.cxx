@@ -367,24 +367,6 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
     return nullptr;
 }
 
-ParaPortion::ParaPortion( ContentNode* pN ) :
-    pNode(pN),
-    nHeight(0),
-    nInvalidPosStart(0),
-    nFirstLineOffset(0),
-    nBulletX(0),
-    nInvalidDiff(0),
-    bInvalid(true),
-    bSimple(false),
-    bVisible(true),
-    bForceRepaint(false)
-{
-}
-
-ParaPortion::~ParaPortion()
-{
-}
-
 void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
 {
     if ( !bInvalid )
@@ -537,14 +519,6 @@ sal_Int32 FastGetPos(const Array& rArray, const Val* p, sal_Int32& rLastPos)
     return EE_PARA_NOT_FOUND;
 }
 
-}
-
-ParaPortionList::ParaPortionList() : nLastCache( 0 )
-{
-}
-
-ParaPortionList::~ParaPortionList()
-{
 }
 
 sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const

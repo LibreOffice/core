@@ -60,27 +60,29 @@ class ParaPortion
 private:
     EditLineList aLineList;
     TextPortionList aTextPortionList;
-    ContentNode* pNode;
-    tools::Long nHeight;
+    ContentNode* pNode = nullptr;
+    tools::Long nHeight = 0;
 
     ScriptTypePosInfos aScriptInfos;
     WritingDirectionInfos aWritingDirectionInfos;
 
-    sal_Int32 nInvalidPosStart;
-    sal_Int32 nFirstLineOffset; // For Writer-LineSpacing-Interpretation
-    sal_Int32 nBulletX;
-    sal_Int32 nInvalidDiff;
+    sal_Int32 nInvalidPosStart = 0;
+    sal_Int32 nFirstLineOffset = 0; // For Writer-LineSpacing-Interpretation
+    sal_Int32 nBulletX = 0;
+    sal_Int32 nInvalidDiff = 0;
 
-    bool bInvalid : 1;
-    bool bSimple : 1; // only linear Tap
-    bool bVisible : 1; // Belongs to the node!
-    bool bForceRepaint : 1;
+    bool bInvalid : 1 = true;
+    bool bSimple : 1 = false; // only linear Tap
+    bool bVisible : 1 = true; // Belongs to the node!
+    bool bForceRepaint : 1 = false;
 
     ParaPortion(const ParaPortion&) = delete;
 
 public:
-    ParaPortion(ContentNode* pNode);
-    ~ParaPortion();
+    ParaPortion(ContentNode* pN)
+        : pNode(pN)
+    {
+    }
 
     sal_Int32 GetLineNumber(sal_Int32 nIndex) const;
 
