@@ -790,14 +790,14 @@ void EditSelection::Adjust( const EditDoc& rNodes )
 }
 
 EditDoc::EditDoc( SfxItemPool* pPool ) :
-    nLastCache(0),
-    pItemPool(pPool ? pPool : new EditEngineItemPool()),
-    nDefTab(DEFTAB),
-    bIsVertical(false),
+    mnLastCache(0),
+    mpItemPool(pPool ? pPool : new EditEngineItemPool()),
+    mnDefTab(DEFTAB),
+    mbIsVertical(false),
     mnRotation(TextRotation::NONE),
-    bIsFixedCellHeight(false),
-    bModified(false),
-    bDisableAttributeExpanding(false)
+    mbIsFixedCellHeight(false),
+    mbModified(false),
+    mbDisableAttributeExpanding(false)
 {
     // Don't create an empty node, Clear() will be called in EditEngine-CTOR
 };
@@ -903,24 +903,24 @@ void EditDoc::CreateDefFont( bool bUseStyles )
 
 bool EditDoc::IsEffectivelyVertical() const
 {
-    return (bIsVertical && mnRotation == TextRotation::NONE) ||
-        (!bIsVertical && mnRotation != TextRotation::NONE);
+    return (mbIsVertical && mnRotation == TextRotation::NONE) ||
+        (!mbIsVertical && mnRotation != TextRotation::NONE);
 }
 
 bool EditDoc::IsTopToBottom() const
 {
-    return (bIsVertical && mnRotation == TextRotation::NONE) ||
-        (!bIsVertical && mnRotation == TextRotation::TOPTOBOTTOM);
+    return (mbIsVertical && mnRotation == TextRotation::NONE) ||
+        (!mbIsVertical && mnRotation == TextRotation::TOPTOBOTTOM);
 }
 
 bool EditDoc::GetVertical() const
 {
-    return bIsVertical;
+    return mbIsVertical;
 }
 
-sal_Int32 EditDoc::GetPos(const ContentNode* p) const
+sal_Int32 EditDoc::GetPos(const ContentNode* pContentNode) const
 {
-    return FastGetPos(maContents, p, nLastCache);
+    return FastGetPos(maContents, pContentNode, mnLastCache);
 }
 
 const ContentNode* EditDoc::GetObject(sal_Int32 nPos) const
@@ -1085,11 +1085,9 @@ void EditDoc::ClearSpellErrors()
 
 void EditDoc::SetModified( bool b )
 {
-    bModified = b;
-    if ( bModified )
-    {
-        aModifyHdl.Call( nullptr );
-    }
+    mbModified = b;
+    if (mbModified)
+        maModifyHdl.Call(nullptr);
 }
 
 EditPaM EditDoc::RemoveText()
@@ -1235,7 +1233,7 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
     // tdf#132288  By default inserting an attribute beside another that is of
     // the same type expands the original instead of inserting another. But the
     // spell check dialog doesn't want that behaviour
-    if (bDisableAttributeExpanding)
+    if (mbDisableAttributeExpanding)
     {
         pStartingAttrib = nullptr;
         pEndingAttrib = nullptr;

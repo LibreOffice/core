@@ -104,20 +104,20 @@ public:
 class EditDoc
 {
 private:
-    mutable sal_Int32 nLastCache;
-    std::vector<std::unique_ptr<ContentNode> > maContents;
+    mutable sal_Int32 mnLastCache;
+    std::vector<std::unique_ptr<ContentNode>> maContents;
 
-    rtl::Reference<SfxItemPool> pItemPool;
-    Link<LinkParamNone*,void>      aModifyHdl;
+    rtl::Reference<SfxItemPool> mpItemPool;
+    Link<LinkParamNone*,void> maModifyHdl;
 
     SvxFont         maDefFont;           //faster than ever from the pool!!
-    sal_uInt16      nDefTab;
-    bool            bIsVertical:1;
+    sal_uInt16      mnDefTab;
+    bool            mbIsVertical:1;
     TextRotation    mnRotation;
-    bool            bIsFixedCellHeight:1;
+    bool            mbIsFixedCellHeight:1;
 
-    bool            bModified:1;
-    bool            bDisableAttributeExpanding:1;
+    bool            mbModified:1;
+    bool            mbDisableAttributeExpanding:1;
 
 public:
                     EditDoc( SfxItemPool* pItemPool );
@@ -126,28 +126,44 @@ public:
     void            dumpAsXml(xmlTextWriterPtr pWriter) const;
     void            ClearSpellErrors();
 
-    bool            IsModified() const      { return bModified; }
+    bool            IsModified() const      { return mbModified; }
     void            SetModified( bool b );
 
-    void            DisableAttributeExpanding() { bDisableAttributeExpanding = true; }
+    void            DisableAttributeExpanding() { mbDisableAttributeExpanding = true; }
 
-    void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
+    void            SetModifyHdl(const Link<LinkParamNone*,void>& rLink)
+    {
+        maModifyHdl = rLink;
+    }
 
     void            CreateDefFont( bool bUseStyles );
     const SvxFont&  GetDefFont() const { return maDefFont; }
 
-    void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
-    sal_uInt16      GetDefTab() const           { return nDefTab; }
+    void            SetDefTab(sal_uInt16 nTab)
+    {
+        mnDefTab = nTab ? nTab : DEFTAB;
+    }
 
-    void            SetVertical( bool bVertical )   { bIsVertical = bVertical; }
+    sal_uInt16      GetDefTab() const
+    {
+        return mnDefTab;
+    }
+
+    void            SetVertical( bool bVertical )   { mbIsVertical = bVertical; }
     bool            IsEffectivelyVertical() const;
     bool            IsTopToBottom() const;
     bool            GetVertical() const;
     void            SetRotation( TextRotation nRotation )   { mnRotation = nRotation; }
     TextRotation    GetRotation() const                     { return mnRotation; }
 
-    void            SetFixedCellHeight( bool bUseFixedCellHeight )  { bIsFixedCellHeight = bUseFixedCellHeight; }
-    bool            IsFixedCellHeight() const               { return bIsFixedCellHeight; }
+    void            SetFixedCellHeight( bool bUseFixedCellHeight )
+    {
+        mbIsFixedCellHeight = bUseFixedCellHeight;
+    }
+    bool            IsFixedCellHeight() const
+    {
+        return mbIsFixedCellHeight;
+    }
 
     EditPaM         Clear();
     EditPaM         RemoveText();
@@ -166,8 +182,14 @@ public:
     EditPaM GetStartPaM() const;
     EditPaM GetEndPaM() const;
 
-    SfxItemPool&        GetItemPool()                   { return *pItemPool; }
-    const SfxItemPool&  GetItemPool() const             { return *pItemPool; }
+    SfxItemPool&        GetItemPool()
+    {
+        return *mpItemPool;
+    }
+    const SfxItemPool&  GetItemPool() const
+    {
+        return *mpItemPool;
+    }
 
     void            InsertAttrib( const SfxPoolItem& rItem, ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd );
     void            InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem );
