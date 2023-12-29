@@ -32,7 +32,7 @@ namespace drawinglayer::primitive3d
         {
         }
 
-        /** The compare opertator uses the Sequence::==operator, so only checking if
+        /** The compare operator uses the Sequence::==operator, so only checking if
             the references are equal. All non-equal references are interpreted as
             non-equal.
          */
