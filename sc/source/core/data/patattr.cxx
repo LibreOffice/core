@@ -196,7 +196,7 @@ void CellAttributeHelper::UpdateAllStyleSheets(ScDocument& rDoc)
     for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
         const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc);
 
-    // force existance, then access
+    // force existence, then access
     getDefaultCellAttribute();
     mpDefaultCellAttribute->UpdateStyleSheet(rDoc);
 }
@@ -206,7 +206,7 @@ void CellAttributeHelper::AllStylesToNames()
     for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
         const_cast<ScPatternAttr*>(pCheck)->StyleToName();
 
-    // force existance, then access
+    // force existence, then access
     getDefaultCellAttribute();
     mpDefaultCellAttribute->StyleToName();
 }

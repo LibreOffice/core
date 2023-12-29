@@ -333,7 +333,7 @@ void ScDocument::SharePooledResources( const ScDocument* pSrcDoc )
     mxPoolHelper = pSrcDoc->mxPoolHelper;
     mpCellStringPool = pSrcDoc->mpCellStringPool;
 
-    // force lazy creation/existance in source document *before* sharing
+    // force lazy creation/existence in source document *before* sharing
     pSrcDoc->getCellAttributeHelper();
     mpCellAttributeHelper = pSrcDoc->mpCellAttributeHelper;
 }
