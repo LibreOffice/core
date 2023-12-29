@@ -2125,25 +2125,61 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf152307)
     CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), nTabBottom < nFooterTop);
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158900)
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf57187_Tdf158900)
 {
     // Given a document with a single paragraph, having some long space runs and line breaks
     createSwDoc("space+break.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // Make sure there is only one page, one paragraph, and four lines
+    // Make sure there is only one page, one paragraph, and five lines
     assertXPath(pXmlDoc, "/root/page"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion"_ostr, 1);
-    // Without the fix in place, this would fail: there used to be 5 lines
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout"_ostr, 4);
-    // Check that the second line has correct portions
-    // Without the fix in place, this would fail: the line had only 2 portions (text + hole),
-    // and the break was on a separate third line
+    // Without the fix in place, this would fail: there used to be 6 lines
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout"_ostr, 5);
+
+    // tdf#57187: Check that relatively short lines have spaces not participating in layout.
+    // First line has 11 spaces in the end, and then a manual line break. It is rather short:
+    // without block justification, it is narrower than the available space.
+    // It uses the "first check if everything fits to line" return path in SwTextGuess::Guess.
+    // Check that the spaces are put into a Hole portion, thus not participating in layout.
+    // Without the fix, this would fail: there were only 2 portions, no Hole nor Margin portions.
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*"_ostr, 4);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[1]"_ostr, "type"_ostr,
+                u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[1]"_ostr,
+                "length"_ostr, u"11"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[2]"_ostr, "type"_ostr,
+                u"PortionType::Hole"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[2]"_ostr,
+                "length"_ostr, u"11"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[3]"_ostr, "type"_ostr,
+                u"PortionType::Break"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[4]"_ostr, "type"_ostr,
+                u"PortionType::Margin"_ustr);
+    // Second line has 101 spaces in the end, and then a manual line break.
+    // It uses the "second check if everything fits to line" return path in SwTextGuess::Guess.
+    // Check that the spaces are put into a Hole portion, thus not participating in layout.
+    // Without the fix, this would fail: there were only 2 portions, no Hole portion.
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*"_ostr, 3);
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[1]"_ostr, "type"_ostr,
                 u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[1]"_ostr,
+                "length"_ostr, u"11"_ustr);
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[2]"_ostr, "type"_ostr,
                 u"PortionType::Hole"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[2]"_ostr,
+                "length"_ostr, u"101"_ustr);
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[3]"_ostr, "type"_ostr,
+                u"PortionType::Break"_ustr);
+
+    // tdf#158900: Check that the break after a long line with trailing spaces is kept on same line.
+    // Without the fix in place, this would fail: the line had only 2 portions (text + hole),
+    // and the break was on a separate third line
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*"_ostr, 3);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[1]"_ostr, "type"_ostr,
+                u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[2]"_ostr, "type"_ostr,
+                u"PortionType::Hole"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[3]"_ostr, "type"_ostr,
                 u"PortionType::Break"_ustr);
 }
 

@@ -44,7 +44,7 @@
  </office:master-styles>
  <office:body>
   <office:text>
-   <text:p text:style-name="P1">Lorem ipsum <text:s text:c="10"/><text:line-break/>Lorem ipsum <text:s text:c="1000"/><text:line-break/>Lorem ipsum <text:s text:c="1000"/>Lorem ipsum</text:p>
+   <text:p text:style-name="P1">Lorem ipsum <text:s text:c="10"/><text:line-break/>Lorem ipsum <text:s text:c="100"/><text:line-break/>Lorem ipsum <text:s text:c="1000"/><text:line-break/>Lorem ipsum <text:s text:c="1000"/>Lorem ipsum</text:p>
   </office:text>
  </office:body>
 </office:document>

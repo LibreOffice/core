@@ -21,6 +21,7 @@
 #include <SwPortionHandler.hxx>
 
 #include "porlin.hxx"
+#include "portxt.hxx"
 #include "inftxt.hxx"
 #include "pormulti.hxx"
 #if OSL_DEBUG_LEVEL > 0
@@ -86,10 +87,10 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
         return;
 
     const sal_uInt16 nHalfView = nViewWidth / 2;
-    sal_uInt16 nLastWidth = pLast->Width();
+    sal_uInt16 nLastWidth = pLast->Width() + pLast->ExtraBlankWidth();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        nLastWidth = nLastWidth + pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
+        nLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
     sal_uInt16 nPos;
     SwTextPaintInfo aInf( rInf );
@@ -276,9 +277,10 @@ void SwLinePortion::Move(SwTextPaintInfo & rInf) const
     bool bCounterDir = ( ! bFrameDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
                        (   bFrameDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
 
+    SwTwips nTmp = PrtWidth() + ExtraBlankWidth();
     if ( InSpaceGrp() && rInf.GetSpaceAdd(/*bShrink=*/true) )
     {
-        SwTwips nTmp = PrtWidth() + CalcSpacing( rInf.GetSpaceAdd(/*bShrink=*/true), rInf );
+        nTmp += CalcSpacing( rInf.GetSpaceAdd(/*bShrink=*/true), rInf );
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -nTmp : nTmp ) );
         else if ( bCounterDir )
@@ -294,11 +296,11 @@ void SwLinePortion::Move(SwTextPaintInfo & rInf) const
             rInf.IncKanaIdx();
         }
         if( rInf.IsRotated() )
-            rInf.Y( rInf.Y() + ( bB2T ? -PrtWidth() : PrtWidth() ) );
+            rInf.Y(rInf.Y() + (bB2T ? -nTmp : nTmp));
         else if ( bCounterDir )
-            rInf.X( rInf.X() - PrtWidth() );
+            rInf.X(rInf.X() - nTmp);
         else
-            rInf.X( rInf.X() + PrtWidth() );
+            rInf.X(rInf.X() + nTmp);
     }
     if (IsMultiPortion() && static_cast<SwMultiPortion const*>(this)->HasTabulator())
         rInf.IncSpaceIdx();
