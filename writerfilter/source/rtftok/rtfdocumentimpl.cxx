@@ -1348,7 +1348,7 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     }
     else
     {
-        pCurrentBuffer->push_back(Buf_t(BUFFER_STARTRUN, nullptr, nullptr));
+        pCurrentBuffer->emplace_back(BUFFER_STARTRUN, nullptr, nullptr);
     }
 
     // Should we send run properties?
@@ -1363,8 +1363,8 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     else
     {
         auto pValue = new RTFValue(*sValue);
-        pCurrentBuffer->push_back(Buf_t(BUFFER_TEXT, pValue, nullptr));
-        pCurrentBuffer->push_back(Buf_t(BUFFER_ENDRUN, nullptr, nullptr));
+        pCurrentBuffer->emplace_back(BUFFER_TEXT, pValue, nullptr);
+        pCurrentBuffer->emplace_back(BUFFER_ENDRUN, nullptr, nullptr);
     }
 }
 
@@ -1604,7 +1604,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else if (pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        pCurrentBuffer->push_back(Buf_t(BUFFER_STARTRUN, pValue, nullptr));
+        pCurrentBuffer->emplace_back(BUFFER_STARTRUN, pValue, nullptr);
     }
 
     if (m_aStates.top().getDestination() == Destination::NORMAL
@@ -1617,7 +1617,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else
     {
         auto pValue = new RTFValue(rString);
-        pCurrentBuffer->push_back(Buf_t(BUFFER_UTEXT, pValue, nullptr));
+        pCurrentBuffer->emplace_back(BUFFER_UTEXT, pValue, nullptr);
     }
 
     m_bNeedCr = true;
@@ -1627,7 +1627,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else if (pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        pCurrentBuffer->push_back(Buf_t(BUFFER_ENDRUN, pValue, nullptr));
+        pCurrentBuffer->emplace_back(BUFFER_ENDRUN, pValue, nullptr);
     }
 }
 
@@ -2498,8 +2498,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                     // Also buffer the RTFPicture of the state stack as it contains
                     // the shape size.
                     auto pPictureValue = new RTFValue(m_aStates.top().getPicture());
-                    m_aStates.top().getCurrentBuffer()->push_back(
-                        Buf_t(BUFFER_PICTURE, pPictureValue, nullptr));
+                    m_aStates.top().getCurrentBuffer()->emplace_back(BUFFER_PICTURE, pPictureValue,
+                                                                     nullptr);
                     auto pValue = new RTFValue(m_aStates.top().getShape());
 
                     // Buffer wrap type.
@@ -2513,8 +2513,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                         }
                     }
 
-                    m_aStates.top().getCurrentBuffer()->push_back(
-                        Buf_t(BUFFER_RESOLVESHAPE, pValue, nullptr));
+                    m_aStates.top().getCurrentBuffer()->emplace_back(BUFFER_RESOLVESHAPE, pValue,
+                                                                     nullptr);
                 }
             }
             else if (rState.getInShapeGroup() && !rState.getInShape())
@@ -3575,8 +3575,8 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                     if (!m_aStates.top().getCurrentBuffer())
                         m_pSdrImport->close();
                     else
-                        m_aStates.top().getCurrentBuffer()->push_back(
-                            Buf_t(BUFFER_ENDSHAPE, nullptr, nullptr));
+                        m_aStates.top().getCurrentBuffer()->emplace_back(BUFFER_ENDSHAPE, nullptr,
+                                                                         nullptr);
                 }
 
                 // It's allowed to declare these inside the shape text, and they

@@ -4108,9 +4108,9 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
 
         if (eType != StoredRedlines::NONE)
         {
-            m_aStoredRedlines[eType].push_back( uno::Any(xRange) );
-            m_aStoredRedlines[eType].push_back( uno::Any(sType) );
-            m_aStoredRedlines[eType].push_back( uno::Any(aRedlineProperties) );
+            m_aStoredRedlines[eType].emplace_back(xRange);
+            m_aStoredRedlines[eType].emplace_back(sType);
+            m_aStoredRedlines[eType].emplace_back(aRedlineProperties);
         }
     }
     catch( const uno::Exception & )

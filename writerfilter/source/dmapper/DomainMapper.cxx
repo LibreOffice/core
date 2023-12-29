@@ -2958,12 +2958,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if (m_pImpl->m_pSdtHelper->getDropDownDisplayTexts().size() != nDropDownDisplayTexts + 1)
         {
             // w:displayText="..." is optional, add empty value if it was not provided.
-            m_pImpl->m_pSdtHelper->getDropDownDisplayTexts().push_back(OUString());
+            m_pImpl->m_pSdtHelper->getDropDownDisplayTexts().emplace_back();
         }
         if (m_pImpl->m_pSdtHelper->getDropDownItems().size() != nDropDownItems + 1)
         {
             // w:value="..." is optional, add empty value if it was not provided.
-            m_pImpl->m_pSdtHelper->getDropDownItems().push_back(OUString());
+            m_pImpl->m_pSdtHelper->getDropDownItems().emplace_back();
         }
     }
     break;
