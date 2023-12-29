@@ -2519,8 +2519,11 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
     // primitive2d::TransparencePrimitive2D& rTrCand();
     primitive2d::Primitive2DContainer xEmbedSeq{ &const_cast<primitive2d::TransparencePrimitive2D&>(
         rTransparenceCandidate) };
+
+    // tdf#158743 when embedding, do not forget to 1st apply the evtl. used
+    // CurrentTransformation (right-to-left, apply that 1st)
     xEmbedSeq = primitive2d::Primitive2DContainer{ new primitive2d::TransformPrimitive2D(
-        aEmbedding, std::move(xEmbedSeq)) };
+        aEmbedding * maCurrentTransformation, std::move(xEmbedSeq)) };
 
     // use empty ViewInformation & a useful MaximumQuadraticPixels
     // limitation to paint the content
