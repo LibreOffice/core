@@ -96,7 +96,7 @@ const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& 
         return &rCandidate;
     }
 
-    if (nullptr != mpLastHit && ScPatternAttr::areSame(mpLastHit, &rCandidate))
+    if (ScPatternAttr::areSame(mpLastHit, &rCandidate))
     {
         // hit for single-entry cache, make use of it
         mpLastHit->mnRefCount++;
@@ -107,6 +107,10 @@ const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& 
 
     for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
     {
+        if (mpLastHit == pCheck)
+            // ptr compare: already checked above, skip this one
+            continue;
+
         if (ScPatternAttr::areSame(pCheck, &rCandidate))
         {
             pCheck->mnRefCount++;
