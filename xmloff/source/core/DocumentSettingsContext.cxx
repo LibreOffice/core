@@ -48,7 +48,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/configmgr.hxx>
 #include "xmlenums.hxx"
 
 using namespace com::sun::star;

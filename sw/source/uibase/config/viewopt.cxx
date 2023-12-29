@@ -35,7 +35,6 @@
 #include <crstate.hxx>
 #include <authratr.hxx>
 #include <svtools/colorcfg.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <editeng/acorrcfg.hxx>
@@ -285,7 +284,7 @@ SwViewOption::SwViewOption() :
     }
     m_nDivisionX = m_nDivisionY = 1;
 
-    m_bSelectionInReadonly = comphelper::IsFuzzing() || officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get();
+    m_bSelectionInReadonly = officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get();
 
     m_bIdle = true;
 

@@ -123,7 +123,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
@@ -335,7 +334,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext(std::move( xContext )),
-        m_bForceGenericFields(!comphelper::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
+        m_bForceGenericFields(officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
         m_bIsDecimalComma( false ),
         m_bSetUserFieldContent( false ),
         m_bSetCitation( false ),
