@@ -191,16 +191,8 @@ bool SwLayoutFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoin
 bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                              SwCursorMoveState* pCMS, bool bTestBackground ) const
 {
-    Point aPoint( rPoint );
-
-    // check, if we have to adjust the point
-    if ( !getFrameArea().Contains( aPoint ) )
-    {
-        aPoint.setX( std::max( aPoint.X(), getFrameArea().Left() ) );
-        aPoint.setX( std::min( aPoint.X(), getFrameArea().Right() ) );
-        aPoint.setY( std::max( aPoint.Y(), getFrameArea().Top() ) );
-        aPoint.setY( std::min( aPoint.Y(), getFrameArea().Bottom() ) );
-    }
+    Point aPoint(std::clamp(rPoint.X(), getFrameArea().Left(), getFrameArea().Right()),
+                 std::clamp(rPoint.Y(), getFrameArea().Top(), getFrameArea().Bottom()));
 
     bool bRet = false;
     //Could it be a free flying one?
