@@ -172,8 +172,7 @@ class SwContentTree final : public SfxListener
 
     SwNavigationPI* GetParentWindow();
 
-    bool        FillTransferData( TransferDataContainer& rTransfer,
-                                            sal_Int8& rDragMode );
+    bool FillTransferData(TransferDataContainer& rTransfer);
 
     /** Check if the displayed content is valid. */
     bool            HasContentChanged();

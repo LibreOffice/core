@@ -26,7 +26,6 @@
 class SwDocShell;
 class TransferDataContainer;
 class TransferableDataHelper;
-enum class RegionMode;
 
 /*
     navigator bookmark for distinct identification in Sw
@@ -34,19 +33,18 @@ enum class RegionMode;
 
 class NaviContentBookmark
 {
-    OUString        m_aUrl;       // URL including jump mark
+    OUString m_sURL; // URL including jump mark
+    OUString m_sCrossRef; // cross-reference
     OUString        m_aDescription;     // description
     tools::Long            m_nDocSh;     // address of DocShell
-    RegionMode      m_nDefaultDrag;   // description contains defaultDragType
 
 public:
     NaviContentBookmark();
-    NaviContentBookmark( OUString aUrl, OUString aDesc,
-                            RegionMode nDragType, const SwDocShell* );
+    NaviContentBookmark(OUString sURL, OUString sCrossRef, OUString aDesc, const SwDocShell*);
 
-    const OUString& GetURL() const              { return m_aUrl; }
+    const OUString& GetURL() const { return m_sURL; }
+    const OUString& GetCrossRef() const { return m_sCrossRef; }
     const OUString& GetDescription() const      { return m_aDescription; }
-    RegionMode      GetDefaultDragType() const  { return m_nDefaultDrag; }
     void            Copy( TransferDataContainer& rData ) const;
     bool            Paste( const TransferableDataHelper& rData, const OUString& rsDesc );
 };

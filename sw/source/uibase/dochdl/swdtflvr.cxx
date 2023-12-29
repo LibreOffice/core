@@ -1692,7 +1692,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
                             SotClipboardFormatId nFormat,
                             SotExchangeDest nDestination, bool bIsPasteFormat,
-                            bool bIsDefault,
+                            [[maybe_unused]] bool bIsDefault,
                             const Point* pPt, sal_Int8 nDropAction,
                             bool bPasteSelection, RndStdIds nAnchorType,
                             bool bIgnoreComments,
@@ -1731,7 +1731,11 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                 break;
 
             default:
+                bool bLockView = rSh.IsViewLocked();
+                if (nFormat == SotClipboardFormatId::SONLK)
+                    rSh.LockView(true); // prevent view jump
                 SwTransferable::SetSelInShell( rSh, false, pPt );
+                rSh.LockView(bLockView);
                 break;
             }
         }
@@ -1921,16 +1925,8 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                     NaviContentBookmark aBkmk;
                     if (aBkmk.Paste(rData, rSh.GetSelText()))
                     {
-                        if(bIsDefault)
-                        {
-                            switch(aBkmk.GetDefaultDragType())
-                            {
-                                case RegionMode::NONE: nAction = EXCHG_IN_ACTION_COPY; break;
-                                case RegionMode::EMBEDDED: nAction = EXCHG_IN_ACTION_MOVE; break;
-                                case RegionMode::LINK: nAction = EXCHG_IN_ACTION_LINK; break;
-                            }
-                        }
-                        rSh.NavigatorPaste( aBkmk, nAction );
+                        aWait.~SwWait(); // end the wait pointer, X11 only annoyance
+                        rSh.NavigatorPaste(aBkmk);
                         bRet = true;
                     }
                 }

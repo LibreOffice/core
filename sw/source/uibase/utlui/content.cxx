@@ -123,6 +123,8 @@
 
 #include <svl/fstathelper.hxx>
 
+#include <expfld.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -1058,22 +1060,18 @@ namespace {
 enum STR_CONTEXT_IDX
 {
     IDX_STR_OUTLINE_LEVEL = 0,
-    IDX_STR_DRAGMODE = 1,
-    IDX_STR_HYPERLINK = 2,
-    IDX_STR_LINK_REGION = 3,
-    IDX_STR_COPY_REGION = 4,
-    IDX_STR_DISPLAY = 5,
-    IDX_STR_ACTIVE_VIEW = 6,
-    IDX_STR_HIDDEN = 7,
-    IDX_STR_ACTIVE = 8,
-    IDX_STR_INACTIVE = 9,
-    IDX_STR_EDIT_ENTRY = 10,
-    IDX_STR_DELETE_ENTRY = 11,
-    IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY = 12,
-    IDX_STR_OUTLINE_TRACKING = 13,
-    IDX_STR_OUTLINE_TRACKING_DEFAULT = 14,
-    IDX_STR_OUTLINE_TRACKING_FOCUS = 15,
-    IDX_STR_OUTLINE_TRACKING_OFF = 16
+    IDX_STR_DISPLAY = 1,
+    IDX_STR_ACTIVE_VIEW = 2,
+    IDX_STR_HIDDEN = 3,
+    IDX_STR_ACTIVE = 4,
+    IDX_STR_INACTIVE = 5,
+    IDX_STR_EDIT_ENTRY = 6,
+    IDX_STR_DELETE_ENTRY = 7,
+    IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY = 8,
+    IDX_STR_OUTLINE_TRACKING = 9,
+    IDX_STR_OUTLINE_TRACKING_DEFAULT = 10,
+    IDX_STR_OUTLINE_TRACKING_FOCUS = 11,
+    IDX_STR_OUTLINE_TRACKING_OFF = 12
 };
 
 }
@@ -1081,10 +1079,6 @@ enum STR_CONTEXT_IDX
 const TranslateId STR_CONTEXT_ARY[] =
 {
     STR_OUTLINE_LEVEL,
-    STR_DRAGMODE,
-    STR_HYPERLINK,
-    STR_LINK_REGION,
-    STR_COPY_REGION,
     STR_DISPLAY,
     STR_ACTIVE_VIEW,
     STR_HIDDEN,
@@ -1238,12 +1232,6 @@ IMPL_LINK(SwContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
         return true; // disallow
     }
 
-    rtl::Reference<TransferDataContainer> xContainer = new TransferDataContainer;
-    sal_Int8 nDragMode = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
-
-    if (FillTransferData(*xContainer, nDragMode))
-        bDisallow = false;
-
     if (m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE)
     {
         // Only move drag entry and continuous selected siblings:
@@ -1267,11 +1255,16 @@ IMPL_LINK(SwContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
             m_aDndOutlinesSelected.push_back(m_xTreeView->make_iterator(xEntry.get()));
         }
         while (m_xTreeView->iter_next_sibling(*xEntry) && m_xTreeView->is_selected(*xEntry));
-        bDisallow = false;
     }
 
-    if (!bDisallow)
-        m_xTreeView->enable_drag_source(xContainer, nDragMode);
+    rtl::Reference<TransferDataContainer> xContainer = new TransferDataContainer;
+
+    if (FillTransferData(*xContainer))
+    {
+        bDisallow = false;
+        m_xTreeView->enable_drag_source(xContainer, DND_ACTION_COPY);
+    }
+
     return bDisallow;
 }
 
@@ -1637,15 +1630,6 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xSubPop1->set_item_help_id(sId, HID_NAV_OUTLINE_LEVEL);
     }
     xSubPop1->set_active(OUString::number(100 + m_nOutlineLevel), true);
-
-    // Add entries to the Drag Mode submenu
-    for (int i=0; i < 3; ++i)
-    {
-        sId = OUString::number(i + 201);
-        xSubPop2->append_radio(sId, m_aContextStrings[IDX_STR_HYPERLINK + i]);
-        xSubPop2->set_item_help_id(sId, HID_NAV_DRAG_MODE);
-    }
-    xSubPop2->set_active(OUString::number(201 + static_cast<int>(GetParentWindow()->GetRegionDropMode())), true);
 
     // Insert the list of the open files in the Display submenu
     {
@@ -3033,10 +3017,8 @@ void SwContentTree::clear()
     m_xTreeView->thaw();
 }
 
-bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
-                                            sal_Int8& rDragMode )
+bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
 {
-    bool bRet = false;
     SwWrtShell* pWrtShell = GetWrtShell();
     OSL_ENSURE(pWrtShell, "no Shell!");
 
@@ -3044,15 +3026,18 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     bool bEntry = m_xTreeView->get_cursor(xEntry.get());
     if (!bEntry || lcl_IsContentType(*xEntry, *m_xTreeView) || !pWrtShell)
         return false;
-    OUString sEntry;
     assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
     SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
 
-    const ContentTypeId nActType = pCnt->GetParent()->GetType();
+    OUString sEntry;
     OUString sUrl;
-    bool bOutline = false;
+    OUString sCrossRef;
+    bool bUrl = true;
+    bool bCrossRef = true;
     OUString sOutlineText;
-    switch( nActType )
+
+    const ContentTypeId eActType = pCnt->GetParent()->GetType();
+    switch (eActType)
     {
         case ContentTypeId::OUTLINE:
         {
@@ -3081,62 +3066,67 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 sEntry += pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, pWrtShell->GetLayout(), false);
                 sOutlineText = pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, pWrtShell->GetLayout());
                 m_bIsOutlineMoveable = static_cast<SwOutlineContent*>(pCnt)->IsMoveable();
-                bOutline = true;
             }
         }
         break;
+        case ContentTypeId::BOOKMARK:
+            sEntry = m_xTreeView->get_text(*xEntry);
+        break;
+        case ContentTypeId::TABLE:
+        case ContentTypeId::FRAME:
+        case ContentTypeId::REGION:
+            bCrossRef = false;
+            sEntry = m_xTreeView->get_text(*xEntry);
+        break;
+        // content types that cannot be inserted, as URL, section, or reference
         case ContentTypeId::POSTIT:
         case ContentTypeId::INDEX:
-        case ContentTypeId::REFERENCE :
+            return false;
+        // content types than can only be inserted as a cross-reference
+        case ContentTypeId::REFERENCE:
         case ContentTypeId::TEXTFIELD:
         case ContentTypeId::FOOTNOTE:
         case ContentTypeId::ENDNOTE:
-            // cannot be inserted, neither as URL nor as section
+            bUrl = false;
+            sEntry = m_xTreeView->get_text(*xEntry);
         break;
+        // content types tha can only be inserted as a hyperlink
         case ContentTypeId::URLFIELD:
             sUrl = static_cast<SwURLFieldContent*>(pCnt)->GetURL();
             [[fallthrough]];
         case ContentTypeId::OLE:
         case ContentTypeId::GRAPHIC:
-            if(GetParentWindow()->GetRegionDropMode() != RegionMode::NONE)
-                break;
-            else
-                rDragMode &= ~( DND_ACTION_MOVE | DND_ACTION_LINK );
-            [[fallthrough]];
-        default:
+        case ContentTypeId::DRAWOBJECT:
+            bCrossRef = false;
             sEntry = m_xTreeView->get_text(*xEntry);
+        break;
+        default:
+            return false;
     }
 
     if(!sEntry.isEmpty())
     {
         const SwDocShell* pDocShell = pWrtShell->GetView().GetDocShell();
-        if(sUrl.isEmpty())
+        if (bUrl && sUrl.isEmpty())
         {
             if(pDocShell->HasName())
             {
                 SfxMedium* pMedium = pDocShell->GetMedium();
                 sUrl = pMedium->GetURLObject().GetURLNoMark();
-                // only if a primarily link shall be integrated.
-                bRet = true;
             }
-            else if ( nActType == ContentTypeId::REGION || nActType == ContentTypeId::BOOKMARK )
-            {
-                // For field and bookmarks a link is also allowed
-                // without a filename into its own document.
-                bRet = true;
-            }
-            else if (State::CONSTANT == m_eState &&
-                    ( !::GetActiveView() ||
-                        m_pActiveShell != ::GetActiveView()->GetWrtShellPtr()))
+            else if (State::CONSTANT == m_eState
+                     && (!::GetActiveView()
+                         || m_pActiveShell != ::GetActiveView()->GetWrtShellPtr()))
             {
                 // Urls of inactive views cannot dragged without
                 // file names, also.
-                bRet = false;
+                return false;
             }
-            else
+            else if (eActType != ContentTypeId::REGION && eActType != ContentTypeId::BOOKMARK)
             {
-                bRet = GetParentWindow()->GetRegionDropMode() == RegionMode::NONE;
-                rDragMode = DND_ACTION_MOVE;
+                // For sections and bookmarks a link is also allowed
+                // without a filename into its own document.
+                return false;
             }
 
             const OUString& rToken = pCnt->GetParent()->GetTypeToken();
@@ -3146,32 +3136,93 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 sUrl += OUStringChar(cMarkSeparator) + rToken;
             }
         }
-        else
-            bRet = true;
 
-        if( bRet )
+        if (bCrossRef)
         {
-            // In Outlines of heading text must match
-            // the real number into the description.
-            if(bOutline)
-                sEntry = sOutlineText;
-
+            if (eActType == ContentTypeId::TEXTFIELD)
             {
-                NaviContentBookmark aBmk( sUrl, sEntry,
-                                    GetParentWindow()->GetRegionDropMode(),
-                                    pDocShell);
-                aBmk.Copy( rTransfer );
+                SwTextFieldContent* pTextFieldContent = static_cast<SwTextFieldContent*>(pCnt);
+                const SwFormatField* pFormatField = pTextFieldContent->GetFormatField();
+                const SwField* pField = pFormatField->GetField();
+
+                if (SwFieldTypesEnum::Sequence != pField->GetTypeId())
+                    return false;
+
+                OUString sVal = pField->ExpandField(true, m_pActiveShell->GetLayout());
+                sal_uInt32 nSeqNo = sVal.toUInt32();
+                if (nSeqNo > 0)
+                {
+                    --nSeqNo;
+                    sVal = OUString::number(nSeqNo);
+                }
+                else
+                    return false;
+
+                const OUString& rsFieldTypeName = pField->GetTyp()->GetName();
+                sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_SEQUENCEFLD))
+                        + u"|" + rsFieldTypeName + u"|" + sVal;
             }
-
-            // An INetBookmark must a be delivered to foreign DocShells
-            if( pDocShell->HasName() )
+            else if (eActType == ContentTypeId::REFERENCE)
             {
-                INetBookmark aBkmk( sUrl, sEntry );
-                rTransfer.CopyINetBookmark( aBkmk );
+                sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_SETREFATTR))
+                        + u"|" + sEntry;
+            }
+            else if (eActType == ContentTypeId::BOOKMARK)
+            {
+                sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_BOOKMARK))
+                        + u"|" + sEntry;
+            }
+            else if (eActType == ContentTypeId::FOOTNOTE || eActType == ContentTypeId::ENDNOTE)
+            {
+                SeqFieldLstElem aElem(sEntry, 0);
+                SwSeqFieldList aArr;
+                size_t nIdx = 0;
+                OUString sVal;
+
+                if (m_pActiveShell->GetSeqFootnoteList(aArr, eActType == ContentTypeId::ENDNOTE)
+                        && aArr.SeekEntry(aElem, &nIdx))
+                    sVal = OUString::number(aArr[nIdx].nSeqNo);
+                else
+                    return false;
+
+                REFERENCESUBTYPE eReferenceSubType =
+                        eActType == ContentTypeId::FOOTNOTE ? REFERENCESUBTYPE::REF_FOOTNOTE :
+                                                              REFERENCESUBTYPE::REF_ENDNOTE;
+
+                sCrossRef = OUString::number(static_cast<int>(eReferenceSubType)) + u"|"
+                        + sEntry + u"|" + sVal;
+            }
+            else if (eActType == ContentTypeId::OUTLINE)
+            {
+                sEntry = sOutlineText;
+                const SwOutlineNodes::size_type nPos =
+                        static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos();
+                const SwTextNode* pTextNode =
+                        pWrtShell->GetNodes().GetOutLineNds()[nPos]->GetTextNode();
+                sw::mark::IMark const * const pMark =
+                        pWrtShell->getIDocumentMarkAccess()->getMarkForTextNode(
+                            *pTextNode, IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
+                // REFERENCESUBTYPE_OUTLINE is changed to REFERENCESUBTYPE::BOOKMARK in
+                // SwWrtShell::NavigatorPaste. It is used to differentiate between a
+                // headings reference and a regular bookmark reference to show different
+                // options in the reference mark type popup menu.
+                sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_OUTLINE))
+                        + u"|" + pMark->GetName();
             }
         }
+
+        NaviContentBookmark aBmk(sUrl, sCrossRef, sEntry, pDocShell);
+        aBmk.Copy(rTransfer);
+
+        // An INetBookmark must a be delivered to foreign DocShells
+        if (bUrl && pDocShell->HasName())
+        {
+            INetBookmark aBkmk( sUrl, sEntry );
+            rTransfer.CopyINetBookmark( aBkmk );
+        }
     }
-    return bRet;
+
+    return true;
 }
 
 void SwContentTree::ToggleToRoot()
@@ -5086,11 +5137,6 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
             if(m_nOutlineLevel != nSelectedPopupEntry )
                 SetOutlineLevel(static_cast<sal_Int8>(nSelectedPopupEntry));
         break;
-        case 201:
-        case 202:
-        case 203:
-            GetParentWindow()->SetRegionDropMode(static_cast<RegionMode>(nSelectedPopupEntry - 201));
-        break;
         case 401:
         case 402:
             EditEntry(*xFirst, nSelectedPopupEntry == 401 ? EditEntryMode::RMV_IDX : EditEntryMode::UPD_IDX);
@@ -5932,32 +5978,26 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
     }
 }
 
-// Now even the matching text::Bookmark
-NaviContentBookmark::NaviContentBookmark()
-    :
-    m_nDocSh(0),
-    m_nDefaultDrag( RegionMode::NONE )
+NaviContentBookmark::NaviContentBookmark() :
+    m_nDocSh(0)
 {
 }
 
-NaviContentBookmark::NaviContentBookmark( OUString aUrl,
-                    OUString aDesc,
-                    RegionMode nDragType,
-                    const SwDocShell* pDocSh ) :
-    m_aUrl(std::move( aUrl )),
+NaviContentBookmark::NaviContentBookmark(OUString sURL, OUString sCrossRef, OUString aDesc,
+                    const SwDocShell* pDocSh) :
+    m_sURL(std::move(sURL)),
+    m_sCrossRef(std::move(sCrossRef)),
     m_aDescription(std::move(aDesc)),
-    m_nDocSh(reinterpret_cast<sal_IntPtr>(pDocSh)),
-    m_nDefaultDrag( nDragType )
+    m_nDocSh(reinterpret_cast<sal_IntPtr>(pDocSh))
 {
 }
 
 void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 {
     rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
-
-    OString sStrBuf(OUStringToOString(m_aUrl, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
+    OString sStrBuf(OUStringToOString(m_sURL, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
+                    OUStringToOString(m_sCrossRef, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
                     OUStringToOString(m_aDescription, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
-                    OString::number(static_cast<int>(m_nDefaultDrag)) + OStringChar(NAVI_BOOKMARK_DELIM) +
                     OString::number(m_nDocSh));
     rData.CopyByteString(SotClipboardFormatId::SONLK, sStrBuf);
 }
@@ -5969,9 +6009,9 @@ bool NaviContentBookmark::Paste( const TransferableDataHelper& rData, const OUSt
     if( bRet )
     {
         sal_Int32 nPos = 0;
-        m_aUrl    = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
+        m_sURL    = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
+        m_sCrossRef = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos);
         m_aDescription  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        m_nDefaultDrag= static_cast<RegionMode>( o3tl::toInt32(o3tl::getToken(sStr, 0, NAVI_BOOKMARK_DELIM, nPos )) );
         m_nDocSh  = o3tl::toInt32(o3tl::getToken(sStr, 0, NAVI_BOOKMARK_DELIM, nPos ));
         if (!rsDesc.isEmpty())
             m_aDescription = rsDesc;

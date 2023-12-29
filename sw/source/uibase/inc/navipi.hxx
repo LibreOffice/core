@@ -37,7 +37,6 @@ class SwWrtShell;
 class SfxBindings;
 class SwNavigationConfig;
 class SwView;
-enum class RegionMode;
 class SpinField;
 
 class SwNavigationPI final : public PanelLayout
@@ -60,7 +59,6 @@ class SwNavigationPI final : public PanelLayout
     std::unique_ptr<ToolbarUnoDispatcher> m_xContent2Dispatch;
     std::unique_ptr<ToolbarUnoDispatcher> m_xContent3Dispatch;
     std::unique_ptr<weld::Menu> m_xHeadingsMenu;
-    std::unique_ptr<weld::Menu> m_xDragModeMenu;
     std::unique_ptr<weld::Menu> m_xUpdateMenu;
     std::unique_ptr<weld::Menu> m_xInsertMenu;
     std::unique_ptr<weld::Toolbar> m_xGlobalToolBox;
@@ -84,7 +82,6 @@ class SwNavigationPI final : public PanelLayout
     SwNavigationConfig  *m_pConfig;
     SfxBindings         &m_rBindings;
 
-    RegionMode  m_nRegionMode; // 0 - URL, 1 - region with link 2 - region without link
     Size        m_aExpandedSize;
 
     bool    m_bIsZoomedIn : 1;
@@ -102,9 +99,7 @@ class SwNavigationPI final : public PanelLayout
     DECL_LINK( ToolBoxSelectHdl, const OUString&, void );
     DECL_LINK( ToolBoxClickHdl, const OUString&, void );
     DECL_LINK( ToolBox5DropdownClickHdl, const OUString&, void );
-    DECL_LINK( ToolBox6DropdownClickHdl, const OUString&, void );
     DECL_LINK( DoneLink, SfxPoolItem const *, void );
-    DECL_LINK( DropModeMenuSelectHdl, const OUString&, void );
     DECL_LINK( HeadingsMenuSelectHdl, const OUString&, void );
     DECL_LINK( GlobalMenuSelectHdl, const OUString&, void );
     DECL_LINK( ChangePageHdl, Timer*, void );
@@ -149,9 +144,6 @@ public:
 
     static OUString CreateDropFileName( const TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);
-
-    RegionMode      GetRegionDropMode() const {return m_nRegionMode;}
-    void            SetRegionDropMode(RegionMode nNewMode);
 
     sal_Int8        AcceptDrop();
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );

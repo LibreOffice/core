@@ -8,40 +8,6 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkMenu" id="dragmodemenu">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <child>
-      <object class="GtkRadioMenuItem" id="hyperlink">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorpanel|hyperlink">Insert as Hyperlink</property>
-        <property name="use-underline">True</property>
-        <property name="active">True</property>
-        <property name="draw-as-radio">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="link">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorpanel|link">Insert as Link</property>
-        <property name="use-underline">True</property>
-        <property name="draw-as-radio">True</property>
-        <property name="group">hyperlink</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioMenuItem" id="copy">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorpanel|copy">Insert as Copy</property>
-        <property name="use-underline">True</property>
-        <property name="draw-as-radio">True</property>
-        <property name="group">hyperlink</property>
-      </object>
-    </child>
-  </object>
   <object class="GtkMenu" id="headingsmenu">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -634,33 +600,6 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="chapterdown-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|chapterdown">Moves the selected heading, and the text below the heading, down one heading position in the Navigator and in the document. To move only the selected heading and not the text associated with the heading, hold down Ctrl, and then click this icon.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorToolItem" id="separator1">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkMenuToolButton" id="dragmode">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
-                        <property name="icon-name">sw/res/sc20235.png</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="dragmode-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|dragmode">Sets the drag and drop options for inserting items from the Navigator into a document, for example, as a hyperlink. Click this icon, and then choose the option that you want to use.</property>
                           </object>
                         </child>
                       </object>

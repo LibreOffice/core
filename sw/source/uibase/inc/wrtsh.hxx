@@ -461,8 +461,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     // if a URL-Button is selected, return its URL; otherwise an empty string
     bool GetURLFromButton( OUString& rURL, OUString& rDescr ) const;
 
-    void NavigatorPaste( const NaviContentBookmark& rBkmk,
-                         const sal_uInt16 nAction );
+    void NavigatorPaste(const NaviContentBookmark& rBkmk);
 
     virtual void ApplyViewOptions( const SwViewOption &rOpt ) override;
     virtual void SetReadonlyOption( bool bSet ) override;

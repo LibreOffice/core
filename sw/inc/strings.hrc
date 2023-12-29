@@ -421,6 +421,9 @@
 #define STR_HIDDEN_CHANGES_DETAIL3              NC_("STR_HIDDEN_CHANGES_DETAIL3", "Document contains tracked changes.")
 #define STR_FLDREF_FOOTNOTE                     NC_("STR_FLDREF_FOOTNOTE", "Footnote")
 #define STR_FLDREF_ENDNOTE                      NC_("STR_FLDREF_ENDNOTE", "Endnote")
+#define STR_HYPERLINK                           NC_("STR_HYPERLINK", "Hyperlink")
+#define STR_SECTIONLINK                         NC_("STR_SECTIONLINK", "Section Link")
+#define STR_SECTIONCOPY                         NC_("STR_SECTIONCOPY", "Section Copy")
 
 // Undo
 #define STR_CANT_UNDO                           NC_("STR_CANT_UNDO", "not possible")
@@ -699,9 +702,6 @@
 
 #define STR_EXPANDALL                           NC_("STR_EXPANDALL", "Expand All")
 #define STR_COLLAPSEALL                         NC_("STR_COLLAPSEALL", "Collapse All")
-#define STR_HYPERLINK                           NC_("STR_HYPERLINK", "Insert as Hyperlink")
-#define STR_LINK_REGION                         NC_("STR_LINK_REGION", "Insert as Link")
-#define STR_COPY_REGION                         NC_("STR_COPY_REGION", "Insert as Copy")
 #define STR_DISPLAY                             NC_("STR_DISPLAY", "Display")
 #define STR_ACTIVE_VIEW                         NC_("STR_ACTIVE_VIEW", "Active Window")
 #define STR_HIDDEN                              NC_("STR_HIDDEN", "hidden")

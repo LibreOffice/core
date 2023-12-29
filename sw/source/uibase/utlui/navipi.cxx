@@ -345,38 +345,6 @@ IMPL_LINK(SwNavigationPI, ToolBoxClickHdl, const OUString&, rCommand, void)
         m_xGlobalTree->TbxMenuHdl(rCommand, *m_xInsertMenu);
 }
 
-IMPL_LINK(SwNavigationPI, ToolBox6DropdownClickHdl, const OUString&, rCommand, void)
-{
-    if (!m_xContent6ToolBox->get_menu_item_active(rCommand))
-        return;
-
-    if (rCommand != "dragmode")
-        return;
-
-    switch (m_nRegionMode)
-    {
-        case RegionMode::NONE:
-            m_xDragModeMenu->set_active("hyperlink", true);
-            break;
-        case RegionMode::LINK:
-            m_xDragModeMenu->set_active("link", true);
-            break;
-        case RegionMode::EMBEDDED:
-            m_xDragModeMenu->set_active("copy", true);
-            break;
-    }
-}
-
-IMPL_LINK(SwNavigationPI, DropModeMenuSelectHdl, const OUString&, rIdent, void)
-{
-    if (rIdent == "hyperlink")
-        SetRegionDropMode(RegionMode::NONE);
-    else if (rIdent == "link")
-        SetRegionDropMode(RegionMode::LINK);
-    else if (rIdent == "copy")
-        SetRegionDropMode(RegionMode::EMBEDDED);
-}
-
 IMPL_LINK(SwNavigationPI, GlobalMenuSelectHdl, const OUString&, rIdent, void)
 {
     m_xGlobalTree->ExecuteContextMenuAction(rIdent);
@@ -534,7 +502,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_xContent2Dispatch(new ToolbarUnoDispatcher(*m_xContent2ToolBox, *m_xBuilder, rxFrame))
     , m_xContent3Dispatch(new ToolbarUnoDispatcher(*m_xContent3ToolBox, *m_xBuilder, rxFrame))
     , m_xHeadingsMenu(m_xBuilder->weld_menu("headingsmenu"))
-    , m_xDragModeMenu(m_xBuilder->weld_menu("dragmodemenu"))
     , m_xUpdateMenu(m_xBuilder->weld_menu("updatemenu"))
     , m_xInsertMenu(m_xBuilder->weld_menu("insertmenu"))
     , m_xGlobalToolBox(m_xBuilder->weld_toolbar("global"))
@@ -552,7 +519,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_pCreateView(nullptr)
     , m_pConfig(SW_MOD()->GetNavigationConfig())
     , m_rBindings(*_pBindings)
-    , m_nRegionMode(RegionMode::NONE)
     , m_bIsZoomedIn(false)
     , m_bGlobalMode(false)
 {
@@ -628,8 +594,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 
     bool bFloatingNavigator = ParentIsFloatingWindow(m_xNavigatorDlg);
 
-    SetRegionDropMode(m_pConfig->GetRegionMode());
-
     m_xContentTree->ShowTree();
     m_xContent6ToolBox->set_item_active("listbox", true);
     m_xContent6ToolBox->set_item_sensitive("listbox", bFloatingNavigator);
@@ -648,9 +612,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xContent5ToolBox->set_item_menu("headings", m_xHeadingsMenu.get());
     m_xHeadingsMenu->connect_activate(LINK(this, SwNavigationPI, HeadingsMenuSelectHdl));
     m_xContent5ToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBox5DropdownClickHdl));
-    m_xContent6ToolBox->set_item_menu("dragmode", m_xDragModeMenu.get());
-    m_xDragModeMenu->connect_activate(LINK(this, SwNavigationPI, DropModeMenuSelectHdl));
-    m_xContent6ToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBox6DropdownClickHdl));
     m_xGlobalToolBox->set_item_menu("update", m_xUpdateMenu.get());
     m_xUpdateMenu->connect_activate(LINK(this, SwNavigationPI, GlobalMenuSelectHdl));
     m_xGlobalToolBox->set_item_menu("insert", m_xInsertMenu.get());
@@ -744,7 +705,6 @@ SwNavigationPI::~SwNavigationPI()
     m_xGlobalToolBox.reset();
     m_xEdit.reset();
     m_xHeadingsMenu.reset();
-    m_xDragModeMenu.reset();
     m_xUpdateMenu.reset();
     m_xInsertMenu.reset();
     m_xContent2Dispatch.reset();
@@ -1046,27 +1006,6 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
                         { &aFileItem, &aOptionsItem, &aLink });
     }
     return nRet;
-}
-
-void SwNavigationPI::SetRegionDropMode(RegionMode nNewMode)
-{
-    m_nRegionMode = nNewMode;
-    m_pConfig->SetRegionMode( m_nRegionMode );
-
-    OUString sImageId;
-    switch (nNewMode)
-    {
-        case RegionMode::NONE:
-            sImageId = RID_BMP_DROP_REGION;
-            break;
-        case RegionMode::LINK:
-            sImageId = RID_BMP_DROP_LINK;
-            break;
-        case RegionMode::EMBEDDED:
-            sImageId = RID_BMP_DROP_COPY;
-            break;
-    }
-    m_xContent6ToolBox->set_item_icon_name("dragmode", sImageId);
 }
 
 void SwNavigationPI::ToggleTree()

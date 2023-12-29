@@ -97,8 +97,6 @@ inline constexpr OUString RID_BMP_NAVI_TEXTFIELD = u"sw/res/nc20005.png"_ustr;
 inline constexpr OUString RID_BMP_NAVI_FOOTNOTE = u"sw/res/nc20012.png"_ustr;
 inline constexpr OUString RID_BMP_NAVI_ENDNOTE = u"sw/res/nc20013.png"_ustr;
 inline constexpr OUString RID_BMP_DROP_REGION = u"sw/res/sc20235.png"_ustr;
-inline constexpr OUString RID_BMP_DROP_LINK = u"sw/res/sc20238.png"_ustr;
-inline constexpr OUString RID_BMP_DROP_COPY = u"sw/res/sc20239.png"_ustr;
 
 inline constexpr OUString RID_BMP_WRAP_RIGHT = u"sw/res/wr03.png"_ustr;
 inline constexpr OUString RID_BMP_WRAP_CONTOUR_RIGHT = u"sw/res/wr09.png"_ustr;

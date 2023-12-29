@@ -28,7 +28,6 @@ class SwNavigationConfig final : public utl::ConfigItem
     ContentTypeId  m_nRootType;      //RootType
     sal_Int32      m_nSelectedPos;   //SelectedPosition
     sal_Int32      m_nOutlineLevel;  //OutlineLevel
-    RegionMode     m_nRegionMode;    //InsertMode
     sal_Int32      m_nActiveBlock;   //ActiveBlock//Expand/CollapsState
     bool           m_bIsSmall;       //ShowListBox
     bool           m_bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
@@ -67,15 +66,6 @@ public:
                             m_nOutlineLevel = nSet;
                         }
                     }
-
-    RegionMode  GetRegionMode()const {return m_nRegionMode;}
-    void        SetRegionMode(RegionMode nSet){
-                    if(m_nRegionMode != nSet)
-                    {
-                        SetModified();
-                        m_nRegionMode = nSet;
-                    }
-                }
 
     sal_Int32   GetActiveBlock()const {return m_nActiveBlock;}
     void        SetActiveBlock(sal_Int32 nSet){
