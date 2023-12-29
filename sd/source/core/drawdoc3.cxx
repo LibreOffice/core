@@ -67,11 +67,11 @@ namespace {
 class InsertBookmarkAsPage_FindDuplicateLayouts
 {
 public:
-    explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::map<OUString, sal_Int32> &rLayoutsToTransfer )
+    explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer )
         : mrLayoutsToTransfer(rLayoutsToTransfer) {}
     void operator()( SdDrawDocument&, SdPage const *, bool, SdDrawDocument* );
 private:
-    std::map<OUString, sal_Int32> &mrLayoutsToTransfer;
+    std::vector<OUString> &mrLayoutsToTransfer;
 };
 
 }
@@ -85,11 +85,11 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     if( nIndex != -1 )
         aLayout = aLayout.copy(0, nIndex);
 
-    std::map<OUString, sal_Int32>::const_iterator pIter = mrLayoutsToTransfer.find(aLayout);
+    std::vector<OUString>::const_iterator pIter =
+        find(mrLayoutsToTransfer.begin(), mrLayoutsToTransfer.end(), aLayout);
 
     bool bFound = pIter != mrLayoutsToTransfer.end();
 
-    sal_Int32 nLayout = 20; // blank page - master slide layout ID
     const sal_uInt16 nMPageCount = rDoc.GetMasterPageCount();
     for (sal_uInt16 nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
     {
@@ -110,15 +110,6 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
                     pBMMPage->GetLayoutName(), pBMMPage->GetName() + "_");
                 aLayout = pBMMPage->GetName();
 
-                uno::Reference< drawing::XDrawPage > xOldPage(rDoc.GetMasterPage(nMPage)->getUnoPage(), uno::UNO_QUERY_THROW);
-                uno::Reference<beans::XPropertySet> xPropSet(xOldPage, uno::UNO_QUERY_THROW);
-                if (xPropSet.is())
-                {
-                    uno::Any aLayoutID = xPropSet->getPropertyValue("SlideLayout");
-                    if (aLayoutID.hasValue()) {
-                        aLayoutID >>= nLayout;
-                    }
-                }
                 break;
             }
             else
@@ -127,7 +118,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     }
 
     if (!bFound)
-        mrLayoutsToTransfer.insert({ aLayout, nLayout });
+        mrLayoutsToTransfer.push_back(aLayout);
 }
 
 // Inserts a bookmark as a page
@@ -508,7 +499,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
 
-    std::map<OUString, sal_Int32> aLayoutsToTransfer;
+    std::vector<OUString> aLayoutsToTransfer;
     InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( aLayoutsToTransfer );
     lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nBMSdPageCount, aSearchFunctor, ( rBookmarkList.empty() && pBookmarkDoc != this ) );
 
@@ -520,11 +511,14 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     if( !aLayoutsToTransfer.empty() )
         bMergeMasterPages = true;
 
-    for ( const auto& layout : aLayoutsToTransfer )
+    std::map<OUString, sal_Int32> aSlideLayoutsToTransfer;
+    std::map<OUString, std::shared_ptr<model::Theme>> aThemesToTransfer;
+
+    for ( const OUString& layoutName : aLayoutsToTransfer )
     {
         StyleSheetCopyResultVector aCreatedStyles;
 
-        rStyleSheetPool.CopyLayoutSheets(layout.first, rBookmarkStyleSheetPool, aCreatedStyles);
+        rStyleSheetPool.CopyLayoutSheets(layoutName, rBookmarkStyleSheetPool, aCreatedStyles);
 
         if(!aCreatedStyles.empty())
         {
@@ -532,6 +526,29 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             {
                 pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aCreatedStyles, true));
             }
+        }
+
+        // copy SlideLayout and Theme of the master slide
+        sal_Int32 nLayout = 20; // blank page - master slide layout ID
+        bool bIsMasterPage = false;
+        sal_uInt16 nBMPage = pBookmarkDoc->GetPageByName(layoutName, bIsMasterPage);
+        if (bIsMasterPage)
+        {
+            uno::Reference< drawing::XDrawPage > xOldPage(pBookmarkDoc->GetMasterPage(nBMPage)->getUnoPage(), uno::UNO_QUERY_THROW);
+            SdrPage* pMasterPage = SdPage::getImplementation(xOldPage);
+            if (pMasterPage)
+            {
+                aThemesToTransfer.insert({ layoutName, pMasterPage->getSdrPageProperties().getTheme() });
+                uno::Reference<beans::XPropertySet> xPropSet(xOldPage, uno::UNO_QUERY_THROW);
+                if (xPropSet.is())
+                {
+                    uno::Any aLayoutID = xPropSet->getPropertyValue("SlideLayout");
+                    if (aLayoutID.hasValue()) {
+                        aLayoutID >>= nLayout;
+                    }
+                }
+            }
+            aSlideLayoutsToTransfer.insert({ layoutName, nLayout });
         }
     }
 
@@ -910,12 +927,23 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                 pRefPage->SetOrientation( eOrient );
 
                 uno::Reference< drawing::XDrawPage > xNewPage(GetMasterPage(nPage)->getUnoPage(), uno::UNO_QUERY_THROW);
+
+                SdrPage* pMasterPage = SdPage::getImplementation(xNewPage);
+                if (pMasterPage)
+                {
+                    OUString aLayout(pRefPage->GetName());
+                    if (auto it{ aThemesToTransfer.find(aLayout) }; it != std::end(aThemesToTransfer))
+                    {
+                        pMasterPage->getSdrPageProperties().setTheme(it->second);
+                    }
+                }
+
                 uno::Reference<beans::XPropertySet> xNewPropSet(xNewPage, uno::UNO_QUERY_THROW);
                 if (xNewPropSet.is())
                 {
                     OUString aLayout(pRefPage->GetName());
                     sal_Int32 nLayout = 20; // blank page - master slide layout ID
-                    if (auto it{ aLayoutsToTransfer.find(aLayout) }; it != std::end(aLayoutsToTransfer))
+                    if (auto it{ aSlideLayoutsToTransfer.find(aLayout) }; it != std::end(aSlideLayoutsToTransfer))
                     {
                         nLayout = it->second;
                     }
