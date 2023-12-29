@@ -2018,7 +2018,7 @@ namespace xmloff
                         "OFormImport::implTranslateStringListProperty: invalid quoted element name.");
                 sElement = sElement.substr(1, nElementLength - 2);
 
-                aElements.push_back(OUString(sElement));
+                aElements.emplace_back(sElement);
 
                 // switch to the next element
                 nElementStart = 1 + nNextSep;
