@@ -2109,24 +2109,64 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
     CPPUNIT_ASSERT_EQUAL(true, pDoc->getIDocumentSettingAccess().get(
                                    DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS));
     calcLayout();
-    // Check that trailing spaces spans have no width if option is enabled
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Check that trailing spaces spans are put into Hole portion if option is enabled
 
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("0"),
-        parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
-                  "width"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("0"),
-        parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
-                  "width"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("0"),
-        parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
-                  "width"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("0"),
-        parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
-                  "width"_ostr));
+    assertXPath(pXmlDoc, "/root/page/body/txt"_ostr, 3);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*"_ostr, 4);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "portion"_ostr, u"TEST "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "portion"_ostr, u"   "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "portion"_ostr, u"   T"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "type"_ostr, u"PortionType::Hole"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "portion"_ostr, u"         "_ustr); // All the trailing blanks
+
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*"_ostr, 4);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "portion"_ostr, u"TEST "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "portion"_ostr, u"   "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "portion"_ostr, u"   T"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "type"_ostr, u"PortionType::Hole"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "portion"_ostr, u"         "_ustr); // All the trailing blanks
+
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*"_ostr, 4);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "portion"_ostr, u"TEST "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "portion"_ostr, u"   "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "portion"_ostr, u"   T"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "type"_ostr, u"PortionType::Hole"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "portion"_ostr, u"         "_ustr); // All the trailing blanks
 
     // The option is false in settings.xml
     createSwDoc("MsWordCompTrailingBlanksFalse.odt");
@@ -2134,19 +2174,76 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
     CPPUNIT_ASSERT_EQUAL(false, pDoc->getIDocumentSettingAccess().get(
                                     DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS));
     calcLayout();
-    // Check that trailing spaces spans have width if option is disabled
-    CPPUNIT_ASSERT(parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
-                             "width"_ostr)
-                   != "0");
-    CPPUNIT_ASSERT(parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
-                             "width"_ostr)
-                   != "0");
-    CPPUNIT_ASSERT(parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
-                             "width"_ostr)
-                   != "0");
-    CPPUNIT_ASSERT(parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
-                             "width"_ostr)
-                   != "0");
+    pXmlDoc = parseLayoutDump();
+    // Check that trailing spaces spans are put into Text portions if option is disabled
+
+    assertXPath(pXmlDoc, "/root/page/body/txt"_ostr, 3);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*"_ostr, 5);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "portion"_ostr, u"TEST "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "portion"_ostr, u"   "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "portion"_ostr, u"   T   "_ustr); // first colored trailing blank span here
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "portion"_ostr, u"   "_ustr); // second colored trailing blank span here
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
+                "portion"_ostr, u"   "_ustr); // third colored trailing blank span here
+
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*"_ostr, 5);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "portion"_ostr, u"TEST "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "portion"_ostr, u"   "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "portion"_ostr, u"   T   "_ustr); // first colored trailing blank span here
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "portion"_ostr, u"   "_ustr); // second colored trailing blank span here
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
+                "portion"_ostr, u"   "_ustr); // third colored trailing blank span here
+
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*"_ostr, 5);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
+                "portion"_ostr, u"TEST "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
+                "portion"_ostr, u"   "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
+                "portion"_ostr, u"   T   "_ustr); // first colored trailing blank span here
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
+                "portion"_ostr, u"   "_ustr); // second colored trailing blank span here
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
+                "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
+                "portion"_ostr, u"   "_ustr); // third colored trailing blank span here
 
     // MsWordCompTrailingBlanks option should be false by default in new documents
     createSwDoc();

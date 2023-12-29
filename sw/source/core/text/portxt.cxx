@@ -435,8 +435,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
                 // UAX #14 Unicode Line Breaking Algorithm Non-tailorable Line breaking rule LB6:
                 // https://www.unicode.org/reports/tr14/#LB6 Do not break before hard line breaks
-                if (rInf.GetChar(aGuess.BreakStart()) == CH_BREAK)
-                    bFull = false; // Keep following SwBreakPortion in the same line
+                if (auto ch = rInf.GetChar(aGuess.BreakStart()); !ch || ch == CH_BREAK)
+                    bFull = false; // Keep following SwBreakPortion / para break in the same line
             }
         }
         else    // case C2, last exit

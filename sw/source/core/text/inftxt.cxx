@@ -1210,74 +1210,6 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         aFillColor = *m_pFnt->GetBackColor();
     }
 
-    // tdf#104349 do not highlight portions of space chars before end of line if the compatibility option is enabled
-    // for LTR mode only
-    if ( !GetTextFrame()->IsRightToLeft() )
-    {
-        if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
-        {
-            bool           draw = false;
-            bool           full = false;
-            const sal_Int32 nMaxLen = GetText().getLength();
-            const sal_Int32 nCurrPorEnd(GetIdx() + rPor.GetLen());
-            const SwLinePortion* pPos = &rPor;
-            TextFrameIndex nIdx = GetIdx();
-
-            do
-            {
-                const sal_Int32 nEndPos = std::min(sal_Int32(nIdx + pPos->GetLen()), nMaxLen);
-                for (sal_Int32 i = sal_Int32(nIdx); i < nEndPos; ++i)
-                {
-                    if (i < nMaxLen && i >= nCurrPorEnd && GetText()[i] == CH_TXTATR_NEWLINE)
-                        goto drawcontinue;
-
-                    if (i == nMaxLen || GetText()[i] != CH_BLANK)
-                    {
-                        draw = true;
-                        if (i >= nCurrPorEnd)
-                        {
-                            full = true;
-                            goto drawcontinue;
-                        }
-                    }
-                }
-                nIdx += pPos->GetLen();
-                pPos = pPos->GetNextPortion();
-            } while ( pPos );
-
-        drawcontinue:
-
-            if ( !draw )
-                return;
-
-            if ( !full )
-            {
-                const sal_Int32 nLastPos = std::min(nCurrPorEnd, nMaxLen) - 1;
-                for (sal_Int32 i = nLastPos; TextFrameIndex(i) >= GetIdx(); --i)
-                {
-                    if (GetText()[i] == CH_TXTATR_NEWLINE)
-                        continue;
-
-                    if (GetText()[i] != CH_BLANK)
-                    {
-                        const sal_uInt16 nOldWidth = rPor.Width();
-                        const sal_uInt16 nExcessWidth
-                            = GetTextSize(m_pOut, nullptr, GetText(), TextFrameIndex(i + 1),
-                                          TextFrameIndex(nLastPos - i)).Width();
-                        const_cast<SwLinePortion&>(rPor).Width(nOldWidth - nExcessWidth);
-                        CalcRect( rPor, nullptr, &aIntersect, true );
-                        const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
-
-                        if ( !aIntersect.HasArea() )
-                            return;
-
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     pTmpOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
 
     pTmpOut->SetFillColor(aFillColor);
@@ -1793,6 +1725,37 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
 {
     SetMulti( true );
     SetFirstMulti( rInf.IsFirstMulti() );
+}
+
+void SwTextFormatInfo::UpdateTabSeen(PortionType type)
+{
+    switch (type)
+    {
+        case PortionType::TabLeft:
+            m_eLastTabsSeen = TabSeen::Left;
+            break;
+        case PortionType::TabRight:
+            m_eLastTabsSeen = TabSeen::Right;
+            break;
+        case PortionType::TabCenter:
+            m_eLastTabsSeen = TabSeen::Center;
+            break;
+        case PortionType::TabDecimal:
+            m_eLastTabsSeen = TabSeen::Decimal;
+            break;
+        case PortionType::Break:
+            m_eLastTabsSeen = TabSeen::None;
+            break;
+        default:
+            break;
+    }
+}
+
+void SwTextFormatInfo::SetLast(SwLinePortion* pNewLast)
+{
+    m_pLast = pNewLast;
+    assert(pNewLast); // We never pass nullptr here. If we start, then a check is needed below.
+    UpdateTabSeen(pNewLast->GetWhichPor());
 }
 
 bool SwTextFormatInfo::CheckFootnotePortion_( SwLineLayout const * pCurr )

@@ -399,18 +399,30 @@ void SwTextCursor::CtorInitTextCursor( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     // GetInfo().SetOut( GetInfo().GetWin() );
 }
 
+static bool isTrailingDecoration(SwLinePortion* p)
+{
+    // Optional no-width portion, followed only by no-width portions and/or terminating portions?
+    for (; p; p = p->GetNextPortion())
+    {
+        if (p->IsMarginPortion() || p->IsBreakPortion())
+            return true;
+        if (p->Width())
+            return false;
+    }
+    return true; // no more portions
+}
+
 // tdf#120715 tdf#43100: Make width for some HolePortions, so cursor will be able to move into it.
 // It should not change the layout, so this should be called after the layout is calculated.
 void SwTextCursor::AddExtraBlankWidth()
 {
     SwLinePortion* pPos = m_pCurr->GetNextPortion();
-    SwLinePortion* pNextPos;
     while (pPos)
     {
-        pNextPos = pPos->GetNextPortion();
+        SwLinePortion* pNextPos = pPos->GetNextPortion();
         // Do it only if it is the last portion that able to handle the cursor,
         // else the next portion would miscalculate the cursor position
-        if (pPos->ExtraBlankWidth() && (!pNextPos || pNextPos->IsMarginPortion()))
+        if (pPos->ExtraBlankWidth() && isTrailingDecoration(pNextPos))
         {
             pPos->Width(pPos->Width() + pPos->ExtraBlankWidth());
             pPos->ExtraBlankWidth(0);

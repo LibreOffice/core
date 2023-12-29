@@ -320,6 +320,8 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             }
         }
     }
+    if (pTabPor)
+        rInf.UpdateTabSeen(pTabPor->GetWhichPor());
 
     return pTabPor;
 }

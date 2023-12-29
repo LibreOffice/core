@@ -1262,7 +1262,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             // If pCurr does not have a width, it can however already have content.
             // E.g. for non-displayable characters
 
-            auto const ch(rInf.GetText()[sal_Int32(rInf.GetIdx())]);
+            auto const ch(rInf.GetChar(rInf.GetIdx()));
             SwTextFrame const*const pFrame(rInf.GetTextFrame());
             SwPosition aPosition(pFrame->MapViewToModelPos(rInf.GetIdx()));
             sw::mark::IFieldmark *pBM = pFrame->GetDoc().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPosition);

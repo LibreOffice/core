@@ -44,6 +44,108 @@ namespace{
 
 bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_NB_SPACE || ch == CH_SIX_PER_EM; }
 
+// Used when spaces should not be counted in layout
+// Returns adjusted cut position
+TextFrameIndex AdjustCutPos(TextFrameIndex cutPos, TextFrameIndex& rBreakPos,
+                            const SwTextFormatInfo& rInf)
+{
+    assert(cutPos >= rInf.GetIdx());
+    TextFrameIndex x = rBreakPos = cutPos;
+
+    // we step back until a non blank character has been found
+    // or there is only one more character left
+    while (x && x > rInf.GetIdx() + TextFrameIndex(1) && IsBlank(rInf.GetChar(--x)))
+        --rBreakPos;
+
+    while (IsBlank(rInf.GetChar(cutPos)))
+        ++cutPos;
+
+    return cutPos;
+}
+
+bool hasBlanksInLine(const SwTextFormatInfo& rInf, TextFrameIndex end)
+{
+    for (auto x = rInf.GetLineStart(); x < end; ++x)
+        if (IsBlank(rInf.GetChar(x)))
+            return true;
+    return false;
+}
+
+// Called for the last text run in a line; if it is block-adjusted, or center / right-adjusted
+// with Word compatibility option set, and it has trailing spaces, then the function sets the
+// values, and returns 'false' value that SwTextGuess::Guess should return, to create a
+// trailing SwHolePortion.
+bool maybeAdjustPositionsForBlockAdjust(TextFrameIndex& rCutPos, TextFrameIndex& rBreakPos,
+                                        TextFrameIndex& rBreakStart, sal_uInt16& rBreakWidth,
+                                        sal_uInt16& rExtraBlankWidth, sal_uInt16& rMaxSizeDiff,
+                                        const SwTextFormatInfo& rInf, const SwScriptInfo& rSI,
+                                        sal_uInt16 maxComp)
+{
+    const auto& adjObj = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
+    const SvxAdjust& adjust = adjObj.GetAdjust();
+    if (adjust == SvxAdjust::Block)
+    {
+        if (rInf.DontBlockJustify())
+            return true; // See tdf#106234
+    }
+    else
+    {
+        // tdf#104668 space chars at the end should be cut if the compatibility option is enabled
+        if (!rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
+            return true;
+        // for LTR mode only
+        if (rInf.GetTextFrame()->IsRightToLeft())
+            return true;
+    }
+    if (auto ch = rInf.GetChar(rCutPos); !ch) // end of paragraph - last line
+    {
+        if (adjust == SvxAdjust::Block)
+        {
+            // Check adjustment for last line
+            switch (adjObj.GetLastBlock())
+            {
+                default:
+                    return true;
+                case SvxAdjust::Center: // tdf#104668
+                    if (!rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                            DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
+                        return true;
+                    break;
+                case SvxAdjust::Block:
+                    break; // OK - last line uses block-adjustment
+            }
+        }
+    }
+    else if (ch != CH_BREAK && !IsBlank(ch))
+        return true;
+
+    // tdf#57187: block-adjusted line shorter than full width, terminated by manual
+    // line break, must not use trailing spaces for adjustment
+    TextFrameIndex breakPos;
+    TextFrameIndex newCutPos = AdjustCutPos(rCutPos, breakPos, rInf);
+
+    if (auto ch = rInf.GetChar(newCutPos); ch && ch != CH_BREAK)
+        return true; // next is neither line break nor paragraph end
+    if (breakPos == newCutPos)
+        return true; // no trailing whitespace
+    if (adjust == SvxAdjust::Block && adjObj.GetOneWord() != SvxAdjust::Block
+        && !hasBlanksInLine(rInf, breakPos))
+        return true; // line can't block-adjust
+
+    // Some trailing spaces actually found, and in case of block adjustment, the text portion
+    // itself has spaces to be able to block-adjust, or single word is allowed to adjust
+    rBreakStart = rCutPos = newCutPos;
+    rBreakPos = breakPos;
+
+    rInf.GetTextSize(&rSI, rInf.GetIdx(), breakPos - rInf.GetIdx(), maxComp, rBreakWidth,
+                     rMaxSizeDiff, rInf.GetCachedVclData().get());
+    rInf.GetTextSize(&rSI, breakPos, rBreakStart - breakPos, maxComp, rExtraBlankWidth,
+                     rMaxSizeDiff, rInf.GetCachedVclData().get());
+
+    return false; // require SwHolePortion creation
+}
+
 }
 
 // provides information for line break calculation
@@ -86,38 +188,6 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         static constexpr OUStringLiteral STR_BLANK = u" ";
         sal_Int16 nSpaceWidth = rInf.GetTextSize(STR_BLANK).Width();
         nLineWidth += nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth);
-    }
-
-    // tdf#104668 space chars at the end should be cut if the compatibility option is enabled
-    // for LTR mode only
-    if ( !rInf.GetTextFrame()->IsRightToLeft() )
-    {
-        if (rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                    DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
-        {
-            if ( rAdjust == SvxAdjust::Right || rAdjust == SvxAdjust::Center )
-            {
-                TextFrameIndex nSpaceCnt(0);
-                for (sal_Int32 i = rInf.GetText().getLength() - 1;
-                     sal_Int32(rInf.GetIdx()) <= i; --i)
-                {
-                    sal_Unicode cChar = rInf.GetText()[i];
-                    if ( cChar != CH_BLANK && cChar != CH_FULL_BLANK && cChar != CH_SIX_PER_EM )
-                        break;
-                    ++nSpaceCnt;
-                }
-                TextFrameIndex nCharsCnt = nMaxLen - nSpaceCnt;
-                if ( nSpaceCnt && nCharsCnt < rPor.GetLen() )
-                {
-                    if (nSpaceCnt)
-                        rInf.GetTextSize( &rSI, rInf.GetIdx() + nCharsCnt, nSpaceCnt,
-                                          nMaxComp, m_nExtraBlankWidth, nMaxSizeDiff );
-                    nMaxLen = nCharsCnt;
-                    if ( !nMaxLen )
-                        return true;
-                }
-            }
-        }
     }
 
     if ( rInf.GetLen() < nMaxLen )
@@ -183,12 +253,15 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         {
             // portion fits to line
             m_nCutPos = rInf.GetIdx() + nMaxLen;
+            bool bRet = maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
+                                                           m_nBreakWidth, m_nExtraBlankWidth,
+                                                           nMaxSizeDiff, rInf, rSI, nMaxComp);
             if( nItalic &&
                 (m_nCutPos >= TextFrameIndex(rInf.GetText().getLength()) ||
                   // #i48035# Needed for CalcFitToContent
                   // if first line ends with a manual line break
                   rInf.GetText()[sal_Int32(m_nCutPos)] == CH_BREAK))
-                m_nBreakWidth = m_nBreakWidth + nItalic;
+                m_nBreakWidth += nItalic;
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
@@ -196,7 +269,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
             m_nBreakWidth += nLeftRightBorderSpace;
 
-            return true;
+            return bRet;
         }
     }
 
@@ -335,8 +408,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // there likely has been a pixel rounding error in GetTextBreak
         if ( m_nBreakWidth <= nLineWidth )
         {
+            bool bRet = maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
+                                                           m_nBreakWidth, m_nExtraBlankWidth,
+                                                           nMaxSizeDiff, rInf, rSI, nMaxComp);
+
             if (nItalic && (m_nBreakPos + TextFrameIndex(1)) >= TextFrameIndex(rInf.GetText().getLength()))
-                m_nBreakWidth = m_nBreakWidth + nItalic;
+                m_nBreakWidth += nItalic;
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
@@ -344,7 +421,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
             m_nBreakWidth += nLeftRightBorderSpace;
 
-            return true;
+            return bRet;
         }
     }
 
@@ -359,36 +436,11 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     TextFrameIndex nPorLen(0);
     // do not call the break iterator nCutPos is a blank
-    sal_Unicode cCutChar = m_nCutPos < TextFrameIndex(rInf.GetText().getLength())
-        ? rInf.GetText()[sal_Int32(m_nCutPos)]
-        : 0;
+    sal_Unicode cCutChar = rInf.GetChar(m_nCutPos);
     if (IsBlank(cCutChar))
     {
-        m_nBreakPos = m_nCutPos;
-        TextFrameIndex nX = m_nBreakPos;
-
-        if ( rAdjust == SvxAdjust::Left )
-        {
-            // we step back until a non blank character has been found
-            // or there is only one more character left
-            while (nX && TextFrameIndex(rInf.GetText().getLength()) < m_nBreakPos &&
-                   IsBlank(rInf.GetChar(--nX)))
-                --m_nBreakPos;
-        }
-        else // #i20878#
-        {
-            while (nX && m_nBreakPos > rInf.GetLineStart() + TextFrameIndex(1) &&
-                   IsBlank(rInf.GetChar(--nX)))
-                --m_nBreakPos;
-        }
-
-        if( m_nBreakPos > rInf.GetIdx() )
-            nPorLen = m_nBreakPos - rInf.GetIdx();
-        while (++m_nCutPos < TextFrameIndex(rInf.GetText().getLength()) &&
-               IsBlank(rInf.GetChar(m_nCutPos)))
-            ; // nothing
-
-        m_nBreakStart = m_nCutPos;
+        m_nCutPos = m_nBreakStart = AdjustCutPos(m_nCutPos, m_nBreakPos, rInf);
+        nPorLen = m_nBreakPos - rInf.GetIdx();
     }
     else
     {
