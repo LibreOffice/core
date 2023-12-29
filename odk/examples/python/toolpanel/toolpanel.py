@@ -18,7 +18,6 @@
 # inspired by core/testautomation/extensions/optional/input/extension_sources/TaskPaneComponent
 #
 
-import uno
 import unohelper
 
 from com.sun.star.ui import XUIElementFactory

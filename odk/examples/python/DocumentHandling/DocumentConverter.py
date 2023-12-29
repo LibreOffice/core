@@ -13,7 +13,6 @@ import sys
 from os.path import abspath, basename, isdir, join, splitext
 
 import uno
-import unohelper
 from com.sun.star.beans import PropertyValue
 from com.sun.star.connection import NoConnectException
 

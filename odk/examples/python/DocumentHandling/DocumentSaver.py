@@ -12,7 +12,6 @@ import sys
 from os.path import basename, abspath
 
 import uno
-import unohelper
 from com.sun.star.beans import PropertyValue
 from com.sun.star.connection import NoConnectException
 

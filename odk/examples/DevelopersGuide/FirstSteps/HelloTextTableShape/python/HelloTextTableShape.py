@@ -10,7 +10,6 @@
 import sys
 import traceback
 
-import uno
 import officehelper
 
 from com.sun.star.lang import DisposedException

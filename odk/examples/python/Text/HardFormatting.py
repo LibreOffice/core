@@ -11,7 +11,6 @@ import officehelper
 import sys
 import traceback
 
-from com.sun.star.awt import Size
 from com.sun.star.awt.FontWeight import BOLD
 from com.sun.star.beans.PropertyState import AMBIGUOUS_VALUE
 from com.sun.star.beans.PropertyState import DEFAULT_VALUE

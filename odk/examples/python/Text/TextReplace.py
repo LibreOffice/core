@@ -11,9 +11,7 @@ import officehelper
 import sys
 import traceback
 
-from com.sun.star.awt import Size
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
-from com.sun.star.text.TextContentAnchorType import AS_CHARACTER
 
 
 def get_desktop():
