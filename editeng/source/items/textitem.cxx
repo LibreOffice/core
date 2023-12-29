@@ -765,7 +765,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (fPoint < 0. || fPoint > 10000.)
                 return false;
             static bool bFuzzing = utl::ConfigManager::IsFuzzing();
-            if (bFuzzing && fPoint > 240)
+            if (bFuzzing && fPoint > 120)
             {
                 SAL_WARN("editeng.items", "SvxFontHeightItem ignoring font size of " << fPoint << " for performance");
                 return false;
