@@ -31,6 +31,7 @@
 #include <tools/lineend.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include "TextPortion.hxx"
+#include "TextPortionList.hxx"
 #include "ItemList.hxx"
 #include "ContentNode.hxx"
 #include "EditLineList.hxx"
@@ -111,30 +112,6 @@ typedef std::vector<Color> SvxColorList;
 
 enum class DeleteMode {
     Simple, RestOfWord, RestOfContent
-};
-
-class TextPortionList
-{
-    typedef std::vector<std::unique_ptr<TextPortion> > PortionsType;
-    PortionsType maPortions;
-
-public:
-            TextPortionList();
-            ~TextPortionList();
-
-    void    Reset();
-    sal_Int32 FindPortion(
-        sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false) const;
-    sal_Int32 GetStartPos(sal_Int32 nPortion);
-    void DeleteFromPortion(sal_Int32 nDelFrom);
-    sal_Int32 Count() const;
-    const TextPortion& operator[](sal_Int32 nPos) const;
-    TextPortion& operator[](sal_Int32 nPos);
-
-    void Append(TextPortion* p);
-    void Insert(sal_Int32 nPos, TextPortion* p);
-    void Remove(sal_Int32 nPos);
-    sal_Int32 GetPos(const TextPortion* p) const;
 };
 
 class ParaPortion
