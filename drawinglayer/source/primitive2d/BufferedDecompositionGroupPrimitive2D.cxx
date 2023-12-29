@@ -36,11 +36,17 @@ public:
     {
     }
 
+    void clearCallback() { pCustomer = nullptr; }
+
 protected:
     virtual void SAL_CALL onShot() override;
 };
 
-void SAL_CALL LocalCallbackTimer::onShot() { flushBufferedDecomposition(*pCustomer); }
+void SAL_CALL LocalCallbackTimer::onShot()
+{
+    if (nullptr != pCustomer)
+        flushBufferedDecomposition(*pCustomer);
+}
 }
 
 namespace drawinglayer::primitive2d
@@ -55,7 +61,7 @@ BufferedDecompositionGroupPrimitive2D::getBuffered2DDecomposition() const
 {
     if (0 != maCallbackSeconds && maCallbackTimer.is())
     {
-        // decomposition was used, touch
+        // decomposition was used, touch/restart time
         maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
     }
 
@@ -70,19 +76,20 @@ void BufferedDecompositionGroupPrimitive2D::setBuffered2DDecomposition(Primitive
         {
             if (rNew.empty())
             {
-                // no more decomposition, end callback
+                // stop timer
                 maCallbackTimer->stop();
-                maCallbackTimer.clear();
             }
             else
             {
                 // decomposition changed, touch
                 maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
+                if (!maCallbackTimer->isTicking())
+                    maCallbackTimer->start();
             }
         }
         else if (!rNew.empty())
         {
-            // decomposition changed, start callback
+            // decomposition defined/set/changed, init & start timer
             maCallbackTimer.set(new LocalCallbackTimer(*this));
             maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
             maCallbackTimer->start();
@@ -105,8 +112,8 @@ BufferedDecompositionGroupPrimitive2D::~BufferedDecompositionGroupPrimitive2D()
     if (maCallbackTimer.is())
     {
         // no more decomposition, end callback
+        static_cast<LocalCallbackTimer*>(maCallbackTimer.get())->clearCallback();
         maCallbackTimer->stop();
-        maCallbackTimer.clear();
     }
 }
 
