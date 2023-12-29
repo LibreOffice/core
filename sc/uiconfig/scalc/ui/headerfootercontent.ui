@@ -1,140 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="imageBTN_DATE">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">sc/res/date.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sc/res/date.png</property>
   </object>
   <object class="GtkImage" id="imageBTN_FILE">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">sc/res/file.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sc/res/file.png</property>
   </object>
   <object class="GtkImage" id="imageBTN_PAGE">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">sc/res/page.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sc/res/page.png</property>
   </object>
   <object class="GtkImage" id="imageBTN_PAGES">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">sc/res/pages.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sc/res/pages.png</property>
   </object>
   <object class="GtkImage" id="imageBTN_TABLE">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">sc/res/table.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sc/res/table.png</property>
   </object>
   <object class="GtkImage" id="imageBTN_TEXT">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">sc/res/text.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sc/res/text.png</property>
   </object>
   <object class="GtkImage" id="imageBTN_TIME">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">sc/res/time.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sc/res/time.png</property>
   </object>
   <object class="GtkMenu" id="popup">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkMenuItem" id="title">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="headerfootercontent|title">Title</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="filename">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="headerfootercontent|filename">File Name</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="pathname">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="headerfootercontent|pathname">Path/File Name</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
   </object>
   <object class="GtkBox" id="HeaderFooterContent">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
-      <!-- n-columns=1 n-rows=1 -->
+      <!-- n-columns=3 n-rows=2 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="row_spacing">12</property>
-        <property name="column_spacing">6</property>
-        <property name="column_homogeneous">True</property>
+        <property name="can-focus">False</property>
+        <property name="row-spacing">12</property>
+        <property name="column-spacing">6</property>
+        <property name="column-homogeneous">True</property>
         <child>
           <object class="GtkLabel" id="labelFT_LEFT">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_LEFT">_Left area</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">textviewWND_LEFT</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">textviewWND_LEFT</property>
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="labelFT_CENTER">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_CENTER">_Center area</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">textviewWND_CENTER</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">textviewWND_CENTER</property>
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="labelFT_RIGHT">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_RIGHT">R_ight area</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">textviewWND_RIGHT</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">textviewWND_RIGHT</property>
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="border_width">0</property>
-            <property name="shadow_type">in</property>
+            <property name="can-focus">True</property>
+            <property name="border-width">0</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkViewport">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkDrawingArea" id="textviewWND_LEFT">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="textviewWND_LEFT-atkobject">
@@ -147,24 +147,24 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="border_width">0</property>
-            <property name="shadow_type">in</property>
+            <property name="can-focus">True</property>
+            <property name="border-width">0</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkViewport">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkDrawingArea" id="textviewWND_CENTER">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="textviewWND_CENTER-atkobject">
@@ -177,24 +177,24 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="border_width">0</property>
-            <property name="shadow_type">in</property>
+            <property name="can-focus">True</property>
+            <property name="border-width">0</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkViewport">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkDrawingArea" id="textviewWND_RIGHT">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="textviewWND_RIGHT-atkobject">
@@ -207,8 +207,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
       </object>
@@ -219,25 +219,25 @@
       </packing>
     </child>
     <child>
-      <!-- n-columns=1 n-rows=1 -->
+      <!-- n-columns=2 n-rows=2 -->
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="row_spacing">12</property>
-        <property name="column_spacing">6</property>
+        <property name="row-spacing">12</property>
+        <property name="column-spacing">6</property>
         <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="labelFT_H_DEFINED">
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_H_DEFINED">_Header</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">comboLB_DEFINED</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">comboLB_DEFINED</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -248,11 +248,11 @@
             </child>
             <child>
               <object class="GtkLabel" id="labelFT_F_DEFINED">
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_F_DEFINED">_Footer</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">comboLB_DEFINED</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">comboLB_DEFINED</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -263,19 +263,19 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="labelFT_H_CUSTOM">
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_H_CUSTOM">Custom header</property>
                 <property name="xalign">0</property>
@@ -288,7 +288,7 @@
             </child>
             <child>
               <object class="GtkLabel" id="labelFT_F_CUSTOM">
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_F_CUSTOM">Custom footer</property>
                 <property name="xalign">0</property>
@@ -301,21 +301,21 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkButton" id="buttonBTN_TEXT">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TEXT|tooltip_text">Text Attributes</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="headerfootercontent|buttonBTN_TEXT|tooltip_text">Text Attributes</property>
                 <property name="image">imageBTN_TEXT</property>
                 <property name="always-show-image">True</property>
                 <child internal-child="accessible">
@@ -333,14 +333,13 @@
             <child>
               <object class="GtkMenuButton" id="buttonBTN_FILE">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_FILE|tooltip_text">Title</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="headerfootercontent|buttonBTN_FILE|tooltip_text">Title</property>
                 <property name="image">imageBTN_FILE</property>
-                <property name="draw_indicator">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="popup">popup</property>
-                <property name="direction">down</property>
-                <property name="use_popover">False</property>
+                <property name="use-popover">False</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="buttonBTN_FILE-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_FILE">Inserts a file name placeholder in the selected area.</property>
@@ -356,9 +355,9 @@
             <child>
               <object class="GtkButton" id="buttonBTN_TABLE">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TABLE|tooltip_text">Sheet Name</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="headerfootercontent|buttonBTN_TABLE|tooltip_text">Sheet Name</property>
                 <property name="image">imageBTN_TABLE</property>
                 <property name="always-show-image">True</property>
                 <child internal-child="accessible">
@@ -376,9 +375,9 @@
             <child>
               <object class="GtkButton" id="buttonBTN_PAGE">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGE|tooltip_text">Page</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="headerfootercontent|buttonBTN_PAGE|tooltip_text">Page</property>
                 <property name="image">imageBTN_PAGE</property>
                 <property name="always-show-image">True</property>
                 <child internal-child="accessible">
@@ -396,9 +395,9 @@
             <child>
               <object class="GtkButton" id="buttonBTN_PAGES">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGES|tooltip_text">Pages</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="headerfootercontent|buttonBTN_PAGES|tooltip_text">Pages</property>
                 <property name="image">imageBTN_PAGES</property>
                 <property name="always-show-image">True</property>
                 <child internal-child="accessible">
@@ -416,9 +415,9 @@
             <child>
               <object class="GtkButton" id="buttonBTN_DATE">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_DATE|tooltip_text">Date</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="headerfootercontent|buttonBTN_DATE|tooltip_text">Date</property>
                 <property name="image">imageBTN_DATE</property>
                 <property name="always-show-image">True</property>
                 <child internal-child="accessible">
@@ -436,9 +435,9 @@
             <child>
               <object class="GtkButton" id="buttonBTN_TIME">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TIME|tooltip_text">Time</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="headerfootercontent|buttonBTN_TIME|tooltip_text">Time</property>
                 <property name="image">imageBTN_TIME</property>
                 <property name="always-show-image">True</property>
                 <child internal-child="accessible">
@@ -455,14 +454,14 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBoxText" id="comboLB_DEFINED">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="comboLB_DEFINED-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|comboLB_DEFINED">Select a predefined header or footer from the list.</property>
@@ -470,8 +469,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
       </object>
@@ -484,25 +483,25 @@
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="headerfootercontent|label2">Use the buttons to change the font or insert field commands such as date, time, etc.</property>
+            <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
+            <property name="label" translatable="yes" context="headerfootercontent|label2">Use the buttons to change the font or insert field commands such as date, time, etc.</property>
             <attributes>
-              <attribute name="scale" value="0.9"/>
+              <attribute name="scale" value="0.90000000000000002"/>
             </attributes>
           </object>
         </child>
         <child type="label">
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|label1">Note</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -518,13 +517,13 @@
     </child>
     <child>
       <object class="GtkBox" id="box4">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel" id="labelSTR_HF_NONE_IN_BRACKETS">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_NONE_IN_BRACKETS">(none)</property>
           </object>
           <packing>
@@ -536,7 +535,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_PAGE">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelSTR_PAGE">Page</property>
           </object>
           <packing>
@@ -548,7 +547,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_HF_OF_QUESTION">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_OF_QUESTION">of ?</property>
           </object>
           <packing>
@@ -560,7 +559,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_HF_CONFIDENTIAL">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_CONFIDENTIAL">Confidential</property>
           </object>
           <packing>
@@ -572,7 +571,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_HF_CREATED_BY">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_CREATED_BY">Created by</property>
           </object>
           <packing>
@@ -584,7 +583,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_HF_CUSTOMIZED">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_CUSTOMIZED">Customized</property>
           </object>
           <packing>
@@ -596,7 +595,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_HF_OF">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_OF">of</property>
           </object>
           <packing>
