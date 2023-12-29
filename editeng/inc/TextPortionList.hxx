@@ -28,21 +28,35 @@ class TextPortionList
     PortionsType maPortions;
 
 public:
-    TextPortionList();
-    ~TextPortionList();
+    TextPortionList() = default;
 
-    void Reset();
+    void Reset() { maPortions.clear(); }
+
     sal_Int32 FindPortion(sal_Int32 nCharPos, sal_Int32& rPortionStart,
                           bool bPreferStartingPortion = false) const;
     sal_Int32 GetStartPos(sal_Int32 nPortion);
     void DeleteFromPortion(sal_Int32 nDelFrom);
-    sal_Int32 Count() const;
-    const TextPortion& operator[](sal_Int32 nPos) const;
-    TextPortion& operator[](sal_Int32 nPos);
 
-    void Append(TextPortion* p);
-    void Insert(sal_Int32 nPos, TextPortion* p);
-    void Remove(sal_Int32 nPos);
+    sal_Int32 Count() const { return sal_Int32(maPortions.size()); }
+
+    const TextPortion& operator[](sal_Int32 nPosition) const { return *maPortions[nPosition]; }
+
+    TextPortion& operator[](sal_Int32 nPosition) { return *maPortions[nPosition]; }
+
+    void Append(TextPortion* pTextPortion)
+    {
+        maPortions.push_back(std::unique_ptr<TextPortion>(pTextPortion));
+    }
+
+    void Insert(sal_Int32 nPosition, TextPortion* pTextPortion)
+    {
+        maPortions.insert(maPortions.begin() + nPosition,
+                          std::unique_ptr<TextPortion>(pTextPortion));
+    }
+
+    void Remove(sal_Int32 nPosition) { maPortions.erase(maPortions.begin() + nPosition); }
+
     sal_Int32 GetPos(const TextPortion* p) const;
 };
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -75,6 +75,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/misspellrange \
     editeng/source/editeng/section \
     editeng/source/editeng/textconv \
+    editeng/source/editeng/TextPortionList \
     editeng/source/items/borderline \
     editeng/source/items/bulitem \
     editeng/source/items/CustomPropertyField \

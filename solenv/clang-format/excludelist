@@ -3419,6 +3419,7 @@ editeng/source/editeng/misspellrange.cxx
 editeng/source/editeng/section.cxx
 editeng/source/editeng/textconv.cxx
 editeng/source/editeng/textconv.hxx
+editeng/source/editeng/TextPortionList.cxx
 editeng/source/items/CustomPropertyField.cxx
 editeng/source/items/borderline.cxx
 editeng/source/items/bulitem.cxx
