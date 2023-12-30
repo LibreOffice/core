@@ -82,7 +82,7 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
             if ( ! pPor->GetNextPortion() || nFieldIdx + nFieldLen > nCharOfst )
                 break;
 
-            nFieldIdx = nFieldIdx + nFieldLen;
+            nFieldIdx += nFieldLen;
             rOrig.Pos().AdjustX(pPor->Width() );
             pPor = pPor->GetNextPortion();
 
@@ -471,7 +471,7 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
     // Search for the last Text/EndPortion of the line
     while( pPor )
     {
-        nX = nX + pPor->Width();
+        nX += pPor->Width();
         if( pPor->InTextGrp() || ( pPor->GetLen() && !pPor->IsFlyPortion()
             && !pPor->IsHolePortion() ) || pPor->IsBreakPortion() )
         {
@@ -1009,7 +1009,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     while( pNext && !pNext->InFieldGrp() )
                     {
                         OSL_ENSURE( !pNext->GetLen(), "Where's my field follow?" );
-                        nAddX = nAddX + pNext->Width();
+                        nAddX += pNext->Width();
                         pNext = pNext->GetNextPortion();
                     }
                     if( !pNext )
@@ -1382,7 +1382,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
         if ( pPor->InSpaceGrp() && nSpaceAdd )
         {
             const_cast<SwTextSizeInfo&>(GetInfo()).SetIdx( nCurrStart );
-            nWidth = nWidth + pPor->CalcSpacing( nSpaceAdd, GetInfo() );
+            nWidth += pPor->CalcSpacing( nSpaceAdd, GetInfo() );
         }
         if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||
             ( pPor->IsMultiPortion() && static_cast<SwMultiPortion*>(pPor)->HasTabulator() )
@@ -1416,8 +1416,8 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
 
     while (ConsiderNextPortionForCursorOffset(pPor, nWidth30, nX))
     {
-        nX = nX - nWidth;
-        nCurrStart = nCurrStart + pPor->GetLen();
+        nX -= nWidth;
+        nCurrStart += pPor->GetLen();
         pPor = pPor->GetNextPortion();
         nWidth = pPor->Width();
         if ( m_pCurr->IsSpaceAdd() || pKanaComp )
@@ -1425,7 +1425,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             if ( pPor->InSpaceGrp() && nSpaceAdd )
             {
                 const_cast<SwTextSizeInfo&>(GetInfo()).SetIdx( nCurrStart );
-                nWidth = nWidth + pPor->CalcSpacing( nSpaceAdd, GetInfo() );
+                nWidth += pPor->CalcSpacing( nSpaceAdd, GetInfo() );
             }
 
             if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||
@@ -1467,7 +1467,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
         SwLinePortion *pNextPor = pPor->GetNextPortion();
         while( pNextPor && pNextPor->InFieldGrp() && !pNextPor->Width() )
         {
-            nCurrStart = nCurrStart + pPor->GetLen();
+            nCurrStart += pPor->GetLen();
             pPor = pNextPor;
             if( !pPor->IsFlyPortion() && !pPor->IsMarginPortion() )
                 bLastHyph = pPor->InHyphGrp();
@@ -1671,7 +1671,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             {
                 const sal_uInt16 nPreWidth = static_cast<SwDoubleLinePortion*>(pPor)->PreWidth();
                 if ( nX > nPreWidth )
-                    nX = nX - nPreWidth;
+                    nX -= nPreWidth;
                 else
                     nX = 0;
             }
