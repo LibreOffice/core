@@ -938,11 +938,11 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, std::u16string_vie
     pChild->SetContentTransferEncoding("8bit");
 
     // Body
-    SvMemoryStream* pStream = new SvMemoryStream;
+    std::unique_ptr<SvMemoryStream> pStream(new SvMemoryStream);
     pStream->WriteLine( OUStringToOString(rData, rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding)) );
     pStream->FlushBuffer();
     pStream->Seek( 0 );
-    pChild->SetDocumentLB( new SvLockBytes(pStream, true) );
+    pChild->SetDocumentLB( std::move(pStream) );
     rParent.AttachChild( std::move(pChild) );
 }
 
@@ -1001,7 +1001,7 @@ void ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, std::u16string_vie
 
 
     // Body
-    pChild->SetDocumentLB( new SvLockBytes(pStream.release(), true) );
+    pChild->SetDocumentLB( std::move(pStream) );
     rParent.AttachChild( std::move(pChild) );
 }
 

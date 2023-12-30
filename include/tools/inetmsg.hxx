@@ -77,7 +77,7 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) INetMIMEMessage
     ::std::vector< std::unique_ptr<INetMessageHeader> >
                     m_aHeaderList;
 
-    SvLockBytesRef  m_xDocLB;
+    std::unique_ptr<SvStream> m_xDocLB;
 
     ::std::map<InetMessageMime, sal_uInt32>   m_nMIMEIndex;
     INetMIMEMessage*                          pParent;
@@ -139,8 +139,8 @@ public:
         }
     }
 
-    SvLockBytes* GetDocumentLB() const { return m_xDocLB.get(); }
-    void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
+    SvStream* GetDocumentLB() const { return m_xDocLB.get(); }
+    void      SetDocumentLB (std::unique_ptr<SvStream> pDocLB) { m_xDocLB = std::move(pDocLB); }
 
     static bool ParseDateField (
         std::u16string_view rDateField, DateTime& rDateTime);
