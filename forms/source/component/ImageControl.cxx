@@ -52,6 +52,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 
@@ -399,7 +400,6 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
     // create a stream for the image specified by the URL
-    std::unique_ptr< SvStream > pImageStream;
     Reference< XInputStream > xImageStream;
 
     if ( ::svt::GraphicAccess::isSupportedURL( _rURL ) )
@@ -408,19 +408,11 @@ bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, Val
     }
     else
     {
-        pImageStream = ::utl::UcbStreamHelper::CreateStream( _rURL, StreamMode::READ );
+        std::unique_ptr< SvStream > pImageStream = ::utl::UcbStreamHelper::CreateStream( _rURL, StreamMode::READ );
         bool bSetNull = (pImageStream == nullptr) || (ERRCODE_NONE != pImageStream->GetErrorCode());
 
         if ( !bSetNull )
-        {
-            // get the size of the stream
-            sal_uInt64 const nSize = pImageStream->remainingSize();
-            if (pImageStream->GetBufferSize() < 8192)
-                pImageStream->SetBufferSize(8192);
-            pImageStream->Seek(STREAM_SEEK_TO_BEGIN);
-
-            xImageStream = new ::utl::OInputStreamHelper( new SvLockBytes( pImageStream.get(), false ), nSize );
-        }
+            xImageStream = new ::utl::OInputStreamWrapper( std::move(pImageStream) );
     }
 
     if ( xImageStream.is() )
