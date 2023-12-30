@@ -193,8 +193,7 @@ void OrganizeDialog::SetCurrentEntry(const css::uno::Reference<css::frame::XFram
     Reference<css::frame::XModel> xModel(xController->getModel());
     if (!xModel)
         return;
-    ScriptDocument aScriptDocument(xModel);
-    EntryDescriptor aDesc(aScriptDocument, LIBRARY_LOCATION_DOCUMENT, OUString(), OUString(), OUString(), OBJ_TYPE_DOCUMENT);
+    EntryDescriptor aDesc(ScriptDocument(xModel), LIBRARY_LOCATION_DOCUMENT, OUString(), OUString(), OUString(), OBJ_TYPE_DOCUMENT);
     m_xModulePage->SetCurrentEntry(aDesc);
     m_xDialogPage->SetCurrentEntry(aDesc);
 }

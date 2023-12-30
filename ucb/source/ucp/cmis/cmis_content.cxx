@@ -1547,9 +1547,7 @@ namespace cmis
             if (!document)
                 return false;
 
-            boost::shared_ptr< std::istream > aIn = document->getContentStream( );
-
-            uno::Reference< io::XInputStream > xIn = new StdInputStream( aIn );
+            uno::Reference< io::XInputStream > xIn = new StdInputStream(document->getContentStream());
             if( !xIn.is( ) )
                 return false;
 

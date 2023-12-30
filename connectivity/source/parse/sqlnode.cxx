@@ -244,7 +244,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
     parseNodeToStr(
         rString, _rxConnection, nullptr, nullptr, OUString(),
         pContext ? pContext->getPreferredLocale() : OParseContext::getDefaultLocale(),
-        pContext, _bIntl, _bQuote, OUString("."), false );
+        pContext, _bIntl, _bQuote, ".", false );
 }
 
 
@@ -287,7 +287,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
                       const IParseContext* pContext,
                       bool _bIntl,
                       bool _bQuote,
-                      OUString _sDecSep,
+                      const OUString& _rDecSep,
                       bool _bPredicate) const
 {
     OSL_ENSURE( _rxConnection.is(), "OSQLParseNode::parseNodeToStr: invalid connection!" );
@@ -301,7 +301,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
         OSQLParseNode::impl_parseNodeToString_throw( sBuffer,
             SQLParseNodeParameter(
                  _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext,
-                _bIntl, _bQuote, _sDecSep, _bPredicate, false
+                _bIntl, _bQuote, _rDecSep, _bPredicate, false
             ) );
     }
     catch( const SQLException& )

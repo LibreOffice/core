@@ -64,7 +64,7 @@ namespace
 // global functions (->at the end of the file):
 
 static bool lcl_CheckRepeatString( std::u16string_view aStr, const ScDocument& rDoc, bool bIsRow, ScRange* pRange );
-static void lcl_GetRepeatRangeString( std::optional<ScRange> oRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr );
+static void lcl_GetRepeatRangeString( const std::optional<ScRange>& oRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr );
 
 #if 0
 // this method is useful when debugging address flags.
@@ -763,7 +763,7 @@ static bool lcl_CheckRepeatString( std::u16string_view aStr, const ScDocument& r
     return true;
 }
 
-static void lcl_GetRepeatRangeString( std::optional<ScRange> oRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr )
+static void lcl_GetRepeatRangeString( const std::optional<ScRange>& oRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr )
 {
     rStr.clear();
     if (!oRange)

@@ -470,8 +470,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                             //          as member, thus saving time.
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for the ParaAdjust context id!");
 
-                        uno::Any aParaAdjustValue = xPropSet->getPropertyValue( "ParaAdjust" );
-                        XMLPropertyState aAlignDefaultState( nIndex, aParaAdjustValue );
+                        XMLPropertyState aAlignDefaultState(nIndex, xPropSet->getPropertyValue("ParaAdjust"));
 
                         aPropStates.push_back( aAlignDefaultState );
                     }

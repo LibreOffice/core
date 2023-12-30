@@ -393,8 +393,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                                 ScChartListenerCollection* pCollection = rDoc.GetChartListenerCollection();
                                 if (pCollection && !pCollection->findByName(aChartName))
                                 {
-                                    ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
-                                    ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );
+                                    ScRangeListRef rRangeList(new ScRangeList(rRangesVector[nRangeList++]));
                                     ScChartListener* pChartListener = new ScChartListener( aChartName, rDoc, rRangeList );
                                     pCollection->insert( pChartListener );
                                     pChartListener->StartListeningTo();

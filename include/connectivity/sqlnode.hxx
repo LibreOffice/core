@@ -408,7 +408,7 @@ namespace connectivity
                             const IParseContext* pContext,
                             bool _bIntl,
                             bool _bQuote,
-                            OUString _sDecSep,
+                            const OUString& _rDecSep,
                             bool _bPredicate) const;
 
     private:
