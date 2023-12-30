@@ -4124,7 +4124,7 @@ void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )
     DBG_ASSERT( pNode, "NULL-Pointer in InsertContent! " );
     DBG_ASSERT( IsInUndo(), "InsertContent only for Undo()!" );
     GetParaPortions().Insert(nPos, std::make_unique<ParaPortion>( pNode ));
-    maEditDoc.Insert(nPos, pNode);
+    maEditDoc.Insert(nPos, std::unique_ptr<ContentNode>(pNode));
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPos );
 }

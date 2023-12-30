@@ -2218,8 +2218,8 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
         aSelection.Max().SetNode( pTmpPortion->GetNode() );
         aSelection.Max().SetIndex( pTmpPortion->GetNode()->Len() );
 
-        ContentNode* pN = pTmpPortion->GetNode();
-        maEditDoc.Insert(nRealNewPos+i, pN);
+        ContentNode* pNode = pTmpPortion->GetNode();
+        maEditDoc.Insert(nRealNewPos+i, std::unique_ptr<ContentNode>(pNode));
 
         GetParaPortions().Insert(nRealNewPos+i, std::move(pTmpPortion));
         ++i;
@@ -2998,7 +2998,7 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( sal_Int32 nPara )
     if ( GetStatus().DoOnlineSpelling() )
         pNode->CreateWrongList();
 
-    maEditDoc.Insert(nPara, pNode);
+    maEditDoc.Insert(nPara, std::unique_ptr<ContentNode>(pNode));
 
     GetParaPortions().Insert(nPara, std::make_unique<ParaPortion>( pNode ));
     if ( IsCallParaInsertedOrDeleted() )

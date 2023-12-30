@@ -100,7 +100,10 @@ public:
 };
 
 
-
+/** Edit document
+ *
+ * Holder, responsible for the content nodes and the manipulation of those.
+ */
 class EditDoc
 {
 private:
@@ -204,7 +207,7 @@ public:
     sal_Int32 Count() const;
     const ContentNode* operator[](sal_Int32 nPos) const;
     ContentNode* operator[](sal_Int32 nPos);
-    void Insert(sal_Int32 nPos, ContentNode* p);
+    void Insert(sal_Int32 nPos, std::unique_ptr<ContentNode> p);
     /// deletes
     void Remove(sal_Int32 nPos);
     /// does not delete

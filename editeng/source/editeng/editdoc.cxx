@@ -943,14 +943,14 @@ ContentNode* EditDoc::operator[](sal_Int32 nPos)
     return GetObject(nPos);
 }
 
-void EditDoc::Insert(sal_Int32 nPos, ContentNode* p)
+void EditDoc::Insert(sal_Int32 nPos, std::unique_ptr<ContentNode> pNode)
 {
     if (nPos < 0 || nPos == SAL_MAX_INT32)
     {
         SAL_WARN( "editeng", "EditDoc::Insert - overflow pos " << nPos);
         return;
     }
-    maContents.insert(maContents.begin()+nPos, std::unique_ptr<ContentNode>(p));
+    maContents.insert(maContents.begin()+nPos, std::move(pNode));
 }
 
 void EditDoc::Remove(sal_Int32 nPos)
@@ -1057,8 +1057,8 @@ EditPaM EditDoc::Clear()
 {
     maContents.clear();
 
-    ContentNode* pNode = new ContentNode( GetItemPool() );
-    Insert(0, pNode);
+    ContentNode* pNode = new ContentNode(GetItemPool());
+    Insert(0, std::unique_ptr<ContentNode>(pNode));
 
     CreateDefFont(false);
 
@@ -1100,8 +1100,8 @@ EditPaM EditDoc::RemoveText()
 
     maContents.clear();
 
-    ContentNode* pNode = new ContentNode( GetItemPool() );
-    Insert(0, pNode);
+    ContentNode* pNode = new ContentNode(GetItemPool());
+    Insert(0, std::unique_ptr<ContentNode>(pNode));
 
     pNode->SetStyleSheet(pPrevStyle, false);
     pNode->GetContentAttribs().GetItems().Set( aPrevSet );
@@ -1109,7 +1109,7 @@ EditPaM EditDoc::RemoveText()
 
     SetModified(true);
 
-    return EditPaM( pNode, 0 );
+    return EditPaM(pNode, 0);
 }
 
 EditPaM EditDoc::InsertText( EditPaM aPaM, std::u16string_view rStr )
@@ -1143,7 +1143,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true) );
 
     // ContentNode constructor copies also the paragraph attributes
-    ContentNode* pNode = new ContentNode( aStr, std::move(aContentAttribs) );
+    ContentNode* pNode = new ContentNode(aStr, std::move(aContentAttribs));
 
     // Copy the Default Font
     pNode->GetCharAttribs().GetDefFont() = aPaM.GetNode()->GetCharAttribs().GetDefFont();
@@ -1161,7 +1161,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     // Character attributes may need to be copied or trimmed:
     pNode->CopyAndCutAttribs( aPaM.GetNode(), GetItemPool(), bKeepEndingAttribs );
 
-    Insert(nPos+1, pNode);
+    Insert(nPos+1, std::unique_ptr<ContentNode>(pNode));
 
     SetModified(true);
 
