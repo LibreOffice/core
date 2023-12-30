@@ -65,7 +65,7 @@ public:
     OutlineToImpressFinalizer (
         ::sd::ViewShellBase& rBase,
         SdDrawDocument& rDocument,
-        SvLockBytes const & rBytes);
+        css::uno::Sequence<sal_Int8> const & rBytes);
     void operator() (bool bEventSeen);
 private:
     ::sd::ViewShellBase& mrBase;
@@ -250,9 +250,9 @@ bool SdModule::OutlineToImpress(SfxRequest const & rRequest)
 
     if (pSet)
     {
-        SvLockBytes* pBytes = static_cast<const SfxLockBytesItem&>(pSet->Get(SID_OUTLINE_TO_IMPRESS)).GetValue();
+        css::uno::Sequence<sal_Int8> pBytes = static_cast<const SfxLockBytesItem&>(pSet->Get(SID_OUTLINE_TO_IMPRESS)).GetValue();
 
-        if (pBytes)
+        if (pBytes.getLength())
         {
             SfxObjectShellLock xDocShell;
             ::sd::DrawDocShell* pDocSh;
@@ -296,7 +296,7 @@ bool SdModule::OutlineToImpress(SfxRequest const & rRequest)
                         FrameworkHelper::CreateResourceId(
                         FrameworkHelper::msOutlineViewURL,
                         FrameworkHelper::msCenterPaneURL),
-                        OutlineToImpressFinalizer(*pBase, *pDoc, *pBytes));
+                        OutlineToImpressFinalizer(*pBase, *pDoc, pBytes));
                 }
             }
         }
@@ -544,58 +544,13 @@ namespace {
 OutlineToImpressFinalizer::OutlineToImpressFinalizer (
     ::sd::ViewShellBase& rBase,
     SdDrawDocument& rDocument,
-    SvLockBytes const & rBytes)
+    css::uno::Sequence<sal_Int8> const & rBytes)
     : mrBase(rBase),
       mrDocument(rDocument)
 {
-    // The given stream has a lifetime shorter than this new
-    // OutlineToImpressFinalizer object.  Therefore a local copy of the
-    // stream is created.
-    const SvStream* pStream (rBytes.GetStream());
-    if (pStream == nullptr)
-        return;
-
-    // Create a memory stream and prepare to fill it with the content of
+    // Create a memory stream to fill it with the content of
     // the original stream.
-    mpStream = std::make_shared<SvMemoryStream>();
-    static const std::size_t nBufferSize = 4096;
-    ::std::unique_ptr<sal_Int8[]> pBuffer (new sal_Int8[nBufferSize]);
-
-    sal_uInt64 nReadPosition(0);
-    bool bLoop (true);
-    while (bLoop)
-    {
-        // Read the next part of the original stream.
-        std::size_t nReadByteCount (0);
-        const ErrCode nErrorCode (
-            rBytes.ReadAt(
-                nReadPosition,
-                pBuffer.get(),
-                nBufferSize,
-                &nReadByteCount));
-
-        // Check the error code and stop copying the stream data when an
-        // error has occurred.
-        if (nErrorCode == ERRCODE_NONE)
-        {
-            if (nReadByteCount == 0)
-                bLoop = false;
-        }
-        else if (nErrorCode == ERRCODE_IO_PENDING)
-            ;
-        else
-        {
-            bLoop = false;
-            nReadByteCount = 0;
-        }
-
-        // Append the read bytes to the end of the memory stream.
-        if (nReadByteCount > 0)
-        {
-            mpStream->WriteBytes(pBuffer.get(), nReadByteCount);
-            nReadPosition += nReadByteCount;
-        }
-    }
+    mpStream = std::make_shared<SvMemoryStream>(static_cast<void*>(const_cast<sal_Int8*>(rBytes.getConstArray())), rBytes.getLength(), StreamMode::READ);
 
     // Rewind the memory stream so that in the operator() method its
     // content is properly read.

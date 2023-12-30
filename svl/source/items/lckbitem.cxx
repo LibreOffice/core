@@ -39,7 +39,7 @@ SfxLockBytesItem::~SfxLockBytesItem()
 
 bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
 {
-    return SfxPoolItem::operator==(rItem) && static_cast<const SfxLockBytesItem&>(rItem)._xVal == _xVal;
+    return SfxPoolItem::operator==(rItem) && static_cast<const SfxLockBytesItem&>(rItem).mxVal == mxVal;
 }
 
 SfxLockBytesItem* SfxLockBytesItem::Clone(SfxItemPool *) const
@@ -50,52 +50,19 @@ SfxLockBytesItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 // virtual
 bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
-    css::uno::Sequence< sal_Int8 > aSeq;
-    if ( rVal >>= aSeq )
+    if ( rVal >>= mxVal )
     {
-        if ( aSeq.hasElements() )
-        {
-            SvMemoryStream* pStream = new SvMemoryStream();
-            pStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );
-            pStream->Seek(0);
-
-            _xVal = new SvLockBytes( pStream, true );
-        }
-        else
-            _xVal = nullptr;
-
         return true;
     }
 
-    OSL_FAIL( "SfxLockBytesItem::PutValue - Wrong type!" );
+    assert( false && "SfxLockBytesItem::PutValue - Wrong type!" );
     return true;
 }
 
 // virtual
 bool SfxLockBytesItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-    if ( _xVal.is() )
-    {
-        sal_uInt32 nLen;
-        SvLockBytesStat aStat;
-
-        if ( _xVal->Stat( &aStat ) == ERRCODE_NONE )
-            nLen = aStat.nSize;
-        else
-            return false;
-
-        std::size_t nRead = 0;
-        css::uno::Sequence< sal_Int8 > aSeq( nLen );
-
-        _xVal->ReadAt( 0, aSeq.getArray(), nLen, &nRead );
-        rVal <<= aSeq;
-    }
-    else
-    {
-        css::uno::Sequence< sal_Int8 > aSeq( 0 );
-        rVal <<= aSeq;
-    }
-
+    rVal <<= mxVal;
     return true;
 }
 
