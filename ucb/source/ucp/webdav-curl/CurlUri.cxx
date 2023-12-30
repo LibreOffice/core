@@ -290,7 +290,7 @@ CurlUri CurlUri::CloneWithRelativeRefPathAbsolute(std::u16string_view rRelativeR
         SAL_WARN("ucb.ucp.webdav.curl", "curl_url_set failed: " << uc);
         throw DAVException(DAVException::DAV_INVALID_ARG);
     }
-    return CurlUri(*pUrl.release());
+    return CurlUri(*pUrl);
 }
 
 OUString EncodeSegment(OUString const& rSegment)
