@@ -375,81 +375,23 @@ sal_uInt32 ScColumnData::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
     return nFormat;
 }
 
-SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
-                                     bool* const pIsChanged )
+void ScColumnData::ApplySelectionCache(SfxItemPoolCache* pCache, SCROW nStartRow, SCROW nEndRow,
+                                       ScEditDataArray* pDataArray, bool* pIsChanged)
 {
-    return ScColumnData::ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged, nCol );
+    pAttrArray->ApplyCacheArea(nStartRow, nEndRow, pCache, pDataArray, pIsChanged);
 }
 
-SCROW ScColumnData::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
-                                         bool* const pIsChanged, SCCOL nCol )
+void ScColumnData::ChangeSelectionIndent(bool bIncrement, SCROW nStartRow, SCROW nEndRow)
 {
-    SCROW nTop = 0;
-    SCROW nBottom = 0;
-    bool bFound = false;
-
-    if ( rMark.IsMultiMarked() )
-    {
-        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
-        while (aMultiIter.Next( nTop, nBottom ))
-        {
-            pAttrArray->ApplyCacheArea( nTop, nBottom, pCache, pDataArray, pIsChanged );
-            bFound = true;
-        }
-    }
-
-    if (!bFound)
-        return -1;
-    else if (nTop==0 && nBottom==GetDoc().MaxRow())
-        return 0;
-    else
-        return nBottom;
+    pAttrArray->ChangeIndent(nStartRow, nEndRow, bIncrement);
 }
 
-void ScColumnData::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol )
-{
-    assert(rMark.IsMultiMarked());
-    if ( pAttrArray && rMark.IsMultiMarked() )
-    {
-        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
-        SCROW nTop;
-        SCROW nBottom;
-        while (aMultiIter.Next( nTop, nBottom ))
-            pAttrArray->ChangeIndent(nTop, nBottom, bIncrement);
-    }
-}
-
-void ScColumn::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
-{
-    return ScColumnData::ChangeSelectionIndent( bIncrement, rMark, nCol );
-}
-
-void ScColumnData::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& rMark, SCCOL nCol )
+void ScColumnData::ClearSelectionItems(const sal_uInt16* pWhich, SCROW nStartRow, SCROW nEndRow)
 {
     if (!pAttrArray)
         return;
 
-    if (rMark.IsMultiMarked() )
-    {
-        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
-        SCROW nTop;
-        SCROW nBottom;
-        while (aMultiIter.Next( nTop, nBottom ))
-            pAttrArray->ClearItems(nTop, nBottom, pWhich);
-    }
-    else if (rMark.IsMarked())
-    {
-        const ScRange& aRange = rMark.GetMarkArea();
-        if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
-        {
-            pAttrArray->ClearItems(aRange.aStart.Row(), aRange.aEnd.Row(), pWhich);
-        }
-    }
-}
-
-void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& rMark )
-{
-    ScColumnData::ClearSelectionItems( pWhich, rMark, nCol );
+    pAttrArray->ClearItems(nStartRow, nEndRow, pWhich);
 }
 
 void ScColumn::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
@@ -522,17 +464,9 @@ void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle )
     pAttrArray->SetPattern(nRow, std::move(pNewPattern), true);
 }
 
-void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark)
+void ScColumnData::ApplySelectionStyle(const ScStyleSheet& rStyle, SCROW nTop, SCROW nBottom)
 {
-    SCROW nTop;
-    SCROW nBottom;
-
-    if ( rMark.IsMultiMarked() )
-    {
-        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
-        while (aMultiIter.Next( nTop, nBottom ))
-            pAttrArray->ApplyStyleArea(nTop, nBottom, rStyle);
-    }
+    pAttrArray->ApplyStyleArea(nTop, nBottom, rStyle);
 }
 
 void ScColumn::ApplySelectionLineStyle( const ScMarkData& rMark,
