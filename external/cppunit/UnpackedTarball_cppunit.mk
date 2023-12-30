@@ -23,6 +23,8 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,cppunit))
 # * external/cppunit/clang.patch.0 upstreamed at
 #   <https://gerrit.libreoffice.org/c/cppunit/+/147384> "Don't mis-apply GCC < 4.6 workaround for
 #   Clang":
+# * external/cppunit/0001-cid-1546460-COPY_INSTEAD_OF_MOVE.patch.1 upstreamed at
+#   <https://gerrit.libreoffice.org/c/cppunit/+/161455> "cid#1546460 COPY_INSTEAD_OF_MOVE";
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/windows.patch \
 	external/cppunit/unix.patch \
@@ -34,6 +36,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/propagate-exceptions.patch.0 \
 	external/cppunit/sprintf.patch.0 \
 	external/cppunit/clang.patch.0 \
+	external/cppunit/0001-cid-1546460-COPY_INSTEAD_OF_MOVE.patch.1 \
 ))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
