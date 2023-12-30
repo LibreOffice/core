@@ -36,13 +36,10 @@ enum class TransliterationFlags;
 class EditUndoDelContent : public EditUndo
 {
 private:
-    bool            bDelObject;
-    sal_Int32       nNode;
-    ContentNode*    pContentNode;   // Points to the valid,
-                                    // undestroyed object!
-
+    sal_Int32 nNode;
+    std::unique_ptr<ContentNode> mpContentNode;   // Points to the valid, undestroyed object!
 public:
-    EditUndoDelContent(EditEngine* pEE, ContentNode* pNode, sal_Int32 nPortion);
+    EditUndoDelContent(EditEngine* pEE, std::unique_ptr<ContentNode> pNode, sal_Int32 nPortion);
     virtual ~EditUndoDelContent() override;
 
     virtual void    Undo() override;

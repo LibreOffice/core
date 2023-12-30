@@ -157,25 +157,22 @@ ViewShellId EditUndo::GetViewShellId() const
     return mnViewShellId;
 }
 
-EditUndoDelContent::EditUndoDelContent(
-    EditEngine* pEE, ContentNode* pNode, sal_Int32 nPortion) :
-    EditUndo(EDITUNDO_DELCONTENT, pEE),
-    bDelObject(true),
-    nNode(nPortion),
-    pContentNode(pNode) {}
+EditUndoDelContent::EditUndoDelContent(EditEngine* pEE, std::unique_ptr<ContentNode> pNode, sal_Int32 nPortion)
+    : EditUndo(EDITUNDO_DELCONTENT, pEE)
+    , nNode(nPortion)
+    , mpContentNode(std::move(pNode))
+{}
 
 EditUndoDelContent::~EditUndoDelContent()
 {
-    if ( bDelObject )
-        delete pContentNode;
 }
 
 void EditUndoDelContent::Undo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    GetEditEngine()->InsertContent( pContentNode, nNode );
-    bDelObject = false; // belongs to the Engine again
-    EditSelection aSel( EditPaM( pContentNode, 0 ), EditPaM( pContentNode, pContentNode->Len() ) );
+    ContentNode* pNode = mpContentNode.get();
+    GetEditEngine()->InsertContent(std::move(mpContentNode), nNode);
+    EditSelection aSel(EditPaM(pNode, 0), EditPaM(pNode, pNode->Len()));
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
@@ -187,27 +184,29 @@ void EditUndoDelContent::Redo()
 
     // pNode is no longer correct, if the paragraphs where merged
     // in between Undos
-    pContentNode = pEE->GetEditDoc().GetObject( nNode );
-    DBG_ASSERT( pContentNode, "EditUndoDelContent::Redo(): Node?!" );
+    ContentNode* pNode = pEE->GetEditDoc().GetObject(nNode);
+    DBG_ASSERT(pNode, "EditUndoDelContent::Redo(): Node?!");
 
     pEE->RemoveParaPortion(nNode);
 
     // Do not delete node, depends on the undo!
-    pEE->GetEditDoc().Release( nNode );
-    if (pEE->IsCallParaInsertedOrDeleted())
-        pEE->ParagraphDeleted( nNode );
+    mpContentNode = pEE->GetEditDoc().Release(nNode);
+    assert(mpContentNode.get() == pNode);
 
-    DeletedNodeInfo* pInf = new DeletedNodeInfo( pContentNode, nNode );
-    pEE->AppendDeletedNodeInfo(pInf);
+    if (pEE->IsCallParaInsertedOrDeleted())
+        pEE->ParagraphDeleted(nNode);
+
+    DeletedNodeInfo* pDeletedNodeInfo = new DeletedNodeInfo(pNode, nNode);
+    pEE->AppendDeletedNodeInfo(pDeletedNodeInfo);
     pEE->UpdateSelections();
 
-    ContentNode* pN = ( nNode < pEE->GetEditDoc().Count() )
-        ? pEE->GetEditDoc().GetObject( nNode )
-        : pEE->GetEditDoc().GetObject( nNode-1 );
-    DBG_ASSERT( pN && ( pN != pContentNode ), "?! RemoveContent !? " );
-    EditPaM aPaM( pN, pN->Len() );
+    ContentNode* pCheckNode = (nNode < pEE->GetEditDoc().Count())
+        ? pEE->GetEditDoc().GetObject(nNode)
+        : pEE->GetEditDoc().GetObject(nNode - 1);
 
-    bDelObject = true;  // belongs to the Engine again
+    DBG_ASSERT(pCheckNode && pCheckNode != mpContentNode.get(), "?! RemoveContent !? ");
+
+    EditPaM aPaM(pCheckNode, pCheckNode->Len());
 
     pEE->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }

@@ -963,16 +963,17 @@ void EditDoc::Remove(sal_Int32 nPos)
     maContents.erase(maContents.begin() + nPos);
 }
 
-void EditDoc::Release(sal_Int32 nPos)
+std::unique_ptr<ContentNode> EditDoc::Release(sal_Int32 nPos)
 {
     if (nPos < 0 || o3tl::make_unsigned(nPos) >= maContents.size())
     {
         SAL_WARN( "editeng", "EditDoc::Release - out of bounds pos " << nPos);
-        return;
+        return nullptr;
     }
-    // coverity[leaked_storage] - this is on purpose, ownership should be transferred to undo/redo
-    (void)maContents[nPos].release();
+
+    std::unique_ptr<ContentNode> pNode = std::move(maContents[nPos]);
     maContents.erase(maContents.begin() + nPos);
+    return pNode;
 }
 
 sal_Int32 EditDoc::Count() const

@@ -113,6 +113,7 @@ public:
     void testTdf148148();
 
     void testSingleLine();
+    void testMoveParagraph();
 
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST(testTdf147196);
     CPPUNIT_TEST(testTdf148148);
     CPPUNIT_TEST(testSingleLine);
+    CPPUNIT_TEST(testMoveParagraph);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -555,8 +557,7 @@ IMPL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
 void Test::testHyperlinkCopyPaste()
 {
     // Create Outliner instance
-    Outliner aOutliner(mpItemPool.get(), OutlinerMode
-::TextObject);
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
     aOutliner.SetCalcFieldValueHdl( LINK( nullptr, Test, CalcFieldValueHdl ) );
 
     // Create EditEngine's instance
@@ -1982,6 +1983,94 @@ void Test::testSingleLine()
     CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetLineCount(0));
+}
+
+void Test::testMoveParagraph()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetPaperSize(Size(5000, 5000));
+    aEditEngine.SetText("Paragraph 1\nParagraph 2\nParagraph 3\nParagraph 4\nParagraph 5");
+
+    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+
+    aEditEngine.MoveParagraphs(Range(1, 1), 4); // Move paragraph 2 (index 1) -> to before index 4
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+
+    aEditEngine.MoveParagraphs(Range(3, 3), 1); // Move paragraph 2 (index 3) -> to before index 1
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+
+    aEditEngine.MoveParagraphs(Range(1, 2), 4); // Move paragraph 2, 3 -> to before index 4
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+
+    aEditEngine.MoveParagraphs(Range(2, 3), 1); // Move paragraph 2, 3 -> to before index 2
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+
+    aEditEngine.MoveParagraphs(Range(2, 4), 0); // Move paragraph 3, 4, 5 -> to before index 0
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(4));
+
+    aEditEngine.MoveParagraphs(Range(0, 2), 5); // Move paragraph 3, 4, 5 -> to before index 0
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+
+    aEditEngine.MoveParagraphs(Range(0, 0), 8); // Move paragraph 1 -> to before index 8 but 8 is out of bounds
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(4));
+
+    aEditEngine.MoveParagraphs(Range(4, 4), 0); // Move paragraph 1 -> to before index 0
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), aEditEngine.GetText(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

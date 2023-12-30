@@ -4119,12 +4119,14 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     pView->DrawSelectionXOR(pView->GetEditSelection(), nullptr, &rTarget);
 }
 
-void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )
+void ImpEditEngine::InsertContent(std::unique_ptr<ContentNode> pNode, sal_Int32 nPos )
 {
     DBG_ASSERT( pNode, "NULL-Pointer in InsertContent! " );
     DBG_ASSERT( IsInUndo(), "InsertContent only for Undo()!" );
-    GetParaPortions().Insert(nPos, std::make_unique<ParaPortion>( pNode ));
-    maEditDoc.Insert(nPos, std::unique_ptr<ContentNode>(pNode));
+
+    GetParaPortions().Insert(nPos, std::make_unique<ParaPortion>(pNode.get()));
+    maEditDoc.Insert(nPos, std::move(pNode));
+
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPos );
 }

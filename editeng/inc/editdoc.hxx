@@ -211,7 +211,7 @@ public:
     /// deletes
     void Remove(sal_Int32 nPos);
     /// does not delete
-    void Release(sal_Int32 nPos);
+    std::unique_ptr<ContentNode> Release(sal_Int32 nPos);
 
     static OUString GetSepStr( LineEnd eEnd );
 };

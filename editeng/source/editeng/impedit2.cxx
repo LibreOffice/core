@@ -2201,7 +2201,8 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     {
         // always aOldPositions.Min(), since Remove().
         std::unique_ptr<ParaPortion> pTmpPortion = GetParaPortions().Release(aOldPositions.Min());
-        maEditDoc.Release( aOldPositions.Min() );
+        auto pContentNode = maEditDoc.Release(aOldPositions.Min());
+        pContentNode.release();
         aTmpPortionList.Append(std::move(pTmpPortion));
     }
 
@@ -2499,15 +2500,15 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
 
 void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 {
-    ContentNode* pNode = maEditDoc.GetObject( nPara );
+    assert(maEditDoc.GetObject(nPara));
+
     ContentNode* pNextNode = maEditDoc.GetObject( nPara+1 );
 
-    assert(pNode);
-
-    aDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pNode, nPara ));
+    std::unique_ptr<ContentNode> pNode = maEditDoc.Release(nPara);
+    aDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>(pNode.get(), nPara));
 
     // The node is managed by the undo and possibly destroyed!
-    maEditDoc.Release( nPara );
+
     GetParaPortions().Remove( nPara );
 
     if ( IsCallParaInsertedOrDeleted() )
@@ -2521,13 +2522,15 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
     if ( pNextNode )
         ParaAttribsChanged( pNextNode );
 
-    if ( IsUndoEnabled() && !IsInUndo() )
-        InsertUndo(std::make_unique<EditUndoDelContent>(pEditEngine, pNode, nPara));
+    if (IsUndoEnabled() && !IsInUndo())
+    {
+        InsertUndo(std::make_unique<EditUndoDelContent>(pEditEngine, std::move(pNode), nPara));
+    }
     else
     {
         if ( pNode->GetStyleSheet() )
-            EndListening( *pNode->GetStyleSheet() );
-        delete pNode;
+            EndListening(*pNode->GetStyleSheet());
+        pNode.reset();
     }
 }
 

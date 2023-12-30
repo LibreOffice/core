@@ -733,9 +733,9 @@ void EditEngine::UpdateSelections()
     pImpEditEngine->UpdateSelections();
 }
 
-void EditEngine::InsertContent(ContentNode* pNode, sal_Int32 nPos)
+void EditEngine::InsertContent(std::unique_ptr<ContentNode> pNode, sal_Int32 nPos)
 {
-    pImpEditEngine->InsertContent(pNode, nPos);
+    pImpEditEngine->InsertContent(std::move(pNode), nPos);
 }
 
 EditPaM EditEngine::SplitContent(sal_Int32 nNode, sal_Int32 nSepPos)

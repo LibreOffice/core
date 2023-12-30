@@ -705,7 +705,7 @@ private:
 
     void                ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, std::vector<sal_Int32>& rArray );
 
-    void                InsertContent( ContentNode* pNode, sal_Int32 nPos );
+    void                InsertContent(std::unique_ptr<ContentNode> pNode, sal_Int32 nPos);
     EditPaM             SplitContent( sal_Int32 nNode, sal_Int32 nSepPos );
     EditPaM             ConnectContents( sal_Int32 nLeftNode, bool bBackward );
 
