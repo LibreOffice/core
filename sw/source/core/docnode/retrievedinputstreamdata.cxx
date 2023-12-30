@@ -38,8 +38,7 @@ SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::R
 
     // create empty data container for given thread Consumer
     tDataKey nDataKey( snNextKeyValue );
-    tData aNewEntry( pThreadConsumer );
-    maInputStreamData[ nDataKey ] = aNewEntry;
+    maInputStreamData[nDataKey] = tData(pThreadConsumer);
 
     // prepare next data key value
     if ( snNextKeyValue < SAL_MAX_UINT64 )

@@ -349,9 +349,8 @@ Reference<XComponentContext> connectToOffice(
     bool verbose )
 {
     OUString pipeId( ::dp_misc::generateRandomPipeId() );
-    OUString acceptArg = "--accept=pipe,name=" + pipeId + ";urp;";
 
-    Sequence<OUString> args { "--nologo", "--nodefault", acceptArg };
+    Sequence<OUString> args { "--nologo", "--nodefault", "--accept=pipe,name=" + pipeId + ";urp;" };
     OUString appURL( getExecutableDir() + "/soffice" );
 
     if (verbose)
