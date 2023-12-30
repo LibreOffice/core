@@ -780,21 +780,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pStrm->WriteChar( '\0' );
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
-                        // Transfer ownership of stream to a lockbytes object
-                        SvLockBytes aLockBytes( pStrm, true );
-                        SvLockBytesStat aStat;
-                        if ( aLockBytes.Stat( &aStat ) == ERRCODE_NONE )
-                        {
-                            sal_uInt32 nLen = aStat.nSize;
-                            std::size_t nRead = 0;
-                            uno::Sequence< sal_Int8 > aSeq( nLen );
-                            aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
+                        uno::Sequence< sal_Int8 > aSeq( pStrm->TellEnd() );
+                        pStrm->ReadBytes( aSeq.getArray(), aSeq.getLength() );
 
-                            uno::Sequence< beans::PropertyValue > aArgs{
-                                comphelper::makePropertyValue("RtfOutline", aSeq)
-                            };
-                            xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
-                        }
+                        uno::Sequence< beans::PropertyValue > aArgs{
+                            comphelper::makePropertyValue("RtfOutline", aSeq)
+                        };
+                        xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
                     }
                     else
                         ErrorHandler::HandleError( eErr );
@@ -844,21 +836,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pStrm->WriteChar( '\0' );
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
-                        // Transfer ownership of stream to a lockbytes object
-                        SvLockBytes aLockBytes( pStrm.release(), true );
-                        SvLockBytesStat aStat;
-                        if ( aLockBytes.Stat( &aStat ) == ERRCODE_NONE )
-                        {
-                            sal_uInt32 nLen = aStat.nSize;
-                            std::size_t nRead = 0;
-                            uno::Sequence< sal_Int8 > aSeq( nLen );
-                            aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
+                        uno::Sequence< sal_Int8 > aSeq( pStrm->TellEnd() );
+                        pStrm->ReadBytes( aSeq.getArray(), aSeq.getLength() );
 
-                            uno::Sequence< beans::PropertyValue > aArgs{
-                                comphelper::makePropertyValue("RtfOutline", aSeq)
-                            };
-                            xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
-                        }
+                        uno::Sequence< beans::PropertyValue > aArgs{
+                            comphelper::makePropertyValue("RtfOutline", aSeq)
+                        };
+                        xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
                     }
                     else
                     {
