@@ -400,6 +400,7 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
     // cache mdds position, this doesn't modify the mdds container, just EditTextObject's
     sc::ColumnBlockPosition blockPos;
     rDocument.InitColumnBlockPosition( blockPos, nTab, nCol );
+    nEndRow = rDocument.GetLastDataRow(nTab, nCol, nCol, nEndRow);
     for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
     {
         ScAddress aPos(nCol, nRow, nTab);
