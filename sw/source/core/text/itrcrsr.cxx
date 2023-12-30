@@ -1364,7 +1364,6 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     // in which nX is situated.
     SwLinePortion *pPor = m_pCurr->GetFirstPortion();
     TextFrameIndex nCurrStart = m_nStart;
-    bool bHolePortion = false;
     bool bLastHyph = false;
 
     std::deque<sal_uInt16> *pKanaComp = m_pCurr->GetpKanaComp();
@@ -1419,7 +1418,6 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     {
         nX = nX - nWidth;
         nCurrStart = nCurrStart + pPor->GetLen();
-        bHolePortion = pPor->IsHolePortion();
         pPor = pPor->GetNextPortion();
         nWidth = pPor->Width();
         if ( m_pCurr->IsSpaceAdd() || pKanaComp )
@@ -1520,7 +1518,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             return TextFrameIndex(0);
 
         // 7849, 7816: pPor->GetHyphPortion is mandatory!
-        if( bHolePortion || ( !bRightAllowed && bLastHyph ) ||
+        if( ( !bRightAllowed && bLastHyph ) ||
             ( pPor->IsMarginPortion() && !pPor->GetNextPortion() &&
               // 46598: Consider the situation: We might end up behind the last character,
               // in the last line of a centered paragraph
