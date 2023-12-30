@@ -36,13 +36,15 @@
 
 namespace slideshow::internal
 {
-SlideOverlayButtonSharedPtr SlideOverlayButton::create(
-    const css::uno::Reference<css::rendering::XBitmap>& xIconBitmap, css::awt::Point pPosition,
-    std::function<void(basegfx::B2DPoint)> clickHandler, ScreenUpdater& rScreenUpdater,
-    EventMultiplexer& rEventMultiplexer, const UnoViewContainer& rViewContainer)
+SlideOverlayButtonSharedPtr
+SlideOverlayButton::create(const css::uno::Reference<css::rendering::XBitmap>& xIconBitmap,
+                           const css::awt::Point& rPosition,
+                           const std::function<void(basegfx::B2DPoint)>& clickHandler,
+                           ScreenUpdater& rScreenUpdater, EventMultiplexer& rEventMultiplexer,
+                           const UnoViewContainer& rViewContainer)
 {
     SlideOverlayButtonSharedPtr pRet(new SlideOverlayButton(
-        xIconBitmap, pPosition, clickHandler, rScreenUpdater, rEventMultiplexer, rViewContainer));
+        xIconBitmap, rPosition, clickHandler, rScreenUpdater, rEventMultiplexer, rViewContainer));
 
     rEventMultiplexer.addViewHandler(pRet);
     // Set priority to 1000 so that the handler fires before the click handler on the slide

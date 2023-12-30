@@ -1257,7 +1257,6 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
         return true;
     }
 
-    Reference< css::container::XIndexAccess >  xParameters = aEvent.Parameters;
     SolarMutexGuard aSolarGuard;
 
     // default handling: instantiate an interaction handler and let it handle the parameter request
@@ -1268,7 +1267,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
         rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
         // the request
         ParametersRequest aRequest;
-        aRequest.Parameters = xParameters;
+        aRequest.Parameters = aEvent.Parameters;
         aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
         rtl::Reference<OInteractionRequest> pParamRequest = new OInteractionRequest(Any(aRequest));
         // some knittings

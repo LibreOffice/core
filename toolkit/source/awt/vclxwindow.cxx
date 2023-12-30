@@ -689,7 +689,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( aMEvt, *this ) );
                 aEvent.PopupTrigger = true;
 
-                Callback aCallback = [ this, aEvent ]()
+                Callback aCallback = [ this, aEvent=std::move(aEvent) ]()
                                      { this->mpImpl->getMouseListeners().mousePressed( aEvent ); };
 
                 ImplExecuteAsyncWithoutSolarLock( aCallback );
@@ -703,7 +703,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
                 bool const isEnter(pMouseEvt->IsEnterWindow());
-                Callback aCallback = [ this, isEnter, aEvent ]()
+                Callback aCallback = [ this, isEnter, aEvent=std::move(aEvent) ]()
                      { MouseListenerMultiplexer& rMouseListeners = this->mpImpl->getMouseListeners();
                        isEnter
                            ? rMouseListeners.mouseEntered(aEvent)
@@ -728,7 +728,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getMouseListeners().getLength() )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast<MouseEvent*>(rVclWindowEvent.GetData()), *this ) );
-                Callback aCallback = [ this, aEvent ]()
+                Callback aCallback = [ this, aEvent=std::move(aEvent) ]()
                                      { this->mpImpl->getMouseListeners().mousePressed( aEvent ); };
                 ImplExecuteAsyncWithoutSolarLock( aCallback );
             }
@@ -740,7 +740,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast<MouseEvent*>(rVclWindowEvent.GetData()), *this ) );
 
-                Callback aCallback = [ this, aEvent ]()
+                Callback aCallback = [ this, aEvent=std::move(aEvent) ]()
                                      { this->mpImpl->getMouseListeners().mouseReleased( aEvent ); };
                 ImplExecuteAsyncWithoutSolarLock( aCallback );
             }

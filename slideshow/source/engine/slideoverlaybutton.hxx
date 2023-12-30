@@ -50,7 +50,8 @@ public:
 
     static SlideOverlayButtonSharedPtr
     create(const css::uno::Reference<css::rendering::XBitmap>& xIconBitmap,
-           css::awt::Point pPosition, std::function<void(basegfx::B2DPoint)> clickHandler,
+           const css::awt::Point& rPosition,
+           const std::function<void(basegfx::B2DPoint)>& clickHandler,
            ScreenUpdater& rScreenUpdater, EventMultiplexer& rEventMultiplexer,
            const UnoViewContainer& rViewContainer);
 

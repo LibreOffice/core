@@ -171,6 +171,7 @@ struct SvTreeListBoxImpl;
 
 typedef std::pair<vcl::RenderContext&, const SvTreeListEntry&> svtree_measure_args;
 typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, const SvTreeListEntry&> svtree_render_args;
+typedef std::pair<SvTreeListEntry*, OUString> IterString;
 
 class VCL_DLLPUBLIC SvTreeListBox
                 :public Control

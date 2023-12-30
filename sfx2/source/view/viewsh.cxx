@@ -688,7 +688,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
     }
 }
 
-void aboutParagraph(std::string msg, const OUString& rsParagraphContent, sal_Int32 nCaretPosition,
+void aboutParagraph(const std::string& msg, const OUString& rsParagraphContent, sal_Int32 nCaretPosition,
                     sal_Int32 nSelectionStart, sal_Int32 nSelectionEnd, sal_Int32 nListPrefixLength,
                     bool force = false)
 {
@@ -701,7 +701,7 @@ void aboutParagraph(std::string msg, const OUString& rsParagraphContent, sal_Int
             );
 }
 
-void aboutParagraph(std::string msg, const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+void aboutParagraph(const std::string& msg, const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                     bool force = false)
 {
     if (!xAccText.is())

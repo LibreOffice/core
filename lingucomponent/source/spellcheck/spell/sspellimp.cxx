@@ -479,8 +479,7 @@ Reference< XSpellAlternatives >
                     OUString *pStr = aStr.getArray();
                     for (size_t ii = 0; ii < suglst.size(); ++ii)
                     {
-                        OUString cvtwrd(suglst[ii].c_str(), suglst[ii].size(), eEnc);
-                        pStr[numsug + ii] = cvtwrd;
+                        pStr[numsug + ii] = OUString(suglst[ii].c_str(), suglst[ii].size(), eEnc);
                     }
                     numsug += suglst.size();
                 }

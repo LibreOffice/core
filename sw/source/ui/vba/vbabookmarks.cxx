@@ -43,8 +43,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< container::XNamed > xNamed( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        OUString aName = xNamed->getName();
-        return uno::Any( uno::Reference< word::XBookmark > ( new SwVbaBookmark( m_xParent, m_xContext, mxModel, aName ) ) );
+        return uno::Any(uno::Reference<word::XBookmark>(new SwVbaBookmark(m_xParent, m_xContext, mxModel, xNamed->getName())));
     }
 
 };

@@ -938,9 +938,9 @@ void SwCursorShell::GotoFormControl(bool bNext)
     {
         auto pFieldMark = dynamic_cast<sw::mark::IFieldmark*>(*it);
         assert(pFieldMark);
-        std::pair<SwTextContentControl*, sw::mark::IFieldmark*> pFormControl(nullptr, pFieldMark);
         // legacy form fields do not have (functional) tabIndexes - use lowest priority for them
-        aFormMap[std::make_pair((*it)->GetMarkStart(), SAL_MAX_UINT32)] = pFormControl;
+        aFormMap[std::make_pair((*it)->GetMarkStart(), SAL_MAX_UINT32)] =
+            std::pair<SwTextContentControl*, sw::mark::IFieldmark*>(nullptr, pFieldMark);
     }
 
     if (aFormMap.begin() == aFormMap.end())
