@@ -144,8 +144,9 @@ public:
 
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
-    SCROW       ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
-                                     SCCOL nCol );
+    void        ApplySelectionStyle(const ScStyleSheet& rStyle, SCROW nTop, SCROW nBottom);
+    void        ApplySelectionCache(ScItemPoolCache* pCache, SCROW nStartRow, SCROW nEndRow,
+                                    ScEditDataArray* pDataArray, bool* pIsChanged);
     void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                   ScEditDataArray* pDataArray = nullptr,
                                   bool* const pIsChanged = nullptr);
@@ -167,12 +168,17 @@ public:
 
     bool        IsAllAttrEqual( const ScColumnData& rCol, SCROW nStartRow, SCROW nEndRow ) const;
 
-    void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark, SCCOL nCol );
-    void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol );
+    void        ClearSelectionItems(const sal_uInt16* pWhich, SCROW nStartRow, SCROW nEndRow);
+    void        ChangeSelectionIndent(bool bIncrement, SCROW nStartRow, SCROW nEndRow);
 
     bool        TestInsertRow( SCSIZE nSize ) const;
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
+
+    // Applies a function to the selected ranges.
+    // The function looks like
+    //     ApplyDataFunc(ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
+    template <typename ApplyDataFunc> void Apply(const ScMarkData&, SCCOL, ApplyDataFunc);
 };
 
 // Use protected inheritance to prevent publishing some internal ScColumnData
@@ -548,7 +554,6 @@ public:
                             const ScPatternAttr& rPattern, SvNumFormatType nNewType );
 
     void        ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle );
-    void        ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark);
     void        ApplySelectionLineStyle( const ScMarkData& rMark,
                                     const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
     void        AddCondFormat(SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
@@ -575,11 +580,7 @@ public:
 
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
-    SCROW       ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged );
     void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast );
-
-    void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
-    void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
     tools::Long GetNeededSize(
         SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
@@ -1065,6 +1066,24 @@ inline void ScColumnData::InsertRow( SCROW nStartRow, SCSIZE nSize )
 inline void ScColumnData::DeleteRow(SCROW nStartRow, SCSIZE nSize)
 {
     pAttrArray->DeleteRow( nStartRow, nSize );
+}
+
+template <typename ApplyDataFunc>
+void ScColumnData::Apply(const ScMarkData& rMark, SCCOL nCol, ApplyDataFunc apply)
+{
+    if (rMark.IsMultiMarked())
+    {
+        ScMultiSelIter aMultiIter(rMark.GetMultiSelData(), nCol);
+        SCROW nTop, nBottom;
+        while (aMultiIter.Next(nTop, nBottom))
+            apply(*this, nTop, nBottom);
+    }
+    else if (rMark.IsMarked())
+    {
+        const ScRange& aRange = rMark.GetMarkArea();
+        if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
+            apply(*this, aRange.aStart.Row(), aRange.aEnd.Row());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

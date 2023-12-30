@@ -3075,8 +3075,8 @@ void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
 
 void ScTable::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark)
 {
-    for (SCCOL i=0; i < aCol.size(); i++)
-        aCol[i].ApplySelectionStyle( rStyle, rMark );
+    ApplyWithAllocation(rMark, [&rStyle](ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
+                        { applyTo.ApplySelectionStyle(rStyle, nTop, nBottom); });
 }
 
 void ScTable::ApplySelectionLineStyle( const ScMarkData& rMark,
@@ -3239,71 +3239,21 @@ void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )
 void ScTable::ApplySelectionCache( ScItemPoolCache* pCache, const ScMarkData& rMark,
                                    ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
-    if(!rMark.GetTableSelect(nTab))
-        return;
-    SCCOL lastChangeCol;
-    if( rMark.GetArea().aEnd.Col() == GetDoc().MaxCol())
-    {
-        // For the same unallocated columns until the end we can change just the default.
-        lastChangeCol = rMark.GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
-        if( lastChangeCol >= 0 )
-            CreateColumnIfNotExists(lastChangeCol); // Allocate needed different columns before changing the default.
-        aDefaultColData.ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged, GetDoc().MaxCol());
-    }
-    else // need to allocate all columns affected
-    {
-        lastChangeCol = rMark.GetArea().aEnd.Col();
-        CreateColumnIfNotExists(lastChangeCol);
-    }
-
-    for (SCCOL i=0; i <= lastChangeCol; i++)
-        aCol[i].ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged );
+    ApplyWithAllocation(
+        rMark, [pCache, pDataArray, pIsChanged](ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
+        { applyTo.ApplySelectionCache(pCache, nTop, nBottom, pDataArray, pIsChanged); });
 }
 
 void ScTable::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
 {
-    if(!rMark.GetTableSelect(nTab))
-        return;
-    SCCOL lastChangeCol;
-    if( rMark.GetArea().aEnd.Col() == GetDoc().MaxCol())
-    {
-        // For the same unallocated columns until the end we can change just the default.
-        lastChangeCol = rMark.GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
-        if( lastChangeCol >= 0 )
-            CreateColumnIfNotExists(lastChangeCol); // Allocate needed different columns before changing the default.
-        aDefaultColData.ChangeSelectionIndent( bIncrement, rMark, GetDoc().MaxCol());
-    }
-    else
-    {
-        lastChangeCol = rMark.GetArea().aEnd.Col();
-        CreateColumnIfNotExists(lastChangeCol);
-    }
-
-    for (SCCOL i=0; i <= lastChangeCol; i++)
-        aCol[i].ChangeSelectionIndent( bIncrement, rMark );
+    ApplyWithAllocation(rMark, [&bIncrement](ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
+                        { applyTo.ChangeSelectionIndent(bIncrement, nTop, nBottom); });
 }
 
 void ScTable::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark )
 {
-    if(!rMark.GetTableSelect(nTab))
-        return;
-    SCCOL lastChangeCol;
-    if( rMark.GetArea().aEnd.Col() == GetDoc().MaxCol())
-    {
-        // For the same unallocated columns until the end we can change just the default.
-        lastChangeCol = rMark.GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
-        if( lastChangeCol >= 0 )
-            CreateColumnIfNotExists(lastChangeCol); // Allocate needed different columns before changing the default.
-        aDefaultColData.ClearSelectionItems( pWhich, rMark, GetDoc().MaxCol());
-    }
-    else
-    {
-        lastChangeCol = rMark.GetArea().aEnd.Col();
-        CreateColumnIfNotExists(lastChangeCol);
-    }
-
-    for (SCCOL i=0; i <= lastChangeCol; i++)
-        aCol[i].ClearSelectionItems( pWhich, rMark );
+    ApplyWithAllocation(rMark, [pWhich](ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
+                        { applyTo.ClearSelectionItems(pWhich, nTop, nBottom); });
 }
 
 //  Column widths / Row heights
