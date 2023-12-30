@@ -216,7 +216,7 @@ void setBorderLineType(const oox::drawingml::LinePropertiesPtr& pLineProp, sal_I
 }
 
 void insertBorderLine(TableStylePart& aTableStylePart, sal_Int32 nToken,
-                      oox::drawingml::LinePropertiesPtr pLineProp)
+                      const oox::drawingml::LinePropertiesPtr& pLineProp)
 {
     if (pLineProp->maLineFill.moFillType.has_value())
     {
