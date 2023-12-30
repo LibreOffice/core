@@ -48,8 +48,8 @@ private:
     ConsumerList_t  maConsList;
     std::optional<Graphic>
                     moGraphic;
-    std::unique_ptr<SvStream>
-                    mpStm;
+    SvStream*       mpStm;
+    std::unique_ptr<SvStream> mxOwnedStream;
     sal_uInt32      mnTransIndex;
     bool            mbConsInit;
     Link<Graphic*,void> maDoneHdl;

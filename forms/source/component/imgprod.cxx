@@ -32,132 +32,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include <svtools/imageresourceaccess.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
-
-namespace {
-
-class ImgProdLockBytes : public SvLockBytes
-{
-    css::uno::Reference< css::io::XInputStream >      xStmRef;
-    css::uno::Sequence<sal_Int8>                      maSeq;
-
-public:
-
-    ImgProdLockBytes( SvStream* pStm, bool bOwner );
-    explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > xStreamRef );
-
-    virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, std::size_t nCount, std::size_t * pRead ) const override;
-    virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, std::size_t nCount, std::size_t * pWritten ) override;
-    virtual ErrCode     Flush() const override;
-    virtual ErrCode     SetSize( sal_uInt64 nSize ) override;
-    virtual ErrCode     Stat( SvLockBytesStat* ) const override;
-};
-
-}
-
-ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, bool bOwner ) :
-        SvLockBytes( pStm, bOwner )
-{
-}
-
-
-ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > _xStmRef ) :
-        xStmRef(std::move( _xStmRef ))
-{
-    if( !xStmRef.is() )
-        return;
-
-    const sal_uInt32    nBytesToRead = 65535;
-    sal_uInt32          nRead;
-
-    do
-    {
-        css::uno::Sequence< sal_Int8 > aReadSeq;
-
-        nRead = xStmRef->readSomeBytes( aReadSeq, nBytesToRead );
-
-        if( nRead )
-        {
-            const sal_uInt32 nOldLength = maSeq.getLength();
-            maSeq.realloc( nOldLength + nRead );
-            memcpy( maSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
-        }
-    }
-    while( nBytesToRead == nRead );
-}
-
-ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
-        void* pBuffer, std::size_t nCount, std::size_t * pRead) const
-{
-    if( GetStream() )
-    {
-        const_cast<SvStream*>(GetStream())->ResetError();
-        const ErrCode nErr = SvLockBytes::ReadAt( nPos, pBuffer, nCount, pRead );
-        const_cast<SvStream*>(GetStream())->ResetError();
-        return nErr;
-    }
-    else
-    {
-        const std::size_t nSeqLen = maSeq.getLength();
-
-        if( nPos < nSeqLen )
-        {
-            if( ( nPos + nCount ) > nSeqLen )
-                nCount = nSeqLen - nPos;
-
-            memcpy( pBuffer, maSeq.getConstArray() + nPos, nCount );
-            *pRead = nCount;
-        }
-        else
-            *pRead = 0;
-
-        return ERRCODE_NONE;
-    }
-}
-
-
-ErrCode ImgProdLockBytes::WriteAt(sal_uInt64 const nPos,
-        const void* pBuffer, std::size_t nCount, std::size_t * pWritten)
-{
-    if( GetStream() )
-        return SvLockBytes::WriteAt( nPos, pBuffer, nCount, pWritten );
-    else
-    {
-        DBG_ASSERT( xStmRef.is(), "ImgProdLockBytes::WriteAt: xInputStream has no reference..." );
-        return ERRCODE_IO_CANTWRITE;
-    }
-}
-
-
-ErrCode ImgProdLockBytes::Flush() const
-{
-    return ERRCODE_NONE;
-}
-
-
-ErrCode ImgProdLockBytes::SetSize(sal_uInt64 const nSize)
-{
-    if( GetStream() )
-        return SvLockBytes::SetSize( nSize );
-    else
-    {
-        OSL_FAIL( "ImgProdLockBytes::SetSize not supported for xInputStream..." );
-        return ERRCODE_IO_CANTWRITE;
-    }
-}
-
-
-ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat ) const
-{
-    if( GetStream() )
-        return SvLockBytes::Stat( pStat );
-    else
-    {
-        DBG_ASSERT( xStmRef.is(), "ImgProdLockBytes::Stat: xInputStream has no reference..." );
-        pStat->nSize = maSeq.getLength();
-        return ERRCODE_NONE;
-    }
-}
 
 
 ImageProducer::ImageProducer()
@@ -205,17 +81,18 @@ void ImageProducer::SetImage( const OUString& rPath )
     maURL = rPath;
     moGraphic->Clear();
     mbConsInit = false;
-    mpStm.reset();
+    mxOwnedStream.reset();
+    mpStm = nullptr;
 
     if ( ::svt::GraphicAccess::isSupportedURL( maURL ) )
     {
-        mpStm = ::svt::GraphicAccess::getImageStream( ::comphelper::getProcessComponentContext(), maURL );
+        mxOwnedStream = ::svt::GraphicAccess::getImageStream( ::comphelper::getProcessComponentContext(), maURL );
+        mpStm = mxOwnedStream.get();
     }
     else if( !maURL.isEmpty() )
     {
-        std::unique_ptr<SvStream> pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, StreamMode::STD_READ );
-        if (pIStm)
-            mpStm.reset( new SvStream( new ImgProdLockBytes( pIStm.release(), true ) ) );
+        mxOwnedStream = ::utl::UcbStreamHelper::CreateStream( maURL, StreamMode::STD_READ );
+        mpStm = mxOwnedStream.get();
     }
 }
 
@@ -225,8 +102,8 @@ void ImageProducer::SetImage( SvStream& rStm )
     maURL.clear();
     moGraphic->Clear();
     mbConsInit = false;
-
-    mpStm.reset( new SvStream( new ImgProdLockBytes( &rStm, false ) ) );
+    mxOwnedStream.reset();
+    mpStm = &rStm;
 }
 
 
@@ -235,10 +112,14 @@ void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > const
     maURL.clear();
     moGraphic->Clear();
     mbConsInit = false;
-    mpStm.reset();
+    mxOwnedStream.reset();
+    mpStm = nullptr;
 
     if( rInputStmRef.is() )
-        mpStm.reset( new SvStream( new ImgProdLockBytes( rInputStmRef ) ) );
+    {
+        mxOwnedStream = utl::UcbStreamHelper::CreateStream( rInputStmRef );
+        mpStm = mxOwnedStream.get();
+    }
 }
 
 
