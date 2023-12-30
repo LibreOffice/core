@@ -21,6 +21,7 @@
 
 #include <tools/solar.h>
 #include <unotools/streamhelper.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -54,10 +55,8 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
     }
     else
     {
-        SvFileStream* pStream = new SvFileStream( uri, StreamMode::READ );
-        sal_uInt64 nBytes = pStream->TellEnd();
-        SvLockBytesRef xLockBytes = new SvLockBytes( pStream, true );
-        xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
+        std::unique_ptr<SvFileStream> pStream(new SvFileStream( uri, StreamMode::READ ));
+        xInputStream = new utl::OInputStreamWrapper( std::move(pStream) );
     }
     return xInputStream;
 }
