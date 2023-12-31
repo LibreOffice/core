@@ -449,7 +449,7 @@ awt::Size lcl_placeLegendEntries(
                             else
                                 --nNewLen;
                         }
-                        if (aTextShapes.size() == 0)
+                        if (aTextShapes.empty())
                         {
                             DrawModelWrapper::removeShape(rEntries[0].xSymbol);
                             rEntries.pop_back();
