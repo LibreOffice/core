@@ -773,7 +773,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         case ContentTypeId::ENDNOTE:
         {
             const SwFootnoteIdxs& rFootnoteIdxs = m_pWrtShell->GetDoc()->GetFootnoteIdxs();
-            if (rFootnoteIdxs.size() == 0)
+            if (rFootnoteIdxs.empty())
                 break;
             // insert footnotes and endnotes
             tools::Long nPos = 0;
