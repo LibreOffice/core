@@ -579,7 +579,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
 
                 for (sal_uInt16 a(0); a < pImpl->mpSecondary->GetSize_Impl(); a++, ppSet++)
                 {
-                    if (nullptr != *ppSet && (*ppSet)->size() != 0)
+                    if (nullptr != *ppSet && !(*ppSet)->empty())
                     {
                         SAL_WARN("svl.items", "old secondary pool: " << pImpl->mpSecondary->pImpl->aName
                                         << " of pool: " << pImpl->aName << " must be empty.");
