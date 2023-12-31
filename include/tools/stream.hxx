@@ -99,6 +99,10 @@ struct SvLockBytesStat
     SvLockBytesStat() : nSize(0) {}
 };
 
+/** This is only extended by UcbLockBytes in ucb/ and appears to exist
+to allow UCB to do delayed feeding of data into a SvStream i.e. a kind of a pipe
+mechanism to allow asynchronous fetching of data.
+*/
 class TOOLS_DLLPUBLIC SvLockBytes: public SvRefBase
 {
     SvStream * m_pStream;
