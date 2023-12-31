@@ -933,16 +933,6 @@ ContentNode* EditDoc::GetObject(sal_Int32 nPos)
     return 0 <= nPos && o3tl::make_unsigned(nPos) < maContents.size() ? maContents[nPos].get() : nullptr;
 }
 
-const ContentNode* EditDoc::operator[](sal_Int32 nPos) const
-{
-    return GetObject(nPos);
-}
-
-ContentNode* EditDoc::operator[](sal_Int32 nPos)
-{
-    return GetObject(nPos);
-}
-
 void EditDoc::Insert(sal_Int32 nPos, std::unique_ptr<ContentNode> pNode)
 {
     if (nPos < 0 || nPos == SAL_MAX_INT32)

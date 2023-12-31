@@ -613,8 +613,8 @@ OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
 
     bAllowUndoAction = false;   // Not anymore ...
 
-    EditDoc& rNodes = mpEditEngine->GetEditDoc();
-    sal_Int32 nPos = rNodes.GetPos( pCurNode );
+    EditDoc& rEditDoc = mpEditEngine->GetEditDoc();
+    sal_Int32 nPos = rEditDoc.GetPos( pCurNode );
 
     // Special case: Bullet => Paragraph start => simply return NULL...
     const SfxBoolItem& rBulletState = mpEditEngine->GetParaAttrib( nPos, EE_PARA_BULLETSTATE );
@@ -632,7 +632,7 @@ OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
     for ( sal_Int32 n = nPos; n; )
     {
         n--;
-        ContentNode* pNode = rNodes[n];
+        ContentNode* pNode = rEditDoc.GetObject(n);
         if ( pNode->Len() )
             return & pNode->GetString();
     }

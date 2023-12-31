@@ -236,8 +236,8 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
     sal_Int32 nParas = maEditDoc.Count();
     for ( sal_Int32 n = bKeepParaAttribs ? 1 : 0; n < nParas; n++ )
     {
-        if ( maEditDoc[n]->GetStyleSheet() )
-            EndListening( *maEditDoc[n]->GetStyleSheet() );
+        if (maEditDoc.GetObject(n)->GetStyleSheet())
+            EndListening( *maEditDoc.GetObject(n)->GetStyleSheet() );
     }
 
     if ( bKeepParaAttribs )
@@ -247,7 +247,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
 
     GetParaPortions().Reset();
 
-    GetParaPortions().Insert(0, std::make_unique<ParaPortion>( maEditDoc[0] ));
+    GetParaPortions().Insert(0, std::make_unique<ParaPortion>(maEditDoc.GetObject(0)));
 
     mbFormatted = false;
 
@@ -3776,7 +3776,7 @@ EditSelection ImpEditEngine::ConvertSelection(
     sal_Int32 nIndex = nStartPos;
     if ( !pNode )
     {
-        pNode = maEditDoc[ maEditDoc.Count()-1 ];
+        pNode = maEditDoc.GetObject(maEditDoc.Count() - 1);
         nIndex = pNode->Len();
     }
     else if ( nIndex > pNode->Len() )
@@ -3790,7 +3790,7 @@ EditSelection ImpEditEngine::ConvertSelection(
     nIndex = nEndPos;
     if ( !pNode )
     {
-        pNode = maEditDoc[ maEditDoc.Count()-1 ];
+        pNode = maEditDoc.GetObject(maEditDoc.Count() - 1);
         nIndex = pNode->Len();
     }
     else if ( nIndex > pNode->Len() )

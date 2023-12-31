@@ -1090,8 +1090,8 @@ public:
     EditPaM CreateEditPaM( const EPaM& rEPaM )
     {
         DBG_ASSERT( rEPaM.nPara < maEditDoc.Count(), "CreateEditPaM: invalid paragraph" );
-        DBG_ASSERT( maEditDoc[ rEPaM.nPara ]->Len() >= rEPaM.nIndex, "CreateEditPaM: invalid Index" );
-        return EditPaM( maEditDoc[ rEPaM.nPara], rEPaM.nIndex );
+        DBG_ASSERT(maEditDoc.GetObject(rEPaM.nPara)->Len() >= rEPaM.nIndex, "CreateEditPaM: invalid Index");
+        return EditPaM(maEditDoc.GetObject(rEPaM.nPara), rEPaM.nIndex);
     }
 
     ESelection CreateESel(const EditSelection& rSel) const
@@ -1111,9 +1111,9 @@ public:
         DBG_ASSERT( rSel.nStartPara < maEditDoc.Count(), "CreateSel: invalid start paragraph" );
         DBG_ASSERT( rSel.nEndPara < maEditDoc.Count(), "CreateSel: invalid end paragraph" );
         EditSelection aSel;
-        aSel.Min().SetNode( maEditDoc[ rSel.nStartPara ] );
+        aSel.Min().SetNode(maEditDoc.GetObject(rSel.nStartPara));
         aSel.Min().SetIndex( rSel.nStartPos );
-        aSel.Max().SetNode( maEditDoc[ rSel.nEndPara ] );
+        aSel.Max().SetNode(maEditDoc.GetObject(rSel.nEndPara));
         aSel.Max().SetIndex( rSel.nEndPos );
         DBG_ASSERT( !aSel.DbgIsBuggy( maEditDoc ), "CreateSel: incorrect selection!" );
         return aSel;
