@@ -1758,7 +1758,7 @@ void OfaTreeOptionsDialog::generalOptions(const std::vector<sal_uInt16>& vPageId
                     continue;
             }
 
-            if (vPageId.size() != 0)
+            if (!vPageId.empty())
             {
                 if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                     AddTabPage(nPageId, sNewTitle, nGroup);
@@ -1784,7 +1784,7 @@ void OfaTreeOptionsDialog::loadAndSaveOptions(const std::vector<sal_uInt16>& vPa
             nPageId = static_cast<sal_uInt16>(SID_FILTER_DLG_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
             {
-                if (vPageId.size() != 0)
+                if (!vPageId.empty())
                 {
                     if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                         AddTabPage(nPageId, CuiResId(SID_FILTER_DLG_RES[i].first), nGroup);
@@ -1824,7 +1824,7 @@ void OfaTreeOptionsDialog::languageOptions(const std::vector<sal_uInt16>& vPageI
                  ( RID_SVXPAGE_ASIAN_LAYOUT != nPageId    || SvtCJKOptions::IsAsianTypographyEnabled() ) &&
                  ( RID_SVXPAGE_OPTIONS_CTL != nPageId     || SvtCTLOptions::IsCTLFontEnabled() ) )
             {
-                if (vPageId.size() != 0)
+                if (!vPageId.empty())
                 {
                     if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                         AddTabPage(nPageId, CuiResId(SID_LANGUAGE_OPTIONS_RES[i].first), nGroup);
@@ -1871,7 +1871,7 @@ void OfaTreeOptionsDialog::writerOptions(const std::vector<sal_uInt16>& vPageId)
                          ( RID_SW_TP_STD_FONT_CTL != nPageId || SvtCTLOptions::IsCTLFontEnabled() ) &&
                          ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfgIsEmailSupported() ) )
                     {
-                        if (vPageId.size() != 0)
+                        if (!vPageId.empty())
                         {
                             if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                                 AddTabPage(nPageId, CuiResId(SID_SW_EDITOPTIONS_RES[i].first),
@@ -1882,7 +1882,7 @@ void OfaTreeOptionsDialog::writerOptions(const std::vector<sal_uInt16>& vPageId)
                     }
                 }
 #ifdef DBG_UTIL
-                if (vPageId.size() != 0)
+                if (!vPageId.empty())
                 {
                     if (std::find(vPageId.begin(), vPageId.end(), RID_SW_TP_OPTTEST_PAGE)
                         != vPageId.end())
@@ -1924,7 +1924,7 @@ void OfaTreeOptionsDialog::writerWebOptions(const std::vector<sal_uInt16>& vPage
                     nPageId = static_cast<sal_uInt16>(SID_SW_ONLINEOPTIONS_RES[i].second);
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                     {
-                        if (vPageId.size() != 0)
+                        if (!vPageId.empty())
                         {
                             if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                                 AddTabPage(nPageId, CuiResId(SID_SW_ONLINEOPTIONS_RES[i].first),
@@ -1936,7 +1936,7 @@ void OfaTreeOptionsDialog::writerWebOptions(const std::vector<sal_uInt16>& vPage
                     }
                 }
 #ifdef DBG_UTIL
-                if (vPageId.size() != 0)
+                if (!vPageId.empty())
                 {
                     if (std::find(vPageId.begin(), vPageId.end(), RID_SW_TP_OPTTEST_PAGE)
                         != vPageId.end())
@@ -1977,7 +1977,7 @@ void OfaTreeOptionsDialog::calcOptions(const std::vector<sal_uInt16>& vPageId)
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
-                    if (vPageId.size() != 0)
+                    if (!vPageId.empty())
                     {
                         if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                             AddTabPage(nPageId, CuiResId(SID_SC_EDITOPTIONS_RES[i].first), nGroup);
@@ -2017,7 +2017,7 @@ void OfaTreeOptionsDialog::impressOptions(const std::vector<sal_uInt16>& vPageId
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
-                    if (vPageId.size() != 0)
+                    if (!vPageId.empty())
                     {
                         if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                             AddTabPage(nPageId, CuiResId(SID_SD_EDITOPTIONS_RES[i].first), nGroup);
@@ -2057,7 +2057,7 @@ void OfaTreeOptionsDialog::drawOptions(const std::vector<sal_uInt16>& vPageId)
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
-                    if (vPageId.size() != 0)
+                    if (!vPageId.empty())
                     {
                         if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                             AddTabPage(nPageId, CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[i].first),
@@ -2096,7 +2096,7 @@ void OfaTreeOptionsDialog::mathOptions(const std::vector<sal_uInt16>& vPageId)
                     nPageId = static_cast<sal_uInt16>(SID_SM_EDITOPTIONS_RES[i].second);
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                     {
-                        if (vPageId.size() != 0)
+                        if (!vPageId.empty())
                         {
                             if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                                 AddTabPage(nPageId, CuiResId(SID_SM_EDITOPTIONS_RES[i].first),
@@ -2133,7 +2133,7 @@ void OfaTreeOptionsDialog::databaseOptions(const std::vector<sal_uInt16>& vPageI
             nPageId = static_cast<sal_uInt16>(SID_SB_STARBASEOPTIONS_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
             {
-                if (vPageId.size() != 0)
+                if (!vPageId.empty())
                 {
                     if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                         AddTabPage(nPageId, CuiResId(SID_SB_STARBASEOPTIONS_RES[i].first), nGroup);
@@ -2160,7 +2160,7 @@ void OfaTreeOptionsDialog::chartOptions(const std::vector<sal_uInt16>& vPageId)
             nPageId = static_cast<sal_uInt16>(SID_SCH_EDITOPTIONS_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
             {
-                if (vPageId.size() != 0)
+                if (!vPageId.empty())
                 {
                     if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                         AddTabPage(nPageId, CuiResId(SID_SCH_EDITOPTIONS_RES[i].first), nGroup);
@@ -2194,7 +2194,7 @@ void OfaTreeOptionsDialog::internetOptions(const std::vector<sal_uInt16>& vPageI
         if ( nPageId == RID_SVXPAGE_INET_MAIL )
             continue;
 #endif
-        if (vPageId.size() != 0)
+        if (!vPageId.empty())
         {
             if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
                 AddTabPage(nPageId, CuiResId(SID_INET_DLG_RES[i].first), nGroup);
