@@ -88,11 +88,13 @@ static sal_uInt16 lcl_CalcExtraSpace( const SvxLineSpacingItem& rLSItem )
     return nExtra;
 }
 
+constexpr tools::Long constMaxPaperSize = 0x7FFFFFFF;
+
 ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pSharedVCL(EditDLL::Get().GetSharedVclResources()),
-    maPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
-    maMinAutoPaperSize( 0x0, 0x0 ),
-    maMaxAutoPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
+    maPaperSize(constMaxPaperSize, constMaxPaperSize),
+    maMinAutoPaperSize(0, 0),
+    maMaxAutoPaperSize(constMaxPaperSize, constMaxPaperSize),
     maEditDoc( pItemPool ),
     pEditEngine(pEE),
     pActiveView(nullptr),
