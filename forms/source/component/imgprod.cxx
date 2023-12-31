@@ -32,7 +32,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include <svtools/imageresourceaccess.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
 
