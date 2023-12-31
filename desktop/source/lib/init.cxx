@@ -4564,7 +4564,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
             pViewShell->setLibreOfficeKitViewCallback(pDocument->mpCallbackFlushHandlers[nView].get());
         }
 
-        if (pDocument->maFontsMissing.size() != 0)
+        if (!pDocument->maFontsMissing.empty())
         {
             OString sPayload = "{ \"fontsmissing\": [ "_ostr;
             bool bFirst = true;
