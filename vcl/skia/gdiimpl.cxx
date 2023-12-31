@@ -977,7 +977,7 @@ bool SkiaSalGraphicsImpl::delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& aP
     if (!polygonContainsLine(aPolyPolygon))
         return false;
 
-    if (mLastPolyPolygonInfo.polygons.size() != 0
+    if (!mLastPolyPolygonInfo.polygons.empty()
         && (mLastPolyPolygonInfo.transparency != fTransparency
             || !mLastPolyPolygonInfo.bounds.overlaps(aPolyPolygon.getB2DRange())))
     {
@@ -1029,7 +1029,7 @@ static void roundPolygonPoints(basegfx::B2DPolyPolygon& polyPolygon)
 
 void SkiaSalGraphicsImpl::checkPendingDrawing()
 {
-    if (mLastPolyPolygonInfo.polygons.size() != 0)
+    if (!mLastPolyPolygonInfo.polygons.empty())
     { // Flush any pending polygon drawing.
         basegfx::B2DPolyPolygonVector polygons;
         std::swap(polygons, mLastPolyPolygonInfo.polygons);
