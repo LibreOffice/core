@@ -339,8 +339,8 @@ class SwBorderAttrs final : public SwCacheObj
     mutable bool m_bCachedJoinedWithPrev : 1;
     mutable bool m_bCachedJoinedWithNext : 1;
     // Booleans indicate that borders are joined with previous/next frame.
-    bool m_bJoinedWithPrev :1;
-    bool m_bJoinedWithNext :1;
+    mutable bool m_bJoinedWithPrev :1;
+    mutable bool m_bJoinedWithNext :1;
 
     // The cached values (un-defined until calculated for the first time)
     sal_uInt16 m_nTopLine,
@@ -375,8 +375,8 @@ class SwBorderAttrs final : public SwCacheObj
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     void CalcJoinedWithPrev( const SwFrame& _rFrame,
-                              const SwFrame* _pPrevFrame );
-    void CalcJoinedWithNext( const SwFrame& _rFrame );
+                              const SwFrame* _pPrevFrame ) const;
+    void CalcJoinedWithNext( const SwFrame& _rFrame ) const;
 
     // internal helper method for CalcJoinedWithPrev and CalcJoinedWithNext
     bool JoinWithCmp( const SwFrame& _rCallerFrame,

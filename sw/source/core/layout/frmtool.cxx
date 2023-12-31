@@ -2510,7 +2510,7 @@ bool SwBorderAttrs::JoinWithCmp( const SwFrame& _rCallerFrame,
 // previous frame. Calculated value saved in cached value <m_bJoinedWithPrev>
 // OD 2004-02-26 #i25029# - add 2nd parameter <_pPrevFrame>
 void SwBorderAttrs::CalcJoinedWithPrev( const SwFrame& _rFrame,
-                                         const SwFrame* _pPrevFrame )
+                                         const SwFrame* _pPrevFrame ) const
 {
     // set default
     m_bJoinedWithPrev = false;
@@ -2544,7 +2544,7 @@ void SwBorderAttrs::CalcJoinedWithPrev( const SwFrame& _rFrame,
 
 // OD 21.05.2003 #108789# - method to determine, if borders are joined with
 // next frame. Calculated value saved in cached value <m_bJoinedWithNext>
-void SwBorderAttrs::CalcJoinedWithNext( const SwFrame& _rFrame )
+void SwBorderAttrs::CalcJoinedWithNext( const SwFrame& _rFrame ) const
 {
     // set default
     m_bJoinedWithNext = false;
@@ -2581,7 +2581,7 @@ bool SwBorderAttrs::JoinedWithPrev( const SwFrame& _rFrame,
     if ( !m_bCachedJoinedWithPrev || _pPrevFrame )
     {
         // OD 2004-02-26 #i25029# - pass <_pPrevFrame> as 2nd parameter
-        const_cast<SwBorderAttrs*>(this)->CalcJoinedWithPrev( _rFrame, _pPrevFrame );
+        CalcJoinedWithPrev( _rFrame, _pPrevFrame );
     }
 
     return m_bJoinedWithPrev;
@@ -2591,7 +2591,7 @@ bool SwBorderAttrs::JoinedWithNext( const SwFrame& _rFrame ) const
 {
     if ( !m_bCachedJoinedWithNext )
     {
-        const_cast<SwBorderAttrs*>(this)->CalcJoinedWithNext( _rFrame );
+        CalcJoinedWithNext( _rFrame );
     }
 
     return m_bJoinedWithNext;
