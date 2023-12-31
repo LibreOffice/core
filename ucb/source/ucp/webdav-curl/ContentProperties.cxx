@@ -339,7 +339,7 @@ bool ContentProperties::containsAllNames(
         }
     }
 
-    return ( rNamesNotContained.size() == 0 );
+    return rNamesNotContained.empty();
 }
 
 
