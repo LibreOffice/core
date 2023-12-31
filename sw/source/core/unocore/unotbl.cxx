@@ -503,7 +503,7 @@ static const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines,
         const SwTableLine* pLine(i_bTopLeft ? pLines->front() : pLines->back());
         assert(pLine);
         const SwTableBoxes& rBoxes(pLine->GetTabBoxes());
-        assert(rBoxes.size() != 0);
+        assert(!rBoxes.empty());
         const SwTableBox* pBox = i_bTopLeft ? rBoxes.front() : rBoxes.back();
         assert(pBox);
         if (pBox->GetSttNd())

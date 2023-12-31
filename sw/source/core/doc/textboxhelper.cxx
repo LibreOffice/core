@@ -1686,7 +1686,7 @@ SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
 
 SwTextBoxNode::~SwTextBoxNode()
 {
-    if (m_pTextBoxes.size() != 0)
+    if (!m_pTextBoxes.empty())
     {
         SAL_WARN("sw.core", "SwTextBoxNode::~SwTextBoxNode(): Text-Box-Vector still not empty!");
         assert(false);

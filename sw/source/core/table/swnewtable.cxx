@@ -2383,7 +2383,7 @@ bool SwTable::CanConvertSubtables() const
     {
         return false; // no formulas in fields yet
     }
-    if (pDoc->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA).size() != 0)
+    if (!pDoc->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA).empty())
     {
         return false; // no table box formulas yet
     }
