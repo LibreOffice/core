@@ -65,7 +65,7 @@ Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
 // XNameContainer
 void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rElement )
 {
-    if( m_aMap.find( rName ) != m_aMap.end() )
+    if( m_aMap.contains( rName ))
         throw container::ElementExistException();
     m_aMap.emplace( rName, rElement );
 }
