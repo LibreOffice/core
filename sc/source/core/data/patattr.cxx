@@ -219,20 +219,20 @@ CellAttributeHolder::CellAttributeHolder(const ScPatternAttr* pNew, bool bPassin
 : mpScPatternAttr(nullptr)
 {
     if (nullptr != pNew)
-        mpScPatternAttr = pNew->getCellAttributeHelper().registerAndCheck(*pNew, bPassingOwnership);
+        suppress_fun_call_w_exception(mpScPatternAttr = pNew->getCellAttributeHelper().registerAndCheck(*pNew, bPassingOwnership));
 }
 
 CellAttributeHolder::CellAttributeHolder(const CellAttributeHolder& rHolder)
 : mpScPatternAttr(nullptr)
 {
     if (rHolder.getScPatternAttr())
-        mpScPatternAttr = rHolder.getScPatternAttr()->getCellAttributeHelper().registerAndCheck(*rHolder.getScPatternAttr(), false);
+        suppress_fun_call_w_exception(mpScPatternAttr = rHolder.getScPatternAttr()->getCellAttributeHelper().registerAndCheck(*rHolder.getScPatternAttr(), false));
 }
 
 CellAttributeHolder::~CellAttributeHolder()
 {
     if (nullptr != mpScPatternAttr)
-        mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr);
+        suppress_fun_call_w_exception(mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr));
 }
 
 const CellAttributeHolder& CellAttributeHolder::operator=(const CellAttributeHolder& rHolder)
