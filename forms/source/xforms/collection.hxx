@@ -106,7 +106,7 @@ public:
 
     bool hasItems() const
     {
-        return maItems.size() != 0;
+        return !maItems.empty();
     }
 
     sal_Int32 countItems() const
