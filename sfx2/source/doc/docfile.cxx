@@ -4928,7 +4928,7 @@ void CheckReadOnlyTask::doWork()
             g_existingReadOnlyDocs[pMed] = roEntry;
             it = g_newReadOnlyDocs.erase(it);
         }
-        if (g_existingReadOnlyDocs.size() == 0)
+        if (g_existingReadOnlyDocs.empty())
         {
             g_bChkReadOnlyTaskRunning = false;
             return;
