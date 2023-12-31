@@ -36,7 +36,8 @@
 
 
 ImageProducer::ImageProducer()
-    : mnTransIndex(0)
+    : mpStm(nullptr)
+    , mnTransIndex(0)
     , mbConsInit(false)
 {
     moGraphic.emplace();
