@@ -237,8 +237,35 @@ MetaRectAction::MetaRectAction( const tools::Rectangle& rRect ) :
     maRect      ( rRect )
 {}
 
+static bool AllowDim(tools::Long nDim)
+{
+    static bool bFuzzing = comphelper::IsFuzzing();
+    if (bFuzzing)
+    {
+        if (nDim > 0x20000000 || nDim < -0x20000000)
+        {
+            SAL_WARN("vcl", "skipping huge dimension: " << nDim);
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool AllowPoint(const Point& rPoint)
+{
+    return AllowDim(rPoint.X()) && AllowDim(rPoint.Y());
+}
+
+static bool AllowRect(const tools::Rectangle& rRect)
+{
+    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight());
+}
+
 void MetaRectAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawRect( maRect );
 }
 
@@ -462,30 +489,6 @@ MetaPolyLineAction::MetaPolyLineAction( tools::Polygon aPoly, LineInfo aLineInfo
     maLineInfo  (std::move( aLineInfo )),
     maPoly      (std::move( aPoly ))
 {}
-
-static bool AllowDim(tools::Long nDim)
-{
-    static bool bFuzzing = comphelper::IsFuzzing();
-    if (bFuzzing)
-    {
-        if (nDim > 0x20000000 || nDim < -0x20000000)
-        {
-            SAL_WARN("vcl", "skipping huge dimension: " << nDim);
-            return false;
-        }
-    }
-    return true;
-}
-
-static bool AllowPoint(const Point& rPoint)
-{
-    return AllowDim(rPoint.X()) && AllowDim(rPoint.Y());
-}
-
-static bool AllowRect(const tools::Rectangle& rRect)
-{
-    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight());
-}
 
 void MetaPolyLineAction::Execute( OutputDevice* pOut )
 {
@@ -822,6 +825,9 @@ void MetaTextLineAction::Execute( OutputDevice* pOut )
         SAL_WARN("vcl", "skipping line with negative width: " << mnWidth);
         return;
     }
+    if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maPos, Size(mnWidth, pOut->GetTextHeight())))))
+        return;
+
     pOut->DrawTextLine( maPos, mnWidth, meStrikeout, meUnderline, meOverline );
 }
 
