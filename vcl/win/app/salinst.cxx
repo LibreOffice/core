@@ -211,11 +211,11 @@ bool SalYieldMutex::IsCurrentThread() const
 
 void SalData::initKeyCodeMap()
 {
-    UINT nKey;
-    #define initKey( a, b )\
-        nKey = LOWORD( VkKeyScanW( a ) );\
-        if( nKey < 0xffff )\
-            maVKMap[ nKey ] = b;
+    auto initKey = [this](wchar_t ch, sal_uInt16 key)
+    {
+        if (UINT vkey = LOWORD(VkKeyScanW(ch)); vkey < 0xffff)
+            maVKMap[vkey] = key;
+    };
 
     maVKMap.clear();
 
@@ -586,45 +586,33 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     return bDidWork;
 }
 
-#define CASE_NOYIELDLOCK( salmsg, function ) \
-    case salmsg: \
-        if (bIsOtherThreadMessage) \
-        { \
-            ++pInst->m_nNoYieldLock; \
-            function; \
-            --pInst->m_nNoYieldLock; \
-        } \
-        else \
-        { \
-            DBG_TESTSOLARMUTEX(); \
-            function; \
-        } \
-        break;
-
-#define CASE_NOYIELDLOCK_RESULT( salmsg, function ) \
-    case salmsg: \
-        if (bIsOtherThreadMessage) \
-        { \
-            ++pInst->m_nNoYieldLock; \
-            nRet = reinterpret_cast<LRESULT>( function ); \
-            --pInst->m_nNoYieldLock; \
-        } \
-        else \
-        { \
-            DBG_TESTSOLARMUTEX(); \
-            nRet = reinterpret_cast<LRESULT>( function ); \
-        } \
-        break;
+namespace
+{
+struct NoYieldLockGuard
+{
+    NoYieldLockGuard()
+        : counter(InSendMessage() ? GetSalData()->mpInstance->m_nNoYieldLock : dummy())
+    {
+        ++counter;
+    }
+    ~NoYieldLockGuard() { --counter; }
+    static decltype(WinSalInstance::m_nNoYieldLock)& dummy()
+    {
+        DBG_TESTSOLARMUTEX(); // called when !InSendMessage()
+        static decltype(WinSalInstance::m_nNoYieldLock) n = 0;
+        return n;
+    }
+    decltype(WinSalInstance::m_nNoYieldLock)& counter;
+};
+}
 
 LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef )
 {
-    const bool bIsOtherThreadMessage = InSendMessage();
     LRESULT nRet = 0;
-    WinSalInstance *pInst = GetSalData()->mpInstance;
     WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
 
     SAL_INFO("vcl.gdi.wndproc", "SalComWndProc(nMsg=" << nMsg << ", wParam=" << wParam
-                                << ", lParam=" << lParam << "); inSendMsg: " << bIsOtherThreadMessage);
+                                << ", lParam=" << lParam << "); inSendMsg: " << InSendMessage());
 
     if (ImplGetSVData()->mbDeInit)
     {
@@ -658,13 +646,34 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             pTimer->ImplStop();
             break;
 
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_CREATEFRAME, ImplSalCreateFrame( GetSalData()->mpInstance,
-            reinterpret_cast<HWND>(lParam), static_cast<SalFrameStyleFlags>(wParam)) )
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_RECREATEHWND, ImplSalReCreateHWND(
-            reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false) )
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_RECREATECHILDHWND, ImplSalReCreateHWND(
-            reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), true) )
-        CASE_NOYIELDLOCK( SAL_MSG_DESTROYFRAME, delete reinterpret_cast<SalFrame*>(lParam) )
+        case (SAL_MSG_CREATEFRAME):
+            {
+                NoYieldLockGuard g;
+                nRet = reinterpret_cast<LRESULT>(
+                    ImplSalCreateFrame(GetSalData()->mpInstance, reinterpret_cast<HWND>(lParam),
+                                       static_cast<SalFrameStyleFlags>(wParam)));
+            }
+            break;
+        case (SAL_MSG_RECREATEHWND):
+            {
+                NoYieldLockGuard g;
+                nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND(
+                    reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false));
+            }
+            break;
+        case (SAL_MSG_RECREATECHILDHWND):
+            {
+                NoYieldLockGuard g;
+                nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND(
+                    reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), true));
+            }
+            break;
+        case (SAL_MSG_DESTROYFRAME):
+            {
+                NoYieldLockGuard g;
+                delete reinterpret_cast<SalFrame*>(lParam);
+            }
+            break;
 
         case SAL_MSG_DESTROYHWND:
             // We only destroy the native window here. We do NOT destroy the SalFrame contained
@@ -678,13 +687,32 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             }
             break;
 
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_CREATEOBJECT, ImplSalCreateObject(
-            GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam)) )
-        CASE_NOYIELDLOCK( SAL_MSG_DESTROYOBJECT, delete reinterpret_cast<SalObject*>(lParam) )
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_GETCACHEDDC, GetDCEx(
-            reinterpret_cast<HWND>(wParam), nullptr, DCX_CACHE) )
-        CASE_NOYIELDLOCK( SAL_MSG_RELEASEDC, ReleaseDC(
-            reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam)) )
+        case (SAL_MSG_CREATEOBJECT):
+            {
+                NoYieldLockGuard g;
+                nRet = reinterpret_cast<LRESULT>(ImplSalCreateObject(
+                    GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam)));
+            }
+            break;
+        case (SAL_MSG_DESTROYOBJECT):
+            {
+                NoYieldLockGuard g;
+                delete reinterpret_cast<SalObject*>(lParam);
+            }
+            break;
+        case (SAL_MSG_GETCACHEDDC):
+            {
+                NoYieldLockGuard g;
+                nRet = reinterpret_cast<LRESULT>(
+                    GetDCEx(reinterpret_cast<HWND>(wParam), nullptr, 0x00000002L));
+            }
+            break;
+        case (SAL_MSG_RELEASEDC):
+            {
+                NoYieldLockGuard g;
+                ReleaseDC(reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam));
+            }
+            break;
 
         case SAL_MSG_TIMER_CALLBACK:
             assert( pTimer != nullptr );
@@ -711,9 +739,6 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
 
     return nRet;
 }
-
-#undef CASE_NOYIELDLOCK
-#undef CASE_NOYIELDLOCK_RESULT
 
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
