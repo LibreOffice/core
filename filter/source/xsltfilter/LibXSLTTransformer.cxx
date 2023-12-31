@@ -441,7 +441,7 @@ namespace XSLT
     LibXSLTTransformer::removeListener(
             const css::uno::Reference<XStreamListener>& listener)
     {
-        m_listeners.erase( std::remove(m_listeners.begin(), m_listeners.end(), listener ), m_listeners.end() );
+        std::erase(m_listeners,listener);
     }
 
     void
