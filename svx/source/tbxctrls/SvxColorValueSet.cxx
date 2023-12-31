@@ -72,7 +72,7 @@ void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sa
 void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, std::u16string_view rNamePrefix)
 {
     sal_uInt32 nStartIndex = 1;
-    if(rNamePrefix.size() != 0)
+    if(!rNamePrefix.empty())
     {
         for(const auto& rColor : rColorSet)
         {
