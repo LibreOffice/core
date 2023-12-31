@@ -284,12 +284,12 @@ public:
     }
     #endif
 
-    static void parseError( const char* pMessage, iteratorT pLocation )
+    static void parseError( const char* pMessage, const iteratorT& pLocation )
     {
         throw_( pLocation, pMessage );
     }
 
-    OString iteratorToString( iteratorT first, iteratorT last ) const
+    OString iteratorToString( iteratorT first, const iteratorT& last ) const
     {
         OStringBuffer aStr( 32 );
         while( first != last )
@@ -300,7 +300,7 @@ public:
         return aStr.makeStringAndClear();
     }
 
-    void haveFile( iteratorT pBegin, SAL_UNUSED_PARAMETER iteratorT /*pEnd*/ )
+    void haveFile( const iteratorT& pBegin, SAL_UNUSED_PARAMETER iteratorT /*pEnd*/ )
     {
         if( m_aObjectStack.empty() )
         {
@@ -315,7 +315,7 @@ public:
             parseError( "found file header in unusual place", pBegin );
     }
 
-    void pushComment( iteratorT first, iteratorT last )
+    void pushComment(const iteratorT& first, const iteratorT& last)
     {
         // add a comment to the current stack element
         PDFComment* pComment =
@@ -328,7 +328,7 @@ public:
         pContainer->m_aSubElements.emplace_back( pComment );
     }
 
-    void insertNewValue( std::unique_ptr<PDFEntry> pNewValue, iteratorT pPos )
+    void insertNewValue( std::unique_ptr<PDFEntry> pNewValue, const iteratorT& pPos )
     {
         PDFContainer* pContainer = nullptr;
         const char* pMsg = nullptr;
@@ -384,33 +384,32 @@ public:
         }
     }
 
-    void pushName( iteratorT first, iteratorT last )
+    void pushName(const iteratorT& first, const iteratorT& last )
     {
         insertNewValue( std::make_unique<PDFName>(iteratorToString(first,last)), first );
     }
 
-    void pushDouble( iteratorT first, SAL_UNUSED_PARAMETER iteratorT /*last*/ )
+    void pushDouble( const iteratorT& first, SAL_UNUSED_PARAMETER const iteratorT& /*last*/ )
     {
         insertNewValue( std::make_unique<PDFNumber>(m_fDouble), first );
     }
 
-    void pushString( iteratorT first, iteratorT last )
+    void pushString( const iteratorT& first, const iteratorT& last )
     {
         insertNewValue( std::make_unique<PDFString>(iteratorToString(first,last)), first );
     }
 
-    void pushBool( iteratorT first, iteratorT last )
+    void pushBool( const iteratorT& first, const iteratorT& last )
     {
         insertNewValue( std::make_unique<PDFBool>( last-first == 4 ), first );
     }
 
-    void pushNull( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+    void pushNull( const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         insertNewValue( std::make_unique<PDFNull>(), first );
     }
 
-
-    void beginObject( iteratorT first, SAL_UNUSED_PARAMETER iteratorT /*last*/ )
+    void beginObject( const iteratorT& first, SAL_UNUSED_PARAMETER const iteratorT& /*last*/ )
     {
         if( m_aObjectStack.empty() )
             m_aObjectStack.push_back( new PDFPart() );
@@ -435,7 +434,7 @@ public:
             parseError( "object in wrong place", first );
     }
 
-    void endObject( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+    void endObject( const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         if( m_aObjectStack.empty() )
             parseError( "endobj without obj", first );
@@ -445,7 +444,7 @@ public:
             m_aObjectStack.pop_back();
     }
 
-    void pushObjectRef( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+    void pushObjectRef( const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         unsigned int nGeneration = m_aUIntStack.back();
         m_aUIntStack.pop_back();
@@ -454,7 +453,7 @@ public:
         insertNewValue( std::make_unique<PDFObjectRef>(nObject,nGeneration), first );
     }
 
-    void beginDict( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+    void beginDict( const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         PDFDict* pDict = new PDFDict();
         pDict->m_nOffset = first - m_aGlobalBegin;
@@ -463,7 +462,8 @@ public:
         // will not come here if insertion fails (exception)
         m_aObjectStack.push_back( pDict );
     }
-    void endDict( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+
+    void endDict( const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         PDFDict* pDict = nullptr;
         if( m_aObjectStack.empty() )
@@ -484,7 +484,7 @@ public:
         }
     }
 
-    void beginArray( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+    void beginArray( const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         PDFArray* pArray = new PDFArray();
         pArray->m_nOffset = first - m_aGlobalBegin;
@@ -494,7 +494,7 @@ public:
         m_aObjectStack.push_back( pArray );
     }
 
-    void endArray( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+    void endArray( const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         if( m_aObjectStack.empty() )
             parseError( "array end without begin", first );
@@ -504,7 +504,7 @@ public:
             m_aObjectStack.pop_back();
     }
 
-    void emitStream( iteratorT first, iteratorT last )
+    void emitStream(const iteratorT& first, const iteratorT& last)
     {
         if( m_aObjectStack.empty() )
             parseError( "stream without object", first );
@@ -527,7 +527,7 @@ public:
             parseError( "stream without object", first );
     }
 
-    void beginTrailer( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+    void beginTrailer( const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         if( m_aObjectStack.empty() )
             m_aObjectStack.push_back( new PDFPart() );
@@ -547,7 +547,7 @@ public:
             parseError( "trailer in wrong place", first );
     }
 
-    void endTrailer( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
+    void endTrailer(const iteratorT& first, SAL_UNUSED_PARAMETER iteratorT )
     {
         if( m_aObjectStack.empty() )
             parseError( "%%EOF without trailer", first );

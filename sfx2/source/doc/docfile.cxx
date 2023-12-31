@@ -4924,8 +4924,7 @@ void CheckReadOnlyTask::doWork()
         std::unique_lock<std::mutex> globalLock(g_chkReadOnlyGlobalMutex);
         for (auto it = g_newReadOnlyDocs.begin(); it != g_newReadOnlyDocs.end(); )
         {
-            auto [pMed, roEntry] = *it;
-            g_existingReadOnlyDocs[pMed] = roEntry;
+            g_existingReadOnlyDocs[it->first] = it->second;
             it = g_newReadOnlyDocs.erase(it);
         }
         if (g_existingReadOnlyDocs.empty())

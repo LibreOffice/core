@@ -2082,8 +2082,7 @@ namespace cmis
 
             if ( typeIt != propsTypes.end( ) )
             {
-                libcmis::PropertyTypePtr propType = typeIt->second;
-                libcmis::PropertyPtr property( new libcmis::Property( propType, { rValue }) );
+                libcmis::PropertyPtr property( new libcmis::Property( typeIt->second, { rValue }) );
                 m_pObjectProps.insert(std::pair< std::string, libcmis::PropertyPtr >(rName, property));
             }
         }

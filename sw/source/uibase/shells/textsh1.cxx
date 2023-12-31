@@ -2649,7 +2649,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                                   aActionIndicesSequence,
                                                   aStringKeyMaps,
                                                   xRange,
-                                                  xController,
+                                                  std::move(xController),
                                                   std::move(aLocale),
                                                   aApplicationName,
                                                   aRangeText );

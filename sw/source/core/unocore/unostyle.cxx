@@ -3853,9 +3853,8 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
     uno::Any aRet;
     if( m_pImpl->hasMoreElements() )
     {
-        std::shared_ptr<SfxItemSet> pNextSet = m_pImpl->nextElement();
         uno::Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(&m_pImpl->getDoc(),
-                                                        pNextSet, m_pImpl->getFamily());
+                                                        m_pImpl->nextElement(), m_pImpl->getFamily());
         aRet <<= xAutoStyle;
     }
     return aRet;

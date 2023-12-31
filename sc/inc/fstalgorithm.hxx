@@ -117,8 +117,7 @@ std::vector<Span> toSpanArray( const mdds::flat_segment_tree<Key,bool>& rTree, K
         // Tree search failed.
         return aSpans;
 
-    typename FstType::const_iterator it = r.first, itEnd = rTree.end();
-    buildSpan<Key,Span>(aSpans, it, itEnd, &nStartPos);
+    buildSpan<Key,Span>(aSpans, r.first, rTree.end(), &nStartPos);
     return aSpans;
 }
 

@@ -43,13 +43,13 @@ class VCL_DLLPUBLIC SalLayoutGlyphsCache final
 public:
     // NOTE: The lifetime of the returned value is guaranteed only until the next call
     // to any function in this class.
-    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice,
+    const SalLayoutGlyphs* GetLayoutGlyphs(const VclPtr<const OutputDevice>& outputDevice,
                                            const OUString& text,
                                            const vcl::text::TextLayoutCache* layoutCache = nullptr)
     {
         return GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), 0, layoutCache);
     }
-    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice,
+    const SalLayoutGlyphs* GetLayoutGlyphs(const VclPtr<const OutputDevice>& outputDevice,
                                            const OUString& text, sal_Int32 nIndex, sal_Int32 nLen,
                                            tools::Long nLogicWidth = 0,
                                            const vcl::text::TextLayoutCache* layoutCache = nullptr);

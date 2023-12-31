@@ -321,10 +321,9 @@ static void checkGlyphsEqual(const SalLayoutGlyphs& g1, const SalLayoutGlyphs& g
 }
 #endif
 
-const SalLayoutGlyphs*
-SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
-                                      sal_Int32 nIndex, sal_Int32 nLen, tools::Long nLogicWidth,
-                                      const vcl::text::TextLayoutCache* layoutCache)
+const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
+    const VclPtr<const OutputDevice>& outputDevice, const OUString& text, sal_Int32 nIndex,
+    sal_Int32 nLen, tools::Long nLogicWidth, const vcl::text::TextLayoutCache* layoutCache)
 {
     if (nLen == 0)
         return nullptr;

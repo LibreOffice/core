@@ -772,8 +772,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 // #i97628#
                 // encapsulate with TextHierarchyEditPrimitive2D to allow renderers
                 // to suppress actively edited content if needed
-                Primitive2DReference xRefA(pNew);
-                Primitive2DContainer aContent { xRefA };
+                Primitive2DContainer aContent { Primitive2DReference(pNew) };
 
                 // create and add TextHierarchyEditPrimitive2D primitive
                 return Primitive2DReference(new TextHierarchyEditPrimitive2D(std::move(aContent)));
