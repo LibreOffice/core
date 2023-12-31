@@ -508,6 +508,7 @@ void PropertyHelper_Hyphen::SetDefaultValues()
     nResHyphMinLeading      = nHyphMinLeading       = 2;
     nResHyphMinTrailing     = nHyphMinTrailing      = 2;
     nResHyphMinWordLength   = nHyphMinWordLength    = 0;
+    nResHyphTextHyphenZone  = nHyphTextHyphenZone   = 0;
     bResNoHyphenateCaps = bNoHyphenateCaps = false;
 }
 
@@ -542,6 +543,11 @@ void PropertyHelper_Hyphen::GetCurrentValues()
             pnVal    = &nHyphMinWordLength;
             pnResVal = &nResHyphMinWordLength;
         }
+        else if ( rPropName == UPN_HYPH_ZONE )
+        {
+            pnVal    = &nHyphTextHyphenZone;
+            pnResVal = &nResHyphTextHyphenZone;
+        }
         else if ( rPropName == UPN_HYPH_NO_CAPS )
         {
             pbVal    = &bNoHyphenateCaps;
@@ -575,6 +581,7 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
             case UPH_HYPH_MIN_LEADING     : pnVal = &nHyphMinLeading; break;
             case UPH_HYPH_MIN_TRAILING    : pnVal = &nHyphMinTrailing; break;
             case UPH_HYPH_MIN_WORD_LENGTH : pnVal = &nHyphMinWordLength; break;
+            case UPH_HYPH_ZONE            : pnVal = &nHyphTextHyphenZone; break;
             case UPH_HYPH_NO_CAPS : pbVal = &bNoHyphenateCaps; break;
             default:
                 SAL_WARN( "linguistic", "unknown property handle " << rEvt.PropertyHandle << " (check in include/unotools/linguprops.hxx)");
@@ -613,6 +620,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     nResHyphMinLeading      = nHyphMinLeading;
     nResHyphMinTrailing     = nHyphMinTrailing;
     nResHyphMinWordLength   = nHyphMinWordLength;
+    nResHyphTextHyphenZone  = nHyphTextHyphenZone;
     bResNoHyphenateCaps = bNoHyphenateCaps;
 
     for (const PropertyValue& rVal : rPropVals)
@@ -626,6 +634,8 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
             pnResVal = &nResHyphMinTrailing;
         else if ( rVal.Name == UPN_HYPH_MIN_WORD_LENGTH )
             pnResVal = &nResHyphMinWordLength;
+        else if ( rVal.Name == UPN_HYPH_ZONE )
+            pnResVal = &nResHyphTextHyphenZone;
         else if ( rVal.Name == UPN_HYPH_NO_CAPS )
             pbResVal = &bResNoHyphenateCaps;
 
@@ -703,6 +713,11 @@ sal_Int16 PropertyHelper_Hyphenation::GetMinTrailing() const
 sal_Int16 PropertyHelper_Hyphenation::GetMinWordLength() const
 {
     return mxPropHelper->GetMinWordLength();
+}
+
+sal_Int16 PropertyHelper_Hyphenation::GetTextHyphenZone() const
+{
+    return mxPropHelper->GetTextHyphenZone();
 }
 
 bool PropertyHelper_Hyphenation::IsNoHyphenateCaps() const

@@ -20,10 +20,13 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
@@ -53,6 +56,10 @@
 #include <vector>
 #include <set>
 #include <memory>
+#include <o3tl/string_view.hxx>
+
+// XML-header to query SPELLML support
+constexpr OUStringLiteral SPELLML_SUPPORT = u"<?xml?>";
 
 using namespace utl;
 using namespace osl;
@@ -62,6 +69,13 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
+{
+    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    uno::Reference< XLinguServiceManager2 > xRes = LinguServiceManager::create( xContext ) ;
+    return xRes;
+}
 
 Hyphenator::Hyphenator() :
     aEvtListeners   ( GetLinguMutex() )
@@ -251,6 +265,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
     sal_Int16 minLen = rHelper.GetMinWordLength();
+    sal_Int16 nHyphZone = rHelper.GetTextHyphenZone();
     bool bNoHyphenateCaps = rHelper.IsNoHyphenateCaps();
 
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
@@ -364,6 +379,16 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
         sal_Int32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
 
+        // use morphological analysis of Hunspell to get better hyphenation of compound words
+        // optionally when hyphenation zone is enabled
+        // pa: fields contain stems resulted by compound word analysis of non-dictionary words
+        // hy: fields contain hyphenation data of dictionary (compound) words
+        Reference< XSpellAlternatives > xTmpRes;
+        bool bAnalyzed = false; // enough the analyse once the word
+        bool bCompoundHyphenation = true; // try to hyphenate compound words better
+        OUString sStems; // processed result of the compound word analysis, e.g. com|pound|word
+        sal_Int32 nSuffixLen = 0; // do not remove break points in suffixes
+
         for (sal_Int32 i = 0; i < n; i++)
         {
             int leftrep = 0;
@@ -393,6 +418,162 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             }
             if (hit)
             {
+                // skip hyphenation right after stem boundaries in compound words
+                // if hyphenation zone is enabled (default value: less than 4-character distance)
+                if ( bCompoundHyphenation && nHyphZone && nHyphenationPos > -1 && i - nHyphenationPos < 4 )
+                {
+                    uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
+                    uno::Reference< XSpellChecker1 > xSpell;
+
+                    LanguageType nLanguage = LinguLocaleToLanguage( aLocale );
+
+                    xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+
+                    // get morphological analysis of the word
+                    if ( ( bAnalyzed && xTmpRes.is() ) || ( xSpell.is() && xSpell->isValid(
+                            SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage),
+                            uno::Sequence< beans::PropertyValue >() ) ) )
+                    {
+                        if ( !bAnalyzed )
+                        {
+                            xTmpRes = xSpell->spell( "<?xml?><query type='analyze'><word>" +
+                                                       aWord + "</word></query>",
+                                               static_cast<sal_uInt16>(nLanguage),
+                                               uno::Sequence< beans::PropertyValue >() );
+                            bAnalyzed = true;
+
+                            if (xTmpRes.is())
+                            {
+                                Sequence<OUString>seq = xTmpRes->getAlternatives();
+                                if (seq.hasElements())
+                                {
+                                    sal_Int32 nEndOfFirstAnalysis = seq[0].indexOf("</a>");
+                                    // FIXME use only the first analysis
+                                    OUString morph(
+                                            seq[0].copy(0, nEndOfFirstAnalysis));
+
+                                    // concatenate pa: fields, i.e. stems in the analysis:
+                                    // pa:stem1 pa:stem2 pa:stem3 -> stem1||stem2||stem3
+                                    sal_Int32 nPa = -1;
+                                    while ( (nPa = morph.indexOf(u" pa:", nPa + 1)) > -1 )
+                                    {
+                                        // use hy: field of the actual stem, if it exists
+                                        // pa:stem1 hy:st|em1 pa:stem2 -> st|em1||stem2
+                                        sal_Int32 nHy = morph.indexOf(u" hy:", nPa + 3);
+                                        sal_Int32 nPa2 = morph.indexOf(u" pa:", nPa + 3);
+
+                                        if ( nHy > -1 && ( nPa2 == -1 || nHy < nPa2 ) )
+                                        {
+                                            OUString sStems2(morph.getToken(1, ' ', nHy).copy(3));
+                                            if ( sStems2.indexOf('|') > -1 )
+                                                sStems += sStems2+ u"||";
+                                            else if ( sal_Int32 nBreak = o3tl::toInt32(sStems2) )
+                                            {
+                                                OUString sPa(morph.getToken(1, ' ', nPa).copy(3));
+                                                if ( nBreak < sPa.getLength() )
+                                                    sStems += OUString::Concat(sPa.subView(0, nBreak)) + u"|" +
+                                                           sPa.subView(nBreak);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            OUString sPa(morph.getToken(1, ' ', nPa).copy(3));
+
+                                            // handle special case: missing pa: in morphological analysis
+                                            // before in-word suffixes (German, Sweden etc. dictionaries)
+                                            // (recognized by the single last pa:)
+                                            if (sStems.isEmpty() && nPa2 == -1 && aWord.endsWith(sPa))
+                                            {
+                                                sStems = OUString::Concat(aWord.subView(0, aWord.getLength() -
+                                                             sPa.getLength())) + u"||" +
+                                                         aWord.subView(aWord.getLength() -
+                                                             sPa.getLength());
+                                                break;
+                                            }
+
+                                            sStems += sPa + "||";
+
+                                            // count suffix length
+                                            sal_Int32 nSt = morph.lastIndexOf(" st:");
+                                            if ( nSt > -1 )
+                                            {
+                                                sal_Int32 nStemLen =
+                                                    o3tl::getToken(morph, 1, ' ', nSt).length() - 3;
+                                                if ( nStemLen < sPa.getLength() )
+                                                    nSuffixLen = sPa.getLength() - nStemLen;
+                                            }
+                                        }
+
+                                        if ( nPa == -1 ) // getToken() can modify nPa
+                                            break;
+                                    }
+
+                                    // only hy:, but not pa:
+                                    if ( sStems.isEmpty() )
+                                    {
+                                        // check hy: (pre-defined hyphenation)
+                                        sal_Int32 nHy = morph.indexOf(" hy:");
+                                        if (nHy > -1)
+                                        {
+                                            sStems = morph.getToken(1, ' ', nHy).copy(3);
+                                            if ( sStems.indexOf('|') == -1 && sStems.indexOf('-') == -1 )
+                                            {
+                                                if ( sal_Int32 nBreak = o3tl::toInt32(sStems) )
+                                                {
+                                                    if ( nBreak < aWord.getLength() )
+                                                        sStems += OUString::Concat(aWord.subView(0, nBreak)) + u"|" +
+                                                               aWord.subView(nBreak);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // handle string separated by |, e.g "program hy:pro|gram"
+                        if ( sStems.indexOf('|') > -1 )
+                        {
+                            sal_Int32 nLetters = 0; // count not separator characters
+                            sal_Int32 nSepPos = -1; // position of last character | used for stem boundaries
+                            bool bWeightedSep = false; // double separator || = weighted stem boundary
+                            sal_Int32 j = 0;
+                            for (; j < sStems.getLength() && nLetters <= i; j++)
+                            {
+                                if ( sStems[j] == '|' )
+                                {
+                                    bWeightedSep = nSepPos > -1 && (j - 1 == nSepPos);
+                                    nSepPos = j;
+                                }
+                                else if ( sStems[j] != '-' && sStems[j] != '=' && sStems[j] != '*' )
+                                    ++nLetters;
+                            }
+                            // skip break points near stem boundaries
+                            if (
+                                // there is a stem boundary before the actual break point
+                                nSepPos > -1 &&
+                                // and the break point is within a stem, i.e. not in the
+                                // suffix of the last stem
+                                i < aWord.getLength() - nSuffixLen - 1 &&
+                                // and it is not another stem boundary
+                                j + 1 < sStems.getLength() &&
+                                ( sStems[j + 1] != u'|' ||
+                                // except if it's only the previous was a weighted one
+                                    ( bWeightedSep && ( j + 2 == sStems.getLength() ||
+                                                        sStems[j + 2] != u'|' ) ) ) )
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                            // not a compound word
+                            bCompoundHyphenation = false;
+                    }
+                    else
+                        // no SPELLML support, no morphological analysis
+                        bCompoundHyphenation = false;
+                }
+
                 nHyphenationPos = i;
                 if (rep && rep[i])
                 {
