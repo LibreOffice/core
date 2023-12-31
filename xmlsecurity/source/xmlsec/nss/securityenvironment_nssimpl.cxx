@@ -284,7 +284,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates()
 
     }
 
-    if( certsList.size() != 0 ) {
+    if( !certsList.empty() ) {
         return comphelper::containerToSequence<Reference< XCertificate >>(certsList) ;
     }
 
