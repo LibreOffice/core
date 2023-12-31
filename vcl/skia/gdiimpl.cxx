@@ -415,7 +415,10 @@ void SkiaSalGraphicsImpl::flushSurfaceToWindowContext()
         // for every swapBuffers(), for this reason mSurface is an offscreen surface
         // where we keep the contents (LO does not do full redraws).
         // So here blit the surface to the window context surface and then swap it.
-        assert(isGPU()); // Raster should always draw directly to backbuffer to save copying
+
+        // Raster should always draw directly to backbuffer to save copying
+        // except for small sizes - see renderMethodToUseForSize
+        assert(isGPU() || (mSurface->width() <= 32 && mSurface->height() <= 32));
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is
         // We ignore mDirtyRect here, and mSurface already is in screenSurface coordinates,
