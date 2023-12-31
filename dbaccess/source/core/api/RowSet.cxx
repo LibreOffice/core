@@ -1221,7 +1221,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
 
 void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
-    assert(m_aDataColumns.size() == m_aReadOnlyDataColumns.size() || m_aReadOnlyDataColumns.size() == 0 );
+    assert(m_aDataColumns.size() == m_aReadOnlyDataColumns.size() || m_aReadOnlyDataColumns.empty());
     TDataColumns::const_iterator aIter = m_aDataColumns.begin();
     for (bool readOnlyDataColumn : m_aReadOnlyDataColumns)
     {
