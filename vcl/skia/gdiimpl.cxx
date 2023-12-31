@@ -28,6 +28,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
+#include <tools/debug.hxx>
 
 #include <SkBitmap.h>
 #include <SkCanvas.h>
@@ -446,7 +447,7 @@ void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }
 
 void SkiaSalGraphicsImpl::preDraw()
 {
-    assert(comphelper::SolarMutex::get()->IsCurrentThread());
+    DBG_TESTSOLARMUTEX();
     SkiaZone::enter(); // matched in postDraw()
     checkSurface();
     checkPendingDrawing();
