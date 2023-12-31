@@ -393,13 +393,13 @@ void SkiaSalGraphicsImpl::performFlush()
 {
     SkiaZone zone;
     flushDrawing();
-    // Related: tdf#152703 Eliminate flickering during live resizing of a window
-    // When in live resize, the SkiaSalGraphicsImpl class does not detect that
-    // the window size has changed until after the flush has been called so
-    // call checkSurface() to recreate the SkSurface if needed before flushing.
-    checkSurface();
     if (mSurface)
     {
+        // Related: tdf#152703 Eliminate flickering during live resizing of a window
+        // When in live resize, the SkiaSalGraphicsImpl class does not detect that
+        // the window size has changed until after the flush has been called so
+        // call checkSurface() to recreate the SkSurface if needed before flushing.
+        checkSurface();
         if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
             flushSurfaceToWindowContext();
         mDirtyRect.setEmpty();
