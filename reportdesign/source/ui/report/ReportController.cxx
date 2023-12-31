@@ -2218,8 +2218,6 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                 m_xColumns.clear();
                 m_xHoldAlive.clear();
                 InvalidateFeature(SID_FM_ADD_FIELD);
-                if ( !getDesignView()->isAddFieldVisible() && isUiVisible() )
-                    getDesignView()->toggleAddField();
             }
             /// TODO: check what we need to notify here TitleHelper
             /*else if (   evt.PropertyName.equals( PROPERTY_CAPTION ) )
