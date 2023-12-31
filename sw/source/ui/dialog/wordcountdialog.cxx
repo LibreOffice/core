@@ -65,9 +65,10 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
     setValue(*m_xDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces, rLocaleData);
     setValue(*m_xDocCjkcharsFT, rDoc.nAsianWord, rLocaleData);
 
-    if (m_xStandardizedPagesLabelFT->get_visible())
+    const sal_Int64 nCharsPerStandardizedPage = m_xStandardizedPagesLabelFT->get_visible() ?
+        officecfg::Office::Writer::WordCount::StandardizedPageSize::get() : 0;
+    if (nCharsPerStandardizedPage)
     {
-        sal_Int64 nCharsPerStandardizedPage = officecfg::Office::Writer::WordCount::StandardizedPageSize::get();
         setDoubleValue(*m_xCurrentStandardizedPagesFT,
             static_cast<double>(rCurrent.nChar) / nCharsPerStandardizedPage);
         setDoubleValue(*m_xDocStandardizedPagesFT,
