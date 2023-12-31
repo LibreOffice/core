@@ -535,7 +535,7 @@ bool ImplSdPPTImport::Import()
                     break;
             }
 
-            if (m_aHyperList.size() == 0)
+            if (m_aHyperList.empty())
             {
                 while(true)
                 {
