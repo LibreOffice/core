@@ -380,7 +380,7 @@ int TrueTypeTableGlyf::GetRawData(TableEntry* te)
     te->length = 0;
     te->tag = 0;
 
-    if (m_list.size() == 0) return TTCR_ZEROGLYPHS;
+    if (m_list.empty()) return TTCR_ZEROGLYPHS;
 
     for (const std::unique_ptr<GlyphData>& pGlyph : m_list)
     {
