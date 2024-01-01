@@ -264,7 +264,7 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
 void ScMultiSel::Set( ScRangeList const & rList )
 {
     Clear();
-    if (rList.size() == 0)
+    if (rList.empty())
         return;
 
     // sort by row to make the combining/merging faster

@@ -1423,7 +1423,7 @@ void ScGridWindow::SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab)
     std::set<SCROW> aRowBreaks;
     rDoc.GetAllColBreaks(aColBreaks, nTab, true, false);
     rDoc.GetAllRowBreaks(aRowBreaks, nTab, true, false);
-    if (aColBreaks.size() == 0 || aRowBreaks.size() == 0)
+    if (aColBreaks.empty() || aRowBreaks.empty())
     {
         maShowPageBreaksTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
         maShowPageBreaksTimer.Start();
