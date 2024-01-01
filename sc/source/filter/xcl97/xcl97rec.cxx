@@ -43,7 +43,6 @@
 #include <xelink.hxx>
 #include <xlcontent.hxx>
 
-#include <unotools/fltrcfg.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
@@ -64,6 +63,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <sax/fastattribs.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
@@ -1027,17 +1027,16 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     // set version to "old" version, because it must be
     // saved in MS notation.
     sal_uInt32                  nFl = 0;
-    const SvtFilterOptions& rFltOpts = SvtFilterOptions::Get();
-    if( rFltOpts.IsMath2MathType() )
+    if( officecfg::Office::Common::Filter::Microsoft::Export::MathToMathType::get() )
         nFl |= OLE_STARMATH_2_MATHTYPE;
 
-    if( rFltOpts.IsWriter2WinWord() )
+    if( officecfg::Office::Common::Filter::Microsoft::Export::WriterToWinWord::get() )
         nFl |= OLE_STARWRITER_2_WINWORD;
 
-    if( rFltOpts.IsCalc2Excel() )
+    if( officecfg::Office::Common::Filter::Microsoft::Export::CalcToExcel::get() )
         nFl |= OLE_STARCALC_2_EXCEL;
 
-    if( rFltOpts.IsImpress2PowerPoint() )
+    if( officecfg::Office::Common::Filter::Microsoft::Export::ImpressToPowerPoint::get() )
         nFl |= OLE_STARIMPRESS_2_POWERPOINT;
 
     SvxMSExportOLEObjects   aOLEExpFilt( nFl );

@@ -42,9 +42,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <sfx2/objsh.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/configuration.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/outdev.hxx>
@@ -3349,12 +3349,11 @@ XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffS
     mnOleImpFlags( 0 ),
     mbNotifyMacroEventRead(false)
 {
-    const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
-    if( rFilterOpt.IsMathType2Math() )
+    if( officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::get() )
         mnOleImpFlags |= OLE_MATHTYPE_2_STARMATH;
-    if( rFilterOpt.IsWinWord2Writer() )
+    if( officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get() )
         mnOleImpFlags |= OLE_WINWORD_2_STARWRITER;
-    if( rFilterOpt.IsPowerPoint2Impress() )
+    if( officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress::get() )
         mnOleImpFlags |= OLE_POWERPOINT_2_STARIMPRESS;
 
     // try to open the 'Ctls' storage stream containing OCX control properties

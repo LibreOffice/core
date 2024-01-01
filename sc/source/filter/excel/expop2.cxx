@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/fltrcfg.hxx>
-
 #include <osl/diagnose.h>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docinf.hxx>
@@ -35,6 +33,7 @@
 #include <xehelper.hxx>
 
 #include <officecfg/Office/Calc.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -82,8 +81,7 @@ ErrCode ExportBiff5::Write()
             eVbaExportMode = VBAExportMode::FULL_EXPORT;
         else
         {
-            const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
-            if (rFilterOpt.IsLoadExcelBasicStorage())
+            if ( officecfg::Office::Calc::Filter::Import::VBA::Save::get() )
                 eVbaExportMode = VBAExportMode::REEXPORT_STREAM;
         }
     }
@@ -115,7 +113,7 @@ ErrCode ExportBiff5::Write()
                 static_cast<cppu::OWeakObject*>(pDocShell->GetModel()), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps
                 = xDPS->getDocumentProperties();
-        if ( SvtFilterOptions::Get().IsEnableCalcPreview() )
+        if ( officecfg::Office::Common::Filter::Microsoft::Export::EnableExcelPreview::get() )
         {
             std::shared_ptr<GDIMetaFile> xMetaFile =
                 pDocShell->GetPreviewMetaFile();

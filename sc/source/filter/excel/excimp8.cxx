@@ -24,7 +24,7 @@
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <unotools/fltrcfg.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -323,7 +323,6 @@ void ImportExcel8::ReadBasic()
 {
     ScDocShell* pShell = GetDocShell();
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
-    const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
     if( !pShell || !xRootStrg.is() )
         return;
 
@@ -331,9 +330,9 @@ void ImportExcel8::ReadBasic()
     {
         // #FIXME need to get rid of this, we can also do this from within oox
         // via the "ooo.vba.VBAGlobals" service
-        if( ( rFilterOpt.IsLoadExcelBasicCode() ||
-              rFilterOpt.IsLoadExcelBasicStorage() ) &&
-            rFilterOpt.IsLoadExcelBasicExecutable() )
+        if( ( officecfg::Office::Calc::Filter::Import::VBA::Load::get() ||
+              officecfg::Office::Calc::Filter::Import::VBA::Save::get() ) &&
+              officecfg::Office::Calc::Filter::Import::VBA::Executable::get() )
         {
             // see if we have the XCB stream
             tools::SvRef<SotStorageStream> xXCB = xRootStrg->OpenSotStream( "XCB", StreamMode::STD_READ );
