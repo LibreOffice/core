@@ -1398,7 +1398,7 @@ void ImpGraphic::updateFromLoadedGraphic(const ImpGraphic* pGraphic)
             // Only set the size in case the unloaded and loaded unit matches.
             setPrefSize(aPrefSize);
         }
-        maGraphicExternalLink = aLink;
+        maGraphicExternalLink = std::move(aLink);
     }
     else
     {
@@ -1683,7 +1683,7 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
 
                         if (!rStream.GetError())
                         {
-                            maVectorGraphicData = aVectorGraphicDataPtr;
+                            maVectorGraphicData = std::move(aVectorGraphicDataPtr);
                             bReturn = true;
                         }
                     }

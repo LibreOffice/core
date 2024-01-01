@@ -319,7 +319,7 @@ VectorGraphicData::VectorGraphicData(
 
         if (!rIStm.GetError())
         {
-            maDataContainer = aData;
+            maDataContainer = std::move(aData);
         }
     }
 }
