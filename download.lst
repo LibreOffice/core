@@ -384,8 +384,8 @@ LIBEOT_TARBALL := libeot-0.01.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBEXTTEXTCAT_SHA256SUM := 6d77eace20e9ea106c1330e268ede70c9a4a89744ddc25715682754eca3368df
-LIBEXTTEXTCAT_TARBALL := libexttextcat-3.4.6.tar.xz
+LIBEXTTEXTCAT_SHA256SUM := df0a59d413a5b202573d8d4f5159e33a8538da4f8e8e60979facc64d6290cebd
+LIBEXTTEXTCAT_TARBALL := libexttextcat-3.4.7.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
