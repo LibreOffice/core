@@ -9,8 +9,8 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/templates/wizard))
 
-# mimetype, content.xml, settings.xml, styles.xml, META-INF/manifest.xml and
-# Thumbnails/thumbnail.png files are automatically added for each template
+# mimetype, content.xml, settings.xml, styles.xml and META-INF/manifest.xml
+# files are automatically added for each template
 # list of meta.xml files (one per template) + other files (manifest.rdf, pictures...)
 extras_WIZARD_XMLFILES := \
 	agenda/10grey/meta.xml \
@@ -174,7 +174,7 @@ extras_WIZARD_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_WIZARD
 
 .SECONDEXPANSION:
 # secondexpansion since the patterns not just cover a filename portion, but also include a
-# directory portion withdifferent number of elements
+# directory portion with different number of elements
 # copy regular files (mimetype, *.jpg, *.png, *.rdf, *.svg, *.svm, …)
 $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/% : $(SRCDIR)/extras/source/templates/wizard/% \
         | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*).dir
@@ -203,15 +203,13 @@ $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/%.ott : \
         $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
             styles.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
         $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
-            META-INF/manifest.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
-            Thumbnails/thumbnail.png $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) )
+            META-INF/manifest.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) )
 	$(call gb_Output_announce,templates/wizard/$*.ott,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/wizard/$*.ott,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(dir $<) && \
 		zip -q0X --filesync --must-match $@ mimetype && \
-		zip -qrX --must-match $@ content.xml settings.xml styles.xml META-INF/manifest.xml Thumbnails/thumbnail.png && \
+		zip -qrX --must-match $@ content.xml settings.xml styles.xml META-INF/manifest.xml && \
 		zip -qrX --must-match $@ $(call extras_WIZARD_XMLFILES_RELATIVE,$*) \
 	)
 	$(call gb_Trace_EndRange,templates/wizard/$*.ott,ZIP)
@@ -227,15 +225,13 @@ $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/%.ots : \
         $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
             styles.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
         $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
-            META-INF/manifest.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) ) \
-        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/wizard)/$$*/,\
-            Thumbnails/thumbnail.png $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) )
+            META-INF/manifest.xml $$(call extras_WIZARD_XMLFILES_RELATIVE,$$*) )
 	$(call gb_Output_announce,templates/wizard/$*.ots,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/wizard/$*.ots,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(dir $<) && \
 		zip -q0X --filesync --must-match $@ mimetype && \
-		zip -qrX --must-match $@ content.xml settings.xml styles.xml META-INF/manifest.xml Thumbnails/thumbnail.png && \
+		zip -qrX --must-match $@ content.xml settings.xml styles.xml META-INF/manifest.xml && \
 		zip -qrX --must-match $@ $(call extras_WIZARD_XMLFILES_RELATIVE,$*) \
 	)
 	$(call gb_Trace_EndRange,templates/wizard/$*.ots,ZIP)
