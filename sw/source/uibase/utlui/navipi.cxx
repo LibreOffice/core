@@ -487,17 +487,6 @@ void SwNavigationPI::ZoomIn()
     m_xContent6ToolBox->set_item_active("listbox", false);
 }
 
-namespace {
-
-enum StatusIndex
-{
-    IDX_STR_HIDDEN = 0,
-    IDX_STR_ACTIVE = 1,
-    IDX_STR_INACTIVE = 2
-};
-
-}
-
 std::unique_ptr<PanelLayout> SwNavigationPI::Create(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -637,30 +626,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
         m_xContent1ToolBox->set_item_visible("contenttoggle", false);
     }
 
-    const TranslateId REGIONNAME_ARY[] =
-    {
-        STR_HYPERLINK,
-        STR_LINK_REGION,
-        STR_COPY_REGION
-    };
-
-    const TranslateId REGIONMODE_ARY[] =
-    {
-        STR_HIDDEN,
-        STR_ACTIVE,
-        STR_INACTIVE
-    };
-
-    static_assert(SAL_N_ELEMENTS(REGIONNAME_ARY) == SAL_N_ELEMENTS(REGIONMODE_ARY), "### unexpected size!");
-    static_assert(SAL_N_ELEMENTS(REGIONNAME_ARY) == static_cast<sal_uInt16>(RegionMode::EMBEDDED) + 1, "### unexpected size!");
-
-    for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); ++i)
-    {
-        m_aStatusArr[i] = SwResId(REGIONMODE_ARY[i]);
-    }
-
-    m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
-
     bool bFloatingNavigator = ParentIsFloatingWindow(m_xNavigatorDlg);
 
     SetRegionDropMode(m_pConfig->GetRegionMode());
@@ -723,7 +688,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 
     m_xContentTree->set_accessible_name(SwResId(STR_ACCESS_TL_CONTENT));
     m_xGlobalTree->set_accessible_name(SwResId(STR_ACCESS_TL_GLOBAL));
-    m_xDocListBox->set_accessible_name(m_aStatusArr[3]);
+    m_xDocListBox->set_accessible_name(SwResId(STR_ACTIVE_VIEW));
 
     m_aExpandedSize = m_xContainer->get_preferred_size();
 
@@ -930,10 +895,10 @@ void SwNavigationPI::UpdateListBox()
             if (pView == pActView)
             {
                 nAct = nCount;
-                sEntry += m_aStatusArr[IDX_STR_ACTIVE];
+                sEntry += SwResId(STR_ACTIVE);
             }
             else
-                sEntry += m_aStatusArr[IDX_STR_INACTIVE];
+                sEntry += SwResId(STR_INACTIVE);
             sEntry += ")";
             m_xDocListBox->append_text(sEntry);
 
@@ -944,16 +909,13 @@ void SwNavigationPI::UpdateListBox()
         }
         pView = SwModule::GetNextView(pView);
     }
-    m_xDocListBox->append_text(m_aStatusArr[3]); // "Active Window"
+    m_xDocListBox->append_text(SwResId(STR_ACTIVE_VIEW)); // "Active Window"
     nCount++;
 
-    if(m_xContentTree->GetHiddenWrtShell())
+    if (SwWrtShell* pHiddenWrtShell = m_xContentTree->GetHiddenWrtShell())
     {
-        OUString sEntry = m_xContentTree->GetHiddenWrtShell()->GetView().
-                                        GetDocShell()->GetTitle() +
-            " (" +
-            m_aStatusArr[IDX_STR_HIDDEN] +
-            ")";
+        OUString sEntry = pHiddenWrtShell->GetView().GetDocShell()->GetTitle() +
+                " (" + SwResId(STR_HIDDEN) + ")";
         m_xDocListBox->append_text(sEntry);
         bDisable = false;
     }

@@ -72,7 +72,6 @@ class SwNavigationPI final : public PanelLayout
     std::unique_ptr<weld::ComboBox> m_xDocListBox;
     Idle                m_aPageChgIdle;
     OUString            m_sContentFileName;
-    OUString            m_aStatusArr[4];
 
     VclPtr<SfxNavigator> m_xNavigatorDlg;
 

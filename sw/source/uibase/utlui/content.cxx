@@ -5318,11 +5318,14 @@ void SwContentTree::ShowHiddenShell()
 }
 
 // Mode Change: Show active view
+// only called from IMPL_LINK(SwNavigationPI, DocListBoxSelectHdl, weld::ComboBox&, rBox, void)
 void SwContentTree::ShowActualView()
 {
-    m_eState = State::ACTIVE;
-    Display(true);
-    GetParentWindow()->UpdateListBox();
+    if (SwView* pView = m_pDialog->GetCreateView())
+    {
+        SetConstantShell(pView->GetWrtShellPtr());
+        m_pDialog->UpdateListBox();
+    }
 }
 
 IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
