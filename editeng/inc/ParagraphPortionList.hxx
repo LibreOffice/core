@@ -28,7 +28,8 @@ class EditDoc;
 class ParaPortionList
 {
     mutable sal_Int32 nLastCache = 0;
-    std::vector<std::unique_ptr<ParaPortion>> maPortions;
+    typedef std::vector<std::unique_ptr<ParaPortion>> ParaPortionContainerType;
+    ParaPortionContainerType maPortions;
 
 public:
     ParaPortionList() = default;
@@ -49,6 +50,17 @@ public:
     void Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p);
     void Append(std::unique_ptr<ParaPortion> p);
     sal_Int32 Count() const;
+
+    ParaPortionContainerType::iterator begin() { return maPortions.begin(); }
+    ParaPortionContainerType::iterator end() { return maPortions.end(); }
+    ParaPortionContainerType::const_iterator cbegin() const { return maPortions.cbegin(); }
+    ParaPortionContainerType::const_iterator cend() const { return maPortions.cend(); }
+
+    void MarkAllSelectionsInvalid(sal_Int32 nStart)
+    {
+        for (auto& pParaPortion : maPortions)
+            pParaPortion->MarkSelectionInvalid(nStart);
+    }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     // temporary:

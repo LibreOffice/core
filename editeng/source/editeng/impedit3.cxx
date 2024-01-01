@@ -393,8 +393,7 @@ bool ImpEditEngine::IsPageOverflow( ) const
 
 void ImpEditEngine::FormatFullDoc()
 {
-    for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
-        GetParaPortions()[nPortion]->MarkSelectionInvalid( 0 );
+    GetParaPortions().MarkAllSelectionsInvalid(0);
     FormatDoc();
 }
 
