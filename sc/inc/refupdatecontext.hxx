@@ -113,6 +113,8 @@ struct RefUpdateResult
      */
     bool mbNameModified;
 
+    SCTAB nTab;
+
     RefUpdateResult();
 };
 
