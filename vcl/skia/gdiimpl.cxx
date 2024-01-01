@@ -462,7 +462,8 @@ void SkiaSalGraphicsImpl::postDraw()
     // a problematic operation has been performed too many times without a flush.
     // Note that the counter is a static variable, as all drawing shares the same Skia drawing
     // context (and so the flush here will also flush all drawing).
-    if (pendingOperationsToFlush > 1000)
+    static int maxOperationsToFlush = 1000;
+    if (pendingOperationsToFlush > maxOperationsToFlush)
     {
         mSurface->flushAndSubmit();
         pendingOperationsToFlush = 0;
@@ -471,13 +472,20 @@ void SkiaSalGraphicsImpl::postDraw()
     // If there's a problem with the GPU context, abort.
     if (GrDirectContext* context = GrAsDirectContext(mSurface->getCanvas()->recordingContext()))
     {
-        // Running out of memory on the GPU technically could be possibly recoverable,
-        // but we don't know the exact status of the surface (and what has or has not been drawn to it),
-        // so in practice this is unrecoverable without possible data loss.
+        // We don't know the exact status of the surface (and what has or has not been drawn to it).
+        // But let's pretend it was drawn OK, and reduce the flush limit, to try to avoid possible
+        // small HW memory limitation
         if (context->oomed())
         {
-            SAL_WARN("vcl.skia", "GPU context has run out of memory, aborting.");
-            abort();
+            if (maxOperationsToFlush > 10)
+            {
+                maxOperationsToFlush /= 2;
+            }
+            else
+            {
+                SAL_WARN("vcl.skia", "GPU context has run out of memory, aborting.");
+                abort();
+            }
         }
         // Unrecoverable problem.
         if (context->abandoned())
