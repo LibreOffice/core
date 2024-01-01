@@ -1876,11 +1876,11 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 rShell.CountWords(selectionStats);
                 documentStats = rShell.GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( true /* complete-async */, false /* don't update fields */ );
 
-                sal_uLong nWord = selectionStats.nWord ? selectionStats.nWord : documentStats.nWord;
+                sal_uLong nWord = selectionStats.nChar ? selectionStats.nWord : documentStats.nWord;
                 sal_uLong nChar = selectionStats.nChar ? selectionStats.nChar : documentStats.nChar;
-                TranslateId pResId = selectionStats.nWord ? STR_WORDCOUNT : STR_WORDCOUNT_NO_SELECTION;
-                TranslateNId pWordResId = selectionStats.nWord ? STR_WORDCOUNT_WORDARG : STR_WORDCOUNT_WORDARG_NO_SELECTION;
-                TranslateNId pCharResId = selectionStats.nWord ? STR_WORDCOUNT_CHARARG : STR_WORDCOUNT_CHARARG_NO_SELECTION;
+                TranslateId pResId = selectionStats.nChar ? STR_WORDCOUNT : STR_WORDCOUNT_NO_SELECTION;
+                TranslateNId pWordResId = selectionStats.nChar ? STR_WORDCOUNT_WORDARG : STR_WORDCOUNT_WORDARG_NO_SELECTION;
+                TranslateNId pCharResId = selectionStats.nChar ? STR_WORDCOUNT_CHARARG : STR_WORDCOUNT_CHARARG_NO_SELECTION;
 
                 const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
                 OUString aWordArg = SwResId(pWordResId, nWord).replaceAll("$1", rLocaleData.getNum(nWord, 0));
