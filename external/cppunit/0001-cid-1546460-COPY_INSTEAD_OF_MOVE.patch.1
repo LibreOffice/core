@@ -19,7 +19,30 @@ index 3b68d58..7b38a34 100644
 +    m_name(std::move(name))
  {
  }
- 
+
+diff --git a/src/cppunit/XmlElement.cpp b/src/cppunit/XmlElement.cpp
+index 585c3da..be02385 100644
+--- a/src/cppunit/XmlElement.cpp
++++ b/src/cppunit/XmlElement.cpp
+@@ -8,8 +8,8 @@ CPPUNIT_NS_BEGIN
+   
+ XmlElement::XmlElement( std::string elementName,
+                         std::string content ) 
+-  : m_name( elementName )
+-  , m_content( content )
++  : m_name(std::move(elementName))
++  , m_content(std::move(content))
+   , m_attributes()
+   , m_elements()
+ {
+@@ -18,7 +18,7 @@ XmlElement::XmlElement( std::string elementName,
+     
+ XmlElement::XmlElement( std::string elementName,
+                         int numericContent )
+-  : m_name( elementName )
++  : m_name(std::move(elementName))
+   , m_content()
+   , m_attributes()
+   , m_elements()
 -- 
 2.43.0
-
