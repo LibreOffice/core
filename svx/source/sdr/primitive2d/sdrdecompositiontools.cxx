@@ -750,8 +750,9 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                         pNew.clear();
 
                         // create a new animatedInterpolatePrimitive and add it
-                        Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D({ aLeft, aRight }, aAnimationList, std::move(aAnimSequence)));
-                        Primitive2DContainer aContent { xRefA };
+                        Primitive2DContainer aContent {
+                            Primitive2DReference(new AnimatedInterpolatePrimitive2D({ aLeft, aRight }, aAnimationList, std::move(aAnimSequence)))
+                        };
 
                         // scrolling needs an encapsulating clipping primitive
                         const basegfx::B2DRange aClipRange(aClipTopLeft, aClipBottomRight);
