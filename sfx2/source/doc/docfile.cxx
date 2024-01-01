@@ -127,7 +127,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <sfx2/digitalsignatures.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/threadpool.hxx>
@@ -1553,8 +1552,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                             ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
 
                             std::unique_ptr<svt::MSODocumentLockFile> pMSOLockFile;
-                            const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-                            if (rOpt.IsMSOLockFileCreationIsEnabled() && svt::MSODocumentLockFile::IsMSOSupportedFileFormat(pImpl->m_aLogicName))
+                            if (officecfg::Office::Common::Filter::Microsoft::Import::CreateMSOLockFiles::get()  && svt::MSODocumentLockFile::IsMSOSupportedFileFormat(pImpl->m_aLogicName))
                             {
                                 pMSOLockFile.reset(new svt::MSODocumentLockFile(pImpl->m_aLogicName));
                                 pImpl->m_bMSOLockFileCreated = true;

@@ -22,11 +22,12 @@
 #include <sfx2/sfxsids.hrc>
 #include <filter/msfilter/msoleexp.hxx>
 #include <svx/svxerr.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -191,16 +192,15 @@ bool SdPPTFilter::Export()
     if( mxModel.is() )
     {
         sal_uInt32          nCnvrtFlags = 0;
-        const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
-        if ( rFilterOptions.IsMath2MathType() )
+        if ( officecfg::Office::Common::Filter::Microsoft::Export::MathToMathType::get() )
             nCnvrtFlags |= OLE_STARMATH_2_MATHTYPE;
-        if ( rFilterOptions.IsWriter2WinWord() )
+        if ( officecfg::Office::Common::Filter::Microsoft::Export::WriterToWinWord::get() )
             nCnvrtFlags |= OLE_STARWRITER_2_WINWORD;
-        if ( rFilterOptions.IsCalc2Excel() )
+        if ( officecfg::Office::Common::Filter::Microsoft::Export::CalcToExcel::get() )
             nCnvrtFlags |= OLE_STARCALC_2_EXCEL;
-        if ( rFilterOptions.IsImpress2PowerPoint() )
+        if ( officecfg::Office::Common::Filter::Microsoft::Export::ImpressToPowerPoint::get() )
             nCnvrtFlags |= OLE_STARIMPRESS_2_POWERPOINT;
-        if ( rFilterOptions.IsEnablePPTPreview() )
+        if ( officecfg::Office::Common::Filter::Microsoft::Export::EnablePowerPointPreview::get() )
             nCnvrtFlags |= 0x8000;
 
         CreateStatusIndicator();
@@ -319,8 +319,7 @@ bool SdPPTFilter::Export()
 
 void SdPPTFilter::PreSaveBasic()
 {
-    const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
-    if( rFilterOptions.IsLoadPPointBasicStorage() )
+    if( officecfg::Office::Impress::Filter::Import::VBA::Save::get() )
     {
         SaveVBA( static_cast<SfxObjectShell&>(mrDocShell), pBas );
     }

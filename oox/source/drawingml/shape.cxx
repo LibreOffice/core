@@ -96,12 +96,12 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdtrans.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -461,7 +461,7 @@ void Shape::addShape(
                 // metafile is only implemented for DOCX.
                 bool bPowerPoint = dynamic_cast<oox::ppt::PowerPointImport*>(&rFilterBase) != nullptr;
 
-                if (!SvtFilterOptions::Get().IsSmartArt2Shape() && !bPowerPoint)
+                if (!officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get() && !bPowerPoint)
                     convertSmartArtToMetafile( rFilterBase );
             }
 

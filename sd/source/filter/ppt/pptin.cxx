@@ -68,7 +68,8 @@
 #include <FrameView.hxx>
 #include <unokywds.hxx>
 
-#include <unotools/fltrcfg.hxx>
+#include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/editstat.hxx>
 #include <unotools/pathoptions.hxx>
@@ -199,16 +200,15 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
     }
     sal_uInt32 nSvxMSDffOLEConvFlags2 = 0;
 
-    const SvtFilterOptions& rBasOpt = SvtFilterOptions::Get();
-    if ( rBasOpt.IsLoadPPointBasicCode() )
+    if (  officecfg::Office::Impress::Filter::Import::VBA::Load::get() )
         mnFilterOptions |= 1;
-    if ( rBasOpt.IsMathType2Math() )
+    if ( officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::get() )
         nSvxMSDffOLEConvFlags2 |= OLE_MATHTYPE_2_STARMATH;
-    if ( rBasOpt.IsWinWord2Writer() )
+    if ( officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get() )
         nSvxMSDffOLEConvFlags2 |= OLE_WINWORD_2_STARWRITER;
-    if ( rBasOpt.IsExcel2Calc() )
+    if ( officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get() )
         nSvxMSDffOLEConvFlags2 |= OLE_EXCEL_2_STARCALC;
-    if ( rBasOpt.IsPowerPoint2Impress() )
+    if ( officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress::get() )
         nSvxMSDffOLEConvFlags2 |= OLE_POWERPOINT_2_STARIMPRESS;
 
     InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags2 );
