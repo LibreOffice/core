@@ -528,13 +528,13 @@ private:
     EditDoc maEditDoc; // Document content
 
     // Engine Specific data ...
-    EditEngine*         pEditEngine;
-    ViewsType           aEditViews;
-    EditView*           pActiveView;
-    std::unique_ptr<TextRanger> pTextRanger;
+    EditEngine* mpEditEngine;
+    ViewsType maEditViews;
+    EditView*  mpActiveView;
+    std::unique_ptr<TextRanger> mpTextRanger;
 
-    SfxStyleSheetPool*  pStylePool;
-    SfxItemPool*        pTextObjectPool;
+    SfxStyleSheetPool* mpStylePool;
+    SfxItemPool* mpTextObjectPool;
 
     VclPtr<VirtualDevice> mpVirtDev;
     VclPtr<OutputDevice> mpRefDev;
@@ -543,15 +543,15 @@ private:
     svtools::ColorConfig maColorConfig;
 
     mutable std::unique_ptr<SfxItemSet> pEmptyItemSet;
-    EditUndoManager*    pUndoManager;
+    EditUndoManager* mpUndoManager;
     std::optional<ESelection> moUndoMarkSelection;
 
     std::unique_ptr<ImplIMEInfos> mpIMEInfos;
 
-    OUString            aWordDelimiters;
+    OUString maWordDelimiters;
 
-    EditSelFunctionSet  aSelFuncSet;
-    EditSelectionEngine aSelEngine;
+    EditSelFunctionSet  maSelFuncSet;
+    EditSelectionEngine maSelEngine;
 
     Color               maBackgroundColor;
 
@@ -563,16 +563,16 @@ private:
 
     CharCompressType mnAsianCompressionMode;
 
-    EEHorizontalTextDirection eDefaultHorizontalTextDirection;
+    EEHorizontalTextDirection meDefaultHorizontalTextDirection;
 
     sal_Int32 mnBigTextObjectStart;
-    css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller;
-    css::uno::Reference< css::linguistic2::XHyphenator >    xHyphenator;
-    std::unique_ptr<SpellInfo> pSpellInfo;
-    mutable css::uno::Reference < css::i18n::XBreakIterator > xBI;
-    mutable css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
+    css::uno::Reference<css::linguistic2::XSpellChecker1> mxSpeller;
+    css::uno::Reference<css::linguistic2::XHyphenator>    mxHyphenator;
+    std::unique_ptr<SpellInfo> mpSpellInfo;
+    mutable css::uno::Reference <css::i18n::XBreakIterator> mxBI;
+    mutable css::uno::Reference <css::i18n::XExtendedInputSequenceChecker> mxISC;
 
-    std::unique_ptr<ConvInfo> pConvInfo;
+    std::unique_ptr<ConvInfo> mpConvInfo;
 
     OUString maAutoCompleteText;
 
@@ -580,19 +580,18 @@ private:
 
     LanguageType meDefLanguage;
 
-    OnDemandLocaleDataWrapper       xLocaleDataWrapper;
-    OnDemandTransliterationWrapper  xTransliterationWrapper;
+    OnDemandLocaleDataWrapper       mxLocaleDataWrapper;
+    OnDemandTransliterationWrapper  mxTransliterationWrapper;
 
     // For Formatting / Update...
-    std::vector<std::unique_ptr<DeletedNodeInfo> > aDeletedNodes;
-    tools::Rectangle           aInvalidRect;
-    tools::Long         nCurTextHeight;
-    tools::Long         nCurTextHeightNTP;  // without trailing empty paragraphs
-    sal_uInt16          nOnePixelInRef;
+    std::vector<std::unique_ptr<DeletedNodeInfo>> maDeletedNodes;
+    tools::Rectangle maInvalidRect;
+    tools::Long mnCurTextHeight;
+    tools::Long mnCurTextHeightNTP;  // without trailing empty paragraphs
+    sal_uInt16 mnOnePixelInRef;
 
-    IdleFormattter      aIdleFormatter;
-
-    Timer               aOnlineSpellTimer;
+    IdleFormattter maIdleFormatter;
+    Timer maOnlineSpellTimer;
 
     // For Chaining
     sal_Int32 mnOverflowingPara = -1;
@@ -604,18 +603,18 @@ private:
 
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
-    Timer               aStatusTimer;
-    Size                aLOKSpecialPaperSize;
+    Timer maStatusTimer;
+    Size maLOKSpecialPaperSize;
 
-    Link<EditStatus&,void>         aStatusHdlLink;
-    Link<EENotify&,void>           aNotifyHdl;
-    Link<HtmlImportInfo&,void>     aHtmlImportHdl;
-    Link<RtfImportInfo&,void>      aRtfImportHdl;
-    Link<MoveParagraphsInfo&,void> aBeginMovingParagraphsHdl;
-    Link<MoveParagraphsInfo&,void> aEndMovingParagraphsHdl;
-    Link<PasteOrDropInfos&,void>   aBeginPasteOrDropHdl;
-    Link<PasteOrDropInfos&,void>   aEndPasteOrDropHdl;
-    Link<LinkParamNone*,void>      aModifyHdl;
+    Link<EditStatus&,void>         maStatusHdlLink;
+    Link<EENotify&,void>           maNotifyHdl;
+    Link<HtmlImportInfo&,void>     maHtmlImportHdl;
+    Link<RtfImportInfo&,void>      maRtfImportHdl;
+    Link<MoveParagraphsInfo&,void> maBeginMovingParagraphsHdl;
+    Link<MoveParagraphsInfo&,void> maEndMovingParagraphsHdl;
+    Link<PasteOrDropInfos&,void>   maBeginPasteOrDropHdl;
+    Link<PasteOrDropInfos&,void>   maEndPasteOrDropHdl;
+    Link<LinkParamNone*,void>      maModifyHdl;
     Link<EditView*,void>           maBeginDropHdl;
     Link<EditView*,void>           maEndDropHdl;
 
@@ -648,7 +647,7 @@ private:
 
     void                InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge = false );
     void                ResetUndoManager();
-    bool            HasUndoManager() const  { return pUndoManager != nullptr; }
+    bool            HasUndoManager() const  { return mpUndoManager != nullptr; }
 
     std::unique_ptr<EditUndoSetAttribs> CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet );
 
@@ -880,7 +879,7 @@ private:
 
     tools::Long Calc1ColumnTextHeight(tools::Long* pHeightNTP);
 
-    void IdleFormatAndLayout(EditView* pCurView) { aIdleFormatter.DoIdleFormat(pCurView); }
+    void IdleFormatAndLayout(EditView* pCurView) { maIdleFormatter.DoIdleFormat(pCurView); }
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -892,28 +891,28 @@ public:
 
     EditUndoManager& GetUndoManager()
     {
-        if ( !pUndoManager )
+        if (!mpUndoManager)
         {
-            pUndoManager = new EditUndoManager();
-            pUndoManager->SetEditEngine(pEditEngine);
+            mpUndoManager = new EditUndoManager();
+            mpUndoManager->SetEditEngine(mpEditEngine);
         }
-        return *pUndoManager;
+        return *mpUndoManager;
     }
 
     EditUndoManager* SetUndoManager(EditUndoManager* pNew)
     {
-        EditUndoManager* pRetval = pUndoManager;
+        EditUndoManager* pRetval = mpUndoManager;
 
-        if(pUndoManager)
+        if (mpUndoManager)
         {
-            pUndoManager->SetEditEngine(nullptr);
+            mpUndoManager->SetEditEngine(nullptr);
         }
 
-        pUndoManager = pNew;
+        mpUndoManager = pNew;
 
-        if(pUndoManager)
+        if (mpUndoManager)
         {
-            pUndoManager->SetEditEngine(pEditEngine);
+            mpUndoManager->SetEditEngine(mpEditEngine);
         }
 
         return pRetval;
@@ -923,8 +922,8 @@ public:
     bool                    SetUpdateLayout( bool bUpdate, EditView* pCurView = nullptr, bool bForceUpdate = false );
     bool IsUpdateLayout() const   { return mbUpdateLayout; }
 
-    ViewsType& GetEditViews() { return aEditViews; }
-    const ViewsType& GetEditViews() const { return aEditViews; }
+    ViewsType& GetEditViews() { return maEditViews; }
+    const ViewsType& GetEditViews() const { return maEditViews; }
 
     const Size& GetPaperSize() const { return maPaperSize; }
     void SetPaperSize(const Size& rSize) { maPaperSize = rSize; }
@@ -943,8 +942,8 @@ public:
     void                    SetFixedCellHeight( bool bUseFixedCellHeight );
     bool                    IsFixedCellHeight() const { return GetEditDoc().IsFixedCellHeight(); }
 
-    void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir ) { eDefaultHorizontalTextDirection = eHTextDir; }
-    EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const { return eDefaultHorizontalTextDirection; }
+    void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir ) { meDefaultHorizontalTextDirection = eHTextDir; }
+    EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const { return meDefaultHorizontalTextDirection; }
 
 
     void                    InitWritingDirections( sal_Int32 nPara );
@@ -953,7 +952,7 @@ public:
     bool                    HasDifferentRTLLevels( const ContentNode* pNode );
 
     void                    SetTextRanger( std::unique_ptr<TextRanger> pRanger );
-    TextRanger*             GetTextRanger() const { return pTextRanger.get(); }
+    TextRanger*             GetTextRanger() const { return mpTextRanger.get(); }
 
     const Size& GetMinAutoPaperSize() const { return maMinAutoPaperSize; }
     void SetMinAutoPaperSize(const Size& rSize) { maMinAutoPaperSize = rSize; }
@@ -975,7 +974,7 @@ public:
     bool                MouseMove( const MouseEvent& rMouseEvent, EditView* pView );
     bool                    Command(const CommandEvent& rCEvt, EditView* pView);
 
-    EditSelectionEngine&    GetSelEngine() { return aSelEngine; }
+    EditSelectionEngine&    GetSelEngine() { return maSelEngine; }
     OUString                GetSelected( const EditSelection& rSel ) const;
 
     const SfxItemSet& GetEmptyItemSet() const;
@@ -1054,7 +1053,7 @@ public:
 
     bool            IsModified() const { return maEditDoc.IsModified(); }
     void            SetModifyFlag(bool b) { maEditDoc.SetModified( b ); }
-    void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
+    void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { maModifyHdl = rLink; }
 
     bool IsInSelectionMode() const { return mbInSelection; }
 
@@ -1067,11 +1066,11 @@ public:
     EditPaM         InsertParagraph( sal_Int32 nPara );
     std::optional<EditSelection> SelectParagraph( sal_Int32 nPara );
 
-    void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink ) { aStatusHdlLink = rLink; }
-    const Link<EditStatus&,void>& GetStatusEventHdl() const               { return aStatusHdlLink; }
+    void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink ) { maStatusHdlLink = rLink; }
+    const Link<EditStatus&,void>& GetStatusEventHdl() const               { return maStatusHdlLink; }
 
-    void            SetNotifyHdl( const Link<EENotify&,void>& rLink )     { aNotifyHdl = rLink; }
-    const Link<EENotify&,void>&   GetNotifyHdl() const            { return aNotifyHdl; }
+    void            SetNotifyHdl( const Link<EENotify&,void>& rLink )     { maNotifyHdl = rLink; }
+    const Link<EENotify&,void>&   GetNotifyHdl() const            { return maNotifyHdl; }
 
     void            FormatAndLayout( EditView* pCurView = nullptr, bool bCalledFromUndo = false );
 
@@ -1121,7 +1120,7 @@ public:
     }
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
-    SfxStyleSheetPool*  GetStyleSheetPool() const { return pStylePool; }
+    SfxStyleSheetPool*  GetStyleSheetPool() const { return mpStylePool; }
 
     void                SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle );
     void                SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle );
@@ -1141,28 +1140,28 @@ public:
 
     InternalEditStatus& GetStatus() { return maStatus; }
     void                CallStatusHdl();
-    void                DelayedCallStatusHdl()  { aStatusTimer.Start(); }
+    void                DelayedCallStatusHdl()  { maStatusTimer.Start(); }
 
     void                UndoActionStart( sal_uInt16 nId );
     void                UndoActionStart( sal_uInt16 nId, const ESelection& rSel );
     void                UndoActionEnd();
 
-    EditView*           GetActiveView() const   { return pActiveView; }
+    EditView*           GetActiveView() const   { return mpActiveView; }
     void                SetActiveView( EditView* pView );
 
     css::uno::Reference< css::linguistic2::XSpellChecker1 > const &
                         GetSpeller();
     void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpl )
-                            { xSpeller = xSpl; }
+                            { mxSpeller = xSpl; }
     const css::uno::Reference< css::linguistic2::XHyphenator >&
-                        GetHyphenator() const { return xHyphenator; }
+                        GetHyphenator() const { return mxHyphenator; }
     void                SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator > const &xHyph )
-                            { xHyphenator = xHyph; }
+                            { mxHyphenator = xHyph; }
 
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
     void SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges );
 
-    SpellInfo*          GetSpellInfo() const { return pSpellInfo.get(); }
+    SpellInfo*          GetSpellInfo() const { return mpSpellInfo.get(); }
 
     void SetDefaultLanguage(LanguageType eLang) { meDefLanguage = eLang; }
     LanguageType GetDefaultLanguage() const { return meDefLanguage; }
@@ -1182,7 +1181,7 @@ public:
     void                Convert(EditView* pEditView, weld::Widget* pDialogParent, LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc);
     void                ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
                                     bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const vcl::Font *pTargetFont );
-    ConvInfo *          GetConvInfo() const { return pConvInfo.get(); }
+    ConvInfo *          GetConvInfo() const { return mpConvInfo.get(); }
     bool                HasConvertibleTextPortion( LanguageType nLang );
     void                SetLanguageAndFont( const ESelection &rESel,
                                 LanguageType nLang, sal_uInt16 nLangWhichId,
@@ -1218,8 +1217,8 @@ public:
     sal_Int32               StartSearchAndReplace( EditView* pEditView, const SvxSearchItem& rSearchItem );
     bool                    HasText( const SvxSearchItem& rSearchItem );
 
-    void                    SetEditTextObjectPool( SfxItemPool* pP )    { pTextObjectPool = pP; }
-    SfxItemPool*            GetEditTextObjectPool() const               { return pTextObjectPool; }
+    void                    SetEditTextObjectPool( SfxItemPool* pP )    { mpTextObjectPool = pP; }
+    SfxItemPool*            GetEditTextObjectPool() const               { return mpTextObjectPool; }
 
     const SvxNumberFormat * GetNumberFormat( const ContentNode* pNode ) const;
     sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode *pNode, sal_Int32 *pnSpaceBefore = nullptr, sal_Int32 *pnMinLabelWidth = nullptr ) const;
@@ -1245,10 +1244,10 @@ public:
 
     sal_Int32 GetBigTextObjectStart() const { return mnBigTextObjectStart; }
 
-    EditEngine*  GetEditEnginePtr() const    { return pEditEngine; }
+    EditEngine*  GetEditEnginePtr() const    { return mpEditEngine; }
 
-    void                StartOnlineSpellTimer()     { aOnlineSpellTimer.Start(); }
-    void                StopOnlineSpellTimer()      { aOnlineSpellTimer.Stop(); }
+    void                StartOnlineSpellTimer()     { maOnlineSpellTimer.Start(); }
+    void                StopOnlineSpellTimer()      { maOnlineSpellTimer.Stop(); }
 
     const OUString& GetAutoCompleteText() const { return maAutoCompleteText; }
     void                SetAutoCompleteText(const OUString& rStr, bool bUpdateTipWindow);
@@ -1296,8 +1295,8 @@ public:
     void EnableSkipOutsideFormat(bool set) { mbSkipOutsideFormat = set; }
 
     void Dispose();
-    void SetLOKSpecialPaperSize(const Size& rSize) { aLOKSpecialPaperSize = rSize; }
-    const Size& GetLOKSpecialPaperSize() const { return aLOKSpecialPaperSize; }
+    void SetLOKSpecialPaperSize(const Size& rSize) { maLOKSpecialPaperSize = rSize; }
+    const Size& GetLOKSpecialPaperSize() const { return maLOKSpecialPaperSize; }
 
     enum class CallbackResult
     {

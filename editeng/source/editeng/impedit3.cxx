@@ -316,16 +316,16 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
 
 void ImpEditEngine::UpdateViews( EditView* pCurView )
 {
-    if ( !IsUpdateLayout() || IsFormatting() || aInvalidRect.IsEmpty() )
+    if ( !IsUpdateLayout() || IsFormatting() || maInvalidRect.IsEmpty() )
         return;
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
 
-    for (EditView* pView : aEditViews)
+    for (EditView* pView : maEditViews)
     {
         pView->HideCursor();
 
-        tools::Rectangle aClipRect( aInvalidRect );
+        tools::Rectangle aClipRect(maInvalidRect);
         tools::Rectangle aVisArea( pView->GetVisArea() );
         aClipRect.Intersection( aVisArea );
 
@@ -347,7 +347,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         pCurView->ShowCursor( bGotoCursor );
     }
 
-    aInvalidRect = tools::Rectangle();
+    maInvalidRect = tools::Rectangle();
     CallStatusHdl();
 }
 
@@ -356,18 +356,18 @@ IMPL_LINK_NOARG(ImpEditEngine, OnlineSpellHdl, Timer *, void)
     if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) && IsUpdateLayout() && IsFormatted() )
         DoOnlineSpelling();
     else
-        aOnlineSpellTimer.Start();
+        maOnlineSpellTimer.Start();
 }
 
 IMPL_LINK_NOARG(ImpEditEngine, IdleFormatHdl, Timer *, void)
 {
-    aIdleFormatter.ResetRestarts();
+    maIdleFormatter.ResetRestarts();
 
     // #i97146# check if that view is still available
     // else probably the idle format timer fired while we're already
     // downing
-    EditView* pView = aIdleFormatter.GetView();
-    for (EditView* aEditView : aEditViews)
+    EditView* pView = maIdleFormatter.GetView();
+    for (EditView* aEditView : maEditViews)
     {
         if( aEditView == pView )
         {
@@ -379,7 +379,7 @@ IMPL_LINK_NOARG(ImpEditEngine, IdleFormatHdl, Timer *, void)
 
 void ImpEditEngine::CheckIdleFormatter()
 {
-    aIdleFormatter.ForceTimeout();
+    maIdleFormatter.ForceTimeout();
     // If not idle, but still not formatted:
     if ( !IsFormatted() )
         FormatDoc();
@@ -441,7 +441,7 @@ void ImpEditEngine::FormatDoc()
                 {
                     GetEditEnginePtr()->ParagraphHeightChanged( nPara );
 
-                    for (EditView* pView : aEditViews)
+                    for (EditView* pView : maEditViews)
                     {
                         ImpEditView* pImpView = pView->pImpEditView.get();
                         pImpView->ScrollStateChange();
@@ -456,34 +456,34 @@ void ImpEditEngine::FormatDoc()
         nY += pParaPortion->GetHeight();
     }
 
-    aInvalidRect = tools::Rectangle(); // make empty
+    maInvalidRect = tools::Rectangle(); // make empty
 
     // One can also get into the formatting through UpdateMode ON=>OFF=>ON...
     // enable optimization first after Vobis delivery...
     {
         tools::Long nNewHeightNTP;
         tools::Long nNewHeight = CalcTextHeight(&nNewHeightNTP);
-        tools::Long nDiff = nNewHeight - nCurTextHeight;
+        tools::Long nDiff = nNewHeight - mnCurTextHeight;
         if ( nDiff )
         {
-            aInvalidRect.Union(tools::Rectangle::Normalize(
-                { 0, nNewHeight }, { getWidthDirectionAware(maPaperSize), nCurTextHeight }));
+            maInvalidRect.Union(tools::Rectangle::Normalize(
+                { 0, nNewHeight }, { getWidthDirectionAware(maPaperSize), mnCurTextHeight }));
             maStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
         }
 
-        nCurTextHeight = nNewHeight;
-        nCurTextHeightNTP = nNewHeightNTP;
+        mnCurTextHeight = nNewHeight;
+        mnCurTextHeightNTP = nNewHeightNTP;
 
         if ( maStatus.AutoPageSize() )
             CheckAutoPageSize();
         else if ( nDiff )
         {
-            for (EditView* pView : aEditViews)
+            for (EditView* pView : maEditViews)
             {
                 ImpEditView* pImpView = pView->pImpEditView.get();
                 if ( pImpView->DoAutoHeight() )
                 {
-                    Size aSz( pImpView->GetOutputArea().GetWidth(), nCurTextHeight );
+                    Size aSz( pImpView->GetOutputArea().GetWidth(), mnCurTextHeight );
                     if ( aSz.Height() > maMaxAutoPaperSize.Height() )
                         aSz.setHeight( maMaxAutoPaperSize.Height() );
                     else if ( aSz.Height() < maMinAutoPaperSize.Height() )
@@ -498,7 +498,7 @@ void ImpEditEngine::FormatDoc()
         {
             auto CombineRepaintParasAreas = [&](const LineAreaInfo& rInfo) {
                 if (aRepaintParas.count(rInfo.nPortion))
-                    aInvalidRect.Union(rInfo.aArea);
+                    maInvalidRect.Union(rInfo.aArea);
                 return CallbackResult::Continue;
             };
             IterateLineAreas(CombineRepaintParasAreas, IterFlag::inclILS);
@@ -583,10 +583,10 @@ void ImpEditEngine::CheckAutoPageSize()
         aSz.setWidth( aInvSize.Height() );
         aSz.setHeight( aInvSize.Width() );
     }
-    aInvalidRect = tools::Rectangle( Point(), aSz );
+    maInvalidRect = tools::Rectangle( Point(), aSz );
 
 
-    for (EditView* pView : aEditViews)
+    for (EditView* pView : maEditViews)
     {
         pView->pImpEditView->RecalcOutputArea();
     }
@@ -2033,8 +2033,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 const OUString aWord = pNode->GetString().copy(nWordStart, nWordLen);
                 sal_Int32 nMinTrail = nWordEnd-nMaxBreakPos+1; //+1: Before the dickey letter
                 Reference< XHyphenatedWord > xHyphWord;
-                if (xHyphenator.is())
-                    xHyphWord = xHyphenator->hyphenate( aWord, aLocale, aWord.getLength() - nMinTrail, Sequence< PropertyValue >() );
+                if (mxHyphenator.is())
+                    xHyphWord = mxHyphenator->hyphenate( aWord, aLocale, aWord.getLength() - nMinTrail, Sequence< PropertyValue >() );
                 if (xHyphWord.is())
                 {
                     bool bAlternate = xHyphWord->isAlternativeSpelling();
@@ -2784,7 +2784,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
 
 void ImpEditEngine::SetTextRanger( std::unique_ptr<TextRanger> pRanger )
 {
-    pTextRanger = std::move(pRanger);
+    mpTextRanger = std::move(pRanger);
 
     for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
     {
@@ -2796,7 +2796,7 @@ void ImpEditEngine::SetTextRanger( std::unique_ptr<TextRanger> pRanger )
     FormatFullDoc();
     UpdateViews( GetActiveView() );
     if ( IsUpdateLayout() && GetActiveView() )
-        pActiveView->ShowCursor(false, false);
+        mpActiveView->ShowCursor(false, false);
 }
 
 void ImpEditEngine::SetVertical( bool bVertical)
@@ -3267,10 +3267,10 @@ Point ImpEditEngine::MoveToNextLine(
     adjustYDirectionAware(rMovePos, nLineHeight);
     // Check if the resulting position has moved beyond the limits, and more columns left.
     // The limits are defined by a rectangle starting from aOrigin with width of maPaperSize
-    // and height of nCurTextHeight
+    // and height of mnCurTextHeight
     Point aOtherCorner = aOrigin;
     adjustXDirectionAware(aOtherCorner, getWidthDirectionAware(maPaperSize));
-    adjustYDirectionAware(aOtherCorner, nCurTextHeight);
+    adjustYDirectionAware(aOtherCorner, mnCurTextHeight);
     tools::Long nNeeded
         = getYOverflowDirectionAware(rMovePos, tools::Rectangle::Normalize(aOrigin, aOtherCorner));
     if (pnHeightNeededToNotWrap)
@@ -3393,7 +3393,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                         GetEditEnginePtr()->PaintingFirstLine(n, aLineStart, aOrigin, nOrientation, rOutDev);
 
                         // Remember whether a bullet was painted.
-                        const SfxBoolItem& rBulletState = pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE);
+                        const SfxBoolItem& rBulletState = mpEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE);
                         bPaintBullet = rBulletState.GetValue();
                     }
 
@@ -3565,13 +3565,13 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     ExtraPortionInfo *pExtraInfo = rTextPortion.GetExtraInfos();
                                     // Do not split the Fields into different lines while editing
                                     // With EditView on Overlay bStripOnly is now set for stripping to
-                                    // primitives. To stay compatible in EditMode use pActiveView to detect
+                                    // primitives. To stay compatible in EditMode use mpActiveView to detect
                                     // when we are in EditMode. For whatever reason URLs are drawn as single
                                     // line in edit mode, originally clipped against edit area (which is no
                                     // longer done in Overlay mode and allows to *read* the URL).
                                     // It would be difficult to change this due to needed adaptations in
                                     // EditEngine (look for lineBreaksList creation)
-                                    if( nullptr == pActiveView && bStripOnly && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty() )
+                                    if (nullptr == mpActiveView && bStripOnly && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
                                     {
                                         bParsingFields = true;
                                         itSubLines = pExtraInfo->lineBreaksList.begin();
@@ -3606,7 +3606,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             {
                                                 // tdf#148966 don't paint the line break following a
                                                 // multiline field based on a compat flag
-                                                OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(pEditEngine) };
+                                                OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(mpEditEngine)};
                                                 if (pOutlEditEng
                                                     && pOutlEditEng->GetCompatFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)
                                                            .value_or(false))
@@ -4180,7 +4180,7 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
     {
         // Mark as deleted, so that no selection will end or begin at
         // this paragraph...
-        aDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pPPortion->GetNode(), nParagraph ));
+        maDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pPPortion->GetNode(), nParagraph ));
         UpdateSelections();
         // The region below will not be invalidated if UpdateMode = sal_False!
         // If anyway, then save as sal_False before SetVisible !
@@ -4198,19 +4198,19 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
             {
                 CalcHeight( pPPortion );
             }
-            nCurTextHeight += pPPortion->GetHeight();
+            mnCurTextHeight += pPPortion->GetHeight();
         }
         else
         {
-            nCurTextHeight = 0x7fffffff;
+            mnCurTextHeight = 0x7fffffff;
         }
     }
 
     pPPortion->SetMustRepaint( true );
     if ( IsUpdateLayout() && !IsInUndo() && !GetTextRanger() )
     {
-        aInvalidRect = tools::Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
-                                    Point( GetPaperSize().Width(), nCurTextHeight ) );
+        maInvalidRect = tools::Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
+                                    Point( GetPaperSize().Width(), mnCurTextHeight ) );
         UpdateViews( GetActiveView() );
     }
 }
@@ -4241,11 +4241,11 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
         ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
         if (pUpperPortion && pLowerPortion)
         {
-            aInvalidRect = tools::Rectangle();  // make empty
-            aInvalidRect.SetLeft( 0 );
-            aInvalidRect.SetRight(GetColumnWidth(maPaperSize));
-            aInvalidRect.SetTop( GetParaPortions().GetYOffset( pUpperPortion ) );
-            aInvalidRect.SetBottom( GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight() );
+            maInvalidRect = tools::Rectangle();  // make empty
+            maInvalidRect.SetLeft( 0 );
+            maInvalidRect.SetRight(GetColumnWidth(maPaperSize));
+            maInvalidRect.SetTop( GetParaPortions().GetYOffset( pUpperPortion ) );
+            maInvalidRect.SetBottom( GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight() );
 
             UpdateViews( pCurView );
         }
@@ -4284,14 +4284,14 @@ IMPL_LINK_NOARG(ImpEditEngine, StatusTimerHdl, Timer *, void)
 
 void ImpEditEngine::CallStatusHdl()
 {
-    if ( aStatusHdlLink.IsSet() && bool(maStatus.GetStatusWord()) )
+    if (maStatusHdlLink.IsSet() && bool(maStatus.GetStatusWord()))
     {
         // The Status has to be reset before the Call,
         // since other Flags might be set in the handler...
         EditStatus aTmpStatus( maStatus );
         maStatus.Clear();
-        aStatusHdlLink.Call( aTmpStatus );
-        aStatusTimer.Stop();    // If called by hand...
+        maStatusHdlLink.Call( aTmpStatus );
+        maStatusTimer.Stop();    // If called by hand...
     }
 }
 
@@ -4451,8 +4451,8 @@ void ImpEditEngine::SetFlatMode( bool bFlat )
 
     FormatFullDoc();
     UpdateViews();
-    if ( pActiveView )
-        pActiveView->ShowCursor();
+    if (mpActiveView)
+        mpActiveView->ShowCursor();
 }
 
 void ImpEditEngine::setScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY)
@@ -4482,7 +4482,7 @@ void ImpEditEngine::setScale(double fFontScaleX, double fFontScaleY, double fSpa
     {
         FormatFullDoc();
         // (potentially) need everything redrawn
-        aInvalidRect = tools::Rectangle(0, 0, 1000000, 1000000);
+        maInvalidRect = tools::Rectangle(0, 0, 1000000, 1000000);
         UpdateViews(GetActiveView());
     }
 }
@@ -4502,7 +4502,7 @@ const SvxNumberFormat* ImpEditEngine::GetNumberFormat( const ContentNode *pNode 
             // object to provide
             // access to the SvxNumberFormat of the Outliner.
             // The EditEngine implementation will just return 0.
-            pRes = pEditEngine->GetNumberFormat( nPara );
+            pRes = mpEditEngine->GetNumberFormat( nPara );
         }
     }
 
@@ -4633,22 +4633,22 @@ void ImpEditEngine::ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, s
 
 Reference < i18n::XBreakIterator > const & ImpEditEngine::ImplGetBreakIterator() const
 {
-    if ( !xBI.is() )
+    if (!mxBI.is())
     {
-        Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        xBI = i18n::BreakIterator::create( xContext );
+        uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+        mxBI = i18n::BreakIterator::create(xContext);
     }
-    return xBI;
+    return mxBI;
 }
 
 Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGetInputSequenceChecker() const
 {
-    if ( !xISC.is() )
+    if (!mxISC.is())
     {
-        Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        xISC = i18n::InputSequenceChecker::create( xContext );
+        uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+        mxISC = i18n::InputSequenceChecker::create(xContext);
     }
-    return xISC;
+    return mxISC;
 }
 
 Color ImpEditEngine::GetAutoColor() const
@@ -4867,7 +4867,7 @@ void ImpEditEngine::ImplUpdateOverflowingParaNum(tools::Long nPaperHeight)
         ParaPortion* pPara = GetParaPortions()[nPara];
         nPH = pPara->GetHeight();
         nY += nPH;
-        if ( nY > nPaperHeight /*nCurTextHeight*/ ) // found first paragraph overflowing
+        if ( nY > nPaperHeight /*mnCurTextHeight*/ ) // found first paragraph overflowing
         {
             mnOverflowingPara = nPara;
             SAL_INFO("editeng.chaining", "[CHAINING] Setting first overflowing #Para#: " << nPara);

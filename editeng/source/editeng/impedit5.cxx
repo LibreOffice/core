@@ -26,10 +26,8 @@
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
-    if ( pStylePool != pSPool )
-    {
-        pStylePool = pSPool;
-    }
+    if (mpStylePool != pSPool)
+        mpStylePool = pSPool;
 }
 
 const SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_Int32 nPara ) const
@@ -77,7 +75,7 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
                 aNewStyleName = pStyle->GetName();
 
             InsertUndo(
-                std::make_unique<EditUndoSetStyleSheet>(pEditEngine, maEditDoc.GetPos( pNode ),
+                std::make_unique<EditUndoSetStyleSheet>(mpEditEngine, maEditDoc.GetPos( pNode ),
                         aPrevStyleName, pCurStyle ? pCurStyle->GetFamily() : SfxStyleFamily::Para,
                         aNewStyleName, pStyle ? pStyle->GetFamily() : SfxStyleFamily::Para,
                         pNode->GetContentAttribs().GetItems() ) );
@@ -192,11 +190,11 @@ std::unique_ptr<EditUndoSetAttribs> ImpEditEngine::CreateAttribUndo( EditSelecti
     {
         SfxItemSet aTmpSet( GetEmptyItemSet() );
         aTmpSet.Put( rSet );
-        pUndo.reset( new EditUndoSetAttribs(pEditEngine, aESel, std::move(aTmpSet)) );
+        pUndo.reset( new EditUndoSetAttribs(mpEditEngine, aESel, std::move(aTmpSet)) );
     }
     else
     {
-        pUndo.reset( new EditUndoSetAttribs(pEditEngine, aESel, rSet) );
+        pUndo.reset( new EditUndoSetAttribs(mpEditEngine, aESel, rSet) );
     }
 
     SfxItemPool* pPool = pUndo->GetNewAttribs().GetPool();
@@ -225,7 +223,7 @@ ViewShellId ImpEditEngine::CreateViewShellId()
 {
     ViewShellId nRet(-1);
 
-    const EditView* pEditView = pEditEngine ? pEditEngine->GetActiveView() : nullptr;
+    const EditView* pEditView = mpEditEngine ? mpEditEngine->GetActiveView() : nullptr;
     const OutlinerViewShell* pViewShell = pEditView ? pEditView->GetImpEditView()->GetViewShell() : nullptr;
     if (pViewShell)
         nRet = pViewShell->GetViewShellId();
@@ -266,7 +264,7 @@ void ImpEditEngine::InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge 
     DBG_ASSERT( !IsInUndo(), "InsertUndo in Undo mode!" );
     if ( moUndoMarkSelection )
     {
-        GetUndoManager().AddUndoAction( std::make_unique<EditUndoMarkSelection>(pEditEngine, *moUndoMarkSelection) );
+        GetUndoManager().AddUndoAction( std::make_unique<EditUndoMarkSelection>(mpEditEngine, *moUndoMarkSelection) );
         moUndoMarkSelection.reset();
     }
     GetUndoManager().AddUndoAction( std::move(pUndo), bTryMerge );
@@ -692,11 +690,11 @@ void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
         {
             SfxItemSet aTmpSet( GetEmptyItemSet() );
             aTmpSet.Put( rSet );
-            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet));
+            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(mpEditEngine, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet));
         }
         else
         {
-            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), rSet));
+            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(mpEditEngine, nPara, pNode->GetContentAttribs().GetItems(), rSet));
         }
     }
 

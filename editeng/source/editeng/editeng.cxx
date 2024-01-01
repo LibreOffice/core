@@ -393,7 +393,7 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
     if ( !(bAutoPageSize || ( aNewSize.Width() != aOldSize.Width() )) )
         return;
 
-    for (EditView* pView : pImpEditEngine->aEditViews)
+    for (EditView* pView : pImpEditEngine->maEditViews)
     {
         if ( bAutoPageSize )
             pView->pImpEditView->RecalcOutputArea();
@@ -414,7 +414,7 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
         pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
 
         if ( pImpEditEngine->IsUpdateLayout() && pImpEditEngine->GetActiveView() )
-            pImpEditEngine->pActiveView->ShowCursor( false, false );
+            pImpEditEngine->mpActiveView->ShowCursor( false, false );
     }
 }
 
@@ -685,7 +685,7 @@ void EditEngine::CheckIdleFormatter()
 
 bool EditEngine::IsIdleFormatterActive() const
 {
-    return pImpEditEngine->aIdleFormatter.IsActive();
+    return pImpEditEngine->maIdleFormatter.IsActive();
 }
 
 ParaPortion* EditEngine::FindParaPortion(ContentNode const * pNode)
@@ -725,7 +725,7 @@ bool EditEngine::IsCallParaInsertedOrDeleted() const
 
 void EditEngine::AppendDeletedNodeInfo(DeletedNodeInfo* pInfo)
 {
-    pImpEditEngine->aDeletedNodes.push_back(std::unique_ptr<DeletedNodeInfo>(pInfo));
+    pImpEditEngine->maDeletedNodes.push_back(std::unique_ptr<DeletedNodeInfo>(pInfo));
 }
 
 void EditEngine::UpdateSelections()
@@ -969,12 +969,12 @@ EditPaM EditEngine::DeleteSelected(const EditSelection& rSel)
 
 void EditEngine::HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos)
 {
-    pImpEditEngine->aBeginPasteOrDropHdl.Call(rInfos);
+    pImpEditEngine->maBeginPasteOrDropHdl.Call(rInfos);
 }
 
 void EditEngine::HandleEndPasteOrDrop(PasteOrDropInfos& rInfos)
 {
-    pImpEditEngine->aEndPasteOrDropHdl.Call(rInfos);
+    pImpEditEngine->maEndPasteOrDropHdl.Call(rInfos);
 }
 
 bool EditEngine::HasText() const
@@ -984,7 +984,7 @@ bool EditEngine::HasText() const
 
 const EditSelectionEngine& EditEngine::GetSelectionEngine() const
 {
-    return pImpEditEngine->aSelEngine;
+    return pImpEditEngine->maSelEngine;
 }
 
 void EditEngine::SetInSelectionMode(bool b)
@@ -1049,7 +1049,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     sal_Int32 nParas = GetParagraphCount();
                     Point aPos;
                     Point aViewStart( pEditView->GetOutputArea().TopLeft() );
-                    tools::Long n20 = 40 * pImpEditEngine->nOnePixelInRef;
+                    tools::Long n20 = 40 * pImpEditEngine->mnOnePixelInRef;
                     for ( sal_Int32 n = 0; n < nParas; n++ )
                     {
                         tools::Long nH = GetTextHeight( n );
@@ -1316,7 +1316,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                         // Only at end of word...
                         sal_Int32 nIndex = aCurSel.Max().GetIndex();
                         if ( ( nIndex >= aCurSel.Max().GetNode()->Len() ) ||
-                             ( pImpEditEngine->aWordDelimiters.indexOf( aCurSel.Max().GetNode()->GetChar( nIndex ) ) != -1 ) )
+                             ( pImpEditEngine->maWordDelimiters.indexOf( aCurSel.Max().GetNode()->GetChar( nIndex ) ) != -1 ) )
                         {
                             EditPaM aStart( pImpEditEngine->WordLeft( aCurSel.Max() ) );
                             OUString aWord = pImpEditEngine->GetSelected( EditSelection( aStart, aCurSel.Max() ) );
@@ -1327,18 +1327,18 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                 LanguageType eLang = pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1)).nLang;
                                 LanguageTag aLanguageTag( eLang);
 
-                                if (!pImpEditEngine->xLocaleDataWrapper.isInitialized())
-                                    pImpEditEngine->xLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), aLanguageTag);
+                                if (!pImpEditEngine->mxLocaleDataWrapper.isInitialized())
+                                    pImpEditEngine->mxLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), aLanguageTag);
                                 else
-                                    pImpEditEngine->xLocaleDataWrapper.changeLocale( aLanguageTag);
+                                    pImpEditEngine->mxLocaleDataWrapper.changeLocale( aLanguageTag);
 
-                                if (!pImpEditEngine->xTransliterationWrapper.isInitialized())
-                                    pImpEditEngine->xTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang);
+                                if (!pImpEditEngine->mxTransliterationWrapper.isInitialized())
+                                    pImpEditEngine->mxTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang);
                                 else
-                                    pImpEditEngine->xTransliterationWrapper.changeLocale( eLang);
+                                    pImpEditEngine->mxTransliterationWrapper.changeLocale( eLang);
 
-                                const ::utl::TransliterationWrapper* pTransliteration = pImpEditEngine->xTransliterationWrapper.get();
-                                Sequence< i18n::CalendarItem2 > xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarDays();
+                                const ::utl::TransliterationWrapper* pTransliteration = pImpEditEngine->mxTransliterationWrapper.get();
+                                Sequence< i18n::CalendarItem2 > xItem = pImpEditEngine->mxLocaleDataWrapper->getDefaultCalendarDays();
                                 sal_Int32 nCount = xItem.getLength();
                                 const i18n::CalendarItem2* pArr = xItem.getConstArray();
                                 for( sal_Int32 n = 0; n <= nCount; ++n )
@@ -1353,7 +1353,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
 
                                 if ( aComplete.isEmpty() )
                                 {
-                                    xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarMonths();
+                                    xItem = pImpEditEngine->mxLocaleDataWrapper->getDefaultCalendarMonths();
                                     sal_Int32 nMonthCount = xItem.getLength();
                                     const i18n::CalendarItem2* pMonthArr = xItem.getConstArray();
                                     for( sal_Int32 n = 0; n <= nMonthCount; ++n )
@@ -1466,10 +1466,10 @@ sal_uInt32 EditEngine::CalcTextWidth()
 bool EditEngine::SetUpdateLayout(bool bUpdate, bool bRestoring)
 {
     bool bPrevUpdateLayout = pImpEditEngine->SetUpdateLayout( bUpdate );
-    if (pImpEditEngine->pActiveView)
+    if (pImpEditEngine->mpActiveView)
     {
         // Not an activation if we are restoring the previous update mode.
-        pImpEditEngine->pActiveView->ShowCursor(false, false, /*bActivate=*/!bRestoring);
+        pImpEditEngine->mpActiveView->ShowCursor(false, false, /*bActivate=*/!bRestoring);
     }
     return bPrevUpdateLayout;
 }
@@ -1559,43 +1559,43 @@ Link<EditStatus&, void> const & EditEngine::GetStatusEventHdl() const
 
 void EditEngine::SetHtmlImportHdl( const Link<HtmlImportInfo&,void>& rLink )
 {
-    pImpEditEngine->aHtmlImportHdl = rLink;
+    pImpEditEngine->maHtmlImportHdl = rLink;
 }
 
 const Link<HtmlImportInfo&,void>& EditEngine::GetHtmlImportHdl() const
 {
-    return pImpEditEngine->aHtmlImportHdl;
+    return pImpEditEngine->maHtmlImportHdl;
 }
 
 void EditEngine::SetRtfImportHdl( const Link<RtfImportInfo&,void>& rLink )
 {
-    pImpEditEngine->aRtfImportHdl = rLink;
+    pImpEditEngine->maRtfImportHdl = rLink;
 }
 
 const Link<RtfImportInfo&,void>& EditEngine::GetRtfImportHdl() const
 {
-    return pImpEditEngine->aRtfImportHdl;
+    return pImpEditEngine->maRtfImportHdl;
 }
 
 void EditEngine::SetBeginMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink )
 {
-    pImpEditEngine->aBeginMovingParagraphsHdl = rLink;
+    pImpEditEngine->maBeginMovingParagraphsHdl = rLink;
 }
 
 void EditEngine::SetEndMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink )
 {
-    pImpEditEngine->aEndMovingParagraphsHdl = rLink;
+    pImpEditEngine->maEndMovingParagraphsHdl = rLink;
 }
 
 void EditEngine::SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink )
 {
 
-    pImpEditEngine->aBeginPasteOrDropHdl = rLink;
+    pImpEditEngine->maBeginPasteOrDropHdl = rLink;
 }
 
 void EditEngine::SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink )
 {
-    pImpEditEngine->aEndPasteOrDropHdl = rLink;
+    pImpEditEngine->maEndPasteOrDropHdl = rLink;
 }
 
 std::unique_ptr<EditTextObject> EditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
@@ -1934,11 +1934,11 @@ void EditEngine::SetControlWord( EEControlBits nWord )
             pNode->DestroyWrongList();
             if ( bWrongs )
             {
-                pImpEditEngine->aInvalidRect.SetLeft( 0 );
-                pImpEditEngine->aInvalidRect.SetRight( pImpEditEngine->GetPaperSize().Width() );
-                pImpEditEngine->aInvalidRect.SetTop( nY+1 );
-                pImpEditEngine->aInvalidRect.SetBottom( nY+pPortion->GetHeight()-1 );
-                pImpEditEngine->UpdateViews( pImpEditEngine->pActiveView );
+                pImpEditEngine->maInvalidRect.SetLeft( 0 );
+                pImpEditEngine->maInvalidRect.SetRight( pImpEditEngine->GetPaperSize().Width() );
+                pImpEditEngine->maInvalidRect.SetTop( nY+1 );
+                pImpEditEngine->maInvalidRect.SetBottom( nY+pPortion->GetHeight()-1 );
+                pImpEditEngine->UpdateViews(pImpEditEngine->mpActiveView);
             }
             nY += pPortion->GetHeight();
         }
@@ -2162,14 +2162,14 @@ SfxStyleSheetPool* EditEngine::GetStyleSheetPool()
 
 void EditEngine::SetWordDelimiters( const OUString& rDelimiters )
 {
-    pImpEditEngine->aWordDelimiters = rDelimiters;
-    if (pImpEditEngine->aWordDelimiters.indexOf(CH_FEATURE) == -1)
-        pImpEditEngine->aWordDelimiters += OUStringChar(CH_FEATURE);
+    pImpEditEngine->maWordDelimiters = rDelimiters;
+    if (pImpEditEngine->maWordDelimiters.indexOf(CH_FEATURE) == -1)
+        pImpEditEngine->maWordDelimiters += OUStringChar(CH_FEATURE);
 }
 
 const OUString& EditEngine::GetWordDelimiters() const
 {
-    return pImpEditEngine->aWordDelimiters;
+    return pImpEditEngine->maWordDelimiters;
 }
 
 void EditEngine::EraseVirtualDevice()
@@ -2552,7 +2552,7 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
         pImpEditEngine->GetNotifyHdl().Call( aNotify );
     }
 
-    for (EditView* pView : pImpEditEngine->aEditViews)
+    for (EditView* pView : pImpEditEngine->maEditViews)
         pView->pImpEditView->ScrollStateChange();
 }
 
@@ -2834,12 +2834,12 @@ void EditEngine::SetReplaceLeadingSingleQuotationMark( bool bReplace )
 
 bool EditEngine::IsHtmlImportHandlerSet() const
 {
-    return pImpEditEngine->aHtmlImportHdl.IsSet();
+    return pImpEditEngine->maHtmlImportHdl.IsSet();
 }
 
 bool EditEngine::IsRtfImportHandlerSet() const
 {
-    return pImpEditEngine->aRtfImportHdl.IsSet();
+    return pImpEditEngine->maRtfImportHdl.IsSet();
 }
 
 bool EditEngine::IsImportRTFStyleSheetsSet() const
@@ -2849,12 +2849,12 @@ bool EditEngine::IsImportRTFStyleSheetsSet() const
 
 void EditEngine::CallHtmlImportHandler(HtmlImportInfo& rInfo)
 {
-    pImpEditEngine->aHtmlImportHdl.Call(rInfo);
+    pImpEditEngine->maHtmlImportHdl.Call(rInfo);
 }
 
 void EditEngine::CallRtfImportHandler(RtfImportInfo& rInfo)
 {
-    pImpEditEngine->aRtfImportHdl.Call(rInfo);
+    pImpEditEngine->maRtfImportHdl.Call(rInfo);
 }
 
 EditPaM EditEngine::InsertParaBreak(const EditSelection& rEditSelection)

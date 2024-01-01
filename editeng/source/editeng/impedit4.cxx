@@ -150,7 +150,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
     DBG_ASSERT(pPool && pPool->GetName() == "EditEngineItemPool",
         "ReadRTF: no EditEnginePool!");
 
-    EditRTFParserRef xPrsr = new EditRTFParser(rInput, aSel, *pPool, pEditEngine);
+    EditRTFParserRef xPrsr = new EditRTFParser(rInput, aSel, *pPool, mpEditEngine);
     SvParserState eState = xPrsr->CallParser();
     if ( ( eState != SvParserState::Accepted ) && ( !rInput.GetError() ) )
     {
@@ -166,7 +166,7 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const OUString& rBaseURL, Edi
         aSel = ImpDeleteSelection( aSel );
 
     EditHTMLParserRef xPrsr = new EditHTMLParser( rInput, rBaseURL, pHTTPHeaderAttrs );
-    SvParserState eState = xPrsr->CallParser(pEditEngine, aSel.Max());
+    SvParserState eState = xPrsr->CallParser(mpEditEngine, aSel.Max());
     if ( ( eState != SvParserState::Accepted ) && ( !rInput.GetError() ) )
     {
         rInput.SetError( EE_READWRITE_WRONGFORMAT );
@@ -1442,36 +1442,36 @@ css::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
 
 Reference< XSpellChecker1 > const & ImpEditEngine::GetSpeller()
 {
-    if ( !xSpeller.is() )
-        xSpeller = LinguMgr::GetSpellChecker();
-    return xSpeller;
+    if (!mxSpeller.is())
+        mxSpeller = LinguMgr::GetSpellChecker();
+    return mxSpeller;
 }
 
 
 void ImpEditEngine::CreateSpellInfo( bool bMultipleDocs )
 {
-    if (!pSpellInfo)
-        pSpellInfo.reset( new SpellInfo );
+    if (!mpSpellInfo)
+        mpSpellInfo.reset(new SpellInfo);
     else
-        *pSpellInfo = SpellInfo();  // reset to default values
+        *mpSpellInfo = SpellInfo();  // reset to default values
 
-    pSpellInfo->bMultipleDoc = bMultipleDocs;
+    mpSpellInfo->bMultipleDoc = bMultipleDocs;
     // always spell draw objects completely, starting at the top.
     // (spelling in only a selection or not starting with the top requires
     // further changes elsewhere to work properly)
-    pSpellInfo->aSpellStart = EPaM();
-    pSpellInfo->aSpellTo    = EPaM( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND );
+    mpSpellInfo->aSpellStart = EPaM();
+    mpSpellInfo->aSpellTo    = EPaM( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND );
 }
 
 
 EESpellState ImpEditEngine::Spell(EditView* pEditView, weld::Widget* pDialogParent, bool bMultipleDoc)
 {
-    SAL_WARN_IF( !xSpeller.is(), "editeng", "No Spell checker set!" );
+    SAL_WARN_IF(!mxSpeller.is(), "editeng", "No Spell checker set!");
 
-    if ( !xSpeller.is() )
+    if (!mxSpeller.is())
         return EESpellState::NoSpeller;
 
-    aOnlineSpellTimer.Stop();
+    maOnlineSpellTimer.Stop();
 
     // In MultipleDoc always from the front / rear ...
     if ( bMultipleDoc )
@@ -1485,7 +1485,7 @@ EESpellState ImpEditEngine::Spell(EditView* pEditView, weld::Widget* pDialogPare
     bool bIsStart = false;
     if ( bMultipleDoc )
         bIsStart = true;    // Accessible from the front or from behind ...
-    else if ( CreateEPaM( maEditDoc.GetStartPaM() ) == pSpellInfo->aSpellStart )
+    else if ( CreateEPaM( maEditDoc.GetStartPaM() ) == mpSpellInfo->aSpellStart )
         bIsStart = true;
 
     {
@@ -1503,8 +1503,8 @@ EESpellState ImpEditEngine::Spell(EditView* pEditView, weld::Widget* pDialogPare
         pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->ShowCursor( true, false );
     }
-    EESpellState eState = pSpellInfo->eState;
-    pSpellInfo.reset();
+    EESpellState eState = mpSpellInfo->eState;
+    mpSpellInfo.reset();
     return eState;
 }
 
@@ -1513,11 +1513,11 @@ bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
 {
     bool    bHasConvTxt = false;
 
-    sal_Int32 nParas = pEditEngine->GetParagraphCount();
+    sal_Int32 nParas = mpEditEngine->GetParagraphCount();
     for (sal_Int32 k = 0;  k < nParas;  ++k)
     {
         std::vector<sal_Int32> aPortions;
-        pEditEngine->GetPortions( k, aPortions );
+        mpEditEngine->GetPortions( k, aPortions );
         for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
         {
             sal_Int32 nEnd   = aPortions[ nPos ];
@@ -1528,7 +1528,7 @@ bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
             // specified position is evaluated.
             if (nEnd > nStart)  // empty para?
                 ++nStart;
-            LanguageType nLangFound = pEditEngine->GetLanguage( k, nStart ).nLang;
+            LanguageType nLangFound = mpEditEngine->GetLanguage( k, nStart ).nLang;
 #ifdef DEBUG
             lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
 #endif
@@ -1557,9 +1557,9 @@ void ImpEditEngine::Convert( EditView* pEditView, weld::Widget* pDialogParent,
     // initialize pConvInfo
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     aCurSel.Adjust( maEditDoc );
-    pConvInfo.reset(new ConvInfo);
-    pConvInfo->bMultipleDoc = bMultipleDoc;
-    pConvInfo->aConvStart = CreateEPaM( aCurSel.Min() );
+    mpConvInfo.reset(new ConvInfo);
+    mpConvInfo->bMultipleDoc = bMultipleDoc;
+    mpConvInfo->aConvStart = CreateEPaM( aCurSel.Min() );
 
     // if it is not just a selection and we are about to begin
     // with the current conversion for the very first time
@@ -1577,16 +1577,16 @@ void ImpEditEngine::Convert( EditView* pEditView, weld::Widget* pDialogParent,
         // not work. Thus since chinese conversion is not interactive we start
         // at the begin of the paragraph to solve the problem, i.e. have the
         // TextConversion service get those characters together in the same call.
-        pConvInfo->aConvStart.nIndex = editeng::HangulHanjaConversion::IsChinese( nSrcLang )
+        mpConvInfo->aConvStart.nIndex = editeng::HangulHanjaConversion::IsChinese( nSrcLang )
             ? 0 : aWordStartPaM.GetIndex();
     }
 
-    pConvInfo->aConvContinue = pConvInfo->aConvStart;
+    mpConvInfo->aConvContinue = mpConvInfo->aConvStart;
 
     bool bIsStart = false;
     if ( bMultipleDoc )
         bIsStart = true;    // Accessible from the front or from behind ...
-    else if ( CreateEPaM( maEditDoc.GetStartPaM() ) == pConvInfo->aConvStart )
+    else if ( CreateEPaM( maEditDoc.GetStartPaM() ) == mpConvInfo->aConvStart )
         bIsStart = true;
 
     TextConvWrapper aWrp( pDialogParent,
@@ -1624,7 +1624,7 @@ void ImpEditEngine::Convert( EditView* pEditView, weld::Widget* pDialogParent,
         pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->ShowCursor( true, false );
     }
-    pConvInfo.reset();
+    mpConvInfo.reset();
 }
 
 
@@ -1633,11 +1633,11 @@ void ImpEditEngine::SetLanguageAndFont(
     LanguageType nLang, sal_uInt16 nLangWhichId,
     const vcl::Font *pFont,  sal_uInt16 nFontWhichId )
 {
-    ESelection aOldSel = pActiveView->GetSelection();
-    pActiveView->SetSelection( rESel );
+    ESelection aOldSel = mpActiveView->GetSelection();
+    mpActiveView->SetSelection( rESel );
 
     // set new language attribute
-    SfxItemSet aNewSet( pActiveView->GetEmptyItemSet() );
+    SfxItemSet aNewSet(mpActiveView->GetEmptyItemSet());
     aNewSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
 
     // new font to be set?
@@ -1655,9 +1655,8 @@ void ImpEditEngine::SetLanguageAndFont(
     }
 
     // apply new attributes
-    pActiveView->SetAttribs( aNewSet );
-
-    pActiveView->SetSelection( aOldSel );
+    mpActiveView->SetAttribs(aNewSet);
+    mpActiveView->SetSelection(aOldSel);
 }
 
 
@@ -1673,7 +1672,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
     OUString aRes;
     LanguageType nResLang = LANGUAGE_NONE;
 
-    EditPaM aPos( CreateEditPaM( pConvInfo->aConvContinue ) );
+    EditPaM aPos(CreateEditPaM(mpConvInfo->aConvContinue));
     EditSelection aCurSel( aPos, aPos );
 
     OUString aWord;
@@ -1682,9 +1681,9 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
     {
         // empty paragraph found that needs to have language and font set?
         if (bAllowImplicitChangesForNotConvertibleText &&
-            pEditEngine->GetText( pConvInfo->aConvContinue.nPara ).isEmpty())
+            mpEditEngine->GetText(mpConvInfo->aConvContinue.nPara).isEmpty())
         {
-            sal_Int32 nPara = pConvInfo->aConvContinue.nPara;
+            sal_Int32 nPara = mpConvInfo->aConvContinue.nPara;
             ESelection aESel( nPara, 0, nPara, 0 );
             // see comment for below same function call
             SetLanguageAndFont( aESel,
@@ -1693,8 +1692,8 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         }
 
 
-        if (pConvInfo->aConvContinue.nPara  == pConvInfo->aConvTo.nPara &&
-            pConvInfo->aConvContinue.nIndex >= pConvInfo->aConvTo.nIndex)
+        if (mpConvInfo->aConvContinue.nPara  == mpConvInfo->aConvTo.nPara &&
+            mpConvInfo->aConvContinue.nIndex >= mpConvInfo->aConvTo.nIndex)
             break;
 
         sal_Int32 nAttribStart = -1;
@@ -1702,7 +1701,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         sal_Int32 nCurPos      = -1;
         EPaM aCurStart = CreateEPaM( aCurSel.Min() );
         std::vector<sal_Int32> aPortions;
-        pEditEngine->GetPortions( aCurStart.nPara, aPortions );
+        mpEditEngine->GetPortions(aCurStart.nPara, aPortions);
         for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
         {
             const sal_Int32 nEnd   = aPortions[ nPos ];
@@ -1713,7 +1712,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             // thus we usually have to add 1 in order to get the language
             // of the text right to the cursor position
             const sal_Int32 nLangIdx = nEnd > nStart ? nStart + 1 : nStart;
-            LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nLangIdx ).nLang;
+            LanguageType nLangFound = mpEditEngine->GetLanguage( aCurStart.nPara, nLangIdx ).nLang;
 #ifdef DEBUG
             lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
 #endif
@@ -1782,26 +1781,26 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             aCurSel.Max().SetIndex( nCurPos );
         }
 
-        if ( !pConvInfo->bConvToEnd )
+        if ( !mpConvInfo->bConvToEnd )
         {
             EPaM aEPaM( CreateEPaM( aCurSel.Min() ) );
-            if ( !( aEPaM < pConvInfo->aConvTo ) )
+            if ( !( aEPaM < mpConvInfo->aConvTo ) )
                 break;
         }
 
         // clip selected word to the converted area
         // (main use when conversion starts/ends **within** a word)
-        EditPaM aPaM( CreateEditPaM( pConvInfo->aConvStart ) );
-        if (pConvInfo->bConvToEnd &&
+        EditPaM aPaM( CreateEditPaM( mpConvInfo->aConvStart ) );
+        if (mpConvInfo->bConvToEnd &&
             aCurSel.Min().GetNode() == aPaM.GetNode() &&
             aCurSel.Min().GetIndex() < aPaM.GetIndex())
                 aCurSel.Min().SetIndex( aPaM.GetIndex() );
-        aPaM = CreateEditPaM( pConvInfo->aConvContinue );
+        aPaM = CreateEditPaM( mpConvInfo->aConvContinue );
         if (aCurSel.Min().GetNode() == aPaM.GetNode() &&
             aCurSel.Min().GetIndex() < aPaM.GetIndex())
                 aCurSel.Min().SetIndex( aPaM.GetIndex() );
-        aPaM = CreateEditPaM( pConvInfo->aConvTo );
-        if ((!pConvInfo->bConvToEnd || rConvRange.HasRange())&&
+        aPaM = CreateEditPaM( mpConvInfo->aConvTo );
+        if ((!mpConvInfo->bConvToEnd || rConvRange.HasRange())&&
             aCurSel.Max().GetNode() == aPaM.GetNode() &&
             aCurSel.Max().GetIndex() > aPaM.GetIndex())
                 aCurSel.Max().SetIndex( aPaM.GetIndex() );
@@ -1815,7 +1814,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         if ( aRes.isEmpty() )
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
 
-        pConvInfo->aConvContinue = CreateEPaM( aCurSel.Max() );
+        mpConvInfo->aConvContinue = CreateEPaM( aCurSel.Max() );
     }
 
     pEditView->pImpEditView->DrawSelectionXOR();
@@ -1831,7 +1830,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
 
 Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 {
-    DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
+    DBG_ASSERT(mxSpeller.is(), "No spell checker set!");
 
     ContentNode* pLastNode = maEditDoc.GetObject( maEditDoc.Count()-1 );
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
@@ -1844,7 +1843,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         // Known (most likely) bug: If SpellToCurrent, the current has to be
         // corrected at each replacement, otherwise it may not fit exactly in
         // the end ...
-        if ( pSpellInfo->bSpellToEnd || pSpellInfo->bMultipleDoc )
+        if (mpSpellInfo->bSpellToEnd || mpSpellInfo->bMultipleDoc)
         {
             if ( aCurSel.Max().GetNode() == pLastNode )
             {
@@ -1852,10 +1851,10 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
                     break;
             }
         }
-        else if ( !pSpellInfo->bSpellToEnd )
+        else if (!mpSpellInfo->bSpellToEnd)
         {
             EPaM aEPaM( CreateEPaM( aCurSel.Max() ) );
-            if ( !( aEPaM < pSpellInfo->aSpellTo ) )
+            if (!(aEPaM < mpSpellInfo->aSpellTo))
                 break;
         }
 
@@ -1877,14 +1876,14 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         if ( !aWord.isEmpty() )
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() ).nLang;
-            SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
-            xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
+            SvxSpellWrapper::CheckSpellLang(mxSpeller, eLang);
+            xSpellAlt = mxSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
         }
 
         if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
         else
-            pSpellInfo->eState = EESpellState::ErrorFound;
+            mpSpellInfo->eState = EESpellState::ErrorFound;
     }
 
     pEditView->pImpEditView->DrawSelectionXOR();
@@ -1925,13 +1924,13 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
         }
 
         if ( !aWord.isEmpty() )
-            xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(GetLanguage( aCurSel.Max() ).nLang), aEmptySeq );
+            xSpellAlt = mxSpeller->spell( aWord, static_cast<sal_uInt16>(GetLanguage( aCurSel.Max() ).nLang), aEmptySeq );
 
         if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
         else
         {
-            pSpellInfo->eState = EESpellState::ErrorFound;
+            mpSpellInfo->eState = EESpellState::ErrorFound;
             rSelection = aCurSel;
         }
     }
@@ -1943,12 +1942,12 @@ bool ImpEditEngine::SpellSentence(EditView const & rEditView,
 {
     bool bRet = false;
     EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
-    if(!pSpellInfo)
+    if (!mpSpellInfo)
         CreateSpellInfo( true );
-    pSpellInfo->aCurSentenceStart = aCurSel.Min();
-    DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
-    pSpellInfo->aLastSpellPortions.clear();
-    pSpellInfo->aLastSpellContentSelections.clear();
+    mpSpellInfo->aCurSentenceStart = aCurSel.Min();
+    DBG_ASSERT(mxSpeller.is(), "No spell checker set!");
+    mpSpellInfo->aLastSpellPortions.clear();
+    mpSpellInfo->aLastSpellContentSelections.clear();
     rToFill.clear();
     //if no selection previously exists the range is extended to the end of the object
     if (!aCurSel.HasRange())
@@ -2015,8 +2014,8 @@ void ImpEditEngine::AddPortion(
     rToFill.push_back(aPortion);
 
     //save the spelled portions for later use
-    pSpellInfo->aLastSpellPortions.push_back(aPortion);
-    pSpellInfo->aLastSpellContentSelections.push_back(rSel);
+    mpSpellInfo->aLastSpellPortions.push_back(aPortion);
+    mpSpellInfo->aLastSpellContentSelections.push_back(rSel);
 }
 
 // Adds one or more portions of text to the SpellPortions depending on language changes
@@ -2095,8 +2094,8 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
     // Note: rNewPortions.size() == 0 is valid and happens when the whole
     // sentence got removed in the dialog
 
-    DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized");
-    if (!pSpellInfo || pSpellInfo->aLastSpellPortions.empty())  // no portions -> no text to be changed
+    DBG_ASSERT(mpSpellInfo, "mpSpellInfo not initialized");
+    if (!mpSpellInfo || mpSpellInfo->aLastSpellPortions.empty())  // no portions -> no text to be changed
         return;
 
     // get current paragraph length to calculate later on how the sentence length changed,
@@ -2105,17 +2104,17 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
     sal_Int32 nOldLen = aOldSel.Max().GetNode()->Len();
 
     UndoActionStart( EDITUNDO_INSERT );
-    if(pSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
+    if (mpSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
     {
-        DBG_ASSERT( !rNewPortions.empty(), "rNewPortions should not be empty here" );
-        DBG_ASSERT( pSpellInfo->aLastSpellPortions.size() == pSpellInfo->aLastSpellContentSelections.size(),
-                "aLastSpellPortions and aLastSpellContentSelections size mismatch" );
+        DBG_ASSERT(!rNewPortions.empty(), "rNewPortions should not be empty here");
+        DBG_ASSERT(mpSpellInfo->aLastSpellPortions.size() == mpSpellInfo->aLastSpellContentSelections.size(),
+                "aLastSpellPortions and aLastSpellContentSelections size mismatch");
 
         //the simple case: the same number of elements on both sides
         //each changed element has to be applied to the corresponding source element
         svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
-        svx::SpellPortions::const_iterator aCurrentOldPortion = pSpellInfo->aLastSpellPortions.end();
-        SpellContentSelections::const_iterator aCurrentOldPosition = pSpellInfo->aLastSpellContentSelections.end();
+        svx::SpellPortions::const_iterator aCurrentOldPortion = mpSpellInfo->aLastSpellPortions.end();
+        SpellContentSelections::const_iterator aCurrentOldPosition = mpSpellInfo->aLastSpellContentSelections.end();
         bool bSetToEnd = false;
         do
         {
@@ -2158,12 +2157,12 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
     }
     else
     {
-        DBG_ASSERT( !pSpellInfo->aLastSpellContentSelections.empty(), "aLastSpellContentSelections should not be empty here" );
+        DBG_ASSERT( !mpSpellInfo->aLastSpellContentSelections.empty(), "aLastSpellContentSelections should not be empty here" );
 
         //select the complete sentence
-        SpellContentSelections::const_iterator aCurrentEndPosition = pSpellInfo->aLastSpellContentSelections.end();
+        SpellContentSelections::const_iterator aCurrentEndPosition = mpSpellInfo->aLastSpellContentSelections.end();
         --aCurrentEndPosition;
-        SpellContentSelections::const_iterator aCurrentStartPosition = pSpellInfo->aLastSpellContentSelections.begin();
+        SpellContentSelections::const_iterator aCurrentStartPosition = mpSpellInfo->aLastSpellContentSelections.begin();
         EditSelection aAllSentence(aCurrentStartPosition->Min(), aCurrentEndPosition->Max());
 
         //delete the sentence completely
@@ -2195,7 +2194,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
 
     EditPaM aNext;
     if (bRecheck)
-        aNext = pSpellInfo->aCurSentenceStart;
+        aNext = mpSpellInfo->aCurSentenceStart;
     else
     {
         // restore cursor position to the end of the modified sentence.
@@ -2214,9 +2213,9 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
 
 void ImpEditEngine::PutSpellingToSentenceStart( EditView const & rEditView )
 {
-    if( pSpellInfo && !pSpellInfo->aLastSpellContentSelections.empty() )
+    if (mpSpellInfo && !mpSpellInfo->aLastSpellContentSelections.empty())
     {
-        rEditView.pImpEditView->SetEditSelection( pSpellInfo->aLastSpellContentSelections.begin()->Min() );
+        rEditView.pImpEditView->SetEditSelection(mpSpellInfo->aLastSpellContentSelections.begin()->Min());
     }
 }
 
@@ -2234,13 +2233,13 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
       even out properly with VDev on transitions from wrong => right)
     */
 
-    if ( !xSpeller.is() )
+    if (!mxSpeller.is())
         return;
 
     EditPaM aCursorPos;
-    if( pActiveView && !bSpellAtCursorPos )
+    if (mpActiveView && !bSpellAtCursorPos)
     {
-        aCursorPos = pActiveView->pImpEditView->GetEditSelection().Max();
+        aCursorPos = mpActiveView->pImpEditView->GetEditSelection().Max();
     }
 
     bool bRestartTimer = false;
@@ -2296,7 +2295,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 {
                     const sal_Int32 nWStart = aSel.Min().GetIndex();
                     const sal_Int32 nWEnd = aSel.Max().GetIndex();
-                    if ( !xSpeller->isValid( aWord, static_cast<sal_uInt16>(GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ).nLang), aEmptySeq ) )
+                    if (!mxSpeller->isValid( aWord, static_cast<sal_uInt16>(GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ).nLang), aEmptySeq))
                     {
                         // Check if already marked correctly...
                         const sal_Int32 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
@@ -2363,7 +2362,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 maStatus.GetStatusWord() |= EditStatusFlags::WRONGWORDCHANGED;
                 CallStatusHdl();
 
-                if (!aEditViews.empty())
+                if (!maEditViews.empty())
                 {
                     // For SimpleRepaint one was painted over a range without
                     // reaching VDEV, but then one would have to intersect, c
@@ -2372,21 +2371,21 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     EditPaM aEndPaM( pNode, nPaintTo );
                     tools::Rectangle aStartCursor( PaMtoEditCursor( aStartPaM ) );
                     tools::Rectangle aEndCursor( PaMtoEditCursor( aEndPaM ) );
-                    DBG_ASSERT( aInvalidRect.IsEmpty(), "InvalidRect set!" );
-                    aInvalidRect.SetLeft( 0 );
-                    aInvalidRect.SetRight( GetPaperSize().Width() );
-                    aInvalidRect.SetTop( aStartCursor.Top() );
-                    aInvalidRect.SetBottom( aEndCursor.Bottom() );
-                    if ( pActiveView && pActiveView->HasSelection() )
+                    DBG_ASSERT(maInvalidRect.IsEmpty(), "InvalidRect set!");
+                    maInvalidRect.SetLeft( 0 );
+                    maInvalidRect.SetRight( GetPaperSize().Width() );
+                    maInvalidRect.SetTop( aStartCursor.Top() );
+                    maInvalidRect.SetBottom( aEndCursor.Bottom() );
+                    if (mpActiveView && mpActiveView->HasSelection())
                     {
                         // Then no output through VDev.
                         UpdateViews();
                     }
                     else if ( bSimpleRepaint )
                     {
-                        for (EditView* pView : aEditViews)
+                        for (EditView* pView : maEditViews)
                         {
-                            tools::Rectangle aClipRect( aInvalidRect );
+                            tools::Rectangle aClipRect(maInvalidRect);
                             aClipRect.Intersection( pView->GetVisArea() );
                             if ( !aClipRect.IsEmpty() )
                             {
@@ -2398,9 +2397,9 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     }
                     else
                     {
-                        UpdateViews( pActiveView );
+                        UpdateViews(mpActiveView);
                     }
-                    aInvalidRect = tools::Rectangle();
+                    maInvalidRect = tools::Rectangle();
                 }
             }
             // After two corrected nodes give up the control...
@@ -2416,13 +2415,13 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             break;
     }
     if ( bRestartTimer )
-        aOnlineSpellTimer.Start();
+        maOnlineSpellTimer.Start();
 }
 
 
 EESpellState ImpEditEngine::HasSpellErrors()
 {
-    DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
+    DBG_ASSERT(mxSpeller.is(), "No spell checker set!");
 
     ContentNode* pLastNode = maEditDoc.GetObject( maEditDoc.Count() - 1 );
     EditSelection aCurSel( maEditDoc.GetStartPaM() );
@@ -2443,8 +2442,8 @@ EESpellState ImpEditEngine::HasSpellErrors()
         if ( !aWord.isEmpty() )
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() ).nLang;
-            SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
-            xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
+            SvxSpellWrapper::CheckSpellLang(mxSpeller, eLang);
+            xSpellAlt = mxSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
         }
         aCurSel = WordRight( aCurSel.Max(), css::i18n::WordType::DICTIONARY_WORD );
     }
@@ -2674,8 +2673,8 @@ bool ImpEditEngine::HasText( const SvxSearchItem& rSearchItem )
 void ImpEditEngine::SetAutoCompleteText(const OUString& rStr, bool bClearTipWindow)
 {
     maAutoCompleteText = rStr;
-    if ( bClearTipWindow && pActiveView )
-        Help::ShowQuickHelp( pActiveView->GetWindow(), tools::Rectangle(), OUString() );
+    if ( bClearTipWindow && mpActiveView )
+        Help::ShowQuickHelp( mpActiveView->GetWindow(), tools::Rectangle(), OUString() );
 }
 
 namespace
@@ -2972,7 +2971,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 aNewSel = aSel;
 
                 ESelection aESel( CreateESel( aSel ) );
-                pUndo.reset(new EditUndoTransliteration(pEditEngine, aESel, nTransliterationMode));
+                pUndo.reset(new EditUndoTransliteration(mpEditEngine, aESel, nTransliterationMode));
 
                 const bool bSingleNode = aSel.Min().GetNode()== aSel.Max().GetNode();
                 const bool bHasAttribs = aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
