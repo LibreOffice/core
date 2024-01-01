@@ -314,7 +314,8 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
         SolarMutexGuard aSolarGuard;
 
         OUString sConnectingContext(DBA_RES(STR_COULDNOTCONNECT_DATASOURCE));
-        sConnectingContext = sConnectingContext.replaceFirst("$name$", getStrippedDatabaseName());
+        OUString sDatabaseName;
+        sConnectingContext = sConnectingContext.replaceFirst("$name$", ::dbaui::getStrippedDatabaseName(m_xDataSource, sDatabaseName));
 
         // do the connection *without* holding getMutex() to avoid deadlock
         // when we are not in the main thread and we need username/password

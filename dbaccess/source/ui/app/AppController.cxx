@@ -362,11 +362,12 @@ void SAL_CALL OApplicationController::disposing()
                     if ( pFilter )
                         aFilter = pFilter->GetFilterName();
 
+                    OUString sDatabaseName;
                     // add to svtool history options
                     SvtHistoryOptions::AppendItem( EHistoryType::PickList,
                             aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                             aFilter,
-                            getStrippedDatabaseName(),
+                            ::dbaui::getStrippedDatabaseName(m_xDataSource, sDatabaseName),
                             std::nullopt, std::nullopt);
 
                     // add to recent document list
@@ -504,7 +505,8 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend)
                 )
             )
         {
-            switch (ExecuteQuerySaveDocument(getFrameWeld(), getStrippedDatabaseName()))
+            OUString sDatabaseName;
+            switch (ExecuteQuerySaveDocument(getFrameWeld(), ::dbaui::getStrippedDatabaseName(m_xDataSource, sDatabaseName)))
             {
                 case RET_YES:
                     Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());

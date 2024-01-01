@@ -321,7 +321,8 @@ void SAL_CALL OApplicationController::connect(  )
 
         // no particular error, but nonetheless could not connect -> throw a generic exception
         OUString sConnectingContext( DBA_RES( STR_COULDNOTCONNECT_DATASOURCE ) );
-        ::dbtools::throwGenericSQLException( sConnectingContext.replaceFirst( "$name$", getStrippedDatabaseName() ), *this );
+        OUString sDatabaseName;
+        ::dbtools::throwGenericSQLException( sConnectingContext.replaceFirst( "$name$", ::dbaui::getStrippedDatabaseName(m_xDataSource, sDatabaseName) ), *this );
     }
 }
 
@@ -548,12 +549,6 @@ OUString OApplicationController::getDatabaseName() const
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return sDatabaseName;
-}
-
-OUString OApplicationController::getStrippedDatabaseName() const
-{
-    OUString sDatabaseName;
-    return ::dbaui::getStrippedDatabaseName( m_xDataSource, sDatabaseName );
 }
 
 void OApplicationController::onDocumentOpened( const OUString& _rName, const sal_Int32 _nType,
