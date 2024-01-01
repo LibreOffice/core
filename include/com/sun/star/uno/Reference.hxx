@@ -129,12 +129,15 @@ inline Reference< interface_type >::Reference( const Reference< interface_type >
 }
 
 #if defined LIBO_INTERNAL_ONLY
+
+#if !defined(__COVERITY__)
 template< class interface_type >
 inline Reference< interface_type >::Reference( Reference< interface_type > && rRef ) noexcept
 {
     _pInterface = rRef._pInterface;
     rRef._pInterface = nullptr;
 }
+#endif
 
 template< class interface_type > template< class derived_type >
 inline Reference< interface_type >::Reference(

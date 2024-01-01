@@ -146,7 +146,9 @@ public:
     inline Any & SAL_CALL operator = ( const Any & rAny );
 
 #if defined LIBO_INTERNAL_ONLY
+#if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     inline Any(Any && other) noexcept;
+#endif
     inline Any & operator =(Any && other) noexcept;
 #endif
 

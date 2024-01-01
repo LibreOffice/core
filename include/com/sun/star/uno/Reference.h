@@ -264,7 +264,9 @@ public:
 
         @param rRef another reference
     */
+#if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     inline Reference( Reference< interface_type > && rRef ) noexcept;
+#endif
 
     /** Up-casting conversion constructor: Copies interface reference.
 

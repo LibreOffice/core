@@ -133,6 +133,7 @@ inline Any & Any::operator = ( const Any & rAny )
 
 #if defined LIBO_INTERNAL_ONLY
 
+#if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
 Any::Any(Any && other) noexcept {
     uno_any_construct(this, nullptr, nullptr, &cpp_acquire);
     std::swap(other.pType, pType);
@@ -146,6 +147,7 @@ Any::Any(Any && other) noexcept {
     // only that it isn't a nullptr (as e.g. >>= -> uno_type_assignData ->
     // _assignData takes a null pSource to mean "construct a default value").
 }
+#endif
 
 Any & Any::operator =(Any && other) noexcept {
     std::swap(other.pType, pType);

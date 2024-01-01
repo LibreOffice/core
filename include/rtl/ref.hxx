@@ -83,6 +83,7 @@ public:
     }
 
 #ifdef LIBO_INTERNAL_ONLY
+#if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     /** Move constructor...
      */
     Reference (Reference<reference_type> && handle) noexcept
@@ -90,6 +91,7 @@ public:
     {
         handle.m_pBody = nullptr;
     }
+#endif
 #endif
 
 #if defined LIBO_INTERNAL_ONLY

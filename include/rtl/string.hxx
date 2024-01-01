@@ -229,6 +229,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
+#if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     /**
       Move constructor.
 
@@ -255,6 +256,7 @@ public:
         str.pData = nullptr;
         rtl_string_new( &str.pData );
     }
+#endif
 #endif
 
     /**
