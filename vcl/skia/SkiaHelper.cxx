@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <config_features.h>
+
 #include <string_view>
 
 #include <vcl/skia/SkiaHelper.hxx>
@@ -34,6 +36,7 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #include <driverblocklist.hxx>
 #include <skia/utils.hxx>
 #include <config_folders.h>
+#include <config_skia.h>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <list>
