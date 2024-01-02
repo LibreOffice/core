@@ -81,7 +81,7 @@ void SwColumnFrame::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterEndElement(writer);
 }
 
-static void lcl_RemoveColumns( SwLayoutFrame *pCont, sal_uInt16 nCnt )
+static void lcl_RemoveColumns(SwLayoutFrame *pCont, sal_uInt16 nCnt, const SwFrame *pSave)
 {
     OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrame(),
             "no columns to remove." );
@@ -98,6 +98,7 @@ static void lcl_RemoveColumns( SwLayoutFrame *pCont, sal_uInt16 nCnt )
     {
         SwColumnFrame *pTmp = static_cast<SwColumnFrame*>(pColumn->GetPrev());
         pColumn->Cut();
+        assert(pSave != pColumn && "we will deref pSave later, so shouldn't be deleted here"); (void)pSave;
         SwFrame::DestroyFrame(pColumn); //format is going to be destroyed in the DTor if needed.
         pColumn = pTmp;
     }
@@ -247,7 +248,7 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
         //If columns exist, they get deleted if a column count of 0 or 1 is requested.
         if ( nNewNum == 1 && !bAtEnd )
         {
-            ::lcl_RemoveColumns( this, nOldNum );
+            ::lcl_RemoveColumns( this, nOldNum, pSave );
             if ( IsBodyFrame() )
                 SetFrameFormat( pDoc->GetDfltFrameFormat() );
             else
@@ -267,7 +268,7 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
         }
         if ( nOldNum > nNewNum )
         {
-            ::lcl_RemoveColumns( this, nOldNum - nNewNum );
+            ::lcl_RemoveColumns( this, nOldNum - nNewNum, pSave );
             bAdjustAttributes = true;
         }
         else if( nOldNum < nNewNum )
