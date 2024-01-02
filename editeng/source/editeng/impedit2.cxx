@@ -2199,36 +2199,42 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     // do not lose sight of the Position !
     ParaPortion* pDestPortion = GetParaPortions().SafeGetObject( nNewPos );
 
-    ParaPortionList aTmpPortionList;
+    // Temporary containers used for moving the paragraph portions and content nodes to a new location
+    std::vector<std::unique_ptr<ParaPortion>> aParagraphPortionVector;
+    std::vector<std::unique_ptr<ContentNode>> aContentNodeVector;
+
+    // Take the paragraph portions and content nodes out of its containers
     for (tools::Long i = aOldPositions.Min(); i <= aOldPositions.Max(); i++  )
     {
-        // always aOldPositions.Min(), since Remove().
-        std::unique_ptr<ParaPortion> pTmpPortion = GetParaPortions().Release(aOldPositions.Min());
-        auto pContentNode = maEditDoc.Release(aOldPositions.Min());
-        pContentNode.release();
-        aTmpPortionList.Append(std::move(pTmpPortion));
+        // always aOldPositions.Min() as the index, since we remove and the elements from the containers and the
+        // other elements shift to the left.
+        std::unique_ptr<ParaPortion> pPortion = GetParaPortions().Release(aOldPositions.Min());
+        aParagraphPortionVector.push_back(std::move(pPortion));
+
+        std::unique_ptr<ContentNode> pContentNode = maEditDoc.Release(aOldPositions.Min());
+        aContentNodeVector.push_back(std::move(pContentNode));
     }
 
+    // Determine the new location for paragraphs
     sal_Int32 nRealNewPos = pDestPortion ? GetParaPortions().GetPos( pDestPortion ) : GetParaPortions().Count();
     assert( nRealNewPos != EE_PARA_NOT_FOUND && "ImpMoveParagraphs: Invalid Position!" );
 
+    // Add the paragraph portions and content nodes to a new position
     sal_Int32 i = 0;
-    while( aTmpPortionList.Count() > 0 )
+    for (auto& pPortion : aParagraphPortionVector)
     {
-        std::unique_ptr<ParaPortion> pTmpPortion = aTmpPortionList.Release(0);
-        if ( i == 0 )
-            aSelection.Min().SetNode( pTmpPortion->GetNode() );
+        if (i == 0)
+            aSelection.Min().SetNode(pPortion->GetNode());
+        aSelection.Max().SetNode(pPortion->GetNode());
+        aSelection.Max().SetIndex(pPortion->GetNode()->Len());
 
-        aSelection.Max().SetNode( pTmpPortion->GetNode() );
-        aSelection.Max().SetIndex( pTmpPortion->GetNode()->Len() );
+        maEditDoc.Insert(nRealNewPos + i, std::move(aContentNodeVector[i]));
+        GetParaPortions().Insert(nRealNewPos + i, std::move(pPortion));
 
-        ContentNode* pNode = pTmpPortion->GetNode();
-        maEditDoc.Insert(nRealNewPos+i, std::unique_ptr<ContentNode>(pNode));
-
-        GetParaPortions().Insert(nRealNewPos+i, std::move(pTmpPortion));
         ++i;
     }
 
+    // Signal end of paragraph moving
     maEndMovingParagraphsHdl.Call( aMoveParagraphsInfo );
 
     if ( GetNotifyHdl().IsSet() )
