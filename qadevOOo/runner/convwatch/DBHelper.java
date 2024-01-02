@@ -109,12 +109,15 @@ public class DBHelper
             ExecSQL( _aCon, aUpdateStr.toString() );
         }
 
+    private static final Object settingsLock = new Object();
     private static String m_sDBServerName;
     private static String m_sDBName;
     private static String m_sDBUser;
     private static String m_sDBPasswd;
 
-    protected synchronized void fillDBConnection(String _sInfo)
+    protected void fillDBConnection(String _sInfo)
+    {
+        synchronized (settingsLock)
         {
             StringTokenizer aTokenizer = new StringTokenizer(_sInfo,",",false);
             while (aTokenizer.hasMoreTokens())
@@ -138,6 +141,7 @@ public class DBHelper
                 }
             }
         }
+    }
 
     /**
      * This method establishes a Connection<br>
@@ -145,6 +149,8 @@ public class DBHelper
      */
 
     public static Connection getMySQLConnection() throws SQLException
+    {
+        synchronized (settingsLock)
         {
             try
             {
@@ -162,6 +168,7 @@ public class DBHelper
             }
             return null;
         }
+    }
 
     private synchronized void ExecSQL(Connection _aCon, String _sSQL)
             {
