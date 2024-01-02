@@ -53,7 +53,7 @@ $(eval $(call gb_Executable_add_ldflags,test_updater_dialog,\
 else
 
 $(eval $(call gb_Executable_add_defs,test_updater_dialog,\
-	-DVERIFY_MAR_SIGNATURE \
+	-DMOZ_VERIFY_MAR_SIGNATURE \
 	-DNSS3 \
 ))
 

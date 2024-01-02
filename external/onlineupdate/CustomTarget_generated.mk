@@ -9,31 +9,14 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,external/onlineupdate/generated))
 
-onlineupdate_INC := $(call gb_CustomTarget_get_workdir,external/onlineupdate/generated)/onlineupdate
+onlineupdate_INC := $(call gb_CustomTarget_get_workdir,external/onlineupdate/generated)
 
-# For debug purposes, ONLINEUPDATE_MAR_CERTIFICATEDER can be empty, but gen_cert_header.py always
-# expects an existing certificate-der=... pathname, so as a hack fall back to the generated
-# update.ini itself as the pathname of the certificate DER file (though that will cause
-# gen_cert_header.py to generate nonsense data, of course):
-$(call gb_CustomTarget_get_workdir,onlineupdate/generated)/update.ini: | \
-        $(call gb_CustomTarget_get_workdir,onlineupdate/generated)/.dir
-	printf '[Updater]\ncertificate-der=%s\n' '$(or $(ONLINEUPDATE_MAR_CERTIFICATEDER),$@)' > $@
-
-$(onlineupdate_INC)/primaryCert.h : \
+$(onlineupdate_INC)/primaryCert.h $(onlineupdate_INC)/secondaryCert.h : \
 		$(call gb_ExternalExecutable_get_dependencies,python) \
-		$(call gb_CustomTarget_get_workdir,onlineupdate/generated)/update.ini \
         | $(call gb_UnpackedTarball_get_target,onlineupdate)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,,1)
 	mkdir -p $(dir $@)
-	$(call gb_ExternalExecutable_get_command,python) $(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/updater/gen_cert_header.py "primaryCertData" $(call gb_CustomTarget_get_workdir,onlineupdate/generated)/update.ini > $(onlineupdate_INC)/primaryCert.h
-
-$(onlineupdate_INC)/secondaryCert.h : \
-		$(call gb_ExternalExecutable_get_dependencies,python) \
-		$(call gb_CustomTarget_get_workdir,onlineupdate/generated)/update.ini \
-        | $(call gb_UnpackedTarball_get_target,onlineupdate)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,,1)
-	mkdir -p $(dir $@)
-	$(call gb_ExternalExecutable_get_command,python) $(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/updater/gen_cert_header.py "secondaryCertData" $(call gb_CustomTarget_get_workdir,onlineupdate/generated)/update.ini > $(onlineupdate_INC)/secondaryCert.h
+	PYPATH=$${PYPATH:+$$PYPATH$(gb_CLASSPATHSEP)}'$(call gb_UnpackedTarball_get_dir,onlineupdate)/onlineupdate/source/update/updater' $(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/onlineupdate/generate.py $@ '$(ONLINEUPDATE_MAR_CERTIFICATEDER)'
 
 $(call gb_CustomTarget_get_target,external/onlineupdate/generated) : \
 	$(onlineupdate_INC)/primaryCert.h \

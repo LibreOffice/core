@@ -25,6 +25,7 @@ $(eval $(call gb_Module_add_targets,onlineupdate,\
 	Executable_updater \
 	Executable_mbsdiff \
 	CustomTarget_generated \
+	Package_update-settings_ini \
 	Package_updater_ini \
 ))
 endif
