@@ -384,6 +384,7 @@ void Writer::AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
         SvxFontItem aFont( rFont );
         aFont.SetWhich( RES_CHRATR_FONT );
         pItem = &rPool.DirectPutItemInPool( aFont );
+        assert(pItem != &aFont && "Pointer to local outside scope (pushed to aFontRemoveLst)");
     }
     else
         pItem = &rPool.DirectPutItemInPool( rFont );
