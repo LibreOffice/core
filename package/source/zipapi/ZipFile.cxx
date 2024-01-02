@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/digest.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -952,8 +953,10 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nSize = nSize;
             aEntry.nOffset = nOffset;
 
-            aEntry.nOffset += nLocPos;
-            aEntry.nOffset *= -1;
+            if (o3tl::checked_add<sal_Int64>(aEntry.nOffset, nLocPos, aEntry.nOffset))
+                throw ZipException("Integer-overflow");
+            if (o3tl::checked_multiply<sal_Int64>(aEntry.nOffset, -1, aEntry.nOffset))
+                throw ZipException("Integer-overflow");
 
             if ( aEntry.nPathLen < 0 )
                 throw ZipException("unexpected name length" );
