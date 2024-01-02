@@ -655,7 +655,7 @@ sub replace_setup_variables
     my $updateid = $productname . "_" . $libo_version_major . "_" . $$languagestringref;
     $updateid =~ s/ /_/g;
 
-    my $updatechannel = $ENV{'ONLINEUPDATE_MAR_CHANNEL'};
+    my $updatechannel = 'LOOnlineUpdater';
 
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {
