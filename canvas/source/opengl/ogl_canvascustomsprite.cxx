@@ -193,9 +193,9 @@ namespace oglcanvas
                             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(mxClip)));
 
                     glBegin(GL_TRIANGLES);
-                    for( size_t i=0; i<rTriangulatedPolygon.size(); i++ )
+                    for(const auto& i : rTriangulatedPolygon)
                     {
-                        const::basegfx::triangulator::B2DTriangle& rCandidate(rTriangulatedPolygon[i]);
+                        const::basegfx::triangulator::B2DTriangle& rCandidate(i);
                         glTexCoord2f(
                             rCandidate.getA().getX()/fWidth,
                             rCandidate.getA().getY()/fHeight);
