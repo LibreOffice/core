@@ -57,8 +57,8 @@ class ConstantValueExpression : public ExpressionNode
 
 public:
 
-    explicit ConstantValueExpression( ORowSetValueDecoratorRef aValue ) :
-        maValue(std::move( aValue ))
+    explicit ConstantValueExpression(ORowSetValueDecoratorRef aValue)
+        : maValue(std::move(aValue))
     {
     }
     virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const override
@@ -156,7 +156,7 @@ public:
     void operator()( StringIteratorT rFirst,StringIteratorT rSecond) const
     {
         OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-        mpContext->maOperandStack.push( std::make_shared<ConstantValueExpression>( new ORowSetValueDecorator( sVal ) ) );
+        mpContext->maOperandStack.push(std::make_shared<ConstantValueExpression>(ORowSetValueDecoratorRef(new ORowSetValueDecorator(sVal))));
     }
 };
 
@@ -173,7 +173,7 @@ public:
     }
     void operator()( sal_Int32 n ) const
     {
-        mpContext->maOperandStack.push( std::make_shared<ConstantValueExpression>( new ORowSetValueDecorator( n ) ) );
+        mpContext->maOperandStack.push(std::make_shared<ConstantValueExpression>(ORowSetValueDecoratorRef(new ORowSetValueDecorator(n))));
     }
 };
 
