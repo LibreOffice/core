@@ -1126,8 +1126,10 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nSize = nSize;
             aEntry.nOffset = nOffset;
 
-            aEntry.nOffset += nLocPos;
-            aEntry.nOffset *= -1;
+            if (o3tl::checked_add<sal_Int64>(aEntry.nOffset, nLocPos, aEntry.nOffset))
+                throw ZipException("Integer-overflow");
+            if (o3tl::checked_multiply<sal_Int64>(aEntry.nOffset, -1, aEntry.nOffset))
+                throw ZipException("Integer-overflow");
 
             aMemGrabber.skipBytes(nCommentLen);
             aEntries[aEntry.sPath] = aEntry;
