@@ -64,7 +64,8 @@ $(eval $(call gb_Executable_add_ldflags,updater,\
 ))
 
 $(eval $(call gb_Executable_add_defs,updater,\
-	-DVERIFY_MAR_SIGNATURE \
+	-DMOZ_APP_VERSION=\"$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\" \
+	-DMOZ_VERIFY_MAR_SIGNATURE \
 	-DNS_NO_XPCOM \
 	-DMOZ_MAINTENANCE_SERVICE \
 	-DXP_WIN \
@@ -84,7 +85,8 @@ $(eval $(call gb_Executable_add_defs,updater,\
 else
 
 $(eval $(call gb_Executable_add_defs,updater,\
-	-DVERIFY_MAR_SIGNATURE \
+	-DMOZ_APP_VERSION=\"$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\" \
+	-DMOZ_VERIFY_MAR_SIGNATURE \
 	-DNSS3 \
 	-DNS_NO_XPCOM \
 	-DXP_UNIX \

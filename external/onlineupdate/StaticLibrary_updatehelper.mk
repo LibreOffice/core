@@ -26,7 +26,7 @@ $(eval $(call gb_StaticLibrary_set_include,updatehelper,\
 $(eval $(call gb_StaticLibrary_add_defs,updatehelper,\
 	-DMOZ_MAINTENANCE_SERVICE \
 	-DNSS3 \
-	-DVERIFY_MAR_SIGNATURE \
+	-DMOZ_VERIFY_MAR_SIGNATURE \
 	-DXP_$(if $(filter WNT,$(OS)),WIN,UNIX) \
 	$(if $(filter WNT,$(OS)),-U_WIN32_WINNT) \
 ))
