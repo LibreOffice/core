@@ -1959,13 +1959,8 @@ void LwpPlacableLayout::Read()
             sal_uInt16 count = pStrm->QuickReaduInt16();
             if (count)
             {
-                // temporarily added by  to avoid assertion
-                while (count)
-                {
-                    LwpPoint aPoint;
-                    aPoint.Read(pStrm);
-                    count--;
-                }
+                // skip 'count' of LwpPoints, each of which is 2 Int32s
+                pStrm->SeekRel(count * 8);
             }
             pStrm->SkipExtra();
         }
