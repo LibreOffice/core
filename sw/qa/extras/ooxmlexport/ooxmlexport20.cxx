@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -1039,6 +1040,55 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
     uno::Reference<text::XTextTable>(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
     getParagraph(2, u"Next page"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
+{
+    // Given a section break and an SDT in the following paragraph
+    load(createFileURL(u"sdt_after_section_break.docx"));
+
+    // Check that the import doesn't introduce unwanted character properties in the paragraph after
+    // the section break
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    {
+        auto para = getParagraph(2, u"text"_ustr);
+        css::uno::Reference<css::beans::XPropertyState> xRunState(getRun(para, 1, u""_ustr),
+                                                                  css::uno::UNO_QUERY_THROW);
+        // without the fix, this would fail with
+        // - Expected: 1
+        // - Actual  : 0
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"RubyAdjust"_ustr));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"RubyIsAbove"_ustr));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"RubyPosition"_ustr));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"UnvisitedCharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"VisitedCharStyleName"_ustr));
+    }
+
+    // Saving must not fail assertions
+    saveAndReload(mpFilter);
+
+    // Check again
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    {
+        auto para = getParagraph(2, u"text"_ustr);
+        css::uno::Reference<css::beans::XPropertyState> xRunState(getRun(para, 1, u""_ustr),
+                                                                  css::uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"RubyAdjust"_ustr));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"RubyIsAbove"_ustr));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"RubyPosition"_ustr));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"UnvisitedCharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState(u"VisitedCharStyleName"_ustr));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
