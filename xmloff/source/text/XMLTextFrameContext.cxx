@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/base64.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/mediamimetype.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -896,7 +897,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_ELEMENT(TEXT, XML_ANCHOR_PAGE_NUMBER):
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertNumber(nTmp, aIter.toView(), 1, SHRT_MAX))
+                sal_Int32 nMax = !comphelper::IsFuzzing() ? SHRT_MAX : 100;
+                if (::sax::Converter::convertNumber(nTmp, aIter.toView(), 1, nMax))
                     nPage = static_cast<sal_Int16>(nTmp);
             }
             break;
