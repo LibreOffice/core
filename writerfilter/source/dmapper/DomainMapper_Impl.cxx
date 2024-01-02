@@ -3517,14 +3517,19 @@ static void checkAndAddPropVal(const OUString& prop, const css::uno::Any& val,
     // Avoid well-known reasons for exceptions when setting property values
     if (!val.hasValue())
         return;
-    if (prop == "CharAutoStyleName" || prop == "ParaAutoStyleName")
-        return;
     if (prop == "CharStyleName" || prop == "DropCapCharStyleName")
         if (OUString val_string; (val >>= val_string) && val_string.isEmpty())
             return;
 
     props.push_back(prop);
     values.push_back(val);
+}
+
+static uno::Reference<lang::XComponent>
+getParagraphOfRange(const css::uno::Reference<css::text::XTextRange>& xRange)
+{
+    uno::Reference<container::XEnumerationAccess> xEA{ xRange, uno::UNO_QUERY_THROW };
+    return { xEA->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW };
 }
 
 static void copyAllProps(const css::uno::Reference<css::uno::XInterface>& from,
@@ -3539,6 +3544,17 @@ static void copyAllProps(const css::uno::Reference<css::uno::XInterface>& from,
     for (const auto& prop : rawProps)
         if ((prop.Attributes & css::beans::PropertyAttribute::READONLY) == 0)
             props.push_back(prop.Name);
+
+    if (css::uno::Reference<css::beans::XPropertyState> xFromState{ from, css::uno::UNO_QUERY })
+    {
+        const auto propsSeq = comphelper::containerToSequence(props);
+        const auto statesSeq = xFromState->getPropertyStates(propsSeq);
+        assert(propsSeq.getLength() == statesSeq.getLength());
+        for (sal_Int32 i = 0; i < propsSeq.getLength(); ++i)
+            if (statesSeq[i] != css::beans::PropertyState_DIRECT_VALUE)
+                std::erase(props, propsSeq[i]);
+    }
+
     std::vector<css::uno::Any> values;
     values.reserve(props.size());
     if (css::uno::Reference<css::beans::XMultiPropertySet> xFromMulti{ xFromProps,
@@ -3614,12 +3630,11 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
             // table; then trying to go left would skip the whole table. Split the trailing
             // paragraph; let the section span over the first of the two resulting paragraphs;
             // destroy the last section's paragraph afterwards.
-            css::uno::Reference<css::text::XTextRange> xEndPara = xCursor->getEnd();
             xTextAppend->insertControlCharacter(
-                xEndPara, css::text::ControlCharacter::PARAGRAPH_BREAK, false);
-            css::uno::Reference<css::text::XTextRange> xNewPara = xCursor->getEnd();
+                xCursor->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK, false);
+            auto xNewPara = getParagraphOfRange(xCursor->getEnd());
             xCursor->gotoPreviousParagraph(true);
-            xEndPara = xCursor->getEnd();
+            auto xEndPara = getParagraphOfRange(xCursor->getEnd());
             // xEndPara may already have properties (like page break); make sure to apply them
             // to the newly appended paragraph, which will be kept in the end.
             copyAllProps(xEndPara, xNewPara);
@@ -3628,14 +3643,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
             xSection->attach(xCursor);
 
             // Remove the extra paragraph (last inside the section)
-            if (uno::Reference<container::XEnumerationAccess> xEA{ xEndPara, uno::UNO_QUERY })
-            {
-                if (uno::Reference<lang::XComponent> xParagraph{
-                        xEA->createEnumeration()->nextElement(), uno::UNO_QUERY })
-                {
-                    xParagraph->dispose();
-                }
-            }
+            xEndPara->dispose();
 
             xRet.set(xSection, uno::UNO_QUERY );
         }
