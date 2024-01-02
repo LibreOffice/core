@@ -70,32 +70,38 @@ BufferedDecompositionGroupPrimitive2D::getBuffered2DDecomposition() const
 
 void BufferedDecompositionGroupPrimitive2D::setBuffered2DDecomposition(Primitive2DContainer&& rNew)
 {
-    if (0 != maCallbackSeconds)
+    if (0 == maCallbackSeconds)
     {
-        if (maCallbackTimer.is())
-        {
-            if (rNew.empty())
-            {
-                // stop timer
-                maCallbackTimer->stop();
-            }
-            else
-            {
-                // decomposition changed, touch
-                maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
-                if (!maCallbackTimer->isTicking())
-                    maCallbackTimer->start();
-            }
-        }
-        else if (!rNew.empty())
-        {
-            // decomposition defined/set/changed, init & start timer
-            maCallbackTimer.set(new LocalCallbackTimer(*this));
-            maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
-            maCallbackTimer->start();
-        }
+        // no flush used, just set
+        maBuffered2DDecomposition = std::move(rNew);
+        return;
     }
 
+    if (maCallbackTimer.is())
+    {
+        if (rNew.empty())
+        {
+            // stop timer
+            maCallbackTimer->stop();
+        }
+        else
+        {
+            // decomposition changed, touch
+            maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
+            if (!maCallbackTimer->isTicking())
+                maCallbackTimer->start();
+        }
+    }
+    else if (!rNew.empty())
+    {
+        // decomposition defined/set/changed, init & start timer
+        maCallbackTimer.set(new LocalCallbackTimer(*this));
+        maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
+        maCallbackTimer->start();
+    }
+
+    // tdf#158913 need to secure change when flush/multithreading is in use
+    std::lock_guard Guard(maCallbackLock);
     maBuffered2DDecomposition = std::move(rNew);
 }
 
@@ -103,6 +109,7 @@ BufferedDecompositionGroupPrimitive2D::BufferedDecompositionGroupPrimitive2D(
     Primitive2DContainer&& aChildren)
     : GroupPrimitive2D(std::move(aChildren))
     , maCallbackTimer()
+    , maCallbackLock()
     , maCallbackSeconds(0)
 {
 }
@@ -129,6 +136,17 @@ void BufferedDecompositionGroupPrimitive2D::get2DDecomposition(
             std::move(aNewSequence));
     }
 
+    if (0 == maCallbackSeconds)
+    {
+        // no flush/multithreading is in use, just call
+        rVisitor.visit(getBuffered2DDecomposition());
+        return;
+    }
+
+    // tdf#158913 need to secure 'visit' when flush/multithreading is in use,
+    // so that the local non-ref-Counted instance of the decomposition gets not
+    // manipulated (e.g. deleted)
+    std::lock_guard Guard(maCallbackLock);
     rVisitor.visit(getBuffered2DDecomposition());
 }
 

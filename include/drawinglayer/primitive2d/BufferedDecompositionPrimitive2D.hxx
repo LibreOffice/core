@@ -71,6 +71,7 @@ private:
 
     /// offer callback mechanism to flush buffered content timer-based
     ::rtl::Reference<::salhelper::Timer> maCallbackTimer;
+    mutable std::mutex maCallbackLock;
     sal_uInt16 maCallbackSeconds;
 
     /// When a shadow wraps a list of primitives, this primitive wants to influence the transparency
