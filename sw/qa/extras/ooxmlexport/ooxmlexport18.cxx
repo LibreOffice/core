@@ -792,6 +792,55 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
     getParagraph(2, "Next page");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
+{
+    // Given a section break and an SDT in the following paragraph
+    loadFromURL(u"sdt_after_section_break.docx");
+
+    // Check that the import doesn't introduce unwanted character properties in the paragraph after
+    // the section break
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    {
+        auto para = getParagraph(2, "text");
+        css::uno::Reference<css::beans::XPropertyState> xRunState(getRun(para, 1, ""),
+                                                                  css::uno::UNO_QUERY_THROW);
+        // without the fix, this would fail with
+        // - Expected: 1
+        // - Actual  : 0
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("RubyAdjust"));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("RubyIsAbove"));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("RubyPosition"));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("UnvisitedCharStyleName"));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("VisitedCharStyleName"));
+    }
+
+    // Saving must not fail assertions
+    saveAndReload(OUString::createFromAscii(mpFilter));
+
+    // Check again
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    {
+        auto para = getParagraph(2, "text");
+        css::uno::Reference<css::beans::XPropertyState> xRunState(getRun(para, 1, ""),
+                                                                  css::uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("RubyAdjust"));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("RubyIsAbove"));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("RubyPosition"));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("UnvisitedCharStyleName"));
+        CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
+                             xRunState->getPropertyState("VisitedCharStyleName"));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
