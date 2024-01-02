@@ -265,25 +265,25 @@ SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem; }
 
 XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
     NameOrIndex(_nWhich, nIndex),
-    aColor(rTheColor)
+    m_aColor(rTheColor)
 {
 }
 
 XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor) :
     NameOrIndex(_nWhich, rName),
-    aColor(rTheColor)
+    m_aColor(rTheColor)
 {
 }
 
 XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const Color& rTheColor)
     : NameOrIndex(_nWhich, OUString())
-    , aColor(rTheColor)
+    , m_aColor(rTheColor)
 {
 }
 
 XColorItem::XColorItem(const XColorItem& rItem) :
     NameOrIndex(rItem),
-    aColor(rItem.aColor),
+    m_aColor(rItem.m_aColor),
     maComplexColor(rItem.maComplexColor)
 {
 }
@@ -296,14 +296,14 @@ XColorItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
 bool XColorItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-            static_cast<const XColorItem&>(rItem).aColor == aColor ) &&
+            static_cast<const XColorItem&>(rItem).m_aColor == m_aColor ) &&
             static_cast<const XColorItem&>(rItem).maComplexColor == maComplexColor;
 }
 
 const Color& XColorItem::GetColorValue() const
 {
     assert(!IsIndex());
-    return aColor;
+    return m_aColor;
 
 }
 
@@ -386,7 +386,7 @@ void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("XATTR_FILLCOLOR"));
     }
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aColor"),
-                                BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
+                                BAD_CAST(m_aColor.AsRGBHexString().toUtf8().getStr()));
 
     NameOrIndex::dumpAsXml(pWriter);
 

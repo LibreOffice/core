@@ -30,7 +30,7 @@ class XColorList;
 
 class SVXCORE_DLLPUBLIC XColorItem : public NameOrIndex
 {
-    Color   aColor;
+    Color   m_aColor;
     model::ComplexColor maComplexColor;
 
 public:
@@ -47,7 +47,7 @@ public:
     virtual XColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     const Color&    GetColorValue() const;
-    void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }
+    void            SetColorValue(const Color& rNew) { m_aColor = rNew; Detach(); }
 
     void setComplexColor(model::ComplexColor const& rComplexColor) { maComplexColor = rComplexColor; }
     const model::ComplexColor& getComplexColor() const { return maComplexColor; }
