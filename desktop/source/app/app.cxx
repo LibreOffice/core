@@ -478,6 +478,13 @@ void Desktop::Init()
     // the UserConfiguration directory
     comphelper::BackupFileHelper::reactOnSafeMode(Application::IsSafeModeEnabled());
 
+    // tdf117100: do not try to re-install extensions after the requested restart
+    if (officecfg::Setup::Office::OfficeRestartInProgress::get())
+    {
+        if (!officecfg::Office::Common::Misc::FirstRun::get())
+            GetCommandLineArgs().RemoveFilesFromOpenListEndingWith(".oxt");
+    }
+
     try
     {
         if (!langselect::prepareLocale())

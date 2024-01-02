@@ -99,6 +99,7 @@ class CommandLineArgs
         bool                    HasSplashPipe() const { return m_splashpipe;}
         std::vector< OUString > const & GetAccept() const { return m_accept;}
         std::vector< OUString > const & GetUnaccept() const { return m_unaccept;}
+        void RemoveFilesFromOpenListEndingWith(const OUString& rExt);
         std::vector< OUString > GetOpenList() const;
         std::vector< OUString > GetViewList() const;
         std::vector< OUString > GetStartList() const;
