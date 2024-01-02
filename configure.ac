@@ -13693,15 +13693,6 @@ else
 fi
 AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATEPATH)
 
-AC_MSG_CHECKING([for mar online update channel])
-ONLINEUPDATE_MAR_CHANNEL=$with_online_update_mar_channel
-if test -n "$ONLINEUPDATE_MAR_CHANNEL"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ONLINEUPDATE_MAR_CHANNEL)
-
 AC_MSG_CHECKING([for mar online update serverurl])
 ONLINEUPDATE_MAR_SERVERURL=$with_online_update_mar_serverurl
 if test -n "$ONLINEUPDATE_MAR_SERVERURL"; then

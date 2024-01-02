@@ -182,7 +182,7 @@ define instsetoo_native_genversionini
 AllLanguages=$(if $(gb_WITH_LANG),$(gb_WITH_LANG),en-US)
 buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)
 ExtensionUpdateURL=https://updateexte.libreoffice.org/ExtensionUpdateService/check.Update
-UpdateChannel=$(if $(ENABLE_ONLINE_UPDATE_MAR),$(ONLINEUPDATE_MAR_CHANNEL))
+UpdateChannel=$(if $(ENABLE_ONLINE_UPDATE_MAR),LOOnlineUpdater)
 ReferenceOOoMajorMinor=4.1
 UpdateID=$(PRODUCTNAME)_$(LIBO_VERSION_MAJOR)_en-US
 UpdateURL=$(if $(ENABLE_ONLINE_UPDATE),https://update.libreoffice.org/check.php$(if $(filter-out WNT,$(OS)),?pkgfmt=$(PKGFORMAT)))
