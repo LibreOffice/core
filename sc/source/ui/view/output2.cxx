@@ -1482,6 +1482,20 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
 
 void ScOutputData::LayoutStrings(bool bPixelToLogic)
 {
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(mpDev->GetExtOutDevData());
+    bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
+    if (bTaggedPDF)
+    {
+        bool bReopenTag = ReopenPDFStructureElement(vcl::PDFWriter::Table);
+        if (!bReopenTag)
+        {
+            sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
+            pPDF->InitStructureElement(nId, vcl::PDFWriter::Table, "Table");
+            pPDF->BeginStructureElement(nId);
+            pPDF->GetScPDFState()->m_TableId = nId;
+        }
+    }
+
     bool bOrigIsInLayoutStrings = mpDoc->IsInLayoutStrings();
     mpDoc->SetLayoutStrings(true);
     OSL_ENSURE( mpDev == mpRefDevice ||
@@ -1502,8 +1516,6 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
     // for the entire formula group, which could be large.
     mpDoc->InterpretCellsIfNeeded( ScRange( nX1, nY1, nTab, nX2, nY2, nTab ));
 
-    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >(mpDev->GetExtOutDevData() );
-
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
     bool bProgress = false;
@@ -1521,7 +1533,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
     }
 
     SCCOL nLoopStartX = nX1;
-    if ( nX1 > 0 )
+    if ( nX1 > 0  && !bTaggedPDF )
         --nLoopStartX;          // start before nX1 for rest of long text to the left
 
     // variables for GetOutputArea
@@ -1546,11 +1558,31 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
         SCROW nY = pThisRowInfo->nRowNo;
         if (pThisRowInfo->bChanged)
         {
+            if (bTaggedPDF)
+            {
+                bool bReopenTag = false;
+                if (nLoopStartX != 0)
+                {
+                    bReopenTag
+                        = ReopenPDFStructureElement(vcl::PDFWriter::TableRow, nY);
+                }
+                if (!bReopenTag)
+                {
+                    sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
+                    pPDF->InitStructureElement(nId, vcl::PDFWriter::TableRow, "TR");
+                    pPDF->BeginStructureElement(nId);
+                    pPDF->GetScPDFState()->m_TableRowMap.emplace(nY, nId);
+                }
+            }
+
             tools::Long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
                 nPosX -= pRowInfo[0].basicCellInfo(nLoopStartX).nWidth * nLayoutSign;
             for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
+                if (bTaggedPDF)
+                    pPDF->WrapBeginStructureElement(vcl::PDFWriter::TableData, "TD");
+
                 bool bMergeEmpty = false;
                 const ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bEmpty = nX < nX1 || pThisRowInfo->basicCellInfo(nX).bEmptyCellText;
@@ -1880,6 +1912,13 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                     RowInfo* pMarkRowInfo = ( nCellY == nY ) ? pThisRowInfo : &pRowInfo[0];
                     pMarkRowInfo->basicCellInfo(nMarkX).bEditEngine = true;
                     bDoCell = false;    // don't draw here
+
+                    // Mark the tagged "TD" structure element to be drawn in DrawEdit
+                    if (bTaggedPDF)
+                    {
+                        sal_Int32 nId = pPDF->GetCurrentStructureElement();
+                        pPDF->GetScPDFState()->m_TableDataMap[{nY, nX}] = nId;
+                    }
                 }
                 if ( bDoCell )
                 {
@@ -2088,6 +2127,9 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                         const OUString& aString = aVars.GetString();
                         if (!aString.isEmpty())
                         {
+                            if (bTaggedPDF)
+                                pPDF->WrapBeginStructureElement(vcl::PDFWriter::Paragraph, "P");
+
                             // If the string is clipped, make it shorter for
                             // better performance since drawing by HarfBuzz is
                             // quite expensive especially for long string.
@@ -2154,6 +2196,8 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                                 mpDev->DrawText(aDrawTextPos, aShort, 0, -1, nullptr, nullptr,
                                     aVars.GetLayoutGlyphs(aShort));
                             }
+                            if (bTaggedPDF)
+                                pPDF->EndStructureElement();
                         }
 
                         if ( bHClip || bVClip )
@@ -2165,7 +2209,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                         }
 
                         // PDF: whole-cell hyperlink from formula?
-                        bool bHasURL = pPDFData && aCell.getType() == CELLTYPE_FORMULA && aCell.getFormula()->IsHyperLinkCell();
+                        bool bHasURL = pPDF && aCell.getType() == CELLTYPE_FORMULA && aCell.getFormula()->IsHyperLinkCell();
                         if (bHasURL)
                         {
                             tools::Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
@@ -2174,10 +2218,17 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                     }
                 }
                 nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+                if (bTaggedPDF)
+                    pPDF->EndStructureElement();
             }
+            if (bTaggedPDF)
+                pPDF->EndStructureElement();
         }
         nPosY += pRowInfo[nArrY].nHeight;
     }
+    if (bTaggedPDF)
+        pPDF->EndStructureElement();
+
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
 }
@@ -4384,6 +4435,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
 void ScOutputData::DrawEdit(bool bPixelToLogic)
 {
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(mpDev->GetExtOutDevData());
+    bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
+
     InitOutputEditEngine();
 
     bool bHyphenatorSet = false;
@@ -4424,6 +4478,10 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                 if (pThisRowInfo->basicCellInfo(nX).bEditEngine)
                 {
                     SCROW nY = pThisRowInfo->nRowNo;
+
+                    bool bReopenTag = false;
+                    if (bTaggedPDF)
+                        bReopenTag = ReopenPDFStructureElement(vcl::PDFWriter::TableData, nY, nX);
 
                     SCCOL nCellX = nX;                  // position where the cell really starts
                     SCROW nCellY = nY;
@@ -4557,6 +4615,8 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         pOldPreviewFontSet = aParam.mpOldPreviewFontSet;
                         bHyphenatorSet = aParam.mbHyphenatorSet;
                     }
+                    if (bReopenTag)
+                        pPDF->EndStructureElement();
                 }
                 nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }

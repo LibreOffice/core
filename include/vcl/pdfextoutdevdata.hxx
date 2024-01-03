@@ -32,6 +32,7 @@ class Graphic;
 class GDIMetaFile;
 class SdrObject;
 struct SwEnhancedPDFState;
+struct ScEnhancedPDFState;
 
 namespace vcl
 {
@@ -98,6 +99,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData final : public ExtOutDevData
     ::std::map<SdrObject const*, ::std::vector<sal_Int32>> m_ScreenAnnotations;
 
     SwEnhancedPDFState * m_pSwPDFState = nullptr;
+    ScEnhancedPDFState * m_pScPDFState = nullptr;
 
 public:
 
@@ -158,6 +160,9 @@ public:
 
     SwEnhancedPDFState * GetSwPDFState() { return m_pSwPDFState; }
     void SetSwPDFState(SwEnhancedPDFState *const pSwPDFState) { m_pSwPDFState = pSwPDFState; }
+
+    ScEnhancedPDFState* GetScPDFState() { return m_pScPDFState; }
+    void SetScPDFState(ScEnhancedPDFState* const pScPDFState) { m_pScPDFState = pScPDFState; }
 
     const Graphic& GetCurrentGraphic() const;
 

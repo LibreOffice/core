@@ -29,6 +29,7 @@
 #include <svtools/colorcfg.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/fmview.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/paperinf.hxx>
@@ -576,6 +577,20 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
     aOutputData.SetShowNullValues(bNullVal);
     aOutputData.SetShowFormulas(bFormula);
 
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+    bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
+    if (bTaggedPDF)
+    {
+        bool bReopen = aOutputData.ReopenPDFStructureElement(vcl::PDFWriter::Part);
+        if (!bReopen)
+        {
+            sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
+            pPDF->InitStructureElement(nId, vcl::PDFWriter::Part, "Worksheet");
+            pPDF->BeginStructureElement(nId);
+            pPDF->GetScPDFState()->m_WorksheetId = nId;
+        }
+    }
+
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
     std::unique_ptr<FmFormView> pDrawView;
 
@@ -651,6 +666,10 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
 
     // #i72502#
     aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, aMMOffset);
+
+    if (bTaggedPDF)
+        pPDF->EndStructureElement();
+
     aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, aMMOffset);
     aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
 }
@@ -1622,6 +1641,20 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, &rDoc, nPrintTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
 
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+    bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
+    if (bTaggedPDF)
+    {
+        bool bReopen = aOutputData.ReopenPDFStructureElement(vcl::PDFWriter::Part);
+        if (!bReopen)
+        {
+            sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
+            pPDF->InitStructureElement(nId, vcl::PDFWriter::Part, "Worksheet");
+            pPDF->BeginStructureElement(nId);
+            pPDF->GetScPDFState()->m_WorksheetId = nId;
+        }
+    }
+
     aOutputData.SetDrawView( pDrawView );
 
     // test if all paint parts are hidden, then a paint is not necessary at all
@@ -1690,9 +1723,17 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
         aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, aMMOffset);
     }
 
+    if (bTaggedPDF)
+    {
+        aOutputData.PrintDrawingLayer(SC_LAYER_CONTROLS, aMMOffset);
+        pPDF->EndStructureElement();
+    }
+
     // #i72502#
     aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, aMMOffset);
-    aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
+
+    if (!bTaggedPDF)
+        aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
 }
 
 bool ScPrintFunc::IsMirror( tools::Long nPageNo )          // Mirror margins?
@@ -1763,6 +1804,11 @@ void ScPrintFunc::MakeEditEngine()
 void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStartY,
                             bool bDoPrint, ScPreviewLocationData* pLocationData )
 {
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+    bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
+    if (bTaggedPDF)
+        pPDF->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+
     const ScPrintHFParam& rParam = bHeader ? aHdr : aFtr;
 
     pDev->SetMapMode( aTwipMode );          // Head-/Footlines in Twips
@@ -1896,6 +1942,9 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
         tools::Rectangle aHeaderRect( aBorderStart, aBorderSize );
         pLocationData->AddHeaderFooter( aHeaderRect, bHeader, bLeft );
     }
+
+    if (bTaggedPDF)
+        pPDF->EndStructureElement();
 }
 
 tools::Long ScPrintFunc::DoNotes( tools::Long nNoteStart, bool bDoPrint, ScPreviewLocationData* pLocationData )

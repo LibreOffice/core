@@ -26,6 +26,7 @@
 #include <tools/gen.hxx>
 #include <editeng/svxenum.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/pdfwriter.hxx>
 #include <tools/degree.hxx>
 #include <o3tl/deleter.hxx>
 #include <optional>
@@ -60,6 +61,17 @@ enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
 class ClearableClipRegion;
 typedef std::unique_ptr<ClearableClipRegion, o3tl::default_delete<ClearableClipRegion>> ClearableClipRegionPtr;
+
+typedef std::map<SCROW, sal_Int32> TableRowIdMap;
+typedef std::map<std::pair<SCROW, SCCOL>, sal_Int32> TableDataIdMap;
+struct ScEnhancedPDFState
+{
+    sal_Int32 m_WorksheetId = -1;
+    sal_Int32 m_TableId = -1;
+    TableRowIdMap m_TableRowMap;
+    TableDataIdMap m_TableDataMap;
+    ScEnhancedPDFState(){};
+};
 
 /// Describes reference mark to be drawn, position & size in TWIPs
 struct ReferenceMark {
@@ -341,6 +353,9 @@ public:
     tools::Long    GetScrH() const     { return nScrH; }
 
     void    SetSnapPixel();
+
+    bool    ReopenPDFStructureElement(vcl::PDFWriter::StructElement aType, SCROW nRow = -1,
+                                      SCCOL nCol = -1);
 
     void    DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover = false);
     void    DrawStrings( bool bPixelToLogic = false );

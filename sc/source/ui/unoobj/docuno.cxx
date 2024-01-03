@@ -131,6 +131,7 @@
 #include <table.hxx>
 #include <appoptio.hxx>
 #include <formulaopt.hxx>
+#include <output.hxx>
 
 #include <strings.hrc>
 
@@ -2111,6 +2112,156 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     return aSequence;
 }
 
+static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabName, bool bIsFirstPage)
+{
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+    if (pPDF)
+    {
+        css::lang::Locale const docLocale(Application::GetSettings().GetLanguageTag().getLocale());
+        pPDF->SetDocumentLocale(docLocale);
+
+        // first page of a sheet: add outline item for the sheet name
+
+        if (pPDF->GetIsExportBookmarks())
+        {
+            // the sheet starts at the top of the page
+            tools::Rectangle aArea(pDev->PixelToLogic(tools::Rectangle(0, 0, 0, 0)));
+            sal_Int32 nDestID = pPDF->CreateDest(aArea);
+            // top-level
+            pPDF->CreateOutlineItem(-1/*nParent*/, rTabName, nDestID);
+        }
+        // #i56629# add the named destination stuff
+        if (pPDF->GetIsExportNamedDestinations())
+        {
+            tools::Rectangle aArea(pDev->PixelToLogic(tools::Rectangle(0, 0, 0, 0)));
+            //need the PDF page number here
+            pPDF->CreateNamedDest(rTabName, aArea);
+        }
+
+        if (pPDF->GetIsExportTaggedPDF())
+        {
+            if (bIsFirstPage)
+                pPDF->WrapBeginStructureElement(vcl::PDFWriter::Document, "Workbook");
+            else
+            {   // if there is a new worksheet(not first), delete and add new ScPDFState
+                assert(pPDF->GetScPDFState());
+                delete pPDF->GetScPDFState();
+                pPDF->SetScPDFState(nullptr);
+            }
+
+            assert(pPDF->GetScPDFState() == nullptr);
+            pPDF->SetScPDFState(new ScEnhancedPDFState());
+        }
+    }
+}
+
+static void lcl_PDFExportBookmarkHelper(OutputDevice* pDev, ScDocument& rDoc,
+                                        const std::unique_ptr<ScPrintFuncCache>& pPrintFuncCache,
+                                        const ScMarkData& rMark, sal_Int32 nTab)
+{
+    //  resolve the hyperlinks for PDF export
+
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+    if (!pPDF || pPDF->GetBookmarks().empty())
+        return;
+
+    //  iterate over the hyperlinks that were output for this page
+
+    std::vector<vcl::PDFExtOutDevBookmarkEntry>& rBookmarks = pPDF->GetBookmarks();
+    for (const auto& rBookmark : rBookmarks)
+    {
+        OUString aBookmark = rBookmark.aBookmark;
+        if (aBookmark.toChar() == '#')
+        {
+            //  try to resolve internal link
+
+            OUString aTarget(aBookmark.copy(1));
+
+            ScRange aTargetRange;
+            tools::Rectangle aTargetRect; // 1/100th mm
+            bool bIsSheet = false;
+            bool bValid = lcl_ParseTarget(aTarget, aTargetRange, aTargetRect, bIsSheet, rDoc, nTab);
+
+            if (bValid)
+            {
+                sal_Int32 nPage = -1;
+                tools::Rectangle aArea;
+                if (bIsSheet)
+                {
+                    //  Get first page for sheet (if nothing from that sheet is printed,
+                    //  this page can show a different sheet)
+                    nPage = pPrintFuncCache->GetTabStart(aTargetRange.aStart.Tab());
+                    aArea = pDev->PixelToLogic(tools::Rectangle(0, 0, 0, 0));
+                }
+                else
+                {
+                    pPrintFuncCache->InitLocations(rMark, pDev); // does nothing if already initialized
+
+                    ScPrintPageLocation aLocation;
+                    if (pPrintFuncCache->FindLocation(aTargetRange.aStart, aLocation))
+                    {
+                        nPage = aLocation.nPage;
+
+                        // get the rectangle of the page's cell range in 1/100th mm
+                        ScRange aLocRange = aLocation.aCellRange;
+                        tools::Rectangle aLocationMM = rDoc.GetMMRect(
+                            aLocRange.aStart.Col(), aLocRange.aStart.Row(), aLocRange.aEnd.Col(),
+                            aLocRange.aEnd.Row(), aLocRange.aStart.Tab());
+                        tools::Rectangle aLocationPixel = aLocation.aRectangle;
+
+                        // Scale and move the target rectangle from aLocationMM to aLocationPixel,
+                        // to get the target rectangle in pixels.
+                        assert(aLocationPixel.GetWidth() != 0 && aLocationPixel.GetHeight() != 0);
+
+                        Fraction aScaleX(aLocationPixel.GetWidth(), aLocationMM.GetWidth());
+                        Fraction aScaleY(aLocationPixel.GetHeight(), aLocationMM.GetHeight());
+
+                        tools::Long nX1
+                            = aLocationPixel.Left()
+                            + static_cast<tools::Long>(
+                                Fraction(aTargetRect.Left() - aLocationMM.Left(), 1) * aScaleX);
+                        tools::Long nX2
+                            = aLocationPixel.Left()
+                            + static_cast<tools::Long>(
+                                Fraction(aTargetRect.Right() - aLocationMM.Left(), 1) * aScaleX);
+                        tools::Long nY1
+                            = aLocationPixel.Top()
+                            + static_cast<tools::Long>(
+                                Fraction(aTargetRect.Top() - aLocationMM.Top(), 1) * aScaleY);
+                        tools::Long nY2
+                            = aLocationPixel.Top()
+                            + static_cast<tools::Long>(
+                                Fraction(aTargetRect.Bottom() - aLocationMM.Top(), 1) * aScaleY);
+
+                        if (nX1 > aLocationPixel.Right())
+                            nX1 = aLocationPixel.Right();
+                        if (nX2 > aLocationPixel.Right())
+                            nX2 = aLocationPixel.Right();
+                        if (nY1 > aLocationPixel.Bottom())
+                            nY1 = aLocationPixel.Bottom();
+                        if (nY2 > aLocationPixel.Bottom())
+                            nY2 = aLocationPixel.Bottom();
+
+                        // The link target area is interpreted using the device's MapMode at
+                        // the time of the CreateDest call, so PixelToLogic can be used here,
+                        // regardless of the MapMode that is actually selected.
+                        aArea = pDev->PixelToLogic(tools::Rectangle(nX1, nY1, nX2, nY2));
+                    }
+                }
+
+                if (nPage >= 0)
+                    pPDF->SetLinkDest(rBookmark.nLinkId, pPDF->CreateDest(aArea, nPage));
+            }
+        }
+        else
+        {
+            //  external link, use as-is
+            pPDF->SetLinkURL(rBookmark.nLinkId, aBookmark);
+        }
+    }
+    rBookmarks.clear();
+}
+
 void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelection,
                                     const uno::Sequence<beans::PropertyValue>& rOptions )
 {
@@ -2126,6 +2277,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     OUString aPagesStr;
     bool bRenderToGraphic = false;
     bool bSinglePageSheets = false;
+    bool bIsFirstPage = false;
+    bool bIsLastPage = false;
     if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr, bRenderToGraphic ) )
         throw lang::IllegalArgumentException();
 
@@ -2140,7 +2293,14 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         if ( rValue.Name == "SinglePageSheets" )
         {
             rValue.Value >>= bSinglePageSheets;
-            break;
+        }
+        else if (rValue.Name == "IsFirstPage")
+        {
+            rValue.Value >>= bIsFirstPage;
+        }
+        else if (rValue.Name == "IsLastPage")
+        {
+            rValue.Value >>= bIsLastPage;
         }
     }
 
@@ -2198,7 +2358,22 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
             rDoc.SetVisibleTab(nVisTab);
         }
 
+        OUString aTabName;
+        rDoc.GetName(nVisTab, aTabName);
+        lcl_PDFExportHelper(pDev, aTabName, bIsFirstPage);
+
         pDocShell->DoDraw(pDev, Point(0,0), Size(aPageSize.Width, aPageSize.Height), JobSetup());
+
+        vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+        if (pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage)
+        {
+            pPDFData->EndStructureElement();  // Workbook
+            assert(pPDFData->GetScPDFState());
+            delete pPDFData->GetScPDFState();
+            pPDFData->SetScPDFState(nullptr);
+        }
+
+        lcl_PDFExportBookmarkHelper(pDev, rDoc, pPrintFuncCache, aMark, nVisTab);
 
         return;
     }
@@ -2304,39 +2479,23 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     tools::Long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     tools::Long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
-    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >(pDev->GetExtOutDevData() );
-    if ( nRenderer == nTabStart )
+    if ( nRenderer == nTabStart || bIsFirstPage )
     {
-        if (pPDFData)
-        {
-            css::lang::Locale const docLocale(Application::GetSettings().GetLanguageTag().getLocale());
-            pPDFData->SetDocumentLocale(docLocale);
-        }
-
-        // first page of a sheet: add outline item for the sheet name
-
-        if ( pPDFData && pPDFData->GetIsExportBookmarks() )
-        {
-            // the sheet starts at the top of the page
-            tools::Rectangle aArea( pDev->PixelToLogic( tools::Rectangle( 0,0,0,0 ) ) );
-            sal_Int32 nDestID = pPDFData->CreateDest( aArea );
-            OUString aTabName;
-            rDoc.GetName( nTab, aTabName );
-            // top-level
-            pPDFData->CreateOutlineItem( -1/*nParent*/, aTabName, nDestID );
-        }
-        // #i56629# add the named destination stuff
-        if( pPDFData && pPDFData->GetIsExportNamedDestinations() )
-        {
-            tools::Rectangle aArea( pDev->PixelToLogic( tools::Rectangle( 0,0,0,0 ) ) );
-            OUString aTabName;
-            rDoc.GetName( nTab, aTabName );
-            //need the PDF page number here
-            pPDFData->CreateNamedDest( aTabName, aArea );
-        }
+        OUString aTabName;
+        rDoc.GetName(nTab, aTabName);
+        lcl_PDFExportHelper(pDev, aTabName, bIsFirstPage);
     }
 
     (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, true, nullptr );
+
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+    if (pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage)
+    {
+        pPDFData->EndStructureElement();  // Workbook
+        assert(pPDFData->GetScPDFState());
+        delete pPDFData->GetScPDFState();
+        pPDFData->SetScPDFState(nullptr);
+    }
 
     if (!m_pPrintState)
     {
@@ -2344,91 +2503,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         pPrintFunc->GetPrintState(*m_pPrintState, true);
     }
 
-    //  resolve the hyperlinks for PDF export
-
-    if ( !pPDFData || pPDFData->GetBookmarks().empty() )
-        return;
-
-    //  iterate over the hyperlinks that were output for this page
-
-    std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFData->GetBookmarks();
-    for ( const auto& rBookmark : rBookmarks )
-    {
-        OUString aBookmark = rBookmark.aBookmark;
-        if ( aBookmark.toChar() == '#' )
-        {
-            //  try to resolve internal link
-
-            OUString aTarget( aBookmark.copy( 1 ) );
-
-            ScRange aTargetRange;
-            tools::Rectangle aTargetRect;      // 1/100th mm
-            bool bIsSheet = false;
-            bool bValid = lcl_ParseTarget( aTarget, aTargetRange, aTargetRect, bIsSheet, rDoc, nTab );
-
-            if ( bValid )
-            {
-                sal_Int32 nPage = -1;
-                tools::Rectangle aArea;
-                if ( bIsSheet )
-                {
-                    //  Get first page for sheet (if nothing from that sheet is printed,
-                    //  this page can show a different sheet)
-                    nPage = pPrintFuncCache->GetTabStart( aTargetRange.aStart.Tab() );
-                    aArea = pDev->PixelToLogic( tools::Rectangle( 0,0,0,0 ) );
-                }
-                else
-                {
-                    pPrintFuncCache->InitLocations( aMark, pDev );      // does nothing if already initialized
-
-                    ScPrintPageLocation aLocation;
-                    if ( pPrintFuncCache->FindLocation( aTargetRange.aStart, aLocation ) )
-                    {
-                        nPage = aLocation.nPage;
-
-                        // get the rectangle of the page's cell range in 1/100th mm
-                        ScRange aLocRange = aLocation.aCellRange;
-                        tools::Rectangle aLocationMM = rDoc.GetMMRect(
-                                   aLocRange.aStart.Col(), aLocRange.aStart.Row(),
-                                   aLocRange.aEnd.Col(),   aLocRange.aEnd.Row(),
-                                   aLocRange.aStart.Tab() );
-                        tools::Rectangle aLocationPixel = aLocation.aRectangle;
-
-                        // Scale and move the target rectangle from aLocationMM to aLocationPixel,
-                        // to get the target rectangle in pixels.
-                        assert(aLocationPixel.GetWidth() != 0 && aLocationPixel.GetHeight() != 0);
-
-                        Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
-                        Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
-
-                        tools::Long nX1 = aLocationPixel.Left() + static_cast<tools::Long>( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
-                        tools::Long nX2 = aLocationPixel.Left() + static_cast<tools::Long>( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
-                        tools::Long nY1 = aLocationPixel.Top() + static_cast<tools::Long>( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
-                        tools::Long nY2 = aLocationPixel.Top() + static_cast<tools::Long>( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
-
-                        if ( nX1 > aLocationPixel.Right() ) nX1 = aLocationPixel.Right();
-                        if ( nX2 > aLocationPixel.Right() ) nX2 = aLocationPixel.Right();
-                        if ( nY1 > aLocationPixel.Bottom() ) nY1 = aLocationPixel.Bottom();
-                        if ( nY2 > aLocationPixel.Bottom() ) nY2 = aLocationPixel.Bottom();
-
-                        // The link target area is interpreted using the device's MapMode at
-                        // the time of the CreateDest call, so PixelToLogic can be used here,
-                        // regardless of the MapMode that is actually selected.
-                        aArea = pDev->PixelToLogic( tools::Rectangle( nX1, nY1, nX2, nY2 ) );
-                    }
-                }
-
-                if ( nPage >= 0 )
-                    pPDFData->SetLinkDest( rBookmark.nLinkId, pPDFData->CreateDest( aArea, nPage ) );
-            }
-        }
-        else
-        {
-            //  external link, use as-is
-            pPDFData->SetLinkURL( rBookmark.nLinkId, aBookmark );
-        }
-    }
-    rBookmarks.clear();
+    lcl_PDFExportBookmarkHelper(pDev, rDoc, pPrintFuncCache, aMark, nTab);
 }
 
 // XLinkTargetSupplier

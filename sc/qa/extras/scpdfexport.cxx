@@ -34,6 +34,9 @@
 #if USE_TLS_NSS
 #include <nss.h>
 #endif
+#include <vcl/filter/pdfdocument.hxx>
+#include <tools/zcodec.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css::lang;
 using namespace ::com::sun::star;
@@ -62,6 +65,7 @@ public:
     void testExportFitToPage_Tdf103516();
     void testUnoCommands_Tdf120161();
     void testTdf64703_hiddenPageBreak();
+    void testTdf123870();
     void testTdf143978();
     void testTdf120190();
     void testTdf84012();
@@ -73,6 +77,7 @@ public:
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
     CPPUNIT_TEST(testUnoCommands_Tdf120161);
     CPPUNIT_TEST(testTdf64703_hiddenPageBreak);
+    CPPUNIT_TEST(testTdf123870);
     CPPUNIT_TEST(testTdf143978);
     CPPUNIT_TEST(testTdf120190);
     CPPUNIT_TEST(testTdf84012);
@@ -149,7 +154,8 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
     css::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue("Selection", xCellRange),
         comphelper::makePropertyValue("Printing", sal_Int32(2)),
-        comphelper::makePropertyValue("ViewPDFAfterExport", true)
+        comphelper::makePropertyValue("ViewPDFAfterExport", true),
+        comphelper::makePropertyValue("PDFUACompliance", true)
     };
 
     // init set of params for storeToURL() call
@@ -386,6 +392,94 @@ void ScPDFExportTest::testTdf64703_hiddenPageBreak()
         CPPUNIT_ASSERT(hasTextInPdf("/Count 4>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
     }
+}
+
+void ScPDFExportTest::testTdf123870()
+{
+    loadFromURL(u"tdf123870.ods");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:G4
+    ScRange range1(0, 0, 0, 6, 4, 0);
+    exportToPDF(xModel, range1);
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+
+    enum
+    {
+        Default,
+        Artifact,
+        Tagged
+    } state
+        = Default;
+
+    auto nLine(0);
+    auto nTagged(0);
+    auto nArtifacts(0);
+    while (true)
+    {
+        ++nLine;
+        auto const pLine = ::std::find(pStart, pEnd, '\n');
+        if (pLine == pEnd)
+        {
+            break;
+        }
+        std::string_view const line(pStart, pLine - pStart);
+        pStart = pLine + 1;
+        if (!line.empty() && line[0] != '%')
+        {
+            ::std::cerr << nLine << ": " << line << "\n ";
+            if (o3tl::ends_with(line, "/Artifact BMC"))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Artifact;
+                ++nArtifacts;
+            }
+            else if ((o3tl::starts_with(line, "/P<</MCID") && o3tl::ends_with(line, ">>BDC"))
+                     || (o3tl::starts_with(line, "/Figure<</MCID")
+                         && o3tl::ends_with(line, ">>BDC")))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Tagged;
+                ++nTagged;
+            }
+            else if (line == "EMC")
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected end", state != Default);
+                state = Default;
+            }
+            else if (nLine > 1) // first line is expected "0.1 w"
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected content outside MCS", state != Default);
+            }
+        }
+    }
+    // text in cell + 1 shape
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nTagged)>(9), nTagged);
+    // header, footer, background color, color scale, shadow, cell border
+    CPPUNIT_ASSERT(nArtifacts >= 6);
 }
 
 void ScPDFExportTest::testTdf143978()

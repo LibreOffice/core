@@ -297,6 +297,56 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
     }
 }
 
+bool ScOutputData::ReopenPDFStructureElement(vcl::PDFWriter::StructElement aType, SCROW nRow, SCCOL nCol)
+{
+    bool bReopenTag = false;
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(mpDev->GetExtOutDevData());
+    if (pPDF)
+    {
+        if (aType == vcl::PDFWriter::Part) // Worksheet
+        {
+            if (pPDF->GetScPDFState()->m_WorksheetId != -1)
+            {
+                sal_Int32 nId = pPDF->GetScPDFState()->m_WorksheetId;
+                pPDF->BeginStructureElement(nId);
+                bReopenTag = true;
+            }
+        }
+        else if (aType == vcl::PDFWriter::Table)
+        {
+            if (pPDF->GetScPDFState()->m_TableId != -1)
+            {
+                sal_Int32 nId = pPDF->GetScPDFState()->m_TableId;
+                pPDF->BeginStructureElement(nId);
+                bReopenTag = true;
+            }
+        }
+        else if (aType == vcl::PDFWriter::TableRow)
+        {
+            const auto aIter = pPDF->GetScPDFState()->m_TableRowMap.find(nRow);
+            if (aIter != pPDF->GetScPDFState()->m_TableRowMap.end() && nRow == aIter->first)
+            {
+                sal_Int32 nId = (*aIter).second;
+                pPDF->BeginStructureElement(nId);
+                bReopenTag = true;
+            }
+        }
+        else if (aType == vcl::PDFWriter::TableData)
+        {
+            const std::pair<SCROW, SCCOL> keyToFind = std::make_pair(nRow, nCol);
+            const auto aIter = pPDF->GetScPDFState()->m_TableDataMap.find(keyToFind);
+            if (aIter != pPDF->GetScPDFState()->m_TableDataMap.end() && keyToFind == aIter->first)
+            {
+                sal_Int32 nId = (*aIter).second;
+                pPDF->BeginStructureElement(nId);
+                bReopenTag = true;
+            }
+        }
+    }
+
+    return bReopenTag;
+}
+
 void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover)
 {
     // bMergeCover : Draw lines in sheet bgcolor to cover lok client grid lines in merged cell areas.
@@ -1025,6 +1075,9 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
 
 void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 {
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(mpDev->GetExtOutDevData());
+    bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
+
     Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
     tools::Long nOneXLogic = aOnePixel.Width();
     tools::Long nOneYLogic = aOnePixel.Height();
@@ -1074,6 +1127,9 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
             }
             else
             {
+                if (bTaggedPDF)
+                    pPDF->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+
                 // scan for rows with the same background:
                 SCSIZE nSkip = 0;
                 while ( nArrY+nSkip+2<nArrCount &&
@@ -1181,6 +1237,9 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 drawCells(rRenderContext, std::optional<Color>(), nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
                 nArrY += nSkip;
+
+                if (bTaggedPDF)
+                    pPDF->EndStructureElement();
             }
         }
         nPosY += nRowHeight;
@@ -1194,6 +1253,9 @@ void ScOutputData::DrawShadow()
 
 void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(mpDev->GetExtOutDevData());
+    bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
+
     mpDev->SetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -1235,6 +1297,9 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                             pThisRowInfo->cellInfo(nCol).pHShadowOrigin;
                     if ( pAttr && !bSkipX )
                     {
+                        if (bTaggedPDF)
+                            pPDF->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+
                         ScShadowPart ePart = nPass ?
                                 pThisRowInfo->cellInfo(nCol).eVShadowPart :
                                 pThisRowInfo->cellInfo(nCol).eHShadowPart;
@@ -1322,6 +1387,9 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                             //! merge rectangles?
                             mpDev->SetFillColor( bCellContrast ? aAutoTextColor : pAttr->GetColor() );
                             mpDev->DrawRect( aRect );
+
+                            if (bTaggedPDF)
+                                pPDF->EndStructureElement();
                         }
                     }
                 }
@@ -1390,6 +1458,11 @@ static tools::Long lclGetSnappedY( const OutputDevice& rDev, tools::Long nPosY, 
 
 void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 {
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(mpDev->GetExtOutDevData());
+    bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
+    if (bTaggedPDF)
+        pPDF->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+
     DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();
 
     Color aSingleColor;
@@ -1510,6 +1583,9 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     pProcessor.reset();
 
     rRenderContext.SetDrawMode(nOldDrawMode);
+
+    if (bTaggedPDF)
+        pPDF->EndStructureElement();
 }
 
 void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
