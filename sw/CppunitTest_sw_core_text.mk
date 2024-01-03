@@ -17,6 +17,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_core_text, \
     sw/qa/core/text/frmform \
     sw/qa/core/text/itratr \
     sw/qa/core/text/itrform2 \
+    sw/qa/core/text/porlay \
     sw/qa/core/text/porrst \
     sw/qa/core/text/text \
 ))
