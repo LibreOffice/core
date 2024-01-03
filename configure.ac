@@ -1893,13 +1893,6 @@ libo_FUZZ_ARG_WITH(online-update-mar-certificatepath,
          non-functional.)]),
 ,)
 
-libo_FUZZ_ARG_WITH(online-update-mar-channel,
-    AS_HELP_STRING([--with-online-update-mar-channel=...],
-        [Set the channel value for --enable-online-update-mar.
-         (Can be left off for debug purposes, even if that may render the feature
-         non-functional.)]),
-,)
-
 libo_FUZZ_ARG_WITH(online-update-mar-serverurl,
     AS_HELP_STRING([--with-online-update-mar-serverurl=...],
         [Set the server URL value for --enable-online-update-mar.
