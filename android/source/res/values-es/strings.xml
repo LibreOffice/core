@@ -114,7 +114,7 @@
     <string name="unable_to_go_further">No se puede ir más allá.</string>
     <string name="current_uno_command">Orden UNO actual</string>
     <string name="display_language">Mostrar en idioma</string>
-    <string name="display_language_summary">Establecer el idioma para mostrar predeterminado</string>
+    <string name="display_language_summary">Establecer el idioma en pantalla predeterminado</string>
     <string name="pdf_export_finished">Terminó la exportación a PDF</string>
     <string name="unable_to_export_pdf">No se pudo exportar a PDF</string>
     <string name="unable_to_save">No se pudo guardar el archivo</string>

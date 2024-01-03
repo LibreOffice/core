@@ -120,9 +120,14 @@
     <string name="bmp_null">Il file Bitmap è vuoto!</string>
     <string name="slide">Diapositiva</string>
     <string name="part">Parte</string>
-    <string name="font_color">Colore font</string>
+    <string name="font_color">Colore tipo di carattere</string>
     <string name="page">Pagina</string>
     <string name="highlight_color">Colore evidenziazione</string>
     <string name="directory_not_saved">Cartella non salvata.</string>
     <string name="sheet">Foglio</string>
+    <string name="file_icon_desc">fileicon</string>
+    <string name="calc_optimal_length_default_text">Inserisci lunghezza aggiuntiva in centesimi di millimetro</string>
+    <string name="action_pwd_dialog_title">Inserisci la password</string>
+    <string name="automatic">Automatico</string>
+    <string name="action_rename_slide">Rinomina diapositiva</string>
 </resources>
