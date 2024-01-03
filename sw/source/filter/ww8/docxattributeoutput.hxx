@@ -498,7 +498,7 @@ private:
     void WriteFFData( const FieldInfos& rInfos );
     void WritePendingPlaceholder();
 
-    void EmbedFontStyle( std::u16string_view name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
+    bool EmbedFontStyle( std::u16string_view name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
         FontPitch pitch );
 
     /**
