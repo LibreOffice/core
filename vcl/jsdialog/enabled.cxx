@@ -197,6 +197,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/linenumbering.ui"
         || rUIFile == u"modules/swriter/ui/newuserindexdialog.ui"
         || rUIFile == u"modules/swriter/ui/numparapage.ui"
+        || rUIFile == u"modules/swriter/ui/objectdialog.ui"
         || rUIFile == u"modules/swriter/ui/pagenumberdlg.ui"
         || rUIFile == u"modules/swriter/ui/paradialog.ui"
         || rUIFile == u"modules/swriter/ui/picturedialog.ui"
