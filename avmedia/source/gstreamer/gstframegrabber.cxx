@@ -31,7 +31,6 @@
 
 #include <string>
 
-constexpr OUStringLiteral AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_GStreamer";
 constexpr OUString AVMEDIA_GST_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_GStreamer"_ustr;
 
 using namespace ::com::sun::star;
@@ -161,7 +160,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
 OUString SAL_CALL FrameGrabber::getImplementationName(  )
 {
-    return AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME;
+    return u"com.sun.star.comp.avmedia.FrameGrabber_GStreamer"_ustr;
 }
 
 sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
