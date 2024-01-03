@@ -40,6 +40,7 @@
 #include <optional>
 #include <editeng/adjustitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <svl/asiancfg.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/multisel.hxx>
@@ -665,6 +666,18 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         sal_uInt16 nTmpAscent = GetAscent();
         sal_uInt16 nTmpHeight = Height();
         rLine.GetAttrHandler().GetDefaultAscentAndHeight( rInf.GetVsh(), *rInf.GetOut(), nTmpAscent, nTmpHeight );
+
+        short nEscapement = rLine.GetAttrHandler().GetFont()->GetEscapement();
+        if (GetAscent() && Height() && !nTmpAscent && !nTmpHeight
+            && (nEscapement == DFLT_ESC_AUTO_SUPER || nEscapement == DFLT_ESC_AUTO_SUB))
+        {
+            // We already had a calculated ascent + height, it would be cleared, automatic
+            // sub/superscript is set and we have no content. In this case it makes no sense to
+            // clear the old, correct ascent/height.
+            nTmpAscent = GetAscent();
+            nTmpHeight = Height();
+        }
+
         if (nTmpAscent < GetAscent() || GetAscent() <= 0)
             SetAscent(nTmpAscent);
         if (nTmpHeight < Height() || Height() <= 0)
