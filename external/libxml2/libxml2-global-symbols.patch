@@ -13,7 +13,7 @@
  } LIBXML2_2.6.28;
  
  LIBXML2_2.6.32 {
-@@ -2231,3 +2231,49 @@
+@@ -2231,3 +2231,55 @@
    xmlPopOutputCallbacks;
  } LIBXML2_2.9.8;
  
@@ -22,6 +22,12 @@
 +    xmlMemSize;
 +    xmlNewSAXParserCtxt;
 +} LIBXML2_2.9.11;
++
++LIBXML2_2.12.3 {
++    global:
++    xmlCtxtSetMaxAmplification;
++    xmlTextReaderSetMaxAmplification;
++} LIBXML2_2.11.4;
 +
 +# HACK: export global variable accessor functions (globals.h)
 +LIBXML2_GLOBAL_VARIABLES {

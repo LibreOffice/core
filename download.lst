@@ -462,8 +462,8 @@ LIBGPGERROR_TARBALL := libgpg-error-1.47.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBLANGTAG_SHA256SUM := 1f12a20a02ec3a8d22e54dedb8b683a43c9c160bda1ba337bf1060607ae733bd
-LIBLANGTAG_TARBALL := liblangtag-0.6.3.tar.bz2
+LIBLANGTAG_SHA256SUM := 5ed6bcd4ae3f3c05c912e62f216cd1a44123846147f729a49fb5668da51e030e
+LIBLANGTAG_TARBALL := liblangtag-0.6.7.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -487,14 +487,14 @@ XMLSEC_TARBALL := xmlsec1-1.3.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBXML_SHA256SUM := 737e1d7f8ab3f139729ca13a2494fd17bf30ddb4b7a427cf336252cab57f57f7
-LIBXML_VERSION_MICRO := 4
-LIBXML_TARBALL := libxml2-2.11.$(LIBXML_VERSION_MICRO).tar.xz
+LIBXML_SHA256SUM := 8c8f1092340a89ff32bc44ad5c9693aff9bc8a7a3e161bb239666e5d15ac9aaa
+LIBXML_VERSION_MICRO := 3
+LIBXML_TARBALL := libxml2-2.12.$(LIBXML_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBXSLT_SHA256SUM := 1f32450425819a09acaff2ab7a5a7f8a2ec7956e505d7beeb45e843d0e1ecab1
-LIBXSLT_VERSION_MICRO := 38
+LIBXSLT_SHA256SUM := 2a20ad621148339b0759c4d4e96719362dee64c9a096dbba625ba053846349f0
+LIBXSLT_VERSION_MICRO := 39
 LIBXSLT_TARBALL := libxslt-1.1.$(LIBXSLT_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
