@@ -593,7 +593,7 @@ IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
         mxAllRecentThumbnails->GrabFocus();
         mxRecentButton->set_active(true);
         mxTemplateButton->set_active(false);
-        mxActions->set_sensitive(true);
+        mxActions->show();
     }
     else
     {
@@ -604,7 +604,7 @@ IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
         mxLocalView->GrabFocus();
         mxRecentButton->set_active(false);
         mxTemplateButton->set_active(true);
-        mxActions->set_sensitive(false);
+        mxActions->hide();
     }
     applyFilter();
 }
