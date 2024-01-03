@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
     // Given a document containing a shape that has:
     // 1) automatic height (resize shape to fix text)
     // 2) multiple columns (2)
-    loadFromURL(u"auto-height-multi-col-shape.pptx");
+    loadFromFile(u"auto-height-multi-col-shape.pptx");
 
     // Make sure the in-file shape height is kept, even if nominally the shape height is
     // automatic:
@@ -357,7 +357,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
 {
-    loadFromURL(u"FontWork.odg");
+    loadFromFile(u"FontWork.odg");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
@@ -392,7 +392,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
 
     for (int i = 0; i < 3; i++)
     {
-        loadFromURL(aFilenames[i]);
+        loadFromFile(aFilenames[i]);
 
         SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -435,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextWidth)
 
     for (int i = 0; i < 3; i++)
     {
-        loadFromURL(aFilenames[i]);
+        loadFromFile(aFilenames[i]);
 
         SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -468,7 +468,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextWidth)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
 {
-    loadFromURL(u"tdf140321_metal.odp");
+    loadFromFile(u"tdf140321_metal.odp");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -484,7 +484,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
 {
-    loadFromURL(u"tdf140321_phong.odp");
+    loadFromFile(u"tdf140321_phong.odp");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -497,7 +497,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
 {
-    loadFromURL(u"tdf140321_Matte_import.ppt");
+    loadFromFile(u"tdf140321_Matte_import.ppt");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -521,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
 {
-    loadFromURL(u"tdf140321_material_specular.odp");
+    loadFromFile(u"tdf140321_material_specular.odp");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -545,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
 {
     // Given a slide with a media shape, containing a 4 sec video, red-green-blue-black being the 4
     // seconds:
-    loadFromURL(u"video-snapshot.pptx");
+    loadFromFile(u"video-snapshot.pptx");
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
     auto pSdrMediaObj = dynamic_cast<SdrMediaObj*>(pSdrPage->GetObj(0));
 
@@ -571,7 +571,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
 {
     // Given a document with 2 pages, first page footer has an off-page line shape:
-    loadFromURL(u"page-view-draw-layer-clip.docx");
+    loadFromFile(u"page-view-draw-layer-clip.docx");
 
     // When saving that document to PDF:
     save("writer_pdf_Export");
@@ -719,7 +719,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
     // 2-) Text not overflowing the rectangle
     // 3-) (Vertical text) Text overflowing the rectangle
     // 4-) (Vertical text) Text not overflowing the rectangle
-    loadFromURL(u"clip-vertical-overflow.pptx");
+    loadFromFile(u"clip-vertical-overflow.pptx");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
     xmlDocUniquePtr pDocument = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);

@@ -109,7 +109,7 @@ void ScDataPilotFieldObj::setUp()
 {
     UnoApiTest::setUp();
 
-    loadFromURL(u"scdatapilotfieldobj.ods");
+    loadFromFile(u"scdatapilotfieldobj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldObj);

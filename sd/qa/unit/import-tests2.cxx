@@ -1364,7 +1364,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testDescriptionImport)
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf83247)
 {
     auto GetPause = [this](const OUString& sSrc) {
-        loadFromURL(sSrc);
+        loadFromFile(sSrc);
         uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(mxComponent,
                                                                                   uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPresentationProps(

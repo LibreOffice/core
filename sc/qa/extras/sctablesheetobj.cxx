@@ -354,7 +354,7 @@ OUString ScTableSheetObj::getFileURL()
 void ScTableSheetObj::setUp()
 {
     UnoApiTest::setUp();
-    maFileURL = loadFromURL(u"ScTableSheetObj.ods");
+    maFileURL = loadFromFile(u"ScTableSheetObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableSheetObj);

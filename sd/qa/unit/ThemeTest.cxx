@@ -65,7 +65,7 @@ Color GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
 CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
 {
     // Given a document, with a first slide and blue shape text from theme:
-    loadFromURL(u"theme.pptx");
+    loadFromFile(u"theme.pptx");
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);

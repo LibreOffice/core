@@ -53,7 +53,7 @@ public:
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testWriterGraphicExport)
 {
     // Load a document with a Writer picture in it.
-    loadFromURL(u"unodraw-writer-image.odt");
+    loadFromFile(u"unodraw-writer-image.odt");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<lang::XComponent> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testWriterGraphicExport)
 
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testTdf93998)
 {
-    loadFromURL(u"tdf93998.odp");
+    loadFromFile(u"tdf93998.odp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
 

@@ -30,7 +30,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testFollowStyle)
 {
     // Given a file with \snext:
-    loadFromURL(u"follow-style.rtf");
+    loadFromFile(u"follow-style.rtf");
 
     // Then make sure we set the follow of the para style correctly:
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
@@ -53,7 +53,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowStyle)
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 {
     // Given a document with a top margin and a border which has more spacing than the margin:
-    loadFromURL(u"negative-page-border.rtf");
+    loadFromFile(u"negative-page-border.rtf");
 
     // Then make sure that the border distance is negative, so it can appear at the correct
     // position:

@@ -29,7 +29,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedCellStartDOCXImport)
 {
     // Given a document with a nested floating table at cell start and an other inner floating table:
     // When importing that document:
-    loadFromURL(u"floattable-nested-cellstart.docx");
+    loadFromFile(u"floattable-nested-cellstart.docx");
 
     // Then make sure that both inner tables are floating:
     uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);

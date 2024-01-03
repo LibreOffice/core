@@ -574,7 +574,7 @@ void ScModelTestBase::createScDoc(const char* pName, const char* pPassword, bool
     if (!pName)
         load("private:factory/scalc");
     else
-        loadFromURL(OUString::createFromAscii(pName), pPassword);
+        loadFromFile(OUString::createFromAscii(pName), pPassword);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"));
@@ -620,7 +620,7 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
     {
         const std::u16string_view sFileName = aTestValues[ index ].sTestDoc;
         const OUString sExportType =  aTestValues[ index ].sExportType;
-        loadFromURL(sFileName);
+        loadFromFile(sFileName);
 
         if ( !sExportType.isEmpty() )
             saveAndReload(sExportType);

@@ -68,7 +68,7 @@ void EPUBExportTest::createDoc(std::u16string_view rFile,
                                const uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     // Import the bugdoc and export as EPUB.
-    loadFromURL(rFile);
+    loadFromFile(rFile);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("EPUB");

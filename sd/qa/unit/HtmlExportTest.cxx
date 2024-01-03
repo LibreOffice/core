@@ -22,7 +22,7 @@ public:
 
     void testHTMLExport()
     {
-        loadFromURL(u"HtmlExportTestDocument.odp");
+        loadFromFile(u"HtmlExportTestDocument.odp");
         save("impress_html_Export");
         htmlDocUniquePtr htmlDoc = parseHtml(maTempFile);
 
@@ -43,7 +43,7 @@ public:
 
     void testTdf154989()
     {
-        loadFromURL(u"tdf154989.odg");
+        loadFromFile(u"tdf154989.odg");
         save("XHTML Draw File");
         xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
 

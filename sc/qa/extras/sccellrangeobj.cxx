@@ -245,7 +245,7 @@ void ScCellRangeObj::setUp()
 {
     UnoApiTest::setUp();
 
-    loadFromURL(u"xcellrangesquery.ods");
+    loadFromFile(u"xcellrangesquery.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangeObj);

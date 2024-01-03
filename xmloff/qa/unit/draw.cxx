@@ -88,7 +88,7 @@ uno::Reference<drawing::XShape> XmloffDrawTest::getShape(sal_uInt8 nShapeIndex)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
 {
     // Load a document that has a shape with a textbox in it. Save it to ODF and reload.
-    loadFromURL(u"textbox-loss.docx");
+    loadFromFile(u"textbox-loss.docx");
     saveAndReload("impress8");
 
     // Make sure that the shape is still a textbox.
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
 {
     // Load a document that has a custom shape with extrusion direction as set by LO as its default.
-    loadFromURL(u"tdf141301_Extrusion_Skew.odg");
+    loadFromFile(u"tdf141301_Extrusion_Skew.odg");
 
     // Prepare use of XPath
     save("draw8");
@@ -161,7 +161,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
 {
     // Execute ODP import:
-    loadFromURL(u"video-snapshot.odp");
+    loadFromFile(u"video-snapshot.odp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
@@ -204,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
 {
     // Given a document that has a master page with a theme associated:
-    loadFromURL(u"theme.fodp");
+    loadFromFile(u"theme.fodp");
 
     // Then make sure the doc model has a master page with a theme:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -271,7 +271,7 @@ void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testFillAndLineThemeColorExportImport)
 {
-    loadFromURL(u"FillAndStrokeThemeColorTest.fodp");
+    loadFromFile(u"FillAndStrokeThemeColorTest.fodp");
 
     checkFillAndLineComplexColors(getShape(0));
 
@@ -285,7 +285,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testFillAndLineThemeColorExportImport)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
 {
     // Given a document that refers to a theme color:
-    loadFromURL(u"Reference-ThemeColors-TextAndFill.pptx");
+    loadFromFile(u"Reference-ThemeColors-TextAndFill.pptx");
     save("impress8");
 
     // Make sure the export result has the theme reference:
@@ -460,7 +460,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColor_ShapeFill)
 {
-    loadFromURL(u"ReferenceShapeFill.pptx");
+    loadFromFile(u"ReferenceShapeFill.pptx");
     save("impress8");
     // reload
     load(maTempFile.GetURL());
@@ -484,7 +484,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
 {
     // Given a document with a shape with a "FrameX" parent style (starts with Frame, but is not
     // Frame):
-    loadFromURL(u"table-in-shape.fodt");
+    loadFromFile(u"table-in-shape.fodt");
 
     // Then make sure the table inside the shape is not lost:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -527,7 +527,7 @@ void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::X
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 {
-    loadFromURL(u"tdf145700_3D_metal_type_MSCompatible.doc");
+    loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
     // verify properties
     uno::Reference<drawing::XShape> xShape(getShape(0));
     lcl_assertMetalProperties("from doc", xShape);
@@ -551,7 +551,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 {
-    loadFromURL(u"tdf145700_3D_metal_type_MSCompatible.doc");
+    loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
 
     // save ODF 1.3 strict and test, that new attribute is not written. Adapt when attribute is
     // added to ODF.
@@ -588,7 +588,7 @@ void lcl_assertSpecularityProperty(std::string_view sInfo, uno::Reference<drawin
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 {
-    loadFromURL(u"tdf147580_extrusion-specularity.doc");
+    loadFromFile(u"tdf147580_extrusion-specularity.doc");
     // verify property
     uno::Reference<drawing::XShape> xShape(getShape(0));
     lcl_assertSpecularityProperty("from doc", xShape);
@@ -612,7 +612,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
 {
-    loadFromURL(u"tdf147580_extrusion-specularity.doc");
+    loadFromFile(u"tdf147580_extrusion-specularity.doc");
 
     // The file has c3DSpecularAmt="80000" which results internally in specularity=122%.
     // Save to ODF 1.3 strict and make sure it does not produce a validation error.
@@ -661,7 +661,7 @@ bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rS
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf148714_CurvedArrowsOld)
 {
     // Load a document with CurveArrow shapes with faulty path as written by older LO versions.
-    loadFromURL(u"tdf148714_CurvedArrowsOld.odp");
+    loadFromFile(u"tdf148714_CurvedArrowsOld.odp");
 
     //  Make sure, that the error has been corrected on opening.
     for (sal_Int32 nShapeIndex = 0; nShapeIndex < 4; nShapeIndex++)
@@ -699,7 +699,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf148714_CurvedArrowsOld)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
 {
-    loadFromURL(u"tdf149551_verticalText.pptx");
+    loadFromFile(u"tdf149551_verticalText.pptx");
     // The file has a shape with attribute vert="vert" in <bodyPr> element. That generates a
     // TextPreRotateAngle attribute in CustomShapeGeometry.
 
@@ -782,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)
 {
     // Similar to testThemeImport but for Draw.
     // Load document with custom color theme
-    loadFromURL(u"tdf157018_CustomTheme.fodg");
+    loadFromFile(u"tdf157018_CustomTheme.fodg");
 
     // First make sure the doc model has a master page with a theme:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);

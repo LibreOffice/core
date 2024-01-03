@@ -29,7 +29,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, test129205)
 {
-    loadFromURL(u"tdf129205.docx");
+    loadFromFile(u"tdf129205.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);

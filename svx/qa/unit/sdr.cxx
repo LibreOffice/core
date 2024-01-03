@@ -59,7 +59,7 @@ SdrTest::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawP
 CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
 {
     // Load a document containing a custom shape.
-    loadFromURL(u"shadow-scale-origin.pptx");
+    loadFromFile(u"shadow-scale-origin.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
 {
-    loadFromURL(u"tdf150020-shadow-alignment.pptx");
+    loadFromFile(u"tdf150020-shadow-alignment.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     {
@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
 CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
 {
     // Load a document containing a 0-width shape with text.
-    loadFromURL(u"0-width-text-wrap.pptx");
+    loadFromFile(u"0-width-text-wrap.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
 CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
 {
     // Given a document with a slide what has a linked background image:
-    loadFromURL(u"slide-background.odp");
+    loadFromFile(u"slide-background.odp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);

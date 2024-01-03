@@ -33,7 +33,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testLargeParaTopMargin)
 {
     // Given a document with a paragraph with a large "before" spacing.
-    loadFromURL(u"large-para-top-margin.docx");
+    loadFromFile(u"large-para-top-margin.docx");
 
     // When checking the first paragraph.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLargeParaTopMargin)
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunInPara)
 {
     // Given a document with a block SDT, and inside that some content + a run SDT:
-    loadFromURL(u"sdt-run-in-para.docx");
+    loadFromFile(u"sdt-run-in-para.docx");
 
     // Then make sure the content inside the block SDT but outside the run SDT is not lost:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunInPara)
 CPPUNIT_TEST_FIXTURE(Test, testSdtDropdownNoDisplayText)
 {
     // Given a document with <w:listItem w:value="..."/> (no display text):
-    loadFromURL(u"sdt-dropdown-no-display-text.docx");
+    loadFromFile(u"sdt-dropdown-no-display-text.docx");
 
     // Then make sure we create a dropdown content control, not a rich text one:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableThenTable)
 {
     // Given a document with an in-section floating table, followed by a table:
     // When laying out that document:
-    loadFromURL(u"floattable-then-table.docx");
+    loadFromFile(u"floattable-then-table.docx");
 
     // Then make sure that instead of crashing, the floating table is anchored inside the body text
     // (and not a cell):
@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableThenTable)
 CPPUNIT_TEST_FIXTURE(Test, testSdtBlockText)
 {
     // Given a document with a block SDT that only contains text:
-    loadFromURL(u"sdt-block-text.docx");
+    loadFromFile(u"sdt-block-text.docx");
 
     // Then make sure that the text inside the SDT is imported as a content control:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtBlockText)
 CPPUNIT_TEST_FIXTURE(Test, testFdo78333)
 {
     // just care that it doesn't crash/assert
-    loadFromURL(u"fdo78333-1-minimized.docx");
+    loadFromFile(u"fdo78333-1-minimized.docx");
 }
 }
 

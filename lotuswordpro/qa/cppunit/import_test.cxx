@@ -44,7 +44,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
     //         2) Numbered bullet w/ bracket two (2))
     //             a) Lettered bullet w/ bracket lowercase 1 (a))
     //             b) Lettered bullet w/ bracket lowercase 2 (b))
-    loadFromURL(u"tdf33787-ordered-bullets.lwp");
+    loadFromFile(u"tdf33787-ordered-bullets.lwp");
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
                                                                   uno::UNO_QUERY);
@@ -135,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
 
 CPPUNIT_TEST_FIXTURE(LotusWordProTest, testTdf129993)
 {
-    loadFromURL(u"tdf129993.lwp");
+    loadFromFile(u"tdf129993.lwp");
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
                                                                   uno::UNO_QUERY);
@@ -149,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testTdf129993)
 
 CPPUNIT_TEST_FIXTURE(LotusWordProTest, paragraphProperties)
 {
-    loadFromURL(u"paragraphProperties.lwp");
+    loadFromFile(u"paragraphProperties.lwp");
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
                                                                   uno::UNO_QUERY);

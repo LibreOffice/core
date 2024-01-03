@@ -86,7 +86,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000Xlsx()
 
 void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const char* format)
 {
-    loadFromURL(name);
+    loadFromFile(name);
     {
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
@@ -116,7 +116,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const 
 
 void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 {
-    loadFromURL(u"ods/sum-whole-column-row.ods");
+    loadFromFile(u"ods/sum-whole-column-row.ods");
     {
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
@@ -150,7 +150,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 
 void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
 {
-    loadFromURL(u"ods/sum-whole-column-row.ods");
+    loadFromFile(u"ods/sum-whole-column-row.ods");
     saveAndReload("Calc Office Open XML");
     {
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
@@ -170,7 +170,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
 
 void ScJumboSheetsTest::testRoundtripNamedRanges(std::u16string_view name, const char* format)
 {
-    loadFromURL(name);
+    loadFromFile(name);
 
     std::pair<OUString, OUString> ranges[] = { { "CELLBXX1", "$Sheet1.$BXX$1" },
                                                { "CELLSA4_AMJ4", "$Sheet1.$A$4:$AMJ$4" },
@@ -220,7 +220,7 @@ void ScJumboSheetsTest::testNamedRangeNameConflict()
 {
     // The document contains named ranges named 'num1' and 'num2', that should be still treated
     // as named references even though with 16k columns those are normally NUM1 and NUM2 cells.
-    loadFromURL(u"ods/named-range-conflict.ods");
+    loadFromFile(u"ods/named-range-conflict.ods");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -242,7 +242,7 @@ void ScJumboSheetsTest::testNamedRangeNameConflict()
 
 void ScJumboSheetsTest::testTdf134553()
 {
-    loadFromURL(u"xlsx/tdf134553.xlsx");
+    loadFromFile(u"xlsx/tdf134553.xlsx");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -292,7 +292,7 @@ void ScJumboSheetsTest::testTdf134553()
 void ScJumboSheetsTest::testTdf134392()
 {
     // Without the fix in place, the file would have crashed
-    loadFromURL(u"xlsx/tdf134392.xlsx");
+    loadFromFile(u"xlsx/tdf134392.xlsx");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -343,7 +343,7 @@ void ScJumboSheetsTest::testTdf133033()
 void ScJumboSheetsTest::testTdf109061()
 {
     // Without the fix in place, the file would have crashed
-    loadFromURL(u"xlsx/tdf109061.xlsx");
+    loadFromFile(u"xlsx/tdf109061.xlsx");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);

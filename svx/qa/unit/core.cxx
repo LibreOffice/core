@@ -35,7 +35,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
 {
     // Given a Calc document with a chart in it:
-    loadFromURL(u"chart.ods");
+    loadFromFile(u"chart.ods");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);

@@ -35,7 +35,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testReloadPage)
 {
     // Load a document, which has 2 pages.
-    loadFromURL(u"reload-page.odg");
+    loadFromFile(u"reload-page.odg");
 
     // Reload, and request to start on page 2.
     SfxViewFrame* pFrame = SfxViewFrame::Current();

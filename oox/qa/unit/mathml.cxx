@@ -26,12 +26,12 @@ public:
 CPPUNIT_TEST_FIXTURE(OoxMathmlTest, testImportCharacters)
 {
     // Without the accompanying fix in place, this failed with an assertion failure on import.
-    loadFromURL(u"import-characters.pptx");
+    loadFromFile(u"import-characters.pptx");
 }
 
 CPPUNIT_TEST_FIXTURE(OoxMathmlTest, testImportMce)
 {
-    loadFromURL(u"import-mce.pptx");
+    loadFromFile(u"import-mce.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);

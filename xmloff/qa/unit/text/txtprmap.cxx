@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartImport)
     // Given a document with a floating table + wrap on all pages
     // (loext:may-break-between-pages="true" and loext:wrap-text-at-frame-start="true"), when
     // importing that document:
-    loadFromURL(u"floattable-wrap-all-pages2.fodt");
+    loadFromFile(u"floattable-wrap-all-pages2.fodt");
 
     // Then make sure that the matching text frame property is set:
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);

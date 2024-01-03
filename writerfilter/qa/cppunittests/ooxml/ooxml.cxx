@@ -29,7 +29,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTablesLost)
 {
     // Given a document with 2 floating tables, the 2nd has an inner floating table as well:
-    loadFromURL(u"floattable-tables-lost.docx");
+    loadFromFile(u"floattable-tables-lost.docx");
 
     // When counting the created Writer tables:
     uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableLeak)
 {
     // Given an outer table and 2 inner tables at B1 start:
     // When importing that document:
-    loadFromURL(u"floattable-leak.docx");
+    loadFromFile(u"floattable-leak.docx");
 
     // Then make sure the body text only contains a table and an empty final paragraph:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

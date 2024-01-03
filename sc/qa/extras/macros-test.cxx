@@ -781,7 +781,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testShapeLayerId)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testFunctionAccessIndirect)
 {
-    OUString aFileName = loadFromURL(u"tdf120161.ods"); // just some document with known values in cells
+    OUString aFileName = loadFromFile(u"tdf120161.ods"); // just some document with known values in cells
 
     const OUString aReference = "'" + aFileName + "'#$Sheet1.A1";
 

@@ -51,7 +51,7 @@ public:
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
 {
     // Import the bugdoc and export as PDF.
-    loadFromURL(rFile);
+    loadFromFile(rFile);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
 #if !defined MACOSX && !defined _WIN32
 
     // Import the bugdoc and print to PDF.
-    loadFromURL(u"tdf107868.odt");
+    loadFromFile(u"tdf107868.odt");
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
     uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(
@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
 #if !defined MACOSX && !defined _WIN32
 
     // Import the bugdoc and print to PDF.
-    loadFromURL(u"softhyphen_pdf.odt");
+    loadFromFile(u"softhyphen_pdf.odt");
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
     uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(

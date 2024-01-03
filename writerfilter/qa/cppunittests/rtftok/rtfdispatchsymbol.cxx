@@ -30,7 +30,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testPage)
 {
     // Given a file with a \page and 2 \par tokens:
-    loadFromURL(u"page.rtf");
+    loadFromFile(u"page.rtf");
 
     // Then make sure we get exactly two paragraphs:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCenterAfterPage)
 {
     // Given a file with a \page, followed by a \qc:
     // When loading that file:
-    loadFromURL(u"center-after-page.rtf");
+    loadFromFile(u"center-after-page.rtf");
 
     // Then make sure that the last paragraph is centered:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

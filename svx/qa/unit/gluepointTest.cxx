@@ -87,7 +87,7 @@ bool lcl_getGeometryGluePoints(
 
 CPPUNIT_TEST_FIXTURE(GluePointTest, testTdf157543_5PointStar)
 {
-    loadFromURL(u"tdf157543_5PointStar.ppt");
+    loadFromFile(u"tdf157543_5PointStar.ppt");
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
     CPPUNIT_ASSERT(lcl_getGeometryGluePoints(aGluePoints, getShape(0)));
     // Without fix only two glue points exist.

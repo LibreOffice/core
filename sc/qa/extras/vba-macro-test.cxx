@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSimpleCopyAndPaste)
     // Range(Cells(4, 3), Cells(6, 3)).Copy
     // Cells(4, 2).Activate
     // ActiveCell.PasteSpecial xlValues
-    loadFromURL(u"SimpleCopyPaste.xlsm");
+    loadFromFile(u"SimpleCopyPaste.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMultiDocumentCopyAndPaste)
     // Cells(2, 2).Activate
     // ActiveCell.PasteSpecial xlValues
     // ...
-    loadFromURL(u"MultiDocumentCopyPaste.xlsm");
+    loadFromFile(u"MultiDocumentCopyPaste.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMultiDocumentCopyAndPaste)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSheetAndColumnSelectAndHide)
 {
-    loadFromURL(u"SheetAndColumnSelectAndHide.xlsm");
+    loadFromFile(u"SheetAndColumnSelectAndHide.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testPrintArea)
 {
     // Sets the print area to A1:B5
     // ActiveSheet.PageSetup.PrintArea = "$A$1:$B$5"
-    loadFromURL(u"VariousTestMacros.xlsm");
+    loadFromFile(u"VariousTestMacros.xlsm");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSelectAllChaged)
 {
     // Columns("A:A").Select
     // Range(Selection, Selection.End(xlToRight)).Select
-    loadFromURL(u"VariousTestMacros.xlsm");
+    loadFromFile(u"VariousTestMacros.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRangeSelect)
 {
     // Range("B2").Select
     // Range(Selection, Selection.End(xlToRight)).Select
-    loadFromURL(u"VariousTestMacros.xlsm");
+    loadFromFile(u"VariousTestMacros.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -255,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testWindowState)
     // Application.WindowState = xlMinimized
     // Application.WindowState = xlMaximized
     // Application.WindowState = xlNormal
-    loadFromURL(u"VariousTestMacros.xlsm");
+    loadFromFile(u"VariousTestMacros.xlsm");
 
     executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?language=Basic&"
                  "location=document");
@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testScroll)
     // ActiveWindow.ScrollColumn = 30
     // ActiveWindow.ScrollRow = 100
 
-    loadFromURL(u"VariousTestMacros.xlsm");
+    loadFromFile(u"VariousTestMacros.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMacroKeyBinding)
 {
     // key_U() -> CTRL+U
     // key_T() -> CTRL+T
-    loadFromURL(u"KeyShortcut.xlsm");
+    loadFromFile(u"KeyShortcut.xlsm");
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
@@ -430,7 +430,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
     uno::Sequence<uno::Any> aParams;
     for (const auto& rTestInfo : testInfo)
     {
-        OUString aFileName = loadFromURL(rTestInfo.sFileBaseName);
+        OUString aFileName = loadFromFile(rTestInfo.sFileBaseName);
 
         // process all events such as OnLoad events etc.  otherwise they tend
         // to arrive later at a random time - while processing other StarBasic
@@ -551,7 +551,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107885)
 {
-    loadFromURL(u"tdf107885.xlsm");
+    loadFromFile(u"tdf107885.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107885)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf131562)
 {
-    loadFromURL(u"tdf131562.xlsm");
+    loadFromFile(u"tdf131562.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -607,7 +607,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf131562)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf52602)
 {
-    loadFromURL(u"tdf52602.xls");
+    loadFromFile(u"tdf52602.xls");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf52602)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107902)
 {
-    loadFromURL(u"tdf107902.xlsm");
+    loadFromFile(u"tdf107902.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -663,7 +663,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107902)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf90278)
 {
-    loadFromURL(u"tdf90278.xls");
+    loadFromFile(u"tdf90278.xls");
 
     // Without the fix in place, changing the border weight
     // would cause a Basic exception/error in the following script.
@@ -678,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf90278)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149531)
 {
-    loadFromURL(u"tdf149531.xls");
+    loadFromFile(u"tdf149531.xls");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -701,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149531)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
 {
-    loadFromURL(u"tdf118247.xlsm");
+    loadFromFile(u"tdf118247.xlsm");
 
     uno::Any aRet = executeMacro(
         "vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstantsEmpty?"
@@ -830,7 +830,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testForEachInSelection)
 {
-    loadFromURL(u"ForEachInSelection.ods");
+    loadFromFile(u"ForEachInSelection.ods");
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -857,7 +857,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testForEachInSelection)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
 {
-    loadFromURL(u"ForEachInSelection.ods");
+    loadFromFile(u"ForEachInSelection.ods");
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);

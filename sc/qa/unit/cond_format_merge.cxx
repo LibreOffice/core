@@ -41,7 +41,7 @@ ScCondFormatMergeTest::ScCondFormatMergeTest()
 
 void ScCondFormatMergeTest::testCondFormatMerge()
 {
-    loadFromURL(u"cond_format_merge.ods");
+    loadFromFile(u"cond_format_merge.ods");
 
     // get the first sheet
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);

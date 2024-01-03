@@ -46,7 +46,7 @@ public:
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Table_inside_Textbox)
 {
     // The document has a table inside a text box on a drawing canvas.
-    loadFromURL(u"WPC_tdf48610_Textbox_with_table_inside.docx");
+    loadFromFile(u"WPC_tdf48610_Textbox_with_table_inside.docx");
 
     // Make sure the table exists. Without import of drawing canvas, the table was lost.
     uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Table_inside_Textbox)
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Text_in_ellipse)
 {
     // The document has text in an ellipse on a drawing canvas.
-    loadFromURL(u"WPC_Textwrap_in_ellipse.docx");
+    loadFromFile(u"WPC_Textwrap_in_ellipse.docx");
 
     // The VML import creates for an ellipse not a custom shape but a legacy ellipse and that has no
     // word wrap. Thus the text was in one line and overflows the shape. This overflow becomes visible
@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Text_in_ellipse)
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_MulticolorGradient)
 {
     // The document has a shape with multi color gradient fill on a drawing canvas.
-    loadFromURL(u"WPC_MulticolorGradient.docx");
+    loadFromFile(u"WPC_MulticolorGradient.docx");
 
     // The VML import was not able to import multicolor gradients. Thus only start and end color
     // were imported, ColorStops had only two elements.
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_MulticolorGradient)
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CanvasBackground)
 {
     // The document has a drawing canvas with color fill.
-    loadFromURL(u"WPC_CanvasBackground.docx");
+    loadFromFile(u"WPC_CanvasBackground.docx");
 
     // The VML import displayed the background as if it was transparent. Thus the BoundRect
     // of the shape which represents the background was zero.
@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CanvasBackground)
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Glow)
 {
     // The document has a shape with glow effect.
-    loadFromURL(u"WPC_Glow.docx");
+    loadFromFile(u"WPC_Glow.docx");
 
     // VML does not know any glow effect. Thus it was lost on import.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Glow)
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_BentConnector)
 {
     // The document has two shapes connected with a bentConnector on a drawing canvas.
-    loadFromURL(u"WPC_BentConnector.docx");
+    loadFromFile(u"WPC_BentConnector.docx");
 
     // VML has no information about the target shapes of the connector. The connector was imported as
     // custom shape, not as connector shape
@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_ThemeColor)
 {
     // The document has a shape with color fill used as pseudo background and a 'heart' shape with
     // color fill and colored line. All colors are theme colors.
-    loadFromURL(u"WPC_ThemeColor.docx");
+    loadFromFile(u"WPC_ThemeColor.docx");
 
     // VML has no information about theme colors. Thus ThemeColorType was always 'Unknown'.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -215,7 +215,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_ThemeColor)
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf104671_Cloud)
 {
     // The document has 'cloud' shape on a drawing canvas.
-    loadFromURL(u"WPC_tdf104671_Cloud.docx");
+    loadFromFile(u"WPC_tdf104671_Cloud.docx");
 
     // MS Office writes the 'cloud' shape without type to the VML fallback. Thus the VLM import uses
     // ClosedBezierShape with several closed polygons. That produces holes because of the even-odd
@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf104671_Cloud)
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Shadow)
 {
     // The document has a shape with blur shadow on a drawing canvas.
-    loadFromURL(u"WPC_Shadow.docx");
+    loadFromFile(u"WPC_Shadow.docx");
 
     // The VML fallback contains a block shadow. Blur is not available in VML. The VML import does not
     // import shadow at all.
@@ -260,7 +260,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158339_shape_text_in_group)
 {
     // The document has a group of two shapes with text. This group is child of a drawing canvas.
     // Without fix the text of the shapes were imported as separate text boxes.
-    loadFromURL(u"WPC_tdf158339_shape_text_in_group.docx");
+    loadFromFile(u"WPC_tdf158339_shape_text_in_group.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158348_shape_text_in_table_cell)
 {
     // The document has a shape with text on a drawing canvas in a table cell.
     // Without fix the text of the shape becomes part of the paragraph of the table cell.
-    loadFromURL(u"WPC_tdf158348_shape_text_in_table_cell.docx");
+    loadFromFile(u"WPC_tdf158348_shape_text_in_table_cell.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -311,7 +311,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CurvedConnector2)
 {
     // The document has two shapes connected with a curvedConnector2 on a drawing canvas.
     // This connector is a single Bezier segment without handles.
-    loadFromURL(u"WPC_CurvedConnector2.docx");
+    loadFromFile(u"WPC_CurvedConnector2.docx");
 
     // LO and OOXML differ in the position of the control points. LibreOffice uses 2/3 but OOXML
     // uses 1/2 of width or height. The path by LO looks more round.

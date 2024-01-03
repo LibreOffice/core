@@ -1253,7 +1253,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testUnicodeFileNameGnumeric)
     {
         return;
     }
-    loadFromURL(u"gnumeric/t\u00E4\u00DFt.gnumeric");
+    loadFromFile(u"gnumeric/t\u00E4\u00DFt.gnumeric");
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testMergedCellsXLSXML)

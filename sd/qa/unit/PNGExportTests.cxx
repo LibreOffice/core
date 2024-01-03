@@ -41,7 +41,7 @@ static void assertColorsAreSimilar(const std::string& message, const BitmapColor
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 {
-    loadFromURL(u"odp/tdf105998.odp");
+    loadFromFile(u"odp/tdf105998.odp");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
 {
-    loadFromURL(u"odg/tdf126319.odg");
+    loadFromFile(u"odg/tdf126319.odg");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
 {
     // Reuse existing file
-    loadFromURL(u"odp/tdf105998.odp");
+    loadFromFile(u"odp/tdf105998.odp");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -203,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157652)
 {
-    loadFromURL(u"odp/tdf157652.odp");
+    loadFromFile(u"odp/tdf157652.odp");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -251,7 +251,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157652)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
 {
-    loadFromURL(u"pptx/tdf156808.pptx");
+    loadFromFile(u"pptx/tdf156808.pptx");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -302,7 +302,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157795)
 {
-    loadFromURL(u"odp/tdf157795.odp");
+    loadFromFile(u"odp/tdf157795.odp");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157795)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105362)
 {
-    loadFromURL(u"odp/tdf105362.odp");
+    loadFromFile(u"odp/tdf105362.odp");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105362)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
 {
-    loadFromURL(u"ppt/tdf157636.ppt");
+    loadFromFile(u"ppt/tdf157636.ppt");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -451,7 +451,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
 {
-    loadFromURL(u"pptx/tdf157793.pptx");
+    loadFromFile(u"pptx/tdf157793.pptx");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
 {
-    loadFromURL(u"pptx/tdf157635.pptx");
+    loadFromFile(u"pptx/tdf157635.pptx");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -553,7 +553,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
 {
-    loadFromURL(u"pptx/tdf113163.pptx");
+    loadFromFile(u"pptx/tdf113163.pptx");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -603,7 +603,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
 {
-    loadFromURL(u"odg/tdf147119.odg");
+    loadFromFile(u"odg/tdf147119.odg");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -652,7 +652,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
 {
-    loadFromURL(u"odp/tdf113197.odp");
+    loadFromFile(u"odp/tdf113197.odp");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -703,7 +703,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
 {
-    loadFromURL(u"ppt/tdf93124.ppt");
+    loadFromFile(u"ppt/tdf93124.ppt");
     uno::Reference<uno::XComponentContext> xContext = getComponentContext();
     CPPUNIT_ASSERT(xContext.is());
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
@@ -759,7 +759,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
     for (size_t i = 0; i < SAL_N_ELEMENTS(filenames); ++i)
     {
         // 1st check for new behaviour - having AnchoredTextOverflowLegacy compatibility flag set to false in settings.xml
-        loadFromURL(filenames[i]);
+        loadFromFile(filenames[i]);
 
         uno::Reference<uno::XComponentContext> xContext = getComponentContext();
         CPPUNIT_ASSERT(xContext.is());
@@ -812,7 +812,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
 {
-    loadFromURL(u"odg/diagonalLine.fodg");
+    loadFromFile(u"odg/diagonalLine.fodg");
 
     auto xGraphicExporter = drawing::GraphicExportFilter::create(getComponentContext());
     CPPUNIT_ASSERT(xGraphicExporter);

@@ -64,7 +64,7 @@ Test::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawPage
 CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
 {
     // Given a document containing a table with a blurry shadow:
-    loadFromURL(u"table-shadow-blur.pptx");
+    loadFromFile(u"table-shadow-blur.pptx");
 
     // When rendering the table shadow to primitives:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);

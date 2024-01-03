@@ -33,7 +33,7 @@ public:
 
     void testHtmlSkipImage()
     {
-        loadFromURL(u"BaseForHTMLExport.ods");
+        loadFromFile(u"BaseForHTMLExport.ods");
         save("HTML (StarCalc)");
         htmlDocUniquePtr pDoc = parseHtml(maTempFile);
         CPPUNIT_ASSERT (pDoc);
@@ -52,7 +52,7 @@ public:
 
     void testTdf155244()
     {
-        loadFromURL(u"default-styles.ods");
+        loadFromFile(u"default-styles.ods");
         save("XHTML Calc File");
 
         xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);

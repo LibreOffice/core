@@ -106,7 +106,7 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocu
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
 {
-    loadFromURL(u"ods/tdf120348.ods");
+    loadFromFile(u"ods/tdf120348.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
 
@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
     std::vector<OUString> aExpected
         = { u"Ωφέλιμο"_ustr, u"Επικίνδυνο"_ustr, u"Απόσταση"_ustr, u"Μάσκα"_ustr, u"Εμβόλιο"_ustr };
 
-    loadFromURL(u"ods/tdf151091.ods");
+    loadFromFile(u"ods/tdf151091.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf107097)
 {
-    loadFromURL(u"ods/tdf107097.ods");
+    loadFromFile(u"ods/tdf107097.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getPivotChartDocFromSheet(1, mxComponent),
                                                     uno::UNO_QUERY_THROW);
     testCopyPasteToNewSheet(xChartDoc, "Object 1", 4, 12);
@@ -166,12 +166,12 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf107097)
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
 {
-    loadFromURL(u"ods/tdf136011.ods");
+    loadFromFile(u"ods/tdf136011.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
     testCopyPasteToNewSheet(xChartDoc, "Object 1", 3, 9);
 
-    loadFromURL(u"ods/tdf136011.ods");
+    loadFromFile(u"ods/tdf136011.ods");
     uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 1, mxComponent),
                                                      uno::UNO_QUERY_THROW);
 
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf62057)
 {
-    loadFromURL(u"ods/tdf62057.ods");
+    loadFromFile(u"ods/tdf62057.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
 
@@ -197,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf62057)
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
 {
-    loadFromURL(u"xlsx/tdf98690.xlsx");
+    loadFromFile(u"xlsx/tdf98690.xlsx");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
 
@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
 {
-    loadFromURL(u"ods/tdf101894.ods");
+    loadFromFile(u"ods/tdf101894.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
 
@@ -312,7 +312,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
 {
-    loadFromURL(u"ods/chartWithDotInSheetName.ods");
+    loadFromFile(u"ods/chartWithDotInSheetName.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     uno::UNO_QUERY_THROW);
 
@@ -390,7 +390,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
 
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf158223)
 {
-    loadFromURL(u"ods/tdf158223.ods");
+    loadFromFile(u"ods/tdf158223.ods");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);

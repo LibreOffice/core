@@ -147,7 +147,7 @@ void checkSparklines(ScDocument& rDocument)
 
 void SparklineImportExportTest::testSparklinesRoundtripXLSX()
 {
-    loadFromURL(u"xlsx/Sparklines.xlsx");
+    loadFromFile(u"xlsx/Sparklines.xlsx");
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
@@ -163,7 +163,7 @@ void SparklineImportExportTest::testSparklinesRoundtripXLSX()
 void SparklineImportExportTest::testSparklinesExportODS()
 {
     // Load the document containing sparklines
-    loadFromURL(u"xlsx/Sparklines.xlsx");
+    loadFromFile(u"xlsx/Sparklines.xlsx");
 
     // Save as ODS and check content.xml with XPath
     save("calc8");
@@ -213,7 +213,7 @@ void SparklineImportExportTest::testSparklinesExportODS()
 
 void SparklineImportExportTest::testSparklinesRoundtripODS()
 {
-    loadFromURL(u"xlsx/Sparklines.xlsx");
+    loadFromFile(u"xlsx/Sparklines.xlsx");
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
@@ -233,7 +233,7 @@ void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
     // Check no sparkline elements are written when there are none in the document
 
     // Load the document containing NO sparklines
-    loadFromURL(u"xlsx/empty.xlsx");
+    loadFromFile(u"xlsx/empty.xlsx");
 
     save("Calc Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/worksheets/sheet1.xml");
@@ -277,7 +277,7 @@ void checkSparklineThemeColors(ScDocument& rDocument)
 
 void SparklineImportExportTest::testSparklinesRoundtripThemeColorsODS()
 {
-    loadFromURL(u"fods/Sparklines.fods");
+    loadFromFile(u"fods/Sparklines.fods");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -292,7 +292,7 @@ void SparklineImportExportTest::testSparklinesRoundtripThemeColorsODS()
 
 void SparklineImportExportTest::testSparklinesRoundtripThemeColorsOOXML()
 {
-    loadFromURL(u"fods/Sparklines.fods");
+    loadFromFile(u"fods/Sparklines.fods");
     saveAndReload("Calc Office Open XML");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);

@@ -26,7 +26,7 @@ public:
 CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradient)
 {
     // Given a document with three-color gradient on a Fontwork.
-    loadFromURL(u"MCGR_FontworkColorGradient.fodp");
+    loadFromFile(u"MCGR_FontworkColorGradient.fodp");
     // Save it to PPTX
     save("Impress Office Open XML");
     // And make sure a multi-color gradient fill is exported.
@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
     // Fontwork is handled different in Word than in PowerPoint documents. So we need a separate
     // test for a text document.
     // Given a document with three-color gradient on a Fontwork.
-    loadFromURL(u"MCGR_FontworkColorGradient.fodt");
+    loadFromFile(u"MCGR_FontworkColorGradient.fodt");
     // Save it to DOCX
     save("Office Open XML Text");
     // And make sure a multi-color gradient fill is exported.
@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
 CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
 {
     // Color gradient has offset range [0,0.8] and transparency gradient has offset range [0,1].
-    loadFromURL(u"tdf155825_MCGR_SourceOffsetRangeDifferent.fodp");
+    loadFromFile(u"tdf155825_MCGR_SourceOffsetRangeDifferent.fodp");
     // Save it to PPTX
     // Without fix, a debug-build would have crashed in oox/source/export/drawingml.cxx from
     // assert(false && "oox::WriteGradientFill: non-synchronized gradients (!)");
@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
 CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
 {
     // Given a document with two-color gradient with StepCount 4.
-    loadFromURL(u"tdf155852_MCGR_StepCount4.fodp");
+    loadFromFile(u"tdf155852_MCGR_StepCount4.fodp");
     // Save it to PPTX
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testAxialColorLinearTrans)
 {
     // Given a document with a shape with axial color gradient from inside red to outside cyan and
     // two-stop linear transparency gradient from start 80% to end 0%.
-    loadFromURL(u"tdf155827_MCGR_AxialColorLinearTrans.fodp");
+    loadFromFile(u"tdf155827_MCGR_AxialColorLinearTrans.fodp");
     // Save it to PPTX
     save("Impress Office Open XML");
     // OOXML has transparency together with color. Transparency is stored as opacity.

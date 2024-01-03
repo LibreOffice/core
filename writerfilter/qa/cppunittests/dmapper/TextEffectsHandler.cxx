@@ -29,7 +29,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
 {
     // Load a document with a single paragraph: second text portion has semi-transparent text.
-    loadFromURL(u"semi-transparent-text.docx");
+    loadFromFile(u"semi-transparent-text.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
 {
     // Load a document with a single paragraph. It has semi-transparent text and the color is
     // determined by a w14:schemeClr element.
-    loadFromURL(u"tdf152884_Char_Transparency.docx");
+    loadFromFile(u"tdf152884_Char_Transparency.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);

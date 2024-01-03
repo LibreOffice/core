@@ -26,7 +26,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
 {
     // Given a document with a group shape and therein a polyline and a connector.
-    loadFromURL(u"tdf141786_PolylineConnectorInGroup.odt");
+    loadFromFile(u"tdf141786_PolylineConnectorInGroup.odt");
     // When saving that to DOCX:
     save("Office Open XML Text");
 
@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
 CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
 {
     // Given a document with a group shape and therein a rotated custom shape.
-    loadFromURL(u"tdf141786_RotatedShapeInGroup.odt");
+    loadFromFile(u"tdf141786_RotatedShapeInGroup.odt");
 
     // FIXME: validation error in OOXML export: Errors: 3
     skipValidation();
@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
 CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
 {
     // Given a document with a group shape, containing a single polygon child shape:
-    loadFromURL(u"dml-groupshape-polygon.docx");
+    loadFromFile(u"dml-groupshape-polygon.docx");
 
     // FIXME: validation error in OOXML export: Errors: 9
     skipValidation();
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
 {
     // Given a document with a few different kinds of arrow shapes in it:
-    loadFromURL(u"tdf142602_CustomShapeArrows.odt");
+    loadFromFile(u"tdf142602_CustomShapeArrows.odt");
 
     // FIXME: validation error in OOXML export: Errors: 11
     skipValidation();
@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
 CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
 {
     // Given a PPTX file that contains camera revolution (rotation around z axis) applied shapes
-    loadFromURL(u"camera-rotation-revolution-nonwps.pptx");
+    loadFromFile(u"camera-rotation-revolution-nonwps.pptx");
 
     // When saving that document:
     save("Impress Office Open XML");
@@ -308,7 +308,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
 CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
 {
     // Given a PPTX file that contains references to a theme:
-    loadFromURL(u"refer-to-theme.pptx");
+    loadFromFile(u"refer-to-theme.pptx");
 
     // When saving that document:
     save("Impress Office Open XML");
@@ -352,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
 CPPUNIT_TEST_FIXTURE(Test, testThemeColor_ShapeFill)
 {
     // Given an ODP file that contains references to a theme for shape fill:
-    loadFromURL(u"ReferenceShapeFill.fodp");
+    loadFromFile(u"ReferenceShapeFill.fodp");
 
     // When saving that document:
     save("Impress Office Open XML");
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColor_ShapeFill)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSize)
 {
     // Given a PPTX file that contains references to a theme:
-    loadFromURL(u"endParaRPr-newline-textsize.pptx");
+    loadFromFile(u"endParaRPr-newline-textsize.pptx");
 
     // When saving that document:
     save("Impress Office Open XML");
@@ -388,7 +388,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSi
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
 {
     // Given an odp file that contains a non-primitive custom shape with command N
-    loadFromURL(u"tdf147978_endsubpath.odp");
+    loadFromFile(u"tdf147978_endsubpath.odp");
 
     // When saving that document:
     save("Impress Office Open XML");
@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandA)
 {
     // Given an odp file that contains a non-primitive custom shape with command N
-    loadFromURL(u"tdf147978_enhancedPath_commandA.odp");
+    loadFromFile(u"tdf147978_enhancedPath_commandA.odp");
 
     // When saving that document:
     save("Impress Office Open XML");
@@ -426,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandA)
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandT)
 {
     // The odp file contains a non-primitive custom shape with commands MTZ
-    loadFromURL(u"tdf147978_enhancedPath_commandT.odp");
+    loadFromFile(u"tdf147978_enhancedPath_commandT.odp");
 
     // Export to pptx had only exported the command M and has used a wrong path size
     save("Impress Office Open XML");
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandT)
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandXY)
 {
     // The odp file contains a non-primitive custom shapes with commands XY
-    loadFromURL(u"tdf147978_enhancedPath_commandXY.odp");
+    loadFromFile(u"tdf147978_enhancedPath_commandXY.odp");
 
     // Export to pptx had dropped commands X and Y.
     save("Impress Office Open XML");
@@ -489,7 +489,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandXY)
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandHIJK)
 {
     // The odp file contains a non-primitive custom shapes with commands H,I,J,K
-    loadFromURL(u"tdf147978_enhancedPath_commandHIJK.odp");
+    loadFromFile(u"tdf147978_enhancedPath_commandHIJK.odp");
 
     // Export to pptx had dropped commands X and Y.
     save("Impress Office Open XML");
@@ -511,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandHIJK)
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
 {
     // The odp file contains a non-primitive custom shapes with commands H,I,J,K
-    loadFromURL(u"tdf147978_enhancedPath_subpath.pptx");
+    loadFromFile(u"tdf147978_enhancedPath_subpath.pptx");
 
     // Export to pptx had dropped the subpaths.
     save("Impress Office Open XML");
@@ -532,7 +532,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
 CPPUNIT_TEST_FIXTURE(Test, testTdf100391TextAreaRect)
 {
     // The document has a custom shape of type "non-primitive" to trigger the custGeom export
-    loadFromURL(u"tdf100391_TextAreaRect.odp");
+    loadFromFile(u"tdf100391_TextAreaRect.odp");
     // When saving to PPTX the textarea rect was set to default instead of using the actual area
     save("Impress Office Open XML");
 
@@ -553,7 +553,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
 {
     // The odp file contains an "Octagon Bevel" shape. Such has shading not in commands H,I,J,K
     // but shading is generated in ctor of EnhancedCustomShape2d from the Type value.
-    loadFromURL(u"tdf109169_OctagonBevel.odt");
+    loadFromFile(u"tdf109169_OctagonBevel.odt");
 
     // FIXME: validation error in OOXML export: Errors: 1
     skipValidation();
@@ -578,7 +578,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
     // path. LO is tolerant and renders it so that is makes a moveTo to the start point of the arc or
     // the end of the line respectively. Export to OOXML does the same now and writes a moveTo
     // instead of the normally used lnTo. If a lnTo is written, MS Office shows nothing of the shape.
-    loadFromURL(u"FaultyPathStart.odp");
+    loadFromFile(u"FaultyPathStart.odp");
 
     save("Impress Office Open XML");
 
@@ -597,7 +597,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchXY)
     // They use formulas with 'right' and 'bottom'.
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered. The
     // line at right and bottom edge were positioned inside as if the shape had a square size.
-    loadFromURL(u"tdf148784_StretchXY.odp");
+    loadFromFile(u"tdf148784_StretchXY.odp");
     save("Impress Office Open XML");
 
     // Verify the markup.
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandQ)
     // They use formulas with 'right' and 'bottom'.
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered.
     // That results in wrong arcs on the right or bottom side of the shape.
-    loadFromURL(u"tdf148784_StretchCommandQ.odp");
+    loadFromFile(u"tdf148784_StretchCommandQ.odp");
     save("Impress Office Open XML");
 
     // Verify the markup.
@@ -674,7 +674,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandVW)
     // has only fixed values in the path.
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered.
     // That results in circles instead of ellipses.
-    loadFromURL(u"tdf148784_StretchCommandVW.odp");
+    loadFromFile(u"tdf148784_StretchCommandVW.odp");
     save("Impress Office Open XML");
 
     // Verify the markup.
@@ -708,7 +708,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551VertPadding)
     // The document has shape[1] with attribute vert="vert270" and shape[2] with vert="vert". The text
     // has paddings lIns="720000"=2cm, tIns="360000"=1cm, rIns="0" and bIns="0".
     // After load and save the paddings were rotated and a 90deg text rotation was added.
-    loadFromURL(u"tdf149551_vert_and_padding.pptx");
+    loadFromFile(u"tdf149551_vert_and_padding.pptx");
     save("Impress Office Open XML");
 
     // Verify the markup. The values must be the same as in the original file.
@@ -730,7 +730,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
     // emulated by rotating the text area rectangle. On export there should be an upright="1"
     // attribute but no 'rot' attribute. Without the fix the 'rot' attribute with values from
     // the emulation was written out.
-    loadFromURL(u"tdf149538_upright.pptx");
+    loadFromFile(u"tdf149538_upright.pptx");
     save("Impress Office Open XML");
 
     // Verify the markup. The values must be the same as in the original file.
@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
 {
-    loadFromURL(u"tdf151008_eaVertAnchor.pptx");
+    loadFromFile(u"tdf151008_eaVertAnchor.pptx");
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // The order of the shapes in the file is by name "Right", "Center", "Left", "RightMiddle",
@@ -771,7 +771,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
 CPPUNIT_TEST_FIXTURE(Test, testFontworkBitmapFill)
 {
     // The document has a Fontwork shape with bitmap fill.
-    loadFromURL(u"tdf128568_FontworkBitmapFill.odt");
+    loadFromFile(u"tdf128568_FontworkBitmapFill.odt");
 
     // FIXME: validation error in OOXML export: Errors: 1
     // Attribute ID is not allowed in element v:shape
@@ -802,7 +802,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkFontProperties)
 {
     // The document has five Fontwork shapes. They have bitmap fill and thus are exported to VML.
     // They differ in font properties e.g. font weight and character spacing.
-    loadFromURL(u"tdf128568_FontworkFontProperties.odt");
+    loadFromFile(u"tdf128568_FontworkFontProperties.odt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -838,7 +838,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkSlantUp)
     // not recognize its markup as preset WordArt, because the used markup differs from what Word
     // expects for this type of shape. As a result Word saves the shape as having custom geometry
     // and such is not understand by LibreOffice.
-    loadFromURL(u"tdf153296_VML_export_SlantUp.odt");
+    loadFromFile(u"tdf153296_VML_export_SlantUp.odt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -865,7 +865,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLFontworkArchUp)
 {
     // The document has a Fontwork shape type 'textArchUp' (172). When exporting to docx, the shape
     // was not exported as VML Fontwork but as a rectangle.
-    loadFromURL(u"tdf153296_VML_export_ArchUpCurve.odt");
+    loadFromFile(u"tdf153296_VML_export_ArchUpCurve.odt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -887,7 +887,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLAdjustmentExport)
 {
     // The document has a Fontwork shape type 'textCirclePour' (150). When exporting to docx, the
     // adjustment values were not exported at all.
-    loadFromURL(u"tdf153246_VML_export_Fontwork_Adjustment.odt");
+    loadFromFile(u"tdf153246_VML_export_Fontwork_Adjustment.odt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -915,7 +915,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDirectColor)
     // The document has a Fontwork shape with fill #2e8b57 plus 60% transparency and line color
     // #ff7f50 with 20% transparency. When exporting to docx, line color was not exported at all
     // and fill color was replaced with character color.
-    loadFromURL(u"tdf51195_Fontwork_DirectColor.odt");
+    loadFromFile(u"tdf51195_Fontwork_DirectColor.odt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -951,7 +951,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
     // The document has a Fontwork shape with fill theme color 'lt2' and 50% darker, and a Fontwork
     // shape with theme color 'dk2' and 40% lighter. When exporting to docx, fill color was not
     // exported as theme color at all, and it was replaced with character color.
-    loadFromURL(u"tdf51195_Fontwork_ThemeColor.fodt");
+    loadFromFile(u"tdf51195_Fontwork_ThemeColor.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -999,7 +999,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
 {
     // LO ignores 'Spacing to Borders' of the 'Text Attributes' for Fontwork shapes. Word interprets
     // them. Make sure we force them to zero on export to docx, otherwise Word might wrap the text.
-    loadFromURL(u"tdf51195_Fontwork_Distance.odt");
+    loadFromFile(u"tdf51195_Fontwork_Distance.odt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1022,7 +1022,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkLinGradientRGBColor)
     // start color #ffff00 (Yellow) with 'Intensity' 80%, end color #4682B4 (Steel Blue), Transition
     // Start 25% and solid transparency 30%.
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_linearGradient.fodt");
+    loadFromFile(u"tdf51195_Fontwork_linearGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1069,7 +1069,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkAxialGradientTransparency)
     // Transparency gradient Type Axial with Angle 160deg, Transition start 40%,
     // Start value 5%, End value 90%
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_axialGradient.fodt");
+    loadFromFile(u"tdf51195_Fontwork_axialGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1119,7 +1119,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRadialGradient)
     // From Color #40E0D0, To Color #FF0000, Center x|y 75%|20%, no transparency
     // Transition start 10%
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_radialGradient.fodt");
+    loadFromFile(u"tdf51195_Fontwork_radialGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1160,7 +1160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkEllipticalGradient)
     // transparency gradient type Ellipsoid, Center x|y 50%|50%, Transition Start 50%,
     // Start 70%, End 0%.
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_ellipticalGradient.fodt");
+    loadFromFile(u"tdf51195_Fontwork_ellipticalGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1203,7 +1203,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
     // From Color #4963ef 40%, To Color #ffff6e 90%, Center x|y 100%|50%,
     // no transparency
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_squareGradient.fodt");
+    loadFromFile(u"tdf51195_Fontwork_squareGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1245,7 +1245,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
     // transparency gradient Type "Rectangular", Center x|y 50%|50%, Transition start 10%,
     // Start value 70%, End value 5%.
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_rectGradient.fodt");
+    loadFromFile(u"tdf51195_Fontwork_rectGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1295,7 +1295,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
     // The document has first a Fontwork shape with solid fill theme color with transparency and
     // outline transparency and second a textbox with character transparency.
     // Without fix the transparency was not written to file.
-    loadFromURL(u"tdf139618_ThemeColorTransparency.pptx");
+    loadFromFile(u"tdf139618_ThemeColorTransparency.pptx");
 
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
@@ -1321,7 +1321,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeFontTypeface)
     // Saving the document had produced a file which PowerPoint wants to repair. The mandatory
     // attribute 'typeface' was missing in the <a:ea> elements.
 
-    loadFromURL(u"tdf155412_typeface.pptx");
+    loadFromFile(u"tdf155412_typeface.pptx");
 
     save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/theme/theme1.xml");
@@ -1337,7 +1337,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
     // The document has a custom shape of type "circular-arrow". Such uses a B command where
     // the ellipse bounding box is defined by bottom-right vertex first and then top-left vertex.
     // When saving to PPTX this had resulted in negative radii for the ellipse.
-    loadFromURL(u"tdf157289_circularArrow_export.fodp");
+    loadFromFile(u"tdf157289_circularArrow_export.fodp");
     save("Impress Office Open XML");
 
     // Verify the markup. Both wR and hR must be positive.

@@ -196,7 +196,7 @@ void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > const & xCh
 // improve the test
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarXLSX)
 {
-    loadFromURL(u"ods/error_bar.ods");
+    loadFromFile(u"ods/error_bar.ods");
     {
         // make sure the ODS import was successful
         uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarXLSX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarPropXLSX)
 {
-    loadFromURL(u"xlsx/testErrorBarProp.xlsx");
+    loadFromFile(u"xlsx/testErrorBarProp.xlsx");
     save("Calc Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -255,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendline)
     // Validation fails with
     // Error: tag name "chart:symbol-image" is not allowed. Possible tag names are: <label-separator>
     skipValidation();
-    loadFromURL(u"ods/trendline.ods");
+    loadFromFile(u"ods/trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     saveAndReload("calc8");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendline)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendlineOOXML)
 {
-    loadFromURL(u"ods/trendline.ods");
+    loadFromFile(u"ods/trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     saveAndReload("Calc Office Open XML");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
@@ -271,7 +271,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendlineOOXML)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendlineXLS)
 {
-    loadFromURL(u"ods/trendline.ods");
+    loadFromFile(u"ods/trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     saveAndReload("MS Excel 97");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
@@ -279,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendlineXLS)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testMovingAverage)
 {
-    loadFromURL(u"ods/moving-type.ods");
+    loadFromFile(u"ods/moving-type.ods");
     saveAndReload("calc8");
 
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent);
@@ -314,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testStockChart)
      * an attribute val of index should start from 1 and not from 0.
      * Which was problem area.
      */
-    loadFromURL(u"docx/testStockChart.docx");
+    loadFromFile(u"docx/testStockChart.docx");
 
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testStockChart)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarChart)
 {
-    loadFromURL(u"docx/testBarChart.docx");
+    loadFromFile(u"docx/testBarChart.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -342,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testCrosses)
 {
     // test crosses val="autoZero" with DOCX
     {
-        loadFromURL(u"docx/Bar_horizontal_cone.docx");
+        loadFromFile(u"docx/Bar_horizontal_cone.docx");
         save("Office Open XML Text");
         xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
 
@@ -350,7 +350,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testCrosses)
     }
     // tdf#142351: test crossesAt val="-50" with XLSX
     {
-        loadFromURL(u"xlsx/tdf142351.xlsx");
+        loadFromFile(u"xlsx/tdf142351.xlsx");
         save("Calc Office Open XML");
         xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
         CPPUNIT_ASSERT(pXmlDoc);
@@ -361,7 +361,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testCrosses)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterChartTextXValues)
 {
-    loadFromURL(u"docx/scatter-chart-text-x-values.docx");
+    loadFromFile(u"docx/scatter-chart-text-x-values.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -410,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterChartTextXValues)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisValues)
 {
-    loadFromURL(u"odt/tdf114657.odt");
+    loadFromFile(u"odt/tdf114657.odt");
 
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
@@ -425,7 +425,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisValues)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisCategories)
 {
-    loadFromURL(u"odt/tdf131143.odt");
+    loadFromFile(u"odt/tdf131143.odt");
 
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
@@ -437,7 +437,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisCategories)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartDataTable)
 {
-    loadFromURL(u"docx/testChartDataTable.docx");
+    loadFromFile(u"docx/testChartDataTable.docx");
 
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
@@ -449,7 +449,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartDataTable)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartExternalData)
 {
-    loadFromURL(u"docx/testMultipleChart.docx");
+    loadFromFile(u"docx/testMultipleChart.docx");
 
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
@@ -463,7 +463,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
    // after saving file.
    // This test case tests whether embeddings files grabbagged properly in correct object.
 
-   loadFromURL(u"docx/testMultiplechartembeddings.docx" );
+   loadFromFile(u"docx/testMultiplechartembeddings.docx" );
    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
    uno::Sequence<beans::PropertyValue> aGrabBag(0);
@@ -498,7 +498,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAreaChartLoad)
 {
-    loadFromURL(u"docx/testAreaChartLoad.docx");
+    loadFromFile(u"docx/testAreaChartLoad.docx");
 
     // FIXME: validation error in OOXML export: Errors: 1
     skipValidation();
@@ -512,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAreaChartLoad)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testUpDownBars)
 {
-    loadFromURL(u"docx/UpDownBars.docx");
+    loadFromFile(u"docx/UpDownBars.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -521,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testUpDownBars)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDoughnutChart)
 {
-    loadFromURL(u"docx/doughnutChart.docx");
+    loadFromFile(u"docx/doughnutChart.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -531,7 +531,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDoughnutChart)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDisplayUnits)
 {
-    loadFromURL(u"docx/DisplayUnits.docx");
+    loadFromFile(u"docx/DisplayUnits.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -541,7 +541,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDisplayUnits)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallGradientFill)
 {
-    loadFromURL(u"docx/fdo74115_WallGradientFill.docx");
+    loadFromFile(u"docx/fdo74115_WallGradientFill.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -551,7 +551,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallGradientFill)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallBitmapFill)
 {
-    loadFromURL(u"docx/fdo74115_WallBitmapFill.docx");
+    loadFromFile(u"docx/fdo74115_WallBitmapFill.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -560,7 +560,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallBitmapFill)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartWallLineStyle)
 {
-    loadFromURL(u"odt/testPieChartWallLineStyle.odt");
+    loadFromFile(u"odt/testPieChartWallLineStyle.odt");
 
     // FIXME: validation error in OOXML export: Errors: 9
     skipValidation();
@@ -575,7 +575,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartWallLineStyle)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290LineChartMarkerX)
 {
-    loadFromURL(u"docx/fdo78290_Line_Chart_Marker_x.docx");
+    loadFromFile(u"docx/fdo78290_Line_Chart_Marker_x.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -587,7 +587,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290LineChartMarkerX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290ScatterChartMarkerX)
 {
-    loadFromURL(u"docx/fdo78290_Scatter_Chart_Marker_x.docx");
+    loadFromFile(u"docx/fdo78290_Scatter_Chart_Marker_x.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -600,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290ScatterChartMarkerX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290CombinationChartMarkerX)
 {
-    loadFromURL(u"docx/fdo78290_Combination_Chart_Marker_x.docx");
+    loadFromFile(u"docx/fdo78290_Combination_Chart_Marker_x.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -611,7 +611,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290CombinationChartMarkerX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf126115IndividualMarker)
 {
     // Check individual marker properties.
-    loadFromURL(u"xlsx/tdf126115.xlsx");
+    loadFromFile(u"xlsx/tdf126115.xlsx");
     save("Calc Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -662,7 +662,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAxisNumberFormatODS)
 
     } aTest;
 
-    loadFromURL(u"ods/axis-numformats-linked.ods");
+    loadFromFile(u"ods/axis-numformats-linked.ods");
 
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     aTest.check(xChartDoc);
@@ -718,7 +718,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAxisNumberFormatXLS)
 
     } aTest;
 
-    loadFromURL(u"xls/axis_sourceformatting.xls" );
+    loadFromFile(u"xls/axis_sourceformatting.xls" );
 
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet( 0, mxComponent );
     aTest.check( xChartDoc, true, util::NumberFormat::PERCENT );
@@ -817,7 +817,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
 
     } aTest;
 
-    loadFromURL(u"docx/data-label-borders.docx");
+    loadFromFile(u"docx/data-label-borders.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
 
@@ -848,7 +848,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabel3DChartDOCX)
 {
-    loadFromURL(u"docx/3d-bar-label.docx");
+    loadFromFile(u"docx/3d-bar-label.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -868,7 +868,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabel3DChartDOCX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBarChartDOCX)
 {
-    loadFromURL(u"docx/bar-chart-labels.docx");
+    loadFromFile(u"docx/bar-chart-labels.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -884,7 +884,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBarChartDOCX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelClusteredBarChartDOCX)
 {
-    loadFromURL(u"docx/clustered-bar-chart-labels.docx");
+    loadFromFile(u"docx/clustered-bar-chart-labels.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -902,7 +902,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelClusteredBarChartDOCX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelRadarChartDOCX)
 {
-    loadFromURL(u"docx/radar-chart-labels.docx");
+    loadFromFile(u"docx/radar-chart-labels.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -918,7 +918,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelRadarChartDOCX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDoughnutChartDOCX)
 {
-    loadFromURL(u"docx/doughnut-chart-labels.docx");
+    loadFromFile(u"docx/doughnut-chart-labels.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -937,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDoughnutChartDOCX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelAreaChartDOCX)
 {
-    loadFromURL(u"docx/area-chart-labels.docx");
+    loadFromFile(u"docx/area-chart-labels.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDefaultLineChartDOCX)
     // label position (2010 does).  Make sure its default data label position
     // is RIGHT when exporting.
 
-    loadFromURL(u"docx/line-chart-label-default-placement.docx");
+    loadFromFile(u"docx/line-chart-label-default-placement.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -979,7 +979,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDefaultLineChartDOCX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testIndividualDataLabelProps)
 {
-    loadFromURL(u"xlsx/tdf122915.xlsx");
+    loadFromFile(u"xlsx/tdf122915.xlsx");
 
     // FIXME: validation error in OOXML export: Errors: 1
     skipValidation();
@@ -995,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testIndividualDataLabelProps)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarChartRotation)
 {
-    loadFromURL(u"docx/barChartRotation.docx");
+    loadFromFile(u"docx/barChartRotation.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1011,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testShapeFollowedByChart)
        docPr Id is being repeated, ECMA 20.4.2.5 says that the
        docPr Id should be unique, ensuring the same here.
     */
-    loadFromURL(u"docx/FDO74430.docx");
+    loadFromFile(u"docx/FDO74430.docx");
 
     // FIXME: validation error in OOXML export: Errors: 5
     skipValidation();
@@ -1028,7 +1028,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testShapeFollowedByChart)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartDataLabels)
 {
-    loadFromURL(u"docx/PieChartDataLabels.docx");
+    loadFromFile(u"docx/PieChartDataLabels.docx");
 
     // FIXME: validation error in OOXML export: Errors: 19
     skipValidation();
@@ -1041,7 +1041,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartDataLabels)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSeriesIdxOrder)
 {
-    loadFromURL(u"docx/testSeriesIdxOrder.docx");
+    loadFromFile(u"docx/testSeriesIdxOrder.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1051,7 +1051,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSeriesIdxOrder)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterPlotLabels)
 {
-    loadFromURL(u"odt/scatter-plot-labels.odt");
+    loadFromFile(u"odt/scatter-plot-labels.odt");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
@@ -1083,7 +1083,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterPlotLabels)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarDataRangeODS)
 {
-    loadFromURL(u"ods/ErrorBarRange.ods");
+    loadFromFile(u"ods/ErrorBarRange.ods");
     saveAndReload("calc8");
 
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
@@ -1112,7 +1112,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarDataRangeODS)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartCrash)
 {
-    loadFromURL(u"docx/FDO75975.docx");
+    loadFromFile(u"docx/FDO75975.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1120,7 +1120,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartCrash)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartRotation)
 {
-    loadFromURL(u"docx/pieChartRotation.docx");
+    loadFromFile(u"docx/pieChartRotation.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1134,7 +1134,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsOleObjectGrabBag)
    // after saving file.
    // This test case tests whether embeddings files grabbagged properly in correct object.
 
-   loadFromURL(u"docx/testchartoleobjectembeddings.docx" );
+   loadFromFile(u"docx/testchartoleobjectembeddings.docx" );
    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
    uno::Sequence<beans::PropertyValue> aGrabBag(0);
@@ -1205,7 +1205,7 @@ void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartDocument > co
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testGapWidthXLSX)
 {
-    loadFromURL(u"xlsx/gapWidth.xlsx");
+    loadFromFile(u"xlsx/gapWidth.xlsx");
 
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
     checkSheetForGapWidthAndOverlap(xChartDoc, 120, -60);
@@ -1224,7 +1224,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testGapWidthXLSX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSmoothedLines)
 {
-    loadFromURL(u"ods/smoothedLines.ods");
+    loadFromFile(u"ods/smoothedLines.ods");
     save("Calc Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1233,7 +1233,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSmoothedLines)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testLabelStringODS)
 {
-    loadFromURL(u"ods/labelString.ods");
+    loadFromFile(u"ods/labelString.ods");
 
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
     Reference< chart2::data::XDataSequence > xLabelSeq =

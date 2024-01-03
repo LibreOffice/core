@@ -92,7 +92,7 @@ void ScNamedRangeObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    loadFromURL(u"ScNamedRangeObj.ods");
+    loadFromFile(u"ScNamedRangeObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScNamedRangeObj);

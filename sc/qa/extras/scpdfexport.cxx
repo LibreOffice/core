@@ -345,7 +345,7 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
 
 void ScPDFExportTest::testUnoCommands_Tdf120161()
 {
-    loadFromURL(u"tdf120161.ods");
+    loadFromFile(u"tdf120161.ods");
 
     // A1:G1
     {
@@ -374,7 +374,7 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
 
 void ScPDFExportTest::testTdf64703_hiddenPageBreak()
 {
-    loadFromURL(u"tdf64703_hiddenPageBreak.ods");
+    loadFromFile(u"tdf64703_hiddenPageBreak.ods");
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
@@ -396,7 +396,7 @@ void ScPDFExportTest::testTdf143978()
         return;
     }
 
-    loadFromURL(u"tdf143978.ods");
+    loadFromFile(u"tdf143978.ods");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1:A2
@@ -504,7 +504,7 @@ void ScPDFExportTest::testTdf84012()
         return;
     }
 
-    loadFromURL(u"tdf84012.ods");
+    loadFromFile(u"tdf84012.ods");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1
@@ -539,7 +539,7 @@ void ScPDFExportTest::testTdf78897()
         return;
     }
 
-    loadFromURL(u"tdf78897.xls");
+    loadFromFile(u"tdf78897.xls");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // C3:D3
@@ -569,7 +569,7 @@ void ScPDFExportTest::testTdf78897()
 // just needs to not crash on export to pdf
 void ScPDFExportTest::testForcepoint97()
 {
-    loadFromURL(u"forcepoint97.xlsx");
+    loadFromFile(u"forcepoint97.xlsx");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1:H81

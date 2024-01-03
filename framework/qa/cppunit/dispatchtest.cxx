@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
 CPPUNIT_TEST_FIXTURE(DispatchTest, testSfxOfficeDispatchDispose)
 {
     // this test doesn't work with a new document because of aURL.Main check in SfxBaseController::dispatch()
-    loadFromURL(u"empty.fodp");
+    loadFromFile(u"empty.fodp");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
     uno::Reference<frame::XController> xController(xModel->getCurrentController());

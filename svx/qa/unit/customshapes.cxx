@@ -91,7 +91,7 @@ sal_uInt8 CustomshapesTest::countShapes()
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf150302)
 {
-    loadFromURL(u"FontworkSameLetterHeights.fodg");
+    loadFromFile(u"FontworkSameLetterHeights.fodg");
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of shapes", static_cast<sal_uInt8>(2),
                                  countShapes());
@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf150302)
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf147409_GeomItemHash)
 {
-    loadFromURL(u"tdf147409_GeomItemHash.odg");
+    loadFromFile(u"tdf147409_GeomItemHash.odg");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape* pSdrCustomShape(
         static_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)));
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf147409_GeomItemHash)
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf146866_GeomItemHash)
 {
-    loadFromURL(u"tdf147409_GeomItemHash.odg");
+    loadFromFile(u"tdf147409_GeomItemHash.odg");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape* pSdrCustomShape(
         static_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)));
@@ -176,7 +176,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_NonUI)
     // The document contains first light soft, no ambient color, no second light and shininess 6.
     // Such settings are not available in the UI. It tests the actual color, not the geometry.
     // Load document
-    loadFromURL(u"tdf145700_3D_NonUI.doc");
+    loadFromFile(u"tdf145700_3D_NonUI.doc");
 
     // Generate bitmap from shape
     uno::Reference<drawing::XShape> xShape = getShape(0);
@@ -212,7 +212,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FrontLightDim)
 {
     // This tests the actual color, not the geometry.
     // Load document
-    loadFromURL(u"tdf145700_3D_FrontLightDim.doc");
+    loadFromFile(u"tdf145700_3D_FrontLightDim.doc");
 
     // Generate bitmap from shape
     uno::Reference<drawing::XShape> xShape = getShape(0);
@@ -241,7 +241,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FrontLightDim)
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FirstLightHarsh)
 {
     // Load document
-    loadFromURL(u"tdf145700_3D_FirstLightHarsh.doc");
+    loadFromFile(u"tdf145700_3D_FirstLightHarsh.doc");
 
     // Generate bitmap from shape
     uno::Reference<drawing::XShape> xShape = getShape(0);
@@ -268,7 +268,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145956_Origin_Relative_BoundRect)
     // Error (among others) was, that the unrotated snap rectangle was used.
 
     // Load document
-    loadFromURL(u"tdf145956_Origin.odp");
+    loadFromFile(u"tdf145956_Origin.odp");
 
     // The shape is extruded with 10cm. viewpoint="(0cm 0cm 25cm)", origin="0 0".
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -289,7 +289,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterZ_odt)
     // Error (among others) was, that the value was interpreted as Twips.
 
     // Load document
-    loadFromURL(u"tdf145904_center_Zminus2000.odt");
+    loadFromFile(u"tdf145904_center_Zminus2000.odt");
 
     // The shape is extruded and tilt left 60deg. The rotation center is at -2000Hmm on the z-axis.
     // That is a position behind the back face of the extruded shape.
@@ -313,7 +313,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterY_odt)
     // shape size. Error was, that the relative fraction was handled as absolute value in Hmm.
 
     // Load document
-    loadFromURL(u"tdf145904_center_Y0dot25.odt");
+    loadFromFile(u"tdf145904_center_Y0dot25.odt");
 
     // The shape is extruded and tilt down 90deg. The rotation center is in the middle between shape
     // center and bottom shape edge. The bottom edge of the projected solid has roughly the
@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterY_doc)
     // shape size. Error was, that the relative fraction was handled as absolute value in EMU.
 
     // Load document
-    loadFromURL(u"tdf145904_center_Y0dot25.doc");
+    loadFromFile(u"tdf145904_center_Y0dot25.doc");
 
     // The shape is extruded and tilt down 90deg. The rotation center is in the middle between shape
     // center and bottom shape edge. The bottom edge of the projected solid has roughly the
@@ -365,7 +365,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145245_ExtrusionPosition)
     // depth itself is 5cm. Y-coordinate of shape is 6cm.
 
     // Load document
-    loadFromURL(u"tdf145245_ExtrusionPosition.odp");
+    loadFromFile(u"tdf145245_ExtrusionPosition.odp");
 
     // The tolerance 40 is estimated and can be adjusted if required for HiDPI.
     {
@@ -410,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_Fontwork_rendering_font_siz
     // the first paragraph was too long and the second would fit. It resulted in wrong position
     // and height and overlapping characters.
 
-    loadFromURL(u"tdf144988_Fontwork_FontSize.odp");
+    loadFromFile(u"tdf144988_Fontwork_FontSize.odp");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
@@ -433,7 +433,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
     // 'Top-Left' and 'Bottom-Left'.
 
     // Load document
-    loadFromURL(u"tdf145111_TL_BL_Fontwork.odp");
+    loadFromFile(u"tdf145111_TL_BL_Fontwork.odp");
 
     {
         // First shape has anchor set to Top-Left, which shifts Fontwork text down.
@@ -469,7 +469,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145004_gap_by_ScaleX)
 
     // Load document and get shape. It is a custom shape from pptx import of a WordArt of
     // kind 'Follow Path'.
-    loadFromURL(u"tdf145004_gap_by_ScaleX.pptx");
+    loadFromFile(u"tdf145004_gap_by_ScaleX.pptx");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
     // side faces were wrong calculated.
 
     // Load document and get shape. It is a custom shape in 3D mode.
-    loadFromURL(u"tdf141021_ExtrusionNorth.odp");
+    loadFromFile(u"tdf141021_ExtrusionNorth.odp");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     // Problem was, that fObjectRotation was not updated.
 
     // Load document and get shape. It is a rectangle custom shape with 45° shear and 330° rotation.
-    loadFromURL(u"tdf138945_resizeRotatedShape.odg");
+    loadFromFile(u"tdf138945_resizeRotatedShape.odg");
     uno::Reference<drawing::XShape> xShape(getShape(0));
 
     // Change height and mirror vertical
@@ -564,7 +564,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testViewBoxLeftTop)
 {
     // tdf#121890 formula values "left" and "top" are wrongly calculated
     // Load a document with two custom shapes of type "non-primitive"
-    loadFromURL(u"viewBox_positive_twolines_strict.odp");
+    loadFromFile(u"viewBox_positive_twolines_strict.odp");
     // Get the shape "leftright". Error was, that the identifier "left" was always set to zero, thus
     // the path was outside the frame rectangle for a viewBox having a positive "left" value.
     uno::Reference<drawing::XShape> xShapeLR(getShape(0));
@@ -595,7 +595,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testAccuracyCommandX)
     // 121761 Increase accuracy of quarter circles drawn by command X or Y
     // The loaded document has a quarter circle with radius 10000 (unit 1/100 mm)
     // which is rotated by 45deg. The test considers the segment.
-    loadFromURL(u"tdf121761_Accuracy_command_X.odp");
+    loadFromFile(u"tdf121761_Accuracy_command_X.odp");
     // Get the shape "arc_45deg_rotated". Error was, that a Bezier curve with bad parameters
     // was used, thus the segment height was obviously smaller than for a true circle.
     // Math: segment height approx 10000 * ( 1 - sqrt(0.5)) + line width
@@ -615,7 +615,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testToggleCommandXY)
     // The loaded document has a shape with command X and two parameter placed on a diagonal.
     // The radius of the quarter circles are both 10000 (unit 1/100 mm).
     // The shape is rotated by 45deg, so you get two segments, one up and one down.
-    loadFromURL(u"tdf121952_Toggle_direction_command_X.odp");
+    loadFromFile(u"tdf121952_Toggle_direction_command_X.odp");
     // Error was, that the second segment was drawn with same direction as first one. If drawn
     // correctly, the bounding box height of the segments together is about twice the single
     // segment height. Math: segment height approx 10000 * ( 1 - sqrt(0.5)) + line width
@@ -633,7 +633,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testMultipleMoveTo)
 {
     // tdf122964 Multiple moveTo has to be treated as lineTo in draw:enhanced-path
     // Load a document with path "M 0 0 5 10 10 0 N"
-    loadFromURL(u"tdf122964_MultipleMoveTo.odg");
+    loadFromFile(u"tdf122964_MultipleMoveTo.odg");
     // Error was, that the second and further parameter pairs were treated as moveTo,
     // and so the generated path was empty, resulting in zero width and height of the
     // bounding box. It has to be treated same as "M 0 0 L 5 10 10 0 N".
@@ -651,7 +651,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testWidthOrientationCommandU)
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document with path "M 750 0 L 750 500 250 500 250 0 U 500 0 500 500 0 180 N"
     // in viewBox="0 0 1000 500" and width="10cm", height="5cm".
-    loadFromURL(u"tdf121845_WidthOrientation_command_U.odg");
+    loadFromFile(u"tdf121845_WidthOrientation_command_U.odg");
     // Error was, that the width and height of the ellipse was halved and that the ellipse
     // was not drawn clockwise but counter clockwise.
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testHalfEllipseVML)
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document which was converted from VML to doc by Word. It had a VML
     // path="m750,al500,,500,500,,-11796480e" resulting in a lower half circle.
-    loadFromURL(u"tdf121845_HalfEllipseVML.doc");
+    loadFromFile(u"tdf121845_HalfEllipseVML.doc");
     // Error was, that a full circle instead of the half circle was draw.
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -689,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testLargeSwingAngleVML)
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document which was converted from VML to doc by Word. It had a VML
     // path="al50,50,45,45,2621440,31457280e" resulting in a full circle plus 120 deg segment.
-    loadFromURL(u"tdf121845_start40_swing480.doc");
+    loadFromFile(u"tdf121845_start40_swing480.doc");
     // Error was, that only the 120 deg segment was drawn.
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -706,7 +706,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf121845_two_commands_U)
     // Load a document with path "U 950 250 200 200 90 180 250 250 200 200 180 270 N"
     // Error was, that the second ellipse segment was interpreted as command T and
     // thus a line from first to second segment was drawn.
-    loadFromURL(u"tdf121845_Two_commands_U.odg");
+    loadFromFile(u"tdf121845_Two_commands_U.odg");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // In case no line is drawn, two polygons are generated; with line only one polygon
     SdrObjCustomShape& rSdrObjCustomShape(
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124212_handle_position)
     // default viewBox. Load a document with svg:viewBox="10800 0 10800 21600"
     // Error was, that moving the controller results in a handle position that
     // does not reflect the movement.
-    loadFromURL(u"tdf124212_handle_position.odg");
+    loadFromFile(u"tdf124212_handle_position.odg");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The shape has one, horizontal adjust handle.
     SdrObjCustomShape& rSdrObjCustomShape(
@@ -748,7 +748,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124029_arc_position)
     // tdf121029 MS binary custom shape mso_sptArc has wrong position
     // MS uses the sector for position reference. Error was, that
     // LibreOffice has used the underlying ellipse.
-    loadFromURL(u"tdf124029_Arc_position.doc");
+    loadFromFile(u"tdf124029_Arc_position.doc");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The visual wrong position is due to a wrong shape width.
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -764,7 +764,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124740_handle_path_coordsystem)
     // tdf124740 OOXML shape with handle and w and h attribute on path has wrong
     // handle position
     // The handle position was scaled erroneously twice.
-    loadFromURL(u"tdf124740_HandleInOOXMLUserShape.pptx");
+    loadFromFile(u"tdf124740_HandleInOOXMLUserShape.pptx");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The shape has one, horizontal adjust handle. It is about 1/5 of 10cm from left
     // shape edge, shape is 6cm from left . That results in a position
@@ -787,7 +787,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
     // Connectors are included as ordinary shapes to prevent converting.
     // Error was, that the handle movement and the changes to the shape did not follow
     // the mouse movement.
-    loadFromURL(u"tdf115813_HandleMovementOOXMLPresetShapes.pptx");
+    loadFromFile(u"tdf115813_HandleMovementOOXMLPresetShapes.pptx");
 
     // values in vector InteractionsHandles are in 1/100 mm and refer to page
     for (sal_uInt8 i = 0; i < countShapes(); i++)
@@ -840,7 +840,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testQuadraticCurveTo)
     // When converting to cubic Bezier curve, this had resulted in a wrong first control point.
     // The quadraticcurveto segment starts in shape center in the test file. The first control
     // point should produce a horizontal tangent in the start point.
-    loadFromURL(u"tdf125782_QuadraticCurveTo.odg");
+    loadFromFile(u"tdf125782_QuadraticCurveTo.odg");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
@@ -858,7 +858,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
     // opened and exported to ODF format by LibreOffice.
     // Error was, that for shapes, which were originally imported from OOXML, the handles
     // could not be moved at all.
-    loadFromURL(u"tdf126512_OOXMLHandleMovementInODF.odp");
+    loadFromFile(u"tdf126512_OOXMLHandleMovementInODF.odp");
 
     for (sal_uInt8 i = 0; i < countShapes(); i++)
     {
@@ -902,7 +902,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
     // and therefore equals approximately the text frame.
     // Error was, that because of wrong calculation, the flipped shapes do not use the
     // text frame but the frame rectangle for their text.
-    loadFromURL(u"tdf127785_Mirror.odp");
+    loadFromFile(u"tdf127785_Mirror.odp");
 
     uno::Reference<drawing::XShape> xShapeV(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeVProps(xShapeV, uno::UNO_QUERY);
@@ -939,7 +939,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126060_3D_Z_Rotation)
     // and the text has 3D z rotation. When we open the document we
     // should see the text vertically and rotated from text bound center not text box.
 
-    loadFromURL(u"tdf126060_3D_Z_Rotation.pptx");
+    loadFromFile(u"tdf126060_3D_Z_Rotation.pptx");
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrObjCustomShape(
@@ -973,7 +973,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
     // the text and therefore equals approximately the text frame.
     // Error was, that the 180deg text rotation was not compensated for the position of
     // the flipped text box.
-    loadFromURL(u"tdf127785_asymmetricTextBoxFlipV.odg");
+    loadFromFile(u"tdf127785_asymmetricTextBoxFlipV.odg");
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -996,7 +996,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
     // surrounds the text and therefore equals approximately the text frame.
     // Error was, that the compensation for the 180° rotation added for vertical
     // flip were not made to the text box position but to the text matrix.
-    loadFromURL(u"tdf127785_TextRotateAngle.odp");
+    loadFromFile(u"tdf127785_TextRotateAngle.odp");
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -1017,7 +1017,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf128413_tbrlOnOff)
     // The document contains a rotated shape with text. The error was, that switching
     // tb-rl writing-mode on, changed the shape size and position.
 
-    loadFromURL(u"tdf128413_tbrl_OnOff.odp");
+    loadFromFile(u"tdf128413_tbrl_OnOff.odp");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
@@ -1044,7 +1044,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
     // attribute. That should result in mirroring on the x-axis. Error was, that the lines
     // which are drawn on the shape rectangle were mirrored, but not the rectangle itself.
     // The rectangle was only shifted.
-    loadFromURL(u"tdf129532_MatrixFlipV.odg");
+    loadFromFile(u"tdf129532_MatrixFlipV.odg");
 
     uno::Reference<drawing::XShape> xShape0(getShape(0));
     uno::Reference<beans::XPropertySet> xShape0Props(xShape0, uno::UNO_QUERY);
@@ -1070,7 +1070,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
     // corner case where the ellipse has zero height.
     // Error was, that the calculation of the circle angle from the ellipse
     // angle results in a wrong angle for the case 180° and height zero.
-    loadFromURL(u"tdf103474_commandT_CaseZeroHeight.odp");
+    loadFromFile(u"tdf103474_commandT_CaseZeroHeight.odp");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The end points of the straight line segment should have the same x-coordinate of left
     // of shape, and different y-coordinates, one top and the other bottom of the shape.
@@ -1098,7 +1098,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandG_CaseZeroHeight)
 {
     // Some as above, but with shape with command G.
-    loadFromURL(u"tdf103474_commandG_CaseZeroHeight.odp");
+    loadFromFile(u"tdf103474_commandG_CaseZeroHeight.odp");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The end points of the straight line segment should have the same x-coordinate of left
     // of shape, and different y-coordinates, one top and the other bottom of the shape.
@@ -1127,7 +1127,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
 {
     // SwingAngles are clamped to [-360;360] in MS Office. Error was, that LO calculated
     // the end angle and used it modulo 360, no full ellipse was drawn.
-    loadFromURL(u"tdf122323_swingAngle_larger360deg.pptx");
+    loadFromFile(u"tdf122323_swingAngle_larger360deg.pptx");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
@@ -1145,7 +1145,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141268)
 {
-    loadFromURL(u"tdf141268.odp");
+    loadFromFile(u"tdf141268.odp");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
@@ -1160,7 +1160,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
 {
     // Error was, that fObjectRotation was not correctly updated after shearing.
     // The problem becomes visible after save and reload.
-    loadFromURL(u"tdf136176_rot30_flip.odg");
+    loadFromFile(u"tdf136176_rot30_flip.odg");
 
     for (sal_uInt16 i = 0; i < 3; i++)
     {
@@ -1205,7 +1205,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148501_OctagonBevel)
     // The document contains a shape "Octagon Bevel". It should use shadings 40%, 20%, -20%, -40%
     // from left-top to bottom-right. The test examines actual color, not the geometry.
     // Load document
-    loadFromURL(u"tdf148501_OctagonBevel.odp");
+    loadFromFile(u"tdf148501_OctagonBevel.odp");
 
     // Generate bitmap from shape
     uno::Reference<drawing::XShape> xShape = getShape(0);
@@ -1273,7 +1273,7 @@ bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rS
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148714_CurvedArrows)
 {
     // Error was, that the line between 1. and 2. arc was missing.
-    loadFromURL(u"tdf148714_CurvedArrows.ppt");
+    loadFromFile(u"tdf148714_CurvedArrows.ppt");
 
     for (sal_Int32 nShapeIndex = 0; nShapeIndex < 4; nShapeIndex++)
     {
@@ -1314,7 +1314,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148707_two_commands_B_V)
     // between the arcs as if the second command was a A or W respectively.
     // The test document has a shape with path "V 0 0 50 100 0 50 25 0 50 0 100 100 75 0 100 50 N"
     // and a shape with path "B 0 0 50 100 0 50 25 100 50 0 100 100 75 100 100 50 N".
-    loadFromURL(u"tdf148707_two_commands_B_V.odp");
+    loadFromFile(u"tdf148707_two_commands_B_V.odp");
     for (sal_uInt8 i = 0; i < 2; i++)
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
@@ -1366,7 +1366,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf153000_MS0_SPT_25_31)
 {
     // The shapes MSO_SPT=25 to MSO_SPT=31 are currently rendered as rectangle. They should be
     // rendered same way as in Word. More info in bug 153000.
-    loadFromURL(u"tdf153000_WordArt_type_25_to_31.docx");
+    loadFromFile(u"tdf153000_WordArt_type_25_to_31.docx");
     // The wrong rendering becomes visible in properties "Coordinates" and "Segments". To simplify
     // the test we do not compare the values themselves but only the amount of values.
     // Without fix there were always 5 pairs in "Coordinates" and "Segments" did not exist.

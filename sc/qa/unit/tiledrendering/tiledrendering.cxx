@@ -113,7 +113,7 @@ void ScTiledRenderingTest::tearDown()
 
 ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
 {
-    loadFromURL(OUString::createFromAscii(pName));
+    loadFromFile(OUString::createFromAscii(pName));
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -2825,7 +2825,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
 {
-    loadFromURL(u"validity.xlsx");
+    loadFromFile(u"validity.xlsx");
 
     // .uno:Save modifies the original file, make a copy first
     saveAndReload("Calc Office Open XML");

@@ -66,7 +66,7 @@ public:
 void PdfExportTest2::saveAsPDF(std::u16string_view rFile)
 {
     // Import the bugdoc and export as PDF.
-    loadFromURL(rFile);
+    loadFromFile(rFile);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
@@ -268,7 +268,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf129085)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTocLink)
 {
     // Load the Writer document.
-    loadFromURL(u"toc-link.fodt");
+    loadFromFile(u"toc-link.fodt");
 
     // Update the ToC.
     uno::Reference<text::XDocumentIndexesSupplier> xDocumentIndexesSupplier(mxComponent,
@@ -436,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf147164)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReduceImage)
 {
     // Load the Writer document.
-    loadFromURL(u"reduce-image.fodt");
+    loadFromFile(u"reduce-image.fodt");
 
     // Save as PDF.
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
@@ -3870,7 +3870,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf142129)
 {
-    loadFromURL(u"master.odm");
+    loadFromFile(u"master.odm");
 
     // update linked section
     dispatchCommand(mxComponent, ".uno:UpdateAllLinks", {});

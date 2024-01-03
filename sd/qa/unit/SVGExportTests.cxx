@@ -76,7 +76,7 @@ public:
 
     void testSVGExportTextDecorations()
     {
-        loadFromURL(u"svg-export-text-decorations.odp");
+        loadFromFile(u"svg-export-text-decorations.odp");
         save("impress_svg_Export");
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -99,7 +99,7 @@ public:
 
     void testSVGExportJavascriptURL()
     {
-        loadFromURL(u"textbox-link-javascript.odp");
+        loadFromFile(u"textbox-link-javascript.odp");
         save("impress_svg_Export");
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -114,7 +114,7 @@ public:
 
     void testSVGExportSlideCustomBackground()
     {
-        loadFromURL(u"slide-custom-background.odp");
+        loadFromFile(u"slide-custom-background.odp");
         save("impress_svg_Export");
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -125,7 +125,7 @@ public:
 
     void testSVGExportTextFieldsInMasterPage()
     {
-        loadFromURL(u"text-fields.odp");
+        loadFromFile(u"text-fields.odp");
         save("impress_svg_Export");
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -149,7 +149,7 @@ public:
 
     void testSVGExportEmbeddedVideo()
     {
-        loadFromURL(u"slide-video-thumbnail.odp");
+        loadFromFile(u"slide-video-thumbnail.odp");
         save("impress_svg_Export");
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -180,7 +180,7 @@ public:
 
     void testSVGExportSlideBitmapBackground()
     {
-        loadFromURL(u"slide-bitmap-background.odp");
+        loadFromFile(u"slide-bitmap-background.odp");
         save("impress_svg_Export");
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -209,7 +209,7 @@ public:
 
     void testSVGExportSlideTileBitmapBackground()
     {
-        loadFromURL(u"slide-tile-background.odp");
+        loadFromFile(u"slide-tile-background.odp");
         save("impress_svg_Export");
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -274,7 +274,7 @@ public:
         aSettings.SetLanguageTag(aLangISO, true);
         Application::SetSettings(aSettings);
 
-        loadFromURL(u"text-fields.odp");
+        loadFromFile(u"text-fields.odp");
         save("impress_svg_Export");
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);

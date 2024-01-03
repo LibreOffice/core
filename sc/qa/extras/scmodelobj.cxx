@@ -105,7 +105,7 @@ void ScModelObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    loadFromURL(u"ScModelObj.ods");
+    loadFromFile(u"ScModelObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScModelObj);

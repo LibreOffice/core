@@ -151,7 +151,7 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
     if (!pPDFium)
         return;
 
-    loadFromURL(u"commentsInMargin.odt");
+    loadFromFile(u"commentsInMargin.odt");
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
     uno::Reference<document::XFilter> xFilter(
         xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);

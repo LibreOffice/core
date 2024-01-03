@@ -317,7 +317,7 @@ void PivotChartTest::testRoundtrip()
 
     std::vector<double> aReference2 { 101879.458079, 178636.929704, 314626.484864 };
 
-    loadFromURL(u"ods/PivotChartRoundTrip.ods");
+    loadFromFile(u"ods/PivotChartRoundTrip.ods");
 
     xChartDoc = getPivotChartDocFromSheet(1, mxComponent);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -372,7 +372,7 @@ void PivotChartTest::testChangePivotTable()
     uno::Sequence<uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
-    loadFromURL(u"ods/PivotTableExample.ods");
+    loadFromFile(u"ods/PivotTableExample.ods");
 
     // Check we have the Pivot Table
     OUString sPivotTableName("DataPilot1");

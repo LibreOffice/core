@@ -59,7 +59,7 @@ void FirebirdTest::testEmptyDBConnection()
  */
 void FirebirdTest::testIntegerDatabase()
 {
-    loadFromURL(u"firebird_integer_ods12.odb");
+    loadFromFile(u"firebird_integer_ods12.odb");
     uno::Reference< XOfficeDatabaseDocument > xDocument(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< XConnection > xConnection =
@@ -97,7 +97,7 @@ void FirebirdTest::testIntegerDatabase()
 
 void FirebirdTest::testTdf132924()
 {
-    loadFromURL(u"tdf132924.odb");
+    loadFromFile(u"tdf132924.odb");
     uno::Reference< XOfficeDatabaseDocument > xDocument(mxComponent, UNO_QUERY_THROW);
     uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
 

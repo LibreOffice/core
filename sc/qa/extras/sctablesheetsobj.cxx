@@ -141,7 +141,7 @@ void ScTableSheetsObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    loadFromURL(u"rangenamessrc.ods");
+    loadFromFile(u"rangenamessrc.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableSheetsObj);

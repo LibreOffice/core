@@ -135,7 +135,7 @@ void SdTiledRenderingTest::tearDown()
 
 SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName, const uno::Sequence<beans::PropertyValue>& rArguments)
 {
-    loadFromURL(OUString::createFromAscii(pName));
+    loadFromFile(OUString::createFromAscii(pName));
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
     pImpressDocument->initializeForTiledRendering(rArguments);

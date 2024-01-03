@@ -29,7 +29,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testLeftMarginDedup)
 {
-    loadFromURL(u"left-margin-dedup.rtf");
+    loadFromFile(u"left-margin-dedup.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
