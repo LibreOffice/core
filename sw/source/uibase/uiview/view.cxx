@@ -284,12 +284,13 @@ void SwView::SelectShell()
     // Determine if a different fly frame was selected.
     bool bUpdateFly = false;
     const SwFrameFormat* pCurFlyFormat = nullptr;
-    if (m_nSelectionType & SelectionType::Ole || m_nSelectionType & SelectionType::Graphic)
+    if (m_pWrtShell->IsSelFrameMode())
     {
         pCurFlyFormat = m_pWrtShell->GetFlyFrameFormat();
     }
-    if (pCurFlyFormat && pCurFlyFormat != m_pLastFlyFormat)
+    if (pCurFlyFormat && m_pLastFlyFormat && pCurFlyFormat != m_pLastFlyFormat)
     {
+        // Only do an explicit update when switching between flys.
         bUpdateFly = true;
     }
     m_pLastFlyFormat = pCurFlyFormat;
