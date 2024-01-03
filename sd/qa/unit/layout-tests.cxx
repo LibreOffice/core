@@ -21,7 +21,7 @@ public:
 
     xmlDocUniquePtr load(const char* pName)
     {
-        loadFromURL(OUString::createFromAscii(pName));
+        loadFromFile(OUString::createFromAscii(pName));
         SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
         CPPUNIT_ASSERT(pModel);
         SfxObjectShell* pShell = pModel->GetObjectShell();

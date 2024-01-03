@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
 
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportOOXML)
 {
-    loadFromURL(u"xlsx/CalcThemeTest.xlsx");
+    loadFromFile(u"xlsx/CalcThemeTest.xlsx");
 
     save("Calc Office Open XML");
 
@@ -219,7 +219,7 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
 
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBackgroundThemeColorOOXML)
 {
-    loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     checkCellBackgroundThemeColor(getScDoc());
     saveAndReload("Calc Office Open XML");
     checkCellBackgroundThemeColor(getScDoc());
@@ -228,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBackgroundThemeColorOOXML)
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBackgroundThemeColorODF)
 {
     // Open the OOXML source
-    loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     // Save as ODF and load again - checks import / export cycle
     saveAndReload("calc8");
     // Check the values and show that the document is unchanged and all the data preserved
@@ -290,7 +290,7 @@ void checkCellTextThemeColor(ScDocument* pDoc)
 
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColor)
 {
-    loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     checkCellTextThemeColor(getScDoc());
     saveAndReload("Calc Office Open XML");
     checkCellTextThemeColor(getScDoc());
@@ -299,7 +299,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColor)
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColorODF)
 {
     // Open the OOXML source
-    loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     // Save as ODF and load again - checks import / export cycle
     saveAndReload("calc8");
     // Check the values and show that the document is unchanged and all the data preserved
@@ -419,7 +419,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
 
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBorderThemeColor)
 {
-    loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     checkCellBorderThemeColor(getScDoc());
     saveAndReload("Calc Office Open XML");
     checkCellBorderThemeColor(getScDoc());
@@ -428,7 +428,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBorderThemeColor)
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBorderThemeColorODF)
 {
     // Open the OOXML source
-    loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     // Save as ODF and load again - checks import / export cycle
     saveAndReload("calc8");
     // Check the values and show that the document is unchanged and all the data preserved

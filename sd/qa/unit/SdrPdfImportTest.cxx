@@ -89,7 +89,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     // We need to enable PDFium import (and make sure to disable after the test)
     EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
 
-    loadFromURL(u"SimplePDF.pdf");
+    loadFromFile(u"SimplePDF.pdf");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
 
     auto pPdfiumLibrary = vcl::pdf::PDFiumLibrary::get();
 
-    loadFromURL(u"PdfWithAnnotation.pdf");
+    loadFromFile(u"PdfWithAnnotation.pdf");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);

@@ -28,7 +28,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testInvalidHex)
 {
     // Given a document with a markup like "\'3?":
-    loadFromURL(u"invalid-hex.rtf");
+    loadFromFile(u"invalid-hex.rtf");
 
     // Then make sure the result matches Word, rather than just refusing to import the document:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

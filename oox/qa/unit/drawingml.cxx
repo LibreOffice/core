@@ -70,7 +70,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 {
-    loadFromURL(u"transparent-text.pptx");
+    loadFromFile(u"transparent-text.pptx");
     saveAndReload("Impress Office Open XML");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
 {
-    loadFromURL(u"tdf131082.pptx");
+    loadFromFile(u"tdf131082.pptx");
     saveAndReload("Impress Office Open XML");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
 {
-    loadFromURL(u"preset-adjust-value.pptx");
+    loadFromFile(u"preset-adjust-value.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -137,7 +137,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
 {
-    loadFromURL(u"chart-data-label-char-color.docx");
+    loadFromFile(u"chart-data-label-char-color.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -174,7 +174,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
 {
     // Load a document with a multi-step gradient.
-    loadFromURL(u"gradient-multistep-transparency.pptx");
+    loadFromFile(u"gradient-multistep-transparency.pptx");
 
     // Check the end transparency of the gradient.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
 {
-    loadFromURL(u"shape-text-alignment.pptx");
+    loadFromFile(u"shape-text-alignment.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -228,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
 {
-    loadFromURL(u"shape-text-adjust-left.pptx");
+    loadFromFile(u"shape-text-adjust-left.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -245,7 +245,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
 {
-    loadFromURL(u"camera-rotation-revolution.docx");
+    loadFromFile(u"camera-rotation-revolution.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -269,7 +269,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf146534_CameraRotationRevolutionNonWpsShapes)
 {
-    loadFromURL(u"camera-rotation-revolution-nonwps.pptx");
+    loadFromFile(u"camera-rotation-revolution-nonwps.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -306,7 +306,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
         CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowColor") >>= nColor);
         CPPUNIT_ASSERT_EQUAL(Color(0xff0000), nColor);
     };
-    loadFromURL(u"table-shadow.pptx");
+    loadFromFile(u"table-shadow.pptx");
     // Without the accompanying fix in place, this test would have failed, because shadow on a table
     // was lost on import.
     verify(mxComponent);
@@ -321,7 +321,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGroupShapeSmartArt)
 {
     // Given a file with a smartart inside a group shape:
-    loadFromURL(u"smartart-groupshape.pptx");
+    loadFromFile(u"smartart-groupshape.pptx");
 
     // Then make sure that the smartart is not just an empty group shape:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -339,7 +339,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     // The document contains a Bezier curve, where the control points are outside the bounding
     // rectangle of the shape. Error was, that the export uses a path size which included the
     // control points.
-    loadFromURL(u"tdf142605_CurveSize.odp");
+    loadFromFile(u"tdf142605_CurveSize.odp");
     saveAndReload("Impress Office Open XML");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -366,7 +366,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
 {
     // Given a document with 2 slides, slide1 has a chart with a theme override and slide2 has a
     // shape:
-    loadFromURL(u"chart-theme-override.pptx");
+    loadFromFile(u"chart-theme-override.pptx");
 
     // Then make sure that the slide 2 shape's text color is blue, not red:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -390,7 +390,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
 {
     // Given a PPTX file with a slide -> master slide -> theme:
-    loadFromURL(u"theme.pptx");
+    loadFromFile(u"theme.pptx");
 
     // Then make sure the theme + referring to that theme is imported:
     // Check the imported theme of the master page:
@@ -442,7 +442,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
 {
     // slide with date, footer, slide number with custom shapes
-    loadFromURL(u"testTdf132557_footerCustomShapes.pptx");
+    loadFromFile(u"testTdf132557_footerCustomShapes.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -468,7 +468,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
 {
     // Given a document with a table style, using theme color with tinting in the A2 cell:
-    loadFromURL(u"theme-tint.pptx");
+    loadFromFile(u"theme-tint.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -510,7 +510,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
 {
     // Given a document with a table style, using theme color with tinting in the A2 cell:
-    loadFromURL(u"ThemeShapesReference.pptx");
+    loadFromFile(u"ThemeShapesReference.pptx");
 
     // Then make sure that we only import theming info to the doc model if the effects are limited
     // to lum mod / off that we can handle (i.e. no tint/shade):
@@ -581,7 +581,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testVert270AndTextRot)
     // tdf##149551. The document contains a shape with attributes 'rot="720000"' and 'vert="vert270"'
     // of the <bodyPr> element. Without the fix the simulation of vert270 had overwritten the text
     // rotation angle and thus 'rot'="720000" was lost.
-    loadFromURL(u"tdf149551_vert270AndTextRot.pptx");
+    loadFromFile(u"tdf149551_vert270AndTextRot.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -606,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
     // tdf#149551 The document contains a shape with attribute 'rot="720000"' of the <bodyPr> element.
     // Without fix, the text rotation angle was saved in "TextPreRotateAngle" instead of
     // "TextRotateAngle". That resulted in unrotated but sheared text.
-    loadFromURL(u"tdf149551_TextRot.pptx");
+    loadFromFile(u"tdf149551_TextRot.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -637,7 +637,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
 {
-    loadFromURL(u"tdf113187_arcTo_withoutReferences.pptx");
+    loadFromFile(u"tdf113187_arcTo_withoutReferences.pptx");
 
     // Get ViewBox of shape
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -658,7 +658,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontTheme)
 {
     // The font info for the shape is in the theme, the text run has no font settings.
-    loadFromURL(u"tdf125085_WordArtFontTheme.pptx");
+    loadFromFile(u"tdf125085_WordArtFontTheme.pptx");
 
     // Get shape and its properties
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -681,7 +681,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontTheme)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontText)
 {
     // The font info for the shape is in the text run inside the shape.
-    loadFromURL(u"tdf125085_WordArtFontText.pptx");
+    loadFromFile(u"tdf125085_WordArtFontText.pptx");
 
     // Get shape and its properties
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);

@@ -39,7 +39,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143455SmartArtPosition)
 {
-    loadFromURL(u"tdf143455_SmartArtPosition.docx");
+    loadFromFile(u"tdf143455_SmartArtPosition.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143455SmartArtPosition)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143208wrapTight)
 {
-    loadFromURL(u"tdf143208_wrapTight.docx");
+    loadFromFile(u"tdf143208_wrapTight.docx");
     // The document has a shape with indentation and contour wrap "wrapTight". Error was, that
     // the corresponding shape property 'ContourOutside=true' was not set.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143208wrapTight)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142305StrokeGlowMargin)
 {
-    loadFromURL(u"tdf142305StrokeGlowMargin.docx");
+    loadFromFile(u"tdf142305StrokeGlowMargin.docx");
     // The document has an arc with fat stroke and glow. Its bounding rectangle differs much
     // from the snap rectangle. Error was, that the margins were not set in a way, that the shape
     // would render similar to Word.
@@ -91,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142305StrokeGlowMargin)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142305SquareWrapMargin)
 {
-    loadFromURL(u"tdf142305SquareWrapMargin.docx");
+    loadFromFile(u"tdf142305SquareWrapMargin.docx");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY_THROW);
@@ -108,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142305SquareWrapMargin)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142304GroupPosition)
 {
-    loadFromURL(u"tdf142304GroupPosition.docx");
+    loadFromFile(u"tdf142304GroupPosition.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -125,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142304GroupPosition)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141540ChildRotation)
 {
-    loadFromURL(u"tdf141540ChildRotation.docx");
+    loadFromFile(u"tdf141540ChildRotation.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540ChildRotation)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupRotation)
 {
-    loadFromURL(u"tdf141540GroupRotation.docx");
+    loadFromFile(u"tdf141540GroupRotation.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupRotation)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupLinePosSize)
 {
-    loadFromURL(u"tdf141540GroupLinePosSize.docx");
+    loadFromFile(u"tdf141540GroupLinePosSize.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
 
@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupLinePosSize)
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupShapeRotation)
 {
-    loadFromURL(u"group-shape-rotation.docx");
+    loadFromFile(u"group-shape-rotation.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeRotation)
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawShapeInlineEffect)
 {
-    loadFromURL(u"draw-shape-inline-effect.docx");
+    loadFromFile(u"draw-shape-inline-effect.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -219,7 +219,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineAnchoredZOrder)
 {
     // Load a document which has two shapes: an inline one and an anchored one. The inline has no
     // explicit ZOrder, the anchored one has, and it's set to a value so it's visible.
-    loadFromURL(u"inline-anchored-zorder.docx");
+    loadFromFile(u"inline-anchored-zorder.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<container::XNamed> xOval(xDrawPage->getByIndex(1), uno::UNO_QUERY);
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineInShapeAnchoredZOrder)
 {
     // This document has a textbox shape and then an inline shape inside that.
     // The ZOrder of the inline shape is larger than the hosting textbox, so the image is visible.
-    loadFromURL(u"inline-inshape-anchored-zorder.docx");
+    loadFromFile(u"inline-inshape-anchored-zorder.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<container::XNamed> xOval(xDrawPage->getByIndex(1), uno::UNO_QUERY);
@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineInShapeAnchoredZOrder)
 
 CPPUNIT_TEST_FIXTURE(Test, testRelfromhInsidemargin)
 {
-    loadFromURL(u"relfromh-insidemargin.docx");
+    loadFromFile(u"relfromh-insidemargin.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelfromhInsidemargin)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolyCrop)
 {
-    loadFromURL(u"wrap-poly-crop.docx");
+    loadFromFile(u"wrap-poly-crop.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -294,7 +294,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxTextline)
 {
     // Load a document with a shape with a textbox.
     // The shape's vertical relation is <wp:positionV relativeFrom="line">.
-    loadFromURL(u"textbox-textline.docx");
+    loadFromFile(u"textbox-textline.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -311,7 +311,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxTextline)
 
 CPPUNIT_TEST_FIXTURE(Test, testTextboxTextlineTop)
 {
-    loadFromURL(u"textbox-textline-top.docx");
+    loadFromFile(u"textbox-textline-top.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -333,7 +333,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxTextlineTop)
 CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellWrapnoneColumn)
 {
     // Given a file with a table, then a shape anchored inside the cell:
-    loadFromURL(u"layout-in-cell-wrapnone-column.docx");
+    loadFromFile(u"layout-in-cell-wrapnone-column.docx");
 
     // Then make sure the shape can leave the cell:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellWrapnoneColumn)
 CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellOfHraphics)
 {
     // Given a file with a table, then a shape anchored inside the cell:
-    loadFromURL(u"layout-in-cell-2.docx");
+    loadFromFile(u"layout-in-cell-2.docx");
 
     // Then make sure the cell obeys the layoutInCell:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -374,7 +374,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149840SmartArtBackground)
         pChange->commit();
     }
 
-    loadFromURL(u"tdf149840_SmartArtBackground.docx");
+    loadFromFile(u"tdf149840_SmartArtBackground.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);

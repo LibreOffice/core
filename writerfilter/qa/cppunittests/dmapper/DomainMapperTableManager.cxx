@@ -30,7 +30,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTblOverlap)
 {
     // Given a document with 2 floating tables, the second is not allowed to overlap:
     // When importing that document:
-    loadFromURL(u"floattable-tbl-overlap.docx");
+    loadFromFile(u"floattable-tbl-overlap.docx");
 
     // Then make sure the second table is marked as "can't overlap":
     uno::Reference<text::XTextFramesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);

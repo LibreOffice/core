@@ -139,7 +139,7 @@ void SwMacrosTest::testVba()
     for (auto const & [ sFileBaseName, sMacroUrl ] : testInfo)
     {
         OUString sFileName("docm/" + sFileBaseName);
-        loadFromURL(sFileName);
+        loadFromFile(sFileName);
 
         uno::Any aRet = executeMacro(sMacroUrl);
         OUString aStringRes;
@@ -157,7 +157,7 @@ void SwMacrosTest::testModernVBADelete()
         };
 
     OUString sFileName("docm/" + testInfo.sFileBaseName);
-    loadFromURL(sFileName);
+    loadFromFile(sFileName);
 
     SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     SwDoc *const pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -244,7 +244,7 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
 
 void SwMacrosTest::testControlShapeGrouping()
 {
-    loadFromURL(u"odt/testControlShapeGrouping.odt");
+    loadFromFile(u"odt/testControlShapeGrouping.odt");
 
     uno::Reference<frame::XModel> const xModel(mxComponent, UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
@@ -344,7 +344,7 @@ void SwMacrosTest::testControlShapeGrouping()
 
 void SwMacrosTest::testTdf151846()
 {
-    loadFromURL(u"odt/tdf151846.odt");
+    loadFromFile(u"odt/tdf151846.odt");
 
     // Without the fix in place, this test would have failed with
     // Property or method not found: createDiagramByDataSource.
@@ -393,7 +393,7 @@ void SwMacrosTest::testFdo55289()
 
 void SwMacrosTest::testFdo68983()
 {
-    loadFromURL(u"odt/fdo68983.odt");
+    loadFromFile(u"odt/fdo68983.odt");
     Reference< frame::XStorable > xDocStorable(mxComponent, UNO_QUERY_THROW);
 
     saveAndReload("writer8");

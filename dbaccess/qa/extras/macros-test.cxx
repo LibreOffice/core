@@ -32,7 +32,7 @@ DBAccessTest::DBAccessTest()
 {
 }
 
-void DBAccessTest::test() { loadFromURL(u"testdb.odb"); }
+void DBAccessTest::test() { loadFromFile(u"testdb.odb"); }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DBAccessTest);
 

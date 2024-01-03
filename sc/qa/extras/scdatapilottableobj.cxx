@@ -131,7 +131,7 @@ void ScDataPilotTableObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    loadFromURL(u"ScDataPilotTableObj.ods");
+    loadFromFile(u"ScDataPilotTableObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotTableObj);

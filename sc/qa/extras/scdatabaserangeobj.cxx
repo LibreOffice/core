@@ -97,7 +97,7 @@ void ScDatabaseRangeObj::setUp()
 {
     UnoApiTest::setUp();
 
-    loadFromURL(u"ScDatabaseRangeObj.ods");
+    loadFromFile(u"ScDatabaseRangeObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDatabaseRangeObj);

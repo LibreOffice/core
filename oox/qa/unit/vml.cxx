@@ -38,7 +38,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
 {
     // Load a document with v:polyline shapes. Error was, that the size was set to zero and the
     // points were zero because of missing decode from length with unit.
-    loadFromURL(u"tdf112450_vml_polyline.docx");
+    loadFromFile(u"tdf112450_vml_polyline.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf137314_vml_rotation_unit_fd)
 {
     // Load a document with a 30deg rotated arc on a drawing canvas. Rotation is given
     // as 1966080fd. Error was, that the vml angle unit "fd" was not converted to Degree100.
-    loadFromURL(u"tdf137314_vml_rotation_unit_fd.docx");
+    loadFromFile(u"tdf137314_vml_rotation_unit_fd.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
 {
     // Load a document with a groupshape, 2nd child is a <v:shape>, its type has o:spt set to 202
     // (TextBox).
-    loadFromURL(u"group-spt202.docx");
+    loadFromFile(u"group-spt202.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
     // Load a document which has a group shape, containing a single child.
     // 17.78 cm is the full group shape width, 19431/64008 is the child shape's relative width inside
     // that, so 5.3975 cm should be the shape width.
-    loadFromURL(u"shape-non-autosize-with-text.docx");
+    loadFromFile(u"shape-non-autosize-with-text.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
 
 CPPUNIT_TEST_FIXTURE(OoxVmlTest, testGraphicStroke)
 {
-    loadFromURL(u"graphic-stroke.pptx");
+    loadFromFile(u"graphic-stroke.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -186,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWatermark)
     // Given a document with a picture watermark, and the "washout" checkbox is ticked on the Word
     // UI:
     // When loading that document:
-    loadFromURL(u"watermark.docx");
+    loadFromFile(u"watermark.docx");
 
     // Then make sure the watermark effect is not lost on import:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWriterFontworkTrimTrue)
     // The document contains a shape, that will be exported as VML shape to docx. Error was that the
     // attribute trim was not written out and thus import had treated it as the default 'false' and
     // had reduced the shape height.
-    loadFromURL(u"tdf153260_VML_trim_export.odt");
+    loadFromFile(u"tdf153260_VML_trim_export.odt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -228,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testVMLDetectWordArtOnImport)
 {
     // The document contains a WordArt shape with type other than "fontwork-foo". Error was that
     // WordArt was not detected and thus shrinking shape to text content was not prevented.
-    loadFromURL(u"tdf153258_VML_import_WordArt_detection.docx");
+    loadFromFile(u"tdf153258_VML_import_WordArt_detection.docx");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),

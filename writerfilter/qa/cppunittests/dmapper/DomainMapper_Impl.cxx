@@ -43,7 +43,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreakFooterTable)
 {
     // Load a document which refers to a footer which ends with a table, and there is a page break
     // in the body text right after the footer reference.
-    loadFromURL(u"page-break-footer-table.docx");
+    loadFromFile(u"page-break-footer-table.docx");
 
     // Check the last paragraph.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreakFooterTable)
 
 CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
 {
-    loadFromURL(u"num-restart-style-parent.docx");
+    loadFromFile(u"num-restart-style-parent.docx");
 
     // The paragraphs are A 1 2 B 1 2.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
 
 CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
 {
-    loadFromURL(u"frame-direction.docx");
+    loadFromFile(u"frame-direction.docx");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
 
 CPPUNIT_TEST_FIXTURE(Test, testAltChunk)
 {
-    loadFromURL(u"alt-chunk.docx");
+    loadFromFile(u"alt-chunk.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
 {
     // Load a document with a field in a table cell: it contains an IF field with various nested
     // fields.
-    loadFromURL(u"field-if-inside-if.docx");
+    loadFromFile(u"field-if-inside-if.docx");
     uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextDocument->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -174,7 +174,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
 
 CPPUNIT_TEST_FIXTURE(Test, testCreateDatePreserve)
 {
-    loadFromURL(u"create-date-preserve.docx");
+    loadFromFile(u"create-date-preserve.docx");
     // Trigger idle layout.
     Scheduler::ProcessEventsToIdle();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCreateDatePreserve)
 CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
 {
     // Given a document with a chart and a shape on it:
-    loadFromURL(u"chart-zorder.docx");
+    loadFromFile(u"chart-zorder.docx");
 
     // Then make sure the shape is on top of the chart:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -209,7 +209,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
 CPPUNIT_TEST_FIXTURE(Test, testPTab)
 {
     // Given a document that has a <w:ptab> to render a linebreak:
-    loadFromURL(u"ptab.docx");
+    loadFromFile(u"ptab.docx");
 
     // Then make sure that the Writer doc model contains that linebreak:
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
 CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
 {
     // Given a document with a clearing break:
-    loadFromURL(u"clearing-break.docx");
+    loadFromFile(u"clearing-break.docx");
 
     // Then make sure that the clear property of the break is not ignored:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -290,7 +290,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlDateDataBinding)
 {
     // Given a document with date content control and data binding, data binding date is 2012,
     // in-document date is 2022:
-    loadFromURL(u"content-control-date-data-binding.docx");
+    loadFromFile(u"content-control-date-data-binding.docx");
 
     // Then make sure that the date is from the data binding, not from document.xml:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -309,7 +309,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlDataBindingColor)
 {
     // Given a document with an inline content control with data binding, placeholder char color is
     // set to red, when loading that document:
-    loadFromURL(u"content-control-data-binding-color.docx");
+    loadFromFile(u"content-control-data-binding-color.docx");
 
     // Then make sure that the placeholder char color is not in the document, since data binding is
     // active:
@@ -332,7 +332,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionBreak)
 {
     // Given a document with 2 floating tables and 2 pages, section break (next page) between the
     // two:
-    loadFromURL(u"floating-table-section-break.docx");
+    loadFromFile(u"floating-table-section-break.docx");
 
     // When going to the last page:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -353,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionBreak)
 CPPUNIT_TEST_FIXTURE(Test, testFloattableSectend)
 {
     // Given a document with 2 tables, table 1 on page 1, table 2 on page 2:
-    loadFromURL(u"floattable-sectend.docx");
+    loadFromFile(u"floattable-sectend.docx");
 
     // When importing that document and listing the tables:
     uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);

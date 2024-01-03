@@ -99,7 +99,7 @@ void ScAnnontationsObj::setUp()
     UnoApiTest::setUp();
 
     // get the test file
-    loadFromURL(u"ScAnnotationObj.ods");
+    loadFromFile(u"ScAnnotationObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAnnontationsObj);

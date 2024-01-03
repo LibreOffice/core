@@ -31,7 +31,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTable)
 {
     // Given a document with a floating table, when importing that document:
-    loadFromURL(u"floating-table.rtf");
+    loadFromFile(u"floating-table.rtf");
 
     // Then make sure the floating table is there & has the expected properties:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -71,7 +71,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
 {
     // Given a document without \nobrkwrptbl:
     // When importing that document:
-    loadFromURL(u"do-not-break-wrapped-tables.rtf");
+    loadFromFile(u"do-not-break-wrapped-tables.rtf");
 
     // Then make sure that the matching compat flag is set:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
@@ -88,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTblOverlap)
 {
     // Given a document with 2 floating tables, the second is not allowed to overlap:
     // When importing that document:
-    loadFromURL(u"floattable-tbl-overlap.rtf");
+    loadFromFile(u"floattable-tbl-overlap.rtf");
 
     // Then make sure the second table is marked as "can't overlap":
     uno::Reference<text::XTextFramesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);

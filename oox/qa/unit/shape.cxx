@@ -93,7 +93,7 @@ uno::Reference<drawing::XShape> OoxShapeTest::getShapeByName(std::u16string_view
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
 {
-    loadFromURL(u"tdf141463_GroupTransform.pptx");
+    loadFromFile(u"tdf141463_GroupTransform.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
 {
-    loadFromURL(u"multiple-group-shapes.docx");
+    loadFromFile(u"multiple-group-shapes.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -142,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCustomshapePosition)
 {
-    loadFromURL(u"customshape-position.docx");
+    loadFromFile(u"customshape-position.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
     // The document contains a shape with a:prstTxWarp="textCircle" with two paragraphs.
     // PowerPoint aligns the bottom of the text with the path, LO had aligned the middle of the
     // text with the path, which resulted in smaller text.
-    loadFromURL(u"tdf125582_TextOnCircle.pptx");
+    loadFromFile(u"tdf125582_TextOnCircle.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -193,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151008VertAnchor)
     // The document contains shapes with all six kind of anchor positions in pptx. The text in the
     // shapes is larger than the shape and has no word wrap. That way anchor position is visible
     // in case you inspect the file manually.
-    loadFromURL(u"tdf151008_eaVertAnchor.pptx");
+    loadFromFile(u"tdf151008_eaVertAnchor.pptx");
 
     struct anchorDesc
     {
@@ -240,7 +240,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
 
     // The document contains SmartArt with shapes with not default text area. Without fix the
     // text was shifted up because of wrong values in TextLowerDistance and TextUpperDistance.
-    loadFromURL(u"tdf151518_SmartArtTextLocation.docx");
+    loadFromFile(u"tdf151518_SmartArtTextLocation.docx");
 
     struct TextDistance
     {
@@ -295,7 +295,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     }
 
     // get SmartArt
-    loadFromURL(u"tdf54095_SmartArtThemeTextColor.docx");
+    loadFromFile(u"tdf54095_SmartArtThemeTextColor.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
 {
-    loadFromURL(u"tdf125885_WordArt.docx");
+    loadFromFile(u"tdf125885_WordArt.docx");
     // Without the patch WordArt in text document was imported as rectangular custom shape with
     // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
     // This test covers some basic properties.
@@ -412,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
 {
-    loadFromURL(u"tdf125885_WordArt2.docx");
+    loadFromFile(u"tdf125885_WordArt2.docx");
     // Without the patch WordArt in text document was imported as rectangular custom shape with
     // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
     // This test covers whether theme color properties are correctly converted on import.
@@ -460,7 +460,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
 {
-    loadFromURL(u"tdf125885_WordArt3.docx");
+    loadFromFile(u"tdf125885_WordArt3.docx");
     // Without the patch WordArt in text document was imported as rectangular custom shape with
     // attached frame. So there was no artistic text at all. Now it is imported as Fontwork.
     // This test covers some aspects of import of gradient fill.
@@ -544,7 +544,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkNonAccentColor)
 {
-    loadFromURL(u"tdf152840_WordArt_non_accent_color.docx");
+    loadFromFile(u"tdf152840_WordArt_non_accent_color.docx");
     // The file contains WordArt which uses the theme colors "Background 1", "Text 1", "Background 2"
     // and "Text 2".
 
@@ -587,7 +587,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkNonAccentColor)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
 {
-    loadFromURL(u"tdf152840_theme_color_non_accent.docx");
+    loadFromFile(u"tdf152840_theme_color_non_accent.docx");
     // The file contains shapes which uses the theme colors "bg2", "bg1", "tx1" and "tx2" in this
     // order as fill color.
 
@@ -613,7 +613,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkDarkenTransparency)
 {
-    loadFromURL(u"tdf152896_WordArt_color_darken.docx");
+    loadFromFile(u"tdf152896_WordArt_color_darken.docx");
     // The file contains a WordArt shape with theme colors "Background 2", shading mode "Darken 25%"
     // and "20% Transparency". Word writes this as w:color element with additional w14:textFill
     // element. In such case the w14:textFill element supersedes the w:color element. Error was, that
@@ -634,7 +634,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkDarkenTransparency)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
 {
-    loadFromURL(u"tdf139618_ImportWordArtGradient.pptx");
+    loadFromFile(u"tdf139618_ImportWordArtGradient.pptx");
     // Without the patch all WordArt was imported with solid color. Now gradient is imported.
     // This test covers several aspects of import of gradient fill.
 
@@ -772,7 +772,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtBitmapFill)
 {
     // The document has a WordArt shape with bitmap fill.
     // Without fix it was imported as solid color fill.
-    loadFromURL(u"tdf139618_WordArtBitmapFill.pptx");
+    loadFromFile(u"tdf139618_WordArtBitmapFill.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -805,7 +805,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtDefaultColor)
     // The document has a WordArt shape for which the text color is not explicitly set. In such cases
     // MS Office uses the scheme color 'tx1'. Without fix it was imported as 'fill none'. The shape
     // existed but was not visible on screen.
-    loadFromURL(u"tdf155327_WordArtDefaultColor.pptx");
+    loadFromFile(u"tdf155327_WordArtDefaultColor.pptx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -822,7 +822,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGlowOnGroup)
 {
     // The document contains a group of two shapes. A glow-effect is set on the group.
     // Without the fix, the children of the group were not imported at all.
-    loadFromURL(u"tdf156902_GlowOnGroup.docx");
+    loadFromFile(u"tdf156902_GlowOnGroup.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);

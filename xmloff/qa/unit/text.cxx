@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMailMergeInEditeng)
 {
     // Without the accompanying fix in place, this test would have failed, as unexpected
     // <text:database-display> in editeng text aborted the whole import process.
-    loadFromURL(u"mail-merge-editeng.odt");
+    loadFromFile(u"mail-merge-editeng.odt");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
@@ -181,13 +181,13 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentTableBorder)
 {
     // Without the accompanying fix in place, this failed to load, as a comment that started in a
     // table and ended outside a table aborted the whole importer.
-    loadFromURL(u"comment-table-border.fodt");
+    loadFromFile(u"comment-table-border.fodt");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
 {
     // Given a document with style:list-level="...":
-    loadFromURL(u"para-style-list-level.fodt");
+    loadFromFile(u"para-style-list-level.fodt");
 
     // Then make sure we map that to the paragraph style's numbering level:
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContinueNumberingWord)
 {
     // Given a document, which is produced by Word and contains text:continue-numbering="true":
-    loadFromURL(u"continue-numbering-word.odt");
+    loadFromFile(u"continue-numbering-word.odt");
 
     // Then make sure that the numbering from the 1st para is continued on the 3rd para:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -239,7 +239,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContinueNumberingWord)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
 {
     // Given a document with a simple list (no continue-list="..." attribute):
-    loadFromURL(u"list-id.fodt");
+    loadFromFile(u"list-id.fodt");
 
     // When storing that document as ODF:
     save("writer8");
@@ -255,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId2)
 {
     // tdf#155823 Given a document with a list consisting of items having different list styles:
-    loadFromURL(u"differentListStylesInOneList.fodt");
+    loadFromFile(u"differentListStylesInOneList.fodt");
 
     auto xTextDocument(mxComponent.queryThrow<css::text::XTextDocument>());
     auto xParaEnumAccess(xTextDocument->getText().queryThrow<css::container::XEnumerationAccess>());
@@ -361,7 +361,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdOnRestart)
     // and text:continue-list, but uses text:continue-numbering, and is imported correctly.
 
     // Given a document with a list with a restart after break:
-    loadFromURL(u"listRestartAfterBreak.fodt");
+    loadFromFile(u"listRestartAfterBreak.fodt");
 
     auto xTextDocument(mxComponent.queryThrow<css::text::XTextDocument>());
     auto xParaEnumAccess(xTextDocument->getText().queryThrow<css::container::XEnumerationAccess>());
@@ -446,7 +446,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakImport)
 {
     // Given an ODF document with a clearing break:
-    loadFromURL(u"clearing-break.fodt");
+    loadFromFile(u"clearing-break.fodt");
 
     // Then make sure that the "clear" attribute is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -573,7 +573,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlImport)
 {
     // Given an ODF document with a content control:
-    loadFromURL(u"content-control.fodt");
+    loadFromFile(u"content-control.fodt");
 
     // Then make sure that the content control is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlImport)
 {
     // Given an ODF document with a checkbox content control:
-    loadFromURL(u"content-control-checkbox.fodt");
+    loadFromFile(u"content-control-checkbox.fodt");
 
     // Then make sure that the content control is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -733,7 +733,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlImport)
 {
     // Given an ODF document with a dropdown content control:
-    loadFromURL(u"content-control-dropdown.fodt");
+    loadFromFile(u"content-control-dropdown.fodt");
 
     // Then make sure that the content control is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -809,7 +809,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlImport)
 {
     // Given an ODF document with a picture content control:
-    loadFromURL(u"content-control-picture.fodt");
+    loadFromFile(u"content-control-picture.fodt");
 
     // Then make sure that the content control is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -871,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlImport)
 {
     // Given an ODF document with a date content control:
-    loadFromURL(u"content-control-date.fodt");
+    loadFromFile(u"content-control-date.fodt");
 
     // Then make sure that the content control is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -935,7 +935,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlImport)
 {
     // Given an ODF document with a plain-text content control:
-    loadFromURL(u"content-control-plain-text.fodt");
+    loadFromFile(u"content-control-plain-text.fodt");
 
     // Then make sure that the content control is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -1027,7 +1027,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlImport)
 {
     // Given an ODF document with a plain-text content control:
-    loadFromURL(u"content-control-combo-box.fodt");
+    loadFromFile(u"content-control-combo-box.fodt");
 
     // Then make sure that the content control is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -1054,7 +1054,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlImport)
 {
     // Given an ODF document with a content control and its alias/tag:
-    loadFromURL(u"content-control-alias.fodt");
+    loadFromFile(u"content-control-alias.fodt");
 
     // Then make sure that the content control is not lost on import:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -1096,7 +1096,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
 {
     // Given a document with a dropdown content control, and formatting that forms an autostyle in
     // ODT:
-    loadFromURL(u"content-control-dropdown.docx");
+    loadFromFile(u"content-control-dropdown.docx");
 
     // When saving that document to ODT, then make sure no assertion failure happens:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -1111,7 +1111,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthRedline)
 {
     // Given a document with change tracking enabled, one image is part of a delete redline:
-    loadFromURL(u"scale-width-redline.fodt");
+    loadFromFile(u"scale-width-redline.fodt");
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     dispatchCommand(mxComponent, ".uno:GoToEndOfLine", {});
     dispatchCommand(mxComponent, ".uno:EndOfParaSel", {});
@@ -1209,7 +1209,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableImport)
 {
     // Given a document with a floating table (loext:may-break-between-pages="true"), when importing
     // that document:
-    loadFromURL(u"floattable.fodt");
+    loadFromFile(u"floattable.fodt");
 
     // Then make sure that the matching text frame property is set:
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1224,7 +1224,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParagraphScopedTabDistance)
 {
     // Given a document with paragraph scoped default tab stop distance (loext:tab-stop-distance="0.5cm")
-    loadFromURL(u"paragraph-tab-stop-distance.fodp");
+    loadFromFile(u"paragraph-tab-stop-distance.fodp");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
@@ -1266,7 +1266,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testNestedSpans)
     // Given a document with a first paragraph that has a nested span, the outer span setting the
     // boldness:
     // When importing that document:
-    loadFromURL(u"nested-spans.odt");
+    loadFromFile(u"nested-spans.odt");
 
     // Then make sure the text portion is bold, not normal:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

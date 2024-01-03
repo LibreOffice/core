@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
         int const nUpdateMe
             = -1; // index of test we want to update; supposedly only when the test is created
 
-        loadFromURL(aFilesToCompare[i].sInput);
+        loadFromFile(aFilesToCompare[i].sInput);
         if (!aFilesToCompare[i].sExportType.isEmpty())
             saveAndReload(aFilesToCompare[i].sExportType);
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,

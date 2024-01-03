@@ -434,7 +434,7 @@ void ScConditionalFormatTest::setUp()
 {
     UnoApiTest::setUp();
     // get the test file
-    loadFromURL(u"new_cond_format_api.ods");
+    loadFromFile(u"new_cond_format_api.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScConditionalFormatTest);

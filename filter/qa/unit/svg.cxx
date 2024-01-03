@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
 {
 #if !defined(MACOSX)
     // Load a document with a jpeg image in it.
-    loadFromURL(u"preserve-jpg.odt");
+    loadFromFile(u"preserve-jpg.odt");
 
     // Select the image.
     dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
 {
     // Load a document with a semi-transparent line shape.
-    loadFromURL(u"semi-transparent-line.odg");
+    loadFromFile(u"semi-transparent-line.odg");
 
     // Export it to SVG.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentFillWithTransparentLine)
 {
     // Load a document with a shape with semi-transparent fill and line
-    loadFromURL(u"semi-transparent-fill.odg");
+    loadFromFile(u"semi-transparent-fill.odg");
 
     // Export it to SVG.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
     // correct transparency factor applied for the first shape.
 
     // Load draw document with transparent text in one box
-    loadFromURL(u"TransparentText.odg");
+    loadFromFile(u"TransparentText.odg");
 
     // Export to SVG.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
@@ -228,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
 {
     // Load a document containing a 3D shape.
-    loadFromURL(u"shape-nographic.odp");
+    loadFromFile(u"shape-nographic.odp");
 
     // Export to SVG.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
 {
     // Given a presentation with a custom bullet:
-    loadFromURL(u"custom-bullet.fodp");
+    loadFromFile(u"custom-bullet.fodp");
 
     // When exporting that to SVG:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
@@ -275,7 +275,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
 {
     // Load document containing empty paragraphs with ids.
-    loadFromURL(u"attributeRedefinedTest.odp");
+    loadFromFile(u"attributeRedefinedTest.odp");
 
     // Export to SVG.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);

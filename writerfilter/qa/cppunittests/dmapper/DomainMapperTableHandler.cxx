@@ -36,7 +36,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, test1cellInsidevRightborder)
 {
-    loadFromURL(u"1cell-insidev-rightborder.docx");
+    loadFromFile(u"1cell-insidev-rightborder.docx");
     uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextDocument->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(Test, test1cellInsidevRightborder)
 
 CPPUNIT_TEST_FIXTURE(Test, testNestedFloatingTable)
 {
-    loadFromURL(u"nested-floating-table.docx");
+    loadFromFile(u"nested-floating-table.docx");
     // Normal outer table, floating inner tables.
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -64,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableBreakBefore)
 {
     // Given a 3 pages document: page break, then a multi-page floating table on pages 2 and 3:
     // When laying out that document:
-    loadFromURL(u"floattable-break-before.docx");
+    loadFromFile(u"floattable-break-before.docx");
 
     // Then make sure the page break property is on the anchor of the floating table, otherwise it
     // has no effect:
@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(Test, test3NestedFloatingTables)
 {
     // Given a document with nested tables: outer and inner one is normal, middle one is floating:
     // When laying out that document:
-    loadFromURL(u"floattable-nested-3tables.docx");
+    loadFromFile(u"floattable-nested-3tables.docx");
 
     // Then make sure we don't crash and create the 3 tables:
     // Without the accompanying fix in place, this would have crashed, layout can't handle nested
@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTablesOuterNonsplitInner)
 {
     // Given a document with a normal table, 3 outer floating tables and an inner floating table in
     // the last floating table:
-    loadFromURL(u"floattable-outer-nonsplit-inner.docx");
+    loadFromFile(u"floattable-outer-nonsplit-inner.docx");
 
     // When counting the floating tables in the document:
     uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -120,7 +120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTablesOuterNonsplitInner)
 CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHiddenAnchor)
 {
     // Given a document with a floating table, anchored in a paragraph that is hidden:
-    loadFromURL(u"floattable-hidden-anchor.docx");
+    loadFromFile(u"floattable-hidden-anchor.docx");
 
     // When checking the visibility of the anchor paragraph:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableNested)
 {
     // Given a document with nested, multi-page floating tables:
     // When loading that document:
-    loadFromURL(u"floattable-nested.docx");
+    loadFromFile(u"floattable-nested.docx");
 
     // Then make sure that both floating tables are allowed to split:
     uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -167,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHeader)
 {
     // Given a document with a header that has a floating table and some large images in the body
     // text:
-    loadFromURL(u"floattable-header.docx");
+    loadFromFile(u"floattable-header.docx");
 
     // When breaking that document into pages:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

@@ -36,7 +36,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPicwPich)
 {
     // Given a document with a WMF file where picwgoal and picscalex is provided, so picw is not
     // relevant:
-    loadFromURL(u"picw-pich.rtf");
+    loadFromFile(u"picw-pich.rtf");
 
     // Then make sure the graphic's preferred size is correct:
     uno::Reference<drawing::XDrawPageSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPicwPich)
 CPPUNIT_TEST_FIXTURE(Test, testCharHiddenInTable)
 {
     // Given a document with a table, and a hidden \line in it:
-    loadFromURL(u"char-hidden-intbl.rtf");
+    loadFromFile(u"char-hidden-intbl.rtf");
 
     // Then make sure that line is indeed hidden:
     uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCharHiddenInTable)
 CPPUNIT_TEST_FIXTURE(Test, testDuplicatedImage)
 {
     // Given a document with 2 images:
-    loadFromURL(u"duplicated-image.rtf");
+    loadFromFile(u"duplicated-image.rtf");
 
     // Then make sure no duplicated images are created:
     uno::Reference<drawing::XDrawPageSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDuplicatedImage)
 CPPUNIT_TEST_FIXTURE(Test, testOldParaNumLeftMargin)
 {
     // Given a document with 3 paragraphs, the third one with a left indent:
-    loadFromURL(u"old-para-num-left-margin.rtf");
+    loadFromFile(u"old-para-num-left-margin.rtf");
 
     // Then make sure that the third paragraph has a left indent:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

@@ -202,7 +202,7 @@ void ScCellCursorObj::setUp()
 {
     UnoApiTest::setUp();
 
-    loadFromURL(u"ScCellCursorObj.ods");
+    loadFromFile(u"ScCellCursorObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellCursorObj);

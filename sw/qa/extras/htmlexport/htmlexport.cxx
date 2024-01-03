@@ -300,8 +300,8 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo81276)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo62336)
 {
     // The problem was essentially a crash during table export as docx/rtf/html
-    // If calc-layout is enabled, the crash does not occur, that's why loadFromURL/save is used
-    loadFromURL(u"fdo62336.docx");
+    // If calc-layout is enabled, the crash does not occur, that's why loadFromFile/save is used
+    loadFromFile(u"fdo62336.docx");
     save("HTML (StarWriter)");
 }
 

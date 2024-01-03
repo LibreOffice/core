@@ -32,7 +32,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
 {
     // Given a document with <w:doNotBreakWrappedTables>:
     // When importing that document:
-    loadFromURL(u"do-not-break-wrapped-tables.docx");
+    loadFromFile(u"do-not-break-wrapped-tables.docx");
 
     // Then make sure that the matching compat flag is set:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
 {
     // Given a document with <w:compatSetting w:name="allowTextAfterFloatingTableBreak">:
     // When importing that document:
-    loadFromURL(u"floattable-wrap-on-all-pages.docx");
+    loadFromFile(u"floattable-wrap-on-all-pages.docx");
 
     // Then make sure that the matching compat flag is set:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAddVerticalFrameOffsetsRTF)
 {
     // Given a document with a floating table, immediately followed by an inline table:
     // When importing that document:
-    loadFromURL(u"floattable-vertical-frame-offset.rtf");
+    loadFromFile(u"floattable-vertical-frame-offset.rtf");
 
     // Then make sure the floating and the inline tables don't overlap:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

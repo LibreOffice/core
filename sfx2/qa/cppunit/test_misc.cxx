@@ -86,7 +86,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
 CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 {
     // Load a document.
-    loadFromURL(u"hello.odt");
+    loadFromFile(u"hello.odt");
 
     // Save it with the NoThumbnail option and assert that it has no thumbnail.
 #ifndef _WIN32

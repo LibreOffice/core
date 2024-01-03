@@ -30,7 +30,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureInTextframe)
 {
-    loadFromURL(u"picture-in-textframe.rtf");
+    loadFromFile(u"picture-in-textframe.rtf");
     uno::Reference<drawing::XDrawPageSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xTextDocument->getDrawPage();
     uno::Reference<beans::XPropertySet> xInnerShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermark)
 {
     // Given a document with a picture watermark, and the "washout" checkbox is ticked on the Word
     // UI:
-    loadFromURL(u"watermark.rtf");
+    loadFromFile(u"watermark.rtf");
 
     // Then make sure the watermark effect is not lost on import:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);

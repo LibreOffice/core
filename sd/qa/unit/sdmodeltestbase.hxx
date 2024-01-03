@@ -51,7 +51,7 @@ public:
         if (!pName)
             load("private:factory/simpress");
         else
-            loadFromURL(OUString::createFromAscii(pName), pPassword);
+            loadFromFile(OUString::createFromAscii(pName), pPassword);
 
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(
@@ -65,7 +65,7 @@ public:
         if (!pName)
             load("private:factory/sdraw");
         else
-            loadFromURL(OUString::createFromAscii(pName), pPassword);
+            loadFromFile(OUString::createFromAscii(pName), pPassword);
 
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"));

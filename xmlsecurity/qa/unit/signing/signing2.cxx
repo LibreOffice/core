@@ -43,7 +43,7 @@ SigningTest2::SigningTest2()
 /// Test if a macro signature from a ODF Database is preserved when saving
 CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
 {
-    loadFromURL(u"odb_signed_macros.odb");
+    loadFromFile(u"odb_signed_macros.odb");
 
     // save as ODB
     save("StarOffice XML (Base)");

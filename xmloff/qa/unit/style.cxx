@@ -53,7 +53,7 @@ uno::Reference<drawing::XShape> XmloffStyleTest::getShape(sal_uInt8 nShapeIndex)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFillImageBase64)
 {
     // Load a flat ODG that has base64-encoded bitmap as a fill style.
-    loadFromURL(u"fill-image-base64.fodg");
+    loadFromFile(u"fill-image-base64.fodg");
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xBitmaps(
         xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
 {
     // Given a document with a gutter margin and an RTL writing mode:
     // When loading that document from ODF:
-    loadFromURL(u"rtl-gutter.fodt");
+    loadFromFile(u"rtl-gutter.fodt");
 
     // Then make sure the page style's RtlGutter property is true.
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
@@ -174,7 +174,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
     // Load document. It has a frame style with writing-mode bt-lr.
     // In ODF 1.3 extended it is written as loext:writing-mode="bt-lr".
     // In ODF 1.3 strict, there must not be an attribute at all.
-    loadFromURL(u"tdf150407_WritingModeBTLR_style.odt");
+    loadFromFile(u"tdf150407_WritingModeBTLR_style.odt");
 
     Resetter _([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -203,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
                     "writing-mode"_ostr, "bt-lr");
     }
 
-    loadFromURL(u"tdf150407_WritingModeBTLR_style.odt");
+    loadFromFile(u"tdf150407_WritingModeBTLR_style.odt");
     // Save to ODF 1.3 strict.
     {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -227,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
     // Load document. It has a frame position with vertical position relative to bottom margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-bottom".
     // In ODF 1.3 strict, there must not be an attribute at all.
-    loadFromURL(u"tdf150407_PosRelBottomMargin.docx");
+    loadFromFile(u"tdf150407_PosRelBottomMargin.docx");
 
     Resetter _([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -259,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
             "vertical-rel"_ostr, "page-content-bottom");
     }
 
-    loadFromURL(u"tdf150407_PosRelBottomMargin.docx");
+    loadFromFile(u"tdf150407_PosRelBottomMargin.docx");
     // Save to ODF 1.3 strict.
     {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
     // Load document. It has a frame position with vertical position relative to top margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-top".
     // In ODF 1.3 strict, there must not be an attribute at all.
-    loadFromURL(u"tdf150407_PosRelTopMargin.docx");
+    loadFromFile(u"tdf150407_PosRelTopMargin.docx");
 
     Resetter _([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -315,7 +315,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
             "vertical-rel"_ostr, "page-content-top");
     }
 
-    loadFromURL(u"tdf150407_PosRelTopMargin.docx");
+    loadFromFile(u"tdf150407_PosRelTopMargin.docx");
     // Save to ODF 1.3 strict.
     {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
 {
     // The file contains a shape with linear gradient fill from red #ff0000 to yellow #ffff00,
     // named 'red2yellow'
-    loadFromURL(u"MCGR_OldToNew.odg");
+    loadFromFile(u"MCGR_OldToNew.odg");
 
     // saveAndReload includes validation and must not fail with the new elements and attributes.
     saveAndReload("draw8");
@@ -392,7 +392,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
 {
     // The file contains a shape with solid fill and a radial transparency gradient with start 90%,
     // end 0%, border 20% and center at 50%|50%. There is only one draw:opacity element in file.
-    loadFromURL(u"MCGR_OldToNew_opacity.odg");
+    loadFromFile(u"MCGR_OldToNew_opacity.odg");
 
     // saveAndReload includes validation and must not fail with the new elements and attributes.
     saveAndReload("draw8");
@@ -452,7 +452,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
 {
     // The file contains a shape with square gradient fill from red #ff0000 over teal #0099bb to
     // yellow #ffff00, named 'threeStops'. It has 45deg rotation, center 0%|50%, border 10%.
-    loadFromURL(u"MCGR_threeStops.fodt");
+    loadFromFile(u"MCGR_threeStops.fodt");
 
     // saveAndReload includes validation and must not fail with the new elements and attributes.
     saveAndReload("draw8");
@@ -527,7 +527,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
     // exported to ODF with a border of 50%.
     // When gradient-stops are integrated in ODF strict, the test needs to be adapted.
 
-    loadFromURL(u"MCGR_Border_restoration.pptx");
+    loadFromFile(u"MCGR_Border_restoration.pptx");
 
     // Backup original ODF default version
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
@@ -565,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
     // backward compatibility such gradient is exported with a border of 40% in the transparency
     // gradient. The color itself is the same for all gradient stops.
     // When transparency gradient-stops are integrated in ODF strict, the test needs to be adapted.
-    loadFromURL(u"MCGR_TransparencyBorder_restoration.pptx");
+    loadFromFile(u"MCGR_TransparencyBorder_restoration.pptx");
 
     // Backup original ODF default version
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
@@ -604,7 +604,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialGradientCompatible)
     // ODF export writes an axial gradient. with colors A and B.
     // This test needs to be adapted when color stops are available in ODF strict and widely
     // supported in even older LibreOffice versions.
-    loadFromURL(u"tdf155549_MCGR_AxialGradientCompatible.odt");
+    loadFromFile(u"tdf155549_MCGR_AxialGradientCompatible.odt");
 
     //Round-trip through OOXML.
     // FixMe tdf#153183. Here "Attribute 'ID' is not allowed to appear in element 'v:rect'".
@@ -636,7 +636,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialTransparencyCompatible)
     // axial transparency gradient that is same as in the original document.
     // This test needs to be adapted when color stops are available in ODF strict and widely
     // supported in even older LibreOffice versions.
-    loadFromURL(u"tdf155549_MCGR_AxialTransparencyCompatible.odt");
+    loadFromFile(u"tdf155549_MCGR_AxialTransparencyCompatible.odt");
 
     //Round-trip through OOXML.
     // FixMe tdf#153183, and error in charSpace and in CharacterSet

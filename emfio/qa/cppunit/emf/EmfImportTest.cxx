@@ -1734,7 +1734,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
     }
 
     // Load a PPTX file, which has a shape, with a bitmap fill, which is an EMF, containing a PDF.
-    loadFromURL(u"pdf-in-emf.pptx");
+    loadFromFile(u"pdf-in-emf.pptx");
 
     // Get the EMF.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);

@@ -32,7 +32,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableHeader)
 {
-    loadFromURL(u"floating-table-header.docx");
+    loadFromFile(u"floating-table-header.docx");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY);
@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowPageTopMargin)
 {
     // Load a document with 2 pages: first page has larger top margin, second page has smaller top
     // margin.
-    loadFromURL(u"follow-page-top-margin.docx");
+    loadFromFile(u"follow-page-top-margin.docx");
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableNegativeVerticalPos)
 {
     // Given a document with a table which has a negative vertical position (moves up to overlap
     // with the header):
-    loadFromURL(u"table-negative-vertical-pos.docx");
+    loadFromFile(u"table-negative-vertical-pos.docx");
 
     // Then make sure we don't import that as a plain table, which can't have a negative top margin:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableNegativeVerticalPos)
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 {
     // Given a document with a top margin and a border which has more spacing than the margin:
-    loadFromURL(u"negative-page-border.docx");
+    loadFromFile(u"negative-page-border.docx");
 
     // Then make sure that the border distance is negative, so it can appear at the correct
     // position:
@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderNoMargin)
 {
     // Given a document with no top margin and a border which has spacing:
-    loadFromURL(u"negative-page-border-no-margin.docx");
+    loadFromFile(u"negative-page-border-no-margin.docx");
 
     // Then make sure that the border distance is negative, so it can appear at the correct
     // position:

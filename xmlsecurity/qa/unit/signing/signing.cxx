@@ -416,7 +416,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
 /// Test a typical ODF where all streams are signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFGood)
 {
-    loadFromURL(u"good.odt");
+    loadFromFile(u"good.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFGood)
 /// Test a typical broken ODF signature where one stream is corrupted.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFBroken)
 {
-    loadFromURL(u"bad.odt");
+    loadFromFile(u"bad.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -443,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFBroken)
 // Document has a signature stream, but no actual signatures.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFNo)
 {
-    loadFromURL(u"no.odt");
+    loadFromFile(u"no.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFNo)
 // document has one signed timestamp and one unsigned timestamp
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
 {
-    loadFromURL(u"02_doc_signed_by_trusted_person_manipulated.odt");
+    loadFromFile(u"02_doc_signed_by_trusted_person_manipulated.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -480,7 +480,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
 {
-    loadFromURL(u"signed_with_x509certificate_chain.odt");
+    loadFromFile(u"signed_with_x509certificate_chain.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -503,7 +503,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Data)
 {
-    loadFromURL(u"02_doc_signed_by_attacker_manipulated.odt");
+    loadFromFile(u"02_doc_signed_by_attacker_manipulated.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -523,7 +523,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Data)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFTripleX509Data)
 {
-    loadFromURL(u"02_doc_signed_by_attacker_manipulated_triple.odt");
+    loadFromFile(u"02_doc_signed_by_attacker_manipulated_triple.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -543,7 +543,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFTripleX509Data)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFMacroDoubleX509Data)
 {
-    loadFromURL(u"02_doc_macros_signed_by_attacker_manipulated.odt");
+    loadFromFile(u"02_doc_macros_signed_by_attacker_manipulated.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -563,7 +563,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFMacroDoubleX509Data)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Certificate)
 {
-    loadFromURL(u"02_doc_signed_by_attacker_manipulated2.odt");
+    loadFromFile(u"02_doc_signed_by_attacker_manipulated2.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -605,7 +605,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDNCompatibility)
 /// Test a typical OOXML where a number of (but not all) streams are signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLPartial)
 {
-    loadFromURL(u"partial.docx");
+    loadFromFile(u"partial.docx");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -622,7 +622,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLPartial)
 /// Test a typical broken OOXML signature where one stream is corrupted.
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLBroken)
 {
-    loadFromURL(u"bad.docx");
+    loadFromFile(u"bad.docx");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -637,7 +637,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLBroken)
 /// Test a typical PDF where the signature is good.
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFGood)
 {
-    loadFromURL(u"good.pdf");
+    loadFromFile(u"good.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -658,7 +658,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFGood)
 /// Test a typical PDF where the signature is bad.
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFBad)
 {
-    loadFromURL(u"bad.pdf");
+    loadFromFile(u"bad.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -675,7 +675,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFBad)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFHideAndReplace)
 {
-    loadFromURL(u"hide-and-replace-shadow-file-signed-2.pdf");
+    loadFromFile(u"hide-and-replace-shadow-file-signed-2.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFHideAndReplace)
 /// Test a typical PDF which is not signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFNo)
 {
-    loadFromURL(u"no.pdf");
+    loadFromFile(u"no.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -778,7 +778,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
 {
-    loadFromURL(u"tdf96097.ods");
+    loadFromFile(u"tdf96097.ods");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to access document base model", pBaseModel);
 
@@ -806,7 +806,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
 {
-    loadFromURL(u"tdf96097.odt");
+    loadFromFile(u"tdf96097.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1084,7 +1084,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 /// Works with an existing good XAdES signature.
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESGood)
 {
-    loadFromURL(u"good-xades.odt");
+    loadFromFile(u"good-xades.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1126,7 +1126,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineOOXML)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
 {
-    loadFromURL(u"signatureline.odt");
+    loadFromFile(u"signatureline.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1148,7 +1148,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
 /// Test a typical ODF where all streams are GPG-signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)
 {
-    loadFromURL(u"goodGPG.odt");
+    loadFromFile(u"goodGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1163,7 +1163,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)
 /// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
 {
-    loadFromURL(u"untrustedGoodGPG.odt");
+    loadFromFile(u"untrustedGoodGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1179,7 +1179,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
 /// Test a typical broken ODF signature where one stream is corrupted.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenStreamGPG)
 {
-    loadFromURL(u"badStreamGPG.odt");
+    loadFromFile(u"badStreamGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1191,7 +1191,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenStreamGPG)
 /// Test a typical broken ODF signature where the XML dsig hash is corrupted.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenDsigGPG)
 {
-    loadFromURL(u"badDsigGPG.odt");
+    loadFromFile(u"badDsigGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1206,14 +1206,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenDsigGPG)
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
 {
     // ODF1.2 + loext flavour
-    loadFromURL(u"encryptedGPG.odt");
+    loadFromFile(u"encryptedGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
 
     // ODF1.3 flavour
-    loadFromURL(u"encryptedGPG_odf13.odt");
+    loadFromFile(u"encryptedGPG_odf13.odt");
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     pObjectShell = pBaseModel->GetObjectShell();

@@ -58,7 +58,7 @@ public:
 
 void Test::testColor()
 {
-    loadFromURL(u"color.mml");
+    loadFromFile(u"color.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(OUString("{ color black b"
@@ -86,7 +86,7 @@ void Test::testColor()
 
 void Test::testSimple()
 {
-    loadFromURL(u"simple.mml");
+    loadFromFile(u"simple.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
@@ -95,7 +95,7 @@ void Test::testSimple()
 
 void Test::testNsPrefixMath()
 {
-    loadFromURL(u"ns-prefix-math.mml");
+    loadFromFile(u"ns-prefix-math.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
@@ -104,7 +104,7 @@ void Test::testNsPrefixMath()
 
 void Test::testMaction()
 {
-    loadFromURL(u"maction.mml");
+    loadFromFile(u"maction.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix{ 1 ## 2 ## 3 }"),
@@ -113,7 +113,7 @@ void Test::testMaction()
 
 void Test::testMspace()
 {
-    loadFromURL(u"mspace.mml");
+    loadFromFile(u"mspace.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(OUString("{ a b ~ c ~~``` d }"), pDocShell->GetText());
@@ -121,7 +121,7 @@ void Test::testMspace()
 
 void Test::testtdf99556()
 {
-    loadFromURL(u"tdf99556-1.mml");
+    loadFromFile(u"tdf99556-1.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("sqrt { }"), pDocShell->GetText());
@@ -129,7 +129,7 @@ void Test::testtdf99556()
 
 void Test::testTdf103430()
 {
-    loadFromURL(u"tdf103430.mml");
+    loadFromFile(u"tdf103430.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(
@@ -140,7 +140,7 @@ void Test::testTdf103430()
 
 void Test::testTdf103500()
 {
-    loadFromURL(u"tdf103500.mml");
+    loadFromFile(u"tdf103500.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(
@@ -152,7 +152,7 @@ void Test::testTdf103500()
 void Test::testTdf137008()
 {
     // Without the fix in place, this test would have crashed
-    loadFromURL(u"tdf137008.mml");
+    loadFromFile(u"tdf137008.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(OUString("matrix{ { } # ## # }"), pDocShell->GetText());
@@ -161,7 +161,7 @@ void Test::testTdf137008()
 void Test::testTdf151842()
 {
     // Without the fix in place, this test would have crashed
-    loadFromURL(u"tdf151842.odf");
+    loadFromFile(u"tdf151842.odf");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(OUString("test"), pDocShell->GetText());
@@ -175,7 +175,7 @@ void Test::testTdf151842()
 
 void Test::testMathmlEntities()
 {
-    loadFromURL(u"mthmlentities.mml");
+    loadFromFile(u"mthmlentities.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(u"{ \u03C3 \u221E \u221E \u03C3 }"_ustr, pDocShell->GetText());
@@ -183,7 +183,7 @@ void Test::testMathmlEntities()
 
 void Test::testMaj()
 {
-    loadFromURL(u"maj.mml");
+    loadFromFile(u"maj.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pModel);
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
@@ -195,7 +195,7 @@ void Test::testMaj()
 
 void Test::testHadd()
 {
-    loadFromURL(u"hadd.mml");
+    loadFromFile(u"hadd.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pModel);
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());

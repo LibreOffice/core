@@ -65,7 +65,7 @@ ScAnchorTest::ScAnchorTest()
 
 void ScAnchorTest::testUndoAnchor()
 {
-    loadFromURL(u"document_with_linked_graphic.ods");
+    loadFromFile(u"document_with_linked_graphic.ods");
 
     // Get the document model
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
@@ -191,7 +191,7 @@ void ScAnchorTest::testTdf76183()
 
 void ScAnchorTest::testODFAnchorTypes()
 {
-    loadFromURL(u"3AnchorTypes.ods");
+    loadFromFile(u"3AnchorTypes.ods");
 
     // Get the document model
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
@@ -230,7 +230,7 @@ void ScAnchorTest::testODFAnchorTypes()
 /// Test that copying a column with an image anchored to it also copies the image
 void ScAnchorTest::testCopyColumnWithImages()
 {
-    loadFromURL(u"3AnchorTypes.ods");
+    loadFromFile(u"3AnchorTypes.ods");
 
     // Get the document model
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
@@ -296,7 +296,7 @@ void ScAnchorTest::testCopyColumnWithImages()
 
 void ScAnchorTest::testCutWithImages()
 {
-    loadFromURL(u"3AnchorTypes.ods");
+    loadFromFile(u"3AnchorTypes.ods");
     // open the document with graphic included
 
     // Get the document model
@@ -350,7 +350,7 @@ void ScAnchorTest::testCutWithImages()
 
 void ScAnchorTest::testTdf121963()
 {
-    loadFromURL(u"tdf121963.ods");
+    loadFromFile(u"tdf121963.ods");
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
@@ -359,7 +359,7 @@ void ScAnchorTest::testTdf121963()
 
 void ScAnchorTest::testTdf129552()
 {
-    loadFromURL(u"tdf129552.fods");
+    loadFromFile(u"tdf129552.fods");
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
@@ -368,7 +368,7 @@ void ScAnchorTest::testTdf129552()
 
 void ScAnchorTest::testTdf130556()
 {
-    loadFromURL(u"tdf130556.ods");
+    loadFromFile(u"tdf130556.ods");
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
@@ -377,7 +377,7 @@ void ScAnchorTest::testTdf130556()
 
 void ScAnchorTest::testTdf134161()
 {
-    loadFromURL(u"tdf134161.ods");
+    loadFromFile(u"tdf134161.ods");
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop

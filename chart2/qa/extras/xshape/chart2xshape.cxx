@@ -118,7 +118,7 @@ void Chart2XShapeTest::testTdf150832()
     // Without the fix in place, this test would have failed with
     // - Expected: 319
     // - Actual  : 0
-    loadFromURL(u"xls/tdf150832.xls");
+    loadFromFile(u"xls/tdf150832.xls");
     compareAgainstReference(getXShapeDumpString(), u"tdf150832.xml");
 }
 
@@ -134,7 +134,7 @@ void Chart2XShapeTest::testTdf149204()
     // - Actual  : 12940
     // - Node: /XShapes/XShape[2]
     // - Attr: sizeX
-    loadFromURL(u"pptx/tdf149204.pptx");
+    loadFromFile(u"pptx/tdf149204.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 0);
     compareAgainstReference(getShapeDump(xChartDoc), u"tdf149204.xml");
 }
@@ -151,7 +151,7 @@ void Chart2XShapeTest::testTdf151424()
     // - Actual  : 3530
     // - Node: /XShapes/XShape[2]/XShapes/XShape[1]
     // - Attr: positionX
-    loadFromURL(u"ods/tdf151424.ods");
+    loadFromFile(u"ods/tdf151424.ods");
     compareAgainstReference(getXShapeDumpString(), u"tdf151424.xml");
 }
 
@@ -162,7 +162,7 @@ void Chart2XShapeTest::testFdo75075()
     if (!IsDefaultDPI())
         return;
 
-    loadFromURL(u"ods/fdo75075.ods");
+    loadFromFile(u"ods/fdo75075.ods");
     compareAgainstReference(getXShapeDumpString(), u"fdo75075.xml");
 }
 
@@ -173,7 +173,7 @@ void Chart2XShapeTest::testPropertyMappingBarChart()
     if (!IsDefaultDPI())
         return;
 
-    loadFromURL(u"ods/property-mapping-bar.ods");
+    loadFromFile(u"ods/property-mapping-bar.ods");
     compareAgainstReference(getXShapeDumpString(), u"property-mapping-bar.xml");
 }
 
@@ -185,7 +185,7 @@ void Chart2XShapeTest::testPieChartLabels1()
         return;
 
     // inside placement for the best fit case
-    loadFromURL(u"xlsx/tdf90839-1.xlsx");
+    loadFromFile(u"xlsx/tdf90839-1.xlsx");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-1.xml");
 }
 
@@ -197,7 +197,7 @@ void Chart2XShapeTest::testPieChartLabels2()
         return;
 
     // text wrap: wrap all text labels except one
-    loadFromURL(u"xlsx/tdf90839-2.xlsx");
+    loadFromFile(u"xlsx/tdf90839-2.xlsx");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-2.xml");
 }
 
@@ -209,7 +209,7 @@ void Chart2XShapeTest::testPieChartLabels3()
         return;
 
     // text wrap: wrap no text label except one
-    loadFromURL(u"xlsx/tdf90839-3.xlsx");
+    loadFromFile(u"xlsx/tdf90839-3.xlsx");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-3.xml");
 }
 
@@ -221,7 +221,7 @@ void Chart2XShapeTest::testPieChartLabels4()
         return;
 
     // data value and percent value are centered horizontally
-    loadFromURL(u"ods/tdf90839-4.ods");
+    loadFromFile(u"ods/tdf90839-4.ods");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-4.xml");
 }
 
@@ -232,7 +232,7 @@ void Chart2XShapeTest::testChart()
     if (!IsDefaultDPI())
         return;
 
-    loadFromURL(u"ods/testChart.ods");
+    loadFromFile(u"ods/testChart.ods");
     compareAgainstReference(getXShapeDumpString(), u"testChart.xml");
 }
 
@@ -241,7 +241,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
     // This bug prevents that the trendline (regression curve) is drawn
     // if the first cell is empty. See tdf#76649 for details.
 
-    loadFromURL(u"ods/tdf76649_TrendLineBug.ods");
+    loadFromFile(u"ods/tdf76649_TrendLineBug.ods");
 
     xmlDocUniquePtr pXmlDoc = getXShapeDumpXmlDoc();
 
@@ -252,7 +252,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
 
 void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
 {
-    loadFromURL(u"pptx/tdf88154_LabelRotatedLayout.pptx");
+    loadFromFile(u"pptx/tdf88154_LabelRotatedLayout.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 5);
     OUString rDump = getShapeDump(xChartDoc);
     OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
