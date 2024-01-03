@@ -7354,10 +7354,16 @@ void DocxAttributeOutput::EmbedFont( std::u16string_view name, FontFamily family
 {
     if( !m_rExport.m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         return; // no font embedding with this document
-    EmbedFontStyle( name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_NORMAL, pitch );
-    EmbedFontStyle( name, XML_embedBold, family, ITALIC_NONE, WEIGHT_BOLD, pitch );
-    EmbedFontStyle( name, XML_embedItalic, family, ITALIC_NORMAL, WEIGHT_NORMAL, pitch );
-    EmbedFontStyle( name, XML_embedBoldItalic, family, ITALIC_NORMAL, WEIGHT_BOLD, pitch );
+    bool foundFont
+        = EmbedFontStyle(name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_NORMAL, pitch);
+    foundFont
+        = EmbedFontStyle(name, XML_embedBold, family, ITALIC_NONE, WEIGHT_BOLD, pitch) || foundFont;
+    foundFont = EmbedFontStyle(name, XML_embedItalic, family, ITALIC_NORMAL, WEIGHT_NORMAL, pitch)
+                || foundFont;
+    foundFont = EmbedFontStyle(name, XML_embedBoldItalic, family, ITALIC_NORMAL, WEIGHT_BOLD, pitch)
+                || foundFont;
+    if (!foundFont)
+        EmbedFontStyle(name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_DONTKNOW, pitch);
 }
 
 static char toHexChar( int value )
@@ -7365,21 +7371,21 @@ static char toHexChar( int value )
     return value >= 10 ? value + 'A' - 10 : value + '0';
 }
 
-void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, FontFamily family, FontItalic italic,
-    FontWeight weight, FontPitch pitch )
+bool DocxAttributeOutput::EmbedFontStyle(std::u16string_view name, int tag, FontFamily family,
+                                         FontItalic italic, FontWeight weight, FontPitch pitch)
 {
     // Embed font if at least viewing is allowed (in which case the opening app must check
     // the font license rights too and open either read-only or not use the font for editing).
     OUString fontUrl = EmbeddedFontsHelper::fontFileUrl( name, family, italic, weight, pitch,
         EmbeddedFontsHelper::FontRights::ViewingAllowed );
     if( fontUrl.isEmpty())
-        return;
+        return false;
     // TODO IDocumentSettingAccess::EMBED_SYSTEM_FONTS
     if( !m_FontFilesMap.count( fontUrl ))
     {
         osl::File file( fontUrl );
         if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
-            return;
+            return false;
         uno::Reference< css::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
             "word/fonts/font" + OUString::number(m_nextFontId) + ".odttf",
             "application/vnd.openxmlformats-officedocument.obfuscatedFont" );
@@ -7398,7 +7404,7 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
         {
             SAL_WARN( "sw.ww8", "Font file size too small (" << fontUrl << ")" );
             xOutStream->closeOutput();
-            return;
+            return false;
         }
         for( int i = 0;
              i < 16;
@@ -7415,7 +7421,7 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
             {
                 SAL_WARN( "sw.ww8", "Error reading font file " << fontUrl );
                 xOutStream->closeOutput();
-                return;
+                return false;
             }
             if( eof )
                 break;
@@ -7423,7 +7429,7 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
             {
                 SAL_WARN( "sw.ww8", "Error reading font file " << fontUrl );
                 xOutStream->closeOutput();
-                return;
+                return false;
             }
             if( readSize == 0 )
                 break;
@@ -7443,6 +7449,7 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
     m_pSerializer->singleElementNS( XML_w, tag,
         FSNS( XML_r, XML_id ), m_FontFilesMap[ fontUrl ].relId,
         FSNS( XML_w, XML_fontKey ), m_FontFilesMap[ fontUrl ].fontKey );
+    return true;
 }
 
 OString DocxAttributeOutput::TransHighlightColor( sal_uInt8 nIco )
