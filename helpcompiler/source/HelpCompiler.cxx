@@ -39,7 +39,21 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, fs::path in_inputFile,
     src(std::move(in_src)), zipdir(std::move(in_zipdir)), module(std::move(in_module)), lang(std::move(in_lang)), resCompactStylesheet(std::move(in_resCompactStylesheet)),
     resEmbStylesheet(std::move(in_resEmbStylesheet)), bExtensionMode( in_bExtensionMode )
 {
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4996)
+#endif
     xmlKeepBlanksDefaultValue = 0;
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
     char* os = getenv("OS");
     if (os)
     {
