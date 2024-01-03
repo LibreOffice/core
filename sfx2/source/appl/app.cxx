@@ -25,7 +25,6 @@
 #include <basic/sberrors.hxx>
 
 #include <svl/svdde.hxx>
-#include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -114,11 +113,11 @@ SfxApplication* SfxApplication::GetOrCreate()
 #if HAVE_FEATURE_XMLHELP || defined(EMSCRIPTEN)
         bool bHelpTip = officecfg::Office::Common::Help::Tip::get();
         bool bExtendedHelpTip = officecfg::Office::Common::Help::ExtendedTip::get();
-        if (!comphelper::IsFuzzing() && bHelpTip)
+        if (bHelpTip)
             Help::EnableQuickHelp();
         else
             Help::DisableQuickHelp();
-        if (!comphelper::IsFuzzing() && bHelpTip && bExtendedHelpTip)
+        if (bHelpTip && bExtendedHelpTip)
             Help::EnableBalloonHelp();
         else
             Help::DisableBalloonHelp();
