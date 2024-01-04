@@ -48,6 +48,8 @@ public:
 private:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
     VclPtr<SwEditWin> mpSwWin;         //< Used to get SwView to change the SideBar visibility
+    /// User is currently dragging the thing
+    bool        mbIsDrag;
     bool        mbIsHighlighted; //< If comment control is highlighted (mouse is over it)
     Timer       maFadeTimer;     //< Timer for high/'low'light fading
     int         mnFadeRate;      //< From 0 to 100. 0 means not highlighted.
@@ -60,6 +62,8 @@ private:
      * When on comment control, it toggles the comment panel visibility.
      */
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
     /**
      * Callback function to handle a mouse move event.
      *
@@ -79,6 +83,8 @@ private:
      * current cursor position.
      */
     virtual void Update() override;
+
+    tools::Rectangle GetDragArea();
 
     /**
      * Get the rectangle area that should be used to draw the comment control.

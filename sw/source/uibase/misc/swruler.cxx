@@ -12,6 +12,7 @@
 #include <swruler.hxx>
 
 #include <viewsh.hxx>
+#include <viewopt.hxx>
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
 #include <view.hxx>
@@ -20,6 +21,7 @@
 #include <tools/UnitConversion.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <tools/json_writer.hxx>
@@ -199,6 +201,9 @@ void SwCommentRuler::Command(const CommandEvent& rCEvt)
 
 void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
 {
+    if (mbIsDrag)
+        return;
+
     SvxRuler::MouseMove(rMEvt);
     if (!mpViewShell->GetPostItMgr() || !mpViewShell->GetPostItMgr()->HasNotes())
         return;
@@ -206,6 +211,9 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
     UpdateCommentHelpText();
 
     Point aMousePos = rMEvt.GetPosPixel();
+    if (GetDragArea().Contains(aMousePos))
+        SetPointer(PointerStyle::HSizeBar);
+
     bool bWasHighlighted = mbIsHighlighted;
     mbIsHighlighted = GetCommentControlRegion().Contains(aMousePos);
     if (mbIsHighlighted != bWasHighlighted)
@@ -216,20 +224,41 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
 void SwCommentRuler::MouseButtonDown(const MouseEvent& rMEvt)
 {
     Point aMousePos = rMEvt.GetPosPixel();
-    if (!rMEvt.IsLeft() || IsTracking() || !GetCommentControlRegion().Contains(aMousePos))
+    if (!rMEvt.IsLeft() || IsTracking()
+        || (!GetCommentControlRegion().Contains(aMousePos) && !GetDragArea().Contains(aMousePos)))
     {
         SvxRuler::MouseButtonDown(rMEvt);
         return;
     }
 
-    // Toggle notes visibility
-    SwView& rView = mpSwWin->GetView();
-    SfxRequest aRequest(rView.GetViewFrame(), SID_TOGGLE_NOTES);
-    rView.ExecViewOptions(aRequest);
+    if (GetDragArea().Contains(aMousePos))
+    {
+        mbIsDrag = true;
+    }
+    else
+    {
+        // Toggle notes visibility
+        SwView& rView = mpSwWin->GetView();
+        SfxRequest aRequest(rView.GetViewFrame(), SID_TOGGLE_NOTES);
+        rView.ExecViewOptions(aRequest);
 
-    // It is inside comment control, so update help text
-    UpdateCommentHelpText();
+        // It is inside comment control, so update help text
+        UpdateCommentHelpText();
+    }
 
+    Invalidate();
+}
+
+void SwCommentRuler::MouseButtonUp(const MouseEvent& rMEvt)
+{
+    if (!mbIsDrag)
+    {
+        SvxRuler::MouseButtonUp(rMEvt);
+        return;
+    }
+    mpViewShell->GetPostItMgr()->SetSidebarWidth(rMEvt.GetPosPixel().X()
+                                                 - GetCommentControlRegion().TopLeft().X());
+    mbIsDrag = false;
     Invalidate();
 }
 
@@ -306,6 +335,14 @@ void SwCommentRuler::UpdateCommentHelpText()
     else
         pTooltipResId = STR_SHOW_COMMENTS;
     SetQuickHelpText(SwResId(pTooltipResId));
+}
+
+tools::Rectangle SwCommentRuler::GetDragArea()
+{
+    tools::Rectangle base(GetCommentControlRegion());
+    base.Move(Size(base.GetWidth() - 5, 0));
+    base.SetWidth(10);
+    return base;
 }
 
 // TODO Make Ruler return its central rectangle instead of margins.

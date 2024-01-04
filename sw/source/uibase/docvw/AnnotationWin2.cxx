@@ -564,7 +564,10 @@ void SwAnnotationWin::SetPosAndSize()
         {
             bChange = true;
             SetPosPixel(mPosSize.TopLeft());
+        }
 
+        if (bChange)
+        {
             Point aLineStart;
             Point aLineEnd ;
             switch ( meSidebarPosition )

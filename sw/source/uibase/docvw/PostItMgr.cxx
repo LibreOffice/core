@@ -56,6 +56,7 @@
 #include <SwRewriter.hxx>
 #include <tools/color.hxx>
 #include <unotools/datetime.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <swmodule.hxx>
 #include <strings.hrc>
@@ -2154,6 +2155,17 @@ bool SwPostItMgr::HasNotes() const
     return !mvPostItFields.empty();
 }
 
+void SwPostItMgr::SetSidebarWidth(sal_uInt16 nPx)
+{
+    sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
+    double nFactor = static_cast<double>(nPx) /  static_cast<double>(nZoom);
+    nFactor = std::clamp(nFactor, 1.0, 8.0);
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Notes::DisplayWidthFactor::set(nFactor, xChanges);
+    xChanges->commit();
+    LayoutPostIts();
+}
+
 tools::ULong SwPostItMgr::GetSidebarWidth(bool bPx) const
 {
     bool bEnableMapMode = !mpWrtShell->GetOut()->IsMapModeEnabled();
@@ -2164,7 +2176,8 @@ tools::ULong SwPostItMgr::GetSidebarWidth(bool bPx) const
         double fScaleX = double(mpWrtShell->GetOut()->GetMapMode().GetScaleX());
         nZoom = fScaleX * 100;
     }
-    tools::ULong aWidth = static_cast<tools::ULong>(nZoom * 1.8);
+    tools::ULong aWidth = static_cast<tools::ULong>(
+        nZoom * officecfg::Office::Writer::Notes::DisplayWidthFactor::get());
 
     if (bPx)
         return aWidth;

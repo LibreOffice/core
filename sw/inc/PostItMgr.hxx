@@ -191,6 +191,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool HasNotes() const ;
         bool ShowNotes() const;
         bool IsShowAnchor() const { return mbIsShowAnchor;}
+        void SetSidebarWidth(sal_uInt16 nPx);
         tools::ULong GetSidebarWidth(bool bPx = false) const;
         tools::ULong GetSidebarBorderWidth(bool bPx = false) const;
 

@@ -4911,6 +4911,17 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="DisplayWidthFactor" oor:type="xs:double" oor:nillable="false">
+        <!-- UIHints: Can be changed by scaling the comment section width -->
+        <info>
+          <desc>Defines the width of the comment bar in Writer. Factor between 1 and 8.</desc>
+        </info>
+        <value>1.8</value>
+        <constraints>
+          <minInclusive oor:value="1"/>
+          <maxInclusive oor:value="8"/>
+        </constraints>
+      </prop>
     </group>
     <group oor:name="WordCount">
       <info>
