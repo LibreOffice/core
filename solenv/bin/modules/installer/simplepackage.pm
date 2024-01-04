@@ -42,13 +42,13 @@ sub check_simple_packager_project
 {
     my ( $allvariables ) = @_;
 
-    if (( $installer::globals::packageformat eq "installed" ) ||
-        ( $installer::globals::packageformat eq "archive" ))
+    if ( $installer::globals::packageformat eq "installed" )
     {
         $installer::globals::is_simple_packager_project = 1;
         $installer::globals::patch_user_dir = 1;
     }
-    elsif( $installer::globals::packageformat eq "dmg" )
+    elsif(( $installer::globals::packageformat eq "archive" ) ||
+          ( $installer::globals::packageformat eq "dmg" ) )
     {
         $installer::globals::is_simple_packager_project = 1;
     }
