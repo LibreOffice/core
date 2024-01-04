@@ -101,7 +101,7 @@ SfxSimpleHint(SfxHintId::Dying) from:
 
 SfxStyleSheetHint( SfxHintId::StyleSheetCreated, *p ) from:
    SfxStyleSheetBasePool::Make( const String& rName,
-   SfxStyleFamily eFam, sal_uInt16 mask)
+   SfxStyleFamily eFam, SfxStyleSearchBits mask)
 
 SfxStyleSheetHint( SfxHintId::StyleSheetChanged, *pNew ) from:
    SfxStyleSheetBasePool::Add( SfxStyleSheetBase& rSheet )
