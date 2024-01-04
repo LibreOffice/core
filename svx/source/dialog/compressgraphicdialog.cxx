@@ -45,7 +45,7 @@
 namespace
 {
     struct memParam {
-        bool ReduceResolutionCB = false;
+        bool ReduceResolutionCB = true;
         int  MFNewWidth = 1;
         int  MFNewHeight = 1;
         bool LosslessRB = true;
