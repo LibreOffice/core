@@ -1953,7 +1953,7 @@
           <desc>The entry specifies if the recent document list should show only
           files that can be handled by the current module.</desc>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <set oor:name="HelpBookmarks" oor:node-type="HistoryType">
         <info>
