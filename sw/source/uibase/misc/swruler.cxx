@@ -152,7 +152,7 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
     // calculate label and arrow positions
     const OUString aLabel = SwResId(STR_COMMENTS_LABEL);
     const tools::Long nTriangleSize = maVirDev->GetTextHeight() / 2 + 1;
-    const tools::Long nTrianglePad = maVirDev->GetTextHeight() / 4;
+    const tools::Long nTrianglePad = maVirDev->GetTextHeight() / 2;
 
     Point aLabelPos(0, (aControlRect.GetHeight() - maVirDev->GetTextHeight()) / 2);
     Point aArrowPos(0, (aControlRect.GetHeight() - nTriangleSize) / 2);
@@ -160,7 +160,7 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
     if (!AllSettings::GetLayoutRTL()) // | > Comments |
     {
         aArrowPos.setX(nTrianglePad);
-        aLabelPos.setX(aArrowPos.X() + nTriangleSize + nTrianglePad);
+        aLabelPos.setX(aArrowPos.X() + nTriangleSize + nTrianglePad / 2);
     }
     else // RTL => | Comments < |
     {
