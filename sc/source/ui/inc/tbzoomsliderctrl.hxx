@@ -43,6 +43,7 @@ public:
 class ScZoomSlider final : public weld::CustomWidgetController
 {
 private:
+    sal_uInt16                   mnSliderLength;
     sal_uInt16                   mnCurrentZoom;
     sal_uInt16                   mnMinZoom;
     sal_uInt16                   mnMaxZoom;
@@ -64,6 +65,8 @@ public:
 
     void UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem);
 
+    void SetSliderLength(sal_uInt16 nLength) { mnSliderLength = nLength; }
+    sal_uInt16 GetSliderLength() const { return mnSliderLength; }
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -73,6 +76,8 @@ class ScZoomSliderWnd final : public InterimItemWindow
 {
 private:
     std::unique_ptr<ScZoomSlider> mxWidget;
+    std::unique_ptr<weld::Label> mxPercentage;
+    std::unique_ptr<weld::Label> mxLabel;
     std::unique_ptr<weld::CustomWeld> mxWeld;
 
 public:
