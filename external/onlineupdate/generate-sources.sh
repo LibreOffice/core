@@ -185,6 +185,9 @@ copyto toolkit/mozapps/update/common/updateutils_win.cpp toolkit/mozapps/update/
 copyto toolkit/mozapps/update/common/updateutils_win.h toolkit/mozapps/update/common/updateutils_win.h
 copyto toolkit/mozapps/update/updater/crctable.h toolkit/mozapps/update/updater/crctable.h
 copyto toolkit/xre/nsWindowsRestart.cpp toolkit/xre/nsWindowsRestart.cpp
+copyto tools/update-packaging/common.sh tools/update-packaging/common.sh
+copyto tools/update-packaging/make_full_update.sh tools/update-packaging/make_full_update.sh
+copyto tools/update-packaging/make_incremental_update.sh tools/update-packaging/make_incremental_update.sh
 copyto xpcom/base/nsAlgorithm.h xpcom/base/nsAlgorithm.h
 copyto xpcom/base/nsAutoRef.h xpcom/base/nsAutoRef.h
 copyto xpcom/base/nsWindowsHelpers.h xpcom/base/nsWindowsHelpers.h

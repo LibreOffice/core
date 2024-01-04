@@ -41,7 +41,7 @@ def get_hash(file_path):
 def get_file_info(mar_file, url):
     filesize = os.path.getsize(mar_file)
     data = {'hash': get_hash(mar_file),
-            'hashFunction': 'sha512',
+            'hash_function': 'sha512',
             'size': filesize,
             'url': url + os.path.basename(mar_file)}
 
