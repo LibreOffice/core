@@ -1750,6 +1750,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLSX(SvStream &rStream)
     bool ret = false;
     try
     {
+        SolarMutexGuard aGuard;
         ret = xFilter->filter(aArgs);
     }
     catch (const css::io::IOException&)
