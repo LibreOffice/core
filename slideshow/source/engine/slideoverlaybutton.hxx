@@ -97,6 +97,7 @@ private:
     ViewsVecT maViews;
     ScreenUpdater& mrScreenUpdater;
     bool mbVisible = false;
+    sal_Int32 mnIgnoreClicksCnt = 0;
 };
 }
 
