@@ -41,7 +41,7 @@ create-update-info:
 	rm -rf $(MAR_DIR) || true
 	rm -rf $(UPDATE_DIR) || true
 	mkdir -p $(MAR_DIR)/language
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)"
+	MAR=$(INSTDIR)/program/mar $(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_full_mar.py),$(SRCDIR)/bin/update/create_full_mar.py) "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)'
 	$(if $(filter WNT,$(OS)),, \
 		MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" \
 	)

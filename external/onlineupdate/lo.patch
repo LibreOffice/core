@@ -1,3 +1,96 @@
+--- onlineupdate/source/libmar/tool/mar.c
++++ onlineupdate/source/libmar/tool/mar.c
+@@ -14,7 +14,9 @@
+ #  include <windows.h>
+ #  include <direct.h>
+ #  define chdir _chdir
++#  define PATH_MAX MAX_PATH
+ #else
++#  include <limits.h>
+ #  include <unistd.h>
+ #endif
+ 
+@@ -39,7 +41,7 @@
+   printf("Create a MAR file:\n");
+   printf(
+       "  mar -H MARChannelID -V ProductVersion [-C workingDir] "
+-      "-c archive.mar [files...]\n");
++      "-c archive.mar [files...|-f files]\n");
+ 
+   printf("Extract a MAR file:\n");
+   printf("  mar [-C workingDir] -x archive.mar\n");
+@@ -244,6 +246,8 @@
+ 
+   switch (argv[1][1]) {
+     case 'c': {
++      int numfiles;
++      char** files;
+       struct ProductInformationBlock infoBlock;
+       if (!productVersion) {
+         fprintf(stderr,
+@@ -256,9 +260,61 @@
+                 "<mar-channel-id>`).\n");
+         return -1;
+       }
++      if (argc == 5 && !strcmp(argv[3], "-f")) {
++        FILE* in;
++        in = fopen(argv[4], "r");
++        if (!in) {
++          fprintf(stderr,
++                  "ERROR: Cannot open file `%s` for reading.\n", argv[4]);
++          return -1;
++        }
++        numfiles = 0;
++        files = malloc(sizeof(char*) * 10000); /*TODO*/
++        if (!files) {
++          fprintf(stderr,
++                  "ERROR: Cannot allocate memory");
++          return -1;
++        }
++        for (;;) {
++          char buf[PATH_MAX + 1];
++          size_t len;
++          if (!fgets(buf, PATH_MAX + 1, in)) {
++            if (feof(in)) {
++              break;
++            }
++            fprintf(stderr,
++                    "ERROR: Cannot read from file `%s`.\n", argv[4]);
++            return -1;
++          }
++          len = strlen(buf);
++          if (len != 0 && buf[len - 1] == '\n') {
++            buf[len - 1] = '\0';
++          } else if (!feof(in)) {
++            fprintf(stderr,
++                    "ERROR: Too long line in file `%s`.\n", argv[4]);
++            return -1;
++          }
++          if (numfiles == 10000) { /*TODO*/
++            fprintf(stderr,
++                    "ERROR: Too many lines in file `%s`.\n", argv[4]);
++            return -1;
++          }
++          files[numfiles] = strdup(buf);
++          if (!files[numfiles]) {
++            fprintf(stderr,
++                    "ERROR: Cannot allocate memory");
++            return -1;
++          }
++          ++numfiles;
++        }
++        fclose(in);
++      } else {
++        numfiles = argc - 3;
++        files = argv + 3;
++      }
+       infoBlock.MARChannelID = MARChannelID;
+       infoBlock.productVersion = productVersion;
+-      return mar_create(argv[2], argc - 3, argv + 3, &infoBlock);
++      return mar_create(argv[2], numfiles, files, &infoBlock);
+     }
+     case 'i': {
+       if (!productVersion) {
 --- onlineupdate/source/service/serviceinstall.cpp
 +++ onlineupdate/source/service/serviceinstall.cpp
 @@ -25,7 +25,7 @@
@@ -130,3 +223,43 @@
        LOG_WARN(("Install directory updater could not be determined."));
        result = FALSE;
      }
+--- tools/update-packaging/make_full_update.sh
++++ tools/update-packaging/make_full_update.sh
+@@ -53,9 +53,10 @@
+ fi
+ workdir="$targetdir.work"
+ updatemanifestv3="$workdir/updatev3.manifest"
+-targetfiles="updatev3.manifest"
+ 
+ mkdir -p "$workdir"
++
++printf 'updatev3.manifest\n' >"$workdir/files.txt"
+ 
+ # Generate a list of all files in the target directory.
+ pushd "$targetdir"
+@@ -66,7 +67,6 @@
+ if [ ! -f "precomplete" ]; then
+   if [ ! -f "Contents/Resources/precomplete" ]; then
+     notice "precomplete file is missing!"
+-    exit 1
+   fi
+ fi
+ 
+@@ -99,7 +99,7 @@
+   $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$targetdir/$f" > "$workdir/$f"
+   copy_perm "$targetdir/$f" "$workdir/$f"
+ 
+-  targetfiles="$targetfiles \"$f\""
++  printf '%s\n' "$f" >>"$workdir/files.txt"
+ done
+ 
+ # Append remove instructions for any dead files.
+@@ -110,7 +110,7 @@
+ $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force "$updatemanifestv3" && mv -f "$updatemanifestv3.xz" "$updatemanifestv3"
+ 
+ mar_command="$mar_command -C \"$workdir\" -c output.mar"
+-eval "$mar_command $targetfiles"
++eval "$mar_command -f $workdir/files.txt"
+ mv -f "$workdir/output.mar" "$archive"
+ 
+ # cleanup
