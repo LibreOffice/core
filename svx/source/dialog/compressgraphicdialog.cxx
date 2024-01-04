@@ -108,6 +108,8 @@ void CompressGraphicsDialog::recallParameter()
     m_xQualitySlider->set_value( memp.QualityMF );
 
     m_xInterpolationCombo->set_active( memp.InterpolationCombo );
+
+    UpdateSensitivity(m_xReduceResolutionCB->get_active());
 }
 
 void CompressGraphicsDialog::Initialize()
@@ -205,6 +207,14 @@ void CompressGraphicsDialog::Update()
     m_xFixedText5->set_label(aNativeSizeString);
 
     m_xFixedText6->set_label("??");
+}
+
+void CompressGraphicsDialog::UpdateSensitivity(const bool bSensitive)
+{
+    m_xMFNewWidth->set_sensitive(bSensitive);
+    m_xMFNewHeight->set_sensitive(bSensitive);
+    m_xResolutionLB->set_sensitive(bSensitive);
+    m_xInterpolationCombo->set_sensitive(bSensitive);
 }
 
 void CompressGraphicsDialog::UpdateNewWidthMF()
@@ -353,11 +363,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleCompressionRB, weld::Toggleable&,
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB, weld::Toggleable&, void )
 {
-    bool choice = m_xReduceResolutionCB->get_active();
-    m_xMFNewWidth->set_sensitive(choice);
-    m_xMFNewHeight->set_sensitive(choice);
-    m_xResolutionLB->set_sensitive(choice);
-    m_xInterpolationCombo->set_sensitive(choice);
+    UpdateSensitivity(m_xReduceResolutionCB->get_active());
     Update();
 }
 

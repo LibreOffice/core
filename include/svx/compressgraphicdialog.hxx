@@ -79,6 +79,7 @@ private:
     DECL_DLLPRIVATE_LINK( OkayClickHdl, weld::Button&, void );
 
     void Update();
+    void UpdateSensitivity(const bool bSensitive);
     void UpdateNewWidthMF();
     void UpdateNewHeightMF();
     void UpdateResolutionLB();
