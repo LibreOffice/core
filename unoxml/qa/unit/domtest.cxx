@@ -207,9 +207,9 @@ struct BasicTest : public test::BootstrapFixture
         mxErrHandler.set( new ErrorHandler() );
         uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance("com.sun.star.xml.dom.DocumentBuilder"), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
-        mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
-        mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), SAL_N_ELEMENTS(warningTestFile))) );
-        mxErrorInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(errorTestFile), SAL_N_ELEMENTS(errorTestFile))) );
+        mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile)-1)) );
+        mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), SAL_N_ELEMENTS(warningTestFile)-1)) );
+        mxErrorInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(errorTestFile), SAL_N_ELEMENTS(errorTestFile)-1)) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());
     }
 
@@ -293,7 +293,7 @@ struct SerializerTest : public test::BootstrapFixture
         mxErrHandler.set( new ErrorHandler() );
         uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance("com.sun.star.xml.dom.DocumentBuilder"), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
-        mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
+        mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile)-1)) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());
         mxHandler.set( new DocumentHandler );
         mxTokHandler.set( new TokenHandler );
