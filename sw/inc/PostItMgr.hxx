@@ -82,45 +82,6 @@ struct FieldShadowState
     }
 };
 
-class SwNoteProps final : public utl::ConfigItem
-{
-    private:
-        bool m_bIsShowAnchor;
-
-        virtual void ImplCommit() override;
-
-    public:
-        SwNoteProps()
-            : ConfigItem("Office.Writer/Notes")
-            , m_bIsShowAnchor(false)
-        {
-            const css::uno::Sequence< OUString >& rNames = GetPropertyNames();
-            css::uno::Sequence< css::uno::Any > aValues = GetProperties(rNames);
-            const css::uno::Any* pValues = aValues.getConstArray();
-            SAL_WARN_IF(aValues.getLength() != rNames.getLength(), "sw", "GetProperties failed");
-            if (aValues.hasElements())
-                    pValues[0]>>=m_bIsShowAnchor;
-        }
-
-        bool IsShowAnchor() const
-        {
-            return m_bIsShowAnchor;
-        }
-        static css::uno::Sequence< OUString >& GetPropertyNames()
-        {
-            static css::uno::Sequence< OUString > aNames;
-            if(!aNames.hasElements())
-            {
-                aNames.realloc(1);
-                OUString* pNames = aNames.getArray();
-                pNames[0] = "ShowAnkor";
-            }
-            return aNames;
-        }
-
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-};
-
 class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
 {
     private:
@@ -140,7 +101,6 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         FieldShadowState                mShadowState;
         std::optional<OutlinerParaObject> mpAnswer;
         OUString                        maAnswerText;
-        bool                            mbIsShowAnchor;
 
         // data structure to collect the <SwAnnotationWin> instances for certain <SwFrame> instances.
         std::unique_ptr<sw::sidebarwindows::SwFrameSidebarWinContainer> mpFrameSidebarWinContainer;
@@ -190,7 +150,6 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool ShowScrollbar(const tools::ULong aPage) const;
         bool HasNotes() const ;
         bool ShowNotes() const;
-        bool IsShowAnchor() const { return mbIsShowAnchor;}
         void SetSidebarWidth(sal_uInt16 nPx);
         tools::ULong GetSidebarWidth(bool bPx = false) const;
         tools::ULong GetSidebarBorderWidth(bool bPx = false) const;

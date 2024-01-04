@@ -56,7 +56,6 @@
 #include <SwRewriter.hxx>
 #include <tools/color.hxx>
 #include <unotools/datetime.hxx>
-#include <officecfg/Office/Writer.hxx>
 
 #include <swmodule.hxx>
 #include <strings.hrc>
@@ -77,6 +76,7 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <annotsh.hxx>
@@ -205,13 +205,9 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     , mbLayouting(false)
     , mbReadOnly(mpView->GetDocShell()->IsReadOnly())
     , mbDeleteNote(true)
-    , mbIsShowAnchor( false )
 {
     if(!mpView->GetDrawView() )
         mpView->GetWrtShell().MakeDrawView();
-
-    SwNoteProps aProps;
-    mbIsShowAnchor = aProps.IsShowAnchor();
 
     //make sure we get the colour yellow always, even if not the first one of comments or redlining
     SW_MOD()->GetRedlineAuthor();
@@ -2547,8 +2543,5 @@ void SwPostItMgr::UpdateResolvedStatus(const sw::annotation::SwAnnotationWin* to
         }
     }
 }
-
-void SwNoteProps::ImplCommit() {}
-void SwNoteProps::Notify( const css::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

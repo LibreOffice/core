@@ -79,6 +79,7 @@
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <osl/diagnose.h>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -953,7 +954,7 @@ void SwAnnotationWin::HideNote()
         Window::Hide();
     if (mpAnchor)
     {
-        if (mrMgr.IsShowAnchor())
+        if (officecfg::Office::Writer::Notes::ShowAnkor::get())
             mpAnchor->SetAnchorState(AnchorState::Tri);
         else
             mpAnchor->setVisible(false);
