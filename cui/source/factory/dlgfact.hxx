@@ -220,7 +220,7 @@ DECL_ABSTDLG_CLASS(AbstractURLDlg, URLDlg)
 };
 
 // AbstractSvxSearchSimilarityDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSvxSearchSimilarityDialog,SvxSearchSimilarityDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxSearchSimilarityDialog,SvxSearchSimilarityDialog)
     virtual sal_uInt16              GetOther() override;
     virtual sal_uInt16              GetShorter() override;
     virtual sal_uInt16              GetLonger() override;
