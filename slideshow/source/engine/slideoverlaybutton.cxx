@@ -170,7 +170,15 @@ bool SlideOverlayButton::handleMouseReleased(const css::awt::MouseEvent& e)
         && clickPnt.getY() > btnPnt.getY()
         && clickPnt.getY() < btnPnt.getY() + mxIconBitmap->getSize().Height)
     {
-        mClickHandler(clickPnt);
+        if (mnIgnoreClicksCnt == 0)
+        {
+            mnIgnoreClicksCnt = e.ClickCount - 1;
+            mClickHandler(clickPnt);
+        }
+        else
+        {
+            mnIgnoreClicksCnt--;
+        }
         return true;
     }
     return false;
