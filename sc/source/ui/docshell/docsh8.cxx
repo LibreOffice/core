@@ -286,7 +286,6 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
 
     try
     {
-        tools::Long i;
         sal_Int32 nColCount = 0;
         OUString aTabName;
         uno::Reference<sdbc::XDriverManager2> xDrvMan;
@@ -335,7 +334,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
         // currency flag is not needed for dBase
         uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
         sal_Int32* pTypeArr = aColTypes.getArray();
-        for (i=0; i<nColCount; i++)
+        for (sal_Int32 i=0; i<nColCount; i++)
             pTypeArr[i] = xMeta->getColumnType( i+1 );
 
         //  read column names
@@ -344,7 +343,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
         aProgress.SetState( 0 );
 
         vector<tools::Long> aScales(nColCount, -1);
-        for (i=0; i<nColCount; i++)
+        for (sal_Int32 i=0; i<nColCount; i++)
         {
             OUString aHeader = xMeta->getColumnLabel( i+1 );
 
@@ -386,11 +385,11 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
         bool bEnd = false;
         while ( !bEnd && xRowSet->next() )
         {
-            if ( nRow <= m_pDocument->MaxRow() )
+            if (nRow <= m_pDocument->MaxRow())
             {
                 bool bSimpleRow = true;
                 SCCOL nCol = 0;
-                for (i=0; i<nColCount; i++)
+                for (sal_Int32 i=0; i<nColCount; i++)
                 {
                     ScDatabaseDocUtil::StrData aStrData;
                     ScDatabaseDocUtil::PutData( *m_pDocument, nCol, nRow, 0,
