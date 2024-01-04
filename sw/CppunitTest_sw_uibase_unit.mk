@@ -30,4 +30,8 @@ $(eval $(call gb_CppunitTest_set_include,sw_uibase_unit,\
     $$(INCLUDE) \
 ))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_uibase_unit,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
