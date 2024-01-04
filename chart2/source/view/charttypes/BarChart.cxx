@@ -542,8 +542,6 @@ void BarChart::createShapes()
                         getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
                     rtl::Reference<SvxShapePolyPolygon> xShape( ShapeFactory::createLine2D(
                         xSeriesGroupShape_Shapes, aPoly ) );
-                    PropertyMapper::setMappedProperties( *xShape, pSeries->getPropertiesOfSeries()
-                        , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                 }
             }
         }
