@@ -2851,15 +2851,19 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
         }
     }
 
+    bool bLOK = comphelper::LibreOfficeKit::isActive();
     //  cells too big?
-    if ( rPosX == nStartPosX && nClickX > 0 )
+    // Work-around this for LOK, because the screen size is in not set correctly
+    // for all views and we will geturn the wrong position in case we send a click
+    // that is outside the set screen grid area
+    if (rPosX == nStartPosX && nClickX > 0 && !bLOK)
     {
          if (pView)
             aScrSize.setWidth( pView->GetGridWidth(eHWhich) );
          if ( nClickX > aScrSize.Width() )
             ++rPosX;
     }
-    if ( rPosY == nStartPosY && nClickY > 0 )
+    if (rPosY == nStartPosY && nClickY > 0 && !bLOK)
     {
         if (pView)
             aScrSize.setHeight( pView->GetGridHeight(eVWhich) );
