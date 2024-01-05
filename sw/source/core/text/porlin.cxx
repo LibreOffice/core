@@ -89,8 +89,8 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
     const sal_uInt16 nHalfView = nViewWidth / 2;
     sal_uInt16 nLastWidth = pLast->Width() + pLast->ExtraBlankWidth();
 
-    if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        nLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
+    if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd(/*bShrink=*/true) )
+        nLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(/*bShrink=*/true), rInf );
 
     sal_uInt16 nPos;
     SwTextPaintInfo aInf( rInf );
