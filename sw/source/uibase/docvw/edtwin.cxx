@@ -568,7 +568,6 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                     IsAttrAtPos::InetAttr |
                     IsAttrAtPos::Ftn |
                     IsAttrAtPos::SmartTag);
-                aSwContentAtPos.bPosMatchesBounds = true; // treat last half-char same as first half
                 if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
                 {
                     // Is edit inline input field
