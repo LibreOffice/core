@@ -242,11 +242,17 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
         {
             aSequence[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::Argon2id;
 
-            aString = rConvertedAttribs[ATTRIBUTE_ARGON2_T_LO];
+            aString = rConvertedAttribs.find(ATTRIBUTE_ARGON2_T) != rConvertedAttribs.end()
+                ? rConvertedAttribs[ATTRIBUTE_ARGON2_T]
+                : rConvertedAttribs[ATTRIBUTE_ARGON2_T_LO];
             sal_Int32 const t(aString.toInt32());
-            aString = rConvertedAttribs[ATTRIBUTE_ARGON2_M_LO];
+            aString = rConvertedAttribs.find(ATTRIBUTE_ARGON2_M) != rConvertedAttribs.end()
+                ? rConvertedAttribs[ATTRIBUTE_ARGON2_M]
+                : rConvertedAttribs[ATTRIBUTE_ARGON2_M_LO];
             sal_Int32 const m(aString.toInt32());
-            aString = rConvertedAttribs[ATTRIBUTE_ARGON2_P_LO];
+            aString = rConvertedAttribs.find(ATTRIBUTE_ARGON2_P) != rConvertedAttribs.end()
+                ? rConvertedAttribs[ATTRIBUTE_ARGON2_P]
+                : rConvertedAttribs[ATTRIBUTE_ARGON2_P_LO];
             sal_Int32 const p(aString.toInt32());
             if (0 < t && 0 < m && 0 < p)
             {
