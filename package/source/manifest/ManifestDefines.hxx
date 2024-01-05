@@ -70,9 +70,12 @@ inline constexpr OUString ELEMENT_KEY_DERIVATION = u"manifest:key-derivation"_us
 inline constexpr OUString ATTRIBUTE_KEY_DERIVATION_NAME  = u"manifest:key-derivation-name"_ustr;
 inline constexpr OUString ATTRIBUTE_SALT  = u"manifest:salt"_ustr;
 inline constexpr OUString ATTRIBUTE_ITERATION_COUNT = u"manifest:iteration-count"_ustr;
-inline constexpr OUString ATTRIBUTE_ARGON2_T_LO= u"loext:argon2-iterations"_ustr;
-inline constexpr OUString ATTRIBUTE_ARGON2_M_LO= u"loext:argon2-memory"_ustr;
-inline constexpr OUString ATTRIBUTE_ARGON2_P_LO= u"loext:argon2-lanes"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_T = u"manifest:argon2-iterations"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_M = u"manifest:argon2-memory"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_P = u"manifest:argon2-lanes"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_T_LO = u"loext:argon2-iterations"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_M_LO = u"loext:argon2-memory"_ustr;
+inline constexpr OUString ATTRIBUTE_ARGON2_P_LO = u"loext:argon2-lanes"_ustr;
 
 /// OFFICE-3708: wrong URL cited in ODF 1.2 and used since OOo 3.4 beta
 inline constexpr OUString SHA256_URL_ODF12 = u"http://www.w3.org/2000/09/xmldsig#sha256"_ustr;
