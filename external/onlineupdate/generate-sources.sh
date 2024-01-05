@@ -1,4 +1,14 @@
 #!/bin/sh
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# Generate an external tarball from upstream git repo $1 (optionally using $2 in the tarball name):
+
 set -ex
 
 source=${1?}
