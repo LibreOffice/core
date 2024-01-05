@@ -145,6 +145,7 @@ void CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempD
 {
     OUString aUpdaterName = OUString::fromUtf8(pUpdaterName);
     CopyFileToDir(rTempDirURL, aUpdaterName, rInstallDirURL);
+    CopyFileToDir(rTempDirURL, u"updater.ini"_ustr, rInstallDirURL);
 }
 
 #ifdef UNX
