@@ -892,11 +892,10 @@ void EditDoc::CreateDefFont( bool bUseStyles )
     maDefFont.SetVertical( IsEffectivelyVertical() );
     maDefFont.SetOrientation( Degree10(IsEffectivelyVertical() ? (IsTopToBottom() ? 2700 : 900) : 0) );
 
-    for ( sal_Int32 nNode = 0; nNode < Count(); nNode++ )
+    for (std::unique_ptr<ContentNode>& pNode : maContents)
     {
-        ContentNode* pNode = GetObject( nNode );
         pNode->GetCharAttribs().GetDefFont() = maDefFont;
-        if ( bUseStyles )
+        if (bUseStyles)
             pNode->CreateDefFont();
     }
 }
