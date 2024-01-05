@@ -407,7 +407,9 @@ void ScDrawStringsVars::SetPattern(
 
     // There is no cell attribute for kerning, default is kerning OFF, all
     // kerning is stored at an EditText object that is drawn using EditEngine.
-    aFont.SetKerning( FontKerning::NONE);
+    // See also matching kerning cases in ScColumn::GetNeededSize and
+    // ScColumn::GetOptimalColWidth.
+    aFont.SetKerning(FontKerning::NONE);
 
     pDev->SetFont( aFont );
     if ( pFmtDevice != pDev )
