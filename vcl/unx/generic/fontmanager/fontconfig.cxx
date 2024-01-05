@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <iostream>
 #include <memory>
 #include <string_view>
 
@@ -1171,6 +1172,7 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
             return;
         SAL_WARN("vcl.fonts", "PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
                               "' try: " << rPattern.maSearchName << " instead");
+        std::cerr << "terminating test due to missing font: " << rPattern.maTargetName << std::endl;
         std::abort();
     }
 }
