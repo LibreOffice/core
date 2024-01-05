@@ -1167,7 +1167,6 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         }
     }
     else if (aEvent.FeatureURL.Path == "StatusDocPos" ||
-             aEvent.FeatureURL.Path == "RowColSelCount" ||
              aEvent.FeatureURL.Path == "StatusPageStyle" ||
              aEvent.FeatureURL.Path == "StateWordCount" ||
              aEvent.FeatureURL.Path == "PageStyleName" ||
@@ -1182,6 +1181,26 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         {
             aBuffer.append(aString);
         }
+    }
+    else if (aEvent.FeatureURL.Path == "RowColSelCount")
+    {
+        OUString aString;
+        if (aEvent.IsEnabled)
+        {
+            aEvent.State >>= aString;
+        }
+        boost::property_tree::ptree aTree;
+        aTree.put("commandName", aEvent.FeatureURL.Complete);
+        aTree.put("locale", comphelper::LibreOfficeKit::getLocale().getBcp47());
+        aTree.put("state", aString);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        const SfxViewShell* pShell = pViewFrame->GetViewShell();
+        if (pShell)
+        {
+            pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aStream.str().c_str());
+        }
+        return;
     }
     else if (aEvent.FeatureURL.Path == "StateTableCell")
     {

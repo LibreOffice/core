@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/datatransfer/clipboard/LokClipboard.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <osl/conditn.hxx>
@@ -26,6 +27,8 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/dispatchcommand.hxx>
+#include <sfx2/msgpool.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdpage.hxx>
@@ -158,6 +161,7 @@ public:
     void testInvalidateOnTextEditWithDifferentZoomLevels(const ColRowZoom& rData);
     void testOpenURL();
     void testInvalidateForSplitPanes();
+    void testStatusBarLocale();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -229,6 +233,7 @@ public:
                                });
     CPPUNIT_TEST(testOpenURL);
     CPPUNIT_TEST(testInvalidateForSplitPanes);
+    CPPUNIT_TEST(testStatusBarLocale);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -624,6 +629,7 @@ public:
     OString m_sInvalidateSheetGeometry;
     OString m_aHyperlinkClicked;
     OString m_ShapeSelection;
+    std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     TestLokCallbackWrapper m_callbackWrapper;
 
     ViewCallback(bool bDeleteListenerOnDestruct=true)
@@ -768,6 +774,16 @@ public:
         {
             m_aTextSelectionResult.parseMessage(pPayload);
         }
+        break;
+        case LOK_CALLBACK_STATE_CHANGED:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            std::string aCommandName = aTree.get<std::string>("commandName");
+            m_aStateChanges[aCommandName] = aTree;
+        }
+        break;
         }
     }
 };
@@ -3474,6 +3490,48 @@ void ScTiledRenderingTest::testInvalidateForSplitPanes()
     bool bFoundBottomLeftPane =
         std::find(aView.m_aInvalidations.begin(), aView.m_aInvalidations.end(), aBottomLeftPane) != aView.m_aInvalidations.end();
     CPPUNIT_ASSERT_MESSAGE("The cell visible in the bottom left pane should be redrawn", bFoundBottomLeftPane);
+}
+
+void ScTiledRenderingTest::testStatusBarLocale()
+{
+    // Given 2 views, the second's locale is set to German:
+    createDoc("empty.ods");
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    pView2->SetLOKLocale("de-DE");
+    {
+        SfxViewFrame* pFrame = pView2->GetViewFrame();
+        SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pFrame);
+        uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
+        util::URL aCommandURL;
+        aCommandURL.Complete = ".uno:RowColSelCount";
+        xParser->parseStrict(aCommandURL);
+        const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
+        pFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false);
+    }
+    aView2.m_aStateChanges.clear();
+
+    // When creating a cell selection in the 2nd view and processing jobs with the 1st view set to
+    // active:
+    comphelper::dispatchCommand(".uno:GoDownSel", {});
+    SfxLokHelper::setView(nView1);
+    pView2->GetViewFrame()->GetBindings().GetTimer().Invoke();
+    // Once more to hit the pImpl->bMsgDirty = false case in SfxBindings::NextJob_Impl().
+    pView2->GetViewFrame()->GetBindings().GetTimer().Invoke();
+
+    // Then make sure that the locale is taken into account while producing the state changed
+    // callback:
+    auto it = aView2.m_aStateChanges.find(".uno:RowColSelCount");
+    CPPUNIT_ASSERT(it != aView2.m_aStateChanges.end());
+    std::string aLocale = it->second.get<std::string>("locale");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: de-DE
+    // - Actual  : en-US
+    // i.e. the 2nd view got its callback with the locale of the first view, which is buggy.
+    CPPUNIT_ASSERT_EQUAL(std::string("de-DE"), aLocale);
 }
 
 }

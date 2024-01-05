@@ -50,6 +50,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 #include <cstddef>
 #include <memory>
@@ -1217,7 +1219,28 @@ void SfxBindings::UpdateControllers_Impl
 
 IMPL_LINK( SfxBindings, NextJob, Timer *, pTimer, void )
 {
+    bool bSetView = false;
+    int nOldId = -1;
+    if (comphelper::LibreOfficeKit::isActive() && pDispatcher)
+    {
+        SfxViewFrame* pFrame = pDispatcher->GetFrame();
+        SfxViewShell* pShell = pFrame ? pFrame->GetViewShell() : nullptr;
+        int nNewId = SfxLokHelper::getView(pShell);
+        nOldId = SfxLokHelper::getView();
+        if (nNewId != -1 && nNewId != nOldId)
+        {
+            // The current view ID is not the one that belongs to this frame, switch to it.
+            SfxLokHelper::setView(nNewId);
+            bSetView = true;
+        }
+    }
+
     NextJob_Impl(pTimer);
+
+    if (bSetView)
+    {
+        SfxLokHelper::setView(nOldId);
+    }
 }
 
 bool SfxBindings::NextJob_Impl(Timer const * pTimer)
@@ -1778,6 +1801,11 @@ uno::Reference < frame::XDispatch > SfxBindings::GetDispatch( const SfxSlot* pSl
     }
 
     return xRet;
+}
+
+Timer& SfxBindings::GetTimer()
+{
+    return pImpl->aAutoTimer;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
