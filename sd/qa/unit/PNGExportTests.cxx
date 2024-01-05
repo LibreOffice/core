@@ -301,6 +301,58 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
     CPPUNIT_ASSERT_GREATER(9000, nBlackCount);
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf158743)
+{
+    loadFromFile(u"odp/tdf158743.odp");
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("PixelWidth", sal_Int32(100)),
+        comphelper::makePropertyValue("PixelHeight", sal_Int32(100)),
+        comphelper::makePropertyValue("Translucent", sal_Int32(1))
+    };
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG")),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                           uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xPage);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+
+    // make sure the bitmap is not empty and correct size (PNG export->import was successful)
+    Size aSize = aBMPEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    BitmapScopedReadAccess pReadAccess(aBMP);
+    int nBlackCount = 0;
+    for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
+    {
+        for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
+        {
+            const Color aColor = pReadAccess->GetColor(nY, nX);
+            if (aColor == COL_BLACK)
+                ++nBlackCount;
+        }
+    }
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 842
+    // - Actual  : 2493
+    CPPUNIT_ASSERT_LESS(850, nBlackCount);
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157795)
 {
     loadFromFile(u"odp/tdf157795.odp");
