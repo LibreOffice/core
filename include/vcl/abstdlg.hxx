@@ -65,6 +65,12 @@ public:
         bool isSet() const { return !!maEndDialogFn; }
     };
 
+    /**
+    * Usual codepath for modal dialogs. Some uno command decides to open a dialog,
+      we call StartExecuteAsync() with a callback to handle the dialog result
+      and that handler will be executed at some stage in the future,
+      instead of right now.
+    */
     bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn)
     {
         AsyncContext aCtx;

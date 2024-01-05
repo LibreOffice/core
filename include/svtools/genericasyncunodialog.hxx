@@ -32,6 +32,13 @@ typedef cppu::ImplInheritanceHelper<::svt::OGenericUnoDialog,
     OGenericUnoAsyncDialogBase;
 
 /** abstract base class for implementing UNO objects representing asynchronous dialogs
+
+    Contrary to StartExecuteAsync in VclAbstractDialog from include/vcl/abstdlg.hxx,
+    the different methods are used in a special case when an import or export action
+    wants to show a dialog, as part of a synchronous filter() API call.
+
+    In this case it's not possible to move the "rest of the code" to an async
+    callback, so that needs special handling. Luckily these dialogs are rather rare.
     */
 template <typename T> class OGenericUnoAsyncDialog : public OGenericUnoAsyncDialogBase
 {
