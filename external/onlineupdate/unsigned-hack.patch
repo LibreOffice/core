@@ -1,0 +1,20 @@
+--- onlineupdate/source/service/workmonitor.cpp
++++ onlineupdate/source/service/workmonitor.cpp
+@@ -395,7 +395,7 @@
+   }
+ 
+ #ifndef DISABLE_UPDATER_AUTHENTICODE_CHECK
+-  return DoesBinaryMatchAllowedCertificates(installDir, updater);
++  return DoesBinaryMatchAllowedCertificates(installDir, updater)||true;
+ #else
+   return true;
+ #endif
+@@ -732,7 +732,7 @@
+           if (!WriteStatusFailure(argv[4], SERVICE_INSTALL_DIR_REG_ERROR)) {
+             LOG_WARN(("Could not write update.status for previous failure."));
+           }
+-          return FALSE;
++          //return FALSE;
+         }
+         RegCloseKey(baseKey);
+       } else {

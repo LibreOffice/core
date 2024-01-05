@@ -18,4 +18,13 @@ $(eval $(call gb_UnpackedTarball_add_patches,onlineupdate, \
     external/onlineupdate/lo.patch \
 ))
 
+# The update maintenance service that is used on Windows has a couple of checks that files in the
+# to-be-updated installation set are signed, which would fail for --disable-windows-build-signing;
+# so, as a HACK for debugging purposes, silence those problematic checks for --enable-dbgutil:
+ifeq ($(OS)-$(WINDOWS_BUILD_SIGNING)-$(ENABLE_DBGUTIL),WNT-FALSE-TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,onlineupdate, \
+    external/onlineupdate/unsigned-hack.patch \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
