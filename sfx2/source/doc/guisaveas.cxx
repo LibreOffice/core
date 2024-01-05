@@ -1099,12 +1099,48 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        // keep name with extension
-        aSuggestedName = aRecommendedName;
-        OUString aExtension;
-        if (size_t nPos = aSuggestedName.lastIndexOf('.') + 1)
-            aExtension = aSuggestedName.copy(nPos, aSuggestedName.getLength() - nPos);
-        aURL.SetExtension(aExtension);
+#ifdef IOS
+        // The iOS app (and maybe the Android app) have fails to set the URL to
+        // save to so we need to set it to a temporary file.
+        // Note: the iOS app is responsible for deleting the temporary file.
+        if (nStoreMode & EXPORT_REQUESTED && aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE).isEmpty())
+        {
+            // Mirror the "export/docbasename.pdf" path format to match the
+            // format used in the "downloadas" message handler in the iOS app's
+            // -[DocumentViewController userContentController:didReceiveScriptMessage]
+            // selector.
+            // Important note: temporary files created here must be in their
+            // own subdirectory since the iOS app's UIDocumentPickerDelegate
+            // will try to delete both the temporary file and its parent
+            // directory.
+            OUString aFullName = u"export/" + aRecommendedName;
+            OUString aBaseName;
+            OUString aExtension;
+            sal_Int32 nPos = aFullName.lastIndexOf( '.' );
+            if ( nPos >= 0 )
+            {
+                aBaseName = aFullName.copy(0, nPos);
+                aExtension = aFullName.copy(nPos, aFullName.getLength() - nPos);
+            }
+            aURL = INetURLObject(::utl::CreateTempURL( aBaseName, false, aExtension, nullptr, true));
+
+            // Remove any stale files left from a previous export
+            OUString fileURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            if (!fileURL.isEmpty())
+                osl::File::remove(fileURL);
+        }
+        else
+        {
+#endif
+            // keep name with extension
+            aSuggestedName = aRecommendedName;
+            OUString aExtension;
+            if (size_t nPos = aSuggestedName.lastIndexOf('.') + 1)
+                aExtension = aSuggestedName.copy(nPos, aSuggestedName.getLength() - nPos);
+            aURL.SetExtension(aExtension);
+#ifdef IOS
+        }
+#endif
     }
     else
     {
@@ -1786,10 +1822,22 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
 
         // this is actually a save operation with different parameters
         // so storeTo or storeAs without DocInfo operations are used
-        if ( nStoreMode & EXPORT_REQUESTED )
-            aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
-        else
-            aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
+#ifdef IOS
+        try
+        {
+#endif
+            if ( nStoreMode & EXPORT_REQUESTED )
+                aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
+            else
+                aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
+#ifdef IOS
+        }
+        catch( const uno::Exception& )
+        {
+            // When using the iOS app (and maybe the Android app), the app
+            // will remain blocked if we rethrow an exception.
+        }
+#endif
     }
 
     // Launch PDF viewer
