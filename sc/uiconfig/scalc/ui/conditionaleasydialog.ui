@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="CondFormatEasyDlg">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="stock">Apply conditional formatting...</property>
+    <property name="title" translatable="yes" context="conditionaleasydialog|title">Apply conditional formatting...</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox">
@@ -133,7 +133,7 @@
                           <object class="GtkLabel" id="with">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="stock">with</property>
+                            <property name="label" translatable="yes" context="conditionaleasydialog|label">with</property>
                             <accessibility>
                               <relation type="label-for" target="themeCombo"/>
                             </accessibility>
@@ -171,7 +171,7 @@
                   <object class="GtkLabel" id="description">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="stock">Apply conditional formatting to cells</property>
+                    <property name="label" translatable="yes" context="conditionaleasydialog|label">Apply conditional formatting to cells</property>
                     <accessibility>
                       <relation type="label-for" target="entryNumber"/>
                       <relation type="label-for" target="entryNumber2"/>
@@ -238,7 +238,7 @@
                   <object class="GtkLabel" id="range">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="stock">Range:</property>
+                    <property name="label" translatable="yes" context="conditionaleasydialog|label">Range:</property>
                     <accessibility>
                       <relation type="label-for" target="entryRange"/>
                     </accessibility>
