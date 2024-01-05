@@ -283,6 +283,7 @@ tools::Long ScColumn::GetNeededSize(
     {
         Fraction aFontZoom = ( eOrient == SvxCellOrientation::Standard ) ? rZoomX : rZoomY;
         vcl::Font aFont;
+        aFont.SetKerning(FontKerning::NONE); // like ScDrawStringsVars::SetPattern
         // font color doesn't matter here
         pPattern->fillFontOnly(aFont, pDev, &aFontZoom, pCondSet, nScript);
         pDev->SetFont(aFont);
@@ -754,6 +755,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         SCROW nRow = 0;
         const ScPatternAttr* pPattern = GetPattern( nRow );
         vcl::Font aFont;
+        aFont.SetKerning(FontKerning::NONE); // like ScDrawStringsVars::SetPattern
         // font color doesn't matter here
         pPattern->fillFontOnly(aFont, pDev, &rZoomX);
         pDev->SetFont(aFont);
