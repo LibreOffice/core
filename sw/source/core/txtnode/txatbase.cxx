@@ -113,13 +113,6 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
     case RES_TXTATR_FLYCNT:
         pWhich = "fly content";
         break;
-    case RES_TXTATR_INETFMT:
-        {
-            pWhich = "inet format";
-            const SwFormatINetFormat& rFormat = GetINetFormat();
-            oValue = OString("url: " + rFormat.GetValue().toUtf8());
-            break;
-        }
     case RES_TXTATR_CJK_RUBY:
         {
             pWhich = "ruby";
