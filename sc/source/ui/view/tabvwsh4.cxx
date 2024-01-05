@@ -1770,6 +1770,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     bForceFocusOnCurCell(false),
     bInPrepareClose(false),
     bInDispose(false),
+    bMoveKeepEdit(false),
     nCurRefDlgId(0),
     mbInSwitch(false),
     m_pDragData(new ScDragData)

@@ -32,6 +32,7 @@ using namespace com::sun::star::uno;
 ScInputOptions::ScInputOptions()
     : nMoveDir(DIR_BOTTOM)
     , bMoveSelection(true)
+    , bMoveKeepEdit(false)
     , bEnterEdit(false)
     , bExtendFormat(false)
     , bRangeFinder(true)
