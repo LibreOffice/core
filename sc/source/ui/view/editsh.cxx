@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <i18nutil/unicode.hxx>
@@ -572,8 +573,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
                     bool bCellLinksOnly
-                        = SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
-                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat();
+                        = (SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
+                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
+                          || comphelper::LibreOfficeKit::isActive();
 
                     bool bDone = false;
                     if ( (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD) && !bCellLinksOnly )
@@ -784,8 +786,9 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 {
                     SvxHyperlinkItem aHLinkItem;
                     bool bCellLinksOnly
-                        = SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
-                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat();
+                        = (SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
+                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
+                          || comphelper::LibreOfficeKit::isActive();
                     const SvxURLField* pURLField = GetURLField();
                     if (!bCellLinksOnly)
                     {
