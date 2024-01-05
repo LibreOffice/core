@@ -308,6 +308,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     // adjusted line by shrinking spaces using the know space count from the first Guess() call
     const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
     if ( bFull && rAdjust == SvxAdjust::Block &&
+         aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
          rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
                     DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
          // tdf#158436 avoid shrinking at underflow, e.g. no-break space after a
