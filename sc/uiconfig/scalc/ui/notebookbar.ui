@@ -1761,7 +1761,7 @@
       <object class="GtkMenuItem" id="MenuStatistic-FTestDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:CovarianceDialog</property>
+        <property name="action_name">.uno:FTestDialog</property>
       </object>
     </child>
     <child>
