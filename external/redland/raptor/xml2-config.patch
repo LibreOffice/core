@@ -1,6 +1,6 @@
 --- configure
 +++ configure
-@@ -14197,6 +14197,11 @@
+@@ -16004,6 +16004,11 @@
    test -n "$XML_CONFIG" && break
  done
  
@@ -12,11 +12,11 @@
    fi
  fi
  
-@@ -14481,6 +14481,7 @@
+@@ -16104,6 +16109,7 @@
  
      LIBXML_VERSION=`$PKG_CONFIG libxml-2.0 --modversion`
      libxml_source="pkg-config"
 +    XML_CONFIG="$PKG_CONFIG libxml-2.0"
  
  fi
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libxml via pkg-config" >&5
+   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libxml via pkg-config" >&5
