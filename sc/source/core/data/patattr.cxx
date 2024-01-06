@@ -190,7 +190,7 @@ void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, std::u16string_view
     // for undo or clipboard content.
     for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
     {
-        if (nullptr == pCheck->GetStyleSheet() && rName == *pCheck->GetStyleName())
+        if (nullptr == pCheck->GetStyleSheet() && pCheck->GetStyleName() && rName == *pCheck->GetStyleName())
             const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc); // find and store style pointer
     }
 }
