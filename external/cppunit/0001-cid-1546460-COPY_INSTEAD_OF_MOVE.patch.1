@@ -44,6 +44,65 @@ index 585c3da..be02385 100644
    , m_content()
    , m_attributes()
    , m_elements()
+@@ -74,15 +74,15 @@ XmlElement::setContent( int numericContent )
+ 
+ 
+ void 
+-XmlElement::addAttribute( std::string attributeName,
+-                          std::string value  )
++XmlElement::addAttribute( const std::string& attributeName,
++                          const std::string& value  )
+ {
+   m_attributes.push_back( Attribute( attributeName, value ) );
+ }
+ 
+ 
+ void 
+-XmlElement::addAttribute( std::string attributeName,
++XmlElement::addAttribute( const std::string& attributeName,
+                           int numericValue )
+ {
+   addAttribute( attributeName, StringTools::toString( numericValue ) );
+@@ -194,7 +194,7 @@ XmlElement::attributesAsString() const
+ 
+ 
+ std::string 
+-XmlElement::escape( std::string value ) const
++XmlElement::escape( const std::string& value ) const
+ {
+   std::string escaped;
+   for ( unsigned int index =0; index < value.length(); ++index )
+diff --git a/include/cppunit/tools/XmlElement.h b/include/cppunit/tools/XmlElement.h
+index 3478a35..d033aa2 100644
+--- a/include/cppunit/tools/XmlElement.h
++++ b/include/cppunit/tools/XmlElement.h
+@@ -79,14 +79,14 @@ public:
+    * \param attributeName Name of the attribute. Must not be an empty.
+    * \param value Value of the attribute.
+    */
+-  void addAttribute( std::string attributeName,
+-                     std::string value );
++  void addAttribute( const std::string& attributeName,
++                     const std::string& value );
+ 
+   /*! \brief Adds an attribute with the specified numeric value.
+    * \param attributeName Name of the attribute. Must not be empty.
+    * \param numericValue Numeric value of the attribute.
+    */
+-  void addAttribute( std::string attributeName,
++  void addAttribute( const std::string& attributeName,
+                      int numericValue );
+ 
+   /*! \brief Adds a child element to the element.
+@@ -125,7 +125,7 @@ private:
+   typedef std::pair<std::string,std::string> Attribute;
+ 
+   std::string attributesAsString() const;
+-  std::string escape( std::string value ) const;
++  std::string escape( const std::string& value ) const;
+ 
+ private:
+   std::string m_name;
 diff --git a/include/cppunit/Asserter.h b/include/cppunit/Asserter.h
 index ca65593..2010739 100644
 --- a/include/cppunit/Asserter.h
