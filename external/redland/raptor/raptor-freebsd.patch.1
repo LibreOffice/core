@@ -1,28 +1,17 @@
 Usual patch to produce Linux-like .so files on FreeBSD
 
---- a/build/ltmain.sh	2008-02-02 22:28:24.000000000 +0900
-+++ b/build/ltmain.sh	2008-07-08 11:58:42.000000000 +0900
-@@ -7341,9 +7341,9 @@
- 	    revision="$number_revision"
+--- a/build/ltmain.sh	2023-02-24 11:51:18.000000000 +0900
++++ b/build/ltmain.sh	2024-01-06 13:46:15.460224000 +0900
+@@ -9107,9 +9107,9 @@
+ 	    revision=$number_revision
  	    ;;
- 	  freebsd-aout|freebsd-elf|qnx|sunos)
--	    current="$number_major"
--	    revision="$number_minor"
--	    age="0"
+ 	  freebsd-aout|qnx|sunos)
+-	    current=$number_major
+-	    revision=$number_minor
+-	    age=0
 +	    current=`expr $number_major + $number_minor`
-+	    age="$number_minor"
-+	    revision="$number_revision"
++	    age=$number_minor
++	    revision=$number_revision
  	    ;;
  	  irix|nonstopux)
  	    func_arith $number_major + $number_minor
-@@ -7420,8 +7420,8 @@
- 	  ;;
- 
- 	freebsd-elf)
--	  major=".$current"
--	  versuffix=".$current"
-+	  major=.`expr $current - $age`
-+	  versuffix="$major.$age.$revision"
- 	  ;;
- 
- 	irix | nonstopux)

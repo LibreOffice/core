@@ -53,14 +53,14 @@ extern "C" {
  *
  * Format: major * 10000 + minor * 100 + release
  */
-#define RAPTOR_VERSION 20015
+#define RAPTOR_VERSION 20016
 
 /**
  * RAPTOR_VERSION_STRING:
  *
  * Raptor library version string
  */
-#define RAPTOR_VERSION_STRING "2.0.15"
+#define RAPTOR_VERSION_STRING "2.0.16"
 
 /**
  * RAPTOR_VERSION_MAJOR:
@@ -81,7 +81,7 @@ extern "C" {
  *
  * Raptor library release
  */
-#define RAPTOR_VERSION_RELEASE 15
+#define RAPTOR_VERSION_RELEASE 16
 
 /**
  * RAPTOR_API:
@@ -250,6 +250,14 @@ extern const unsigned int raptor_rdf_namespace_uri_len;
  */
 RAPTOR_API
 extern const unsigned char * const raptor_rdf_schema_namespace_uri;
+
+/**
+ * raptor_rdf_schenma_namespace_uri_len:
+ *
+ * Length of #raptor_rdf_schenma_namespace_uri string
+ */
+RAPTOR_API
+extern const unsigned int raptor_rdf_schema_namespace_uri_len;
 
 /**
  * raptor_xmlschema_datatypes_namespace_uri:
@@ -1433,10 +1441,16 @@ int raptor_www_set_ssl_cert_options(raptor_www* www, const char* cert_filename, 
 RAPTOR_API
 int raptor_www_set_ssl_verify_options(raptor_www* www, int verify_peer, int verify_host);
 RAPTOR_API
+int raptor_www_set_user_agent2(raptor_www *www, const char *user_agent, size_t user_agent_len);
+RAPTOR_API RAPTOR_DEPRECATED
 void raptor_www_set_user_agent(raptor_www *www, const char *user_agent);
 RAPTOR_API
+int raptor_www_set_proxy2(raptor_www *www, const char *proxy, size_t proxy_len);
+RAPTOR_API RAPTOR_DEPRECATED
 void raptor_www_set_proxy(raptor_www *www, const char *proxy);
 RAPTOR_API
+int raptor_www_set_http_accept2(raptor_www *www, const char *value, size_t value_len);
+RAPTOR_API RAPTOR_DEPRECATED
 void raptor_www_set_http_accept(raptor_www *www, const char *value);
 RAPTOR_API
 void raptor_www_set_write_bytes_handler(raptor_www *www, raptor_www_write_bytes_handler handler, void *user_data);
@@ -1812,8 +1826,8 @@ int raptor_iostream_read_eof(raptor_iostream *iostr);
 /**
  * raptor_escaped_write_bitflags:
  * @RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_BF   : Allow \b \f,
- * @RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_TNRU : ALlow \t \n \r \u
- * @RAPTOR_ESCAPED_WRITE_BITFLAG_UTF8            : Allow UTF-8 for printable U *
+ * @RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_TNRU : Allow \t \n \r \u \U
+ * @RAPTOR_ESCAPED_WRITE_BITFLAG_UTF8            : Use UTF-8 instead of \u \U for U+0080 or larger (will always use \u for U+0000..U+001F and U+007F)
  * @RAPTOR_ESCAPED_WRITE_BITFLAG_SPARQL_URI_ESCAPES: Must escape #x00-#x20<>\"{}|^` in URIs
  * @RAPTOR_ESCAPED_WRITE_NTRIPLES_LITERAL: N-Triples literal
  * @RAPTOR_ESCAPED_WRITE_NTRIPLES_URI: N-Triples URI
@@ -1823,7 +1837,7 @@ int raptor_iostream_read_eof(raptor_iostream *iostr);
  * @RAPTOR_ESCAPED_WRITE_TURTLE_URI: Turtle 2013 URIs (like SPARQL)
  * @RAPTOR_ESCAPED_WRITE_TURTLE_LITERAL: Turtle 2013 literals (like SPARQL)
  * @RAPTOR_ESCAPED_WRITE_TURTLE_LONG_LITERAL: Turtle 2013 long literals (like SPARQL)
- * @RAPTOR_ESCAPED_WRITE_JSON_LITERAL: JSON literals: \b \f \t \r \n and \u \U
+ * @RAPTOR_ESCAPED_WRITE_JSON_LITERAL: JSON literals: UTF-8 plus \b \f \t \r \n, \uXXXX only, no \U
  *
  * Bit flags for raptor_string_escaped_write() and friends.
  */
@@ -1851,8 +1865,8 @@ typedef enum {
   RAPTOR_ESCAPED_WRITE_TURTLE_LITERAL = RAPTOR_ESCAPED_WRITE_SPARQL_LITERAL,
   RAPTOR_ESCAPED_WRITE_TURTLE_LONG_LITERAL = RAPTOR_ESCAPED_WRITE_SPARQL_LONG_LITERAL,
 
-  /* JSON literals: \b \f \t \r \n and \u \U */
-  RAPTOR_ESCAPED_WRITE_JSON_LITERAL = RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_TNRU | RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_BF
+  /* JSON literals: UTF-8 plus \b \f \t \r \n \uXXXX */
+  RAPTOR_ESCAPED_WRITE_JSON_LITERAL = RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_TNRU | RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_BF | RAPTOR_ESCAPED_WRITE_BITFLAG_UTF8
 } raptor_escaped_write_bitflags;
 
 
@@ -2152,6 +2166,8 @@ RAPTOR_API
 void* raptor_avltree_remove(raptor_avltree* tree, void* p_data);
 RAPTOR_API
 int raptor_avltree_delete(raptor_avltree* tree, void* p_data);
+RAPTOR_API
+void raptor_avltree_trim(raptor_avltree* tree);
 RAPTOR_API
 void* raptor_avltree_search(raptor_avltree* tree, const void* p_data);
 RAPTOR_API

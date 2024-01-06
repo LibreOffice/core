@@ -9,7 +9,12 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,raptor))
 
-$(eval $(call gb_ExternalProject_use_external,raptor,libxml2))
+$(eval $(call gb_ExternalProject_use_externals,raptor,\
+	icu \
+	libxml2 \
+))
+
+$(eval $(call gb_ExternalProject_use_package,raptor,icu_ure))
 
 $(eval $(call gb_ExternalProject_register_targets,raptor,\
 	build \
@@ -24,9 +29,9 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			$(call gb_ExternalProject_get_build_flags,raptor) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \
 			$(if $(filter GCCLINUXPOWERPC64,$(COM)$(OS)$(CPUNAME)),-mminimal-toc)" \
-		LDFLAGS=" \
-			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN") \
-			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
+		LDFLAGS='$(strip \
+		    $(if $(filter LINUX FREEBSD,$(OS)),$(strip -Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN -Wl,-rpath-link,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER))) \
+		    $(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)))' \
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(gb_EMSCRIPTEN_CPPFLAGS)" \
 		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \
 			 --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
