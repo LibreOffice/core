@@ -1373,7 +1373,7 @@ public:
 
     /** in case during copying of embedded object a new shell is created,
      it should be set here and cleaned later */
-    void SetTmpDocShell( SfxObjectShellLock rLock )    { mxTmpDocShell = rLock; }
+    void SetTmpDocShell(const SfxObjectShellLock& rLock) { mxTmpDocShell = rLock; }
     const SfxObjectShellLock& GetTmpDocShell() const   { return mxTmpDocShell; }
 
     // For Autotexts? (text modules) They have only one SVPersist at their disposal.
