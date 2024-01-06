@@ -311,121 +311,131 @@ void loadDiagram( ShapePtr const & pShape,
     DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);
     pDiagram->setLayout( pLayout );
 
-    // set DiagramFontHeights at filter
-    rFilter.setDiagramFontHeights(&pDiagram->getDiagramFontHeights());
-
-    // data
-    if( !rDataModelPath.isEmpty() )
+    try
     {
-        rtl::Reference< core::FragmentHandler > xRefDataModel(
-                new DiagramDataFragmentHandler( rFilter, rDataModelPath, pData ));
+        // set DiagramFontHeights at filter
+        rFilter.setDiagramFontHeights(&pDiagram->getDiagramFontHeights());
 
-        importFragment(rFilter,
-                       loadFragment(rFilter,xRefDataModel),
-                       "OOXData",
-                       pDiagram,
-                       xRefDataModel);
-
-        pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter,
-                xRefDataModel->getFragmentPath(), u"image" );
-
-        // Pass the info to pShape
-        for (auto const& extDrawing : pData->getExtDrawings())
+        // data
+        if( !rDataModelPath.isEmpty() )
         {
-            OUString aFragmentPath = rRelations.getFragmentPathFromRelId(extDrawing);
-            // Ignore RelIds which don't resolve to a fragment path.
-            if (aFragmentPath.isEmpty())
-                continue;
-
-            sal_Int32 nCounter = 0;
-            rtl::Reference<core::FragmentHandler> xCounter(
-                new DiagramShapeCounter(rFilter, aFragmentPath, nCounter));
-            rFilter.importFragment(xCounter);
-            // Ignore ext drawings which don't actually have any shapes.
-            if (nCounter == 0)
-                continue;
-
-            pShape->addExtDrawingRelId(extDrawing);
-        }
-    }
-
-    // extLst is present, lets bet on that and ignore the rest of the data from here
-    if( pShape->getExtDrawings().empty() )
-    {
-        // layout
-        if( !rLayoutPath.isEmpty() )
-        {
-            rtl::Reference< core::FragmentHandler > xRefLayout(
-                    new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
+            rtl::Reference< core::FragmentHandler > xRefDataModel(
+                    new DiagramDataFragmentHandler( rFilter, rDataModelPath, pData ));
 
             importFragment(rFilter,
-                    loadFragment(rFilter,xRefLayout),
-                    "OOXLayout",
-                    pDiagram,
-                    xRefLayout);
+                           loadFragment(rFilter,xRefDataModel),
+                           "OOXData",
+                           pDiagram,
+                           xRefDataModel);
+
+            pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter,
+                    xRefDataModel->getFragmentPath(), u"image" );
+
+            // Pass the info to pShape
+            for (auto const& extDrawing : pData->getExtDrawings())
+            {
+                OUString aFragmentPath = rRelations.getFragmentPathFromRelId(extDrawing);
+                // Ignore RelIds which don't resolve to a fragment path.
+                if (aFragmentPath.isEmpty())
+                    continue;
+
+                sal_Int32 nCounter = 0;
+                rtl::Reference<core::FragmentHandler> xCounter(
+                    new DiagramShapeCounter(rFilter, aFragmentPath, nCounter));
+                rFilter.importFragment(xCounter);
+                // Ignore ext drawings which don't actually have any shapes.
+                if (nCounter == 0)
+                    continue;
+
+                pShape->addExtDrawingRelId(extDrawing);
+            }
         }
 
-        // style
-        if( !rQStylePath.isEmpty() )
+        // extLst is present, lets bet on that and ignore the rest of the data from here
+        if( pShape->getExtDrawings().empty() )
         {
-            rtl::Reference< core::FragmentHandler > xRefQStyle(
-                    new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
+            // layout
+            if( !rLayoutPath.isEmpty() )
+            {
+                rtl::Reference< core::FragmentHandler > xRefLayout(
+                        new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
+
+                importFragment(rFilter,
+                        loadFragment(rFilter,xRefLayout),
+                        "OOXLayout",
+                        pDiagram,
+                        xRefLayout);
+            }
+
+            // style
+            if( !rQStylePath.isEmpty() )
+            {
+                rtl::Reference< core::FragmentHandler > xRefQStyle(
+                        new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
+
+                importFragment(rFilter,
+                        loadFragment(rFilter,xRefQStyle),
+                        "OOXStyle",
+                        pDiagram,
+                        xRefQStyle);
+            }
+        }
+        else
+        {
+            // We still want to add the XDocuments to the DiagramDomMap
+            DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
+            rMainDomMap[OUString("OOXLayout")] = loadFragment(rFilter,rLayoutPath);
+            rMainDomMap[OUString("OOXStyle")] = loadFragment(rFilter,rQStylePath);
+        }
+
+        // colors
+        if( !rColorStylePath.isEmpty() )
+        {
+            rtl::Reference< core::FragmentHandler > xRefColorStyle(
+                new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));
 
             importFragment(rFilter,
-                    loadFragment(rFilter,xRefQStyle),
-                    "OOXStyle",
-                    pDiagram,
-                    xRefQStyle);
+                loadFragment(rFilter,xRefColorStyle),
+                "OOXColor",
+                pDiagram,
+                xRefColorStyle);
         }
-    }
-    else
-    {
-        // We still want to add the XDocuments to the DiagramDomMap
-        DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
-        rMainDomMap[OUString("OOXLayout")] = loadFragment(rFilter,rLayoutPath);
-        rMainDomMap[OUString("OOXStyle")] = loadFragment(rFilter,rQStylePath);
-    }
 
-    // colors
-    if( !rColorStylePath.isEmpty() )
-    {
-        rtl::Reference< core::FragmentHandler > xRefColorStyle(
-            new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));
-
-        importFragment(rFilter,
-            loadFragment(rFilter,xRefColorStyle),
-            "OOXColor",
-            pDiagram,
-            xRefColorStyle);
-    }
-
-    if( !pData->getExtDrawings().empty() )
-    {
-        const DiagramColorMap::const_iterator aColor = pDiagram->getColors().find("node0");
-        if( aColor != pDiagram->getColors().end() && !aColor->second.maTextFillColors.empty())
+        if( !pData->getExtDrawings().empty() )
         {
-            // TODO(F1): well, actually, there might be *several* color
-            // definitions in it, after all it's called list.
-            pShape->setFontRefColorForNodes(DiagramColor::getColorByIndex(aColor->second.maTextFillColors, -1));
+            const DiagramColorMap::const_iterator aColor = pDiagram->getColors().find("node0");
+            if( aColor != pDiagram->getColors().end() && !aColor->second.maTextFillColors.empty())
+            {
+                // TODO(F1): well, actually, there might be *several* color
+                // definitions in it, after all it's called list.
+                pShape->setFontRefColorForNodes(DiagramColor::getColorByIndex(aColor->second.maTextFillColors, -1));
+            }
         }
+
+        // collect data, init maps
+        // for Diagram import, do - for now - NOT clear all oox::drawingml::Shape
+        pData->buildDiagramDataModel(false);
+
+        // diagram loaded. now lump together & attach to shape
+        pDiagram->addTo(pShape);
+        pShape->setDiagramDoms(pDiagram->getDomsAsPropertyValues());
+
+        // Get the oox::Theme definition and - if available - move/secure the
+        // original ImportData directly to the Diagram ModelData
+        std::shared_ptr<::oox::drawingml::Theme> aTheme(rFilter.getCurrentThemePtr());
+        if(aTheme)
+            pData->setThemeDocument(aTheme->getFragment()); //getTempFile());
+
+        // Prepare support for the advanced DiagramHelper using Diagram & Theme data
+        pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr());
     }
-
-    // collect data, init maps
-    // for Diagram import, do - for now - NOT clear all oox::drawingml::Shape
-    pData->buildDiagramDataModel(false);
-
-    // diagram loaded. now lump together & attach to shape
-    pDiagram->addTo(pShape);
-    pShape->setDiagramDoms(pDiagram->getDomsAsPropertyValues());
-
-    // Get the oox::Theme definition and - if available - move/secure the
-    // original ImportData directly to the Diagram ModelData
-    std::shared_ptr<::oox::drawingml::Theme> aTheme(rFilter.getCurrentThemePtr());
-    if(aTheme)
-        pData->setThemeDocument(aTheme->getFragment()); //getTempFile());
-
-    // Prepare support for the advanced DiagramHelper using Diagram & Theme data
-    pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr());
+    catch (...)
+    {
+        // unset DiagramFontHeights at filter if there was a failure
+        // to avoid dangling pointer
+        rFilter.setDiagramFontHeights(nullptr);
+        throw;
+    }
 }
 
 const oox::drawingml::Color&
