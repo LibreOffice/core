@@ -66,12 +66,6 @@
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
 
-/* Define to 1 if you have the <math.h> header file. */
-#define HAVE_MATH_H 1
-
-/* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
-
 /* Define to 1 if you have the `qsort_r' function. */
 #undef HAVE_QSORT_R
 
@@ -99,6 +93,9 @@
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
+/* Define to 1 if you have the <stdio.h> header file. */
+#define HAVE_STDIO_H 1
+
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
 
@@ -114,7 +111,7 @@
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
 
-/* Define to 1 if you have the `strtok_r' function. */
+/* have the strtok_r function */
 #undef HAVE_STRTOK_R
 
 /* Define to 1 if you have the <sys/param.h> header file. */
@@ -128,6 +125,9 @@
 
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <time.h> header file. */
+#define HAVE_TIME_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
@@ -156,8 +156,10 @@
 /* Is __FUNCTION__ available */
 #define HAVE___FUNCTION__ 1
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* ICU UC major version */
+#define ICU_UC_MAJOR_VERSION ICU_MAJOR
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
 
 /* Define to 1 if maintainer mode is enabled. */
@@ -165,9 +167,6 @@
 
 /* need 'extern int optind' declaration? */
 #undef NEED_OPTIND_DECLARATION
-
-/* Define to 1 if your C compiler doesn't accept -c and -o together. */
-#undef NO_MINUS_C_MINUS_O
 
 /* Name of package */
 #undef PACKAGE
@@ -194,7 +193,7 @@
 #undef RAPTOR_DEBUG
 
 /* Use ICU for Unicode NFC check */
-#undef RAPTOR_ICU_NFC
+#define RAPTOR_ICU_NFC 1
 
 /* does libxml struct xmlEntity have a field etype */
 #define RAPTOR_LIBXML_ENTITY_ETYPE 1
@@ -259,6 +258,9 @@
 /* Building JSON serializer */
 #undef RAPTOR_SERIALIZER_JSON
 
+/* Building mKR serializer */
+#undef RAPTOR_SERIALIZER_MKR
+
 /* Building N-Quads serializer */
 #undef RAPTOR_SERIALIZER_NQUADS
 
@@ -278,7 +280,7 @@
 #undef RAPTOR_SERIALIZER_TURTLE
 
 /* Release version as a decimal */
-#define RAPTOR_VERSION_DECIMAL 20015
+#define RAPTOR_VERSION_DECIMAL 20016
 
 /* Major version number */
 #define RAPTOR_VERSION_MAJOR 2
@@ -287,7 +289,7 @@
 #define RAPTOR_VERSION_MINOR 0
 
 /* Release version number */
-#define RAPTOR_VERSION_RELEASE 15
+#define RAPTOR_VERSION_RELEASE 16
 
 /* Have libcurl WWW library */
 #undef RAPTOR_WWW_LIBCURL
@@ -307,14 +309,13 @@
 /* Use libxml XML parser */
 #define RAPTOR_XML_LIBXML 1
 
-/* Define to 1 if you have the ANSI C header files. */
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
 #undef STDC_HEADERS
 
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-#undef TIME_WITH_SYS_TIME
-
 /* Version number of package */
-#define VERSION "2.0.15"
+#define VERSION "2.0.16"
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
@@ -331,11 +332,6 @@
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */
 #undef YYTEXT_POINTER
-
-/* Enable large inode numbers on macOS 10.5.  */
-#ifndef _DARWIN_USE_64_BIT_INODE
-# define _DARWIN_USE_64_BIT_INODE 1
-#endif
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #undef _FILE_OFFSET_BITS

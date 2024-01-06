@@ -24,9 +24,9 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 	$(call gb_Trace_StartRange,redland,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		CFLAGS="$(CFLAGS) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) $(call gb_ExternalProject_get_build_flags,redland) $(gb_EMSCRIPTEN_CPPFLAGS)" \
-		LDFLAGS=" \
-			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN") \
-			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
+		LDFLAGS='$(strip \
+		    $(if $(filter LINUX FREEBSD,$(OS)),$(strip -Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN -Wl,-rpath-link,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER))) \
+		    $(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)))' \
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \

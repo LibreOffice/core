@@ -9,17 +9,3 @@
      /* Remove <component>/.. at the end of the path */
      *prev = '\0';
      path_len -= (s-prev);
---- src/raptor_uri.c
-+++ src/raptor_uri.c
-@@ -1336,9 +1336,9 @@
-      !strncmp((const char*)base_detail->scheme, 
-               (const char*)reference_detail->scheme,
-               base_detail->scheme_len) &&
--     !strncmp((const char*)base_detail->authority, 
-+     (base_detail->authority_len == 0 || !strncmp((const char*)base_detail->authority, 
-               (const char*)reference_detail->authority,
--              base_detail->authority_len)) {
-+              base_detail->authority_len))) {
-     
-     if(!base_detail->path) {
-       if(reference_detail->path) {
