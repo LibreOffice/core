@@ -574,13 +574,11 @@ namespace xforms
         return sInfo.makeStringAndClear();
     }
 
-
     OAnyURIType::OAnyURIType( const OUString& _rName, sal_Int16 _nTypeClass )
-        :OAnyURIType_Base( _rName, _nTypeClass )
+        : OAnyURIType_Base(_rName, _nTypeClass)
+        , m_xURLTransformer(css::util::URLTransformer::create(::comphelper::getProcessComponentContext()))
     {
-        m_xURLTransformer = css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
     }
-
 
     void OAnyURIType::registerProperties()
     {
@@ -596,11 +594,11 @@ namespace xforms
             &m_aMaxLength, cppu::UnoType<sal_Int32>::get() );
     }
 
-
     rtl::Reference<OXSDDataType> OAnyURIType::createClone( const OUString& _rName ) const
     {
         return new OAnyURIType( _rName, getTypeClass() );
     }
+
     void OAnyURIType::initializeClone( const OXSDDataType& _rCloneSource )
     {
         OAnyURIType_Base::initializeClone( _rCloneSource );

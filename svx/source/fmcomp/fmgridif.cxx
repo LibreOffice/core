@@ -1189,8 +1189,6 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
     bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
 
     DbGridColumn* pCol;
-    Reference< css::sdb::XColumn >  xFieldContent;
-    Reference< XPropertySet >  xCurrentColumn;
     for (sal_Int32 i=0; i<nColumns; ++i)
     {
         if (bRequestedAsAny)
@@ -1206,12 +1204,14 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
         pCol = aColumns[ nModelPos ].get();
         const DbGridRowRef xRow = pGrid->GetSeekRow();
-        xFieldContent = (xRow.is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< css::sdb::XColumn > ();
+        Reference<css::sdb::XColumn> xFieldContent =
+            (xRow.is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< css::sdb::XColumn > ();
         if (!xFieldContent.is())
             // can't supply anything without a field content
             // FS - 07.12.99 - 54391
             continue;
 
+        Reference<XPropertySet> xCurrentColumn;
         xColumns->getByIndex(nModelPos) >>= xCurrentColumn;
         if (!::comphelper::hasProperty(FM_PROP_CLASSID, xCurrentColumn))
             continue;
@@ -1258,7 +1258,6 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     Any* pReturnArray = aReturnSequence.getArray();
 
     bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
-    Reference< css::sdb::XColumn >  xFieldContent;
     for (sal_Int32 i=0; i < nColumnCount; ++i)
     {
         sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos(static_cast<sal_uInt16>(i)));
@@ -1267,7 +1266,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
         // FS - 30.09.99 - 68644
         DbGridColumn* pCol = aColumns[ nModelPos ].get();
-        xFieldContent = xPaintRow->HasField( pCol->GetFieldPos() )
+        Reference<css::sdb::XColumn> xFieldContent = xPaintRow->HasField(pCol->GetFieldPos())
                     ?   xPaintRow->GetField( pCol->GetFieldPos() ).getColumn()
                     :   Reference< XColumn > ();
 
