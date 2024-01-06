@@ -15,6 +15,10 @@ ifneq ($(OS),MACOSX)
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_ooxmlimport))
 endif
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_ooxmlimport,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlimport, \
     sw/qa/extras/ooxmlimport/ooxmlimport \
 ))
