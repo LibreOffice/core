@@ -664,6 +664,27 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTableOnPage3)
     CPPUNIT_ASSERT_EQUAL(OUString("If oversubscription relative to allowance holds steady at average oversubscription level B15-B17"), aColumnDesc[3]);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, tdf137691)
+{
+    // given a doc where the banana negative data formats as ($123) and the pineapple data as $(123)
+    loadFromFile(u"pptx/tdf137691_dataTable.pptx");
+    // saveAndReload("Impress MS PowerPoint 2007 XML"); // Always exports as key 0 (General)
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+
+    Reference< chart2::data::XDataSequence > xDataSeq;
+    xDataSeq.set(getDataSequenceFromDocByRole(xChartDoc, u"values-y", 0));
+    const sal_Int32 nKey_bananas = xDataSeq->getNumberFormatKeyByIndex(-1);
+    // This should not be General format (0), but a defined format (129)
+    CPPUNIT_ASSERT(nKey_bananas);
+
+    xDataSeq.set(getDataSequenceFromDocByRole(xChartDoc, u"values-y", 1));
+    const sal_Int32 nKey_pineapples = xDataSeq->getNumberFormatKeyByIndex(-1);
+    // This should not be General format (0), but a defined format (130)
+    CPPUNIT_ASSERT(nKey_pineapples);
+    CPPUNIT_ASSERT(nKey_pineapples != nKey_bananas);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testMultipleAxisXLSX)
 {
     loadFromFile(u"ods/multiple_axis.ods");
