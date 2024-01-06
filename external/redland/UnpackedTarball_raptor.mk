@@ -28,11 +28,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,raptor,\
 	external/redland/raptor/ubsan.patch \
 	$(if $(SYSTEM_LIBXML),,external/redland/raptor/rpath.patch) \
 	external/redland/raptor/xml2-config.patch \
-	external/redland/raptor/0001-Calcualte-max-nspace-declarations-correctly-for-XML-.patch.1 \
-	external/redland/raptor/0001-CVE-2020-25713-raptor2-malformed-input-file-can-lead.patch.1 \
-	external/redland/raptor/libtool.patch \
-	external/redland/raptor/Wint-conversion.patch \
 	external/redland/raptor/raptor-libxml2-11.patch.1 \
+	$(if $(SYSTEM_ICU),,external/redland/raptor/raptor-icu.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:
