@@ -17,6 +17,8 @@ $(eval $(call gb_Library_set_include,raptor2, \
 $(eval $(call gb_Library_use_unpacked,raptor2,raptor))
 
 $(eval $(call gb_Library_use_externals,raptor2,\
+	icu_headers \
+	icuuc \
 	libxml2 \
 	libxslt \
 ))
