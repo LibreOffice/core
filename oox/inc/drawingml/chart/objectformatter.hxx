@@ -142,6 +142,9 @@ public:
     /** Returns true, if the passed shape properties have automatic fill mode. */
     static bool         isAutomaticFill( const ModelRef< Shape >& rxShapeProp );
 
+    /** Returns the index lookup key given for this number formatting code **/
+    sal_Int32 getNumberFormatKey(const OUString& sNumberFormat);
+
 private:
     std::shared_ptr< ObjectFormatterData > mxData;
 };

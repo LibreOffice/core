@@ -78,6 +78,11 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
     // set sequence role
     PropertySet aSeqProp( xDataSeq );
     aSeqProp.setProperty( PROP_Role, rRole );
+
+    const sal_Int32 nKey = getFormatter().getNumberFormatKey(mrModel.maFormatCode);
+    if (nKey >= 0)
+        aSeqProp.setProperty(PROP_NumberFormatKey, nKey);
+
     return xDataSeq;
 }
 

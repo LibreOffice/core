@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
@@ -1147,6 +1148,27 @@ void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eO
 bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
 {
     return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has_value();
+}
+
+sal_Int32 ObjectFormatter::getNumberFormatKey(const OUString& sNumberFormat)
+{
+    if (!mxData->mxNumFmts.is() || sNumberFormat.isEmpty())
+        return -1;
+
+    sal_Int32 nIndex = -1;
+    try
+    {
+        const bool bGeneral = sNumberFormat.equalsIgnoreAsciiCase("general");
+        nIndex = bGeneral ? mxData->mxNumTypes->getStandardIndex(mxData->maFromLocale)
+                          : mxData->mxNumFmts->addNewConverted(sNumberFormat, mxData->maEnUsLocale,
+                                                               mxData->maFromLocale);
+    }
+    catch (Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("oox.drawingml");
+    }
+
+    return nIndex;
 }
 
 } // namespace oox
