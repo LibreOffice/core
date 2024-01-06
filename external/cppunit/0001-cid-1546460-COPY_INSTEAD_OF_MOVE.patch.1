@@ -44,5 +44,73 @@ index 585c3da..be02385 100644
    , m_content()
    , m_attributes()
    , m_elements()
+diff --git a/include/cppunit/Asserter.h b/include/cppunit/Asserter.h
+index ca65593..2010739 100644
+--- a/include/cppunit/Asserter.h
++++ b/include/cppunit/Asserter.h
+@@ -159,11 +159,11 @@
+    *                          what are the differences between the expected and actual value.
+    * \param shortDescription Short description for the failure message.
+    */
+-  [[noreturn]] static void CPPUNIT_API failNotEqual( std::string expected, 
+-                                        std::string actual, 
++  [[noreturn]] static void CPPUNIT_API failNotEqual( const std::string& expected, 
++                                        const std::string& actual, 
+                                         const SourceLine &sourceLine,
+                                         const AdditionalMessage &additionalMessage = AdditionalMessage(),
+-                                        std::string shortDescription = "equality assertion failed" );
++                                        const std::string& shortDescription = "equality assertion failed" );
+ 
+   /*! \brief Throws an Exception with the specified message and location.
+    * \param expected Text describing the expected value.
+@@ -231,11 +231,11 @@
+    * \param shortDescription Short description for the failure message.
+    */
+   static void CPPUNIT_API failNotEqualIf( bool shouldFail,
+-                                          std::string expected, 
+-                                          std::string actual, 
++                                          const std::string& expected, 
++                                          const std::string& actual, 
+                                           const SourceLine &sourceLine,
+                                           const AdditionalMessage &additionalMessage = AdditionalMessage(),
+-                                          std::string shortDescription = "equality assertion failed" );
++                                          const std::string& shortDescription = "equality assertion failed" );
+ 
+ };
+ 
+diff --git a/src/cppunit/Asserter.cpp b/src/cppunit/Asserter.cpp
+index 52f8625..fe2097e 100644
+--- a/src/cppunit/Asserter.cpp
++++ b/src/cppunit/Asserter.cpp
+@@ -110,11 +110,11 @@
+ 
+ 
+ void 
+-Asserter::failNotEqual( std::string expected, 
+-                        std::string actual, 
++Asserter::failNotEqual( const std::string& expected, 
++                        const std::string& actual, 
+                         const SourceLine &sourceLine,
+                         const AdditionalMessage &additionalMessage,
+-                        std::string shortDescription )
++                        const std::string& shortDescription )
+ {
+   fail( makeMessage( makeExpectedEqual(expected),
+                      makeActual(actual),
+@@ -182,11 +182,11 @@
+ }
+ void 
+ Asserter::failNotEqualIf( bool shouldFail,
+-                          std::string expected, 
+-                          std::string actual, 
++                          const std::string& expected, 
++                          const std::string& actual, 
+                           const SourceLine &sourceLine,
+                           const AdditionalMessage &additionalMessage,
+-                          std::string shortDescription )
++                          const std::string& shortDescription )
+ {
+   if ( shouldFail )
+     failNotEqual( expected, actual, sourceLine, additionalMessage, shortDescription );
 -- 
 2.43.0
