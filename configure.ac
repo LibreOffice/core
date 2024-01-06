@@ -10752,8 +10752,8 @@ ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
 ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="TRUE"
 ICU_RECLASSIFIED_HEBREW_LETTER="TRUE"
 ICU_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
-ICU_LIBS_internal="-L${WORKDIR}/UnpackedTarball/icu/source/lib"
-libo_CHECK_SYSTEM_MODULE([icu],[ICU],[icu-i18n >= 4.6])
+ICU_LIBS_internal="-L${WORKDIR}/UnpackedTarball/icu/source/lib -licuuc"
+libo_CHECK_SYSTEM_MODULE([icu],[ICU],[icu-i18n >= 66])
 if test "$SYSTEM_ICU" = TRUE; then
     AC_LANG_PUSH([C++])
     AC_MSG_CHECKING([for unicode/rbbi.h])

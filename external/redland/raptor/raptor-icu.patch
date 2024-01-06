@@ -1,0 +1,11 @@
+--- configure	2023-03-02 02:58:10.000000000 +0900
++++ configure	2024-05-11 16:19:06.843539720 +0900
+@@ -16583,7 +16583,7 @@
+ printf "%s\n" "yes" >&6; }
+ 
+   have_icu=yes
+-  ICU_UC_VERSION=`$PKG_CONFIG icu-uc --modversion`
++  ICU_UC_VERSION="$ICU_MAJOR.$ICU_MINOR"
+ 
+ fi
+ ICU_UC_MAJOR_VERSION=`echo "$ICU_UC_VERSION" | sed -e 's/\..*$//'`
