@@ -113,7 +113,7 @@ void ScDocument::ImplDeleteOptions()
 
 SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
 {
-    if ( !mpPrinter && bCreateIfNotExist )
+    if (!mpPrinter && bCreateIfNotExist && mxPoolHelper)
     {
         auto pSet =
             std::make_unique<SfxItemSetFixed
@@ -201,8 +201,11 @@ OutputDevice* ScDocument::GetRefDevice(bool bForceVirtDev)
     // Create printer like ref device, see Writer...
     OutputDevice* pRefDevice = nullptr;
     if ( !bForceVirtDev && SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+    {
         pRefDevice = GetPrinter();
-    else
+        SAL_WARN_IF(!pRefDevice, "sc", "unable to get a printer, fallback to virdev");
+    }
+    if (!pRefDevice)
         pRefDevice = GetVirtualDevice_100th_mm();
     return pRefDevice;
 }
