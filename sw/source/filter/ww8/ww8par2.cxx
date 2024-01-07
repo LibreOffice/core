@@ -309,9 +309,9 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
             }
         }
 
-        *m_pPaM->GetPoint() = aTmpPos;        // restore Cursor
+        *m_pPaM->GetPoint() = std::move(aTmpPos); // restore Cursor
 
-        m_xPlcxMan = xOldPlcxMan;             // Restore attributes
+        m_xPlcxMan = std::move(xOldPlcxMan);  // Restore attributes
         m_xPlcxMan->RestoreAllPLCFx( aSave );
     }
 
@@ -1058,7 +1058,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
         SwPosition aTmpPos(*m_pPaM->GetPoint());
         m_pPaM->Move(fnMoveBackward, GoInContent);
         m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
-        *m_pPaM->GetPoint() = aTmpPos;
+        *m_pPaM->GetPoint() = std::move(aTmpPos);
     }
     else
         m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);

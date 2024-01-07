@@ -1962,7 +1962,7 @@ void RtfAttributeOutput::WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bo
     m_aSectionHeaders.append('}');
 
     m_aSectionBreaks = aSectionBreaks;
-    m_aRun = aRun;
+    m_aRun = std::move(aRun);
 }
 
 namespace
@@ -3061,7 +3061,7 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
     m_bBufferSectionHeaders = false;
     m_bInRun = bInRunOrig;
     m_bSingleEmptyRun = bSingleEmptyRunOrig;
-    m_aRun = aRun;
+    m_aRun = std::move(aRun);
     m_aRun->append(m_aSectionHeaders);
     m_aSectionHeaders.setLength(0);
 

@@ -618,7 +618,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     }
 
     OUString aStr = rRuby.GetText().copy( sal_Int32(nOffs) );
-    SwFieldPortion *pField = new SwFieldPortion( aStr, std::move(pRubyFont) );
+    SwFieldPortion *pField = new SwFieldPortion( std::move(aStr), std::move(pRubyFont) );
     pField->SetNextOffset( nOffs );
     pField->SetFollow( true );
 

@@ -252,7 +252,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
             pClient.disposeAndClear();
         }
 
-        pChild = pNextChild;
+        pChild = std::move(pNextChild);
     }
 
     // find system windows...
@@ -271,7 +271,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
                 xComp->dispose();
             }
 
-            pOverlap = pNextOverlap;
+            pOverlap = std::move(pNextOverlap);
         }
     }
 
@@ -308,10 +308,9 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
         VclPtr< vcl::Window > pNextTopChild = pTopWindowChild->GetWindow( GetWindowType::NextTopWindowSibling );
 
         pTopWindowChild.disposeAndClear();
-        pTopWindowChild = pNextTopChild;
+        pTopWindowChild = std::move(pNextTopChild);
     }
 }
-
 
 css::uno::Reference< css::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, bool bIsMenuBar )
 {

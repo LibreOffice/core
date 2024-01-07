@@ -1784,7 +1784,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             m_aStates.top().getShape() = std::get<1>(aTuple)->getShape();
 
             m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), true, RTFSdrImport::SHAPE);
-            m_aStates.top().getShape() = aShape;
+            m_aStates.top().getShape() = std::move(aShape);
             m_aStates.top().setCurrentBuffer(pCurrentBuffer);
         }
         else if (std::get<0>(aTuple) == BUFFER_ENDSHAPE)

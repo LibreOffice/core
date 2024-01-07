@@ -2365,7 +2365,7 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
                         m_pTableCursor->GetPoint() : m_pTableCursor->GetMark();
             if (pPos)
             {
-                *pPos = aNewPos;
+                *pPos = std::move(aNewPos);
             }
             else {
                 OSL_FAIL( "neither point nor mark available for change" );

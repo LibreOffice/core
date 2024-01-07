@@ -65,7 +65,7 @@ void UndoElement::impl_toggleModelState()
     // apply the previous snapshot to our model
     m_pModelClone->applyToModel( m_xDocumentModel );
     // remember the new snapshot, for the next toggle
-    m_pModelClone = pNewClone;
+    m_pModelClone = std::move(pNewClone);
 }
 
 void SAL_CALL UndoElement::undo(  )

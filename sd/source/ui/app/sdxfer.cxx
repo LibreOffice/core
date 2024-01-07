@@ -489,7 +489,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                 }
             }
 
-            maDocShellRef = aOldRef;
+            maDocShellRef = std::move(aOldRef);
         }
         else if( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {

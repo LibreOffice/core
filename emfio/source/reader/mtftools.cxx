@@ -1322,7 +1322,7 @@ namespace emfio
     void MtfTools::DrawRectWithBGColor(const tools::Rectangle& rRect)
     {
         WinMtfFillStyle aFillStyleBackup = maFillStyle;
-        bool            aTransparentBackup = maLineStyle.bTransparent;
+        bool            bTransparentBackup = maLineStyle.bTransparent;
         BackgroundMode  mnBkModeBackup = mnBkMode;
 
         const tools::Polygon aPoly( rRect );
@@ -1332,8 +1332,8 @@ namespace emfio
         ImplSetNonPersistentLineColorTransparenz();
         DrawPolygon(aPoly, false);
         mnBkMode = mnBkModeBackup; // The rectangle needs to be always drawned even if mode is transparent
-        maFillStyle = aFillStyleBackup;
-        maLineStyle.bTransparent = aTransparentBackup;
+        maFillStyle = std::move(aFillStyleBackup);
+        maLineStyle.bTransparent = bTransparentBackup;
     }
 
     void MtfTools::DrawRect( const tools::Rectangle& rRect, bool bEdge )

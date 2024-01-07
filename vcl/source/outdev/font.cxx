@@ -1151,7 +1151,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
 
     // restore orig font settings
     pSalLayout->InitFont();
-    rLayoutArgs.maRuns = aLayoutRuns;
+    rLayoutArgs.maRuns = std::move(aLayoutRuns);
 
     return pSalLayout;
 }

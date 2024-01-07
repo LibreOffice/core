@@ -1167,7 +1167,7 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
             }
 
             pTemp->SetMark();
-            *pTemp->GetPoint() = aEnd;
+            *pTemp->GetPoint() = std::move(aEnd);
 
             SwUnoCursorHelper::SelectPam(*pTemp, true);
 

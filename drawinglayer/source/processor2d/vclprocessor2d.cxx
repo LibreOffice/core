@@ -974,7 +974,7 @@ void VclProcessor2D::RenderTransparencePrimitive2D(
     process(rTransCandidate.getTransparence());
 
     // back to old color stack
-    maBColorModifierStack = aLastBColorModifierStack;
+    maBColorModifierStack = std::move(aLastBColorModifierStack);
 
     // back to old OutDev
     mpOutputDevice = pLastOutputDevice;

@@ -116,7 +116,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
         }
     }
 
-    mpStream = savedStream;
+    mpStream = std::move(savedStream);
 }
 
 void OOXMLDocumentImpl::resolveFastSubStreamWithId(Stream & rStream,
@@ -248,7 +248,8 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
 
     OOXMLDocumentImpl * pTemp;
     // Do not pass status indicator to sub-streams: they are typically marginal in size, so we just track the main document for now.
-    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor));
+    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp =
+            new OOXMLDocumentImpl(std::move(pStream), uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor));
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
     pTemp->mbIsSubstream = true;

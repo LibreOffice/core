@@ -269,7 +269,7 @@ namespace drawinglayer::processor3d
             // restore values
             mbModulate = bOldModulate;
             mbFilter = bOldFilter;
-            mpGeoTexSvx = pOldTex;
+            mpGeoTexSvx = std::move(pOldTex);
         }
 
         void DefaultProcessor3D::impRenderModifiedColorPrimitive3D(const primitive3d::ModifiedColorPrimitive3D& rModifiedCandidate)

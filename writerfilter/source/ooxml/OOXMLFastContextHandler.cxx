@@ -1203,9 +1203,8 @@ OOXMLFastContextHandlerPropertyTable::~OOXMLFastContextHandlerPropertyTable()
 void OOXMLFastContextHandlerPropertyTable::lcl_endFastElement
 (Token_t /*Element*/)
 {
-    OOXMLPropertySet::Pointer_t pPropSet(mpPropertySet->clone());
     OOXMLTable::ValuePointer_t pTmpVal
-        (new OOXMLPropertySetValue(pPropSet));
+        (new OOXMLPropertySetValue(mpPropertySet->clone()));
 
     mTable.add(pTmpVal);
 

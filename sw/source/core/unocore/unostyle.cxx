@@ -3761,9 +3761,9 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     }
 
     SwAttrSet aEmptySet(m_pDocShell->GetDoc()->GetAttrPool(), pRange);
-    auto pSet = PropValuesToAutoStyleItemSet(*m_pDocShell->GetDoc(), m_eFamily, Values, aEmptySet);
+    auto xSet = PropValuesToAutoStyleItemSet(*m_pDocShell->GetDoc(), m_eFamily, Values, aEmptySet);
 
-    uno::Reference<style::XAutoStyle> xRet = new SwXAutoStyle(m_pDocShell->GetDoc(), pSet, m_eFamily);
+    uno::Reference<style::XAutoStyle> xRet = new SwXAutoStyle(m_pDocShell->GetDoc(), std::move(xSet), m_eFamily);
 
     return xRet;
 }

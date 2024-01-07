@@ -2596,7 +2596,8 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         pSet->Put( SfxUInt16Item( SID_UPDATEDOCMODE, css::document::UpdateDocMode::FULL_UPDATE));
     }
 
-    unique_ptr<SfxMedium> pMedium(new SfxMedium(aFile, StreamMode::STD_READ, pFilter, std::move(pSet)));
+    unique_ptr<SfxMedium> pMedium(new SfxMedium(aFile, StreamMode::STD_READ,
+                                                std::move(pFilter), std::move(pSet)));
     if (pMedium->GetErrorIgnoreWarning() != ERRCODE_NONE)
         return nullptr;
 

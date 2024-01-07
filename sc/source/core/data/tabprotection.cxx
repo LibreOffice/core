@@ -456,13 +456,15 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     // present we assume the permission to edit is not granted. Until we
     // actually can evaluate the descriptors...
 
-    auto lIsEditable = [rRange](const ScEnhancedProtection& rEnhancedProtection) {
-        return !rEnhancedProtection.hasSecurityDescriptor()
-            && rEnhancedProtection.maRangeList.is() && rEnhancedProtection.maRangeList->Contains( rRange)
-            && !rEnhancedProtection.hasPassword(); // Range is editable if no password is assigned.
-    };
-    if (std::any_of(maEnhancedProtection.begin(), maEnhancedProtection.end(), lIsEditable))
-        return true;
+    {
+        auto lIsEditable = [rRange](const ScEnhancedProtection& rEnhancedProtection) {
+            return !rEnhancedProtection.hasSecurityDescriptor()
+                && rEnhancedProtection.maRangeList.is() && rEnhancedProtection.maRangeList->Contains( rRange)
+                && !rEnhancedProtection.hasPassword(); // Range is editable if no password is assigned.
+        };
+        if (std::any_of(maEnhancedProtection.begin(), maEnhancedProtection.end(), std::move(lIsEditable)))
+            return true;
+    }
 
     // For a single address, a simple check with single ranges was sufficient.
     if (rRange.aStart == rRange.aEnd)

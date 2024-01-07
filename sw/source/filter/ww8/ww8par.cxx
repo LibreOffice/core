@@ -2310,7 +2310,7 @@ void SwWW8ImplReader::Read_HdFtText(WW8_CP nStart, WW8_CP nLen, SwFrameFormat co
 
     Read_HdFtFootnoteText(pSttIdx, nStart, nLen - 1, MAN_HDFT);
 
-    *m_pPaM->GetPoint() = aTmpPos;
+    *m_pPaM->GetPoint() = std::move(aTmpPos);
 }
 
 bool SwWW8ImplReader::isValid_HdFt_CP(WW8_CP nHeaderCP) const
@@ -4573,7 +4573,7 @@ void wwSectionManager::InsertSegments()
                 // create a new following page style
                 SwFormatPageDesc aFollow(SetSwFormatPageDesc(aIter, aStart, bIgnoreCols));
                 // restore any contents of aIter trashed by SetSwFormatPageDesc
-                *aIter = aTmpSection;
+                *aIter = std::move(aTmpSection);
 
                 // Handle the section break
                 UseOnPage eUseOnPage = UseOnPage::Left;

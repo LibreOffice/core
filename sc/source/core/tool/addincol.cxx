@@ -1330,11 +1330,8 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
             rDesc.pDefArgFlags[nArg].bOptional = pArgs[nArg].bOptional;
 
             // no empty names...
-            if ( rDesc.maDefArgNames[nArg].isEmpty() )
-            {
-                OUString aDefName = "arg" + OUString::number( nArg+1 );
-                rDesc.maDefArgNames[nArg] = aDefName;
-            }
+            if (rDesc.maDefArgNames[nArg].isEmpty())
+                rDesc.maDefArgNames[nArg] = "arg" + OUString::number(nArg + 1);
 
             //  last argument repeated?
             if ( nArg+1 == nArgCount && ( pArgs[nArg].eType == SC_ADDINARG_VARARGS ) )

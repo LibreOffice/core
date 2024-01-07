@@ -191,9 +191,9 @@ void AccessibilityIssue::gotoIssue() const
             SwPosition aMark(*pContentNode, TempIssueObject.m_nEnd);
             pWrtShell->StartAllAction();
             SwPaM* pPaM = pWrtShell->GetCursor();
-            *pPaM->GetPoint() = aPoint;
+            *pPaM->GetPoint() = std::move(aPoint);
             pPaM->SetMark();
-            *pPaM->GetMark() = aMark;
+            *pPaM->GetMark() = std::move(aMark);
             pWrtShell->EndAllAction();
 
             // bring issue to attention

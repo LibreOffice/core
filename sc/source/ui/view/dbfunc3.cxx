@@ -1214,8 +1214,7 @@ void ScDBFunc::GroupDataPilot()
     }
     OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
-    OUString aGroupName = pGroupDimension->CreateGroupName(ScResId(STR_PIVOT_GROUP));
-    ScDPSaveGroupItem aGroup( aGroupName );
+    ScDPSaveGroupItem aGroup(pGroupDimension->CreateGroupName(ScResId(STR_PIVOT_GROUP)));
     for (const OUString& aEntryName : aEntries)
     {
         if ( pBaseGroupDim )

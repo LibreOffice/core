@@ -1171,7 +1171,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                         spawned from within the VML & DML block and alter
                         the contents.
                 */
-                ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.m_pTableInfo;
+                ww8::WW8TableInfo::Pointer_t xOldTableInfo = m_rExport.m_pTableInfo;
                 //Reset the table infos after saving.
                 m_rExport.m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
 
@@ -1198,7 +1198,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                     DocxTableExportContext aVMLTableExportContext(*this);
                     m_rExport.SdrExporter().writeVMLTextFrame(&aFrame);
                 }
-                m_rExport.m_pTableInfo = pOldTableInfo;
+                m_rExport.m_pTableInfo = std::move(xOldTableInfo);
 
                 m_pSerializer->endElementNS(XML_mc, XML_Fallback);
                 m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);

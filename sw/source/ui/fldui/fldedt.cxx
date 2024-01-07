@@ -88,7 +88,7 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
         if (bSelectionFailed)
         {
             pCursor->DeleteMark();
-            *pCursor->GetPoint() = aOrigPos;
+            *pCursor->GetPoint() = std::move(aOrigPos);
         }
     }
 

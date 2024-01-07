@@ -121,7 +121,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     mpCurrentNode = pNewNode;
 
     // set new parent for children
-    ShapePtr pPreviousParent(mpParentShape);
+    ShapePtr xPreviousParent(mpParentShape);
     mpParentShape = pCurrParent;
 
     // process children
@@ -133,7 +133,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     meLookFor = LAYOUT_NODE;
 
     // restore parent
-    mpParentShape = pPreviousParent;
+    mpParentShape = std::move(xPreviousParent);
     mpCurrentNode = pPreviousNode;
 }
 

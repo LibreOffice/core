@@ -1092,7 +1092,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 basegfx::B2DPolyPolygon aPolyPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLength, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
 
                 rSet.Put( XLineStartWidthItem( nArrowWidth ) );
-                rSet.Put( XLineStartItem( aArrowName, aPolyPoly) );
+                rSet.Put( XLineStartItem( std::move(aArrowName), std::move(aPolyPoly)) );
                 rSet.Put( XLineStartCenterItem( bArrowCenter ) );
             }
 
