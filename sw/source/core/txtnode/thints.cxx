@@ -46,7 +46,6 @@
 #include <textlinebreak.hxx>
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <charfmt.hxx>
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
@@ -80,6 +79,8 @@
 
 #include <rdfhelper.hxx>
 #include <hints.hxx>
+
+#include <officecfg/Office/Common.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK           Check(true);
@@ -1906,7 +1907,7 @@ bool SwTextNode::IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich, bool b
     // LO can save the char background as either shading or highlight, so check which mode is currently chosen.
     // Shading does not affect the numbering. Highlighting does (but isn't allowed in a char style).
     if (nWhich == RES_CHRATR_BACKGROUND)
-        return bIsCharStyle || SvtFilterOptions::Get().IsCharBackground2Shading();
+        return bIsCharStyle || !officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::get();
 
     return (nWhich == RES_CHRATR_UNDERLINE
             || nWhich == RES_CHRATR_ESCAPEMENT);

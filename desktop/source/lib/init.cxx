@@ -222,7 +222,6 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/compatibility.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/searchopt.hxx>
@@ -7523,7 +7522,6 @@ static void preloadData()
     static SvtMiscOptions aSvtMiscOptions;
     static SvtCommandOptions aSvtCommandOptions;
     static SvtCompatibilityOptions aSvtCompatibilityOptions;
-    static SvtFilterOptions aSvtFilterOptions;
     static SvtLinguConfig aSvtLinguConfig;
     static SvtModuleOptions aSvtModuleOptions;
     static SvtPathOptions aSvtPathOptions;

@@ -6180,7 +6180,6 @@ include/unotools/dynamicmenuoptions.hxx
 include/unotools/eventcfg.hxx
 include/unotools/eventlisteneradapter.hxx
 include/unotools/extendedsecurityoptions.hxx
-include/unotools/fltrcfg.hxx
 include/unotools/fontcfg.hxx
 include/unotools/fontcvt.hxx
 include/unotools/fontdefs.hxx

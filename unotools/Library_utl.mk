@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/docinfohelper \
     unotools/source/config/dynamicmenuoptions \
     unotools/source/config/eventcfg \
-    unotools/source/config/fltrcfg \
     unotools/source/config/fontcfg \
     unotools/source/config/historyoptions \
     unotools/source/config/itemholder1 \

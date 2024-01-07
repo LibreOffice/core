@@ -141,7 +141,7 @@
 #include "fields.hxx"
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <unotools/fltrcfg.hxx>
+#include <officecfg/Office/Common.hxx>
 
 
 using ::editeng::SvxBorderLine;
@@ -5981,7 +5981,7 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
 
 void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
 {
-    bool bConvertToShading = SvtFilterOptions::Get().IsCharBackground2Shading();
+    bool bConvertToShading = !officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::get();
     bool bHasShadingMarker = false;
 
     // MS Word doesn't support highlight in character styles. Always export those as shading.

@@ -545,7 +545,6 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/fltrcfg.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>

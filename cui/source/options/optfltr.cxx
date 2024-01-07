@@ -18,7 +18,6 @@
  */
 
 #include <unotools/moduleoptions.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Writer.hxx>
@@ -109,67 +108,67 @@ OUString OfaMSFilterTabPage::GetAllStrings()
 
 bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
 {
-    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    auto batch = comphelper::ConfigurationChanges::create();
 
     if( m_xWBasicCodeCB->get_state_changed_from_saved() )
-        rOpt.SetLoadWordBasicCode( m_xWBasicCodeCB->get_active() );
+        officecfg::Office::Writer::Filter::Import::VBA::Load::set(m_xWBasicCodeCB->get_active(), batch);
     if( m_xWBasicWbctblCB->get_state_changed_from_saved() )
-        rOpt.SetLoadWordBasicExecutable( m_xWBasicWbctblCB->get_active() );
+        officecfg::Office::Writer::Filter::Import::VBA::Executable::set(m_xWBasicWbctblCB->get_active(), batch);
     if( m_xWBasicStgCB->get_state_changed_from_saved() )
-        rOpt.SetLoadWordBasicStorage( m_xWBasicStgCB->get_active() );
+        officecfg::Office::Writer::Filter::Import::VBA::Save::set(m_xWBasicStgCB->get_active(), batch);
 
     if( m_xEBasicCodeCB->get_state_changed_from_saved())
-        rOpt.SetLoadExcelBasicCode( m_xEBasicCodeCB->get_active() );
+        officecfg::Office::Calc::Filter::Import::VBA::Load::set(m_xEBasicCodeCB->get_active(), batch);
     if( m_xEBasicExectblCB->get_state_changed_from_saved())
-        rOpt.SetLoadExcelBasicExecutable( m_xEBasicExectblCB->get_active() );
+        officecfg::Office::Calc::Filter::Import::VBA::Executable::set(m_xEBasicExectblCB->get_active(), batch);
     if( m_xEBasicStgCB->get_state_changed_from_saved())
-        rOpt.SetLoadExcelBasicStorage( m_xEBasicStgCB->get_active() );
+        officecfg::Office::Calc::Filter::Import::VBA::Save::set(m_xEBasicStgCB->get_active(), batch);
 
     if( m_xPBasicCodeCB->get_state_changed_from_saved())
-        rOpt.SetLoadPPointBasicCode( m_xPBasicCodeCB->get_active() );
+        officecfg::Office::Impress::Filter::Import::VBA::Load::set(m_xPBasicCodeCB->get_active(), batch);
     if( m_xPBasicStgCB->get_state_changed_from_saved())
-        rOpt.SetLoadPPointBasicStorage( m_xPBasicStgCB->get_active() );
+        officecfg::Office::Impress::Filter::Import::VBA::Save::set(m_xPBasicStgCB->get_active(), batch);
+
+    batch->commit();
 
     return false;
 }
 
 void OfaMSFilterTabPage::Reset( const SfxItemSet* )
 {
-    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-
-    m_xWBasicCodeCB->set_active( rOpt.IsLoadWordBasicCode() );
+    m_xWBasicCodeCB->set_active(officecfg::Office::Writer::Filter::Import::VBA::Load::get());
     m_xWBasicCodeCB->set_sensitive(!officecfg::Office::Writer::Filter::Import::VBA::Load::isReadOnly());
     m_xWBasicCodeImg->set_visible(officecfg::Office::Writer::Filter::Import::VBA::Load::isReadOnly());
     m_xWBasicCodeCB->save_state();
-    m_xWBasicWbctblCB->set_active( rOpt.IsLoadWordBasicExecutable() );
+    m_xWBasicWbctblCB->set_active(officecfg::Office::Writer::Filter::Import::VBA::Executable::get());
     m_xWBasicWbctblCB->set_sensitive(!officecfg::Office::Writer::Filter::Import::VBA::Executable::isReadOnly());
     m_xWBasicWbctblImg->set_visible(officecfg::Office::Writer::Filter::Import::VBA::Executable::isReadOnly());
     m_xWBasicWbctblCB->save_state();
-    m_xWBasicStgCB->set_active( rOpt.IsLoadWordBasicStorage() );
+    m_xWBasicStgCB->set_active(officecfg::Office::Writer::Filter::Import::VBA::Save::get());
     m_xWBasicStgCB->set_sensitive(!officecfg::Office::Writer::Filter::Import::VBA::Save::isReadOnly());
     m_xWBasicStgImg->set_visible(officecfg::Office::Writer::Filter::Import::VBA::Save::isReadOnly());
     m_xWBasicStgCB->save_state();
     LoadWordBasicCheckHdl_Impl( *m_xWBasicCodeCB );
 
-    m_xEBasicCodeCB->set_active( rOpt.IsLoadExcelBasicCode() );
+    m_xEBasicCodeCB->set_active(officecfg::Office::Calc::Filter::Import::VBA::Load::get());
     m_xEBasicCodeCB->set_sensitive(!officecfg::Office::Calc::Filter::Import::VBA::Load::isReadOnly());
     m_xEBasicCodeImg->set_visible(officecfg::Office::Calc::Filter::Import::VBA::Load::isReadOnly());
     m_xEBasicCodeCB->save_state();
-    m_xEBasicExectblCB->set_active( rOpt.IsLoadExcelBasicExecutable() );
+    m_xEBasicExectblCB->set_active(officecfg::Office::Calc::Filter::Import::VBA::Executable::get());
     m_xEBasicExectblCB->set_sensitive(!officecfg::Office::Calc::Filter::Import::VBA::Executable::isReadOnly());
     m_xEBasicExectblImg->set_visible(officecfg::Office::Calc::Filter::Import::VBA::Executable::isReadOnly());
     m_xEBasicExectblCB->save_state();
-    m_xEBasicStgCB->set_active( rOpt.IsLoadExcelBasicStorage() );
+    m_xEBasicStgCB->set_active(officecfg::Office::Calc::Filter::Import::VBA::Save::get());
     m_xEBasicStgCB->set_sensitive(!officecfg::Office::Calc::Filter::Import::VBA::Save::isReadOnly());
     m_xEBasicStgImg->set_visible(officecfg::Office::Calc::Filter::Import::VBA::Save::isReadOnly());
     m_xEBasicStgCB->save_state();
     LoadExcelBasicCheckHdl_Impl( *m_xEBasicCodeCB );
 
-    m_xPBasicCodeCB->set_active( rOpt.IsLoadPPointBasicCode() );
+    m_xPBasicCodeCB->set_active(officecfg::Office::Impress::Filter::Import::VBA::Load::get());
     m_xPBasicCodeCB->set_sensitive(!officecfg::Office::Impress::Filter::Import::VBA::Load::isReadOnly());
     m_xPBasicCodeImg->set_visible(officecfg::Office::Impress::Filter::Import::VBA::Load::isReadOnly());
     m_xPBasicCodeCB->save_state();
-    m_xPBasicStgCB->set_active( rOpt.IsLoadPPointBasicStorage() );
+    m_xPBasicStgCB->set_active(officecfg::Office::Impress::Filter::Import::VBA::Save::get());
     m_xPBasicStgCB->set_sensitive(!officecfg::Office::Impress::Filter::Import::VBA::Save::isReadOnly());
     m_xPBasicStgImg->set_visible(officecfg::Office::Impress::Filter::Import::VBA::Save::isReadOnly());
     m_xPBasicStgCB->save_state();
@@ -234,87 +233,97 @@ OUString OfaMSFilterTabPage2::GetAllStrings()
     return sAllStrings.replaceAll("_", "");
 }
 
+namespace
+{
+struct Functions
+{
+    bool (*FnIs)();
+    bool (*FnIsReadOnly)();
+    void (*FnSet)(const bool& bFlag, const std::shared_ptr<comphelper::ConfigurationChanges>&);
+    template <class reg> static constexpr Functions fromReg()
+    {
+        return { reg::get, reg::isReadOnly, reg::set };
+    }
+};
+struct ChkCBoxPair
+{
+    MSFltrPg2_CheckBoxEntries eType;
+    Functions load;
+    Functions save;
+};
+template <class regLoad, class regSave> constexpr ChkCBoxPair Pair(MSFltrPg2_CheckBoxEntries eType)
+{
+    return { eType, Functions::fromReg<regLoad>(), Functions::fromReg<regSave>() };
+}
+template <class regLoad> constexpr ChkCBoxPair Load(MSFltrPg2_CheckBoxEntries eType)
+{
+    return { eType, Functions::fromReg<regLoad>(), {} };
+}
+constexpr ChkCBoxPair aChkArr[] = {
+    Pair<officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath,
+         officecfg::Office::Common::Filter::Microsoft::Export::MathToMathType>(
+        MSFltrPg2_CheckBoxEntries::Math),
+    Pair<officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter,
+         officecfg::Office::Common::Filter::Microsoft::Export::WriterToWinWord>(
+        MSFltrPg2_CheckBoxEntries::Writer),
+    Pair<officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc,
+         officecfg::Office::Common::Filter::Microsoft::Export::CalcToExcel>(
+        MSFltrPg2_CheckBoxEntries::Calc),
+    Pair<officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress,
+         officecfg::Office::Common::Filter::Microsoft::Export::ImpressToPowerPoint>(
+        MSFltrPg2_CheckBoxEntries::Impress),
+    Load<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes>(
+        MSFltrPg2_CheckBoxEntries::SmartArt),
+    Load<officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw>(
+        MSFltrPg2_CheckBoxEntries::Visio),
+    Load<officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw>(
+        MSFltrPg2_CheckBoxEntries::PDF),
+};
+}
+
 bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
 {
-    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
-    static struct ChkCBoxEntries{
-        MSFltrPg2_CheckBoxEntries eType;
-        bool (SvtFilterOptions::*FnIs)() const;
-        void (SvtFilterOptions::*FnSet)( bool bFlag );
-    } const aChkArr[] = {
-        { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMathType2Math,
-                        &SvtFilterOptions::SetMathType2Math },
-        { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMath2MathType,
-                        &SvtFilterOptions::SetMath2MathType },
-        { MSFltrPg2_CheckBoxEntries::Writer,   &SvtFilterOptions::IsWinWord2Writer,
-                        &SvtFilterOptions::SetWinWord2Writer },
-        { MSFltrPg2_CheckBoxEntries::Writer,   &SvtFilterOptions::IsWriter2WinWord,
-                        &SvtFilterOptions::SetWriter2WinWord },
-        { MSFltrPg2_CheckBoxEntries::Calc,     &SvtFilterOptions::IsExcel2Calc,
-                        &SvtFilterOptions::SetExcel2Calc },
-        { MSFltrPg2_CheckBoxEntries::Calc,     &SvtFilterOptions::IsCalc2Excel,
-                        &SvtFilterOptions::SetCalc2Excel },
-        { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsPowerPoint2Impress,
-                        &SvtFilterOptions::SetPowerPoint2Impress },
-        { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsImpress2PowerPoint,
-                        &SvtFilterOptions::SetImpress2PowerPoint },
-        { MSFltrPg2_CheckBoxEntries::SmartArt,  &SvtFilterOptions::IsSmartArt2Shape,
-                        &SvtFilterOptions::SetSmartArt2Shape },
-        { MSFltrPg2_CheckBoxEntries::Visio, &SvtFilterOptions::IsVisio2Draw,
-                        &SvtFilterOptions::SetVisio2Draw },
-    };
-
-    bool bFirstCol = true;
-    for( const ChkCBoxEntries & rEntry : aChkArr )
+    auto pBatch = comphelper::ConfigurationChanges::create();
+    for (const ChkCBoxPair& rEntry : aChkArr)
     {
         // we loop through the list, alternating reading the first/second column,
         // each row appears twice in the list (except for smartart and later entries, which are
         // import only)
-        sal_uInt16 nCol = bFirstCol ? 0 : 1;
-        bFirstCol = !bFirstCol;
         int nEntry = GetEntry4Type(rEntry.eType);
         if (nEntry != -1)
         {
-            bool bCheck = m_xCheckLB->get_toggle(nEntry, nCol);
-            if( bCheck != (rOpt.*rEntry.FnIs)() )
-                (rOpt.*rEntry.FnSet)( bCheck );
+            bool bCheck = m_xCheckLB->get_toggle(nEntry, 0);
+            if (bCheck != (rEntry.load.FnIs)())
+                (rEntry.load.FnSet)(bCheck, pBatch);
+
+            if (rEntry.save.FnIs)
+            {
+                bCheck = m_xCheckLB->get_toggle(nEntry, 1);
+                if (bCheck != (rEntry.save.FnIs)())
+                    (rEntry.save.FnSet)(bCheck, pBatch);
+            }
         }
-        if (rEntry.eType == MSFltrPg2_CheckBoxEntries::SmartArt)
-        {
-            bFirstCol = !bFirstCol;
-        }
-    }
-    int nPDFEntry = GetEntry4Type(MSFltrPg2_CheckBoxEntries::PDF);
-    bool bPDFCheck = m_xCheckLB->get_toggle(nPDFEntry, 0);
-    if (bPDFCheck != officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get())
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::set(bPDFCheck, pBatch);
-        pBatch->commit();
     }
 
     if( m_xHighlightingRB->get_state_changed_from_saved() )
     {
-        if (m_xHighlightingRB->get_active())
-            rOpt.SetCharBackground2Highlighting();
-        else
-            rOpt.SetCharBackground2Shading();
+        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(
+            m_xHighlightingRB->get_active(), pBatch);
     }
 
     if (m_xMSOLockFileCB->get_state_changed_from_saved())
     {
-        rOpt.EnableMSOLockFileCreation(m_xMSOLockFileCB->get_active());
+        officecfg::Office::Common::Filter::Microsoft::Import::CreateMSOLockFiles::set(
+            m_xMSOLockFileCB->get_active(), pBatch);
     }
+    pBatch->commit();
 
     return true;
 }
 
 void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
 {
-    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-
     m_xCheckLB->freeze();
     m_xCheckLB->clear();
 
@@ -336,92 +345,31 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         InsertEntry(sChgToFromPDF, MSFltrPg2_CheckBoxEntries::PDF, false);
     }
 
-    static struct ChkCBoxEntries{
-        MSFltrPg2_CheckBoxEntries eType;
-        bool (SvtFilterOptions::*FnIs)() const;
-    } const aChkArr[] = {
-        { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMathType2Math },
-        { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMath2MathType },
-        { MSFltrPg2_CheckBoxEntries::Writer,   &SvtFilterOptions::IsWinWord2Writer },
-        { MSFltrPg2_CheckBoxEntries::Writer,   &SvtFilterOptions::IsWriter2WinWord },
-        { MSFltrPg2_CheckBoxEntries::Calc,     &SvtFilterOptions::IsExcel2Calc },
-        { MSFltrPg2_CheckBoxEntries::Calc,     &SvtFilterOptions::IsCalc2Excel },
-        { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsPowerPoint2Impress },
-        { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
-        { MSFltrPg2_CheckBoxEntries::SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
-        { MSFltrPg2_CheckBoxEntries::Visio,    &SvtFilterOptions::IsVisio2Draw },
-        { MSFltrPg2_CheckBoxEntries::PDF,      nullptr },
-    };
-
-    bool bFirstCol = true;
-    bool bReadOnly = false;
-    for( const ChkCBoxEntries & rArr : aChkArr )
+    for (const ChkCBoxPair& rArr : aChkArr)
     {
         // we loop through the list, alternating reading the first/second column,
         // each row appears twice in the list (except for smartart and later entries, which are
         // import only)
-        sal_uInt16 nCol = bFirstCol ? 0 : 1;
-        bFirstCol = !bFirstCol;
         int nEntry = GetEntry4Type( rArr.eType );
         if (nEntry != -1)
         {
-            bool bCheck = false;
-            if (rArr.eType != MSFltrPg2_CheckBoxEntries::PDF)
+            bool bCheck = (rArr.load.FnIs)();
+            bool bReadOnly = (rArr.load.FnIsReadOnly)();
+            m_xCheckLB->set_toggle(nEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+            m_xCheckLB->set_sensitive(nEntry, !bReadOnly, 0);
+
+            if (rArr.save.FnIs)
             {
-                bCheck = (rOpt.*rArr.FnIs)();
-                switch (rArr.eType)
-                {
-                case MSFltrPg2_CheckBoxEntries::Math:
-                    if (nCol == 0)
-                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::isReadOnly();
-                    else
-                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Export::MathToMathType::isReadOnly();
-                    break;
-                case MSFltrPg2_CheckBoxEntries::Writer:
-                    if (nCol == 0)
-                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::isReadOnly();
-                    else
-                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Export::WriterToWinWord::isReadOnly();
-                    break;
-                case MSFltrPg2_CheckBoxEntries::Calc:
-                    if (nCol == 0)
-                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::isReadOnly();
-                    else
-                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Export::CalcToExcel::isReadOnly();
-                    break;
-                case MSFltrPg2_CheckBoxEntries::Impress:
-                    if (nCol == 0)
-                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress::isReadOnly();
-                    else
-                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Export::ImpressToPowerPoint::isReadOnly();
-                    break;
-                case MSFltrPg2_CheckBoxEntries::SmartArt:
-                    bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::isReadOnly();
-                    break;
-                case MSFltrPg2_CheckBoxEntries::Visio:
-                    bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::isReadOnly();
-                    break;
-                default:
-                    break;
-                }
+                bCheck = (rArr.save.FnIs)();
+                bReadOnly = (rArr.save.FnIsReadOnly)();
+                m_xCheckLB->set_toggle(nEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 1);
+                m_xCheckLB->set_sensitive(nEntry, !bReadOnly, 1);
             }
-            else
-            {
-                bCheck = officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get();
-                bReadOnly = officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::isReadOnly();
-                nCol = 0;
-            }
-            m_xCheckLB->set_toggle(nEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, nCol);
-            m_xCheckLB->set_sensitive(nEntry, !bReadOnly, nCol);
-        }
-        if (rArr.eType == MSFltrPg2_CheckBoxEntries::SmartArt)
-        {
-            bFirstCol = !bFirstCol;
         }
     }
     m_xCheckLB->thaw();
 
-    if (rOpt.IsCharBackground2Highlighting())
+    if (officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::get())
         m_xHighlightingRB->set_active(true);
     else
         m_xShadingRB->set_active(true);
@@ -436,7 +384,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
 
     m_xHighlightingRB->save_state();
 
-    m_xMSOLockFileCB->set_active(rOpt.IsMSOLockFileCreationIsEnabled());
+    m_xMSOLockFileCB->set_active(officecfg::Office::Common::Filter::Microsoft::Import::CreateMSOLockFiles::get());
     m_xMSOLockFileCB->save_state();
     m_xMSOLockFileCB->set_sensitive(!officecfg::Office::Common::Filter::Microsoft::Import::CreateMSOLockFiles::isReadOnly());
     m_xMSOLockFileImg->set_visible(officecfg::Office::Common::Filter::Microsoft::Import::CreateMSOLockFiles::isReadOnly());

@@ -37,7 +37,6 @@
 #include <docsh.hxx>
 #include <drawdoc.hxx>
 
-#include <unotools/fltrcfg.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docinf.hxx>
 #include <editeng/tstpitem.hxx>
@@ -118,6 +117,7 @@
 #include <fmtclbl.hxx>
 #include <iodetect.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace css;
 using namespace sw::util;
@@ -3434,14 +3434,13 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     if ( !m_oOLEExp )
     {
         sal_uInt32 nSvxMSDffOLEConvFlags = 0;
-        const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-        if ( rOpt.IsMath2MathType() )
+        if (officecfg::Office::Common::Filter::Microsoft::Export::MathToMathType::get())
             nSvxMSDffOLEConvFlags |= OLE_STARMATH_2_MATHTYPE;
-        if ( rOpt.IsWriter2WinWord() )
+        if (officecfg::Office::Common::Filter::Microsoft::Export::WriterToWinWord::get())
             nSvxMSDffOLEConvFlags |= OLE_STARWRITER_2_WINWORD;
-        if ( rOpt.IsCalc2Excel() )
+        if (officecfg::Office::Common::Filter::Microsoft::Export::CalcToExcel::get())
             nSvxMSDffOLEConvFlags |= OLE_STARCALC_2_EXCEL;
-        if ( rOpt.IsImpress2PowerPoint() )
+        if (officecfg::Office::Common::Filter::Microsoft::Export::ImpressToPowerPoint::get())
             nSvxMSDffOLEConvFlags |= OLE_STARIMPRESS_2_POWERPOINT;
 
         m_oOLEExp.emplace( nSvxMSDffOLEConvFlags );
@@ -3778,7 +3777,7 @@ void WW8Export::PrepareStorage()
     if (!xDocProps.is())
         return;
 
-    if ( SvtFilterOptions::Get().IsEnableWordPreview() )
+    if (officecfg::Office::Common::Filter::Microsoft::Export::EnableWordPreview::get())
     {
         std::shared_ptr<GDIMetaFile> xMetaFile =
             pDocShell->GetPreviewMetaFile();

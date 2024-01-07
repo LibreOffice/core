@@ -79,9 +79,9 @@
 #include "writerhelper.hxx"
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <xmloff/odffields.hxx>
 #include <osl/diagnose.h>
+#include <officecfg/Office/Common.hxx>
 
 #include <algorithm>
 #include <string_view>
@@ -525,8 +525,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
     if (!pF || !pF->EndPosIsFieldEnd(nCP))
         return nRet;
 
-    const SvtFilterOptions &rOpt = SvtFilterOptions::Get();
-    bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    bool bUseEnhFields = officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
 
     OSL_ENSURE(!m_aFieldStack.empty(), "Empty field stack");
     if (!m_aFieldStack.empty())

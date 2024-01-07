@@ -69,10 +69,10 @@
 #include "ww8par2.hxx"
 
 #include <IMark.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <rtl/character.hxx>
 #include <xmloff/odffields.hxx>
 #include <comphelper/string.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
 using namespace sw::util;
@@ -110,8 +110,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
     text.
     */
 
-    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    const bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    const bool bUseEnhFields = officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
 
     if (!bUseEnhFields)
     {
@@ -192,8 +191,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
 
     if (rStr[pF->nLCode-1]==0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
-    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    const bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    const bool bUseEnhFields = officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
 
     if (!bUseEnhFields)
     {
@@ -248,8 +246,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
     if (pF->nLCode > 0 && rStr.getLength() >= pF->nLCode && rStr[pF->nLCode-1] == 0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
-    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    bool bUseEnhFields = officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
 
     if (!bUseEnhFields)
     {

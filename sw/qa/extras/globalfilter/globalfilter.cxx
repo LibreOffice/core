@@ -32,7 +32,6 @@
 #include <ndtxt.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <xmloff/odffields.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
@@ -537,13 +536,15 @@ void Test::testCharStyleHighlight()
 
 void Test::testCharHighlight()
 {
-    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    rOpt.SetCharBackground2Shading();
+    auto batch = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(false, batch);
+    batch->commit();
 
     testCharHighlightBody();
     testCharStyleHighlight();
 
-    rOpt.SetCharBackground2Highlighting();
+    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
+    batch->commit();
 
     testCharHighlightBody();
     testCharStyleHighlight();
@@ -628,6 +629,10 @@ void Test::testMSCharBackgroundEditing()
         "Office Open XML Text",
     };
 
+    auto batch = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
+    batch->commit();
+
     for (OUString const & rFilterName : aFilterNames)
     {
         createSwDoc("char_background_editing.docx");
@@ -683,9 +688,6 @@ void Test::testMSCharBackgroundEditing()
             xRun->setPropertyValue("CharInteropGrabBag", uno::Any(aGrabBag));
         }
 
-        SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-        rOpt.SetCharBackground2Highlighting();
-
         // Export the document and import again for a check
         saveAndReload(rFilterName);
 
@@ -733,9 +735,9 @@ void Test::testCharBackgroundToHighlighting()
 
         OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
-
-        SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-        rOpt.SetCharBackground2Highlighting();
+        auto batch = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
+        batch->commit();
 
         // Export the document and import again for a check
         saveAndReload(rFilterName);

@@ -19,7 +19,10 @@
 
 #include <config_features.h>
 
+#include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -78,7 +81,6 @@
 #include <cmdid.h>
 #include <strings.hrc>
 
-#include <unotools/fltrcfg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
@@ -304,7 +306,7 @@ bool SwDocShell::Save()
             {
                 if (m_xDoc->ContainsMSVBasic())
                 {
-                    if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
+                    if (officecfg::Office::Writer::Filter::Import::VBA::Save::get())
                         nVBWarning = GetSaveWarningOfMSVBAStorage( static_cast<SfxObjectShell&>(*this) );
                     m_xDoc->SetContainsMSVBasic( false );
                 }
@@ -501,7 +503,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         if (m_xDoc->ContainsMSVBasic())
         {
-            if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
+            if (officecfg::Office::Writer::Filter::Import::VBA::Save::get())
                 nVBWarning = GetSaveWarningOfMSVBAStorage( static_cast<SfxObjectShell&>(*this) );
             m_xDoc->SetContainsMSVBasic( false );
         }
@@ -606,7 +608,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     if (m_xDoc->ContainsMSVBasic())
     {
         bool bSave = pFlt->GetUserData() == "CWW8"
-             && SvtFilterOptions::Get().IsLoadWordBasicStorage();
+                     && officecfg::Office::Writer::Filter::Import::VBA::Save::get();
 
         if ( bSave )
         {

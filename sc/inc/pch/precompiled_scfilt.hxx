@@ -277,7 +277,6 @@
 #include <unotools/charclass.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <unotools/options.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/unotoolsdllapi.h>

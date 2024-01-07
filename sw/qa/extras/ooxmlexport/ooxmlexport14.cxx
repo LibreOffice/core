@@ -30,8 +30,8 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
@@ -923,9 +923,10 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
     createSwDoc("tdf135774_numberingCRProps.docx");
 
     // This only affects when saving as w:highlight - which is not the default since 7.0.
-    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    bool bWasExportToShade = rOpt.IsCharBackground2Shading();
-    rOpt.SetCharBackground2Highlighting();
+    bool bWasExportToShade = !officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::get();
+    auto batch = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
+    batch->commit();
 
     //Simulate a user editing the char background color of the paragraph 2 marker (CR)
     uno::Reference<beans::XPropertySet> properties(getParagraph(2), uno::UNO_QUERY);
@@ -943,7 +944,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
     for (beans::PropertyValue& rProp : asNonConstRange(aGrabBag))
     {
         // The shading is no longer defined from import, so clear that flag.
-        // BackColor 0xff00ff will now attempt to export as highlight, since we set that in SvtFilterOptions.
+        // BackColor 0xff00ff will now attempt to export as highlight, since we set that in officecfg.
         if (rProp.Name == "CharShadingMarker")
             rProp.Value <<= false;
     }
@@ -961,7 +962,10 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
     // Visually, the "none" highlight means the bullet point should not have a character background.
 
     if (bWasExportToShade)
-        rOpt.SetCharBackground2Shading();
+    {
+        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(false, batch);
+        batch->commit();
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132766)

@@ -11,4 +11,8 @@
 
 $(eval $(call sw_ooxmlexport_test,14))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_ooxmlexport14,\
+    officecfg/registry \
+))
+
 # vim: set noet sw=4 ts=4:

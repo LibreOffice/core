@@ -68,7 +68,6 @@
 #include <svx/sdtcfitm.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtmfitm.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <fmtfld.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
@@ -154,6 +153,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -490,14 +490,13 @@ SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr, bool bSkipImages )
 sal_uInt32 SwMSDffManager::GetFilterFlags()
 {
     sal_uInt32 nFlags(0);
-    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    if (rOpt.IsMathType2Math())
+    if (officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::get())
         nFlags |= OLE_MATHTYPE_2_STARMATH;
-    if (rOpt.IsExcel2Calc())
+    if (officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get())
         nFlags |= OLE_EXCEL_2_STARCALC;
-    if (rOpt.IsPowerPoint2Impress())
+    if (officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress::get())
         nFlags |= OLE_POWERPOINT_2_STARIMPRESS;
-    if (rOpt.IsWinWord2Writer())
+    if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get())
         nFlags |= OLE_WINWORD_2_STARWRITER;
     return nFlags;
 }
@@ -1998,8 +1997,7 @@ void SwWW8ImplReader::ImportDop()
         xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
 
-    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    if (rOpt.IsUseEnhancedFields())
+    if (officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get())
         m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, m_xWDop->fProtEnabled );
 
     if (m_xWDop->iGutterPos)

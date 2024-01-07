@@ -27,11 +27,11 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>
 #include <comphelper/sequenceashashmap.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <unoprnms.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <officecfg/Office/Common.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -526,16 +526,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 {
-    bool bIsExportAsShading = SvtFilterOptions::Get().IsCharBackground2Shading();
+    bool bIsExportAsShading = !officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::get();
+    auto batch = comphelper::ConfigurationChanges::create();
+
     // This function is run at the end of the test - returning the filter options to normal.
     comphelper::ScopeGuard g(
-        [bIsExportAsShading]
+        [bIsExportAsShading, batch]
         {
             if (bIsExportAsShading)
-                SvtFilterOptions::Get().SetCharBackground2Shading();
+            {
+                officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(false, batch);
+                batch->commit();
+            }
         });
     // For these test, ensure exporting CharBackground as w:highlight.
-    SvtFilterOptions::Get().SetCharBackground2Highlighting();
+    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
+    batch->commit();
 
     loadAndSave("tdf135774_numberingShading.docx");
     // This test uses a custom setting to export CharBackground as Highlight instead of the 7.0 default of Shading.
