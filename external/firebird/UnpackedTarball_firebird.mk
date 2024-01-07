@@ -46,6 +46,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/configure-c99.patch \
     external/firebird/Wincompatible-function-pointer-types.patch \
 	external/firebird/0001-Revert-Backported-fix-for-7122-Invalid-state-of-mapp.patch.1 \
+	external/firebird/mold.patch \
 ))
 
 ifeq ($(OS),WNT)
