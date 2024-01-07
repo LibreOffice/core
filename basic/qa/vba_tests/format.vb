@@ -148,7 +148,8 @@ Sub Custom_Number_Format_Sample()
     TestUtil.AssertEqual(Format(123456, "####E0"),           "12E4",         "Format(123456, ""####E0"")")
     TestUtil.AssertEqual(Format(2345.25, "$#,###.##"),       "$2,345.25",    "Format(2345.25, ""$#,###.##"")")
     TestUtil.AssertEqual(Format(0.25, "##.###\%"),           ".25%",         "Format(0.25, ""##.###\%"")")
-    TestUtil.AssertEqual(Format(12.25, "0.???"),             "12.25 ",       "Format(12.25, ""0.???"")")
+    ' tdf#158890 blank replaced by figure blank
+    TestUtil.AssertEqual(Format(12.25, "0.???"),             "12.25 ",       "Format(12.25, ""0.???"")")
 
     Exit Sub
 errorHandler:

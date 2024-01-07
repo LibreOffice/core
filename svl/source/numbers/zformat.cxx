@@ -64,6 +64,8 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 
 constexpr sal_Int32 kTimeSignificantRound = 7;  // Round (date+)time at 7 decimals
                                                 // (+5 of 86400 == 12 significant digits).
+
+const sal_Unicode cBlankDigit = 0x2007;     // tdf#158890 use figure space for '?'
 } // namespace
 
 const double D_MAX_U_INT32 = double(0xffffffff);      // 4294967295.0
@@ -4549,7 +4551,7 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                         }
                         else if ( c == '?' )
                         {
-                            sStr[ k ] = ' ';
+                            sStr[ k ] = cBlankDigit;
                             bFilled = true;
                         }
                         else if ( !bFilled ) // #
@@ -4708,7 +4710,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
                         sBuff.insert(0, '0');
                         break;
                     case '?':
-                        sBuff.insert(0, ' ');
+                        sBuff.insert(0, cBlankDigit);
                         break;
                     }
                 }
@@ -4848,7 +4850,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
                         sBuff.insert(0, '0');
                         break;
                     case '?':
-                        sBuff.insert(nPosInsertBlank, ' ');
+                        sBuff.insert(nPosInsertBlank, cBlankDigit);
                         break;
                     }
                 }

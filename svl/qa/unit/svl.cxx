@@ -1368,6 +1368,8 @@ void Test::testUserDefinedNumberFormats()
     LanguageType eLang = LANGUAGE_ENGLISH_US;
     OUString sCode, sExpected;
     SvNumberFormatter aFormatter(m_xContext, eLang);
+    // tdf#158890 replace '?' with figure blank (0x2007)
+    constexpr OUString sBlankDigit = u" "_ustr;
     {  // tdf#97835: suppress decimal separator
         sCode = "0.##\" m\"";
         sExpected = "12 m";
@@ -1461,7 +1463,7 @@ void Test::testUserDefinedNumberFormats()
     }
     {  // tdf#102507: left alignment of denominator
         sCode = "# ?/???";
-        sExpected = "3 1/2  ";
+        sExpected = OUString::Concat( u"3 1/2"_ustr ) + sBlankDigit + sBlankDigit;
         checkPreviewString(aFormatter, sCode, 3.5, eLang, sExpected);
     }
     {  // tdf#100594: forced denominator
@@ -1505,15 +1507,15 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "15/ 12";
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
         sCode = "# ?/ ???";
-        sExpected = "3 1/ 2  ";
+        sExpected = OUString::Concat( u"3 1/ 2"_ustr ) + sBlankDigit + sBlankDigit;
         checkPreviewString(aFormatter, sCode, 3.5, eLang, sExpected);
     }
     {  // Display 1.96 as 2 and not 1 1/1
         sCode = "# ?/?";
-        sExpected = "2    ";
+        sExpected = OUString::Concat( u"2 "_ustr ) + sBlankDigit + u" "_ustr + sBlankDigit;
         checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
         sCode = "# ?/ ?";
-        sExpected = "2     ";
+        sExpected = OUString::Concat( u"2 "_ustr ) + sBlankDigit + u"  "_ustr + sBlankDigit;
         checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
         sCode = "# #/#";
         sExpected = "2";
@@ -1745,7 +1747,7 @@ void Test::testUserDefinedNumberFormats()
     }
     {   // tdf#156449 Use '?' in exponent of scientific number
         sCode =     "0.00E+?0";
-        sExpected = "3.14E+ 0"; // before change it was "3.14E+00"
+        sExpected = OUString::Concat( u"3.14E+"_ustr ) + sBlankDigit + u"0"_ustr; // before change it was "3.14E+00"
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // There should be at least one '0' in exponent
         sCode =     "0.00E+??";
@@ -1809,11 +1811,11 @@ void Test::testUserDefinedNumberFormats()
     }
     {   // tdf#117575 treat thousand separator with '?' in integer part
         sCode = "\"Value= \"?,??0.00";
-        sExpected = "Value=     3.14";
+        sExpected = OUString::Concat( u"Value= "_ustr ) + sBlankDigit + u" "_ustr + sBlankDigit + sBlankDigit + u"3.14"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, LANGUAGE_ENGLISH_US, sExpected);
-        sExpected = "Value=    12.00";
+        sExpected = OUString::Concat( u"Value= "_ustr ) + sBlankDigit + u" "_ustr + sBlankDigit + u"12.00"_ustr;
         checkPreviewString(aFormatter, sCode, 12, LANGUAGE_ENGLISH_US, sExpected);
-        sExpected = "Value=   123.00";
+        sExpected = OUString::Concat( u"Value= "_ustr ) + sBlankDigit + u" 123.00"_ustr;
         checkPreviewString(aFormatter, sCode, 123, LANGUAGE_ENGLISH_US, sExpected);
         sExpected = "Value= 1,234.00";
         checkPreviewString(aFormatter, sCode, 1234, LANGUAGE_ENGLISH_US, sExpected);
