@@ -512,122 +512,122 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
 
 static Sequence<OUString> getSupportedServiceNames_PAR()
 {
-    return { "com.sun.star.animations.ParallelTimeContainer" };
+    return { u"com.sun.star.animations.ParallelTimeContainer"_ustr };
 }
 
 static OUString getImplementationName_PAR()
 {
-    return "animcore::ParallelTimeContainer";
+    return u"animcore::ParallelTimeContainer"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_SEQ()
 {
-    return { "com.sun.star.animations.SequenceTimeContainer" };
+    return { u"com.sun.star.animations.SequenceTimeContainer"_ustr };
 }
 
 static OUString getImplementationName_SEQ()
 {
-    return "animcore::SequenceTimeContainer";
+    return u"animcore::SequenceTimeContainer"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_ITERATE()
 {
-    return { "com.sun.star.animations.IterateContainer" };
+    return { u"com.sun.star.animations.IterateContainer"_ustr };
 }
 
 static OUString getImplementationName_ITERATE()
 {
-    return "animcore::IterateContainer";
+    return u"animcore::IterateContainer"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATE()
 {
-    return { "com.sun.star.animations.Animate" };
+    return { u"com.sun.star.animations.Animate"_ustr };
 }
 
 static OUString getImplementationName_ANIMATE()
 {
-        return "animcore::Animate";
+        return u"animcore::Animate"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_SET()
 {
-    return { "com.sun.star.animations.AnimateSet" };
+    return { u"com.sun.star.animations.AnimateSet"_ustr };
 }
 
 static OUString getImplementationName_SET()
 {
-    return "animcore::AnimateSet";
+    return u"animcore::AnimateSet"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR()
 {
-    return { "com.sun.star.animations.AnimateColor" };
+    return { u"com.sun.star.animations.AnimateColor"_ustr };
 }
 
 static OUString getImplementationName_ANIMATECOLOR()
 {
-    return "animcore::AnimateColor";
+    return u"animcore::AnimateColor"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION()
 {
-    return { "com.sun.star.animations.AnimateMotion" };
+    return { u"com.sun.star.animations.AnimateMotion"_ustr };
 }
 
 static OUString getImplementationName_ANIMATEMOTION()
 {
-    return "animcore::AnimateMotion";
+    return u"animcore::AnimateMotion"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATEPHYSICS()
 {
-    return { "com.sun.star.animations.AnimatePhysics" };
+    return { u"com.sun.star.animations.AnimatePhysics"_ustr };
 }
 
 static OUString getImplementationName_ANIMATEPHYSICS()
 {
-    return "animcore::AnimatePhysics";
+    return u"animcore::AnimatePhysics"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATETRANSFORM()
 {
-    return { "com.sun.star.animations.AnimateTransform" };
+    return { u"com.sun.star.animations.AnimateTransform"_ustr };
 }
 
 static OUString getImplementationName_ANIMATETRANSFORM()
 {
-    return "animcore::AnimateTransform";
+    return u"animcore::AnimateTransform"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_TRANSITIONFILTER()
 {
-    return { "com.sun.star.animations.TransitionFilter" };
+    return { u"com.sun.star.animations.TransitionFilter"_ustr };
 }
 
 static OUString getImplementationName_TRANSITIONFILTER()
 {
-        return "animcore::TransitionFilter";
+        return u"animcore::TransitionFilter"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_AUDIO()
 {
-    return { "com.sun.star.animations.Audio" };
+    return { u"com.sun.star.animations.Audio"_ustr };
 }
 
 static OUString getImplementationName_AUDIO()
 {
-        return "animcore::Audio";
+        return u"animcore::Audio"_ustr;
 }
 
 static Sequence<OUString> getSupportedServiceNames_COMMAND()
 {
-    return { "com.sun.star.animations.Command" };
+    return { u"com.sun.star.animations.Command"_ustr };
 }
 
 static OUString getImplementationName_COMMAND()
 {
-    return "animcore::Command";
+    return u"animcore::Command"_ustr;
 }
 
 // XInterface
