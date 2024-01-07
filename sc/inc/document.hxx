@@ -2712,8 +2712,6 @@ public:
     const ScTable* FetchTable( SCTAB nTab ) const;
 
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );
-
-    void SharePooledResources( const ScDocument* pSrcDoc );
 private:
     ScRefCellValue GetRefCellValue( const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
@@ -2722,6 +2720,8 @@ private:
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol ) const;
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     void   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
+
+    void SharePooledResources( const ScDocument* pSrcDoc );
 
     void EndListeningIntersectedGroup(
         sc::EndListeningContext& rCxt, const ScAddress& rPos, std::vector<ScAddress>* pGroupPos );
