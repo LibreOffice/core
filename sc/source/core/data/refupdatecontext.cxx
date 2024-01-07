@@ -96,7 +96,8 @@ ColumnBlockPosition* RefUpdateContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
     return mpBlockPos ? mpBlockPos->getBlockPosition(nTab, nCol) : nullptr;
 }
 
-RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbReferenceModified(false), mbNameModified(false) {}
+RefUpdateResult::RefUpdateResult()
+    : mbValueChanged(false), mbReferenceModified(false), mbNameModified(false), mnTab(-1) {}
 
 RefUpdateInsertTabContext::RefUpdateInsertTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets) :
     mrDoc(rDoc), mnInsertPos(nInsertPos), mnSheets(nSheets) {}

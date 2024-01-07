@@ -4420,7 +4420,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( const sc::RefUpdate
     {
         aRes.mbReferenceModified = true;
         aRes.mbValueChanged = true;
-        aRes.nTab = aNewPos.Tab(); // this sets the new tab position used when deleting
+        aRes.mnTab = aNewPos.Tab(); // this sets the new tab position used when deleting
     }
 
     TokenPointers aPtrs( pCode.get(), nLen, pRPN, nRPN);
