@@ -544,7 +544,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     }
 
     if ( !xResult.is() )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Unable to retrive the UI configuration menu.", getXWeak());
 
     return xResult;
 }
@@ -569,7 +569,7 @@ void DocumentHolder::FindConnectPoints(
             }
 
         if ( aCommand.isEmpty() )
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("CommandURL is empty at index: " + OUString::number(nInd),  xMenu);
 
         if ( aCommand == ".uno:PickList" )
             nConnectPoints[0] = nInd;
@@ -638,7 +638,7 @@ bool DocumentHolder::MergeMenus_Impl( const uno::Reference< css::frame::XLayoutM
             uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xContMenu = xUISettings->getSettings( true );
         if ( !xContMenu.is() )
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("Unable to merge the menu", getXWeak());
 
         uno::Reference< container::XIndexAccess > xOwnMenu = RetrieveOwnMenu_Impl();
         uno::Reference< frame::XDispatchProvider > xOwnDisp( m_xFrame, uno::UNO_QUERY_THROW );
