@@ -102,7 +102,7 @@
 #include <PostItMgr.hxx>
 #include <annotsh.hxx>
 #include <swruler.hxx>
-#include <svx/theme/ThemeColorPaletteManager.hxx>
+#include <svx/theme/ThemeColorChangerCommon.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
@@ -1218,8 +1218,7 @@ void SwView::afterCallbackRegistered()
     auto* pDocShell = GetDocShell();
     if (pDocShell)
     {
-        svx::ThemeColorPaletteManager aManager(pDocShell->GetThemeColors());
-        libreOfficeKitViewCallback(LOK_CALLBACK_COLOR_PALETTES, aManager.generateJSON());
+        svx::theme::notifyLOK(pDocShell->GetThemeColors());
     }
 }
 

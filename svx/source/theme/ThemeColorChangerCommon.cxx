@@ -7,30 +7,29 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/theme/ThemeColorChangerCommon.hxx>
+#include <comphelper/lok.hxx>
 
-#include <sal/config.h>
-#include <editeng/colritem.hxx>
-#include <editeng/unoprnms.hxx>
-#include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XComplexColor.hpp>
-
-#include <svx/xlnclit.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xdef.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
-#include <svx/svdundo.hxx>
+#include <editeng/section.hxx>
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
+#include <sal/config.h>
+
+#include <sfx2/lokhelper.hxx>
+
 #include <svx/svdmodel.hxx>
 #include <svx/svdotext.hxx>
-
-#include <editeng/editeng.hxx>
-#include <editeng/section.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/theme/ThemeColorChangerCommon.hxx>
+#include <svx/theme/ThemeColorPaletteManager.hxx>
+#include <svx/xdef.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xflclit.hxx>
 
 using namespace css;
 
@@ -170,6 +169,15 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
     updateObjectAttributes(rColorSet, *pObject, pUndoManager);
     if (pView)
         updateEditEngTextSections(rColorSet, pObject, *pView);
+}
+
+void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        svx::ThemeColorPaletteManager aManager(pColorSet);
+        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aManager.generateJSON());
+    }
 }
 
 } // end svx::theme namespace
