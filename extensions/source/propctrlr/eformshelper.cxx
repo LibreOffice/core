@@ -374,7 +374,6 @@ namespace pcr
         return xModel;
     }
 
-
     OUString EFormsHelper::getCurrentFormModelName() const
     {
         OUString sModelName;
@@ -390,7 +389,6 @@ namespace pcr
         }
         return sModelName;
     }
-
 
     Reference< XPropertySet > EFormsHelper::getCurrentBinding() const
     {
@@ -408,7 +406,6 @@ namespace pcr
 
         return xBinding;
     }
-
 
     OUString EFormsHelper::getCurrentBindingName() const
     {
@@ -429,19 +426,18 @@ namespace pcr
 
     Reference< XListEntrySource > EFormsHelper::getCurrentListSourceBinding() const
     {
-        Reference< XListEntrySource > xReturn;
         try
         {
             Reference< XListEntrySink > xAsSink( m_xControlModel, UNO_QUERY );
             OSL_ENSURE( xAsSink.is(), "EFormsHelper::getCurrentListSourceBinding: you should have used isListEntrySink before!" );
-            if ( xAsSink.is() )
-                xReturn = xAsSink->getListEntrySource();
+            if (xAsSink.is())
+                return xAsSink->getListEntrySource();
         }
         catch( const Exception& )
         {
             TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getCurrentListSourceBinding" );
         }
-        return xReturn;
+        return Reference<XListEntrySource>();
     }
 
 
@@ -459,7 +455,6 @@ namespace pcr
             TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::setListSourceBinding" );
         }
     }
-
 
     void EFormsHelper::setBinding( const Reference< css::beans::XPropertySet >& _rxBinding )
     {

@@ -52,7 +52,6 @@ ProgressBar::~ProgressBar()
 }
 
 //  XInterface
-
 Any SAL_CALL ProgressBar::queryInterface( const Type& rType )
 {
     // Ask for my own supported interfaces ...
@@ -63,18 +62,15 @@ Any SAL_CALL ProgressBar::queryInterface( const Type& rType )
                                         )
                 );
 
-    // If searched interface not supported by this class ...
-    if ( !aReturn.hasValue() )
-    {
-        // ... ask baseclasses.
-        aReturn = BaseControl::queryInterface( rType );
-    }
+    if (aReturn.hasValue())
+        return aReturn;
 
-    return aReturn;
+    // If searched interface not supported by this class ...
+    // ... ask baseclasses.
+    return BaseControl::queryInterface(rType);
 }
 
 //  XInterface
-
 void SAL_CALL ProgressBar::acquire() noexcept
 {
     // Attention:
@@ -85,7 +81,6 @@ void SAL_CALL ProgressBar::acquire() noexcept
 }
 
 //  XInterface
-
 void SAL_CALL ProgressBar::release() noexcept
 {
     // Attention:

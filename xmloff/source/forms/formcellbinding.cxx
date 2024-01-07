@@ -332,20 +332,18 @@ bool FormCellBindingHelper::doesComponentSupport( const Reference< XInterface >&
 
 Reference< XValueBinding > FormCellBindingHelper::getCurrentBinding( ) const
 {
-    Reference< XValueBinding > xBinding;
     Reference< XBindableValue > xBindable( m_xControlModel, UNO_QUERY );
     if ( xBindable.is() )
-        xBinding = xBindable->getValueBinding();
-    return xBinding;
+        return xBindable->getValueBinding();
+    return Reference<XValueBinding>();
 }
 
 Reference< XListEntrySource > FormCellBindingHelper::getCurrentListSource( ) const
 {
-    Reference< XListEntrySource > xSource;
     Reference< XListEntrySink > xSink( m_xControlModel, UNO_QUERY );
-    if ( xSink.is() )
-        xSource = xSink->getListEntrySource();
-    return xSource;
+    if (xSink.is())
+        return xSink->getListEntrySource();
+    return Reference<XListEntrySource>();
 }
 
 void FormCellBindingHelper::setBinding( const Reference< XValueBinding >& _rxBinding )

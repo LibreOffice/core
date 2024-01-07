@@ -52,7 +52,6 @@ OConnectionPointHelper::~OConnectionPointHelper()
 }
 
 //  XInterface
-
 Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType )
 {
     // Attention:
@@ -64,18 +63,15 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType )
                                         )
                 );
 
-    // If searched interface not supported by this class ...
-    if ( !aReturn.hasValue() )
-    {
-        // ... ask baseclasses.
-        aReturn = OWeakObject::queryInterface( aType );
-    }
+    if (aReturn.hasValue())
+        return aReturn;
 
-    return aReturn;
+    // If searched interface not supported by this class ...
+    // ... ask baseclasses.
+    return OWeakObject::queryInterface(aType);
 }
 
 //  XInterface
-
 void SAL_CALL OConnectionPointHelper::acquire() noexcept
 {
     // Attention:
@@ -86,7 +82,6 @@ void SAL_CALL OConnectionPointHelper::acquire() noexcept
 }
 
 //  XInterface
-
 void SAL_CALL OConnectionPointHelper::release() noexcept
 {
     // Attention:

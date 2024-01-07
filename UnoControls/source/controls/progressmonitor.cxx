@@ -121,14 +121,12 @@ Any SAL_CALL ProgressMonitor::queryInterface( const Type& rType )
                                         )
                 );
 
-    // If searched interface not supported by this class ...
-    if ( !aReturn.hasValue() )
-    {
-        // ... ask baseclasses.
-        aReturn = BaseControl::queryInterface( rType );
-    }
+    if (aReturn.hasValue())
+        return aReturn;
 
-    return aReturn;
+    // If searched interface not supported by this class ...
+    // ... ask baseclasses.
+    return BaseControl::queryInterface(rType);
 }
 
 //  XInterface

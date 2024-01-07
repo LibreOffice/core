@@ -70,7 +70,6 @@ FrameControl::~FrameControl()
 }
 
 //  XInterface
-
 Any SAL_CALL FrameControl::queryInterface( const Type& rType )
 {
     // Ask for my own supported interfaces ...
@@ -81,22 +80,18 @@ Any SAL_CALL FrameControl::queryInterface( const Type& rType )
                                         )
                 );
 
-    // If searched interface not supported by this class ...
-    if ( !aReturn.hasValue() )
-    {
-        // ... ask baseclasses.
-        aReturn = OPropertySetHelper::queryInterface( rType );
-        if ( !aReturn.hasValue() )
-        {
-            aReturn = BaseControl::queryInterface( rType );
-        }
-    }
+    if (aReturn.hasValue())
+        return aReturn;
 
-    return aReturn;
+    // If searched interface not supported by this class ...
+    // ... ask baseclasses.
+    aReturn = OPropertySetHelper::queryInterface(rType);
+    if (aReturn.hasValue())
+        return aReturn;
+    return BaseControl::queryInterface(rType);
 }
 
 //  XInterface
-
 void SAL_CALL FrameControl::acquire() noexcept
 {
     // Attention:
@@ -107,7 +102,6 @@ void SAL_CALL FrameControl::acquire() noexcept
 }
 
 //  XInterface
-
 void SAL_CALL FrameControl::release() noexcept
 {
     // Attention:
