@@ -62,6 +62,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
+#include <svx/theme/ThemeColorChangerCommon.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -1019,7 +1020,11 @@ void ViewShellBase::afterCallbackRegistered()
     // common tasks
     SfxViewShell::afterCallbackRegistered();
 
-    // TODO: Add theme color palette changed callback
+    SfxObjectShell* pDocShell = GetObjectShell();
+    if (pDocShell)
+    {
+        svx::theme::notifyLOK(pDocShell->GetThemeColors());
+    }
 }
 
 void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const

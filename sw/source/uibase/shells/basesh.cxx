@@ -91,7 +91,6 @@
 #include <SwRewriter.hxx>
 #include <GraphicSizeCheck.hxx>
 #include <svx/galleryitem.hxx>
-#include <svx/theme/ThemeColorPaletteManager.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -102,7 +101,6 @@
 #include <svx/dialog/ThemeDialog.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <osl/diagnose.h>
 
@@ -3096,11 +3094,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                         if (pColorSet)
                         {
                             pChanger->apply(pColorSet);
-                            if (comphelper::LibreOfficeKit::isActive())
-                            {
-                                svx::ThemeColorPaletteManager aManager(pColorSet);
-                                SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aManager.generateJSON());
-                            }
                         }
                     });
                 }

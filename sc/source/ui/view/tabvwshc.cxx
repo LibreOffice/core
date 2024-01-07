@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svx/theme/ThemeColorChangerCommon.hxx>
 #include <editeng/editview.hxx>
 #include <inputhdl.hxx>
 
@@ -473,6 +474,12 @@ void ScTabViewShell::afterCallbackRegistered()
         {
             pInputWindow->NotifyLOKClient();
         }
+    }
+
+    SfxObjectShell* pDocShell = GetObjectShell();
+    if (pDocShell)
+    {
+        svx::theme::notifyLOK(pDocShell->GetThemeColors());
     }
 }
 

@@ -188,8 +188,6 @@
 
 #include <theme/ThemeColorChanger.hxx>
 #include <svx/dialog/ThemeDialog.hxx>
-#include <svx/theme/ThemeColorPaletteManager.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <ViewShellBase.hxx>
@@ -3571,12 +3569,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     sd::ThemeColorChanger aChanger(pMasterPage, pDocShell);
                     aChanger.apply(pColorSet);
-
-                    if (comphelper::LibreOfficeKit::isActive())
-                    {
-                        svx::ThemeColorPaletteManager aManager(pColorSet);
-                        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aManager.generateJSON());
-                    }
                 }
             });
 

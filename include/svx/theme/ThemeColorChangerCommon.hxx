@@ -10,7 +10,6 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
-#include <svx/theme/IThemeColorChanger.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
@@ -23,6 +22,8 @@ namespace theme
 {
 SVXCORE_DLLPUBLIC void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject,
                                        SdrView* pView, SfxUndoManager* pUndoManager = nullptr);
+
+SVXCORE_DLLPUBLIC void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet);
 }
 
 } // end svx namespace
