@@ -19,7 +19,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include <svx/svditer.hxx>
-#include <svx/theme/ThemeColorChangerCommon.hxx>
+#include <svx/theme/IThemeColorChanger.hxx>
 
 #include <undodraw.hxx>
 #include <stlpool.hxx>
@@ -311,7 +311,7 @@ void changeThemeColorInTheDocModel(ScDocShell& rDocShell,
 
 } // end anonymous ns
 
-void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
+void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     // Can't change to an empty color set
     if (!pColorSet)

@@ -11,6 +11,7 @@
 
 #include <svx/svxdllapi.h>
 #include <docmodel/theme/ColorSet.hxx>
+#include "ThemeColorChangerCommon.hxx"
 
 namespace svx
 {
@@ -18,7 +19,14 @@ class SVXCORE_DLLPUBLIC IThemeColorChanger
 {
 public:
     virtual ~IThemeColorChanger() = default;
-    virtual void apply(std::shared_ptr<model::ColorSet> const& pColorSet) = 0;
+    void apply(std::shared_ptr<model::ColorSet> const& pColorSet)
+    {
+        doApply(pColorSet);
+        svx::theme::notifyLOK(pColorSet);
+    }
+
+private:
+    virtual void doApply(std::shared_ptr<model::ColorSet> const& pColorSet) = 0;
 };
 
 } // end svx namespace

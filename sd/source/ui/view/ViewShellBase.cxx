@@ -62,6 +62,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
+#include <svx/theme/ThemeColorChangerCommon.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -1007,6 +1008,18 @@ void ViewShellBase::setEditMode(int nMode)
             pDrawViewShell->ChangeEditMode(EditMode::MasterPage, false);
             break;
         }
+    }
+}
+
+void ViewShellBase::afterCallbackRegistered()
+{
+    // common tasks
+    SfxViewShell::afterCallbackRegistered();
+
+    SfxObjectShell* pDocShell = GetObjectShell();
+    if (pDocShell)
+    {
+        svx::theme::notifyLOK(pDocShell->GetThemeColors());
     }
 }
 

@@ -9,7 +9,7 @@
 
 #include <editeng/colritem.hxx>
 #include <theme/ThemeColorChanger.hxx>
-#include <svx/theme/ThemeColorChangerCommon.hxx>
+#include <svx/theme/IThemeColorChanger.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svditer.hxx>
 #include <docmodel/theme/Theme.hxx>
@@ -133,7 +133,7 @@ bool changeStyles(sd::DrawDocShell* pDocShell, std::shared_ptr<model::ColorSet> 
 
 } // end anonymous ns
 
-void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
+void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     auto* pUndoManager = mpDocShell->GetUndoManager();
     sd::ViewShell* pViewShell = mpDocShell->GetViewShell();
