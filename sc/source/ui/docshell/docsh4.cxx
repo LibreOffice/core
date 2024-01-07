@@ -1309,10 +1309,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                                              rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_LANGUAGE)));
                             if (nScriptType == SvtScriptType::COMPLEX)
                                 pNewSet->Put(SvxLanguageItem(nLangType,
-                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE)));
+                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE)));
                             if (nScriptType == SvtScriptType::ASIAN)
                                 pNewSet->Put(SvxLanguageItem(nLangType,
-                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE)));
+                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE)));
 
                             pViewShell->ApplyAttributes(*pNewSet, rOldSet);
                         }
