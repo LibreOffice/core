@@ -15,7 +15,6 @@
 #include <svx/strings.hrc>
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/color/ComplexColorJSON.hxx>
-#include <boost/property_tree/json_parser.hpp>
 
 #include <array>
 
@@ -126,11 +125,10 @@ svx::ThemePaletteCollection ThemeColorPaletteManager::generate()
     return aThemePaletteCollection;
 }
 
-OString ThemeColorPaletteManager::generateJSON()
+void ThemeColorPaletteManager::generateJSON(boost::property_tree::ptree& aTree)
 {
     svx::ThemePaletteCollection aThemePaletteCollection = generate();
 
-    boost::property_tree::ptree aTree;
     boost::property_tree::ptree aColorListTree;
 
     for (size_t nEffect = 0; nEffect < 6; ++nEffect)
@@ -160,11 +158,6 @@ OString ThemeColorPaletteManager::generateJSON()
     }
 
     aTree.add_child("ThemeColors", aColorListTree);
-
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-
-    return OString(aStream.str());
 }
 
 } // end svx namespace

@@ -14,6 +14,7 @@
 #include <memory>
 #include <tools/color.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 namespace model
 {
@@ -60,7 +61,7 @@ class SVXCORE_DLLPUBLIC ThemeColorPaletteManager final
 public:
     ThemeColorPaletteManager(std::shared_ptr<model::ColorSet> const& pColorSet);
     ThemePaletteCollection generate();
-    OString generateJSON();
+    void generateJSON(boost::property_tree::ptree& aTree);
 };
 
 } // end svx namespace
