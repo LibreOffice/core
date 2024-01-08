@@ -376,14 +376,70 @@ public:
     bool IsHlplFront() const { return mbHlplFront  ; }
 
     const Color& GetGridColor() const { return maGridColor;}
-    void SetPageVisible(bool bOn = true) { mbPageVisible=bOn; InvalidateAllWin(); }
-    void SetPageShadowVisible(bool bOn) { mbPageShadowVisible=bOn; InvalidateAllWin(); }
-    void SetPageBorderVisible(bool bOn = true) { mbPageBorderVisible=bOn; InvalidateAllWin(); }
-    void SetBordVisible(bool bOn = true) { mbBordVisible=bOn; InvalidateAllWin(); }
-    void SetGridVisible(bool bOn) { mbGridVisible=bOn; InvalidateAllWin(); }
-    void SetGridFront(bool bOn) { mbGridFront  =bOn; InvalidateAllWin(); }
-    void SetHlplVisible(bool bOn = true) { mbHlplVisible=bOn; InvalidateAllWin(); }
-    void SetHlplFront(bool bOn) { mbHlplFront  =bOn; InvalidateAllWin(); }
+    void SetPageVisible(bool bOn = true)
+    {
+        if (mbPageVisible != bOn)
+        {
+            mbPageVisible = bOn;
+            InvalidateAllWin();
+        }
+    }
+    void SetPageShadowVisible(bool bOn)
+    {
+        if (mbPageShadowVisible != bOn)
+        {
+            mbPageShadowVisible = bOn;
+            InvalidateAllWin();
+        }
+    }
+    void SetPageBorderVisible(bool bOn = true)
+    {
+        if (mbPageBorderVisible != bOn)
+        {
+            mbPageBorderVisible = bOn;
+            InvalidateAllWin();
+        }
+    }
+    void SetBordVisible(bool bOn = true)
+    {
+        if (mbBordVisible != bOn)
+        {
+            mbBordVisible = bOn;
+            InvalidateAllWin();
+        }
+    }
+    void SetGridVisible(bool bOn)
+    {
+        if (mbGridVisible != bOn)
+        {
+            mbGridVisible = bOn;
+            InvalidateAllWin();
+        }
+    }
+    void SetGridFront(bool bOn)
+    {
+        if (mbGridFront != bOn)
+        {
+            mbGridFront = bOn;
+            InvalidateAllWin();
+        }
+    }
+    void SetHlplVisible(bool bOn = true)
+    {
+        if (mbHlplVisible != bOn)
+        {
+            mbHlplVisible = bOn;
+            InvalidateAllWin();
+        }
+    }
+    void SetHlplFront(bool bOn)
+    {
+        if (mbHlplFront != bOn)
+        {
+            mbHlplFront = bOn;
+            InvalidateAllWin();
+        }
+    }
     void SetGlueVisible(bool bOn = true) { if (mbGlueVisible!=bOn) { mbGlueVisible=bOn; if (!mbGlueVisible2 && !mbGlueVisible3 && !mbGlueVisible4) GlueInvalidate(); } }
 
     bool IsPreviewRenderer() const { return mbPreviewRenderer; }
