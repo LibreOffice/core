@@ -169,11 +169,18 @@ bool lcl_HasRowOutline( const ScViewData& rViewData )
     return false;
 }
 
+ScViewRenderingOptions getViewRenderingOptions(ScDocShell& rDocShell)
+{
+    ScTabViewShell* pViewShell = rDocShell.GetBestViewShell();
+    return pViewShell ? pViewShell->GetViewRenderingData() : ScViewRenderingOptions();
+}
+
 } // anonymous namespace
 
 ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     pFrameWin( pParent ),
     aViewData( rDocSh, pViewShell ),
+    aViewRenderingData(getViewRenderingOptions(rDocSh)),
     aFunctionSet( &aViewData ),
     aHdrFunc( &aViewData ),
     aVScrollTop( VclPtr<ScrollAdaptor>::Create( pFrameWin, false ) ),

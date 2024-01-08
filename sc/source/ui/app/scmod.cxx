@@ -219,14 +219,13 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
 
             if (pViewShell)
             {
-                ScViewData& pViewData = pViewShell->GetViewData();
-                ScViewOptions aViewOptions = pViewData.GetOptions();
+                ScViewRenderingOptions aViewRenderingOptions(pViewShell->GetViewRenderingData());
                 Color aFillColor(m_pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor);
-                aViewOptions.SetDocColor(aFillColor);
-                aViewOptions.SetColorSchemeName(svtools::ColorConfig::GetCurrentSchemeName());
-                const bool bChanged(aViewOptions != pViewData.GetOptions());
-                if (bChanged)
-                    pViewData.SetOptions(aViewOptions);
+                aViewRenderingOptions.SetDocColor(aFillColor);
+                aViewRenderingOptions.SetColorSchemeName(svtools::ColorConfig::GetCurrentSchemeName());
+                const bool bUnchanged(aViewRenderingOptions == pViewShell->GetViewRenderingData());
+                if (!bUnchanged)
+                    pViewShell->SetViewRenderingData(aViewRenderingOptions);
                 ScModelObj* pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(SfxObjectShell::Current()->GetModel());
                 SfxLokHelper::notifyViewRenderState(SfxViewShell::Current(), pScModelObj);
                 // In Online, the document color is the one used for the background, contrary to
@@ -235,7 +234,7 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
                         aFillColor.AsRGBHexString().toUtf8());
 
                 // if nothing changed, and the hint was OnlyCurrentDocumentColorScheme we can skip invalidate
-                bSkipInvalidate = !bChanged && eHints == ConfigurationHints::OnlyCurrentDocumentColorScheme;
+                bSkipInvalidate = bUnchanged && eHints == ConfigurationHints::OnlyCurrentDocumentColorScheme;
             }
         }
 

@@ -508,13 +508,12 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
 
 ::Color ScTabViewShell::GetColorConfigColor(svtools::ColorConfigEntry nColorType) const
 {
-    const ScViewOptions& rViewOptions = GetViewData().GetOptions();
-
     switch (nColorType)
     {
         case svtools::ColorConfigEntry::DOCCOLOR:
         {
-            return rViewOptions.GetDocColor();
+            const ScViewRenderingOptions& rViewRenderingOptions = GetViewRenderingData();
+            return rViewRenderingOptions.GetDocColor();
         }
         // Should never be called for an unimplemented color type
         default:

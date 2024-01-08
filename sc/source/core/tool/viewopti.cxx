@@ -68,6 +68,17 @@ bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
             && bEqualGrid       == rCpy.bEqualGrid );
 }
 
+ScViewRenderingOptions::ScViewRenderingOptions()
+    : sColorSchemeName("Default")
+    , aDocCol(SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor)
+{
+}
+
+bool ScViewRenderingOptions::operator==(const ScViewRenderingOptions& rOther) const
+{
+    return sColorSchemeName == rOther.sColorSchemeName &&
+           aDocCol == rOther.aDocCol;
+}
 
 ScViewOptions::ScViewOptions()
 {
@@ -110,8 +121,6 @@ void ScViewOptions::SetDefaults()
 
     aGridCol = svtools::ColorConfig().GetColorValue( svtools::CALCGRID ).nColor;
 
-    aDocCol = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-
     aGridOpt.SetDefaults();
 }
 
@@ -136,8 +145,6 @@ bool ScViewOptions::operator==( const ScViewOptions& rOpt ) const
     bEqual = bEqual && (aGridCol       == rOpt.aGridCol);
     bEqual = bEqual && (aGridColName   == rOpt.aGridColName);
     bEqual = bEqual && (aGridOpt       == rOpt.aGridOpt);
-    bEqual = bEqual && (sColorSchemeName == rOpt.sColorSchemeName);
-    bEqual = bEqual && (aDocCol        == rOpt.aDocCol);
 
     return bEqual;
 }
