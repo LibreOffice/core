@@ -1262,25 +1262,20 @@ void ScModelObj::completeFunction(const OUString& rFunctionName)
 OString ScModelObj::getViewRenderState(SfxViewShell* pViewShell)
 {
     OStringBuffer aState;
-    ScViewData* pViewData = nullptr;
 
-    if (pViewShell)
+    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+    if (!pTabViewShell)
     {
-        ScTabViewShell* pTabViewShell = dynamic_cast< ScTabViewShell*>(pViewShell);
-        if (pTabViewShell)
-            pViewData = &pTabViewShell->GetViewData();
-    }
-    else
-    {
-        pViewData = ScDocShell::GetViewData();
+        ScViewData* pViewData = ScDocShell::GetViewData();
+        pTabViewShell = pViewData ? pViewData->GetViewShell() : nullptr;
     }
 
-    if (pViewData)
+    if (pTabViewShell)
     {
         aState.append(';');
 
-        const ScViewOptions& aViewOptions = pViewData->GetOptions();
-        OString aThemeName = OUStringToOString(aViewOptions.GetColorSchemeName(), RTL_TEXTENCODING_UTF8);
+        const ScViewRenderingOptions& rViewRenderingOptions = pTabViewShell->GetViewRenderingData();
+        OString aThemeName = OUStringToOString(rViewRenderingOptions.GetColorSchemeName(), RTL_TEXTENCODING_UTF8);
         aState.append(aThemeName);
     }
 

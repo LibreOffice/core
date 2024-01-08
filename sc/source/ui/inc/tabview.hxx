@@ -120,6 +120,7 @@ private:
 
     VclPtr<vcl::Window>             pFrameWin;              // First !!!
     ScViewData          aViewData;              // must be at the front !
+    ScViewRenderingOptions aViewRenderingData;
 
     std::unique_ptr<ScViewSelectionEngine> pSelEngine;
     ScViewFunctionSet       aFunctionSet;
@@ -343,6 +344,9 @@ public:
 
     ScViewData&         GetViewData()       { return aViewData; }
     const ScViewData&   GetViewData() const { return aViewData; }
+
+    const ScViewRenderingOptions& GetViewRenderingData() const { return aViewRenderingData; }
+    void SetViewRenderingData(const ScViewRenderingOptions& rViewRenderingData) { aViewRenderingData = rViewRenderingData; }
 
     ScViewFunctionSet&      GetFunctionSet()    { return aFunctionSet; }
     ScViewSelectionEngine*  GetSelEngine()      { return pSelEngine.get(); }

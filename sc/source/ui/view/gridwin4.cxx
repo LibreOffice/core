@@ -1130,13 +1130,12 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             ScTabViewShell* pCurrentViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
                             if (pCurrentViewShell)
                             {
-                                const ScViewData& pViewData = pCurrentViewShell->GetViewData();
-                                const ScViewOptions& aViewOptions = pViewData.GetOptions();
                                 const ScPatternAttr* pPattern = rDoc.GetPattern( nCol1, nRow1, nTab );
                                 Color aCellColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
                                 if (aCellColor.IsTransparent())
                                 {
-                                    aCellColor = aViewOptions.GetDocColor();
+                                    const ScViewRenderingOptions& rViewRenderingOptions = pCurrentViewShell->GetViewRenderingData();
+                                    aCellColor = rViewRenderingOptions.GetDocColor();
                                 }
                                 rDevice.SetFillColor(aCellColor);
                                 pOtherEditView->SetBackgroundColor(aCellColor);

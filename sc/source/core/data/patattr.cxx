@@ -508,9 +508,8 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
                     ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
                     if (pViewShell)
                     {
-                        const ScViewData& pViewData = pViewShell->GetViewData();
-                        const ScViewOptions& aViewOptions = pViewData.GetOptions();
-                        aBackColor = aViewOptions.GetDocColor();
+                        const ScViewRenderingOptions& rViewRenderingOptions = pViewShell->GetViewRenderingData();
+                        aBackColor = rViewRenderingOptions.GetDocColor();
                     }
                 }
             }

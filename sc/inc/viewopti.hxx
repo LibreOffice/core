@@ -75,6 +75,26 @@ public:
     bool                    operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
 };
 
+class SC_DLLPUBLIC ScViewRenderingOptions
+{
+public:
+    ScViewRenderingOptions();
+
+    const OUString& GetColorSchemeName() const { return sColorSchemeName; }
+    void SetColorSchemeName( const OUString& rName ) { sColorSchemeName = rName; }
+
+    const Color& GetDocColor() const { return aDocCol; }
+    void SetDocColor(const Color& rDocColor) { aDocCol = rDocColor; }
+
+    bool operator==(const ScViewRenderingOptions& rOther) const;
+
+private:
+    // The name of the color scheme
+    OUString sColorSchemeName;
+    // The background color of the document
+    Color aDocCol;
+};
+
 // Options - View
 
 class SC_DLLPUBLIC ScViewOptions
@@ -99,12 +119,6 @@ public:
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
     std::unique_ptr<SvxGridItem> CreateGridItem() const;
 
-    const OUString& GetColorSchemeName() const { return sColorSchemeName; }
-    void SetColorSchemeName( const OUString& rName ) { sColorSchemeName = rName; }
-
-    const Color& GetDocColor() const { return aDocCol; }
-    void SetDocColor(const Color& rDocColor) { aDocCol = rDocColor; }
-
     ScViewOptions&          operator=  ( const ScViewOptions& rCpy );
     bool                    operator== ( const ScViewOptions& rOpt ) const;
     bool                    operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
@@ -115,10 +129,6 @@ private:
     Color           aGridCol;
     OUString        aGridColName;
     ScGridOptions   aGridOpt;
-    // The name of the color scheme
-    OUString sColorSchemeName = "Default";
-    // The background color of the document
-    Color aDocCol;
 };
 
 // Item for the options dialog - View
