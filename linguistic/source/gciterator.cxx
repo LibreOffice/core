@@ -417,7 +417,7 @@ void GrammarCheckingIterator::ProcessResult(
                 for (const linguistic2::SingleProofreadingError &rError : rRes.aErrors)
                 {
                     OUString word(rRes.aText.subView(rError.nErrorStart, rError.nErrorLength));
-                    bool ignored = xIgnoreAll->getEntry(word).is();
+                    bool ignored = xIgnoreAll.is() && xIgnoreAll->getEntry(word).is();
 
                     if (!ignored)
                     {
