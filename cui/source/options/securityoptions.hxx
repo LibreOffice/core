@@ -42,6 +42,8 @@ namespace svx
         std::unique_ptr<weld::Widget> m_xCtrlHyperlinkImg;
         std::unique_ptr<weld::CheckButton> m_xBlockUntrustedRefererLinksCB;
         std::unique_ptr<weld::Widget> m_xBlockUntrustedRefererLinksImg;
+        std::unique_ptr<weld::CheckButton> m_xDisableActiveContentCB;
+        std::unique_ptr<weld::Widget> m_xDisableActiveContentImg;
 
         std::unique_ptr<weld::CheckButton> m_xRedlineinfoCB;
         std::unique_ptr<weld::Widget> m_xRedlineinfoImg;
@@ -69,6 +71,7 @@ namespace svx
         bool IsRecommPasswdChecked() const { return m_xRecommPasswdCB->get_active(); }
         bool IsCtrlHyperlinkChecked() const { return m_xCtrlHyperlinkCB->get_active(); }
         bool IsBlockUntrustedRefererLinksChecked() const { return m_xBlockUntrustedRefererLinksCB->get_active(); }
+        bool IsDisableActiveContentChecked() const { return m_xDisableActiveContentCB->get_active(); }
 
         DECL_LINK(ShowPersonalInfosToggle, weld::Toggleable&, void);
 
