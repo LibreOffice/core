@@ -85,6 +85,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"sfx/ui/custominfopage.ui"
         || rUIFile == u"sfx/ui/descriptioninfopage.ui"
         || rUIFile == u"sfx/ui/documentinfopage.ui"
+        || rUIFile == u"sfx/ui/documentfontspage.ui"
         || rUIFile == u"sfx/ui/documentpropertiesdialog.ui"
         || rUIFile == u"sfx/ui/editdurationdialog.ui"
         || rUIFile == u"sfx/ui/linefragment.ui"
