@@ -192,7 +192,8 @@ void SfxLokHelper::setView(int nId)
             DisableCallbacks dc;
 
             bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
-            if (bIsCurrShell && comphelper::LibreOfficeKit::getLanguageTag().getBcp47() == pViewShell->GetLOKLanguageTag().getBcp47())
+            const auto aKitLang = comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
+            if (bIsCurrShell && aKitLang == pViewShell->GetLOKLanguageTag().getBcp47())
                 return;
 
             if (bIsCurrShell)
@@ -201,7 +202,7 @@ void SfxLokHelper::setView(int nId)
                 // But it looks like that the language can go wrong, so we have to fix that.
                 // This can happen, when someone sets the language or SfxViewShell::Current() separately.
                 SAL_WARN("lok", "LANGUAGE mismatch at setView! ... old (wrong) lang:"
-                                << comphelper::LibreOfficeKit::getLanguageTag().getBcp47()
+                                << aKitLang
                                 << " new lang:" << pViewShell->GetLOKLanguageTag().getBcp47());
             }
 
