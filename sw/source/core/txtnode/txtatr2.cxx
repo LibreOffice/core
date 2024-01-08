@@ -54,14 +54,17 @@ bool lcl_CheckAutoFormatHint(const SfxHint& rHint, const SwTextNode* pTextNode)
 }
 }
 
-SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
-                    sal_Int32 nStt, sal_Int32 nEnd )
+SwTextCharFormat::SwTextCharFormat(
+    const SfxPoolItemHolder& rAttr,
+    sal_Int32 nStt,
+    sal_Int32 nEnd )
     : SwTextAttr( rAttr, nStt )
     , SwTextAttrEnd( rAttr, nStt, nEnd )
     , m_pTextNode( nullptr )
     , m_nSortNumber( 0 )
 {
-    rAttr.m_pTextAttribute = this;
+    SwFormatCharFormat& rSwFormatCharFormat(static_cast<SwFormatCharFormat&>(GetAttr()));
+    rSwFormatCharFormat.m_pTextAttribute = this;
     SetCharFormatAttr( true );
 }
 
@@ -93,8 +96,10 @@ void SwTextCharFormat::HandleAutoFormatUsedHint(const sw::AutoFormatUsedHint& rH
     rHint.CheckNode(m_pTextNode);
 }
 
-SwTextAttrNesting::SwTextAttrNesting( SfxPoolItem & i_rAttr,
-            const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
+SwTextAttrNesting::SwTextAttrNesting(
+    const SfxPoolItemHolder& i_rAttr,
+    const sal_Int32 i_nStart,
+    const sal_Int32 i_nEnd )
     : SwTextAttr( i_rAttr, i_nStart )
     , SwTextAttrEnd( i_rAttr, i_nStart, i_nEnd )
 {
@@ -110,8 +115,10 @@ SwTextAttrNesting::~SwTextAttrNesting()
 {
 }
 
-SwTextINetFormat::SwTextINetFormat( SwFormatINetFormat& rAttr,
-                            sal_Int32 nStart, sal_Int32 nEnd )
+SwTextINetFormat::SwTextINetFormat(
+    const SfxPoolItemHolder& rAttr,
+    sal_Int32 nStart,
+    sal_Int32 nEnd )
     : SwTextAttr( rAttr, nStart )
     , SwTextAttrNesting( rAttr, nStart, nEnd )
     , SwClient( nullptr )
@@ -119,7 +126,8 @@ SwTextINetFormat::SwTextINetFormat( SwFormatINetFormat& rAttr,
     , m_bVisited( false )
     , m_bVisitedValid( false )
 {
-    rAttr.mpTextAttr  = this;
+    SwFormatINetFormat& rSwFormatINetFormat(static_cast<SwFormatINetFormat&>(GetAttr()));
+    rSwFormatINetFormat.mpTextAttr  = this;
     SetCharFormatAttr( true );
 }
 
@@ -192,14 +200,17 @@ bool SwTextINetFormat::IsProtect( ) const
     return m_pTextNode && m_pTextNode->IsProtect();
 }
 
-SwTextRuby::SwTextRuby( SwFormatRuby& rAttr,
-                      sal_Int32 nStart, sal_Int32 nEnd )
+SwTextRuby::SwTextRuby(
+    const SfxPoolItemHolder& rAttr,
+    sal_Int32 nStart,
+    sal_Int32 nEnd )
     : SwTextAttr( rAttr, nStart )
     , SwTextAttrNesting( rAttr, nStart, nEnd )
     , SwClient( nullptr )
     , m_pTextNode( nullptr )
 {
-    rAttr.m_pTextAttr  = this;
+    SwFormatRuby& rSwFormatRuby(static_cast<SwFormatRuby&>(GetAttr()));
+    rSwFormatRuby.m_pTextAttr  = this;
 }
 
 SwTextRuby::~SwTextRuby()
@@ -270,7 +281,7 @@ SwTextMeta *
 SwTextMeta::CreateTextMeta(
     ::sw::MetaFieldManager & i_rTargetDocManager,
     SwTextNode *const i_pTargetTextNode,
-    SwFormatMeta & i_rAttr,
+    const SfxPoolItemHolder& i_rAttr,
     sal_Int32 const i_nStart,
     sal_Int32 const i_nEnd,
     bool const i_bIsCopy)
@@ -278,18 +289,22 @@ SwTextMeta::CreateTextMeta(
     if (i_bIsCopy)
     {   // i_rAttr is already cloned, now call DoCopy to copy the sw::Meta
         OSL_ENSURE(i_pTargetTextNode, "cannot copy Meta without target node");
-        i_rAttr.DoCopy(i_rTargetDocManager, *i_pTargetTextNode);
+        SwFormatMeta* pSwFormatMeta(static_cast<SwFormatMeta*>(const_cast<SfxPoolItem*>(i_rAttr.getItem())));
+        pSwFormatMeta->DoCopy(i_rTargetDocManager, *i_pTargetTextNode);
     }
     SwTextMeta *const pTextMeta(new SwTextMeta(i_rAttr, i_nStart, i_nEnd));
     return pTextMeta;
 }
 
-SwTextMeta::SwTextMeta( SwFormatMeta & i_rAttr,
-        const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
+SwTextMeta::SwTextMeta(
+    const SfxPoolItemHolder& i_rAttr,
+    const sal_Int32 i_nStart,
+    const sal_Int32 i_nEnd )
     : SwTextAttr( i_rAttr, i_nStart )
     , SwTextAttrNesting( i_rAttr, i_nStart, i_nEnd )
 {
-    i_rAttr.SetTextAttr( this );
+    SwFormatMeta& rSwFormatMeta(static_cast<SwFormatMeta&>(GetAttr()));
+    rSwFormatMeta.SetTextAttr( this );
     SetHasDummyChar(true);
 }
 

@@ -102,11 +102,12 @@ void SwFormatLineBreak::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SwTextLineBreak::SwTextLineBreak(SwFormatLineBreak& rAttr, sal_Int32 nStartPos)
+SwTextLineBreak::SwTextLineBreak(const SfxPoolItemHolder& rAttr, sal_Int32 nStartPos)
     : SwTextAttr(rAttr, nStartPos)
     , m_pTextNode(nullptr)
 {
-    rAttr.SetTextLineBreak(this);
+    SwFormatLineBreak& rSwFormatLineBreak(static_cast<SwFormatLineBreak&>(GetAttr()));
+    rSwFormatLineBreak.SetTextLineBreak(this);
     SetHasDummyChar(true);
 }
 

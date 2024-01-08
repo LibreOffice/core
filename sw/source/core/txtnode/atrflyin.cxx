@@ -68,10 +68,13 @@ void SwFormatFlyCnt::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SwTextFlyCnt::SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStartPos )
+SwTextFlyCnt::SwTextFlyCnt(
+    const SfxPoolItemHolder& rAttr,
+    sal_Int32 nStartPos )
     : SwTextAttr( rAttr, nStartPos )
 {
-    rAttr.m_pTextAttr = this;
+    SwFormatFlyCnt& rSwFormatFlyCnt(static_cast<SwFormatFlyCnt&>(GetAttr()));
+    rSwFormatFlyCnt.m_pTextAttr = this;
     SetHasDummyChar(true);
 }
 

@@ -916,7 +916,7 @@ void SwRedlineItr::Clear_( SwFont* pFnt )
             m_rAttrHandler.PopAndChg( *hint, *pFnt );
         else
             m_rAttrHandler.Pop( *hint );
-        SwTextAttr::Destroy(hint, const_cast<SwDoc&>(m_rDoc).GetAttrPool() );
+        SwTextAttr::Destroy(hint);
     }
     m_Hints.clear();
 }

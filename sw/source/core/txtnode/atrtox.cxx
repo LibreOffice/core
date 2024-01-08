@@ -21,15 +21,18 @@
 #include <txttxmrk.hxx>
 #include <tox.hxx>
 
-SwTextTOXMark::SwTextTOXMark( SwTOXMark& rAttr,
-            sal_Int32 const nStartPos, sal_Int32 const*const pEnd)
+SwTextTOXMark::SwTextTOXMark(
+    const SfxPoolItemHolder& rAttr,
+    sal_Int32 const nStartPos,
+    sal_Int32 const*const pEnd)
     : SwTextAttr( rAttr, nStartPos )
     , SwTextAttrEnd( rAttr, nStartPos, nStartPos )
     , m_pTextNode( nullptr )
     , m_pEnd( nullptr )
 {
-    rAttr.m_pTextAttr = this;
-    if ( rAttr.GetAlternativeText().isEmpty() )
+    SwTOXMark& rSwTOXMark(static_cast<SwTOXMark&>(GetAttr()));
+    rSwTOXMark.m_pTextAttr = this;
+    if ( rSwTOXMark.GetAlternativeText().isEmpty() )
     {
         m_nEnd = *pEnd;
         m_pEnd = & m_nEnd;

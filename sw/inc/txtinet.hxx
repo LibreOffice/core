@@ -35,7 +35,10 @@ class SW_DLLPUBLIC SwTextINetFormat final: public SwTextAttrNesting, public SwCl
         virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     public:
-        SwTextINetFormat( SwFormatINetFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+        SwTextINetFormat(
+            const SfxPoolItemHolder& rAttr,
+            sal_Int32 nStart,
+            sal_Int32 nEnd );
         virtual ~SwTextINetFormat() override;
 
         SAL_DLLPRIVATE void InitINetFormat(SwTextNode & rNode);

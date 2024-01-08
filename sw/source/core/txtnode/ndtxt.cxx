@@ -764,7 +764,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             }
 
             m_pSwpHints->DeleteAtPos(i);
-            SwTextAttr::Destroy(pHt, GetDoc().GetAttrPool());
+            SwTextAttr::Destroy(pHt);
             --i;
         }
     }
@@ -1409,7 +1409,7 @@ void SwTextNode::Update(
                             {
                                 SwTextAttr *pTmp = *it;
                                 pCollector->erase( it );
-                                SwTextAttr::Destroy( pTmp, GetDoc().GetAttrPool() );
+                                SwTextAttr::Destroy( pTmp );
                             }
                             SwTextAttr * const pTmp =
                             MakeTextAttr( GetDoc(),

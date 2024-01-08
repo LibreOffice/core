@@ -28,7 +28,7 @@ class SwTextAnnotationField final : public SwTextField
 {
 public:
     SwTextAnnotationField(
-        SwFormatField & rAttr,
+        const SfxPoolItemHolder& rAttr,
         sal_Int32 const nStart,
         bool const bInClipboard );
 

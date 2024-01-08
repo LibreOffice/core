@@ -35,7 +35,7 @@ class SAL_DLLPUBLIC_RTTI SwTextField : public virtual SwTextAttr
 
 public:
     SwTextField(
-        SwFormatField & rAttr,
+        const SfxPoolItemHolder& rAttr,
         sal_Int32 const nStart,
         bool const bInClipboard );
 
@@ -80,7 +80,7 @@ class SwTextInputField final
 {
 public:
     SwTextInputField(
-        SwFormatField & rAttr,
+        const SfxPoolItemHolder& rAttr,
         sal_Int32 const nStart,
         sal_Int32 const nEnd,
         bool const bInClipboard );

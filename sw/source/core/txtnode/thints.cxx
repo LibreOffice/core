@@ -105,7 +105,7 @@ SwpHints::SwpHints(const SwTextNode& rParent)
 {
 }
 
-static void TextAttrDelete( SwDoc & rDoc, SwTextAttr * const pAttr )
+static void TextAttrDelete( SwTextAttr * const pAttr )
 {
     if (RES_TXTATR_META == pAttr->Which() ||
         RES_TXTATR_METAFIELD == pAttr->Which())
@@ -116,7 +116,7 @@ static void TextAttrDelete( SwDoc & rDoc, SwTextAttr * const pAttr )
     {
         static_txtattr_cast<SwTextContentControl*>(pAttr)->ChgTextNode(nullptr);
     }
-    SwTextAttr::Destroy( pAttr, rDoc.GetAttrPool() );
+    SwTextAttr::Destroy( pAttr );
 }
 
 static bool TextAttrContains(const sal_Int32 nPos, const SwTextAttrEnd * const pAttr)
@@ -415,7 +415,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                     case FAIL:
                         SAL_INFO("sw.core", "cannot insert hint: overlap");
                         for (const auto& aSplit : SplitNew)
-                            TextAttrDelete(rNode.GetDoc(), aSplit);
+                            TextAttrDelete(aSplit);
                         return false;
                     case SPLIT_NEW:
                         lcl_DoSplitNew(SplitNew, rNode, nNewStart,
@@ -470,7 +470,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
             {
                 SAL_INFO("sw.core", "cannot insert hint: fieldmark overlap");
                 assert(SplitNew.size() == 1);
-                TextAttrDelete(rNode.GetDoc(), &rNewHint);
+                TextAttrDelete(&rNewHint);
                 return false;
             }
             else
@@ -1022,11 +1022,8 @@ SwTextAttr* MakeRedlineTextAttr( SwDoc & rDoc, SfxPoolItem const & rAttr )
             break;
     }
 
-    // Put new attribute into pool
-    // FIXME: this const_cast is evil!
-    SfxPoolItem& rNew =
-        const_cast<SfxPoolItem&>( rDoc.GetAttrPool().DirectPutItemInPool( rAttr ) );
-    return new SwTextAttrEnd( rNew, 0, 0 );
+    // create a SfxPoolItemHolder and return it (will move Item to referenced mode)
+    return new SwTextAttrEnd(SfxPoolItemHolder(rDoc.GetAttrPool(), &rAttr), 0, 0);
 }
 
 // create new text attribute
@@ -1060,13 +1057,12 @@ SwTextAttr* MakeTextAttr(
         return pNew;
     }
 
-    // Put new attribute into pool
-    // FIXME: this const_cast is evil!
-    SfxPoolItem& rNew =
-        const_cast<SfxPoolItem&>( rDoc.GetAttrPool().DirectPutItemInPool( rAttr ) );
+    // create a SfxPoolItemHolder and use it (will move Item to referenced mode)
+    const SfxPoolItemHolder aHolder(rDoc.GetAttrPool(), &rAttr);
+    SfxPoolItem& rNew(const_cast<SfxPoolItem&>(*aHolder.getItem()));
 
     SwTextAttr* pNew = nullptr;
-    switch( rNew.Which() )
+    switch( aHolder.Which() )
     {
     case RES_TXTATR_CHARFMT:
         {
@@ -1076,21 +1072,21 @@ SwTextAttr* MakeTextAttr(
                 rFormatCharFormat.SetCharFormat( rDoc.GetDfltCharFormat() );
             }
 
-            pNew = new SwTextCharFormat( rFormatCharFormat, nStt, nEnd );
+            pNew = new SwTextCharFormat( aHolder, nStt, nEnd );
         }
         break;
     case RES_TXTATR_INETFMT:
-        pNew = new SwTextINetFormat( static_cast<SwFormatINetFormat&>(rNew), nStt, nEnd );
+        pNew = new SwTextINetFormat( aHolder, nStt, nEnd );
         break;
 
     case RES_TXTATR_FIELD:
-        pNew = new SwTextField( static_cast<SwFormatField &>(rNew), nStt,
+        pNew = new SwTextField( aHolder, nStt,
                     rDoc.IsClipBoard() );
         break;
 
     case RES_TXTATR_ANNOTATION:
         {
-            pNew = new SwTextAnnotationField( static_cast<SwFormatField &>(rNew), nStt, rDoc.IsClipBoard() );
+            pNew = new SwTextAnnotationField( aHolder, nStt, rDoc.IsClipBoard() );
             if (bIsCopy == CopyOrNewType::Copy)
             {
                 // On copy of the annotation field do not keep the annotated text range by removing
@@ -1105,14 +1101,14 @@ SwTextAttr* MakeTextAttr(
         break;
 
     case RES_TXTATR_INPUTFIELD:
-        pNew = new SwTextInputField( static_cast<SwFormatField &>(rNew), nStt, nEnd,
+        pNew = new SwTextInputField( aHolder, nStt, nEnd,
                     rDoc.IsClipBoard() );
         break;
 
     case RES_TXTATR_FLYCNT:
         {
             // finally, copy the frame format (with content)
-            pNew = new SwTextFlyCnt( static_cast<SwFormatFlyCnt&>(rNew), nStt );
+            pNew = new SwTextFlyCnt( aHolder, nStt );
             if ( static_cast<const SwFormatFlyCnt &>(rAttr).GetTextFlyCnt() )
             {
                 // if it has an existing attr then the format must be copied
@@ -1121,15 +1117,15 @@ SwTextAttr* MakeTextAttr(
         }
         break;
     case RES_TXTATR_FTN:
-        pNew = new SwTextFootnote( static_cast<SwFormatFootnote&>(rNew), nStt );
+        pNew = new SwTextFootnote( aHolder, nStt );
         // copy note's SeqNo
         if( static_cast<SwFormatFootnote&>(rAttr).GetTextFootnote() )
             static_cast<SwTextFootnote*>(pNew)->SetSeqNo( static_cast<SwFormatFootnote&>(rAttr).GetTextFootnote()->GetSeqRefNo() );
         break;
     case RES_TXTATR_REFMARK:
         pNew = nStt == nEnd
-                ? new SwTextRefMark( static_cast<SwFormatRefMark&>(rNew), nStt )
-                : new SwTextRefMark( static_cast<SwFormatRefMark&>(rNew), nStt, &nEnd );
+                ? new SwTextRefMark( aHolder, nStt )
+                : new SwTextRefMark( aHolder, nStt, &nEnd );
         break;
     case RES_TXTATR_TOXMARK:
     {
@@ -1146,28 +1142,31 @@ SwTextAttr* MakeTextAttr(
             rMark.RegisterToTOXType(*pToxType);
         }
 
-        pNew = new SwTextTOXMark(rMark, nStt, &nEnd);
+        pNew = new SwTextTOXMark(aHolder, nStt, &nEnd);
         break;
     }
     case RES_TXTATR_CJK_RUBY:
-        pNew = new SwTextRuby( static_cast<SwFormatRuby&>(rNew), nStt, nEnd );
+        pNew = new SwTextRuby( aHolder, nStt, nEnd );
         break;
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
         pNew = SwTextMeta::CreateTextMeta( rDoc.GetMetaFieldManager(), pTextNode,
-                static_cast<SwFormatMeta&>(rNew), nStt, nEnd, bIsCopy == CopyOrNewType::Copy );
+                aHolder,
+                nStt, nEnd, bIsCopy == CopyOrNewType::Copy );
         break;
     case RES_TXTATR_LINEBREAK:
-        pNew = new SwTextLineBreak(static_cast<SwFormatLineBreak&>(rNew), nStt);
+        pNew = new SwTextLineBreak(aHolder, nStt);
         break;
     case RES_TXTATR_CONTENTCONTROL:
         pNew = SwTextContentControl::CreateTextContentControl(
-            rDoc, pTextNode, static_cast<SwFormatContentControl&>(rNew), nStt, nEnd,
+            rDoc, pTextNode,
+            aHolder,
+            nStt, nEnd,
             bIsCopy == CopyOrNewType::Copy);
         break;
     default:
         assert(RES_TXTATR_AUTOFMT == rNew.Which());
-        pNew = new SwTextAttrEnd( rNew, nStt, nEnd );
+        pNew = new SwTextAttrEnd( aHolder, nStt, nEnd );
         break;
     }
 
@@ -1302,7 +1301,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
         break;
     }
 
-    SwTextAttr::Destroy( pAttr, rDoc.GetAttrPool() );
+    SwTextAttr::Destroy( pAttr );
 }
 
 SwTextAttr* SwTextNode::InsertItem(
@@ -1802,7 +1801,7 @@ void SwTextNode::DeleteAttribute( SwTextAttr * const pAttr )
             pAttr->Which());
 
         m_pSwpHints->Delete( pAttr );
-        SwTextAttr::Destroy( pAttr, GetDoc().GetAttrPool() );
+        SwTextAttr::Destroy( pAttr );
         CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
 
         TryDeleteSwpHints();
@@ -1877,7 +1876,7 @@ void SwTextNode::DeleteAttributes(
                     nWhich);
 
                 m_pSwpHints->DeleteAtPos( nPos );
-                SwTextAttr::Destroy( pTextHt, GetDoc().GetAttrPool() );
+                SwTextAttr::Destroy( pTextHt );
                 CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
             }
         }
@@ -2763,7 +2762,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                 if (pHt->GetStart() == *pHt->GetEnd())
                 {
                     DeleteAtPos(i); // kill it without History!
-                    SwTextAttr::Destroy(pHt, rNode.GetDoc().GetAttrPool());
+                    SwTextAttr::Destroy(pHt);
                     --i;
                     continue;
                 }

@@ -33,7 +33,7 @@ class SW_DLLPUBLIC SwTextLineBreak final : public SwTextAttr
     SwTextNode* m_pTextNode;
 
 public:
-    SwTextLineBreak(SwFormatLineBreak& rAttr, sal_Int32 nStart);
+    SwTextLineBreak(const SfxPoolItemHolder& rAttr, sal_Int32 nStart);
 
     ~SwTextLineBreak() override;
 

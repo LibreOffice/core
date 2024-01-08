@@ -485,16 +485,18 @@ void SwFormatField::dumpAsXml(xmlTextWriterPtr pWriter) const
 // class SwTextField ////////////////////////////////////////////////////
 
 SwTextField::SwTextField(
-    SwFormatField & rAttr,
+    const SfxPoolItemHolder& rAttr,
     sal_Int32 const nStartPos,
     bool const bInClipboard)
     : SwTextAttr( rAttr, nStartPos )
 // fdo#39694 the ExpandField here may not give the correct result in all cases,
 // but is better than nothing
-    , m_aExpand( rAttr.GetField()->ExpandField(bInClipboard, nullptr) )
+    , m_aExpand()
     , m_pTextNode( nullptr )
 {
-    rAttr.SetTextField( *this );
+    SwFormatField& rSwFormatField(static_cast<SwFormatField&>(GetAttr()));
+    m_aExpand = rSwFormatField.GetField()->ExpandField(bInClipboard, nullptr);
+    rSwFormatField.SetTextField( *this );
     SetHasDummyChar(true);
 }
 
@@ -664,7 +666,7 @@ void SwTextField::DeleteTextField( const SwTextField& rTextField )
 
 // input field in-place editing
 SwTextInputField::SwTextInputField(
-    SwFormatField & rAttr,
+    const SfxPoolItemHolder& rAttr,
     sal_Int32 const nStart,
     sal_Int32 const nEnd,
     bool const bInClipboard )
@@ -765,7 +767,7 @@ void SwTextInputField::UpdateTextNodeContent( const OUString& rNewContent )
 
 // text annotation field
 SwTextAnnotationField::SwTextAnnotationField(
-    SwFormatField & rAttr,
+    const SfxPoolItemHolder& rAttr,
     sal_Int32 const nStart,
     bool const bInClipboard )
     : SwTextAttr( rAttr, nStart )

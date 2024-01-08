@@ -37,7 +37,10 @@ class SwTextCharFormat final : public SwTextAttrEnd
     sal_uInt16 m_nSortNumber;
 
 public:
-    SwTextCharFormat( SwFormatCharFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    SwTextCharFormat(
+        const SfxPoolItemHolder& rAttr,
+        sal_Int32 nStart,
+        sal_Int32 nEnd );
     virtual ~SwTextCharFormat( ) override;
 
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
@@ -54,14 +57,17 @@ public:
 class SwTextMeta final : public SwTextAttrNesting
 {
 private:
-    SwTextMeta( SwFormatMeta & i_rAttr,
-        const sal_Int32 i_nStart, const sal_Int32 i_nEnd );
+    SwTextMeta(
+        const SfxPoolItemHolder& rAttr,
+        const sal_Int32 i_nStart,
+        const sal_Int32 i_nEnd );
 
 public:
     static SwTextMeta * CreateTextMeta(
         ::sw::MetaFieldManager & i_rTargetDocManager,
         SwTextNode *const i_pTargetTextNode,
-        SwFormatMeta & i_rAttr,
+        const SfxPoolItemHolder& rAttr,
+        // SwFormatMeta & i_rAttr,
         sal_Int32 const i_nStart, sal_Int32 const i_nEnd,
         bool const i_bIsCopy);
 
@@ -76,7 +82,10 @@ class SW_DLLPUBLIC SwTextRuby final: public SwTextAttrNesting, public SwClient
     SwTextNode* m_pTextNode;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 public:
-    SwTextRuby( SwFormatRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    SwTextRuby(
+        const SfxPoolItemHolder& rAttr,
+        sal_Int32 nStart,
+        sal_Int32 nEnd );
     virtual ~SwTextRuby() override;
 
     SAL_DLLPRIVATE void InitRuby(SwTextNode & rNode);

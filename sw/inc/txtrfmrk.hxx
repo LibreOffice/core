@@ -32,8 +32,10 @@ class SwTextRefMark final : public SwTextAttrEnd
     sal_Int32 * m_pEnd; // end is optional (point reference)
 
 public:
-    SwTextRefMark( SwFormatRefMark& rAttr,
-            sal_Int32 const nStart, sal_Int32 const*const pEnd = nullptr);
+    SwTextRefMark(
+        const SfxPoolItemHolder& rAttr,
+        sal_Int32 const nStart,
+        sal_Int32 const*const pEnd = nullptr);
 
     ~SwTextRefMark();
 

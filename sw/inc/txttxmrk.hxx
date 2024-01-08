@@ -31,8 +31,10 @@ class SAL_DLLPUBLIC_RTTI SwTextTOXMark final : public SwTextAttrEnd
     sal_Int32 * m_pEnd;   // 0 if SwTOXMark without AlternativeText
 
 public:
-    SwTextTOXMark( SwTOXMark& rAttr,
-            sal_Int32 const nStart, sal_Int32 const*const pEnd);
+    SwTextTOXMark(
+        const SfxPoolItemHolder& rAttr,
+        sal_Int32 const nStart,
+        sal_Int32 const*const pEnd);
     virtual ~SwTextTOXMark() override;
 
     virtual const sal_Int32 *GetEnd() const override;     // SwTextAttr

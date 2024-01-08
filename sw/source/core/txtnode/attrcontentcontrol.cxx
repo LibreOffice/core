@@ -697,35 +697,38 @@ SwContentControlListItem::ItemsFromAny(const css::uno::Any& rVal)
     return aRet;
 }
 
-SwTextContentControl* SwTextContentControl::CreateTextContentControl(SwDoc& rDoc,
-                                                                     SwTextNode* pTargetTextNode,
-                                                                     SwFormatContentControl& rAttr,
-                                                                     sal_Int32 nStart,
-                                                                     sal_Int32 nEnd, bool bIsCopy)
+SwTextContentControl*
+SwTextContentControl::CreateTextContentControl(SwDoc& rDoc, SwTextNode* pTargetTextNode,
+                                               const SfxPoolItemHolder& rHolder, sal_Int32 nStart,
+                                               sal_Int32 nEnd, bool bIsCopy)
 {
     if (bIsCopy)
     {
-        // rAttr is already cloned, now call DoCopy to copy the SwContentControl
+        // the item in rHolder is already cloned, now call DoCopy to copy the SwContentControl
         if (!pTargetTextNode)
         {
             SAL_WARN("sw.core",
                      "SwTextContentControl ctor: cannot copy content control without target node");
         }
-        rAttr.DoCopy(*pTargetTextNode);
+        SwFormatContentControl* pSwFormatContentControl(
+            static_cast<SwFormatContentControl*>(const_cast<SfxPoolItem*>(rHolder.getItem())));
+        pSwFormatContentControl->DoCopy(*pTargetTextNode);
     }
     SwContentControlManager* pManager = &rDoc.GetContentControlManager();
-    auto pTextContentControl(new SwTextContentControl(pManager, rAttr, nStart, nEnd));
+    auto pTextContentControl(new SwTextContentControl(pManager, rHolder, nStart, nEnd));
     return pTextContentControl;
 }
 
 SwTextContentControl::SwTextContentControl(SwContentControlManager* pManager,
-                                           SwFormatContentControl& rAttr, sal_Int32 nStart,
+                                           const SfxPoolItemHolder& rAttr, sal_Int32 nStart,
                                            sal_Int32 nEnd)
     : SwTextAttr(rAttr, nStart)
     , SwTextAttrNesting(rAttr, nStart, nEnd)
     , m_pManager(pManager)
 {
-    rAttr.SetTextAttr(this);
+    SwFormatContentControl& rSwFormatContentControl(
+        static_cast<SwFormatContentControl&>(GetAttr()));
+    rSwFormatContentControl.SetTextAttr(this);
     SetHasDummyChar(true);
     m_pManager->Insert(this);
 }

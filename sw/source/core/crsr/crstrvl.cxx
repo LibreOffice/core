@@ -744,11 +744,18 @@ bool SwCursorShell::MoveFieldType(
         if( bDelField )
         {
             // create dummy for the search
-            SwFormatField* pFormatField = new SwFormatField( SwDateTimeField(
-                static_cast<SwDateTimeFieldType*>(mxDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DateTime ) ) ) );
-
-            pTextField = new SwTextField( *pFormatField, rPos.GetContentIndex(),
-                        mxDoc->IsClipBoard() );
+            // NOTE: with SfxPoolItemHolder in SwTextAttr the
+            // SwFormatField will just be managed by it, when
+            // wanted and handing over bPassingOwnership==true
+            pTextField = new SwTextField (
+                SfxPoolItemHolder(
+                    mxDoc->GetAttrPool(),
+                    new SwFormatField(
+                        SwDateTimeField(
+                            static_cast<SwDateTimeFieldType*>(mxDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DateTime )))),
+                    true), // bPassingOwnership
+                rPos.GetContentIndex(),
+                mxDoc->IsClipBoard() );
             pTextField->ChgTextNode( pTNd );
         }
         else
@@ -765,9 +772,9 @@ bool SwCursorShell::MoveFieldType(
 
         if( bDelField )
         {
-            auto const pFormat(static_cast<SwFormatField*>(&pTextField->GetAttr()));
+            // with using SfxPoolItemHolder in SwTextAttr there is no need anymore
+            // to cleanup the contained SwFormatField self
             delete pTextField;
-            delete pFormat;
         }
 
         if( it != aSrtLst.end() && isSrch ) // found

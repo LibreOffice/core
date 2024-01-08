@@ -500,14 +500,14 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
     if (m_pUndo)
     {
         // set the footnote in the TextNode
-        SwFormatFootnote aTemp( m_bEndNote );
-        SwFormatFootnote& rNew = const_cast<SwFormatFootnote&>(
-                pDoc->GetAttrPool().DirectPutItemInPool(aTemp) );
+        SwFormatFootnote aNew( m_bEndNote );
         if ( !m_FootnoteNumber.isEmpty() )
         {
-            rNew.SetNumStr( m_FootnoteNumber );
+            aNew.SetNumStr( m_FootnoteNumber );
         }
-        SwTextFootnote* pTextFootnote = new SwTextFootnote( rNew, m_nStart );
+        SwTextFootnote* pTextFootnote = new SwTextFootnote(
+            SfxPoolItemHolder(pDoc->GetAttrPool(), &aNew),
+            m_nStart );
 
         // create the section of the Footnote
         SwNodeIndex aIdx( *pTextNd );

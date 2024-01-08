@@ -23,8 +23,8 @@
 #include <txatbase.hxx>
 #include <fmtfld.hxx>
 
-SwTextAttr::SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart )
-    : m_pAttr( &rAttr )
+SwTextAttr::SwTextAttr( const SfxPoolItemHolder& rAttr, sal_Int32 nStart )
+    : m_aAttr( rAttr )
     , m_nStart( nStart )
     , m_bDontExpand( false )
     , m_bLockExpandFlag( false )
@@ -55,12 +55,10 @@ void SwTextAttr::SetEnd(sal_Int32 )
     assert(false);
 }
 
-void SwTextAttr::Destroy( SwTextAttr * pToDestroy, SfxItemPool& rPool )
+void SwTextAttr::Destroy( SwTextAttr * pToDestroy )
 {
     if (!pToDestroy) return;
-    SfxPoolItem * const pAttr = pToDestroy->m_pAttr;
     delete pToDestroy;
-    rPool.DirectRemoveItemFromPool( *pAttr );
 }
 
 bool SwTextAttr::operator==( const SwTextAttr& rAttr ) const
@@ -68,8 +66,10 @@ bool SwTextAttr::operator==( const SwTextAttr& rAttr ) const
     return GetAttr() == rAttr.GetAttr();
 }
 
-SwTextAttrEnd::SwTextAttrEnd( SfxPoolItem& rAttr,
-        sal_Int32 nStart, sal_Int32 nEnd ) :
+SwTextAttrEnd::SwTextAttrEnd(
+    const SfxPoolItemHolder& rAttr,
+    sal_Int32 nStart,
+    sal_Int32 nEnd ) :
     SwTextAttr( rAttr, nStart ), m_nEnd( nEnd )
 {
 }
@@ -99,7 +99,7 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (End())
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("end"), BAD_CAST(OString::number(*End()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pAttr"), "%p", m_pAttr);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_aAttr.getItem()"), "%p", m_aAttr.getItem());
     const char* pWhich = nullptr;
     std::optional<OString> oValue;
     switch (Which())

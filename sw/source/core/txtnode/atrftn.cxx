@@ -292,12 +292,15 @@ void SwFormatFootnote::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SwTextFootnote::SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStartPos )
+SwTextFootnote::SwTextFootnote(
+    const SfxPoolItemHolder& rAttr,
+    sal_Int32 nStartPos )
     : SwTextAttr( rAttr, nStartPos )
     , m_pTextNode( nullptr )
     , m_nSeqNo( USHRT_MAX )
 {
-    rAttr.m_pTextAttr = this;
+    SwFormatFootnote& rSwFormatFootnote(static_cast<SwFormatFootnote&>(GetAttr()));
+    rSwFormatFootnote.m_pTextAttr = this;
     SetHasDummyChar(true);
 }
 

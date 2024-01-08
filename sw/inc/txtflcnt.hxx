@@ -31,7 +31,9 @@ class SwTextFlyCnt final : public SwTextAttr
 {
     SwFlyInContentFrame  *GetFlyFrame_( const SwFrame *pCurrFrame );
 public:
-    SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStart );
+    SwTextFlyCnt(
+        const SfxPoolItemHolder& rAttr,
+        sal_Int32 nStart );
 
     // Sets anchor in pFormat and
     void    SetAnchor( const SwTextNode *pNode );

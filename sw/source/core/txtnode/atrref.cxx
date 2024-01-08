@@ -102,14 +102,17 @@ void SwFormatRefMark::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // attribute for content references in the text
 
-SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
-            sal_Int32 const nStartPos, sal_Int32 const*const pEnd)
+SwTextRefMark::SwTextRefMark(
+    const SfxPoolItemHolder& rAttr,
+    sal_Int32 const nStartPos,
+    sal_Int32 const*const pEnd)
     : SwTextAttr(rAttr, nStartPos)
     , SwTextAttrEnd( rAttr, nStartPos, nStartPos )
     , m_pTextNode( nullptr )
     , m_pEnd( nullptr )
 {
-    rAttr.m_pTextAttr = this;
+    SwFormatRefMark& rSwFormatRefMark(static_cast<SwFormatRefMark&>(GetAttr()));
+    rSwFormatRefMark.m_pTextAttr = this;
     if ( pEnd )
     {
         m_nEnd = *pEnd;

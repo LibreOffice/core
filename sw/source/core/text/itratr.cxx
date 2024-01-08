@@ -1308,7 +1308,7 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
     // scaling value 100 and priority flag on top of the scaling stack
     SwAttrHandler& rAH = aIter.GetAttrHandler();
     SvxCharScaleWidthItem aItem(100, RES_CHRATR_SCALEW);
-    SwTextAttrEnd aAttr( aItem, 0, COMPLETE_STRING );
+    SwTextAttrEnd aAttr( SfxPoolItemHolder(getRootFrame()->GetCurrShell()->GetAttrPool(), &aItem), 0, COMPLETE_STRING );
     aAttr.SetPriorityAttr( true );
     rAH.PushAndChg( aAttr, *(aIter.GetFnt()) );
 
