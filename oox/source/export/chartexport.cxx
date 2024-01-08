@@ -2958,8 +2958,11 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
     sal_Int32 ptCount = aValues.size();
     pFS->startElement(FSNS(XML_c, XML_numCache));
     pFS->startElement(FSNS(XML_c, XML_formatCode));
-    // TODO: what format code?
-    pFS->writeEscaped( "General" );
+    OUString sNumberFormatString("General");
+    const sal_Int32 nKey = xValueSeq->getNumberFormatKeyByIndex(-1);
+    if (nKey > 0)
+        sNumberFormatString = getNumberFormatCode(nKey);
+    pFS->writeEscaped(sNumberFormatString);
     pFS->endElement( FSNS( XML_c, XML_formatCode ) );
     pFS->singleElement(FSNS(XML_c, XML_ptCount), XML_val, OString::number(ptCount));
 
