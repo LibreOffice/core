@@ -15,9 +15,11 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <IDocumentDrawModelAccess.hxx>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
@@ -239,6 +241,62 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
     pXmlDoc = parseLayoutDump();
     // This was 1
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159026)
+{
+    // load a floating table (tables in DOCX footnotes
+    // imported as floating tables in Writer)
+    createSwDoc("tdf159026.docx");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    // hide changes
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    // select table with SelectionSupplier
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
+                                                          uno::UNO_QUERY_THROW);
+    // select floating table (table in a frame)
+    xSelSupplier->select(xIndexAccess->getByIndex(0));
+
+    // delete table with track changes
+    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+
+    // tracked table deletion
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    // hidden table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//tab"_ostr, 0);
+
+    // delete frame
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess2(xTextFramesSupplier->getTextFrames(),
+                                                          uno::UNO_QUERY);
+    xSelSupplier->select(xIndexAccess2->getByIndex(0));
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    // undo frame deletion
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // undo tracked table deletion
+
+    // This resulted crashing
+    dispatchCommand(mxComponent, ".uno:Undo", {});
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
