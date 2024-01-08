@@ -317,6 +317,13 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
         }
     }
 
+    auto order
+        = [](const std::unique_ptr<VSeriesPlotter>& a, const std::unique_ptr<VSeriesPlotter>& b) {
+              return a->getRenderOrder() < b->getRenderOrder();
+          };
+
+    std::stable_sort(m_aSeriesPlotterList.begin(), m_aSeriesPlotterList.end(), order);
+
     //transport seriesnames to the coordinatesystems if needed
     if (m_aSeriesPlotterList.empty())
         return;

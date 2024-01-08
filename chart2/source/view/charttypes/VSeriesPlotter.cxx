@@ -2307,6 +2307,48 @@ OUString VSeriesPlotter::getCategoryName( sal_Int32 nPointIndex ) const
     return OUString();
 }
 
+namespace {
+// The following it to support rendering order for combo charts. A chart type
+// with a lower rendering order is rendered before (i.e., behind) a chart with a
+// higher rendering order. The rendering orders are based on rough guesses about
+// how much one chart (type) will obscure another chart (type). The intent is to
+// minimize obscuring of data, by putting charts that generally cover more
+// pixels (e.g., area charts) behind ones that generally cover fewer (e.g., line
+// charts).
+struct ROrderPair
+{
+    ROrderPair(OUString n, sal_Int32 r) : chartName(n), renderOrder(r) {}
+
+    OUString chartName;
+    sal_Int32 renderOrder;
+};
+
+const ROrderPair pairList[] = {
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_AREA, 0),
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_BAR, 6),   // bar & column are same
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN, 6),
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_LINE, 8),
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER, 5),
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_PIE, 1),
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_NET, 3),
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET, 2),
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK, 7),
+    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE, 4)
+};
+} // unnamed
+
+sal_Int32 VSeriesPlotter::getRenderOrder() const
+{
+    OUString aChartType = m_xChartTypeModel->getChartType();
+    for (size_t n = 0; n < sizeof(pairList); ++n) {
+        if (aChartType.equalsIgnoreAsciiCase(pairList[n].chartName)) {
+            return pairList[n].renderOrder;
+        }
+    }
+    SAL_WARN("chart2", "Unsupported chart type in getRenderOrder()");
+    return 0;
+}
+
 std::vector<VDataSeries const*> VSeriesPlotter::getAllSeries() const
 {
     std::vector<VDataSeries const*> aAllSeries;

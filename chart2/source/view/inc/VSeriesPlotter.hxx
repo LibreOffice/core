@@ -275,6 +275,8 @@ public:
     OUString getLabelTextForValue(VDataSeries const & rDataSeries, sal_Int32 nPointIndex,
                                   double fValue, bool bAsPercentage);
 
+    sal_Int32 getRenderOrder() const;
+
 protected:
 
     VSeriesPlotter( rtl::Reference< ::chart::ChartType > xChartTypeModel
