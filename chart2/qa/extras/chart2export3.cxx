@@ -668,7 +668,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, tdf137691)
 {
     // given a doc where the banana negative data formats as ($123) and the pineapple data as $(123)
     loadFromFile(u"pptx/tdf137691_dataTable.pptx");
-    // saveAndReload("Impress MS PowerPoint 2007 XML"); // Always exports as key 0 (General)
+    saveAndReload("Impress MS PowerPoint 2007 XML");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
 
