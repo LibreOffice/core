@@ -1195,7 +1195,9 @@ void SwView::afterCallbackRegistered()
     auto* pDocShell = GetDocShell();
     if (pDocShell)
     {
-        svx::theme::notifyLOK(pDocShell->GetThemeColors());
+        std::shared_ptr<model::ColorSet> pThemeColors = pDocShell->GetThemeColors();
+        std::set<Color> aDocumentColors = pDocShell->GetDocColors();
+        svx::theme::notifyLOK(pThemeColors, aDocumentColors);
     }
 }
 

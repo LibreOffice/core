@@ -29,6 +29,7 @@
 
 #include <sfx2/lokhelper.hxx>
 
+#include <svx/PaletteManager.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
@@ -178,12 +179,23 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
         updateEditEngTextSections(rColorSet, pObject, *pView);
 }
 
-void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet)
+void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet,
+               const std::set<Color>& rDocumentColors)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
         svx::ThemeColorPaletteManager aManager(pColorSet);
-        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aManager.generateJSON());
+        std::stringstream aStream;
+        boost::property_tree::ptree aTree;
+
+        if (pColorSet)
+            aManager.generateJSON(aTree);
+        if (rDocumentColors.size())
+            PaletteManager::generateJSON(aTree, rDocumentColors);
+
+        boost::property_tree::write_json(aStream, aTree);
+
+        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, OString(aStream.str()));
     }
 }
 
