@@ -28,7 +28,7 @@ namespace basctl
 BasicColorConfig::BasicColorConfig()
     : ConfigItem("Office.BasicIDE/IDEColorSchemes")
 {
-    // Innitially the active color scheme is the one defined in the registry
+    // Initially the active color scheme is the one defined in the registry
     m_sCurrentColorScheme = officecfg::Office::BasicIDE::EditorSettings::ColorScheme::get();
 
     // Initialize all available scheme names
