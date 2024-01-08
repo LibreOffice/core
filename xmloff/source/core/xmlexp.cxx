@@ -95,7 +95,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XMLOasisBasicExporter.hpp>
-#include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <RDFaExportHelper.hxx>
@@ -1188,10 +1188,22 @@ lcl_AddGrddl(SvXMLExport const & rExport, const SvXMLExportFlags /*nExportMode*/
 // note: the point of this is presumably to mitigate SHA/1k info leak of plain text
 void SvXMLExport::addChaffWhenEncryptedStorage()
 {
-    uno::Reference< embed::XEncryptionProtectedSource2 > xEncr(mpImpl->mxTargetStorage, uno::UNO_QUERY);
+    uno::Reference<embed::XEncryptionProtectedStorage> const xEncr(mpImpl->mxTargetStorage, uno::UNO_QUERY);
 
     if (xEncr.is() && xEncr->hasEncryptionData() && mxExtHandler.is())
     {
+        uno::Sequence<beans::NamedValue> const algo(xEncr->getEncryptionAlgorithms());
+        for (auto const& it : algo)
+        {
+            if (it.Name == "ChecksumAlgorithm")
+            {
+                if (!it.Value.hasValue())
+                {
+                    return; // no checksum => no chaff
+                }
+                break;
+            }
+        }
         mxExtHandler->comment(OStringToOUString(comphelper::xml::makeXMLChaff(), RTL_TEXTENCODING_ASCII_US));
     }
 }
