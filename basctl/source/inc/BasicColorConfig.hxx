@@ -61,7 +61,7 @@ private:
         { "COLORSCHEME_SOLARIZED_DARK", RID_STR_COLORSCHEME_SOLARIZED_DARK },
     };
 
-    // Used to get colors defined in the Appliation Colors dialog
+    // Used to get colors defined in the Application Colors dialog
     const svtools::ColorConfig aColorConfig;
 
     virtual void ImplCommit() override;
