@@ -2199,7 +2199,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 
                 // try to find an existing conditional format
-                const ScConditionalFormat* pCondFormat = nullptr;
                 const ScPatternAttr* pPattern = rDoc.GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
                 ScConditionalFormatList* pList = rDoc.GetCondFormList(aPos.Tab());
                 const ScCondFormatIndexes& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
@@ -2211,7 +2210,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     for (const auto& rCondFormat : rCondFormats)
                     {
                         // check if at least one existing conditional format has the same range
-                        pCondFormat = pList->GetFormat(rCondFormat);
+                        const ScConditionalFormat* pCondFormat = pList->GetFormat(rCondFormat);
                         if(!pCondFormat)
                             continue;
 
@@ -2428,8 +2427,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         else
                         {
                             // define an overlapping conditional format
-                            const ScConditionalFormat* pCondFormat = pInnerList->GetFormat(rInnerCondFormats[0]);
-                            assert(pCondFormat);
+                            assert(pInnerList->GetFormat(rInnerCondFormats[0]));
                             bNewCondFormatDlg = true;
                         }
 
