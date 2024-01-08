@@ -906,6 +906,7 @@ bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
         CheckAndSave( SvtSecurityOptions::EOption::DocWarnRecommendPassword, m_xSecOptDlg->IsRecommPasswdChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::CtrlClickHyperlink, m_xSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, m_xSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DisableActiveContent, m_xSecOptDlg->IsDisableActiveContentChecked(), bModified );
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
