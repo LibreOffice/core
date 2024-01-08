@@ -964,6 +964,38 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154125)
     CPPUNIT_ASSERT_EQUAL(OUString("21"), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf159046)
+{
+    createScDoc("tdf159046.ods");
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
+    std::map<SCROW, std::vector<SdrObject*>> aObjects
+        = pDrawLayer->GetObjectsAnchoredToRange(0, 0, 6, 8);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aObjects.size());
+
+    aObjects = pDrawLayer->GetObjectsAnchoredToRange(0, 1, 6, 8);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aObjects.size());
+
+    goToCell("A2:F10");
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    goToCell("B2");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Without the fix in place, this test would have crashed here
+    saveAndReload("calc8");
+
+    pDoc = getScDoc();
+    pDrawLayer = pDoc->GetDrawLayer();
+
+    aObjects = pDrawLayer->GetObjectsAnchoredToRange(0, 0, 6, 8);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aObjects.size());
+
+    aObjects = pDrawLayer->GetObjectsAnchoredToRange(0, 1, 6, 8);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aObjects.size());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf148863)
 {
     createScDoc();
