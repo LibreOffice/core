@@ -22,7 +22,7 @@ public:
     void apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     {
         doApply(pColorSet);
-        svx::theme::notifyLOK(pColorSet);
+        svx::theme::notifyLOK(pColorSet, std::set<Color>());
     }
 
 private:

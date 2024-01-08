@@ -50,7 +50,6 @@
 #include <memory>
 #include <array>
 #include <stack>
-#include <set>
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
@@ -467,6 +466,41 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
         if (xFrame->getContainerWindow().is())
             xFrame->getContainerWindow()->setFocus();
     }
+}
+
+// TODO: make it generic, send any palette
+void PaletteManager::generateJSON(boost::property_tree::ptree& aTree, const std::set<Color>& rColors)
+{
+    boost::property_tree::ptree aColorListTree;
+    sal_uInt32 nStartIndex = 1;
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    sal_uInt32 nColumnCount = rStyleSettings.GetColorValueSetColumnCount();
+    const OUString aNamePrefix(Concat2View(SvxResId(RID_SVXSTR_DOC_COLOR_PREFIX) + " "));
+
+    auto aColorIt = rColors.begin();
+    while (aColorIt != rColors.end())
+    {
+        boost::property_tree::ptree aColorRowTree;
+
+        for (sal_uInt32 nColumn = 0; nColumn < nColumnCount; nColumn++)
+        {
+            boost::property_tree::ptree aColorTree;
+            OUString sName = aNamePrefix + OUString::number(nStartIndex++);
+            aColorTree.put("Value", aColorIt->AsRGBHexString().toUtf8());
+            aColorTree.put("Name", sName);
+
+            aColorRowTree.push_back(std::make_pair("", aColorTree));
+
+            aColorIt++;
+            if (aColorIt == rColors.end())
+                break;
+        }
+
+        aColorListTree.push_back(std::make_pair("", aColorRowTree));
+    }
+
+    aTree.add_child("DocumentColors", aColorListTree);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

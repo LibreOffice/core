@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <set>
 #include <svx/svxdllapi.h>
 #include <docmodel/theme/ColorSet.hxx>
 #include <svx/svdobj.hxx>
@@ -22,7 +23,9 @@ namespace theme
 SVXCORE_DLLPUBLIC void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject,
                                        SdrView* pView, SfxUndoManager* pUndoManager = nullptr);
 
-SVXCORE_DLLPUBLIC void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet);
+/// Sends to the LOK updated palettes
+SVXCORE_DLLPUBLIC void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet,
+                                 const std::set<Color>& rDocumentColors);
 }
 
 } // end svx namespace
