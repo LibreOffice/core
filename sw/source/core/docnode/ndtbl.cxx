@@ -347,6 +347,11 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     assert(nCols && "Table without rows?");
 
     {
+        // Do not copy into Footnotes!
+        if( rPos.GetNode() < GetNodes().GetEndOfInserts() &&
+            rPos.GetNode().GetIndex() >= GetNodes().GetEndOfInserts().StartOfSectionIndex() )
+            return nullptr;
+
         // If the ColumnArray has a wrong count, ignore it!
         if( pColArr &&
             static_cast<size_t>(nCols + ( text::HoriOrientation::NONE == eAdjust ? 2 : 1 )) != pColArr->size() )
