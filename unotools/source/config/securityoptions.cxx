@@ -100,6 +100,10 @@ bool IsReadOnly( EOption eOption )
         case SvtSecurityOptions::EOption::BlockUntrustedRefererLinks:
             bReadonly = officecfg::Office::Common::Security::Scripting::BlockUntrustedRefererLinks::isReadOnly();
             break;
+        case SvtSecurityOptions::EOption::DisableActiveContent:
+            bReadonly = officecfg::Office::Common::Security::Scripting::DisableActiveContent::isReadOnly() ||
+                        officecfg::Office::Common::Security::Scripting::DisableOLEAutomation::isReadOnly();
+            break;
 
         default:
             assert(false);
@@ -334,6 +338,10 @@ bool IsOptionSet( EOption eOption )
         case SvtSecurityOptions::EOption::BlockUntrustedRefererLinks:
             bSet = officecfg::Office::Common::Security::Scripting::BlockUntrustedRefererLinks::get();
             break;
+        case SvtSecurityOptions::EOption::DisableActiveContent:
+            bSet = officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() &&
+                   officecfg::Office::Common::Security::Scripting::DisableOLEAutomation::get();
+            break;
 
         default:
             assert(false);
@@ -382,6 +390,10 @@ void SetOption( EOption eOption, bool bValue )
             break;
         case SvtSecurityOptions::EOption::BlockUntrustedRefererLinks:
              officecfg::Office::Common::Security::Scripting::BlockUntrustedRefererLinks::set(bValue, xChanges);
+            break;
+        case SvtSecurityOptions::EOption::DisableActiveContent:
+            officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(bValue, xChanges);
+            officecfg::Office::Common::Security::Scripting::DisableOLEAutomation::set(bValue, xChanges);
             break;
 
         default:

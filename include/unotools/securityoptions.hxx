@@ -49,7 +49,8 @@ namespace SvtSecurityOptions
         MacroSecLevel,
         MacroTrustedAuthors,
         CtrlClickHyperlink,
-        BlockUntrustedRefererLinks
+        BlockUntrustedRefererLinks,
+        DisableActiveContent
     };
 
     struct Certificate

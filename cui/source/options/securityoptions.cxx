@@ -63,6 +63,8 @@ SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent)
     , m_xCtrlHyperlinkImg(m_xBuilder->weld_widget("lockctrlclick"))
     , m_xBlockUntrustedRefererLinksCB(m_xBuilder->weld_check_button("blockuntrusted"))
     , m_xBlockUntrustedRefererLinksImg(m_xBuilder->weld_widget("lockblockuntrusted"))
+    , m_xDisableActiveContentCB(m_xBuilder->weld_check_button("disableactivecontent"))
+    , m_xDisableActiveContentImg(m_xBuilder->weld_widget("lockdisableactivecontent"))
     , m_xRedlineinfoCB(m_xBuilder->weld_check_button("redlineinfo"))
     , m_xRedlineinfoImg(m_xBuilder->weld_widget("lockredlineinfo"))
     , m_xDocPropertiesCB(m_xBuilder->weld_check_button("docproperties"))
@@ -107,6 +109,8 @@ void SecurityOptionsDialog::init()
         *m_xCtrlHyperlinkImg);
     enableAndSet(SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, *m_xBlockUntrustedRefererLinksCB,
         *m_xBlockUntrustedRefererLinksImg);
+    enableAndSet(SvtSecurityOptions::EOption::DisableActiveContent,
+                 *m_xDisableActiveContentCB, *m_xDisableActiveContentImg);
 
     if (!SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo))
         changeKeepSecurityInfosEnabled();
@@ -127,6 +131,7 @@ bool SecurityOptionsDialog::SetSecurityOptions()
     CheckAndSave(SvtSecurityOptions::EOption::DocWarnRecommendPassword, IsRecommPasswdChecked(), bModified);
     CheckAndSave(SvtSecurityOptions::EOption::CtrlClickHyperlink, IsCtrlHyperlinkChecked(), bModified);
     CheckAndSave(SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, IsBlockUntrustedRefererLinksChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DisableActiveContent, IsDisableActiveContentChecked(), bModified);
 
     return bModified;
 }
