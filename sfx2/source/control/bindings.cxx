@@ -1220,26 +1220,28 @@ void SfxBindings::UpdateControllers_Impl
 IMPL_LINK( SfxBindings, NextJob, Timer *, pTimer, void )
 {
     bool bSetView = false;
-    int nOldId = -1;
+    SfxViewShell* pOldShell = nullptr;
     if (comphelper::LibreOfficeKit::isActive() && pDispatcher)
     {
         SfxViewFrame* pFrame = pDispatcher->GetFrame();
-        SfxViewShell* pShell = pFrame ? pFrame->GetViewShell() : nullptr;
-        int nNewId = SfxLokHelper::getView(pShell);
-        nOldId = SfxLokHelper::getView();
-        if (nNewId != -1 && nNewId != nOldId)
+        SfxViewShell* pNewShell = pFrame ? pFrame->GetViewShell() : nullptr;
+        pOldShell = SfxViewShell::Current();
+        if (pNewShell && pNewShell != pOldShell)
         {
-            // The current view ID is not the one that belongs to this frame, switch to it.
-            SfxLokHelper::setView(nNewId);
+            // The current view ID is not the one that belongs to this frame, update
+            // language/locale.
+            comphelper::LibreOfficeKit::setLanguageTag(pNewShell->GetLOKLanguageTag());
+            comphelper::LibreOfficeKit::setLocale(pNewShell->GetLOKLocale());
             bSetView = true;
         }
     }
 
     NextJob_Impl(pTimer);
 
-    if (bSetView)
+    if (bSetView && pOldShell)
     {
-        SfxLokHelper::setView(nOldId);
+        comphelper::LibreOfficeKit::setLanguageTag(pOldShell->GetLOKLanguageTag());
+        comphelper::LibreOfficeKit::setLocale(pOldShell->GetLOKLocale());
     }
 }
 
