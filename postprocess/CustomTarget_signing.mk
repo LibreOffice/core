@@ -20,6 +20,7 @@ TIMESTAMPURL ?= "http://timestamp.globalsign.com/scripts/timestamp.dll"
 $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done: \
 	$(SRCDIR)/postprocess/signing/signing.pl \
 	$(SRCDIR)/postprocess/signing/no_signing.txt \
+	$(call gb_Module_get_target,extras) \
 	$(call gb_Postprocess_get_target,AllLibraries) \
 	$(call gb_Postprocess_get_target,AllExecutables) \
 	$(call gb_Postprocess_get_target,AllModuleTests) \
