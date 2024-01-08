@@ -635,6 +635,38 @@ tools::Long ImpEditEngine::GetColumnWidth(const Size& rPaperSize) const
     return (nWidth - mnColumnSpacing * (mnColumns - 1)) / mnColumns;
 }
 
+bool ImpEditEngine::createLinesForEmptyParagraph(ParaPortion& rParaPortion)
+{
+    // fast special treatment...
+    if (rParaPortion.GetTextPortions().Count())
+        rParaPortion.GetTextPortions().Reset();
+    if (rParaPortion.GetLines().Count())
+        rParaPortion.GetLines().Reset();
+
+    CreateAndInsertEmptyLine(&rParaPortion);
+    return FinishCreateLines(&rParaPortion);
+}
+
+tools::Long ImpEditEngine::calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem)
+{
+    const bool bAutoSize = IsEffectivelyVertical() ? maStatus.AutoPageHeight() : maStatus.AutoPageWidth();
+    tools::Long nMaxLineWidth = GetColumnWidth(bAutoSize ? maMaxAutoPaperSize : maPaperSize);
+
+    nMaxLineWidth -= scaleXSpacingValue(rLRItem.GetRight());
+    nMaxLineWidth -= nStartX;
+
+    // If PaperSize == long_max, one cannot take away any negative
+    // first line indent. (Overflow)
+    if (nMaxLineWidth < 0 && nStartX < 0)
+        nMaxLineWidth = GetColumnWidth(maPaperSize) - scaleXSpacingValue(rLRItem.GetRight());
+
+    // If still less than 0, it may be just the right edge.
+    if (nMaxLineWidth <= 0)
+        nMaxLineWidth = 1;
+
+    return nMaxLineWidth;
+}
+
 bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 {
     ParaPortion* pParaPortion = GetParaPortions()[nPara];
@@ -649,17 +681,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
 
     // Fast special treatment for empty paragraphs...
-
-    if ( ( pParaPortion->GetNode()->Len() == 0 ) && !GetTextRanger() )
-    {
-        // fast special treatment...
-        if ( pParaPortion->GetTextPortions().Count() )
-            pParaPortion->GetTextPortions().Reset();
-        if ( pParaPortion->GetLines().Count() )
-            pParaPortion->GetLines().Reset();
-        CreateAndInsertEmptyLine( pParaPortion );
-        return FinishCreateLines( pParaPortion );
-    }
+    bool bEmptyParagraph = pParaPortion->GetNode()->Len() == 0 && !GetTextRanger();
+    if (bEmptyParagraph)
+        return createLinesForEmptyParagraph(*pParaPortion);
 
     sal_Int64 nCurrentPosY = nStartPosY;
     // If we're allowed to skip parts outside and this cannot possibly fit in the given height,
@@ -678,10 +702,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     if ( pParaPortion->GetLines().Count() == 0 )
     {
-        EditLine* pL = new EditLine;
-        pParaPortion->GetLines().Append(pL);
+        EditLine* pLine = new EditLine;
+        pParaPortion->GetLines().Append(pLine);
     }
-
 
     // Get Paragraph attributes...
 
@@ -739,7 +762,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     sal_Int32 nRealInvalidStart = nInvalidStart;
 
-    if ( bEmptyNodeWithPolygon )
+    if (bEmptyNodeWithPolygon)
     {
         TextPortion* pDummyPortion = new TextPortion( 0 );
         pParaPortion->GetTextPortions().Reset();
@@ -754,7 +777,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     {
         CreateTextPortions( pParaPortion, nRealInvalidStart );
     }
-
 
     // Search for line with InvalidPos, start one line before
     // Flag the line => do not remove it !
@@ -773,14 +795,16 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     }
     // Begin one line before...
     // If it is typed at the end, the line in front cannot change.
-    if ( nLine && ( !pParaPortion->IsSimpleInvalid() || ( nInvalidEnd < pNode->Len() ) || ( nInvalidDiff <= 0 ) ) )
+    if (nLine && (!pParaPortion->IsSimpleInvalid() ||
+                    (nInvalidEnd < pNode->Len()) ||
+                    (nInvalidDiff <= 0)))
+    {
         nLine--;
+    }
 
-    EditLine* pLine = &pParaPortion->GetLines()[nLine];
+    tools::Rectangle aBulletArea{Point(), Point()};
 
-    static const tools::Rectangle aZeroArea { Point(), Point() };
-    tools::Rectangle aBulletArea( aZeroArea );
-    if ( !nLine )
+    if (!nLine)
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( !aBulletArea.IsWidthEmpty() && aBulletArea.Right() > 0 )
@@ -789,14 +813,15 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             pParaPortion->SetBulletX( 0 ); // if Bullet is set incorrectly
     }
 
-
     // Reformat all lines from here...
 
     sal_Int32 nDelFromLine = -1;
     bool bLineBreak = false;
 
+    EditLine* pLine = &pParaPortion->GetLines()[nLine];
     sal_Int32 nIndex = pLine->GetStart();
     EditLine aSaveLine( *pLine );
+
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
     KernArray aCharPositionArray;
@@ -830,20 +855,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
         }
 
-        const bool bAutoSize = IsEffectivelyVertical() ? maStatus.AutoPageHeight() : maStatus.AutoPageWidth();
-        tools::Long nMaxLineWidth = GetColumnWidth(bAutoSize ? maMaxAutoPaperSize : maPaperSize);
-
-        nMaxLineWidth -= scaleXSpacingValue(rLRItem.GetRight());
-        nMaxLineWidth -= nStartX;
-
-        // If PaperSize == long_max, one cannot take away any negative
-        // first line indent. (Overflow)
-        if ( ( nMaxLineWidth < 0 ) && ( nStartX < 0 ) )
-            nMaxLineWidth = GetColumnWidth(maPaperSize) - scaleXSpacingValue(rLRItem.GetRight());
-
-        // If still less than 0, it may be just the right edge.
-        if ( nMaxLineWidth <= 0 )
-            nMaxLineWidth = 1;
+        tools::Long nMaxLineWidth = calculateMaxLineWidth(nStartX, rLRItem);
 
         // Problem:
         // Since formatting starts a line _before_ the invalid position,
@@ -1256,12 +1268,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 tools::Long nWidthAfterTab = 0;
                 for ( sal_Int32 n = aCurrentTab.nTabPortion+1; n <= nTmpPortion; n++  )
                 {
-                    const TextPortion& rTP = pParaPortion->GetTextPortions()[n];
-                    nWidthAfterTab += rTP.GetSize().Width();
+                    const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
+                    nWidthAfterTab += rTextPortion.GetSize().Width();
                 }
                 tools::Long nW = nWidthAfterTab;   // Length before tab position
                 if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Right )
                 {
+                    // Do nothing
                 }
                 else if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Center )
                 {
@@ -1269,8 +1282,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 }
                 else if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Decimal )
                 {
-                    OUString aText = GetSelected( EditSelection(  EditPaM( pParaPortion->GetNode(), nTmpPos ),
-                                                                EditPaM( pParaPortion->GetNode(), nTmpPos + nPortionLen ) ) );
+                    EditPaM aSelectionStart(pParaPortion->GetNode(), nTmpPos);
+                    EditPaM aSelectionEnd(pParaPortion->GetNode(), nTmpPos + nPortionLen);
+                    EditSelection aSelection(aSelectionStart, aSelectionEnd);
+                    OUString aText = GetSelected(aSelection);
+
                     sal_Int32 nDecPos = aText.indexOf( aCurrentTab.aTabStop.GetDecimal() );
                     if ( nDecPos != -1 )
                     {

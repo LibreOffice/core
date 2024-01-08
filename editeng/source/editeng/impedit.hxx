@@ -673,7 +673,11 @@ private:
 
     void                Clear();
     EditPaM             RemoveText();
-    bool                CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY );
+
+    bool createLinesForEmptyParagraph(ParaPortion& rParaPortion);
+    tools::Long calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem);
+    bool CreateLines(sal_Int32 nPara, sal_uInt32 nStartPosY);
+
     void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion );
     bool                FinishCreateLines( ParaPortion* pParaPortion );
     void                CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rStartPos /*, sal_Bool bCreateBlockPortions */ );
