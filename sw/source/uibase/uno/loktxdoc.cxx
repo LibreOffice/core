@@ -70,7 +70,7 @@ void GetTextFormFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 
     SwDoc* pDoc = pDocShell->GetDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    tools::ScopedJsonWriterArray aFields = rJsonWriter.startArray("fields");
+    auto aFields = rJsonWriter.startArray("fields");
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
         auto pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(*it);
@@ -93,7 +93,7 @@ void GetTextFormFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
             continue;
         }
 
-        tools::ScopedJsonWriterStruct aField = rJsonWriter.startStruct();
+        auto aField = rJsonWriter.startStruct();
         rJsonWriter.put("type", aType);
         rJsonWriter.put("command", aCommand);
     }
@@ -175,7 +175,7 @@ void GetDocumentProperties(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell
     uno::Reference<beans::XPropertyAccess> xUDP(xDP->getUserDefinedProperties(), uno::UNO_QUERY);
     auto aUDPs = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
         xUDP->getPropertyValues());
-    tools::ScopedJsonWriterArray aProperties = rJsonWriter.startArray("userDefinedProperties");
+    auto aProperties = rJsonWriter.startArray("userDefinedProperties");
     for (const auto& rUDP : aUDPs)
     {
         if (!rUDP.Name.startsWith(aNamePrefix))
@@ -191,7 +191,7 @@ void GetDocumentProperties(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell
         OUString aValue;
         rUDP.Value >>= aValue;
 
-        tools::ScopedJsonWriterStruct aProperty = rJsonWriter.startStruct();
+        auto aProperty = rJsonWriter.startStruct();
         rJsonWriter.put("name", rUDP.Name);
         rJsonWriter.put("type", "string");
         rJsonWriter.put("value", aValue);
@@ -216,7 +216,7 @@ void GetBookmarks(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     }
 
     IDocumentMarkAccess& rIDMA = *pDocShell->GetDoc()->getIDocumentMarkAccess();
-    tools::ScopedJsonWriterArray aBookmarks = rJsonWriter.startArray("bookmarks");
+    auto aBookmarks = rJsonWriter.startArray("bookmarks");
     for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
     {
         sw::mark::IMark* pMark = *it;
@@ -225,7 +225,7 @@ void GetBookmarks(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
             continue;
         }
 
-        tools::ScopedJsonWriterStruct aProperty = rJsonWriter.startStruct();
+        auto aProperty = rJsonWriter.startStruct();
         rJsonWriter.put("name", pMark->GetName());
     }
 }
@@ -251,7 +251,7 @@ void GetBookmark(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
     sw::mark::IMark* pBookmark = rIDMA.getOneInnermostBookmarkFor(rCursor);
-    tools::ScopedJsonWriterNode aBookmark = rJsonWriter.startNode("bookmark");
+    auto aBookmark = rJsonWriter.startNode("bookmark");
     if (!pBookmark)
     {
         return;
@@ -298,7 +298,7 @@ void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     }
 
     SwDoc* pDoc = pDocShell->GetDoc();
-    tools::ScopedJsonWriterArray aBookmarks = rJsonWriter.startArray("setRefs");
+    auto aBookmarks = rJsonWriter.startArray("setRefs");
     std::vector<const SwFormatRefMark*> aRefMarks;
     for (sal_uInt16 i = 0; i < pDoc->GetRefMarks(); ++i)
     {
@@ -321,7 +321,7 @@ void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
             continue;
         }
 
-        tools::ScopedJsonWriterStruct aProperty = rJsonWriter.startStruct();
+        auto aProperty = rJsonWriter.startStruct();
         rJsonWriter.put("name", pRefMark->GetRefName());
     }
 }
@@ -363,7 +363,7 @@ void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     SwTextNode* pTextNode = rCursor.GetNode().GetTextNode();
     std::vector<SwTextAttr*> aAttrs
         = pTextNode->GetTextAttrsAt(rCursor.GetContentIndex(), RES_TXTATR_REFMARK);
-    tools::ScopedJsonWriterNode aRefmark = rJsonWriter.startNode("setRef");
+    auto aRefmark = rJsonWriter.startNode("setRef");
     if (aAttrs.empty())
     {
         return;
@@ -396,7 +396,7 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     }
 
     SwDoc* pDoc = pDocShell->GetDoc();
-    tools::ScopedJsonWriterArray aBookmarks = rJsonWriter.startArray("sections");
+    auto aBookmarks = rJsonWriter.startArray("sections");
     for (const auto& pSection : pDoc->GetSections())
     {
         if (!pSection->GetName().startsWith(aNamePrefix))
@@ -404,7 +404,7 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
             continue;
         }
 
-        tools::ScopedJsonWriterStruct aProperty = rJsonWriter.startStruct();
+        auto aProperty = rJsonWriter.startStruct();
         rJsonWriter.put("name", pSection->GetName());
     }
 }

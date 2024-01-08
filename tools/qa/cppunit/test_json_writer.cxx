@@ -81,7 +81,7 @@ void JsonWriterTest::testArray()
 {
     tools::JsonWriter aJson;
     {
-        tools::ScopedJsonWriterArray aArray = aJson.startArray("items");
+        auto aArray = aJson.startArray("items");
         aJson.putSimpleValue("foo");
         aJson.putSimpleValue("bar");
     }

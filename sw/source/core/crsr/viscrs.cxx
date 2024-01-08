@@ -708,7 +708,7 @@ void SwSelPaintRects::HighlightContentControl()
 
             if (pContentControl && (pContentControl->GetComboBox() || pContentControl->GetDropDown()))
             {
-                tools::ScopedJsonWriterArray aItems = aJson.startArray("items");
+                auto aItems = aJson.startArray("items");
                 for (const auto& rItem : pContentControl->GetListItems())
                 {
                     aJson.putSimpleValue(rItem.ToString());

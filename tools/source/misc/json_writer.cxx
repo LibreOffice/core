@@ -40,78 +40,46 @@ JsonWriter::~JsonWriter()
     free(mpBuffer);
 }
 
-ScopedJsonWriterNode JsonWriter::startNode(std::string_view pNodeName)
+JsonWriter::ScopedJsonWriterNode<'}'> JsonWriter::startNode(std::string_view pNodeName)
 {
     putLiteral(pNodeName, "{ ");
 
     mStartNodeCount++;
     mbFirstFieldInNode = true;
 
-    return ScopedJsonWriterNode(*this);
+    return { *this };
 }
 
-void JsonWriter::endNode()
+void JsonWriter::endNode(char closing)
 {
     assert(mStartNodeCount && "mismatched StartNode/EndNode somewhere");
     --mStartNodeCount;
     ensureSpace(1);
-    *mPos = '}';
+    *mPos = closing;
     ++mPos;
     mbFirstFieldInNode = false;
 
     validate();
 }
 
-ScopedJsonWriterArray JsonWriter::startArray(std::string_view pNodeName)
+JsonWriter::ScopedJsonWriterNode<']'> JsonWriter::startArray(std::string_view pNodeName)
 {
     putLiteral(pNodeName, "[ ");
 
     mStartNodeCount++;
     mbFirstFieldInNode = true;
 
-    return ScopedJsonWriterArray(*this);
+    return { *this };
 }
 
-void JsonWriter::endArray()
+JsonWriter::ScopedJsonWriterNode<'}'> JsonWriter::startStruct()
 {
-    assert(mStartNodeCount && "mismatched StartNode/EndNode somewhere");
-    --mStartNodeCount;
-    ensureSpace(1);
-    *mPos = ']';
-    ++mPos;
-    mbFirstFieldInNode = false;
+    putRaw("{ ");
 
-    validate();
-}
-
-ScopedJsonWriterStruct JsonWriter::startStruct()
-{
-    ensureSpace(6);
-
-    addCommaBeforeField();
-
-    *mPos = '{';
-    ++mPos;
-    *mPos = ' ';
-    ++mPos;
     mStartNodeCount++;
     mbFirstFieldInNode = true;
 
-    validate();
-
-    return ScopedJsonWriterStruct(*this);
-}
-
-void JsonWriter::endStruct()
-{
-    assert(mStartNodeCount && "mismatched StartNode/EndNode somewhere");
-    --mStartNodeCount;
-    ensureSpace(1);
-    *mPos = '}';
-    ++mPos;
-    mbFirstFieldInNode = false;
-
-    validate();
+    return { *this };
 }
 
 static char getEscapementChar(char ch)
