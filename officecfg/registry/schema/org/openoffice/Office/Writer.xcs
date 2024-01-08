@@ -4916,7 +4916,7 @@
         <info>
           <desc>Defines the width of the comment bar in Writer. Factor between 1 and 8.</desc>
         </info>
-        <value>1.8</value>
+        <value>3.0</value>
         <constraints>
           <minInclusive oor:value="1"/>
           <maxInclusive oor:value="8"/>
