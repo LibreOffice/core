@@ -325,7 +325,14 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
         // call with an extra space: shrinking can result a new word in the line
         // and a new space before that, which is also a shrank space
-        bFull = !aGuess.Guess( *this, rInf, Height(), nSpacesInLine + 1 );
+        // (except if the line was already broken at a soft hyphen, i.e. inside a word)
+        if ( aGuess.BreakPos() < TextFrameIndex(rInf.GetText().getLength()) &&
+             rInf.GetText()[sal_Int32(aGuess.BreakPos())] != CHAR_SOFTHYPHEN )
+        {
+            ++nSpacesInLine;
+        }
+
+        bFull = !aGuess.Guess( *this, rInf, Height(), nSpacesInLine );
     }
 
     // these are the possible cases:
