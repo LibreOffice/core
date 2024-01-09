@@ -642,7 +642,7 @@
       </node>
       <node oor:name=".uno:InsertFootnoteDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">F~ootnote or Endnote...</value>
+          <value xml:lang="en-US">Insert Special F~ootnote/Endnote...</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertReferenceField" oor:op="replace">
@@ -1552,7 +1552,7 @@
       </node>
       <node oor:name=".uno:CurrentFootnoteDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Footnotes and Endnotes...</value>
+          <value xml:lang="en-US">~Footnote/Endnote Settings...</value>
         </prop>
       </node>
       <node oor:name=".uno:ResetAttributes" oor:op="replace">
