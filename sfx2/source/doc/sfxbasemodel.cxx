@@ -3303,18 +3303,19 @@ public:
 
 void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame::XController2 >& xController, const Any& supplement )
 {
-    // object already disposed?
-    if ( impl_isDisposed() )
+    if (aName.isEmpty())
+    {
+        SAL_WARN("sfx.doc", "postEvent_Impl: Empty event name!");
         return;
-
-    // keep m_pData alive, if notified target would dispose the document
-    std::shared_ptr<IMPL_SfxBaseModel_DataContainer> xKeepAlive(m_pData);
+    }
 
     // also make sure this object doesn't self-destruct while notifying
     rtl::Reference<SfxBaseModel> xHoldAlive(this);
+    // keep m_pData alive, if notified target would dispose the document
+    std::shared_ptr<IMPL_SfxBaseModel_DataContainer> xKeepAlive(m_pData);
 
-    DBG_ASSERT( !aName.isEmpty(), "Empty event name!" );
-    if (aName.isEmpty())
+    // object already disposed?
+    if ( impl_isDisposed() )
         return;
 
     if ( xKeepAlive->m_aDocumentEventListeners2.getLength() )
@@ -3340,7 +3341,6 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
                 &document::XEventListener::notifyEvent,
                 aEvent ) );
     }
-
 }
 
 Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData()
