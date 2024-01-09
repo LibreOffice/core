@@ -663,6 +663,7 @@ public:
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void    SelectSection(const OUString& rSectionName) override;
 };
 
