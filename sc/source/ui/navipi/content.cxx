@@ -632,6 +632,7 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                         GetManualOrCurrent()->GetDocFunc().ShowNote(aPos, true);
                         ScTabViewShell* pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
                         pScTabViewShell->EditNote();
+                        bDone = true;
                     }
                 }
                 else if (sIdent == "delete")
