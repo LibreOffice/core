@@ -3855,6 +3855,25 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                              ' ' == aText[nTextStart + nTextLen - 1] )
                                             --nTextLen;
 
+                                        // PDF export:
+                                        const SvxFieldData* pFieldData = nullptr;
+                                        if (pPDFExtOutDevData)
+                                        {
+                                            if (rTextPortion.GetKind() == PortionKind::FIELD)
+                                            {
+                                                const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
+                                                const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
+                                                if (pFieldItem)
+                                                {
+                                                    pFieldData = pFieldItem->GetField();
+                                                    auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldData);
+                                                    if (pUrlField)
+                                                        if (pPDFExtOutDevData->GetIsExportTaggedPDF())
+                                                            pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Link, "Link");
+                                                }
+                                            }
+                                        }
+
                                         // output directly
                                         aTmpFont.QuickDrawText( &rOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray, pKashidaArray );
 
@@ -3869,27 +3888,24 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         }
 
                                         // PDF export:
-                                        if ( pPDFExtOutDevData )
+                                        if (pPDFExtOutDevData)
                                         {
-                                            if ( rTextPortion.GetKind() == PortionKind::FIELD )
+                                            if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldData))
                                             {
-                                                const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
-                                                const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
-                                                if( pFieldItem )
-                                                {
-                                                    const SvxFieldData* pFieldData = pFieldItem->GetField();
-                                                    if ( auto pUrlField = dynamic_cast< const SvxURLField* >( pFieldData ) )
-                                                    {
-                                                        Point aTopLeft( aTmpPos );
-                                                        aTopLeft.AdjustY( -(pLine->GetMaxAscent()) );
+                                                Point aTopLeft(aTmpPos);
+                                                aTopLeft.AdjustY(-(pLine->GetMaxAscent()));
 
-                                                        tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
-                                                        vcl::PDFExtOutDevBookmarkEntry aBookmark;
-                                                        aBookmark.nLinkId = pPDFExtOutDevData->CreateLink(aRect, pUrlField->GetRepresentation());
-                                                        aBookmark.aBookmark = pUrlField->GetURL();
-                                                        std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
-                                                        rBookmarks.push_back( aBookmark );
-                                                    }
+                                                tools::Rectangle aRect(aTopLeft, rTextPortion.GetSize());
+                                                vcl::PDFExtOutDevBookmarkEntry aBookmark;
+                                                aBookmark.nLinkId = pPDFExtOutDevData->CreateLink(aRect, pUrlField->GetRepresentation());
+                                                aBookmark.aBookmark = pUrlField->GetURL();
+                                                std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
+                                                rBookmarks.push_back(aBookmark);
+
+                                                if (pPDFExtOutDevData->GetIsExportTaggedPDF())
+                                                {
+                                                    pPDFExtOutDevData->SetStructureAttributeNumerical(vcl::PDFWriter::LinkAnnotation, aBookmark.nLinkId);
+                                                    pPDFExtOutDevData->EndStructureElement();
                                                 }
                                             }
                                         }
