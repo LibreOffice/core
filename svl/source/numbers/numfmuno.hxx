@@ -136,11 +136,11 @@ class SvNumberFormatObj : public cppu::WeakImplHelper<
 private:
     rtl::Reference<SvNumberFormatsSupplierObj>
                                         m_xSupplier;
-    sal_uLong                           nKey;
+    sal_Int32                           nKey;
     mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
-    SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, ::comphelper::SharedMutex _aMutex );
+    SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_Int32 nK, ::comphelper::SharedMutex _aMutex );
     virtual         ~SvNumberFormatObj() override;
 
     // XPropertySet

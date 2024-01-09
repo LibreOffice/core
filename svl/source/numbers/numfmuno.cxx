@@ -639,7 +639,7 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
     return { "com.sun.star.util.NumberFormats" };
 }
 
-SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, ::comphelper::SharedMutex _aMutex )
+SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_Int32 nK, ::comphelper::SharedMutex _aMutex )
     :m_xSupplier( &rParent )
     ,nKey( nK )
     ,m_aMutex(std::move( _aMutex ))
