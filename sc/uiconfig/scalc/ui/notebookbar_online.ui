@@ -58,7 +58,7 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom127">
+          <object class="GtkToolbar" id="WeldedToolbar">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="toolbar_style">icons</property>
@@ -67,6 +67,16 @@
               <object class="GtkToolButton" id="Home-NumberFormatType">
                 <property name="visible">True</property>
                 <property name="action_name">.uno:NumberFormatType</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuToolButton" id="NumberFormatCurrency">
+                <property name="visible">True</property>
+                <property name="action_name">.uno:NumberFormatCurrency</property>
               </object>
               <packing>
                 <property name="expand">True</property>

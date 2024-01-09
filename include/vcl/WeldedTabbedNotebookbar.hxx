@@ -23,12 +23,16 @@ class VCL_DLLPUBLIC WeldedTabbedNotebookbar
     std::unique_ptr<weld::Builder> m_xBuilder;
 
     std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::Toolbar> m_xWeldedToolbar;
 
 public:
     WeldedTabbedNotebookbar(const VclPtr<vcl::Window>& pContainerWindow,
                             const OUString& rUIFilePath,
                             const css::uno::Reference<css::frame::XFrame>& rFrame,
                             sal_uInt64 nWindowId);
+
+    weld::Toolbar& getWeldedToolbar() { return *m_xWeldedToolbar; }
+    weld::Builder& getBuilder() { return *m_xBuilder; }
 };
 
 #endif // INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX

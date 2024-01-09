@@ -14,6 +14,7 @@
 #include <vcl/syswin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
@@ -41,6 +42,7 @@ const char MERGE_NOTEBOOKBAR_URL[] = "URL";
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
+std::unique_ptr<ToolbarUnoDispatcher> SfxNotebookBar::m_xCalcToolboxDispatcher;
 std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>> SfxNotebookBar::m_pNotebookBarWeldedWrapper;
 std::map<const SfxViewShell*, VclPtr<NotebookBar>> SfxNotebookBar::m_pNotebookBarInstance;
 
@@ -436,12 +438,17 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 assert(pNotebookBar->IsWelded());
 
                 sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
-                m_pNotebookBarWeldedWrapper.emplace(std::make_pair(pViewShell,
-                        new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
+                WeldedTabbedNotebookbar* pWrapper = new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
                                                     pNotebookBar->GetUIFilePath(),
                                                     xFrame,
-                                                    nWindowId)));
+                                                    nWindowId);
+                m_pNotebookBarWeldedWrapper.emplace(std::make_pair(pViewShell, pWrapper));
                 pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
+
+                // TODO: this has to be per instance!!! like m_pNotebookBarWeldedWrapper
+                // TODO: create LOK Notebookbar Instance manager which will encapsulate in single place all of these...
+                SfxNotebookBar::m_xCalcToolboxDispatcher.reset(
+                    new ToolbarUnoDispatcher(pWrapper->getWeldedToolbar(), pWrapper->getBuilder(), xFrame));
 
                 return true;
             }
