@@ -250,6 +250,17 @@
  }
  
  
+--- src/jrd/scl.epp
++++ src/jrd/scl.epp
+@@ -218,8 +218,6 @@
+ 	if ((tdbb->tdbb_flags & TDBB_trusted_ddl) && (mask != SCL_references))
+ 		return true;
+ 
+-	const MetaName& userName = s_class->sclClassUser.second;
+-
+ 	if (s_class && (s_class->scl_flags & SCL_corrupt))
+ 	{
+ 		Arg::StatusVector status;
 --- src/lock/lock.cpp
 +++ src/lock/lock.cpp
 @@ -441,7 +441,7 @@
