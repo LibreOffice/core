@@ -68,6 +68,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158785)
     CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
+{
+    // The document contains a shape which has a text with a line break. When copying the text to
+    // clipboard the line break was missing in the RTF flavor of the clipboard.
+    createSwDoc("tdf159049_LineBreakRTFClipboard.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    selectShape(1);
+
+    // Bring shape into text edit mode
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+    // Copy text
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // Deactivate text edit mode ...
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    // ... and deselect shape.
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Paste special as RTF
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aArgs);
+    // Without fix Actual was "Abreakhere", the line break \n was missing.
+    CPPUNIT_ASSERT_EQUAL(u"Abreak\nhere"_ustr, getParagraph(1)->getString());
+}
+
 } // end of anonymouse namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

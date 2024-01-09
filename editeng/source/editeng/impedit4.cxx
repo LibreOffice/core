@@ -905,7 +905,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_FEATURE_LINEBR:
         {
-            rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_SL );
+            rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_LINE );
         }
         break;
         case EE_CHAR_KERNING:
