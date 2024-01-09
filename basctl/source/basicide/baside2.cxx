@@ -1458,6 +1458,16 @@ ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObje
     // Get active color scheme from the registry
     m_sColorSchemeId = GetShell()->GetColorConfig()->GetCurrentColorSchemeName();
     aSyntaxColors.ApplyColorScheme(m_sColorSchemeId, true);
+
+    // Initialize the visibility of the Stack Window
+    bool bStackVisible = ::officecfg::Office::BasicIDE::EditorSettings::StackWindow::get();
+    if (!bStackVisible)
+        aStackWindow->Show(bStackVisible);
+
+    // Initialize the visibility of the Watched Expressions window
+    bool bWatchVisible = ::officecfg::Office::BasicIDE::EditorSettings::WatchWindow::get();
+    if (!bWatchVisible)
+        aWatchWindow->Show(bWatchVisible);
 }
 
 ModulWindowLayout::~ModulWindowLayout()

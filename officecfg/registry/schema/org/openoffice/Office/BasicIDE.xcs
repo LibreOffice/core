@@ -170,6 +170,24 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="StackWindow" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Sets the visibility of the Call Stack window.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="WatchWindow" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Sets the visibility of the Watched Expressions window.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="ObjectCatalog" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Sets the visibility of the Object Catalog window.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="ColorScheme" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Name of the selected color scheme used in the Basic IDE.</desc>

@@ -423,14 +423,21 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
 
         case SID_BASICIDE_OBJCAT:
-            // toggling object catalog
-            aObjectCatalog->Show(!aObjectCatalog->IsVisible());
+        {
+            // Toggle the visibility of the object catalog
+            bool bVisible = aObjectCatalog->IsVisible();
+            aObjectCatalog->Show(!bVisible);
             if (pLayout)
                 pLayout->ArrangeWindows();
             // refresh the button state
             if (SfxBindings* pBindings = GetBindingsPtr())
                 pBindings->Invalidate(SID_BASICIDE_OBJCAT);
-            break;
+
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::BasicIDE::EditorSettings::ObjectCatalog::set(!bVisible, batch);
+            batch->commit();
+        }
+        break;
 
         case SID_BASICIDE_WATCH:
         {
@@ -438,9 +445,14 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if (!dynamic_cast<ModulWindowLayout*>(pLayout.get()))
                 return;
 
-            pModulLayout->ShowWatchWindow(!pModulLayout->IsWatchWindowVisible());
+            bool bVisible = pModulLayout->IsWatchWindowVisible();
+            pModulLayout->ShowWatchWindow(!bVisible);
             if (SfxBindings* pBindings = GetBindingsPtr())
                 pBindings->Invalidate(SID_BASICIDE_WATCH);
+
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::BasicIDE::EditorSettings::WatchWindow::set(!bVisible, batch);
+            batch->commit();
         }
         break;
 
@@ -450,9 +462,14 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if (!dynamic_cast<ModulWindowLayout*>(pLayout.get()))
                 return;
 
-            pModulLayout->ShowStackWindow(!pModulLayout->IsStackWindowVisible());
+            bool bVisible = pModulLayout->IsStackWindowVisible();
+            pModulLayout->ShowStackWindow(!bVisible);
             if (SfxBindings* pBindings = GetBindingsPtr())
                 pBindings->Invalidate(SID_BASICIDE_STACK);
+
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::BasicIDE::EditorSettings::StackWindow::set(!bVisible, batch);
+            batch->commit();
         }
         break;
 

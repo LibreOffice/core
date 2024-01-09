@@ -75,6 +75,7 @@
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <BasicColorConfig.hxx>
+#include <officecfg/Office/BasicIDE.hxx>
 
 namespace basctl
 {
@@ -210,6 +211,11 @@ void Shell::Init()
     InitScrollBars();
     InitTabBar();
     InitZoomLevel();
+
+    // Initialize the visibility of the Object Catalog
+    bool bObjCatVisible = ::officecfg::Office::BasicIDE::EditorSettings::ObjectCatalog::get();
+    if (!bObjCatVisible)
+        aObjectCatalog->Show(bObjCatVisible);
 
     SetCurLib( ScriptDocument::getApplicationScriptDocument(), "Standard", false, false );
 
