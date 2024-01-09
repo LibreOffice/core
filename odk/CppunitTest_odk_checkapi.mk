@@ -28,6 +28,12 @@ $(eval $(call gb_CppunitTest_set_external_code,odk_checkapi))
 $(eval $(call gb_CppunitTest_set_include,odk_checkapi, \
     -I$(INSTDIR)/$(SDKDIRNAME)/include $(SOLARINC)))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_CppunitTest_add_libs,odk_checkapi,\
+	-ldl \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_custom_headers,odk_checkapi,\
 	odk/allheaders \
 ))
