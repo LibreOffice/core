@@ -17,6 +17,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -117,6 +118,50 @@ DECLARE_RTFEXPORT_TEST(testTdf158826_extraCR, "tdf158826_extraCR.rtf")
 
     // There is a two-column floating table [that SHOULD be getParagraphOrTable(1)]
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY_THROW);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf158830, "tdf158830.rtf")
+{
+    //check centered text in table
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_CENTER,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf158978, "tdf158978.rtf")
+{
+    //check right alignment in table1 or table3
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_RIGHT,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf158982, "tdf158982.rtf")
+{
+    //check table count == 6
+    // check left margin in a cell of the last table
+    //
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTables->getCount());
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(5), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(508),
+                         getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
 }
 
 } // end of anonymous namespace
