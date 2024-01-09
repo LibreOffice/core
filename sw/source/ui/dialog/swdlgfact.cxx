@@ -302,6 +302,11 @@ short AbstractEditRegionDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractEditRegionDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractInsertSectionTabDialog_Impl::Execute()
 {
     return m_xDlg->run();

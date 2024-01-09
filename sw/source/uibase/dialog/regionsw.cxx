@@ -218,15 +218,17 @@ void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)
         case FN_EDIT_CURRENT_REGION:
         {
             weld::Window* pParentWin = GetView().GetFrameWeld();
+
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            VclPtr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));
+
+            if(auto pStringItem = dynamic_cast< const SfxStringItem *>( pItem ))
             {
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));
-                if(auto pStringItem = dynamic_cast< const SfxStringItem *>( pItem ))
-                {
-                    pEditRegionDlg->SelectSection(pStringItem->GetValue());
-                }
-                pEditRegionDlg->Execute();
+                pEditRegionDlg->SelectSection(pStringItem->GetValue());
             }
+            pEditRegionDlg->StartExecuteAsync([pEditRegionDlg](sal_Int32 /*nResult */){
+                pEditRegionDlg->disposeOnce();
+            });
         }
         break;
     }
