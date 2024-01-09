@@ -194,10 +194,6 @@ void SfxLokHelper::setView(int nId)
             if (bIsCurrShell && comphelper::LibreOfficeKit::getLanguageTag().getBcp47() == pViewShell->GetLOKLanguageTag().getBcp47())
                 return;
 
-            // update the current LOK language and locale for the dialog tunneling
-            comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
-            comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
-
             if (bIsCurrShell)
             {
                 // If we wanted to set the SfxViewShell that is actually set, we could skip it.
@@ -206,8 +202,14 @@ void SfxLokHelper::setView(int nId)
                 SAL_WARN("lok", "LANGUAGE mismatch at setView! ... old (wrong) lang:"
                                 << comphelper::LibreOfficeKit::getLanguageTag().getBcp47()
                                 << " new lang:" << pViewShell->GetLOKLanguageTag().getBcp47());
-                return;
             }
+
+            // update the current LOK language and locale for the dialog tunneling
+            comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
+            comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
+
+            if (bIsCurrShell)
+                return;
 
             SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
             rViewFrame.MakeActive_Impl(false);
