@@ -27,6 +27,9 @@ class SwWrtShell;
 class SwTableRep;
 struct ImplSVEvent;
 
+/// Provides the Table tab page on the Table -> Properties dialog, which works on an existing table.
+///
+/// Has nothing to do with the other SwFormatSomething classes, which are subclasses of SfxPoolItem.
 class SwFormatTablePage : public SfxTabPage
 {
     SwTableRep*     m_pTableData;
