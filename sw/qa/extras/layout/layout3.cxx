@@ -244,6 +244,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
                 "venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159085)
+{
+    createSwDoc("tdf159085.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // This was "... cursus" instead of breaking the word at soft hyphen
+    assertXPath(
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+        u"venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cur­"_ustr);
+
+    // This was "... cursus" instead of breaking the word at soft hyphen
+    assertXPath(
+        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+        u"venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cur­"_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158419)
 {
     createSwDoc("tdf130088.docx");
