@@ -178,6 +178,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/contentcontrollistitemdlg.ui"
         || rUIFile == u"modules/swriter/ui/dropcapspage.ui"
         || rUIFile == u"modules/swriter/ui/dropdownfielddialog.ui"
+        || rUIFile == u"modules/swriter/ui/editsectiondialog.ui"
         || rUIFile == u"modules/swriter/ui/endnotepage.ui"
         || rUIFile == u"modules/swriter/ui/footendnotedialog.ui"
         || rUIFile == u"modules/swriter/ui/footnoteareapage.ui"

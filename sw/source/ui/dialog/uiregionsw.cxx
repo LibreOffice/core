@@ -818,12 +818,15 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
 
     aOrigArray.clear();
 
+    SwWrtShell& rSh = m_rSh;
+
     // response must be called ahead of EndAction's end,
     // otherwise ScrollError can occur.
     m_xDialog->response(RET_OK);
 
-    m_rSh.EndUndo();
-    m_rSh.EndAllAction();
+    // accessing 'this' after response isn't safe, as the callback might cause the dialog to be disposed
+    rSh.EndUndo();
+    rSh.EndAllAction();
 }
 
 // Toggle protect
