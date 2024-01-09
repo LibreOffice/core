@@ -13,6 +13,7 @@
 #include <svx/svdpage.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
+#include <stlsheet.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -85,6 +86,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf150499)
     dispatchCommand(mxComponent, ".uno:Remove", aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf158254)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    goToCell("A:G");
+    dispatchCommand(mxComponent,
+                    ".uno:StyleApply?Style:string=Accent%201&FamilyName:string=CellStyles", {});
+
+    const ScPatternAttr* pPattern = pDoc->GetPattern(5, 0, 0);
+    ScStyleSheet* pStyleSheet = const_cast<ScStyleSheet*>(pPattern->GetStyleSheet());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Accent 1
+    // - Actual  : Default
+    CPPUNIT_ASSERT_EQUAL(OUString("Accent 1"), pStyleSheet->GetName());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    pPattern = pDoc->GetPattern(5, 0, 0);
+    pStyleSheet = const_cast<ScStyleSheet*>(pPattern->GetStyleSheet());
+    CPPUNIT_ASSERT_EQUAL(OUString("Default"), pStyleSheet->GetName());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf133326)
