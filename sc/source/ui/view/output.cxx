@@ -2519,7 +2519,9 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                     }
                     // DPI/ZOOM 100/100 => 10, 100/50 => 7, 100/150 => 13
                     // DPI/ZOOM 150/100 => 13, 150/50 => 8.5, 150/150 => 17.5
-                    const double nSize( rRenderContext.GetDPIScaleFactor() * aZoomX * 6 + 4);
+                    const double fSize(rRenderContext.GetDPIScaleFactor() * aZoomX * 6 + 4);
+                    // Make sure we have an integer size to draw a proper triangle
+                    sal_Int16 nSize = static_cast<sal_Int16>(fSize);
                     Point aPoints[3];
                     aPoints[0] = Point(nMarkX, nPosY);
                     aPoints[0].setX( bLayoutRTL ? aPoints[0].X() + nSize : aPoints[0].X() - nSize );
