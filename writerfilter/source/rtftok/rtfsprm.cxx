@@ -290,7 +290,7 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
         {
             //this removes properties that are equal at the style and at the sprm
             //don't do that for paragraph styles
-            if (nStyleType != NS_ooxml::LN_Value_ST_StyleType_paragraph)
+            if (nStyleType == NS_ooxml::LN_Value_ST_StyleType_character)
             {
                 if (!isSPRMDeduplicateDenylist(rSprm.first, pDirect))
                 {
