@@ -103,35 +103,29 @@ static char getEscapementChar(char ch)
 
 static bool writeEscapedSequence(sal_uInt32 ch, char*& pos)
 {
-    // control characters
-    if (ch <= 0x1f)
-    {
-        int written = snprintf(pos, 7, "\\u%.4x", static_cast<unsigned int>(ch));
-        if (written > 0)
-            pos += written;
-        return true;
-    }
-
     switch (ch)
     {
+        case '\b':
+        case '\t':
+        case '\n':
+        case '\f':
+        case '\r':
         case '"':
         case '/':
         case '\\':
             *pos++ = '\\';
             *pos++ = getEscapementChar(ch);
             return true;
-        // Special processing of U+2028 and U+2029, which are valid JSON, but invalid JavaScript
-        // Write them in escaped '\u2028' or '\u2029' form
-        case 0x2028:
-        case 0x2029:
-            *pos++ = '\\';
-            *pos++ = 'u';
-            *pos++ = '2';
-            *pos++ = '0';
-            *pos++ = '2';
-            *pos++ = ch == 0x2028 ? '8' : '9';
-            return true;
         default:
+            if (ch <= 0x1f || ch == 0x2028 || ch == 0x2029)
+            {
+                // control characters, plus special processing of U+2028 and U+2029, which are valid
+                // JSON, but invalid JavaScript. Write them in escaped '\u2028' or '\u2029' form
+                int written = snprintf(pos, 7, "\\u%.4x", static_cast<unsigned int>(ch));
+                if (written > 0)
+                    pos += written;
+                return true;
+            }
             return false;
     }
 }
@@ -228,38 +222,22 @@ void JsonWriter::put(std::string_view pPropName, std::string_view rPropVal)
     ++mPos;
 
     // copy and perform escaping
-    bool bReachedEnd = false;
-    for (size_t i = 0; i < rPropVal.size() && !bReachedEnd; ++i)
+    for (size_t i = 0; i < rPropVal.size(); ++i)
     {
         char ch = rPropVal[i];
-        switch (ch)
+        if (ch == 0)
+            break;
+        // Special processing of U+2028 and U+2029
+        if (ch == '\xE2' && i + 2 < rPropVal.size() && rPropVal[i + 1] == '\x80'
+            && (rPropVal[i + 2] == '\xA8' || rPropVal[i + 2] == '\xA9'))
         {
-            case '\b':
-            case '\t':
-            case '\n':
-            case '\f':
-            case '\r':
-            case '"':
-            case '/':
-            case '\\':
-                writeEscapedSequence(ch, mPos);
-                break;
-            case 0:
-                bReachedEnd = true;
-                break;
-            case '\xE2': // Special processing of U+2028 and U+2029
-                if (i + 2 < rPropVal.size() && rPropVal[i + 1] == '\x80'
-                    && (rPropVal[i + 2] == '\xA8' || rPropVal[i + 2] == '\xA9'))
-                {
-                    writeEscapedSequence(rPropVal[i + 2] == '\xA8' ? 0x2028 : 0x2029, mPos);
-                    i += 2;
-                    break;
-                }
-                [[fallthrough]];
-            default:
-                *mPos = ch;
-                ++mPos;
-                break;
+            writeEscapedSequence(rPropVal[i + 2] == '\xA8' ? 0x2028 : 0x2029, mPos);
+            i += 2;
+        }
+        else if (!writeEscapedSequence(static_cast<sal_uInt32>(ch), mPos))
+        {
+            *mPos = ch;
+            ++mPos;
         }
     }
 
