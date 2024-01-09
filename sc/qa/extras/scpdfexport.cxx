@@ -396,7 +396,7 @@ void ScPDFExportTest::testTdf64703_hiddenPageBreak()
 
 void ScPDFExportTest::testTdf123870()
 {
-    loadFromURL(u"tdf123870.ods");
+    loadFromFile(u"tdf123870.ods");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1:G4
