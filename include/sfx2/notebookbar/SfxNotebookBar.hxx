@@ -33,6 +33,7 @@ class SfxBindings;
 class SfxViewFrame;
 class SfxViewShell;
 class SystemWindow;
+class ToolbarUnoDispatcher;
 class WeldedTabbedNotebookbar;
 
 namespace sfx2
@@ -74,6 +75,7 @@ public:
 private:
     static bool m_bLock;
     static bool m_bHide;
+    static std::unique_ptr<ToolbarUnoDispatcher> m_xCalcToolboxDispatcher;
 
     static std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>>
         m_pNotebookBarWeldedWrapper;
