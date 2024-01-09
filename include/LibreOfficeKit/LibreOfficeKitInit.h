@@ -10,7 +10,7 @@
 #ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
 
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include "LibreOfficeKit.h"
 
 #if defined __GNUC__ || defined __clang__
 #  define LOK_TOLERATE_UNUSED __attribute__((used))

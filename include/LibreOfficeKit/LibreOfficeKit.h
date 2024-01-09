@@ -21,7 +21,7 @@
 # include <stdint.h>
 #endif
 
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include "LibreOfficeKitTypes.h"
 
 #ifdef __cplusplus
 extern "C"

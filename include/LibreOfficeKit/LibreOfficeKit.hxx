@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include <LibreOfficeKit/LibreOfficeKit.h>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <LibreOfficeKit/LibreOfficeKitInit.h>
+#include "LibreOfficeKit.h"
+#include "LibreOfficeKitEnums.h"
+#include "LibreOfficeKitInit.h"
 
 /*
  * The reasons this C++ code is not as pretty as it could be are:
