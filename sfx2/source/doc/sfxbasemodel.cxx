@@ -2026,7 +2026,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     if( m_pData->m_pObjectShell->IsAbortingImport() )
         nError = ERRCODE_ABORT;
 
-    if( bSalvage )
+    if (bSalvage && nError == ERRCODE_NONE)
     {
         // file recovery: restore original filter
         const SfxStringItem* pFilterItem = pMedium->GetItemSet().GetItem(SID_FILTER_NAME, false);
