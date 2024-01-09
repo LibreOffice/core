@@ -601,9 +601,12 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     sActive = sId;
                 xDocMenu->set_active(sActive, true);
 
-                // Edit Comments entry is only visible for comments
+                // Edit/Delete Comments are only visible for comments
                 if (nType != ScContentId::NOTE)
+                {
                     xPop->set_visible("edit", false);
+                    xPop->set_visible("delete", false);
+                }
 
                 OUString sIdent = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
                 if (sIdent == "hyperlink")
@@ -630,6 +633,14 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                         ScTabViewShell* pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
                         pScTabViewShell->EditNote();
                     }
+                }
+                else if (sIdent == "delete")
+                {
+                    ScAddress aPos = GetNotePos(nChild);
+                    pParentWindow->SetCurrentTable(aPos.Tab());
+                    pParentWindow->SetCurrentCell(aPos.Col(), aPos.Row());
+                    ScTabViewShell* pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
+                    pScTabViewShell->DeleteContents(InsertDeleteFlags::NOTE);
                 }
             }
             break;
