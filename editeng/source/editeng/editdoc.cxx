@@ -2869,6 +2869,19 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
     return nullptr;
 }
 
+EditCharAttrib* CharAttribList::FindAttribRightOpen( sal_uInt16 nWhich, sal_Int32 nPos )
+{
+    AttribsType::reverse_iterator it = std::find_if(aAttribs.rbegin(), aAttribs.rend(),
+        [&nWhich, &nPos](AttribsType::value_type& rxAttr) {
+            return rxAttr->Which() == nWhich && rxAttr->IsInLeftClosedRightOpen(nPos); });
+    if (it != aAttribs.rend())
+    {
+        EditCharAttrib& rAttr = **it;
+        return &rAttr;
+    }
+    return nullptr;
+}
+
 const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const
 {
     assert(nWhich);

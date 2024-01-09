@@ -101,6 +101,8 @@ public:
 
     bool    IsIn( sal_Int32 nIndex ) const
                 { return ( ( nStart <= nIndex ) && ( nEnd >= nIndex ) ); }
+    bool    IsInLeftClosedRightOpen( sal_Int32 nIndex ) const
+                { return ( ( nStart <= nIndex ) && ( nEnd > nIndex ) ); }
     bool    IsInside( sal_Int32 nIndex ) const
                 { return ( ( nStart < nIndex ) && ( nEnd > nIndex ) ); }
     bool        IsEmpty() const

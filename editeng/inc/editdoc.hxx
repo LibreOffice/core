@@ -200,6 +200,7 @@ public:
 
     const EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const;
     EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
+    EditCharAttrib* FindAttribRightOpen( sal_uInt16 nWhich, sal_Int32 nPos );
     const EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const;
     EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
     const EditCharAttrib* FindFeature( sal_Int32 nPos ) const;

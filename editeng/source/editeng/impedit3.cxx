@@ -2981,7 +2981,11 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                     // #i1550# hard color attrib should win over text color from field
                     if ( pAttrib->Which() == EE_FEATURE_FIELD )
                     {
-                        EditCharAttrib* pColorAttr = pNode->GetCharAttribs().FindAttrib( EE_CHAR_COLOR, nPos );
+                        // These Attribs positions come from PaMs, so their interval is right-open and left-closed
+                        // when SeekCursor is called, nPos is incremented by 1. I do not know why...
+                        // probably designed to be a nEndPos, and like in a PaM, it is the position after the actual character.
+                        sal_Int32 nPosActual = nPos > 0 ? nPos - 1 : 0;
+                        EditCharAttrib* pColorAttr = pNode->GetCharAttribs().FindAttribRightOpen( EE_CHAR_COLOR, nPosActual );
                         if ( pColorAttr )
                             pColorAttr->SetFont( rFont, pOut );
                     }
