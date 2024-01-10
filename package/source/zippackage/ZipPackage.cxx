@@ -171,6 +171,7 @@ void ZipPackage::parseManifest()
         return;
 
     bool bManifestParsed = false;
+    ::std::optional<OUString> oFirstVersion;
     static constexpr OUString sMeta (u"META-INF"_ustr);
     if ( m_xRootFolder->hasByName( sMeta ) )
     {
@@ -216,7 +217,13 @@ void ZipPackage::parseManifest()
                             if ( rValue.Name == sPropFullPath )
                                 rValue.Value >>= sPath;
                             else if ( rValue.Name == sPropVersion )
+                            {
                                 rValue.Value >>= sVersion;
+                                if (!oFirstVersion)
+                                {
+                                    oFirstVersion.emplace(sVersion);
+                                }
+                            }
                             else if ( rValue.Name == sPropMediaType )
                                 rValue.Value >>= sMediaType;
                             else if ( rValue.Name == sPropSalt )
@@ -457,6 +464,11 @@ void ZipPackage::parseManifest()
             {
                 // accept only types that look similar to own mediatypes
                 m_xRootFolder->SetMediaType( aPackageMediatype );
+                // also set version explicitly
+                if (oFirstVersion && m_xRootFolder->GetVersion().isEmpty())
+                {
+                    m_xRootFolder->SetVersion(*oFirstVersion);
+                }
                 // if there is an encrypted inner package, there is no root
                 // document, because instead there is a package, and it is not
                 // an error
