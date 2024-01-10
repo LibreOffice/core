@@ -141,8 +141,6 @@ void SwModelTestBase::calcLayout()
     getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
-int SwModelTestBase::getLength() const { return getBodyText().getLength(); }
-
 OUString SwModelTestBase::getBodyText() const
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

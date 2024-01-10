@@ -151,8 +151,6 @@ protected:
 
     void calcLayout();
 
-    /// Get the length of the whole document. @deprecated why use this?
-    int getLength() const;
     /// Get the body text of the whole document.
     OUString getBodyText() const;
 

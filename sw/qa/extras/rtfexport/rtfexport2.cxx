@@ -93,9 +93,15 @@ DECLARE_RTFEXPORT_TEST(testN192129, "n192129.rtf")
     }
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo45543, "fdo45543.rtf") { CPPUNIT_ASSERT_EQUAL(5, getLength()); }
+DECLARE_RTFEXPORT_TEST(testFdo45543, "fdo45543.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(u"この文書は"_ustr, getBodyText());
+}
 
-DECLARE_RTFEXPORT_TEST(testFdo42465, "fdo42465.rtf") { CPPUNIT_ASSERT_EQUAL(3, getLength()); }
+DECLARE_RTFEXPORT_TEST(testFdo42465, "fdo42465.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(u"kód"_ustr, getBodyText());
+}
 
 DECLARE_RTFEXPORT_TEST(testFdo45187, "fdo45187.rtf")
 {
@@ -185,8 +191,8 @@ DECLARE_RTFEXPORT_TEST(testFdo79384, "fdo79384.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo47326, "fdo47326.rtf")
 {
-    // This was 15 only, as \super buffered text, then the contents of it got lost.
-    CPPUNIT_ASSERT_EQUAL(19, getLength());
+    // Length was 15 only, as \super buffered text, then the contents of it got lost.
+    CPPUNIT_ASSERT_EQUAL(u"Windows®XP: Cartes:"_ustr, getBodyText());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo46955, "fdo46955.rtf")
@@ -327,7 +333,10 @@ DECLARE_RTFEXPORT_TEST(testFdo48876, "fdo48876.rtf")
         getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing").Mode);
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo48193, "fdo48193.rtf") { CPPUNIT_ASSERT_EQUAL(7, getLength()); }
+DECLARE_RTFEXPORT_TEST(testFdo48193, "fdo48193.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("foo1bar"), getBodyText());
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo44211)
 {
@@ -537,7 +546,7 @@ DECLARE_RTFEXPORT_TEST(testAllGapsWord, "all_gaps_word.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo52389, "fdo52389.rtf")
 {
     // The last '!' character at the end of the document was lost
-    CPPUNIT_ASSERT_EQUAL(6, getLength());
+    CPPUNIT_ASSERT_EQUAL(u"dania!"_ustr, getBodyText());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo49655, "fdo49655.rtf")
