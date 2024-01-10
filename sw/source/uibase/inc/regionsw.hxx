@@ -77,6 +77,7 @@ class SwEditRegionDlg final : public SfxDialogController
     std::unique_ptr<weld::Button> m_xOptionsPB;
     std::unique_ptr<weld::Button> m_xDismiss;
     std::unique_ptr<weld::Widget> m_xHideFrame;
+    std::unique_ptr<weld::Frame> m_xLinkFrame;
 
     void    RecurseList(const SwSectionFormat* pFormat, const weld::TreeIter* pIter);
     size_t  FindArrPos(const SwSectionFormat* pFormat);
