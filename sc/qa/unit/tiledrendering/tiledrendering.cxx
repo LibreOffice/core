@@ -589,6 +589,11 @@ public:
         case LOK_CALLBACK_STATE_CHANGED:
         {
             std::stringstream aStream(pPayload);
+            if (!aStream.str().starts_with("{"))
+            {
+                break;
+            }
+
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             std::string aCommandName = aTree.get<std::string>("commandName");
