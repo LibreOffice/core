@@ -3522,6 +3522,125 @@ static void FlushIMBeforeShortCut(WinSalFrame* pFrame, SalEvent nEvent, sal_uInt
     }
 }
 
+// When Num Lock is off, the key codes from NumPag come as arrows, PgUp/PgDn, etc.
+static WORD NumPadFromArrows(WORD vk)
+{
+    switch (vk)
+    {
+        case VK_CLEAR:
+            return VK_NUMPAD5;
+        case VK_PRIOR:
+            return VK_NUMPAD9;
+        case VK_NEXT:
+            return VK_NUMPAD3;
+        case VK_END:
+            return VK_NUMPAD1;
+        case VK_HOME:
+            return VK_NUMPAD7;
+        case VK_LEFT:
+            return VK_NUMPAD4;
+        case VK_UP:
+            return VK_NUMPAD8;
+        case VK_RIGHT:
+            return VK_NUMPAD6;
+        case VK_DOWN:
+            return VK_NUMPAD2;
+        case VK_INSERT:
+            return VK_NUMPAD0;
+        default:
+            return vk;
+    }
+}
+
+static bool HandleAltNumPadCode(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
+{
+    struct
+    {
+        bool started = false;
+        //static bool hex = false; // TODO: support HKEY_CURRENT_USER\Control Panel\Input Method\EnableHexNumpad
+        sal_UCS4 ch = 0;
+        bool wait_WM_CHAR = false;
+        void clear()
+        {
+            started = false;
+            ch = 0;
+            wait_WM_CHAR = false;
+        }
+    } static state;
+
+    WORD vk = LOWORD(wParam);
+    WORD keyFlags = HIWORD(lParam);
+
+    switch (nMsg)
+    {
+        case WM_CHAR:
+            if (state.wait_WM_CHAR && MapVirtualKeyW(LOBYTE(keyFlags), MAPVK_VSC_TO_VK) == VK_MENU)
+            {
+                state.clear();
+                // Ignore it - it is synthetized (incorrect, truncated) character from system
+                return true;
+            }
+
+            break;
+
+        case WM_SYSKEYDOWN:
+            if (vk == VK_MENU)
+            {
+                if (!(keyFlags & KF_REPEAT))
+                    state.clear();
+                state.started = true;
+                return true;
+            }
+
+            if (!state.started)
+                break;
+
+            if (keyFlags & KF_EXTENDED)
+                break; // NUMPAD numeric keys are *not* considered extended
+
+            vk = NumPadFromArrows(vk);
+            if (vk >= VK_NUMPAD0 && vk <= VK_NUMPAD9)
+                return true;
+
+            break;
+
+        case WM_SYSKEYUP:
+            if (!state.started)
+                break;
+
+            if (keyFlags & KF_EXTENDED)
+                break; // NUMPAD numeric keys are *not* considered extended
+
+            vk = NumPadFromArrows(vk);
+            if (vk >= VK_NUMPAD0 && vk <= VK_NUMPAD9)
+            {
+                state.ch *= 10;
+                state.ch += vk - VK_NUMPAD0;
+                return true;
+            }
+
+            break;
+
+        case WM_KEYUP:
+            if (vk == VK_MENU && state.started && state.ch)
+            {
+                sal_UCS4 ch = state.ch;
+                state.clear();
+                // Let system provide codes for values below 256
+                if (ch >= 256 && rtl::isUnicodeCodePoint(ch))
+                {
+                    PostMessageW(hWnd, WM_UNICHAR, ch, 0);
+                    state.wait_WM_CHAR = true;
+                }
+                return true;
+            }
+            break;
+    }
+
+    state.clear();
+    return false;
+}
+
 static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
@@ -3531,7 +3650,9 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     static sal_uInt16   nLastChar       = 0;
     static ModKeyFlags  nLastModKeyCode = ModKeyFlags::NONE;
     static bool         bWaitForModKeyRelease = false;
-    sal_uInt16          nRepeat         = LOWORD( lParam )-1;
+    sal_uInt16          nRepeat         = LOWORD( lParam );
+    if (nRepeat)
+        --nRepeat;
     sal_uInt16          nModCode        = 0;
 
     // this key might have been relayed by SysChild and thus
@@ -3543,6 +3664,9 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         nDeadChar = wParam;
         return false;
     }
+
+    if (HandleAltNumPadCode(hWnd, nMsg, wParam, lParam))
+        return true; // no default processing
 
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
