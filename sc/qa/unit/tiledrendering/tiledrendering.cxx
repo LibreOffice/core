@@ -777,6 +777,12 @@ public:
         break;
         case LOK_CALLBACK_STATE_CHANGED:
         {
+            OString aPayload(pPayload);
+            if (!aPayload.startsWith("{"))
+            {
+                break;
+            }
+
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
