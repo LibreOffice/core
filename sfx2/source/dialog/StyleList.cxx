@@ -735,19 +735,27 @@ static void lcl_Insert(weld::TreeView& rTreeView, const OUString& rName, SfxStyl
 
 static void FillBox_Impl(weld::TreeView& rBox, StyleTree_Impl* pEntry,
                          const std::vector<OUString>& rEntries, SfxStyleFamily eStyleFamily,
-                         const weld::TreeIter* pParent, bool blcl_insert, SfxViewShell* pViewShell)
+                         const weld::TreeIter* pParent, bool blcl_insert, SfxViewShell* pViewShell,
+                         SfxStyleSheetBasePool* pStyleSheetPool)
 {
     std::unique_ptr<weld::TreeIter> xResult = rBox.make_iterator();
     const OUString& rName = pEntry->getName();
-
     if (blcl_insert)
-        lcl_Insert(rBox, rName, eStyleFamily, pParent, xResult.get(), pViewShell);
+    {
+        const SfxStyleSheetBase* pStyle = nullptr;
+        if (pStyleSheetPool)
+            pStyle = pStyleSheetPool->Find(rName, eStyleFamily);
+        if (pStyle && pStyle->IsUsed())
+            lcl_Insert(rBox, rName, eStyleFamily, pParent, xResult.get(), pViewShell);
+        else
+            rBox.insert(pParent, -1, &rName, &rName, nullptr, nullptr, false, xResult.get());
+    }
     else
         rBox.insert(pParent, -1, &rName, &rName, nullptr, nullptr, false, xResult.get());
 
     for (size_t i = 0; i < pEntry->getChildren().size(); ++i)
         FillBox_Impl(rBox, pEntry->getChildren()[i].get(), rEntries, eStyleFamily, xResult.get(),
-                     blcl_insert, pViewShell);
+                     blcl_insert, pViewShell, pStyleSheetPool);
 }
 
 namespace SfxTemplate
@@ -1046,7 +1054,8 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
 
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        FillBox_Impl(*m_xTreeBox, aArr[i].get(), aEntries, eFam, nullptr, blcl_insert, pViewShell);
+        FillBox_Impl(*m_xTreeBox, aArr[i].get(), aEntries, eFam, nullptr, blcl_insert, pViewShell,
+                     m_pStyleSheetPool);
         aArr[i].reset();
     }
 
@@ -1241,7 +1250,13 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
             || (eFam == SfxStyleFamily::Char && m_bHighlightCharStyles)))
     {
         for (nPos = 0; nPos < nCount; ++nPos)
-            lcl_Insert(*m_xFmtLb, aStrings[nPos], eFam, nullptr, nullptr, pViewShell);
+        {
+            pStyle = m_pStyleSheetPool->Find(aStrings[nPos], eFam);
+            if (pStyle && pStyle->IsUsed())
+                lcl_Insert(*m_xFmtLb, aStrings[nPos], eFam, nullptr, nullptr, pViewShell);
+            else
+                m_xFmtLb->append(aStrings[nPos], aStrings[nPos]);
+        }
     }
     else
     {
