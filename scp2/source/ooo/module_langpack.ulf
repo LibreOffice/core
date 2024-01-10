@@ -52,6 +52,12 @@ en-US = "Frisian"
 [STR_DESC_MODULE_LANGPACK_FY]
 en-US = "Installs the Frisian user interface"
 
+[STR_NAME_MODULE_LANGPACK_HY]
+en-US = "Armenian"
+
+[STR_DESC_MODULE_LANGPACK_HY]
+en-US = "Installs the Armenian user interface"
+
 [STR_NAME_MODULE_LANGPACK_IT]
 en-US = "Italian"
 
