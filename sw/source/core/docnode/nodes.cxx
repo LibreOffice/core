@@ -231,7 +231,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
                         sNumRule = pNumRule->GetName();
                         SwNumRule* pDestRule = pDestDoc->FindNumRulePtr( sNumRule );
                         if( pDestRule )
-                            pDestRule->SetInvalidRule( true );
+                            pDestRule->Invalidate();
                         else
                             pDestDoc->MakeNumRule( sNumRule, pNumRule );
                     }

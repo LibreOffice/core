@@ -156,7 +156,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     PropagateOutlineRule();
-    mpOutlineRule->SetInvalidRule(true);
+    mpOutlineRule->Invalidate();
     UpdateNumRule();
 
     // update if we have foot notes && numbering by chapter
@@ -825,7 +825,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 
         if ( bInvalidateNumRule )
         {
-            pOld->SetInvalidRule(true);
+            pOld->Invalidate();
         }
 
         return ;
@@ -852,7 +852,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
             pOld->Set( n, rRule.GetNumFormat( n ) );
 
     pOld->CheckCharFormats( rDoc );
-    pOld->SetInvalidRule( true );
+    pOld->Invalidate();
     pOld->SetContinusNum( rRule.IsContinusNum() );
 
     rDoc.UpdateNumRule();
@@ -1386,7 +1386,7 @@ void SwDoc::DelNumRules(const SwPaM& rPam, SwRootFrame const*const pLayout)
 void SwDoc::InvalidateNumRules()
 {
     for (size_t n = 0; n < mpNumRuleTable->size(); ++n)
-        (*mpNumRuleTable)[n]->SetInvalidRule(true);
+        (*mpNumRuleTable)[n]->Invalidate();
 }
 
 // To the next/preceding Bullet at the same Level

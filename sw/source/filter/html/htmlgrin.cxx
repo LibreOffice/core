@@ -480,7 +480,7 @@ IMAGE_SETEVENT:
             // It's necessary to invalidate the rule, because between the reading
             // of LI and the graphic an EndAction could be called.
             if( GetNumInfo().GetNumRule() )
-                GetNumInfo().GetNumRule()->SetInvalidRule( true );
+                GetNumInfo().GetNumRule()->Invalidate();
 
             // Set the style again, so that indent of the first line is correct.
             SetTextCollAttrs();

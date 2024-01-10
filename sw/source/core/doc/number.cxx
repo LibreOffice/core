@@ -1089,7 +1089,7 @@ void SwNumRule::ChangeIndent( const sal_Int32 nDiff )
         Set( i, aTmpNumFormat );
     }
 
-    SetInvalidRule( true );
+    mbInvalidRuleFlag = true;
 }
 
 /// set indent of certain list level to given value
@@ -1117,7 +1117,7 @@ void SwNumRule::SetIndent( const short nNewIndent,
         aTmpNumFormat.SetIndentAt( nNewIndent );
     }
 
-    SetInvalidRule( true );
+    mbInvalidRuleFlag = true;
 }
 
 /// set indent of first list level to given value and change other list level's
@@ -1160,7 +1160,7 @@ void SwNumRule::Validate(const SwDoc& rDoc)
     for ( auto aList : aLists )
         aList->ValidateListTree(rDoc);
 
-    SetInvalidRule(false);
+    mbInvalidRuleFlag = false;
 }
 
 void SwNumRule::SetCountPhantoms(bool bCountPhantoms)

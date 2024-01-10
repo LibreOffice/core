@@ -526,7 +526,7 @@ void SwHTMLParser::NewNumberBulletListItem( HtmlTokenId nToken )
     }
 
     if( GetNumInfo().GetNumRule() )
-        GetNumInfo().GetNumRule()->SetInvalidRule( true );
+        GetNumInfo().GetNumRule()->Invalidate();
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -614,7 +614,7 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
     pTextNode->SetCountedInList( false );
 
     // Invalidate NumRule, it may have been set valid because of an EndAction
-    GetNumInfo().GetNumRule()->SetInvalidRule( false );
+    GetNumInfo().GetNumRule()->Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

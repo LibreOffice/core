@@ -1218,7 +1218,7 @@ bool SwContentNode::InvalidateNumRule()
         nullptr != (pRule = GetDoc().FindNumRulePtr(
                                 static_cast<const SwNumRuleItem*>(pItem)->GetValue() ) ) )
     {
-        pRule->SetInvalidRule( true );
+        pRule->Invalidate();
     }
     return nullptr != pRule;
 }

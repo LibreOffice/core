@@ -396,7 +396,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 {
                     SwNumRule* pDestRule = pDstDoc->FindNumRulePtr( rNm );
                     if( pDestRule )
-                        pDestRule->SetInvalidRule( true );
+                        pDestRule->Invalidate();
                     else
                         pDstDoc->MakeNumRule( rNm, pSrcDoc->FindNumRulePtr( rNm ) );
                 }

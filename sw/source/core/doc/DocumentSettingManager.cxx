@@ -300,7 +300,7 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
                 const SwNumRuleTable& rNmTable = m_rDoc.GetNumRuleTable();
                 for( SwNumRuleTable::size_type n = 0; n < rNmTable.size(); ++n )
-                    rNmTable[n]->SetInvalidRule(true);
+                    rNmTable[n]->Invalidate();
 
                 m_rDoc.UpdateNumRule();
 

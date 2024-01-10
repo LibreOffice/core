@@ -1229,7 +1229,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
                 {
                     SwNumRule* pDestRule = FindNumRulePtr( rName );
                     if( pDestRule )
-                        pDestRule->SetInvalidRule( true );
+                        pDestRule->Invalidate();
                     else
                         MakeNumRule( rName, pRule );
                 }
