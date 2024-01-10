@@ -2134,7 +2134,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
         pTemp->MovePara(GoCurrPara, fnParaStart);
     }
     pTemp->SetMark();
-    *pTemp->GetPoint() = aEnd;
+    *pTemp->GetPoint() = std::move(aEnd);
     SwUnoCursorHelper::SelectPam(*pTemp, true);
     if(!SwUnoCursorHelper::IsEndOfPara(*pTemp))
     {

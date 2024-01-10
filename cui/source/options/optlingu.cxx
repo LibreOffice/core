@@ -1385,10 +1385,10 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
         if (!pLinguData)
             pLinguData.reset( new SvxLinguData_Impl );
 
-        SvxLinguData_Impl   aOldLinguData( *pLinguData );
+        SvxLinguData_Impl aOldLinguData(*pLinguData);
         SvxEditModulesDlg aDlg(GetFrameWeld(), *pLinguData);
         if (aDlg.run() != RET_OK)
-            *pLinguData = aOldLinguData;
+            *pLinguData = std::move(aOldLinguData);
 
         // evaluate new status of 'bConfigured' flag
         sal_uInt32 nLen = pLinguData->GetDisplayServiceCount();

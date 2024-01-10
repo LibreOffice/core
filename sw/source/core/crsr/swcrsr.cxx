@@ -1099,7 +1099,7 @@ sal_Int32 SwCursor::FindAll( SwFindParas& rParas,
 
         nFound = rParas.DoFind(*this, fnMove, aRegion, bInReadOnly, xSearchItem) ? 1 : 0;
         if (0 != nFound && bMarkPos)
-            *GetMark() = aMarkPos;
+            *GetMark() = std::move(aMarkPos);
     }
 
     if( nFound && SwCursor::IsSelOvr( SwCursorSelOverFlags::Toggle ) )

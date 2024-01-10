@@ -174,7 +174,7 @@ bool SvFileObject::LoadFile_Impl()
 
         bClearMedium = !xMed.is();
         if( bClearMedium )
-            xMed = xTmpMed;  // If already finished in Download
+            xMed = std::move(xTmpMed);  // If already finished in Download
         return bDataReady;
     }
 

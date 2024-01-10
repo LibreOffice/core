@@ -45,18 +45,19 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         {
             if (m_bFullWPGSupport)
             {
-                oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
-                    "com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false);
-                return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(), mpShape,
-                                                  pShape);
+                return new oox::shape::WpsContext(
+                    *this, uno::Reference<drawing::XShape>(), mpShape,
+                    std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.CustomShape",
+                                                            /*bDefaultHeight=*/false));
             }
 
             // Don't set default character height, Writer has its own way to set
             // the default, and if we don't set it here, editeng properly inherits
             // it.
-            oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
-                "com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false);
-            return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
+            return new oox::drawingml::ShapeContext(
+                *this, mpShape,
+                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.CustomShape",
+                                                        /*bDefaultHeight=*/false));
         }
         case XML_pic:
             return new oox::drawingml::GraphicShapeContext(

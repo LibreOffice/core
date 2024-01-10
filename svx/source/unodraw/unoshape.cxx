@@ -3593,8 +3593,8 @@ uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
 
     if( HasSdrObject() && !xGluePoints.is() )
     {
-        uno::Reference< container::XIndexContainer > xNew( SvxUnoGluePointAccess_createInstance( GetSdrObject() ), uno::UNO_QUERY );
-        mxGluePoints = xGluePoints = xNew;
+        xGluePoints.set(SvxUnoGluePointAccess_createInstance(GetSdrObject()), uno::UNO_QUERY);
+        mxGluePoints = xGluePoints;
     }
 
     return xGluePoints;

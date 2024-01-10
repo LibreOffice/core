@@ -190,7 +190,7 @@ namespace drawinglayer::processor3d
             // rescue values
             const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
             const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-            std::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
+            std::shared_ptr<texture::GeoTexSvx> xOldTex(mpGeoTexSvx);
 
             // calculate logic pixel size in object coordinates. Create transformation view
             // to object by inverting ObjectToView
@@ -218,7 +218,7 @@ namespace drawinglayer::processor3d
             // restore values
             mbModulate = bOldModulate;
             mbFilter = bOldFilter;
-            mpGeoTexSvx = pOldTex;
+            mpGeoTexSvx = std::move(xOldTex);
         }
 
         void DefaultProcessor3D::impRenderBitmapTexturePrimitive3D(const primitive3d::BitmapTexturePrimitive3D& rPrimitive)

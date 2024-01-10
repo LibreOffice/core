@@ -1867,7 +1867,7 @@ void Ruler::ImplDrag( const Point& rPos )
             Invalidate(InvalidateFlags::NoErase);
 
             // reset the data as before cancel
-            *mpDragData = aTempData;
+            *mpDragData = std::move(aTempData);
         }
     }
     else

@@ -1768,10 +1768,10 @@ Reference< xml::sax::XDocumentHandler > importDialogModel(
     Reference< XModel > const & xDocument )
 {
     // single set of styles and stylenames apply to all containers
-    auto pStyleNames = std::make_shared<std::vector< OUString >>();
-    auto pStyles = std::make_shared<std::vector< css::uno::Reference< css::xml::input::XElement > >>();
+    auto xStyleNames = std::make_shared<std::vector< OUString >>();
+    auto xStyles = std::make_shared<std::vector< css::uno::Reference< css::xml::input::XElement > >>();
     return ::xmlscript::createDocumentHandler(
-        new DialogImport(xContext, xDialogModel, pStyleNames, pStyles, xDocument));
+        new DialogImport(xContext, xDialogModel, std::move(xStyleNames), std::move(xStyles), xDocument));
 }
 }
 

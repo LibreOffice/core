@@ -1821,12 +1821,12 @@ void MSWordExportBase::WriteSpecialText( SwNodeOffset nStart, SwNodeOffset nEnd,
     // tdf#106261 Reset table infos, otherwise the depth of the cells will be
     // incorrect, in case the header/footer had table(s) and we try to export
     // the same table second time.
-    ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_pTableInfo;
+    ww8::WW8TableInfo::Pointer_t xOldTableInfo(m_pTableInfo);
     m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
 
     WriteText();
 
-    m_pTableInfo = pOldTableInfo;
+    m_pTableInfo = std::move(xOldTableInfo);
 
     m_bOutPageDescs = bOldPageDescs;
     m_pCurPam = pOldPam; // delete Pam

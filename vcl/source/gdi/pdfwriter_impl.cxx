@@ -10168,7 +10168,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
             if( rNewState.m_bClipRegion )
             {
                 // clip region is always stored in private PDF mapmode
-                MapMode aNewMapMode = rNewState.m_aMapMode;
+                MapMode aNewMapMode = std::move(rNewState.m_aMapMode);
                 rNewState.m_aMapMode = m_aMapMode;
                 SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
@@ -10187,7 +10187,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
                 }
                 aLine.append( "W* n\n" );
 
-                rNewState.m_aMapMode = aNewMapMode;
+                rNewState.m_aMapMode = std::move(aNewMapMode);
                 SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
             }
