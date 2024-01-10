@@ -3819,9 +3819,10 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
 
         ScModule* pScMod = SC_MOD();
         const ScInputOptions& rOpt = pScMod->GetInputOptions();
+        const bool bKit = comphelper::LibreOfficeKit::isActive();
 
-        if ( (rOpt.GetMoveKeepEdit() && !comphelper::LibreOfficeKit::isActive())
-             || (pActiveViewSh->GetMoveKeepEdit() && comphelper::LibreOfficeKit::isActive()) )
+        if ( (rOpt.GetMoveKeepEdit() && !bKit)
+             || (pActiveViewSh && pActiveViewSh->GetMoveKeepEdit() && bKit) )
             pScMod->SetInputMode( SC_INPUT_TABLE );
 
         return true;
