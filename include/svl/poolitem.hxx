@@ -115,7 +115,7 @@ class SVL_DLLPUBLIC SfxPoolItem
 
     // allow ItemSetTooling to access
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool);
-    friend void implCleanupItemEntry(SfxItemPool&, SfxPoolItem const*);
+    friend void implCleanupItemEntry(SfxPoolItem const*);
 
     mutable sal_uInt32 m_nRefCount;
     sal_uInt16  m_nWhich;
@@ -133,13 +133,12 @@ class SVL_DLLPUBLIC SfxPoolItem
     bool        m_bIsVoidItem : 1;          // bit 0
     bool        m_bStaticDefault : 1;       // bit 1
     bool        m_bPoolDefault : 1;         // bit 2
-    bool        m_bRegisteredAtPool : 1;    // bit 3
-    bool        m_bIsSetItem : 1;           // bit 5
+    bool        m_bIsSetItem : 1;           // bit 3
 
 protected:
 #ifdef DBG_UTIL
     // this flag will make debugging item stuff much simpler
-    bool        m_bDeleted : 1;             // bit 6
+    bool        m_bDeleted : 1;             // bit 4
 #endif
 
 private:
@@ -153,7 +152,6 @@ protected:
     void setIsVoidItem() { m_bIsVoidItem = true; }
     void setStaticDefault() { m_bStaticDefault = true; }
     void setPoolDefault() { m_bPoolDefault = true; }
-    void setRegisteredAtPool(bool bNew) { m_bRegisteredAtPool = bNew; }
     void setIsSetItem() { m_bIsSetItem = true; }
 
 public:
@@ -171,7 +169,6 @@ public:
     bool isVoidItem() const { return m_bIsVoidItem; }
     bool isStaticDefault() const { return m_bStaticDefault; }
     bool isPoolDefault() const { return m_bPoolDefault; }
-    bool isRegisteredAtPool() const { return m_bRegisteredAtPool; }
     bool isSetItem() const { return m_bIsSetItem; }
 
     // version that allows nullptrs

@@ -191,7 +191,9 @@ std::set<Color> ScDocument::GetDocColors()
     const sal_uInt16 pAttribs[] = {ATTR_BACKGROUND, ATTR_FONT_COLOR};
     for (sal_uInt16 nAttrib : pAttribs)
     {
-        for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(nAttrib))
+        ItemSurrogates aSurrogates;
+        pPool->GetItemSurrogates(aSurrogates, nAttrib);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             const SvxColorItem *pColorItem = static_cast<const SvxColorItem*>(pItem);
             Color aColor( pColorItem->GetValue() );

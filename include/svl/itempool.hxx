@@ -29,9 +29,7 @@
 #include <unordered_set>
 #include <o3tl/sorted_vector.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-
-class SfxBroadcaster;
-struct SfxItemPool_Impl;
+#include <svl/SfxBroadcaster.hxx>
 
 struct SfxItemInfo
 {
@@ -52,13 +50,16 @@ struct SfxItemInfo
     bool             _bShareable : 1;
 };
 
-class SfxItemPool;
-typedef std::unordered_set<const SfxPoolItem*> registeredSfxPoolItems;
-
 #ifdef DBG_UTIL
 SVL_DLLPUBLIC size_t getAllDirectlyPooledSfxPoolItemCount();
 SVL_DLLPUBLIC size_t getRemainingDirectlyPooledSfxPoolItemCount();
 #endif
+
+typedef std::unordered_set<const SfxItemSet*> registeredSfxItemSets;
+class SfxPoolItemHolder;
+typedef std::unordered_set<const SfxPoolItemHolder*> registeredSfxPoolItemHolders;
+typedef std::unordered_set<SfxPoolItemHolder*> directPutSfxPoolItemHolders;
+typedef std::vector<const SfxPoolItem*> ItemSurrogates;
 
 /** Base class for providers of defaults of SfxPoolItems.
  *
@@ -69,21 +70,33 @@ SVL_DLLPUBLIC size_t getRemainingDirectlyPooledSfxPoolItemCount();
  */
 class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
 {
-    friend struct SfxItemPool_Impl;
     friend class SfxItemSet;
+    friend class SfxPoolItemHolder;
     friend class SfxAllItemSet;
 
     // allow ItemSetTooling to access
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool);
-    friend void implCleanupItemEntry(SfxItemPool&, SfxPoolItem const*);
+    friend void implCleanupItemEntry(SfxPoolItem const*);
 
     // unit testing
     friend class PoolItemTest;
 
     const SfxItemInfo*              pItemInfos;
-    std::unique_ptr<SfxItemPool_Impl>               pImpl;
+    SfxBroadcaster                  aBC;
+    OUString                        aName;
+    std::vector<SfxPoolItem*>       maPoolDefaults;
+    std::vector<SfxPoolItem*>*      mpStaticDefaults;
+    SfxItemPool*                    mpMaster;
+    rtl::Reference<SfxItemPool>     mpSecondary;
+    WhichRangesContainer            mpPoolRanges;
+    sal_uInt16                      mnStart;
+    sal_uInt16                      mnEnd;
+    MapUnit                         eDefMetric;
 
-    registeredSfxPoolItems** ppRegisteredSfxPoolItems;
+    registeredSfxItemSets maRegisteredSfxItemSets;
+    registeredSfxPoolItemHolders maRegisteredSfxPoolItemHolders;
+    directPutSfxPoolItemHolders maDirectPutItems;
+    bool mbPreDeleteDone;
 
 private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
@@ -93,6 +106,14 @@ private:
     { return pItemInfos[nPos]._bNeedsPoolRegistration; }
     SVL_DLLPRIVATE bool             Shareable_Impl(sal_uInt16 nPos) const
     { return pItemInfos[nPos]._bShareable; }
+
+    void registerItemSet(SfxItemSet& rSet);
+    void unregisterItemSet(SfxItemSet& rSet);
+
+    void registerPoolItemHolder(SfxPoolItemHolder& rHolder);
+    void unregisterPoolItemHolder(SfxPoolItemHolder& rHolder);
+
+    void CollectSurrogates(std::unordered_set<const SfxPoolItem*>& rTarget, sal_uInt16 nWhich) const;
 
 public:
     // for default SfxItemSet::CTOR, set default WhichRanges
@@ -112,7 +133,6 @@ public:
                                                  const SfxItemInfo *pItemInfos,
                                                  std::vector<SfxPoolItem*> *pDefaults = nullptr );
 
-public:
     virtual                         ~SfxItemPool();
 
     SfxBroadcaster&                 BC();
@@ -167,34 +187,24 @@ public:
     virtual rtl::Reference<SfxItemPool> Clone() const;
     const OUString&                 GetName() const;
 
-    template<class T> const T&      DirectPutItemInPool( std::unique_ptr<T> xItem, sal_uInt16 nWhich = 0 )
-    { return static_cast<const T&>(DirectPutItemInPoolImpl( *xItem.release(), nWhich, /*bPassingOwnership*/true)); }
-    template<class T> const T&      DirectPutItemInPool( const T& rItem, sal_uInt16 nWhich = 0 )
-    { return static_cast<const T&>(DirectPutItemInPoolImpl( rItem, nWhich, /*bPassingOwnership*/false)); }
-    void                            DirectRemoveItemFromPool( const SfxPoolItem& );
+    const SfxPoolItem& DirectPutItemInPool(const SfxPoolItem&);
+    void DirectRemoveItemFromPool(const SfxPoolItem&);
 
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
     template<class T> const T&      GetDefaultItem( TypedWhichId<T> nWhich ) const
     { return static_cast<const T&>(GetDefaultItem(sal_uInt16(nWhich))); }
-
-    struct Item2Range
-    {
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator m_begin;
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator m_end;
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator const & begin() const { return m_begin; }
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator const & end() const { return m_end; }
-    };
     const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
     template<class T> const T*      GetItem2Default( TypedWhichId<T> nWhich ) const
     { return static_cast<const T*>(GetItem2Default(sal_uInt16(nWhich))); }
 
-    const registeredSfxPoolItems&   GetItemSurrogates(sal_uInt16 nWhich) const;
+public:
+    void GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const;
     /*
         This is only valid for SfxPoolItem that override IsSortable and operator<.
         Returns a range of items defined by using operator<.
         @param rNeedle must be the same type or a supertype of the pool items for nWhich.
     */
-    std::vector<const SfxPoolItem*> FindItemSurrogate(sal_uInt16 nWhich, SfxPoolItem const & rNeedle) const;
+    void FindItemSurrogate(ItemSurrogates& rTarget, sal_uInt16 nWhich, SfxPoolItem const & rNeedle) const;
 
     sal_uInt16                      GetFirstWhich() const;
     sal_uInt16                      GetLastWhich() const;
@@ -229,24 +239,6 @@ public:
                                         return nId && nId <= SFX_WHICH_MAX; }
     static bool                     IsSlot(sal_uInt16 nId) {
                                         return nId && nId > SFX_WHICH_MAX; }
-
-    // This method will try to register the Item at this Pool.
-    void registerSfxPoolItem(const SfxPoolItem& rItem);
-
-    // this method will unregister an Item from this Pool
-    void unregisterSfxPoolItem(const SfxPoolItem& rItem);
-
-    // check if this Item is registered at this Pool, needed to detect
-    // if an Item is to be set at another Pool and needs to be cloned
-    bool isSfxPoolItemRegisteredAtThisPool(const SfxPoolItem& rItem) const;
-
-    // try to find an equal existing Item to given one in pool
-    const SfxPoolItem* tryToGetEqualItem(const SfxPoolItem& rItem, sal_uInt16 nWhich) const;
-
-    void                            dumpAsXml(xmlTextWriterPtr pWriter) const;
-
-protected:
-    const SfxPoolItem&      DirectPutItemInPoolImpl( const SfxPoolItem&, sal_uInt16 nWhich = 0, bool bPassingOwnership = false );
 
 private:
     const SfxItemPool&              operator=(const SfxItemPool &) = delete;

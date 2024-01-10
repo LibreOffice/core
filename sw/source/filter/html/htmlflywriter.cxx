@@ -2218,7 +2218,9 @@ void SwHTMLWriter::CollectLinkTargets()
 {
     const SwTextINetFormat* pTextAttr;
 
-    for (const SfxPoolItem* pItem : m_pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
+    ItemSurrogates aSurrogates;
+    m_pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pINetFormat = dynamic_cast<const SwFormatINetFormat*>(pItem);
         const SwTextNode* pTextNd;
@@ -2232,7 +2234,8 @@ void SwHTMLWriter::CollectLinkTargets()
         }
     }
 
-    for (const SfxPoolItem* pItem : m_pDoc->GetAttrPool().GetItemSurrogates(RES_URL))
+    m_pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_URL);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pURL = dynamic_cast<const SwFormatURL*>(pItem);
         if( pURL )

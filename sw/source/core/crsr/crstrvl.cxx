@@ -416,13 +416,14 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                                 &rPos, &tmp) );
     }
 
-    const registeredSfxPoolItems& rSurrogates(GetDoc()->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA));
-    const sal_uInt32 nMaxItems(rSurrogates.size());
+    ItemSurrogates aSurrogates;
+    GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
+    const sal_uInt32 nMaxItems(aSurrogates.size());
     if( nMaxItems > 0 )
     {
         sal_uInt8 nMaxDo = 2;
         do {
-            for (const SfxPoolItem* pItem : rSurrogates)
+            for (const SfxPoolItem* pItem : aSurrogates)
             {
                 const SwTableBox* pTBox;
                 auto pFormulaItem = dynamic_cast<const SwTableBoxFormula*>(pItem);
@@ -522,8 +523,9 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
 
     const SwTextNode* pTextNd;
     const SwTextTOXMark* pTextTOX;
-    const registeredSfxPoolItems& rSurrogates(GetDoc()->GetAttrPool().GetItemSurrogates(RES_TXTATR_TOXMARK));
-    const sal_uInt32 nMaxItems(rSurrogates.size());
+    ItemSurrogates aSurrogates;
+    GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_TOXMARK);
+    const sal_uInt32 nMaxItems(aSurrogates.size());
     if( nMaxItems == 0 )
     {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
@@ -531,7 +533,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
     }
 
     do {
-        for (const SfxPoolItem* pItem : rSurrogates)
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             auto pToxMarkItem = dynamic_cast<const SwTOXMark*>(pItem);
             if( !pToxMarkItem )

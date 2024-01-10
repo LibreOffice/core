@@ -546,7 +546,9 @@ void ScDocument::UpdateFontCharSet()
         return;
 
     ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
-    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_FONT))
+    ItemSurrogates aSurrogates;
+    pPool->GetItemSurrogates(aSurrogates, ATTR_FONT);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pFontItem = const_cast<SvxFontItem*>(dynamic_cast<const SvxFontItem*>(pItem));
         if ( pFontItem && ( pFontItem->GetCharSet() == eSrcSet ||
@@ -557,7 +559,8 @@ void ScDocument::UpdateFontCharSet()
     if ( mpDrawLayer )
     {
         SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
-        for (const SfxPoolItem* pItem : rDrawPool.GetItemSurrogates(EE_CHAR_FONTINFO))
+        rDrawPool.GetItemSurrogates(aSurrogates, EE_CHAR_FONTINFO);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             SvxFontItem* pFontItem = const_cast<SvxFontItem*>(dynamic_cast<const SvxFontItem*>(pItem));
             if ( pFontItem && ( pFontItem->GetCharSet() == eSrcSet ||

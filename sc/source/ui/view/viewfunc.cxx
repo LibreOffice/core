@@ -1049,10 +1049,13 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet& rDialogSet,
     const SvxBoxInfoItem& rOldInner = rOldSet.Get(ATTR_BORDER_INNER);
     const SvxBoxInfoItem& rNewInner = rDialogSet.Get(ATTR_BORDER_INNER);
     SfxItemSet&           rNewSet   = aNewAttrs.GetItemSet();
-    SfxItemPool*          pNewPool  = rNewSet.GetPool();
 
-    pNewPool->DirectPutItemInPool(rNewOuter);        // don't delete yet
-    pNewPool->DirectPutItemInPool(rNewInner);
+    // protect referenced Items from disappearing (was: don't delete yet)
+    const SfxPoolItemHolder aHoldOuter(*rDialogSet.GetPool() , &rNewOuter);
+    const SfxPoolItemHolder aHoldInner(*rDialogSet.GetPool() , &rNewInner);
+    (void)aHoldOuter;
+    (void)aHoldInner;
+
     rNewSet.ClearItem( ATTR_BORDER );
     rNewSet.ClearItem( ATTR_BORDER_INNER );
 
@@ -1095,9 +1098,6 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet& rDialogSet,
                            bDefNewOuter ? rOldOuter : rNewOuter,
                            bDefNewInner ? &rOldInner : &rNewInner );
     }
-
-    pNewPool->DirectRemoveItemFromPool(rNewOuter);         // release
-    pNewPool->DirectRemoveItemFromPool(rNewInner);
 
     //  adjust height only if needed
     if (bAdjustBlockHeight)

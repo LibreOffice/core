@@ -5554,8 +5554,9 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             if(nMode == EditEntryMode::DELETE)
             {
                 const OUString& rName = pCnt->GetName();
-                for (const SfxPoolItem* pItem :
-                     m_pActiveShell->GetDoc()->GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
+                ItemSurrogates aSurrogates;
+                m_pActiveShell->GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
+                for (const SfxPoolItem* pItem : aSurrogates)
                 {
                     assert(dynamic_cast<const SwFormatRefMark*>(pItem));
                     const auto pFormatRefMark = static_cast<const SwFormatRefMark*>(pItem);
@@ -6230,8 +6231,9 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             else if (nType == ContentTypeId::REFERENCE)
             {
                 std::vector<const SwTextAttr*> aTextAttrArr;
-                for (const SfxPoolItem* pItem :
-                     m_pActiveShell->GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
+                ItemSurrogates aSurrogates;
+                m_pActiveShell->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
+                for (const SfxPoolItem* pItem : aSurrogates)
                 {
                     if (const auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem))
                     {

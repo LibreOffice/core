@@ -614,7 +614,9 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
         }
     }
     // process all table box formulas
-    for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
+    ItemSurrogates aSurrogates;
+    m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
         if(pBoxFormula && pBoxFormula->GetDefinedIn())
@@ -713,7 +715,8 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
     }
 
     // calculate the formula at the boxes
-    for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
+    m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
         if(!pFormula || !pFormula->GetDefinedIn() || pFormula->IsValid())

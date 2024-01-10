@@ -1252,6 +1252,7 @@ void RtfExport::OutColorTable()
     InsColor(COL_BROWN);
     InsColor(COL_GRAY);
     InsColor(COL_LIGHTGRAY);
+    ItemSurrogates aSurrogates;
 
     // char color
     {
@@ -1260,7 +1261,8 @@ void RtfExport::OutColorTable()
         pCol = rPool.GetPoolDefaultItem(RES_CHRATR_COLOR);
         if (pCol)
             InsColor(pCol->GetValue());
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_CHRATR_COLOR))
+        rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_COLOR);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             pCol = dynamic_cast<const SvxColorItem*>(pItem);
             if (pCol)
@@ -1269,7 +1271,8 @@ void RtfExport::OutColorTable()
 
         auto pUnder = GetDfltAttr(RES_CHRATR_UNDERLINE);
         InsColor(pUnder->GetColor());
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_CHRATR_UNDERLINE))
+        rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_UNDERLINE);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             pUnder = dynamic_cast<const SvxUnderlineItem*>(pItem);
             if (pUnder)
@@ -1278,7 +1281,8 @@ void RtfExport::OutColorTable()
 
         auto pOver = GetDfltAttr(RES_CHRATR_OVERLINE);
         InsColor(pOver->GetColor());
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_CHRATR_OVERLINE))
+        rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_OVERLINE);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             pOver = dynamic_cast<const SvxOverlineItem*>(pItem);
             if (pOver)
@@ -1298,7 +1302,8 @@ void RtfExport::OutColorTable()
         {
             InsColor(pBackground->GetColor());
         }
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(*pIds))
+        rPool.GetItemSurrogates(aSurrogates, *pIds);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             pBackground = static_cast<const SvxBrushItem*>(pItem);
             if (pBackground)
@@ -1317,7 +1322,8 @@ void RtfExport::OutColorTable()
         {
             InsColor(pShadow->GetColor());
         }
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_SHADOW))
+        rPool.GetItemSurrogates(aSurrogates, RES_SHADOW);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             pShadow = dynamic_cast<const SvxShadowItem*>(pItem);
             if (pShadow)
@@ -1332,7 +1338,8 @@ void RtfExport::OutColorTable()
         const SvxBoxItem* pBox = rPool.GetPoolDefaultItem(RES_BOX);
         if (nullptr != pBox)
             InsColorLine(*pBox);
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_BOX))
+        rPool.GetItemSurrogates(aSurrogates, RES_BOX);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             pBox = dynamic_cast<const SvxBoxItem*>(pItem);
             if (pBox)
@@ -1344,7 +1351,8 @@ void RtfExport::OutColorTable()
         const SvxBoxItem* pCharBox = rPool.GetPoolDefaultItem(RES_CHRATR_BOX);
         if (pCharBox)
             InsColorLine(*pCharBox);
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_CHRATR_BOX))
+        rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_BOX);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             pCharBox = dynamic_cast<const SvxBoxItem*>(pItem);
             if (pCharBox)
@@ -1353,7 +1361,8 @@ void RtfExport::OutColorTable()
     }
 
     // TextFrame or paragraph background solid fill.
-    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(XATTR_FILLCOLOR))
+    rPool.GetItemSurrogates(aSurrogates, XATTR_FILLCOLOR);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         if (auto pColorItem = dynamic_cast<const XFillColorItem*>(pItem))
             InsColor(pColorItem->GetColorValue());

@@ -599,7 +599,9 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
 /// Check if the DocNodesArray contains fields.
 bool SwViewShell::IsAnyFieldInDoc() const
 {
-    for (const SfxPoolItem* pItem : mxDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_FIELD))
+    ItemSurrogates aSurrogates;
+    mxDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_FIELD);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pFormatField = dynamic_cast<const SwFormatField*>(pItem);
         if(pFormatField)
@@ -612,7 +614,8 @@ bool SwViewShell::IsAnyFieldInDoc() const
         }
     }
 
-    for (const SfxPoolItem* pItem : mxDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INPUTFIELD))
+    mxDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INPUTFIELD);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         const SwFormatField* pFormatField = dynamic_cast<const SwFormatField*>(pItem);
         if(pFormatField)

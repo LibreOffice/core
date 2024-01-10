@@ -171,7 +171,9 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, const SwField& rField )
             && (static_cast<SwSetExpFieldType*>(rField.GetTyp())->GetType()
                 & nsSwGetSetExpType::GSE_STRING)))
     {
-        for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INPUTFIELD))
+        ItemSurrogates aSurrogates;
+        pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INPUTFIELD);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             auto pFormatField = dynamic_cast<const SwFormatField*>(pItem);
             if( pFormatField && pFormatField->GetField() == &rField )
@@ -184,7 +186,9 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, const SwField& rField )
     else if( SwFieldIds::SetExp == rField.Which()
         && static_cast<const SwSetExpField&>(rField).GetInputFlag() )
     {
-        for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_FIELD))
+        ItemSurrogates aSurrogates;
+        pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_FIELD);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             auto pFormatField = dynamic_cast<const SwFormatField*>(pItem);
             if( pFormatField && pFormatField->GetField() == &rField )

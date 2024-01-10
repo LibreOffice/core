@@ -3797,7 +3797,9 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAut
 
         // do this in two phases otherwise we invalidate the iterators when we insert into the pool
         std::vector<const SwFormatRuby*> vRubyItems;
-        for (const SfxPoolItem* pItem : rAttrPool.GetItemSurrogates(RES_TXTATR_CJK_RUBY))
+        ItemSurrogates aSurrogates;
+        rAttrPool.GetItemSurrogates(aSurrogates, RES_TXTATR_CJK_RUBY);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             auto pRubyItem = dynamic_cast<const SwFormatRuby*>(pItem);
             if ( pRubyItem && pRubyItem->GetTextRuby() )

@@ -1840,7 +1840,9 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
     const SwPageFrame *pVirtPage = nullptr;
     const SwFrame *pFrame = nullptr;
     const SfxItemPool &rPool = pPage->GetFormat()->GetDoc()->GetAttrPool();
-    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_PAGEDESC))
+    ItemSurrogates aSurrogates;
+    rPool.GetItemSurrogates(aSurrogates, RES_PAGEDESC);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         const SwFormatPageDesc *pDesc = dynamic_cast<const SwFormatPageDesc*>(pItem);
         if ( !pDesc )

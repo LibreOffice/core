@@ -1071,7 +1071,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 /// @return the reference in the doc for the name
 const SwFormatRefMark* SwDoc::GetRefMark( std::u16string_view rName ) const
 {
-    for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
+    ItemSurrogates aSurrogates;
+    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pFormatRef = dynamic_cast<const SwFormatRefMark*>(pItem);
         if(!pFormatRef)
@@ -1091,7 +1093,9 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
     const SwFormatRefMark* pRet = nullptr;
 
     sal_uInt32 nCount = 0;
-    for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
+    ItemSurrogates aSurrogates;
+    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
         if( !pRefMark )
@@ -1116,7 +1120,9 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
 {
     sal_uInt16 nCount = 0;
-    for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
+    ItemSurrogates aSurrogates;
+    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
         if( !pRefMark )
@@ -1247,7 +1253,9 @@ void SwDoc::InvalidateAutoCompleteFlag()
 
 const SwFormatINetFormat* SwDoc::FindINetAttr( std::u16string_view rName ) const
 {
-    for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
+    ItemSurrogates aSurrogates;
+    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
         if( !pFormatItem || pFormatItem->GetName() != rName )

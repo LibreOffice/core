@@ -142,7 +142,9 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
 
     if (!aUniqueName.isEmpty() && pPool1)
     {
-        for (const SfxPoolItem* pItem : pPool1->GetItemSurrogates(nWhich))
+        ItemSurrogates aSurrogates;
+        pPool1->GetItemSurrogates(aSurrogates, nWhich);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
@@ -227,7 +229,9 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
 
         if (aUniqueName.isEmpty() && pPool1)
         {
-            for (const SfxPoolItem* pItem : pPool1->GetItemSurrogates(nWhich))
+            ItemSurrogates aSurrogates;
+            pPool1->GetItemSurrogates(aSurrogates, nWhich);
+            for (const SfxPoolItem* pItem : aSurrogates)
             {
                 const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
@@ -1248,7 +1252,9 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
         const SfxItemPool& rPool1 = pModel->GetItemPool();
         if (!aUniqueName.isEmpty())
         {
-            for (const SfxPoolItem* p : rPool1.GetItemSurrogates(XATTR_LINESTART))
+            ItemSurrogates aSurrogates;
+            rPool1.GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+            for (const SfxPoolItem* p : aSurrogates)
             {
                 auto pItem = dynamic_cast<const XLineStartItem*>(p);
 
@@ -1268,7 +1274,8 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
 
             if( !bForceNew )
             {
-                for (const SfxPoolItem* p : rPool1.GetItemSurrogates(XATTR_LINEEND))
+                rPool1.GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+                for (const SfxPoolItem* p : aSurrogates)
                 {
                     auto pItem = dynamic_cast<const XLineEndItem*>(p);
 
@@ -1291,7 +1298,9 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
         const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr;
         if( !aUniqueName.isEmpty() && pPool2)
         {
-            for (const SfxPoolItem* p : pPool2->GetItemSurrogates(XATTR_LINESTART))
+            ItemSurrogates aSurrogates;
+            pPool2->GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+            for (const SfxPoolItem* p : aSurrogates)
             {
                 auto pItem = dynamic_cast<const XLineStartItem*>(p);
 
@@ -1311,7 +1320,8 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
 
             if( !bForceNew )
             {
-                for (const SfxPoolItem* p : pPool2->GetItemSurrogates(XATTR_LINEEND))
+                pPool2->GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+                for (const SfxPoolItem* p : aSurrogates)
                 {
                     auto pItem = dynamic_cast<const XLineEndItem*>(p);
 
@@ -1340,7 +1350,9 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
             sal_Int32 nUserIndex = 1;
             const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
 
-            for (const SfxPoolItem* p : rPool1.GetItemSurrogates(XATTR_LINESTART))
+            ItemSurrogates aSurrogates;
+            rPool1.GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+            for (const SfxPoolItem* p : aSurrogates)
             {
                 auto pItem = dynamic_cast<const XLineStartItem*>(p);
 
@@ -1362,7 +1374,8 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
                 }
             }
 
-            for (const SfxPoolItem* p : rPool1.GetItemSurrogates(XATTR_LINEEND))
+            rPool1.GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+            for (const SfxPoolItem* p : aSurrogates)
             {
                 auto pItem = dynamic_cast<const XLineEndItem*>(p);
 
@@ -1487,7 +1500,9 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
         const SfxItemPool& rPool1 = pModel->GetItemPool();
         if (!aUniqueName.isEmpty())
         {
-            for (const SfxPoolItem* p : rPool1.GetItemSurrogates(XATTR_LINESTART))
+            ItemSurrogates aSurrogates;
+            rPool1.GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+            for (const SfxPoolItem* p : aSurrogates)
             {
                 auto pItem = dynamic_cast<const XLineStartItem*>(p);
 
@@ -1507,7 +1522,8 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
 
             if( !bForceNew )
             {
-                for (const SfxPoolItem* p : rPool1.GetItemSurrogates(XATTR_LINEEND))
+                rPool1.GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+                for (const SfxPoolItem* p : aSurrogates)
                 {
                     auto pItem = dynamic_cast<const XLineEndItem*>(p);
 
@@ -1530,7 +1546,9 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
         const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr;
         if( !aUniqueName.isEmpty() && pPool2)
         {
-            for (const SfxPoolItem* p : pPool2->GetItemSurrogates(XATTR_LINESTART))
+            ItemSurrogates aSurrogates;
+            pPool2->GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+            for (const SfxPoolItem* p : aSurrogates)
             {
                 auto pItem = dynamic_cast<const XLineStartItem*>(p);
 
@@ -1550,7 +1568,8 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
 
             if( !bForceNew )
             {
-                for (const SfxPoolItem* p : pPool2->GetItemSurrogates(XATTR_LINEEND))
+                pPool2->GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+                for (const SfxPoolItem* p : aSurrogates)
                 {
                     auto pItem = dynamic_cast<const XLineEndItem*>(p);
 
@@ -1579,7 +1598,9 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
             sal_Int32 nUserIndex = 1;
             const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
 
-            for (const SfxPoolItem* p : rPool1.GetItemSurrogates(XATTR_LINESTART))
+            ItemSurrogates aSurrogates;
+            rPool1.GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+            for (const SfxPoolItem* p : aSurrogates)
             {
                 auto pItem = dynamic_cast<const XLineStartItem*>(p);
 
@@ -1601,7 +1622,8 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
                 }
             }
 
-            for (const SfxPoolItem* p : rPool1.GetItemSurrogates(XATTR_LINEEND))
+            rPool1.GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+            for (const SfxPoolItem* p : aSurrogates)
             {
                 auto pItem = dynamic_cast<const XLineEndItem*>(p);
 

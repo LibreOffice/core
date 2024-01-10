@@ -427,10 +427,11 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         {
             const ScCondFormatDlgItem* pDlgItem = nullptr;
             // Get the pool item stored by Conditional Format Manager Dialog.
-            auto itemsRange = GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
-            if (itemsRange.begin() != itemsRange.end())
+            ItemSurrogates aSurrogates;
+            GetPool().GetItemSurrogates(aSurrogates, SCITEM_CONDFORMATDLGDATA);
+            if (aSurrogates.begin() != aSurrogates.end())
             {
-                const SfxPoolItem* pItem = *itemsRange.begin();
+                const SfxPoolItem* pItem = *aSurrogates.begin();
                 pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
             }
 

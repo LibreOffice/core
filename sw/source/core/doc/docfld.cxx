@@ -469,7 +469,9 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
 
     for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(nWhichHint))
+        ItemSurrogates aSurrogates;
+        GetAttrPool().GetItemSurrogates(aSurrogates, nWhichHint);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();
@@ -625,7 +627,9 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
 
     for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(nWhichHint))
+        ItemSurrogates aSurrogates;
+        GetAttrPool().GetItemSurrogates(aSurrogates, nWhichHint);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             SwFormatField* pFormatField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem));
             SwTextField* pTextField = pFormatField->GetTextField();
@@ -937,7 +941,9 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
 
     for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        for (const SfxPoolItem* pItem : rDoc.GetAttrPool().GetItemSurrogates(nWhichHint))
+        ItemSurrogates aSurrogates;
+        rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, nWhichHint);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();

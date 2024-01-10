@@ -5329,7 +5329,9 @@ XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExp
 
 void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib)
 {
-    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(nAttrib))
+    ItemSurrogates aSurrogates;
+    pPool->GetItemSurrogates(aSurrogates, nAttrib);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         const SvXMLAttrContainerItem *pUnknown(static_cast<const SvXMLAttrContainerItem *>(pItem));
         if( pUnknown->GetAttrCount() > 0 )

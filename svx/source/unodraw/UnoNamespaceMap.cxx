@@ -127,9 +127,10 @@ NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool
     mnItem = -1;
     if (mpWhichId && (0 != *mpWhichId) && mpPool)
     {
-        const registeredSfxPoolItems& rSurrogates(mpPool->GetItemSurrogates(*mpWhichId));
-        mvItems.reserve(rSurrogates.size());
-        for (const SfxPoolItem* pItem : rSurrogates)
+        ItemSurrogates aSurrogates;
+        mpPool->GetItemSurrogates(aSurrogates, *mpWhichId);
+        mvItems.reserve(aSurrogates.size());
+        for (const SfxPoolItem* pItem : aSurrogates)
             mvItems.push_back(static_cast<const SvXMLAttrContainerItem*>(pItem));
     }
 }
@@ -163,9 +164,10 @@ bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
         mvItems.clear();
         if (mpPool)
         {
-            const registeredSfxPoolItems& rSurrogates(mpPool->GetItemSurrogates(*mpWhichId));
-            mvItems.reserve(rSurrogates.size());
-            for (const SfxPoolItem* pItem2 : rSurrogates)
+            ItemSurrogates aSurrogates;
+            mpPool->GetItemSurrogates(aSurrogates, *mpWhichId);
+            mvItems.reserve(aSurrogates.size());
+            for (const SfxPoolItem* pItem2 : aSurrogates)
                 mvItems.push_back(static_cast<const SvXMLAttrContainerItem*>(pItem2));
         }
         return next( rPrefix, rURL );

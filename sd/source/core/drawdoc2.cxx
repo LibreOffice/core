@@ -268,7 +268,9 @@ void SdDrawDocument::UpdatePageRelativeURLs(std::u16string_view aOldName, std::u
         return;
 
     SfxItemPool& rPool(GetPool());
-    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(EE_FEATURE_FIELD))
+    ItemSurrogates aSurrogates;
+    rPool.GetItemSurrogates(aSurrogates, EE_FEATURE_FIELD);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         const SvxFieldItem* pFldItem = dynamic_cast< const SvxFieldItem * > (pItem);
 
@@ -310,7 +312,9 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
     bool bNotes = (pPage->GetPageKind() == PageKind::Notes);
 
     SfxItemPool& rPool(GetPool());
-    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(EE_FEATURE_FIELD))
+    ItemSurrogates aSurrogates;
+    rPool.GetItemSurrogates(aSurrogates, EE_FEATURE_FIELD);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         const SvxFieldItem* pFldItem;
 

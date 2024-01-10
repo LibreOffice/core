@@ -57,7 +57,9 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         sBkmk = "#" + pIURL->GetMark();
 
     bool bAction = false, bUnLockView = false;
-    for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
+    ItemSurrogates aSurrogates;
+    m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         const SwFormatINetFormat* pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
         if( pFormatItem != nullptr &&

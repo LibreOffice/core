@@ -2383,7 +2383,9 @@ bool SwTable::CanConvertSubtables() const
     {
         return false; // no formulas in fields yet
     }
-    if (!pDoc->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA).empty())
+    ItemSurrogates aSurrogates;
+    pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
+    if (!aSurrogates.empty())
     {
         return false; // no table box formulas yet
     }

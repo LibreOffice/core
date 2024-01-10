@@ -40,7 +40,7 @@ SVL_DLLPUBLIC size_t getUsedSfxPoolItemHolderCount();
 
 // ItemSet/ItemPool helpers
 SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership);
-void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource);
+void implCleanupItemEntry(SfxPoolItem const* pSource);
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxPoolItemHolder
 {
@@ -79,11 +79,12 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 
     // allow ItemSetTooling to access
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool);
-    friend void implCleanupItemEntry(SfxItemPool&, SfxPoolItem const*);
+    friend void implCleanupItemEntry(SfxPoolItem const*);
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
     sal_uInt16        m_nCount;        ///< number of items
+    sal_uInt16        m_nRegister;     ///< number of items with NeedsPoolRegistration
     sal_uInt16        m_nTotalCount;   ///< number of WhichIDs, also size of m_ppItems array
 
     // bitfield (better packaging if a bool needs to be added)
@@ -94,6 +95,10 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 
     // Notification-Callback mechanism for SwAttrSet in SW, functionPtr for callback
     std::function<void(const SfxPoolItem*, const SfxPoolItem*)> m_aCallback;
+
+    // helpers to keep m_nRegister up-to-date
+    void checkRemovePoolRegistration(const SfxPoolItem* pItem);
+    void checkAddPoolRegistration(const SfxPoolItem* pItem);
 
 protected:
     // Notification-Callback mechanism for SwAttrSet in SW

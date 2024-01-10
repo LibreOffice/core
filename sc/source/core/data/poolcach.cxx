@@ -26,7 +26,7 @@
 ScItemPoolCache::ScItemPoolCache(CellAttributeHelper& _rHelper, const SfxPoolItem& rPutItem)
 : rHelper(_rHelper)
 , pSetToPut(nullptr)
-, aItemToPut(_rHelper.GetPool(), &rPutItem)
+, aItemToPut(rHelper.GetPool(), &rPutItem)
 {
 }
 

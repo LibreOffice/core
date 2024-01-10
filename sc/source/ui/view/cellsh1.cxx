@@ -2161,10 +2161,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool        bManaged    = false;
 
                 // Get the pool item stored by Conditional Format Manager Dialog.
-                auto itemsRange = pTabViewShell->GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
-                if (itemsRange.begin() != itemsRange.end())
+                ItemSurrogates aSurrogates;
+                pTabViewShell->GetPool().GetItemSurrogates(aSurrogates, SCITEM_CONDFORMATDLGDATA);
+                if (aSurrogates.begin() != aSurrogates.end())
                 {
-                    const ScCondFormatDlgItem* pDlgItem = static_cast<const ScCondFormatDlgItem*>(*itemsRange.begin());
+                    const ScCondFormatDlgItem* pDlgItem = static_cast<const ScCondFormatDlgItem*>(*aSurrogates.begin());
                     nIndex = pDlgItem->GetIndex();
                     bManaged = true;
                 }
@@ -2873,10 +2874,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScConditionalFormatList* pList = nullptr;
 
                 const ScCondFormatDlgItem* pDlgItem = nullptr;
-                auto itemsRange = pTabViewShell->GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
-                if (itemsRange.begin() != itemsRange.end())
+                ItemSurrogates aSurrogates;
+                pTabViewShell->GetPool().GetItemSurrogates(aSurrogates, SCITEM_CONDFORMATDLGDATA);
+                if (aSurrogates.begin() != aSurrogates.end())
                 {
-                    pDlgItem= static_cast<const ScCondFormatDlgItem*>(*itemsRange.begin());
+                    pDlgItem= static_cast<const ScCondFormatDlgItem*>(*aSurrogates.begin());
                     pList = const_cast<ScCondFormatDlgItem*>(pDlgItem)->GetConditionalFormatList();
                 }
 

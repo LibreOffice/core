@@ -1438,7 +1438,9 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
         return false;
     }
 
-    for (const SfxPoolItem* p : rSet.GetPool()->GetItemSurrogates(nWID))
+    ItemSurrogates aSurrogates;
+    rSet.GetPool()->GetItemSurrogates(aSurrogates, nWID);
+    for (const SfxPoolItem* p : aSurrogates)
     {
         const NameOrIndex* pItem = static_cast<const NameOrIndex*>(p);
         if( pItem->GetName() == aName )

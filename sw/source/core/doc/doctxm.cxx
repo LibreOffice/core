@@ -89,7 +89,9 @@ void SwDoc::GetTOIKeys(SwTOIKeyType eTyp, std::vector<OUString>& rArr,
     rArr.clear();
 
     // Look up all Primary and Secondary via the Pool
-    for (const SfxPoolItem* pPoolItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_TOXMARK))
+    ItemSurrogates aSurrogates;
+    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_TOXMARK);
+    for (const SfxPoolItem* pPoolItem : aSurrogates)
     {
         const SwTOXMark* pItem = dynamic_cast<const SwTOXMark*>(pPoolItem);
         if( !pItem )

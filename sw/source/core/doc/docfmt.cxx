@@ -637,7 +637,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                     nOldWidth = aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos();
 
             bool bChg = false;
-            for (const SfxPoolItem* pItem2 : GetAttrPool().GetItemSurrogates(RES_PARATR_TABSTOP))
+            ItemSurrogates aSurrogates;
+            GetAttrPool().GetItemSurrogates(aSurrogates, RES_PARATR_TABSTOP);
+            for (const SfxPoolItem* pItem2 : aSurrogates)
             {
                 if(auto pTabStopItem = pItem2->DynamicWhichCast(RES_PARATR_TABSTOP))
                     bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
@@ -2039,7 +2041,9 @@ std::set<Color> SwDoc::GetDocColors()
     const sal_uInt16 pAttribs[] = {RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_BACKGROUND};
     for (sal_uInt16 nAttrib : pAttribs)
     {
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nAttrib))
+        ItemSurrogates aSurrogates;
+        rPool.GetItemSurrogates(aSurrogates, nAttrib);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             auto pColorItem = static_cast<const SvxColorItem*>(pItem);
             Color aColor( pColorItem->GetValue() );

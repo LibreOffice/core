@@ -306,7 +306,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         else if ( nScriptType == 2 )
             nWhich = EE_CHAR_FONTINFO_CTL;
 
-        for (const SfxPoolItem* pItem : maEditDoc.GetItemPool().GetItemSurrogates(nWhich))
+        ItemSurrogates aSurrogates;
+        maEditDoc.GetItemPool().GetItemSurrogates(aSurrogates, nWhich);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             SvxFontItem const*const pFontItem = static_cast<const SvxFontItem*>(pItem);
             bool bAlreadyExist = false;
@@ -390,7 +392,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     {
         aColorList.push_back(rDefault.GetValue());
     }
-    for (const SfxPoolItem* pItem : maEditDoc.GetItemPool().GetItemSurrogates(EE_CHAR_COLOR))
+    ItemSurrogates aSurrogates;
+    maEditDoc.GetItemPool().GetItemSurrogates(aSurrogates, EE_CHAR_COLOR);
+    for (const SfxPoolItem* pItem : aSurrogates)
     {
         auto pColorItem(dynamic_cast<SvxColorItem const*>(pItem));
         if (pColorItem && pColorItem->GetValue() != COL_AUTO) // may be null!

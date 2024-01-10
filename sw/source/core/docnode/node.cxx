@@ -696,7 +696,9 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
         {
             SwFindNearestNode aInfo( *pNd );
             // Over all Nodes of all PageDescs
-            for (const SfxPoolItem* pItem : rDoc.GetAttrPool().GetItemSurrogates(RES_PAGEDESC))
+            ItemSurrogates aSurrogates;
+            rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_PAGEDESC);
+            for (const SfxPoolItem* pItem : aSurrogates)
             {
                 auto pPageDescItem = dynamic_cast<const SwFormatPageDesc*>(pItem);
                 if( pPageDescItem && pPageDescItem->GetDefinedIn() )

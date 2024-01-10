@@ -497,7 +497,6 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     , m_bIsVoidItem(false)
     , m_bStaticDefault(false)
     , m_bPoolDefault(false)
-    , m_bRegisteredAtPool(false)
     , m_bIsSetItem(false)
 #ifdef DBG_UTIL
     , m_bDeleted(false)

@@ -149,7 +149,9 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         for( int j=0; j < nWhichIds; ++j )
         {
             const sal_uInt16 nWhichId = aWhichIds[j];
-            for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nWhichId))
+            ItemSurrogates aSurrogates;
+            rPool.GetItemSurrogates(aSurrogates, nWhichId);
+            for (const SfxPoolItem* pItem : aSurrogates)
             {
                 auto pUnknown = dynamic_cast<const SvXMLAttrContainerItem*>( pItem  );
                 OSL_ENSURE( pUnknown, "illegal attribute container item" );

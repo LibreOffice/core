@@ -10965,7 +10965,6 @@ svgio/source/svgreader/svgtspannode.cxx
 svgio/source/svgreader/svgusenode.cxx
 svgio/source/svguno/xsvgparser.cxx
 svl/qa/unit/items/test_IndexedStyleSheets.cxx
-svl/qa/unit/items/test_itempool.cxx
 svl/qa/unit/svl.cxx
 svl/qa/unit/test_INetContentType.cxx
 svl/qa/unit/test_URIHelper.cxx
@@ -10985,7 +10984,6 @@ svl/source/fsstor/oinputstreamcontainer.hxx
 svl/source/fsstor/ostreamcontainer.cxx
 svl/source/fsstor/ostreamcontainer.hxx
 svl/source/inc/fsfactory.hxx
-svl/source/inc/poolio.hxx
 svl/source/items/IndexedStyleSheets.cxx
 svl/source/items/aeitem.cxx
 svl/source/items/cenumitm.cxx

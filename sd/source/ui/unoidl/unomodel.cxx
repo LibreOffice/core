@@ -1391,13 +1391,14 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                 for(sal_uInt16 nWhichId : aWhichIds)
                 {
-                    const registeredSfxPoolItems& rSurrogates(rPool.GetItemSurrogates(nWhichId));
-                    const sal_uInt32 nItems(rSurrogates.size());
+                    ItemSurrogates aSurrogates;
+                    rPool.GetItemSurrogates(aSurrogates, nWhichId);
+                    const sal_uInt32 nItems(aSurrogates.size());
 
                     aSeq.realloc( aSeq.getLength() + nItems*5 + 5 );
                     auto pSeq = aSeq.getArray();
 
-                    for (const SfxPoolItem* pItem : rSurrogates)
+                    for (const SfxPoolItem* pItem : aSurrogates)
                     {
                         const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
 

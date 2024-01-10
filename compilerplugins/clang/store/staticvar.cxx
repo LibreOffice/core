@@ -53,7 +53,6 @@ public:
             || fn == SRCDIR "/sal/qa/rtl/digest/rtl_digest.cxx"
             || fn == SRCDIR "/sal/qa/rtl/strings/test_oustring_endswith.cxx"
             || fn == SRCDIR "/sal/qa/rtl/strings/test_oustring_convert.cxx"
-            || fn == SRCDIR "/svl/qa/unit/items/test_itempool.cxx"
             // contains mutable state
             || fn == SRCDIR "/vcl/unx/generic/dtrans/X11_selection.cxx"
             || fn == SRCDIR "/sax/qa/cppunit/xmlimport.cxx"

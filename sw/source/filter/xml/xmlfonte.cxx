@@ -70,7 +70,9 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, 
         const SvxFontItem& rFont =
             static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));
         aFonts.push_back(&rFont);
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nWhichId))
+        ItemSurrogates aSurrogates;
+        rPool.GetItemSurrogates(aSurrogates, nWhichId);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             auto pFont = static_cast<const SvxFontItem *>(pItem);
             aFonts.push_back(pFont);

@@ -119,7 +119,7 @@ struct ScCellInfo
         , pConditionSet(nullptr)
         , pDataBar(nullptr)
         , pIconSet(nullptr)
-        , pBackground(nullptr)   // TODO: omit?
+        , maBackground()
         , pLinesAttr(nullptr)
         , mpTLBRLine(nullptr)
         , mpBLTRLine(nullptr)
@@ -156,7 +156,7 @@ struct ScCellInfo
     const ScDataBarInfo*        pDataBar;
     const ScIconSetInfo*        pIconSet;
 
-    const SvxBrushItem*         pBackground;
+    SfxPoolItemHolder           maBackground;
 
     const SvxBoxItem*           pLinesAttr;         /// original item from document.
     const SvxLineItem*          mpTLBRLine;         /// original item from document.

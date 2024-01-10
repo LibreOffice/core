@@ -823,7 +823,7 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
     else
     {
         for ( nX=nX1; nX<=nX2; nX++ )
-            if ( !SfxPoolItem::areSame(rFirst.cellInfo(nX).pBackground, rOther.cellInfo(nX).pBackground ) )
+            if ( !SfxPoolItem::areSame(rFirst.cellInfo(nX).maBackground.getItem(), rOther.cellInfo(nX).maBackground.getItem() ) )
                 return false;
     }
 
@@ -1204,7 +1204,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                             pBackground = nullptr;
                     }
                     else
-                        pBackground = pInfo->pBackground;
+                        pBackground = static_cast<const SvxBrushItem*>(pInfo->maBackground.getItem());
 
                     if ( bPagebreakMode && !pInfo->bPrinted )
                         pBackground = pProtectedBackground.get();
@@ -1723,7 +1723,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                         aPoints[2] = Point(nBotRight, nBottom);
                         aPoints[3] = Point(nBotLeft, nBottom);
 
-                        const SvxBrushItem* pBackground = pInfo->pBackground;
+                        const SvxBrushItem* pBackground(static_cast<const SvxBrushItem*>(pInfo->maBackground.getItem()));
                         if (!pBackground)
                             pBackground = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
                         if (bCellContrast)
@@ -2494,7 +2494,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                 {
 
                     const bool bIsDarkBackground = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
-                    const Color aColor = pInfo->pBackground->GetColor();
+                    const Color aColor(static_cast<const SvxBrushItem*>(pInfo->maBackground.getItem())->GetColor());
                     if ( aColor == COL_AUTO ? bIsDarkBackground : aColor.IsDark() )
                         rRenderContext.SetLineColor(COL_WHITE);
                     else
@@ -2794,7 +2794,9 @@ void ScOutputData::DrawClipMarks()
                     tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
 
-                    const Color aColor = pInfo->pBackground ? pInfo->pBackground->GetColor() : COL_AUTO;
+                    const Color aColor = pInfo->maBackground ?
+                        static_cast<const SvxBrushItem*>(pInfo->maBackground.getItem())->GetColor() :
+                        COL_AUTO;
                     if ( aColor == COL_AUTO ? bIsDarkBackground : aColor.IsDark() )
                         mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::WhiteLine );
                     else

@@ -45,12 +45,12 @@ struct Writer_Impl
     SvStream * m_pStream;
 
     std::map<OUString, OUString> maFileNameMap;
-    std::vector<const SvxFontItem*> aFontRemoveLst;
+    std::vector<SfxPoolItemHolder> aFontRemoveLst;
     SwBookmarkNodeTable aBkmkNodePos;
 
     Writer_Impl();
 
-    void RemoveFontList( SwDoc& rDoc );
+    void RemoveFontList();
     void InsertBkmk( const ::sw::mark::IMark& rBkmk );
 };
 
@@ -59,12 +59,9 @@ Writer_Impl::Writer_Impl()
 {
 }
 
-void Writer_Impl::RemoveFontList( SwDoc& rDoc )
+void Writer_Impl::RemoveFontList()
 {
-    for( const auto& rpFontItem : aFontRemoveLst )
-    {
-        rDoc.GetAttrPool().DirectRemoveItemFromPool( *rpFontItem );
-    }
+    aFontRemoveLst.clear();
 }
 
 void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
@@ -119,7 +116,7 @@ const IDocumentStylePoolAccess& Writer::getIDocumentStylePoolAccess() const { re
 
 void Writer::ResetWriter()
 {
-    m_pImpl->RemoveFontList( *m_pDoc );
+    m_pImpl->RemoveFontList();
     m_pImpl.reset(new Writer_Impl);
 
     if( m_pCurrentPam )
@@ -372,28 +369,28 @@ void Writer::AddFontItems_( SfxItemPool& rPool, sal_uInt16 nW )
     if( nullptr != pFont )
         AddFontItem( rPool, *pFont );
 
-    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nW))
+    ItemSurrogates aSurrogates;
+    rPool.GetItemSurrogates(aSurrogates, nW);
+    for (const SfxPoolItem* pItem : aSurrogates)
         AddFontItem( rPool, *static_cast<const SvxFontItem*>(pItem) );
 }
 
 void Writer::AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
 {
-    const SvxFontItem* pItem;
+    SfxPoolItemHolder aItem;
     if( RES_CHRATR_FONT != rFont.Which() )
     {
         SvxFontItem aFont( rFont );
         aFont.SetWhich( RES_CHRATR_FONT );
-        pItem = &rPool.DirectPutItemInPool( aFont );
-        assert(pItem != &aFont && "Pointer to local outside scope (pushed to aFontRemoveLst)");
+        aItem = SfxPoolItemHolder(rPool, &aFont);
+        assert(aItem.getItem() != &aFont && "Pointer to local outside scope (pushed to aFontRemoveLst)");
     }
     else
-        pItem = &rPool.DirectPutItemInPool( rFont );
+        aItem = SfxPoolItemHolder(rPool, &rFont);
 
-    if( 1 < pItem->GetRefCount() )
-        rPool.DirectRemoveItemFromPool( *pItem );
-    else
+    if(1 == aItem.getItem()->GetRefCount())
     {
-        m_pImpl->aFontRemoveLst.push_back( pItem );
+        m_pImpl->aFontRemoveLst.push_back(aItem);
     }
 }
 

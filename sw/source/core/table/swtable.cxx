@@ -1630,7 +1630,9 @@ bool SwTable::IsDeleted() const
 
 void SwTable::GatherFormulas(std::vector<SwTableBoxFormula*>& rvFormulas)
 {
-    for(const SfxPoolItem* pItem: GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
+    ItemSurrogates aSurrogates;
+    GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
+    for(const SfxPoolItem* pItem: aSurrogates)
     {
         auto pBoxFormula = dynamic_cast<const SwTableBoxFormula*>(pItem);
         assert(pBoxFormula); // use StaticWhichCast instead?
@@ -1720,7 +1722,9 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
         }
     }
     // process all table box formulas
-    for(const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
+    ItemSurrogates aSurrogates;
+    pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
+    for(const SfxPoolItem* pItem : aSurrogates)
     {
         auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
         if(pBoxFormula && pBoxFormula->GetDefinedIn())

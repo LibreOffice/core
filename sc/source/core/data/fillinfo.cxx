@@ -186,7 +186,9 @@ public:
 
 bool isRotateItemUsed(const ScDocumentPool *pPool)
 {
-    return pPool->GetItemSurrogates(ATTR_ROTATE_VALUE).size() > 0;
+    ItemSurrogates aSurrogates;
+    pPool->GetItemSurrogates(aSurrogates, ATTR_ROTATE_VALUE);
+    return aSurrogates.size() > 0;
 }
 
 void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
@@ -543,7 +545,7 @@ void ScDocument::FillInfo(
 
                                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
                                 ScBasicCellInfo* pBasicInfo = &pThisRowInfo->basicCellInfo(nCol);
-                                pInfo->pBackground  = pBackground;
+                                pInfo->maBackground = SfxPoolItemHolder(*pPool, pBackground);
                                 pInfo->pPatternAttr = pPattern;
                                 pInfo->bMerged      = bMerged;
                                 pInfo->bHOverlapped = bHOverlapped;
@@ -563,7 +565,7 @@ void ScDocument::FillInfo(
 
                                 if (bScenario)
                                 {
-                                    pInfo->pBackground = ScGlobal::GetButtonBrushItem();
+                                    pInfo->maBackground = SfxPoolItemHolder(*pPool, ScGlobal::GetButtonBrushItem());
                                     pThisRowInfo->bEmptyBack = false;
                                 }
 
@@ -664,7 +666,7 @@ void ScDocument::FillInfo(
                             // Background
                     if ( const SvxBrushItem* pItem = pCondSet->GetItemIfSet( ATTR_BACKGROUND ) )
                     {
-                        pInfo->pBackground = pItem;
+                        pInfo->maBackground = SfxPoolItemHolder(*pPool, pItem);
                         pRowInfo[nArrRow].bEmptyBack = false;
                     }
 
@@ -687,7 +689,8 @@ void ScDocument::FillInfo(
                 if( bAnyCondition && pInfo->mxColorScale)
                 {
                     pRowInfo[nArrRow].bEmptyBack = false;
-                    pInfo->pBackground = &pPool->DirectPutItemInPool(SvxBrushItem(*pInfo->mxColorScale, ATTR_BACKGROUND));
+                    const SvxBrushItem aBrushItem(*pInfo->mxColorScale, ATTR_BACKGROUND);
+                    pInfo->maBackground = SfxPoolItemHolder(*pPool, &aBrushItem);
                 }
             }
         }
@@ -725,7 +728,7 @@ void ScDocument::FillInfo(
                     if ( !pStartCond ||
                         !(pBrushItem = pStartCond->GetItemIfSet(ATTR_BACKGROUND)) )
                         pBrushItem = &pStartPattern->GetItem(ATTR_BACKGROUND);
-                    pInfo->pBackground = pBrushItem;
+                    pInfo->maBackground = SfxPoolItemHolder(*pPool, pBrushItem);
                     pRowInfo[nArrRow].bEmptyBack = false;
 
                     // Shadow

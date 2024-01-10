@@ -182,7 +182,9 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     if (mpModelPool)
     {
         SampleItem aSample(mnWhich, aName);
-        for (const SfxPoolItem* pNameOrIndex : mpModelPool->FindItemSurrogate(mnWhich, aSample))
+        ItemSurrogates aSurrogates;
+        mpModelPool->FindItemSurrogate(aSurrogates, mnWhich, aSample);
+        for (const SfxPoolItem* pNameOrIndex : aSurrogates)
             if (isValid(static_cast<const NameOrIndex*>(pNameOrIndex)))
             {
                 const_cast<SfxPoolItem*>(pNameOrIndex)->PutValue( aElement, mnMemberId );
@@ -210,7 +212,9 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
     if (mpModelPool && !aName.isEmpty())
     {
         SampleItem aSample(mnWhich, aName);
-        for (const SfxPoolItem* pFindItem : mpModelPool->FindItemSurrogate(mnWhich, aSample))
+        ItemSurrogates aSurrogates;
+        mpModelPool->FindItemSurrogate(aSurrogates, mnWhich, aSample);
+        for (const SfxPoolItem* pFindItem : aSurrogates)
             if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
             {
                 uno::Any aAny;
@@ -230,7 +234,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
 
 
     if (mpModelPool)
-        for (const SfxPoolItem* pItem : mpModelPool->GetItemSurrogates(mnWhich))
+    {
+        ItemSurrogates aSurrogates;
+        mpModelPool->GetItemSurrogates(aSurrogates, mnWhich);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
@@ -240,6 +247,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
             OUString aApiName = SvxUnogetApiNameForItem(mnWhich, pNameOrIndex->GetName());
             aNameSet.insert(aApiName);
         }
+    }
 
     return comphelper::containerToSequence(aNameSet);
 }
@@ -257,7 +265,9 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
         return false;
 
     SampleItem aSample(mnWhich, aName);
-    for (const SfxPoolItem* pFindItem : mpModelPool->FindItemSurrogate(mnWhich, aSample))
+    ItemSurrogates aSurrogates;
+    mpModelPool->FindItemSurrogate(aSurrogates, mnWhich, aSample);
+    for (const SfxPoolItem* pFindItem : aSurrogates)
         if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
             return true;
     return false;
@@ -268,13 +278,17 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
     SolarMutexGuard aGuard;
 
     if (mpModelPool)
-        for (const SfxPoolItem* pItem : mpModelPool->GetItemSurrogates(mnWhich))
+    {
+        ItemSurrogates aSurrogates;
+        mpModelPool->GetItemSurrogates(aSurrogates, mnWhich);
+        for (const SfxPoolItem* pItem : aSurrogates)
         {
             const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
             if( isValid( pNameOrIndex ) )
                 return true;
         }
+    }
 
     return false;
 }

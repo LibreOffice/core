@@ -50,7 +50,6 @@ size_t getUsedSfxPoolItemHolderCount() { return nUsedSfxPoolItemHolderCount; }
 // ScPatternAttr). Still keep it so that when errors
 // come up to this change be able to quickly check using the
 // fallback flag 'ITEM_CLASSIC_MODE'
-static bool g_bItemClassicMode(getenv("ITEM_CLASSIC_MODE"));
 
 // I thought about this constructor a while, but when there is no
 // Item we need no cleanup at destruction (what we would need the
@@ -83,7 +82,9 @@ SfxPoolItemHolder::SfxPoolItemHolder(SfxItemPool& rPool, const SfxPoolItem* pIte
     nUsedSfxPoolItemHolderCount++;
 #endif
     if (nullptr != m_pItem)
-        m_pItem = implCreateItemEntry(*m_pPool, m_pItem, m_pItem->Which(), bPassingOwnership);
+        m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), bPassingOwnership);
+    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+        getPool().registerPoolItemHolder(*this);
 }
 
 SfxPoolItemHolder::SfxPoolItemHolder(const SfxPoolItemHolder& rHolder)
@@ -99,7 +100,9 @@ SfxPoolItemHolder::SfxPoolItemHolder(const SfxPoolItemHolder& rHolder)
     nUsedSfxPoolItemHolderCount++;
 #endif
     if (nullptr != m_pItem)
-        m_pItem = implCreateItemEntry(*m_pPool, m_pItem, m_pItem->Which(), false);
+        m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), false);
+    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+        getPool().registerPoolItemHolder(*this);
 }
 
 SfxPoolItemHolder::~SfxPoolItemHolder()
@@ -108,8 +111,10 @@ SfxPoolItemHolder::~SfxPoolItemHolder()
     assert(!isDeleted() && "Destructed instance used (!)");
     nAllocatedSfxPoolItemHolderCount--;
 #endif
+    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+        getPool().unregisterPoolItemHolder(*this);
     if (nullptr != m_pItem)
-        implCleanupItemEntry(*m_pPool, m_pItem);
+        implCleanupItemEntry(m_pItem);
 #ifdef DBG_UTIL
     m_bDeleted = true;
 #endif
@@ -122,14 +127,18 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
     if (this == &rHolder || *this == rHolder)
         return *this;
 
+    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+        getPool().unregisterPoolItemHolder(*this);
     if (nullptr != m_pItem)
-        implCleanupItemEntry(*m_pPool, m_pItem);
+        implCleanupItemEntry(m_pItem);
 
     m_pPool = rHolder.m_pPool;
     m_pItem = rHolder.m_pItem;
 
     if (nullptr != m_pItem)
-        m_pItem = implCreateItemEntry(*m_pPool, m_pItem, m_pItem->Which(), false);
+        m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), false);
+    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+        getPool().registerPoolItemHolder(*this);
 
     return *this;
 }
@@ -154,6 +163,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
     : m_pPool(&rPool)
     , m_pParent(nullptr)
     , m_nCount(0)
+    , m_nRegister(0)
     , m_nTotalCount(svl::detail::CountRanges(rPool.GetFrozenIdRanges()))
     , m_bItemsFixed(false)
     , m_ppItems(new SfxPoolItem const *[m_nTotalCount]{})
@@ -171,6 +181,7 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, SfxAllItemSetFlag )
     : m_pPool(&rPool)
     , m_pParent(nullptr)
     , m_nCount(0)
+    , m_nRegister(0)
     , m_nTotalCount(0)
     , m_bItemsFixed(false)
     , m_ppItems(nullptr)
@@ -188,6 +199,7 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, WhichRangesContainer&& ranges, SfxPo
     : m_pPool(&rPool)
     , m_pParent(nullptr)
     , m_nCount(0)
+    , m_nRegister(0)
     , m_nTotalCount(nTotalCount)
     , m_bItemsFixed(true)
     , m_ppItems(ppItems)
@@ -209,6 +221,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rOther,
     : m_pPool(rOther.m_pPool)
     , m_pParent(rOther.m_pParent)
     , m_nCount(rOther.m_nCount)
+    , m_nRegister(rOther.m_nRegister)
     , m_nTotalCount(rOther.m_nTotalCount)
     , m_bItemsFixed(true)
     , m_ppItems(ppMyItems)
@@ -234,12 +247,16 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rOther,
         *ppDst = implCreateItemEntry(*GetPool(), rSource, 0, false);
         ppDst++;
     }
+
+    if (0 != m_nRegister)
+        GetPool()->registerItemSet(*this);
 }
 
 SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     : m_pPool(&pool)
     , m_pParent(nullptr)
     , m_nCount(0)
+    , m_nRegister(0)
     , m_nTotalCount(svl::detail::CountRanges(wids))
     , m_bItemsFixed(false)
     , m_ppItems(new SfxPoolItem const *[m_nTotalCount]{})
@@ -278,9 +295,13 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     //     return pSource;
 
     if (0 == pSource->Which())
+    {
         // These *should* be SfxVoidItem(0) the only Items with 0 == WhichID,
         // these need to be cloned (currently...)
+        if (bPassingOwnership)
+            return pSource;
         return pSource->Clone();
+    }
 
     // get correct target WhichID
     if (0 == nWhich)
@@ -321,6 +342,46 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         return pSource;
     }
 
+    // // currently need to check if pSource is a default Item and
+    // // avoid it to leave the Pool. This is necessary since Pools
+    // // currently delete their default items hard, resetting RefCnt
+    // // and killing them. This might change after a Pool refinement.
+    // // For now, replace them with the local Pool default. It *might*
+    // // be even necessary to replace with a cloned non-default instance
+    // // if the defaults differ.
+    // // NOTE: Currently even some Pools have no 'real' StaticDefaults,
+    // // but these also get deleted (sigh)
+    // if (IsStaticDefaultItem(pSource))
+    // {
+    //     assert(!bPassingOwnership && "ITEM: PassingOwnership not possible combined with StaticDefault (!)");
+    //     const SfxPoolItem* pStatic(pTargetPool->GetItem2Default(nWhich));
+    //     if (nullptr != pStatic)
+    //     {
+    //         if (SfxPoolItem::areSame(pSource, pStatic))
+    //             pSource = pStatic;
+    //         else
+    //         {
+    //             pSource = pSource->Clone(pMasterPool);
+    //             bPassingOwnership = true;
+    //         }
+    //     }
+    // }
+    // else if (IsDefaultItem(pSource))
+    // {
+    //     assert(!bPassingOwnership && "ITEM: PassingOwnership not possible combined with DynaimcDefault (!)");
+    //     const SfxPoolItem* pDynamic(pTargetPool->GetPoolDefaultItem(nWhich));
+    //     if (nullptr != pDynamic)
+    //     {
+    //         if (SfxPoolItem::areSame(pSource, pDynamic))
+    //             pSource = pDynamic;
+    //         else
+    //         {
+    //             pSource = pSource->Clone(pMasterPool);
+    //             bPassingOwnership = true;
+    //         }
+    //     }
+    // }
+
     // CAUTION: Shareable_Impl and NeedsPoolRegistration_Impl
     // use index, not WhichID (one more reason to change the Pools)
     const sal_uInt16 nIndex(pTargetPool->GetIndex_Impl(nWhich));
@@ -351,47 +412,9 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         if (pSource->isSetItem() && static_cast<const SfxSetItem*>(pSource)->GetItemSet().GetPool() != pMasterPool)
             break;
 
-        // If the Item is registered it is pool-dependent, so do not share when
-        // it is registered but not at this pool
-        if (pSource->isRegisteredAtPool() && !pTargetPool->isSfxPoolItemRegisteredAtThisPool(*pSource))
-            break;
-
         // If we get here we can share the Item
         pSource->AddRef();
         return pSource;
-    }
-
-    // g_bItemClassicMode: try finding already existing item
-    // NOTE: the UnitTest testIteratorsDefPattern claims that that Item "can be
-    //   edited by the user" which explains why it breaks so many rules for Items,
-    //   it behaves like an alien. That Item in the SC Pool claims to be a
-    //   'StaticDefault' and gets changed (..?)
-
-    // only do this if classic mode or required (calls from Pool::Direct*)
-    while(g_bItemClassicMode)
-    {
-        if (!pTargetPool->Shareable_Impl(nIndex))
-            // not shareable, so no need to search for identical item
-            break;
-
-        // try to get equal Item. This is the expensive part...
-        const SfxPoolItem* pExisting(pTargetPool->tryToGetEqualItem(*pSource, nWhich));
-
-        if (nullptr == pExisting)
-            // none found, done
-            break;
-
-        if (0 == pExisting->GetRefCount())
-            // do not share not-yet shared Items (should not happen)
-            break;
-
-        if (bPassingOwnership)
-            // need to cleanup if we are offered to own pSource
-            delete pSource;
-
-        // If we get here we can share the found Item
-        pExisting->AddRef();
-        return pExisting;
     }
 
     // check if the handed over and to be directly used item is a
@@ -419,30 +442,10 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // increase RefCnt 0->1
     pSource->AddRef();
 
-    // try to register @Pool (only needed if not yet registered)
-    if (!pSource->isRegisteredAtPool())
-    {
-        bool bRegisterAtPool(false);
-
-        if (g_bItemClassicMode)
-        {
-            // in classic mode register only/all shareable items
-            bRegisterAtPool = pTargetPool->Shareable_Impl(nIndex);
-        }
-        else
-        {
-            // in new mode register only/all items marked as need to be registered
-            bRegisterAtPool = pTargetPool->NeedsPoolRegistration_Impl(nIndex);
-        }
-
-        if (bRegisterAtPool)
-            pTargetPool->registerSfxPoolItem(*pSource);
-    }
-
     return pSource;
 }
 
-void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource)
+void implCleanupItemEntry(SfxPoolItem const* pSource)
 {
     if (nullptr == pSource)
         // no entry, done
@@ -454,10 +457,6 @@ void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource)
 
     if (0 == pSource->Which())
     {
-        // de-register when registered @pool
-        if (pSource->isRegisteredAtPool())
-            rPool.unregisterSfxPoolItem(*pSource);
-
         // These *should* be SfxVoidItem(0) the only Items with 0 == WhichID
         // and need to be deleted
         delete pSource;
@@ -479,10 +478,6 @@ void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource)
     // good to find other errors)
     pSource->ReleaseRef();
 
-    // de-register before deletion when registered @pool
-    if (pSource->isRegisteredAtPool())
-        rPool.unregisterSfxPoolItem(*pSource);
-
     // delete Item
     delete pSource;
 }
@@ -491,6 +486,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
     , m_nCount( rASet.m_nCount )
+    , m_nRegister( rASet.m_nRegister )
     , m_nTotalCount( rASet.m_nTotalCount )
     , m_bItemsFixed(false)
     , m_ppItems(nullptr)
@@ -502,9 +498,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     nUsedSfxItemSetCount++;
 #endif
     if (rASet.GetRanges().empty())
-    {
         return;
-    }
 
     if (0 == rASet.Count())
     {
@@ -527,12 +521,15 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     }
 
     assert(svl::detail::validRanges2(m_pWhichRanges));
+    if (0 != m_nRegister)
+        GetPool()->registerItemSet(*this);
 }
 
 SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
     , m_nCount( rASet.m_nCount )
+    , m_nRegister( rASet.m_nRegister )
     , m_nTotalCount( rASet.m_nTotalCount )
     , m_bItemsFixed(false)
     , m_ppItems( rASet.m_ppItems )
@@ -550,18 +547,27 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
 
         // can just copy the pointers, the ones in the original m_ppItems
         // array will no longer be used/referenced (unused mem, but not lost,
-        // it's part of the ItemSet-derived object)
+        // it's part of the ItemSet-derived object).
         std::copy(rASet.m_ppItems, rASet.m_ppItems + TotalCount(), m_ppItems);
     }
-    else
-    {
-        // taking over ownership
-        rASet.m_nTotalCount = 0;
-        rASet.m_ppItems = nullptr;
-    }
+
+    // deregister if rASet is registered before ptrs vanish
+    if (0 != rASet.m_nRegister)
+        rASet.GetPool()->unregisterItemSet(rASet);
+
+    // register if new set needs that
+    if (0 != m_nRegister)
+        GetPool()->registerItemSet(*this);
+
+    // taking over ownership
     rASet.m_pPool = nullptr;
     rASet.m_pParent = nullptr;
     rASet.m_nCount = 0;
+    rASet.m_nRegister = 0;
+    rASet.m_nTotalCount = 0;
+    rASet.m_ppItems = nullptr;
+    rASet.m_pWhichRanges.reset();
+    rASet.m_aCallback = nullptr;
 
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
@@ -614,6 +620,65 @@ sal_uInt16 SfxItemSet::ClearSingleItem_ForWhichID( sal_uInt16 nWhich )
     return 0;
 }
 
+void SfxItemSet::checkRemovePoolRegistration(const SfxPoolItem* pItem)
+{
+    if (nullptr == pItem)
+        // no Item, done
+        return;
+
+    if (IsInvalidItem(pItem) || pItem->isVoidItem() || 0 == pItem->Which())
+        // checks IsInvalidItem/SfxVoidItem(0)
+        return;
+
+    if (SfxItemPool::IsSlot(pItem->Which()))
+        // no slots, these do not support NeedsPoolRegistration
+        return;
+
+    if(!GetPool()->NeedsPoolRegistration(pItem->Which()))
+        // not needed for this item, done
+        return;
+
+    // there must be a registered one
+    assert(0 != m_nRegister);
+
+    // decrement counter
+    m_nRegister--;
+
+    // deregister when no more Items that NeedsPoolRegistration exist
+    if (0 == m_nRegister)
+        GetPool()->unregisterItemSet(*this);
+}
+
+void SfxItemSet::checkAddPoolRegistration(const SfxPoolItem* pItem)
+{
+    if (nullptr == pItem)
+        // no Item, done
+        return;
+
+    if (IsInvalidItem(pItem) || pItem->isVoidItem() || 0 == pItem->Which())
+        // checks IsInvalidItem/SfxVoidItem(0)
+        return;
+
+    if (SfxItemPool::IsSlot(pItem->Which()))
+        // no slots, these do not support NeedsPoolRegistration
+        return;
+
+    if(!GetPool()->NeedsPoolRegistration(pItem->Which()))
+        // not needed for this item, done
+        return;
+
+    // there cannot be more than m_nCount, *but* use one more to
+    // allow paired Remove/Add calls (see SfxItemSet::PutImpl)
+    assert(m_nRegister <= m_nCount);
+
+    // register when first Item that NeedsPoolRegistration exist
+    if (0 == m_nRegister)
+        GetPool()->registerItemSet(*this);
+
+    // increment counter
+    m_nRegister++;
+}
+
 sal_uInt16 SfxItemSet::ClearSingleItem_ForOffset( sal_uInt16 nOffset )
 {
     assert(nOffset < TotalCount());
@@ -633,8 +698,11 @@ sal_uInt16 SfxItemSet::ClearSingleItem_ForOffset( sal_uInt16 nOffset )
         m_aCallback(*aEntry, nullptr);
     }
 
+    // check register for remove
+    checkRemovePoolRegistration(*aEntry);
+
     // cleanup item & reset ptr
-    implCleanupItemEntry(*GetPool(), *aEntry);
+    implCleanupItemEntry(*aEntry);
     *aEntry = nullptr;
 
     return 1;
@@ -654,12 +722,19 @@ sal_uInt16 SfxItemSet::ClearAllItemsImpl()
             m_aCallback(rCandidate, nullptr);
         }
 
-        implCleanupItemEntry(*GetPool(), rCandidate);
+        implCleanupItemEntry(rCandidate);
     }
 
     // remember count before resetting it, that is the retval
     const sal_uInt16 nRetval(Count());
     m_nCount = 0;
+
+    if (0 != m_nRegister)
+    {
+        GetPool()->unregisterItemSet(*this);
+        m_nRegister = 0;
+    }
+
     return nRetval;
 }
 
@@ -811,8 +886,13 @@ const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, sal_uInt16 nWhi
         m_aCallback(*aEntry, pNew);
     }
 
+    // check register for add/remove. add first so that unregister/register
+    // is avoided when an Item is replaced (increase, decrease, do not reach 0)
+    checkAddPoolRegistration(pNew);
+    checkRemovePoolRegistration(*aEntry);
+
     // cleanup old entry & set entry at m_ppItems array
-    implCleanupItemEntry(*GetPool(), *aEntry);
+    implCleanupItemEntry(*aEntry);
     *aEntry = pNew;
 
     return pNew;
@@ -1173,15 +1253,10 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
         {
             if (IsInvalidItem(*aFoundOne))
             {
-                //FIXME: The following code is duplicated further down
-                assert(m_pPool);
-                //!((SfxAllItemSet *)this)->aDefault.SetWhich(nWhich);
-                //!return aDefault;
                 return GetPool()->GetDefaultItem(nWhich);
             }
 #ifdef DBG_UTIL
-            const SfxPoolItem *pItem = *aFoundOne;
-            if ( pItem->isVoidItem() || !pItem->Which() )
+            if ((*aFoundOne)->isVoidItem())
                 SAL_INFO("svl.items", "SFX_WARNING: Getting disabled Item");
 #endif
             return **aFoundOne;
@@ -1215,7 +1290,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     if (!rSet.Count())
     {
         // no Items contained in rSet -> Delete everything
-        ClearItem();
+        ClearAllItemsImpl();
         return;
     }
 
@@ -1272,7 +1347,7 @@ void SfxItemSet::Differentiate(const SfxItemSet& rSet)
     if (this == &rSet)
     {
         // same ItemSet, all Items are contained -> Delete everything
-        ClearItem();
+        ClearAllItemsImpl();
         return;
     }
 
@@ -1416,7 +1491,10 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
             // *ppFnd1 = &GetPool()->Put( *pFnd2 );
 
         if ( *ppFnd1 )
+        {
             ++m_nCount;
+            checkAddPoolRegistration(*ppFnd1);
+        }
     }
 
     // 1st Item set?
@@ -1429,7 +1507,8 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
                  **ppFnd1 != GetPool()->GetDefaultItem((*ppFnd1)->Which()) )
             {
                 // Decision table: set, default, !=, sal_False
-                implCleanupItemEntry(*GetPool(), *ppFnd1);
+                checkRemovePoolRegistration(*ppFnd1);
+                implCleanupItemEntry(*ppFnd1);
                 // GetPool()->Remove( **ppFnd1 );
                 *ppFnd1 = INVALID_POOL_ITEM;
             }
@@ -1442,7 +1521,8 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
             {
                 // Decision table: set, dontcare, doesn't matter, sal_False
                 // or:             set, dontcare, !=, sal_True
-                implCleanupItemEntry(*GetPool(), *ppFnd1);
+                checkRemovePoolRegistration(*ppFnd1);
+                implCleanupItemEntry(*ppFnd1);
                 // GetPool()->Remove( **ppFnd1 );
                 *ppFnd1 = INVALID_POOL_ITEM;
             }
@@ -1453,7 +1533,8 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
             if ( **ppFnd1 != *pFnd2 )
             {
                 // Decision table: set, set, !=, doesn't matter
-                implCleanupItemEntry(*GetPool(), *ppFnd1);
+                checkRemovePoolRegistration(*ppFnd1);
+                implCleanupItemEntry(*ppFnd1);
                 // GetPool()->Remove( **ppFnd1 );
                 *ppFnd1 = INVALID_POOL_ITEM;
             }
@@ -1551,7 +1632,8 @@ void SfxItemSet::InvalidateItem_ForOffset(sal_uInt16 nOffset)
             return;
 
         // cleanup entry
-        implCleanupItemEntry(*GetPool(), *aFoundOne);
+        checkRemovePoolRegistration(*aFoundOne);
+        implCleanupItemEntry(*aFoundOne);
     }
 
     // set new entry

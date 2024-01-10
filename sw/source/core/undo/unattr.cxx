@@ -683,11 +683,12 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     break;
     case RES_TXTATR_REFMARK:
     {
-        const registeredSfxPoolItems& aRange(rDoc.GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK));
+        ItemSurrogates aSurrogates;
+        rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
         SwHistoryHint* pHistoryHint = GetHistory()[0];
         if (pHistoryHint && HSTRY_SETREFMARKHNT == pHistoryHint->Which())
         {
-            for (const SfxPoolItem* pItem : aRange)
+            for (const SfxPoolItem* pItem : aSurrogates)
             {
                 assert(dynamic_cast<const SwFormatRefMark*>(pItem));
                 const auto pFormatRefMark = static_cast<const SwFormatRefMark*>(pItem);
