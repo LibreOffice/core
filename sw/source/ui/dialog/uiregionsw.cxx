@@ -357,6 +357,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     , m_xOptionsPB(m_xBuilder->weld_button("options"))
     , m_xDismiss(m_xBuilder->weld_button("remove"))
     , m_xHideFrame(m_xBuilder->weld_widget("hideframe"))
+    , m_xLinkFrame(m_xBuilder->weld_frame("linkframe"))
 {
     m_xTree->set_size_request(-1, m_xTree->get_height_rows(16));
     m_xFileCB->set_state(TRISTATE_FALSE);
@@ -418,6 +419,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
 
     if(comphelper::LibreOfficeKit::isActive())
     {
+        m_xLinkFrame->hide();
         m_xDDECB->hide();
         m_xDDECommandFT->hide();
         m_xFileNameFT->hide();
