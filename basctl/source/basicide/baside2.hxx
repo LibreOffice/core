@@ -396,7 +396,7 @@ public:
 
     void UpdateModule ();
     OUString GetEditorColorScheme() { return m_sWinColorScheme; }
-    void SetEditorColorScheme(OUString aColorScheme);
+    void SetEditorColorScheme(const OUString& rColorScheme);
 };
 
 class ModulWindowLayout: public Layout
@@ -422,7 +422,7 @@ public:
     Color const & GetFontColor () const { return aSyntaxColors.GetFontColor(); }
     Color const & GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
     OUString GetActiveColorSchemeId() { return m_sColorSchemeId; }
-    void ApplyColorSchemeToCurrentWindow (OUString aSchemeId);
+    void ApplyColorSchemeToCurrentWindow(const OUString& rSchemeId);
 
 protected:
     // Window:
@@ -448,7 +448,7 @@ private:
         virtual ~SyntaxColors () override;
     public:
         void SetActiveEditor (EditorWindow* pEditor_) { pEditor = pEditor_; }
-        void SetActiveColorSchemeId(OUString aColorSchemeId) { m_sActiveSchemeId = aColorSchemeId; }
+        void SetActiveColorSchemeId(const OUString& rColorSchemeId) { m_sActiveSchemeId = rColorSchemeId; }
     public:
         Color const & GetBackgroundColor () const { return m_aBackgroundColor; };
         Color const & GetFontColor () const { return m_aFontColor; }

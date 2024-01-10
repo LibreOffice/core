@@ -1433,9 +1433,9 @@ void ModulWindow::UpdateModule ()
     MarkDocumentModified(m_aDocument);
 }
 
-void ModulWindow::SetEditorColorScheme(OUString aColorScheme)
+void ModulWindow::SetEditorColorScheme(const OUString& rColorScheme)
 {
-    m_sWinColorScheme = aColorScheme;
+    m_sWinColorScheme = rColorScheme;
     EditorWindow& rEditWindow = GetEditorWindow();
     Wallpaper aBackgroundColor(GetLayout().GetSyntaxBackgroundColor());
     rEditWindow.SetBackground(aBackgroundColor);
@@ -1553,10 +1553,10 @@ void ModulWindowLayout::OnFirstSize (tools::Long const nWidth, tools::Long const
 
 // Applies the color scheme to the current window and updates color definitions;
 // note that other ModulWindow instances are not affected by calling this method
-void ModulWindowLayout::ApplyColorSchemeToCurrentWindow(OUString aSchemeId)
+void ModulWindowLayout::ApplyColorSchemeToCurrentWindow(const OUString& rSchemeId)
 {
     // Apply new color scheme to the UI
-    m_sColorSchemeId = aSchemeId;
+    m_sColorSchemeId = rSchemeId;
     aSyntaxColors.ApplyColorScheme(m_sColorSchemeId, false);
 }
 
