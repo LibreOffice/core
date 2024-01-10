@@ -1092,8 +1092,8 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
     else
     {
         INetURLObject aURL( rUrl, INetProtocol::NotValid );
-        sURL = aURL.GetURLNoMark( INetURLObject::DecodeMechanism::Unambiguous );
-        sMark = aURL.GetMark( INetURLObject::DecodeMechanism::Unambiguous );
+        sURL = aURL.GetURLNoMark( INetURLObject::DecodeMechanism::NONE );
+        sMark = aURL.GetMark( INetURLObject::DecodeMechanism::NONE );
         INetProtocol aProtocol = aURL.GetProtocol();
 
         if ( aProtocol == INetProtocol::File || aProtocol == INetProtocol::NotValid )
