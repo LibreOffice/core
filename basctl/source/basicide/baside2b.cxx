@@ -71,6 +71,7 @@
 #include "uiobject.hxx"
 #include <basegfx/utils/zoomtools.hxx>
 #include <svl/itemset.hxx>
+#include <BasicColorConfig.hxx>
 
 namespace basctl
 {
@@ -248,12 +249,14 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     bHighlighting(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),
+    m_nLastHighlightPara(0),
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
     set_id("EditorWindow");
     const Wallpaper aBackground(rModulWindow.GetLayout().GetSyntaxBackgroundColor());
     SetBackground(aBackground);
     GetWindow(GetWindowType::Border)->SetBackground(aBackground);
+    SetLineHighlightColor(GetShell()->GetColorConfig()->GetCurrentColorScheme().m_aLineHighlightColor);
     SetPointer( PointerStyle::Text );
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
 
@@ -729,6 +732,11 @@ void EditorWindow::HandleAutoCorrect()
     }
 }
 
+void EditorWindow::SetLineHighlightColor(Color aColor)
+{
+    m_aLineHighlightColor = aColor;
+}
+
 TextSelection EditorWindow::GetLastHighlightPortionTextSelection() const
 {//creates a text selection from the highlight portion on the cursor
     const sal_uInt32 nLine = GetEditView()->GetSelection().GetStart().GetPara();
@@ -976,7 +984,32 @@ void EditorWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     if (!pEditEngine)     // We need it now at latest
         CreateEditEngine();
 
+    HighlightCurrentLine(rRenderContext);
+
     pEditView->Paint(rRenderContext, rRect);
+}
+
+void EditorWindow::HighlightCurrentLine(vcl::RenderContext& rRenderContext)
+{
+    // If the cursor is in a single line and nothing is selected, then a highlight color
+    // is applied to the background of the current line
+    TextPaM aStartPaM = pEditView->GetSelection().GetStart();
+    TextPaM aEndPaM = pEditView->GetSelection().GetEnd();
+    if (aStartPaM == aEndPaM)
+    {
+        Size aWinSize(GetOutputSizePixel());
+        sal_Int16 nDocPosY = pEditView->GetStartDocPos().Y();
+        sal_Int16 nY1 = pEditEngine->PaMtoEditCursor(aStartPaM).TopLeft().Y();
+        sal_Int16 nY2 = pEditEngine->PaMtoEditCursor(aStartPaM).BottomRight().Y();
+        // Only draw if the cursor is in a visible position
+        if ((nY1 >= nDocPosY && nY1 <= nDocPosY + aWinSize.Height())
+            || (nY2 >= nDocPosY && nY2 <= nDocPosY + aWinSize.Height()))
+        {
+            tools::Rectangle aRect(Point(0, nY1 - nDocPosY), Point(aWinSize.Width(), nY2 - nDocPosY));
+            rRenderContext.SetFillColor(m_aLineHighlightColor);
+            rRenderContext.DrawRect(aRect);
+        }
+    }
 }
 
 void EditorWindow::LoseFocus()
@@ -1167,6 +1200,24 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             pBindings->Invalidate( SID_CUT );
             pBindings->Invalidate( SID_COPY );
+        }
+    }
+    else if( rTextHint.GetId() == SfxHintId::TextViewCaretChanged )
+    {
+        // Check whether the line number where the caret is has changed and the
+        // highlight needs to be redrawn
+        sal_uInt32 nStartPara = pEditView->GetSelection().GetStart().GetPara();
+        sal_uInt32 nEndPara = pEditView->GetSelection().GetEnd().GetPara();
+        if (nStartPara == nEndPara && nStartPara != m_nLastHighlightPara)
+        {
+            m_nLastHighlightPara = nStartPara;
+            Invalidate();
+            rModulWindow.GetLineNumberWindow().Invalidate();
+        }
+        else if (nStartPara != nEndPara)
+        {
+            // If multiple lines are selected, then update the line number window
+            rModulWindow.GetLineNumberWindow().Invalidate();
         }
     }
 }

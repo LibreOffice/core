@@ -105,6 +105,11 @@ private:
     bool            bDoSyntaxHighlight;
     bool            bDelayHighlight;
 
+    // Used to determine if the highlighted line has changed, which would require redrawing the highlight
+    sal_uInt32      m_nLastHighlightPara;
+
+    Color           m_aLineHighlightColor;
+
     virtual css::uno::Reference< css::awt::XVclWindowPeer > GetComponentInterface(bool bCreate = true) override;
     CodeCompleteDataCache aCodeCompleteCache;
     VclPtr<CodeCompleteWindow> pCodeCompleteWnd;
@@ -130,6 +135,7 @@ private:
     void            DoSyntaxHighlight( sal_uInt32 nPara );
     OUString        GetWordAtCursor();
     bool            ImpCanModify();
+    void            HighlightCurrentLine(vcl::RenderContext& rRenderContext);
 
 public:
                     EditorWindow (vcl::Window* pParent, ModulWindow*);
@@ -156,6 +162,7 @@ public:
 
     void            ChangeFontColor( Color aColor );
     void            UpdateSyntaxHighlighting ();
+    void            SetLineHighlightColor(Color aColor);
 
     void            SetEditorZoomLevel(sal_uInt16 nNewZoomLevel);
     sal_uInt16      GetCurrentZoom() { return nCurrentZoomLevel; }

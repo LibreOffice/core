@@ -49,13 +49,16 @@ ColorScheme BasicColorConfig::GetColorScheme(const OUString& rScheme)
         return GetAutomaticColorScheme();
     }
 
-    std::vector<OUString> aVecPropNames = {
-        OUString(rScheme + "/GenericColor/Color"),   OUString(rScheme + "/IdentifierColor/Color"),
-        OUString(rScheme + "/NumberColor/Color"),    OUString(rScheme + "/StringColor/Color"),
-        OUString(rScheme + "/CommentColor/Color"),   OUString(rScheme + "/ErrorColor/Color"),
-        OUString(rScheme + "/OperatorColor/Color"),  OUString(rScheme + "/KeywordColor/Color"),
-        OUString(rScheme + "/BackgroundColor/Color")
-    };
+    std::vector<OUString> aVecPropNames = { OUString(rScheme + "/GenericColor/Color"),
+                                            OUString(rScheme + "/IdentifierColor/Color"),
+                                            OUString(rScheme + "/NumberColor/Color"),
+                                            OUString(rScheme + "/StringColor/Color"),
+                                            OUString(rScheme + "/CommentColor/Color"),
+                                            OUString(rScheme + "/ErrorColor/Color"),
+                                            OUString(rScheme + "/OperatorColor/Color"),
+                                            OUString(rScheme + "/KeywordColor/Color"),
+                                            OUString(rScheme + "/BackgroundColor/Color"),
+                                            OUString(rScheme + "/LineHighlightColor/Color") };
 
     css::uno::Sequence<OUString> aPropNames(aVecPropNames.size());
     OUString* pPropNames = aPropNames.getArray();
@@ -77,12 +80,22 @@ ColorScheme BasicColorConfig::GetColorScheme(const OUString& rScheme)
     aColors[6] >>= aColorScheme.m_aOperatorColor;
     aColors[7] >>= aColorScheme.m_aKeywordColor;
     aColors[8] >>= aColorScheme.m_aBackgroundColor;
+    aColors[9] >>= aColorScheme.m_aLineHighlightColor;
 
     return aColorScheme;
 }
 
 ColorScheme BasicColorConfig::GetAutomaticColorScheme()
 {
+    // Application Colors do not define a line highlight color, so here we adjust
+    // the background color to get a highlight color
+    Color aBackgroundColor = aColorConfig.GetColorValue(svtools::BASICEDITOR).nColor;
+    Color aHighlightColor(aBackgroundColor);
+    if (aBackgroundColor.IsDark())
+        aHighlightColor.ApplyTintOrShade(1000);
+    else
+        aHighlightColor.ApplyTintOrShade(-1000);
+
     ColorScheme aScheme = { DEFAULT_SCHEME,
                             false,
                             aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor,
@@ -93,7 +106,9 @@ ColorScheme BasicColorConfig::GetAutomaticColorScheme()
                             aColorConfig.GetColorValue(svtools::BASICERROR).nColor,
                             aColorConfig.GetColorValue(svtools::BASICOPERATOR).nColor,
                             aColorConfig.GetColorValue(svtools::BASICKEYWORD).nColor,
-                            aColorConfig.GetColorValue(svtools::BASICEDITOR).nColor };
+                            aBackgroundColor,
+                            aHighlightColor };
+
     return aScheme;
 }
 

@@ -116,6 +116,16 @@
           </info>
         </prop>
       </group>
+      <group oor:name="LineHighlightColor">
+        <info>
+          <desc>Specifies the formatting to highlight the selected line.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used to highlight the selected line.</desc>
+          </info>
+        </prop>
+      </group>
     </group>
     </templates>
     <component>

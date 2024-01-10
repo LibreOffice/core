@@ -37,6 +37,7 @@ typedef struct
     Color m_aOperatorColor;
     Color m_aKeywordColor;
     Color m_aBackgroundColor;
+    Color m_aLineHighlightColor;
 } ColorScheme;
 
 } // namespace basctl

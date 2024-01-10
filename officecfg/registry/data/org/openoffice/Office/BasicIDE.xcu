@@ -65,6 +65,11 @@
           <value>16777215</value>
         </prop>
       </node>
+      <node oor:name="LineHighlightColor">
+        <prop oor:name="Color">
+          <value>15658734</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="COLORSCHEME_LIBREOFFICE_DARK" oor:op="replace">
       <node oor:name="GenericColor">
@@ -110,6 +115,11 @@
       <node oor:name="BackgroundColor">
         <prop oor:name="Color">
           <value>0</value>
+        </prop>
+      </node>
+      <node oor:name="LineHighlightColor">
+        <prop oor:name="Color">
+          <value>2236962</value>
         </prop>
       </node>
     </node>
@@ -159,6 +169,11 @@
           <value>16777215</value>
         </prop>
       </node>
+      <node oor:name="LineHighlightColor">
+        <prop oor:name="Color">
+          <value>16316406</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="COLORSCHEME_BREEZE_DARK" oor:op="replace">
       <node oor:name="GenericColor">
@@ -204,6 +219,11 @@
       <node oor:name="BackgroundColor">
         <prop oor:name="Color">
           <value>2303529</value>
+        </prop>
+      </node>
+      <node oor:name="LineHighlightColor">
+        <prop oor:name="Color">
+          <value>2764338</value>
         </prop>
       </node>
     </node>
@@ -253,6 +273,11 @@
           <value>16643811</value>
         </prop>
       </node>
+      <node oor:name="LineHighlightColor">
+        <prop oor:name="Color">
+          <value>15657173</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="COLORSCHEME_SOLARIZED_DARK" oor:op="replace">
       <node oor:name="GenericColor">
@@ -298,6 +323,11 @@
       <node oor:name="BackgroundColor">
         <prop oor:name="Color">
           <value>11062</value>
+        </prop>
+      </node>
+      <node oor:name="LineHighlightColor">
+        <prop oor:name="Color">
+          <value>472642</value>
         </prop>
       </node>
     </node>

@@ -1618,6 +1618,7 @@ void ModulWindowLayout::SyntaxColors::ApplyColorScheme(OUString aSchemeId, bool 
     {
         pEditor->ChangeFontColor(aFontColor);
         pEditor->SetBackground(Wallpaper(aDocColor));
+        pEditor->SetLineHighlightColor(aColorScheme.m_aLineHighlightColor);
         pEditor->Invalidate();
     }
 

@@ -23,6 +23,7 @@ private:
     tools::Long m_nCurYOffset;
     int m_nBaseWidth;
     Color m_FontColor;
+    Color m_HighlightColor;
     virtual void DataChanged(DataChangedEvent const& rDCEvt) override;
 
 protected:

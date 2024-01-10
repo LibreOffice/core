@@ -25,6 +25,7 @@ LineNumberWindow::LineNumberWindow(vcl::Window* pParent, ModulWindow* pModulWind
     SetBackground(aBackground);
     GetWindow(GetWindowType::Border)->SetBackground(aBackground);
     m_FontColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+    m_HighlightColor = GetSettings().GetStyleSettings().GetFaceColor();
     m_nBaseWidth = GetTextWidth("8");
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
 }
@@ -51,6 +52,7 @@ void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         return;
 
     int windowHeight = rRenderContext.GetOutputSize().Height();
+    int windowWidth = rRenderContext.GetOutputSize().Width();
     int nLineHeight = rRenderContext.GetTextHeight();
     if (!nLineHeight)
     {
@@ -78,16 +80,38 @@ void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         m_nWidth += m_nBaseWidth;
     }
 
+    vcl::Font aNormalFont = rRenderContext.GetFont();
+    vcl::Font aBoldFont(aNormalFont);
+    aBoldFont.SetWeight(FontWeight::WEIGHT_BOLD);
+
+    sal_uInt32 nParaEnd = txtView->GetSelection().GetEnd().GetPara() + 1;
     sal_Int64 y = (nStartLine - 1) * static_cast<sal_Int64>(nLineHeight);
-    rRenderContext.SetTextColor(m_FontColor);
+
     for (sal_uInt32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
     {
+        // Font weight for the selected lines is bold
+        if (n == nParaEnd)
+        {
+            tools::Rectangle aRect(Point(0, y - m_nCurYOffset),
+                                   Point(windowWidth, y - m_nCurYOffset + nLineHeight));
+            rRenderContext.SetFillColor(m_HighlightColor);
+            rRenderContext.DrawRect(aRect);
+            rRenderContext.SetFont(aBoldFont);
+        }
+        else
+        {
+            rRenderContext.SetFont(aNormalFont);
+        }
+
+        rRenderContext.SetTextColor(m_FontColor);
         const OUString aLineNumber = OUString::number(n);
         // tdf#153798 - align line numbers to the right
         rRenderContext.DrawText(
             Point(m_nWidth - GetTextWidth(aLineNumber) - m_nBaseWidth / 2, y - m_nCurYOffset),
             aLineNumber);
     }
+    // Restore the original font
+    rRenderContext.SetFont(aNormalFont);
 
     // Resize the parent after calculating the new width and height values
     GetParent()->Resize();
