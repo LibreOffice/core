@@ -14,7 +14,9 @@
 -->
 <!-- https://issues.oasis-open.org/browse/OFFICE-2153 -->
 
-<rng:grammar xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<rng:grammar xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
+xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
+xmlns:rng="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <rng:start>
     <rng:choice>
       <rng:ref name="manifest"/>
@@ -103,17 +105,19 @@
     </rng:element>
   </rng:define>
   <rng:define name="encryption-data-attlist">
-    <rng:interleave>
-      <rng:attribute name="manifest:checksum-type">
-        <rng:choice>
-          <rng:value>SHA1/1K</rng:value>
-          <rng:ref name="anyURI"/>
-        </rng:choice>
-      </rng:attribute>
-      <rng:attribute name="manifest:checksum">
-        <rng:ref name="base64Binary"/>
-      </rng:attribute>
-    </rng:interleave>
+    <rng:optional>
+      <rng:interleave>
+        <rng:attribute name="manifest:checksum-type">
+          <rng:choice>
+            <rng:value>SHA1/1K</rng:value>
+            <rng:ref name="anyURI"/>
+         </rng:choice>
+        </rng:attribute>
+        <rng:attribute name="manifest:checksum">
+          <rng:ref name="base64Binary"/>
+        </rng:attribute>
+      </rng:interleave>
+    </rng:optional>
   </rng:define>
   <rng:define name="file-entry">
     <rng:element name="manifest:file-entry">
@@ -165,17 +169,38 @@
         <rng:value>PGP</rng:value>
       </rng:attribute>
       <rng:interleave>
-        <rng:attribute name="manifest:key-derivation-name">
-          <rng:choice>
-            <rng:value>PBKDF2</rng:value>
-            <rng:ref name="anyURI"/>
-          </rng:choice>
-        </rng:attribute>
+        <rng:choice>
+          <rng:interleave>
+            <rng:attribute name="manifest:key-derivation-name">
+              <rng:choice>
+                <rng:value>PBKDF2</rng:value>
+                <rng:ref name="anyURI"/>
+              </rng:choice>
+            </rng:attribute>
+            <rng:attribute name="manifest:iteration-count">
+              <rng:ref name="nonNegativeInteger"/>
+            </rng:attribute>
+          </rng:interleave>
+          <rng:interleave>
+            <rng:attribute name="manifest:key-derivation-name">
+            <!--
+              <rng:value>urn:oasis:names:tc:opendocument:xmlns:manifest:1.5#argon2id</rng:value>
+              -->
+              <rng:value>urn:org:documentfoundation:names:experimental:office:manifest:argon2id</rng:value>
+            </rng:attribute>
+            <rng:attribute name="loext:argon2-iterations">
+              <rng:ref name="positiveInteger"/>
+            </rng:attribute>
+            <rng:attribute name="loext:argon2-memory">
+              <rng:ref name="positiveInteger"/>
+            </rng:attribute>
+            <rng:attribute name="loext:argon2-lanes">
+              <rng:ref name="positiveInteger"/>
+            </rng:attribute>
+          </rng:interleave>
+        </rng:choice>
         <rng:attribute name="manifest:salt">
           <rng:ref name="base64Binary"/>
-        </rng:attribute>
-        <rng:attribute name="manifest:iteration-count">
-          <rng:ref name="nonNegativeInteger"/>
         </rng:attribute>
         <rng:optional>
           <rng:attribute name="manifest:key-size">
@@ -213,6 +238,9 @@
   </rng:define>
   <rng:define name="nonNegativeInteger">
     <rng:data type="nonNegativeInteger"/>
+  </rng:define>
+  <rng:define name="positiveInteger">
+    <rng:data type="positiveInteger"/>
   </rng:define>
   <rng:define name="start-key-generation">
     <rng:element name="manifest:start-key-generation">

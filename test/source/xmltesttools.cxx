@@ -294,6 +294,8 @@ int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString
 
 void XmlTestTools::registerODFNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("manifest"),
+                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("office"),
                        BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("style"),
