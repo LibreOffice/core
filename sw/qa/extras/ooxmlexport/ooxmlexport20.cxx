@@ -1091,6 +1091,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159110)
+{
+    // Given a text with an URL with multiple spaces
+    loadAndReload("multi_space_url.fodt");
+
+    constexpr OUString sExpectedURL = u"http://www.example.org/path%20%20with%20%20spaces"_ustr;
+
+    // Without the fix, this would have failed with
+    // - Expected: http://www.example.org/path%20%20with%20%20spaces
+    // - Actual  : http://www.example.org/path with spaces
+    CPPUNIT_ASSERT_EQUAL(sExpectedURL,
+                         getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
+
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    OString sId
+        = OUStringToOString(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink"_ostr, "id"_ostr),
+                            RTL_TEXTENCODING_UTF8);
+
+    xmlDocUniquePtr pXmlRels = parseExport("word/_rels/document.xml.rels");
+
+    // Without the fix, this would have failed with
+    // - Expected: http://www.example.org/path%20%20with%20%20spaces
+    // - Actual  : http://www.example.org/path  with  spaces
+    // - In <>, attribute 'Target' of '/rels:Relationships/rels:Relationship[@Id='rId2']' incorrect value.
+    // I.e., the spaces were stored without percent-encoding, and collapsed on import
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='"_ostr + sId + "']",
+                "Target"_ostr, sExpectedURL);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
