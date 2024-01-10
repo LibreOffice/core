@@ -34,7 +34,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="case-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|case">Sorts first by uppercase letters and then by lowercase letters. For Asian languages, special handling applies.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|case">Sorts first by uppercase letters and then by lowercase letters. For Asian locales, special handling applies.</property>
                   </object>
                 </child>
               </object>
@@ -236,7 +236,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes" context="sortoptionspage|label6">Language</property>
+                    <property name="label" translatable="yes" context="sortoptionspage|label6">Locale</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">language</property>
                   </object>
@@ -272,7 +272,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="language-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|language">Select the language for the sorting rules.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|language">Select the locale for the sorting rules.</property>
                       </object>
                     </child>
                   </object>
@@ -288,7 +288,7 @@
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="algorithmlb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|algorithmlb">Select a sorting option for the language.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|algorithmlb">Select a sorting option for the locale.</property>
                       </object>
                     </child>
                   </object>
