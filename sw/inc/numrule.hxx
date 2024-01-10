@@ -232,7 +232,7 @@ public:
     void SetAutoRule( bool bFlag )      { mbAutoRuleFlag = bFlag; }
 
     bool IsInvalidRule() const          { return mbInvalidRuleFlag; }
-    void SetInvalidRule( bool bFlag );
+    void SetInvalidRule(bool bFlag) { mbInvalidRuleFlag = bFlag; }
 
     bool IsContinusNum() const          { return mbContinusNum; }
     void SetContinusNum( bool bFlag )   { mbContinusNum = bFlag; }

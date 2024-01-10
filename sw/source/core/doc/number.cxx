@@ -1053,14 +1053,6 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
     return aRule;
 }
 
-void SwNumRule::SetInvalidRule(bool bFlag)
-{
-    if (mbInvalidRuleFlag == bFlag)
-        return;
-
-    mbInvalidRuleFlag = bFlag;
-}
-
 /// change indent of all list levels by given difference
 void SwNumRule::ChangeIndent( const sal_Int32 nDiff )
 {
