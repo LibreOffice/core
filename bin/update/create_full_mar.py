@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import glob
 import os
 import subprocess
 import json
@@ -35,8 +36,11 @@ def main():
     target_dir = update_path.get_update_dir()
     temp_dir = update_path.get_current_build_dir()
 
-    tar_dir = os.path.join(update_path.get_workdir(), "installation", product_name, "archive", "install", "en-US")
-    tar_file = os.path.join(tar_dir, os.listdir(tar_dir)[0])
+    tar_file_glob = os.path.join(update_path.get_workdir(), "installation", product_name, "archive", "install", "*", f'{product_name}_*_archive*')
+    tar_files = glob.glob(tar_file_glob)
+    if len(tar_files) != 1:
+        raise Exception(f'`{tar_file_glob}` does not match exactly one file')
+    tar_file = tar_files[0]
 
     uncompress_dir = uncompress_file_to_dir(tar_file, temp_dir)
 
