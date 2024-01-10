@@ -111,12 +111,14 @@ mkdir -p afl-testcases && cd afl-testcases/ && tar xf $SRC/afl_testcases.tgz && 
     zip -q $SRC/pngfuzzer_seed_corpus.zip afl-testcases/png*/full/images/* && \
     zip -q $SRC/webpfuzzer_seed_corpus.zip afl-testcases/webp*/full/images/*
 # using github's svn view to use svn export as a hack to just export part of the git repo
-svn export --force -q https://github.com/khaledhosny/ots/trunk/tests/fonts $SRC/sample-sft-fonts/ots
-svn export --force -q https://github.com/unicode-org/text-rendering-tests/trunk/fonts/ $SRC/sample-sft-fonts/unicode-org
-svn export --force -q https://github.com/harfbuzz/harfbuzz/trunk/test/shape/data/in-house/fonts $SRC/sample-sft-fonts/harfbuzz
+# svn support turned off now: https://github.blog/2023-01-20-sunsetting-subversion-support/
+# and git sparse checkout is a total pain
+#svn export --force -q https://github.com/khaledhosny/ots/trunk/tests/fonts $SRC/sample-sft-fonts/ots
+#svn export --force -q https://github.com/unicode-org/text-rendering-tests/trunk/fonts/ $SRC/sample-sft-fonts/unicode-org
+#svn export --force -q https://github.com/harfbuzz/harfbuzz/trunk/test/shape/data/in-house/fonts $SRC/sample-sft-fonts/harfbuzz
 mkdir -p $SRC/sample-sft-fonts/adobe
 curl --no-progress-meter -S \
-    -C - -o $SRC/sample-sft-fonts/adobe/AdobeVFPrototype.otf https://github.com/adobe-fonts/adobe-variable-font-prototype/releases/download/1.001/AdobeVFPrototype.otf
+    -C - -o $SRC/sample-sft-fonts/adobe/AdobeVFPrototype.otf https://github.com/adobe-fonts/adobe-variable-font-prototype/releases/download/1.005a/AdobeVFPrototype.otf
 zip -qr $SRC/sftfuzzer_seed_corpus.zip $SRC/sample-sft-fonts
 curl --no-progress-meter -S -C - https://storage.googleapis.com/skia-fuzzer/oss-fuzz/svg_seed_corpus.zip -o svgfuzzer_seed_corpus.zip
 curl --no-progress-meter -S \
