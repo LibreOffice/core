@@ -1299,14 +1299,14 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                 {
                     SwRegionRects aRegion( aOldRect );
                     aRegion -= aPaint;
-                    for ( size_t i = 0; i < aRegion.size(); ++i )
-                        m_pImp->GetShell()->AddPaintRect( aRegion[i] );
+                    for ( auto const& aRect : aRegion )
+                        m_pImp->GetShell()->AddPaintRect( aRect );
                     aRegion.ChangeOrigin( aPaint );
                     aRegion.clear();
                     aRegion.push_back( aPaint );
                     aRegion -= aOldRect;
-                    for ( size_t i = 0; i < aRegion.size(); ++i )
-                        m_pImp->GetShell()->AddPaintRect( aRegion[i] );
+                    for ( auto const& aRect : aRegion )
+                        m_pImp->GetShell()->AddPaintRect( aRect );
                 }
             }
             else
