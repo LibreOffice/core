@@ -61,6 +61,7 @@ class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocum
     bool bPgpEncryption;
     sal_Int32 nDerivedKeySize;
     ::std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rManVector;
+    OUString m_PackageVersion; // on root element
 
 
     OUString PushNameAndNamespaces( const OUString& aName,
