@@ -112,6 +112,29 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf158254)
     CPPUNIT_ASSERT_EQUAL(OUString("Default"), pStyleSheet->GetName());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf125030)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    goToCell("A1");
+    dispatchCommand(mxComponent,
+                    ".uno:StyleApply?Style:string=Accent%201&FamilyName:string=CellStyles", {});
+
+    const ScPatternAttr* pPatternA1 = pDoc->GetPattern(0, 0, 0);
+    ScStyleSheet* pStyleSheetA1 = const_cast<ScStyleSheet*>(pPatternA1->GetStyleSheet());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Accent 1"), pStyleSheetA1->GetName());
+
+    goToCell("A2");
+    dispatchCommand(mxComponent, ".uno:Repeat", {});
+
+    const ScPatternAttr* pPatternA2 = pDoc->GetPattern(0, 1, 0);
+    ScStyleSheet* pStyleSheetA2 = const_cast<ScStyleSheet*>(pPatternA2->GetStyleSheet());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Accent 1"), pStyleSheetA2->GetName());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf133326)
 {
     createScDoc("tdf133326.ods");
