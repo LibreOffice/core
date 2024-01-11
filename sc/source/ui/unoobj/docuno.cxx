@@ -563,9 +563,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     // to pass it down to ScGridWindow::PaintFile to avoid computing twice.
     SCCOL nTiledRenderingAreaEndCol = 0;
     SCROW nTiledRenderingAreaEndRow = 0;
-    Size aDocSize = getDocumentSize(nTiledRenderingAreaEndCol, nTiledRenderingAreaEndRow);
-
-    pGridWindow->SetOutputSizePixel(Size(aDocSize.Width() * pViewData->GetPPTX(), aDocSize.Height() * pViewData->GetPPTY()));
+    (void)getDocumentSize(nTiledRenderingAreaEndCol, nTiledRenderingAreaEndRow);
 
     pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
                             nTilePosX, nTilePosY, nTileWidth, nTileHeight,
