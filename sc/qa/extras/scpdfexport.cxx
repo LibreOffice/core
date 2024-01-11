@@ -65,6 +65,7 @@ public:
     void testExportFitToPage_Tdf103516();
     void testUnoCommands_Tdf120161();
     void testTdf64703_hiddenPageBreak();
+    void testTdf159066();
     void testTdf159065();
     void testTdf123870();
     void testTdf143978();
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
     CPPUNIT_TEST(testUnoCommands_Tdf120161);
     CPPUNIT_TEST(testTdf64703_hiddenPageBreak);
+    CPPUNIT_TEST(testTdf159066);
     CPPUNIT_TEST(testTdf159065);
     CPPUNIT_TEST(testTdf123870);
     CPPUNIT_TEST(testTdf143978);
@@ -394,6 +396,22 @@ void ScPDFExportTest::testTdf64703_hiddenPageBreak()
         CPPUNIT_ASSERT(hasTextInPdf("/Count 4>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
     }
+}
+
+void ScPDFExportTest::testTdf159066()
+{
+    loadFromFile(u"tdf159066.ods");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:E5
+    ScRange range1(0, 0, 0, 4, 4, 0);
+    exportToPDF(xModel, range1);
+
+    bool bFound = false;
+    CPPUNIT_ASSERT(hasTextInPdf("/Alt<", bFound));
+
+    // The OLE object contains alternative text description
+    CPPUNIT_ASSERT_EQUAL(true, bFound);
 }
 
 void ScPDFExportTest::testTdf159065()
