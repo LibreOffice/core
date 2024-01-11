@@ -136,6 +136,46 @@ ScViewFunc::~ScViewFunc()
 
 namespace {
 
+struct FormulaProcessingContext
+{
+    std::shared_ptr<ScAddress> aPos;
+    std::shared_ptr<ScCompiler> aComp;
+    std::shared_ptr<ScDocShellModificator> aModificator;
+    std::shared_ptr<ScTokenArray> pArr;
+    std::shared_ptr<ScTokenArray> pArrFirst;
+
+    const EditTextObject* pData;
+    ScMarkData aMark;
+    ScViewFunc& rViewFunc;
+
+    OUString aCorrectedFormula;
+    OUString aFormula;
+    OUString aString;
+
+    SCCOL nCol;
+    SCROW nRow;
+    SCTAB nTab;
+
+    bool bMatrixExpand;
+    bool bNumFmtChanged;
+    bool bRecord;
+
+    ScViewData& GetViewData() const
+    {
+        return rViewFunc.GetViewData();
+    }
+
+    ScDocFunc& GetDocFunc() const
+    {
+        return GetViewData().GetDocFunc();
+    }
+
+    ScDocument& GetDoc() const
+    {
+        return GetViewData().GetDocument();
+    }
+};
+
 void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUString& rAction)
 {
     EventDescription aDescription;
@@ -358,7 +398,7 @@ static bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 
 namespace HelperNotifyChanges
 {
-    static void NotifyIfChangesListeners(const ScDocShell &rDocShell, ScMarkData& rMark,
+    static void NotifyIfChangesListeners(const ScDocShell &rDocShell, const ScMarkData& rMark,
                                          SCCOL nCol, SCROW nRow, const OUString& rType = "cell-change")
     {
         ScModelObj* pModelObj = rDocShell.GetModel();
@@ -398,6 +438,212 @@ namespace
         }
     };
 }
+namespace
+{
+    void runAutoCorrectQueryAsync(std::shared_ptr<FormulaProcessingContext> context);
+
+    void performAutoFormatAndUpdate(std::u16string_view rString, const ScMarkData& rMark, SCCOL nCol,
+                                    SCROW nRow, SCTAB nTab, bool bNumFmtChanged, bool bRecord,
+                                    const std::shared_ptr<ScDocShellModificator>& pModificator,
+                                    ScViewFunc& rViewFunc)
+    {
+        bool bAutoFormat = rViewFunc.TestFormatArea(nCol, nRow, nTab, bNumFmtChanged);
+
+        if (bAutoFormat)
+            rViewFunc.DoAutoAttributes(nCol, nRow, nTab, bNumFmtChanged);
+
+        ScViewData& rViewData = rViewFunc.GetViewData();
+        ScDocShell* pDocSh = rViewData.GetDocShell();
+        pDocSh->UpdateOle(rViewData);
+
+        const OUString aType(rString.empty() ? u"delete-content" : u"cell-change");
+        HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow, aType);
+
+        if (bRecord)
+        {
+            ScDocFunc &rFunc = rViewData.GetDocFunc();
+            rFunc.EndListAction();
+        }
+
+        pModificator->SetDocumentModified();
+        ScDocument& rDoc = rViewData.GetDocument();
+        lcl_PostRepaintCondFormat(rDoc.GetCondFormat(nCol, nRow, nTab), pDocSh);
+        lcl_PostRepaintSparkLine(rDoc.GetSparklineList(nTab), ScRange(nCol, nRow, nTab), pDocSh);
+    }
+
+    void finalizeFormulaProcessing(std::shared_ptr<FormulaProcessingContext> context)
+    {
+        // to be used in multiple tabs, the formula must be compiled anew
+        // via ScFormulaCell copy-ctor because of RangeNames,
+        // the same code-array for all cells is not possible.
+        // If the array has an error, (it) must be RPN-erased in the newly generated
+        // cells and the error be set explicitly, so that
+        // via FormulaCell copy-ctor and Interpreter it will be, when possible,
+        // ironed out again, too intelligent... e.g.: =1))
+        FormulaError nError = context->pArr->GetCodeError();
+        if ( nError == FormulaError::NONE )
+        {
+            //  update list of recent functions with all functions that
+            //  are not within parentheses
+
+            ScModule* pScMod = SC_MOD();
+            ScAppOptions aAppOpt = pScMod->GetAppOptions();
+            bool bOptChanged = false;
+
+            formula::FormulaToken** ppToken = context->pArr->GetArray();
+            sal_uInt16 nTokens = context->pArr->GetLen();
+            sal_uInt16 nLevel = 0;
+            for (sal_uInt16 nTP=0; nTP<nTokens; nTP++)
+            {
+                formula::FormulaToken* pTok = ppToken[nTP];
+                OpCode eOp = pTok->GetOpCode();
+                if ( eOp == ocOpen )
+                    ++nLevel;
+                else if ( eOp == ocClose && nLevel )
+                    --nLevel;
+                if ( nLevel == 0 && pTok->IsFunction() &&
+                        lcl_AddFunction( aAppOpt, sal::static_int_cast<sal_uInt16>( eOp ) ) )
+                    bOptChanged = true;
+            }
+
+            if ( bOptChanged )
+            {
+                pScMod->SetAppOptions(aAppOpt);
+            }
+
+            if (context->bMatrixExpand)
+            {
+                // If the outer function/operator returns an array/matrix then
+                // enter a matrix formula. ScViewFunc::EnterMatrix() takes care
+                // of selection/mark of the result dimensions or preselected
+                // mark. If the user wanted less or a single cell then should
+                // mark such prior to entering the formula.
+                const formula::FormulaToken* pToken = context->pArr->LastRPNToken();
+                if (pToken && (formula::FormulaCompiler::IsMatrixFunction( pToken->GetOpCode())
+                            || pToken->IsInForceArray()))
+                {
+                    // Discard this (still empty here) Undo action,
+                    // EnterMatrix() will create its own.
+                    if (context->bRecord)
+                        context->GetDocFunc().EndListAction();
+
+                    // Use corrected formula string.
+                    context->rViewFunc.EnterMatrix( context->aFormula, context->GetDoc().GetGrammar());
+
+                    return;
+                }
+            }
+        }
+
+        ScFormulaCell aCell(context->GetDoc(), *context->aPos, std::move(*context->pArr), formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
+
+        SCTAB i;
+        SvNumberFormatter* pFormatter = context->GetDoc().GetFormatTable();
+        for (const auto& rTab : context->aMark)
+        {
+            i = rTab;
+            context->aPos->SetTab( i );
+            const sal_uInt32 nIndex = context->GetDoc().GetAttr(
+                        context->nCol, context->nRow, i, ATTR_VALUE_FORMAT )->GetValue();
+            const SvNumFormatType nType = pFormatter->GetType( nIndex);
+            if (nType == SvNumFormatType::TEXT ||
+                    ((context->aString[0] == '+' || context->aString[0] == '-') && nError != FormulaError::NONE && context->aString == context->aFormula))
+            {
+                if ( context->pData )
+                {
+                    // A clone of context->pData will be stored in the cell.
+                    context->GetDocFunc().SetEditCell(*(context->aPos), *context->pData, true);
+                }
+                else
+                    context->GetDocFunc().SetStringCell(*(context->aPos), context->aFormula, true);
+            }
+            else
+            {
+                ScFormulaCell* pCell = new ScFormulaCell( aCell, context->GetDoc(), *(context->aPos) );
+                if ( nError != FormulaError::NONE )
+                {
+                    pCell->GetCode()->DelRPN();
+                    pCell->SetErrCode( nError );
+                    if(pCell->GetCode()->IsHyperLink())
+                        pCell->GetCode()->SetHyperLink(false);
+                }
+                if (nType == SvNumFormatType::LOGICAL)
+                {
+                    // Reset to General so the actual format can be determined
+                    // after the cell has been interpreted. A sticky boolean
+                    // number format is highly likely unwanted... see tdf#75650.
+                    // General of same locale as current number format.
+                    const SvNumberformat* pEntry = pFormatter->GetEntry( nIndex);
+                    const LanguageType nLang = (pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge);
+                    const sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, nLang);
+                    ScPatternAttr aPattern(context->GetDoc().getCellAttributeHelper());
+                    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
+                    ScMarkData aMark(context->GetDoc().GetSheetLimits());
+                    aMark.SelectTable( i, true);
+                    aMark.SetMarkArea( ScRange( *(context->aPos)));
+                    context->GetDocFunc().ApplyAttributes( aMark, aPattern, false);
+                    context->bNumFmtChanged = true;
+                }
+                context->GetDocFunc().SetFormulaCell(*(context->aPos), pCell, true);
+            }
+        }
+
+        performAutoFormatAndUpdate(context->aString, context->aMark, context->nCol,
+                                   context->nRow, context->nTab, context->bNumFmtChanged,
+                                   context->bRecord, context->aModificator, context->rViewFunc);
+    }
+
+    void parseAndCorrectFormula(std::shared_ptr<FormulaProcessingContext> context)
+    {
+        bool bAddEqual = false;
+        context->pArr = context->aComp->CompileString(context->aFormula);
+        bool bCorrected = context->aComp->IsCorrected();
+
+        if (bCorrected) {
+            context->pArrFirst = context->pArr;
+            context->pArr = context->aComp->CompileString(context->aComp->GetCorrectedFormula());
+        }
+
+        if (context->pArr->GetCodeError() == FormulaError::NONE) {
+            bAddEqual = true;
+            context->aComp->CompileTokenArray();
+            bCorrected |= context->aComp->IsCorrected();
+        }
+
+        if (bCorrected) {
+            context->aCorrectedFormula = bAddEqual ? "=" + context->aComp->GetCorrectedFormula()
+                                                   : context->aComp->GetCorrectedFormula();
+            if (context->aCorrectedFormula.getLength() == 1) {
+                // empty formula, just '='
+                if (context->pArrFirst)
+                    context->pArr = context->pArrFirst;
+            }
+            else
+            {
+                runAutoCorrectQueryAsync(context);
+                return;
+            }
+        }
+        finalizeFormulaProcessing(context);
+    }
+
+    void runAutoCorrectQueryAsync(std::shared_ptr<FormulaProcessingContext> context)
+    {
+        auto aQueryBox = std::make_shared<AutoCorrectQuery>(context->GetViewData().GetDialogParent(), context->aCorrectedFormula);
+        weld::DialogController::runAsync(aQueryBox, [context] (int nResult)
+        {
+            if (nResult == RET_YES) {
+                context->aFormula = context->aCorrectedFormula;
+                parseAndCorrectFormula(context);
+            } else {
+                if (context->pArrFirst)
+                    context->pArr = context->pArrFirst;
+
+                finalizeFormulaProcessing(context);
+            }
+        });
+    }
+}
 
 //      actual functions
 
@@ -414,7 +660,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocFunc &rFunc = GetViewData().GetDocFunc();
-    ScDocShellModificator aModificator( *pDocSh );
+    std::shared_ptr<ScDocShellModificator> xModificator = std::make_shared<ScDocShellModificator>(*pDocSh);
 
     ScEditableTester aTester( rDoc, nCol,nRow, nCol,nRow, rMark );
     if (!aTester.IsEditable())
@@ -468,176 +714,28 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( bFormula )
     {   // formula, compile with autoCorrection
         i = rMark.GetFirstSelected();
-        ScAddress aPos( nCol, nRow, i );
-        ScCompiler aComp( rDoc, aPos, rDoc.GetGrammar(), true, false );
-//2do: enable/disable autoCorrection via calcoptions
-        aComp.SetAutoCorrection( true );
+        auto aPosPtr = std::make_shared<ScAddress>(nCol, nRow, i);
+        auto aCompPtr = std::make_shared<ScCompiler>(rDoc, *aPosPtr, rDoc.GetGrammar(), true, false);
+
+        //2do: enable/disable autoCorrection via calcoptions
+        aCompPtr->SetAutoCorrection( true );
         if ( rString[0] == '+' || rString[0] == '-' )
         {
-            aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
+            aCompPtr->SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
         }
+
         OUString aFormula( rString );
-        std::unique_ptr< ScTokenArray > pArr;
-        bool bAgain;
-        do
-        {
-            bAgain = false;
-            bool bAddEqual = false;
-            pArr = aComp.CompileString( aFormula );
-            bool bCorrected = aComp.IsCorrected();
-            std::unique_ptr< ScTokenArray > pArrFirst;
-            if ( bCorrected )
-            {   // try to parse with first parser-correction
-                pArrFirst = std::move( pArr );
-                pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
-            }
-            if ( pArr->GetCodeError() == FormulaError::NONE )
-            {
-                bAddEqual = true;
-                aComp.CompileTokenArray();
-                bCorrected |= aComp.IsCorrected();
-            }
-            if ( bCorrected )
-            {
-                OUString aCorrectedFormula;
-                if ( bAddEqual )
-                {
-                    aCorrectedFormula = "=" + aComp.GetCorrectedFormula();
-                }
-                else
-                    aCorrectedFormula = aComp.GetCorrectedFormula();
-                short nResult;
-                if ( aCorrectedFormula.getLength() == 1 )
-                    nResult = RET_NO;   // empty formula, just '='
-                else
-                {
-                    AutoCorrectQuery aQueryBox(GetViewData().GetDialogParent(), aCorrectedFormula);
-                    nResult = aQueryBox.run();
-                }
-                if ( nResult == RET_YES )
-                {
-                    aFormula = aCorrectedFormula;
-                    bAgain = true;
-                }
-                else
-                {
-                    if ( pArrFirst )
-                        pArr = std::move( pArrFirst );
-                }
-            }
-        } while ( bAgain );
-        // to be used in multiple tabs, the formula must be compiled anew
-        // via ScFormulaCell copy-ctor because of RangeNames,
-        // the same code-array for all cells is not possible.
-        // If the array has an error, (it) must be RPN-erased in the newly generated
-        // cells and the error be set explicitly, so that
-        // via FormulaCell copy-ctor and Interpreter it will be, when possible,
-        // ironed out again, too intelligent... e.g.: =1))
-        FormulaError nError = pArr->GetCodeError();
-        if ( nError == FormulaError::NONE )
-        {
-            //  update list of recent functions with all functions that
-            //  are not within parentheses
+        std::shared_ptr< ScTokenArray > pArr;
 
-            ScModule* pScMod = SC_MOD();
-            ScAppOptions aAppOpt = pScMod->GetAppOptions();
-            bool bOptChanged = false;
+        FormulaProcessingContext context_instance{
+            aPosPtr, aCompPtr, xModificator,  pArr,           nullptr,        pData,
+            rMark,   *this,    OUString(),    aFormula,       rString,        nCol,
+            nRow,    nTab,     bMatrixExpand, bNumFmtChanged, bRecord
+        };
 
-            formula::FormulaToken** ppToken = pArr->GetArray();
-            sal_uInt16 nTokens = pArr->GetLen();
-            sal_uInt16 nLevel = 0;
-            for (sal_uInt16 nTP=0; nTP<nTokens; nTP++)
-            {
-                formula::FormulaToken* pTok = ppToken[nTP];
-                OpCode eOp = pTok->GetOpCode();
-                if ( eOp == ocOpen )
-                    ++nLevel;
-                else if ( eOp == ocClose && nLevel )
-                    --nLevel;
-                if ( nLevel == 0 && pTok->IsFunction() &&
-                        lcl_AddFunction( aAppOpt, sal::static_int_cast<sal_uInt16>( eOp ) ) )
-                    bOptChanged = true;
-            }
+        std::shared_ptr<FormulaProcessingContext> context = std::make_shared<FormulaProcessingContext>(context_instance);
 
-            if ( bOptChanged )
-            {
-                pScMod->SetAppOptions(aAppOpt);
-            }
-
-            if (bMatrixExpand)
-            {
-                // If the outer function/operator returns an array/matrix then
-                // enter a matrix formula. ScViewFunc::EnterMatrix() takes care
-                // of selection/mark of the result dimensions or preselected
-                // mark. If the user wanted less or a single cell then should
-                // mark such prior to entering the formula.
-                const formula::FormulaToken* pToken = pArr->LastRPNToken();
-                if (pToken && (formula::FormulaCompiler::IsMatrixFunction( pToken->GetOpCode())
-                            || pToken->IsInForceArray()))
-                {
-                    // Discard this (still empty here) Undo action,
-                    // EnterMatrix() will create its own.
-                    if (bRecord)
-                        rFunc.EndListAction();
-
-                    // Use corrected formula string.
-                    EnterMatrix( aFormula, rDoc.GetGrammar());
-
-                    return;
-                }
-            }
-        }
-
-        ScFormulaCell aCell(rDoc, aPos, std::move( pArr ), formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
-
-        for (const auto& rTab : rMark)
-        {
-            i = rTab;
-            aPos.SetTab( i );
-            const sal_uInt32 nIndex = rDoc.GetAttr(
-                        nCol, nRow, i, ATTR_VALUE_FORMAT )->GetValue();
-            const SvNumFormatType nType = pFormatter->GetType( nIndex);
-            if (nType == SvNumFormatType::TEXT ||
-                    ((rString[0] == '+' || rString[0] == '-') && nError != FormulaError::NONE && rString == aFormula))
-            {
-                if ( pData )
-                {
-                    // A clone of pData will be stored in the cell.
-                    rFunc.SetEditCell(aPos, *pData, true);
-                }
-                else
-                    rFunc.SetStringCell(aPos, aFormula, true);
-            }
-            else
-            {
-                ScFormulaCell* pCell = new ScFormulaCell( aCell, rDoc, aPos );
-                if ( nError != FormulaError::NONE )
-                {
-                    pCell->GetCode()->DelRPN();
-                    pCell->SetErrCode( nError );
-                    if(pCell->GetCode()->IsHyperLink())
-                        pCell->GetCode()->SetHyperLink(false);
-                }
-                if (nType == SvNumFormatType::LOGICAL)
-                {
-                    // Reset to General so the actual format can be determined
-                    // after the cell has been interpreted. A sticky boolean
-                    // number format is highly likely unwanted... see tdf#75650.
-                    // General of same locale as current number format.
-                    const SvNumberformat* pEntry = pFormatter->GetEntry( nIndex);
-                    const LanguageType nLang = (pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge);
-                    const sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, nLang);
-                    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-                    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
-                    ScMarkData aMark(rDoc.GetSheetLimits());
-                    aMark.SelectTable( i, true);
-                    aMark.SetMarkArea( ScRange( aPos));
-                    rFunc.ApplyAttributes( aMark, aPattern, false);
-                    bNumFmtChanged = true;
-                }
-                rFunc.SetFormulaCell(aPos, pCell, true);
-            }
-        }
+        parseAndCorrectFormula(context);
     }
     else
     {
@@ -666,24 +764,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 bNumFmtChanged = true;
             }
         }
+        performAutoFormatAndUpdate(rString, rMark, nCol, nRow, nTab, bNumFmtChanged, bRecord, xModificator, *this);
     }
-
-    bool bAutoFormat = TestFormatArea(nCol, nRow, nTab, bNumFmtChanged);
-
-    if (bAutoFormat)
-        DoAutoAttributes(nCol, nRow, nTab, bNumFmtChanged);
-
-    pDocSh->UpdateOle(GetViewData());
-
-    const OUString aType(rString.isEmpty() ? u"delete-content" : u"cell-change");
-    HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow, aType);
-
-    if ( bRecord )
-        rFunc.EndListAction();
-
-    aModificator.SetDocumentModified();
-    lcl_PostRepaintCondFormat( rDoc.GetCondFormat( nCol, nRow, nTab ), pDocSh );
-    lcl_PostRepaintSparkLine(rDoc.GetSparklineList(nTab), ScRange(nCol, nRow, nTab), pDocSh);
 }
 
 // enter value in single cell (on nTab only)

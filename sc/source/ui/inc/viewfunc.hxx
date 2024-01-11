@@ -345,6 +345,10 @@ public:
     void            OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset);
     void            OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth);
 
+    bool            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrChanged );
+    void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                        bool bAttrChanged );
+
                                                 // Internal helper functions
 protected:
     static void     UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,
@@ -381,9 +385,6 @@ private:
     sal_uInt16      GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula );
 
     void            StartFormatArea();
-    bool            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrChanged );
-    void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                        bool bAttrChanged );
 
     void            MarkAndJumpToRanges(const ScRangeList& rRanges);
     void            CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
