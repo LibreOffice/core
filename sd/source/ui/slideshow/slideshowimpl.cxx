@@ -3192,6 +3192,14 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         // better do nothing when no DrawModel (should not happen)
         return;
 
+    // tdf#158664 I am surprised, but the 'this' instance keeps incarnated
+    // when the slideshow was running once, so need to check for
+    // SlideShow instance/running to be safe.
+    // NOTE: isRunning() checks mxShow.is(), that is what we want
+    if (!isRunning())
+        // no SlideShow instance or not running, nothing to do
+        return;
+
     const SdrHintKind eHintKind(static_cast<const SdrHint&>(rHint).GetKind());
 
     if (SdrHintKind::ObjectChange == eHintKind)
