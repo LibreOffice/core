@@ -168,7 +168,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
         CPPUNIT_ASSERT_EQUAL(OUString("secret"), xTextDoc->getText()->getString());
         // test macro signature - this didn't actually work!
         // using Zip Storage means the encrypted streams are signed, so
-        // after encrypting again the sigature didn't match and was dropped
+        // after encrypting again the signature didn't match and was dropped
         //        assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
         //                       SignatureState::OK, ODFVER_013_TEXT);
     }
@@ -361,7 +361,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
         CPPUNIT_ASSERT_EQUAL(OUString("secret"), xTextDoc->getText()->getString());
         // test macro signature - this didn't actually work!
         // using Zip Storage means the encrypted streams are signed, so
-        // after encrypting again the sigature didn't match and was dropped
+        // after encrypting again the signature didn't match and was dropped
         //        assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
         //                       SignatureState::OK, ODFVER_013_TEXT);
     }
