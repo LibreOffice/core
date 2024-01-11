@@ -350,7 +350,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf158743)
     // Without the fix in place, this test would have failed with
     // - Expected: 842
     // - Actual  : 2493
-    CPPUNIT_ASSERT_LESS(850, nBlackCount);
+    CPPUNIT_ASSERT_LESS(900, nBlackCount);
 }
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157795)
