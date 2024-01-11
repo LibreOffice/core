@@ -223,9 +223,35 @@
        LOG_WARN(("Install directory updater could not be determined."));
        result = FALSE;
      }
+--- tools/update-packaging/common.sh
++++ tools/update-packaging/common.sh
+@@ -76,6 +76,15 @@
+     forced=
+   fi
+ 
++  if [ -n "$IFSFILE" ]; then
++    ifsline=$(grep -F " \"$f\"" "$IFSFILE")
++    if [ -n "$ifsline" ]; then
++      testfile=$(printf '%s' "$ifsline" | cut -f 2 -d '"')
++      verbose_notice "     add-if \"$testfile\" \"$f\""
++      echo "add-if \"$testfile\" \"$f\"" >> "$filev3"
++      return
++    fi
++  fi
+   is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
+   if [ $is_extension = "1" ]; then
+     # Use the subdirectory of the extensions folder as the file to test
 --- tools/update-packaging/make_full_update.sh
 +++ tools/update-packaging/make_full_update.sh
-@@ -53,9 +53,10 @@
+@@ -45,6 +45,7 @@
+ 
+ archive="$1"
+ targetdir="$2"
++IFSFILE=$3
+ # Prevent the workdir from being inside the targetdir so it isn't included in
+ # the update mar.
+ if [ $(echo "$targetdir" | grep -c '\/$') = 1 ]; then
+@@ -53,9 +54,10 @@
  fi
  workdir="$targetdir.work"
  updatemanifestv3="$workdir/updatev3.manifest"
@@ -237,7 +263,7 @@
  
  # Generate a list of all files in the target directory.
  pushd "$targetdir"
-@@ -66,7 +67,6 @@
+@@ -66,7 +68,6 @@
  if [ ! -f "precomplete" ]; then
    if [ ! -f "Contents/Resources/precomplete" ]; then
      notice "precomplete file is missing!"
@@ -245,7 +271,7 @@
    fi
  fi
  
-@@ -99,7 +99,7 @@
+@@ -99,7 +100,7 @@
    $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$targetdir/$f" > "$workdir/$f"
    copy_perm "$targetdir/$f" "$workdir/$f"
  
@@ -254,7 +280,7 @@
  done
  
  # Append remove instructions for any dead files.
-@@ -110,7 +110,7 @@
+@@ -110,7 +111,7 @@
  $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force "$updatemanifestv3" && mv -f "$updatemanifestv3.xz" "$updatemanifestv3"
  
  mar_command="$mar_command -C \"$workdir\" -c output.mar"

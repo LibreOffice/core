@@ -2,6 +2,7 @@
 
 import glob
 import os
+import re
 import subprocess
 import json
 import argparse
@@ -44,12 +45,27 @@ def main():
 
     uncompress_dir = uncompress_file_to_dir(tar_file, temp_dir)
 
+    metadatafile = os.path.join(
+        update_path.get_workdir(), 'installation', product_name, 'archive', 'install', 'metadata')
+    ifsfile = os.path.join(update_path.get_mar_dir(), 'ifs')
+    with open(metadatafile) as meta, open(ifsfile, 'w') as ifs:
+        for l in meta:
+            m = re.fullmatch('(skip|cond) (.*)', l.rstrip())
+            if m and m.group(2).startswith(f'{product_name}/'):
+                path = m.group(2)[len(f'{product_name}/'):]
+                if m.group(1) == 'skip':
+                    os.remove(os.path.join(uncompress_dir, path))
+                else:
+                    ifs.write(f'"{path}" "{path}"\n')
+
     mar_file = make_complete_mar_name(target_dir, filename_prefix)
     path = os.path.join(
         workdir, 'UnpackedTarball/onlineupdate/tools/update-packaging/make_full_update.sh')
     os.putenv('MOZ_PRODUCT_VERSION', version)
     os.putenv('MAR_CHANNEL_ID', 'LOOnlineUpdater')
-    subprocess.call([path, convert_to_native(mar_file), convert_to_native(uncompress_dir)])
+    subprocess.call([
+        path, convert_to_native(mar_file), convert_to_native(uncompress_dir),
+        convert_to_native(ifsfile)])
 
     sign_mar_file(target_dir, certificate_path, certificate_name, mar_file, filename_prefix)
 
