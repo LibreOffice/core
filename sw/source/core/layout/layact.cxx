@@ -1365,10 +1365,10 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
             else if( !pLow->IsSctFrame() || static_cast<SwSectionFrame*>(pLow)->GetSection() )
                 bChanged |= FormatLayout( pRenderContext, static_cast<SwLayoutFrame*>(pLow), bAddRect );
         }
-        else if (m_pImp->GetShell()->IsPaintLocked() || !pLay->IsColBodyFrame())
-        {   // tdf#156724 unconditionally for frames in tables, so their footnotes exist before trying to split
+        else if ( m_pImp->GetShell()->IsPaintLocked() )
+            // Shortcut to minimize the cycles. With Lock, the
+            // paint is coming either way (primarily for browse)
             pLow->OptCalc();
-        }
 
         if ( IsAgain() )
             return false;
