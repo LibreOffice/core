@@ -14,6 +14,10 @@
 #include <tools/gen.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 
 TestLokCallbackWrapper::TestLokCallbackWrapper(LibreOfficeKitCallback callback, void* data)
     : Idle("TestLokCallbackWrapper flush timer")
@@ -183,6 +187,25 @@ void TestLokCallbackWrapper::Invoke()
         viewShell->flushPendingLOKInvalidateTiles();
     }
     flushLOKData();
+}
+
+SfxChildWindow* TestLokCallbackWrapper::InitializeSidebar()
+{
+    // in init.cxx we do setupSidebar which creates the controller, do it here
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    assert(pViewShell);
+
+    SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+    SfxChildWindow* pSideBar = rViewFrame.GetChildWindow(SID_SIDEBAR);
+    assert(pSideBar);
+
+    auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow*>(pSideBar->GetWindow());
+    assert(pDockingWin);
+
+    pDockingWin->GetOrCreateSidebarController(); // just to create the controller
+
+    return pSideBar;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

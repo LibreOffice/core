@@ -23,6 +23,7 @@
 #include <functional>
 
 struct ImplSVEvent;
+class SfxViewFrame;
 
 namespace sfx2::sidebar
 {
@@ -33,7 +34,7 @@ class AsynchronousCall
 public:
     typedef ::std::function<void()> Action;
 
-    AsynchronousCall(Action aAction);
+    AsynchronousCall(const SfxViewFrame* pViewFrame, Action aAction);
     ~AsynchronousCall();
 
     void RequestCall();
@@ -43,6 +44,7 @@ public:
 private:
     Action maAction;
     ImplSVEvent* mnCallId;
+    const SfxViewFrame* mpViewFrame;
 
     DECL_LINK(HandleUserCall, void*, void);
 };

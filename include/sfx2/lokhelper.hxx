@@ -250,6 +250,18 @@ void SfxLokHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType 
     }
 }
 
+/// If LOK is active, switch to the language/locale of the provided shell and back on delete.
+class SfxLokLanguageGuard
+{
+    bool m_bSetLanguage;
+    const SfxViewShell* m_pOldShell;
+    const SfxViewShell* m_pNewShell;
+
+public:
+    SfxLokLanguageGuard(SfxViewShell* pNewShell);
+    ~SfxLokLanguageGuard();
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
