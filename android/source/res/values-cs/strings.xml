@@ -2,4 +2,10 @@
 <resources>
     <string name="app_name">LibreOffice Viewer</string>
     <string name="app_name_settings">Nastavení LibreOffice Viewer</string>
+    <string name="app_description">LibreOffice Viewer je prohlížeč dokumentů založený na LibreOffice.</string>
+    <string name="app_credits">https://www.libreoffice.org</string>
+    <string name="app_vendor">Toto vydání bylo dodáno společností $VENDOR.</string>
+    <string name="app_version">Verze: %1$s&lt;br&gt;ID sestavení: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
+    <string name="about_license">Zobrazit licenci</string>
+    <string name="readonly_file">Tento soubor je pouze pro čtení.</string>
 </resources>
