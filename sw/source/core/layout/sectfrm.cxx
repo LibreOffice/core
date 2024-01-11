@@ -1725,7 +1725,6 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
             // creating / moving the cell frame.
             // It doesn't make sense to move to a page that starts with break?
             if (pNxtPg != FindPageFrame() // tdf#156725 not between columns!
-                && !FindFlyFrame() // tdf#156419 linked fly frames don't care!
                 && (WrongPageDesc(pNxtPg) || HasPageBreakBefore(*pNxtPg))
                 && !bLayLeafTableAllowed)
             {
