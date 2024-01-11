@@ -68,6 +68,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <svtools/colorcfg.hxx>
 #include <sal/types.h>
+#include <test/lokcallback.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -3266,33 +3267,11 @@ void DesktopLOKTest::testMultiDocuments()
     }
 }
 
-namespace
-{
-    SfxChildWindow* lcl_initializeSidebar()
-    {
-        // in init.cxx we do setupSidebar which creates the controller, do it here
-
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        CPPUNIT_ASSERT(pViewShell);
-
-        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
-        SfxChildWindow* pSideBar = rViewFrame.GetChildWindow(SID_SIDEBAR);
-        CPPUNIT_ASSERT(pSideBar);
-
-        auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pSideBar->GetWindow());
-        CPPUNIT_ASSERT(pDockingWin);
-
-        pDockingWin->GetOrCreateSidebarController(); // just to create the controller
-
-        return pSideBar;
-    }
-};
-
 void DesktopLOKTest::testControlState()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
-    lcl_initializeSidebar();
+    TestLokCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
 
     boost::property_tree::ptree aState;
@@ -3306,7 +3285,7 @@ void DesktopLOKTest::testMetricField()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
-    SfxChildWindow* pSideBar = lcl_initializeSidebar();
+    SfxChildWindow* pSideBar = TestLokCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
 
     vcl::Window* pWin = pSideBar->GetWindow();

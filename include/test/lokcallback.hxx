@@ -17,6 +17,8 @@
 
 #include <vector>
 
+class SfxChildWindow;
+
 /**
 A helper to convert SfxLokCallbackInterface to a LIbreOfficeKitCallback for tests.
 
@@ -43,6 +45,8 @@ public:
     virtual void dumpState(rtl::OStringBuffer&) override{};
 
     virtual void Invoke() override;
+
+    static SfxChildWindow* InitializeSidebar();
 
 private:
     void callCallback(int nType, const char* pPayload, int nViewId);
