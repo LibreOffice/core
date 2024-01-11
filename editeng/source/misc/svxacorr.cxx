@@ -1976,6 +1976,8 @@ static void GeneratePackageName ( std::u16string_view rShort, OUString& rPackage
             case ':':
             case '.':
             case '\\':
+            // tdf#156769 - escape the question mark in the storage name
+            case '?':
                 aBuf[nPos] = '_';
                 break;
             default:

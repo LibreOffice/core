@@ -527,6 +527,8 @@ OUString SwXMLTextBlocks::GeneratePackageName ( std::u16string_view rShort )
             case ':':
             case '.':
             case '\\':
+            // tdf#156769 - escape the question mark in the storage name for auto-texts
+            case '?':
                 aBuf[nPos] = '_';
                 break;
             default:
