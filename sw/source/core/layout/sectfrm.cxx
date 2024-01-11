@@ -1724,9 +1724,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
             // fine to be on the same page. New page creation is handled when
             // creating / moving the cell frame.
             // It doesn't make sense to move to a page that starts with break?
-            if (pNxtPg != FindPageFrame() // tdf#156725 not between columns!
-                && (WrongPageDesc(pNxtPg) || HasPageBreakBefore(*pNxtPg))
-                && !bLayLeafTableAllowed)
+            if ((WrongPageDesc(pNxtPg) || HasPageBreakBefore(*pNxtPg)) && !bLayLeafTableAllowed )
             {
                 if( bWrongPage )
                     break; // there's a column between me and my right page
