@@ -18,6 +18,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,onlineupdate, \
     external/onlineupdate/lo.patch \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,onlineupdate, \
+    external/onlineupdate/cygpath.patch \
+))
+endif
+
 # The update maintenance service that is used on Windows has a couple of checks that files in the
 # to-be-updated installation set are signed, which would fail for --disable-windows-build-signing;
 # so, as a HACK for debugging purposes, silence those problematic checks for --enable-dbgutil:

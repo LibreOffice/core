@@ -289,3 +289,13 @@
  mv -f "$workdir/output.mar" "$archive"
  
  # cleanup
+--- tools/update-packaging/make_incremental_update.sh
++++ tools/update-packaging/make_incremental_update.sh
+@@ -135,7 +135,6 @@
+ if [ ! -f "precomplete" ]; then
+   if [ ! -f "Contents/Resources/precomplete" ]; then
+     notice "precomplete file is missing!"
+-    exit 1
+   fi
+ fi
+ 

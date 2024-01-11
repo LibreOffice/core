@@ -1893,13 +1893,6 @@ libo_FUZZ_ARG_WITH(online-update-mar-certificatepath,
          non-functional.)]),
 ,)
 
-libo_FUZZ_ARG_WITH(online-update-mar-serverurl,
-    AS_HELP_STRING([--with-online-update-mar-serverurl=...],
-        [Set the server URL value for --enable-online-update-mar.
-         (Can be left off for debug purposes, even if that may render the feature
-         non-functional.)]),
-,)
-
 libo_FUZZ_ARG_WITH(online-update-mar-uploadurl,
     AS_HELP_STRING([--with-online-update-mar-uploadurl=...],
         [Set the upload URL value for --enable-online-update-mar.
@@ -13685,15 +13678,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATEPATH)
-
-AC_MSG_CHECKING([for mar online update serverurl])
-ONLINEUPDATE_MAR_SERVERURL=$with_online_update_mar_serverurl
-if test -n "$ONLINEUPDATE_MAR_SERVERURL"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ONLINEUPDATE_MAR_SERVERURL)
 
 AC_MSG_CHECKING([for mar online update uploadurl])
 ONLINEUPDATE_MAR_UPLOADURL=$with_online_update_mar_uploadurl
