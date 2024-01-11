@@ -6340,6 +6340,19 @@ SalInstanceDrawingArea::~SalInstanceDrawingArea()
     m_xDrawingArea->SetResizeHdl(Link<const Size&, void>());
     m_xDrawingArea->SetPaintHdl(
         Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>());
+
+    // tdf#159089 dispose custom accessible here and unset for `m_xDrawingArea`
+    // rather than waiting for `m_xDrawingArea` to get disposed, to prevent
+    // unsafe use of the now potentially non-functional accessible until it
+    // gets disposed with the VclDrawingArea
+    css::uno::Reference<css::accessibility::XAccessible> xAccessible
+        = m_xDrawingArea->GetAccessible();
+    css::uno::Reference<css::lang::XComponent> xComp(xAccessible, css::uno::UNO_QUERY);
+    if (xComp.is())
+    {
+        xComp->dispose();
+        m_xDrawingArea->SetAccessible(nullptr);
+    }
 }
 
 OutputDevice& SalInstanceDrawingArea::get_ref_device() { return *m_xDrawingArea->GetOutDev(); }
