@@ -2208,8 +2208,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf57187_Tdf158900)
                 u"PortionType::Break"_ustr);
 }
 
-} // end of anonymous namespace
-
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf147666)
 {
     createSwDoc("tdf147666.odt");
@@ -2242,6 +2240,35 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf147666)
     // focus to the inserted graphic
     CPPUNIT_ASSERT_LESS(nInsertedViewTop, nNonInsertedViewTop);
 }
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159050)
+{
+    // Given a document with a justified paragraph and a box with optimal wrapping
+    createSwDoc("tdf159050-wrap-adjust.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Make sure there is only one page, one anchored object, one paragraph, and two lines
+    assertXPath(pXmlDoc, "/root/page"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout"_ostr, 2);
+
+    // Without the fix, this would fail: there was an unexpected second fly portion.
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*"_ostr, 4);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[1]"_ostr, "type"_ostr,
+                u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[1]"_ostr,
+                "length"_ostr, u"91"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[2]"_ostr, "type"_ostr,
+                u"PortionType::Hole"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[2]"_ostr,
+                "length"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[3]"_ostr, "type"_ostr,
+                u"PortionType::Fly"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/*[4]"_ostr, "type"_ostr,
+                u"PortionType::Margin"_ustr);
+}
+
+} // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

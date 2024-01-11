@@ -58,6 +58,16 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
         rInf.GetLastTab()->FormatEOL( rInf );
 
     rInf.GetLast()->FormatEOL( rInf );
+
+    SetBlankWidth(0);
+    if (auto blankWidth = rInf.GetLast()->ExtraBlankWidth())
+    {
+        // Swallow previous blank width
+        SetBlankWidth(blankWidth);
+        rInf.GetLast()->ExtraBlankWidth(0);
+        rInf.X(rInf.X() - blankWidth); // Step back
+    }
+
     PrtWidth( o3tl::narrowing<sal_uInt16>(GetFix() - rInf.X() + PrtWidth()) );
     if( !Width() )
     {
@@ -78,7 +88,7 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
         && ' ' != rInf.GetChar(rInf.GetIdx() - TextFrameIndex(1))
         && ( !rInf.GetLast() || !rInf.GetLast()->IsBreakPortion() ) )
     {
-        SetBlankWidth( rInf.GetTextSize(OUString(' ')).Width() );
+        SetBlankWidth(GetBlankWidth() + rInf.GetTextSize(OUString(' ')).Width());
         SetLen(TextFrameIndex(1));
     }
 
