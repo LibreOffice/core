@@ -3349,6 +3349,92 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
     CPPUNIT_ASSERT_EQUAL(std::string("de-DE"), aLocale);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
+{
+    // Document has a long first column. We want to mouse-click on the column and
+    // check the selection changed to this column.
+
+    // The issue we want to reproduce is that the click on a cell in the first column that is
+    // very long (longer than ~800px default size of GridWindow) triggers a code-path where the cell
+    // selected is the neighbouring cell even when we clicked on the area of the first cell.
+
+    ScModelObj* pModelObj = createDoc("DocumentWithLongFirstColumn.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Fetch current view data
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    double nPPTX = pViewData->GetPPTX();
+    double nPPTY = pViewData->GetPPTX();
+
+    // Set click position
+
+    // Left side of the first cell
+    int leftCellSideX = 1 / nPPTX; // convert pixels to logical units
+
+    // Right side of the first cell. First cell is long so click somewhere more than 800px (default of GridWindow size).
+    int rightCellSideX = 1000 / nPPTX; // convert pixels to logical units
+
+    // Vettical position - doesn't matter - select the first row
+    int y = 1 / nPPTY;
+
+    // Setup view #1
+    ViewCallback aView1;
+    // Set client rect to 2000 x 2000 pixels
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 2000 / nPPTX, 2000 / nPPTY));
+    Scheduler::ProcessEventsToIdle();
+
+    // Click at on the left side of A1 cell
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the A1 cell is selected in view #1
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
+
+    // Click at on the right side of A1 cell
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the A1 cell is selected in view #1
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
+
+    // Try to check the same scenario in a new view
+
+    // Setup view #2
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    ViewCallback aView2;
+    // Set client rect to 2000 x 2000 pixels
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 2000 / nPPTX, 2000 / nPPTY));
+
+    // Lets make sure we are in view #2
+    SfxLokHelper::setView(nView2);
+    Scheduler::ProcessEventsToIdle();
+
+    // Click at on the left side of A1 cell
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the A1 cell is selected in view #2
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
+
+    // Click at on the right side of A1 cell
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the A1 cell is selected in view #2
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
