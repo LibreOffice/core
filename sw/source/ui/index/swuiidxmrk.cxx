@@ -923,6 +923,7 @@ void SwIndexMarkPane::UpdateDialog()
     m_xKey1DCB->set_sensitive(bEnable);
     m_xKey2DCB->set_sensitive(bEnable);
 
+    assert(pMark->GetTextTOXMark()->GetTextNode() == m_pSh->GetCursor_()->GetPoint()->GetNode());
     m_pSh->SelectTextAttr( RES_TXTATR_TOXMARK, pMark->GetTextTOXMark() );
     // we need the point at the start of the attribute
     m_pSh->SwapPam();

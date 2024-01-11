@@ -2218,6 +2218,7 @@ bool SwCursorShell::SelectTextModel( const sal_Int32 nStart,
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
     SwPosition& rPos = *m_pCurrentCursor->GetPoint();
+    assert(nEnd <= rPos.GetNode().GetTextNode()->Len());
     m_pCurrentCursor->DeleteMark();
     rPos.SetContent(nStart);
     m_pCurrentCursor->SetMark();
@@ -2292,7 +2293,9 @@ bool SwCursorShell::SelectTextAttr( sal_uInt16 nWhich,
         return false;
 
     const sal_Int32* pEnd = pTextAttr->End();
-    bool bRet = SelectTextModel(pTextAttr->GetStart(), (pEnd ? *pEnd : pTextAttr->GetStart() + 1));
+    sal_Int32 const nEnd(pEnd ? *pEnd : pTextAttr->GetStart() + 1);
+    assert(nEnd <= m_pCurrentCursor->GetPoint()->GetNode().GetTextNode()->Len());
+    bool bRet = SelectTextModel(pTextAttr->GetStart(), nEnd);
     return bRet;
 }
 
