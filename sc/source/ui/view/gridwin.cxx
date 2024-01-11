@@ -6375,7 +6375,7 @@ void ScGridWindow::updateOtherKitSelections() const
     {
         auto pOther = dynamic_cast<const ScTabViewShell *>(it);
         if (!pOther)
-            return;
+            continue;
 
         // Fetch pixels & convert for each view separately.
         tools::Rectangle aBoundingBox;
