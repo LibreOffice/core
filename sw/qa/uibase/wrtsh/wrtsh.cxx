@@ -18,6 +18,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/propertyvalue.hxx>
+#include <editeng/fontitem.hxx>
 
 #include <swmodeltestbase.hxx>
 #include <doc.hxx>
@@ -26,6 +27,7 @@
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <fmtanchr.hxx>
+#include <view.hxx>
 
 namespace
 {
@@ -100,6 +102,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     // Given a document with a checkbox (checked) content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // The default Liberation Serif doesn't have a checkmark glyph, avoid font fallback.
+    SwView& rView = pWrtShell->GetView();
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+    SvxFontItem aFont(FAMILY_DONTKNOW, "DejaVu Sans", OUString(), PITCH_DONTKNOW,
+                      RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
+    aSet.Put(aFont);
+    pWrtShell->SetAttrSet(aSet);
+
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -117,7 +129,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When clicking on that content control:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
@@ -158,6 +169,15 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControl)
 
     // When inserting a content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // The default Liberation Serif doesn't have a checkmark glyph, avoid font fallback.
+    SwView& rView = pWrtShell->GetView();
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+    SvxFontItem aFont(FAMILY_DONTKNOW, "DejaVu Sans", OUString(), PITCH_DONTKNOW,
+                      RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
+    aSet.Put(aFont);
+    pWrtShell->SetAttrSet(aSet);
+
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
 
     // Then make sure that the matching text attribute is added to the document model:
