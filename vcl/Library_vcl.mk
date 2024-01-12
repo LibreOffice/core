@@ -565,7 +565,7 @@ vcl_headless_freetype_code=\
 
 ifeq ($(SYSTEM_LIBFIXMATH),TRUE)
 $(eval $(call gb_Library_add_libs,vcl,\
-        -llibfixmath \
+        $(LIBFIXMATH_LIBS) \
 ))
 endif
 
