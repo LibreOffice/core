@@ -190,16 +190,15 @@ ChartItemPool::ChartItemPool():
     const sal_uInt16 nMax = SCHATTR_END - SCHATTR_START + 1;
     for( sal_uInt16 i = 0; i < nMax; i++ )
     {
-        // _nSID, _bNeedsPoolRegistration, _bShareable
-        pItemInfos[i]._nSID = 0;
-        pItemInfos[i]._bNeedsPoolRegistration = false;
-        pItemInfos[i]._bShareable = true;
+        // _nItemInfoSlotID, _nItemInfoFlags
+        pItemInfos[i]._nItemInfoSlotID = 0;
+        pItemInfos[i]._nItemInfoFlags = SFX_ITEMINFOFLAG_NONE;
     }
 
     // slot ids differing from which ids
-    pItemInfos[SCHATTR_SYMBOL_BRUSH - SCHATTR_START]._nSID = SID_ATTR_BRUSH;
-    pItemInfos[SCHATTR_STYLE_SYMBOL - SCHATTR_START]._nSID = SID_ATTR_SYMBOLTYPE;
-    pItemInfos[SCHATTR_SYMBOL_SIZE - SCHATTR_START]._nSID  = SID_ATTR_SYMBOLSIZE;
+    pItemInfos[SCHATTR_SYMBOL_BRUSH - SCHATTR_START]._nItemInfoSlotID = SID_ATTR_BRUSH;
+    pItemInfos[SCHATTR_STYLE_SYMBOL - SCHATTR_START]._nItemInfoSlotID = SID_ATTR_SYMBOLTYPE;
+    pItemInfos[SCHATTR_SYMBOL_SIZE - SCHATTR_START]._nItemInfoSlotID  = SID_ATTR_SYMBOLSIZE;
 
     SetDefaults(ppPoolDefaults);
     SetItemInfos(pItemInfos.get());

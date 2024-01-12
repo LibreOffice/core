@@ -44,6 +44,7 @@ SwFormatDrop::SwFormatDrop()
     m_nChars( 0 ),
     m_bWholeWord( false )
 {
+    setNonShareable();
 }
 
 SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
@@ -55,6 +56,7 @@ SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
     m_nChars( rCpy.GetChars() ),
     m_bWholeWord( rCpy.GetWholeWord() )
 {
+    setNonShareable();
 }
 
 SwFormatDrop::~SwFormatDrop()

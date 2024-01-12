@@ -159,64 +159,64 @@ bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
 
 const SfxItemInfo aItemInfos[EDITITEMCOUNT] =
 {
-        // _nSID, _bNeedsPoolRegistration, _bShareable
-        { SID_ATTR_FRAMEDIRECTION, false, true },         // EE_PARA_WRITINGDIR
-        { 0, true, true },                               // EE_PARA_XMLATTRIBS
-        { SID_ATTR_PARA_HANGPUNCTUATION, false, true },   // EE_PARA_HANGINGPUNCTUATION
-        { SID_ATTR_PARA_FORBIDDEN_RULES, false, true },   // EE_PARA_FORBIDDENRULES
-        { SID_ATTR_PARA_SCRIPTSPACE, false, true },       // EE_PARA_ASIANCJKSPACING
-        { SID_ATTR_NUMBERING_RULE, false, true },         // EE_PARA_NUMBULL
-        { 0, false, true },                               // EE_PARA_HYPHENATE
-        { 0, false, true },                               // EE_PARA_HYPHENATE_NO_CAPS
-        { 0, false, true },                               // EE_PARA_HYPHENATE_NO_LAST_WORD
-        { 0, false, true },                               // EE_PARA_BULLETSTATE
-        { 0, false, true },                               // EE_PARA_OUTLLRSPACE
-        { SID_ATTR_PARA_OUTLLEVEL, false, true },         // EE_PARA_OUTLLEVEL
-        { SID_ATTR_PARA_BULLET, false, true },            // EE_PARA_BULLET
-        { SID_ATTR_LRSPACE, false, true },                // EE_PARA_LRSPACE
-        { SID_ATTR_ULSPACE, false, true },                // EE_PARA_ULSPACE
-        { SID_ATTR_PARA_LINESPACE, false, true },         // EE_PARA_SBL
-        { SID_ATTR_PARA_ADJUST, false, true },            // EE_PARA_JUST
-        { SID_ATTR_TABSTOP, false, true },                // EE_PARA_TABS
-        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, false, true }, // EE_PARA_JUST_METHOD
-        { SID_ATTR_ALIGN_VER_JUSTIFY, false, true },      // EE_PARA_VER_JUST
-        { SID_ATTR_CHAR_COLOR, true, true },         // EE_CHAR_COLOR
-        { SID_ATTR_CHAR_FONT, true, true },          // EE_CHAR_FONTINFO
-        { SID_ATTR_CHAR_FONTHEIGHT, false, true },    // EE_CHAR_FONTHEIGHT
-        { SID_ATTR_CHAR_SCALEWIDTH, false, true },    // EE_CHAR_FONTWIDTH
-        { SID_ATTR_CHAR_WEIGHT, false, true },        // EE_CHAR_WEIGHT
-        { SID_ATTR_CHAR_UNDERLINE, false, true },     // EE_CHAR_UNDERLINE
-        { SID_ATTR_CHAR_STRIKEOUT, false, true },     // EE_CHAR_STRIKEOUT
-        { SID_ATTR_CHAR_POSTURE, false, true },       // EE_CHAR_ITALIC
-        { SID_ATTR_CHAR_CONTOUR, false, true },       // EE_CHAR_OUTLINE
-        { SID_ATTR_CHAR_SHADOWED, false, true },      // EE_CHAR_SHADOW
-        { SID_ATTR_CHAR_ESCAPEMENT, false, true },    // EE_CHAR_ESCAPEMENT
-        { SID_ATTR_CHAR_AUTOKERN, false, true },      // EE_CHAR_PAIRKERNING
-        { SID_ATTR_CHAR_KERNING, false, true },       // EE_CHAR_KERNING
-        { SID_ATTR_CHAR_WORDLINEMODE, false, true },  // EE_CHAR_WLM
-        { SID_ATTR_CHAR_LANGUAGE, false, true },      // EE_CHAR_LANGUAGE
-        { SID_ATTR_CHAR_CJK_LANGUAGE, false, true },  // EE_CHAR_LANGUAGE_CJK
-        { SID_ATTR_CHAR_CTL_LANGUAGE, false, true },  // EE_CHAR_LANGUAGE_CTL
-        { SID_ATTR_CHAR_CJK_FONT, true, true },      // EE_CHAR_FONTINFO_CJK
-        { SID_ATTR_CHAR_CTL_FONT, true, true },      // EE_CHAR_FONTINFO_CTL
-        { SID_ATTR_CHAR_CJK_FONTHEIGHT, false, true }, // EE_CHAR_FONTHEIGHT_CJK
-        { SID_ATTR_CHAR_CTL_FONTHEIGHT, false, true }, // EE_CHAR_FONTHEIGHT_CTL
-        { SID_ATTR_CHAR_CJK_WEIGHT, false, true },    // EE_CHAR_WEIGHT_CJK
-        { SID_ATTR_CHAR_CTL_WEIGHT, false, true },    // EE_CHAR_WEIGHT_CTL
-        { SID_ATTR_CHAR_CJK_POSTURE, false, true },   // EE_CHAR_ITALIC_CJK
-        { SID_ATTR_CHAR_CTL_POSTURE, false, true },   // EE_CHAR_ITALIC_CTL
-        { SID_ATTR_CHAR_EMPHASISMARK, false, true },  // EE_CHAR_EMPHASISMARK
-        { SID_ATTR_CHAR_RELIEF, false, true },        // EE_CHAR_RELIEF
-        { 0, false, true },                           // EE_CHAR_RUBI_DUMMY
-        { 0, true, true },                           // EE_CHAR_XMLATTRIBS
-        { SID_ATTR_CHAR_OVERLINE, false, true },      // EE_CHAR_OVERLINE
-        { SID_ATTR_CHAR_CASEMAP, false, true },       // EE_CHAR_CASEMAP
-        { SID_ATTR_CHAR_GRABBAG, false, true },       // EE_CHAR_GRABBAG
-        { SID_ATTR_CHAR_BACK_COLOR, false, true },    // EE_CHAR_BKGCOLOR
-        { 0, false, true },                           // EE_FEATURE_TAB
-        { 0, false, true },                           // EE_FEATURE_LINEBR
-        { SID_ATTR_CHAR_CHARSETCOLOR, false, true },  // EE_FEATURE_NOTCONV
-        { SID_FIELD, true, true },                    // EE_FEATURE_FIELD
+        // _nItemInfoSlotID, _nItemInfoFlags
+        { SID_ATTR_FRAMEDIRECTION, SFX_ITEMINFOFLAG_NONE  },         // EE_PARA_WRITINGDIR
+        { 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },                               // EE_PARA_XMLATTRIBS
+        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEMINFOFLAG_NONE  },   // EE_PARA_HANGINGPUNCTUATION
+        { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEMINFOFLAG_NONE  },   // EE_PARA_FORBIDDENRULES
+        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEMINFOFLAG_NONE  },       // EE_PARA_ASIANCJKSPACING
+        { SID_ATTR_NUMBERING_RULE, SFX_ITEMINFOFLAG_NONE  },         // EE_PARA_NUMBULL
+        { 0, SFX_ITEMINFOFLAG_NONE  },                               // EE_PARA_HYPHENATE
+        { 0, SFX_ITEMINFOFLAG_NONE  },                               // EE_PARA_HYPHENATE_NO_CAPS
+        { 0, SFX_ITEMINFOFLAG_NONE  },                               // EE_PARA_HYPHENATE_NO_LAST_WORD
+        { 0, SFX_ITEMINFOFLAG_NONE  },                               // EE_PARA_BULLETSTATE
+        { 0, SFX_ITEMINFOFLAG_NONE  },                               // EE_PARA_OUTLLRSPACE
+        { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEMINFOFLAG_NONE  },         // EE_PARA_OUTLLEVEL
+        { SID_ATTR_PARA_BULLET, SFX_ITEMINFOFLAG_NONE  },            // EE_PARA_BULLET
+        { SID_ATTR_LRSPACE, SFX_ITEMINFOFLAG_NONE  },                // EE_PARA_LRSPACE
+        { SID_ATTR_ULSPACE, SFX_ITEMINFOFLAG_NONE  },                // EE_PARA_ULSPACE
+        { SID_ATTR_PARA_LINESPACE, SFX_ITEMINFOFLAG_NONE  },         // EE_PARA_SBL
+        { SID_ATTR_PARA_ADJUST, SFX_ITEMINFOFLAG_NONE  },            // EE_PARA_JUST
+        { SID_ATTR_TABSTOP, SFX_ITEMINFOFLAG_NONE  },                // EE_PARA_TABS
+        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEMINFOFLAG_NONE  }, // EE_PARA_JUST_METHOD
+        { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEMINFOFLAG_NONE  },      // EE_PARA_VER_JUST
+        { SID_ATTR_CHAR_COLOR, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },         // EE_CHAR_COLOR
+        { SID_ATTR_CHAR_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },          // EE_CHAR_FONTINFO
+        { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE  },    // EE_CHAR_FONTHEIGHT
+        { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEMINFOFLAG_NONE  },    // EE_CHAR_FONTWIDTH
+        { SID_ATTR_CHAR_WEIGHT, SFX_ITEMINFOFLAG_NONE  },        // EE_CHAR_WEIGHT
+        { SID_ATTR_CHAR_UNDERLINE, SFX_ITEMINFOFLAG_NONE  },     // EE_CHAR_UNDERLINE
+        { SID_ATTR_CHAR_STRIKEOUT, SFX_ITEMINFOFLAG_NONE  },     // EE_CHAR_STRIKEOUT
+        { SID_ATTR_CHAR_POSTURE, SFX_ITEMINFOFLAG_NONE  },       // EE_CHAR_ITALIC
+        { SID_ATTR_CHAR_CONTOUR, SFX_ITEMINFOFLAG_NONE  },       // EE_CHAR_OUTLINE
+        { SID_ATTR_CHAR_SHADOWED, SFX_ITEMINFOFLAG_NONE  },      // EE_CHAR_SHADOW
+        { SID_ATTR_CHAR_ESCAPEMENT, SFX_ITEMINFOFLAG_NONE  },    // EE_CHAR_ESCAPEMENT
+        { SID_ATTR_CHAR_AUTOKERN, SFX_ITEMINFOFLAG_NONE  },      // EE_CHAR_PAIRKERNING
+        { SID_ATTR_CHAR_KERNING, SFX_ITEMINFOFLAG_NONE  },       // EE_CHAR_KERNING
+        { SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEMINFOFLAG_NONE  },  // EE_CHAR_WLM
+        { SID_ATTR_CHAR_LANGUAGE, SFX_ITEMINFOFLAG_NONE  },      // EE_CHAR_LANGUAGE
+        { SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEMINFOFLAG_NONE  },  // EE_CHAR_LANGUAGE_CJK
+        { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEMINFOFLAG_NONE  },  // EE_CHAR_LANGUAGE_CTL
+        { SID_ATTR_CHAR_CJK_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },      // EE_CHAR_FONTINFO_CJK
+        { SID_ATTR_CHAR_CTL_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },      // EE_CHAR_FONTINFO_CTL
+        { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE  }, // EE_CHAR_FONTHEIGHT_CJK
+        { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE  }, // EE_CHAR_FONTHEIGHT_CTL
+        { SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEMINFOFLAG_NONE  },    // EE_CHAR_WEIGHT_CJK
+        { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEMINFOFLAG_NONE  },    // EE_CHAR_WEIGHT_CTL
+        { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEMINFOFLAG_NONE  },   // EE_CHAR_ITALIC_CJK
+        { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEMINFOFLAG_NONE  },   // EE_CHAR_ITALIC_CTL
+        { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEMINFOFLAG_NONE  },  // EE_CHAR_EMPHASISMARK
+        { SID_ATTR_CHAR_RELIEF, SFX_ITEMINFOFLAG_NONE  },        // EE_CHAR_RELIEF
+        { 0, SFX_ITEMINFOFLAG_NONE  },                           // EE_CHAR_RUBI_DUMMY
+        { 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },                           // EE_CHAR_XMLATTRIBS
+        { SID_ATTR_CHAR_OVERLINE, SFX_ITEMINFOFLAG_NONE  },      // EE_CHAR_OVERLINE
+        { SID_ATTR_CHAR_CASEMAP, SFX_ITEMINFOFLAG_NONE  },       // EE_CHAR_CASEMAP
+        { SID_ATTR_CHAR_GRABBAG, SFX_ITEMINFOFLAG_NONE  },       // EE_CHAR_GRABBAG
+        { SID_ATTR_CHAR_BACK_COLOR, SFX_ITEMINFOFLAG_NONE  },    // EE_CHAR_BKGCOLOR
+        { 0, SFX_ITEMINFOFLAG_NONE  },                           // EE_FEATURE_TAB
+        { 0, SFX_ITEMINFOFLAG_NONE  },                           // EE_FEATURE_LINEBR
+        { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEMINFOFLAG_NONE  },  // EE_FEATURE_NOTCONV
+        { SID_FIELD, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },                    // EE_FEATURE_FIELD
 };
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )

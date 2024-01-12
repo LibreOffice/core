@@ -64,6 +64,7 @@ SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
     SwClient(pFormat),
     m_pTextAttribute( nullptr )
 {
+    setNonShareable();
 }
 
 SwFormatCharFormat::SwFormatCharFormat( const SwFormatCharFormat& rAttr )
@@ -71,6 +72,7 @@ SwFormatCharFormat::SwFormatCharFormat( const SwFormatCharFormat& rAttr )
     SwClient( rAttr.GetCharFormat() ),
     m_pTextAttribute( nullptr )
 {
+    setNonShareable();
 }
 
 SwFormatCharFormat::~SwFormatCharFormat() {}
@@ -130,6 +132,7 @@ void SwFormatCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwFormatAutoFormat::SwFormatAutoFormat( sal_uInt16 nInitWhich )
     : SfxPoolItem( nInitWhich )
 {
+    setNonShareable();
 }
 
 bool SwFormatAutoFormat::operator==( const SfxPoolItem& rAttr ) const
@@ -177,7 +180,9 @@ SwFormatINetFormat::SwFormatINetFormat()
     , mpTextAttr( nullptr )
     , mnINetFormatId( 0 )
     , mnVisitedFormatId( 0 )
-{}
+{
+    setNonShareable();
+}
 
 SwFormatINetFormat::SwFormatINetFormat( OUString aURL, OUString aTarget )
     : SfxPoolItem( RES_TXTATR_INETFMT )
@@ -190,6 +195,7 @@ SwFormatINetFormat::SwFormatINetFormat( OUString aURL, OUString aTarget )
     , mnINetFormatId( RES_POOLCHR_INET_NORMAL )
     , mnVisitedFormatId( RES_POOLCHR_INET_VISIT )
 {
+    setNonShareable();
     SwStyleNameMapper::FillUIName( mnINetFormatId, msINetFormatName );
     SwStyleNameMapper::FillUIName( mnVisitedFormatId, msVisitedFormatName );
 }
@@ -206,6 +212,7 @@ SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
     , mnINetFormatId( rAttr.mnINetFormatId )
     , mnVisitedFormatId( rAttr.mnVisitedFormatId )
 {
+    setNonShareable();
     if ( rAttr.GetMacroTable() )
         mpMacroTable.reset( new SvxMacroTableDtor( *rAttr.GetMacroTable() ) );
 }
@@ -409,6 +416,7 @@ SwFormatRuby::SwFormatRuby( OUString aRubyText )
     m_nPosition( 0 ),
     m_eAdjustment( css::text::RubyAdjust_LEFT )
 {
+    setNonShareable();
 }
 
 SwFormatRuby::SwFormatRuby( const SwFormatRuby& rAttr )
@@ -420,6 +428,7 @@ SwFormatRuby::SwFormatRuby( const SwFormatRuby& rAttr )
     m_nPosition( rAttr.m_nPosition ),
     m_eAdjustment( rAttr.m_eAdjustment )
 {
+    setNonShareable();
 }
 
 SwFormatRuby::~SwFormatRuby()
@@ -564,8 +573,9 @@ SwFormatMeta::SwFormatMeta(const sal_uInt16 i_nWhich)
     , m_pMeta()
     , m_pTextAttr( nullptr )
 {
-   OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
-            "ERROR: SwFormatMeta: invalid which id!");
+    setNonShareable();
+    OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
+             "ERROR: SwFormatMeta: invalid which id!");
 }
 
 SwFormatMeta::SwFormatMeta( std::shared_ptr< ::sw::Meta > i_pMeta,
@@ -574,6 +584,7 @@ SwFormatMeta::SwFormatMeta( std::shared_ptr< ::sw::Meta > i_pMeta,
     , m_pMeta( std::move(i_pMeta) )
     , m_pTextAttr( nullptr )
 {
+    setNonShareable();
     OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFormatMeta: invalid which id!");
     OSL_ENSURE(m_pMeta, "SwFormatMeta: no Meta ?");

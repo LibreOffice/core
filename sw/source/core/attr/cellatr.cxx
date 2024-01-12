@@ -58,6 +58,7 @@ SwTableBoxFormula::SwTableBoxFormula( const OUString& rFormula )
     SwTableFormula( rFormula ),
     m_pDefinedIn( nullptr )
 {
+    setNonShareable();
 }
 
 bool SwTableBoxFormula::operator==( const SfxPoolItem& rAttr ) const

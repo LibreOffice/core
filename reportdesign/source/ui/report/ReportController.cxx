@@ -2329,36 +2329,36 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        // _nSID, _bNeedsPoolRegistration, _bShareable
-        { SID_ATTR_LRSPACE,     false, true },
-        { SID_ATTR_ULSPACE,     false, true },
-        { SID_ATTR_PAGE,        false, true },
-        { SID_ATTR_PAGE_SIZE,   false, true },
-        { SID_ENUM_PAGE_MODE,   false, true },
-        { SID_PAPER_START,      false, true },
-        { SID_PAPER_END,        false, true },
-        { SID_ATTR_BRUSH,       false, true },
-        { 0,                    false, true }, // XATTR_FILLSTYLE
-        { 0,                    true,  true }, // XATTR_FILLCOLOR
-        { 0,                    false, true }, // XATTR_FILLGRADIENT
-        { 0,                    false, true }, // XATTR_FILLHATCH
-        { 0,                    false, true }, // XATTR_FILLBITMAP
-        { 0,                    false, true }, // XATTR_FILLTRANSPARENCE
-        { 0,                    false, true }, // XATTR_GRADIENTSTEPCOUNT
-        { 0,                    false, true }, // XATTR_FILLBMP_TILE
-        { 0,                    false, true }, // XATTR_FILLBMP_POS
-        { 0,                    false, true }, // XATTR_FILLBMP_SIZEX
-        { 0,                    false, true }, // XATTR_FILLBMP_SIZEY
-        { 0,                    false, true }, // XATTR_FILLFLOATTRANSPARENCE
-        { 0,                    false, true }, // XATTR_SECONDARYFILLCOLOR
-        { 0,                    false, true }, // XATTR_FILLBMP_SIZELOG
-        { 0,                    false, true }, // XATTR_FILLBMP_TILEOFFSETX
-        { 0,                    false, true }, // XATTR_FILLBMP_TILEOFFSETY
-        { 0,                    false, true }, // XATTR_FILLBMP_STRETCH
-        { 0,                    false, true }, // XATTR_FILLBMP_POSOFFSETX
-        { 0,                    false, true }, // XATTR_FILLBMP_POSOFFSETY
-        { 0,                    false, true }, // XATTR_FILLBACKGROUND
-        { SID_ATTR_METRIC,      false, true }
+        // _nItemInfoSlotID, _nItemInfoFlags
+        { SID_ATTR_LRSPACE,     SFX_ITEMINFOFLAG_NONE },
+        { SID_ATTR_ULSPACE,     SFX_ITEMINFOFLAG_NONE },
+        { SID_ATTR_PAGE,        SFX_ITEMINFOFLAG_NONE },
+        { SID_ATTR_PAGE_SIZE,   SFX_ITEMINFOFLAG_NONE },
+        { SID_ENUM_PAGE_MODE,   SFX_ITEMINFOFLAG_NONE },
+        { SID_PAPER_START,      SFX_ITEMINFOFLAG_NONE },
+        { SID_PAPER_END,        SFX_ITEMINFOFLAG_NONE },
+        { SID_ATTR_BRUSH,       SFX_ITEMINFOFLAG_NONE },
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLSTYLE
+        { 0,                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // XATTR_FILLCOLOR
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLGRADIENT
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLHATCH
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBITMAP
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLTRANSPARENCE
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_GRADIENTSTEPCOUNT
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILE
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POS
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZEX
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZEY
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLFLOATTRANSPARENCE
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_SECONDARYFILLCOLOR
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZELOG
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILEOFFSETX
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILEOFFSETY
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_STRETCH
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POSOFFSETX
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POSOFFSETY
+        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBACKGROUND
+        { SID_ATTR_METRIC,      SFX_ITEMINFOFLAG_NONE }
     };
 
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
@@ -4188,8 +4188,8 @@ void OReportController::openZoomDialog()
 
     static SfxItemInfo aItemInfos[] =
     {
-        // _nSID, _bNeedsPoolRegistration, _bShareable
-        { SID_ATTR_ZOOM, false, true }
+        // _nItemInfoSlotID, _nItemInfoFlags
+        { SID_ATTR_ZOOM, SFX_ITEMINFOFLAG_NONE }
     };
     std::vector<SfxPoolItem*> pDefaults
     {

@@ -50,6 +50,7 @@ SwFormatContentControl::SwFormatContentControl(sal_uInt16 nWhich)
     : SfxPoolItem(nWhich)
     , m_pTextAttr(nullptr)
 {
+    setNonShareable();
 }
 
 SwFormatContentControl::SwFormatContentControl(
@@ -58,6 +59,7 @@ SwFormatContentControl::SwFormatContentControl(
     , m_pContentControl(pContentControl)
     , m_pTextAttr(nullptr)
 {
+    setNonShareable();
     if (!pContentControl)
     {
         SAL_WARN("sw.core", "SwFormatContentControl ctor: no pContentControl?");

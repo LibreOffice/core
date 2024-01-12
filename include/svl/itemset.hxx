@@ -84,7 +84,7 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
     sal_uInt16        m_nCount;        ///< number of items
-    sal_uInt16        m_nRegister;     ///< number of items with NeedsPoolRegistration
+    sal_uInt16        m_nRegister;     ///< number of items with NeedsSurrogateSupport
     sal_uInt16        m_nTotalCount;   ///< number of WhichIDs, also size of m_ppItems array
 
     // bitfield (better packaging if a bool needs to be added)

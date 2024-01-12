@@ -389,7 +389,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     }
     while( pItem )
     {
-        if (!rSet.GetPool()->Shareable(pItem->Which()))
+        if (!pItem->isShareable())
             bNonShareable = true;
         if (!xFoundIgnorableItems || (xFoundIgnorableItems->Put(*pItem) == nullptr))
         {
@@ -403,7 +403,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
         pItem = aIgnorableItemsIter.GetCurItem();
         while( pItem )
         {
-            if (!rSet.GetPool()->Shareable(pItem->Which()))
+            if (!pItem->isShareable())
                 bNonShareable = true;
             pCurNode = pCurNode->findChildNode( *pItem, true );
             pItem = aIgnorableItemsIter.NextItem();

@@ -763,12 +763,12 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        // _nSID, _bNeedsPoolRegistration, _bShareable
-        { 0,                                false, true },    // SBA_DEF_RANGEFORMAT
-        { SID_ATTR_NUMBERFORMAT_VALUE,      false, true },    // SBA_DEF_FMTVALUE
-        { SID_ATTR_ALIGN_HOR_JUSTIFY,       false, true },    // SBA_ATTR_ALIGN_HOR_JUSTIFY
-        { SID_ATTR_NUMBERFORMAT_INFO,       false, true },    // SID_ATTR_NUMBERFORMAT_INFO
-        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   false, true }     // SID_ATTR_NUMBERFORMAT_ONE_AREA
+        // _nItemInfoSlotID, _nItemInfoFlags
+        { 0,                                SFX_ITEMINFOFLAG_NONE },    // SBA_DEF_RANGEFORMAT
+        { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEMINFOFLAG_NONE },    // SBA_DEF_FMTVALUE
+        { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEMINFOFLAG_NONE },    // SBA_ATTR_ALIGN_HOR_JUSTIFY
+        { SID_ATTR_NUMBERFORMAT_INFO,       SFX_ITEMINFOFLAG_NONE },    // SID_ATTR_NUMBERFORMAT_INFO
+        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEMINFOFLAG_NONE }     // SID_ATTR_NUMBERFORMAT_ONE_AREA
     };
     static const auto aAttrMap = svl::Items<
         SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,

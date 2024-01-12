@@ -50,6 +50,7 @@ SwFormatField::SwFormatField( sal_uInt16 nWhich )
     , SfxBroadcaster()
     , mpTextField( nullptr )
 {
+    setNonShareable();
 }
 
 SwFormatField::SwFormatField( const SwField &rField )
@@ -58,6 +59,7 @@ SwFormatField::SwFormatField( const SwField &rField )
     , mpField( rField.CopyField() )
     , mpTextField( nullptr )
 {
+    setNonShareable();
     rField.GetTyp()->Add(this);
     if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
@@ -95,6 +97,7 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
     , SfxBroadcaster()
     , mpTextField( nullptr )
 {
+    setNonShareable();
     if ( !rAttr.mpField )
         return;
 

@@ -83,7 +83,7 @@ SfxPoolItemHolder::SfxPoolItemHolder(SfxItemPool& rPool, const SfxPoolItem* pIte
 #endif
     if (nullptr != m_pItem)
         m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), bPassingOwnership);
-    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+    if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
         getPool().registerPoolItemHolder(*this);
 }
 
@@ -101,7 +101,7 @@ SfxPoolItemHolder::SfxPoolItemHolder(const SfxPoolItemHolder& rHolder)
 #endif
     if (nullptr != m_pItem)
         m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), false);
-    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+    if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
         getPool().registerPoolItemHolder(*this);
 }
 
@@ -111,7 +111,7 @@ SfxPoolItemHolder::~SfxPoolItemHolder()
     assert(!isDeleted() && "Destructed instance used (!)");
     nAllocatedSfxPoolItemHolderCount--;
 #endif
-    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+    if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
         getPool().unregisterPoolItemHolder(*this);
     if (nullptr != m_pItem)
         implCleanupItemEntry(m_pItem);
@@ -127,7 +127,7 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
     if (this == &rHolder || *this == rHolder)
         return *this;
 
-    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+    if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
         getPool().unregisterPoolItemHolder(*this);
     if (nullptr != m_pItem)
         implCleanupItemEntry(m_pItem);
@@ -137,7 +137,7 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
 
     if (nullptr != m_pItem)
         m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), false);
-    if (nullptr != m_pItem && getPool().NeedsPoolRegistration(m_pItem->Which()))
+    if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
         getPool().registerPoolItemHolder(*this);
 
     return *this;
@@ -328,19 +328,6 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // have to do this repeatedly
     SfxItemPool* pMasterPool(rPool.GetMasterPool());
     assert(nullptr != pMasterPool);
-    SfxItemPool* pTargetPool(pMasterPool);
-    while (pTargetPool && !pTargetPool->IsInRange(nWhich))
-        pTargetPool = pTargetPool->GetSecondaryPool();
-
-    // if this goes wrong, an Item with invalid ID for this pool is
-    // processed. This is not allowed (and should not happen, e.g.
-    // ItemSets already have WhichRanges that are checked against
-    // their Pool)
-    if (nullptr == pTargetPool)
-    {
-        assert(false);
-        return pSource;
-    }
 
     // // currently need to check if pSource is a default Item and
     // // avoid it to leave the Pool. This is necessary since Pools
@@ -382,10 +369,6 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     //     }
     // }
 
-    // CAUTION: Shareable_Impl and NeedsPoolRegistration_Impl
-    // use index, not WhichID (one more reason to change the Pools)
-    const sal_uInt16 nIndex(pTargetPool->GetIndex_Impl(nWhich));
-
     // the Item itself is shareable when it already is used somewhere
     // which is equivalent to be referenced already. IsPooledItem also
     // checked for SFX_ITEMS_MAXREF, that is not needed here. Use a
@@ -404,7 +387,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
             // target ranges (e.g. look for ATTR_FONT_UNDERLINE)
             break;
 
-        if (!pTargetPool->Shareable_Impl(nIndex))
+        if (!pSource->isShareable())
             // not shareable, done
             break;
 
@@ -631,10 +614,10 @@ void SfxItemSet::checkRemovePoolRegistration(const SfxPoolItem* pItem)
         return;
 
     if (SfxItemPool::IsSlot(pItem->Which()))
-        // no slots, these do not support NeedsPoolRegistration
+        // no slots, these do not support NeedsSurrogateSupport
         return;
 
-    if(!GetPool()->NeedsPoolRegistration(pItem->Which()))
+    if(!GetPool()->NeedsSurrogateSupport(pItem->Which()))
         // not needed for this item, done
         return;
 
@@ -644,7 +627,7 @@ void SfxItemSet::checkRemovePoolRegistration(const SfxPoolItem* pItem)
     // decrement counter
     m_nRegister--;
 
-    // deregister when no more Items that NeedsPoolRegistration exist
+    // deregister when no more Items that NeedsSurrogateSupport exist
     if (0 == m_nRegister)
         GetPool()->unregisterItemSet(*this);
 }
@@ -660,10 +643,10 @@ void SfxItemSet::checkAddPoolRegistration(const SfxPoolItem* pItem)
         return;
 
     if (SfxItemPool::IsSlot(pItem->Which()))
-        // no slots, these do not support NeedsPoolRegistration
+        // no slots, these do not support NeedsSurrogateSupport
         return;
 
-    if(!GetPool()->NeedsPoolRegistration(pItem->Which()))
+    if(!GetPool()->NeedsSurrogateSupport(pItem->Which()))
         // not needed for this item, done
         return;
 
@@ -671,7 +654,7 @@ void SfxItemSet::checkAddPoolRegistration(const SfxPoolItem* pItem)
     // allow paired Remove/Add calls (see SfxItemSet::PutImpl)
     assert(m_nRegister <= m_nCount);
 
-    // register when first Item that NeedsPoolRegistration exist
+    // register when first Item that NeedsSurrogateSupport exist
     if (0 == m_nRegister)
         GetPool()->registerItemSet(*this);
 

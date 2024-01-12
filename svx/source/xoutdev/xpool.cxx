@@ -159,58 +159,57 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     // create ItemInfos
     for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++)
     {
-        // _nSID, _bNeedsPoolRegistration, _bShareable
-        mpLocalItemInfos[i - XATTR_START]._nSID = 0;
-        mpLocalItemInfos[i - XATTR_START]._bNeedsPoolRegistration = false;
-        mpLocalItemInfos[i - XATTR_START]._bShareable = true;
+        // _nItemInfoSlotID, _nItemInfoFlags
+        mpLocalItemInfos[i - XATTR_START]._nItemInfoSlotID = 0;
+        mpLocalItemInfos[i - XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_NONE;
     }
 
-    // these slots need _bNeedsPoolRegistration == true, see
+    // these slots need SFX_ITEMINFOFLAG_SUPPORT_SURROGATE, see
     // text @svl/source/items/itempool.cxx
-    mpLocalItemInfos[XATTR_FILLBITMAP       -XATTR_START]._bNeedsPoolRegistration = true;
-    mpLocalItemInfos[XATTR_FILLGRADIENT     -XATTR_START]._bNeedsPoolRegistration = true;
-    mpLocalItemInfos[XATTR_FILLHATCH        -XATTR_START]._bNeedsPoolRegistration = true;
-    mpLocalItemInfos[XATTR_FILLFLOATTRANSPARENCE - XATTR_START]._bNeedsPoolRegistration = true;
-    mpLocalItemInfos[XATTR_LINEEND          -XATTR_START]._bNeedsPoolRegistration = true;
-    mpLocalItemInfos[XATTR_LINESTART        -XATTR_START]._bNeedsPoolRegistration = true;
-    mpLocalItemInfos[XATTR_LINEDASH         -XATTR_START]._bNeedsPoolRegistration = true;
-    mpLocalItemInfos[XATTR_FILLCOLOR        -XATTR_START]._bNeedsPoolRegistration = true;
+    mpLocalItemInfos[XATTR_FILLBITMAP       -XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
+    mpLocalItemInfos[XATTR_FILLGRADIENT     -XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
+    mpLocalItemInfos[XATTR_FILLHATCH        -XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
+    mpLocalItemInfos[XATTR_FILLFLOATTRANSPARENCE - XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
+    mpLocalItemInfos[XATTR_LINEEND          -XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
+    mpLocalItemInfos[XATTR_LINESTART        -XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
+    mpLocalItemInfos[XATTR_LINEDASH         -XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
+    mpLocalItemInfos[XATTR_FILLCOLOR        -XATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
 
     // set the SlotIDs, this is a mapping used by GetWhich()/GetSlotId()
-    mpLocalItemInfos[XATTR_LINESTYLE        -XATTR_START]._nSID = SID_ATTR_LINE_STYLE;
-    mpLocalItemInfos[XATTR_LINEDASH         -XATTR_START]._nSID = SID_ATTR_LINE_DASH;
-    mpLocalItemInfos[XATTR_LINEWIDTH        -XATTR_START]._nSID = SID_ATTR_LINE_WIDTH;
-    mpLocalItemInfos[XATTR_LINECOLOR        -XATTR_START]._nSID = SID_ATTR_LINE_COLOR;
-    mpLocalItemInfos[XATTR_LINESTART        -XATTR_START]._nSID = SID_ATTR_LINE_START;
-    mpLocalItemInfos[XATTR_LINEEND          -XATTR_START]._nSID = SID_ATTR_LINE_END;
-    mpLocalItemInfos[XATTR_LINESTARTWIDTH   -XATTR_START]._nSID = SID_ATTR_LINE_STARTWIDTH;
-    mpLocalItemInfos[XATTR_LINEENDWIDTH     -XATTR_START]._nSID = SID_ATTR_LINE_ENDWIDTH;
-    mpLocalItemInfos[XATTR_LINESTARTCENTER  -XATTR_START]._nSID = SID_ATTR_LINE_STARTCENTER;
-    mpLocalItemInfos[XATTR_LINEENDCENTER    -XATTR_START]._nSID = SID_ATTR_LINE_ENDCENTER;
-    mpLocalItemInfos[XATTR_FILLSTYLE        -XATTR_START]._nSID = SID_ATTR_FILL_STYLE;
-    mpLocalItemInfos[XATTR_FILLCOLOR        -XATTR_START]._nSID = SID_ATTR_FILL_COLOR;
-    mpLocalItemInfos[XATTR_FILLGRADIENT     -XATTR_START]._nSID = SID_ATTR_FILL_GRADIENT;
-    mpLocalItemInfos[XATTR_FILLHATCH        -XATTR_START]._nSID = SID_ATTR_FILL_HATCH;
-    mpLocalItemInfos[XATTR_FILLBITMAP       -XATTR_START]._nSID = SID_ATTR_FILL_BITMAP;
-    mpLocalItemInfos[XATTR_FORMTXTSTYLE     -XATTR_START]._nSID = SID_FORMTEXT_STYLE;
-    mpLocalItemInfos[XATTR_FORMTXTADJUST    -XATTR_START]._nSID = SID_FORMTEXT_ADJUST;
-    mpLocalItemInfos[XATTR_FORMTXTDISTANCE  -XATTR_START]._nSID = SID_FORMTEXT_DISTANCE;
-    mpLocalItemInfos[XATTR_FORMTXTSTART     -XATTR_START]._nSID = SID_FORMTEXT_START;
-    mpLocalItemInfos[XATTR_FORMTXTMIRROR    -XATTR_START]._nSID = SID_FORMTEXT_MIRROR;
-    mpLocalItemInfos[XATTR_FORMTXTOUTLINE   -XATTR_START]._nSID = SID_FORMTEXT_OUTLINE;
-    mpLocalItemInfos[XATTR_FORMTXTSHADOW    -XATTR_START]._nSID = SID_FORMTEXT_SHADOW;
-    mpLocalItemInfos[XATTR_FORMTXTSHDWCOLOR -XATTR_START]._nSID = SID_FORMTEXT_SHDWCOLOR;
-    mpLocalItemInfos[XATTR_FORMTXTSHDWXVAL  -XATTR_START]._nSID = SID_FORMTEXT_SHDWXVAL;
-    mpLocalItemInfos[XATTR_FORMTXTSHDWYVAL  -XATTR_START]._nSID = SID_FORMTEXT_SHDWYVAL;
-    mpLocalItemInfos[XATTR_FORMTXTHIDEFORM  -XATTR_START]._nSID = SID_FORMTEXT_HIDEFORM;
+    mpLocalItemInfos[XATTR_LINESTYLE        -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_STYLE;
+    mpLocalItemInfos[XATTR_LINEDASH         -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_DASH;
+    mpLocalItemInfos[XATTR_LINEWIDTH        -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_WIDTH;
+    mpLocalItemInfos[XATTR_LINECOLOR        -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_COLOR;
+    mpLocalItemInfos[XATTR_LINESTART        -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_START;
+    mpLocalItemInfos[XATTR_LINEEND          -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_END;
+    mpLocalItemInfos[XATTR_LINESTARTWIDTH   -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_STARTWIDTH;
+    mpLocalItemInfos[XATTR_LINEENDWIDTH     -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_ENDWIDTH;
+    mpLocalItemInfos[XATTR_LINESTARTCENTER  -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_STARTCENTER;
+    mpLocalItemInfos[XATTR_LINEENDCENTER    -XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_ENDCENTER;
+    mpLocalItemInfos[XATTR_FILLSTYLE        -XATTR_START]._nItemInfoSlotID = SID_ATTR_FILL_STYLE;
+    mpLocalItemInfos[XATTR_FILLCOLOR        -XATTR_START]._nItemInfoSlotID = SID_ATTR_FILL_COLOR;
+    mpLocalItemInfos[XATTR_FILLGRADIENT     -XATTR_START]._nItemInfoSlotID = SID_ATTR_FILL_GRADIENT;
+    mpLocalItemInfos[XATTR_FILLHATCH        -XATTR_START]._nItemInfoSlotID = SID_ATTR_FILL_HATCH;
+    mpLocalItemInfos[XATTR_FILLBITMAP       -XATTR_START]._nItemInfoSlotID = SID_ATTR_FILL_BITMAP;
+    mpLocalItemInfos[XATTR_FORMTXTSTYLE     -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_STYLE;
+    mpLocalItemInfos[XATTR_FORMTXTADJUST    -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_ADJUST;
+    mpLocalItemInfos[XATTR_FORMTXTDISTANCE  -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_DISTANCE;
+    mpLocalItemInfos[XATTR_FORMTXTSTART     -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_START;
+    mpLocalItemInfos[XATTR_FORMTXTMIRROR    -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_MIRROR;
+    mpLocalItemInfos[XATTR_FORMTXTOUTLINE   -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_OUTLINE;
+    mpLocalItemInfos[XATTR_FORMTXTSHADOW    -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_SHADOW;
+    mpLocalItemInfos[XATTR_FORMTXTSHDWCOLOR -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_SHDWCOLOR;
+    mpLocalItemInfos[XATTR_FORMTXTSHDWXVAL  -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_SHDWXVAL;
+    mpLocalItemInfos[XATTR_FORMTXTSHDWYVAL  -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_SHDWYVAL;
+    mpLocalItemInfos[XATTR_FORMTXTHIDEFORM  -XATTR_START]._nItemInfoSlotID = SID_FORMTEXT_HIDEFORM;
 
     // associate new slots for panels with known items
-    mpLocalItemInfos[XATTR_FILLUSESLIDEBACKGROUND - XATTR_START]._nSID = SID_ATTR_FILL_USE_SLIDE_BACKGROUND;
-    mpLocalItemInfos[XATTR_FILLTRANSPARENCE - XATTR_START]._nSID = SID_ATTR_FILL_TRANSPARENCE;
-    mpLocalItemInfos[XATTR_FILLFLOATTRANSPARENCE - XATTR_START]._nSID = SID_ATTR_FILL_FLOATTRANSPARENCE;
-    mpLocalItemInfos[XATTR_LINETRANSPARENCE - XATTR_START]._nSID = SID_ATTR_LINE_TRANSPARENCE;
-    mpLocalItemInfos[XATTR_LINEJOINT - XATTR_START]._nSID = SID_ATTR_LINE_JOINT;
-    mpLocalItemInfos[XATTR_LINECAP - XATTR_START]._nSID = SID_ATTR_LINE_CAP;
+    mpLocalItemInfos[XATTR_FILLUSESLIDEBACKGROUND - XATTR_START]._nItemInfoSlotID = SID_ATTR_FILL_USE_SLIDE_BACKGROUND;
+    mpLocalItemInfos[XATTR_FILLTRANSPARENCE - XATTR_START]._nItemInfoSlotID = SID_ATTR_FILL_TRANSPARENCE;
+    mpLocalItemInfos[XATTR_FILLFLOATTRANSPARENCE - XATTR_START]._nItemInfoSlotID = SID_ATTR_FILL_FLOATTRANSPARENCE;
+    mpLocalItemInfos[XATTR_LINETRANSPARENCE - XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_TRANSPARENCE;
+    mpLocalItemInfos[XATTR_LINEJOINT - XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_JOINT;
+    mpLocalItemInfos[XATTR_LINECAP - XATTR_START]._nItemInfoSlotID = SID_ATTR_LINE_CAP;
 
     // if it's my own creation level, set Defaults and ItemInfos
     if(XATTR_START == GetFirstWhich() && XATTR_END == GetLastWhich())

@@ -164,8 +164,8 @@ inline void CntStaticPoolDefaults_Impl::Insert(
     sal_uInt16 nPos = pItem->Which() - WID_CHAOS_START;
 
     mvDefaults[ nPos ]         = pItem;
-    m_pItemInfos[ nPos ]._nSID   = 0;
-    m_pItemInfos[ nPos ]._bNeedsPoolRegistration = false;
+    m_pItemInfos[ nPos ]._nItemInfoSlotID   = 0;
+    m_pItemInfos[ nPos ]._nItemInfoFlags = SFX_ITEMINFOFLAG_NONE;
 }
 
 

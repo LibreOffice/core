@@ -129,16 +129,35 @@ class SVL_DLLPUBLIC SfxPoolItem
     sal_uInt32  m_nSerialNumber;
 #endif
 
-    // bitfield for flags (instead of SfxItemKind)
+    // bitfield for Item attributes that are Item-Dpendent
+
+    // Item is a SfxVoidItem (used for SfxItemState::DISABLED,
+    // but unfortunately also for some slot stuff with
+    // Which != 0) -> needs cleanup
     bool        m_bIsVoidItem : 1;          // bit 0
+
+    // Item is registered at some Pool as default.
+    //   m_bStaticDefault: direct Pool Item (CAUTION:
+    //     thetse are not really 'static', but should be)
+    //     -> needs cleanup
+    //   m_bPoolDefault: set by user using SetPoolDefaultItem
+    //     tho should be better called 'UserDefault'
     bool        m_bStaticDefault : 1;       // bit 1
     bool        m_bPoolDefault : 1;         // bit 2
+
+    // Item is derived from SfxSetItem -> is Pool-dependent
     bool        m_bIsSetItem : 1;           // bit 3
+
+    // Defines if the Item can be shared/RefCounted else it will be cloned.
+    // Default is true - as it should be for all Items. It is needed by some
+    // SW items, so protected to let them set it in constructor. If this could
+    // be fixed at that Items we may remove this again.
+    bool        m_bShareable : 1;           // bit 4
 
 protected:
 #ifdef DBG_UTIL
     // this flag will make debugging item stuff much simpler
-    bool        m_bDeleted : 1;             // bit 4
+    bool        m_bDeleted : 1;             // bit 5
 #endif
 
 private:
@@ -153,6 +172,7 @@ protected:
     void setStaticDefault() { m_bStaticDefault = true; }
     void setPoolDefault() { m_bPoolDefault = true; }
     void setIsSetItem() { m_bIsSetItem = true; }
+    void setNonShareable() { m_bShareable = false; }
 
 public:
     inline void AddRef(sal_uInt32 n = 1) const
@@ -170,6 +190,7 @@ public:
     bool isStaticDefault() const { return m_bStaticDefault; }
     bool isPoolDefault() const { return m_bPoolDefault; }
     bool isSetItem() const { return m_bIsSetItem; }
+    bool isShareable() const { return m_bShareable; }
 
     // version that allows nullptrs
     static bool areSame(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2);

@@ -37,6 +37,7 @@ SwFormatLineBreak::SwFormatLineBreak(SwLineBreakClear eClear)
     , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
 {
+    setNonShareable();
 }
 
 SwFormatLineBreak::~SwFormatLineBreak() {}

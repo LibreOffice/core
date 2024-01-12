@@ -21,6 +21,7 @@ ScCondFormatDlgItem::ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList
     meDialogType(condformat::dialog::CONDITION),
     mbManaged(bManaged)
 {
+    setNonShareable();
 }
 
 ScCondFormatDlgItem::~ScCondFormatDlgItem()

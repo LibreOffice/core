@@ -532,27 +532,27 @@ namespace pcr
         // create the pool
         static SfxItemInfo const aItemInfos[FontItemIds::CFID_LAST_ITEM_ID - FontItemIds::CFID_FIRST_ITEM_ID + 1] =
         {
-            // _nSID, _bNeedsPoolRegistration, _bShareable
-            { SID_ATTR_CHAR_FONT,               false, false },
-            { SID_ATTR_CHAR_FONTHEIGHT,         false, false },
-            { SID_ATTR_CHAR_WEIGHT,             false, false },
-            { SID_ATTR_CHAR_POSTURE,            false, false },
-            { SID_ATTR_CHAR_LANGUAGE,           false, false },
-            { SID_ATTR_CHAR_UNDERLINE,          false, false },
-            { SID_ATTR_CHAR_STRIKEOUT,          false, false },
-            { SID_ATTR_CHAR_WORDLINEMODE,       false, false },
-            { SID_ATTR_CHAR_COLOR,              false, false },
-            { SID_ATTR_CHAR_RELIEF,             false, false },
-            { SID_ATTR_CHAR_EMPHASISMARK,       false, false },
-            { 0,                                false, false },
-            { 0,                                false, false },
-            { 0,                                false, false },
-            { 0,                                false, false },
-            { 0,                                false, false },
-            { 0,                                false, false },
-            { 0,                                false, false },
-            { 0,                                false, false },
-            { SID_ATTR_CHAR_FONTLIST,           false, false }
+            // _nItemInfoSlotID, _nItemInfoFlags
+            { SID_ATTR_CHAR_FONT,               SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_FONT
+            { SID_ATTR_CHAR_FONTHEIGHT,         SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_HEIGHT
+            { SID_ATTR_CHAR_WEIGHT,             SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_WEIGHT
+            { SID_ATTR_CHAR_POSTURE,            SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_POSTURE
+            { SID_ATTR_CHAR_LANGUAGE,           SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_LANGUAGE
+            { SID_ATTR_CHAR_UNDERLINE,          SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_UNDERLINE
+            { SID_ATTR_CHAR_STRIKEOUT,          SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_STRIKEOUT
+            { SID_ATTR_CHAR_WORDLINEMODE,       SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_WORDLINEMODE
+            { SID_ATTR_CHAR_COLOR,              SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_CHARCOLOR
+            { SID_ATTR_CHAR_RELIEF,             SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_RELIEF
+            { SID_ATTR_CHAR_EMPHASISMARK,       SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_EMPHASIS
+            { 0,                                SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_CJK_FONT
+            { 0,                                SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_CJK_HEIGHT
+            { 0,                                SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_CJK_WEIGHT
+            { 0,                                SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_CJK_POSTURE
+            { 0,                                SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_CJK_LANGUAGE
+            { 0,                                SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_CASEMAP
+            { 0,                                SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_CONTOUR
+            { 0,                                SFX_ITEMINFOFLAG_NONE }, // FontItemIds::CFID_SHADOWED
+            { SID_ATTR_CHAR_FONTLIST,           SFX_ITEMINFOFLAG_NONE }  // FontItemIds::CFID_FONTLIST
         };
 
         _rpPool = new SfxItemPool("PCRControlFontItemPool", FontItemIds::CFID_FIRST_ITEM_ID, FontItemIds::CFID_LAST_ITEM_ID,

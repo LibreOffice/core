@@ -25,17 +25,17 @@
 
 SfxItemInfo const aMsgItemInfos[] =
 {
-    // _nSID, _bNeedsPoolRegistration, _bShareable
-    { 0,                         false, true },   // SCITEM_STRING
-    { 0,                         false, true },   // SCITEM_SEARCHDATA - stop using this!
-    { SID_SORT,                  false, true },   // SCITEM_SORTDATA
-    { SID_QUERY,                 false, true },   // SCITEM_QUERYDATA
-    { SID_SUBTOTALS,             false, true },   // SCITEM_SUBTDATA
-    { SID_CONSOLIDATE,           false, true },   // SCITEM_CONSOLIDATEDATA
-    { SID_PIVOT_TABLE,           false, true },   // SCITEM_PIVOTDATA
-    { SID_SOLVE,                 false, true },   // SCITEM_SOLVEDATA
-    { SID_SCUSERLISTS,           false, true },   // SCITEM_USERLIST
-    { 0,                         true,  false }  // SCITEM_CONDFORMATDLGDATA
+    // _nItemInfoSlotID, _nItemInfoFlags
+    { 0,                         SFX_ITEMINFOFLAG_NONE },   // SCITEM_STRING
+    { 0,                         SFX_ITEMINFOFLAG_NONE },   // SCITEM_SEARCHDATA - stop using this!
+    { SID_SORT,                  SFX_ITEMINFOFLAG_NONE },   // SCITEM_SORTDATA
+    { SID_QUERY,                 SFX_ITEMINFOFLAG_NONE },   // SCITEM_QUERYDATA
+    { SID_SUBTOTALS,             SFX_ITEMINFOFLAG_NONE },   // SCITEM_SUBTDATA
+    { SID_CONSOLIDATE,           SFX_ITEMINFOFLAG_NONE },   // SCITEM_CONSOLIDATEDATA
+    { SID_PIVOT_TABLE,           SFX_ITEMINFOFLAG_NONE },   // SCITEM_PIVOTDATA
+    { SID_SOLVE,                 SFX_ITEMINFOFLAG_NONE },   // SCITEM_SOLVEDATA
+    { SID_SCUSERLISTS,           SFX_ITEMINFOFLAG_NONE },   // SCITEM_USERLIST
+    { 0,                         SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }  // SCITEM_CONDFORMATDLGDATA
 };
 
 ScMessagePool::ScMessagePool()

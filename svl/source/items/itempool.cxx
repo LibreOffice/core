@@ -40,7 +40,7 @@ size_t getAllDirectlyPooledSfxPoolItemCount() { return nAllDirectlyPooledSfxPool
 size_t getRemainingDirectlyPooledSfxPoolItemCount() { return nRemainingDirectlyPooledSfxPoolItemCount; }
 #endif
 
-// WhichIDs that need to set _bNeedsPoolRegistration in SfxItemInfo
+// WhichIDs that need to set SFX_ITEMINFOFLAG_SUPPORT_SURROGATE in SfxItemInfo
 // to true to allow a register of all items of that type/with that WhichID
 // to be accessible using SfxItemPool::GetItemSurrogates. Created by
 // grepping for 'GetItemSurrogates' usages & interpreting. Some
@@ -210,7 +210,7 @@ lcl_CheckSlots2(std::map<sal_uInt16, sal_uInt16> & rSlotMap,
     sal_uInt16 const nCount(rPool.GetLastWhich() - rPool.GetFirstWhich() + 1);
     for (sal_uInt16 n = 0; n < nCount; ++n)
     {
-        sal_uInt16 const nSlotId(pInfo[n]._nSID);
+        sal_uInt16 const nSlotId(pInfo[n]._nItemInfoSlotID);
         if (nSlotId != 0
             && nSlotId != 10883  // preexisting duplicate SID_ATTR_GRAF_CROP
             && nSlotId != 10023  // preexisting duplicate SID_ATTR_BORDER_INNER
@@ -355,32 +355,18 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 }
 
 
-bool SfxItemPool::NeedsPoolRegistration(sal_uInt16 nWhich) const
+bool SfxItemPool::CheckItemInfoFlag(sal_uInt16 nWhich, sal_uInt16 nMask) const
 {
     if (!IsInRange(nWhich))
     {
         // get to correct pool
         if (mpSecondary)
-            return mpSecondary->NeedsPoolRegistration(nWhich);
+            return mpSecondary->CheckItemInfoFlag(nWhich, nMask);
         return false;
     }
 
-    return NeedsPoolRegistration_Impl(nWhich - mnStart);
+    return CheckItemInfoFlag_Impl(nWhich - mnStart, nMask);
 }
-
-bool SfxItemPool::Shareable(sal_uInt16 nWhich) const
-{
-    if (!IsInRange(nWhich))
-    {
-        // get to correct pool
-        if (mpSecondary)
-            return mpSecondary->Shareable(nWhich);
-        return false;
-    }
-
-    return Shareable_Impl(nWhich - mnStart);
-}
-
 
 SfxBroadcaster& SfxItemPool::BC()
 {
@@ -447,7 +433,7 @@ SfxItemPool::SfxItemPool
         auto nWhich = nStartWhich;
         while (nWhich <= nEndWhich)
         {
-            if (p->_nSID == nWhich)
+            if (p->_nItemInfoSlotID == nWhich)
             {
                 SAL_WARN("svl.items", "No point mapping a SID to itself, just put a 0 here in the SfxItemInfo array, at index " << (p - pItemInfos));
                 assert(false);
@@ -911,7 +897,7 @@ void SfxItemPool::CollectSurrogates(std::unordered_set<const SfxPoolItem*>& rTar
 
     // the 3rd source for surrogates is the list of direct put items
     // but since these use SfxPoolItemHolder now they are automatically
-    // registered at 2nd source - IF NeedsPoolRegistration is set. So
+    // registered at 2nd source - IF NeedsSurrogateSupport is set. So
     // as long as we have this DirectPutItem stuff, iterate here and
     // warn if an Item was added
     const directPutSfxPoolItemHolders& rDirects(GetMasterPool()->maDirectPutItems);
@@ -954,7 +940,7 @@ sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, bool bDeep ) const
 
     sal_uInt16 nCount = mnEnd - mnStart + 1;
     for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
-        if ( pItemInfos[nOfs]._nSID == nSlotId )
+        if ( pItemInfos[nOfs]._nItemInfoSlotID == nSlotId )
             return nOfs + mnStart;
     if ( mpSecondary && bDeep )
         return mpSecondary->GetWhich(nSlotId);
@@ -975,7 +961,7 @@ sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich ) const
         return 0;
     }
 
-    sal_uInt16 nSID = pItemInfos[nWhich - mnStart]._nSID;
+    sal_uInt16 nSID = pItemInfos[nWhich - mnStart]._nItemInfoSlotID;
     return nSID ? nSID : nWhich;
 }
 
@@ -987,7 +973,7 @@ sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
 
     sal_uInt16 nCount = mnEnd - mnStart + 1;
     for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
-        if ( pItemInfos[nOfs]._nSID == nSlotId )
+        if ( pItemInfos[nOfs]._nItemInfoSlotID == nSlotId )
             return nOfs + mnStart;
     if ( mpSecondary && bDeep )
         return mpSecondary->GetTrueWhich(nSlotId);
@@ -1007,7 +993,7 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
         assert(false && "unknown WhichId - cannot get slot-id");
         return 0;
     }
-    return pItemInfos[nWhich - mnStart]._nSID;
+    return pItemInfos[nWhich - mnStart]._nItemInfoSlotID;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

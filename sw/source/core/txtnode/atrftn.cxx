@@ -131,6 +131,7 @@ SwFormatFootnote::SwFormatFootnote( bool bEndNote )
     , m_nNumberRLHidden(0)
     , m_bEndNote(bEndNote)
 {
+    setNonShareable();
 }
 
 void SwFormatFootnote::SetXFootnote(rtl::Reference<SwXFootnote> const& xNote)

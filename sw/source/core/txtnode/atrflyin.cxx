@@ -41,6 +41,7 @@ SwFormatFlyCnt::SwFormatFlyCnt( SwFrameFormat *pFrameFormat )
     m_pTextAttr( nullptr ),
     m_pFormat( pFrameFormat )
 {
+    setNonShareable();
 }
 
 bool SwFormatFlyCnt::operator==( const SfxPoolItem& rAttr ) const

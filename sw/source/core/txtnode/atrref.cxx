@@ -46,6 +46,7 @@ SwFormatRefMark::SwFormatRefMark( OUString aName )
     , m_pTextAttr(nullptr)
     , m_aRefName(std::move(aName))
 {
+    setNonShareable();
 }
 
 SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
@@ -54,6 +55,7 @@ SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
     , m_pTextAttr(nullptr)
     , m_aRefName(rAttr.m_aRefName)
 {
+    setNonShareable();
 }
 
 void SwFormatRefMark::SetXRefMark(rtl::Reference<SwXReferenceMark> const& xMark)

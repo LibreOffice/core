@@ -580,11 +580,13 @@ SwFormatContent::SwFormatContent( const SwFormatContent &rCpy )
     : SfxPoolItem( RES_CNTNT )
     , m_oStartNode( rCpy.m_oStartNode )
 {
+    setNonShareable();
 }
 
 SwFormatContent::SwFormatContent( const SwStartNode *pStartNd )
     : SfxPoolItem( RES_CNTNT )
 {
+    setNonShareable();
     if (pStartNd)
         m_oStartNode = *pStartNd;
 }
@@ -634,6 +636,7 @@ SwFormatPageDesc::SwFormatPageDesc( const SwFormatPageDesc &rCpy )
     m_oNumOffset( rCpy.m_oNumOffset ),
     m_pDefinedIn( nullptr )
 {
+    setNonShareable();
 }
 
 SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
@@ -641,6 +644,7 @@ SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
     SwClient( const_cast<SwPageDesc*>(pDesc) ),
     m_pDefinedIn( nullptr )
 {
+    setNonShareable();
 }
 
 SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)
@@ -1572,6 +1576,7 @@ SwFormatAnchor::SwFormatAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     // OD 2004-05-05 #i28701# - get always new increased order number
     m_nOrder( ++s_nOrderCounter )
 {
+    setNonShareable();
     assert( m_eAnchorId == RndStdIds::FLY_AT_PARA
         || m_eAnchorId == RndStdIds::FLY_AS_CHAR
         || m_eAnchorId == RndStdIds::FLY_AT_PAGE
@@ -1589,6 +1594,7 @@ SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
     // OD 2004-05-05 #i28701# - get always new increased order number
     , m_nOrder( ++s_nOrderCounter )
 {
+    setNonShareable();
 }
 
 SwFormatAnchor::~SwFormatAnchor()
@@ -2161,6 +2167,7 @@ bool SwFormatChain::operator==( const SfxPoolItem &rAttr ) const
 SwFormatChain::SwFormatChain( const SwFormatChain &rCpy ) :
     SfxPoolItem( RES_CHAIN )
 {
+    setNonShareable();
     SetPrev( rCpy.GetPrev() );
     SetNext( rCpy.GetNext() );
 }

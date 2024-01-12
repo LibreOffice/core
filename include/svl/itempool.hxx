@@ -31,23 +31,24 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 
+// Defines if this Item needs to be registered at the pool
+// to make it accessible for the GetItemSurrogates call. It
+// will not be included when this flag is not set, but also
+// needs no registration. There are SAL_INFO calls in the
+// GetItemSurrogates impl that will mention that
+#define SFX_ITEMINFOFLAG_NONE               0x0000
+#define SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  0x0001
+
 struct SfxItemInfo
 {
     // Defines a mapping between WhichID <-> SlotID
-    sal_uInt16       _nSID;
+    sal_uInt16  _nItemInfoSlotID;
 
-    // Defines if this Item needs to be registered at the pool
-    // to make it accessible for the GetItemSurrogates call. It
-    // will not be included when this flag is not set, but also
-    // needs no registration. There are SAL_INFO calls in the
-    // GetItemSurrogates impl that will mention that
-    bool             _bNeedsPoolRegistration : 1;
-
-    // Defines if the Item can be shared/RefCounted else it will be cloned.
-    // Default is true - as it should be for all Items. It is needed by some
-    // SW items, so protected to let them set it in constructor. If this could
-    // be fixed at that Items we may remove this again.
-    bool             _bShareable : 1;
+    // Pool-dependent Item-Attributes, please use
+    // SFX_ITEMINFOFLAG_* to create/set. Now using a
+    // sal_uInt16 and not separate bools so changes
+    // will be easier
+    sal_uInt16  _nItemInfoFlags;
 };
 
 #ifdef DBG_UTIL
@@ -102,10 +103,10 @@ private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
     sal_uInt16                      GetSize_Impl() const;
 
-    SVL_DLLPRIVATE bool             NeedsPoolRegistration_Impl(sal_uInt16 nPos) const
-    { return pItemInfos[nPos]._bNeedsPoolRegistration; }
-    SVL_DLLPRIVATE bool             Shareable_Impl(sal_uInt16 nPos) const
-    { return pItemInfos[nPos]._bShareable; }
+    // moved to private: use the access methods, e.g. NeedsSurrogateSupport
+    SVL_DLLPRIVATE bool CheckItemInfoFlag(sal_uInt16 nWhich, sal_uInt16 nMask) const;
+    SVL_DLLPRIVATE bool CheckItemInfoFlag_Impl(sal_uInt16 nPos, sal_uInt16 nMask) const
+        { return pItemInfos[nPos]._nItemInfoFlags & nMask; }
 
     void registerItemSet(SfxItemSet& rSet);
     void unregisterItemSet(SfxItemSet& rSet);
@@ -218,13 +219,10 @@ public:
 
     void                            Delete();
 
-    bool                            NeedsPoolRegistration(sal_uInt16 nWhich) const;
-    bool                            NeedsPoolRegistration(const SfxPoolItem &rItem) const
-                                    { return NeedsPoolRegistration(rItem.Which()); }
-
-    bool                            Shareable(sal_uInt16 nWhich) const;
-    bool                            Shareable(const SfxPoolItem &rItem) const
-                                    { return Shareable(rItem.Which()); }
+    // syntactical sugar: direct call to not have to use the flag define
+    // and make the intention clearer
+    bool NeedsSurrogateSupport(sal_uInt16 nWhich) const
+        { return CheckItemInfoFlag(nWhich, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE); }
 
     void                            SetItemInfos( const SfxItemInfo *pInfos );
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
