@@ -609,6 +609,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
     tools::Long nDiff = std::abs(pShape->GetSnapRect().Top() - pTextBox->GetSnapRect().Top());
     // The top of the two shapes were 410 and 3951, now it should be 3950 and 3951.
     CPPUNIT_ASSERT(nDiff < 10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(3900), pShape->GetSnapRect().Top(), 100);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99140)
