@@ -283,7 +283,7 @@
 #define RID_STR_PROPTITLE_NUMERICFIELD          NC_("RID_STR_PROPTITLE_NUMERICFIELD", "Numeric Field")
 #define RID_STR_PROPTITLE_CURRENCYFIELD         NC_("RID_STR_PROPTITLE_CURRENCYFIELD", "Currency Field")
 #define RID_STR_PROPTITLE_PATTERNFIELD          NC_("RID_STR_PROPTITLE_PATTERNFIELD", "Pattern Field")
-#define RID_STR_PROPTITLE_DBGRID                NC_("RID_STR_PROPTITLE_DBGRID", "Table Control ")
+#define RID_STR_PROPTITLE_DBGRID                NC_("RID_STR_PROPTITLE_DBGRID", "Table Control")
 
 #define STR_DETAIL_FORM                         NC_("STR_DETAIL_FORM", "Sub Form")
 #define STR_MASTER_FORM                         NC_("STR_MASTER_FORM", "Master Form")

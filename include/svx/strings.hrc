@@ -1230,7 +1230,7 @@
 #define RID_STR_PROPTITLE_IMAGEBUTTON                       NC_("RID_STR_PROPTITLE_IMAGEBUTTON", "Image Button")
 #define RID_STR_PROPTITLE_IMAGECONTROL                      NC_("RID_STR_PROPTITLE_IMAGECONTROL", "Image Control")
 #define RID_STR_PROPTITLE_FILECONTROL                       NC_("RID_STR_PROPTITLE_FILECONTROL", "File Selection")
-#define RID_STR_PROPTITLE_DBGRID                            NC_("RID_STR_PROPTITLE_DBGRID", "Table Control ")
+#define RID_STR_PROPTITLE_DBGRID                            NC_("RID_STR_PROPTITLE_DBGRID", "Table Control")
 #define RID_STR_PROPTITLE_SCROLLBAR                         NC_("RID_STR_PROPTITLE_SCROLLBAR", "Scrollbar")
 #define RID_STR_PROPTITLE_SPINBUTTON                        NC_("RID_STR_PROPTITLE_SPINBUTTON", "Spin Button")
 #define RID_STR_PROPTITLE_NAVBAR                            NC_("RID_STR_PROPTITLE_NAVBAR", "Navigation Bar")
