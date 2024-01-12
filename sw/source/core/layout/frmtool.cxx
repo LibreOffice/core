@@ -3404,8 +3404,10 @@ void Notify_Background( const SdrObject* pObj,
     else
     {
         pFlyFrame = nullptr;
-        pAnchor = const_cast<SwFrame*>(
-                    GetUserCall(pObj)->GetAnchoredObj( pObj )->GetAnchorFrame() );
+        if (SwDrawContact* pC = static_cast<SwDrawContact*>(GetUserCall(pObj)))
+            pAnchor = const_cast<SwFrame*>(pC->GetAnchoredObj(pObj)->GetAnchorFrame());
+        else
+            return;
     }
     if( PrepareHint::FlyFrameLeave != eHint && pAnchor->IsInFly() )
         pArea = pAnchor->FindFlyFrame();

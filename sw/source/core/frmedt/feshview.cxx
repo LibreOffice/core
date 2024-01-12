@@ -2221,14 +2221,16 @@ RndStdIds SwFEShell::GetAnchorId() const
                 nRet = RndStdIds::UNKNOWN;
                 break;
             }
-            SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-            RndStdIds nId = pContact->GetFormat()->GetAnchor().GetAnchorId();
-            if ( nRet == RndStdIds(SHRT_MAX) )
-                nRet = nId;
-            else if ( nRet != nId )
+            if (SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
             {
-                nRet = RndStdIds::UNKNOWN;
-                break;
+                RndStdIds nId = pContact->GetFormat()->GetAnchor().GetAnchorId();
+                if (nRet == RndStdIds(SHRT_MAX))
+                    nRet = nId;
+                else if (nRet != nId)
+                {
+                    nRet = RndStdIds::UNKNOWN;
+                    break;
+                }
             }
         }
     }
@@ -3152,17 +3154,19 @@ Color SwFEShell::GetShapeBackground() const
             OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackground - selected object is not a drawing object!");
             if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr )
             {
-                // determine page frame of the frame the shape is anchored.
-                const SwFrame* pAnchorFrame =
-                        static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrame( pSdrObj );
-                OSL_ENSURE( pAnchorFrame, "inconsistent model - no anchor at shape!");
-                if ( pAnchorFrame )
+                if (SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pSdrObj)))
                 {
-                    const SwPageFrame* pPageFrame = pAnchorFrame->FindPageFrame();
-                    OSL_ENSURE( pPageFrame, "inconsistent model - no page!");
-                    if ( pPageFrame )
+                    // determine page frame of the frame the shape is anchored.
+                    const SwFrame * pAnchorFrame = pDrawContact->GetAnchorFrame(pSdrObj);
+                    OSL_ENSURE(pAnchorFrame, "inconsistent model - no anchor at shape!");
+                    if (pAnchorFrame)
                     {
-                        aRetColor = pPageFrame->GetDrawBackgroundColor();
+                        const SwPageFrame* pPageFrame = pAnchorFrame->FindPageFrame();
+                        OSL_ENSURE(pPageFrame, "inconsistent model - no page!");
+                        if (pPageFrame)
+                        {
+                            aRetColor = pPageFrame->GetDrawBackgroundColor();
+                        }
                     }
                 }
             }
