@@ -116,7 +116,7 @@ endif
 
 ifeq ($(SYSTEM_LIBFIXMATH),TRUE)
 $(eval $(call gb_Library_add_libs,tl,\
-	-llibfixmath \
+	$(LIBFIXMATH_LIBS) \
 ))
 endif
 
