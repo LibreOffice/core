@@ -1112,7 +1112,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
     m_xStream = xNewStream;
     if ( !ParsePackageRawStream() )
     {
-        m_xStream = xOldStream;
+        m_xStream = std::move(xOldStream);
         throw packages::NoRawFormatException(THROW_WHERE );
     }
 

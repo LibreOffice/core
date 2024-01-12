@@ -672,7 +672,7 @@ namespace vcl
         m_xWizardImpl->aStateHistory = aTravelVirtually;
         if ( !ShowPage( _nTargetState ) )
         {
-            m_xWizardImpl->aStateHistory = aOldStateHistory;
+            m_xWizardImpl->aStateHistory = std::move(aOldStateHistory);
             return false;
         }
         return true;
@@ -707,7 +707,7 @@ namespace vcl
             // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
             // but ShowPage doesn't? Somebody behaves very strange here...
             OSL_FAIL( "RoadmapWizard::skipUntil: very unpolite..." );
-            m_xWizardImpl->aStateHistory = aOldStateHistory;
+            m_xWizardImpl->aStateHistory = std::move(aOldStateHistory);
             return false;
         }
         return true;
@@ -1078,7 +1078,7 @@ namespace vcl
         m_pImpl->aStateHistory = aTravelVirtually;
         if ( !ShowPage( _nTargetState ) )
         {
-            m_pImpl->aStateHistory = aOldStateHistory;
+            m_pImpl->aStateHistory = std::move(aOldStateHistory);
             return false;
         }
         return true;
@@ -1117,7 +1117,7 @@ namespace vcl
             // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
             // but ShowPage doesn't? Somebody behaves very strange here...
             OSL_FAIL( "WizardMachine::skipUntil: very unpolite..." );
-            m_pImpl->aStateHistory = aOldStateHistory;
+            m_pImpl->aStateHistory = std::move(aOldStateHistory);
             return false;
         }
         return true;

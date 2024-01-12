@@ -1735,7 +1735,7 @@ Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormats
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (! _xSupplier.is())
         {
-            _xSupplier = xSupplier;
+            _xSupplier = std::move(xSupplier);
         }
     }
     return _xSupplier;

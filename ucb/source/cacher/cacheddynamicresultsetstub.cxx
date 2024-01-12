@@ -57,7 +57,7 @@ void CachedDynamicResultSetStub
         new CachedContentResultSetStub( m_xSourceResultOne ) );
 
     std::unique_lock aGuard( m_aMutex );
-    m_xMyResultOne = xStub;
+    m_xMyResultOne = std::move(xStub);
 }
 
 //virtual
@@ -71,9 +71,8 @@ void CachedDynamicResultSetStub
         new CachedContentResultSetStub( m_xSourceResultTwo ) );
 
     std::unique_lock aGuard( m_aMutex );
-    m_xMyResultTwo = xStub;
+    m_xMyResultTwo = std::move(xStub);
 }
-
 
 // XInterface methods.
 void SAL_CALL CachedDynamicResultSetStub::acquire()

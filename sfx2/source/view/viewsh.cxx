@@ -1941,17 +1941,13 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
     while ( xEnumeration->hasMoreElements() )
     {
         ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
-        OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-            "Name",
-            OUString() );
-
         sal_Int32 nFilterFlags = aFilterPropsHM.getUnpackedValueOrDefault(
             "Flags",
             sal_Int32( 0 ) );
 
         if ( nFilterFlags & nFlags )
         {
-            aFoundFilterName = aFilterName;
+            aFoundFilterName = aFilterPropsHM.getUnpackedValueOrDefault("Name", OUString());
             break;
         }
     }

@@ -1791,7 +1791,7 @@ void AutoRecovery::implts_openConfig()
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
-    m_xRecoveryCFG        = xCFG;
+    m_xRecoveryCFG        = std::move(xCFG);
     m_nMinSpaceDocSave    = nMinSpaceDocSave;
     m_nMinSpaceConfigSave = nMinSpaceConfigSave;
     } /* SAFE */

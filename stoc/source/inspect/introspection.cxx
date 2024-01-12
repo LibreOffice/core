@@ -942,7 +942,7 @@ Reference<XEnumerationAccess> ImplIntrospectionAccess::getXEnumerationAccess()
         Reference<XEnumerationAccess> xEnumerationAccess( mxIface, UNO_QUERY );
         aGuard.lock();
         if( !mxObjEnumerationAccess.is() )
-            mxObjEnumerationAccess = xEnumerationAccess;
+            mxObjEnumerationAccess = std::move(xEnumerationAccess);
     }
     return mxObjEnumerationAccess;
 }

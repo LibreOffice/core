@@ -56,7 +56,7 @@ void CachedDynamicResultSet
         new CachedContentResultSet( m_xContext, m_xSourceResultOne, m_xContentIdentifierMapping ) );
 
     std::unique_lock aGuard( m_aMutex );
-    m_xMyResultOne = xCache;
+    m_xMyResultOne = std::move(xCache);
 }
 
 //virtual
@@ -70,9 +70,8 @@ void CachedDynamicResultSet
         new CachedContentResultSet( m_xContext, m_xSourceResultTwo, m_xContentIdentifierMapping ) );
 
     std::unique_lock aGuard( m_aMutex );
-    m_xMyResultTwo = xCache;
+    m_xMyResultTwo = std::move(xCache);
 }
-
 
 // XInterface methods.
 void SAL_CALL CachedDynamicResultSet::acquire()

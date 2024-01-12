@@ -525,7 +525,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     if ( ! s_ExtMgr.is() )
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        s_ExtMgr = that;
+        s_ExtMgr = std::move(that);
     }
 
     if ( !extensionURL.isEmpty() )

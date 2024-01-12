@@ -21,7 +21,7 @@ def getElementsByTagNamesNS(parent, ns, names, ret=minidom.NodeList()):
 
 def createFastChildContextFromFactory(model):
     print("""uno::Reference<xml::sax::XFastContextHandler> OOXMLFactory::createFastChildContextFromFactory
-(OOXMLFastContextHandler* pHandler, OOXMLFactory_ns::Pointer_t pFactory, Token_t Element)
+(OOXMLFastContextHandler* pHandler, const OOXMLFactory_ns::Pointer_t& pFactory, Token_t Element)
 {
     uno::Reference <xml::sax::XFastContextHandler> aResult;
     const Id nDefine = pHandler->getDefine();

@@ -234,7 +234,7 @@ Reference< XIdlClass > IdlMemberImpl::getDeclaringClass()
         Reference< XIdlClass > xDeclClass( getReflection()->forType( getDeclTypeDescr() ) );
         ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
-            _xDeclClass = xDeclClass;
+            _xDeclClass = std::move(xDeclClass);
     }
     return _xDeclClass;
 }

@@ -1349,14 +1349,16 @@ void ElementMode::ReadElementMode (
             msAction = rpDefaultMode->msAction;
 
     // Read text and font
-    OUString sText(rpDefaultMode != nullptr ? rpDefaultMode->maText.GetText() : OUString());
-    PresenterConfigurationAccess::GetProperty(xProperties, "Text") >>= sText;
-    Reference<container::XHierarchicalNameAccess> xFontNode (
-        PresenterConfigurationAccess::GetProperty(xProperties, "Font"), UNO_QUERY);
-    PresenterTheme::SharedFontDescriptor pFont(PresenterTheme::ReadFont(
-        xFontNode, rpDefaultMode != nullptr ? rpDefaultMode->maText.GetFont()
-                                            : PresenterTheme::SharedFontDescriptor()));
-    maText = Text(sText,pFont);
+    {
+        OUString sText(rpDefaultMode != nullptr ? rpDefaultMode->maText.GetText() : OUString());
+        PresenterConfigurationAccess::GetProperty(xProperties, "Text") >>= sText;
+        Reference<container::XHierarchicalNameAccess> xFontNode (
+            PresenterConfigurationAccess::GetProperty(xProperties, "Font"), UNO_QUERY);
+        PresenterTheme::SharedFontDescriptor pFont(PresenterTheme::ReadFont(
+            xFontNode, rpDefaultMode != nullptr ? rpDefaultMode->maText.GetFont()
+                                                : PresenterTheme::SharedFontDescriptor()));
+        maText = Text(std::move(sText), std::move(pFont));
+    }
 
     // Read bitmaps to display as icons.
     Reference<container::XHierarchicalNameAccess> xIconNode (
