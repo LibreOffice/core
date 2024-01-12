@@ -173,6 +173,14 @@ after they are loaded.
     CPPUNIT_ASSERT_EQUAL( OUString( "Black" ), descr1 );
     CPPUNIT_ASSERT_EQUAL( OUString( "Red" ), descr2 );
     CPPUNIT_ASSERT_EQUAL( OUString( "Green" ), descr3 );
+
+    //FIXME: MS Word shows the image below the line of text, not above it.
+    // tdf#139915 This was 826, but it should be -826
+    if (isExported())
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-826), getProperty<sal_Int32>(image1, "VertOrientPosition"));
+    sal_Int16 nExpected = text::RelOrientation::TEXT_LINE;
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(image1, "VertOrientRelation"));
+
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN750255, "n750255.docx")
