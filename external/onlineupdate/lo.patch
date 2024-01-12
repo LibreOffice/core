@@ -241,6 +241,22 @@
    is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
    if [ $is_extension = "1" ]; then
      # Use the subdirectory of the extensions folder as the file to test
+@@ -113,6 +122,15 @@
+   f="$1"
+   filev3="$2"
+ 
++  if [ -n "$IFSFILE" ]; then
++    ifsline=$(grep -F " \"$f\"" "$IFSFILE")
++    if [ -n "$ifsline" ]; then
++      testfile=$(printf '%s' "$ifsline" | cut -f 2 -d '"')
++      verbose_notice "   patch-if \"$testfile\" \"$f.patch\" \"$f\""
++      echo "patch-if \"$testfile\" \"$f.patch\" \"$f\"" >> "$filev3"
++      return
++    fi
++  fi
+   is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
+   if [ $is_extension = "1" ]; then
+     # Use the subdirectory of the extensions folder as the file to test
 --- tools/update-packaging/make_full_update.sh
 +++ tools/update-packaging/make_full_update.sh
 @@ -45,6 +45,7 @@
@@ -291,7 +307,27 @@
  # cleanup
 --- tools/update-packaging/make_incremental_update.sh
 +++ tools/update-packaging/make_incremental_update.sh
-@@ -135,7 +135,6 @@
+@@ -104,6 +104,7 @@
+ archive="$1"
+ olddir="$2"
+ newdir="$3"
++IFSFILE=$4
+ # Prevent the workdir from being inside the targetdir so it isn't included in
+ # the update mar.
+ if [ $(echo "$newdir" | grep -c '\/$') = 1 ]; then
+@@ -112,9 +113,10 @@
+ fi
+ workdir="$(mktemp -d)"
+ updatemanifestv3="$workdir/updatev3.manifest"
+-archivefiles="updatev3.manifest"
+ 
+ mkdir -p "$workdir"
++
++printf 'updatev3.manifest\n' >"$workdir/files.txt"
+ 
+ # Generate a list of all files in the target directory.
+ pushd "$olddir"
+@@ -135,7 +137,6 @@
  if [ ! -f "precomplete" ]; then
    if [ ! -f "Contents/Resources/precomplete" ]; then
      notice "precomplete file is missing!"
@@ -299,3 +335,53 @@
    fi
  fi
  
+@@ -170,7 +171,7 @@
+       $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$newdir/$f" > "$workdir/$f"
+       copy_perm "$newdir/$f" "$workdir/$f"
+       make_add_if_not_instruction "$f" "$updatemanifestv3"
+-      archivefiles="$archivefiles \"$f\""
++      printf '%s\n' "$f" >>"$workdir/files.txt"
+       continue 1
+     fi
+ 
+@@ -180,7 +181,7 @@
+       $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$newdir/$f" > "$workdir/$f"
+       copy_perm "$newdir/$f" "$workdir/$f"
+       make_add_instruction "$f" "$updatemanifestv3" 1
+-      archivefiles="$archivefiles \"$f\""
++      printf '%s\n' "$f" >>"$workdir/files.txt"
+       continue 1
+     fi
+ 
+@@ -227,11 +228,11 @@
+         make_patch_instruction "$f" "$updatemanifestv3"
+         mv -f "$patchfile" "$workdir/$f.patch"
+         rm -f "$workdir/$f"
+-        archivefiles="$archivefiles \"$f.patch\""
++        printf '%s\n' "$f.patch" >>"$workdir/files.txt"
+       else
+         make_add_instruction "$f" "$updatemanifestv3"
+         rm -f "$patchfile"
+-        archivefiles="$archivefiles \"$f\""
++        printf '%s\n' "$f" >>"$workdir/files.txt"
+       fi
+     fi
+   else
+@@ -270,7 +271,7 @@
+   fi
+ 
+ 
+-  archivefiles="$archivefiles \"$f\""
++  printf '%s\n' "$f" >>"$workdir/files.txt"
+ done
+ 
+ notice ""
+@@ -302,7 +303,7 @@
+ $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force "$updatemanifestv3" && mv -f "$updatemanifestv3.xz" "$updatemanifestv3"
+ 
+ mar_command="$mar_command -C \"$workdir\" -c output.mar"
+-eval "$mar_command $archivefiles"
++eval "$mar_command -f $workdir/files.txt"
+ mv -f "$workdir/output.mar" "$archive"
+ 
+ # cleanup
