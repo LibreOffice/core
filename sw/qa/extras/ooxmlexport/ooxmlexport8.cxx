@@ -170,15 +170,14 @@ after they are loaded.
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), zOrder1 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), zOrder2 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2 ), zOrder3 );
-    CPPUNIT_ASSERT_EQUAL( OUString( "Black" ), descr1 );
-    CPPUNIT_ASSERT_EQUAL( OUString( "Red" ), descr2 );
-    CPPUNIT_ASSERT_EQUAL( OUString( "Green" ), descr3 );
+    CPPUNIT_ASSERT_EQUAL(OUString("Red"), descr1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Green"), descr2);
+    CPPUNIT_ASSERT_EQUAL(OUString("Black"), descr3); // tdf#159158: black should be on top
 
     // tdf#139915/tdf#159157 This was 826, but it should be -826
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-826), getProperty<sal_Int32>(image1, "VertOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-826), getProperty<sal_Int32>(image3, "VertOrientPosition"));
     sal_Int16 nExpected = text::RelOrientation::TEXT_LINE;
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(image1, "VertOrientRelation"));
-
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN750255, "n750255.docx")

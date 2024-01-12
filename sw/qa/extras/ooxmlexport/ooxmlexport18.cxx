@@ -886,6 +886,81 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_duplicate, "tdf159158_zOrder_dupli
     CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // last one defined wins
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalA, "tdf159158_zOrder_1and0equalA.docx")
+{
+    // given a yellow star with relativeHeight 1, followed by an overlapping blue star with 0
+    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
+    sal_Int32 zOrder1, zOrder2;
+    OUString descr1, descr2;
+    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
+    imageProperties1->getPropertyValue("ZOrder") >>= zOrder1;
+    imageProperties1->getPropertyValue("Name") >>= descr1;
+    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
+    imageProperties2->getPropertyValue("ZOrder") >>= zOrder2;
+    imageProperties2->getPropertyValue("Name") >>= descr2;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), zOrder1); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), zOrder2); // higher
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // 0 >= 1 (last one wins)
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalB, "tdf159158_zOrder_1and0equalB.docx")
+{
+    // given a yellow star with relativeHeight 0, followed by an overlapping blue star with 1
+    // since they have the same zOrder value, last one wins, so same result as version A
+    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
+    sal_Int32 zOrder1, zOrder2;
+    OUString descr1, descr2;
+    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
+    imageProperties1->getPropertyValue("ZOrder") >>= zOrder1;
+    imageProperties1->getPropertyValue("Name") >>= descr1;
+    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
+    imageProperties2->getPropertyValue("ZOrder") >>= zOrder2;
+    imageProperties2->getPropertyValue("Name") >>= descr2;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), zOrder1); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), zOrder2); // higher
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // 1 >= 0 (last one wins)
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0max, "tdf159158_zOrder_1and0max.docx")
+{
+    // given a yellow star with relativeHeight 251658240 (0F00 0000)
+    // followed by an overlapping blue star with 0.
+    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
+    sal_Int32 zOrder1, zOrder2;
+    OUString descr1, descr2;
+    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
+    imageProperties1->getPropertyValue("ZOrder") >>= zOrder1;
+    imageProperties1->getPropertyValue("Name") >>= descr1;
+    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
+    imageProperties2->getPropertyValue("ZOrder") >>= zOrder2;
+    imageProperties2->getPropertyValue("Name") >>= descr2;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), zOrder1); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), zOrder2); // higher
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // 0 >= 0F00 0000 (last one wins)
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_max, "tdf159158_zOrder_max.docx")
+{
+    // given a yellow star with relativeHeight 251658241 (0F00 0001)
+    // followed by an overlapping blue star with relativeHeight 251658240 (0F00 0000)
+    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
+    sal_Int32 zOrder1, zOrder2;
+    OUString descr1, descr2;
+    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
+    imageProperties1->getPropertyValue("ZOrder") >>= zOrder1;
+    imageProperties1->getPropertyValue("Name") >>= descr1;
+    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
+    imageProperties2->getPropertyValue("ZOrder") >>= zOrder2;
+    imageProperties2->getPropertyValue("Name") >>= descr2;
+//     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), zOrder1); // lower
+//     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), zOrder2); // higher
+//     CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
+//     CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // 0F00 0000 == 0F00 0001
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
 {
     // Without the accompanying fix in place, this test would have crashed,

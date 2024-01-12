@@ -737,9 +737,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_Anchor_simplePos_attr:
             m_pImpl->m_bUseSimplePos = nIntValue > 0;
         break;
-        case NS_ooxml::LN_CT_Anchor_relativeHeight:
+        case NS_ooxml::LN_CT_Anchor_relativeHeight: // unsigned content
         {
-            m_pImpl->m_zOrder = nIntValue;
+            // undocumented - based on testing: both 0 and 1 are equivalent to the maximum 251658240
+            if (nIntValue < 2/* || nIntValue > 0x0F000000*/)
+                m_pImpl->m_zOrder = 0x0F000000;
+            else
+                m_pImpl->m_zOrder = nIntValue;
         }
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc:
