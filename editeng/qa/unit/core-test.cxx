@@ -14,6 +14,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <editdoc.hxx>
+#include <impedit.hxx>
 
 #include <sfx2/app.hxx>
 #include <svl/itempool.hxx>
@@ -114,6 +115,7 @@ public:
 
     void testSingleLine();
     void testMoveParagraph();
+    void testCreateLines();
 
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
@@ -141,6 +143,7 @@ public:
     CPPUNIT_TEST(testTdf148148);
     CPPUNIT_TEST(testSingleLine);
     CPPUNIT_TEST(testMoveParagraph);
+    CPPUNIT_TEST(testCreateLines);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2071,6 +2074,77 @@ void Test::testMoveParagraph()
     CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), aEditEngine.GetText(2));
     CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), aEditEngine.GetText(3));
     CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 5"), aEditEngine.GetText(4));
+}
+
+void Test::testCreateLines()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDevice(DeviceFormat::WITHOUT_ALPHA);
+
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetRefDevice(pVirtualDevice.get());
+    aEditEngine.SetPaperSize(Size(500, 500));
+    aEditEngine.SetText("ABC\nABC DEF ABC DEFGH");
+
+    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetLineCount(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aEditEngine.GetLineCount(1));
+
+    ParaPortionList& rParagraphPortionList = aEditEngine.GetParaPortions();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rParagraphPortionList.Count());
+
+    {
+        EditLineList& rLines = rParagraphPortionList[0]->GetLines();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rLines.Count());
+        EditLine const& rLine = rLines[0];
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rLine.GetEnd());
+
+        std::vector<sal_Int32> const& rArray = rLine.GetCharPosArray();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rArray.size());
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(173), rArray[0]);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(333), rArray[1]);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(493), rArray[2]);
+    }
+
+    {
+        EditLineList& rLines = rParagraphPortionList[1]->GetLines();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rLines.Count());
+
+        {
+            EditLine const& rLine = rLines[0];
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rLine.GetEnd());
+        }
+
+        {
+            EditLine const& rLine = rLines[1];
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rLine.GetStart());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(8), rLine.GetEnd());
+        }
+
+        {
+            EditLine const& rLine = rLines[2];
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(8), rLine.GetStart());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(12), rLine.GetEnd());
+        }
+
+        {
+            EditLine const& rLine = rLines[3];
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(12), rLine.GetStart());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(15), rLine.GetEnd());
+        }
+
+        {
+            EditLine const& rLine = rLines[4];
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(15), rLine.GetStart());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(17), rLine.GetEnd());
+        }
+    }
+
+    // CPPUNIT_ASSERT_MESSAGE("INTENTIONALLY FALSE", false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
