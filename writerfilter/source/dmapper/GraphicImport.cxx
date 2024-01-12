@@ -1850,6 +1850,13 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                     m_pImpl->m_nLeftPosition = 0;
                 }
 
+                if (m_pImpl->m_nVertRelation == text::RelOrientation::TEXT_LINE)
+                {
+                    // Word's "line" is "below the bottom of the line", our TEXT_LINE is
+                    // "towards top, from the bottom of the line", so invert the vertical position.
+                    m_pImpl->m_nTopPosition *= -1;
+                }
+
                 m_pImpl->applyPosition(xGraphicObjectProperties);
                 m_pImpl->applyRelativePosition(xGraphicObjectProperties);
                 if( !m_pImpl->m_bOpaque )
