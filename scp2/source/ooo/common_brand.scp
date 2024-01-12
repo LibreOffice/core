@@ -533,19 +533,6 @@ ProfileItem gid_Brand_Profileitem_Version_Alllanguages
     Value = "<alllanguages>";
 End
 
-#ifdef WNT
-
-ProfileItem gid_Brand_Profileitem_Version_Msiproductversion
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 14;
-    Key = "MsiProductVersion";
-    Value = "<msiproductversion>";
-End
-
-#endif
-
 ProfileItem gid_Brand_Profileitem_Version_Updateurl
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;

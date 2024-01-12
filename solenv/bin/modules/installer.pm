@@ -1325,7 +1325,6 @@ sub run {
 
             # Creating the important dynamic idt files
             installer::windows::msiglobal::set_msiproductversion($allvariableshashref);
-            installer::windows::msiglobal::put_msiproductversion_into_bootstrapfile($filesinproductlanguageresolvedarrayref);
 
             # Add cabinet assignments to files
             installer::windows::file::assign_cab_to_files($filesinproductlanguageresolvedarrayref);

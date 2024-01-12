@@ -1417,34 +1417,6 @@ sub set_msiproductversion
     }
 }
 
-#################################################################################
-# Including the msi product version into the bootstrap.ini, Windows only
-#################################################################################
-
-sub put_msiproductversion_into_bootstrapfile
-{
-    my ($filesref) = @_;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-
-        if ( $onefile->{'gid'} eq "gid_Brand_Profile_Version_Ini" )
-        {
-            my $file = installer::files::read_file($onefile->{'sourcepath'});
-
-            for ( my $j = 0; $j <= $#{$file}; $j++ )
-            {
-                ${$file}[$j] =~ s/\<msiproductversion\>/$installer::globals::msiproductversion/;
-            }
-
-            installer::files::save_file($onefile->{'sourcepath'}, $file);
-
-            last;
-        }
-    }
-}
-
 ####################################################################################
 # Updating the file Property.idt dynamically
 # Content:
