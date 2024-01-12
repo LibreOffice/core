@@ -602,6 +602,7 @@ const SwTOXMark& SwCursorShell::GotoTOXMark( const SwTOXMark& rStart,
     SwPosition& rPos = *GetCursor()->GetPoint();
     rPos.Assign(rNewMark.GetTextTOXMark()->GetTextNode(),
                  rNewMark.GetTextTOXMark()->GetStart() );
+    GetCursor()->DeleteMark(); // tdf#158783 prevent UpdateCursor resetting point
 
     if( !m_pCurrentCursor->IsSelOvr() )
         UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
