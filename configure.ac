@@ -10664,13 +10664,17 @@ if test "$with_system_libfixmath" = "yes"; then
     AC_LANG_PUSH([C++])
     AC_CHECK_HEADER([libfixmath/fix16.hpp], [],
        [AC_MSG_ERROR([libfixmath/fix16.hpp not found. install libfixmath])], [])
-    AC_CHECK_LIB([libfixmath], [fix16_mul], [:], [AC_MSG_ERROR(libfixmath lib not found or functional)], [])
+    AC_CHECK_LIB([libfixmath], [fix16_mul], [LIBFIXMATH_LIBS=-llibfixmath],
+                 [AC_CHECK_LIB([fixmath], [fix16_mul], [LIBFIXMATH_LIBS=-lfixmath],
+                               [AC_MSG_ERROR(libfixmath lib not found or functional)])])
     AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBFIXMATH=
+    LIBFIXMATH_LIBS=
 fi
 AC_SUBST([SYSTEM_LIBFIXMATH])
+AC_SUBST([LIBFIXMATH_LIBS])
 
 dnl ===================================================================
 dnl Check for system glm
