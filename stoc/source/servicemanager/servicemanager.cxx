@@ -645,7 +645,7 @@ Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
         MutexGuard aGuard( m_aMutex );
         if (! m_xPropertyInfo.is())
         {
-            m_xPropertyInfo = xInfo;
+            m_xPropertyInfo = std::move(xInfo);
         }
     }
     return m_xPropertyInfo;
@@ -1427,7 +1427,7 @@ Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
         MutexGuard aGuard( m_aMutex );
         if (! m_xPropertyInfo.is())
         {
-            m_xPropertyInfo = xInfo;
+            m_xPropertyInfo = std::move(xInfo);
         }
     }
     return m_xPropertyInfo;

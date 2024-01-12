@@ -623,7 +623,7 @@ PermissionCollection AccessController::getEffectivePermissions(
             MutexGuard guard( m_aMutex );
             if (! m_defaultPerm_init)
             {
-                m_defaultPermissions = defaultPermissions;
+                m_defaultPermissions = std::move(defaultPermissions);
                 m_defaultPerm_init = true;
             }
 #ifdef __DIAGNOSE

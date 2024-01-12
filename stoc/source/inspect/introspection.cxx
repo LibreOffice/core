@@ -791,7 +791,7 @@ Reference<XElementAccess> ImplIntrospectionAccess::getXElementAccess()
         Reference<XElementAccess> xElementAccess( mxIface, UNO_QUERY );
         aGuard.lock();
         if( !mxObjElementAccess.is() )
-            mxObjElementAccess = xElementAccess;
+            mxObjElementAccess = std::move(xElementAccess);
     }
     return mxObjElementAccess;
 }
@@ -957,7 +957,7 @@ Reference<XIdlArray> ImplIntrospectionAccess::getXIdlArray()
         Reference<XIdlArray> xIdlArray( mxIface, UNO_QUERY );
         aGuard.lock();
         if( !mxObjIdlArray.is() )
-            mxObjIdlArray = xIdlArray;
+            mxObjIdlArray = std::move(xIdlArray);
     }
     return mxObjIdlArray;
 }

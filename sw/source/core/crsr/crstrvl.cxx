@@ -476,7 +476,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
 
     if( !bFnd )
     {
-        rPos = aOldPos;
+        rPos = std::move(aOldPos);
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
     }

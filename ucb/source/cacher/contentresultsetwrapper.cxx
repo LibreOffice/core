@@ -345,7 +345,7 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
                 = xMetaDataSupplier->getMetaData();
 
             aGuard.lock();
-            m_xMetaDataFromOrigin = xMetaData;
+            m_xMetaDataFromOrigin = std::move(xMetaData);
         }
     }
     return m_xMetaDataFromOrigin;

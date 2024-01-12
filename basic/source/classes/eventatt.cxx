@@ -113,7 +113,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
             Any result = xScript->invoke( inArgs, outIndex, outArgs );
             if ( pRet )
             {
-                *pRet = result;
+                *pRet = std::move(result);
             }
         }
         catch ( const RuntimeException& )

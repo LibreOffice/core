@@ -56,7 +56,7 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
 
     // SAFE ->
     std::unique_lock aLock(m_aLock);
-    m_xHandler = xHandler;
+    m_xHandler = std::move(xHandler);
     // <- SAFE
 }
 

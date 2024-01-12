@@ -552,7 +552,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
 
         mnXmlNamespace = nSavedNamespace;
     }
-    m_xParent = xParent;
+    m_xParent = std::move(xParent);
 
     pFS->endElementNS(mnXmlNamespace, nGroupShapeToken);
     return *this;

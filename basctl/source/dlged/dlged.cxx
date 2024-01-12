@@ -427,7 +427,7 @@ Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSup
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !m_xSupplier.is() )
         {
-            m_xSupplier = xSupplier;
+            m_xSupplier = std::move(xSupplier);
         }
     }
     return m_xSupplier;

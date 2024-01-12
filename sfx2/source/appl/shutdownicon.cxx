@@ -464,9 +464,8 @@ void ShutdownIcon::init()
 {
     css::uno::Reference < XDesktop2 > xDesktop = Desktop::create( m_xContext );
     std::unique_lock aGuard(m_aMutex);
-    m_xDesktop = xDesktop;
+    m_xDesktop = std::move(xDesktop);
 }
-
 
 void ShutdownIcon::disposing(std::unique_lock<std::mutex>&)
 {
@@ -476,12 +475,10 @@ void ShutdownIcon::disposing(std::unique_lock<std::mutex>&)
     deInitSystray();
 }
 
-
 // XEventListener
 void SAL_CALL ShutdownIcon::disposing( const css::lang::EventObject& )
 {
 }
-
 
 // XTerminateListener
 void SAL_CALL ShutdownIcon::queryTermination( const css::lang::EventObject& )

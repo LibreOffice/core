@@ -73,7 +73,7 @@ public:
             if (nFoundDimension < nDimensionIndex)
                 return;
         }
-        aCoordinateSystems[pCooSys] = aFullAxisIndex;
+        aCoordinateSystems[pCooSys] = std::move(aFullAxisIndex);
 
         //set maximum scale index
         auto aIter = aMaxIndexPerDimension.find(nDimensionIndex);
