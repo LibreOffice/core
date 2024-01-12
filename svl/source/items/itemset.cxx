@@ -355,7 +355,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // }
     // else if (IsDefaultItem(pSource))
     // {
-    //     assert(!bPassingOwnership && "ITEM: PassingOwnership not possible combined with DynaimcDefault (!)");
+    //     assert(!bPassingOwnership && "ITEM: PassingOwnership not possible combined with DynamicDefault (!)");
     //     const SfxPoolItem* pDynamic(pTargetPool->GetPoolDefaultItem(nWhich));
     //     if (nullptr != pDynamic)
     //     {
