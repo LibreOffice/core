@@ -1219,30 +1219,10 @@ void SfxBindings::UpdateControllers_Impl
 
 IMPL_LINK( SfxBindings, NextJob, Timer *, pTimer, void )
 {
-    bool bSetView = false;
-    SfxViewShell* pOldShell = nullptr;
-    if (comphelper::LibreOfficeKit::isActive() && pDispatcher)
-    {
-        SfxViewFrame* pFrame = pDispatcher->GetFrame();
-        SfxViewShell* pNewShell = pFrame ? pFrame->GetViewShell() : nullptr;
-        pOldShell = SfxViewShell::Current();
-        if (pNewShell && pNewShell != pOldShell)
-        {
-            // The current view ID is not the one that belongs to this frame, update
-            // language/locale.
-            comphelper::LibreOfficeKit::setLanguageTag(pNewShell->GetLOKLanguageTag());
-            comphelper::LibreOfficeKit::setLocale(pNewShell->GetLOKLocale());
-            bSetView = true;
-        }
-    }
+    SfxViewFrame* pFrame = pDispatcher ? pDispatcher->GetFrame() : nullptr;
+    SfxLokLanguageGuard aGuard(pFrame ? pFrame->GetViewShell() : nullptr);
 
     NextJob_Impl(pTimer);
-
-    if (bSetView && pOldShell)
-    {
-        comphelper::LibreOfficeKit::setLanguageTag(pOldShell->GetLOKLanguageTag());
-        comphelper::LibreOfficeKit::setLocale(pOldShell->GetLOKLocale());
-    }
 }
 
 bool SfxBindings::NextJob_Impl(Timer const * pTimer)

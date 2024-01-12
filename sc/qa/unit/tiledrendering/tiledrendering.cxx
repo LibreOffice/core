@@ -163,6 +163,7 @@ public:
     void testInvalidateForSplitPanes();
     void testStatusBarLocale();
     void testLongFirstColumnMouseClick();
+    void testSidebarLocale();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -236,6 +237,7 @@ public:
     CPPUNIT_TEST(testInvalidateForSplitPanes);
     CPPUNIT_TEST(testStatusBarLocale);
     CPPUNIT_TEST(testLongFirstColumnMouseClick);
+    CPPUNIT_TEST(testSidebarLocale);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3626,6 +3628,32 @@ void ScTiledRenderingTest::testLongFirstColumnMouseClick()
     // Check the A1 cell is selected in view #2
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), ScDocShell::GetViewData()->GetCurX());
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
+}
+
+void ScTiledRenderingTest::testSidebarLocale()
+{
+    ScModelObj* pModelObj = createDoc("chart.ods");
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    pView1->SetLOKLocale("en-US");
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    pView2->SetLOKLocale("de-DE");
+    TestLokCallbackWrapper::InitializeSidebar();
+    Scheduler::ProcessEventsToIdle();
+    aView2.m_aStateChanges.clear();
+
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/1,/*y=*/1,/*count=*/2, /*buttons=*/1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/1, /*y=*/1, /*count=*/2, /*buttons=*/1, /*modifier=*/0);
+    SfxLokHelper::setView(nView1);
+    Scheduler::ProcessEventsToIdle();
+
+    auto it = aView2.m_aStateChanges.find(".uno:Sidebar");
+    CPPUNIT_ASSERT(it != aView2.m_aStateChanges.end());
+    std::string aLocale = it->second.get<std::string>("locale");
+    CPPUNIT_ASSERT_EQUAL(std::string("de-DE"), aLocale);
 }
 
 }

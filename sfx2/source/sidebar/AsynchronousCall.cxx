@@ -20,12 +20,15 @@
 #include <sfx2/sidebar/AsynchronousCall.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/lokhelper.hxx>
 
 namespace sfx2::sidebar {
 
-AsynchronousCall::AsynchronousCall (Action aAction)
+AsynchronousCall::AsynchronousCall (const SfxViewFrame* pViewFrame, Action aAction)
     : maAction(std::move(aAction)),
-      mnCallId(nullptr)
+      mnCallId(nullptr),
+      mpViewFrame(pViewFrame)
 {
 }
 
@@ -55,6 +58,7 @@ void AsynchronousCall::CancelRequest()
 void AsynchronousCall::Sync()
 {
     if (mnCallId != nullptr) {
+        SfxLokLanguageGuard aGuard(mpViewFrame ? mpViewFrame->GetViewShell() : nullptr);
         maAction();
         CancelRequest();
     }
@@ -64,7 +68,10 @@ IMPL_LINK_NOARG(AsynchronousCall, HandleUserCall, void*, void )
 {
     mnCallId = nullptr;
     if (maAction)
+    {
+        SfxLokLanguageGuard aGuard(mpViewFrame ? mpViewFrame->GetViewShell() : nullptr);
         maAction();
+    }
 }
 
 } // end of namespace sfx2::sidebar

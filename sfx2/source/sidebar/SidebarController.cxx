@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/SidebarController.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
+
 #include <sfx2/sidebar/Deck.hxx>
 #include <sidebar/DeckDescriptor.hxx>
 #include <sidebar/DeckTitleBar.hxx>
@@ -125,8 +128,8 @@ SidebarController::SidebarController (
       mnRequestedForceFlags(SwitchFlag_NoForce),
       mbMinimumSidebarWidth(officecfg::Office::UI::Sidebar::General::MinimumWidth::get()),
       msCurrentDeckId(gsDefaultDeckId),
-      maPropertyChangeForwarder([this](){ return this->BroadcastPropertyChange(); }),
-      maContextChangeUpdate([this](){ return this->UpdateConfigurations(); }),
+      maPropertyChangeForwarder(mpViewFrame, [this](){ return this->BroadcastPropertyChange(); }),
+      maContextChangeUpdate(mpViewFrame, [this](){ return this->UpdateConfigurations(); }),
       mbFloatingDeckClosed(!pParentWindow->IsFloatingMode()),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
       maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
@@ -800,18 +803,35 @@ void SidebarController::SwitchToDeck (
     {
         if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
         {
+            boost::property_tree::ptree aTree;
+            aTree.put("locale", comphelper::LibreOfficeKit::getLocale().getBcp47());
+            bool bStateChanged = false;
             if (msCurrentDeckId != rDeckDescriptor.msId)
             {
                 const std::string hide = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
                 if (!hide.empty())
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                           (hide + "=false").c_str());
+                {
+                    aTree.put("commandName", hide);
+                    aTree.put("state", "false");
+                    bStateChanged = true;
+                }
             }
 
             const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId, GetCurrentContext());
             if (!show.empty())
+            {
+                aTree.put("commandName", show);
+                aTree.put("state", "true");
+                bStateChanged = true;
+            }
+
+            if (bStateChanged)
+            {
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aTree);
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                       (show + "=true").c_str());
+                                                       aStream.str().c_str());
+            }
         }
     }
 
