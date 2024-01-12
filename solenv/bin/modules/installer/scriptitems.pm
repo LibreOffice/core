@@ -625,7 +625,7 @@ sub changing_name_of_language_dependent_keys
 
 ################################################################################
 # Replacement of setup variables in ConfigurationItems and ProfileItems
-# <productkey>, <buildid>, <sequence_languages>, <productcode>, <upgradecode>, <productupdate>
+# <productkey>, <buildid>, <sequence_languages>, <upgradecode>, <productupdate>
 ################################################################################
 
 sub replace_setup_variables
@@ -665,7 +665,6 @@ sub replace_setup_variables
         $value =~ s/\<buildid\>/$buildidstring/;
         $value =~ s/\<sequence_languages\>/$languagesstring/;
         $value =~ s/\<productkey\>/$productkey/;
-        $value =~ s/\<productcode\>/$installer::globals::productcode/;
         $value =~ s/\<upgradecode\>/$installer::globals::upgradecode/;
         $value =~ s/\<alllanguages\>/$languagesstring/;
         $value =~ s/\<sourceid\>/$installer::globals::build/;

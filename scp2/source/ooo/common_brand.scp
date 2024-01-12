@@ -500,19 +500,6 @@ End
 
 #ifdef WNT
 
-ProfileItem gid_Brand_Profileitem_Version_Productcode
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 8;
-    Key = "ProductCode";
-    Value = "<productcode>";
-End
-
-#endif
-
-#ifdef WNT
-
 ProfileItem gid_Brand_Profileitem_Version_Upgradecode
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -828,17 +815,6 @@ ProfileItem gid_Brand_Profileitem_Setup_Findproduct
     Inifiletablekey = "FindProductSet";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
-End
-#endif
-
-#ifdef WNT
-ProfileItem gid_Brand_Profileitem_Setup_Productcode
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "ProductCode";
-    Value = "<productcode>";
 End
 #endif
 
