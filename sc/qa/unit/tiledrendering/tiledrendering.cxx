@@ -596,7 +596,13 @@ public:
 
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
-            std::string aCommandName = aTree.get<std::string>("commandName");
+            auto it = aTree.find("commandName");
+            if (it == aTree.not_found())
+            {
+                break;
+            }
+
+            std::string aCommandName = it->second.get_value<std::string>();
             m_aStateChanges[aCommandName] = aTree;
         }
         break;
