@@ -1,0 +1,11 @@
+--- tools/update-packaging/make_incremental_update.sh
++++ tools/update-packaging/make_incremental_update.sh
+@@ -226,7 +227,7 @@
+       patchsize=$(get_file_size "$patchfile")
+       fullsize=$(get_file_size "$workdir/$f")
+ 
+-      if [ $patchsize -lt $fullsize ]; then
++      if [ $patchsize -lt $fullsize ] && [ "$f" != program/setup.ini ] && [ "$f" != program/version.ini ]; then
+         make_patch_instruction "$f" "$updatemanifestv3"
+         mv -f "$patchfile" "$workdir/$f.patch"
+         rm -f "$workdir/$f"
