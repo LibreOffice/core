@@ -942,6 +942,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 relativeFromV = "paragraph";
                 break;
             case text::RelOrientation::TEXT_LINE:
+                relativeFromV = "line";
+                // Word's "line" is "below the bottom of the line", our TEXT_LINE is
+                // "towards top, from the bottom of the line", so invert the vertical position.
+                aPos.Y *= -1;
+                break;
             default:
                 relativeFromV = "line";
                 break;
