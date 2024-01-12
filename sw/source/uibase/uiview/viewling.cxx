@@ -594,7 +594,6 @@ struct ExecuteInfo
 {
     uno::Reference< frame::XDispatch >  xDispatch;
     util::URL                           aTargetURL;
-    uno::Sequence< PropertyValue >      aArgs;
 };
 
 class AsyncExecute
@@ -614,7 +613,7 @@ IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, void*, p, void )
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
-        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+        pExecuteInfo->xDispatch->dispatch(pExecuteInfo->aTargetURL, uno::Sequence<beans::PropertyValue>());
     }
     catch (const Exception&)
     {
@@ -759,7 +758,6 @@ bool SwView::ExecSpellPopup(const Point& rPt)
 
                                 aURL.Complete = aCommand;
                                 xURLTransformer->parseStrict(aURL);
-                                uno::Sequence< beans::PropertyValue > aArgs;
                                 xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
 
                                 if (xDispatch.is())
@@ -768,7 +766,6 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                                     ExecuteInfo* pExecuteInfo   = new ExecuteInfo;
                                     pExecuteInfo->xDispatch     = xDispatch;
                                     pExecuteInfo->aTargetURL    = aURL;
-                                    pExecuteInfo->aArgs         = aArgs;
                                     Application::PostUserEvent( LINK(nullptr, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
                                 }
                             }
