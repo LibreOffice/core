@@ -669,6 +669,8 @@ void DocxSdrExport::setFlyWrapAttrList(
 
 void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, const Size& rSize)
 {
+    const SwFormatSurround& rSurround(pFrameFormat->GetSurround());
+
     // Word uses size excluding right edge. Caller writeDMLDrawing and writeDiagram are changed for
     // now. ToDo: Look whether the other callers give the size this way.
     m_pImpl->setDrawingOpen(true);
@@ -871,8 +873,9 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 xShapeProps->getPropertyValue("IsFollowingTextFlow") >>= bLclInTabCell;
         }
 
-        if (pFrameFormat->GetSurround().GetValue() == text::WrapTextMode_THROUGH
-            && pFrameFormat->GetHoriOrient().GetRelationOrient() == text::RelOrientation::FRAME)
+        const SwFormatHoriOrient& rHoriOri(pFrameFormat->GetHoriOrient());
+        if (rSurround.GetValue() == text::WrapTextMode_THROUGH
+            && rHoriOri.GetRelationOrient() == text::RelOrientation::FRAME)
         {
             // "In front of text" and horizontal positioning relative to Column is ignored on
             // import, add it back here.
@@ -908,8 +911,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
         // Position is either determined by coordinates aPos or alignment keywords like 'center'.
         // First prepare them.
-        awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(),
-                        pFrameFormat->GetVertOrient().GetPos());
+        const SwFormatVertOrient& rVertOri(pFrameFormat->GetVertOrient());
+        awt::Point aPos(rHoriOri.GetPos(), rVertOri.GetPos());
 
         aPos.X += nPosXDiff; // Make the postponed position move of frames.
         aPos.Y += nPosYDiff;
@@ -921,7 +924,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         const char* relativeFromV;
         const char* alignH = nullptr;
         const char* alignV = nullptr;
-        switch (pFrameFormat->GetVertOrient().GetRelationOrient())
+        switch (rVertOri.GetRelationOrient())
         {
             case text::RelOrientation::PAGE_PRINT_AREA:
                 relativeFromV = "margin";
@@ -943,13 +946,12 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 relativeFromV = "line";
                 break;
         }
-        switch (pFrameFormat->GetVertOrient().GetVertOrient())
+        switch (rVertOri.GetVertOrient())
         {
             case text::VertOrientation::TOP:
             case text::VertOrientation::CHAR_TOP:
             case text::VertOrientation::LINE_TOP:
-                if (pFrameFormat->GetVertOrient().GetRelationOrient()
-                    == text::RelOrientation::TEXT_LINE)
+                if (rVertOri.GetRelationOrient() == text::RelOrientation::TEXT_LINE)
                     alignV = "bottom";
                 else
                     alignV = "top";
@@ -957,8 +959,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             case text::VertOrientation::BOTTOM:
             case text::VertOrientation::CHAR_BOTTOM:
             case text::VertOrientation::LINE_BOTTOM:
-                if (pFrameFormat->GetVertOrient().GetRelationOrient()
-                    == text::RelOrientation::TEXT_LINE)
+                if (rVertOri.GetRelationOrient() == text::RelOrientation::TEXT_LINE)
                     alignV = "top";
                 else
                     alignV = "bottom";
@@ -971,7 +972,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             default:
                 break;
         }
-        switch (pFrameFormat->GetHoriOrient().GetRelationOrient())
+        switch (rHoriOri.GetRelationOrient())
         {
             case text::RelOrientation::PAGE_PRINT_AREA:
                 relativeFromH = "margin";
@@ -993,7 +994,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 relativeFromH = "column";
                 break;
         }
-        switch (pFrameFormat->GetHoriOrient().GetHoriOrient())
+        switch (rHoriOri.GetHoriOrient())
         {
             case text::HoriOrientation::LEFT:
                 alignH = "left";
@@ -1204,14 +1205,14 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     // XML_anchor has exact one of types wrapNone, wrapSquare, wrapTight, wrapThrough and
     // WrapTopAndBottom. Map our own types to them as far as possible.
 
-    if (pFrameFormat->GetSurround().GetValue() == css::text::WrapTextMode_THROUGH
-        || pFrameFormat->GetSurround().GetValue() == css::text::WrapTextMode_THROUGHT)
+    if (rSurround.GetValue() == css::text::WrapTextMode_THROUGH
+        || rSurround.GetValue() == css::text::WrapTextMode_THROUGHT)
     {
         m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapNone);
         return;
     }
 
-    if (pFrameFormat->GetSurround().GetValue() == css::text::WrapTextMode_NONE)
+    if (rSurround.GetValue() == css::text::WrapTextMode_NONE)
     {
         m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapTopAndBottom);
         return;
@@ -1219,7 +1220,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
     // All remaining cases need attribute XML_wrapText
     OUString sWrapType;
-    switch (pFrameFormat->GetSurround().GetSurround())
+    switch (rSurround.GetSurround())
     {
         case text::WrapTextMode_DYNAMIC:
             sWrapType = OUString("largest");
@@ -1242,15 +1243,14 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     // ToDo: handle case Writer frame, where contour can be set in LibreOffice but is not rendered.
 
     // This case needs no wrapPolygon
-    if (!pFrameFormat->GetSurround().IsContour())
+    if (!rSurround.IsContour())
     {
         m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText, sWrapType);
         return;
     }
 
     // Contour wrap.
-    sal_Int32 nWrapToken
-        = pFrameFormat->GetSurround().IsOutside() ? XML_wrapTight : XML_wrapThrough;
+    const sal_Int32 nWrapToken = rSurround.IsOutside() ? XML_wrapTight : XML_wrapThrough;
 
     // ToDo: cases where wrapPolygon is used as workaround.
 
