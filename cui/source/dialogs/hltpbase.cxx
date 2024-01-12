@@ -465,13 +465,13 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
                     SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aFlavor);
                     if (xTransferable->isDataFlavorSupported(aFlavor))
                     {
-                        OUString aClipBoardConentent;
+                        OUString aClipBoardContent;
                         try
                         {
-                            if (xTransferable->getTransferData(aFlavor) >>= aClipBoardConentent)
+                            if (xTransferable->getTransferData(aFlavor) >>= aClipBoardContent)
                             {
-                                INetURLObject aURL;
-                                aURL.SetSmartURL(aClipBoardConentent);
+                                // tdf#162753 - allow only syntactically valid hyperlink targets
+                                INetURLObject aURL(aClipBoardContent);
                                 if (!aURL.HasError())
                                     aStrURL
                                         = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
