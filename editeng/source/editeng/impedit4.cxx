@@ -1148,8 +1148,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             for ( n = 0; n < nCount; n++ )
             {
                 const EditLine& rLine = pParaPortion->GetLines()[n];
-                EditLine* pNew = rLine.Clone();
-                pX->aLines.Append(pNew);
+                pX->aLines.Append(std::unique_ptr<EditLine>(rLine.Clone()));
             }
 #ifdef DBG_UTIL
             sal_uInt16 nTest;
@@ -1348,7 +1347,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                     const EditLine& rLine = rXP.aLines[m];
                     EditLine* pNew = rLine.Clone();
                     pNew->SetInvalid(); // Paint again!
-                    pParaPortion->GetLines().Append(pNew);
+                    pParaPortion->GetLines().Append(std::unique_ptr<EditLine>(pNew));
                 }
 #ifdef DBG_UTIL
                 sal_uInt16 nTest;

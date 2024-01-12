@@ -64,10 +64,11 @@ public:
     const EditLine& operator[](sal_Int32 nPos) const { return *maLines[nPos]; }
     EditLine& operator[](sal_Int32 nPos) { return *maLines[nPos]; }
 
-    void Append(EditLine* p) { maLines.push_back(std::unique_ptr<EditLine>(p)); }
-    void Insert(sal_Int32 nPos, EditLine* p)
+    void Append(std::unique_ptr<EditLine> pEditLine) { maLines.push_back(std::move(pEditLine)); }
+
+    void Insert(sal_Int32 nPos, std::unique_ptr<EditLine> pEditLine)
     {
-        maLines.insert(maLines.begin() + nPos, std::unique_ptr<EditLine>(p));
+        maLines.insert(maLines.begin() + nPos, std::move(pEditLine));
     }
 };
 

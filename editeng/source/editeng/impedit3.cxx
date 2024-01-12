@@ -702,8 +702,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     if ( pParaPortion->GetLines().Count() == 0 )
     {
-        EditLine* pLine = new EditLine;
-        pParaPortion->GetLines().Append(pLine);
+        pParaPortion->GetLines().Append(std::make_unique<EditLine>());
     }
 
     // Get Paragraph attributes...
@@ -1725,7 +1724,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if ( nIndex < pNode->Len() )
                 {
                     pLine = new EditLine;
-                    pParaPortion->GetLines().Insert(++nLine, pLine);
+                    pParaPortion->GetLines().Insert(++nLine, std::unique_ptr<EditLine>(pLine));
                 }
                 else if ( nIndex && bLineBreak && GetTextRanger() )
                 {
@@ -1734,7 +1733,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     TextPortion* pDummyPortion = new TextPortion( 0 );
                     pParaPortion->GetTextPortions().Append(pDummyPortion);
                     pLine = new EditLine;
-                    pParaPortion->GetLines().Insert(++nLine, pLine);
+                    pParaPortion->GetLines().Insert(++nLine, std::unique_ptr<EditLine>(pLine));
                     bForceOneRun = true;
                     bProcessingEmptyLine = true;
                 }
@@ -1775,7 +1774,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     EditLine* pTmpLine = new EditLine;
     pTmpLine->SetStart( pParaPortion->GetNode()->Len() );
     pTmpLine->SetEnd( pParaPortion->GetNode()->Len() );
-    pParaPortion->GetLines().Append(pTmpLine);
+    pParaPortion->GetLines().Append(std::unique_ptr<EditLine>(pTmpLine));
 
     bool bLineBreak = pParaPortion->GetNode()->Len() > 0;
     sal_Int32 nSpaceBefore = 0;
