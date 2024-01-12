@@ -576,7 +576,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 nEndIndex = nStartIndex;
 
             tools::Rectangle aTmpRect(pEditEngine->pImpEditEngine->GetEditCursor(
-                &rInfo.rPortion, rInfo.pLine, nStartIndex, GetCursorFlags::NONE));
+                &rInfo.rPortion, *rInfo.pLine, nStartIndex, GetCursorFlags::NONE));
             const Size aLineOffset = pEditEngine->pImpEditEngine->getTopLeftDocOffset(rInfo.aArea);
             aTmpRect.Move(0, aLineOffset.Height());
 
@@ -595,8 +595,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' position
             if (!bPartOfLine)
             {
-                Range aLineXPosStartEnd
-                    = pEditEngine->GetLineXPosStartEnd(&rInfo.rPortion, rInfo.pLine);
+                Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(&rInfo.rPortion, *rInfo.pLine);
                 aTmpRect.SetLeft(aLineXPosStartEnd.Min());
                 aTmpRect.SetRight(aLineXPosStartEnd.Max());
                 aTmpRect.Move(aLineOffset.Width(), 0);
@@ -617,10 +616,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
                     DBG_ASSERT(nTmpEndIndex > nTmpStartIndex, "DrawSelectionXOR, Start >= End?");
 
-                    tools::Long nX1
-                        = pEditEngine->GetXPos(&rInfo.rPortion, rInfo.pLine, nTmpStartIndex, true);
-                    tools::Long nX2
-                        = pEditEngine->GetXPos(&rInfo.rPortion, rInfo.pLine, nTmpEndIndex);
+                    tools::Long nX1 = pEditEngine->GetXPos(&rInfo.rPortion, *rInfo.pLine, nTmpStartIndex, true);
+                    tools::Long nX2 = pEditEngine->GetXPos(&rInfo.rPortion, *rInfo.pLine, nTmpEndIndex);
 
                     aTmpRect.SetLeft(std::min(nX1, nX2));
                     aTmpRect.SetRight(std::max(nX1, nX2));

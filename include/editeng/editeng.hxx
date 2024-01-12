@@ -185,10 +185,9 @@ private:
         sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
 
     EDITENG_DLLPRIVATE tools::Long GetXPos(
-        const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
+        const ParaPortion* pParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
 
-    EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(
-        const ParaPortion* pParaPortion, const EditLine* pLine) const;
+    EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(const ParaPortion* pParaPortion, EditLine const& rLine) const;
 
     EDITENG_DLLPRIVATE InternalEditStatus& GetInternalEditStatus();
 
