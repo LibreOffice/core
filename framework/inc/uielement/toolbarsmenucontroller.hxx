@@ -61,8 +61,7 @@ namespace framework
             struct ExecuteInfo
             {
                 css::uno::Reference< css::frame::XDispatch >     xDispatch;
-                css::util::URL                                                aTargetURL;
-                css::uno::Sequence< css::beans::PropertyValue >  aArgs;
+                css::util::URL                                   aTargetURL;
             };
 
             DECL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, void );

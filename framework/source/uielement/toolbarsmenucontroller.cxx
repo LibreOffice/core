@@ -613,7 +613,6 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
     else if ( aCmd.indexOf( STATIC_CMD_PART ) < 0 )
     {
         URL                     aTargetURL;
-        Sequence<PropertyValue> aArgs;
 
         aTargetURL.Complete = aCmd;
         xURLTransformer->parseStrict( aTargetURL );
@@ -623,7 +622,6 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
             ExecuteInfo* pExecuteInfo = new ExecuteInfo;
             pExecuteInfo->xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
             pExecuteInfo->aTargetURL = aTargetURL;
-            pExecuteInfo->aArgs = aArgs;
             Application::PostUserEvent( LINK(nullptr, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
         }
     }
@@ -766,7 +764,7 @@ IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, p, void )
         // elements if a component gets detached from its frame!
         if ( pExecuteInfo->xDispatch.is() )
         {
-            pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+            pExecuteInfo->xDispatch->dispatch(pExecuteInfo->aTargetURL, Sequence<PropertyValue>());
         }
     }
     catch ( const Exception& )
