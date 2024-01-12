@@ -32,6 +32,7 @@
 #include <layouter.hxx>
 #include <osl/diagnose.h>
 #include <flyfrms.hxx>
+#include <dcontact.hxx>
 
 using namespace ::com::sun::star;
 
@@ -97,6 +98,8 @@ void SwAnchoredObject::ClearVertPosOrientFrame()
         mpVertPosOrientFrame = nullptr;
     }
 }
+
+bool SwAnchoredObject::HasFrameFormat() const { return GetUserCall(GetDrawObj()); }
 
 SwAnchoredObject::~SwAnchoredObject()
 {
@@ -408,28 +411,32 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
 {
     bool bRet( false );
 
-    const SwFrameFormat& rObjFormat = GetFrameFormat();
+    if (HasFrameFormat())
+    {
+        const SwFrameFormat& rObjFormat = GetFrameFormat();
 
-    // --> #i3317# - add condition <IsTmpConsiderWrapInfluence()>
-    // --> #i55204#
-    // - correction: wrapping style influence has been considered, if condition
-    //   <IsTmpConsiderWrapInfluence()> is hold, regardless of its anchor type
-    //   or its wrapping style.
-    if ( IsTmpConsiderWrapInfluence() )
-    {
-        bRet = true;
-    }
-    else if ( rObjFormat.getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
-    {
-        const SwFormatAnchor& rAnchor = rObjFormat.GetAnchor();
-        if ( ((rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
-              (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)) &&
-             rObjFormat.GetSurround().GetSurround() != css::text::WrapTextMode_THROUGH )
+        // --> #i3317# - add condition <IsTmpConsiderWrapInfluence()>
+        // --> #i55204#
+        // - correction: wrapping style influence has been considered, if condition
+        //   <IsTmpConsiderWrapInfluence()> is hold, regardless of its anchor type
+        //   or its wrapping style.
+        if (IsTmpConsiderWrapInfluence())
         {
-            // --> #i34520# - text also wraps around anchored
-            // objects in the layer Hell - see the text formatting.
-            // Thus, it hasn't to be checked here.
             bRet = true;
+        }
+        else if (rObjFormat.getIDocumentSettingAccess().get(
+                     DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION))
+        {
+            const SwFormatAnchor& rAnchor = rObjFormat.GetAnchor();
+            if (((rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                 || (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA))
+                && rObjFormat.GetSurround().GetSurround() != css::text::WrapTextMode_THROUGH)
+            {
+                // --> #i34520# - text also wraps around anchored
+                // objects in the layer Hell - see the text formatting.
+                // Thus, it hasn't to be checked here.
+                bRet = true;
+            }
         }
     }
 
@@ -567,18 +574,23 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
     if ( !mbObjRectWithSpacesValid )
     {
         maObjRectWithSpaces = GetObjBoundRect();
-        const SwFrameFormat& rFormat = GetFrameFormat();
-        const SvxULSpaceItem& rUL = rFormat.GetULSpace();
-        const SvxLRSpaceItem& rLR = rFormat.GetLRSpace();
+        if (HasFrameFormat())
         {
-            maObjRectWithSpaces.Top ( std::max( maObjRectWithSpaces.Top() - tools::Long(rUL.GetUpper()), tools::Long(0) ));
-            maObjRectWithSpaces.Left( std::max( maObjRectWithSpaces.Left()- rLR.GetLeft(),  tools::Long(0) ));
-            maObjRectWithSpaces.AddHeight(rUL.GetLower() );
-            maObjRectWithSpaces.AddWidth(rLR.GetRight() );
-        }
+            const SwFrameFormat& rFormat = GetFrameFormat();
+            const SvxULSpaceItem& rUL = rFormat.GetULSpace();
+            const SvxLRSpaceItem& rLR = rFormat.GetLRSpace();
+            {
+                maObjRectWithSpaces.Top(std::max(
+                    maObjRectWithSpaces.Top() - tools::Long(rUL.GetUpper()), tools::Long(0)));
+                maObjRectWithSpaces.Left(
+                    std::max(maObjRectWithSpaces.Left() - rLR.GetLeft(), tools::Long(0)));
+                maObjRectWithSpaces.AddHeight(rUL.GetLower());
+                maObjRectWithSpaces.AddWidth(rLR.GetRight());
+            }
 
-        mbObjRectWithSpacesValid = true;
-        maLastObjRect = GetObjRect();
+            mbObjRectWithSpacesValid = true;
+            maLastObjRect = GetObjRect();
+        }
     }
 
     return maObjRectWithSpaces;
@@ -709,39 +721,43 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
     // --> #i44339# - check, if anchor frame exists.
     if ( mpAnchorFrame )
     {
-        const SwFormatAnchor& rAnch = GetFrameFormat().GetAnchor();
-        if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
-            (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR))
+        if (HasFrameFormat())
         {
-            SwTextFrame *const pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
-            TextFrameIndex const nOffset(pFrame->MapModelToViewPos(*rAnch.GetContentAnchor()));
-            pAnchorCharFrame = &pFrame->GetFrameAtOfst(nOffset);
-        }
-        else if (SwFlyFrame* pFlyFrame = DynCastFlyFrame())
-        {
-            // See if this fly is split. If so, then the anchor is also split. All anchors are
-            // empty, except the last follow.
-            if (pFlyFrame->IsFlySplitAllowed())
+            const SwFormatAnchor& rAnch = GetFrameFormat().GetAnchor();
+            if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                || (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR))
             {
-                auto pFlyAtContentFrame = static_cast<SwFlyAtContentFrame*>(pFlyFrame);
-                SwFlyAtContentFrame* pFly = pFlyAtContentFrame;
-                SwTextFrame* pAnchor = static_cast<SwTextFrame*>(AnchorFrame());
-                // If we have to jump back N frames to find the master fly, then we have to step N
-                // frames from the master anchor to reach the correct follow anchor.
-                while (pFly->GetPrecede())
+                SwTextFrame* const pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
+                TextFrameIndex const nOffset(pFrame->MapModelToViewPos(*rAnch.GetContentAnchor()));
+                pAnchorCharFrame = &pFrame->GetFrameAtOfst(nOffset);
+            }
+            else if (SwFlyFrame* pFlyFrame = DynCastFlyFrame())
+            {
+                // See if this fly is split. If so, then the anchor is also split. All anchors are
+                // empty, except the last follow.
+                if (pFlyFrame->IsFlySplitAllowed())
                 {
-                    pFly = pFly->GetPrecede();
-                    if (!pAnchor)
+                    auto pFlyAtContentFrame = static_cast<SwFlyAtContentFrame*>(pFlyFrame);
+                    SwFlyAtContentFrame* pFly = pFlyAtContentFrame;
+                    SwTextFrame* pAnchor = static_cast<SwTextFrame*>(AnchorFrame());
+                    // If we have to jump back N frames to find the master fly, then we have to step N
+                    // frames from the master anchor to reach the correct follow anchor.
+                    while (pFly->GetPrecede())
                     {
-                        SAL_WARN("sw.layout", "SwAnchoredObject::FindAnchorCharFrame: fly chain "
-                                              "length is longer then anchor chain length");
-                        break;
+                        pFly = pFly->GetPrecede();
+                        if (!pAnchor)
+                        {
+                            SAL_WARN("sw.layout",
+                                     "SwAnchoredObject::FindAnchorCharFrame: fly chain "
+                                     "length is longer then anchor chain length");
+                            break;
+                        }
+                        pAnchor = pAnchor->GetFollow();
                     }
-                    pAnchor = pAnchor->GetFollow();
-                }
-                if (pAnchor)
-                {
-                    pAnchorCharFrame = pAnchor;
+                    if (pAnchor)
+                    {
+                        pAnchorCharFrame = pAnchor;
+                    }
                 }
             }
         }
@@ -758,7 +774,9 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
 */
 bool SwAnchoredObject::IsFormatPossible() const
 {
-    return GetFrameFormat().GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetDrawObj()->GetLayer() );
+    if (HasFrameFormat())
+        return GetFrameFormat().GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetDrawObj()->GetLayer() );
+    return false;
 }
 
 bool SwAnchoredObject::IsDraggingOffPageAllowed(const SwFrameFormat* pFrameFormat)

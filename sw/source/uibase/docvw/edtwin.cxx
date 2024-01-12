@@ -4645,19 +4645,23 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             SdrObject* pObj = pSdrView ? pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER) : nullptr;
             if (pObj)
             {
-                SwFrameFormat* pFormat = GetUserCall(pObj)->GetFormat();
-                SwFrameFormat* pShapeFormat = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_FLYFRMFMT);
-                if (!pShapeFormat)
+                if (SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
                 {
-                    pSdrView->UnmarkAllObj();
-                    pSdrView->MarkObj(pObj,pPV);
-                }
-                else
-                {
-                    // If the fly frame is a textbox of a shape, then select the shape instead.
-                    SdrObject* pShape = pShapeFormat->FindSdrObject();
-                    pSdrView->UnmarkAllObj();
-                    pSdrView->MarkObj(pShape, pPV);
+                    SwFrameFormat* pFormat = pContact->GetFormat();
+                    SwFrameFormat* pShapeFormat
+                        = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_FLYFRMFMT);
+                    if (!pShapeFormat)
+                    {
+                        pSdrView->UnmarkAllObj();
+                        pSdrView->MarkObj(pObj, pPV);
+                    }
+                    else
+                    {
+                        // If the fly frame is a textbox of a shape, then select the shape instead.
+                        SdrObject* pShape = pShapeFormat->FindSdrObject();
+                        pSdrView->UnmarkAllObj();
+                        pSdrView->MarkObj(pShape, pPV);
+                    }
                 }
             }
         }
