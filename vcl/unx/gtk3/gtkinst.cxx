@@ -16964,6 +16964,8 @@ private:
         atk_object_set_description(pChild,
                                    OUStringToOString(sTooltipText, RTL_TEXTENCODING_UTF8).getStr());
         g_object_unref(pChild);
+        gtk_tree_path_free(pPath);
+
 #endif
     }
 
