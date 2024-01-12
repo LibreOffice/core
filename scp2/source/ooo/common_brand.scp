@@ -777,34 +777,6 @@ ProfileItem gid_Brand_Profileitem_Redirect_Ure_Bootstrap
 End
 #endif
 
-#ifdef WNT
-ProfileItem gid_Brand_Profileitem_Setup_Alluserset
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "ALLUSERS";
-    Value = "[ALLUSERS]";
-    Inifiletablekey = "AllUsersSet";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-#endif
-
-#ifdef WNT
-ProfileItem gid_Brand_Profileitem_Setup_Findproduct
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "FINDPRODUCT";
-    Value = "[FINDPRODUCT]";
-    Inifiletablekey = "FindProductSet";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-#endif
-
 ProfileItem gid_Brand_Profileitem_Setup_Buildid
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -813,59 +785,3 @@ ProfileItem gid_Brand_Profileitem_Setup_Buildid
     Key = "buildid";
     Value = "<buildid>";
 End
-
-#ifdef WNT
-ProfileItem gid_Brand_Profileitem_Setup_Ureinstall
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "UREINSTALLLOCATION";
-    Value = "[INSTALLLOCATION]URE\\";
-    Inifiletablekey = "UreInstallLocation";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-#endif
-
-#ifdef WNT
-ProfileItem gid_Brand_Profileitem_Setup_Basisinstall
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "BASISINSTALLLOCATION";
-    Value = "[INSTALLLOCATION]";
-    Inifiletablekey = "BasisInstallLocation";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-#endif
-
-#ifdef WNT
-ProfileItem gid_Brand_Profileitem_Setup_Officeinstall
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "OFFICEINSTALLLOCATION";
-    Value = "[INSTALLLOCATION]";
-    Inifiletablekey = "OfficeInstallLocation";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-#endif
-
-#ifdef WNT
-ProfileItem gid_Brand_Profileitem_Setup_Install
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "INSTALLLOCATION";
-    Value = "[INSTALLLOCATION]";
-    Inifiletablekey = "InstallLocation";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-#endif

@@ -212,12 +212,6 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
     }
 
-    if (( $allvariables->{'PRODUCTNAME'} ) && ( $allvariables->{'PRODUCTVERSION'} ) && ( $allvariables->{'REGISTRYLAYERNAME'} ))
-    {
-        my $onepropertyline = "FINDPRODUCT" . "\t" . "Software\\LibreOffice" . "\\" . $allvariables->{'REGISTRYLAYERNAME'} . "\\" . $allvariables->{'PRODUCTNAME'} . "\\" . $allvariables->{'PRODUCTVERSION'} . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
     if ( $allvariables->{'PRODUCTMAJOR'} )
     {
         my $onepropertyline = "PRODUCTMAJOR" . "\t" . $allvariables->{'PRODUCTMAJOR'} . "\n";

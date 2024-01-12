@@ -61,7 +61,6 @@ use installer::windows::file;
 use installer::windows::font;
 use installer::windows::icon;
 use installer::windows::idtglobal;
-use installer::windows::inifile;
 use installer::windows::media;
 use installer::windows::mergemodule;
 use installer::windows::msiglobal;
@@ -1320,9 +1319,6 @@ sub run {
             @installer::globals::binarytableonlyfiles = ();
             $filesinproductlanguageresolvedarrayref = installer::worker::remove_all_items_with_special_flag($filesinproductlanguageresolvedarrayref ,"BINARYTABLE_ONLY");
 
-            # Collecting all profileitems with flag "INIFILETABLE" for table "IniFile"
-            my $inifiletableentries = installer::worker::collect_all_items_with_special_flag($profileitemsinproductlanguageresolvedarrayref ,"INIFILETABLE");
-
             # Creating the important dynamic idt files
             installer::windows::msiglobal::set_msiproductversion($allvariableshashref);
 
@@ -1360,8 +1356,6 @@ sub run {
             my @iconfilecollector = ();
 
             installer::windows::shortcut::create_shortcut_table($filesinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $newidtdir, \@setuplanguagesarray, $includepatharrayref, \@iconfilecollector);
-
-            installer::windows::inifile::create_inifile_table($inifiletableentries, $filesinproductlanguageresolvedarrayref, $newidtdir);
 
             installer::windows::icon::create_icon_table(\@iconfilecollector, $newidtdir);    # creating the icon table with all iconfiles used as shortcuts (FolderItems)
 
