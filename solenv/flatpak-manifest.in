@@ -49,8 +49,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.gnome.org/sources/gvfs/1.52/gvfs-1.52.1.tar.xz",
-                    "sha256": "cdbd4440f6d08792a6e7521244c17386e20bd537d375117099fc8fb68fe91741",
+                    "url": "https://download.gnome.org/sources/gvfs/1.52/gvfs-1.52.2.tar.xz",
+                    "sha256": "a643aceaa053caac0d8eff9a015f636e4bd1bb09cfe27864e347db67460e7b91",
                     "x-checker-data": {
                         "type": "gnome",
                         "name": "gvfs",
