@@ -491,7 +491,7 @@ namespace dlgprov
 
                     Any aResult = xScript->invoke( aInParams, aOutParamsIndex, aOutParams );
                     if ( pRet )
-                        *pRet = aResult;
+                        *pRet = std::move(aResult);
                 }
             }
         }

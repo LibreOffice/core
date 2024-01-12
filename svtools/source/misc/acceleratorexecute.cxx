@@ -127,7 +127,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
         // SAFE -> ------------------------------
         aLock.lock();
 
-        m_xDispatcher  = xDispatcher;
+        m_xDispatcher  = std::move(xDispatcher);
         bDesktopIsUsed = true;
     }
 

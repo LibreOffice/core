@@ -233,7 +233,7 @@ void SAL_CALL SdXCustomPresentation::dispose()
 
     std::unique_lock aGuard2(aDisposeContainerMutex);
     lang::EventObject aEvt;
-    aEvt.Source = xSource;
+    aEvt.Source = std::move(xSource);
     aDisposeListeners.disposeAndClear(aGuard2, aEvt);
 
     mpSdCustomShow = nullptr;

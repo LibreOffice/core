@@ -1080,7 +1080,7 @@ static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                             aOtherSeriesList[nOtherSeriesIndex] = xGivenDataSeries;
                                             xFormerChartType->setDataSeries(aOtherSeriesList);
 
-                                            aSeriesList[nOldSeriesIndex]=xExchangeSeries;
+                                            aSeriesList[nOldSeriesIndex] = std::move(xExchangeSeries);
                                             xCurrentChartType->setDataSeries(aSeriesList);
                                         }
                                     }

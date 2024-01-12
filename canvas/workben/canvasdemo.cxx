@@ -182,7 +182,7 @@ class DemoRenderer
             const double RADIUS = 60.0;
             int i, j;
 
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( center_x, center_y );
 
             for (i = 0; i < VERTICES; i++)
@@ -202,7 +202,7 @@ class DemoRenderer
                 }
             }
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
         void drawHilbert( double anchor_x, double anchor_y )
@@ -269,7 +269,7 @@ class DemoRenderer
 
         void drawRectangles()
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
 
             drawTitle( "Rectangles"_ostr );
 
@@ -279,12 +279,12 @@ class DemoRenderer
             // color steelblue, filled, no outline
             drawRect( tools::Rectangle( 10, 80, 80, 140 ), maColorBlack, 1 );
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
         void drawEllipses()
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( maBox.Width(), 0.0 );
 
             drawTitle( "Ellipses"_ostr );
@@ -310,12 +310,12 @@ class DemoRenderer
             aStrokeAttrs.JoinType = rendering::PathJoinType::MITER;
             mxCanvas->strokePolyPolygon( xPoly, maViewState, maRenderState, aStrokeAttrs );
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
         void drawText()
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, 0.0 );
 
             drawTitle( "Text"_ostr );
@@ -324,12 +324,12 @@ class DemoRenderer
                        maBox.Height() * .5 );
             drawTitle( "This is lame"_ostr );
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
         void drawImages()
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( 0.0, maBox.Height() );
 
             drawTitle( "Images"_ostr );
@@ -357,12 +357,12 @@ class DemoRenderer
             //bitmapExFromXBitmap(): could not extract bitmap' thrown
             //  Thorsten says that this is a bug, and Thorsten never lies.
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
         void drawLines()
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( maBox.Width(), maBox.Height() );
 
             drawTitle( "Lines"_ostr );
@@ -370,12 +370,12 @@ class DemoRenderer
             drawPolishDiamond( 70.0, 80.0 );
             drawHilbert( 140.0, 140.0 );
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
         void drawCurves()
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, maBox.Height() );
 
             drawTitle( "Curves"_ostr );
@@ -413,7 +413,7 @@ class DemoRenderer
             //you can't draw a BezierPolyPolygon2D with this, even though it is derived from it
             //mxCanvas->drawPolyPolygon( xPoly, maViewState, maRenderState );
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
         double gimmerand()
@@ -423,7 +423,7 @@ class DemoRenderer
 
         void drawArcs()
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( 0.0, maBox.Height() * 2.0 );
 
             drawTitle( "Arcs"_ostr );
@@ -472,7 +472,7 @@ class DemoRenderer
                     aEndPoint,
                     maViewState, maRenderState );
             }
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
 
@@ -501,7 +501,7 @@ class DemoRenderer
 
         void drawPolygons()
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( maBox.Width() * 1.0, maBox.Height() * 2.0 );
 
             drawTitle( "Polygons"_ostr );
@@ -513,17 +513,17 @@ class DemoRenderer
                 sides++;
             }
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 
         void drawWidgets() // FIXME: prolly makes no sense
         {
-            rendering::RenderState maOldRenderState = maRenderState; // push
+            rendering::RenderState aOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, maBox.Height() * 2.0 );
 
             drawTitle( "Widgets"_ostr );
 
-            maRenderState = maOldRenderState; // pop
+            maRenderState = std::move(aOldRenderState); // pop
         }
 };
 
