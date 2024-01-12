@@ -278,6 +278,10 @@ void GraphicZOrderHelper::addItem(uno::Reference<beans::XPropertySet> const& pro
 // The relativeHeight value in .docx is an arbitrary number, where only the relative ordering matters.
 // But in Writer, the z-order is index in 0..(numitems-1) range, so whenever a new item needs to be
 // added in the proper z-order, it is necessary to find the proper index.
+
+// The key to this function is that later on, when setPropertyValue("ZOrder", <returned sal_Int32>),
+// SW also automatically increments ALL zOrders >= the one returned for this fly.
+// Thus, getProperty PROP_Z_ORDER for relativeHeight "x" can return different values for itemZOrder.
 sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldStyle )
 {
     // std::map is iterated sorted by key
@@ -292,7 +296,7 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
     if( it == m_items.end()) // we're topmost
     {
         if( m_items.empty())
-            return 0;
+            return 0; // the lowest
         --it;
         itemZOrderOffset = 1; // after the topmost
 

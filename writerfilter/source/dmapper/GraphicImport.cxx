@@ -735,7 +735,17 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             m_pImpl->m_bUseSimplePos = nIntValue > 0;
         break;
         case NS_ooxml::LN_CT_Anchor_relativeHeight:
+        {
             m_pImpl->m_zOrder = nIntValue;
+
+            // Last one defined must win - opposite to what the existing code (for z-Index?) does.
+            GraphicZOrderHelper* pZOrderHelper = m_pImpl->m_rDomainMapper.graphicZOrderHelper();
+            if (pZOrderHelper->hasZOrder(m_pImpl->m_zOrder)
+                && m_pImpl->m_rGraphicImportType != GraphicImportType::IMPORT_AS_DETECTED_INLINE)
+            {
+                ++m_pImpl->m_zOrder;
+            }
+        }
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc:
             if (nIntValue > 0)

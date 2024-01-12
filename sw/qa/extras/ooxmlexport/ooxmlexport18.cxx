@@ -868,6 +868,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155736, "tdf155736_PageNumbers_footer.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[2]/footer/txt/text()"_ostr));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_duplicate, "tdf159158_zOrder_duplicate_compat15.docx")
+{
+    // given a yellow star with relativeHeight 2, followed by an overlapping blue star also with 2
+    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
+    sal_Int32 zOrder1, zOrder2;
+    OUString descr1, descr2;
+    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
+    imageProperties1->getPropertyValue( "ZOrder" ) >>= zOrder1;
+    imageProperties1->getPropertyValue( "Name" ) >>= descr1;
+    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
+    imageProperties2->getPropertyValue( "ZOrder" ) >>= zOrder2;
+    imageProperties2->getPropertyValue( "Name" ) >>= descr2;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), zOrder1 ); // lower
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), zOrder2 ); // higher
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // last one defined wins
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
 {
     // Without the accompanying fix in place, this test would have crashed,

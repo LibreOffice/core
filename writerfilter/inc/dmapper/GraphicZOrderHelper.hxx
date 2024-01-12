@@ -19,6 +19,7 @@ public:
     void addItem(css::uno::Reference<css::beans::XPropertySet> const& props,
                  sal_Int32 relativeHeight);
     sal_Int32 findZOrder(sal_Int32 relativeHeight, bool bOldStyle = false);
+    bool hasZOrder(sal_Int32 relativeHeight) { return m_items.count(relativeHeight) != 0; }
 
 private:
     using Items = std::map<sal_Int32, css::uno::Reference<css::beans::XPropertySet>>;
