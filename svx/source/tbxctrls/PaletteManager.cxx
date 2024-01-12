@@ -471,6 +471,7 @@ void PaletteManager::generateJSON(boost::property_tree::ptree& aTree, const std:
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     sal_uInt32 nColumnCount = rStyleSettings.GetColorValueSetColumnCount();
+    const OUString aNamePrefix(Concat2View(SvxResId(RID_SVXSTR_DOC_COLOR_PREFIX) + " "));
 
     auto aColorIt = rColors.begin();
     while (aColorIt != rColors.end())
@@ -480,7 +481,6 @@ void PaletteManager::generateJSON(boost::property_tree::ptree& aTree, const std:
         for (sal_uInt32 nColumn = 0; nColumn < nColumnCount; nColumn++)
         {
             boost::property_tree::ptree aColorTree;
-            std::u16string_view aNamePrefix = Concat2View(SvxResId(RID_SVXSTR_DOC_COLOR_PREFIX) + " ");
             OUString sName = aNamePrefix + OUString::number(nStartIndex++);
             aColorTree.put("Value", aColorIt->AsRGBHexString().toUtf8());
             aColorTree.put("Name", sName);
