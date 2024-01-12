@@ -148,7 +148,13 @@ void SwTOXMark::RegisterToTOXType(SwTOXType& rType)
 bool SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return m_pType == static_cast<const SwTOXMark&>(rAttr).m_pType;
+    // tdf#158783 this item was never 'pooled', so operator== was not really
+    // ever used. We discussed to implement it (there is quite some
+    // content), but we came to the point that it's only safe to say
+    // instances are equal when same instance -> fallback to ptr compare.
+    // NOTE: Do *not* use areSfxPoolItemPtrsEqual here, with DBG_UTIL
+    //   active the contol/test code there would again call operator==
+    return this == &rAttr;
 }
 
 SwTOXMark* SwTOXMark::Clone( SfxItemPool* ) const
