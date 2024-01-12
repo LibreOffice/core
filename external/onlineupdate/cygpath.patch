@@ -7,5 +7,5 @@
 -workdir="$(mktemp -d)"
 +workdir=$(cygpath -m "$(mktemp -d)")
  updatemanifestv3="$workdir/updatev3.manifest"
- archivefiles="updatev3.manifest"
  
+ mkdir -p "$workdir"
