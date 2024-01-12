@@ -39,18 +39,19 @@ diff --git a/src/nss/crypto.c b/src/nss/crypto.c
 index 429d209f..e0296bda 100644
 --- a/src/nss/crypto.c
 +++ b/src/nss/crypto.c
-@@ -131,9 +131,11 @@ xmlSecCryptoGetFunctions_nss(void) {
+@@ -162,10 +162,12 @@ xmlSecCryptoGetFunctions_nss(void) {
      gXmlSecNssFunctions->transformAes192CbcGetKlass     = xmlSecNssTransformAes192CbcGetKlass;
      gXmlSecNssFunctions->transformAes256CbcGetKlass     = xmlSecNssTransformAes256CbcGetKlass;
  
 +#if 0
+     /* gcm */
      gXmlSecNssFunctions->transformAes128GcmGetKlass     = xmlSecNssTransformAes128GcmGetKlass;
      gXmlSecNssFunctions->transformAes192GcmGetKlass     = xmlSecNssTransformAes192GcmGetKlass;
      gXmlSecNssFunctions->transformAes256GcmGetKlass     = xmlSecNssTransformAes256GcmGetKlass;
 +#endif
  
+     /* kw: uses AES ECB */
      gXmlSecNssFunctions->transformKWAes128GetKlass      = xmlSecNssTransformKWAes128GetKlass;
-     gXmlSecNssFunctions->transformKWAes192GetKlass      = xmlSecNssTransformKWAes192GetKlass;
 diff --git a/include/xmlsec/nss/crypto.h b/include/xmlsec/nss/crypto.h
 index bb64c5f2..4c3dc4d3 100644
 --- a/include/xmlsec/nss/crypto.h
@@ -64,3 +65,18 @@ index bb64c5f2..4c3dc4d3 100644
  #define XMLSEC_NO_RSA_OAEP 1
  #else  /* (NSS_VMAJOR < 3) || ((NSS_VMAJOR == 3) && (NSS_VMINOR < 59)) */
  #define XMLSEC_NO_MD5 1
+diff --git a/src/nss/crypto.c b/src/nss/crypto.c
+index 6455ec72..a6c46350 100644
+--- a/src/nss/crypto.c
++++ b/src/nss/crypto.c
+@@ -546,8 +546,10 @@ xmlSecNssInit (void)  {
+     /* set default errors callback for xmlsec to us */
+     xmlSecErrorsSetCallback(xmlSecNssErrorsDefaultCallback);
+ 
++#if 0
+     /* update the avaialble algos based on NSS configs */
+     xmlSecNssUpdateAvailableCryptoTransforms(xmlSecCryptoGetFunctions_nss());
++#endif
+ 
+     /* register our klasses */
+     if(xmlSecCryptoDLFunctionsRegisterKeyDataAndTransforms(xmlSecCryptoGetFunctions_nss()) < 0) {

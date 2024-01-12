@@ -167,6 +167,7 @@ $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 # nss3 after static libs to appease --as-needed linkers
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	nss3 \
+	nssutil3 \
 ))
 
 else # ! $(ENABLE_NSS)
