@@ -78,10 +78,14 @@ struct ObjAnchorOrder
                      const SwAnchoredObject* _pNewAnchoredObj )
     {
         // get attributes of listed object
+        if (!_pListedAnchoredObj->HasFrameFormat())
+            return false;
         const SwFrameFormat& rFormatListed = _pListedAnchoredObj->GetFrameFormat();
         const SwFormatAnchor* pAnchorListed = &(rFormatListed.GetAnchor());
 
         // get attributes of new object
+        if (!_pNewAnchoredObj->HasFrameFormat())
+            return false;
         const SwFrameFormat& rFormatNew = _pNewAnchoredObj->GetFrameFormat();
         const SwFormatAnchor* pAnchorNew = &(rFormatNew.GetAnchor());
 
