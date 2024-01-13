@@ -800,15 +800,17 @@ void SAL_CALL XFrameImpl::initialize( const css::uno::Reference< css::awt::XWind
 
     // create progress helper
     css::uno::Reference< css::frame::XFrame > xThis (this);
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory =
-        css::task::StatusIndicatorFactory::createWithFrame(m_xContext, xThis,
-                                                           false/*DisableReschedule*/, true/*AllowParentShow*/ );
+    {
+        css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory =
+            css::task::StatusIndicatorFactory::createWithFrame(m_xContext, xThis,
+                                                               false/*DisableReschedule*/, true/*AllowParentShow*/ );
 
-    // SAFE -> ----------------------------------
-    aWriteLock.reset();
-    m_xIndicatorFactoryHelper = xIndicatorFactory;
-    aWriteLock.clear();
-    // <- SAFE ----------------------------------
+        // SAFE -> ----------------------------------
+        aWriteLock.reset();
+        m_xIndicatorFactoryHelper = std::move(xIndicatorFactory);
+        aWriteLock.clear();
+        // <- SAFE ----------------------------------
+    }
 
     // Start listening for events after setting it on helper class ...
     // So superfluous messages are filtered to NULL :-)

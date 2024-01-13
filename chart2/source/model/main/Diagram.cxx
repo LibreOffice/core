@@ -1098,11 +1098,11 @@ static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                         std::vector< rtl::Reference< DataSeries > > aOtherSeriesList = xOtherChartType->getDataSeries2();
                                         if( !aOtherSeriesList.empty() )
                                         {
-                                            rtl::Reference< DataSeries > xExchangeSeries( aOtherSeriesList[0] );
+                                            rtl::Reference<DataSeries> xExchangeSeries(aOtherSeriesList[0]);
                                             aOtherSeriesList[0] = xGivenDataSeries;
                                             xOtherChartType->setDataSeries(aOtherSeriesList);
 
-                                            aSeriesList[nOldSeriesIndex]=xExchangeSeries;
+                                            aSeriesList[nOldSeriesIndex] = std::move(xExchangeSeries);
                                             xCurrentChartType->setDataSeries(aSeriesList);
                                         }
                                     }

@@ -162,11 +162,11 @@ bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
        Reference< css::frame::XController > xController =  mxDocModel->getCurrentController();
        xFrame =  xController.is() ? xController->getFrame() : nullptr;
    }
-   StorageRef noStorage;
+
    // if the GraphicHelper tries to use noStorage it will of course crash
    // but... this shouldn't happen as there is no reason for GraphicHelper
    // to do that when importing VBA projects
-   GraphicHelper grfHlp( mxContext, xFrame, noStorage );
+   GraphicHelper grfHlp(mxContext, xFrame, StorageRef());
    importVbaProject( rVbaPrjStrg, grfHlp );
    // return true if something has been imported
    return (mxBasicLib.is() && mxBasicLib->hasElements()) ||
