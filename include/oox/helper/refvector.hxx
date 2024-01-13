@@ -58,9 +58,9 @@ public:
         skips all elements that are empty references. */
     template< typename FunctorType >
     void                forEach( FunctorType aFunctor ) const
-                        {
-                            ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( aFunctor ) );
-                        }
+    {
+        std::for_each(this->begin(), this->end(), ForEachFunctor<FunctorType>(std::move(aFunctor)));
+    }
 
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */

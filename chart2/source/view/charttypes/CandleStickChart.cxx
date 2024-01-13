@@ -201,9 +201,7 @@ void CandleStickChart::createShapes()
                     drawing::Position3D aPosMiddleMinimum( pPosHelper->transformScaledLogicToScene( fScaledX, fScaledY_Min ,0 ,true ) );
                     drawing::Position3D aPosMiddleMaximum( pPosHelper->transformScaledLogicToScene( fScaledX, fScaledY_Max ,0 ,true ) );
 
-                    rtl::Reference<SvxShapeGroupAnyD> xLossGainTarget( xGainTarget );
-                    if(bBlack)
-                        xLossGainTarget = xLossTarget;
+                    rtl::Reference<SvxShapeGroupAnyD> xLossGainTarget(bBlack ? xLossTarget : xGainTarget);
 
                     uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint( nIndex ));
                     rtl::Reference<SvxShapeGroupAnyD> xPointGroupShape_Shapes;

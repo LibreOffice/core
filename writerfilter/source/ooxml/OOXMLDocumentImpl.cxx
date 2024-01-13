@@ -336,13 +336,13 @@ void OOXMLDocumentImpl::resolveComment(Stream & rStream,
 OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
 (const OUString & rId)
 {
-    OOXMLStream::Pointer_t pStream
+    OOXMLStream::Pointer_t xStream
         (OOXMLDocumentFactory::createStream(mpStream, rId));
 
-    writerfilter::Reference<BinaryObj>::Pointer_t pPicture
-        (new OOXMLBinaryObjectReference(pStream));
+    writerfilter::Reference<BinaryObj>::Pointer_t xPicture
+        (new OOXMLBinaryObjectReference(std::move(xStream)));
 
-    OOXMLValue::Pointer_t pPayloadValue(new OOXMLBinaryValue(pPicture));
+    OOXMLValue::Pointer_t pPayloadValue(new OOXMLBinaryValue(std::move(xPicture)));
 
     OOXMLPropertySet::Pointer_t pBlipSet(new OOXMLPropertySet);
 

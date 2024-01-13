@@ -159,17 +159,20 @@ ChartModel::ChartModel( const ChartModel & rOther )
         if (rOther.m_xDiagram.is())
             xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
         rtl::Reference< ::chart::PageBackground > xNewPageBackground = new PageBackground( *rOther.m_xPageBackground );
-        rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager; // does not implement XCloneable
-        rtl::Reference< ::chart::NameContainer > xXMLNamespaceMap = new NameContainer( *rOther.m_xXMLNamespaceMap );
 
         {
-            MutexGuard aGuard( m_aModelMutex );
-            xListener = this;
-            m_xTitle = xNewTitle;
-            m_xDiagram = xNewDiagram;
-            m_xPageBackground = xNewPageBackground;
-            m_xChartTypeManager = xChartTypeManager;
-            m_xXMLNamespaceMap = xXMLNamespaceMap;
+            rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager; // does not implement XCloneable
+            rtl::Reference< ::chart::NameContainer > xXMLNamespaceMap = new NameContainer( *rOther.m_xXMLNamespaceMap );
+
+            {
+                MutexGuard aGuard( m_aModelMutex );
+                xListener = this;
+                m_xTitle = xNewTitle;
+                m_xDiagram = xNewDiagram;
+                m_xPageBackground = std::move(xNewPageBackground);
+                m_xChartTypeManager = std::move(xChartTypeManager);
+                m_xXMLNamespaceMap = std::move(xXMLNamespaceMap);
+            }
         }
 
         ModifyListenerHelper::addListener( xNewTitle, xListener );

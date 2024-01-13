@@ -1830,7 +1830,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                             aEvt.PropertyName   = rNewValue.Name;
                             aEvt.PropertyHandle = rNewValue.Handle;
                             aEvt.Further        = false;
-                            aEvt.OldValue       = aOldValue;
+                            aEvt.OldValue       = std::move(aOldValue);
                             aEvt.NewValue       = rNewValue.Value;
 
                             aEvents.push_back( aEvt );

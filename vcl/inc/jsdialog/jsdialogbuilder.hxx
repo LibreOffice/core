@@ -168,10 +168,10 @@ public:
     void flush() { mpIdleNotify->Invoke(); }
 
 protected:
-    void initializeSender(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                          const OUString& sTypeOfJSON)
+    void initializeSender(const VclPtr<vcl::Window>& rNotifierWindow,
+                          const VclPtr<vcl::Window>& rContentWindow, const OUString& rTypeOfJSON)
     {
-        mpIdleNotify.reset(new JSDialogNotifyIdle(aNotifierWindow, aContentWindow, sTypeOfJSON));
+        mpIdleNotify.reset(new JSDialogNotifyIdle(rNotifierWindow, rContentWindow, rTypeOfJSON));
     }
 };
 

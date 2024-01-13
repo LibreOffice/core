@@ -1140,9 +1140,10 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 }
                 OUString sParaStyleName;
                 rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
-                StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
                 bool bDocDefault;
-                uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true, &bDocDefault);
+                uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId,
+                        m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName),
+                        true, true, &bDocDefault);
                 // A very strange compatibility rule says that the DEFAULT style's specified fontsize of 11 or 12
                 // or a specified left justify will always be overridden by the table-style.
                 // Normally this rule is applied, so always do this unless a compatSetting indicates otherwise.

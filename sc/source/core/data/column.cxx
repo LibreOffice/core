@@ -2385,15 +2385,17 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
 
     // Check the row positions at which the group must be split per relative
     // references.
-    UpdateRefGroupBoundChecker aBoundChecker(rCxt, aBounds);
-    std::for_each(maCells.begin(), maCells.end(), aBoundChecker);
+    {
+        UpdateRefGroupBoundChecker aBoundChecker(rCxt, aBounds);
+        std::for_each(maCells.begin(), maCells.end(), std::move(aBoundChecker));
+    }
 
     // If expand reference edges is on, splitting groups may happen anywhere
     // where a reference points to an adjacent row of the insertion.
     if (rCxt.mnRowDelta > 0 && rCxt.mrDoc.IsExpandRefs())
     {
         UpdateRefExpandGroupBoundChecker aExpandChecker(rCxt, aBounds);
-        std::for_each(maCells.begin(), maCells.end(), aExpandChecker);
+        std::for_each(maCells.begin(), maCells.end(), std::move(aExpandChecker));
     }
 
     // Do the actual splitting.

@@ -1043,8 +1043,10 @@ void ScTable::SortReorderByColumn(
         // once.
         std::sort(aListeners.begin(), aListeners.end());
         aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
-        ReorderNotifier<sc::RefColReorderHint, sc::ColRowReorderMapType, SCCOL> aFunc(aColMap, nTab, nRow1, nRow2);
-        std::for_each(aListeners.begin(), aListeners.end(), aFunc);
+        {
+            ReorderNotifier<sc::RefColReorderHint, sc::ColRowReorderMapType, SCCOL> aFunc(aColMap, nTab, nRow1, nRow2);
+            std::for_each(aListeners.begin(), aListeners.end(), std::move(aFunc));
+        }
 
         // Re-start area listeners on the reordered columns.
         {
@@ -1488,8 +1490,10 @@ void ScTable::SortReorderByRowRefUpdate(
     }
 
     // Notify the listeners to update their references.
-    ReorderNotifier<sc::RefRowReorderHint, sc::ColRowReorderMapType, SCROW> aFunc(aRowMap, nTab, nCol1, nCol2);
-    std::for_each(aListeners.begin(), aListeners.end(), aFunc);
+    {
+        ReorderNotifier<sc::RefRowReorderHint, sc::ColRowReorderMapType, SCROW> aFunc(aRowMap, nTab, nCol1, nCol2);
+        std::for_each(aListeners.begin(), aListeners.end(), std::move(aFunc));
+    }
 
     // Re-group formulas in affected columns.
     for (const auto& [rTab, rCols] : rGroupTabs)
