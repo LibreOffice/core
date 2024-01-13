@@ -125,6 +125,7 @@ static void RemoveDisabledItemsFromNativeMenu(GLOMenu* pMenu, GList** pOldComman
                             g_free(pSubCommand);
                         }
                     }
+                    g_object_unref(pSubMenuModel);
                 }
             }
 
@@ -1362,7 +1363,8 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
     if ( aCurrentCommand == nullptr || g_strcmp0( aCurrentCommand, aCommand ) != 0 )
     {
-        bool bOldHasSubmenu = g_lo_menu_get_submenu_from_item_in_section(pMenu, nSection, nItemPos) != nullptr;
+        GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section(pMenu, nSection, nItemPos);
+        bool bOldHasSubmenu = pSubMenuModel != nullptr;
         bSubMenuAddedOrRemoved = bOldHasSubmenu != bIsSubmenu;
         if (bSubMenuAddedOrRemoved)
         {
@@ -1386,6 +1388,8 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
             g_lo_menu_set_action_and_target_value_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand, pTarget );
             pTarget = nullptr;
         }
+        if (bOldHasSubmenu)
+            g_object_unref(pSubMenuModel);
 
         g_free( aItemCommand );
     }
