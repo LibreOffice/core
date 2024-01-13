@@ -539,7 +539,6 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
     bool bRefetch = true;
-    Reference<XRow> xRow;
     sal_Int32 i = 1;
     // first the set values
     for (auto const& columnName : *m_pColumnNames)
@@ -585,7 +584,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
         m_aKeyIter = m_aKeyMap.find(nBookmark);
         assert(m_aKeyIter != m_aKeyMap.end());
         m_aKeyIter->second.second.first = 2;
-        m_aKeyIter->second.second.second = xRow;
+        m_aKeyIter->second.second.second.clear();
         copyRowValue(_rInsertRow,m_aKeyIter->second.first,nBookmark);
         tryRefetch(_rInsertRow,bRefetch);
     }
