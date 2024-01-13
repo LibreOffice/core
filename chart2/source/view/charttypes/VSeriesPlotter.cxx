@@ -2340,9 +2340,9 @@ const ROrderPair pairList[] = {
 sal_Int32 VSeriesPlotter::getRenderOrder() const
 {
     OUString aChartType = m_xChartTypeModel->getChartType();
-    for (size_t n = 0; n < sizeof(pairList); ++n) {
-        if (aChartType.equalsIgnoreAsciiCase(pairList[n].chartName)) {
-            return pairList[n].renderOrder;
+    for (const auto& elem : pairList) {
+        if (aChartType.equalsIgnoreAsciiCase(elem.chartName)) {
+            return elem.renderOrder;
         }
     }
     SAL_WARN("chart2", "Unsupported chart type in getRenderOrder()");
