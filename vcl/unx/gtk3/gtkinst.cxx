@@ -15500,7 +15500,10 @@ public:
         GtkTreePath* end_path;
 
         if (!gtk_tree_view_get_visible_range(m_pTreeView, &start_path, &end_path))
+        {
+            g_object_thaw_notify(G_OBJECT(m_pTreeModel));
             return;
+        }
 
         GtkInstanceTreeIter aGtkIter(nullptr);
         gtk_tree_model_get_iter(m_pTreeModel, &aGtkIter.iter, start_path);
