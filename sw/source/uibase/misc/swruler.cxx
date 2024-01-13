@@ -85,6 +85,7 @@ SwCommentRuler::SwCommentRuler(SwViewShell* pViewSh, vcl::Window* pParent, SwEdi
     : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle | WB_HSCROLL)
     , mpViewShell(pViewSh)
     , mpSwWin(pWin)
+    , mbIsDrag(false)
     , mbIsHighlighted(false)
     , maFadeTimer("sw::SwCommentRuler maFadeTimer")
     , mnFadeRate(0)
