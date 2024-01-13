@@ -467,7 +467,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                     SfxStyleSheet* pParent = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pStyle->GetParent(), pStyle->GetFamily() ));
                     DBG_ASSERT( pParent, "Parent not found!" );
                     rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_SBASEDON );
-                    nNumber = aStyleSheetToIdMap.find(pParent)->second;
+                    auto iter = aStyleSheetToIdMap.find(pParent);
+                    assert(iter != aStyleSheetToIdMap.end());
+                    nNumber = iter->second;
                     rOutput.WriteNumberAsString( nNumber );
                 }
 
@@ -479,7 +481,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
                 DBG_ASSERT( pNext, "Next not found!" );
                 rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_SNEXT );
-                nNumber = aStyleSheetToIdMap.find(pNext)->second;
+                auto iter = aStyleSheetToIdMap.find(pNext);
+                assert(iter != aStyleSheetToIdMap.end());
+                nNumber = iter->second;
                 rOutput.WriteNumberAsString( nNumber );
 
                 // Name of the template...
@@ -526,7 +530,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         {
             // Number of template
             rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_S );
-            sal_uInt32 nNumber = aStyleSheetToIdMap.find(pNode->GetStyleSheet())->second;
+            auto iter = aStyleSheetToIdMap.find(pNode->GetStyleSheet());
+            assert(iter != aStyleSheetToIdMap.end());
+            sal_uInt32 nNumber = iter->second;
             rOutput.WriteNumberAsString( nNumber );
 
             // All Attribute
