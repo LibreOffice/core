@@ -599,7 +599,7 @@ void AbstractSwFieldDlg_Impl::SetText( const OUString& rStr )
 bool AbstractSwFieldDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
 {
     auto xDlg = m_xDlg;
-    return SfxTabDialogController::runAsync(m_xDlg, [=](sal_Int32 nResult){
+    return SfxTabDialogController::runAsync(m_xDlg, [rCtx, xDlg=std::move(xDlg)](sal_Int32 nResult){
         xDlg->Close();
         if (rCtx.isSet())
             rCtx.maEndDialogFn(nResult);
