@@ -20343,6 +20343,7 @@ public:
                 bFindButtonTextRenderer = false;
             }
         }
+        g_list_free(cells);
 
         // Seeing as GtkCellRendererPixbuf no longer takes a surface, then insert our own replacement
         // to render that instead here
