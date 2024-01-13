@@ -1235,6 +1235,13 @@ void Shell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWh );
             }
             break;
+            case SID_TOGGLE_COMMENT:
+            {
+                // Only available in a ModulWindow if the document can be edited
+                if (pCurWin && (!dynamic_cast<ModulWindow*>(pCurWin.get()) || pCurWin->IsReadOnly()))
+                    rSet.DisableItem(nWh);
+            }
+            break;
             case SID_GOTOLINE:
             {
                 // if this is not a module window hide the

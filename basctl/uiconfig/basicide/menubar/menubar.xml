@@ -55,6 +55,7 @@
             <menu:menuitem menu:id=".uno:Paste"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
+            <menu:menuitem menu:id=".uno:ToggleComment"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
@@ -177,4 +178,3 @@
         </menu:menupopup>
     </menu:menu>
 </menu:menubar>
-

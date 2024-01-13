@@ -1066,6 +1066,12 @@ void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
             GetDispatcher()->Execute(SID_GOTOLINE);
         }
         break;
+
+        case SID_TOGGLE_COMMENT:
+        {
+            GetEditView()->ToggleComment();
+        }
+        break;
     }
 }
 

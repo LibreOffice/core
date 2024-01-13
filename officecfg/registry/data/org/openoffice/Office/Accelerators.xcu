@@ -371,6 +371,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
     </node>
     <node oor:name="Modules">
       <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
+        <node oor:name="C_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:ToggleComment</value>
+          </prop>
+        </node>
         <node oor:name="F5" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>

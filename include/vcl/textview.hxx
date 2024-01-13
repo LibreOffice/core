@@ -222,6 +222,9 @@ public:
 
     bool                IndentBlock();
     bool                UnindentBlock();
+
+    // Used in the Basic IDE to toggle comment on a block of code
+    void                ToggleComment();
 };
 
 #endif

@@ -670,6 +670,7 @@ class SvxZoomItem;
 #define SID_BASICIDE_WATCH                  TypedWhichId<SfxBoolItem>( SID_BASICIDE_START + 55 )
 #define SID_BASICIDE_STACK                  TypedWhichId<SfxBoolItem>( SID_BASICIDE_START + 56 )
 #define SID_BASICIDE_COLOR_SCHEME_DLG       ( SID_BASICIDE_START + 57 )
+#define SID_TOGGLE_COMMENT                  ( SID_BASICIDE_START + 58 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
 #define SID_OPTIONS_SECURITY                ( SID_BASICIDE_START + 863)
 

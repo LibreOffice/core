@@ -2393,6 +2393,22 @@ SfxBoolItem ShowLines SID_SHOWLINES
     GroupId = SfxGroupId::Macro;
 ]
 
+SfxVoidItem ToggleComment SID_TOGGLE_COMMENT
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Macro;
+]
 
 SfxVoidItem RunMacro SID_RUNMACRO
 ()

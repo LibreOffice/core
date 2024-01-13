@@ -688,6 +688,12 @@ shell basctl_Shell
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
     ]
+
+    SID_TOGGLE_COMMENT
+    [
+        StateMethod = GetState;
+        ExecMethod  = ExecuteGlobal;
+    ]
 }
 
 interface BasicIDEDocument

@@ -18,6 +18,11 @@
           <value xml:lang="en-US">Line Numbers</value>
         </prop>
       </node>
+      <node oor:name=".uno:ToggleComment" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Comment</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertFormRadio" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Form Option Button</value>

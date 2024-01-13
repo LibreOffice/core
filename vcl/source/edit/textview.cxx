@@ -20,6 +20,7 @@
 #include <memory>
 #include <i18nutil/searchopt.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/string_view.hxx>
 #include <utility>
 #include <vcl/textview.hxx>
 #include <vcl/texteng.hxx>
@@ -2232,6 +2233,182 @@ bool TextView::IndentBlock()
 bool TextView::UnindentBlock()
 {
     return ImpIndentBlock( false );
+}
+
+void TextView::ToggleComment()
+{
+    /* To determines whether to add or remove comment markers, the rule is:
+     * - If any of the lines in the selection does not start with a comment character "'"
+     *   or "REM" then the selection is commented
+     * - Otherwise, the selection is uncommented (i.e. if all of the lines start with a
+     *   comment marker "'" or "REM")
+     * - Empty lines, or lines with only blank spaces or tabs are ignored
+     */
+
+    TextEngine* pEngine = GetTextEngine();
+    TextSelection aSel = GetSelection();
+    sal_uInt32 nStartPara = aSel.GetStart().GetPara();
+    sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
+
+    // True = Comment character will be added; False = Comment marker will be removed
+    bool bAddCommentChar = false;
+
+    // Indicates whether any change has been made
+    bool bChanged = false;
+
+    // Indicates whether the selection is downwards (normal) or upwards (reversed)
+    bool bSelReversed = false;
+
+    if (nEndPara < nStartPara)
+    {
+        std::swap(nStartPara, nEndPara);
+        bSelReversed = true;
+    }
+
+    for (sal_uInt32 n = nStartPara; n <= nEndPara; n++)
+    {
+        OUString sText = pEngine->GetText(n).trim();
+
+        // Empty lines or lines with only blank spaces and tabs are ignored
+        if (sText.isEmpty())
+            continue;
+
+        if (!sText.startsWith("'") && !sText.startsWithIgnoreAsciiCase("REM"))
+        {
+            bAddCommentChar = true;
+            break;
+        }
+
+        // Notice that a REM comment is only actually a comment if:
+        // a) There is no subsequent character or
+        // b) The subsequent character is a blank space or a tab
+        OUString sRest;
+        if (sText.startsWithIgnoreAsciiCase("REM", &sRest))
+        {
+            if (sRest.getLength() > 0 && !sRest.startsWith(" ") && !sRest.startsWith("\t"))
+            {
+                bAddCommentChar = true;
+                break;
+            }
+        }
+    }
+
+    if (bAddCommentChar)
+    {
+        // For each line, determine the first position where there is a character that is not
+        // a blank space or a tab; the comment marker will be the smallest such position
+        size_t nCommentPos = std::string::npos;
+
+        for (sal_uInt32 n = nStartPara; n <= nEndPara; n++)
+        {
+            OUString sText = pEngine->GetText(n);
+            std::u16string_view sLine(sText);
+            sal_uInt32 nCharPos = sLine.find_first_not_of(u" \t");
+
+            // Update the position where to place the comment marker
+            if (nCharPos < nCommentPos)
+                nCommentPos = nCharPos;
+
+            // If the comment position is zero, then there's no more need to keep searching
+            if (nCommentPos == 0)
+                break;
+        }
+
+        // Insert the comment marker in all lines (except empty lines)
+        for (sal_uInt32 n = nStartPara; n <= nEndPara; n++)
+        {
+            OUString sText = pEngine->GetText(n);
+            std::u16string_view sLine(sText);
+            if (o3tl::trim(sLine).length() > 0)
+            {
+                pEngine->ImpInsertText(TextPaM(n, nCommentPos), "' ");
+                bChanged = true;
+            }
+        }
+    }
+    else
+    {
+        // For each line, find the first comment marker and remove it
+        for (sal_uInt32 nPara = nStartPara; nPara <= nEndPara; nPara++)
+        {
+            OUString sText = pEngine->GetText(nPara);
+            if (!sText.isEmpty())
+            {
+                // Determine the position of the comment marker and check whether it's
+                // a single quote "'" or a "REM" comment
+                sal_Int32 nQuotePos = sText.indexOf("'");
+                sal_Int32 nRemPos = sText.toAsciiUpperCase().indexOf("REM");
+
+                // An empty line or a line with only blank spaces or tabs needs to be skipped
+                if (nQuotePos == -1 && nRemPos == -1)
+                    continue;
+
+                // nRemPos only refers to a comment if the subsequent character is a blank space or tab
+                const sal_Int32 nRemSub = nRemPos + 3;
+                if (nRemPos != -1 && nRemPos < sText.getLength() - 3 &&
+                    sText.indexOf(" ", nRemSub) != nRemSub &&
+                    sText.indexOf("\t", nRemSub) != nRemSub)
+                {
+                    nRemPos = -1;
+                }
+
+                // True = comment uses single quote; False = comment uses REM
+                bool bQuoteComment = true;
+
+                // Start and end positions to be removed
+                sal_Int32 nStartPos = nQuotePos;
+                sal_Int32 nEndPos = nStartPos + 1;
+
+                if (nQuotePos == -1)
+                    bQuoteComment = false;
+                else if (nRemPos != -1 && nRemPos < nQuotePos)
+                    bQuoteComment = false;
+
+                if (!bQuoteComment)
+                {
+                    nStartPos = nRemPos;
+                    nEndPos = nStartPos + 3;
+                }
+
+                // Check if the next character is a blank space or a tab
+                if (sText.indexOf(" ", nEndPos) == nEndPos || sText.indexOf("\t", nEndPos) == nEndPos)
+                    nEndPos++;
+
+                // Remove the comment marker
+                pEngine->ImpDeleteText(TextSelection(TextPaM(nPara, nStartPos), TextPaM(nPara, nEndPos)));
+                bChanged = true;
+            }
+        }
+    }
+
+    // Update selection if there was a selection in the first place
+    if (bChanged)
+    {
+        TextPaM aNewStart;
+        if (!bSelReversed)
+            aNewStart = TextPaM(nStartPara, std::min(aSel.GetStart().GetIndex(),
+                                                     pEngine->GetText(nStartPara).getLength()));
+        else
+            aNewStart = TextPaM(nStartPara, std::min(aSel.GetEnd().GetIndex(),
+                                                     pEngine->GetText(nEndPara).getLength()));
+
+        if (HasSelection())
+        {
+            TextPaM aNewEnd;
+            if (!bSelReversed)
+                aNewEnd = TextPaM(nEndPara, pEngine->GetText(nEndPara).getLength());
+            else
+                aNewEnd = TextPaM(nEndPara, pEngine->GetText(nStartPara).getLength());
+
+            TextSelection aNewSel(aNewStart, aNewEnd);
+            ImpSetSelection(aNewSel);
+        }
+        else
+        {
+            TextSelection aNewSel(aNewStart, aNewStart);
+            ImpSetSelection(aNewSel);
+        }
+    }
 }
 
 
