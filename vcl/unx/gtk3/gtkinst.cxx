@@ -11097,10 +11097,16 @@ private:
             gtk_main_do_event(pKeyEvent);
 
             GdkEvent *pTriggerEvent = gtk_get_current_event();
+            bool bEventOwnership = true;
             if (!pTriggerEvent)
+            {
                 pTriggerEvent = pKeyEvent;
+                bEventOwnership = false;
+            }
 
             gtk_menu_popup_at_widget(m_pMenu, pWidget, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+            if (bEventOwnership)
+                gdk_event_free(pTriggerEvent);
 
             gdk_event_free(pKeyEvent);
         }
@@ -11118,6 +11124,7 @@ private:
             {
                 gdk_event_get_button(pEvent, &nButton);
                 nTime = gdk_event_get_time(pEvent);
+                gdk_event_free(pEvent);
             }
             else
             {
@@ -11459,8 +11466,12 @@ public:
             gtk_main_do_event(pKeyEvent);
 
             GdkEvent *pTriggerEvent = gtk_get_current_event();
+            bool bEventOwnership = true;
             if (!pTriggerEvent)
+            {
                 pTriggerEvent = pKeyEvent;
+                bEventOwnership = false;
+            }
 
             bool bSwapForRTL = SwapForRTL(pWidget);
 
@@ -11478,6 +11489,8 @@ public:
                 else
                     gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_EAST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
             }
+            if (bEventOwnership)
+                gdk_event_free(pTriggerEvent);
 
             gdk_event_free(pKeyEvent);
         }
@@ -11500,6 +11513,7 @@ public:
                 if (!gdk_event_get_button(pEvent, &nButton))
                     nButton = 0;
                 nTime = gdk_event_get_time(pEvent);
+                gdk_event_free(pEvent);
             }
             else
             {
@@ -14136,6 +14150,8 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GdkEvent *pEvent = gtk_get_current_event();
         m_bChangedByMouse = pEvent && categorizeEvent(pEvent) == VclInputFlags::MOUSE;
+        if (pEvent)
+            gdk_event_free(pEvent);
 #else
         //TODO maybe iterate over gtk_widget_observe_controllers looking for a motion controller
 #endif
