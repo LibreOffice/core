@@ -216,11 +216,12 @@ void ScZoomSliderWnd::dispose()
 
 ScZoomSlider::ScZoomSlider(css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider,
                            sal_uInt16 nCurrentZoom)
-    : mnCurrentZoom( nCurrentZoom ),
-      mnMinZoom( 10 ),
-      mnMaxZoom( 400 ),
-      mbOmitPaint( false ),
-      m_xDispatchProvider(std::move(xDispatchProvider))
+    : mnSliderLength(0)
+    , mnCurrentZoom(nCurrentZoom)
+    , mnMinZoom(10)
+    , mnMaxZoom(400)
+    , mbOmitPaint(false)
+    , m_xDispatchProvider(std::move(xDispatchProvider))
 {
     maSliderButton      = Image(StockImage::Yes, RID_SVXBMP_SLIDERBUTTON);
     maIncreaseButton    = Image(StockImage::Yes, RID_SVXBMP_SLIDERINCREASE);
