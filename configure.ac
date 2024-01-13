@@ -4696,6 +4696,11 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     else
         with_system_zxing=no
     fi
+    if test "$with_system_poppler" = "yes"; then
+        AC_MSG_ERROR([--with-system-poppler conflicts with --enable-dbgutil])
+    else
+        with_system_poppler=no
+    fi
     # As mixing system libwps and non-system libnumbertext or vice versa likely causes trouble (see
     # 603074c5f2b84de8a24593faf807da784b040625 "Pass _GLIBCXX_DEBUG into external/libwps" and the
     # mail thread starting at <https://gcc.gnu.org/ml/gcc/2018-05/msg00057.html> "libstdc++: ODR
