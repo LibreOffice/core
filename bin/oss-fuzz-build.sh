@@ -46,6 +46,8 @@ make
 print_stamp 1 prepare '$OUT'
 
 pushd instdir/program
+# skip last 14 bytes of 1st, and first 85 of 2nd to just skip the
+# xml tags to merge these into a single xml file
 head -c -14 services.rdb  > templateservices.rdb
 tail -c +85 ./services/services.rdb >> templateservices.rdb
 for a in *fuzzer; do

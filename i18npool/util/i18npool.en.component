@@ -143,6 +143,10 @@
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextCircledNumber">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_CASE"
+      constructor="com_sun_star_i18n_Transliteration_IGNORE_CASE_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.SENTENCE_CASE">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
