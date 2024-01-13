@@ -831,6 +831,7 @@ bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
         pImage = gtk_image_new_from_gicon(pIcon);
 #endif
         g_object_unref(pIcon);
+        g_bytes_unref(pBytes);
     }
 
     GtkWidget* pButton = AddButton(pImage);
