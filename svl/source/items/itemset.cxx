@@ -329,7 +329,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     SfxItemPool* pMasterPool(rPool.GetMasterPool());
     assert(nullptr != pMasterPool);
     SfxItemPool* pTargetPool(pMasterPool);
-    while (!pTargetPool->IsInRange(nWhich))
+    while (pTargetPool && !pTargetPool->IsInRange(nWhich))
         pTargetPool = pTargetPool->GetSecondaryPool();
 
     // if this goes wrong, an Item with invalid ID for this pool is
