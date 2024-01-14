@@ -273,7 +273,6 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_csv_dialog \
 	UITest_external_links \
 	UITest_statistics \
-	UITest_solver \
 	UITest_goalSeek \
 	UITest_protect \
 	UITest_sc_options \
@@ -295,6 +294,12 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_function_wizard \
 	UITest_manual_tests \
 ))
+
+ifneq ($(or $(ENABLE_LPSOLVE),$(ENABLE_COINMP)),)
+$(eval $(call gb_Module_add_uicheck_targets,sc,\
+	UITest_solver \
+))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
