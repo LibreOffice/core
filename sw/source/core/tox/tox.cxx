@@ -156,7 +156,7 @@ bool SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
     // content), but we came to the point that it's only safe to say
     // instances are equal when same instance -> fallback to ptr compare.
     // NOTE: Do *not* use areSfxPoolItemPtrsEqual here, with DBG_UTIL
-    //   active the contol/test code there would again call operator==
+    //   active the control/test code there would again call operator==
     return this == &rAttr;
 }
 
