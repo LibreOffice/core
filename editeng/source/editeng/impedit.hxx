@@ -344,8 +344,7 @@ protected:
     void HideDDCursor();
 
     void ImplDrawHighlightRect(OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly, bool bLOKCalcRTL);
-    tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags,
-            sal_Int32& nTextPortionStart, const ParaPortion* pParaPortion) const;
+    tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const;
 
 public:
                     ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow );
@@ -643,7 +642,7 @@ private:
 
     void                ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreUndoCheck = false );
     void                TextModified();
-    void                CalcHeight( ParaPortion* pPortion );
+    void                CalcHeight(ParaPortion& rParaPortion);
 
     void                InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge = false );
     void                ResetUndoManager();
@@ -656,10 +655,10 @@ private:
     std::tuple<const ParaPortion*, const EditLine*, tools::Long> GetPortionAndLine(Point aDocPos);
     EditPaM             GetPaM( Point aDocPos, bool bSmart = true );
     bool IsTextPos(const Point& rDocPos, sal_uInt16 nBorder);
-    tools::Long GetXPos(const ParaPortion* pParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
-    tools::Long GetPortionXOffset(const ParaPortion* pParaPortion, EditLine const& rLine, sal_Int32 nTextPortion) const;
-    sal_Int32 GetChar(const ParaPortion* pParaPortion, EditLine const& rLine, tools::Long nX, bool bSmart = true);
-    Range GetLineXPosStartEnd(const ParaPortion* pParaPortion, EditLine const& rLine) const;
+    tools::Long GetXPos(ParaPortion const& rParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
+    tools::Long GetPortionXOffset(ParaPortion const& rParaPortion, EditLine const& rLine, sal_Int32 nTextPortion) const;
+    sal_Int32 GetChar(ParaPortion const& rParaPortion, EditLine const& rLine, tools::Long nX, bool bSmart = true);
+    Range GetLineXPosStartEnd(ParaPortion const& rParaPortion, EditLine const& rLine) const;
 
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
@@ -678,17 +677,17 @@ private:
     tools::Long calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem);
     bool CreateLines(sal_Int32 nPara, sal_uInt32 nStartPosY);
 
-    void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion );
-    bool                FinishCreateLines( ParaPortion* pParaPortion );
-    void                CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rStartPos /*, sal_Bool bCreateBlockPortions */ );
-    void                RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nStartPos, sal_Int32 nNewChars );
-    sal_Int32           SplitTextPortion( ParaPortion* pParaPortion, sal_Int32 nPos,  EditLine* pCurLine = nullptr );
+    void                CreateAndInsertEmptyLine(ParaPortion& rParaPortion);
+    bool                FinishCreateLines(ParaPortion& rParaPortion);
+    void                CreateTextPortions(ParaPortion& rParaPortion, sal_Int32& rStartPos);
+    void                RecalcTextPortion(ParaPortion& rParaPortion, sal_Int32 nStartPos, sal_Int32 nNewChars);
+    sal_Int32           SplitTextPortion(ParaPortion& rParaPortion, sal_Int32 nPos,  EditLine* pCurLine = nullptr);
     void                SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut = nullptr );
     void                RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics, SvxFont& rFont );
     void                CheckAutoPageSize();
 
-    void                ImpBreakLine( ParaPortion* pParaPortion, EditLine& rLine, TextPortion const * pPortion, sal_Int32 nPortionStart, tools::Long nRemainingWidth, bool bCanHyphenate );
-    void                ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine& rLine, tools::Long nRemainingSpace );
+    void                ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, TextPortion const * pPortion, sal_Int32 nPortionStart, tools::Long nRemainingWidth, bool bCanHyphenate);
+    void                ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, tools::Long nRemainingSpace );
     EditPaM             ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, bool bBackward = false );
     EditPaM             ImpDeleteSelection(const EditSelection& rCurSel);
     EditPaM             ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs = true );
@@ -744,7 +743,7 @@ private:
 
     bool                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_Int32 nStartPos,
                                                 sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray );
-    void                ImplExpandCompressedPortions(EditLine& rLine, ParaPortion* pParaPortion, tools::Long nRemainingWidth);
+    void                ImplExpandCompressedPortions(EditLine& rLine, ParaPortion& rParaPortion, tools::Long nRemainingWidth);
 
     void                ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, sal_Int32 nIndex);
     static LanguageType ImplCalcDigitLang(LanguageType eCurLang);
@@ -1025,7 +1024,7 @@ public:
     sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth( bool bIgnoreExtraSpace);
     sal_uInt32      CalcParaWidth( sal_Int32 nParagraph, bool bIgnoreExtraSpace );
-    sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine const& rLine, bool bIgnoreExtraSpace);
+    sal_uInt32      CalcLineWidth(ParaPortion const& rPortion, EditLine const& rLine, bool bIgnoreExtraSpace);
     sal_Int32       GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32       GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
     void            GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
@@ -1052,7 +1051,7 @@ public:
     }
 
     tools::Rectangle       PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE );
-    tools::Rectangle GetEditCursor(const ParaPortion* pPortion, EditLine const& rLine, sal_Int32 nIndex, GetCursorFlags nFlags);
+    tools::Rectangle GetEditCursor(ParaPortion const& rPortion, EditLine const& rLine, sal_Int32 nIndex, GetCursorFlags nFlags);
 
     bool            IsModified() const { return maEditDoc.IsModified(); }
     void            SetModifyFlag(bool b) { maEditDoc.SetModified( b ); }

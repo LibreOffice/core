@@ -184,10 +184,9 @@ private:
         const EditSelection& rCurSelection,
         sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
 
-    EDITENG_DLLPRIVATE tools::Long GetXPos(
-        const ParaPortion* pParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
+    EDITENG_DLLPRIVATE tools::Long GetXPos(ParaPortion const& rParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
 
-    EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(const ParaPortion* pParaPortion, EditLine const& rLine) const;
+    EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(ParaPortion const& rParaPortion, EditLine const& rLine) const;
 
     EDITENG_DLLPRIVATE InternalEditStatus& GetInternalEditStatus();
 

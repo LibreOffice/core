@@ -576,7 +576,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 nEndIndex = nStartIndex;
 
             tools::Rectangle aTmpRect(pEditEngine->pImpEditEngine->GetEditCursor(
-                &rInfo.rPortion, *rInfo.pLine, nStartIndex, GetCursorFlags::NONE));
+                rInfo.rPortion, *rInfo.pLine, nStartIndex, GetCursorFlags::NONE));
             const Size aLineOffset = pEditEngine->pImpEditEngine->getTopLeftDocOffset(rInfo.aArea);
             aTmpRect.Move(0, aLineOffset.Height());
 
@@ -595,7 +595,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' position
             if (!bPartOfLine)
             {
-                Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(&rInfo.rPortion, *rInfo.pLine);
+                Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(rInfo.rPortion, *rInfo.pLine);
                 aTmpRect.SetLeft(aLineXPosStartEnd.Min());
                 aTmpRect.SetRight(aLineXPosStartEnd.Max());
                 aTmpRect.Move(aLineOffset.Width(), 0);
@@ -616,8 +616,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
                     DBG_ASSERT(nTmpEndIndex > nTmpStartIndex, "DrawSelectionXOR, Start >= End?");
 
-                    tools::Long nX1 = pEditEngine->GetXPos(&rInfo.rPortion, *rInfo.pLine, nTmpStartIndex, true);
-                    tools::Long nX2 = pEditEngine->GetXPos(&rInfo.rPortion, *rInfo.pLine, nTmpEndIndex);
+                    tools::Long nX1 = pEditEngine->GetXPos(rInfo.rPortion, *rInfo.pLine, nTmpStartIndex, true);
+                    tools::Long nX2 = pEditEngine->GetXPos(rInfo.rPortion, *rInfo.pLine, nTmpEndIndex);
 
                     aTmpRect.SetLeft(std::min(nX1, nX2));
                     aTmpRect.SetRight(std::max(nX1, nX2));
@@ -1103,8 +1103,7 @@ boost::property_tree::ptree getHyperlinkPropTree(const OUString& sText, const OU
 
 } // End of anon namespace
 
-tools::Rectangle ImpEditView::ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags, sal_Int32& nTextPortionStart,
-        const ParaPortion* pParaPortion) const
+tools::Rectangle ImpEditView::ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const
 {
     tools::Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nShowCursorFlags );
     if ( !IsInsertMode() && !aEditSelection.HasRange() )
@@ -1115,8 +1114,8 @@ tools::Rectangle ImpEditView::ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nS
             aEditCursor.SetLeft( pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left() );
             aEditCursor.SetRight( aEditCursor.Left() );
 
-            sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
-            const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
+            sal_Int32 nTextPortion = rParaPortion.GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
+            const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[nTextPortion];
             if ( rTextPortion.GetKind() == PortionKind::TAB )
             {
                 aEditCursor.AdjustRight(rTextPortion.GetSize().Width() );
@@ -1163,7 +1162,7 @@ tools::Rectangle ImpEditView::GetEditCursor() const
         nShowCursorFlags |= GetCursorFlags::PreferPortionStart;
     }
 
-    return ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, pParaPortion);
+    return ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, *pParaPortion);
 }
 
 void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
@@ -1210,7 +1209,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         nShowCursorFlags |= GetCursorFlags::PreferPortionStart;
     }
 
-    tools::Rectangle aEditCursor = ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, pParaPortion);
+    tools::Rectangle aEditCursor = ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, *pParaPortion);
 
     if ( bGotoCursor  ) // && (!pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() ) )
     {

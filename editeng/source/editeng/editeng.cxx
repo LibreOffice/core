@@ -865,16 +865,14 @@ EditSelection EditEngine::SelectWord(
     return pImpEditEngine->SelectWord(rCurSelection, nWordType);
 }
 
-tools::Long EditEngine::GetXPos(
-        const ParaPortion* pParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart) const
+tools::Long EditEngine::GetXPos(ParaPortion const& rParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart) const
 {
-    return pImpEditEngine->GetXPos(pParaPortion, rLine, nIndex, bPreferPortionStart);
+    return pImpEditEngine->GetXPos(rParaPortion, rLine, nIndex, bPreferPortionStart);
 }
 
-Range EditEngine::GetLineXPosStartEnd(
-        const ParaPortion* pParaPortion, EditLine const& rLine) const
+Range EditEngine::GetLineXPosStartEnd(ParaPortion const& rParaPortion, EditLine const& rLine) const
 {
-    return pImpEditEngine->GetLineXPosStartEnd(pParaPortion, rLine);
+    return pImpEditEngine->GetLineXPosStartEnd(rParaPortion, rLine);
 }
 
 bool EditEngine::IsFormatted() const
