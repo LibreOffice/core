@@ -553,12 +553,10 @@ SwPosFlyFrames SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for(SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                SwFrameFormat *pFly;
-                if (bDrawAlso || pAnchoredObj->DynCastFlyFrame())
-                    pFly = pAnchoredObj->GetFrameFormat();
-                else
+                if (!bDrawAlso && !pAnchoredObj->DynCastFlyFrame())
                     continue;
 
+                SwFrameFormat* pFly = pAnchoredObj->GetFrameFormat();
                 const SwFormatAnchor& rAnchor = pFly->GetAnchor();
                 if ((RndStdIds::FLY_AT_PARA != rAnchor.GetAnchorId()) &&
                     (RndStdIds::FLY_AT_FLY  != rAnchor.GetAnchorId()) &&
