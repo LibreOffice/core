@@ -87,9 +87,11 @@ class SC_DLLPUBLIC CellAttributeHolder final
 public:
     CellAttributeHolder(const ScPatternAttr* pScPatternAttr = nullptr, bool bPassingOwnership = false);
     CellAttributeHolder(const CellAttributeHolder& rHolder);
+    CellAttributeHolder(CellAttributeHolder&& rHolder) noexcept;
     ~CellAttributeHolder();
 
-    const CellAttributeHolder& operator=(const CellAttributeHolder& rHolder);
+    CellAttributeHolder& operator=(const CellAttributeHolder& rHolder);
+    CellAttributeHolder& operator=(CellAttributeHolder&& rHolder);
     bool operator==(const CellAttributeHolder& rHolder) const;
 
     const ScPatternAttr* getScPatternAttr() const { return mpScPatternAttr; }
