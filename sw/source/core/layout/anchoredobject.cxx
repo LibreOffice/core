@@ -32,7 +32,6 @@
 #include <layouter.hxx>
 #include <osl/diagnose.h>
 #include <flyfrms.hxx>
-#include <dcontact.hxx>
 
 using namespace ::com::sun::star;
 
