@@ -286,12 +286,12 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
                     // that anchored object is correctly positioned.
                     pAnchoredObj->ClearCharRectAndTopOfLine();
                     pAnchoredObj->SetCurrRelPos( Point( 0, 0 ) );
-                    if ( pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
-                            == RndStdIds::FLY_AS_CHAR )
+                    const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+                    if (pObjFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
                     {
                         pAnchoredObj->AnchorFrame()
                                 ->Prepare( PrepareHint::FlyFrameAttributesChanged,
-                                           &(pAnchoredObj->GetFrameFormat()) );
+                                           pObjFormat );
                     }
                     if ( pFly != nullptr )
                     {
@@ -4432,8 +4432,8 @@ tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
                 {
                     // OD 30.09.2003 #i18732# - only objects, which follow
                     // the text flow have to be considered.
-                    const SwFrameFormat& rFrameFormat = pAnchoredObj->GetFrameFormat();
-                    bool bFollowTextFlow = rFrameFormat.GetFollowTextFlow().GetValue();
+                    const SwFrameFormat* pFrameFormat = pAnchoredObj->GetFrameFormat();
+                    bool bFollowTextFlow = pFrameFormat->GetFollowTextFlow().GetValue();
                     bool bIsFarAway = pAnchoredObj->GetObjRect().Top() != FAR_AWAY;
                     const SwPageFrame* pPageFrm = pTmp->FindPageFrame();
                     bool bIsAnchoredToTmpFrm = false;
@@ -4441,14 +4441,14 @@ tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
                         bIsAnchoredToTmpFrm = pAnchoredObj->GetPageFrame() == pPageFrm ||
                         (pPageFrm->GetFormatPage().GetPhyPageNum() == pAnchoredObj->GetPageFrame()->GetFormatPage().GetPhyPageNum() + 1);
                     const bool bConsiderObj =
-                        (rFrameFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) &&
+                        (pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) &&
                         bIsFarAway &&
                         bFollowTextFlow && bIsAnchoredToTmpFrm;
-                    bool bWrapThrough = rFrameFormat.GetSurround().GetValue() == text::WrapTextMode_THROUGH;
-                    bool bInBackground = !rFrameFormat.GetOpaque().GetValue();
+                    bool bWrapThrough = pFrameFormat->GetSurround().GetValue() == text::WrapTextMode_THROUGH;
+                    bool bInBackground = !pFrameFormat->GetOpaque().GetValue();
                     // Legacy render requires in-background setting, the new mode does not.
                     bool bConsiderFollowTextFlow = bInBackground
-                                                   || !rFrameFormat.getIDocumentSettingAccess().get(
+                                                   || !pFrameFormat->getIDocumentSettingAccess().get(
                                                        DocumentSettingId::USE_FORMER_TEXT_WRAPPING);
                     if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough && bConsiderFollowTextFlow)
                     {
@@ -4460,7 +4460,7 @@ tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
 
                     if ( bConsiderObj )
                     {
-                        const SwFormatFrameSize &rSz = rFrameFormat.GetFrameSize();
+                        const SwFormatFrameSize &rSz = pFrameFormat->GetFrameSize();
                         if( !rSz.GetHeightPercent() )
                         {
                             const SwTwips nDistOfFlyBottomToAnchorTop =
@@ -5413,7 +5413,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                     // from its anchor frame.
                     bool bVertPosDepOnAnchor( true );
                     {
-                        SwFormatVertOrient aVert( pAnchoredObj->GetFrameFormat().GetVertOrient() );
+                        SwFormatVertOrient aVert( pAnchoredObj->GetFrameFormat()->GetVertOrient() );
                         switch ( aVert.GetRelationOrient() )
                         {
                             case text::RelOrientation::PAGE_FRAME:
@@ -5516,7 +5516,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                         if ( pTabFrame &&
                              !( pTabFrame->IsFollow() &&
                                 pTabFrame->FindMaster()->IsRebuildLastLine() ) &&
-                            (pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
+                            (pAnchoredObj->GetFrameFormat()->GetAnchor().GetAnchorId()
                                                             != RndStdIds::FLY_AS_CHAR))
                         {
                             SwPageFrame* pPageFrame = pAnchoredObj->GetPageFrame();
@@ -5538,7 +5538,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                         // #i52904# - re-introduce direct move
                         // of drawing objects
                         const bool bDirectMove =
-                                static_cast<const SwDrawFrameFormat&>(pAnchoredObj->GetFrameFormat()).IsPosAttrSet() &&
+                                static_cast<const SwDrawFrameFormat*>(pAnchoredObj->GetFrameFormat())->IsPosAttrSet() &&
                                 bVertPosDepOnAnchor &&
                                 !pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos();
                         if ( bDirectMove )
@@ -5796,8 +5796,8 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 const SwFrame* pAnch = pAnchoredObj->GetAnchorFrame();
                 if ( (bConsiderWrapOnObjPos && IsAnLower( pAnch )) || (!bConsiderWrapOnObjPos && aTmp.Overlaps( aRect )) )
                 {
-                    const SwFrameFormat& rAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
-                    const SwFormatSurround &rSur = rAnchoredObjFrameFormat.GetSurround();
+                    const SwFrameFormat* pAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
+                    const SwFormatSurround &rSur = pAnchoredObjFrameFormat->GetSurround();
 
                     if ( bConsiderWrapOnObjPos || css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
                     {
@@ -5817,7 +5817,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                         if ( bConsiderWrapOnObjPos ||
                              !IsAnLower( pAnch ) ||
                              pAnchoredObj->IsTmpConsiderWrapInfluence() ||
-                             !rAnchoredObjFrameFormat.GetFollowTextFlow().GetValue() )
+                             !pAnchoredObjFrameFormat->GetFollowTextFlow().GetValue() )
                         {
                             bVertDir = false;
                             break;

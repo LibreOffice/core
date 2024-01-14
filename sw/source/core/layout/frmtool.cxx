@@ -1025,7 +1025,7 @@ void SwContentNotify::ImplDestroy()
         SwSortedObjs* pObjs = pMasterFrame->GetDrawObjs();
         for (SwAnchoredObject* pAnchoredObj : *pObjs)
         {
-            if ( pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
+            if ( pAnchoredObj->GetFrameFormat()->GetAnchor().GetAnchorId()
                     == RndStdIds::FLY_AT_CHAR )
             {
                 pAnchoredObj->CheckCharRectAndTopOfLine( !pMasterFrame->IsEmpty() );
@@ -2835,7 +2835,7 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
         // #115759# - remove also drawing objects from page
         else if ( auto pDrawObj = dynamic_cast<SwAnchoredDrawObject*>( pObj) )
         {
-            if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            if (pObj->GetFrameFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
                 if (SwPageFrame *pPg = pObj->GetPageFrame())
                     pPg->RemoveDrawObjFromPage( *pDrawObj );
@@ -2996,7 +2996,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
         // #115759# - remove also drawing objects from page
         else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
         {
-            if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            if (pObj->GetFrameFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
                 pObj->InvalidateObjPos();
                 _pPage->AppendDrawObjToPage(

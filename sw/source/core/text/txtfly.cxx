@@ -162,7 +162,7 @@ SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                             const bool bRight )
 {
     SwRect aRet;
-    const SwFrameFormat* pFormat = &(pAnchoredObj->GetFrameFormat());
+    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
     bool bHandleContour(pFormat->GetSurround().IsContour());
 
     if(!bHandleContour)
@@ -594,7 +594,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
             if (pFly)
             {
                 // #i68520#
-                const SwFormatSurround& rSur = pAnchoredObjTmp->GetFrameFormat().GetSurround();
+                const SwFormatSurround& rSur = pAnchoredObjTmp->GetFrameFormat()->GetSurround();
 
                 // OD 24.01.2003 #106593# - correct clipping of fly frame area.
                 // Consider that fly frame background/shadow can be transparent
@@ -655,8 +655,8 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         if( ( bInFootnote || bInFooterOrHeader ) && m_bTopRule )
         {
             // #i26945#
-            const SwFrameFormat& rFrameFormat = _pAnchoredObj->GetFrameFormat();
-            const SwFormatAnchor& rNewA = rFrameFormat.GetAnchor();
+            const SwFrameFormat* pFrameFormat = _pAnchoredObj->GetFrameFormat();
+            const SwFormatAnchor& rNewA = pFrameFormat->GetAnchor();
             if (RndStdIds::FLY_AT_PAGE == rNewA.GetAnchorId())
             {
                 if ( bInFootnote )
@@ -664,7 +664,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
                 if ( bInFooterOrHeader )
                 {
-                    const SwFormatVertOrient& aVert( rFrameFormat.GetVertOrient() );
+                    const SwFormatVertOrient& aVert(pFrameFormat->GetVertOrient());
                     bool bVertPrt = aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
                             aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA;
                     if( bVertPrt )
@@ -710,13 +710,14 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             {
                 // Within chained Flys we only avoid Lower
                 // #i68520#
-                const SwFormatChain &rChain = mpCurrAnchoredObj->GetFrameFormat().GetChain();
+                const SwFrameFormat* pCurObjFormat = mpCurrAnchoredObj->GetFrameFormat();
+                const SwFormatChain& rChain = pCurObjFormat->GetChain();
                 if ( !rChain.GetPrev() && !rChain.GetNext() )
                 {
                     // #i26945#
-                    const SwFormatAnchor& rNewA = _pAnchoredObj->GetFrameFormat().GetAnchor();
+                    const SwFormatAnchor& rNewA = _pAnchoredObj->GetFrameFormat()->GetAnchor();
                     // #i68520#
-                    const SwFormatAnchor& rCurrA = mpCurrAnchoredObj->GetFrameFormat().GetAnchor();
+                    const SwFormatAnchor& rCurrA = pCurObjFormat->GetAnchor();
 
                     // If <mpCurrAnchoredObj> is anchored as character, its content
                     // does not wrap around pNew
@@ -768,9 +769,9 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         if ( bEvade )
         {
             // #i26945#
-            if (_pAnchoredObj->HasFrameFormat())
+            if (const SwFrameFormat* pAnchoredObjFormat = _pAnchoredObj->GetFrameFormat())
             {
-                const SwFormatAnchor& rNewA = _pAnchoredObj->GetFrameFormat().GetAnchor();
+                const SwFormatAnchor& rNewA = pAnchoredObjFormat->GetAnchor();
                 OSL_ENSURE(RndStdIds::FLY_AS_CHAR != rNewA.GetAnchorId(),
                            "Don't call GetTop with a FlyInContentFrame");
                 if (RndStdIds::FLY_AT_PAGE == rNewA.GetAnchorId())
@@ -926,7 +927,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
                    pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() ) ||
-                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat().GetFollowTextFlow().GetValue() )
+                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat()->GetFollowTextFlow().GetValue() )
                )
             {
                 continue;
@@ -964,13 +965,13 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                     mpAnchoredObjList->insert( aInsPosIter, pAnchoredObj );
                 }
 
-                const SwFormatSurround &rFlyFormat = pAnchoredObj->GetFrameFormat().GetSurround();
+                const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+                const SwFormatSurround& rFlyFormat = pObjFormat->GetSurround();
                 // #i68520#
                 if ( rFlyFormat.IsAnchorOnly() &&
                      pAnchoredObj->GetAnchorFrame() == GetMaster() )
                 {
-                    const SwFormatVertOrient &rTmpFormat =
-                                    pAnchoredObj->GetFrameFormat().GetVertOrient();
+                    const SwFormatVertOrient &rTmpFormat = pObjFormat->GetVertOrient();
                     if( text::VertOrientation::BOTTOM != rTmpFormat.GetVertOrient() )
                         m_nMinBottom = ( aRectFnSet.IsVert() && m_nMinBottom ) ?
                                      std::min( m_nMinBottom, aBound.Left() ) :
@@ -1010,11 +1011,11 @@ SwTwips SwTextFly::CalcMinBottom() const
         for( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pDrawObj)[ i ];
-            const SwFormatSurround &rFlyFormat = pAnchoredObj->GetFrameFormat().GetSurround();
+            const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+            const SwFormatSurround& rFlyFormat = pObjFormat->GetSurround();
             if( rFlyFormat.IsAnchorOnly() )
             {
-                const SwFormatVertOrient &rTmpFormat =
-                                    pAnchoredObj->GetFrameFormat().GetVertOrient();
+                const SwFormatVertOrient &rTmpFormat = pObjFormat->GetVertOrient();
                 if( text::VertOrientation::BOTTOM != rTmpFormat.GetVertOrient() )
                 {
                     const SwRect& aBound( pAnchoredObj->GetObjRectWithSpaces() );
@@ -1130,7 +1131,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
             if ( mpCurrAnchoredObj != pAnchoredObj && aRect.Overlaps( rRect ) )
             {
                 // #i68520#
-                const SwFormat* pFormat( &(pAnchoredObj->GetFrameFormat()) );
+                const SwFormat* pFormat(pAnchoredObj->GetFrameFormat());
                 const SwFormatSurround &rSur = pFormat->GetSurround();
                 if( bAvoid )
                 {
@@ -1417,7 +1418,7 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 
 css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const
 {
-    const SwFrameFormat* pFormat = &(pAnchoredObj->GetFrameFormat());
+    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
     const SwFormatSurround &rFlyFormat = pFormat->GetSurround();
     css::text::WrapTextMode eSurroundForTextWrap = rFlyFormat.GetSurround();
 

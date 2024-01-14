@@ -318,9 +318,8 @@ class SW_DLLPUBLIC SwAnchoredObject
         void SetCurrRelPos( Point _aRelPos );
 
         // accessors to the format
-        bool HasFrameFormat() const;
-        virtual SwFrameFormat& GetFrameFormat() = 0;
-        virtual const SwFrameFormat& GetFrameFormat() const = 0;
+        virtual SwFrameFormat* GetFrameFormat() = 0;
+        virtual const SwFrameFormat* GetFrameFormat() const = 0;
 
         // accessors to the object area and its position
         virtual SwRect GetObjRect() const = 0;

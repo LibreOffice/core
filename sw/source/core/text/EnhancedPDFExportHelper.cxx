@@ -1581,7 +1581,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             {
                 const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pFrame);
                 if (pFly->GetAnchorFrame()->FindFooterOrHeader() != nullptr
-                    || pFly->GetFrameFormat().GetAttrSet().Get(RES_DECORATIVE).GetValue())
+                    || pFly->GetFrameFormat()->GetAttrSet().Get(RES_DECORATIVE).GetValue())
                 {
                     nPDFType = vcl::PDFWriter::NonStructElement;
                 }

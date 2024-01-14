@@ -1716,8 +1716,8 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
             while ( pPage->GetSortedObjs() && i< pPage->GetSortedObjs()->size() )
             {
                 // #i28701#
-                SwFrameFormat& rFormat = (*pPage->GetSortedObjs())[i]->GetFrameFormat();
-                const SwFormatAnchor &rAnch = rFormat.GetAnchor();
+                SwFrameFormat* pFormat = (*pPage->GetSortedObjs())[i]->GetFrameFormat();
+                const SwFormatAnchor &rAnch = pFormat->GetAnchor();
                 const sal_uInt16 nPg = rAnch.GetPageNum();
                 if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE) &&
                      nPg != pPage->GetPhyPageNum() )
@@ -1730,12 +1730,12 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
                         // It can move by itself. Just send a modify to its anchor attribute.
 #if OSL_DEBUG_LEVEL > 1
                         const size_t nCnt = pPage->GetSortedObjs()->size();
-                        rFormat.CallSwClientNotify(sw::LegacyModifyHint(nullptr, &rAnch));
+                        pFormat->CallSwClientNotify(sw::LegacyModifyHint(nullptr, &rAnch));
                         OSL_ENSURE( !pPage->GetSortedObjs() ||
                                 nCnt != pPage->GetSortedObjs()->size(),
                                 "Object couldn't be reattached!" );
 #else
-                        rFormat.CallSwClientNotify(sw::LegacyModifyHint(nullptr, &rAnch));
+                        pFormat->CallSwClientNotify(sw::LegacyModifyHint(nullptr, &rAnch));
 #endif
                         // Do not increment index, in this case
                         continue;
@@ -1861,19 +1861,19 @@ void SwRootFrame::ImplCalcBrowseWidth()
             {
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
-                const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
+                const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
                 const bool bFly = pAnchoredObj->DynCastFlyFrame() !=  nullptr;
                 if ((bFly && (FAR_AWAY == pAnchoredObj->GetObjRect().Width()))
-                    || rFormat.GetFrameSize().GetWidthPercent())
+                    || pFormat->GetFrameSize().GetWidthPercent())
                 {
                     continue;
                 }
 
                 tools::Long nWidth = 0;
-                switch ( rFormat.GetAnchor().GetAnchorId() )
+                switch ( pFormat->GetAnchor().GetAnchorId() )
                 {
                     case RndStdIds::FLY_AS_CHAR:
-                        nWidth = bFly ? rFormat.GetFrameSize().GetWidth() :
+                        nWidth = bFly ? pFormat->GetFrameSize().GetWidth() :
                                         pAnchoredObj->GetObjRect().Width();
                         break;
                     case RndStdIds::FLY_AT_PARA:
@@ -1885,8 +1885,8 @@ void SwRootFrame::ImplCalcBrowseWidth()
                             // at position FAR_AWAY.
                             if ( bFly )
                             {
-                                nWidth = rFormat.GetFrameSize().GetWidth();
-                                const SwFormatHoriOrient &rHori = rFormat.GetHoriOrient();
+                                nWidth = pFormat->GetFrameSize().GetWidth();
+                                const SwFormatHoriOrient &rHori = pFormat->GetHoriOrient();
                                 switch ( rHori.GetHoriOrient() )
                                 {
                                     case text::HoriOrientation::NONE:
@@ -2021,8 +2021,8 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
     for (size_t i = 0; i < pSortedObj->size(); ++i)
     {
         SwAnchoredObject *const pAnchoredObj = (*pSortedObj)[i];
-        const SwFrameFormat& rObjFormat = pAnchoredObj->GetFrameFormat();
-        const SwFormatAnchor& rAnchor = rObjFormat.GetAnchor();
+        const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+        const SwFormatAnchor& rAnchor = pObjFormat->GetAnchor();
 
         // all except from the as character anchored objects are moved
         // when processing the page frame:
@@ -2078,7 +2078,7 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
 
             // clear contour cache
-            if ( pAnchoredDrawObj->GetFrameFormat().GetSurround().IsContour() )
+            if ( pAnchoredDrawObj->GetFrameFormat()->GetSurround().IsContour() )
                 ClrContourCache( pAnchoredDrawObj->GetDrawObj() );
         }
         // #i92511#
