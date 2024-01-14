@@ -286,8 +286,8 @@ void SwFEShell::UnfloatFlyFrame()
         return;
     }
 
-    SwFrameFormat& rFlyFormat = pFly->GetFrameFormat();
-    const SwFormatContent& rContent = rFlyFormat.GetContent();
+    SwFrameFormat* pFlyFormat = pFly->GetFrameFormat();
+    const SwFormatContent& rContent = pFlyFormat->GetContent();
     const SwNodeIndex* pFlyStart = rContent.GetContentIdx();
     if (!pFlyStart)
     {
@@ -315,7 +315,7 @@ void SwFEShell::UnfloatFlyFrame()
     }
 
     SwNodeRange aRange(pFlyStart->GetNode(), SwNodeOffset(1), *pFlyEnd, SwNodeOffset(-1));
-    const SwFormatAnchor& rAnchor = rFlyFormat.GetAnchor();
+    const SwFormatAnchor& rAnchor = pFlyFormat->GetAnchor();
     SwNode* pAnchor = rAnchor.GetAnchorNode();
     if (!pAnchor)
     {
@@ -327,8 +327,8 @@ void SwFEShell::UnfloatFlyFrame()
     rIDCO.MoveNodeRange(aRange, aInsertPos.GetNode(), SwMoveFlags::CREATEUNDOOBJ);
 
     // Remove the fly frame frame.
-    IDocumentLayoutAccess& rIDLA = rFlyFormat.getIDocumentLayoutAccess();
-    rIDLA.DelLayoutFormat(&rFlyFormat);
+    IDocumentLayoutAccess& rIDLA = pFlyFormat->getIDocumentLayoutAccess();
+    rIDLA.DelLayoutFormat(pFlyFormat);
 }
 
 // Get selected fly
@@ -496,8 +496,8 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 
     // #i28701#
     SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
-    SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-    const RndStdIds nAnchorId = rFormat.GetAnchor().GetAnchorId();
+    SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+    const RndStdIds nAnchorId = pFormat->GetAnchor().GetAnchorId();
 
     if ( RndStdIds::FLY_AS_CHAR == nAnchorId )
         return aRet;
@@ -505,9 +505,9 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     bool bFlyFrame = dynamic_cast<SwVirtFlyDrawObj *>(pObj) != nullptr;
 
     bool bTextBox = false;
-    if (rFormat.Which() == RES_DRAWFRMFMT)
+    if (pFormat->Which() == RES_DRAWFRMFMT)
     {
-        bTextBox = SwTextBoxHelper::isTextBox(&rFormat, RES_DRAWFRMFMT, pObj);
+        bTextBox = SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT, pObj);
     }
 
     SwFlyFrame* pFly = nullptr;
@@ -534,7 +534,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     {
         auto pFlyFormat
             = dynamic_cast<const SwFlyFrameFormat*>(SwTextBoxHelper::getOtherTextBoxFormat(
-                &rFormat, RES_DRAWFRMFMT, pObj));
+                pFormat, RES_DRAWFRMFMT, pObj));
         if (pFlyFormat)
         {
             pFly = pFlyFormat->GetFrame();
@@ -608,7 +608,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 
             if ( bMoveIt || (nAnchorId == RndStdIds::FLY_AT_CHAR) )
             {
-                SwFormatAnchor aAnch( rFormat.GetAnchor() );
+                SwFormatAnchor aAnch( pFormat->GetAnchor() );
                 switch ( nAnchorId )
                 {
                     case RndStdIds::FLY_AT_PARA:
@@ -665,24 +665,24 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                     // anchor attribute is change and re-create them afterwards.
                     {
                         std::unique_ptr<SwHandleAnchorNodeChg> pHandleAnchorNodeChg;
-                        SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(&rFormat) );
+                        SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(pFormat) );
                         if ( pFlyFrameFormat )
                         {
                             pHandleAnchorNodeChg.reset(
                                 new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                         }
-                        rFormat.GetDoc()->SetAttr( aAnch, rFormat );
-                        if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT,
+                        pFormat->GetDoc()->SetAttr( aAnch, *pFormat );
+                        if (SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT,
                             pObj))
                         {
                             if (SdrObjList* pObjList = pObj->getChildrenOfSdrObject())
                             {
                                 for (const rtl::Reference<SdrObject>& pChild : *pObjList)
-                                    SwTextBoxHelper::changeAnchor(&rFormat, pChild.get());
+                                    SwTextBoxHelper::changeAnchor(pFormat, pChild.get());
                             }
                             else
                                 SwTextBoxHelper::syncFlyFrameAttr(
-                                    rFormat, rFormat.GetAttrSet(), pObj);
+                                    *pFormat, pFormat->GetAttrSet(), pObj);
                         }
                     }
                     // #i28701# - no call of method

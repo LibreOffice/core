@@ -1576,7 +1576,7 @@ bool SwTextFrame::IsEmptyWithSplitFly() const
     }
 
     // It has a split fly anchored to it.
-    if (pFlyFrame->GetFrameFormat().GetVertOrient().GetPos() >= 0)
+    if (pFlyFrame->GetFrameFormat()->GetVertOrient().GetPos() >= 0)
     {
         return false;
     }

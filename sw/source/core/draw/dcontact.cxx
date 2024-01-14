@@ -497,7 +497,7 @@ sal_uInt32 SwFlyDrawContact::GetOrdNumForNewRef(const SwFlyFrame* pFly,
         {
             for (SwAnchoredObject const*const pAnchoredObj : *pObjs)
             {
-                if (&pAnchoredObj->GetFrameFormat() == pDrawFormat)
+                if (pAnchoredObj->GetFrameFormat() == pDrawFormat)
                 {
                     return pAnchoredObj->GetDrawObj()->GetOrdNum() + 1;
                 }
@@ -1239,7 +1239,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 // #i31698# - determine layout direction
                 // via draw frame format.
                 SwFrameFormat::tLayoutDir eLayoutDir =
-                                pAnchoredDrawObj->GetFrameFormat().GetLayoutDir();
+                                pAnchoredDrawObj->GetFrameFormat()->GetLayoutDir();
                 // use geometry of drawing object
                 tools::Rectangle aObjRect( rObj.GetSnapRect() );
                 // If drawing object is a member of a group, the adjustment
@@ -1971,7 +1971,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                                 {
                                     for (const SwAnchoredObject* pAnchoredObj : *pObjs)
                                     {
-                                        if (&pAnchoredObj->GetFrameFormat() == pFlyFormat)
+                                        if (pAnchoredObj->GetFrameFormat() == pFlyFormat)
                                         {
                                             SdrPage* pDrawPage = pAnchoredObj->GetDrawObj()->getSdrPageFromSdrObject();
                                             if (pDrawPage)
@@ -2364,7 +2364,7 @@ void SwDrawVirtObj::AddToDrawingPage(SwFrame const& rAnchorFrame)
         {
             for (SwAnchoredObject const*const pAnchoredObj : *pObjs)
             {
-                if (&pAnchoredObj->GetFrameFormat() == pFlyFormat)
+                if (pAnchoredObj->GetFrameFormat() == pFlyFormat)
                 {
                     assert(dynamic_cast<SwFlyFrame const*>(pAnchoredObj));
 

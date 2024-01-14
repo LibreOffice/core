@@ -420,7 +420,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 if (pAnchoredObj->RestartLayoutProcess()
                     && !pAnchoredObj->IsTmpConsiderWrapInfluence())
                 {
-                    SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat().GetAnchor());
+                    SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat()->GetAnchor());
                     assert(rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA);
                     TextFrameIndex const nAnchor(GetTextFrame()->MapModelToViewPos(*rAnchor.GetContentAnchor()));
                     if (pFollow->GetOffset() <= nAnchor

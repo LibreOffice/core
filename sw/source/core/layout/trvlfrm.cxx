@@ -70,8 +70,9 @@ namespace {
             const SwVirtFlyDrawObj* pObj =
                                 static_cast<const SwVirtFlyDrawObj*>(aIter());
             const SwAnchoredObject* pAnchoredObj = GetUserCall( aIter() )->GetAnchoredObj( aIter() );
-            const SwFormatSurround& rSurround = pAnchoredObj->GetFrameFormat().GetSurround();
-            const SvxOpaqueItem& rOpaque = pAnchoredObj->GetFrameFormat().GetOpaque();
+            const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+            const SwFormatSurround& rSurround = pObjFormat->GetSurround();
+            const SvxOpaqueItem& rOpaque = pObjFormat->GetOpaque();
             bool bInBackground = ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH ) && !rOpaque.GetValue();
 
             bool bBackgroundMatches = bInBackground == bSearchBackground;
@@ -2633,7 +2634,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
                     continue;
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
-                SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat().GetAnchor());
+                SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat()->GetAnchor());
                 const SwPosition* anchoredAt = rAnchor.GetContentAnchor();
                 bool inSelection = (
                             anchoredAt != nullptr

@@ -1131,18 +1131,18 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 // #i28701# - consider changed type of
                 // <SwSortedObjs> entries
                 SwAnchoredObject* pObj = (*GetDrawObjs())[i];
-                const SwFrameFormat& rFormat = pObj->GetFrameFormat();
+                const SwFrameFormat* pFormat = pObj->GetFrameFormat();
                 const bool bFly = pObj->DynCastFlyFrame() !=  nullptr;
                 if ((bFly && (FAR_AWAY == pObj->GetObjRect().Width()))
-                    || rFormat.GetFrameSize().GetWidthPercent())
+                    || pFormat->GetFrameSize().GetWidthPercent())
                 {
                     continue;
                 }
 
-                if ( RndStdIds::FLY_AS_CHAR == rFormat.GetAnchor().GetAnchorId() )
+                if ( RndStdIds::FLY_AS_CHAR == pFormat->GetAnchor().GetAnchorId() )
                 {
                     nMinWidth = std::max( nMinWidth,
-                                     bFly ? rFormat.GetFrameSize().GetWidth()
+                                     bFly ? pFormat->GetFrameSize().GetWidth()
                                           : pObj->GetObjRect().Width() );
                 }
             }
