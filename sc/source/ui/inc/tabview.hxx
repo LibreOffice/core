@@ -264,6 +264,8 @@ private:
 
     DECL_STATIC_LINK(ScTabView, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
+    void            ImplTabChanged(bool bSameTabButMoved);
+
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = nullptr,
                                         const SCROW* pPosY = nullptr );

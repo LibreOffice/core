@@ -52,6 +52,7 @@
 #include <vcl/settings.hxx>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Calc.hxx>
 
 using namespace com::sun::star;
@@ -277,8 +278,17 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
     pWin->SetAutoSpellContext(mpSpellCheckCxt);
 }
 
-void ScTabView::TabChanged( bool bSameTabButMoved )
+void ScTabView::ImplTabChanged(bool bSameTabButMoved)
 {
+    // For kit ignore invalidations during tab change
+    ScTabViewShell* pViewShell = aViewData.GetViewShell();
+    SfxLokCallbackInterface* pCallback = pViewShell->getLibreOfficeKitViewCallback();
+    pViewShell->setLibreOfficeKitViewCallback(nullptr);
+    comphelper::ScopeGuard aOutputGuard(
+        [pViewShell, pCallback] {
+            pViewShell->setLibreOfficeKitViewCallback(pCallback);
+        });
+
     if (pDrawView)
     {
         DrawDeselectAll();      // end also text edit mode
@@ -327,6 +337,11 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
             break;
         }
     }
+}
+
+void ScTabView::TabChanged( bool bSameTabButMoved )
+{
+    ImplTabChanged(bSameTabButMoved);
 
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -342,11 +357,6 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
     ss << aDocSize.Width() << ", " << aDocSize.Height();
     OString sRect = ss.str().c_str();
     ScTabViewShell* pViewShell = aViewData.GetViewShell();
-
-    // Invalidate first
-    tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
-    pViewShell->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, aViewData.GetTabNo(), 0);
-
     ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pViewShell->GetCurrentDocument());
     SfxLokHelper::notifyDocumentSizeChanged(pViewShell, sRect, pModel, false);
 }

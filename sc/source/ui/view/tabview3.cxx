@@ -63,6 +63,7 @@
 #include <markdata.hxx>
 #include <formula/FormulaCompiler.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <output.hxx>
 
@@ -2033,7 +2034,18 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     SyncGridWindowMapModeFromDrawMapMode();
     SetNewVisArea();
 
-    PaintGrid();
+    // disable invalidations for kit during tab switching
+    {
+        ScTabViewShell* pViewShell = aViewData.GetViewShell();
+        SfxLokCallbackInterface* pCallback = pViewShell->getLibreOfficeKitViewCallback();
+        pViewShell->setLibreOfficeKitViewCallback(nullptr);
+        comphelper::ScopeGuard aOutputGuard(
+            [pViewShell, pCallback] {
+                pViewShell->setLibreOfficeKitViewCallback(pCallback);
+            });
+        PaintGrid();
+    }
+
     PaintTop();
     PaintLeft();
     PaintExtras();

@@ -141,7 +141,7 @@ public:
     void testVbaRangeCopyPaste();
     void testInvalidationLoop();
     void testPageDownInvalidation();
-    void testSheetChangeInvalidation();
+    void testSheetChangeNoInvalidation();
     void testInsertDeletePageInvalidation();
     void testGetRowColumnHeadersInvalidation();
     void testJumpHorizontallyInvalidation();
@@ -213,7 +213,7 @@ public:
     CPPUNIT_TEST(testVbaRangeCopyPaste);
     CPPUNIT_TEST(testInvalidationLoop);
     CPPUNIT_TEST(testPageDownInvalidation);
-    CPPUNIT_TEST(testSheetChangeInvalidation);
+    CPPUNIT_TEST(testSheetChangeNoInvalidation);
     CPPUNIT_TEST(testInsertDeletePageInvalidation);
     CPPUNIT_TEST(testGetRowColumnHeadersInvalidation);
     CPPUNIT_TEST(testJumpHorizontallyInvalidation);
@@ -2011,13 +2011,12 @@ void ScTiledRenderingTest::testPageDownInvalidation()
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(15, 15, 1230, 225), aView1.m_aInvalidations[0]);
 }
 
-void ScTiledRenderingTest::testSheetChangeInvalidation()
+void ScTiledRenderingTest::testSheetChangeNoInvalidation()
 {
     const bool oldPartInInvalidation = comphelper::LibreOfficeKit::isPartInInvalidation();
     comphelper::LibreOfficeKit::setPartInInvalidation(true);
 
     ScModelObj* pModelObj = createDoc("two_sheets.ods");
-    ScDocument* pDoc = pModelObj->GetDocument();
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
@@ -2033,19 +2032,8 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
-    const ScSheetLimits& rLimits = pDoc->GetSheetLimits();
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1280 * rLimits.GetMaxColCount(),
-                                          256 * rLimits.GetMaxRowCount()),
-                         aView1.m_aInvalidations[0]);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[1]);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidationsParts.size());
-    CPPUNIT_ASSERT_EQUAL(pModelObj->getPart(), aView1.m_aInvalidationsParts[0]);
-    CPPUNIT_ASSERT_EQUAL(pModelObj->getPart(), aView1.m_aInvalidationsParts[1]);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidationsMode.size());
-    CPPUNIT_ASSERT_EQUAL(pModelObj->getEditMode(), aView1.m_aInvalidationsMode[0]);
-    CPPUNIT_ASSERT_EQUAL(pModelObj->getEditMode(), aView1.m_aInvalidationsMode[1]);
+    // switching sheets should trigger no invalidations
+    CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
     comphelper::LibreOfficeKit::setPartInInvalidation(oldPartInInvalidation);
 }
 
@@ -2072,7 +2060,7 @@ void ScTiledRenderingTest::testInsertDeletePageInvalidation()
     dispatchCommand(mxComponent, ".uno:Insert", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(6), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
     CPPUNIT_ASSERT_EQUAL(2, pModelObj->getParts());
 
@@ -2085,7 +2073,7 @@ void ScTiledRenderingTest::testInsertDeletePageInvalidation()
     dispatchCommand(mxComponent, ".uno:Remove", aArgs2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(5), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
     CPPUNIT_ASSERT_EQUAL(1, pModelObj->getParts());
 }
