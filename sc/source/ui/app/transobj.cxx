@@ -312,28 +312,34 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             ScAddress aPos(nCol, nRow, nTab);
 
             const ScPatternAttr* pPattern = m_pDoc->GetPattern( nCol, nRow, nTab );
-            ScTabEditEngine aEngine( *pPattern, m_pDoc->GetEditPool(), m_pDoc.get() );
-            ScRefCellValue aCell(*m_pDoc, aPos);
-            if (aCell.getType() == CELLTYPE_EDIT)
+            if (pPattern)
             {
-                const EditTextObject* pObj = aCell.getEditText();
-                aEngine.SetTextCurrentDefaults(*pObj);
-            }
-            else
-            {
-                SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
-                sal_uInt32 nNumFmt = pPattern->GetNumberFormat(pFormatter);
-                const Color* pColor;
-                OUString aText = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, *m_pDoc);
-                if (!aText.isEmpty())
-                    aEngine.SetTextCurrentDefaults(aText);
-            }
+                ScTabEditEngine aEngine(*pPattern, m_pDoc->GetEditPool(), m_pDoc.get());
+                ScRefCellValue aCell(*m_pDoc, aPos);
+                if (aCell.getType() == CELLTYPE_EDIT)
+                {
+                    const EditTextObject* pObj = aCell.getEditText();
+                    aEngine.SetTextCurrentDefaults(*pObj);
+                }
+                else
+                {
+                    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+                    sal_uInt32 nNumFmt = pPattern->GetNumberFormat(pFormatter);
+                    const Color* pColor;
+                    OUString aText
+                        = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, *m_pDoc);
+                    if (!aText.isEmpty())
+                        aEngine.SetTextCurrentDefaults(aText);
+                }
 
-            bOK = SetObject( &aEngine,
-                    ((nFormat == SotClipboardFormatId::RTF) ? SCTRANS_TYPE_EDIT_RTF :
-                     ((nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT) ?
-                      SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT : SCTRANS_TYPE_EDIT_BIN)),
-                    rFlavor );
+                bOK = SetObject(&aEngine,
+                                ((nFormat == SotClipboardFormatId::RTF)
+                                     ? SCTRANS_TYPE_EDIT_RTF
+                                     : ((nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT)
+                                            ? SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT
+                                            : SCTRANS_TYPE_EDIT_BIN)),
+                                rFlavor);
+            }
         }
         else if ( ScImportExport::IsFormatSupported( nFormat ) || nFormat == SotClipboardFormatId::RTF
             || nFormat == SotClipboardFormatId::RICHTEXT )
