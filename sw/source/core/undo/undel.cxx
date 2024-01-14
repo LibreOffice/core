@@ -1152,14 +1152,25 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         SwNode& start(*rDoc.GetNodes()[m_nSttNode +
             ((m_bDelFullPara || !rDoc.GetNodes()[m_nSttNode]->IsTextNode() || pInsNd)
                  ? 0 : 1)]);
-        // don't include end node in the range: it may have been merged already
-        // by the start node, or it may be merged by one of the moved nodes,
-        // but if it isn't merged, its current frame(s) should be good...
-        SwNode& end(*rDoc.GetNodes()[ m_bDelFullPara
-            ? delFullParaEndNode
-            // tdf#147310 SwDoc::DeleteRowCol() may delete whole table - end must be node following table!
-            : (m_nEndNode + (rDoc.GetNodes()[m_nSttNode]->IsTableNode() && rDoc.GetNodes()[m_nEndNode]->IsEndNode() ? 1 : 0))]);
-        ::MakeFrames(&rDoc, start, end);
+        // tdf#158740 fix crash by checking the end node's index
+        // I don't know why m_nEndNode is larger than the size of the node
+        // array, but adjusting m_nEndNode to the last element in the node
+        // array stops the crashing.
+        SwNodeOffset nCount(rDoc.GetNodes().Count());
+        if (nCount > SwNodeOffset(0))
+        {
+            if (m_nEndNode > nCount - 1)
+                m_nEndNode = nCount - 1;
+
+            // don't include end node in the range: it may have been merged already
+            // by the start node, or it may be merged by one of the moved nodes,
+            // but if it isn't merged, its current frame(s) should be good...
+            SwNode& end(*rDoc.GetNodes()[ m_bDelFullPara
+                ? delFullParaEndNode
+                // tdf#147310 SwDoc::DeleteRowCol() may delete whole table - end must be node following table!
+                : (m_nEndNode + (rDoc.GetNodes()[m_nSttNode]->IsTableNode() && rDoc.GetNodes()[m_nEndNode]->IsEndNode() ? 1 : 0))]);
+            ::MakeFrames(&rDoc, start, end);
+        }
     }
 
     if (pMovedNode)
