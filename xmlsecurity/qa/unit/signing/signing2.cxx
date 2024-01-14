@@ -128,9 +128,21 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
         CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetScriptingSignatureState());
     }
 
-    saveAndReload("writer8", "password");
     {
-        // test standard ODF 1.2/1.3/1.4 encryption
+        // test the old, standard ODF 1.2/1.3/1.4 encryption
+        Resetter resetter([]() {
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+            return pBatch->commit();
+        });
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
+        pBatch->commit();
+
+        saveAndReload("writer8", "password");
+
         xmlDocUniquePtr pXmlDoc = parseExport("META-INF/manifest.xml");
         assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, "1.3");
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
@@ -174,18 +186,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
     }
 
     {
-        Resetter resetter([]() {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-            return pBatch->commit();
-        });
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-        pBatch->commit();
-
-        // store it experimental - reload
+        // store it with new wholesome ODF extended encryption - reload
         saveAndReload("writer8", "password");
 
         // test wholesome ODF extended encryption
@@ -253,18 +254,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
     }
 
     {
-        Resetter resetter([]() {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-            return pBatch->commit();
-        });
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-        pBatch->commit();
-
-        // store it experimental - reload
+        // store it with new wholesome ODF extended encryption - reload
         saveAndReload("writer8", "password");
 
         // test wholesome ODF extended encryption
@@ -321,9 +311,21 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
         CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetScriptingSignatureState());
     }
 
-    saveAndReload("writer8", "password");
     {
-        // test standard ODF 1.2/1.3/1.4 encryption
+        // test the old, standard ODF 1.2/1.3/1.4 encryption
+        Resetter resetter([]() {
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+            return pBatch->commit();
+        });
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
+        pBatch->commit();
+
+        saveAndReload("writer8", "password");
+
         xmlDocUniquePtr pXmlDoc = parseExport("META-INF/manifest.xml");
         assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, "1.3");
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,

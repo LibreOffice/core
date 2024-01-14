@@ -170,8 +170,7 @@ bool SfxObjectShell::QuerySlotExecutable( sal_uInt16 /*nSlotId*/ )
 
 static bool UseODFWholesomeEncryption(SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
 {
-    return nODFVersion == SvtSaveOptions::ODFSVER_LATEST_EXTENDED
-        && officecfg::Office::Common::Misc::ExperimentalMode::get();
+    return nODFVersion == SvtSaveOptions::ODFSVER_LATEST_EXTENDED;
 }
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
