@@ -781,7 +781,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")
     uno::Reference<beans::XPropertySet> paragraphProperties(paraEnum->nextElement(), uno::UNO_QUERY);
     assert( paragraphProperties.is() );
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(paragraphProperties, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), getProperty<Color>(paragraphProperties, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(paragraphProperties, "FillColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89791, "tdf89791.docx")

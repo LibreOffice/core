@@ -868,7 +868,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf144092_emptyShapeTextProps)
     // check text properties of empty cells
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("CharColor") >>= aColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aColor);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("CharColor") >>= aColor;

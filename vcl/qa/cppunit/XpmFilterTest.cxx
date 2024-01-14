@@ -67,10 +67,10 @@ CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_1bit)
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
-    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), aBitmap.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aBitmap.GetPixelColor(1, 1));
     CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aBitmap.GetPixelColor(8, 8));
-    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), aBitmap.GetPixelColor(9, 9));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(9, 9));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

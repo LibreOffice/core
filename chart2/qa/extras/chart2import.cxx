@@ -637,7 +637,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc889755)
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.070000000000000007));
     CPPUNIT_ASSERT_EQUAL(Color(0x404040), Color(aColorStops[1].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 0.080000000000000002));
-    CPPUNIT_ASSERT_EQUAL(Color(0xffffff),  Color(aColorStops[2].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE,  Color(aColorStops[2].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc882383)

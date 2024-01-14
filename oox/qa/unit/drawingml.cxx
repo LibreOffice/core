@@ -201,11 +201,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.35, aColorStops[2].getStopOffset(), 1E-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.58, aColorStops[3].getStopOffset(), 1E-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.00, aColorStops[4].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), Color(aColorStops[0].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT_EQUAL(Color(0x9e9e9e), Color(aColorStops[1].getStopColor()));
     CPPUNIT_ASSERT_EQUAL(Color(0x363636), Color(aColorStops[2].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), Color(aColorStops[3].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), Color(aColorStops[4].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[3].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[4].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
