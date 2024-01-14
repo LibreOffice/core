@@ -373,6 +373,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         pBox->NbcSetStyleSheet(nullptr, true);
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
+        pBox->SetDecorative(true);
         pBox->SetLayer( SC_LAYER_INTERN );
         pPage->InsertObject( pBox.get() );
         pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pBox ) );
@@ -418,6 +419,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     pArrow->NbcSetLogicRect(tools::Rectangle::Normalize(aStartPos,aEndPos));  //TODO: needed ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
+    pArrow->SetDecorative(true);
     pArrow->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pArrow.get() );
     pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pArrow ) );
@@ -561,6 +563,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     pCircle->NbcSetStyleSheet(nullptr, true);
     pCircle->SetMergedItemSetAndBroadcast(rAttrSet);
 
+    pCircle->SetDecorative(true);
     pCircle->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pCircle.get() );
     pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pCircle ) );

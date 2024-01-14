@@ -65,6 +65,7 @@ public:
     void testExportFitToPage_Tdf103516();
     void testUnoCommands_Tdf120161();
     void testTdf64703_hiddenPageBreak();
+    void testTdf159068();
     void testTdf159066();
     void testTdf159065();
     void testTdf123870();
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
     CPPUNIT_TEST(testUnoCommands_Tdf120161);
     CPPUNIT_TEST(testTdf64703_hiddenPageBreak);
+    CPPUNIT_TEST(testTdf159068);
     CPPUNIT_TEST(testTdf159066);
     CPPUNIT_TEST(testTdf159065);
     CPPUNIT_TEST(testTdf123870);
@@ -396,6 +398,66 @@ void ScPDFExportTest::testTdf64703_hiddenPageBreak()
         CPPUNIT_ASSERT(hasTextInPdf("/Count 4>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
     }
+}
+
+void ScPDFExportTest::testTdf159068()
+{
+    loadFromFile(u"tdf159068.ods");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:C3
+    ScRange range1(0, 0, 0, 2, 2, 0);
+    exportToPDF(xModel, range1);
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+
+    auto nArtifact(0);
+    auto nLine(0);
+    while (true)
+    {
+        ++nLine;
+        auto const pLine = ::std::find(pStart, pEnd, '\n');
+        if (pLine == pEnd)
+        {
+            break;
+        }
+        std::string_view const line(pStart, pLine - pStart);
+        pStart = pLine + 1;
+        if (!line.empty() && line[0] != '%')
+        {
+            ::std::cerr << nLine << ": " << line << "\n ";
+            if (o3tl::starts_with(line, "/Artifact BMC"))
+                nArtifact++;
+        }
+    }
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 5 (Artifact: Header, Footer, Rectangel, DetectiveArrow, ValidationCircle)
+    // - Actual  : 2 (Artifact: Header, Footer)
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nArtifact)>(5), nArtifact);
 }
 
 void ScPDFExportTest::testTdf159066()
