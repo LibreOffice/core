@@ -2850,14 +2850,12 @@ void SwContentTree::Display( bool bActive )
     std::unique_ptr<weld::TreeIter> xOldSelEntry(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_selected(xOldSelEntry.get()))
         xOldSelEntry.reset();
-    OUString sOldSelEntryId;
     size_t nEntryRelPos = 0; // relative position to their parent
     size_t nOldEntryCount = GetEntryCount();
     sal_Int32 nOldScrollPos = 0;
     if (xOldSelEntry)
     {
         UpdateLastSelType();
-        sOldSelEntryId = m_xTreeView->get_id(*xOldSelEntry);
         nOldScrollPos = m_xTreeView->vadjustment_get_value();
         std::unique_ptr<weld::TreeIter> xParentEntry = m_xTreeView->make_iterator(xOldSelEntry.get());
         while (m_xTreeView->get_iter_depth(*xParentEntry))
@@ -3004,7 +3002,7 @@ void SwContentTree::Display( bool bActive )
                 bool bNext;
                 while ((bNext = m_xTreeView->iter_next(*xIter) && lcl_IsContent(*xIter, *m_xTreeView)))
                 {
-                    if (m_xTreeView->get_id(*xIter) == sOldSelEntryId || nPos == nEntryRelPos)
+                    if (nPos == nEntryRelPos)
                     {
                         m_xTreeView->copy_iterator(*xIter, *xSelEntry);
                         break;
