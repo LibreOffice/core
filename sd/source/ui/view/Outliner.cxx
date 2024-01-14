@@ -1596,7 +1596,7 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
     // to.
     mnPageCount = mpDrawDocument->GetSdPageCount(ePageKind);
 
-    maObjectIterator = aIterator;
+    maObjectIterator = std::move(aIterator);
     mbMatchMayExist = bMatchMayExist;
 
     // Save edit mode so that it can be restored when switching the view

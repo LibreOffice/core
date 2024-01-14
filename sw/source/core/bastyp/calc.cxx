@@ -448,12 +448,12 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                 // ...and write them back.
                 m_nListPor = nListPor;
                 m_bHasNumber = bHasNumber;
-                m_nLastLeft = nLastLeft;
-                m_nNumberValue = nNumberValue;
+                m_nLastLeft = std::move(nLastLeft);
+                m_nNumberValue = std::move(nNumberValue);
                 m_nCommandPos = nCommandPos;
                 m_eCurrOper = eCurrOper;
                 m_eCurrListOper = eCurrListOper;
-                m_sCommand = sCurrCommand;
+                m_sCommand = std::move(sCurrCommand);
             }
             else
             {

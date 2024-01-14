@@ -250,7 +250,7 @@ bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeData(SCCOLROW nPos, 
     auto [it,found] = maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2);
     if (!found)
         return false;
-    maItr = it; // cache the iterator to speed up ForwardIterator.
+    maItr = std::move(it); // cache the iterator to speed up ForwardIterator.
     rData.mnPos2 = rData.mnPos2-1; // end point is not inclusive.
     return true;
 }
