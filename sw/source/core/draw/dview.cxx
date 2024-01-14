@@ -550,7 +550,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
     {
         size_t nTmpNewPos( nNewPos );
         const SwFrameFormat* pParentFrameFormat =
-                pParentAnchoredObj ? &(pParentAnchoredObj->GetFrameFormat()) : nullptr;
+                pParentAnchoredObj ? pParentAnchoredObj->GetFrameFormat() : nullptr;
         const SdrObject* pTmpObj = pDrawPage->GetObj( nNewPos + 1 );
         while ( pTmpObj )
         {
@@ -562,7 +562,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
             const SwFlyFrame* pTmpParentObj = pTmpAnchorFrame
                                             ? pTmpAnchorFrame->FindFlyFrame() : nullptr;
             if ( pTmpParentObj &&
-                 &(pTmpParentObj->GetFrameFormat()) != pParentFrameFormat )
+                 pTmpParentObj->GetFrameFormat() != pParentFrameFormat )
             {
                 if ( bMovedForward )
                 {

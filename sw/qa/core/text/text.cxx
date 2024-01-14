@@ -767,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
     const SwSortedObjs& rSortedObjs = *pTextFrame->GetDrawObjs();
     const SwAnchoredObject* pAnchoredObject = rSortedObjs[0];
     // The content points to the start node, the next node is the graphic node.
-    SwNodeIndex aGraphicNode = *pAnchoredObject->GetFrameFormat().GetContent().GetContentIdx();
+    SwNodeIndex aGraphicNode = *pAnchoredObject->GetFrameFormat()->GetContent().GetContentIdx();
     ++aGraphicNode;
     tools::Rectangle aFlyFrame = pAnchoredObject->GetDrawObj()->GetLastBoundRect();
     Point aDocPos = aFlyFrame.Center();
