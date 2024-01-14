@@ -396,10 +396,13 @@ public:
             // tdf#120760 Send objects with behinddoc=true to the back.
             if (m_bBehindDoc && m_rDomainMapper.IsInHeaderFooter())
                 nZOrder -= SAL_MAX_INT32;
+
+            // TODO: it is possible that RTF has been wrong all along as well. Always true here?
+            const bool bLastDuplicateWins(!m_rDomainMapper.IsRTFImport()
+                || m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE);
             GraphicZOrderHelper* pZOrderHelper = m_rDomainMapper.graphicZOrderHelper();
-            bool const bOldStyle(m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE);
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER),
-                uno::Any(pZOrderHelper->findZOrder(nZOrder, bOldStyle)));
+                uno::Any(pZOrderHelper->findZOrder(nZOrder, bLastDuplicateWins)));
             pZOrderHelper->addItem(xGraphicObjectProperties, nZOrder);
         }
     }
@@ -737,14 +740,6 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_Anchor_relativeHeight:
         {
             m_pImpl->m_zOrder = nIntValue;
-
-            // Last one defined must win - opposite to what the existing code (for z-Index?) does.
-            GraphicZOrderHelper* pZOrderHelper = m_pImpl->m_rDomainMapper.graphicZOrderHelper();
-            if (pZOrderHelper->hasZOrder(m_pImpl->m_zOrder)
-                && m_pImpl->m_rGraphicImportType != GraphicImportType::IMPORT_AS_DETECTED_INLINE)
-            {
-                ++m_pImpl->m_zOrder;
-            }
         }
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc:
