@@ -466,6 +466,9 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPrintFactor */,
                             const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile)
 {
+    if (rDoc.GetMaxTableNumber() < 0)
+        return;
+
     //! evaluate nPrintFactor !!!
 
     SCTAB nTab = 0;
