@@ -13,7 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libcmis,$(LIBCMIS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libcmis,1))
 
+# 0001-cid-1545775-COPY_INSTEAD_OF_MOVE.patch is upstreamed
+
 $(eval $(call gb_UnpackedTarball_add_patches,libcmis,\
+	external/libcmis/0001-cid-1545775-COPY_INSTEAD_OF_MOVE.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

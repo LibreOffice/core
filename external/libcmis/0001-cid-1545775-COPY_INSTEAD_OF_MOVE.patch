@@ -1,0 +1,69 @@
+From ca078137dfa94664275f021c5fbf08a34f3fbc10 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 14 Jan 2024 20:41:06 +0000
+Subject: [PATCH] cid#1545775 COPY_INSTEAD_OF_MOVE
+
+and
+
+cid#1546321 COPY_INSTEAD_OF_MOVE
+cid#1546272 COPY_INSTEAD_OF_MOVE
+cid#1546287 COPY_INSTEAD_OF_MOVE
+cid#1545443 COPY_INSTEAD_OF_MOVE
+---
+ inc/libcmis/exception.hxx       |  4 ++--
+ inc/libcmis/property-type.hxx   | 10 +++++-----
+ inc/libcmis/session-factory.hxx |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/inc/libcmis/exception.hxx b/inc/libcmis/exception.hxx
+index aa42ae7..565bff0 100644
+--- a/inc/libcmis/exception.hxx
++++ b/inc/libcmis/exception.hxx
+@@ -44,8 +44,8 @@ namespace libcmis
+         public:
+             Exception( std::string message, std::string type = "runtime" ) :
+                 exception( ),
+-                m_message( message ),
+-                m_type( type )
++                m_message( std::move(message) ),
++                m_type( std::move(type) )
+             {
+             }
+ 
+diff --git a/inc/libcmis/property-type.hxx b/inc/libcmis/property-type.hxx
+index 350a7b2..e6b3779 100644
+--- a/inc/libcmis/property-type.hxx
++++ b/inc/libcmis/property-type.hxx
+@@ -102,11 +102,11 @@ namespace libcmis
+             bool isOrderable( ) { return m_orderable; }
+             bool isOpenChoice( ) { return m_openChoice; }
+ 
+-            void setId( std::string id ) { m_id = id; }
+-            void setLocalName( std::string localName ) { m_localName = localName; }
+-            void setLocalNamespace( std::string localNamespace ) { m_localNamespace = localNamespace; }
+-            void setDisplayName( std::string displayName ) { m_displayName = displayName; }
+-            void setQueryName( std::string queryName ) { m_queryName = queryName; }
++            void setId( const std::string& id ) { m_id = id; }
++            void setLocalName( const std::string& localName ) { m_localName = localName; }
++            void setLocalNamespace( const std::string& localNamespace ) { m_localNamespace = localNamespace; }
++            void setDisplayName( const std::string& displayName ) { m_displayName = displayName; }
++            void setQueryName( const std::string& queryName ) { m_queryName = queryName; }
+             void setType( Type type ) { m_type = type; }
+             void setMultiValued( bool multivalued ) { m_multiValued = multivalued; }
+             void setUpdatable( bool updatable ) { m_updatable = updatable; }
+diff --git a/inc/libcmis/session-factory.hxx b/inc/libcmis/session-factory.hxx
+index 227ac4d..1887254 100644
+--- a/inc/libcmis/session-factory.hxx
++++ b/inc/libcmis/session-factory.hxx
+@@ -111,7 +111,7 @@ namespace libcmis
+             /** Set the handler to ask the user what to do with invalid SSL certificates. If not set,
+                 every invalid certificate will raise an exception.
+               */
+-            static void setCertificateValidationHandler( CertValidationHandlerPtr handler ) { s_certValidationHandler = handler; }
++            static void setCertificateValidationHandler(const CertValidationHandlerPtr& handler ) { s_certValidationHandler = handler; }
+             static CertValidationHandlerPtr getCertificateValidationHandler( ) { return s_certValidationHandler; }
+ 
+             static void setCurlInitProtocolsFunction(CurlInitProtocolsFunction);
+-- 
+2.43.0
+
