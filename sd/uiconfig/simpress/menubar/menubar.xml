@@ -461,6 +461,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:FillShadow"/>
+      <menu:menuitem menu:id=".uno:FontWork"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AnimationEffects"/>
       <menu:menuitem menu:id=".uno:NameGroup" menu:style="text"/>

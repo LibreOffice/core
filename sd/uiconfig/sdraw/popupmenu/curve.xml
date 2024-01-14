@@ -54,6 +54,7 @@
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuitem menu:id=".uno:Dismantle"/>
   <menu:menuitem menu:id=".uno:Break"/>
+  <menu:menuitem menu:id=".uno:FontWork"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:NameGroup"/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>

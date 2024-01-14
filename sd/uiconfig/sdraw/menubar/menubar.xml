@@ -428,6 +428,7 @@
       <menu:menuitem menu:id=".uno:FormatArea"/>
       <menu:menuitem menu:id=".uno:Window3D"/>
       <menu:menuitem menu:id=".uno:FillShadow"/>
+      <menu:menuitem menu:id=".uno:FontWork"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:NameGroup" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ObjectTitleDescription" menu:style="text"/>
