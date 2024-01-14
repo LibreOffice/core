@@ -153,7 +153,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         if ( !IsNoMoveOnCheckClip() &&
              !( PositionLocked() &&
                 GetAnchorFrame()->IsInFly() &&
-                GetFrameFormat().GetFollowTextFlow().GetValue() ) )
+                GetFrameFormat()->GetFollowTextFlow().GetValue() ) )
         {
             setFrameAreaPositionValid(false);
         }
@@ -1100,7 +1100,7 @@ void SwPageFrame::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
             pFlyFrame->GetVirtDrawObj()->SetOrdNum( nNewNum );
     }
 
-    if ( RndStdIds::FLY_AS_CHAR == _rNewObj.GetFrameFormat().GetAnchor().GetAnchorId() )
+    if ( RndStdIds::FLY_AS_CHAR == _rNewObj.GetFrameFormat()->GetAnchor().GetAnchorId() )
     {
         return;
     }
@@ -1140,9 +1140,9 @@ void SwPageFrame::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
         }
         if ( GetUpper() )
         {
-            if (_rToRemoveObj.HasFrameFormat()
-                && RndStdIds::FLY_AS_CHAR
-                       != _rToRemoveObj.GetFrameFormat().GetAnchor().GetAnchorId())
+            const SwFrameFormat* pObjFormat = _rToRemoveObj.GetFrameFormat();
+            if (pObjFormat
+                && RndStdIds::FLY_AS_CHAR != pObjFormat->GetAnchor().GetAnchorId())
             {
                 static_cast<SwRootFrame*>(GetUpper())->SetSuperfluous();
                 InvalidatePage();

@@ -1673,7 +1673,7 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
                 assert(pAnchorPage);
                 if (pAnchorPage != pPage
                     && pPage->GetPhyPageNum() < pAnchorPage->GetPhyPageNum()
-                    && pObj->GetFrameFormat().GetAnchor().GetAnchorId()
+                    && pObj->GetFrameFormat()->GetAnchor().GetAnchorId()
                         != RndStdIds::FLY_AS_CHAR)
                 {
                     moved.emplace_back(pObj, pAnchorPage);
