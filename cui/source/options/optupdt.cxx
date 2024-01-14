@@ -507,7 +507,7 @@ bool SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateAvailable() {
 
 bool SvxOnlineUpdateTabPage::isMarOnlineUpdateAvailable() {
 #if HAVE_FEATURE_UPDATE_MAR
-    return officecfg::Office::Common::Misc::ExperimentalMode::get();
+    return true;
 #else
     return false;
 #endif
