@@ -169,7 +169,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
                 xListener = this;
                 m_xTitle = xNewTitle;
                 m_xDiagram = xNewDiagram;
-                m_xPageBackground = std::move(xNewPageBackground);
+                m_xPageBackground = xNewPageBackground;
                 m_xChartTypeManager = std::move(xChartTypeManager);
                 m_xXMLNamespaceMap = std::move(xXMLNamespaceMap);
             }
