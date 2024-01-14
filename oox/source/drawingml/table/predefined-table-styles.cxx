@@ -238,10 +238,6 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     ::oox::drawingml::Color firstColTextColor;
     ::oox::drawingml::Color lastRowTextColor;
     ::oox::drawingml::Color lastColTextColor;
-    ::oox::drawingml::Color band1HTextColor;
-    ::oox::drawingml::Color band1VTextColor;
-    ::oox::drawingml::Color band2HTextColor;
-    ::oox::drawingml::Color band2VTextColor;
 
     // Fill properties definitions for table parts
 
@@ -900,10 +896,11 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     pTableStyle->getFirstCol().getTextColor() = firstColTextColor;
     pTableStyle->getLastRow().getTextColor() = lastRowTextColor;
     pTableStyle->getLastCol().getTextColor() = lastColTextColor;
-    pTableStyle->getBand1H().getTextColor() = band1HTextColor;
-    pTableStyle->getBand1V().getTextColor() = band1VTextColor;
-    pTableStyle->getBand2H().getTextColor() = band2HTextColor;
-    pTableStyle->getBand2V().getTextColor() = band2VTextColor;
+
+    pTableStyle->getBand1H().getTextColor() = ::oox::drawingml::Color(); //band1HTextColor
+    pTableStyle->getBand1V().getTextColor() = ::oox::drawingml::Color(); //band1VTextColor
+    pTableStyle->getBand2H().getTextColor() = ::oox::drawingml::Color(); //band2HTextColor
+    pTableStyle->getBand2V().getTextColor() = ::oox::drawingml::Color(); //band2VTextColor
 
     pTableStyle->getBackgroundFillProperties() = pTblBgFillProperties;
     pTableStyle->getWholeTbl().getFillProperties() = pWholeTblFillProperties;
