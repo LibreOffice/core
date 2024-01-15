@@ -1096,6 +1096,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             aCurrentTab.nTabPortion = nTmpPortion;
                         }
 
+                        if (nMaxLineWidth < aCurrentTab.nTabPos && nTmpWidth != nMaxLineWidth - 1)
+                            aCurrentTab.nTabPos = nMaxLineWidth - 1;
+
                         pPortion->SetKind(PortionKind::TAB);
                         pPortion->SetExtraValue( aCurrentTab.aTabStop.GetFill() );
                         pPortion->setWidth( aCurrentTab.nTabPos - (nTmpWidth+nStartX) );
