@@ -70,15 +70,18 @@ struct UserData
     bool bIsReadOnly;
     bool bWasModified;
     OUString sPropertyPath;
+    Any aPropertyValue;
     OUString sTooltip;
     int aLineage;
     Reference<XNameAccess> aXNameAccess;
 
-    explicit UserData(OUString aPropertyPath, OUString aTooltip, bool isReadOnly, bool wasModified)
+    explicit UserData(OUString aPropertyPath, Any aPropValue, OUString aTooltip, bool isReadOnly,
+                      bool wasModified)
         : bIsPropertyPath(true)
         , bIsReadOnly(isReadOnly)
         , bWasModified(wasModified)
         , sPropertyPath(std::move(aPropertyPath))
+        , aPropertyValue(aPropValue)
         , sTooltip(std::move(aTooltip))
         , aLineage(0)
     {
@@ -187,9 +190,10 @@ IMPL_STATIC_LINK_NOARG(CuiAboutConfigTabPage, ValidNameHdl, SvxNameDialog&, bool
 
 CuiAboutConfigTabPage::~CuiAboutConfigTabPage() {}
 
-void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUString& rProp,
-                                        const OUString& rStatus, const OUString& rType,
-                                        const OUString& rValue, const OUString& rTooltip,
+void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, Any aPropertyValue,
+                                        const OUString& rProp, const OUString& rStatus,
+                                        const OUString& rType, const OUString& rValue,
+                                        const OUString& rTooltip,
                                         const weld::TreeIter* pParentEntry, bool bInsertToPrefBox,
                                         bool bIsReadOnly, bool bWasModified)
 {
@@ -197,8 +201,8 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
     if (bOnlyModified && !bWasModified)
         return;
 
-    m_vectorUserData.push_back(
-        std::make_unique<UserData>(rPropertyPath, rTooltip, bIsReadOnly, bWasModified));
+    m_vectorUserData.push_back(std::make_unique<UserData>(rPropertyPath, aPropertyValue, rTooltip,
+                                                          bIsReadOnly, bWasModified));
     if (bInsertToPrefBox)
     {
         OUString sId(weld::toId(m_vectorUserData.back().get()));
@@ -689,8 +693,9 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
             for (int j = 1; j < lineage; ++j)
                 index = sPath.indexOf("/", index + 1);
 
-            InsertEntry(sPath, sPath.copy(index + 1), item, sType, sValue.makeStringAndClear(),
-                        sTooltip, pParentEntry, !bLoadAll, bReadOnly, bWasModified);
+            InsertEntry(sPath, aNode, sPath.copy(index + 1), item, sType,
+                        sValue.makeStringAndClear(), sTooltip, pParentEntry, !bLoadAll, bReadOnly,
+                        bWasModified);
         }
     }
 }
@@ -940,10 +945,8 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             else if (sPropertyType == "string-list")
             {
                 SvxListDialog aListDialog(m_xDialog.get());
-                Reference<XNameAccess> xConfigAccess
-                    = getConfigAccess(pUserData->sPropertyPath, false);
-                Any aNode = xConfigAccess->getByName(sPropertyName);
-                uno::Sequence<OUString> aList = aNode.get<uno::Sequence<OUString>>();
+                uno::Sequence<OUString> aList
+                    = pUserData->aPropertyValue.get<uno::Sequence<OUString>>();
                 aListDialog.SetEntries(
                     comphelper::sequenceToContainer<std::vector<OUString>>(aList));
                 aListDialog.SetMode(ListMode::String);
@@ -962,6 +965,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
         if (bSaveChanges)
         {
             AddToModifiedVector(pProperty);
+            pUserData->aPropertyValue = pProperty->Value;
 
             //update listbox value.
             m_xPrefBox->set_text(*m_xScratchIter, sPropertyType, 2);
