@@ -3691,6 +3691,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76836)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf151752)
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(ScAddress(0,0,0), "66000:00");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 66000:00:00
+    // - Actual  : 464:00:00
+    CPPUNIT_ASSERT_EQUAL(OUString("66000:00:00"), m_pDoc->GetString(ScAddress(0,0,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf142186)
 {
     m_pDoc->InsertTab(0, "Test");
