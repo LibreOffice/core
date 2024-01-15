@@ -891,9 +891,21 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     }
 }
 
-OUString ScModelObj::hyperlinkInfoAtPosition(int /*x*/, int /*y*/)
+OUString ScModelObj::hyperlinkInfoAtPosition(int x, int y)
 {
-    // To be implemented..
+    if (ScViewData* pViewData = ScDocShell::GetViewData())
+    {
+        ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+        if (pGridWindow)
+        {
+            const Point point(x, y);
+            OUString name;
+            OUString url;
+            pGridWindow->GetEditUrl(point, &name, &url);
+            return url;
+        }
+    }
+
     return OUString();
 }
 
