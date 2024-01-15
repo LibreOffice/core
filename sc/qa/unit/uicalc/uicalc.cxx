@@ -1461,6 +1461,27 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154991)
     CPPUNIT_ASSERT(!pDoc->ColHidden(0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf151752)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell("A1", u"1");
+
+    goToCell("A1");
+    dispatchCommand(mxComponent, ".uno:SelectUnprotectedCells", {});
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    goToCell("B1");
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(1, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf95306)
 {
     createScDoc();
