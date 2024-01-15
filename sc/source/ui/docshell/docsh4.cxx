@@ -2207,15 +2207,58 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
             case SID_LANGUAGE_STATUS:
                 {
-                    LanguageType eLatin, eCjk, eCtl;
+                    OUString sLanguage;
+                    sal_uInt16 nLangWhich = 0;
+                    LanguageType eLatin = LANGUAGE_DONTKNOW, eCjk = LANGUAGE_DONTKNOW,
+                        eCtl = LANGUAGE_DONTKNOW;
 
-                    GetDocument().GetLanguage( eLatin, eCjk, eCtl );
-                    OUString sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
-                    if (comphelper::LibreOfficeKit::isActive()) {
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        GetDocument().GetLanguage( eLatin, eCjk, eCtl );
+                        sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
+
                         if (eLatin == LANGUAGE_NONE)
                             sLanguage += ";-";
                         else
                             sLanguage += ";" + LanguageTag(eLatin).getBcp47(false);
+                    }
+                    else if (ScTabViewShell* pViewShell = GetBestViewShell())
+                    {
+                        ScMarkData aMark = pViewShell->GetViewData().GetMarkData();
+                        SCCOL  nCol = pViewShell->GetViewData().GetCurX();
+                        SCROW  nRow = pViewShell->GetViewData().GetCurY();
+                        SCTAB  nTab = pViewShell->GetViewData().GetTabNo();
+
+                        aMark.SetMarkArea(ScRange(nCol, nRow, nTab));
+                        const ScPatternAttr* pSelAttrs = GetDocument().GetSelectionPattern(aMark);
+                        if (pSelAttrs)
+                        {
+                            const SfxItemSet& rItemSet = pSelAttrs->GetItemSet();
+                            nLangWhich = rItemSet.GetPool()->GetWhich(SID_ATTR_CHAR_LANGUAGE);
+                            if (SfxItemState::SET == rItemSet.GetItemState(nLangWhich))
+                                eLatin = static_cast<const SvxLanguageItem&>(rItemSet.Get(nLangWhich)).GetLanguage();
+
+                            nLangWhich = rItemSet.GetPool()->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE);
+                            if (SfxItemState::SET == rItemSet.GetItemState(nLangWhich))
+                                eCjk = static_cast<const SvxLanguageItem&>(rItemSet.Get(nLangWhich)).GetLanguage();
+
+                            nLangWhich = rItemSet.GetPool()->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE);
+                            if (SfxItemState::SET == rItemSet.GetItemState(nLangWhich))
+                                eCtl = static_cast<const SvxLanguageItem&>(rItemSet.Get(nLangWhich)).GetLanguage();
+
+                            if (eLatin != LANGUAGE_NONE && eLatin != LANGUAGE_DONTKNOW)
+                                sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
+                            if (eCjk != LANGUAGE_NONE && eCjk != LANGUAGE_DONTKNOW)
+                                sLanguage = SvtLanguageTable::GetLanguageString(eCjk);
+                            if (eCtl != LANGUAGE_NONE && eCtl != LANGUAGE_DONTKNOW)
+                                sLanguage = SvtLanguageTable::GetLanguageString(eCtl);
+
+                            if (sLanguage.isEmpty())
+                            {
+                                GetDocument().GetLanguage(eLatin, eCjk, eCtl);
+                                sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
+                            }
+                        }
                     }
                     rSet.Put(SfxStringItem(nWhich, sLanguage));
                 }
