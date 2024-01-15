@@ -161,10 +161,10 @@ public:
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
     void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
-    virtual void sendAction(const VclPtr<vcl::Window>& pWindow,
-                            std::unique_ptr<jsdialog::ActionDataMap> pData);
-    virtual void sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& rParentId,
-                           const OUString& rCloseId);
+    void sendAction(const VclPtr<vcl::Window>& pWindow,
+                    std::unique_ptr<jsdialog::ActionDataMap> pData);
+    void sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& rParentId,
+                   const OUString& rCloseId);
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
     void flush() { mpIdleNotify->Invoke(); }
 

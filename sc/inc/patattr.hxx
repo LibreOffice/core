@@ -125,7 +125,7 @@ public:
     ScPatternAttr(const ScPatternAttr& rPatternAttr);
     ~ScPatternAttr();
 
-    virtual bool operator==(const ScPatternAttr& rCmp) const;
+    bool operator==(const ScPatternAttr& rCmp) const;
 
     // version that allows nullptrs
     static bool areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2);

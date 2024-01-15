@@ -189,7 +189,7 @@ public:
 
     virtual void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) = 0;
 
-    virtual void dumpEmbindCppFile(FileStream& o);
+    void dumpEmbindCppFile(FileStream& o);
 
     OUString dumpHeaderDefine(FileStream& o, std::u16string_view extension) const;
 

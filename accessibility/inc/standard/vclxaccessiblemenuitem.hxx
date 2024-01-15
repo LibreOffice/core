@@ -41,7 +41,7 @@ class VCLXAccessibleMenuItem :  public cppu::ImplInheritanceHelper<
 protected:
     virtual bool            IsFocused() override;
     virtual bool            IsSelected() override;
-    virtual bool            IsCheckable();
+    bool                    IsCheckable();
     virtual bool            IsChecked() override;
 
     virtual bool            IsHighlighted() override;
