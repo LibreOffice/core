@@ -3652,7 +3652,7 @@ ScVbaRange::End( ::sal_Int32 Direction )
         // Hoping this will make sure this slot is called
         // synchronously
         SfxBoolItem sfxAsync( SID_ASYNCHRON, false );
-        aArgs.Put( sfxAsync, sfxAsync.Which() );
+        aArgs.Put( sfxAsync );
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
 
         sal_uInt16 nSID = 0;

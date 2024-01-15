@@ -373,24 +373,24 @@ void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, cons
     SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
 
     SfxBoolItem sfxCollate( SID_PRINT_COLLATE, bCollate );
-    aArgs.Put( sfxCollate, sfxCollate.Which() );
+    aArgs.Put( sfxCollate );
     SfxInt16Item sfxCopies( SID_PRINT_COPIES, nCopies );
-    aArgs.Put( sfxCopies, sfxCopies.Which() );
+    aArgs.Put( sfxCopies );
     if ( !sFileName.isEmpty() )
     {
         SfxStringItem sfxFileName( SID_FILE_NAME, sFileName);
-        aArgs.Put( sfxFileName, sfxFileName.Which() );
+        aArgs.Put( sfxFileName );
 
     }
     if (  !sRange.isEmpty() )
     {
         SfxStringItem sfxRange( SID_PRINT_PAGES, sRange );
-        aArgs.Put( sfxRange, sfxRange.Which() );
+        aArgs.Put( sfxRange );
     }
     SfxBoolItem sfxSelection( SID_SELECTION, bSelection );
-    aArgs.Put( sfxSelection, sfxSelection.Which() );
+    aArgs.Put( sfxSelection );
     SfxBoolItem sfxAsync( SID_ASYNCHRON, false );
-    aArgs.Put( sfxAsync, sfxAsync.Which() );
+    aArgs.Put( sfxAsync );
     SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
 
     if ( !pDispatcher )

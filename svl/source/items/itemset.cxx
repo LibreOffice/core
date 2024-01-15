@@ -82,7 +82,7 @@ SfxPoolItemHolder::SfxPoolItemHolder(SfxItemPool& rPool, const SfxPoolItem* pIte
     nUsedSfxPoolItemHolderCount++;
 #endif
     if (nullptr != m_pItem)
-        m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), bPassingOwnership);
+        m_pItem = implCreateItemEntry(getPool(), m_pItem, bPassingOwnership);
     if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
         getPool().registerPoolItemHolder(*this);
 }
@@ -100,7 +100,7 @@ SfxPoolItemHolder::SfxPoolItemHolder(const SfxPoolItemHolder& rHolder)
     nUsedSfxPoolItemHolderCount++;
 #endif
     if (nullptr != m_pItem)
-        m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), false);
+        m_pItem = implCreateItemEntry(getPool(), m_pItem, false);
     if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
         getPool().registerPoolItemHolder(*this);
 }
@@ -136,7 +136,7 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
     m_pItem = rHolder.m_pItem;
 
     if (nullptr != m_pItem)
-        m_pItem = implCreateItemEntry(getPool(), m_pItem, m_pItem->Which(), false);
+        m_pItem = implCreateItemEntry(getPool(), m_pItem, false);
     if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
         getPool().registerPoolItemHolder(*this);
 
@@ -244,7 +244,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rOther,
 
     for (const auto& rSource : rOther)
     {
-        *ppDst = implCreateItemEntry(*GetPool(), rSource, 0, false);
+        *ppDst = implCreateItemEntry(*GetPool(), rSource, false);
         ppDst++;
     }
 
@@ -271,7 +271,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
-SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership)
+SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, bool bPassingOwnership)
 {
     if (nullptr == pSource)
         // SfxItemState::UNKNOWN aka current default (nullptr)
@@ -304,8 +304,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     }
 
     // get correct target WhichID
-    if (0 == nWhich)
-        nWhich = pSource->Which();
+    sal_uInt16 nWhich(pSource->Which());
 
     if (SfxItemPool::IsSlot(nWhich))
     {
@@ -316,8 +315,14 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         if (!bPassingOwnership)
             pSource = pSource->Clone(rPool.GetMasterPool());
 
+        // ARGH! Found out that *some* ::Clone implementations fail to also clone the
+        // WhichID set at the original Item, e.g. SfxFrameItem. Corrected there, but
+        // there may be more cases, so add a SAL_WARN here and correct this
         if (pSource->Which() != nWhich)
+        {
+            SAL_WARN("svl.items", "ITEM: Clone of Item with class " << typeid(*pSource).name() << " did NOT copy/set WhichID (!)");
             const_cast<SfxPoolItem*>(pSource)->SetWhich(nWhich);
+        }
 
         pSource->AddRef();
         return pSource;
@@ -379,14 +384,6 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // stack or else)
     while(pSource->GetRefCount() > 0)
     {
-        if (pSource->Which() != nWhich)
-            // If the target WhichID differs from the WhichID of a shared Item
-            // the item needs to be cloned. This happens, e.g. in
-            // ScPatternAttr::GetFromEditItemSet existing items with WhichIDs
-            // from EditEngine get set at a SetItem's ItemSet with different
-            // target ranges (e.g. look for ATTR_FONT_UNDERLINE)
-            break;
-
         if (!pSource->isShareable())
             // not shareable, done
             break;
@@ -417,10 +414,6 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // bPassingOwnership is given just use the item, else clone it
     if (!bPassingOwnership)
         pSource = pSource->Clone(pMasterPool);
-
-    // ensure WhichID @Item
-    if (pSource->Which() != nWhich)
-        const_cast<SfxPoolItem*>(pSource)->SetWhich(nWhich);
 
     // increase RefCnt 0->1
     pSource->AddRef();
@@ -499,7 +492,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
 
     for (const auto& rSource : rASet)
     {
-        *ppDst = implCreateItemEntry(*GetPool(), rSource, 0, false);
+        *ppDst = implCreateItemEntry(*GetPool(), rSource, false);
         ppDst++;
     }
 
@@ -813,10 +806,38 @@ bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
     return bRet;
 }
 
-const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership)
+const SfxPoolItem* SfxItemSet::PutImplAsTargetWhich(const SfxPoolItem& rItem, sal_uInt16 nTargetWhich, bool bPassingOwnership)
 {
-    bool bActionNeeded(0 != nWhich);
-    sal_uInt16 nOffset(INVALID_WHICHPAIR_OFFSET);
+    if (0 == nTargetWhich || nTargetWhich == rItem.Which())
+        // nTargetWhich not different or not given, use default
+        return PutImpl(rItem, bPassingOwnership);
+
+    if (bPassingOwnership && 0 == rItem.GetRefCount())
+    {
+        // we *can* use rItem when it's not pooled AKA has no RefCount
+        const_cast<SfxPoolItem&>(rItem).SetWhich(nTargetWhich);
+        return PutImpl(rItem, true);
+    }
+
+    // else we have to create a clone, set WhichID at it and
+    // delete rItem when bPassingOwnership was intended
+    SfxPoolItem* pClone(rItem.Clone(GetPool()));
+    pClone->SetWhich(nTargetWhich);
+    if (bPassingOwnership)
+        delete &rItem;
+    return PutImpl(*pClone, true);
+}
+
+const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, bool bPassingOwnership)
+{
+    if (0 == rItem.Which())
+    {
+        // no action needed: this *should* be SfxVoidItem(0) the only Items
+        // with 0 == WhichID -> only to be used by SfxItemSet::DisableItem
+        if (bPassingOwnership)
+            delete &rItem;
+        return nullptr;
+    }
 
 #ifdef _WIN32
     // Win build *insists* for initialization, triggers warning C4701:
@@ -828,11 +849,8 @@ const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, sal_uInt16 nWhi
     const_iterator aEntry;
 #endif
 
-    if (bActionNeeded)
-    {
-        nOffset = GetRanges().getOffsetFromWhich(nWhich);
-        bActionNeeded = (INVALID_WHICHPAIR_OFFSET != nOffset);
-    }
+    sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(rItem.Which()));
+    bool bActionNeeded(INVALID_WHICHPAIR_OFFSET != nOffset);
 
     if (bActionNeeded)
     {
@@ -853,15 +871,12 @@ const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, sal_uInt16 nWhi
     if (!bActionNeeded)
     {
         if (bPassingOwnership)
-        {
             delete &rItem;
-        }
-
         return nullptr;
     }
 
     // prepare new entry
-    SfxPoolItem const* pNew(implCreateItemEntry(*GetPool(), &rItem, nWhich, bPassingOwnership));
+    const SfxPoolItem* pNew(implCreateItemEntry(*GetPool(), &rItem, bPassingOwnership));
 
     // Notification-Callback
     if(m_aCallback)
@@ -913,7 +928,7 @@ bool SfxItemSet::Put(const SfxItemSet& rSource, bool bInvalidAsDefault)
                 }
                 else
                 {
-                    bRetval |= nullptr != PutImpl(**aSource, nWhich, false);
+                    bRetval |= nullptr != PutImpl(**aSource, false);
                 }
             }
 
@@ -965,7 +980,7 @@ void SfxItemSet::PutExtended
                     switch (eDontCareAs)
                     {
                         case SfxItemState::SET:
-                            PutImpl(rSource.GetPool()->GetDefaultItem(nWhich), nWhich, false);
+                            PutImpl(rSource.GetPool()->GetDefaultItem(nWhich), false);
                             break;
 
                         case SfxItemState::DEFAULT:
@@ -983,7 +998,7 @@ void SfxItemSet::PutExtended
                 else
                 {
                     // Item is set:
-                    PutImpl(**aSource, nWhich, false);
+                    PutImpl(**aSource, false);
                 }
             }
             else
@@ -992,7 +1007,7 @@ void SfxItemSet::PutExtended
                 switch (eDefaultAs)
                 {
                     case SfxItemState::SET:
-                        PutImpl(rSource.GetPool()->GetDefaultItem(nWhich), nWhich, false);
+                        PutImpl(rSource.GetPool()->GetDefaultItem(nWhich), false);
                         break;
 
                     case SfxItemState::DEFAULT:
@@ -1195,7 +1210,7 @@ bool SfxItemSet::Set
             }
             const SfxPoolItem* pItem;
             if( SfxItemState::SET == aIter2.GetItemState( true, &pItem ) )
-                bRet |= nullptr != Put( *pItem, pItem->Which() );
+                bRet |= nullptr != Put( *pItem );
             nWhich1 = aIter1.NextWhich();
             nWhich2 = aIter2.NextWhich();
         }
@@ -1470,7 +1485,7 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
 
         else if ( pFnd2 && bIgnoreDefaults )
             // Decision table: default, set, doesn't matter, sal_True
-            *ppFnd1 = implCreateItemEntry(*GetPool(), pFnd2, 0, false);
+            *ppFnd1 = implCreateItemEntry(*GetPool(), pFnd2, false);
             // *ppFnd1 = &GetPool()->Put( *pFnd2 );
 
         if ( *ppFnd1 )
@@ -1623,6 +1638,53 @@ void SfxItemSet::InvalidateItem_ForOffset(sal_uInt16 nOffset)
     *aFoundOne = INVALID_POOL_ITEM;
 }
 
+void SfxItemSet::DisableItem_ForWhichID(sal_uInt16 nWhich)
+{
+    const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(nWhich));
+
+    if (INVALID_WHICHPAIR_OFFSET != nOffset)
+    {
+        DisableItem_ForOffset(nOffset);
+    }
+}
+
+void SfxItemSet::DisableItem_ForOffset(sal_uInt16 nOffset)
+{
+    // check and assert from invalid offset. The caller is responsible for
+    // ensuring a valid offset (see callers, all checked & safe)
+    assert(nOffset < TotalCount());
+    const_iterator aFoundOne(begin() + nOffset);
+
+    if (nullptr == *aFoundOne)
+    {
+        // entry goes from nullptr -> invalid
+        ++m_nCount;
+    }
+    else
+    {
+        // entry is set
+        if ((*aFoundOne)->isVoidItem() && 0 == (*aFoundOne)->Which())
+            // already invalid item, done
+            return;
+    }
+
+    // prepare new entry
+    const SfxPoolItem* pNew(implCreateItemEntry(*GetPool(), new SfxVoidItem(0), true));
+
+    // Notification-Callback
+    if(m_aCallback)
+    {
+        m_aCallback(*aFoundOne, pNew);
+    }
+
+    // cleanup entry (remove only)
+    checkRemovePoolRegistration(*aFoundOne);
+    implCleanupItemEntry(*aFoundOne);
+
+    // set new entry
+    *aFoundOne = pNew;
+}
+
 sal_uInt16 SfxItemSet::GetWhichByOffset( sal_uInt16 nOffset ) const
 {
     assert(nOffset < TotalCount());
@@ -1746,7 +1808,7 @@ std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool 
             {
                 const SfxPoolItem* pItem;
                 if ( SfxItemState::SET == GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, &pItem ) )
-                    pNewSet->Put( *pItem, pItem->Which() );
+                    pNewSet->Put( *pItem );
                 nWhich = aIter.NextWhich();
             }
         }
@@ -1775,7 +1837,7 @@ SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
             {
                 const SfxPoolItem* pItem;
                 if ( SfxItemState::SET == GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, &pItem ) )
-                    aNewSet.Put( *pItem, pItem->Which() );
+                    aNewSet.Put( *pItem );
                 nWhich = aIter.NextWhich();
             }
         }
@@ -1831,19 +1893,10 @@ SfxAllItemSet::SfxAllItemSet(const SfxAllItemSet &rCopy)
 /**
  * Putting with automatic extension of the WhichId with the ID of the Item.
  */
-const SfxPoolItem* SfxAllItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
+const SfxPoolItem* SfxAllItemSet::PutImpl( const SfxPoolItem& rItem, bool bPassingOwnership )
 {
-    MergeRange(nWhich, nWhich);
-    return SfxItemSet::PutImpl(rItem, nWhich, bPassingOwnership);
-}
-
-/**
- * Disable Item
- * Using a VoidItem with Which value 0
- */
-void SfxItemSet::DisableItem(sal_uInt16 nWhich)
-{
-    Put( SfxVoidItem(0), nWhich );
+    MergeRange(rItem.Which(), rItem.Which());
+    return SfxItemSet::PutImpl(rItem, bPassingOwnership);
 }
 
 std::unique_ptr<SfxItemSet> SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const

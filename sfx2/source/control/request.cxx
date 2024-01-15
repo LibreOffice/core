@@ -402,7 +402,7 @@ void SfxRequest::AppendItem(const SfxPoolItem &rItem)
 {
     if(!pArgs)
         pArgs.reset( new SfxAllItemSet(*pImpl->pPool) );
-    pArgs->Put(rItem, rItem.Which());
+    pArgs->Put(rItem);
 }
 
 
@@ -474,7 +474,7 @@ void SfxRequest::Done
         for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
             if(!IsInvalidItem(pItem))
-                pArgs->Put(*pItem,pItem->Which());
+                pArgs->Put(*pItem);
         }
     }
 }

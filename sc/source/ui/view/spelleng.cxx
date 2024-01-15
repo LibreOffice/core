@@ -143,7 +143,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
                     else
                         pNewAttr = new ScPatternAttr(mrDoc.getCellAttributeHelper());
 
-                    pNewAttr->GetItemSet().Put(SvxLanguageItem(aLang.nLang, EE_CHAR_LANGUAGE), ATTR_FONT_LANGUAGE);
+                    pNewAttr->GetItemSet().Put(SvxLanguageItem(aLang.nLang, ATTR_FONT_LANGUAGE));
                     mrDoc.SetPattern(aPos, CellAttributeHolder(pNewAttr, true));
                 }
 

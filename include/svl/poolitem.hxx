@@ -114,7 +114,7 @@ class SVL_DLLPUBLIC SfxPoolItem
     friend class SfxItemSet;
 
     // allow ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool);
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
     mutable sal_uInt32 m_nRefCount;

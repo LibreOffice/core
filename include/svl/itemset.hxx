@@ -39,7 +39,7 @@ SVL_DLLPUBLIC size_t getUsedSfxPoolItemHolderCount();
 #endif
 
 // ItemSet/ItemPool helpers
-SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership);
+SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, bool bPassingOwnership);
 void implCleanupItemEntry(SfxPoolItem const* pSource);
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxPoolItemHolder
@@ -78,7 +78,7 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     friend class SfxWhichIter;
 
     // allow ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool);
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
@@ -132,7 +132,8 @@ private:
     const SfxItemSet&           operator=(const SfxItemSet &) = delete;
 
 protected:
-    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership );
+    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, bool bPassingOwnership );
+    const SfxPoolItem* PutImplAsTargetWhich( const SfxPoolItem&, sal_uInt16 nTargetWhich, bool bPassingOwnership );
 
     /** special constructor for SfxAllItemSet */
     enum class SfxAllItemSetFlag { Flag };
@@ -243,9 +244,10 @@ public:
     bool                        HasItem(TypedWhichId<T> nWhich, const T** ppItem = nullptr) const
     { return HasItem(sal_uInt16(nWhich), reinterpret_cast<const SfxPoolItem**>(ppItem)); }
 
-    void                        DisableItem(sal_uInt16 nWhich);
+    void DisableItem(sal_uInt16 nWhich)
+        { DisableItem_ForWhichID(nWhich); }
     void InvalidateItem(sal_uInt16 nWhich)
-    { InvalidateItem_ForWhichID(nWhich); }
+        { InvalidateItem_ForWhichID(nWhich); }
     sal_uInt16                  ClearItem( sal_uInt16 nWhich = 0);
     void                        ClearInvalidItems();
     void                        InvalidateAllItems(); // HACK(via nWhich = 0) ???
@@ -254,14 +256,14 @@ public:
 
     // add, delete items, work on items
 public:
-    const SfxPoolItem*          Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
-    { return PutImpl(rItem, nWhich, /*bPassingOwnership*/false); }
-    const SfxPoolItem*          Put( std::unique_ptr<SfxPoolItem> xItem, sal_uInt16 nWhich )
-    { return PutImpl(*xItem.release(), nWhich, /*bPassingOwnership*/true); }
     const SfxPoolItem*          Put( const SfxPoolItem& rItem )
-                                { return Put(rItem, rItem.Which()); }
+        { return PutImpl(rItem, /*bPassingOwnership*/false); }
     const SfxPoolItem*          Put( std::unique_ptr<SfxPoolItem> xItem )
-                                { auto nWhich = xItem->Which(); return Put(std::move(xItem), nWhich); }
+        { return PutImpl(*xItem.release(), /*bPassingOwnership*/true); }
+    const SfxPoolItem* PutAsTargetWhich(const SfxPoolItem& rItem, sal_uInt16 nTargetWhich )
+        { return PutImplAsTargetWhich(rItem, nTargetWhich, false); }
+    const SfxPoolItem* PutAsTargetWhich(std::unique_ptr<SfxPoolItem> xItem, sal_uInt16 nTargetWhich )
+        { return PutImplAsTargetWhich(*xItem.release(), nTargetWhich, true); }
     bool                        Put( const SfxItemSet&,
                                      bool bInvalidAsDefault = true );
     void                        PutExtended( const SfxItemSet&,
@@ -311,9 +313,11 @@ private:
     // Merge two given Item(entries)
     void MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2, bool bIgnoreDefaults);
 
-    // split version(s) of InvalidateItem for input types WhichID and Offset
+    // split version(s) of InvalidateItem/DisableItem for input types WhichID and Offset
     void InvalidateItem_ForWhichID(sal_uInt16 nWhich);
     void InvalidateItem_ForOffset(sal_uInt16 nOffset);
+    void DisableItem_ForWhichID(sal_uInt16 nWhich);
+    void DisableItem_ForOffset(sal_uInt16 nOffset);
 
     // split version(s) of GetItemStateImpl for input types WhichID and Offset
     SfxItemState GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const;
@@ -337,7 +341,7 @@ public:
 
     virtual std::unique_ptr<SfxItemSet> Clone( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
 private:
-    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership ) override;
+    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, bool bPassingOwnership ) override;
 };
 
 

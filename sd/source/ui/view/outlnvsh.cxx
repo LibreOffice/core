@@ -1448,14 +1448,14 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                     if (pStyleSheet)
                     {
                         SfxTemplateItem aItem( nWhich, pStyleSheet->GetName() );
-                        aAllSet.Put( aItem, aItem.Which()  );
+                        aAllSet.Put( aItem );
                     }
                 }
 
                 if( !pStyleSheet )
                 {
                     SfxTemplateItem aItem( nWhich, OUString() );
-                    aAllSet.Put( aItem, aItem.Which() );
+                    aAllSet.Put( aItem );
                     // rSet.DisableItem( nWhich );
                 }
             }

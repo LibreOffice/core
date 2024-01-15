@@ -2555,17 +2555,17 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
         if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_FONT ) )
         {
             // tdf#125054 adapt WhichID
-            pSet->Put(*pItem, EE_CHAR_FONTINFO);
+            pSet->PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO);
         }
         if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_CJK_FONT ) )
         {
             // tdf#125054 adapt WhichID
-            pSet->Put(*pItem, EE_CHAR_FONTINFO_CJK);
+            pSet->PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO_CJK);
         }
         if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_CTL_FONT ) )
         {
             // tdf#125054 adapt WhichID
-            pSet->Put(*pItem, EE_CHAR_FONTINFO_CTL);
+            pSet->PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO_CTL);
         }
     }
     bool bParaHyphenate = pSet->Get(EE_PARA_HYPHENATE).GetValue();

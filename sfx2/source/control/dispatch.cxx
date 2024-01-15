@@ -758,12 +758,11 @@ void SfxDispatcher::Execute_(SfxShell& rShell, const SfxSlot& rSlot,
 */
 static void MappedPut_Impl(SfxAllItemSet &rSet, const SfxPoolItem &rItem)
 {
-    // Put with mapped Which-Id if possible
-    const SfxItemPool *pPool = rSet.GetPool();
-    sal_uInt16 nWhich = rItem.Which();
-    if ( SfxItemPool::IsSlot(nWhich) )
-        nWhich = pPool->GetWhich(nWhich);
-    rSet.Put( rItem, nWhich );
+    // Put with mapped Which-Id if needed
+    if (SfxItemPool::IsSlot(rItem.Which()))
+        rSet.PutAsTargetWhich(rItem, rSet.GetPool()->GetWhich(rItem.Which()));
+    else
+        rSet.Put(rItem);
 }
 
 const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )

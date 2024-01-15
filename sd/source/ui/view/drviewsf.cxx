@@ -496,7 +496,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     if( nSlotId != SID_STYLE_APPLY && !mpDrawView->AreObjectsMarked() )
                     {
                         SfxTemplateItem aTmpItem( nWhich, OUString() );
-                        aAllSet.Put( aTmpItem, aTmpItem.Which()  );
+                        aAllSet.Put( aTmpItem );
                     }
                     else
                     {
@@ -512,19 +512,19 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                                 (eFamily == SfxStyleFamily::Pseudo &&   nSlotId == SID_STYLE_FAMILY5))
                             {
                                 SfxTemplateItem aTmpItem ( nWhich, pStyleSheet->GetName() );
-                                aAllSet.Put( aTmpItem, aTmpItem.Which()  );
+                                aAllSet.Put( aTmpItem );
                             }
                             else
                             {
                                 SfxTemplateItem aTmpItem(nWhich, OUString());
-                                aAllSet.Put(aTmpItem,aTmpItem.Which()  );
+                                aAllSet.Put( aTmpItem );
                             }
                         }
                     }
                 }
                 else
                 {   SfxTemplateItem aItem( nWhich, OUString() );
-                    aAllSet.Put( aItem, aItem.Which() );
+                    aAllSet.Put( aItem );
                 }
             }
             break;
@@ -555,7 +555,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 else
                 {
                     SfxBoolItem aItem(nWhich, SD_MOD()->GetWaterCan());
-                    aAllSet.Put( aItem, aItem.Which());
+                    aAllSet.Put( aItem );
                 }
             }
             break;

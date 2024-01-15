@@ -1480,15 +1480,15 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 
                 SfxItemState aState(pDispatch->QueryState(SID_ATTR_LANGUAGE, aResult));
                 if(SfxItemState::DEFAULT <= aState)
-                    pRet->Put(*aResult.getItem(), SID_ATTR_LANGUAGE);
+                    pRet->Put(*aResult.getItem());
 
                 aState = pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, aResult);
                 if(SfxItemState::DEFAULT <= aState)
-                    pRet->Put(*aResult.getItem(), SID_ATTR_CHAR_CJK_LANGUAGE);
+                    pRet->Put(*aResult.getItem());
 
                 aState = pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, aResult);
                 if(SfxItemState::DEFAULT <= aState)
-                    pRet->Put(*aResult.getItem(), SID_ATTR_CHAR_CTL_LANGUAGE);
+                    pRet->Put(*aResult.getItem());
 
                 pRet->Put(aHyphen);
 

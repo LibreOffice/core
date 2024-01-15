@@ -1292,7 +1292,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     }
                     SfxAllItemSet aArgs( GetPool() );
                     SfxStringItem aTmpItem( SID_FILE_NAME, pNameItem->GetValue() );
-                    aArgs.Put( aTmpItem, aTmpItem.Which() );
+                    aArgs.Put( aTmpItem );
                     SfxRequest aSaveAsReq( SID_SAVEASDOC, SfxCallMode::API, aArgs );
                     ExecFile_Impl( aSaveAsReq );
                     if ( !aSaveAsReq.IsDone() )

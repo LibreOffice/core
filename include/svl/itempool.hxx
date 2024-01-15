@@ -76,7 +76,7 @@ class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
     friend class SfxAllItemSet;
 
     // allow ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool);
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
     // unit testing

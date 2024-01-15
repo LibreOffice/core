@@ -389,12 +389,6 @@ SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxFrame *p ):
 {
 }
 
-SfxFrameItem::SfxFrameItem( SfxFrame *p ):
-    SfxPoolItem( 0 ),
-    pFrame( p ), wFrame( p )
-{
-}
-
 bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
      return SfxPoolItem::operator==(rItem) &&
@@ -404,7 +398,9 @@ bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
 
 SfxFrameItem* SfxFrameItem::Clone( SfxItemPool *) const
 {
-    SfxFrameItem* pNew = new SfxFrameItem( wFrame);
+    // Every ::Clone implementation *needs* to also ensure that
+    // the WhichID gets set/copied at the created Item (!)
+    SfxFrameItem* pNew = new SfxFrameItem(Which(), wFrame);
     pNew->pFrame = pFrame;
     return pNew;
 }

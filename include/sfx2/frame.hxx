@@ -154,7 +154,6 @@ class SFX2_DLLPUBLIC SfxFrameItem final : public SfxPoolItem
 public:
 
                             SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame const *p );
-                            SfxFrameItem( SfxFrame *p );
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

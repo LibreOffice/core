@@ -141,12 +141,12 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
             const SfxItemSet* pParent(GetParent());
             m_pOldSet->PutImpl(nullptr != pParent
                 ? pParent->Get(nWhich)
-                : GetPool()->GetDefaultItem(nWhich), nWhich, false);
+                : GetPool()->GetDefaultItem(nWhich), false);
         }
         else if (!IsInvalidItem(pOld))
         {
             // set/remember old value
-            m_pOldSet->PutImpl(*pOld, nWhich, false);
+            m_pOldSet->PutImpl(*pOld, false);
         }
     }
 
@@ -159,12 +159,12 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
             const SfxItemSet* pParent(GetParent());
             m_pNewSet->PutImpl(nullptr != pParent
                 ? pParent->Get(nWhich)
-                : GetPool()->GetDefaultItem(nWhich), nWhich, false);
+                : GetPool()->GetDefaultItem(nWhich), false);
         }
         else if (!IsInvalidItem(pNew))
         {
             // set/remember new value
-            m_pNewSet->PutImpl(*pNew, nWhich, false);
+            m_pNewSet->PutImpl(*pNew, false);
         }
     }
 }

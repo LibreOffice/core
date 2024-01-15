@@ -658,7 +658,7 @@ void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatC
             if (hasWeightComplexPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_CTL_WEIGHT)) &&
                 *pItem == aBoldProperty)
             {
-                rExportSet.Put(aBoldProperty, RES_CHRATR_CTL_WEIGHT);
+                rExportSet.PutAsTargetWhich(aBoldProperty, RES_CHRATR_CTL_WEIGHT);
             }
 
             if (hasPosturePropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_POSTURE)) &&
@@ -668,7 +668,7 @@ void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatC
             if (hasPostureComplexPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_CTL_POSTURE)) &&
                 *pItem == aPostureProperty)
             {
-                rExportSet.Put(aPostureProperty, RES_CHRATR_CTL_POSTURE);
+                rExportSet.PutAsTargetWhich(aPostureProperty, RES_CHRATR_CTL_POSTURE);
             }
 
             if (hasContouredPropertyInCharStyle && (pItem = pFormat->GetAttrSet().GetItem(RES_CHRATR_CONTOUR)) && *pItem == aContouredProperty)
@@ -3104,7 +3104,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                 const SvxAdjustItem* pAdjust = rNode.GetSwAttrSet().GetItem(RES_PARATR_ADJUST);
                 if ( pAdjust && (pAdjust->GetAdjust() == SvxAdjust::Left || pAdjust->GetAdjust() == SvxAdjust::Right ) )
-                    oTmpSet->Put( *pAdjust, RES_PARATR_ADJUST );
+                    oTmpSet->Put( *pAdjust );
             }
             // move code for handling of numbered,
             // but not counted paragraphs to this place. Otherwise, the paragraph

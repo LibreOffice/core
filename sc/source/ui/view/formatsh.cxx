@@ -744,7 +744,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                         if( dynamic_cast<const SvxUnderlineItem*>( &rUnderline) !=  nullptr )
                         {
                             pTabViewShell->ApplyAttr( rUnderline );
-                            pNewSet->Put( rUnderline,rUnderline.Which() );
+                            pNewSet->Put( rUnderline );
                         }
                         else if ( auto pTextLineItem = dynamic_cast<const SvxTextLineItem*>( &rUnderline) )
                         {
@@ -752,7 +752,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                             SvxUnderlineItem aNewItem( pTextLineItem->GetLineStyle(), pTextLineItem->Which() );
                             aNewItem.SetColor( pTextLineItem->GetColor() );
                             pTabViewShell->ApplyAttr( aNewItem );
-                            pNewSet->Put( aNewItem, aNewItem.Which() );
+                            pNewSet->Put( aNewItem );
                         }
                     }
                     else
@@ -763,7 +763,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                                     : LINESTYLE_SINGLE;
                         aUnderline.SetLineStyle( eUnderline );
                         pTabViewShell->ApplyAttr( aUnderline );
-                        pNewSet->Put( aUnderline,aUnderline.Which() );
+                        pNewSet->Put( aUnderline );
                     }
                 }
                 break;
@@ -971,7 +971,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     pTabViewShell->ApplyAttr( aBreakItem );
 
                     SfxAllItemSet aNewSet( GetPool() );
-                    aNewSet.Put( aBreakItem,aBreakItem.Which() );
+                    aNewSet.Put( aBreakItem );
                     rReq.Done( aNewSet );
 
                     rBindings.Invalidate( nSlot );
@@ -990,7 +990,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     pTabViewShell->ApplyAttr( aProtectionItem );
 
                     SfxAllItemSet aNewSet( GetPool() );
-                    aNewSet.Put( aProtectionItem, aProtectionItem.Which());
+                    aNewSet.Put( aProtectionItem );
                     aNewSet.Put( SfxBoolItem( SID_SCATTR_CELLPROTECTION, !bProtect ) );
                     rReq.Done( aNewSet );
 

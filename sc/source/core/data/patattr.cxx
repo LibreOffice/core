@@ -1078,13 +1078,13 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     else
     {
         // tdf#125054 adapt WhichID
-        rEditSet.Put( std::move(aColorItem), EE_CHAR_COLOR );
+        rEditSet.PutAsTargetWhich( std::move(aColorItem), EE_CHAR_COLOR );
     }
 
     // tdf#125054 adapt WhichID
-    rEditSet.Put( std::move(aFontItem), EE_CHAR_FONTINFO );
-    rEditSet.Put( std::move(aCjkFontItem), EE_CHAR_FONTINFO_CJK );
-    rEditSet.Put( std::move(aCtlFontItem), EE_CHAR_FONTINFO_CTL );
+    rEditSet.PutAsTargetWhich( std::move(aFontItem), EE_CHAR_FONTINFO );
+    rEditSet.PutAsTargetWhich( std::move(aCjkFontItem), EE_CHAR_FONTINFO_CJK );
+    rEditSet.PutAsTargetWhich( std::move(aCtlFontItem), EE_CHAR_FONTINFO_CTL );
 
     rEditSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
     rEditSet.Put( SvxFontHeightItem( nCjkHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
@@ -1094,8 +1094,8 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SvxWeightItem ( eCtlWeight,   EE_CHAR_WEIGHT_CTL ) );
 
     // tdf#125054 adapt WhichID
-    rEditSet.Put( std::move(aUnderlineItem), EE_CHAR_UNDERLINE );
-    rEditSet.Put( std::move(aOverlineItem), EE_CHAR_OVERLINE );
+    rEditSet.PutAsTargetWhich( std::move(aUnderlineItem), EE_CHAR_UNDERLINE );
+    rEditSet.PutAsTargetWhich( std::move(aOverlineItem), EE_CHAR_OVERLINE );
 
     rEditSet.Put( SvxWordLineModeItem( bWordLine,   EE_CHAR_WLM ) );
     rEditSet.Put( SvxCrossedOutItem( eStrike,       EE_CHAR_STRIKEOUT ) );
@@ -1130,14 +1130,14 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
 void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet )
 {
     if (const SvxColorItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_COLOR))
-        rDestSet.Put( *pItem, ATTR_FONT_COLOR );
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_FONT_COLOR );
 
     if (const SvxFontItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTINFO))
-        rDestSet.Put( *pItem, ATTR_FONT );
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_FONT );
     if (const SvxFontItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTINFO_CJK))
-        rDestSet.Put( *pItem, ATTR_CJK_FONT );
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_CJK_FONT );
     if (const SvxFontItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTINFO_CTL))
-        rDestSet.Put( *pItem, ATTR_CTL_FONT );
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_CTL_FONT );
 
     if (const SvxFontHeightItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTHEIGHT))
         rDestSet.Put( SvxFontHeightItem(o3tl::toTwips(pItem->GetHeight(), o3tl::Length::mm100),
@@ -1161,9 +1161,9 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
 
     // SvxTextLineItem contains enum and color
     if (const SvxUnderlineItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_UNDERLINE))
-        rDestSet.Put( *pItem, ATTR_FONT_UNDERLINE );
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_FONT_UNDERLINE );
     if (const SvxOverlineItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_OVERLINE))
-        rDestSet.Put( *pItem, ATTR_FONT_OVERLINE );
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_FONT_OVERLINE );
     if (const SvxWordLineModeItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_WLM))
         rDestSet.Put( SvxWordLineModeItem( pItem->GetValue(),
                         ATTR_FONT_WORDLINE) );
