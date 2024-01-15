@@ -560,8 +560,8 @@ g_lo_menu_new_submenu_in_item_in_section (GLOMenu *menu,
 
         g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 
-        g_object_unref (model);
     }
+    g_object_unref (model);
 }
 
 GLOMenu *
