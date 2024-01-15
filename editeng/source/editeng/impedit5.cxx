@@ -519,10 +519,13 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
         bool bCharAttribFound = false;
 
         DBG_ASSERT( maEditDoc.GetObject( nNode ), "Node not found: SetAttribs" );
-        DBG_ASSERT( GetParaPortions().SafeGetObject( nNode ), "Portion not found: SetAttribs" );
+        DBG_ASSERT(GetParaPortions().exists(nNode), "Portion not found: SetAttribs");
 
-        ContentNode* pNode = maEditDoc.GetObject( nNode );
-        ParaPortion* pPortion = GetParaPortions()[nNode];
+        if (!GetParaPortions().exists(nNode))
+            continue;
+
+        ContentNode* pNode = maEditDoc.GetObject(nNode);
+        ParaPortion& rPortion = GetParaPortions().getRef(nNode);
 
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
         const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
@@ -564,14 +567,14 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
 
         if ( bParaAttribFound )
         {
-            ParaAttribsChanged( pPortion->GetNode() );
+            ParaAttribsChanged(rPortion.GetNode());
         }
         else if ( bCharAttribFound )
         {
             mbFormatted = false;
             if ( !pNode->Len() || ( nStartPos != nEndPos  ) )
             {
-                pPortion->MarkSelectionInvalid( nStartPos );
+                rPortion.MarkSelectionInvalid(nStartPos);
                 if ( bCheckLanguage )
                     pNode->GetWrongList()->SetInvalidRange(nStartPos, nEndPos);
             }
@@ -602,10 +605,14 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, EERemoveParaAttribsMo
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
         ContentNode* pNode = maEditDoc.GetObject( nNode );
-        ParaPortion* pPortion = GetParaPortions()[nNode];
 
         DBG_ASSERT( maEditDoc.GetObject( nNode ), "Node not found: SetAttribs" );
-        DBG_ASSERT( GetParaPortions().SafeGetObject( nNode ), "Portion not found: SetAttribs" );
+        DBG_ASSERT(GetParaPortions().exists(nNode), "Portion not found: SetAttribs");
+
+        if (!GetParaPortions().exists(nNode))
+            continue;
+
+        ParaPortion& rPortion = GetParaPortions().getRef(nNode);
 
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
         const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
@@ -636,7 +643,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, EERemoveParaAttribsMo
         if ( bChanged && !bRemoveParaAttribs )
         {
             mbFormatted = false;
-            pPortion->MarkSelectionInvalid( nStartPos );
+            rPortion.MarkSelectionInvalid(nStartPos);
         }
     }
 }

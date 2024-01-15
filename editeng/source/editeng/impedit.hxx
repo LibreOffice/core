@@ -848,14 +848,14 @@ private:
     {
         sal_Int32 nPos = maEditDoc.GetPos( pNode );
         DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
-        return GetParaPortions()[ nPos ];
+        return GetParaPortions().SafeGetObject(nPos);
     }
 
     ParaPortion* FindParaPortion(ContentNode const * pNode)
     {
         sal_Int32 nPos = maEditDoc.GetPos( pNode );
         DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
-        return GetParaPortions()[ nPos ];
+        return GetParaPortions().SafeGetObject(nPos);
     }
 
     css::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );

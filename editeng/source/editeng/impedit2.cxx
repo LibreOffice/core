@@ -2166,27 +2166,35 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     ParaPortion* pRecalc3 = nullptr;
     ParaPortion* pRecalc4 = nullptr;
 
-    if ( nNewPos == 0 ) // Move to Start
+    if (nNewPos == 0) // Move to Start
     {
-        pRecalc1 = GetParaPortions()[0];
-        pRecalc2 = GetParaPortions()[aOldPositions.Min()];
+        if (GetParaPortions().exists(0))
+            pRecalc1 = &GetParaPortions().getRef(0);
+        if (GetParaPortions().exists(aOldPositions.Min()))
+            pRecalc2 = &GetParaPortions().getRef(aOldPositions.Min());
 
     }
-    else if ( nNewPos == nParaCount )
+    else if (nNewPos == nParaCount)
     {
-        pRecalc1 = GetParaPortions()[nParaCount-1];
-        pRecalc2 = GetParaPortions()[aOldPositions.Max()];
+        if (GetParaPortions().exists(nParaCount - 1))
+            pRecalc1 = &GetParaPortions().getRef(nParaCount - 1);
+        if (GetParaPortions().exists(aOldPositions.Max()))
+            pRecalc2 = &GetParaPortions().getRef(aOldPositions.Max());
     }
 
-    if ( aOldPositions.Min() == 0 ) // Move from Start
+    if (aOldPositions.Min() == 0) // Move from Start
     {
-        pRecalc3 = GetParaPortions()[0];
-        pRecalc4 = GetParaPortions()[aOldPositions.Max()+1];
+        if (GetParaPortions().exists(0))
+            pRecalc3 = &GetParaPortions().getRef(0);
+        if (GetParaPortions().exists(aOldPositions.Max() + 1))
+            pRecalc4 = &GetParaPortions().getRef(aOldPositions.Max() + 1);
     }
-    else if ( aOldPositions.Max() == (nParaCount-1) )
+    else if (aOldPositions.Max() == nParaCount - 1)
     {
-        pRecalc3 = GetParaPortions()[aOldPositions.Max()];
-        pRecalc4 = GetParaPortions()[aOldPositions.Min()-1];
+        if (GetParaPortions().exists(aOldPositions.Max()))
+            pRecalc3 = &GetParaPortions().getRef(aOldPositions.Max());
+        if (GetParaPortions().exists(aOldPositions.Min() - 1))
+            pRecalc4 = &GetParaPortions().getRef(aOldPositions.Min() - 1);
     }
 
     MoveParagraphsInfo aMoveParagraphsInfo( aOldPositions.Min(), aOldPositions.Max(), nNewPos );
@@ -2342,9 +2350,9 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
         // the change of the total text height too late...
         for ( sal_Int32 n = nParagraphTobeDeleted; n < GetParaPortions().Count(); n++ )
         {
-            ParaPortion* pPP = GetParaPortions()[n];
-            pPP->MarkSelectionInvalid( 0 );
-            pPP->GetLines().Reset();
+            ParaPortion& rParaPortion = GetParaPortions().getRef(n);
+            rParaPortion.MarkSelectionInvalid(0);
+            rParaPortion.GetLines().Reset();
         }
     }
 
@@ -3103,9 +3111,9 @@ bool ImpEditEngine::UpdateFields()
         if ( bChangesInPara )
         {
             // If possible be more precise when invalidate.
-            ParaPortion* pPortion = GetParaPortions()[nPara];
-            assert(pPortion);
-            pPortion->MarkSelectionInvalid( 0 );
+            assert(GetParaPortions().exists(nPara));
+            ParaPortion& rPortion = GetParaPortions().getRef(nPara);
+            rPortion.MarkSelectionInvalid( 0 );
         }
     }
     return bChanges;
@@ -3208,19 +3216,19 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
     sal_Int16 nColumn = 0;
     for (sal_Int32 n = 0, nPortions = GetParaPortions().Count(); n < nPortions; ++n)
     {
-        ParaPortion* pPortion = GetParaPortions()[n];
+        ParaPortion& rPortion = GetParaPortions().getRef(n);
         bool bSkipThis = true;
-        if (pPortion->IsVisible())
+        if (rPortion.IsVisible())
         {
             // when typing idle formatting, asynchronous Paint. Invisible Portions may be invalid.
-            if (pPortion->IsInvalid())
+            if (rPortion.IsInvalid())
                 return;
 
             LineAreaInfo aInfo{
-                *pPortion, // pPortion
+                rPortion,
                 nullptr, // pLine
                 0, // nHeightNeededToNotWrap
-                { aLineStart, Size{ nColumnWidth, pPortion->GetFirstLineOffset() } }, // aArea
+                { aLineStart, Size{ nColumnWidth, rPortion.GetFirstLineOffset() } }, // aArea
                 n, // nPortion
                 0, // nLine
                 nColumn // nColumn
@@ -3234,16 +3242,16 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
             if (!maStatus.IsOutliner())
             {
                 const SvxLineSpacingItem& rLSItem
-                    = pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL);
+                    = rPortion.GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL);
                 nSBL = (rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix)
                            ? scaleYSpacingValue(rLSItem.GetInterLineSpace())
                            : 0;
             }
 
-            adjustYDirectionAware(aLineStart, pPortion->GetFirstLineOffset());
-            for (sal_Int32 nLine = 0, nLines = pPortion->GetLines().Count(); nLine < nLines; nLine++)
+            adjustYDirectionAware(aLineStart, rPortion.GetFirstLineOffset());
+            for (sal_Int32 nLine = 0, nLines = rPortion.GetLines().Count(); nLine < nLines; nLine++)
             {
-                EditLine& rLine = pPortion->GetLines()[nLine];
+                EditLine& rLine = rPortion.GetLines()[nLine];
                 tools::Long nLineHeight = rLine.GetHeight();
                 if (nLine != nLines - 1)
                     nLineHeight += nVertLineSpacing;
@@ -3278,8 +3286,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
             }
             if (!maStatus.IsOutliner())
             {
-                const SvxULSpaceItem& rULItem
-                    = pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE);
+                const SvxULSpaceItem& rULItem = rPortion.GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE);
                 tools::Long nUL = scaleYSpacingValue(rULItem.GetLower());
                 adjustYDirectionAware(aLineStart, nUL);
             }
@@ -3400,8 +3407,8 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
 
     // Over all the paragraphs ...
 
-    OSL_ENSURE( 0 <= nPara && nPara < GetParaPortions().Count(), "CalcParaWidth: Out of range" );
-    ParaPortion* pPortion = GetParaPortions()[nPara];
+    OSL_ENSURE(GetParaPortions().exists(nPara), "CalcParaWidth: Out of range");
+    ParaPortion* pPortion = GetParaPortions().SafeGetObject(nPara);
     if ( pPortion && pPortion->IsVisible() )
     {
         const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
@@ -3622,8 +3629,8 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
 
 sal_Int32 ImpEditEngine::GetLineCount( sal_Int32 nParagraph ) const
 {
-    OSL_ENSURE( 0 <= nParagraph && nParagraph < GetParaPortions().Count(), "GetLineCount: Out of range" );
-    const ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
+    OSL_ENSURE(GetParaPortions().exists(nParagraph), "GetLineCount: Out of range");
+    const ParaPortion* pPPortion = GetParaPortions().SafeGetObject(nParagraph);
     OSL_ENSURE( pPPortion, "Paragraph not found: GetLineCount" );
     if ( pPPortion )
         return pPPortion->GetLines().Count();
@@ -3633,9 +3640,9 @@ sal_Int32 ImpEditEngine::GetLineCount( sal_Int32 nParagraph ) const
 
 sal_Int32 ImpEditEngine::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const
 {
-    OSL_ENSURE( 0 <= nParagraph && nParagraph < GetParaPortions().Count(), "GetLineLen: Out of range" );
-    const ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
-    OSL_ENSURE( pPPortion, "Paragraph not found: GetLineLen" );
+    OSL_ENSURE(GetParaPortions().exists(nParagraph), "GetLineLen: Out of range");
+    const ParaPortion* pPPortion = GetParaPortions().SafeGetObject(nParagraph);
+    OSL_ENSURE(pPPortion, "Paragraph not found: GetLineLen");
     if ( pPPortion && ( nLine < pPPortion->GetLines().Count() ) )
     {
         const EditLine& rLine = pPPortion->GetLines()[nLine];
@@ -3647,7 +3654,7 @@ sal_Int32 ImpEditEngine::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) con
 
 void ImpEditEngine::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const
 {
-    OSL_ENSURE( 0 <= nParagraph && nParagraph < GetParaPortions().Count(), "GetLineCount: Out of range" );
+    OSL_ENSURE(GetParaPortions().exists(nParagraph), "GetLineCount: Out of range");
     const ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     OSL_ENSURE( pPPortion, "Paragraph not found: GetLineBoundaries" );
     rStart = rEnd = -1;     // default values in case of error
@@ -3688,7 +3695,7 @@ sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex
 
 sal_uInt16 ImpEditEngine::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
 {
-    OSL_ENSURE( 0 <= nParagraph && nParagraph < GetParaPortions().Count(), "GetLineCount: Out of range" );
+    OSL_ENSURE(GetParaPortions().exists(nParagraph), "GetLineCount: Out of range");
     ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     OSL_ENSURE( pPPortion, "Paragraph not found: GetLineHeight" );
     if ( pPPortion && ( nLine < pPPortion->GetLines().Count() ) )
@@ -3730,26 +3737,26 @@ void ImpEditEngine::UpdateSelections()
                 // Use ParaPortions, as now also hidden paragraphs have to be
                 // taken into account!
                 sal_Int32 nPara = rInf.GetPosition();
-                if (!GetParaPortions().SafeGetObject(nPara)) // Last paragraph
+                if (!GetParaPortions().exists(nPara)) // Last paragraph
                 {
-                    nPara = GetParaPortions().Count()-1;
+                    nPara = GetParaPortions().lastIndex();
                 }
-                assert(GetParaPortions()[nPara] && "Empty Document in UpdateSelections ?");
+                assert(GetParaPortions().exists(nPara) && "Empty Document in UpdateSelections ?");
                 // Do not end up from a hidden paragraph:
-                sal_Int32 nCurPara = nPara;
-                sal_Int32 nLastPara = GetParaPortions().Count()-1;
-                while ( nPara <= nLastPara && !GetParaPortions()[nPara]->IsVisible() )
+                sal_Int32 nCurrentPara = nPara;
+                sal_Int32 nLastParaIndex = GetParaPortions().lastIndex();
+                while (nPara <= nLastParaIndex && !GetParaPortions().getRef(nPara).IsVisible())
                     nPara++;
-                if ( nPara > nLastPara ) // then also backwards ...
+                if (nPara > nLastParaIndex) // then also backwards ...
                 {
-                    nPara = nCurPara;
-                    while ( nPara && !GetParaPortions()[nPara]->IsVisible() )
+                    nPara = nCurrentPara;
+                    while ( nPara && !GetParaPortions().getRef(nPara).IsVisible() )
                         nPara--;
                 }
-                OSL_ENSURE( GetParaPortions()[nPara]->IsVisible(), "No visible paragraph found: UpdateSelections" );
+                OSL_ENSURE(GetParaPortions().getRef(nPara).IsVisible(), "No visible paragraph found: UpdateSelections" );
 
-                ParaPortion* pParaPortion = GetParaPortions()[nPara];
-                EditSelection aTmpSelection( EditPaM( pParaPortion->GetNode(), 0 ) );
+                ParaPortion& rParaPortion = GetParaPortions().getRef(nPara);
+                EditSelection aTmpSelection(EditPaM(rParaPortion.GetNode(), 0));
                 pView->pImpEditView->SetEditSelection( aTmpSelection );
                 bChanged=true;
                 break;  // for loop
@@ -4389,7 +4396,7 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
         rPortion.nFirstLineOffset = nUpper;
     }
 
-    if ( nPortion != (GetParaPortions().Count()-1) )
+    if (nPortion != GetParaPortions().lastIndex())
     {
         rPortion.nHeight += scaleYSpacingValue(rULItem.GetLower());   // not in the last
     }

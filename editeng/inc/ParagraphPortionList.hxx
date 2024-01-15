@@ -38,18 +38,33 @@ public:
     tools::Long GetYOffset(const ParaPortion* pPPortion) const;
     sal_Int32 FindParagraph(tools::Long nYOffset) const;
 
-    const ParaPortion* SafeGetObject(sal_Int32 nPos) const;
-    ParaPortion* SafeGetObject(sal_Int32 nPos);
+    const ParaPortion* SafeGetObject(sal_Int32 nPos) const
+    {
+        return exists(nPos) ? maPortions[nPos].get() : nullptr;
+    }
+
+    ParaPortion* SafeGetObject(sal_Int32 nPos)
+    {
+        return exists(nPos) ? maPortions[nPos].get() : nullptr;
+    }
 
     sal_Int32 GetPos(const ParaPortion* p) const;
-    ParaPortion* operator[](sal_Int32 nPos);
-    const ParaPortion* operator[](sal_Int32 nPos) const;
+
+    ParaPortion& getRef(sal_Int32 nPosition) { return *maPortions[nPosition]; }
+    ParaPortion const& getRef(sal_Int32 nPosition) const { return *maPortions[nPosition]; }
 
     std::unique_ptr<ParaPortion> Release(sal_Int32 nPos);
     void Remove(sal_Int32 nPos);
     void Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p);
     void Append(std::unique_ptr<ParaPortion> p);
     sal_Int32 Count() const;
+    sal_Int32 lastIndex() const { return Count() - 1; }
+
+    bool exists(sal_Int32 nPosition) const
+    {
+        return nPosition >= 0 && o3tl::make_unsigned(nPosition) < maPortions.size()
+               && maPortions[nPosition];
+    }
 
     ParaPortionContainerType::iterator begin() { return maPortions.begin(); }
     ParaPortionContainerType::iterator end() { return maPortions.end(); }

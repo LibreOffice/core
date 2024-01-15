@@ -526,16 +526,6 @@ sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const
     return FastGetPos(maPortions, p, nLastCache);
 }
 
-ParaPortion* ParaPortionList::operator [](sal_Int32 nPos)
-{
-    return 0 <= nPos && o3tl::make_unsigned(nPos) < maPortions.size() ? maPortions[nPos].get() : nullptr;
-}
-
-const ParaPortion* ParaPortionList::operator [](sal_Int32 nPos) const
-{
-    return 0 <= nPos && o3tl::make_unsigned(nPos) < maPortions.size() ? maPortions[nPos].get() : nullptr;
-}
-
 std::unique_ptr<ParaPortion> ParaPortionList::Release(sal_Int32 nPos)
 {
     if (nPos < 0 || maPortions.size() <= o3tl::make_unsigned(nPos))
@@ -613,16 +603,6 @@ sal_Int32 ParaPortionList::FindParagraph(tools::Long nYOffset) const
             return i <= SAL_MAX_INT32 ? static_cast<sal_Int32>(i) : SAL_MAX_INT32;
     }
     return EE_PARA_NOT_FOUND;
-}
-
-const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
-{
-    return 0 <= nPos && o3tl::make_unsigned(nPos) < maPortions.size() ? maPortions[nPos].get() : nullptr;
-}
-
-ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
-{
-    return 0 <= nPos && o3tl::make_unsigned(nPos) < maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG

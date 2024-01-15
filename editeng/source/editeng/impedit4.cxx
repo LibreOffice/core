@@ -1050,8 +1050,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
 
         if ( bOnlyFullParagraphs )
         {
-            const ParaPortion* pParaPortion = GetParaPortions()[nNode];
-            nTextPortions += pParaPortion->GetTextPortions().Count();
+            nTextPortions += GetParaPortions().getRef(nNode).GetTextPortions().Count();
         }
 
         sal_Int32 nStartPos = 0;
@@ -1126,38 +1125,38 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
         pTxtObj->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
-            const ParaPortion* pParaPortion = GetParaPortions()[nNode];
+            ParaPortion const& rParaPortion = GetParaPortions().getRef(nNode);
             XParaPortion* pX = new XParaPortion;
             pXList->push_back(pX);
 
-            pX->nHeight = pParaPortion->GetHeight();
-            pX->nFirstLineOffset = pParaPortion->GetFirstLineOffset();
+            pX->nHeight = rParaPortion.GetHeight();
+            pX->nFirstLineOffset = rParaPortion.GetFirstLineOffset();
 
             // The TextPortions
-            sal_uInt16 nCount = pParaPortion->GetTextPortions().Count();
+            sal_uInt16 nCount = rParaPortion.GetTextPortions().Count();
             sal_uInt16 n;
             for ( n = 0; n < nCount; n++ )
             {
-                const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
+                const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[n];
                 TextPortion* pNew = new TextPortion( rTextPortion );
                 pX->aTextPortions.Append(pNew);
             }
 
             // The lines
-            nCount = pParaPortion->GetLines().Count();
+            nCount = rParaPortion.GetLines().Count();
             for ( n = 0; n < nCount; n++ )
             {
-                const EditLine& rLine = pParaPortion->GetLines()[n];
+                const EditLine& rLine = rParaPortion.GetLines()[n];
                 pX->aLines.Append(std::unique_ptr<EditLine>(rLine.Clone()));
             }
 #ifdef DBG_UTIL
             sal_uInt16 nTest;
             int nTPLen = 0, nTxtLen = 0;
-            for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
-                nTPLen += pParaPortion->GetTextPortions()[--nTest].GetLen();
-            for ( nTest = pParaPortion->GetLines().Count(); nTest; )
-                nTxtLen += pParaPortion->GetLines()[--nTest].GetLen();
-            DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "CreateBinTextObject: ParaPortion not completely formatted!" );
+            for (nTest = rParaPortion.GetTextPortions().Count(); nTest;)
+                nTPLen += rParaPortion.GetTextPortions()[--nTest].GetLen();
+            for (nTest = rParaPortion.GetLines().Count(); nTest; )
+                nTxtLen += rParaPortion.GetLines()[--nTest].GetLen();
+            DBG_ASSERT(nTPLen == rParaPortion.GetNode()->Len() && nTxtLen == rParaPortion.GetNode()->Len(), "CreateBinTextObject: ParaPortion not completely formatted!");
 #endif
         }
     }
@@ -1322,7 +1321,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             if ( bNewContent && bUsePortionInfo )
             {
                 const XParaPortion& rXP = (*pPortionInfo)[n];
-                ParaPortion* pParaPortion = GetParaPortions()[ nPara ];
+                ParaPortion* pParaPortion = GetParaPortions().SafeGetObject(nPara);
                 DBG_ASSERT( pParaPortion, "InsertBinTextObject: ParaPortion?" );
                 pParaPortion->nHeight = rXP.nHeight;
                 pParaPortion->nFirstLineOffset = rXP.nFirstLineOffset;
@@ -3010,8 +3009,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                     aNewSel.Max().SetIndex( aNewSel.Max().GetIndex() + nDiffs );
 
                 sal_Int32 nSelNode = maEditDoc.GetPos( rData.aSelection.Min().GetNode() );
-                ParaPortion* pParaPortion = GetParaPortions()[nSelNode];
-                pParaPortion->MarkSelectionInvalid( rData.nStart );
+                ParaPortion& rParaPortion = GetParaPortions().getRef(nSelNode);
+                rParaPortion.MarkSelectionInvalid(rData.nStart);
             }
         }
     }

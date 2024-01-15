@@ -199,8 +199,8 @@ void Test::testLineSpacing()
         aEditEngine.QuickSetAttribs(*pSet, aSelection);
 
         // Assert changes
-        ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
-        ContentNode* const pNode = pParaPortion->GetNode();
+        ParaPortion const& rParaPortion = aEditEngine.GetParaPortions().getRef(0);
+        ContentNode* const pNode = rParaPortion.GetNode();
         const SvxLineSpacingItem& rLSItem = pNode->GetContentAttribs().GetItem(EE_PARA_SBL);
         CPPUNIT_ASSERT_EQUAL(SvxInterLineSpaceRule::Prop, rLSItem.GetInterLineSpaceRule());
         CPPUNIT_ASSERT_EQUAL(nSpace, rLSItem.GetPropLineSpace());
@@ -2094,7 +2094,7 @@ void Test::testCreateLines()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rParagraphPortionList.Count());
 
     {
-        EditLineList& rLines = rParagraphPortionList[0]->GetLines();
+        EditLineList& rLines = rParagraphPortionList.getRef(0).GetLines();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rLines.Count());
         EditLine const& rLine = rLines[0];
 
@@ -2110,7 +2110,7 @@ void Test::testCreateLines()
     }
 
     {
-        EditLineList& rLines = rParagraphPortionList[1]->GetLines();
+        EditLineList& rLines = rParagraphPortionList.getRef(1).GetLines();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rLines.Count());
 
         {

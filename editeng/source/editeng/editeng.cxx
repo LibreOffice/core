@@ -1925,7 +1925,7 @@ void EditEngine::SetControlWord( EEControlBits nWord )
         for ( sal_Int32 n = 0; n < nNodes; n++ )
         {
             ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
-            const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[n];
+            ParaPortion const& rPortion = pImpEditEngine->GetParaPortions().getRef(n);
             bool bWrongs = false;
             if (pNode->GetWrongList() != nullptr)
                 bWrongs = !pNode->GetWrongList()->empty();
@@ -1935,10 +1935,10 @@ void EditEngine::SetControlWord( EEControlBits nWord )
                 pImpEditEngine->maInvalidRect.SetLeft( 0 );
                 pImpEditEngine->maInvalidRect.SetRight( pImpEditEngine->GetPaperSize().Width() );
                 pImpEditEngine->maInvalidRect.SetTop( nY+1 );
-                pImpEditEngine->maInvalidRect.SetBottom( nY+pPortion->GetHeight()-1 );
+                pImpEditEngine->maInvalidRect.SetBottom(nY + rPortion.GetHeight() - 1);
                 pImpEditEngine->UpdateViews(pImpEditEngine->mpActiveView);
             }
-            nY += pPortion->GetHeight();
+            nY += rPortion.GetHeight();
         }
     }
 }
@@ -2305,8 +2305,8 @@ bool EditEngine::ShouldCreateBigTextObject() const
     sal_Int32 nParas = pImpEditEngine->GetEditDoc().Count();
     for ( sal_Int32 nPara = 0; nPara < nParas; nPara++  )
     {
-        ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
-        nTextPortions = nTextPortions + pParaPortion->GetTextPortions().Count();
+        ParaPortion& rParaPortion = pImpEditEngine->GetParaPortions().getRef(nPara);
+        nTextPortions = nTextPortions + rParaPortion.GetTextPortions().Count();
     }
     return nTextPortions >= pImpEditEngine->GetBigTextObjectStart();
 }
@@ -2461,13 +2461,12 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
 
     ParagraphInfos aInfos;
     aInfos.bValid = pImpEditEngine->IsFormatted();
-    if ( pImpEditEngine->IsFormatted() )
+    if (pImpEditEngine->IsFormatted() && pImpEditEngine->GetParaPortions().exists(nPara))
     {
-        const ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
-        const EditLine* pLine = (pParaPortion && pParaPortion->GetLines().Count()) ?
-                &pParaPortion->GetLines()[0] : nullptr;
-        DBG_ASSERT( pParaPortion && pLine, "GetParagraphInfos - Paragraph out of range" );
-        if ( pParaPortion && pLine )
+        ParaPortion const& rParaPortion = pImpEditEngine->GetParaPortions().getRef(nPara);
+        const EditLine* pLine = (rParaPortion.GetLines().Count()) ? &rParaPortion.GetLines()[0] : nullptr;
+        DBG_ASSERT(pLine, "GetParagraphInfos - Paragraph out of range");
+        if (pLine)
         {
             aInfos.nFirstLineHeight = pLine->GetHeight();
             aInfos.nFirstLineTextHeight = pLine->GetTxtHeight();
