@@ -314,13 +314,16 @@ public:
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 
+    tools::Long     GetPixelWidthHint(const ScAddress& rPos);
+
     void            PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, PaintPartFlags nPart,
-                            sal_uInt16 nExtFlags = 0 );
-    void            PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags = 0 );
+                            sal_uInt16 nExtFlags = 0, tools::Long nMaxWidthAffectedHint = -1 );
+    void            PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags = 0,
+                               tools::Long nMaxWidthAffectedHint = -1 );
 
-    void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    void            PostPaintCell( const ScAddress& rPos );
+    void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab, tools::Long nMaxWidthAffectedHint = -1);
+    void            PostPaintCell( const ScAddress& rPos, tools::Long nMaxWidthAffectedHint = -1);
     void            PostPaintGridAll();
     void            PostPaintExtras();
 

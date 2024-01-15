@@ -478,7 +478,8 @@ public:
                                     // Drawing
 
     void            PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                        ScUpdateMode eMode = ScUpdateMode::All );
+                               ScUpdateMode eMode = ScUpdateMode::All,
+                               tools::Long nMaxWidthAffectedHint = -1 );
 
     void            PaintGrid();
 
