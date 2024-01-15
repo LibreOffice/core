@@ -1095,13 +1095,14 @@ CondFormatModel::CondFormatModel() :
 CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
     mpFormat(nullptr),
-    mbReadyForFinalize(false)
+    mbReadyForFinalize(false),
+    mbOwnsFormat(true)
 {
 }
 
 CondFormat::~CondFormat()
 {
-    if (!mbReadyForFinalize && mpFormat)
+    if (mbOwnsFormat)
         delete mpFormat;
 }
 
@@ -1147,12 +1148,11 @@ void CondFormat::finalizeImport()
     if (mpFormat->size() > 0)
     {
         SCTAB nTab = maModel.maRanges.GetTopLeftCorner().Tab();
+        mbOwnsFormat = false; // ownership transferred to std::unique_ptr -> ScDocument
         sal_Int32 nIndex = getScDocument().AddCondFormat(std::unique_ptr<ScConditionalFormat>(mpFormat), nTab);
 
         rDoc.AddCondFormatData( maModel.maRanges, nTab, nIndex );
     }
-    else
-        mbReadyForFinalize = false;
 }
 
 CondFormatRuleRef CondFormat::createRule()
