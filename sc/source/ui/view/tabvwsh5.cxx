@@ -57,12 +57,15 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             if (nParts & PaintPartFlags::Size)
                 RepeatResize();                     //! InvalidateBorder ???
+            const tools::Long nWidthAffectedHint = pPaintHint->GetMaxWidthAffectedHint();
             if (nParts & PaintPartFlags::Grid)
                 PaintArea( pPaintHint->GetStartCol(), pPaintHint->GetStartRow(),
-                           pPaintHint->GetEndCol(), pPaintHint->GetEndRow() );
+                           pPaintHint->GetEndCol(), pPaintHint->GetEndRow(),
+                           ScUpdateMode::All, nWidthAffectedHint );
             if (nParts & PaintPartFlags::Marks)
                 PaintArea( pPaintHint->GetStartCol(), pPaintHint->GetStartRow(),
-                           pPaintHint->GetEndCol(), pPaintHint->GetEndRow(), ScUpdateMode::Marks );
+                           pPaintHint->GetEndCol(), pPaintHint->GetEndRow(),
+                           ScUpdateMode::Marks, nWidthAffectedHint );
             if (nParts & PaintPartFlags::Left)
                 PaintLeftArea( pPaintHint->GetStartRow(), pPaintHint->GetEndRow() );
             if (nParts & PaintPartFlags::Top)

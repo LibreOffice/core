@@ -2363,7 +2363,7 @@ void ScTabView::UpdateFormulas(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //  PaintArea - repaint block
 
 void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                            ScUpdateMode eMode )
+                            ScUpdateMode eMode, tools::Long nMaxWidthAffectedHint )
 {
     SCCOL nCol1;
     SCROW nRow1;
@@ -2441,20 +2441,32 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 
         if ( eMode == ScUpdateMode::All )
         {
-            if (bIsTiledRendering)
+            if (nMaxWidthAffectedHint != -1)
             {
-                // When a cell content is deleted we have no clue about
-                // the width of the embedded text.
-                // Anyway, clients will ask only for tiles that overlaps
-                // the visible area.
-                // Remember that wsd expects int and that aEnd.X() is
-                // in pixels and will be converted in twips, before performing
-                // the lok callback, so we need to avoid that an overflow occurs.
-                aEnd.setX( std::numeric_limits<int>::max() / 1000 );
+                // If we know the max text width affected then just invalidate
+                // the max of the cell width and hint of affected cell width
+                // (where affected with is in terms of max width of optimal cell
+                // width for before/after change)
+                tools::Long nCellWidth = std::abs(aEnd.X() - aStart.X());
+                aEnd.setX(aStart.getX() + std::max(nCellWidth, nMaxWidthAffectedHint) * nLayoutSign);
             }
             else
             {
-                aEnd.setX( bLayoutRTL ? 0 : pGridWin[i]->GetOutputSizePixel().Width() );
+                if (bIsTiledRendering)
+                {
+                    // When a cell content is deleted we have no clue about
+                    // the width of the embedded text.
+                    // Anyway, clients will ask only for tiles that overlaps
+                    // the visible area.
+                    // Remember that wsd expects int and that aEnd.X() is
+                    // in pixels and will be converted in twips, before performing
+                    // the lok callback, so we need to avoid that an overflow occurs.
+                    aEnd.setX( std::numeric_limits<int>::max() / 1000 );
+                }
+                else
+                {
+                    aEnd.setX( bLayoutRTL ? 0 : pGridWin[i]->GetOutputSizePixel().Width() );
+                }
             }
         }
         aEnd.AdjustX( -nLayoutSign );
