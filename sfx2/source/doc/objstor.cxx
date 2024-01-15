@@ -654,7 +654,9 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     EnableSetModified( false );
 
-    pMedium->LockOrigFileOnDemand( true, false );
+    // tdf#53614 - don't try to lock file after cancelling the import process
+    if (GetErrorIgnoreWarning() != ERRCODE_ABORT)
+        pMedium->LockOrigFileOnDemand( true, false );
     if ( GetErrorIgnoreWarning() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage;
