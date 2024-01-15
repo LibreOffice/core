@@ -20,6 +20,25 @@
 #include "pdfioutdev_gpl.hxx"
 #include "pnghelper.hxx"
 
+#if defined __GNUC__ || defined __clang__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#elif defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4100) // unreferenced formal parameter
+#pragma warning(disable : 4121) // alignment of a member was sensitive to packing in Gfx.h/Operator
+#endif
+
+#include <Gfx.h>
+#include <splash/SplashBitmap.h>
+#include <SplashOutputDev.h>
+#if defined __GNUC__ || defined __clang__
+# pragma GCC diagnostic pop
+#elif defined _MSC_VER
+#pragma warning(pop)
+#endif
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -425,7 +444,6 @@ static void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          int               width,
                          int               height,
                          bool              bInvert ) { writeMask_(o_rOutputBuf,str,width,height,bInvert); }
-
 
 int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, const GfxState* state ) const
 {
@@ -1163,6 +1181,50 @@ void PDFOutDev::setSkipImages( bool bSkipImages )
     m_bSkipImages = bSkipImages;
 }
 
+#if POPPLER_CHECK_VERSION(21, 3, 0)
+poppler_bool PDFOutDev::tilingPatternFill(GfxState *, Gfx *, Catalog *,
+                                          GfxTilingPattern *tPat, const double *mat,
+                                          int x0, int y0, int x1, int y1,
+                                          double xStep, double yStep)
+{
+    const double *pBbox = tPat->getBBox();
+    const int nPaintType = tPat->getPaintType();
+    double nWidth = pBbox[2] - pBbox[0];
+    double nHeight = pBbox[3] - pBbox[1];
+
+    // If our wrapper is skipping images then we don't need to do anything
+    // but return 'true' so that Poppler doesn't do the slow method
+    if (m_bSkipImages)
+        return true;
+
+    // Copied from the Cairo output dev; I think this is patterns
+    // with gaps, let poppler do the slow method for now.
+    if (xStep != nWidth || yStep != nHeight)
+        return false;
+
+    printf( "tilingPatternFill %d %d %d %d %f %f "
+            "%d "
+            "%f %f %f %f %f %f", // No ending space!
+
+            x0, y0, x1, y1, normalize(xStep), normalize(yStep),
+
+            nPaintType,
+
+            normalize(mat[0]), normalize(mat[1]),
+            normalize(mat[2]), normalize(mat[3]),
+            normalize(mat[4]), normalize(mat[5])
+            );
+
+    // TODO: Write the image
+
+    // If we return false here we can fall back to the slow path
+    return true;
+}
+
+// This could be implemented for earlier versions, but the interface keeps
+// changing a little; not having it is only a problem for inputs with
+// large patterns.
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

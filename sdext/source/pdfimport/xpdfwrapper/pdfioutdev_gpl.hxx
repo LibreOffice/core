@@ -283,6 +283,13 @@ namespace pdfi
 
         static void setPageNum( int nNumPages );
         void setSkipImages ( bool bSkipImages );
+#if POPPLER_CHECK_VERSION(21, 3, 0)
+        poppler_bool useTilingPatternFill() override { return false; };
+        poppler_bool tilingPatternFill(GfxState *state, Gfx *gfx, Catalog *cat,
+                                       GfxTilingPattern *tPat, const double *mat,
+                                       int x0, int y0, int x1, int y1,
+                                       double xStep, double yStep) override;
+#endif
     };
 }
 
