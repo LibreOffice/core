@@ -2959,7 +2959,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
     pFS->startElement(FSNS(XML_c, XML_numCache));
     pFS->startElement(FSNS(XML_c, XML_formatCode));
     OUString sNumberFormatString("General");
-    const sal_Int32 nKey = xValueSeq->getNumberFormatKeyByIndex(-1);
+    const sal_Int32 nKey = xValueSeq.is() ? xValueSeq->getNumberFormatKeyByIndex(-1) : 0;
     if (nKey > 0)
         sNumberFormatString = getNumberFormatCode(nKey);
     pFS->writeEscaped(sNumberFormatString);
