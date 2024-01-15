@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,editeng_core, \
     editeng/qa/unit/ESelectionTest \
     editeng/qa/unit/EPaMTest \
     editeng/qa/unit/EditLineTest \
+    editeng/qa/unit/EditLineListTest \
     editeng/qa/unit/EditPaMTest \
     editeng/qa/unit/EditSelectionTest \
 ))
