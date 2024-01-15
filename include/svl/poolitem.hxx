@@ -141,7 +141,7 @@ class SVL_DLLPUBLIC SfxPoolItem
     //     these are not really 'static', but should be)
     //     -> needs cleanup
     //   m_bPoolDefault: set by user using SetPoolDefaultItem
-    //     tho should be better called 'UserDefault'
+    //     those should be better called 'UserDefault'
     bool        m_bStaticDefault : 1;       // bit 1
     bool        m_bPoolDefault : 1;         // bit 2
 
