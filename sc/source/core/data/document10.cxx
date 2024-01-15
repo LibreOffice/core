@@ -22,7 +22,7 @@
 
 #include <refupdatecontext.hxx>
 #include <sal/log.hxx>
-#include <editeng/colritem.hxx>
+#include <svx/DocumentColorHelper.hxx>
 #include <scitems.hxx>
 #include <datamapper.hxx>
 #include <docsh.hxx>
@@ -186,17 +186,10 @@ std::set<Color> ScDocument::GetDocColors()
 {
     std::set<Color> aDocColors;
     ScDocumentPool *pPool = GetPool();
-    const sal_uInt16 pAttribs[] = {ATTR_BACKGROUND, ATTR_FONT_COLOR};
-    for (sal_uInt16 nAttrib : pAttribs)
-    {
-        for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(nAttrib))
-        {
-            const SvxColorItem *pColorItem = static_cast<const SvxColorItem*>(pItem);
-            Color aColor( pColorItem->GetValue() );
-            if (COL_AUTO != aColor)
-                aDocColors.insert(aColor);
-        }
-    }
+
+    svx::DocumentColorHelper::queryColors<SvxBrushItem>(ATTR_BACKGROUND, pPool, aDocColors);
+    svx::DocumentColorHelper::queryColors<SvxColorItem>(ATTR_FONT_COLOR, pPool, aDocColors);
+
     return aDocColors;
 }
 
