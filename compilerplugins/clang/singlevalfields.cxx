@@ -412,6 +412,7 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
                 || isa<UnresolvedMemberExpr>(parent)
                 || isa<MaterializeTemporaryExpr>(parent)  //???
                 || isa<InitListExpr>(parent)
+                || isa<DesignatedInitExpr>(parent)
                 || isa<CXXUnresolvedConstructExpr>(parent)
                 || isa<LambdaExpr>(parent)
                 || isa<PackExpansionExpr>(parent)
