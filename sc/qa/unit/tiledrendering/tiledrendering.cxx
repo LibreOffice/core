@@ -92,12 +92,21 @@ inline std::string toString(const ColRowZoom& item)
 }
 CPPUNIT_NS_END
 
+namespace {
+class ViewCallback;
+}
+
 class ScTiledRenderingTest : public UnoApiXmlTest
 {
 public:
     ScTiledRenderingTest();
     virtual void setUp() override;
     virtual void tearDown() override;
+
+    void checkSampleInvalidation(const ViewCallback& rView, bool bFullRow);
+    void cellInvalidationHelper(ScModelObj* pModelObj, ScTabViewShell* pView,
+                                const ScAddress& rAdr, bool bAddText,
+                                bool bFullRow);
 
     ScModelObj* createDoc(const char* pName);
     void setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell);
@@ -3354,6 +3363,112 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     CPPUNIT_ASSERT(!aView.m_bInvalidateTiles);
 }
 
+void ScTiledRenderingTest::checkSampleInvalidation(const ViewCallback& rView, bool bFullRow)
+{
+    // we expect invalidations, but that isn't really important
+    CPPUNIT_ASSERT(rView.m_bInvalidateTiles);
+    tools::Rectangle aInvalidation;
+    for (const auto& rRect : rView.m_aInvalidations)
+        aInvalidation.Union(rRect);
+    if (!bFullRow)
+    {
+        // What matters is that we expect that the invalidation does not extend all the
+        // way to the max right of the sheet.
+        // Here we originally got 32212306 and now ~5056 for a single cell case
+        CPPUNIT_ASSERT_LESSEQUAL(tools::Long(8000), aInvalidation.GetWidth());
+    }
+    else
+    {
+        // We expect RTL to continue to invalidate the entire row
+        // from 0 to end of sheet (see ScDocShell::PostPaint, 'Extend to whole rows'),
+        // which is different to the adjusted LTR case which
+        // invalidated the row from left of edited cell to right of end
+        // of sheet.
+        CPPUNIT_ASSERT_LESSEQUAL(tools::Long(0), aInvalidation.Left());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(32212230), aInvalidation.Right());
+    }
+}
+
+void ScTiledRenderingTest::cellInvalidationHelper(ScModelObj* pModelObj, ScTabViewShell* pView, const ScAddress& rAdr,
+                                                  bool bAddText, bool bFullRow)
+{
+    // view
+    ViewCallback aView;
+
+    if (bAddText)
+    {
+        // Type "Hello World" in D8, process events to idle and don't commit yet
+        lcl_typeCharsInCell("Hello World", rAdr.Col(), rAdr.Row(), pView, pModelObj, false, false);
+
+        aView.m_bInvalidateTiles = false;
+        aView.m_aInvalidations.clear();
+
+        // commit text and process events to idle
+        lcl_typeCharsInCell("", rAdr.Col(), rAdr.Row(), pView, pModelObj, true, true);
+    }
+    else // DeleteText
+    {
+        pView->SetCursor(rAdr.Col(), rAdr.Row());
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    checkSampleInvalidation(aView, bFullRow);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellMinimalInvalidations)
+{
+    ScAddress aA8(0, 7, 0);
+    ScAddress aD4(3, 7, 0);
+    ScAddress aD13(3, 12, 0);
+    ScAddress aD17(3, 16, 0);
+
+    ScModelObj* pModelObj = createDoc("cell-invalidations.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    // Changed: Minimized invalidations (bFullRow: false)
+
+    // Common case, LTR, default cell formatting
+    cellInvalidationHelper(pModelObj, pView, aA8, true, false);
+    cellInvalidationHelper(pModelObj, pView, aD4, true, false);
+    // Left-aligned merged cells
+    cellInvalidationHelper(pModelObj, pView, aD17, true, false);
+    // Delete single cell text case
+    cellInvalidationHelper(pModelObj, pView, aA8, false, false);
+    // Paste into a single cell
+    {
+        pView->SetCursor(aD4.Col(), aD4.Row());
+        uno::Sequence<beans::PropertyValue> aArgs;
+        dispatchCommand(mxComponent, ".uno:Copy", aArgs);
+        pView->SetCursor(aA8.Col(), aA8.Row());
+        Scheduler::ProcessEventsToIdle();
+
+        ViewCallback aView;
+        dispatchCommand(mxComponent, ".uno:Paste", aArgs);
+        Scheduler::ProcessEventsToIdle();
+
+        checkSampleInvalidation(aView, false);
+    }
+
+    // Unchanged: Non-minimized invalidations (bFullRow: true)
+
+    // Centered merged cells;
+    cellInvalidationHelper(pModelObj, pView, aD13, true, true);
+
+    // switch to RTL sheet
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+
+    cellInvalidationHelper(pModelObj, pView, aA8, true, true);
+    cellInvalidationHelper(pModelObj, pView, aD4, true, true);
+    // Delete Text
+    cellInvalidationHelper(pModelObj, pView, aA8, false, true);
+}
+
 // That we don't end up with two views on different zooms that invalidate different
 // rectangles, each should invalidate the same rectangle
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZoom)
@@ -3431,15 +3546,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     // That they don't exactly match doesn't matter, we're not checking rounding issues,
     // what matters is that they are not utterly different rectangles
     // Without fix result is originally:
-    // Comparing invalidation rects Left expected 278 actual 1213 Tolerance 50
-    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(
-                                          aView1.m_aInvalidations[0].TopLeft(),
-                                          aView2.m_aInvalidations[0].TopLeft(),
-                                          100);
-    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(
-                                          aView1.m_aInvalidations[0].BottomLeft(),
-                                          aView2.m_aInvalidations[0].BottomLeft(),
-                                          100);
+    // Comparing invalidation rectangles Width expected 6214742 actual 26716502 Tolerance 50
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aView2.m_aInvalidations[0],
+                                                  aView1.m_aInvalidations[0],
+                                                  50);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)

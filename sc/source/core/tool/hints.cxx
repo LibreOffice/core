@@ -22,9 +22,10 @@
 
 // ScPaintHint - info what has to be repainted
 
-ScPaintHint::ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint ) :
+ScPaintHint::ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint, tools::Long nMaxWidthAffectedHint ) :
     aRange( rRng ),
-    nParts( nPaint )
+    nParts( nPaint ),
+    nWidthAffectedHint(nMaxWidthAffectedHint)
 {
 }
 

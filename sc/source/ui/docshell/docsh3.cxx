@@ -100,13 +100,13 @@ void ScDocShell::PostDataChanged()
 
 void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, PaintPartFlags nPart,
-                            sal_uInt16 nExtFlags )
+                            sal_uInt16 nExtFlags, tools::Long nMaxWidthAffectedHint )
 {
     ScRange aRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
-    PostPaint(aRange, nPart, nExtFlags);
+    PostPaint(aRange, nPart, nExtFlags, nMaxWidthAffectedHint);
 }
 
-void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags )
+void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags, tools::Long nMaxWidthAffectedHint )
 {
     ScRangeList aPaintRanges;
     std::set<SCTAB> aTabsInvalidated;
@@ -118,9 +118,17 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
         SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = std::min<SCTAB>(nMaxTab, rRange.aEnd.Tab());
 
-        if (!m_pDocument->ValidCol(nCol1)) nCol1 = m_pDocument->MaxCol();
+        if (!m_pDocument->ValidCol(nCol1))
+        {
+            nMaxWidthAffectedHint = -1; // Hint no longer valid
+            nCol1 = m_pDocument->MaxCol();
+        }
         if (!m_pDocument->ValidRow(nRow1)) nRow1 = m_pDocument->MaxRow();
-        if (!m_pDocument->ValidCol(nCol2)) nCol2 = m_pDocument->MaxCol();
+        if (!m_pDocument->ValidCol(nCol2))
+        {
+            nMaxWidthAffectedHint = -1; // Hint no longer valid
+            nCol2 = m_pDocument->MaxCol();
+        }
         if (!m_pDocument->ValidRow(nRow2)) nRow2 = m_pDocument->MaxRow();
 
         if ( m_pPaintLockData )
@@ -143,8 +151,16 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         if (nExtFlags & SC_PF_LINES)            // respect space for lines
         {
                                                 //! check for hidden columns/rows!
-            if (nCol1>0) --nCol1;
-            if (nCol2<m_pDocument->MaxCol()) ++nCol2;
+            if (nCol1 > 0)
+            {
+                nMaxWidthAffectedHint = -1; // Hint no longer valid
+                --nCol1;
+            }
+            if (nCol2 < m_pDocument->MaxCol())
+            {
+                nMaxWidthAffectedHint = -1; // Hint no longer valid
+                ++nCol2;
+            }
             if (nRow1>0) --nRow1;
             if (nRow2<m_pDocument->MaxRow()) ++nRow2;
         }
@@ -166,6 +182,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
             {
                 nCol1 = 0;
                 nCol2 = m_pDocument->MaxCol();
+                nMaxWidthAffectedHint = -1; // Hint no longer valid
             }
         }
         aPaintRanges.push_back(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
@@ -173,7 +190,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
             aTabsInvalidated.insert(nTabNum);
     }
 
-    Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart));
+    Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart, nMaxWidthAffectedHint));
 
     // LOK: we are supposed to update the row / columns headers (and actually
     // the document size too - cell size affects that, obviously)
@@ -190,14 +207,14 @@ void ScDocShell::PostPaintGridAll()
     PostPaint( 0,0,0, m_pDocument->MaxCol(),m_pDocument->MaxRow(),MAXTAB, PaintPartFlags::Grid );
 }
 
-void ScDocShell::PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
+void ScDocShell::PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab, tools::Long nMaxWidthAffectedHint )
 {
-    PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid, SC_PF_TESTMERGE );
+    PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid, SC_PF_TESTMERGE, nMaxWidthAffectedHint );
 }
 
-void ScDocShell::PostPaintCell( const ScAddress& rPos )
+void ScDocShell::PostPaintCell( const ScAddress& rPos, tools::Long nMaxWidthAffectedHint )
 {
-    PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
+    PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab(), nMaxWidthAffectedHint );
 }
 
 void ScDocShell::PostPaintExtras()

@@ -671,6 +671,26 @@ bool ScDocFunc::DeleteContents(
     return true;
 }
 
+tools::Long ScDocShell::GetPixelWidthHint(const ScAddress& rPos)
+{
+    ScViewData* pViewData = GetViewData();
+    if (!pViewData)
+        return -1;
+
+    ScSizeDeviceProvider aProv(this);
+    OutputDevice* pDev = aProv.GetDevice();         // has pixel MapMode
+    double nPPTX = aProv.GetPPTX();
+    double nPPTY = aProv.GetPPTY();
+
+    ScDocument& rDoc = GetDocument();
+    Fraction aInvX(pViewData->GetZoomX().GetDenominator(),
+                   pViewData->GetZoomX().GetNumerator());
+    Fraction aInvY(pViewData->GetZoomY().GetDenominator(),
+                   pViewData->GetZoomY().GetNumerator());
+    return rDoc.GetNeededSize(rPos.Col(), rPos.Row(), rPos.Tab(), pDev,
+                              nPPTX, nPPTY, aInvX, aInvY, true /*bWidth*/);
+}
+
 bool ScDocFunc::DeleteCell(
     const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi )
 {
@@ -719,6 +739,7 @@ bool ScDocFunc::DeleteCell(
         pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, rMark, rPos);
     }
 
+    tools::Long nBefore(rDocShell.GetPixelWidthHint(rPos));
     rDoc.DeleteArea(rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark, nFlags);
 
     if (bRecord)
@@ -731,7 +752,7 @@ bool ScDocFunc::DeleteCell(
     if (!AdjustRowHeight(rPos, true, bApi))
         rDocShell.PostPaint(
             rPos.Col(), rPos.Row(), rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Tab(),
-            PaintPartFlags::Grid, nExtFlags);
+            PaintPartFlags::Grid, nExtFlags, nBefore);
 
     aModificator.SetDocumentModified();
 
@@ -833,7 +854,9 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
         aOldValues.push_back(aOldValue);
     }
 
+    tools::Long nBefore(rDocShell.GetPixelWidthHint(rPos));
     o_rbNumFmtSet = rDoc.SetString( rPos.Col(), rPos.Row(), rPos.Tab(), rText );
+    tools::Long nAfter(rDocShell.GetPixelWidthHint(rPos));
 
     if (bUndo)
     {
@@ -845,7 +868,7 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
     if ( bEditDeleted || rDoc.HasAttrib( ScRange(rPos), HasAttrFlags::NeedHeight ) )
         AdjustRowHeight( ScRange(rPos), true, bApi );
 
-    rDocShell.PostPaintCell( rPos );
+    rDocShell.PostPaintCell( rPos, std::max(nBefore, nAfter) );
     aModificator.SetDocumentModified();
 
     // notify input handler here the same way as in PutCell

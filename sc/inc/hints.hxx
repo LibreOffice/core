@@ -28,10 +28,11 @@ class SC_DLLPUBLIC ScPaintHint final : public SfxHint
 {
     ScRange         aRange;
     PaintPartFlags  nParts;
+    tools::Long nWidthAffectedHint;
 
 public:
                     ScPaintHint() = delete;
-                    ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint );
+                    ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint, tools::Long nMaxWidthAffectedHint = -1);
                     virtual ~ScPaintHint() override;
 
     SCCOL           GetStartCol() const     { return aRange.aStart.Col(); }
@@ -41,6 +42,7 @@ public:
     SCROW           GetEndRow() const       { return aRange.aEnd.Row(); }
     SCTAB           GetEndTab() const       { return aRange.aEnd.Tab(); }
     PaintPartFlags  GetParts() const        { return nParts; }
+    tools::Long     GetMaxWidthAffectedHint() const { return nWidthAffectedHint; }
 };
 
 class ScUpdateRefHint final : public SfxHint
