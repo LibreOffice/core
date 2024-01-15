@@ -638,25 +638,25 @@ bool ScConditionEntry::IsEqual( const ScFormatEntry& rOther, bool bIgnoreSrcPos 
 
     const ScConditionEntry& r = static_cast<const ScConditionEntry&>(rOther);
 
-    bool bEq = (eOp == r.eOp && nOptions == r.nOptions &&
-                lcl_IsEqual( pFormula1, r.pFormula1 ) &&
-                lcl_IsEqual( pFormula2, r.pFormula2 ));
+    if (eOp != r.eOp || nOptions != r.nOptions
+        || !lcl_IsEqual(pFormula1, r.pFormula1) || !lcl_IsEqual(pFormula2, r.pFormula2))
+        return false;
 
     if (!bIgnoreSrcPos)
     {
         // for formulas, the reference positions must be compared, too
         // (including aSrcString, for inserting the entries during XML import)
-        if ( bEq && ( pFormula1 || pFormula2 ) && ( aSrcPos != r.aSrcPos || aSrcString != r.aSrcString ) )
-            bEq = false;
+        if ( ( pFormula1 || pFormula2 ) && ( aSrcPos != r.aSrcPos || aSrcString != r.aSrcString ) )
+            return false;
     }
 
     // If not formulas, compare values
-    if ( bEq && !pFormula1 && ( nVal1 != r.nVal1 || aStrVal1 != r.aStrVal1 || bIsStr1 != r.bIsStr1 ) )
-        bEq = false;
-    if ( bEq && !pFormula2 && ( nVal2 != r.nVal2 || aStrVal2 != r.aStrVal2 || bIsStr2 != r.bIsStr2 ) )
-        bEq = false;
+    if ( !pFormula1 && ( nVal1 != r.nVal1 || aStrVal1 != r.aStrVal1 || bIsStr1 != r.bIsStr1 ) )
+        return false;
+    if ( !pFormula2 && ( nVal2 != r.nVal2 || aStrVal2 != r.aStrVal2 || bIsStr2 != r.bIsStr2 ) )
+        return false;
 
-    return bEq;
+    return true;
 }
 
 void ScConditionEntry::Interpret( const ScAddress& rPos )
