@@ -6578,7 +6578,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
             if (xOverlayManager.is())
             {
-                Color aCursorColor = GetSettings().GetStyleSettings().GetAccentColor();
+                Color aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
                 if (mrViewData.GetActivePart() != eWhich)
                     // non-active pane uses a different color.
                     aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
@@ -6753,7 +6753,7 @@ void ScGridWindow::UpdateHighlightOverlay()
             }
 
             const Color aBackgroundColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-            Color aHighlightColor = Application::GetSettings().GetStyleSettings().GetAccentColor();
+            Color aHighlightColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
             aHighlightColor.Merge(aBackgroundColor, 100);
 
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
@@ -6844,7 +6844,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
     }
     else if (xOverlayManager.is())
     {
-        Color aHandleColor = GetSettings().GetStyleSettings().GetHighlightColor();
+        Color aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
         if (mrViewData.GetActivePart() != eWhich)
             // non-active pane uses a different color.
             aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;

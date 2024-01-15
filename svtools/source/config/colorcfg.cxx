@@ -135,6 +135,7 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         { std::u16string_view(u"/HTMLKeyword")     ,false },
         { std::u16string_view(u"/HTMLUnknown")     ,false },
         { std::u16string_view(u"/CalcGrid")        ,false },
+        { std::u16string_view(u"/CalcCellFocus")        ,false },
         { std::u16string_view(u"/CalcPageBreak"), false },
         { std::u16string_view(u"/CalcPageBreakManual"), false },
         { std::u16string_view(u"/CalcPageBreakAutomatic"), false },
@@ -415,6 +416,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         { COL_LIGHTRED,     COL_LIGHTRED    }, // HTMLKEYWORD
         { COL_GRAY,         COL_GRAY        }, // HTMLUNKNOWN
         { COL_GRAY3,        COL_GRAY7       }, // CALCGRID
+        { COL_LIGHTBLUE,    COL_LIGHTBLUE   }, // CALCCELLFOCUS
         { COL_BLUE,         COL_BLUE        }, // CALCPAGEBREAK
         { Color(0x2300dc),  Color(0x2300DC) }, // CALCPAGEBREAKMANUAL
         { COL_GRAY7,        COL_GRAY7       }, // CALCPAGEBREAKAUTOMATIC
@@ -459,6 +461,10 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         case LINKSVISITED :
             aRet = Application::GetSettings().GetStyleSettings().GetVisitedLinkColor();
+            break;
+
+        case CALCCELLFOCUS:
+            aRet = Application::GetSettings().GetStyleSettings().GetAccentColor();
             break;
 
         default:

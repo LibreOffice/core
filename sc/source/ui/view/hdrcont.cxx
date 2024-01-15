@@ -242,7 +242,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     else
         SetTextColor((bBoldSet && !bHighContrast) ? aSelTextColor : aTextColor);
 
-    Color aSelLineColor = rStyleSettings.GetHighlightColor();
+    Color aSelLineColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
     aSelLineColor.Merge( COL_BLACK, 0xe0 );        // darken just a little bit
 
     bool bLayoutRTL = IsLayoutRTL();
@@ -361,7 +361,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             {
                 // background for selection
                 GetOutDev()->SetLineColor();
-                Color aColor( rStyleSettings.GetAccentColor() );
+                Color aColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
 // merging the highlightcolor (which is used if accent does not exist) with the background
 // fails in many cases such as Breeze Dark (highlight is too close to background) and
 // Breeze Light (font color is white and not readable anymore)
@@ -385,7 +385,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         // line in different color for selection
         if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && !bHighContrast )
         {
-            GetOutDev()->SetLineColor( aSelLineColor );
+            GetOutDev()->SetLineColor(aSelLineColor);
             if (bVertical)
             {
                 tools::Long nDarkPos = bMirrored ? 0 : nBarSize-1;

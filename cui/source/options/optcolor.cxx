@@ -132,6 +132,7 @@ const vEntryInfo[] =
     { Group_Html,    IDS(unknown), std::u16string_view(u"/HTMLUnknown") },
 
     { Group_Calc,    IDS(calcgrid), std::u16string_view(u"/CalcGrid") },
+    { Group_Calc,    IDS(calccellfocus), std::u16string_view(u"/CalcCellFocus") },
     { Group_Calc,    IDS(brk), std::u16string_view(u"/CalcPageBreak") },
     { Group_Calc,    IDS(brkmanual), std::u16string_view(u"/CalcPageBreakManual") },
     { Group_Calc,    IDS(brkauto), std::u16string_view(u"/CalcPageBreakAutomatic") },

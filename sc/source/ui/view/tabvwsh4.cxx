@@ -1700,13 +1700,16 @@ public:
 
 private:
     ScTabViewShell& mrViewShell;
-    uno::Reference<util::XChangesNotifier> m_xChangesNotifier;
+    uno::Reference<util::XChangesNotifier> m_xViewChangesNotifier;
+    uno::Reference<util::XChangesNotifier> m_xColorSchemeChangesNotifier;
 };
 
 void ScViewOptiChangesListener::stopListening()
 {
-    if (m_xChangesNotifier)
-        m_xChangesNotifier->removeChangesListener(this);
+    if (m_xViewChangesNotifier)
+        m_xViewChangesNotifier->removeChangesListener(this);
+    if (m_xColorSchemeChangesNotifier)
+        m_xColorSchemeChangesNotifier->removeChangesListener(this);
 }
 
 // virtual
@@ -1720,13 +1723,23 @@ void SAL_CALL ScViewOptiChangesListener::changesOccurred(const util::ChangesEven
             mrViewShell.HighlightOverlay();
             break;
         }
+
+        if (OUString sChangedEntry; (change.Accessor >>= sChangedEntry) && sChangedEntry ==
+            "ColorSchemes/org.openoffice.Office.UI:ColorScheme['COLOR_SCHEME_LIBREOFFICE_AUTOMATIC']/CalcCellFocus/Color")
+        {
+            mrViewShell.GetActiveWin()->UpdateCursorOverlay();
+            mrViewShell.GetActiveWin()->UpdateAutoFillOverlay();
+            mrViewShell.GetActiveWin()->UpdateHighlightOverlay();
+            break;
+        }
     }
 }
 
 // virtual
 void SAL_CALL ScViewOptiChangesListener::disposing(const lang::EventObject& /* rEvent */)
 {
-    m_xChangesNotifier.clear();
+    m_xViewChangesNotifier.clear();
+    m_xColorSchemeChangesNotifier.clear();
 }
 
 ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
@@ -1736,17 +1749,28 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
     uno::Reference<lang::XMultiServiceFactory> xConfigurationProvider(
         configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()));
 
-    beans::NamedValue aProperty{ u"nodepath"_ustr,
+    beans::NamedValue aViewProperty{ u"nodepath"_ustr,
                                  uno::Any(u"/org.openoffice.Office.Calc/Content/Display"_ustr) };
 
-    uno::Reference<uno::XInterface> xConfigurationAccess
+    beans::NamedValue aColorSchemeProperty{ u"nodepath"_ustr,
+                                 uno::Any(u"/org.openoffice.Office.UI/ColorScheme"_ustr) };
+
+    uno::Reference<uno::XInterface> xViewConfigurationAccess
         = xConfigurationProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess", { uno::Any(aProperty) });
+            "com.sun.star.configuration.ConfigurationAccess", { uno::Any(aViewProperty) });
 
-    m_xChangesNotifier.set(xConfigurationAccess, uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> xColorSchemeConfigurationAccess
+        = xConfigurationProvider->createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationAccess", { uno::Any(aColorSchemeProperty) });
 
-    if (m_xChangesNotifier)
-        m_xChangesNotifier->addChangesListener(this);
+    m_xViewChangesNotifier.set(xViewConfigurationAccess, uno::UNO_QUERY);
+    m_xColorSchemeChangesNotifier.set(xColorSchemeConfigurationAccess, uno::UNO_QUERY);
+
+    if (m_xViewChangesNotifier)
+        m_xViewChangesNotifier->addChangesListener(this);
+
+    if (m_xColorSchemeChangesNotifier)
+        m_xColorSchemeChangesNotifier->addChangesListener(this);
 }
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,

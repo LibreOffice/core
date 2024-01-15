@@ -350,6 +350,16 @@
           </info>
         </prop>
       </group>
+      <group oor:name="CalcCellFocus">
+        <info>
+        <desc>Specifies the setting to change cell frame, col/row highlight and col/row header color in Calc</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+          <desc>Specifies the cell frame color for Calc</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="CalcPageBreak">
         <info>
           <desc>Specifies the settings used for page breaks in the page break preview in Calc.</desc>

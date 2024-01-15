@@ -54,6 +54,7 @@ enum ColorConfigEntry : int
     HTMLKEYWORD         ,
     HTMLUNKNOWN         ,
     CALCGRID            ,
+    CALCCELLFOCUS       ,
     CALCPAGEBREAK       ,
     CALCPAGEBREAKMANUAL,
     CALCPAGEBREAKAUTOMATIC,

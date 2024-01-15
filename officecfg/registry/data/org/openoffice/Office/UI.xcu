@@ -293,6 +293,11 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="CalcCellFocus">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="CalcPageBreak">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
