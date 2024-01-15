@@ -455,7 +455,7 @@ void ScPDFExportTest::testTdf159068()
     }
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 5 (Artifact: Header, Footer, Rectangel, DetectiveArrow, ValidationCircle)
+    // - Expected: 5 (Artifact: Header, Footer, Rectangle, DetectiveArrow, ValidationCircle)
     // - Actual  : 2 (Artifact: Header, Footer)
     CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nArtifact)>(5), nArtifact);
 }
