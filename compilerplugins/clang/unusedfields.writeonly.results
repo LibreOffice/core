@@ -1,9 +1,13 @@
 basctl/source/basicide/moduldlg.hxx:134
     basctl::ObjectPage m_xDropTarget std::unique_ptr<SbTreeListBoxDropTarget>
-basctl/source/inc/basidesh.hxx:94
+basctl/source/inc/basidesh.hxx:98
     basctl::Shell m_aNotifier DocumentEventNotifier
 basctl/source/inc/bastype2.hxx:182
     basctl::SbTreeListBox m_aNotifier DocumentEventNotifier
+basctl/source/inc/colorscheme.hxx:29
+    basctl::ColorScheme m_sSchemeName OUString
+basctl/source/inc/colorscheme.hxx:30
+    basctl::ColorScheme m_bIsDefault _Bool
 basctl/source/inc/IDEComboBox.hxx:113
     basctl::DocListenerBox maNotifier DocumentEventNotifier
 basegfx/source/polygon/b2dpolygontriangulator.cxx:113
@@ -86,7 +90,7 @@ chart2/inc/ChartModel.hxx:486
     chart::ChartModel mnEnd sal_Int32
 chart2/source/controller/dialogs/DialogModel.cxx:179
     (anonymous namespace)::lcl_RolesWithRangeAppend m_rDestCnt tContainerType *
-chart2/source/controller/inc/ChartController.hxx:413
+chart2/source/controller/inc/ChartController.hxx:414
     chart::ChartController m_apDropTargetHelper std::unique_ptr<DropTargetHelper>
 chart2/source/controller/inc/dlg_ChartType_UNO.hxx:62
     chart::ChartTypeUnoDlg m_xChartModel rtl::Reference< ::chart::ChartModel>
@@ -96,7 +100,7 @@ chart2/source/controller/main/ElementSelector.hxx:37
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
 chart2/source/inc/MediaDescriptorHelper.hxx:71
     apphelper::MediaDescriptorHelper ReadOnly _Bool
-chart2/source/view/charttypes/PieChart.hxx:129
+chart2/source/view/charttypes/PieChart.hxx:140
     chart::PieChart::PieLabelInfo fValue double
 codemaker/source/cppumaker/dependencies.hxx:108
     codemaker::cppumaker::Dependencies m_voidDependency _Bool
@@ -280,11 +284,11 @@ dbaccess/source/ui/browser/dbloader.cxx:60
     (anonymous namespace)::DBContentLoader m_xListener Reference<XLoadEventListener>
 dbaccess/source/ui/inc/RelationController.hxx:36
     dbaui::ORelationController m_xWaitObject std::unique_ptr<weld::WaitObject>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:313
+desktop/qa/desktop_lib/test_desktop_lib.cxx:314
     DesktopLOKTest m_bModified _Bool
-desktop/source/app/app.cxx:1240
+desktop/source/app/app.cxx:1247
     desktop::(anonymous namespace)::ExecuteGlobals pCTLLanguageOptions std::unique_ptr<SvtCTLOptions>
-desktop/source/app/app.cxx:1241
+desktop/source/app/app.cxx:1248
     desktop::(anonymous namespace)::ExecuteGlobals pPathOptions std::unique_ptr<SvtPathOptions>
 desktop/source/deployment/gui/dp_gui_extlistbox.hxx:138
     dp_gui::ExtensionBox_Impl m_vRemovedEntries std::vector<TEntry_Impl>
@@ -466,7 +470,7 @@ include/sfx2/minfitem.hxx:38
     SfxMacroInfoItem aCommentText OUString
 include/sfx2/viewsh.hxx:188
     SfxViewShell m_xHelper std::shared_ptr<SfxStoringHelper>
-include/svl/poolitem.hxx:144
+include/svl/poolitem.hxx:160
     SfxPoolItem m_bDeleted _Bool
 include/svl/sigstruct.hxx:127
     SignatureInformation hasInconsistentSigningTime _Bool
@@ -564,7 +568,7 @@ include/svx/svdmrkv.hxx:99
     SdrMarkView mpMarkingSubSelectionOverlay std::unique_ptr<MarkingSubSelectionOverlay>
 include/svx/tbcontrl.hxx:265
     SvxCurrencyToolBoxControl::SvxCurrencyData m_onlyIsoCode _Bool
-include/svx/theme/ThemeColorPaletteManager.hxx:43
+include/svx/theme/ThemeColorPaletteManager.hxx:44
     svx::ThemePaletteColorData maBaseColor Color
 include/svx/viewpt3d.hxx:62
     Viewport3D::(unnamed struct at /home/noel/libo-plugin/include/svx/viewpt3d.hxx:60:5) H double
@@ -586,7 +590,7 @@ include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:46
     AddonNotebookBarItem nWidth sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:27
     GLWindow bMultiSampleSupported _Bool
-include/vcl/pdfextoutdevdata.hxx:86
+include/vcl/pdfextoutdevdata.hxx:87
     vcl::PDFExtOutDevData mbSinglePageSheets _Bool
 include/vcl/salnativewidgets.hxx:493
     PushButtonValue mbSingleLine _Bool
@@ -706,13 +710,15 @@ sc/inc/fillinfo.hxx:287
     ScTableInfo mDataBarInfos std::vector<std::unique_ptr<const ScDataBarInfo> >
 sc/inc/fillinfo.hxx:288
     ScTableInfo mIconSetInfos std::vector<std::unique_ptr<const ScIconSetInfo> >
+sc/inc/patattr.hxx:118
+    ScPatternAttr m_bDeleted _Bool
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:78
     ScDPLabelData mbIsValue _Bool
 sc/inc/scmatrix.hxx:105
     ScMatrix mbCloneIfConst _Bool
-sc/inc/scmod.hxx:100
+sc/inc/scmod.hxx:98
     ScModule m_pErrorHdl std::unique_ptr<SfxErrorHandler>
 sc/inc/tabopparams.hxx:37
     ScInterpreterTableOpParams bValid _Bool
@@ -722,13 +728,13 @@ sc/qa/unit/subsequent_export_test.cxx:2231
     (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2228:18) mnStyle SvxBorderLineStyle
 sc/qa/unit/subsequent_export_test.cxx:2232
     (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2228:18) mnWidth tools::Long
-sc/source/core/data/column4.cxx:1451
+sc/source/core/data/column4.cxx:1453
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
-sc/source/core/data/column.cxx:1313
+sc/source/core/data/column.cxx:1244
     (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
-sc/source/core/data/column.cxx:1314
+sc/source/core/data/column.cxx:1245
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags ScCloneFlags
-sc/source/core/data/table2.cxx:4056
+sc/source/core/data/table2.cxx:4020
     (anonymous namespace)::OutlineArrayFinder mpArray ScOutlineArray *
 sc/source/filter/excel/xltoolbar.hxx:24
     TBCCmd A _Bool
@@ -748,6 +754,8 @@ sc/source/filter/inc/exp_op.hxx:47
     ExportBiff5 pExcRoot RootData *
 sc/source/filter/inc/imp_op.hxx:83
     ImportExcel::LastFormula mpCell ScFormulaCell *
+sc/source/filter/inc/lotattr.hxx:92
+    LotAttrCache pDocPool ScDocumentPool *
 sc/source/filter/inc/namebuff.hxx:37
     StringHashEntry aString OUString
 sc/source/filter/inc/namebuff.hxx:38
@@ -1008,7 +1016,7 @@ svx/source/inc/datanavi.hxx:326
     svxform::DataNavigator m_xDataWin std::unique_ptr<DataNavigatorWindow>
 svx/source/inc/docrecovery.hxx:132
     svx::DocRecovery::TURLInfo Module OUString
-svx/source/inc/StylesPreviewToolBoxControl.hxx:33
+svx/source/inc/StylesPreviewToolBoxControl.hxx:32
     StylesPreviewToolBoxControl m_xWeldBox std::unique_ptr<StylesPreviewWindow_Base>
 svx/source/inc/StylesPreviewWindow.hxx:106
     StylesPreviewWindow_Base m_pStylePoolChangeListener std::unique_ptr<StylePoolChangeListener>
@@ -1098,9 +1106,9 @@ svx/source/tbxctrls/tbcontrl.cxx:338
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:95
     SwAccessibleMap mvShapes SwShapeList_Impl
-sw/inc/swmodule.hxx:95
+sw/inc/swmodule.hxx:93
     SwModule m_pErrorHandler std::unique_ptr<SfxErrorHandler>
-sw/inc/swmodule.hxx:108
+sw/inc/swmodule.hxx:106
     SwModule m_xLinguServiceEventListener css::uno::Reference<css::linguistic2::XLinguServiceEventListener>
 sw/inc/swwait.hxx:45
     SwWait mpLockedDispatchers o3tl::sorted_vector<SfxDispatcher *>
@@ -1108,7 +1116,7 @@ sw/inc/textboxhelper.hxx:215
     SwTextBoxNode m_bIsCloningInProgress _Bool
 sw/inc/unoframe.hxx:303
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
-sw/inc/view.hxx:198
+sw/inc/view.hxx:197
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
 sw/inc/viewopt.hxx:46
     ViewOptFlags1 bPagebreak _Bool
@@ -1130,7 +1138,7 @@ sw/source/core/inc/swfont.hxx:992
     SvStatistics nChangeFont sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:135
     SwImplProtocol m_aVars std::vector<tools::Long>
-sw/source/core/table/swtable.cxx:3050
+sw/source/core/table/swtable.cxx:3054
     SwTableCellInfo::Impl m_HandledTableBoxes TableBoxes_t
 sw/source/filter/html/swhtml.hxx:390
     SwHTMLParser m_aOrphanedTableBoxes std::vector<std::unique_ptr<SwTableBox> >
@@ -1142,6 +1150,8 @@ sw/source/filter/inc/rtf.hxx:31
     RTFSurround::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/sw/source/filter/inc/rtf.hxx:27:9) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:32
     RTFSurround::(unnamed union at /home/noel/libo-plugin/sw/source/filter/inc/rtf.hxx:26:5) Flags struct (unnamed struct at /home/noel/libo-plugin/sw/source/filter/inc/rtf.hxx:27:9)
+sw/source/filter/writer/writer.cxx:48
+    Writer_Impl aFontRemoveLst std::vector<SfxPoolItemHolder>
 sw/source/uibase/inc/glossary.hxx:65
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/glossary.hxx:81
@@ -1212,13 +1222,13 @@ vcl/inc/pdf/BitmapID.hxx:22
     vcl::pdf::BitmapID m_nChecksum BitmapChecksum
 vcl/inc/pdf/BitmapID.hxx:23
     vcl::pdf::BitmapID m_nMaskChecksum BitmapChecksum
-vcl/inc/qt5/QtInstance.hxx:63
-    QtInstance m_pQApplication std::unique_ptr<QApplication>
 vcl/inc/qt5/QtInstance.hxx:64
-    QtInstance m_pFakeArgvFreeable std::vector<FreeableCStr>
+    QtInstance m_pQApplication std::unique_ptr<QApplication>
 vcl/inc/qt5/QtInstance.hxx:65
-    QtInstance m_pFakeArgv std::unique_ptr<char *[]>
+    QtInstance m_pFakeArgvFreeable std::vector<FreeableCStr>
 vcl/inc/qt5/QtInstance.hxx:66
+    QtInstance m_pFakeArgv std::unique_ptr<char *[]>
+vcl/inc/qt5/QtInstance.hxx:67
     QtInstance m_pFakeArgc std::unique_ptr<int>
 vcl/inc/salmenu.hxx:34
     SalItemParams pMenu VclPtr<Menu>
@@ -1294,7 +1304,7 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:82
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:21026
+vcl/unx/gtk3/gtkinst.cxx:21049
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection gpointer
@@ -1346,6 +1356,8 @@ xmlsecurity/inc/certificateviewer.hxx:51
     CertificateViewer mxGeneralPage std::unique_ptr<CertificateViewerGeneralTP>
 xmlsecurity/inc/certificateviewer.hxx:52
     CertificateViewer mxDetailsPage std::unique_ptr<CertificateViewerDetailsTP>
+xmlsecurity/qa/unit/signing/signing2.cxx:48
+    SigningTest2 mxSecurityContext uno::Reference<xml::crypto::XXMLSecurityContext>
 xmlsecurity/source/helper/pdfsignaturehelper.cxx:237
     (anonymous namespace)::PageChecksum m_nPageContent BitmapChecksum
 xmlsecurity/source/helper/pdfsignaturehelper.cxx:238

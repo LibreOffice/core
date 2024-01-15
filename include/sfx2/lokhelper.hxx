@@ -255,7 +255,6 @@ class SfxLokLanguageGuard
 {
     bool m_bSetLanguage;
     const SfxViewShell* m_pOldShell;
-    const SfxViewShell* m_pNewShell;
 
 public:
     SfxLokLanguageGuard(SfxViewShell* pNewShell);

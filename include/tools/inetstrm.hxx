@@ -36,8 +36,6 @@ class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) INetMIMEMessageStream
     char           *pRead;
     char           *pWrite;
 
-    std::unique_ptr<SvStream>
-                    pMsgStrm;
     SvMemoryStream  maMsgBuffer;
     char           *pMsgRead;
     char           *pMsgWrite;

@@ -1108,18 +1108,17 @@ void SfxLokHelper::sendNetworkAccessError(std::string_view rAction)
 SfxLokLanguageGuard::SfxLokLanguageGuard(SfxViewShell* pNewShell)
     : m_bSetLanguage(false)
     , m_pOldShell(nullptr)
-    , m_pNewShell(pNewShell)
 {
     m_pOldShell = SfxViewShell::Current();
-    if (!comphelper::LibreOfficeKit::isActive() || !m_pNewShell || m_pNewShell == m_pOldShell)
+    if (!comphelper::LibreOfficeKit::isActive() || !pNewShell || pNewShell == m_pOldShell)
     {
         return;
     }
 
     // The current view ID is not the one that belongs to this frame, update
     // language/locale.
-    comphelper::LibreOfficeKit::setLanguageTag(m_pNewShell->GetLOKLanguageTag());
-    comphelper::LibreOfficeKit::setLocale(m_pNewShell->GetLOKLocale());
+    comphelper::LibreOfficeKit::setLanguageTag(pNewShell->GetLOKLanguageTag());
+    comphelper::LibreOfficeKit::setLocale(pNewShell->GetLOKLocale());
     m_bSetLanguage = true;
 }
 

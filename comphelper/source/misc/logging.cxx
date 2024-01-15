@@ -38,7 +38,6 @@ namespace comphelper
     class EventLogger_Impl
     {
     private:
-        Reference< XComponentContext >  m_aContext;
         Reference< XLogger >            m_xLogger;
 
     public:
@@ -70,8 +69,7 @@ namespace comphelper
     }
 
     EventLogger_Impl::EventLogger_Impl(const Reference< XComponentContext >& _rxContext, const OUString& rLoggerName)
-        : m_aContext(_rxContext)
-        , m_xLogger(createLogger(_rxContext, rLoggerName))
+        : m_xLogger(createLogger(_rxContext, rLoggerName))
     {
     }
 

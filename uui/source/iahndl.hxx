@@ -57,15 +57,6 @@ namespace com::sun::star {
     }
 }
 
-struct InteractionHandlerData
-{
-    /** The UNO service name to use to instantiate the content provider.
-     */
-    OUString ServiceName;
-};
-
-typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
-
 typedef std::unordered_map< OUString, OUString >    StringHashMap;
 
 class UUIInteractionHelper

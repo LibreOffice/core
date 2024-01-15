@@ -49,8 +49,6 @@ LotAttrCache::ENTRY::~ENTRY ()
 LotAttrCache::LotAttrCache (LotusContext& rContext)
     : mrContext(rContext)
 {
-    pDocPool = rContext.rDoc.GetPool();
-
     pColTab.reset( new Color [ 8 ] );
     pColTab[ 0 ] = COL_WHITE;
     pColTab[ 1 ] = COL_LIGHTBLUE;

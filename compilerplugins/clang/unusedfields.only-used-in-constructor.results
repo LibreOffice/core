@@ -42,6 +42,8 @@ chart2/source/controller/inc/dlg_View3D.hxx:46
     chart::View3DDialog m_aControllerLocker ControllerLockHelper
 chart2/source/controller/inc/RangeSelectionListener.hxx:65
     chart::RangeSelectionListener m_aControllerLockGuard ControllerLockGuardUNO
+chart2/source/view/charttypes/AreaChart.hxx:68
+    chart::AreaChart m_aMainPosHelper PlottingPositionHelper
 connectivity/source/commontools/RowFunctionParser.cxx:373
     connectivity::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::classic::rule<ScannerT>
 connectivity/source/commontools/RowFunctionParser.cxx:374
@@ -160,9 +162,7 @@ cui/source/inc/tabstpge.hxx:86
     SvxTabulatorTabPage m_aCenterWin TabWin_Impl
 cui/source/inc/tabstpge.hxx:87
     SvxTabulatorTabPage m_aDezWin TabWin_Impl
-cui/source/options/optaboutconfig.hxx:55
-    CuiAboutConfigTabPage m_pParent weld::Window *
-cui/source/options/optcolor.cxx:274
+cui/source/options/optcolor.cxx:282
     (anonymous namespace)::ColorConfigWindow_Impl::Entry m_aDefaultColor Color
 dbaccess/source/core/api/RowSet.hxx:108
     dbaccess::ORowSet m_aURL OUString
@@ -198,8 +198,8 @@ drawinglayer/source/tools/emfphelperdata.hxx:198
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:199
     emfplushelper::EmfPlusHelperData mnFrameBottom sal_Int32
-editeng/source/editeng/impedit.hxx:528
-    ImpEditEngine aSelFuncSet EditSelFunctionSet
+editeng/source/editeng/impedit.hxx:552
+    ImpEditEngine maSelFuncSet EditSelFunctionSet
 embeddedobj/source/msole/olecomponent.hxx:51
     OleComponent m_pInterfaceContainer comphelper::OMultiTypeInterfaceContainerHelper2 *
 embeddedobj/source/msole/olecomponent.hxx:53
@@ -238,8 +238,6 @@ filter/source/graphicfilter/icgm/chart.hxx:51
     DataNode nBoxY2 sal_Int16
 helpcompiler/inc/HelpCompiler.hxx:200
     HelpCompiler lang const std::string
-include/basic/basmgr.hxx:59
-    BasicError nReason BasicErrorReason
 include/comphelper/seqstream.hxx:75
     comphelper::SequenceInputStream m_aData const css::uno::Sequence<sal_Int8>
 include/docmodel/theme/FormatScheme.hxx:373
@@ -266,6 +264,8 @@ include/registry/registry.hxx:34
     Registry_Api acquire void (*)(RegHandle)
 include/sfx2/classificationhelper.hxx:134
     sfx::ClassificationKeyCreator m_ePolicyType const SfxClassificationPolicyType
+include/sfx2/lokhelper.hxx:258
+    SfxLokLanguageGuard m_pNewShell const SfxViewShell *
 include/sfx2/msg.hxx:116
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:118
@@ -390,8 +390,6 @@ include/sfx2/msg.hxx:146
     SfxType23 nAttribs sal_uInt16
 include/sfx2/msg.hxx:146
     SfxType23 pType const std::type_info *
-include/svl/itemset.hxx:346
-    SfxItemSetFixed m_aItems const SfxPoolItem *[NITEMS]
 include/svx/ClassificationDialog.hxx:35
     svx::ClassificationDialog maInternationalHelper SfxClassificationHelper
 include/svx/ClassificationDialog.hxx:37
@@ -578,6 +576,8 @@ sc/inc/editutil.hxx:113
     ScEnginePoolHelper bDeleteEnginePool _Bool
 sc/inc/mtvelements.hxx:171
     sc::ColumnBlockConstPosition miSparklinePos SparklineStoreType::const_iterator
+sc/inc/patattr.hxx:117
+    ScPatternAttr m_nSerialNumber sal_uInt32
 sc/inc/queryevaluator.hxx:61
     ScQueryEvaluator mnEntryCount const SCSIZE
 sc/inc/queryevaluator.hxx:65
@@ -590,16 +590,18 @@ sc/inc/SolverSettings.hxx:168
     sc::SolverSettings SolverCodesToLOEngines std::map<OUString, OUString>
 sc/inc/token.hxx:402
     SingleDoubleRefModifier aDub ScComplexRefData
-sc/qa/unit/tiledrendering/tiledrendering.cxx:439
+sc/qa/unit/tiledrendering/tiledrendering.cxx:444
     (anonymous namespace)::ViewCallback m_callbackWrapper TestLokCallbackWrapper
-sc/source/core/data/document.cxx:1229
+sc/source/core/data/document.cxx:1234
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1230
+sc/source/core/data/document.cxx:1235
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk ScBulkBroadcast
-sc/source/core/data/table2.cxx:812
+sc/source/core/data/table2.cxx:811
     (anonymous namespace)::TransClipHandler mnEndRow size_t
 sc/source/filter/inc/htmlpars.hxx:627
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
+sc/source/filter/inc/lotattr.hxx:92
+    LotAttrCache pDocPool ScDocumentPool *
 sc/source/filter/inc/sheetdatacontext.hxx:50
     oox::xls::SheetDataContext aReleaser SolarMutexReleaser
 sc/source/filter/inc/XclImpChangeTrack.hxx:55
@@ -666,7 +668,7 @@ scripting/source/stringresource/stringresource.cxx:1246
     stringresource::(anonymous namespace)::BinaryInput m_aData Sequence<sal_Int8>
 sd/inc/anminfo.hxx:51
     SdAnimationInfo maSecondSoundFile OUString
-sd/source/filter/eppt/epptbase.hxx:347
+sd/source/filter/eppt/epptbase.hxx:348
     PPTWriterBase maFraction Fraction
 sd/source/filter/ppt/pptin.hxx:81
     SdPPTImport maParam PowerPointImportParam
@@ -682,13 +684,13 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:33
     sd::ZeroconfService port uint
 sd/source/ui/view/DocumentRenderer.cxx:1318
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1187
+sd/source/ui/view/viewshel.cxx:1200
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1188
+sd/source/ui/view/viewshel.cxx:1201
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1189
+sd/source/ui/view/viewshel.cxx:1202
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1190
+sd/source/ui/view/viewshel.cxx:1203
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:268
     (anonymous namespace)::PDFGrammar::definition boolean rule<ScannerT>
@@ -816,7 +818,7 @@ svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1098
     (anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::classic::rule<ScannerT>
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem SvxContourDlgItem
-svx/source/dialog/framelinkarray.cxx:565
+svx/source/dialog/framelinkarray.cxx:570
     svx::frame::(anonymous namespace)::MergedCellIterator mnFirstRow sal_Int32
 svx/source/dialog/imapwnd.hxx:88
     IMapWindow maItemInfos SfxItemInfo[1]
@@ -852,7 +854,7 @@ sw/source/core/layout/dbg_lay.cxx:181
     SwImplEnterLeave m_nAction DbgAction
 sw/source/core/text/inftxt.cxx:546
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<VirtualDevice>
-sw/source/core/text/inftxt.hxx:683
+sw/source/core/text/inftxt.hxx:700
     SwTextSlot aText OUString
 sw/source/core/text/porfld.cxx:145
     (anonymous namespace)::SwFieldSlot aText OUString
@@ -892,6 +894,8 @@ ucb/source/ucp/gio/gio_mount.hxx:78
     OOoMountOperationClass _gtk_reserved3 void (*)(void)
 ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
+uui/source/iahndl.hxx:64
+    InteractionHandlerData ServiceName OUString
 vcl/inc/graphic/Manager.hxx:41
     vcl::graphic::Manager maSwapOutTimer Timer
 vcl/inc/headless/BitmapHelper.hxx:32
@@ -912,6 +916,8 @@ vcl/inc/salvtables.hxx:1011
     SalInstanceComboBoxWithEdit m_aTextFilter WeldTextFilter
 vcl/inc/sft.hxx:178
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
+vcl/inc/skia/zone.hxx:29
+    SkiaZone g SolarMutexGuard
 vcl/inc/svimpbox.hxx:117
     SvImpLBox m_aFctSet ImpLBSelEng
 vcl/inc/unx/genpspgraphics.h:52
@@ -960,15 +966,15 @@ vcl/unx/gtk3/gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:7380
+vcl/unx/gtk3/gtkinst.cxx:7381
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtkinst.cxx:11036
+vcl/unx/gtk3/gtkinst.cxx:11037
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkBox *
-vcl/unx/gtk3/gtkinst.cxx:11038
+vcl/unx/gtk3/gtkinst.cxx:11039
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pMenuButton GtkMenuButton *
-vcl/unx/gtk3/gtkinst.cxx:21015
+vcl/unx/gtk3/gtkinst.cxx:21038
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtkinst.cxx:21021
+vcl/unx/gtk3/gtkinst.cxx:21044
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:246
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

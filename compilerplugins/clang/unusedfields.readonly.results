@@ -1,3 +1,5 @@
+basctl/source/inc/BasicColorConfig.hxx:65
+    basctl::BasicColorConfig aColorConfig const svtools::ColorConfig
 basegfx/source/polygon/b2dtrapezoid.cxx:208
     basegfx::trapezoidhelper::(anonymous namespace)::PointBlockAllocator maFirstStackBlock B2DPoint[32]
 basegfx/test/B2DPolyPolygonTest.cxx:66
@@ -178,7 +180,7 @@ cppu/source/uno/check.cxx:271
     (anonymous namespace)::Char4 c char
 cppuhelper/inc/interfacecontainer4.hxx:266
     cppuhelper::OInterfaceContainerHelper4::NotifySingleListener m_pMethod const NotificationMethod
-cui/source/options/optcolor.cxx:293
+cui/source/options/optcolor.cxx:303
     (anonymous namespace)::ColorConfigWindow_Impl aModuleOptions SvtModuleOptions
 dbaccess/source/core/api/RowSetBase.hxx:82
     dbaccess::ORowSetBase m_aEmptyValue connectivity::ORowSetValue
@@ -230,7 +232,7 @@ dbaccess/source/ui/inc/sqledit.hxx:42
     dbaui::SQLEditView m_aColorConfig const svtools::ColorConfig
 dbaccess/source/ui/inc/WCopyTable.hxx:258
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
-editeng/source/editeng/impedit.hxx:518
+editeng/source/editeng/impedit.hxx:542
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:114
     OCommonEmbeddedObject m_aClassName OUString
@@ -352,10 +354,6 @@ include/sfx2/msg.hxx:107
     SfxType aAttrib SfxTypeAttrib[1]
 include/sfx2/msg.hxx:117
     SfxType0 pType const std::type_info *
-include/svl/itempool.hxx:182
-    SfxItemPool::Item2Range m_begin o3tl::sorted_vector<SfxPoolItem *>::const_iterator
-include/svl/itempool.hxx:183
-    SfxItemPool::Item2Range m_end o3tl::sorted_vector<SfxPoolItem *>::const_iterator
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale SvtSysLocale
 include/svx/diagram/IDiagramHelper.hxx:72
@@ -398,8 +396,6 @@ include/unoidl/unoidl.hxx:455
     unoidl::ConstantValue::(anonymous union at /home/noel/libo-plugin/include/unoidl/unoidl.hxx:445:5) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories Directories
-include/unotools/historyoptions.hxx:59
-    SvtHistoryOptions::HistoryItem sPassword OUString
 include/vcl/bitmap.hxx:105
     BitmapSystemData mnWidth int
 include/vcl/bitmap.hxx:106
@@ -446,7 +442,7 @@ oox/qa/token/tokenmap-test.cxx:35
     oox::TokenmapTest tokenMap TokenMap
 oox/qa/unit/vba_compression.cxx:70
     TestVbaCompression m_directories test::Directories
-oox/source/drawingml/chart/objectformatter.cxx:722
+oox/source/drawingml/chart/objectformatter.cxx:723
     oox::drawingml::chart::ObjectFormatterData maFromLocale Locale
 reportdesign/source/ui/inc/ColorListener.hxx:35
     rptui::OColorListener m_aColorConfig svtools::ColorConfig
@@ -488,7 +484,7 @@ sc/inc/formulagroup.hxx:38
     sc::FormulaGroupEntry::(anonymous union at /home/noel/libo-plugin/sc/inc/formulagroup.hxx:35:5) mpCells ScFormulaCell **
 sc/inc/reordermap.hxx:20
     sc::ColRowReorderMapType maData DataType
-sc/inc/scmod.hxx:98
+sc/inc/scmod.hxx:96
     ScModule m_pCTLOptions std::unique_ptr<SvtCTLOptions>
 sc/inc/userlist.hxx:64
     ScUserList maData DataType
@@ -546,6 +542,14 @@ sc/source/ui/inc/inputhdl.hxx:68
     ScInputHandler pFormulaDataPara std::unique_ptr<ScTypedCaseStrSet>
 sc/source/ui/inc/tabcont.hxx:37
     ScTabControl bErrorShown _Bool
+sc/source/ui/inc/undoblk.hxx:348
+    ScUndoSelectionAttr aApplyPattern const CellAttributeHolder
+sc/source/ui/inc/undocell.hxx:61
+    ScUndoCursorAttr aOldPattern const CellAttributeHolder
+sc/source/ui/inc/undocell.hxx:62
+    ScUndoCursorAttr aNewPattern const CellAttributeHolder
+sc/source/ui/inc/undocell.hxx:63
+    ScUndoCursorAttr aApplyPattern const CellAttributeHolder
 sc/source/ui/vba/vbaformatconditions.hxx:38
     ScVbaFormatConditions mxSheetConditionalEntries css::uno::Reference<css::sheet::XSheetConditionalEntries>
 sc/source/ui/vba/vbaformatconditions.hxx:39
@@ -590,7 +594,7 @@ sdext/source/pdfimport/inc/pdfihelper.hxx:103
     pdfi::GraphicsContext BlendMode sal_Int8
 sdext/source/pdfimport/tree/style.hxx:44
     pdfi::StyleContainer::Style Contents OUString
-sfx2/source/appl/lnkbase2.cxx:81
+sfx2/source/appl/lnkbase2.cxx:82
     sfx2::(anonymous namespace)::ImplDdeItem pLink SvBaseLink *
 sfx2/source/inc/appdata.hxx:68
     SfxAppData_Impl maDocTopics std::vector<SfxDdeDocTopic_Impl *>
@@ -660,7 +664,7 @@ sw/inc/shellio.hxx:149
     SwReader mpStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/sw/inc/swevent.hxx:69:9) pFormat const SwFrameFormat *
-sw/inc/swmodule.hxx:92
+sw/inc/swmodule.hxx:90
     SwModule m_pCTLOptions std::unique_ptr<SvtCTLOptions>
 sw/qa/api/SwXHeadFootText.cxx:76
     (anonymous namespace)::SwXHeadFootText mxTextContent Reference<text::XTextContent>
@@ -688,7 +692,7 @@ sw/source/core/text/inftxt.cxx:546
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<VirtualDevice>
 sw/source/core/text/redlnitr.hxx:75
     SwRedlineItr m_pSet std::unique_ptr<SfxItemSet>
-sw/source/filter/html/htmltab.cxx:2852
+sw/source/filter/html/htmltab.cxx:2853
     CellSaveStruct m_xCnts std::shared_ptr<HTMLTableCnts>
 sw/source/filter/inc/rtf.hxx:33
     RTFSurround::(unnamed union at /home/noel/libo-plugin/sw/source/filter/inc/rtf.hxx:26:5) nVal sal_uInt8
@@ -722,8 +726,8 @@ ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 ucb/source/ucp/package/pkgprovider.hxx:48
     package_ucp::ContentProvider m_pPackages std::unique_ptr<Packages>
-ucb/source/ucp/webdav-curl/CurlSession.cxx:132
-    (anonymous namespace)::CurlOption::(anonymous union at /home/noel/libo-plugin/ucb/source/ucp/webdav-curl/CurlSession.cxx:131:5) pValue const void *const
+ucb/source/ucp/webdav-curl/CurlSession.cxx:133
+    (anonymous namespace)::CurlOption::(anonymous union at /home/noel/libo-plugin/ucb/source/ucp/webdav-curl/CurlSession.cxx:132:5) pValue const void *const
 ucbhelper/source/client/proxydecider.cxx:130
     ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const InternetProxyServer
 ucbhelper/source/provider/propertyvalueset.cxx:79
