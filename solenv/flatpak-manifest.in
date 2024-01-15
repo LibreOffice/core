@@ -794,6 +794,13 @@
                     "dest-filename": "@ARGON2_TARBALL@"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/@LIBPNG_TARBALL@",
+                    "sha256": "@LIBPNG_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@LIBPNG_TARBALL@"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/extern/@OPENSYMBOL_TTF@",
                     "sha256": "@OPENSYMBOL_SHA256SUM@",
                     "type": "file",
