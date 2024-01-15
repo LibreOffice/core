@@ -81,9 +81,9 @@ void CPDManager::onNameAcquired (GDBusConnection *connection,
                               G_DBUS_CALL_FLAGS_NONE,
                               -1, nullptr, nullptr, nullptr);
 
-            g_free(contents);
             g_object_unref(proxy);
             g_dbus_node_info_unref(introspection_data);
+            g_free(contents);
         }
         g_free(backend.second);
     }
@@ -122,10 +122,10 @@ void CPDManager::printerAdded (GDBusConnection *connection,
                                            nullptr,
                                            nullptr);
 
-            g_free(contents);
             g_dbus_node_info_unref(introspection_data);
             std::pair<std::string, GDBusProxy *> new_backend (sender_name, proxy);
             current->addBackend(std::move(new_backend));
+            g_free(contents);
         }
     }
     CPDPrinter *pDest = static_cast<CPDPrinter *>(malloc(sizeof(CPDPrinter)));
@@ -262,6 +262,7 @@ CPDManager* CPDManager::tryLoadCPD()
                 {
                     std::pair<std::string, gchar*> new_tbackend (filename, contents);
                     pManager->addTempBackend(new_tbackend);
+                    g_free(contents);
                 }
             }
             g_dir_close(dir);

@@ -2332,6 +2332,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     gchar* pFontname = nullptr;
     g_object_get(pSettings, "gtk-font-name", &pFontname, nullptr);
     PangoFontDescription* pFontDesc = pango_font_description_from_string(pFontname);
+    g_free(pFontname);
     vcl::Font aFont(pango_to_vcl(pFontDesc, rSettings.GetUILanguageTag().getLocale()));
     pango_font_description_free(pFontDesc);
 #else
