@@ -129,7 +129,7 @@ class SVL_DLLPUBLIC SfxPoolItem
     sal_uInt32  m_nSerialNumber;
 #endif
 
-    // bitfield for Item attributes that are Item-Dpendent
+    // bitfield for Item attributes that are Item-Dependent
 
     // Item is a SfxVoidItem (used for SfxItemState::DISABLED,
     // but unfortunately also for some slot stuff with
