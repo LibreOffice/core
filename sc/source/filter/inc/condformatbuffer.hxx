@@ -232,6 +232,7 @@ private:
     CondFormatRuleMap   maRules;            /// Maps formatting rules by priority.
     ScConditionalFormat* mpFormat;
     bool                mbReadyForFinalize;
+    bool                mbOwnsFormat;
 };
 
 struct ExCfRuleModel
