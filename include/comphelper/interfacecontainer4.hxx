@@ -288,7 +288,7 @@ inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>&
                                                    FuncT const& func) const
 {
     assert(rGuard.owns_lock());
-    if (std::as_const(maData)->size() == 0)
+    if (std::as_const(maData)->empty())
     {
         return;
     }

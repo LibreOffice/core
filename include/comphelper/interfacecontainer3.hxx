@@ -266,7 +266,11 @@ template <class T>
 template <typename FuncT>
 inline void OInterfaceContainerHelper3<T>::forEach(FuncT const& func)
 {
+    osl::ClearableMutexGuard aGuard(mrMutex);
+    if (std::as_const(maData)->empty())
+        return;
     OInterfaceIteratorHelper3<T> iter(*this);
+    aGuard.clear();
     while (iter.hasMoreElements())
     {
         auto xListener = iter.next();
