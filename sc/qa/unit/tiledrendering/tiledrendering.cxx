@@ -3304,7 +3304,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     // Right side of the first cell. First cell is long so click somewhere more than 800px (default of GridWindow size).
     int rightCellSideX = 1000 / nPPTX; // convert pixels to logical units
 
-    // Vettical position - doesn't matter - select the first row
+    // Vertical position - doesn't matter - select the first row
     int y = 1 / nPPTY;
 
     // Setup view #1
