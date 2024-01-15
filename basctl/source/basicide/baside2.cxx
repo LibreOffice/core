@@ -25,6 +25,7 @@
 #include <iderdll.hxx>
 #include <iderid.hxx>
 #include "moduldlg.hxx"
+#include <sfx2/dispatch.hxx>
 #include <docsignature.hxx>
 #include <colorscheme.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
@@ -1027,12 +1028,15 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             break;
         case SID_GOTOLINE:
         {
-            GotoLineDialog aGotoDlg(GetFrameWeld());
+            sal_uInt32 nCurLine = GetEditView()->GetSelection().GetStart().GetPara() + 1;
+            sal_uInt32 nLineCount = GetEditEngine()->GetParagraphCount();
+            GotoLineDialog aGotoDlg(GetFrameWeld(), nCurLine, nLineCount);
             if (aGotoDlg.run() == RET_OK)
             {
                 if (sal_Int32 const nLine = aGotoDlg.GetLineNumber())
                 {
                     TextSelection const aSel(TextPaM(nLine - 1, 0), TextPaM(nLine - 1, 0));
+                    GrabFocus();
                     GetEditView()->SetSelection(aSel);
                 }
             }
@@ -1054,6 +1058,12 @@ void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
                 if (SfxBindings* pBindings = GetBindingsPtr())
                     pBindings->Invalidate(SID_SIGNATURE);
             }
+        }
+        break;
+
+        case SID_BASICIDE_STAT_POS:
+        {
+            GetDispatcher()->Execute(SID_GOTOLINE);
         }
         break;
     }

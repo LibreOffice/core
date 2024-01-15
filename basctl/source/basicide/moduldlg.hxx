@@ -59,11 +59,15 @@ public:
 
 class GotoLineDialog : public weld::GenericDialogController
 {
-    std::unique_ptr<weld::Entry> m_xEdit;
+    std::unique_ptr<weld::SpinButton> m_xSpinButton;
+    std::unique_ptr<weld::Label> m_xLineCount;
     std::unique_ptr<weld::Button> m_xOKButton;
+    sal_uInt32 m_nCurLine;
+    sal_uInt32 m_nLineCount;
+
     DECL_LINK(OkButtonHandler, weld::Button&, void);
 public:
-    explicit GotoLineDialog(weld::Window* pParent);
+    explicit GotoLineDialog(weld::Window* pParent, sal_uInt32 nCurLine, sal_uInt32 nLineCount);
     virtual ~GotoLineDialog() override;
     sal_Int32 GetLineNumber() const;
 };

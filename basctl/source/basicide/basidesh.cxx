@@ -76,6 +76,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <BasicColorConfig.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
+#include <LineStatusControl.hxx>
 
 namespace basctl
 {
@@ -193,6 +194,7 @@ void Shell::Init()
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );
     LanguageBoxControl::RegisterControl( SID_BASICIDE_CURRENT_LANG );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER );
+    LineStatusControl::RegisterControl(SID_BASICIDE_STAT_POS);
 
     GetViewFrame().GetWindow().SetBackground(
         GetViewFrame().GetWindow().GetSettings().GetStyleSettings().GetWindowColor()

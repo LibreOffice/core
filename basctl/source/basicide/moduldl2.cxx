@@ -153,12 +153,24 @@ NewObjectDialog::NewObjectDialog(weld::Window * pParent, ObjectMode eMode, bool 
 }
 
 // GotoLineDialog
-GotoLineDialog::GotoLineDialog(weld::Window* pParent )
+GotoLineDialog::GotoLineDialog(weld::Window* pParent, sal_uInt32 nCurLine, sal_uInt32 nLineCount)
     : GenericDialogController(pParent, "modules/BasicIDE/ui/gotolinedialog.ui", "GotoLineDialog")
-    , m_xEdit(m_xBuilder->weld_entry("entry"))
+    , m_xSpinButton(m_xBuilder->weld_spin_button("spin"))
+    , m_xLineCount(m_xBuilder->weld_label("line_count"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_nCurLine(nCurLine)
+    , m_nLineCount(nLineCount)
 {
-    m_xEdit->grab_focus();
+    // Adjust line count label
+    OUString sLabel = m_xLineCount->get_label();
+    m_xLineCount->set_label(sLabel.replaceFirst("$1", OUString::number(m_nLineCount)));
+
+    // Initialize the spin button
+    m_xSpinButton->set_text(OUString::number(m_nCurLine));
+    m_xSpinButton->set_range(1, m_nLineCount);
+    m_xSpinButton->grab_focus();
+    m_xSpinButton->select_region(0, -1);
+
     m_xOKButton->connect_clicked(LINK(this, GotoLineDialog, OkButtonHandler));
 }
 
@@ -168,15 +180,22 @@ GotoLineDialog::~GotoLineDialog()
 
 sal_Int32 GotoLineDialog::GetLineNumber() const
 {
-    return m_xEdit->get_text().toInt32();
+    return m_xSpinButton->get_text().toInt32();
 }
 
 IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler, weld::Button&, void)
 {
-    if (GetLineNumber())
+    // The number must be in the range between 1 and the number of lines in the module
+    sal_Int32 nNumber = GetLineNumber();
+    if (nNumber && nNumber >= 1 && nNumber <= static_cast<sal_Int32>(m_nLineCount))
+    {
         m_xDialog->response(RET_OK);
+    }
     else
-        m_xEdit->select_region(0, -1);
+    {
+        m_xSpinButton->set_text(OUString::number(m_nCurLine));
+        m_xSpinButton->select_region(0, -1);
+    }
 }
 
 // ExportDialog

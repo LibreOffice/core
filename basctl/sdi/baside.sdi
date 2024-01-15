@@ -618,6 +618,7 @@ shell basctl_Shell
 
     SID_BASICIDE_STAT_POS
     [
+        ExecMethod  = ExecuteGlobal;
         StateMethod = GetState;
     ]
 

@@ -95,6 +95,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/iderdll \
 	basctl/source/basicide/layout \
 	basctl/source/basicide/linenumberwindow \
+	basctl/source/basicide/LineStatusControl \
 	basctl/source/basicide/localizationmgr \
 	basctl/source/basicide/macrodlg \
 	basctl/source/basicide/moduldl2 \

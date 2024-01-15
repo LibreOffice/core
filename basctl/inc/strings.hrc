@@ -113,6 +113,7 @@
 #define RID_STR_READONLY                    NC_("RID_STR_READONLY", "Read-only")
 #define RID_STR_MODULE_READONLY             NC_("RID_STR_READONLY_WARNING", "This module is read-only and cannot be edited.")
 #define RID_STR_DIALOG_READONLY             NC_("RID_STR_READONLY_WARNING", "This dialog is read-only and cannot be edited.")
+#define RID_LINE_STATUS_CONTROL             NC_("RID_LINE_STATUS_CONTROL", "Current line and character. Click to open 'Go to Line' dialog.")
 
 // Color scheme names
 #define RID_STR_COLORSCHEME_DEFAULT         NC_("RID_STR_COLORSCHEME_DEFAULT", "Default")
