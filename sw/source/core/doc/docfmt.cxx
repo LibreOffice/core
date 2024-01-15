@@ -25,10 +25,10 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/rsiditem.hxx>
-#include <editeng/colritem.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
+#include <svx/DocumentColorHelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
@@ -2038,19 +2038,11 @@ std::set<Color> SwDoc::GetDocColors()
 {
     std::set<Color> aDocColors;
     SwAttrPool& rPool = GetAttrPool();
-    const sal_uInt16 pAttribs[] = {RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_BACKGROUND};
-    for (sal_uInt16 nAttrib : pAttribs)
-    {
-        ItemSurrogates aSurrogates;
-        rPool.GetItemSurrogates(aSurrogates, nAttrib);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            auto pColorItem = static_cast<const SvxColorItem*>(pItem);
-            Color aColor( pColorItem->GetValue() );
-            if (COL_AUTO != aColor)
-                aDocColors.insert(aColor);
-        }
-    }
+
+    svx::DocumentColorHelper::queryColors<SvxColorItem>(RES_CHRATR_COLOR, &rPool, aDocColors);
+    svx::DocumentColorHelper::queryColors<SvxBrushItem>(RES_CHRATR_HIGHLIGHT, &rPool, aDocColors);
+    svx::DocumentColorHelper::queryColors<SvxBrushItem>(RES_CHRATR_BACKGROUND, &rPool, aDocColors);
+
     return aDocColors;
 }
 
