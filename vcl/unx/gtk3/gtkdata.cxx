@@ -69,7 +69,7 @@ GtkSalDisplay::~GtkSalDisplay()
 
     for(GdkCursor* & rpCsr : m_aCursors)
         if( rpCsr )
-            gdk_cursor_unref( rpCsr );
+            g_object_unref(rpCsr);
 #endif
 }
 
