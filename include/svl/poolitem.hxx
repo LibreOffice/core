@@ -138,7 +138,7 @@ class SVL_DLLPUBLIC SfxPoolItem
 
     // Item is registered at some Pool as default.
     //   m_bStaticDefault: direct Pool Item (CAUTION:
-    //     thetse are not really 'static', but should be)
+    //     these are not really 'static', but should be)
     //     -> needs cleanup
     //   m_bPoolDefault: set by user using SetPoolDefaultItem
     //     tho should be better called 'UserDefault'
