@@ -637,6 +637,9 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 {
     ScRange aOldRange( nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab);
     ScRange aNewRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+    // Don't deduplicate when undoing or creating an Undo document! It would disallow correct undo
+    bool bUndoContext = rDocument.IsUndo() || pTable->rDocument.IsUndo();
+    // Note that Undo documents use same pool as the original document
     bool bSameDoc = rDocument.GetStyleSheetPool() == pTable->rDocument.GetStyleSheetPool();
 
     for(const auto& rxCondFormat : *pTable->mpCondFormatList)
@@ -657,7 +660,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         aRefCxt.mnTabDelta = nTab - pTable->nTab;
         pNewFormat->UpdateReference(aRefCxt, true);
 
-        if (bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(rDocument, mpCondFormatList->GetFormat(rxCondFormat->GetKey()), pNewFormat.get(), nTab))
+        if (!bUndoContext && bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(rDocument, mpCondFormatList->GetFormat(rxCondFormat->GetKey()), pNewFormat.get(), nTab))
         {
             continue;
         }
@@ -667,7 +670,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         {
             // Check if there is the same format in the destination
             // If there is, then simply expand its range
-            if (CheckAndDeduplicateCondFormat(rDocument, rxCond.get(), pNewFormat.get(), nTab))
+            if (!bUndoContext && CheckAndDeduplicateCondFormat(rDocument, rxCond.get(), pNewFormat.get(), nTab))
             {
                 bDuplicate = true;
                 break;
