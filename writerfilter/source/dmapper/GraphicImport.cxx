@@ -210,7 +210,7 @@ public:
     sal_Int32 m_nTopPosition;
 
     bool      m_bUseSimplePos;
-    sal_Int32 m_zOrder;
+    std::optional<sal_Int32> m_oZOrder;
 
     sal_Int16 m_nHoriOrient;
     sal_Int16 m_nHoriRelation;
@@ -284,7 +284,6 @@ public:
         ,m_nLeftPosition(0)
         ,m_nTopPosition(0)
         ,m_bUseSimplePos(false)
-        ,m_zOrder(-1)
         ,m_nHoriOrient(   text::HoriOrientation::NONE )
         ,m_nHoriRelation( text::RelOrientation::FRAME )
         ,m_nVertOrient(  text::VertOrientation::NONE )
@@ -385,26 +384,33 @@ public:
 
     void applyZOrder(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
     {
-        sal_Int32 nZOrder = m_zOrder;
+        std::optional<sal_Int32> oZOrder = m_oZOrder;
         bool bBehindText = m_bBehindDoc && !m_bOpaque;
         if (m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE
             && !m_rDomainMapper.IsInShape())
         {
-            nZOrder = 0;
+            oZOrder = SAL_MIN_INT32;
+            bBehindText = false;
         }
-        if (nZOrder >= 0)
+        if (oZOrder)
         {
             // tdf#120760 Send objects with behinddoc=true to the back.
+            // Only relativeHeight zOrders have been used if m_bBehindDoc is set,
+            // and they have already been set as negative values (to be below all z-indexes).
+            // Subtract even more so behindDoc relativeHeights will be behind
+            // other relativeHeights and negative z-indexes (needed for IsInHeaderFooter).
+            // relativeHeight removed 0x1E00 0000, so can subtract another 0x6200 0000
             if (bBehindText)
-                nZOrder -= SAL_MAX_INT32;
+                oZOrder = *oZOrder - 0x62000000;
 
             // TODO: it is possible that RTF has been wrong all along as well. Always true here?
             const bool bLastDuplicateWins(!m_rDomainMapper.IsRTFImport()
                 || m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE);
+
             GraphicZOrderHelper* pZOrderHelper = m_rDomainMapper.graphicZOrderHelper();
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER),
-                uno::Any(pZOrderHelper->findZOrder(nZOrder, bLastDuplicateWins)));
-            pZOrderHelper->addItem(xGraphicObjectProperties, nZOrder);
+                uno::Any(pZOrderHelper->findZOrder(*oZOrder, bLastDuplicateWins)));
+            pZOrderHelper->addItem(xGraphicObjectProperties, *oZOrder);
         }
     }
 
@@ -743,9 +749,15 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             // undocumented - based on testing: both 0 and 1 are equivalent to the maximum 503316479
             const sal_Int32 nMaxAllowed = 0x1DFFFFFF;
             if (nIntValue < 2 || nIntValue > nMaxAllowed)
-                m_pImpl->m_zOrder = nMaxAllowed;
+                m_pImpl->m_oZOrder = nMaxAllowed;
             else
-                m_pImpl->m_zOrder = nIntValue;
+                m_pImpl->m_oZOrder = nIntValue;
+
+            // all relativeHeight objects (i.e. DOCX graphics that use GraphicImport),
+            // no matter how high their value, are below the lowest z-index shape (in same layer)
+            // so emulate that by pretending that they are below text (in the hell-layer).
+            // Please be assured that this does not actually place it in the hell-layer.
+            m_pImpl->m_oZOrder = *m_pImpl->m_oZOrder - (nMaxAllowed + 1);
         }
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc:

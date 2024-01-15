@@ -989,16 +989,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexWins, "tdf159158_zOrder_zInd
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, "ZOrder")); // higher
-    // If zOrder is defined by z-index, it seems that it goes above everything set by relativeHeight
-    if (isExported()) // not named on import
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("DID YOU FIX ME? Frame1 really should be at the very top",
-                                     OUString("Frame1"), getProperty<OUString>(zOrder0,"Name"));
     // I'm puzzled. Somehow 0 is larger than 0EFF FFFF, but not larger than 0F00 0000
     // and yet the maximum value was established earlier as 1DFF FFFF. Something doesn't line up.
     // Perhaps 0 and 1 don't mean maximum value at all, but something completely different?
     CPPUNIT_ASSERT_MESSAGE("DID YOU FIX ME? I really should be yellow, not blue",
-                            "5-Point Star Yellow" != getProperty<OUString>(zOrder1, "Name"));
-    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder2,"Name"));
+                            "5-Point Star Yellow" != getProperty<OUString>(zOrder0, "Name"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+    // If zOrder is defined by z-index, it seems that it goes above everything set by relativeHeight
+    if (isExported()) // not named on import
+        CPPUNIT_ASSERT_EQUAL(OUString("Frame1"), getProperty<OUString>(zOrder2,"Name"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocA, "tdf159158_zOrder_behindDocA.docx")
