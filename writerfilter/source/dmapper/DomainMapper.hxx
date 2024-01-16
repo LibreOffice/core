@@ -83,6 +83,7 @@ public:
 
     // Stream
     virtual void markLastParagraphInSection() override;
+    virtual void markLastParagraph() override { mbIsLastPara = true; }
     virtual void markLastSectionGroup() override;
 
     // BinaryObj
@@ -188,6 +189,7 @@ private:
     bool mbIsSplitPara;
     bool mbHasControls;
     bool mbWasShapeInPara;
+    bool mbIsLastPara = false;
     std::unique_ptr< GraphicZOrderHelper > m_zOrderHelper;
     OUString m_sGlossaryEntryName;
 };
