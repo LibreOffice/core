@@ -207,37 +207,44 @@ static void getExecutableDirectory_Impl(rtl_uString ** ppDirURL)
     rtl_uString_newFromStr_WithLength(ppDirURL,fileName.getStr(),nDirEnd);
 }
 
-static OUString & getIniFileName_Impl()
-{
-    static OUString aStaticName = []() {
-        OUString fileName;
+static OUString getIniFileName(bool overriding) {
+    OUString fileName;
 
 #if defined IOS
-        // On iOS hardcode the inifile as "rc" in the .app
-        // directory. Apps are self-contained anyway, there is no
-        // possibility to have several "applications" in the same
-        // installation location with different inifiles.
-        const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"]] UTF8String];
-        fileName = OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
-        resolvePathnameUrl(&fileName);
+    // On iOS hardcode the inifile as "rc" in the .app
+    // directory. Apps are self-contained anyway, there is no
+    // possibility to have several "applications" in the same
+    // installation location with different inifiles.
+    const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: (overriding ? @"fundamental.override.ini" : @"rc")]] UTF8String];
+    fileName = OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
+    resolvePathnameUrl(&fileName);
 #elif defined ANDROID
         // Apps are self-contained on Android, too, can as well hardcode
         // it as "rc" in the "/assets" directory, i.e.  inside the app's
         // .apk (zip) archive as the /assets/rc file.
+        fileName = overriding
+            ? OUString("vnd.sun.star.pathname:/assets/fundamental.override.ini")
+            : OUString("vnd.sun.star.pathname:/assets/rc");
         fileName = OUString("vnd.sun.star.pathname:/assets/rc");
         resolvePathnameUrl(&fileName);
 #elif defined(EMSCRIPTEN)
-        fileName = OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
+        fileName = overriding
+            ? OUString("vnd.sun.star.pathname:/instdir/program/fundamental.override.ini")
+            : OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
         resolvePathnameUrl(&fileName);
 #else
-        if (getFromCommandLineArgs("INIFILENAME", &fileName))
-        {
-            resolvePathnameUrl(&fileName);
-        }
-        else
-        {
-            osl_getExecutableFile(&(fileName.pData));
+    if (!overriding && getFromCommandLineArgs("INIFILENAME", &fileName))
+    {
+        resolvePathnameUrl(&fileName);
+    }
+    else
+    {
+        osl_getExecutableFile(&(fileName.pData));
 
+        if (overriding) {
+            auto const i = fileName.lastIndexOf('/') + 1;
+            fileName = fileName.replaceAt(i, fileName.getLength() - i, u"fundamental.override.ini");
+        } else {
             // get rid of a potential executable extension
             OUString progExt = ".bin";
             if (fileName.getLength() > progExt.getLength()
@@ -255,6 +262,7 @@ static OUString & getIniFileName_Impl()
 
             // append config file suffix
             fileName += SAL_CONFIGFILE("");
+        }
 
 #ifdef MACOSX
             // We keep only executables in the MacOS folder, and all
@@ -263,11 +271,22 @@ static OUString & getIniFileName_Impl()
             if (off != -1)
                 fileName = fileName.replaceAt(off + 1, strlen("MacOS"), u"" LIBO_ETC_FOLDER);
 #endif
-        }
+    }
 #endif
 
-        return fileName;
-    }();
+    return fileName;
+}
+
+static OUString const & getOverrideIniFileName_Impl()
+{
+    static OUString aStaticName = getIniFileName(true);
+
+    return aStaticName;
+}
+
+static OUString & getIniFileName_Impl()
+{
+    static OUString aStaticName = getIniFileName(false);
 
     return aStaticName;
 }
@@ -287,6 +306,7 @@ namespace {
 struct Bootstrap_Impl
 {
     sal_Int32 _nRefCount;
+    Bootstrap_Impl * _override_base_ini;
     Bootstrap_Impl * _base_ini;
 
     NameValueVector _nameValueVector;
@@ -320,23 +340,47 @@ struct Bootstrap_Impl
 
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _nRefCount( 0 ),
+      _override_base_ini( nullptr ),
       _base_ini( nullptr ),
       _iniName (rIniName)
 {
-    OUString base_ini(getIniFileName_Impl());
+    OUString override_base_ini(getOverrideIniFileName_Impl());
     // normalize path
-    FileStatus status( osl_FileStatus_Mask_FileURL );
-    DirectoryItem dirItem;
-    if (DirectoryItem::get(base_ini, dirItem) == DirectoryItem::E_None &&
-        dirItem.getFileStatus(status) == DirectoryItem::E_None)
+    FileStatus override_status( osl_FileStatus_Mask_FileURL );
+    DirectoryItem override_dirItem;
+    bool skip_base_ini = false;
+    if (DirectoryItem::get(override_base_ini, override_dirItem) == DirectoryItem::E_None &&
+        override_dirItem.getFileStatus(override_status) == DirectoryItem::E_None)
     {
-        base_ini = status.getFileURL();
-        if (rIniName != base_ini)
+        override_base_ini = override_status.getFileURL();
+        if (rIniName != override_base_ini)
         {
-            _base_ini = static_cast< Bootstrap_Impl * >(
-                rtl_bootstrap_args_open(base_ini.pData));
+            _override_base_ini = static_cast< Bootstrap_Impl * >(
+                rtl_bootstrap_args_open(override_base_ini.pData));
+        }
+        else
+        {
+            skip_base_ini = true;
         }
     }
+
+    if (!skip_base_ini) {
+        OUString base_ini(getIniFileName_Impl());
+        // normalize path
+        FileStatus status( osl_FileStatus_Mask_FileURL );
+        DirectoryItem dirItem;
+        if (DirectoryItem::get(base_ini, dirItem) == DirectoryItem::E_None &&
+            dirItem.getFileStatus(status) == DirectoryItem::E_None)
+        {
+            base_ini = status.getFileURL();
+            if (rIniName != base_ini)
+            {
+                _base_ini = static_cast< Bootstrap_Impl * >(
+                    rtl_bootstrap_args_open(base_ini.pData));
+            }
+        }
+    }
+
     SAL_INFO("sal.bootstrap", "Bootstrap_Impl(): sFile=" << _iniName);
     oslFileHandle handle;
     if (!_iniName.isEmpty() &&
@@ -371,6 +415,8 @@ Bootstrap_Impl::~Bootstrap_Impl()
 {
     if (_base_ini)
         rtl_bootstrap_args_close( _base_ini );
+    if (_override_base_ini)
+        rtl_bootstrap_args_close( _override_base_ini );
 }
 
 namespace {
@@ -429,6 +475,10 @@ bool Bootstrap_Impl::getValue(
         mode =  LookupMode::URE_BOOTSTRAP;
 
     if (override && getDirectValue(key, value, mode, requestStack))
+        return true;
+
+    if (_override_base_ini != nullptr
+        && _override_base_ini->getDirectValue(key, value, mode, requestStack))
         return true;
 
     if (key == "_OS")
