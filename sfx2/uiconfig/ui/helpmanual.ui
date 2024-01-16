@@ -18,7 +18,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="btnbox">
             <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="website">
                 <property name="label" translatable="yes" context="helpmanual|website">Read Help Online</property>
