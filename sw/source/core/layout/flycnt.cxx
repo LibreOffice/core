@@ -1474,7 +1474,6 @@ void SwFlyAtContentFrame::RegisterAtCorrectPage()
 
 void SwFlyAtContentFrame::RegisterAtPage(SwPageFrame & rPageFrame)
 {
-    assert(GetPageFrame() != &rPageFrame);
     if (GetPageFrame())
     {
         GetPageFrame()->MoveFly( this, &rPageFrame );

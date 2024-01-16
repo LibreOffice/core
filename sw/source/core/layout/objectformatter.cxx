@@ -364,7 +364,7 @@ bool SwObjectFormatter::FormatObjsAtFrame_( SwTextFrame* _pMasterTextFrame )
     {
         pAnchorFrame = &GetAnchorFrame();
     }
-    if ( !pAnchorFrame->GetDrawObjs() )
+    if ( !pAnchorFrame->GetDrawObjs() || pAnchorFrame->IsInDtor() )
     {
         // nothing to do, if no floating screen object is registered at the anchor frame.
         return true;

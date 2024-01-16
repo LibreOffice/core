@@ -926,14 +926,17 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
     // format anchor frame - format of its follow not needed
     // #i43255# - forbid follow format, only if anchor text
     // frame is in table
-    if ( _rAnchorTextFrame.IsInTab() )
+    if (!_rAnchorTextFrame.IsInDtor())
     {
-        SwForbidFollowFormat aForbidFollowFormat( _rAnchorTextFrame );
-        _rAnchorTextFrame.Calc(_rAnchorTextFrame.getRootFrame()->GetCurrShell()->GetOut());
-    }
-    else
-    {
-        _rAnchorTextFrame.Calc(_rAnchorTextFrame.getRootFrame()->GetCurrShell()->GetOut());
+        if (_rAnchorTextFrame.IsInTab())
+        {
+            SwForbidFollowFormat aForbidFollowFormat(_rAnchorTextFrame);
+            _rAnchorTextFrame.Calc(_rAnchorTextFrame.getRootFrame()->GetCurrShell()->GetOut());
+        }
+        else
+        {
+            _rAnchorTextFrame.Calc(_rAnchorTextFrame.getRootFrame()->GetCurrShell()->GetOut());
+        }
     }
 }
 

@@ -235,12 +235,17 @@ bool SwLayoutFrame::IsAnLower( const SwFrame *pAssumed ) const
     const SwFrame *pUp = pAssumed;
     while ( pUp )
     {
-        if ( pUp == this )
-            return true;
-        if ( pUp->IsFlyFrame() )
-            pUp = static_cast<const SwFlyFrame*>(pUp)->GetAnchorFrame();
+        if (!pUp->IsInDtor())
+        {
+            if (pUp == this)
+                return true;
+            if (pUp->IsFlyFrame())
+                pUp = static_cast<const SwFlyFrame*>(pUp)->GetAnchorFrame();
+            else
+                pUp = pUp->GetUpper();
+        }
         else
-            pUp = pUp->GetUpper();
+            break;
     }
     return false;
 }
