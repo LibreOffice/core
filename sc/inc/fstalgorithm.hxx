@@ -64,7 +64,7 @@ void buildSpanWithValue(
         }
 
         nLastPos = nThisPos;
-        nLastVal = nThisVal;
+        nLastVal = std::move(nThisVal);
     }
 }
 
