@@ -62,6 +62,9 @@ void ImplMultiTextLineInfo::Clear()
 
 namespace vcl
 {
+    TextLayoutCommon::~TextLayoutCommon() COVERITY_NOEXCEPT_FALSE
+    {}
+
     OUString TextLayoutCommon::GetCenterEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth)
     {
         OUStringBuffer aTmpStr(rOrigStr);
@@ -502,7 +505,7 @@ namespace vcl
         ReferenceDeviceTextLayout( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice );
         virtual ~ReferenceDeviceTextLayout();
 
-        // ITextLayout
+        // TextLayoutCommon
         virtual tools::Long        GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const override;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, std::vector< tools::Rectangle >* _pVector, OUString* _pDisplayText ) override;
         virtual tools::Long GetTextArray( const OUString& _rText, KernArray* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength, bool bCaret = false ) const override;

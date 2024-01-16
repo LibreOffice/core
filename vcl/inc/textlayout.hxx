@@ -33,7 +33,7 @@ class Control;
 
 namespace vcl
 {
-    class SAL_NO_VTABLE ITextLayout
+    class VCL_DLLPUBLIC TextLayoutCommon
     {
     public:
         virtual tools::Long        GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
@@ -43,13 +43,6 @@ namespace vcl
         virtual sal_Int32   GetTextBreak( const OUString& _rText, tools::Long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
 
-    protected:
-        ~ITextLayout() COVERITY_NOEXCEPT_FALSE {}
-    };
-
-    class VCL_DLLPUBLIC TextLayoutCommon : public ITextLayout
-    {
-    public:
         OUString GetEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
 
         std::tuple<sal_Int32, sal_Int32> BreakLine(const tools::Long nWidth, OUString const& rStr,
@@ -66,13 +59,16 @@ namespace vcl
                                  tools::Long nWidth, OUString const& rStr,
                                  DrawTextFlags nStyle);
 
+    protected:
+        ~TextLayoutCommon() COVERITY_NOEXCEPT_FALSE;
+
     private:
         OUString GetCenterEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth);
         OUString GetEndEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText);
         OUString GetNewsEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
     };
 
-    /** is an implementation of the ITextLayout interface which simply delegates its calls to the respective
+    /** is an implementation of TextLayoutCommon which simply delegates its calls to the respective
         methods of an OutputDevice instance, without any inbetween magic.
     */
     class VCL_DLLPUBLIC DefaultTextLayout final : public TextLayoutCommon
@@ -84,7 +80,7 @@ namespace vcl
         }
         virtual ~DefaultTextLayout();
 
-        // ITextLayout overridables
+        // TextLayoutCommon overridables
         virtual tools::Long        GetTextWidth( const OUString& _rText,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength ) const override;
