@@ -19,6 +19,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <condformathelper.hxx>
 #include <conditio.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
@@ -42,6 +43,22 @@ public:
 ScUiCalcTest::ScUiCalcTest()
     : ScModelTestBase("sc/qa/unit/uicalc/data")
 {
+}
+
+static void lcl_AssertConditionalFormatList(ScDocument& rDoc, size_t nSize,
+                                            std::unordered_map<OUString, OUString>& rExpectedValues)
+{
+    ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
+    CPPUNIT_ASSERT_EQUAL(nSize, pList->size());
+
+    OUString sRangeStr;
+    for (const auto& rItem : *pList)
+    {
+        const ScRangeList& aRange = rItem->GetRange();
+        aRange.Format(sRangeStr, ScRefFlags::VALID, rDoc, rDoc.GetAddressConvention());
+        CPPUNIT_ASSERT_EQUAL(rExpectedValues[sRangeStr],
+                             ScCondFormatHelper::GetExpression(*rItem, aRange.GetTopLeftCorner()));
+    }
 }
 
 static void lcl_AssertCurrentCursorPosition(ScDocShell& rDocSh, std::u16string_view rStr)
@@ -1191,6 +1208,27 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf97215)
     // Restore previous status
     aInputOption.SetSortRefUpdate(bOldStatus);
     pMod->SetInputOptions(aInputOption);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf104026)
+{
+    createScDoc("tdf104026.ods");
+    ScDocument* pDoc = getScDoc();
+
+    std::unordered_map<OUString, OUString> aExpectedValues
+        = { { "A2", "Cell value != $Sheet1.$B2" }, { "A3", "Cell value != $Sheet1.$B3" },
+            { "A4", "Cell value != $Sheet1.$B4" }, { "A5", "Cell value != $Sheet1.$B5" },
+            { "A6", "Cell value != $Sheet1.$B6" }, { "A7", "Cell value != $Sheet1.$B7" } };
+
+    lcl_AssertConditionalFormatList(*pDoc, 6, aExpectedValues);
+
+    goToCell("A2");
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Cell value != $Sheet1.$B2
+    // - Actual  : Cell value != $Sheet1.$B#REF!
+    lcl_AssertConditionalFormatList(*pDoc, 5, aExpectedValues);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
