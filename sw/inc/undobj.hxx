@@ -288,6 +288,8 @@ public:
     SwUndoInsDoc( const SwPaM& );
 };
 
+/// Undo for copying from part of a document and then inserting that text, as opposed to inserting
+/// it from a file or clipboard.
 class SwUndoCpyDoc final : public SwUndoInserts
 {
 public:
