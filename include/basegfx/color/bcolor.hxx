@@ -171,7 +171,8 @@ namespace basegfx
 
         static const BColor& getEmptyBColor()
         {
-            return static_cast<const BColor&>( ::basegfx::B3DTuple::getEmptyTuple() );
+            static BColor const singleton;
+            return singleton;
         }
 
     };
