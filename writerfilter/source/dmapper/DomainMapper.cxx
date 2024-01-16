@@ -4417,8 +4417,6 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                 xContext->Erase(PROP_NUMBERING_LEVEL);
             }
             finishParagraph(bRemove, bNoNumbering);
-            if (bRemove)
-                m_pImpl->RemoveLastParagraph();
 
             m_pImpl->SetParaSectpr(false);
         }
@@ -4947,6 +4945,9 @@ void DomainMapper::finishParagraph(const bool bRemove, const bool bNoNumbering)
     if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::datePicker)
         m_pImpl->m_pSdtHelper->createDateContentControl();
     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove, bNoNumbering);
+    if (bRemove || mbIsLastPara)
+        m_pImpl->RemoveLastParagraph();
+    mbIsLastPara = false; // handle other subdocuments
 }
 
 void DomainMapper::commentProps(const OUString& sId, const CommentProperties& rProps)
