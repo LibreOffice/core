@@ -1229,6 +1229,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf104026)
     // - Expected: Cell value != $Sheet1.$B2
     // - Actual  : Cell value != $Sheet1.$B#REF!
     lcl_AssertConditionalFormatList(*pDoc, 5, aExpectedValues);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // tdf#140330: Without the fix in place, this test would have failed with
+    // - Expected: 6
+    // - Actual  : 5
+    lcl_AssertConditionalFormatList(*pDoc, 6, aExpectedValues);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
