@@ -35,6 +35,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <vector>
 #include <cassert>
 #include <fcntl.h>
 #include <limits>
@@ -61,7 +62,6 @@
 #include <android/log.h>
 #include <android/asset_manager.h>
 #include <o3tl/string_view.hxx>
-#include <vector>
 #endif
 
 namespace {
