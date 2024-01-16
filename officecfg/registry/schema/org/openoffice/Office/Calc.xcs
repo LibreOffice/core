@@ -105,6 +105,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="NoteIndicator" oor:type="xs:int" oor:nillable="false">
+          <!-- no UI -->
+          <info>
+            <desc>If less than 1, the size of comment indicator is calculated dynamically; otherwise this value will be used.</desc>
+            <label>Comment indicator size</label>
+          </info>
+          <value>0</value>
+        </prop>
         <prop oor:name="FormulaMark" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
           <info>

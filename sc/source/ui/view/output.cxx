@@ -31,6 +31,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
@@ -2467,7 +2468,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
         nInitPosX += nMirrorW - 1;              // always in pixels
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    tools::Long nPosY = nScrY;
+    tools::Long nPosY = nScrY - 1;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
@@ -2492,13 +2493,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                 if (!mpDoc->ColHidden(nX, nTab) && mpDoc->GetNote(nX, pRowInfo[nArrY].nRowNo, nTab)
                     && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
                 {
-
-                    const bool bIsDarkBackground = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
-                    const Color aColor(static_cast<const SvxBrushItem*>(pInfo->maBackground.getItem())->GetColor());
-                    if ( aColor == COL_AUTO ? bIsDarkBackground : aColor.IsDark() )
-                        rRenderContext.SetLineColor(COL_WHITE);
-                    else
-                        rRenderContext.SetLineColor(COL_BLACK);
+                    rRenderContext.SetLineColor(SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCGRID).nColor);
 
                     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                     if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
@@ -2506,7 +2501,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                     else
                         rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCOMMENTS).nColor );
 
-                    tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
+                    tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 1) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )
                     {
                         //  if merged, add widths of all cells
@@ -2517,11 +2512,14 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                             ++nNextX;
                         }
                     }
-                    // DPI/ZOOM 100/100 => 10, 100/50 => 7, 100/150 => 13
-                    // DPI/ZOOM 150/100 => 13, 150/50 => 8.5, 150/150 => 17.5
-                    const double fSize(rRenderContext.GetDPIScaleFactor() * aZoomX * 6 + 4);
-                    // Make sure we have an integer size to draw a proper triangle
-                    sal_Int16 nSize = static_cast<sal_Int16>(fSize);
+                    // DPI/ZOOM 100/100 => 6, 100/50 => 4.5, 100/150 => 7.5
+                    // DPI/ZOOM 150/100 => 7.5, 150/50 => 6, 150/150 => 9
+                    sal_Int16 nSize = officecfg::Office::Calc::Content::Display::NoteIndicator::get();
+                    if (nSize < 1)
+                    {
+                       const double fSize(rRenderContext.GetDPIScaleFactor() * aZoomX * 3 + 3);
+                       nSize = static_cast<sal_Int16>(fSize);
+                    }
                     Point aPoints[3];
                     aPoints[0] = Point(nMarkX, nPosY);
                     aPoints[0].setX( bLayoutRTL ? aPoints[0].X() + nSize : aPoints[0].X() - nSize );
