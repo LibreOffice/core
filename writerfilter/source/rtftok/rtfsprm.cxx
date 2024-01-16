@@ -439,12 +439,22 @@ RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference, Id const nStyleType
     return ret;
 }
 
-bool RTFSprms::equals(const RTFValue& rOther) const
+bool RTFSprms::equals(const RTFSprms& rOther) const
 {
-    return std::all_of(m_pSprms->cbegin(), m_pSprms->cend(),
-                       [&](const std::pair<Id, RTFValue::Pointer_t>& raPair) -> bool {
-                           return raPair.second->equals(rOther);
-                       });
+    auto it1 = m_pSprms->cbegin();
+    auto it1End = m_pSprms->cend();
+    auto it2 = rOther.m_pSprms->cbegin();
+    auto it2End = rOther.m_pSprms->cend();
+    while (it1 != it1End && it2 != it2End)
+    {
+        if (it1->first != it2->first)
+            return false;
+        if (!it1->second->equals(*it2->second))
+            return false;
+        ++it1;
+        ++it2;
+    }
+    return it1 == it1End && it2 == it2End;
 }
 
 void RTFSprms::ensureCopyBeforeWrite()
