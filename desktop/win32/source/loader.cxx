@@ -215,11 +215,11 @@ int officeloader_impl(bool bAllowConsole)
     bool fSuccess = false;
     bool bFirst = true;
 
-    // read limit values from bootstrap.ini
+    // read limit values from fundamental.override.ini
     unsigned int nMaxMemoryInMB = 0;
     bool bExcludeChildProcesses = true;
 
-    const WCHAR* szIniFile = L"\\bootstrap.ini";
+    const WCHAR* szIniFile = L"\\fundamental.override.ini";
     const size_t nDirLen = wcslen(szIniDirectory);
     if (wcslen(szIniFile) + nDirLen < MAX_PATH)
     {
@@ -232,8 +232,8 @@ int officeloader_impl(bool bAllowConsole)
             boost::property_tree::ptree pt;
             std::ifstream aFile(szBootstrapIni);
             boost::property_tree::ini_parser::read_ini(aFile, pt);
-            nMaxMemoryInMB = pt.get("Win32.LimitMaximumMemoryInMB", nMaxMemoryInMB);
-            bExcludeChildProcesses = pt.get("Win32.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
+            nMaxMemoryInMB = pt.get("Bootstrap.LimitMaximumMemoryInMB", nMaxMemoryInMB);
+            bExcludeChildProcesses = pt.get("Bootstrap.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
         }
         catch (...)
         {
