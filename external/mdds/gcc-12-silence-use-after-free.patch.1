@@ -28,13 +28,13 @@ diff -ur mdds.org/include/mdds/node.hpp mdds/include/mdds/node.hpp
  {
 -    --p->refcount;
 -    if (!p->refcount)
-+#if defined __GNUC__ && __GNUC__ == 12 && __GNUC_MINOR__ < 3 && !defined __clang__
++#if defined __GNUC__ && __GNUC__ == 12 && __GNUC_MINOR__ <= 3 && !defined __clang__
 +#pragma GCC diagnostic push
 +#pragma GCC diagnostic ignored "-Wuse-after-free"
 +#endif
 +    if(--p->refcount == 0)
          delete p;
-+#if defined __GNUC__ && __GNUC__ == 12 && __GNUC_MINOR__ < 3 && !defined __clang__
++#if defined __GNUC__ && __GNUC__ == 12 && __GNUC_MINOR__ <= 3 && !defined __clang__
 +#pragma GCC diagnostic pop
 +#endif
  }
