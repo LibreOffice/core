@@ -220,6 +220,7 @@ public:
     virtual void endParagraphGroup() = 0;
 
     virtual void markLastParagraphInSection(){};
+    virtual void markLastParagraph() {} // When finishing this paragraph, do not add new paragraph
 
     /**
        Receives start mark for group with the same character properties.

@@ -3654,8 +3654,15 @@ RTFError RTFDocumentImpl::popState()
         // \par means an empty paragraph at the end of footnotes/endnotes, but
         // not in case of other substreams, like headers.
         if (m_bNeedCr && m_nStreamType != NS_ooxml::LN_footnote
-            && m_nStreamType != NS_ooxml::LN_endnote && m_bIsNewDoc)
+            && m_nStreamType != NS_ooxml::LN_endnote)
+        {
+            if (!m_bIsNewDoc)
+            {
+                // Make sure all the paragraph settings are set, but do not add next paragraph
+                Mapper().markLastParagraph();
+            }
             dispatchSymbol(RTFKeyword::PAR);
+        }
         if (m_bNeedSect) // may be set by dispatchSymbol above!
             sectBreak(true);
         else if (!m_pSuperstream)

@@ -103,7 +103,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
     CPPUNIT_ASSERT_EQUAL(u"Abreak\nhere"_ustr, getParagraph(1)->getString());
 }
 
-} // end of anonymouse namespace
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf135083)
+{
+    createSwDoc("tdf135083-simple-text-plus-list.fodt");
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    // Paste special as RTF
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { u"SelectedFormat"_ustr,
+            uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aArgs);
+
+    auto xLastPara = getParagraph(3);
+    CPPUNIT_ASSERT_EQUAL(u"dolor"_ustr, xLastPara->getString());
+    // Without the fix in place, the last paragraph would loose its settings. ListId would be empty.
+    CPPUNIT_ASSERT(!getProperty<OUString>(xLastPara, u"ListId"_ustr).isEmpty());
+}
+
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
