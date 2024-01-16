@@ -5037,12 +5037,6 @@ void ScDocument::SetPattern( const ScAddress& rPos, const CellAttributeHolder& r
     SetPattern(rPos.Col(), rPos.Row(), rPos.Tab(), rHolder);
 }
 
-void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr )
-{
-    if (ScTable* pTable = FetchTable(nTab))
-        pTable->SetPattern(nCol, nRow, CellAttributeHolder(&rAttr));
-}
-
 void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
 {
     SCTAB nTab = rPos.Tab();

@@ -1840,11 +1840,6 @@ uno::Reference< css::accessibility::XAccessible >
     return GetAccessible( false );
 }
 
-void SwPagePreview::ApplyAccessibilityOptions()
-{
-    GetViewShell()->ApplyAccessibilityOptions();
-}
-
 void SwPagePreview::ShowHScrollbar(bool bShow)
 {
     m_pHScrollbar->Show(bShow);

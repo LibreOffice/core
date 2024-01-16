@@ -623,8 +623,6 @@ public:
 
     // Enable mail merge - mail merge field dialog enabled
     void EnableMailMerge();
-    //apply Accessibility options
-    void ApplyAccessibilityOptions();
 
     SwView(SfxViewFrame& rFrame, SfxViewShell*);
     virtual ~SwView() override;

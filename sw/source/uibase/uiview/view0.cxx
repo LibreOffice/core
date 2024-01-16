@@ -115,17 +115,6 @@ view::XSelectionSupplier* SwView::GetUNOObject()
     return m_pViewImpl->GetUNOObject();
 }
 
-void SwView::ApplyAccessibilityOptions()
-{
-#if ENABLE_WASM_STRIP_ACCESSIBILITY
-#else
-    m_pWrtShell->ApplyAccessibilityOptions();
-    //to enable the right state of the selection cursor in readonly documents
-    if(GetDocShell()->IsReadOnly())
-        m_pWrtShell->ShowCursor();
-#endif
-}
-
 void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem)
 {
     m_pViewImpl->SetMailMergeConfigItem(rConfigItem);

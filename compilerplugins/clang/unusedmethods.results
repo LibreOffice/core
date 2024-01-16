@@ -1,3 +1,5 @@
+basctl/source/basicide/baside2.hxx:405
+    rtl::OUString basctl::ModulWindow::GetEditorColorScheme()
 basegfx/source/range/b2drangeclipper.cxx:686
     type-parameter-?-? basegfx::(anonymous namespace)::eraseFromList(type-parameter-?-? &,const type-parameter-?-? &)
 basic/source/inc/buffer.hxx:40
@@ -128,22 +130,14 @@ cui/source/inc/GraphicsTestsDialog.hxx:48
     void GraphicsTestsDialog::HandleResultViewRequest(weld::Button &)
 cui/source/inc/GraphicsTestsDialog.hxx:48
     void GraphicsTestsDialog::LinkStubHandleResultViewRequest(void *,weld::Button &)
-cui/source/inc/hlinettp.hxx:42
-    void SvxHyperlinkInternetTp::Click_SmartProtocol_Impl(weld::Toggleable &)
-cui/source/inc/hlinettp.hxx:42
-    void SvxHyperlinkInternetTp::LinkStubClick_SmartProtocol_Impl(void *,weld::Toggleable &)
-cui/source/inc/hlinettp.hxx:51
-    rtl::OUString SvxHyperlinkInternetTp::GetSchemeFromButtons()
 cui/source/inc/SvxNotebookbarConfigPage.hxx:40
     void SvxNotebookbarConfigPage::SetElement()
-cui/source/options/optaboutconfig.hxx:70
-    rtl::OUString CuiAboutConfigTabPage::EditNumberHdl(SvxListDialog &)
-cui/source/options/optaboutconfig.hxx:70
-    rtl::OUString CuiAboutConfigTabPage::LinkStubEditNumberHdl(void *,SvxListDialog &)
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:19
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:80
     const std::map<rtl::OUString, std::vector<rtl::OUString> > & dbahsql::SchemaParser::getPrimaryKeys() const
+dbaccess/source/ui/app/AppController.hxx:144
+    rtl::OUString dbaui::OApplicationController::getStrippedDatabaseName() const
 dbaccess/source/ui/inc/dsmeta.hxx:87
     __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<int>, std::set<int> > dbaui::FeatureSet::begin() const
 dbaccess/source/ui/inc/dsmeta.hxx:88
@@ -164,8 +158,6 @@ dbaccess/source/ui/inc/unodatbr.hxx:316
     _Bool dbaui::SbaTableQueryBrowser::implCopyObject(ODataClipboard &,const weld::TreeIter &,int)
 desktop/inc/lib/init.hxx:142
      desktop::CallbackFlushHandler::CallbackData::CallbackData(const tools::Rectangle *,int)
-desktop/qa/desktop_lib/test_desktop_lib.cxx:3711
-    int main()
 desktop/source/lib/lokclipboard.hxx:95
      LOKClipboardFactory::LOKClipboardFactory()
 drawinglayer/inc/texture/texture.hxx:39
@@ -188,17 +180,25 @@ drawinglayer/source/tools/emfpstringformat.hxx:99
     _Bool emfplushelper::EMFPStringFormat::NoClip() const
 drawinglayer/source/tools/emfpstringformat.hxx:100
     _Bool emfplushelper::EMFPStringFormat::BypassGDI() const
-editeng/inc/editdoc.hxx:548
+editeng/inc/EditLine.hxx:102
     _Bool EditLine::IsInvalid() const
-editeng/inc/editdoc.hxx:549
-    _Bool EditLine::IsValid() const
 editeng/inc/edtspell.hxx:103
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, std::__cxx1998::vector<struct editeng::MisspellRange> >, std::vector<struct editeng::MisspellRange> > WrongList::begin() const
 editeng/inc/edtspell.hxx:104
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, std::__cxx1998::vector<struct editeng::MisspellRange> >, std::vector<struct editeng::MisspellRange> > WrongList::end() const
-editeng/source/editeng/impedit.hxx:234
+editeng/inc/ParagraphPortionList.hxx:51
+    void ParaPortionList::Append(std::unique_ptr<ParaPortion>)
+editeng/inc/ParagraphPortionList.hxx:54
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<ParaPortion> *, std::__cxx1998::vector<std::unique_ptr<ParaPortion> > >, std::vector<std::unique_ptr<ParaPortion> > > ParaPortionList::begin()
+editeng/inc/ParagraphPortionList.hxx:55
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<ParaPortion> *, std::__cxx1998::vector<std::unique_ptr<ParaPortion> > >, std::vector<std::unique_ptr<ParaPortion> > > ParaPortionList::end()
+editeng/inc/ParagraphPortionList.hxx:56
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<ParaPortion> *, std::__cxx1998::vector<std::unique_ptr<ParaPortion> > >, std::vector<std::unique_ptr<ParaPortion> > > ParaPortionList::cbegin() const
+editeng/inc/ParagraphPortionList.hxx:57
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<ParaPortion> *, std::__cxx1998::vector<std::unique_ptr<ParaPortion> > >, std::vector<std::unique_ptr<ParaPortion> > > ParaPortionList::cend() const
+editeng/source/editeng/impedit.hxx:236
     tools::Rectangle LOKSpecialPositioning::GetWindowPos(const tools::Rectangle &,enum MapUnit) const
-editeng/source/editeng/impedit.hxx:756
+editeng/source/editeng/impedit.hxx:783
     double ImpEditEngine::scaleYFontValue(unsigned short) const
 embeddedobj/source/msole/olecomponent.hxx:75
     _Bool OleComponent::InitializeObject_Impl()
@@ -446,9 +446,9 @@ include/comphelper/basicio.hxx:52
     const com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> & comphelper::operator>>(const com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> &,unsigned int &)
 include/comphelper/basicio.hxx:53
     const com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> & comphelper::operator<<(const com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> &,unsigned int)
-include/comphelper/configuration.hxx:277
+include/comphelper/configuration.hxx:289
     void comphelper::ConfigurationLocalizedProperty::set(const type-parameter-?-? &,const std::shared_ptr<comphelper::ConfigurationChanges> &)
-include/comphelper/configuration.hxx:312
+include/comphelper/configuration.hxx:324
     com::sun::star::uno::Reference<com::sun::star::container::XHierarchicalNameReplace> comphelper::ConfigurationGroup::get(const std::shared_ptr<comphelper::ConfigurationChanges> &)
 include/comphelper/errcode.hxx:96
     _Bool ErrCode::operator<(const ErrCode &) const
@@ -492,133 +492,133 @@ include/comphelper/interfacecontainer3.hxx:48
     OInterfaceIteratorHelper3<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper3>(OInterfaceIteratorHelper3<ListenerT>)
 include/comphelper/interfacecontainer3.hxx:63
     OInterfaceIteratorHelper3<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper3>(OInterfaceContainerHelper3<type-parameter-?-?> &)
-include/comphelper/interfacecontainer3.hxx:91
+include/comphelper/interfacecontainer3.hxx:92
     OInterfaceIteratorHelper3<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper3>(const OInterfaceIteratorHelper3<ListenerT> &)
-include/comphelper/interfacecontainer3.hxx:169
+include/comphelper/interfacecontainer3.hxx:170
     const Reference<type-parameter-?-?> & comphelper::OInterfaceContainerHelper3::getInterface(int) const
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XActionListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XDockableWindowListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XFocusListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XItemListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XKeyHandler::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XKeyListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XMouseClickHandler::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XMouseListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XMouseMotionListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XStyleChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XTextListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XTopWindowListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XWindowListener2::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::awt::XWindowListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::beans::XPropertiesChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::beans::XPropertyChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::beans::XPropertySetInfoChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::beans::XVetoableChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::container::XContainerListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::document::XDocumentEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::document::XEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::document::XStorageChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XApproveActionListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XConfirmDeleteListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XDatabaseParameterListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XFormControllerListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XGridControlListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XLoadListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XResetListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XSubmitListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::XUpdateListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::binding::XListEntryListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::runtime::XFilterControllerListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::submission::XSubmissionVetoListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::form::validation::XFormComponentValidityListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::frame::XStatusListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::lang::XEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::linguistic2::XDictionaryEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::linguistic2::XDictionaryListEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::linguistic2::XLinguServiceEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::presentation::XShapeEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::presentation::XSlideShowListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::script::vba::XVBAScriptListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::sdb::XDatabaseRegistrationsListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::sdb::XRowSetApproveListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::sdb::XRowSetChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::sdb::XRowsChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::sdb::XSQLErrorListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::sdb::application::XCopyTableListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::sdbc::XRowSetListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::text::XPasteListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::ucb::XContentEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::ui::XContextMenuInterceptor::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::util::XChangesListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::util::XCloseListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::util::XFlushListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::util::XModeChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::util::XModifyListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::util::XRefreshListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::view::XPrintJobListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
-include/comphelper/interfacecontainer3.hxx:213
+include/comphelper/interfacecontainer3.hxx:214
     void comphelper::OInterfaceContainerHelper3::notifyEach(void (com::sun::star::view::XSelectionChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &)
 include/comphelper/interfacecontainer4.hxx:46
     OInterfaceIteratorHelper4<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper4>(OInterfaceIteratorHelper4<ListenerT>)
@@ -892,9 +892,9 @@ include/drawinglayer/tools/primitive2dxmldump.hxx:45
     void drawinglayer::Primitive2dXmlDump::dump(const drawinglayer::primitive2d::Primitive2DContainer &,const rtl::OUString &)
 include/editeng/colritem.hxx:76
     void SvxColorItem::setComplexColor(const model::ComplexColor &)
-include/editeng/editeng.hxx:248
+include/editeng/editeng.hxx:246
     _Bool EditEngine::GetVertical() const
-include/editeng/editeng.hxx:250
+include/editeng/editeng.hxx:248
     enum TextRotation EditEngine::GetRotation() const
 include/editeng/hyphenzoneitem.hxx:67
     _Bool SvxHyphenZoneItem::IsPageEnd() const
@@ -1124,44 +1124,36 @@ include/sfx2/lokcomponenthelpers.hxx:49
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:119
     const std::type_info * SfxType0::Type() const
-include/sfx2/viewsh.hxx:464
+include/sfx2/viewsh.hxx:468
     enum LOKDeviceFormFactor SfxViewShell::GetLOKDeviceFormFactor() const
 include/svl/itemiter.hxx:44
     _Bool SfxItemIter::IsAtEnd() const
 include/svl/itempool.hxx:104
+    unsigned short SfxItemPool::GetSize_Impl() const
+include/svl/itempool.hxx:126
     void SfxItemPool::AddRef(const SfxPoolItem &)
-include/svl/itempool.hxx:135
+include/svl/itempool.hxx:127
+    unsigned int SfxItemPool::ReleaseRef(const SfxPoolItem &,unsigned int)
+include/svl/itempool.hxx:156
     enum MapUnit SfxItemPool::GetDefaultMetric() const
-include/svl/itempool.hxx:184
-    const __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SfxPoolItem *const *, std::__cxx1998::vector<SfxPoolItem *> >, std::vector<SfxPoolItem *> > & SfxItemPool::Item2Range::begin() const
-include/svl/itempool.hxx:185
-    const __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SfxPoolItem *const *, std::__cxx1998::vector<SfxPoolItem *> >, std::vector<SfxPoolItem *> > & SfxItemPool::Item2Range::end() const
-include/svl/itempool.hxx:188
+include/svl/itempool.hxx:198
     const type-parameter-?-? * SfxItemPool::GetItem2Default(TypedWhichId<type-parameter-?-?>) const
-include/svl/itempool.hxx:212
-    _Bool SfxItemPool::NeedsPoolRegistration(const SfxPoolItem &) const
-include/svl/itempool.hxx:216
-    _Bool SfxItemPool::Shareable(const SfxPoolItem &) const
-include/svl/itempool.hxx:246
-    void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
-include/svl/itemset.hxx:58
-    unsigned short SfxPoolItemHolder::Which() const
-include/svl/itemset.hxx:96
+include/svl/itemset.hxx:115
     _Bool SfxItemSet::empty() const
-include/svl/itemset.hxx:97
+include/svl/itemset.hxx:116
     int SfxItemSet::size() const
-include/svl/itemset.hxx:98
+include/svl/itemset.hxx:117
     const SfxPoolItem * SfxItemSet::operator[](int) const
 include/svl/lockfilecommon.hxx:60
     void svt::LockFileCommon::SetURL(const rtl::OUString &)
 include/svl/ondemand.hxx:346
     const CharClass & OnDemandCharClass::operator*() const
-include/svl/poolitem.hxx:176
-    _Bool SfxPoolItem::isDeleteOnIdle() const
-include/svl/poolitem.hxx:232
+include/svl/poolitem.hxx:244
     type-parameter-?-? * SfxPoolItem::DynamicWhichCast(TypedWhichId<type-parameter-?-?>)
-include/svl/poolitem.hxx:281
+include/svl/poolitem.hxx:293
     _Bool IsPoolDefaultItem(const SfxPoolItem *)
+include/svl/poolitem.hxx:308
+    _Bool IsPooledItem(const SfxPoolItem *)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<CntUInt16Item, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
@@ -1204,8 +1196,6 @@ include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<ScPageHFItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<ScPageScaleToItem, derived_type>, int>::type)
-include/svl/typedwhich.hxx:31
-     TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<ScPatternAttr, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<ScPivotItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
@@ -2008,9 +1998,11 @@ include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<const SfxStringItem, derived_type>, int>::type)
 include/svl/whichranges.hxx:52
     void svl::Items_t::fill(struct std::pair<unsigned short, unsigned short> *)
-include/svtools/ctrlbox.hxx:404
+include/svtools/accessibilityoptions.hxx:30
+     SvtAccessibilityOptions::SvtAccessibilityOptions()
+include/svtools/ctrlbox.hxx:407
     void FontStyleBox::set_size_request(int,int)
-include/svtools/ctrlbox.hxx:475
+include/svtools/ctrlbox.hxx:478
     void FontSizeBox::set_size_request(int,int)
 include/svtools/DocumentToGraphicRenderer.hxx:105
     _Bool DocumentToGraphicRenderer::isImpress() const
@@ -2044,7 +2036,7 @@ include/svx/svdpage.hxx:233
     std::reverse_iterator<__gnu_debug::_Safe_iterator<struct std::__cxx1998::_Deque_iterator<rtl::Reference<SdrObject>, const rtl::Reference<SdrObject> &, const rtl::Reference<SdrObject> *>, std::deque<rtl::Reference<SdrObject> > > > SdrObjList::rend() const
 include/svx/svdpage.hxx:337
     void SdrPageProperties::sendLOKitThemeChangedCallback()
-include/svx/svdpntv.hxx:468
+include/svx/svdpntv.hxx:524
     _Bool SdrPaintView::IsSwapAsynchron() const
 include/svx/svdtrans.hxx:246
     _Bool IsMetric(enum MapUnit)
@@ -2098,20 +2090,16 @@ include/toolkit/helper/listenermultiplexer.hxx:115
     void ListenerMultiplexerBase::notifyEach(void (com::sun::star::lang::XEventListener::*)(const type-parameter-?-? &),const type-parameter-?-? &) const
 include/toolkit/helper/listenermultiplexer.hxx:115
     void ListenerMultiplexerBase::notifyEach(void (com::sun::star::view::XSelectionChangeListener::*)(const type-parameter-?-? &),const type-parameter-?-? &) const
-include/tools/bigint.hxx:78
-     BigInt::BigInt(unsigned int)
-include/tools/bigint.hxx:84
+include/tools/bigint.hxx:94
     unsigned short BigInt::operator unsigned short() const
-include/tools/bigint.hxx:86
+include/tools/bigint.hxx:96
     unsigned int BigInt::operator unsigned int() const
-include/tools/bigint.hxx:111
-    BigInt operator-(const BigInt &,const BigInt &)
-include/tools/bigint.hxx:114
-    BigInt operator%(const BigInt &,const BigInt &)
-include/tools/bigint.hxx:117
-    _Bool operator!=(const BigInt &,const BigInt &)
 include/tools/bigint.hxx:120
-    _Bool operator<=(const BigInt &,const BigInt &)
+    _Bool operator==(const BigInt &,const BigInt &)
+include/tools/bigint.hxx:210
+    BigInt operator-(const BigInt &,const BigInt &)
+include/tools/bigint.hxx:231
+    BigInt operator%(const BigInt &,const BigInt &)
 include/tools/color.hxx:32
     unsigned int color::extractRGB(unsigned int)
 include/tools/cpuid.hxx:67
@@ -2180,9 +2168,9 @@ include/tools/gen.hxx:520
     Pair & Selection::toPair()
 include/tools/gen.hxx:750
      RectangleTemplate::RectangleTemplate<RectangleT, PointT, SizeT>(long,long)
-include/tools/json_writer.hxx:61
+include/tools/json_writer.hxx:60
     void tools::JsonWriter::put(std::basic_string_view<char>,const char (&)[_ArrayExtent])
-include/tools/json_writer.hxx:91
+include/tools/json_writer.hxx:88
     void tools::JsonWriter::closeDocument()
 include/tools/link.hxx:134
     const char * Link::getSourceFilename() const
@@ -2194,7 +2182,7 @@ include/tools/poly.hxx:163
     _Bool tools::Polygon::operator!=(const tools::Polygon &) const
 include/tools/poly.hxx:252
     _Bool tools::PolyPolygon::operator!=(const tools::PolyPolygon &) const
-include/tools/stream.hxx:504
+include/tools/stream.hxx:508
     rtl::OString read_uInt32_lenPrefixed_uInt8s_ToOString(SvStream &)
 include/tools/urlobj.hxx:444
     _Bool INetURLObject::SetHost(std::basic_string_view<char16_t>)
@@ -2244,16 +2232,18 @@ include/unotools/resmgr.hxx:62
     _Bool TranslateNId::operator bool() const
 include/unotools/resmgr.hxx:65
     _Bool TranslateNId::operator!=(const struct TranslateNId &) const
-include/unotools/securityoptions.hxx:61
+include/unotools/securityoptions.hxx:62
     _Bool SvtSecurityOptions::Certificate::operator==(const struct SvtSecurityOptions::Certificate &) const
+include/unotools/streamhelper.hxx:45
+     utl::OInputStreamHelper::OInputStreamHelper(tools::SvRef<SvLockBytes>,unsigned int)
 include/unotools/textsearch.hxx:121
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & utl::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const enum utl::SearchParam::SearchType &)
 include/unotools/weakref.hxx:72
      unotools::WeakReference::WeakReference<interface_type>(type-parameter-?-? &)
 include/vcl/alpha.hxx:46
     _Bool AlphaMask::operator!=(const AlphaMask &) const
-include/vcl/alpha.hxx:109
-    _Bool AlphaMask::CopyPixel_AlphaOptimized(const tools::Rectangle &,const tools::Rectangle &)
+include/vcl/alpha.hxx:100
+    _Bool AlphaMask::CopyPixel(const tools::Rectangle &,const tools::Rectangle &)
 include/vcl/animate/Animation.hxx:42
     _Bool Animation::operator!=(const Animation &) const
 include/vcl/animate/AnimationFrame.hxx:77
@@ -2262,8 +2252,6 @@ include/vcl/bitmap.hxx:590
     const basegfx::SystemDependentDataHolder * Bitmap::accessSystemDependentDataHolder() const
 include/vcl/BitmapBasicMorphologyFilter.hxx:63
      BitmapDilateFilter::BitmapDilateFilter(int,unsigned char)
-include/vcl/bitmapex.hxx:172
-    _Bool BitmapEx::CopyPixel(const tools::Rectangle &,const tools::Rectangle &)
 include/vcl/BitmapInfoAccess.hxx:163
      BitmapScopedInfoAccess::BitmapScopedInfoAccess(const AlphaMask &)
 include/vcl/BitmapInfoAccess.hxx:184
@@ -2336,49 +2324,49 @@ include/vcl/GestureEventRotate.hxx:36
      GestureEventRotate::GestureEventRotate(int,int,enum GestureEventRotateType,double)
 include/vcl/GestureEventZoom.hxx:36
      GestureEventZoom::GestureEventZoom(int,int,enum GestureEventZoomType,double)
-include/vcl/gradient.hxx:88
+include/vcl/gradient.hxx:87
     _Bool Gradient::operator!=(const Gradient &) const
 include/vcl/hatch.hxx:57
     _Bool Hatch::operator!=(const Hatch &) const
 include/vcl/inputctx.hxx:63
     _Bool InputContext::operator!=(const InputContext &) const
-include/vcl/ITiledRenderable.hxx:238
+include/vcl/ITiledRenderable.hxx:244
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/jsdialog/executor.hxx:57
     void LOKTrigger::trigger_clicked(weld::Button &)
-include/vcl/kernarray.hxx:64
-    int KernArray::get_subunit(unsigned long) const
 include/vcl/kernarray.hxx:66
+    int KernArray::get_subunit(unsigned long) const
+include/vcl/kernarray.hxx:68
     void KernArray::set_subunit(unsigned long,int)
-include/vcl/lazydelete.hxx:77
+include/vcl/lazydelete.hxx:76
      vcl::DeleteOnDeinit::DeleteOnDeinit(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<(anonymous namespace)::SdrHdlBitmapSet> vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<(anonymous namespace)::VDevBuffer> vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<BitmapEx> vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<EditDLL> vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<SalLayoutGlyphsCache> vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<VclPtr<OutputDevice> > vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<Wallpaper> vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> > vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<com::sun::star::uno::Reference<com::sun::star::i18n::XLocaleData4> > vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<drawinglayer::primitive2d::DiscreteShadow> vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<o3tl::lru_map<rtl::OUString, std::shared_ptr<const vcl::text::TextLayoutCache>, struct vcl::text::FirstCharsStringHash, struct vcl::text::FastStringCompareEqual, struct vcl::text::(anonymous namespace)::TextLayoutCacheCost> > vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<std::shared_ptr<weld::Window> > vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<std::unordered_map<int, rtl::Reference<LOKClipboard> > > vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
-include/vcl/lazydelete.hxx:93
+include/vcl/lazydelete.hxx:92
     std::optional<struct (anonymous namespace)::WavyLineCache> vcl::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/vcl/lok.hxx:23
     void vcl::lok::unregisterPollCallbacks()
@@ -2386,13 +2374,13 @@ include/vcl/opengl/OpenGLHelper.hxx:70
     void OpenGLHelper::renderToFile(long,long,const rtl::OUString &)
 include/vcl/opengl/OpenGLHelper.hxx:103
     void OpenGLHelper::debugMsgStreamWarn(const std::basic_ostringstream<char> &)
-include/vcl/outdev.hxx:1518
+include/vcl/outdev.hxx:1519
     void OutputDevice::DrawMask(const Point &,const Size &,const Point &,const Size &,const Bitmap &,const Color &)
-include/vcl/outdev.hxx:1608
+include/vcl/outdev.hxx:1609
     basegfx::B2DPolyPolygon OutputDevice::LogicToPixel(const basegfx::B2DPolyPolygon &,const MapMode &) const
-include/vcl/outdev.hxx:1626
+include/vcl/outdev.hxx:1627
     basegfx::B2DPolyPolygon OutputDevice::PixelToLogic(const basegfx::B2DPolyPolygon &,const MapMode &) const
-include/vcl/pdfextoutdevdata.hxx:115
+include/vcl/pdfextoutdevdata.hxx:117
     _Bool vcl::PDFExtOutDevData::GetIsExportNotesInMargin() const
 include/vcl/salnativewidgets.hxx:409
     _Bool TabitemValue::isBothAligned() const
@@ -2438,7 +2426,7 @@ include/vcl/toolkit/longcurr.hxx:47
     BigInt LongCurrencyFormatter::GetValue() const
 include/vcl/toolkit/treelist.hxx:170
     const SvTreeListEntry * SvTreeList::GetParent(const SvTreeListEntry *) const
-include/vcl/toolkit/treelistbox.hxx:366
+include/vcl/toolkit/treelistbox.hxx:367
     void SvTreeListBox::RemoveSelection()
 include/vcl/txtattr.hxx:56
     _Bool TextAttrib::operator!=(const TextAttrib &) const
@@ -2520,7 +2508,7 @@ include/vcl/weldutils.hxx:350
     void weld::DateFormatter::LinkStubCursorChangedHdl(void *,weld::Entry &)
 include/vcl/window.hxx:376
     const char * ImplDbgCheckWindow(const void *)
-include/vcl/windowstate.hxx:120
+include/vcl/windowstate.hxx:123
     std::basic_ostream<char> & vcl::operator<<(std::basic_ostream<char> &,const vcl::WindowData &)
 include/xmloff/txtimp.hxx:115
     XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetFootnoteBP()
@@ -2532,9 +2520,9 @@ include/xmloff/xmluconv.hxx:190
     _Bool SvXMLUnitConverter::convertEnum(type-parameter-?-? &,std::basic_string_view<char>,const SvXMLEnumStringMapEntry<type-parameter-?-?> *)
 include/xmlreader/pad.hxx:38
     void xmlreader::Pad::add(const char (&)[_ArrayExtent])
-include/xmlreader/span.hxx:44
+include/xmlreader/span.hxx:43
      xmlreader::Span::Span(const char (&)[_ArrayExtent])
-include/xmlreader/span.hxx:71
+include/xmlreader/span.hxx:70
     _Bool xmlreader::Span::operator!=(const char (&)[_ArrayExtent]) const
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     void * gtv_comments_sidebar_get_instance_private(struct GtvCommentsSidebar *)
@@ -2606,9 +2594,9 @@ sc/inc/arraysumfunctor.hxx:22
     KahanSum sc::op::executeUnrolled(unsigned long &,unsigned long,const double *)
 sc/inc/bigrange.hxx:70
     _Bool ScBigAddress::operator!=(const ScBigAddress &) const
-sc/inc/column.hxx:138
+sc/inc/column.hxx:139
     const type-parameter-?-? & ScColumnData::GetAttr(int,TypedWhichId<type-parameter-?-?>,int &,int &) const
-sc/inc/column.hxx:295
+sc/inc/column.hxx:302
     _Bool ScColumn::HasDataAt(struct sc::ColumnBlockPosition &,int,struct ScDataAreaExtras *)
 sc/inc/columniterator.hxx:81
     int sc::ColumnIterator::getType() const
@@ -2618,8 +2606,10 @@ sc/inc/datamapper.hxx:78
     void sc::ExternalDataSource::setURL(const rtl::OUString &)
 sc/inc/datamapper.hxx:79
     void sc::ExternalDataSource::setProvider(const rtl::OUString &)
-sc/inc/document.hxx:900
+sc/inc/document.hxx:908
     rtl::OUString ScDocument::MaxRowAsString() const
+sc/inc/document.hxx:1952
+    void ScDocument::SetPattern(short,int,short,const ScPatternAttr &)
 sc/inc/dpfilteredcache.hxx:148
     void ScDPFilteredCache::dump() const
 sc/inc/formulacell.hxx:513
@@ -2688,6 +2678,8 @@ sc/inc/mtvelements.hxx:89
     void svl::mdds_mtv_insert_values(mdds::mtv::base_element_block &,unsigned long,const svl::SharedString &,const type-parameter-?-? &,const type-parameter-?-? &)
 sc/inc/mtvfunctions.hxx:376
     void sc::ProcessElements2(type-parameter-?-? &,type-parameter-?-? &,type-parameter-?-? &)
+sc/inc/patattr.hxx:98
+    _Bool CellAttributeHolder::operator!() const
 sc/inc/rangecache.hxx:52
     _Bool ScSortedRangeCache::isValid() const
 sc/inc/rangecache.hxx:94
@@ -2720,9 +2712,9 @@ sc/inc/stlalgorithm.hxx:60
     _Bool sc::AlignedAllocator::operator==(const AlignedAllocator<T, Alignment> &) const
 sc/inc/stlalgorithm.hxx:61
     _Bool sc::AlignedAllocator::operator!=(const AlignedAllocator<T, Alignment> &) const
-sc/inc/table.hxx:348
+sc/inc/table.hxx:343
     _Bool ScTable::IsColRowTabValid(const short,const int,const short) const
-sc/inc/table.hxx:756
+sc/inc/table.hxx:750
     const type-parameter-?-? * ScTable::GetAttr(short,int,TypedWhichId<type-parameter-?-?>,int &,int &) const
 sc/qa/unit/helper/qahelper.hxx:77
     std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const enum OpCode &)
@@ -2842,8 +2834,12 @@ sccomp/source/solver/DifferentialEvolution.hxx:66
     int DifferentialEvolutionAlgorithm::getLastChange()
 sccomp/source/solver/ParticelSwarmOptimization.hxx:84
     int ParticleSwarmOptimizationAlgorithm::getLastChange()
+sd/inc/sdabstdlg.hxx:172
+    VclPtr<SfxAbstractTabDialog> SdAbstractDialogFactory::CreateSdOutlineBulletTabDlg(weld::Window *,const SfxItemSet *,sd::View *)
 sd/inc/sddll.hxx:47
      SdDLL::SdDLL()
+sd/source/filter/eppt/epptooxml.hxx:79
+    int oox::core::PowerPointExport::GetPPTXLayoutId(int)
 sd/source/filter/eppt/epptooxml.hxx:93
     void oox::core::PowerPointExport::WriteDefaultColorSchemes(const std::shared_ptr<sax_fastparser::FastSerializerHelper> &)
 sd/source/filter/ppt/pptinanimations.hxx:107
@@ -2936,11 +2932,11 @@ slideshow/source/engine/animationfactory.cxx:737
     typename type-parameter-?-?::ValueType slideshow::internal::(anonymous namespace)::GenericAnimation::getUnderlyingValue() const
 slideshow/source/engine/opengl/TransitionImpl.hxx:180
     void OGLTransitionImpl::cleanup()
-slideshow/source/engine/slideoverlaybutton.hxx:59
+slideshow/source/engine/slideoverlaybutton.hxx:60
     void slideshow::internal::SlideOverlayButton::show()
-slideshow/source/engine/slideoverlaybutton.hxx:63
+slideshow/source/engine/slideoverlaybutton.hxx:64
     void slideshow::internal::SlideOverlayButton::hide()
-slideshow/source/engine/slideoverlaybutton.hxx:65
+slideshow/source/engine/slideoverlaybutton.hxx:66
     struct com::sun::star::geometry::IntegerSize2D slideshow::internal::SlideOverlayButton::getSize() const
 slideshow/source/inc/box2dtools.hxx:159
     void box2d::utils::box2DWorld::setShapeAngle(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>,const double)
@@ -3196,7 +3192,7 @@ sw/inc/IDocumentMarkAccess.hxx:103
     _Bool IDocumentMarkAccess::iterator::operator>(const IDocumentMarkAccess::iterator &) const
 sw/inc/IDocumentMarkAccess.hxx:105
     _Bool IDocumentMarkAccess::iterator::operator>=(const IDocumentMarkAccess::iterator &) const
-sw/inc/modcfg.hxx:344
+sw/inc/modcfg.hxx:340
     _Bool SwModuleOptions::IsFileEncryptedFromColumn() const
 sw/inc/ndindex.hxx:63
      SwNodeIndex::SwNodeIndex(SwNodes &,int)
@@ -3252,6 +3248,8 @@ sw/inc/textboxhelper.hxx:256
     _Bool SwTextBoxNode::IsGroupTextBox() const
 sw/inc/view.hxx:479
     void SwView::LinkStubMoveNavigationHdl(void *,void *)
+sw/inc/view.hxx:627
+    void SwView::ApplyAccessibilityOptions()
 sw/inc/viewopt.hxx:314
     const struct SwViewColors & SwViewOption::GetColorConfig() const
 sw/inc/viscrs.hxx:227
@@ -3262,7 +3260,9 @@ sw/inc/viscrs.hxx:229
     SwShellTableCursor * SwShellTableCursor::GetPrev()
 sw/inc/viscrs.hxx:230
     const SwShellTableCursor * SwShellTableCursor::GetPrev() const
-sw/qa/inc/swmodeltestbase.hxx:231
+sw/qa/extras/layout/layout3.cxx:2273
+    int main()
+sw/qa/inc/swmodeltestbase.hxx:229
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> &) const
 sw/source/core/access/accportions.cxx:55
     unsigned long FindBreak(const vector<type-parameter-?-?, allocator<type-parameter-?-?> > &,type-parameter-?-?)
@@ -3270,13 +3270,13 @@ sw/source/core/access/accportions.cxx:59
     unsigned long FindLastBreak(const vector<type-parameter-?-?, allocator<type-parameter-?-?> > &,type-parameter-?-?)
 sw/source/core/inc/AccessibilityIssue.hxx:80
     SwTextFootnote * sw::AccessibilityIssue::getTextFootnote()
-sw/source/core/inc/frame.hxx:948
+sw/source/core/inc/frame.hxx:947
     void SwFrame::dumpTopMostAsXml(struct _xmlTextWriter *) const
-sw/source/core/inc/frame.hxx:1395
+sw/source/core/inc/frame.hxx:1394
     Size SwRectFnSet::GetSize(const SwRect &) const
-sw/source/core/inc/frame.hxx:1426
+sw/source/core/inc/frame.hxx:1425
     long SwRectFnSet::LeftDist(const SwRect &,long) const
-sw/source/core/inc/frame.hxx:1427
+sw/source/core/inc/frame.hxx:1426
     long SwRectFnSet::RightDist(const SwRect &,long) const
 sw/source/core/inc/mvsave.hxx:171
     _Bool ZSortFly::operator==(const ZSortFly &) const
@@ -3288,6 +3288,8 @@ sw/source/core/text/txtpaint.hxx:79
      DbgRect::DbgRect(OutputDevice *,const tools::Rectangle &,const _Bool,Color)
 sw/source/filter/ww8/ww8par.hxx:1043
      WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(int,int,SwPaM &)
+sw/source/uibase/inc/pview.hxx:270
+    void SwPagePreview::ApplyAccessibilityOptions()
 sw/source/uibase/inc/swcont.hxx:89
     _Bool SwContent::operator==(const SwContent &) const
 sw/source/uibase/inc/unomod.hxx:36
@@ -3386,15 +3388,15 @@ vcl/inc/skia/gdiimpl.hxx:344
     void SkiaSalGraphicsImpl::windowBackingPropertiesChanged()
 vcl/inc/skia/salbmp.hxx:107
     void SkiaSalBitmap::dump(const char *) const
-vcl/inc/skia/utils.hxx:66
+vcl/inc/skia/utils.hxx:67
     sk_sp<SkSurface> SkiaHelper::createSkSurface(int,int,enum SkAlphaType)
-vcl/inc/skia/utils.hxx:129
+vcl/inc/skia/utils.hxx:130
     void SkiaHelper::removeCachedImage(sk_sp<SkImage>)
-vcl/inc/skia/utils.hxx:139
+vcl/inc/skia/utils.hxx:140
     void SkiaHelper::setPixelGeometry(enum SkPixelGeometry)
-vcl/inc/skia/utils.hxx:257
+vcl/inc/skia/utils.hxx:258
     void SkiaHelper::dump(const SkBitmap &,const char *)
-vcl/inc/skia/zone.hxx:25
+vcl/inc/skia/zone.hxx:23
     void SkiaZone::relaxWatchdogTimings()
 vcl/inc/unx/gtk/gtkframe.hxx:300
     void GtkSalFrame::DrawingAreaFocusInOut(enum SalEvent)

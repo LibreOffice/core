@@ -19,19 +19,11 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <unotools/options.hxx>
 
-class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtAccessibilityOptions final :
-    public utl::detail::Options
+namespace SvtAccessibilityOptions
 {
-private:
-
-public:
-    SvtAccessibilityOptions();
-    virtual ~SvtAccessibilityOptions() override;
-
     // get & set config entries
-    static void SetVCLSettings();
+    SVT_DLLPUBLIC void SetVCLSettings();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

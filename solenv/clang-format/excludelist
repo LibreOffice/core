@@ -6201,7 +6201,6 @@ include/unotools/saveopt.hxx
 include/unotools/searchopt.hxx
 include/unotools/securityoptions.hxx
 include/unotools/sharedunocomponent.hxx
-include/unotools/streamhelper.hxx
 include/unotools/streamwrap.hxx
 include/unotools/syslocale.hxx
 include/unotools/syslocaleoptions.hxx
@@ -13917,7 +13916,6 @@ unotools/source/misc/mediadescriptor.cxx
 unotools/source/misc/sharedunocomponent.cxx
 unotools/source/misc/syslocale.cxx
 unotools/source/misc/wincodepage.cxx
-unotools/source/streaming/streamhelper.cxx
 unotools/source/streaming/streamwrap.cxx
 unotools/source/ucbhelper/XTempFile.hxx
 unotools/source/ucbhelper/localfilehelper.cxx

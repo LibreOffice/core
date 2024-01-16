@@ -98,10 +98,6 @@ public:
     bool Expand( sal_Int32 nDX, sal_Int32 nDY, const Color* pInitColor = nullptr ) { return maBitmap.Expand(nDX, nDY, pInitColor); }
 
     bool CopyPixel( const tools::Rectangle& rRectDst,
-                    const tools::Rectangle& rRectSrc )
-    { return maBitmap.CopyPixel(rRectDst, rRectSrc); }
-
-    bool CopyPixel( const tools::Rectangle& rRectDst,
                     const tools::Rectangle& rRectSrc,
                     const AlphaMask& rBmpSrc )
     { return maBitmap.CopyPixel(rRectDst, rRectSrc, rBmpSrc.maBitmap); }

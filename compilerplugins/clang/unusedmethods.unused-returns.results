@@ -126,13 +126,13 @@ include/oox/ole/olehelper.hxx:176
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(oox::BinaryInputStream &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,std::basic_string_view<char16_t>)
 include/oox/ole/olehelper.hxx:187
     _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const tools::SvRef<SotStorageStream> &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,int,int)
-include/sax/fshelper.hxx:135
+include/sax/fshelper.hxx:134
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
-include/sax/fshelper.hxx:136
+include/sax/fshelper.hxx:135
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
-include/sax/fshelper.hxx:137
+include/sax/fshelper.hxx:136
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
-include/sax/fshelper.hxx:139
+include/sax/fshelper.hxx:138
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/sfx2/linkmgr.hxx:65
     _Bool sfx2::LinkManager::InsertLink(sfx2::SvBaseLink *,enum sfx2::SvBaseLinkObjectType,enum SfxLinkUpdateMode,const rtl::OUString *)
@@ -140,7 +140,7 @@ include/sfx2/lnkbase.hxx:111
     sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
 include/svl/macitem.hxx:89
     SvStream & SvxMacroTableDtor::Write(SvStream &) const
-include/svtools/ctrlbox.hxx:369
+include/svtools/ctrlbox.hxx:372
     _Bool FontNameBox::get_entry_selection_bounds(int &,int &)
 include/svx/autoformathelper.hxx:212
     _Bool AutoFormatBase::LoadBlockA(SvStream &,const struct AutoFormatVersions &,unsigned short)
@@ -154,7 +154,7 @@ include/svx/dlgctrl.hxx:99
     Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:159
     svx::frame::Style & svx::frame::Style::MirrorSelf()
-include/svx/PaletteManager.hxx:86
+include/svx/PaletteManager.hxx:87
     _Bool PaletteManager::GetLumModOff(unsigned short,unsigned short,short &,short &)
 include/test/a11y/AccessibilityTools.hxx:119
     com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForName(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> &,const short,std::basic_string_view<char16_t>,type-parameter-?-?...)
@@ -176,6 +176,8 @@ include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
+include/tools/urlobj.hxx:428
+    _Bool INetURLObject::SetPass(std::basic_string_view<char16_t>)
 include/tools/urlobj.hxx:735
     _Bool INetURLObject::SetParam(std::basic_string_view<char16_t>,enum INetURLObject::EncodeMechanism,unsigned short)
 include/unotools/lingucfg.hxx:191
@@ -190,13 +192,13 @@ include/vcl/alpha.hxx:98
     _Bool AlphaMask::Expand(int,int,const Color *)
 include/vcl/alpha.hxx:104
     _Bool AlphaMask::CopyPixel(const tools::Rectangle &,const tools::Rectangle &,const AlphaMask &)
-include/vcl/BinaryDataContainer.hxx:61
+include/vcl/BinaryDataContainer.hxx:59
     unsigned long BinaryDataContainer::writeToStream(SvStream &) const
 include/vcl/bitmap.hxx:283
     _Bool Bitmap::Blend(const AlphaMask &,const Color &)
 include/vcl/bitmap.hxx:451
     _Bool Bitmap::Replace(const AlphaMask &,const Color &)
-include/vcl/bitmapex.hxx:246
+include/vcl/bitmapex.hxx:225
     _Bool BitmapEx::Rotate(struct o3tl::strong_int<short, struct FractionTag<10> >,const Color &)
 include/vcl/filter/SvmReader.hxx:36
     SvStream & SvmReader::Read(GDIMetaFile &,struct ImplMetaReadData *)
@@ -212,11 +214,11 @@ include/vcl/GraphicNativeTransform.hxx:33
     _Bool GraphicNativeTransform::rotateBitmapOnly(struct o3tl::strong_int<short, struct FractionTag<10> >)
 include/vcl/GraphicNativeTransform.hxx:35
     _Bool GraphicNativeTransform::rotateGeneric(struct o3tl::strong_int<short, struct FractionTag<10> >,std::basic_string_view<char16_t>)
-include/vcl/menu.hxx:392
-    _Bool Menu::HandleMenuActivateEvent(Menu *) const
 include/vcl/menu.hxx:393
+    _Bool Menu::HandleMenuActivateEvent(Menu *) const
+include/vcl/menu.hxx:394
     _Bool Menu::HandleMenuDeActivateEvent(Menu *) const
-include/vcl/outdev.hxx:1169
+include/vcl/outdev.hxx:1170
     _Bool OutputDevice::ForceFallbackFont(const vcl::Font &)
 include/vcl/texteng.hxx:271
     _Bool TextEngine::Read(SvStream &,const TextSelection *)
@@ -232,7 +234,9 @@ lotuswordpro/inc/lwpsvstream.hxx:81
     LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:82
     LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/column.hxx:681
+sc/inc/attarray.hxx:237
+    const ScPatternAttr * ScAttrArray::SetPatternAreaImpl(int,int,const CellAttributeHolder &,ScEditDataArray *)
+sc/inc/column.hxx:683
     _Bool ScColumn::DeleteSparkline(int)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(ScDocument &,rtl::OUString &) const
@@ -292,9 +296,9 @@ sc/source/ui/vba/vbaformat.hxx:145
     com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:139
+sd/source/filter/eppt/pptx-epptooxml.cxx:135
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePlaceholderReferenceShape(enum oox::core::PlaceholderType,int,enum PageType,const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
-sd/source/filter/eppt/pptx-epptooxml.cxx:140
+sd/source/filter/eppt/pptx-epptooxml.cxx:136
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/filter/html/htmlex.hxx:74
     _Bool HtmlExport::WriteHtml(const rtl::OUString &,_Bool,std::basic_string_view<char16_t>)
@@ -316,13 +320,13 @@ slideshow/source/engine/animationnodes/animationbasenode.hxx:62
     _Bool slideshow::internal::AnimationBaseNode::enqueueActivity() const
 svl/source/fsstor/fsstorage.hxx:56
     ucbhelper::Content & FSStorage::GetContent()
-svx/inc/galleryfilestorage.hxx:102
+svx/inc/galleryfilestorage.hxx:101
     SvStream & GalleryFileStorage::writeGalleryTheme(SvStream &,const GalleryTheme &,const GalleryThemeEntry *)
-svx/inc/galleryfilestorageentry.hxx:56
+svx/inc/galleryfilestorageentry.hxx:55
     std::unique_ptr<GalleryTheme> & GalleryFileStorageEntry::getCachedTheme(std::unique_ptr<GalleryTheme> &)
 sw/inc/calc.hxx:124
     SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/crsrsh.hxx:601
+sw/inc/crsrsh.hxx:609
     _Bool SwCursorShell::TrySelectOuterTable()
 sw/inc/docary.hxx:308
     _Bool SwExtraRedlineTable::DeleteAllTableRedlines(SwDoc &,const SwTable &,_Bool,enum RedlineType)
@@ -394,9 +398,9 @@ vcl/inc/qt5/QtFrame.hxx:70
     QString QtFrame::tr(const char *,const char *,int)
 vcl/inc/qt5/QtFrame.hxx:70
     QString QtFrame::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtInstance.hxx:55
+vcl/inc/qt5/QtInstance.hxx:56
     QString QtInstance::tr(const char *,const char *,int)
-vcl/inc/qt5/QtInstance.hxx:55
+vcl/inc/qt5/QtInstance.hxx:56
     QString QtInstance::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtMainWindow.hxx:29
     QString QtMainWindow::tr(const char *,const char *,int)

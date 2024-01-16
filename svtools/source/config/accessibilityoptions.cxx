@@ -40,7 +40,10 @@ using namespace com::sun::star::uno;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
 
-void SvtAccessibilityOptions::SetVCLSettings()
+namespace SvtAccessibilityOptions
+{
+
+void SetVCLSettings()
 {
     AllSettings aAllSettings(Application::GetSettings());
     StyleSettings aStyleSettings(aAllSettings.GetStyleSettings());
@@ -114,15 +117,6 @@ void SvtAccessibilityOptions::SetVCLSettings()
     Application::SetSettings(aAllSettings);
 }
 
-// class SvtAccessibilityOptions --------------------------------------------------
-
-SvtAccessibilityOptions::SvtAccessibilityOptions()
-{
-}
-
-SvtAccessibilityOptions::~SvtAccessibilityOptions()
-{
-}
-
+} // namespace SvtAccessibilityOptions
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

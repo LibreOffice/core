@@ -266,9 +266,6 @@ public:
 
     SwDocShell* GetDocShell();
 
-    // apply Accessibility options
-    void ApplyAccessibilityOptions();
-
     // Inline method to request values of new members
     // <mbResetFormDesignMode> and <mbFormDesignModeToReset>
     bool ResetFormDesignMode() const

@@ -1949,7 +1949,6 @@ public:
     SC_DLLPUBLIC void    SetPattern( const ScAddress&, const ScPatternAttr& rAttr );
     SC_DLLPUBLIC void    SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const CellAttributeHolder& rHolder );
     SC_DLLPUBLIC void    SetPattern( const ScAddress& rPos, const CellAttributeHolder& rHolder );
-    SC_DLLPUBLIC void    SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr );
 
     void                 AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                      sal_uInt16 nFormatNo, const ScMarkData& rMark );

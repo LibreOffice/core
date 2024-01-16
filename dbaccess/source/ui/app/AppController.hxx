@@ -137,12 +137,6 @@ namespace dbaui
         */
         OUString getDatabaseName() const;
 
-        /** returns the stripped database name.
-            @return
-                The stripped database name either the registered name or if it is a file url the last segment.
-        */
-        OUString getStrippedDatabaseName() const;
-
         /** return the element type for given container
             @param  _xContainer The container where the element type has to be found
             @return the element type corresponding to the given container

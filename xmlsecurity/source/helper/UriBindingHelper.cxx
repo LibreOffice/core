@@ -20,7 +20,7 @@
 #include <UriBindingHelper.hxx>
 
 #include <tools/solar.h>
-#include <unotools/streamhelper.hxx>
+#include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>

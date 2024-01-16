@@ -76,7 +76,6 @@ public:
     static const char* GetSideDirection( sal_uInt8 nDirection );
     static const char* GetCornerDirection( sal_uInt8 nDirection );
     static const char* Get8Direction( sal_uInt8 nDirection );
-    static       int   GetPPTXLayoutId( int nOffset );
 
     sal_Int32 GetShapeID(const css::uno::Reference<css::drawing::XShape>& rXShape);
     sal_Int32 GetNextAnimationNodeID();
