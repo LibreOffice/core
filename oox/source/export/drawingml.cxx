@@ -4061,6 +4061,22 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         bHasWrap = true;
     }
 
+    // tdf#134401: If AUTOGROWWIDTH and AUTOGROWHEIGHT are set, then export it as TextWordWrap
+    if (SvxShapeText* pShpTxt = dynamic_cast<SvxShapeText*>(rXIface.get()))
+    {
+        const sdr::properties::BaseProperties& rProperties
+            = pShpTxt->GetSdrObject()->GetProperties();
+
+        const SdrOnOffItem& rSdrTextFitWidth = rProperties.GetItem(SDRATTR_TEXT_AUTOGROWWIDTH);
+        const SdrOnOffItem& rSdrTextFitHeight = rProperties.GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT);
+
+        if (rSdrTextFitWidth.GetValue() == true && rSdrTextFitHeight.GetValue() == true)
+        {
+            bHasWrap = true;
+            bWrap = false;
+        }
+    }
+
     if (bBodyPr)
     {
         const char* pWrap = (bHasWrap && !bWrap) || bIsFontworkShape ? "none" : nullptr;
