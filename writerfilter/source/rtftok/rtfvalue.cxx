@@ -172,7 +172,7 @@ bool RTFValue::equals(const RTFValue& rOther) const
     {
         if (m_pAttributes->size() != rOther.m_pAttributes->size())
             return false;
-        if (!m_pAttributes->equals(rOther))
+        if (!m_pAttributes->equals(*rOther.m_pAttributes))
             return false;
     }
     else if (m_pAttributes && m_pAttributes->size())
@@ -188,7 +188,7 @@ bool RTFValue::equals(const RTFValue& rOther) const
     {
         if (m_pSprms->size() != rOther.m_pSprms->size())
             return false;
-        if (!m_pSprms->equals(rOther))
+        if (!m_pSprms->equals(*rOther.m_pSprms))
             return false;
     }
     else if (m_pSprms && m_pSprms->size())
