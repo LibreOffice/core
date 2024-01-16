@@ -314,7 +314,7 @@ OInterfaceContainerHelper3<ListenerT>::addInterface(const css::uno::Reference<Li
     osl::MutexGuard aGuard(mrMutex);
 
     maData->push_back(rListener);
-    return maData->size();
+    return std::as_const(maData)->size();
 }
 
 template <class ListenerT>
@@ -337,7 +337,7 @@ sal_Int32 OInterfaceContainerHelper3<ListenerT>::removeInterface(
     if (it != maData->end())
         maData->erase(it);
 
-    return maData->size();
+    return std::as_const(maData)->size();
 }
 
 template <class ListenerT>
