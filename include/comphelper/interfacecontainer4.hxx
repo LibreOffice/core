@@ -353,7 +353,7 @@ OInterfaceContainerHelper4<ListenerT>::addInterface(std::unique_lock<std::mutex>
     (void)rGuard;
     assert(rListener.is());
     maData->push_back(rListener);
-    return maData->size();
+    return std::as_const(maData)->size();
 }
 
 template <class ListenerT>
@@ -377,7 +377,7 @@ sal_Int32 OInterfaceContainerHelper4<ListenerT>::removeInterface(
     if (it != maData->end())
         maData->erase(it);
 
-    return maData->size();
+    return std::as_const(maData)->size();
 }
 
 template <class ListenerT>

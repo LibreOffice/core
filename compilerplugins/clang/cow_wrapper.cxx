@@ -34,6 +34,8 @@ public:
     {
     }
 
+    bool shouldVisitTemplateInstantiations() const { return true; }
+
     virtual bool preRun() override { return true; }
 
     virtual void run() override
