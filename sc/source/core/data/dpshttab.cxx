@@ -178,7 +178,7 @@ void ScSheetDPData::FilterCacheTable(std::vector<ScDPFilteredCache::Criterion>&&
 {
     CreateCacheTable();
     aCacheTable.filterByPageDimension(
-        rCriteria, (IsRepeatIfEmpty() ? rCatDims : std::unordered_set<sal_Int32>()));
+        rCriteria, (IsRepeatIfEmpty() ? std::move(rCatDims) : std::unordered_set<sal_Int32>()));
 }
 
 void ScSheetDPData::GetDrillDownData(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&& rCatDims, Sequence< Sequence<Any> >& rData)
@@ -189,7 +189,7 @@ void ScSheetDPData::GetDrillDownData(std::vector<ScDPFilteredCache::Criterion>&&
         return;
 
     aCacheTable.filterTable(
-        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : std::unordered_set<sal_Int32>());
+        rCriteria, rData, IsRepeatIfEmpty() ? std::move(rCatDims) : std::unordered_set<sal_Int32>());
 }
 
 void ScSheetDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
