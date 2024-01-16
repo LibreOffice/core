@@ -1345,6 +1345,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
     assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]"_ostr, "wR"_ostr, "6750");
     assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]"_ostr, "hR"_ostr, "6750");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf134401_ExportAutoGrowToTextWordWrap)
+{
+    // pptx doesn't have autoGrowWidth and autoGrowHeight, but it does have TextWordWrap
+    // which is similar. If autoGrowWidth and autoGrowHeight are set in the document,
+    // then they are exported to pptx as TextWordWrap = "none".
+    loadFromFile(u"tdf134401_ExportAutoGrowToTextWordWrap.odp");
+    save("Impress Office Open XML");
+
+    // There are 2 shapes in the test file.
+    // The 1. shape is without autoGrowWidth/Height.
+    // The 2. shape is with autoGrowWidth/Height.
+    // Check if wrap="none" is exported for shape 2, but no wrap is exported for shape 1.
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    assertXPathNoAttribute(pXmlDoc, "//p:sp[1]/p:txBody/a:bodyPr"_ostr, "wrap"_ostr);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:bodyPr"_ostr, "wrap"_ostr, "none");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
