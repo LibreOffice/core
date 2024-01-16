@@ -48,14 +48,6 @@ def get_file_info(mar_file, url):
     return data
 
 
-def replace_variables_in_string(string, **kwargs):
-    new_string = string
-    for key, val in kwargs.items():
-        new_string = new_string.replace('$(%s)' % key, val)
-
-    return new_string
-
-
 def make_complete_mar_name(target_dir, filename_prefix):
     filename = filename_prefix + "_complete.mar"
     return os.path.join(target_dir, filename)

@@ -1893,13 +1893,6 @@ libo_FUZZ_ARG_WITH(online-update-mar-certificatepath,
          non-functional.)]),
 ,)
 
-libo_FUZZ_ARG_WITH(online-update-mar-uploadurl,
-    AS_HELP_STRING([--with-online-update-mar-uploadurl=...],
-        [Set the upload URL value for --enable-online-update-mar.
-         (Can be left off for debug purposes, even if that may render the feature
-         non-functional.)]),
-,)
-
 libo_FUZZ_ARG_ENABLE(extension-update,
     AS_HELP_STRING([--disable-extension-update],
         [Disable possibility to update installed extensions.]),
@@ -13692,15 +13685,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATEPATH)
-
-AC_MSG_CHECKING([for mar online update uploadurl])
-ONLINEUPDATE_MAR_UPLOADURL=$with_online_update_mar_uploadurl
-if test -n "$ONLINEUPDATE_MAR_UPLOADURL"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ONLINEUPDATE_MAR_UPLOADURL)
 
 
 PRIVACY_POLICY_URL="$with_privacy_policy_url"

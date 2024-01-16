@@ -499,9 +499,6 @@ upload-symbols:
 create-update-info:
 	$(MAKE) -f $(SRCDIR)/Makefile.gbuild create-update-info
 
-upload-update-info:
-	$(MAKE) -f $(SRCDIR)/Makefile.gbuild upload-update-info
-
 create-partial-info:
 	$(MAKE) -f $(SRCDIR)/Makefile.gbuild create-partial-info
 

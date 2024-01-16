@@ -46,15 +46,6 @@ create-update-info:
 		MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)' \
 	)
 
-upload-update-info:
-	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
-	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
-	$(eval UPDATE_DIR := $(WORKDIR)/update-info)
-	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_build_config.py "$(PRODUCTNAME)" "$(VERSION)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" LOOnlineUpdater
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/upload_builds.py "$(PRODUCTNAME)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" "$(ONLINEUPDATE_MAR_UPLOADURL)" LOOnlineUpdater
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/upload_build_config.py "$(UPDATE_DIR)" TODO
-
 create-partial-info:
 	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
 	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
