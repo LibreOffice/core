@@ -213,12 +213,22 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             Reference<XAccessible> xChild;
             if (aEvent.NewValue >>= xChild)
             {
+                assert(xChild.is()
+                       && "AccessibleEventId::CHILD event NewValue without valid child set");
+                // tdf#159213 for now, workaround invalid events being sent and don't crash in release builds
+                if (!xChild.is())
+                    return;
                 QAccessible::updateAccessibility(new QAccessibleEvent(
                     QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectCreated));
                 return;
             }
             if (aEvent.OldValue >>= xChild)
             {
+                assert(xChild.is()
+                       && "AccessibleEventId::CHILD event OldValue without valid child set");
+                // tdf#159213 for now, workaround invalid events being sent and don't crash in release builds
+                if (!xChild.is())
+                    return;
                 QAccessible::updateAccessibility(new QAccessibleEvent(
                     QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectDestroyed));
                 return;

@@ -967,7 +967,7 @@ namespace svt
         if (!IsEditing())
             return;
 
-        if ( isAccessibleAlive() )
+        if ( isAccessibleAlive() && m_aImpl->m_xActiveCell)
         {
             commitBrowseBoxEvent( CHILD, Any(), Any( m_aImpl->m_xActiveCell ) );
             m_aImpl->clearActiveCell();
