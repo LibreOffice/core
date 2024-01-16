@@ -56,6 +56,8 @@ static void lcl_AssertConditionalFormatList(ScDocument& rDoc, size_t nSize,
     {
         const ScRangeList& aRange = rItem->GetRange();
         aRange.Format(sRangeStr, ScRefFlags::VALID, rDoc, rDoc.GetAddressConvention());
+        CPPUNIT_ASSERT_MESSAGE(OString(sRangeStr.toUtf8() + " not found").getStr(),
+                               rExpectedValues.count(sRangeStr));
         CPPUNIT_ASSERT_EQUAL(rExpectedValues[sRangeStr],
                              ScCondFormatHelper::GetExpression(*rItem, aRange.GetTopLeftCorner()));
     }
@@ -1250,8 +1252,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     aInputOption.SetReplaceCellsWarn(false);
     pMod->SetInputOptions(aInputOption);
 
-    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
-    CPPUNIT_ASSERT_EQUAL(size_t(3), pList->size());
+    std::unordered_map<OUString, OUString> aExpectedValues
+        = { { "C1", "Cell value > 14" }, { "C3", "Cell value > 14" }, { "C4", "Cell value > 14" } };
+
+    lcl_AssertConditionalFormatList(*pDoc, 3, aExpectedValues);
 
     goToCell("A3:C4");
 
@@ -1261,7 +1265,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-    CPPUNIT_ASSERT_EQUAL(size_t(2), pList->size());
+    aExpectedValues = { { "C3,C1", "Cell value > 14" }, { "C4,C2", "Cell value > 14" } };
+    lcl_AssertConditionalFormatList(*pDoc, 2, aExpectedValues);
 
     // Restore previous status
     aInputOption.SetReplaceCellsWarn(bOldStatus);
