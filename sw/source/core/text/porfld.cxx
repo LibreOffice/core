@@ -402,10 +402,13 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
             // These characters should not be contained in the follow
             // field portion. They are handled via the HookChar mechanism.
             const sal_Unicode nNew = !aNew.isEmpty() ? aNew[0] : 0;
-            auto IsHook = [](const sal_Unicode cNew) -> bool
+            auto IsHook = [](const sal_Unicode cNew, bool const isSpace = false) -> bool
             {
                 switch (cNew)
                 {
+                    case ' ': // tdf#159101 this one is not in ScanPortionEnd
+                              // but is required for justified text
+                        return isSpace;
                     case CH_BREAK:
                     case CH_TAB:
                     case CHAR_HARDHYPHEN: // non-breaking hyphen
@@ -422,7 +425,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
                         return false;
                 }
             };
-            if (IsHook(nNew))
+            if (IsHook(nNew, true))
             {
                 if (nNew == CH_BREAK)
                 {
