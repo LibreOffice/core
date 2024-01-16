@@ -41,27 +41,29 @@ extern "C" {
    the next level is tried. Every query starts at the first level again, so
    that one setting may be taken from the 3rd and one from the 1st level.
 
-   1st level: explicitly set variables via rtl_bootstrap_set()
+   1st level: a fundamental.override.ini next to the application
 
-   2nd level: command line arguments. A `-env:SETTINGNAME=value` is given on
+   2nd level: explicitly set variables via rtl_bootstrap_set()
+
+   3rd level: command line arguments. A `-env:SETTINGNAME=value` is given on
    command line. This allows giving an application a certain setting, even
    if an ini-file exists (especially useful for e.g. daemons that want to
    start an executable with dynamical changing settings).
 
-   3rd level: environment variables. The application tries to get the
+   4th level: environment variables. The application tries to get the
    setting from the environment.
 
-   4th level: executable ini-file. Every application looks for an ini-file.
+   5th level: executable ini-file. Every application looks for an ini-file.
    The filename defaults to `/absolute/path/to/executable[rc|.ini]`
    without .bin or .exe suffix. The ini-filename can be
    set by the special command line parameter
    `-env:INIFILENAME=/absolute/path/to/inifile` at runtime or it may
    be set at compile time by an API-call.
 
-   5th level: URE_BOOTSTRAP ini-file. If the bootstrap variable URE_BOOTSTRAP
+   6th level: URE_BOOTSTRAP ini-file. If the bootstrap variable URE_BOOTSTRAP
    expands to the URL of an ini-file, that ini-file is searched.
 
-   6th level: default. An application can have some default settings decided
+   7th level: default. An application can have some default settings decided
    at compile time, which allow the application to run even with no
    deployment settings.
 
