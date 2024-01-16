@@ -1252,7 +1252,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat ) const
 
     try
     {
-        pStat->nSize = sal_uLong(xSeekable->getLength());
+        pStat->nSize = xSeekable->getLength();
     }
     catch (const IOException&)
     {
