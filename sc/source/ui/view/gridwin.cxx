@@ -1026,8 +1026,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->setMemberSize(aFilterEntries.size());
     for (auto it = aFilterEntries.begin(); it != aFilterEntries.end(); ++it)
     {
-        // tdf#140745 show (empty) entry on top of the checkbox list
-        if (it->GetString().isEmpty())
+        // tdf#140745 show (empty) entry on top of the checkbox list if not hidden by filter
+        if (it->GetString().isEmpty() && !it->IsHiddenByFilter())
         {
             const OUString& aStringVal = it->GetString();
             const double aDoubleVal = it->GetValue();
@@ -1036,7 +1036,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
                 bSelected = aSelectedString.count(aStringVal) > 0;
             else if (bQueryByNonEmpty)
                 bSelected = false;
-            mpAutoFilterPopup->addMember(aStringVal, aDoubleVal, bSelected, it->IsHiddenByFilter());
+            // it->IsHiddenByFilter() is always false here so no need to evaluate it
+            mpAutoFilterPopup->addMember(aStringVal, aDoubleVal, bSelected, false);
             aFilterEntries.maStrData.erase(it);
             break;
         }
