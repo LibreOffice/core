@@ -1053,7 +1053,20 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_liberation_narrow \
 		fonts_libertineg \
 		fonts_libre_hebrew \
-		fonts_noto \
+		fonts_noto_kufi_arabic \
+		fonts_noto_naskh_arabic \
+		fonts_noto_sans \
+		fonts_noto_sans_arabic \
+		fonts_noto_sans_armenian \
+		fonts_noto_sans_georgian \
+		fonts_noto_sans_hebrew \
+		fonts_noto_sans_lao \
+		fonts_noto_sans_lisu \
+		fonts_noto_serif \
+		fonts_noto_serif_armenian \
+		fonts_noto_serif_georgian \
+		fonts_noto_serif_hebrew \
+		fonts_noto_serif_lao \
 		fonts_reem \
 		fonts_scheherazade \
 	) \
