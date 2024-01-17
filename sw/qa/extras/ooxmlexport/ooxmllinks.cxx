@@ -78,9 +78,7 @@
         CPPUNIT_TEST_SUITE_END();                                                                  \
         void Import()                                                                              \
         {                                                                                          \
-            auto xChanges = comphelper::ConfigurationChanges::create();                            \
-            officecfg::Office::Common::Save::URL::FileSystem::set(!bAbsolute, xChanges);           \
-            xChanges->commit();                                                                    \
+            SetAbsolute(bAbsolute);                                                                \
             executeImportTest(FileName);                                                           \
         }                                                                                          \
         void verify() override;                                                                    \
@@ -95,12 +93,21 @@ public:
         : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text")
     {
     }
+
+    void SetAbsolute(bool bAbsolute)
+    {
+        auto xChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Save::URL::FileSystem::set(!bAbsolute, xChanges);
+        xChanges->commit();
+    }
 };
 
 /* IMPORT */
 
-DECLARE_LINKS_IMPORT_TEST(testRelativeToRelativeImport, "relative-link.docx", USE_RELATIVE)
+CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeImport)
 {
+    SetAbsolute(USE_RELATIVE);
+    createSwDoc("relative-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
     OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
