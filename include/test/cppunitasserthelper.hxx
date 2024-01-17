@@ -10,12 +10,15 @@
 #ifndef INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 #define INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 
+#include <test/testdllapi.hxx>
+
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <tools/gen.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -96,6 +99,15 @@ template <> struct assertion_traits<css::table::CellRangeAddress>
         return ost.str();
     }
 };
+
+void OOO_DLLPUBLIC_TEST AssertRectEqualWithTolerance(std::string_view sInfo,
+                                                     const tools::Rectangle& rExpected,
+                                                     const tools::Rectangle& rActual,
+                                                     const sal_Int32 nTolerance);
+
+void OOO_DLLPUBLIC_TEST AssertPointEqualWithTolerance(std::string_view sInfo, const Point rExpected,
+                                                      const Point rActual,
+                                                      const sal_Int32 nTolerance);
 
 CPPUNIT_NS_END
 
