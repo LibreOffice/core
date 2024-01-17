@@ -308,6 +308,12 @@ private:
 /// from this template and make available its member functions to access each
 /// given configuration group.
 template< typename T > struct ConfigurationGroup {
+    /// Get the read-only status of the given configuration group.
+    static bool isReadOnly()
+    {
+        return detail::ConfigurationWrapper::get().isReadOnly(T::path());
+    }
+
     /// Get read-only access to the given configuration group.
     static css::uno::Reference<
         css::container::XHierarchicalNameAccess >
@@ -341,6 +347,12 @@ private:
 /// from this template and make available its member functions to access each
 /// given configuration set.
 template< typename T > struct ConfigurationSet {
+    /// Get the read-only status of the given configuration set.
+    static bool isReadOnly()
+    {
+        return detail::ConfigurationWrapper::get().isReadOnly(T::path());
+    }
+
     /// Get read-only access to the given configuration set.
     static
     css::uno::Reference< css::container::XNameAccess >
