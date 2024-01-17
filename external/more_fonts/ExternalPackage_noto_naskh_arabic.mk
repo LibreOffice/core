@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto_naskh_arabic))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto_naskh_arabic,font_noto_naskh_arabic))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto_naskh_arabic,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	NotoNaskhArabic/full/ttf/NotoNaskhArabic-Bold.ttf \
 	NotoNaskhArabic/full/ttf/NotoNaskhArabic-Regular.ttf \
 ))

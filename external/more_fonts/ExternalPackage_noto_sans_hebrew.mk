@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto_sans_hebrew))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto_sans_hebrew,font_noto_sans_hebrew))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto_sans_hebrew,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	NotoSansHebrew/full/ttf/NotoSansHebrew-Bold.ttf \
 	NotoSansHebrew/full/ttf/NotoSansHebrew-Regular.ttf \
 ))
