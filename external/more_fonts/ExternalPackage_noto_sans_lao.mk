@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto_sans_lao))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto_sans_lao,font_noto_sans_lao))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto_sans_lao,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	NotoSansLao/full/ttf/NotoSansLao-Bold.ttf \
 	NotoSansLao/full/ttf/NotoSansLao-Regular.ttf \
 ))

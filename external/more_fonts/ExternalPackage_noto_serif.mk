@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto_serif))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto_serif,font_noto_serif))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto_serif,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	NotoSerif/hinted/ttf/NotoSerif-Bold.ttf \
 	NotoSerif/hinted/ttf/NotoSerif-BoldItalic.ttf \
 	NotoSerif/hinted/ttf/NotoSerif-Italic.ttf \
