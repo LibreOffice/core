@@ -3675,6 +3675,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
     assertXPathContent(pXmlDoc, "//tab/row/cell[1]/txt"_ostr, "Abcd efghijkl");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf159101)
+{
+    createSwDoc("tdf159101.odt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFieldPortion"_ostr,
+                "expand"_ostr, "One");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: two
+    // - Actual  :  two
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[2]/SwFieldPortion"_ostr,
+                "expand"_ostr, "two");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf142694)
 {
     createSwDoc("tdf142694-1.odt");
