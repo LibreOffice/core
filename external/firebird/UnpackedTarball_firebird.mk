@@ -21,12 +21,15 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,firebird,\
 # * external/firebird/0001-Make-comparison-operator-member-functions-const.patch.1 is upstream at
 #   <https://github.com/FirebirdSQL/firebird/pull/227> "Make comparison operator member functions
 #   const";
+# * external/firebird/0001-Fix-checks-for-null-HANDLE-in-Windows-only-code.patch.1 is upstream at
+#   <https://github.com/FirebirdSQL/firebird/pull/301> "Fix checks for null HANDLE in Windows-only
+#   code",
 # * external/firebird/0001-extern-cloop-Missing-dependency-of-BIN_DIR-cloop-on-.patch.1 is upstream
 #   at <https://github.com/FirebirdSQL/firebird/pull/302> "extern/cloop: Missing dependency of
 #   $(BIN_DIR)/cloop on $(BIN_DIR)",
-# * external/firebird/0001-Revert-Backported-fix-for-7122-Invalid-state-of-mapp.patch.1 is a revert
-#   of <https://github.com/FirebirdSQL/firebird/commit/585b2d133a3891b58b7aeb4ddd3ccd124168abf0>
-#   "Backported fix for #7122: Invalid state of mapping cache after replacement of database":
+# * external/firebird/0001-extern-cloop-Missing-dependencies-of-compilations-on.patch.1 is upstream
+#   at <https://github.com/FirebirdSQL/firebird/pull/6948> "extern/cloop: Missing dependencies of
+#   compilations on output directories":
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
@@ -37,16 +40,17 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/asan.patch \
 		external/firebird/firebird-tdf125284.patch.1 \
 		external/firebird/0001-Make-comparison-operator-member-functions-const.patch.1 \
+    external/firebird/0001-Fix-warning-on-Win64-build-231.patch.1 \
 		external/firebird/macos-arm64.patch.0 \
     external/firebird/firebird-btyacc-add-explicit-rule.patch \
     external/firebird/firebird-307.patch.1 \
+    external/firebird/0001-Fix-checks-for-null-HANDLE-in-Windows-only-code.patch.1 \
     external/firebird/0001-extern-cloop-Missing-dependency-of-BIN_DIR-cloop-on-.patch.1 \
     external/firebird/msvc.patch \
     external/firebird/wnt-per-process-trace-storage.patch.1 \
+    external/firebird/0001-extern-cloop-Missing-dependencies-of-compilations-on.patch.1 \
     external/firebird/configure-c99.patch \
     external/firebird/Wincompatible-function-pointer-types.patch \
-	external/firebird/0001-Revert-Backported-fix-for-7122-Invalid-state-of-mapp.patch.1 \
-	external/firebird/mold.patch \
     external/firebird/c++26.patch \
 ))
 
@@ -62,6 +66,12 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	external/firebird/firebird-macosx.patch.1 \
 	external/firebird/macosx-elcapitan-dyld.patch \
+))
+endif
+
+ifeq ($(ENABLE_MACOSX_SANDBOX),TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+	external/firebird/firebird-macosx-sandbox.patch.1 \
 ))
 endif
 

@@ -116,8 +116,8 @@ EXPAT_TARBALL := expat-2.5.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FIREBIRD_SHA256SUM := c716fc1c788ed614050f5469e1ba0ff442c2f1f7b907a2c808a8bac1dc3d6f83
-FIREBIRD_TARBALL := Firebird-3.0.11.33703-0.tar.bz2
+FIREBIRD_SHA256SUM := acb85cedafa10ce106b1823fb236b1b3e5d942a5741e8f8435cc8ccfec0afe76
+FIREBIRD_TARBALL := Firebird-3.0.7.33374-0.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
