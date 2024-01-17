@@ -632,6 +632,8 @@ public:
     SCROW GetLOKEndHeaderRow() const { return mnLOKEndHeaderRow; }
     SCCOL GetLOKStartHeaderCol() const { return mnLOKStartHeaderCol; }
     SCCOL GetLOKEndHeaderCol() const { return mnLOKEndHeaderCol; }
+
+    void SyncGridWindowMapModeFromDrawMapMode();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

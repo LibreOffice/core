@@ -2052,11 +2052,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
     // Form Layer must know the visible area of the new sheet
     // that is why MapMode must already be correct here
-    for (VclPtr<ScGridWindow> & pWin : pGridWin)
-    {
-        if (pWin)
-            pWin->SetMapMode(pWin->GetDrawMapMode());
-    }
+    SyncGridWindowMapModeFromDrawMapMode();
     SetNewVisArea();
 
     PaintGrid();
@@ -3100,6 +3096,20 @@ void ScTabView::UpdateInputLine()
     SC_MOD()->InputEnterHandler();
 }
 
+void ScTabView::SyncGridWindowMapModeFromDrawMapMode()
+{
+    // AW: Discussed with NN if there is a reason that new map mode was only set for one window,
+    // but is not. Setting only on one window causes the first repaint to have the old mapMode
+    // in three of four views, so the overlay will save the wrong content e.g. when zooming out.
+    // Changing to setting map mode at all windows.
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+    {
+        if (!pWin)
+            continue;
+        pWin->SetMapMode(pWin->GetDrawMapMode());
+    }
+}
+
 void ScTabView::ZoomChanged()
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl(aViewData.GetViewShell());
@@ -3110,18 +3120,9 @@ void ScTabView::ZoomChanged()
 
     UpdateScrollBars();
 
+    SyncGridWindowMapModeFromDrawMapMode();
+
     // VisArea...
-    // AW: Discussed with NN if there is a reason that new map mode was only set for one window,
-    // but is not. Setting only on one window causes the first repaint to have the old mapMode
-    // in three of four views, so the overlay will save the wrong content e.g. when zooming out.
-    // Changing to setting map mode at all windows.
-
-    for (sal_uInt32 i = 0; i < 4; i++)
-    {
-        if (pGridWin[i])
-            pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
-    }
-
     SetNewVisArea();
 
     InterpretVisible();     // have everything calculated before painting

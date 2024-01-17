@@ -1719,9 +1719,7 @@ void ScTabView::DoHSplit(tools::Long nSplitPos)
 
     // Form Layer needs to know the visible part of all windows
     // that is why MapMode must already be correct here
-    for (VclPtr<ScGridWindow> & pWin : pGridWin)
-        if (pWin)
-            pWin->SetMapMode( pWin->GetDrawMapMode() );
+    SyncGridWindowMapModeFromDrawMapMode();
     SetNewVisArea();
 
     PaintGrid();
@@ -1791,9 +1789,7 @@ void ScTabView::DoVSplit(tools::Long nSplitPos)
 
     // Form Layer needs to know the visible part of all windows
     // that is why MapMode must already be correct here
-    for (VclPtr<ScGridWindow> & pWin : pGridWin)
-        if (pWin)
-            pWin->SetMapMode( pWin->GetDrawMapMode() );
+    SyncGridWindowMapModeFromDrawMapMode();
     SetNewVisArea();
 
     PaintGrid();
@@ -2211,9 +2207,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
 
     // Form Layer needs to know the visible part of all windows
     // that is why MapMode must already be correct here
-    for (VclPtr<ScGridWindow> & p : pGridWin)
-        if (p)
-            p->SetMapMode( p->GetDrawMapMode() );
+    SyncGridWindowMapModeFromDrawMapMode();
     SetNewVisArea();
 
     RepeatResize(bUpdateFix);
