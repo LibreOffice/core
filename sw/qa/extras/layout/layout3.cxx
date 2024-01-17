@@ -1575,6 +1575,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf145826)
     assertXPath(pXmlDoc, "/root/page/body/section/column[2]/ftncont/ftn"_ostr, 3);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTable0HeightRows)
+{
+    createSwDoc("table-0-height-rows.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // the problem was that the table was erroneously split across 2 or 3 pages
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 28);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/infos/bounds[@height='0']"_ostr, 25);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf105481)
 {
     createSwDoc("tdf105481.odt");
