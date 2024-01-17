@@ -1,0 +1,61 @@
+--- src/common/classes/Nullable.h
++++ src/common/classes/Nullable.h
+@@ -113,19 +113,19 @@
+ template <typename T> class Nullable : public BaseNullable<T>
+ {
+ public:
+-	explicit Nullable<T>(const T& v)
++	explicit Nullable(const T& v)
+ 	{
+ 		this->value = v;
+ 		this->specified = true;
+ 	}
+ 
+-	Nullable<T>(const Nullable<T>& o)
++	Nullable(const Nullable<T>& o)
+ 	{
+ 		this->value = o.value;
+ 		this->specified = o.specified;
+ 	}
+ 
+-	Nullable<T>()
++	Nullable()
+ 	{
+ 		NullableClear<T>::clear(this->value);
+ 		this->specified = false;
+--- src/common/classes/alloc.h
++++ src/common/classes/alloc.h
+@@ -259,7 +259,7 @@
+ class SubsystemContextPoolHolder : public ContextPoolHolder
+ {
+ public:
+-	SubsystemContextPoolHolder <SubsystemThreadData, SubsystemPool>
++	SubsystemContextPoolHolder
+ 	(
+ 		SubsystemThreadData* subThreadData,
+ 		SubsystemPool* newPool
+--- src/common/classes/stack.h
++++ src/common/classes/stack.h
+@@ -36,7 +36,7 @@
+ 		class Stack : public AutoStorage
+ 	{
+ 	private:
+-		Stack<Object, Capacity>(Stack<Object, Capacity>&);	// not implemented
++		Stack(Stack<Object, Capacity>&);	// not implemented
+ 
+ 		class Entry : public Vector<Object, Capacity>
+ 		{
+@@ -117,11 +117,11 @@
+ 		Entry* stk_cache;
+ 
+ 	public:
+-		explicit Stack<Object, Capacity>(MemoryPool& p)
++		explicit Stack(MemoryPool& p)
+ 			: AutoStorage(p), stk(0), stk_cache(0)
+ 		{ }
+ 
+-		Stack<Object, Capacity>() : AutoStorage(), stk(0), stk_cache(0) { }
++		Stack() : AutoStorage(), stk(0), stk_cache(0) { }
+ 
+ 		~Stack()
+ 		{

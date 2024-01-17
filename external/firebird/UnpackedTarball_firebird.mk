@@ -52,6 +52,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/configure-c99.patch \
     external/firebird/Wincompatible-function-pointer-types.patch \
     external/firebird/c++26.patch \
+    external/firebird/c++20.patch \
 ))
 
 ifeq ($(OS),WNT)
