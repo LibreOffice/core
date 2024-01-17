@@ -103,6 +103,18 @@ inline void assertRectangleEqual(const tools::Rectangle& rExpected, const tools:
 #define CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpected, aActual, aTolerance)              \
     assertRectangleEqual(aExpected, aActual, aTolerance, CPPUNIT_SOURCELINE())
 
+inline void assertPointEqual(const Point& rExpected, const Point& rActual,
+                             const sal_Int32 nTolerance, const CppUnit::SourceLine& rSourceLine)
+{
+    CPPUNIT_NS::assertDoubleEquals(rExpected.X(), rActual.X(), nTolerance, rSourceLine,
+                                   "different X");
+    CPPUNIT_NS::assertDoubleEquals(rExpected.Y(), rActual.Y(), nTolerance, rSourceLine,
+                                   "different Y");
+}
+
+#define CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aExpected, aActual, aTolerance)                  \
+    assertPointEqual(aExpected, aActual, aTolerance, CPPUNIT_SOURCELINE())
+
 #endif // INCLUDED_TEST_UNOAPI_TEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

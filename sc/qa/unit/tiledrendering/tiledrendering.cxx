@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <test/cppunitasserthelper.hxx>
 #include <test/unoapixml_test.hxx>
 #include <test/helper/transferable.hxx>
 #include <cppunit/tools/StringHelper.h>
@@ -98,7 +99,6 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-protected:
     ScModelObj* createDoc(const char* pName);
     void setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
@@ -3281,6 +3281,167 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
     CPPUNIT_ASSERT(!aView2.m_aHyperlinkClicked.isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForSplitPanes)
+{
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
+    ScModelObj* pModelObj = createDoc("split.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    // view
+    ViewCallback aView;
+
+    // move way over to the right where BP:20 exists, enough so that rows A and B
+    // would scroll off the page and not be visible, if they were not frozen
+    pModelObj->setClientVisibleArea(tools::Rectangle(73050, 0, 94019, 7034));
+    Scheduler::ProcessEventsToIdle();
+
+    ScAddress aBP20(67, 19, 0); // BP:20
+
+    pView->SetCursor(aBP20.Col(), aBP20.Row());
+    Scheduler::ProcessEventsToIdle();
+
+    aView.m_bInvalidateTiles = false;
+    aView.m_aInvalidations.clear();
+
+    lcl_typeCharsInCell("X", aBP20.Col(), aBP20.Row(), pView, pModelObj); // Type 'X' in A1
+
+    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+
+    // missing before fix
+    tools::Rectangle aTopLeftPane(0, 500, 3817, 742);
+    bool bFoundTopLeftPane =
+        std::find(aView.m_aInvalidations.begin(), aView.m_aInvalidations.end(), aTopLeftPane) != aView.m_aInvalidations.end();
+    CPPUNIT_ASSERT_MESSAGE("The cell visible in the top left pane should be redrawn", bFoundTopLeftPane);
+
+    // missing before fix
+    tools::Rectangle aBottomLeftPane(0, 500, 3817, 3242);
+    bool bFoundBottomLeftPane =
+        std::find(aView.m_aInvalidations.begin(), aView.m_aInvalidations.end(), aBottomLeftPane) != aView.m_aInvalidations.end();
+    CPPUNIT_ASSERT_MESSAGE("The cell visible in the bottom left pane should be redrawn", bFoundBottomLeftPane);
+}
+
+// Saving shouldn't trigger an invalidation
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
+{
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
+    loadFromFile(u"invalidate-on-save.ods");
+
+    // .uno:Save modifies the original file, make a copy first
+    saveAndReload("calc8");
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // track invalidations
+    ViewCallback aView;
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    dispatchCommand(mxComponent, ".uno:Save", aArgs);
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView.m_bInvalidateTiles);
+}
+
+// That we don't end up with two views on different zooms that invalidate different
+// rectangles, each should invalidate the same rectangle
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZoom)
+{
+    ScAddress aB7(1, 6, 0);
+    ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
+
+    ScModelObj* pModelObj = createDoc("cell-invalidations-200zoom-settings.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    // Set View #1 to initial 100% and generate a paint
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 19845, 6405));
+    pModelObj->setClientZoom(256, 256, 1536, 1536);
+    pModelObj->paintTile(*xDevice, 3328, 512, 0, 0, 19968, 3072);
+
+    Scheduler::ProcessEventsToIdle();
+
+    int nView1 = SfxLokHelper::getView();
+    // register to track View #1 invalidations
+    ViewCallback aView1;
+
+    // Create a View #2
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    // register to track View #1 invalidations
+    ViewCallback aView2;
+
+    // Set View #2 to initial 100% and generate a paint
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 19845, 6405));
+    pModelObj->setClientZoom(256, 256, 1536, 1536);
+    pModelObj->paintTile(*xDevice, 3328, 512, 0, 0, 19968, 3072);
+
+    // Set View #1 to 50% zoom and generate a paint
+    SfxLokHelper::setView(nView1);
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 41150, 13250));
+    pModelObj->setClientZoom(256, 256, 3185, 3185);
+    pModelObj->paintTile(*xDevice, 3328, 512, 0, 0, 41405, 6370);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // Set View #2 to 200% zoom and generate a paint
+    SfxLokHelper::setView(nView2);
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 9574, 3090));
+    pModelObj->setClientZoom(256, 256, 741, 741);
+    pModelObj->paintTile(*xDevice, 3328, 512, 0, 0, 19968, 3072);
+
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidations.clear();
+    aView2.m_bInvalidateTiles = false;
+    aView2.m_aInvalidations.clear();
+
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView2);
+    pView2->SetCursor(aB7.Col(), aB7.Row());
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    Scheduler::ProcessEventsToIdle();
+
+    // The problem tested for here is with two views at different zooms then a
+    // single cell invalidation resulted in the same rectangle reported as two
+    // different invalidations rectangles of different scales. While we should
+    // get the same invalidation rectangle reported.
+    //
+    // (B7 is a good choice to use in the real world to see the effect, to both
+    // avoid getting the two rects combined into one bigger one, or to have the
+    // two separated by so much space the 2nd is off-screen and not seen
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView2.m_aInvalidations.size());
+
+    // That they don't exactly match doesn't matter, we're not checking rounding issues,
+    // what matters is that they are not utterly different rectangles
+    // Without fix result is originally:
+    // Comparing invalidation rects Left expected 278 actual 1213 Tolerance 50
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(
+                                          aView1.m_aInvalidations[0].TopLeft(),
+                                          aView2.m_aInvalidations[0].TopLeft(),
+                                          100);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(
+                                          aView1.m_aInvalidations[0].BottomLeft(),
+                                          aView2.m_aInvalidations[0].BottomLeft(),
+                                          100);
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
 {
     // Given 2 views, the second's locale is set to German:
@@ -3433,76 +3594,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     // Check the A1 cell is selected in view #2
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), ScDocShell::GetViewData()->GetCurX());
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
-}
-
-CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForSplitPanes)
-{
-    comphelper::LibreOfficeKit::setCompatFlag(
-        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
-
-    ScModelObj* pModelObj = createDoc("split.ods");
-    CPPUNIT_ASSERT(pModelObj);
-    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-    CPPUNIT_ASSERT(pView);
-
-    // view
-    ViewCallback aView;
-
-    // move way over to the right where BP:20 exists, enough so that rows A and B
-    // would scroll off the page and not be visible, if they were not frozen
-    pModelObj->setClientVisibleArea(tools::Rectangle(73050, 0, 94019, 7034));
-    Scheduler::ProcessEventsToIdle();
-
-    ScAddress aBP20(67, 19, 0); // BP:20
-
-    pView->SetCursor(aBP20.Col(), aBP20.Row());
-    Scheduler::ProcessEventsToIdle();
-
-    aView.m_bInvalidateTiles = false;
-    aView.m_aInvalidations.clear();
-
-    lcl_typeCharsInCell("X", aBP20.Col(), aBP20.Row(), pView, pModelObj); // Type 'X' in A1
-
-    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
-
-    // missing before fix
-    tools::Rectangle aTopLeftPane(0, 500, 3817, 742);
-    bool bFoundTopLeftPane =
-        std::find(aView.m_aInvalidations.begin(), aView.m_aInvalidations.end(), aTopLeftPane) != aView.m_aInvalidations.end();
-    CPPUNIT_ASSERT_MESSAGE("The cell visible in the top left pane should be redrawn", bFoundTopLeftPane);
-
-    // missing before fix
-    tools::Rectangle aBottomLeftPane(0, 500, 3817, 3242);
-    bool bFoundBottomLeftPane =
-        std::find(aView.m_aInvalidations.begin(), aView.m_aInvalidations.end(), aBottomLeftPane) != aView.m_aInvalidations.end();
-    CPPUNIT_ASSERT_MESSAGE("The cell visible in the bottom left pane should be redrawn", bFoundBottomLeftPane);
-}
-
-// Saving shouldn't trigger an invalidation
-CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
-{
-    loadFromFile(u"invalidate-on-save.ods");
-
-    // .uno:Save modifies the original file, make a copy first
-    saveAndReload("calc8");
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    CPPUNIT_ASSERT(pModelObj);
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-
-    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-    CPPUNIT_ASSERT(pView);
-
-    Scheduler::ProcessEventsToIdle();
-
-    // track invalidations
-    ViewCallback aView;
-
-    uno::Sequence<beans::PropertyValue> aArgs;
-    dispatchCommand(mxComponent, ".uno:Save", aArgs);
-
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT(!aView.m_bInvalidateTiles);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
