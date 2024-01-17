@@ -34,8 +34,11 @@
 
 #include <cppuhelper/factory.hxx>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 
 // apparently PATH_MAX is not standard and not defined by MSVC
@@ -244,6 +247,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 pyuno_Loader_get_implementation(
     css::uno::XComponentContext* ctx , css::uno::Sequence<css::uno::Any> const&)
 {
+    //HACK: Reading the configuration via officecfg::... below internally needs the
+    // comphelper::getProcessServiceFactory(), which might not be set if this code is e.g. executed
+    // in a uno.bin process when installing a LibreOffice extension written in Python, so make sure
+    // the process service factory is set:
+    try {
+        comphelper::getProcessServiceFactory();
+    } catch (css::uno::DeploymentException const &) {
+        comphelper::setProcessServiceFactory(
+            css::uno::Reference<css::lang::XMultiServiceFactory>(
+                ctx->getServiceManager(), css::uno::UNO_QUERY_THROW));
+    }
     if (officecfg::Office::Common::Security::Scripting::DisablePythonRuntime::get())
         return nullptr;
 
