@@ -722,6 +722,21 @@ DECLARE_RTFEXPORT_TEST(testTdf118047, "tdf118047.rtf")
     CPPUNIT_ASSERT_MESSAGE("Header is too large", 1000 > nHeight);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf158950, "tdf158950.rtf")
+{
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 2, u"style"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: rgba[ff0000ff]
+    // - Actual  : rgba[000000ff]
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xRun, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xRun, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE, getProperty<sal_Int16>(xRun, "CharUnderline"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf104390, "tdf104390.rtf")
 {
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
