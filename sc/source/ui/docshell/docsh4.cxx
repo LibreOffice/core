@@ -1301,28 +1301,41 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (bSelection)
                 {
                     ScTabViewShell* pViewShell = GetBestViewShell();
-                    const LanguageType nLangType = SvtLanguageTable::GetLanguageType(aLangText);
-                    const SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType);
-
                     if (pViewShell)
                     {
                         const ScPatternAttr* pSelAttrs = pViewShell->GetSelectionPattern();
                         if (pSelAttrs)
                         {
                             const SfxItemSet& rOldSet = pSelAttrs->GetItemSet();
+                            SfxItemPool* pItemPool = rOldSet.GetPool();
                             auto pNewSet = std::make_shared<SfxItemSet>(rOldSet);
 
-                            if (nScriptType == SvtScriptType::LATIN)
-                                pNewSet->Put(SvxLanguageItem(nLangType,
-                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_LANGUAGE)));
-                            if (nScriptType == SvtScriptType::COMPLEX)
-                                pNewSet->Put(SvxLanguageItem(nLangType,
-                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE)));
-                            if (nScriptType == SvtScriptType::ASIAN)
-                                pNewSet->Put(SvxLanguageItem(nLangType,
-                                                             rOldSet.GetPool()->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE)));
-
+                            if (aLangText == "LANGUAGE_NONE")
+                            {
+                                pNewSet->Put(SvxLanguageItem(LANGUAGE_NONE,
+                                                             pItemPool->GetWhich(SID_ATTR_CHAR_LANGUAGE)));
+                                pNewSet->Put(SvxLanguageItem(LANGUAGE_NONE,
+                                                             pItemPool->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE)));
+                                pNewSet->Put(SvxLanguageItem(LANGUAGE_NONE,
+                                                             pItemPool->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE)));
+                            }
+                            else
+                            {
+                                const LanguageType nLangType = SvtLanguageTable::GetLanguageType(aLangText);
+                                const SvtScriptType nScriptType =
+                                    SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType);
+                                if (nScriptType == SvtScriptType::LATIN)
+                                    pNewSet->Put(SvxLanguageItem(nLangType,
+                                                                 pItemPool->GetWhich(SID_ATTR_CHAR_LANGUAGE)));
+                                if (nScriptType == SvtScriptType::COMPLEX)
+                                    pNewSet->Put(SvxLanguageItem(nLangType,
+                                                                 pItemPool->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE)));
+                                if (nScriptType == SvtScriptType::ASIAN)
+                                    pNewSet->Put(SvxLanguageItem(nLangType,
+                                                                 pItemPool->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE)));
+                            }
                             pViewShell->ApplyAttributes(*pNewSet, rOldSet);
+                            pBindings->Invalidate(SID_LANGUAGE_STATUS);
                         }
                     }
                 }
@@ -2245,11 +2258,11 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                             if (SfxItemState::SET == rItemSet.GetItemState(nLangWhich))
                                 eCtl = static_cast<const SvxLanguageItem&>(rItemSet.Get(nLangWhich)).GetLanguage();
 
-                            if (eLatin != LANGUAGE_NONE && eLatin != LANGUAGE_DONTKNOW)
+                            if (eLatin != LANGUAGE_DONTKNOW)
                                 sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
-                            if (eCjk != LANGUAGE_NONE && eCjk != LANGUAGE_DONTKNOW)
+                            else if (eCjk != LANGUAGE_DONTKNOW)
                                 sLanguage = SvtLanguageTable::GetLanguageString(eCjk);
-                            if (eCtl != LANGUAGE_NONE && eCtl != LANGUAGE_DONTKNOW)
+                            else if (eCtl != LANGUAGE_DONTKNOW)
                                 sLanguage = SvtLanguageTable::GetLanguageString(eCtl);
 
                             if (sLanguage.isEmpty())
