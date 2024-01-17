@@ -741,7 +741,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         {
             // undocumented - based on testing: both 0 and 1 are equivalent to the maximum 503316479
             const sal_Int32 nMaxAllowed = 0x1DFFFFFF;
-            if (nIntValue < 2/* || nIntValue > nMaxAllowed*/)
+            if (nIntValue < 2 || nIntValue > nMaxAllowed)
                 m_pImpl->m_zOrder = nMaxAllowed;
             else
                 m_pImpl->m_zOrder = nIntValue;

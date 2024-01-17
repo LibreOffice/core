@@ -945,8 +945,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_max, "tdf159158_zOrder_max.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
     // while yellow is a higher value, last duplicate wins, so lower value blue must be the maximum
-    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
-    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexMax, "tdf159158_zOrder_zIndexMax.docx")
