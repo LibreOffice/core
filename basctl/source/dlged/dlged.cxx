@@ -623,6 +623,8 @@ void DlgEditor::CreateDefaultObject()
 
     // set default property values
     pDlgEdObj->SetDefaults();
+    // set the form to which the new object belongs
+    pDlgEdObj->SetDlgEdForm(pDlgEdForm.get());
 
     // insert object into drawing page
     SdrPageView* pPageView = pDlgEdView->GetSdrPageView();
