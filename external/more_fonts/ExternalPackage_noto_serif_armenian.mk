@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto_serif_armenian))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto_serif_armenian,font_noto_serif_armenian))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto_serif_armenian,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	NotoSerifArmenian/full/ttf/NotoSerifArmenian-Bold.ttf \
 	NotoSerifArmenian/full/ttf/NotoSerifArmenian-Regular.ttf \
 ))
