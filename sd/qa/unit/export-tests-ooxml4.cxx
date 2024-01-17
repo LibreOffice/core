@@ -751,22 +751,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf147121)
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf140912_PicturePlaceholder)
 {
-    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
-    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    // -8490 in the test below turns into -8014 on my Windows box with 150% scaling.
-    if (!IsDefaultDPI())
-        return;
-
+    // Given a graphic placeholder with a custom prompt:
     createSdImpressDoc("pptx/tdfpictureplaceholder.pptx");
 
     uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
-    bool bTextContourFrame = true;
-    xShapeProps->getPropertyValue("TextContourFrame") >>= bTextContourFrame;
-    CPPUNIT_ASSERT_EQUAL(false, bTextContourFrame);
+    bool isEmptyPresentationObject = false;
+    // Without the fix, it would not be imported as empty presentation object;
+    // the text would be treated as its content.
+    xShapeProps->getPropertyValue("IsEmptyPresentationObject") >>= isEmptyPresentationObject;
+    CPPUNIT_ASSERT(isEmptyPresentationObject);
 
-    text::GraphicCrop aGraphicCrop;
-    xShapeProps->getPropertyValue("GraphicCrop") >>= aGraphicCrop;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-8490), aGraphicCrop.Top);
+    // If we supported custom prompt text, here we would also test "String" property,
+    // which would be equal to "Insert Image".
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)
