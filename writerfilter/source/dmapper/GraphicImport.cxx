@@ -739,9 +739,10 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         break;
         case NS_ooxml::LN_CT_Anchor_relativeHeight: // unsigned content
         {
-            // undocumented - based on testing: both 0 and 1 are equivalent to the maximum 251658240
-            if (nIntValue < 2/* || nIntValue > 0x0F000000*/)
-                m_pImpl->m_zOrder = 0x0F000000;
+            // undocumented - based on testing: both 0 and 1 are equivalent to the maximum 503316479
+            const sal_Int32 nMaxAllowed = 0x1DFFFFFF;
+            if (nIntValue < 2/* || nIntValue > nMaxAllowed*/)
+                m_pImpl->m_zOrder = nMaxAllowed;
             else
                 m_pImpl->m_zOrder = nIntValue;
         }

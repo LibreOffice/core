@@ -868,97 +868,137 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155736, "tdf155736_PageNumbers_footer.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[2]/footer/txt/text()"_ostr));
 }
 
+// The following zOrder tests are checking the shapes "stacking height".
+// getShape(nZOrder) already gets them in lowest-to-highest order,
+// so for any overlapping shapes the highest numbered shape is expected to be the one on top.
+// Which shape that actually is can be usually be verified based on the shape name.
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_duplicate, "tdf159158_zOrder_duplicate_compat15.docx")
 {
     // given a yellow star with relativeHeight 2, followed by an overlapping blue star also with 2
-    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
-    sal_Int32 zOrder1, zOrder2;
-    OUString descr1, descr2;
-    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
-    imageProperties1->getPropertyValue( "ZOrder" ) >>= zOrder1;
-    imageProperties1->getPropertyValue( "Name" ) >>= descr1;
-    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
-    imageProperties2->getPropertyValue( "ZOrder" ) >>= zOrder2;
-    imageProperties2->getPropertyValue( "Name" ) >>= descr2;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), zOrder1 ); // lower
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), zOrder2 ); // higher
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // last one defined wins
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // the zOrder of the stars should remain consistent between round-trips - last duplicate wins
+    // and compatibility has nothing to do with this for relativeHeight (other tests are compat12).
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalA, "tdf159158_zOrder_1and0equalA.docx")
 {
     // given a yellow star with relativeHeight 1, followed by an overlapping blue star with 0
-    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
-    sal_Int32 zOrder1, zOrder2;
-    OUString descr1, descr2;
-    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
-    imageProperties1->getPropertyValue("ZOrder") >>= zOrder1;
-    imageProperties1->getPropertyValue("Name") >>= descr1;
-    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
-    imageProperties2->getPropertyValue("ZOrder") >>= zOrder2;
-    imageProperties2->getPropertyValue("Name") >>= descr2;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), zOrder1); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), zOrder2); // higher
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // 0 >= 1 (last one wins)
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // 0 is treated the same as 1 - the maximum value, so blue is duplicate - last duplicate wins
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalB, "tdf159158_zOrder_1and0equalB.docx")
 {
     // given a yellow star with relativeHeight 0, followed by an overlapping blue star with 1
     // since they have the same zOrder value, last one wins, so same result as version A
-    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
-    sal_Int32 zOrder1, zOrder2;
-    OUString descr1, descr2;
-    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
-    imageProperties1->getPropertyValue("ZOrder") >>= zOrder1;
-    imageProperties1->getPropertyValue("Name") >>= descr1;
-    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
-    imageProperties2->getPropertyValue("ZOrder") >>= zOrder2;
-    imageProperties2->getPropertyValue("Name") >>= descr2;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), zOrder1); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), zOrder2); // higher
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // 1 >= 0 (last one wins)
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // 1 is treated the same as 0 - the maximum value, so blue is duplicate - last duplicate wins
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0max, "tdf159158_zOrder_1and0max.docx")
 {
-    // given a yellow star with relativeHeight 251658240 (0F00 0000)
+    // given a yellow star with maximum relativeHeight 503316479 (1DFF FFFF)
     // followed by an overlapping blue star with 0.
-    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
-    sal_Int32 zOrder1, zOrder2;
-    OUString descr1, descr2;
-    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
-    imageProperties1->getPropertyValue("ZOrder") >>= zOrder1;
-    imageProperties1->getPropertyValue("Name") >>= descr1;
-    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
-    imageProperties2->getPropertyValue("ZOrder") >>= zOrder2;
-    imageProperties2->getPropertyValue("Name") >>= descr2;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), zOrder1); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), zOrder2); // higher
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // 0 >= 0F00 0000 (last one wins)
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // 0 is treated the same as the maximum value, last duplicate wins, so blue is on top
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_maxLessOne, "tdf159158_zOrder_maxLessOne.docx")
+{
+    // given a yellow star with relativeHeight 503316479 (1DFF FFFF)
+    // followed by a partially hidden blue star with lower relativeHeight 503316478 (1DFF FFFE)
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // since yellow is a higher value, it should be on top
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder0,"Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder1, "Name"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_max, "tdf159158_zOrder_max.docx")
 {
-    // given a yellow star with relativeHeight 251658241 (0F00 0001)
-    // followed by an overlapping blue star with relativeHeight 251658240 (0F00 0000)
-    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2);
-    sal_Int32 zOrder1, zOrder2;
-    OUString descr1, descr2;
-    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
-    imageProperties1->getPropertyValue("ZOrder") >>= zOrder1;
-    imageProperties1->getPropertyValue("Name") >>= descr1;
-    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
-    imageProperties2->getPropertyValue("ZOrder") >>= zOrder2;
-    imageProperties2->getPropertyValue("Name") >>= descr2;
-//     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), zOrder1); // lower
-//     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), zOrder2); // higher
-//     CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), descr1);
-//     CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), descr2); // 0F00 0000 == 0F00 0001
+    // given a yellow star with (one higher than maximum) relativeHeight 503316480 (1E00 0000)
+    // followed by an overlapping blue star with maximum relativeHeight  503316479 (1DFF FFFF)
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // while yellow is a higher value, last duplicate wins, so lower value blue must be the maximum
+    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexMax, "tdf159158_zOrder_zIndexMax.docx")
+{
+    // given a yellow star with a heaven z-index of MAX_SAL_INT32
+    // followed by overlapped blue star with a heaven z-index of MAX_SAL_INT32 - 1
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // there is no artificial maximum for z-index. All values are unique. Yellow is on top
+    if (!isExported()) //somehow the name is lost on this export
+        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder0, "Name"));
+    if (!isExported()) //somehow the name is lost on this export
+        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder1,"Name"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexDuplicate_compat15, "tdf159158_zOrder_zIndexDuplicate_compat15.docx")
+{
+    // given a yellow star with a heaven z-index of MAX_SAL_INT32 - 1
+    // followed by overlapping blue star with the same heaven z-index (last duplicate wins)
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // should be the same as relativeHeight - last duplicate wins so blue is on top.
+    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexWins, "tdf159158_zOrder_zIndexWins.docx")
+{
+    // given a yellow star with relativeHeight 0 (typically a maximum value, but not today)
+    // followed by an overlapping-everything textbox at z-index 0 (the lowest heaven-layer z-index)
+    // followed by a partially overlapping blue star with a
+    // seems-to-be-a-magic-number relativeHeight 251658240 (0F00 0000)
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, "ZOrder")); // higher
+    // If zOrder is defined by z-index, it seems that it goes above everything set by relativeHeight
+    if (isExported()) // not named on import
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("DID YOU FIX ME? Frame1 really should be at the very top",
+                                     OUString("Frame1"), getProperty<OUString>(zOrder0,"Name"));
+    // I'm puzzled. Somehow 0 is larger than 0EFF FFFF, but not larger than 0F00 0000
+    // and yet the maximum value was established earlier as 1DFF FFFF. Something doesn't line up.
+    // Perhaps 0 and 1 don't mean maximum value at all, but something completely different?
+    CPPUNIT_ASSERT_MESSAGE("DID YOU FIX ME? I really should be yellow, not blue",
+                            "5-Point Star Yellow" != getProperty<OUString>(zOrder1, "Name"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder2,"Name"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
