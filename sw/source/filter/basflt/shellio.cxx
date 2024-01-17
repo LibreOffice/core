@@ -251,9 +251,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
                 // ok, here IsAlive is a misnomer...
                 if (!aFlyFrameArr.IsAlive(pFrameFormat))
                 {
-                    if  (   (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
-                        // TODO: why is this not handled via SetInsertRange?
-                        ||  SwUndoInserts::IsCreateUndoForNewFly(rAnchor,
+                    if (SwUndoInserts::IsCreateUndoForNewFly(rAnchor,
                                 pUndoPam->GetPoint()->GetNodeIndex(),
                                 pUndoPam->GetMark()->GetNodeIndex()))
                     {
@@ -268,16 +266,6 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
                         }
                         else
                         {
-                            if( bSaveUndo )
-                            {
-                                mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-                                // UGLY: temp. enable undo
-                                mxDoc->GetIDocumentUndoRedo().DoUndo(true);
-                                mxDoc->GetIDocumentUndoRedo().AppendUndo(
-                                    std::make_unique<SwUndoInsLayFormat>( pFrameFormat, SwNodeOffset(0), 0 ) );
-                                mxDoc->GetIDocumentUndoRedo().DoUndo(false);
-                                mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
-                            }
                             if( pFrameFormat->HasWriterListeners() )
                             {
                                 // Draw-Objects create a Frame when being inserted; thus delete them
@@ -313,7 +301,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
         if( bSaveUndo )
         {
             mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-            pUndo->SetInsertRange( *pUndoPam, false );
+            pUndo->SetInsertRange(*pUndoPam, true);
             // UGLY: temp. enable undo
             mxDoc->GetIDocumentUndoRedo().DoUndo(true);
             mxDoc->GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );

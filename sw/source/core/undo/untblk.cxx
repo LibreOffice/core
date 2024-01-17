@@ -176,6 +176,11 @@ bool SwUndoInserts::IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
 {
     assert(nStartNode <= nEndNode);
 
+    if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+    {
+        return true; // needed for SwUndoInserts/SwReader::Read()
+    }
+
     // check all at-char flys at the start/end nodes:
     // ExcludeFlyAtStartEnd will exclude them!
     SwNode const*const pAnchorNode = rAnchor.GetAnchorNode();
