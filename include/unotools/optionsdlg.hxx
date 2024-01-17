@@ -36,9 +36,6 @@ public:
     bool        IsGroupHidden   (   std::u16string_view _rGroup ) const;
     bool        IsPageHidden    (   std::u16string_view _rPage,
                                         std::u16string_view _rGroup ) const;
-    bool        IsOptionHidden  (   std::u16string_view _rOption,
-                                        std::u16string_view _rPage,
-                                        std::u16string_view _rGroup ) const;
 private:
     bool IsHidden( const OUString& _rPath ) const;
 

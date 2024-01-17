@@ -40,7 +40,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
-#include <unotools/optionsdlg.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
 #include <officecfg/Office/Recovery.hxx>
@@ -54,8 +53,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace comphelper;
-
-#define CFG_PAGE_AND_GROUP          u"General", u"LoadSave"
 
 
 struct SvxSaveTabPage_Impl
@@ -210,8 +207,6 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     aLink = LINK( this, SvxSaveTabPage, FilterHdl_Impl );
     m_xDocTypeLB->connect_changed( aLink );
     m_xSaveAsLB->connect_changed( aLink );
-
-    DetectHiddenControls();
 }
 
 SvxSaveTabPage::~SvxSaveTabPage()
@@ -222,33 +217,6 @@ std::unique_ptr<SfxTabPage> SvxSaveTabPage::Create(weld::Container* pPage, weld:
                                           const SfxItemSet* rAttrSet)
 {
     return std::make_unique<SvxSaveTabPage>(pPage, pController, *rAttrSet);
-}
-
-void SvxSaveTabPage::DetectHiddenControls()
-{
-    SvtOptionsDialogOptions aOptionsDlgOpt;
-
-    if ( aOptionsDlgOpt.IsOptionHidden( u"Backup", CFG_PAGE_AND_GROUP ) )
-    {
-        // hide controls of "Backup"
-        m_xBackupCB->hide();
-        m_xBackupIntoDocumentFolderCB->hide();
-    }
-
-    if ( aOptionsDlgOpt.IsOptionHidden( u"AutoSave", CFG_PAGE_AND_GROUP ) )
-    {
-        // hide controls of "AutoSave"
-        m_xAutoSaveCB->hide();
-        m_xAutoSaveEdit->hide();
-        m_xMinuteFT->hide();
-    }
-
-    if ( aOptionsDlgOpt.IsOptionHidden( u"UserAutoSave", CFG_PAGE_AND_GROUP ) )
-    {
-        // hide controls of "UserAutoSave"
-        m_xUserAutoSaveCB->hide();
-    }
-
 }
 
 OUString SvxSaveTabPage::GetAllStrings()
