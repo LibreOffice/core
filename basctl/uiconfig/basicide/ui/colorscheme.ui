@@ -4,9 +4,9 @@
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name id -->
-      <column type="gchararray"/>
       <!-- column-name scheme -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -179,6 +179,9 @@
                           <object class="GtkTreeViewColumn">
                             <child>
                               <object class="GtkCellRendererText" id="rendertext"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
                             </child>
                           </object>
                         </child>
