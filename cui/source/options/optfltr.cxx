@@ -237,8 +237,8 @@ namespace
 {
 struct Functions
 {
-    bool (*FnIs)();
-    bool (*FnIsReadOnly)();
+    bool (*FnIs)(css::uno::Reference<css::uno::XComponentContext> const &);
+    bool (*FnIsReadOnly)(css::uno::Reference<css::uno::XComponentContext> const &);
     void (*FnSet)(const bool& bFlag, const std::shared_ptr<comphelper::ConfigurationChanges>&);
     template <class reg> static constexpr Functions fromReg()
     {
@@ -294,13 +294,14 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
         if (nEntry != -1)
         {
             bool bCheck = m_xCheckLB->get_toggle(nEntry, 0);
-            if (bCheck != (rEntry.load.FnIs)())
+            if (bCheck != (rEntry.load.FnIs)(css::uno::Reference<css::uno::XComponentContext>()))
                 (rEntry.load.FnSet)(bCheck, pBatch);
 
             if (rEntry.save.FnIs)
             {
                 bCheck = m_xCheckLB->get_toggle(nEntry, 1);
-                if (bCheck != (rEntry.save.FnIs)())
+                if (bCheck != (rEntry.save.FnIs)(
+                        css::uno::Reference<css::uno::XComponentContext>()))
                     (rEntry.save.FnSet)(bCheck, pBatch);
             }
         }
@@ -353,15 +354,17 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         int nEntry = GetEntry4Type( rArr.eType );
         if (nEntry != -1)
         {
-            bool bCheck = (rArr.load.FnIs)();
-            bool bReadOnly = (rArr.load.FnIsReadOnly)();
+            bool bCheck = (rArr.load.FnIs)(css::uno::Reference<css::uno::XComponentContext>());
+            bool bReadOnly = (rArr.load.FnIsReadOnly)(
+                css::uno::Reference<css::uno::XComponentContext>());
             m_xCheckLB->set_toggle(nEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
             m_xCheckLB->set_sensitive(nEntry, !bReadOnly, 0);
 
             if (rArr.save.FnIs)
             {
-                bCheck = (rArr.save.FnIs)();
-                bReadOnly = (rArr.save.FnIsReadOnly)();
+                bCheck = (rArr.save.FnIs)(css::uno::Reference<css::uno::XComponentContext>());
+                bReadOnly = (rArr.save.FnIsReadOnly)(
+                    css::uno::Reference<css::uno::XComponentContext>());
                 m_xCheckLB->set_toggle(nEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 1);
                 m_xCheckLB->set_sensitive(nEntry, !bReadOnly, 1);
             }

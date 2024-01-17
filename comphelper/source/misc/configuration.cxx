@@ -62,9 +62,10 @@ OUString extendLocalizedPath(std::u16string_view path, OUString const & locale) 
 }
 
 std::shared_ptr< comphelper::ConfigurationChanges >
-comphelper::ConfigurationChanges::create()
+comphelper::ConfigurationChanges::create(
+    css::uno::Reference<css::uno::XComponentContext> const & context)
 {
-    return detail::ConfigurationWrapper::get().createChanges();
+    return detail::ConfigurationWrapper::get(context).createChanges();
 }
 
 comphelper::ConfigurationChanges::~ConfigurationChanges() {}
@@ -101,9 +102,10 @@ comphelper::ConfigurationChanges::getSet(OUString const & path) const
 }
 
 comphelper::detail::ConfigurationWrapper const &
-comphelper::detail::ConfigurationWrapper::get()
+comphelper::detail::ConfigurationWrapper::get(
+    css::uno::Reference<css::uno::XComponentContext> const & context)
 {
-    static comphelper::detail::ConfigurationWrapper WRAPPER;
+    static comphelper::detail::ConfigurationWrapper WRAPPER(context);
     return WRAPPER;
 }
 
@@ -131,8 +133,9 @@ public:
     }
 };
 
-comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
-    context_(comphelper::getProcessComponentContext()),
+comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
+    css::uno::Reference<css::uno::XComponentContext> const & context):
+    context_(context.is() ? context : comphelper::getProcessComponentContext()),
     access_(css::configuration::ReadWriteAccess::create(context_, "*")),
     mbDisposed(false)
 {
