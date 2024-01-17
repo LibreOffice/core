@@ -59,7 +59,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf48569)
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // File crashing while saving in LO
-    text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
+    text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShapeByName(u"Marco1"), "AnchorType");
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, eValue);
 }
 

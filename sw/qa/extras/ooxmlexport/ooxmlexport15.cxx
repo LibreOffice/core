@@ -110,7 +110,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137850_compat14ZOrder, "tdf137850_compat14ZOrder
 {
     // The file contains 2 shapes which have a different value of behindDoc.
     // Test that the textbox is hidden behind the arrow (for Word <= 2010/compatibilityMode==14)
-    uno::Reference<text::XText> xShape(getShape(2), uno::UNO_QUERY);
+    uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("2015"), xShape->getString());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in the background", false, getProperty<bool>(xShape, "Opaque"));
 }

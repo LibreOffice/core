@@ -386,6 +386,7 @@ public:
     void applyZOrder(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
     {
         sal_Int32 nZOrder = m_zOrder;
+        bool bBehindText = m_bBehindDoc && !m_bOpaque;
         if (m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE
             && !m_rDomainMapper.IsInShape())
         {
@@ -394,7 +395,7 @@ public:
         if (nZOrder >= 0)
         {
             // tdf#120760 Send objects with behinddoc=true to the back.
-            if (m_bBehindDoc && m_rDomainMapper.IsInHeaderFooter())
+            if (bBehindText)
                 nZOrder -= SAL_MAX_INT32;
 
             // TODO: it is possible that RTF has been wrong all along as well. Always true here?

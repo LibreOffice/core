@@ -108,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69548)
 DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
 {
     // Document has wp:anchor, not wp:inline, so handle it accordingly.
-    uno::Reference<drawing::XShape> xShape = getShape(1);
+    uno::Reference<drawing::XShape> xShape = getShapeByName(u"Isosceles Triangle 1");
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(xShape, "AnchorType");
     // Word only as as-char and at-char, so at-char is our only choice.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eValue);
@@ -124,7 +124,7 @@ DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
     // This should be in front of text.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "Opaque"));
     // And this should be behind the document.
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(2), "Opaque"));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShapeByName(u"Isosceles Triangle 2"), "Opaque"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedDOCXExport)

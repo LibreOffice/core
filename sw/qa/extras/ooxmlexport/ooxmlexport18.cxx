@@ -1001,6 +1001,36 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexWins, "tdf159158_zOrder_zInd
     // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder2,"Name"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocA, "tdf159158_zOrder_behindDocA.docx")
+{
+    // given a yellow star with lowest relativeHeight 2 but behindDoc
+    // followed by an overlapping blue star with negative z-index -1644167168.
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // yellow is at the lowest hell-level possible for relativeHeight, so expected to be under blue
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    if (!isExported()) // the name is lost on export
+        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocB, "tdf159158_zOrder_behindDocB.docx")
+{
+    // given a yellow star with a high relativeHeight 503314431 (1DFF F7FF) but behindDoc
+    // followed by an overlapping blue star with negative z-index -1644167168.
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // yellow is at the highest hell-level possible for relativeHeight,
+    // so you will be forgiven for thinking yellow should be on the top.
+    // Any z-index level ends up being above any relativeHeight, so blue should still be on top
+    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    if (!isExported()) // the name is lost on export
+        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
 {
     // Without the accompanying fix in place, this test would have crashed,
