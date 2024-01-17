@@ -4153,6 +4153,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf154113)
                 "Section3. End selection here -->");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTable0HeightRows)
+{
+    createDoc("table-0-height-rows.fodt");
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // the problem was that the table was erroneously split across 2 or 3 pages
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 28);
+    // xpath doesn't work on this branch? assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/infos/bounds[@height='0']", 25);
+    assertXPath(pXmlDoc, "/root/page", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

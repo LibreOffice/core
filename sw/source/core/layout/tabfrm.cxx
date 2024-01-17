@@ -1359,7 +1359,102 @@ namespace
 
         return true;
     }
-}
+
+    auto IsAllHiddenSection(SwSectionFrame const& rSection) -> bool
+    {
+        for (SwFrame const* pFrame = rSection.Lower(); pFrame; pFrame = pFrame->GetNext())
+        {
+            if (pFrame->IsColumnFrame())
+            {
+                return false; // adds some padding
+            }
+            else if (pFrame->IsSctFrame())
+            {
+                assert(false); // these aren't nested?
+                if (!IsAllHiddenSection(*static_cast<SwSectionFrame const*>(pFrame)))
+                {
+                    return false;
+                }
+            }
+            else if (pFrame->IsTabFrame())
+            {
+                return false; // presumably
+            }
+            else if (pFrame->IsTextFrame())
+            {
+                if (!static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow())
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    auto IsAllHiddenRow(SwRowFrame const& rRow, SwTabFrame const& rTab) -> bool;
+
+    auto IsAllHiddenCell(SwCellFrame const& rCell, SwRowFrame const& rRow, SwTabFrame const& rTab) -> bool
+    {
+        for (SwFrame const* pFrame = rCell.Lower(); pFrame; pFrame = pFrame->GetNext())
+        {
+            if (pFrame->IsRowFrame())
+            {
+                if (!IsAllHiddenRow(*static_cast<SwRowFrame const*>(pFrame), rTab))
+                {
+                    return false;
+                }
+            }
+            else if (pFrame->IsSctFrame())
+            {
+                if (!IsAllHiddenSection(*static_cast<SwSectionFrame const*>(pFrame)))
+                {
+                    return false;
+                }
+            }
+            else if (pFrame->IsTabFrame())
+            {
+                return false; // presumably
+            }
+            else if (pFrame->IsTextFrame())
+            {
+                if (!static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow())
+                {
+                    return false;
+                }
+            }
+        }
+        if (rTab.IsCollapsingBorders() && !rCell.Lower()->IsRowFrame())
+        {
+            if (rRow.GetTopMarginForLowers() != 0
+                || rRow.GetBottomMarginForLowers() != 0)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            SwBorderAttrAccess border(SwFrame::GetCache(), &rCell);
+            if (border.Get()->CalcTop() != 0 || border.Get()->CalcBottom() != 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    auto IsAllHiddenRow(SwRowFrame const& rRow, SwTabFrame const& rTab) -> bool
+    {
+        for (SwFrame const* pCell = rRow.Lower(); pCell; pCell = pCell->GetNext())
+        {
+            if (!IsAllHiddenCell(*static_cast<SwCellFrame const*>(pCell), rRow, rTab))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+} // namespace
 
 void SwTabFrame::Join()
 {
@@ -1378,11 +1473,20 @@ void SwTabFrame::Join()
         SwFrame* pPrv = GetLastLower();
 
         SwTwips nHeight = 0;    //Total height of the inserted rows as return value.
+        bool isAllHidden(true);
 
         while ( pRow )
         {
             pNxt = pRow->GetNext();
             nHeight += aRectFnSet.GetHeight(pRow->getFrameArea());
+            if (nHeight != 0)
+            {
+                isAllHidden = false;
+            }
+            if (isAllHidden)
+            {
+                isAllHidden = IsAllHiddenRow(*static_cast<SwRowFrame *>(pRow), *this);
+            }
             pRow->RemoveFromLayout();
             pRow->InvalidateAll_();
             pRow->InsertBehind( this, pPrv );
@@ -1396,6 +1500,18 @@ void SwTabFrame::Join()
         SwFrame::DestroyFrame(pFoll);
 
         Grow( nHeight );
+
+        // In case the row does not have a height, Grow(nHeight) did nothing.
+        // If this is not invalidated, subsequent follows may never be joined.
+        // Try to guess if the height of the row will be 0.  If the document
+        // was just loaded, it will be 0 in any case, but probably it's not a good
+        // idea to join *all* follows for a newly loaded document, it would be
+        // easier not to split the table in the first place; presumably it is split
+        // because that improves performance.
+        if (isAllHidden)
+        {
+            InvalidateSize_();
+        }
     }
 }
 
