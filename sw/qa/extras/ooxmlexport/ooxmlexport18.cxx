@@ -973,8 +973,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexDuplicate_compat15, "tdf1591
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
     // should be the same as relativeHeight - last duplicate wins so blue is on top.
-    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
-    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+    if (!isExported()) //somehow the name is lost on this export
+        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    if (!isExported()) //somehow the name is lost on this export
+        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexWins, "tdf159158_zOrder_zIndexWins.docx")
