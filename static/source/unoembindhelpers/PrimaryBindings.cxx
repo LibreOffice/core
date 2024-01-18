@@ -39,13 +39,10 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     enum_<UnoReference_Query>("UnoReference_Query").value("UNO_QUERY", UNO_QUERY);
 
     class_<OUString>("OUString")
-        .constructor(
-            +[](const std::string& rString) -> OUString {
-                return OUString::fromUtf8(std::string_view{ rString.c_str() });
-            },
-            allow_raw_pointers())
-        .function("toString", +[](const OUString& rSelf) -> std::string {
-            return std::string{ rSelf.toUtf8() };
+        .constructor(+[](const std::u16string& rString) -> OUString { return OUString(rString); },
+                     allow_raw_pointers())
+        .function("toString", +[](const OUString& rSelf) -> std::u16string {
+            return std::u16string(rSelf.getStr(), rSelf.getLength());
         });
 
     // Types used for Any construction
@@ -94,7 +91,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 case TypeClass_DOUBLE:
                     return Any{ rObject.as<double>() };
                 case TypeClass_STRING:
-                    return Any{ OUString::fromUtf8(std::string_view{ rObject.as<std::string>() }) };
+                    return Any{ OUString(rObject.as<std::u16string>()) };
                 case TypeClass_TYPE:
                 case TypeClass_ANY:
                 case TypeClass_ENUM:
