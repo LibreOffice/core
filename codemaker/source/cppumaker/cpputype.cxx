@@ -610,12 +610,9 @@ void CppuType::dumpHFileContent(
 
 void CppuType::dumpEmbindCppFile(FileStream &out)
 {
-    out << "#ifdef EMSCRIPTEN\n";
     out << "#include <emscripten/bind.h>\n"
            "#include <" << name_.replace('.', '/') << ".hpp>\n";
-    out << "using namespace emscripten;\n\n";
     dumpEmbindDeclaration(out);
-    out << "#endif\n";
 }
 
 void CppuType::dumpGetCppuType(FileStream & out)
@@ -1232,7 +1229,7 @@ void InterfaceType::dumpEmbindDeclaration(FileStream & out)
     codemaker::cppumaker::dumpTypeIdentifier(out, name_);
     out << ") {\n";
 
-    out << "\nclass_<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">(\"";
+    out << "\n::emscripten::class_<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">(\"";
     codemaker::cppumaker::dumpTypeFullWithDecorator(out, name_, u"$");
     codemaker::cppumaker::dumpTypeIdentifier(out, name_);
     out << "\")\n";
@@ -1245,7 +1242,7 @@ void InterfaceType::dumpEmbindDeclaration(FileStream & out)
     dec();
 
     // dump reference bindings.
-    out << "\nclass_<::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">, base<::css::uno::BaseReference>>(\"";
+    out << "\n::emscripten::class_<::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">, ::emscripten::base<::css::uno::BaseReference>>(\"";
     codemaker::cppumaker::dumpTypeFullWithDecorator(out, name_, u"$");
     codemaker::cppumaker::dumpTypeIdentifier(out, name_);
     out << "Ref\")\n";
@@ -1253,8 +1250,8 @@ void InterfaceType::dumpEmbindDeclaration(FileStream & out)
     out << indent() << ".constructor<>()\n"
         << indent() << ".constructor<::css::uno::BaseReference, ::css::uno::UnoReference_Query>()\n"
         << indent() << ".function(\"is\", &::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">::is)\n"
-        << indent() << ".function(\"get\", &::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">::get, allow_raw_pointers())\n"
-        << indent() << ".function(\"set\", emscripten::select_overload<bool(const ::css::uno::Any&, com::sun::star::uno::UnoReference_Query)>(&::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">::set))\n";
+        << indent() << ".function(\"get\", &::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">::get, ::emscripten::allow_raw_pointers())\n"
+        << indent() << ".function(\"set\", ::emscripten::select_overload<bool(const ::css::uno::Any&, com::sun::star::uno::UnoReference_Query)>(&::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">::set))\n";
     dumpEmbindAttributeBindings(out);
     dumpEmbindMethodBindings(out, true);
     out << indent() << ";\n";
@@ -1447,7 +1444,7 @@ void InterfaceType::dumpEmbindWrapperFunc(FileStream& out,
     }
 
     dumpParameters(/*bDumpType=*/false);
-    out << "); }, allow_raw_pointers() )\n";
+    out << "); }, ::emscripten::allow_raw_pointers() )\n";
 }
 
 void InterfaceType::dumpEmbindMethodBindings(FileStream & out, bool bDumpForReference) const
