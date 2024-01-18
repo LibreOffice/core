@@ -2134,6 +2134,8 @@ RTFError RTFDocumentImpl::pushState()
         case Destination::FIELDRESULT:
         case Destination::SHAPETEXT:
         case Destination::FORMFIELD:
+            //TODO: if this is pushed then the font encoding is used which results in a broken command string
+            // if it is not pushed to NORMAL then it is not restored in time.
         case Destination::FIELDINSTRUCTION:
         case Destination::PICT:
             m_aStates.top().setDestination(Destination::NORMAL);
@@ -3798,7 +3800,8 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     if (bHex && !m_aHexBuffer.isEmpty())
     {
         rtl_TextEncoding nEncoding = m_aStates.top().getCurrentEncoding();
-        if (m_aStates.top().getDestination() == Destination::FONTENTRY
+        if ((m_aStates.top().getDestination() == Destination::FONTENTRY
+             || m_aStates.top().getDestination() == Destination::FIELDINSTRUCTION)
             && m_aStates.top().getCurrentEncoding() == RTL_TEXTENCODING_SYMBOL)
             nEncoding = RTL_TEXTENCODING_MS_1252;
         OUString aString = OStringToOUString(m_aHexBuffer, nEncoding);

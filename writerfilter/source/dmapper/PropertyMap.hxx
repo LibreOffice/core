@@ -272,6 +272,9 @@ private:
     sal_Int32                                       m_ndxaLnn;
     sal_Int32                                       m_nLnnMin;
 
+    sal_Int32                                       m_nPaperSourceFirst;
+    sal_Int32                                       m_nPaperSourceOther;
+
     bool                                            m_bDynamicHeightTop;
     bool                                            m_bDynamicHeightBottom;
 
@@ -398,12 +401,14 @@ public:
     void SetdxaLnn( sal_Int32 nValue ) { m_ndxaLnn = nValue; }
     void SetLnnMin( sal_Int32 nValue ) { m_nLnnMin = nValue; }
 
+    void SetPaperSource(sal_Int32 first, sal_Int32 other) { m_nPaperSourceFirst = first; m_nPaperSourceOther = other;}
+
     void addRelativeWidthShape( css::uno::Reference<css::drawing::XShape> xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
 
     // determine which style gets the borders
     void ApplyBorderToPageStyles( DomainMapper_Impl &rDM_Impl,
                                   BorderApply eBorderApply, BorderOffsetFrom eOffsetFrom );
-
+    void ApplyPaperSource(DomainMapper_Impl& rDM_Impl);
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
     // Handling of margins, header and footer for any kind of sections breaks.
     void HandleMarginsHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );

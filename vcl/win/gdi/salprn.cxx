@@ -1203,6 +1203,25 @@ OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal
     return aPaperBinName;
 }
 
+sal_uInt16 WinSalInfoPrinter::GetPaperBinBySourceIndex( const ImplJobSetup* pSetupData, sal_uInt16 nPaperSource )
+{
+    DWORD nBins = ImplDeviceCaps( this, DC_BINNAMES, nullptr, pSetupData );
+    if (nBins != GDI_ERROR)
+    {
+        auto pBuffer = std::make_unique<sal_uInt16[]>(nBins);
+        DWORD nBins = ImplDeviceCaps( this, DC_BINS, reinterpret_cast<BYTE*>(pBuffer.get()), pSetupData );
+        if (nBins != GDI_ERROR)
+        {
+            for (DWORD nBin = 0; nBin < nBins; ++nBin)
+            {
+                if (nPaperSource == *(pBuffer.get() + nBin))
+                    return nBin;
+            }
+        }
+    }
+    return 0xffff;
+}
+
 sal_uInt32 WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType )
 {
     DWORD nRet;

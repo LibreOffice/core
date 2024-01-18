@@ -428,6 +428,8 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_nLnc(NS_ooxml::LN_Value_ST_LineNumberRestart_newPage)
     , m_ndxaLnn( 0 )
     , m_nLnnMin( 0 )
+    , m_nPaperSourceFirst( 0 )
+    , m_nPaperSourceOther( 0 )
     , m_bDynamicHeightTop( true )
     , m_bDynamicHeightBottom( true )
     , m_bDefaultHeaderLinkToPrevious( true )
@@ -542,6 +544,27 @@ void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance
     m_oBorderLines[ePos]     = rBorderLine;
     m_nBorderDistances[ePos] = nLineDistance;
     m_bBorderShadows[ePos]   = bShadow;
+}
+
+void SectionPropertyMap::ApplyPaperSource(DomainMapper_Impl& rDM_Impl)
+{
+    uno::Reference<beans::XPropertySet> xFirst;
+    // todo: negative spacing (from ww8par6.cxx)
+    if (!m_sPageStyleName.isEmpty())
+    {
+        xFirst = GetPageStyle(rDM_Impl);
+        if ( xFirst.is() )
+            try
+            {
+                //TODO: which of the two tray values needs to be set? first/other - the interfaces requires the name of the tray!
+                xFirst->setPropertyValue(getPropertyName(PROP_PAPER_TRAY),
+                                         uno::Any(m_nPaperSourceFirst));
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("writerfilter", "Paper source not found");
+            }
+    }
 }
 
 void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
@@ -1710,6 +1733,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
 
         ApplyBorderToPageStyles( rDM_Impl, m_eBorderApply, m_eBorderOffsetFrom );
+        ApplyPaperSource(rDM_Impl);
 
         try
         {

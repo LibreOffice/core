@@ -703,6 +703,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_PageMar_gutter:
             m_pImpl->SetPageMarginTwip( PAGE_MAR_GUTTER, nIntValue );
         break;
+        case NS_ooxml::LN_CT_PaperSource_first:
+            m_pImpl->SetPaperSource(PAPER_SOURCE_FIRST, nIntValue);
+        break;
+        case NS_ooxml::LN_CT_PaperSource_other:
+            m_pImpl->SetPaperSource(PAPER_SOURCE_OTHER, nIntValue);
+        break;
         case NS_ooxml::LN_CT_Language_val: //90314
         case NS_ooxml::LN_CT_Language_eastAsia: //90315
         case NS_ooxml::LN_CT_Language_bidi: //90316
@@ -2495,7 +2501,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pSectionContext->SetGutterMargin(rPageMar.gutter);
         }
         break;
-
+    case NS_ooxml::LN_EG_SectPrContents_paperSrc:
+        m_pImpl->InitPaperSource();
+        resolveSprmProps(*this, rSprm);
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+        {
+            const PaperSource& rPaperSource = m_pImpl->GetPaperSource();
+            pSectionContext->SetPaperSource( rPaperSource.first, rPaperSource.other );
+        }
+    break;
     case NS_ooxml::LN_EG_SectPrContents_cols:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

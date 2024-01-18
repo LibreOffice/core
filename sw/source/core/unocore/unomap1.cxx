@@ -537,6 +537,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPageStyle
         { UNO_NAME_NUMBERING_TYPE, SID_ATTR_PAGE,             cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE , MID_PAGE_NUMTYPE       },
         { UNO_NAME_PAGE_STYLE_LAYOUT, SID_ATTR_PAGE,          cppu::UnoType<css::style::PageStyleLayout>::get(),    PROPERTY_NONE ,MID_PAGE_LAYOUT     },
         { UNO_NAME_PRINTER_PAPER_TRAY, RES_PAPER_BIN,             cppu::UnoType<OUString>::get(),            PROPERTY_NONE , 0 },
+        { UNO_NAME_PRINTER_PAPER_TRAY_INDEX, RES_PAPER_BIN,       cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE , 0 },
 //                  { UNO_NAME_REGISTER_MODE_ACTIVE, SID_SWREGISTER_MODE,     cppu::UnoType<bool>::get(),             PROPERTY_NONE , 0 },
         { UNO_NAME_REGISTER_PARAGRAPH_STYLE, SID_SWREGISTER_COLLECTION,   cppu::UnoType<OUString>::get(),        PROPERTY_NONE , 0 },
         { UNO_NAME_SIZE, SID_ATTR_PAGE_SIZE,  cppu::UnoType<css::awt::Size>::get(),             PROPERTY_NONE,   MID_SIZE_SIZE|CONVERT_TWIPS},

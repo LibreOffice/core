@@ -208,6 +208,7 @@ inline constexpr OUStringLiteral UNO_NAME_POSITION_PROTECTED = u"PositionProtect
 inline constexpr OUStringLiteral UNO_NAME_ALTERNATIVE_TEXT = u"AlternativeText";
 inline constexpr OUStringLiteral UNO_NAME_PRIMARY_KEY = u"PrimaryKey";
 inline constexpr OUStringLiteral UNO_NAME_PRINTER_PAPER_TRAY = u"PrinterPaperTray";
+inline constexpr OUStringLiteral UNO_NAME_PRINTER_PAPER_TRAY_INDEX = u"PrinterPaperTrayIndex";
 inline constexpr OUStringLiteral UNO_NAME_REGISTER_MODE_ACTIVE = u"RegisterModeActive";
 inline constexpr OUStringLiteral UNO_NAME_RELATIVE_WIDTH = u"RelativeWidth";
 inline constexpr OUStringLiteral UNO_NAME_RELATIVE_WIDTH_RELATION = u"RelativeWidthRelation";
