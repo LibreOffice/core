@@ -45,6 +45,8 @@ public:
     virtual sal_uInt32              GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType ) override;
     virtual sal_uInt16              GetPaperBinCount( const ImplJobSetup* pSetupData ) override;
     virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uInt16 nPaperBin ) override;
+    virtual sal_uInt16              GetPaperBinBySourceIndex(const ImplJobSetup* pSetupData,
+                                                             sal_uInt16 nPaperSource) override;
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) override;
     virtual int                     GetLandscapeAngle( const ImplJobSetup* pSetupData ) override;
 };

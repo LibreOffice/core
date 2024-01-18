@@ -17964,6 +17964,10 @@
       <attribute name="footer" tokenid="ooxml:CT_PageMar_footer"/>
       <attribute name="gutter" tokenid="ooxml:CT_PageMar_gutter"/>
     </resource>
+    <resource name="CT_PaperSource" resource="Properties">
+      <attribute name="first" tokenid="ooxml:CT_PaperSource_first"/>
+      <attribute name="other" tokenid="ooxml:CT_PaperSource_other"/>
+    </resource>
     <resource name="ST_PageBorderZOrder" resource="List">
       <value tokenid="ooxml:Value_doc_ST_PageBorderZOrder_front">front</value>
       <value tokenid="ooxml:Value_doc_ST_PageBorderZOrder_back">back</value>
