@@ -3113,6 +3113,36 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
 }
 
+// Saving shouldn't trigger an invalidation
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
+{
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
+    loadFromFile(u"invalidate-on-save.ods");
+
+    // .uno:Save modifies the original file, make a copy first
+    saveAndReload("calc8");
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // track invalidations
+    ViewCallback aView;
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    dispatchCommand(mxComponent, ".uno:Save", aArgs);
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView.m_bInvalidateTiles);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
