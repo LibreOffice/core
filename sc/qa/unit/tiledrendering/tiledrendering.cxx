@@ -3324,6 +3324,36 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForSplitPanes)
     CPPUNIT_ASSERT_MESSAGE("The cell visible in the bottom left pane should be redrawn", bFoundBottomLeftPane);
 }
 
+// Saving shouldn't trigger an invalidation
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
+{
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
+    loadFromFile(u"invalidate-on-save.ods");
+
+    // .uno:Save modifies the original file, make a copy first
+    saveAndReload("calc8");
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // track invalidations
+    ViewCallback aView;
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    dispatchCommand(mxComponent, ".uno:Save", aArgs);
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView.m_bInvalidateTiles);
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
 {
     // Given 2 views, the second's locale is set to German:

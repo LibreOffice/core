@@ -102,7 +102,8 @@ public:
 private:
     void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
 
-    void SetLayer(const OUString& rName, SdrLayerIDSet& rBS, bool bJa);
+    // return true if changed, false if unchanged
+    bool SetLayer(const OUString& rName, SdrLayerIDSet& rBS, bool bJa);
     bool IsLayer(const OUString& rName, const SdrLayerIDSet& rBS) const;
 
     /// Let's see if the current Group (pCurrentGroup) is still inserted
@@ -182,10 +183,13 @@ public:
     tools::Rectangle& MarkBound() { return aMarkBound; }
     tools::Rectangle& MarkSnap() { return aMarkSnap; }
 
-    void SetLayerVisible(const OUString& rName, bool bShow) {
-        SetLayer(rName, aLayerVisi, bShow);
+    bool SetLayerVisible(const OUString& rName, bool bShow) {
+        const bool bChanged = SetLayer(rName, aLayerVisi, bShow);
+        if (!bChanged)
+            return false;
         if(!bShow) AdjHdl();
         InvalidateAllWin();
+        return true;
     }
     bool IsLayerVisible(const OUString& rName) const { return IsLayer(rName, aLayerVisi); }
 
