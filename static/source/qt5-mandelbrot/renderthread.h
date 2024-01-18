@@ -89,9 +89,6 @@ private:
     bool m_restart = false;
     bool m_abort = false;
 
-    enum
-    {
-        ColormapSize = 512
-    };
+    static constexpr int ColormapSize = 512;
     uint m_colormap[ColormapSize];
 };
