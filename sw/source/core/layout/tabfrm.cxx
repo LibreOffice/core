@@ -6115,7 +6115,9 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const SfxPoolItem* pVertOrientItem = nullptr;
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
         const SfxPoolItem* pProtectItem = nullptr;
+#endif
         const SfxPoolItem* pFrameDirItem = nullptr;
         const SfxPoolItem* pBoxItem = nullptr;
         const auto nWhich = pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
@@ -6125,7 +6127,9 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             {
                 auto& rChgSet = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet();
                 pVertOrientItem = rChgSet.GetItemIfSet(RES_VERT_ORIENT, false);
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
                 pProtectItem = rChgSet.GetItemIfSet(RES_PROTECT, false);
+#endif
                 pFrameDirItem = rChgSet.GetItemIfSet(RES_FRAMEDIR, false);
                 pBoxItem = rChgSet.GetItemIfSet(RES_BOX, false);
                 break;
@@ -6134,7 +6138,9 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pVertOrientItem = pLegacy->m_pNew;
                 break;
             case RES_PROTECT:
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
                 pProtectItem = pLegacy->m_pNew;
+#endif
                 break;
             case RES_FRAMEDIR:
                 pFrameDirItem = pLegacy->m_pNew;
