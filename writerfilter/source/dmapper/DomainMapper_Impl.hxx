@@ -103,6 +103,23 @@ enum PageMarElement
     PAGE_MAR_GUTTER
 };
 
+struct PaperSource
+{
+    sal_Int32 first;
+    sal_Int32 other;
+    public:
+        PaperSource() :
+            first(0),
+            other(0)
+            {}
+};
+
+enum PaperSourceElement
+{
+    PAPER_SOURCE_FIRST,
+    PAPER_SOURCE_OTHER,
+};
+
 /// property stack element
 enum ContextType
 {
@@ -504,6 +521,7 @@ private:
     OUString                                                                        m_sCurrentPermEdGrp;
 
     PageMar                                                                        m_aPageMargins;
+    PaperSource                                                                     m_aPaperSource;
     SymbolData                                                                      m_aSymbolData;
 
     // TableManagers are stacked: one for each stream to avoid any confusion
@@ -1013,6 +1031,10 @@ public:
     void InitPageMargins() { m_aPageMargins = PageMar(); }
     void SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue );
     const PageMar& GetPageMargins() const {return m_aPageMargins;}
+
+    void InitPaperSource() { m_aPaperSource = PaperSource(); }
+    void SetPaperSource( PaperSourceElement eElement, sal_Int32 nValue );
+    const PaperSource& GetPaperSource() {return m_aPaperSource;}
 
     const LineNumberSettings& GetLineNumberSettings() const { return m_aLineNumberSettings;}
     void SetLineNumberSettings(const LineNumberSettings& rSet) { m_aLineNumberSettings = rSet;}

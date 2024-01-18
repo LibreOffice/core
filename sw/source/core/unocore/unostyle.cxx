@@ -1669,27 +1669,37 @@ void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertyMapE
 template<>
 void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
-    if(!rValue.has<OUString>())
+    if (!rValue.has<OUString>() && !rValue.has<sal_Int32>())
         throw lang::IllegalArgumentException();
     SfxPrinter* pPrinter = m_pDoc->getIDocumentDeviceAccess().getPrinter(true);
-    OUString sValue(rValue.get<OUString>());
     using printeridx_t = decltype(pPrinter->GetPaperBinCount());
     printeridx_t nBin = std::numeric_limits<printeridx_t>::max();
-    if(sValue == "[From printer settings]")
-        nBin = std::numeric_limits<printeridx_t>::max()-1;
-    else if(pPrinter)
+    if(rValue.has<OUString>())
     {
-        for(sal_uInt16 i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; ++i)
+        OUString sValue(rValue.get<OUString>());
+        if(sValue == "[From printer settings]")
+            nBin = std::numeric_limits<printeridx_t>::max()-1;
+        else if(pPrinter)
         {
-            if (sValue == pPrinter->GetPaperBinName(i))
+            for(printeridx_t i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; ++i)
             {
-                nBin = i;
-                break;
+                if (sValue == pPrinter->GetPaperBinName(i))
+                {
+                    nBin = i;
+                    break;
+                }
             }
         }
     }
+    else if (rValue.has<sal_Int32>() && pPrinter)
+    {
+        sal_Int32 nValue (rValue.get<sal_Int32>());
+        nBin = pPrinter->GetPaperBinBySourceIndex(nValue);
+    }
+
     if(nBin == std::numeric_limits<printeridx_t>::max())
         throw lang::IllegalArgumentException();
+
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
     SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
     aSet.SetParent(&rStyleSet);

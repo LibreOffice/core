@@ -638,6 +638,11 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
     return OUString();
 }
 
+sal_uInt16 PspSalInfoPrinter::GetPaperBinBySourceIndex( const ImplJobSetup*, sal_uInt16 )
+{
+    return 0xffff;
+}
+
 sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, PrinterCapType nType )
 {
     switch( nType )

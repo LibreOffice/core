@@ -205,6 +205,7 @@ inline constexpr OUString UNO_NAME_POSITION_PROTECTED = u"PositionProtected"_ust
 inline constexpr OUString UNO_NAME_ALTERNATIVE_TEXT = u"AlternativeText"_ustr;
 inline constexpr OUString UNO_NAME_PRIMARY_KEY = u"PrimaryKey"_ustr;
 inline constexpr OUString UNO_NAME_PRINTER_PAPER_TRAY = u"PrinterPaperTray"_ustr;
+inline constexpr OUString UNO_NAME_PRINTER_PAPER_TRAY_INDEX = u"PrinterPaperTrayIndex"_ustr;
 inline constexpr OUString UNO_NAME_RELATIVE_WIDTH = u"RelativeWidth"_ustr;
 inline constexpr OUString UNO_NAME_RELATIVE_WIDTH_RELATION = u"RelativeWidthRelation"_ustr;
 inline constexpr OUString UNO_NAME_RELATIVE_HEIGHT = u"RelativeHeight"_ustr;

@@ -9329,6 +9329,14 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
     }
 }
 
+void DomainMapper_Impl::SetPaperSource(PaperSourceElement eElement, sal_Int32 nValue)
+{
+    if(eElement == PAPER_SOURCE_FIRST)
+        m_aPaperSource.first = nValue;
+    else
+        m_aPaperSource.other = nValue;
+}
+
 
 PageMar::PageMar()
     : top(ConversionHelper::convertTwipToMM100( sal_Int32(1440)))
