@@ -10,6 +10,7 @@
 
 #include <oox/crypto/CryptTools.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <sal/types.h>
 
 #include <config_oox.h>
 
@@ -54,7 +55,9 @@ namespace
 
     struct hmac_delete
     {
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_CTX_free' is deprecated
         void operator()(HMAC_CTX* p) { HMAC_CTX_free(p); }
+SAL_WNODEPRECATED_DECLARATIONS_POP
     };
 }
 
@@ -109,7 +112,9 @@ struct CryptoImpl
 
     void setupCryptoHashContext(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
     {
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_CTX_new' is deprecated
         mpHmacContext.reset(HMAC_CTX_new());
+SAL_WNODEPRECATED_DECLARATIONS_POP
         const EVP_MD* aEvpMd = nullptr;
         switch (eType)
         {
@@ -122,7 +127,9 @@ struct CryptoImpl
             case CryptoHashType::SHA512:
                 aEvpMd = EVP_sha512(); break;
         }
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Init_ex' is deprecated
         HMAC_Init_ex(mpHmacContext.get(), rKey.data(), rKey.size(), aEvpMd, nullptr);
+SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     ~CryptoImpl()
@@ -496,7 +503,9 @@ bool CryptoHash::update(std::vector<sal_uInt8>& rInput, sal_uInt32 nInputLength)
 #endif
 
 #if USE_TLS_OPENSSL
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Update' is deprecated
     return HMAC_Update(mpImpl->mpHmacContext.get(), rInput.data(), nActualInputLength) != 0;
+SAL_WNODEPRECATED_DECLARATIONS_POP
 #elif USE_TLS_NSS
     return PK11_DigestOp(mpImpl->mContext, rInput.data(), nActualInputLength) == SECSuccess;
 #else
@@ -509,7 +518,9 @@ std::vector<sal_uInt8> CryptoHash::finalize()
     std::vector<sal_uInt8> aHash(mnHashSize, 0);
     unsigned int nSizeWritten;
 #if USE_TLS_OPENSSL
+SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Final' is deprecated
     (void) HMAC_Final(mpImpl->mpHmacContext.get(), aHash.data(), &nSizeWritten);
+SAL_WNODEPRECATED_DECLARATIONS_POP
 #elif USE_TLS_NSS
     PK11_DigestFinal(mpImpl->mContext, aHash.data(), &nSizeWritten, aHash.size());
 #endif
