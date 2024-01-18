@@ -247,34 +247,36 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
 
     if (mpModelPool)
     {
-        ItemSurrogates aSurrogates;
-        mpModelPool->GetItemSurrogates(aSurrogates, XATTR_LINESTART);
-        for (const SfxPoolItem* p : aSurrogates)
+        mpModelPool->iterateItemSurrogates(XATTR_LINESTART, [&](SfxItemPool::SurrogateData& rData)
         {
-            NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(p));
+            const NameOrIndex* pItem(static_cast<const NameOrIndex*>(&rData.getItem()));
             if( pItem && pItem->GetName() == aName )
             {
-                pItem->PutValue( aElement, 0 );
+                NameOrIndex* pNew(pItem->Clone(mpModelPool));
+                pNew->PutValue(aElement, 0);
+                rData.setItem(std::unique_ptr<SfxPoolItem>(pNew));
                 bFound = true;
-                break;
+                return false; // interrupt callbacks
             }
-        }
+            return true; // continue callbacks
+        });
     }
 
     if (mpModelPool)
     {
-        ItemSurrogates aSurrogates;
-        mpModelPool->GetItemSurrogates(aSurrogates, XATTR_LINEEND);
-        for (const SfxPoolItem* p : aSurrogates)
+        mpModelPool->iterateItemSurrogates(XATTR_LINEEND, [&](SfxItemPool::SurrogateData& rData)
         {
-            NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(p));
+            const NameOrIndex* pItem(static_cast<const NameOrIndex*>(&rData.getItem()));
             if( pItem && pItem->GetName() == aName )
             {
-                pItem->PutValue( aElement, 0 );
+                NameOrIndex* pNew(pItem->Clone(mpModelPool));
+                pNew->PutValue(aElement, 0);
+                rData.setItem(std::unique_ptr<SfxPoolItem>(pNew));
                 bFound = true;
-                break;
+                return false; // interrupt callbacks
             }
-        }
+            return true; // continue callbacks
+        });
     }
 
     if( !bFound )

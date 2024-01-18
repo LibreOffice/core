@@ -631,12 +631,12 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         GetAttrPool().GetItemSurrogates(aSurrogates, nWhichHint);
         for (const SfxPoolItem* pItem : aSurrogates)
         {
-            SwFormatField* pFormatField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem));
-            SwTextField* pTextField = pFormatField->GetTextField();
+            const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
+            const SwTextField* pTextField = pFormatField->GetTextField();
             if (!pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes())
                 continue;
 
-            SwField* pField = pFormatField->GetField();
+            SwField* pField(const_cast<SwFormatField*>(pFormatField)->GetField());
             bool bExpand = false;
 
             switch( pField->GetTyp()->Which() )
@@ -650,7 +650,8 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
                         SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(getIDocumentFieldsAccess().InsertFieldType(
                             SwDBFieldType(this, pOldTyp->GetColumnName(), aNewDBData)));
 
-                        pFormatField->RegisterToFieldType( *pTyp );
+                        // SwFormatField is non-shareable, so const_cast is somewhat OK
+                        const_cast<SwFormatField*>(pFormatField)->RegisterToFieldType( *pTyp );
                         pField->ChgTyp(pTyp);
 
                         static_cast<SwDBField*>(pField)->ClearInitialized();

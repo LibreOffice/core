@@ -641,6 +641,10 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             GetAttrPool().GetItemSurrogates(aSurrogates, RES_PARATR_TABSTOP);
             for (const SfxPoolItem* pItem2 : aSurrogates)
             {
+                // pItem2 and thus pTabStopItem is a evtl. shared & RefCounted
+                // Item and *should* not be changed that way. lcl_SetNewDefTabStops
+                // seems to change pTabStopItem (!). This may need to be changed
+                // to use iterateItemSurrogates and a defined write cycle.
                 if(auto pTabStopItem = pItem2->DynamicWhichCast(RES_PARATR_TABSTOP))
                     bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
                                                    *const_cast<SvxTabStopItem*>(pTabStopItem) );

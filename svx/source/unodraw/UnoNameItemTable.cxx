@@ -39,8 +39,8 @@ using namespace ::cppu;
 namespace
 {
     // We need to override operator== here and specifically bypass the assert
-    // in SfxPoolItem::operator== in order to make the FindItemSurrogate call
-    // in SvxUnoNameItemTable::hasByName safe.
+    // in SfxPoolItem::operator== in order to make the GetItemSurrogates call
+    // and comparing it's results in SvxUnoNameItemTable::hasByName safe.
     class SampleItem : public NameOrIndex
     {
     public:
@@ -183,13 +183,15 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     {
         SampleItem aSample(mnWhich, aName);
         ItemSurrogates aSurrogates;
-        mpModelPool->FindItemSurrogate(aSurrogates, mnWhich, aSample);
+        mpModelPool->GetItemSurrogates(aSurrogates, mnWhich);
+
         for (const SfxPoolItem* pNameOrIndex : aSurrogates)
-            if (isValid(static_cast<const NameOrIndex*>(pNameOrIndex)))
-            {
-                const_cast<SfxPoolItem*>(pNameOrIndex)->PutValue( aElement, mnMemberId );
-                bFound = true;
-            }
+            if (aSample == *pNameOrIndex)
+                if (isValid(static_cast<const NameOrIndex*>(pNameOrIndex)))
+                {
+                    const_cast<SfxPoolItem*>(pNameOrIndex)->PutValue( aElement, mnMemberId );
+                    bFound = true;
+                }
     }
 
     if( !bFound )
@@ -213,14 +215,16 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
     {
         SampleItem aSample(mnWhich, aName);
         ItemSurrogates aSurrogates;
-        mpModelPool->FindItemSurrogate(aSurrogates, mnWhich, aSample);
+        mpModelPool->GetItemSurrogates(aSurrogates, mnWhich);
+
         for (const SfxPoolItem* pFindItem : aSurrogates)
-            if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
-            {
-                uno::Any aAny;
-                pFindItem->QueryValue( aAny, mnMemberId );
-                return aAny;
-            }
+            if (aSample == *pFindItem)
+                if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
+                {
+                    uno::Any aAny;
+                    pFindItem->QueryValue( aAny, mnMemberId );
+                    return aAny;
+                }
     }
 
     throw container::NoSuchElementException();
@@ -266,10 +270,12 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
 
     SampleItem aSample(mnWhich, aName);
     ItemSurrogates aSurrogates;
-    mpModelPool->FindItemSurrogate(aSurrogates, mnWhich, aSample);
+    mpModelPool->GetItemSurrogates(aSurrogates, mnWhich);
+
     for (const SfxPoolItem* pFindItem : aSurrogates)
-        if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
-            return true;
+        if (aSample == *pFindItem)
+            if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
+                return true;
     return false;
 }
 

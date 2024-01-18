@@ -127,8 +127,10 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
     if (this == &rHolder || *this == rHolder)
         return *this;
 
-    if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
-        getPool().unregisterPoolItemHolder(*this);
+    // avoid unneccessary unregister/register actions
+    const bool bWasRegistered(nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()));
+    const bool bWillBeRegistered(nullptr != rHolder.m_pItem && rHolder.getPool().NeedsSurrogateSupport(rHolder.m_pItem->Which()));
+
     if (nullptr != m_pItem)
         implCleanupItemEntry(m_pItem);
 
@@ -137,8 +139,15 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
 
     if (nullptr != m_pItem)
         m_pItem = implCreateItemEntry(getPool(), m_pItem, false);
-    if (nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()))
-        getPool().registerPoolItemHolder(*this);
+
+    if (bWasRegistered != bWillBeRegistered)
+    {
+        // adapt registration if needed
+        if (bWillBeRegistered)
+            getPool().registerPoolItemHolder(*this);
+        else
+            getPool().unregisterPoolItemHolder(*this);
+    }
 
     return *this;
 }

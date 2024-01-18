@@ -875,62 +875,137 @@ const SfxPoolItem *SfxItemPool::GetItem2Default(sal_uInt16 nWhich) const
     return (*mpStaticDefaults)[ GetIndex_Impl(nWhich) ];
 }
 
-void SfxItemPool::CollectSurrogates(std::unordered_set<const SfxPoolItem*>& rTarget, sal_uInt16 nWhich) const
+namespace
+{
+    class SurrogateData_ItemSet : public SfxItemPool::SurrogateData
+    {
+        const SfxPoolItem*  mpItem;
+        SfxItemSet*         mpSet;
+
+    public:
+        SurrogateData_ItemSet(const SfxPoolItem& rItem, SfxItemSet& rSet)
+        : SfxItemPool::SurrogateData()
+        , mpItem(&rItem)
+        , mpSet(&rSet)
+        {
+        }
+
+        SurrogateData_ItemSet(const SurrogateData_ItemSet&) = default;
+
+        virtual const SfxPoolItem& getItem() const override
+        {
+            return *mpItem;
+        }
+
+        virtual const SfxPoolItem* setItem(std::unique_ptr<SfxPoolItem> aNew) override
+        {
+            return mpSet->Put(std::unique_ptr<SfxPoolItem>(aNew.release()));
+        }
+    };
+
+    class SurrogateData_ItemHolder : public SfxItemPool::SurrogateData
+    {
+        SfxPoolItemHolder*  mpHolder;
+
+    public:
+        SurrogateData_ItemHolder(SfxPoolItemHolder& rHolder)
+        : SfxItemPool::SurrogateData()
+        , mpHolder(&rHolder)
+        {
+        }
+
+        SurrogateData_ItemHolder(const SurrogateData_ItemHolder&) = default;
+
+        virtual const SfxPoolItem& getItem() const override
+        {
+            return *mpHolder->getItem();
+        }
+
+        virtual const SfxPoolItem* setItem(std::unique_ptr<SfxPoolItem> aNew) override
+        {
+            *mpHolder = SfxPoolItemHolder(mpHolder->getPool(), aNew.release(), true);
+            return mpHolder->getItem();
+        }
+    };
+}
+
+void SfxItemPool::iterateItemSurrogates(
+    sal_uInt16 nWhich,
+    const std::function<bool(SurrogateData& rCand)>& rItemCallback) const
+{
+    // 1st source for surrogates
+    const registeredSfxItemSets& rSets(GetMasterPool()->maRegisteredSfxItemSets);
+
+    if(!rSets.empty())
+    {
+        const SfxPoolItem* pItem(nullptr);
+        std::vector<SurrogateData_ItemSet> aEntries;
+
+        // NOTE: this collects the callback data in a preparing run. This
+        //   is by purpose, else any write change may change the iterators
+        //   used at registeredSfxItemSets. I tied with direct feed and
+        //   that worked most of the time, but failed for ItemHolders due
+        //   to these being changed and being re-registered. I have avoided
+        //   this in SfxPoolItemHolder::operator=, but it's just a question
+        //   that in some scenario someone replaces an Item even with a
+        //   different type/WhichID that this will then break/crash
+        for (const auto& rCand : rSets)
+            if (SfxItemState::SET == rCand->GetItemState(nWhich, false, &pItem))
+                aEntries.emplace_back(*pItem, *rCand);
+
+        if (!aEntries.empty())
+            for (auto& rCand : aEntries)
+                if (!rItemCallback(rCand))
+                    return;
+    }
+
+    // 2nd source for surrogates
+    const registeredSfxPoolItemHolders& rHolders(GetMasterPool()->maRegisteredSfxPoolItemHolders);
+
+    if (!rHolders.empty())
+    {
+        std::vector<SurrogateData_ItemHolder> aEntries;
+
+        // NOTE: same as above, look there
+        for (auto& rCand : rHolders)
+            if (rCand->Which() == nWhich && nullptr != rCand->getItem())
+                aEntries.emplace_back(*rCand);
+
+        if (!aEntries.empty())
+            for (auto& rCand : aEntries)
+                if (!rItemCallback(rCand))
+                    return;
+    }
+}
+
+void SfxItemPool::GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const
 {
     rTarget.clear();
 
     if (0 == nWhich)
         return;
 
+    // NOTE: This is pre-collected, in this case mainly to
+    //   remove all double listings of SfxPoolItems which can
+    //   of course be referenced multiple times in multiple
+    //   ItemSets/ItemHolders. It comes handy that
+    //   std::unordered_set does this by definition
+    std::unordered_set<const SfxPoolItem*> aNewSurrogates;
+
     // 1st source for surrogates
     const registeredSfxItemSets& rSets(GetMasterPool()->maRegisteredSfxItemSets);
     const SfxPoolItem* pItem(nullptr);
     for (const auto& rCand : rSets)
         if (SfxItemState::SET == rCand->GetItemState(nWhich, false, &pItem))
-            rTarget.insert(pItem);
+            aNewSurrogates.insert(pItem);
 
     // 2nd source for surrogates
     const registeredSfxPoolItemHolders& rHolders(GetMasterPool()->maRegisteredSfxPoolItemHolders);
     for (const auto& rCand : rHolders)
         if (rCand->Which() == nWhich && nullptr != rCand->getItem())
-            rTarget.insert(rCand->getItem());
+            aNewSurrogates.insert(rCand->getItem());
 
-    // the 3rd source for surrogates is the list of direct put items
-    // but since these use SfxPoolItemHolder now they are automatically
-    // registered at 2nd source - IF NeedsSurrogateSupport is set. So
-    // as long as we have this DirectPutItem stuff, iterate here and
-    // warn if an Item was added
-    const directPutSfxPoolItemHolders& rDirects(GetMasterPool()->maDirectPutItems);
-#ifdef DBG_UTIL
-    const size_t aBefore(rTarget.size());
-#endif
-    for (const auto& rCand : rDirects)
-        if (rCand->Which() == nWhich && nullptr != rCand->getItem())
-            rTarget.insert(rCand->getItem());
-#ifdef DBG_UTIL
-    const size_t aAfter(rTarget.size());
-    if (aBefore != aAfter)
-    {
-        SAL_WARN("svl.items", "SfxItemPool: Found non-automatically registered Item for Surrogates in DirectPutItems (!)");
-    }
-#endif
-}
-
-void SfxItemPool::GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const
-{
-    std::unordered_set<const SfxPoolItem*> aNewSurrogates;
-    CollectSurrogates(aNewSurrogates, nWhich);
     rTarget = ItemSurrogates(aNewSurrogates.begin(), aNewSurrogates.end());
-}
-
-void SfxItemPool::FindItemSurrogate(ItemSurrogates& rTarget, sal_uInt16 nWhich, SfxPoolItem const & rSample) const
-{
-    std::unordered_set<const SfxPoolItem*> aNewSurrogates;
-    CollectSurrogates(aNewSurrogates, nWhich);
-    rTarget.clear();
-    for (const auto& rCand : aNewSurrogates)
-        if (rSample == *rCand)
-            rTarget.push_back(rCand);
 }
 
 sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, bool bDeep ) const

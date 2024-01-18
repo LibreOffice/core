@@ -56,9 +56,9 @@ SVL_DLLPUBLIC size_t getAllDirectlyPooledSfxPoolItemCount();
 SVL_DLLPUBLIC size_t getRemainingDirectlyPooledSfxPoolItemCount();
 #endif
 
-typedef std::unordered_set<const SfxItemSet*> registeredSfxItemSets;
+typedef std::unordered_set<SfxItemSet*> registeredSfxItemSets;
 class SfxPoolItemHolder;
-typedef std::unordered_set<const SfxPoolItemHolder*> registeredSfxPoolItemHolders;
+typedef std::unordered_set<SfxPoolItemHolder*> registeredSfxPoolItemHolders;
 typedef std::unordered_set<SfxPoolItemHolder*> directPutSfxPoolItemHolders;
 typedef std::vector<const SfxPoolItem*> ItemSurrogates;
 
@@ -113,8 +113,6 @@ private:
 
     void registerPoolItemHolder(SfxPoolItemHolder& rHolder);
     void unregisterPoolItemHolder(SfxPoolItemHolder& rHolder);
-
-    void CollectSurrogates(std::unordered_set<const SfxPoolItem*>& rTarget, sal_uInt16 nWhich) const;
 
 public:
     // for default SfxItemSet::CTOR, set default WhichRanges
@@ -199,13 +197,33 @@ public:
     { return static_cast<const T*>(GetItem2Default(sal_uInt16(nWhich))); }
 
 public:
+    // SurrogateData callback helper for iterateItemSurrogates
+    class SurrogateData
+    {
+    public:
+        virtual ~SurrogateData() = default;
+        SurrogateData(const SurrogateData&) = default;
+        SurrogateData() = default;
+
+        // read-access to Item
+        virtual const SfxPoolItem& getItem() const = 0;
+
+        // write-access when Item needs to be modified
+        virtual const SfxPoolItem* setItem(std::unique_ptr<SfxPoolItem>) = 0;
+    };
+
+    // Iterate using a lambda/callback with read/write access to registered SfxPoolItems.
+    // If you use this, look for current usages, inside the callback you may
+    // return true; // to continue callback (like 'continue')
+    // return false; // to end callbacks (like 'break')
+    void iterateItemSurrogates(
+        sal_uInt16 nWhich,
+        const std::function<bool(SfxItemPool::SurrogateData& rData)>& rItemCallback) const;
+
+    // read-only access to registered SfxPoolItems
+    // NOTE: In no case use static_cast and change those Items (!)
+    // Read commit text for more information
     void GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const;
-    /*
-        This is only valid for SfxPoolItem that override IsSortable and operator<.
-        Returns a range of items defined by using operator<.
-        @param rNeedle must be the same type or a supertype of the pool items for nWhich.
-    */
-    void FindItemSurrogate(ItemSurrogates& rTarget, sal_uInt16 nWhich, SfxPoolItem const & rNeedle) const;
 
     sal_uInt16                      GetFirstWhich() const;
     sal_uInt16                      GetLastWhich() const;

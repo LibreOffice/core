@@ -546,27 +546,32 @@ void ScDocument::UpdateFontCharSet()
         return;
 
     ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
-    ItemSurrogates aSurrogates;
-    pPool->GetItemSurrogates(aSurrogates, ATTR_FONT);
-    for (const SfxPoolItem* pItem : aSurrogates)
+
+    pPool->iterateItemSurrogates(ATTR_FONT, [&](SfxItemPool::SurrogateData& rData)
     {
-        auto pFontItem = const_cast<SvxFontItem*>(dynamic_cast<const SvxFontItem*>(pItem));
-        if ( pFontItem && ( pFontItem->GetCharSet() == eSrcSet ||
-                           ( bUpdateOld && pFontItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-            pFontItem->SetCharSet(eSysSet);
-    }
+        const SvxFontItem& rSvxFontItem(static_cast<const SvxFontItem&>(rData.getItem()));
+        if (eSrcSet == rSvxFontItem.GetCharSet() || (bUpdateOld && RTL_TEXTENCODING_SYMBOL != rSvxFontItem.GetCharSet()))
+        {
+            SvxFontItem* pNew(rSvxFontItem.Clone(pPool));
+            pNew->SetCharSet(eSysSet);
+            rData.setItem(std::unique_ptr<SfxPoolItem>(pNew));
+        }
+        return true; // continue callbacks
+    });
 
     if ( mpDrawLayer )
     {
-        SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
-        rDrawPool.GetItemSurrogates(aSurrogates, EE_CHAR_FONTINFO);
-        for (const SfxPoolItem* pItem : aSurrogates)
+        pPool->iterateItemSurrogates(EE_CHAR_FONTINFO, [&](SfxItemPool::SurrogateData& rData)
         {
-            SvxFontItem* pFontItem = const_cast<SvxFontItem*>(dynamic_cast<const SvxFontItem*>(pItem));
-            if ( pFontItem && ( pFontItem->GetCharSet() == eSrcSet ||
-                               ( bUpdateOld && pFontItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-                pFontItem->SetCharSet( eSysSet );
-        }
+            const SvxFontItem& rSvxFontItem(static_cast<const SvxFontItem&>(rData.getItem()));
+            if (eSrcSet == rSvxFontItem.GetCharSet() || (bUpdateOld && RTL_TEXTENCODING_SYMBOL != rSvxFontItem.GetCharSet()))
+            {
+                SvxFontItem* pNew(rSvxFontItem.Clone(pPool));
+                pNew->SetCharSet(eSysSet);
+                rData.setItem(std::unique_ptr<SfxPoolItem>(pNew));
+            }
+            return true; // continue callbacks
+        });
     }
 }
 

@@ -618,6 +618,7 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
     m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
+        // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
         auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
         if(pBoxFormula && pBoxFormula->GetDefinedIn())
             pBoxFormula->ChangeState();
@@ -718,6 +719,7 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
     m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
+        // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
         auto pFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
         if(!pFormula || !pFormula->GetDefinedIn() || pFormula->IsValid())
             continue;

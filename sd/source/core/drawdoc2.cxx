@@ -268,43 +268,53 @@ void SdDrawDocument::UpdatePageRelativeURLs(std::u16string_view aOldName, std::u
         return;
 
     SfxItemPool& rPool(GetPool());
-    ItemSurrogates aSurrogates;
-    rPool.GetItemSurrogates(aSurrogates, EE_FEATURE_FIELD);
-    for (const SfxPoolItem* pItem : aSurrogates)
+
+    rPool.iterateItemSurrogates(EE_FEATURE_FIELD, [&](SfxItemPool::SurrogateData& rData)
     {
-        const SvxFieldItem* pFldItem = dynamic_cast< const SvxFieldItem * > (pItem);
+        const SvxFieldItem* pFieldItem(dynamic_cast<const SvxFieldItem*>(&rData.getItem()));
 
-        if(pFldItem)
+        if (nullptr == pFieldItem)
+            return true; // continue callbacks
+
+        const SvxURLField* pURLField(dynamic_cast<const SvxURLField*>(pFieldItem->GetField()));
+
+        if (nullptr == pURLField)
+            return true; // continue callbacks
+
+        OUString aURL(pURLField->GetURL());
+
+        if (aURL.isEmpty() || (aURL[0] != 35) || (aURL.indexOf(aOldName, 1) != 1))
+            return true; // continue callbacks
+
+        bool bURLChange(false);
+
+        if (aURL.getLength() == sal_Int32(aOldName.size() + 1)) // standard page name
         {
-            SvxURLField* pURLField = const_cast< SvxURLField* >( dynamic_cast<const SvxURLField*>( pFldItem->GetField() ) );
-
-            if(pURLField)
+            aURL = aURL.replaceAt(1, aURL.getLength() - 1, u"") +
+                aNewName;
+            bURLChange = true;
+        }
+        else
+        {
+            const OUString sNotes(SdResId(STR_NOTES));
+            if (aURL.getLength() == sal_Int32(aOldName.size()) + 2 + sNotes.getLength()
+                && aURL.indexOf(sNotes, aOldName.size() + 2) == sal_Int32(aOldName.size() + 2))
             {
-                OUString aURL = pURLField->GetURL();
-
-                if (!aURL.isEmpty() && (aURL[0] == 35) && (aURL.indexOf(aOldName, 1) == 1))
-                {
-                    if (aURL.getLength() == sal_Int32(aOldName.size() + 1)) // standard page name
-                    {
-                        aURL = aURL.replaceAt(1, aURL.getLength() - 1, u"") +
-                            aNewName;
-                        pURLField->SetURL(aURL);
-                    }
-                    else
-                    {
-                        const OUString sNotes(SdResId(STR_NOTES));
-                        if (aURL.getLength() == sal_Int32(aOldName.size()) + 2 + sNotes.getLength()
-                            && aURL.indexOf(sNotes, aOldName.size() + 2) == sal_Int32(aOldName.size() + 2))
-                        {
-                            aURL = aURL.replaceAt(1, aURL.getLength() - 1, u"") +
-                                aNewName + " " + sNotes;
-                            pURLField->SetURL(aURL);
-                        }
-                    }
-                }
+                aURL = aURL.replaceAt(1, aURL.getLength() - 1, u"") +
+                    aNewName + " " + sNotes;
+                bURLChange = true;
             }
         }
-    }
+
+        if(bURLChange)
+        {
+            SvxFieldItem* pNewFieldItem(pFieldItem->Clone(&rPool));
+            const_cast<SvxURLField*>(static_cast<const SvxURLField*>(pNewFieldItem->GetField()))->SetURL(aURL);
+            rData.setItem(std::unique_ptr<SfxPoolItem>(pNewFieldItem));
+        }
+
+        return true; // continue callbacks
+    });
 }
 
 void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPos, sal_Int32 nIncrement)
@@ -312,60 +322,63 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
     bool bNotes = (pPage->GetPageKind() == PageKind::Notes);
 
     SfxItemPool& rPool(GetPool());
-    ItemSurrogates aSurrogates;
-    rPool.GetItemSurrogates(aSurrogates, EE_FEATURE_FIELD);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    rPool.iterateItemSurrogates(EE_FEATURE_FIELD, [&](SfxItemPool::SurrogateData& rData)
     {
-        const SvxFieldItem* pFldItem;
+        const SvxFieldItem* pFieldItem(static_cast<const SvxFieldItem*>(&rData.getItem()));
 
-        if ((pFldItem = dynamic_cast< const SvxFieldItem * > (pItem)) != nullptr)
+        if (nullptr == pFieldItem)
+            return true; // continue callbacks
+
+        const SvxURLField* pURLField(dynamic_cast<const SvxURLField*>(pFieldItem->GetField()));
+
+        if (nullptr == pURLField)
+            return true; // continue callbacks
+
+        OUString aURL(pURLField->GetURL());
+
+        if (aURL.isEmpty() || (aURL[0] != 35))
+            return true; // continue callbacks
+
+        OUString aHashSlide = "#" + SdResId(STR_PAGE);
+
+        if (!aURL.startsWith(aHashSlide))
+            return true; // continue callbacks
+
+        OUString aURLCopy = aURL;
+        const OUString sNotes(SdResId(STR_NOTES));
+
+        aURLCopy = aURLCopy.replaceAt(0, aHashSlide.getLength(), u"");
+
+        bool bNotesLink = ( aURLCopy.getLength() >= sNotes.getLength() + 3
+            && aURLCopy.endsWith(sNotes) );
+
+        if (bNotesLink != bNotes)
+            return true; // no compatible link and page, continue callbacks
+
+        if (bNotes)
+            aURLCopy = aURLCopy.replaceAt(aURLCopy.getLength() - sNotes.getLength(), sNotes.getLength(), u"");
+
+        sal_Int32 number = aURLCopy.toInt32();
+        sal_uInt16 realPageNumber = (nPos + 1)/ 2;
+
+        if ( number < realPageNumber )
+            return true; // continue callbacks
+
+        // update link page number
+        number += nIncrement;
+        aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, u"") +
+            OUString::number(number);
+        if (bNotes)
         {
-            SvxURLField* pURLField = const_cast< SvxURLField* >( dynamic_cast<const SvxURLField*>( pFldItem->GetField() ) );
-
-            if(pURLField)
-            {
-                OUString aURL = pURLField->GetURL();
-
-                if (!aURL.isEmpty() && (aURL[0] == 35))
-                {
-                    OUString aHashSlide = "#" + SdResId(STR_PAGE);
-
-                    if (aURL.startsWith(aHashSlide))
-                    {
-                        OUString aURLCopy = aURL;
-                        const OUString sNotes(SdResId(STR_NOTES));
-
-                        aURLCopy = aURLCopy.replaceAt(0, aHashSlide.getLength(), u"");
-
-                        bool bNotesLink = ( aURLCopy.getLength() >= sNotes.getLength() + 3
-                            && aURLCopy.endsWith(sNotes) );
-
-                        if (bNotesLink != bNotes)
-                            continue; // no compatible link and page
-
-                        if (bNotes)
-                            aURLCopy = aURLCopy.replaceAt(aURLCopy.getLength() - sNotes.getLength(), sNotes.getLength(), u"");
-
-                        sal_Int32 number = aURLCopy.toInt32();
-                        sal_uInt16 realPageNumber = (nPos + 1)/ 2;
-
-                        if ( number >= realPageNumber )
-                        {
-                            // update link page number
-                            number += nIncrement;
-                            aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, u"") +
-                                OUString::number(number);
-                            if (bNotes)
-                            {
-                                aURL += " " + sNotes;
-                            }
-                            pURLField->SetURL(aURL);
-                        }
-                    }
-                }
-            }
+            aURL += " " + sNotes;
         }
-    }
+
+        SvxFieldItem* pNewFieldItem(pFieldItem->Clone(&rPool));
+        const_cast<SvxURLField*>(static_cast<const SvxURLField*>(pNewFieldItem->GetField()))->SetURL(aURL);
+        rData.setItem(std::unique_ptr<SfxPoolItem>(pNewFieldItem));
+
+        return true; // continue callbacks
+    });
 }
 
 // Move page
