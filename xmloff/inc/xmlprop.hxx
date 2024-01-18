@@ -94,6 +94,7 @@ inline constexpr OUString PROP_CharLeftBorderDistance = u"CharLeftBorderDistance
 inline constexpr OUString PROP_CharLocale = u"CharLocale"_ustr;
 inline constexpr OUString PROP_CharLocaleAsian = u"CharLocaleAsian"_ustr;
 inline constexpr OUString PROP_CharLocaleComplex = u"CharLocaleComplex"_ustr;
+inline constexpr OUString PROP_CharNoHyphenation = u"CharNoHyphenation"_ustr;
 inline constexpr OUString PROP_CharOverline = u"CharOverline"_ustr;
 inline constexpr OUString PROP_CharOverlineColor = u"CharOverlineColor"_ustr;
 inline constexpr OUString PROP_CharOverlineHasColor = u"CharOverlineHasColor"_ustr;
