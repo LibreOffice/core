@@ -73,6 +73,7 @@
 #include <unicode/uchar.h>
 
 #include <osl/endian.h>
+#include <osl/file.hxx>
 
 // We don't want to end up with 2GB read in one line just because of malformed
 // multiline fields, so chop it _somewhere_, which is twice supported columns
@@ -2569,7 +2570,21 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
     std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateHTMLImport( &rDoc, rBaseURL, aRange);
     if (!pImp)
         return false;
-    pImp->Read( rStrm, rBaseURL );
+
+    // If this is set, read from this file, instead of the real clipboard during paste.
+    char* pEnv = getenv("SC_DEBUG_HTML_PASTE_FROM");
+    if (pEnv)
+    {
+        OUString aURL;
+        osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pEnv), aURL);
+        SvFileStream aStream(aURL, StreamMode::READ);
+        pImp->Read( aStream, rBaseURL );
+    }
+    else
+    {
+        pImp->Read( rStrm, rBaseURL );
+    }
+
     aRange = pImp->GetRange();
 
     bool bOk = StartPaste();
