@@ -411,7 +411,9 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     // If want also draw parts of items in the last line,
     // then we add one more line if parts of this line are visible
 
+#if !ENABLE_WASM_STRIP_RECENT
     bool bPinnedItems = true;
+#endif
     size_t nCurCount = 0;
     for ( size_t i = 0; i < nItemCount; i++ )
     {
