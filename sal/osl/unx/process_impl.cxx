@@ -95,8 +95,6 @@ namespace {
 
 oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 {
-    oslProcessError result = osl_Process_E_NotFound;
-
 #ifdef EMSCRIPTEN
     // Just return some dummy file: URL for now to see what happens
     OUString fileURL = "vnd.sun.star.pathname:/instdir/program/soffice";
@@ -104,6 +102,8 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     *ppFileURL = fileURL.pData;
     return osl_Process_E_None;
 #else
+    oslProcessError result = osl_Process_E_NotFound;
+
 #ifdef ANDROID
     /* Now with just a single DSO, this one from lo-bootstrap.c is as good as
      * any */
