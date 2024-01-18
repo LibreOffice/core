@@ -25,4 +25,8 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
 
 $(eval $(call gb_JunitTest_use_unoapi_jars,sw_complex))
 
+$(eval $(call gb_JunitTest_add_classes,sw_complex,\
+    complex.indeterminateState.CheckIndeterminateState \
+))
+
 # vim: set noet sw=4 ts=4:
