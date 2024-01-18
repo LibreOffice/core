@@ -1342,6 +1342,18 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w,
                                pIntValue);
             break;
+        case RTFKeyword::BINFSXN:
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_paperSrc,
+                               NS_ooxml::LN_CT_PaperSource_first, pIntValue);
+            break;
+        case RTFKeyword::BINSXN:
+        {
+            putNestedAttribute(m_aStates.top().getSectionSprms(),
+                               NS_ooxml::LN_EG_SectPrContents_paperSrc,
+                               NS_ooxml::LN_CT_PaperSource_other, pIntValue);
+        }
+        break;
         case RTFKeyword::MARGL:
             putNestedAttribute(m_aDefaultState.getSectionSprms(),
                                NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left,

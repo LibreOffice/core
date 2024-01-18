@@ -383,6 +383,7 @@ namespace
         { PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF, u"CursorNotIgnoreTables"},
         { PROP_PARA_CONNECT_BORDERS, u"ParaIsConnectBorder"},
         { PROP_DECORATIVE, u"Decorative"},
+        { PROP_PAPER_TRAY, u"PrinterPaperTray"},
     });
 } // end anonymous ns
 
