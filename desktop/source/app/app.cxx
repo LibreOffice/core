@@ -341,6 +341,7 @@ void RemoveIconCacheDirectory()
 
 namespace {
 
+#if !defined(EMSCRIPTEN)
 void runGraphicsRenderTests()
 {
     if (comphelper::LibreOfficeKit::isActive())
@@ -354,6 +355,7 @@ void runGraphicsRenderTests()
     GraphicsRenderTests TestObject;
     TestObject.run();
 }
+#endif
 
 
 OUString MakeStartupErrorMessage(std::u16string_view aErrorMessage)
