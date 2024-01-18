@@ -102,6 +102,26 @@ DECLARE_ODFEXPORT_TEST(testTdf77961, "tdf77961.odt")
     CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, "GridPrint"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf106733)
+{
+    loadAndReload("tdf106733.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+
+    // keep fo:hyphenate="false" in direct formatting
+    assertXPath(
+        pXmlDoc,
+        "//style:style[@style:name='T3']/style:text-properties"_ostr,
+        "hyphenate"_ostr, "false");
+
+    // keep fo:hyphenate="false" in character style
+    xmlDocUniquePtr pXmlDoc2 = parseExport("styles.xml");
+    assertXPath(
+        pXmlDoc2,
+        "//style:style[@style:name='Strong_20_Emphasis']/style:text-properties"_ostr,
+        "hyphenate"_ostr, "false");
+}
+
 DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
