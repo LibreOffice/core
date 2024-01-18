@@ -2630,10 +2630,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
                 const SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame();
-                if ( !pFly )
-                    continue;
-                const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
-                const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
+                SdrObject const*const pObj(pAnchoredObj->GetDrawObj());
+                SwFormatSurround const& rSur(pAnchoredObj->GetFrameFormat()->GetSurround());
                 SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat()->GetAnchor());
                 const SwPosition* anchoredAt = rAnchor.GetContentAnchor();
                 bool inSelection = (
@@ -2643,8 +2641,10 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
                             || (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
                                 && IsSelectFrameAnchoredAtPara(*anchoredAt, *pStartPos, *pEndPos))));
                 if (eMode != RectsMode::NoAnchoredFlys && inSelection)
-                        Add( aRegion, pFly->getFrameArea() );
-                else if ( !pFly->IsAnLower( pStartFrame ) &&
+                {
+                    Add(aRegion, pAnchoredObj->GetObjRect());
+                }
+                else if (pFly && !pFly->IsAnLower(pStartFrame) &&
                     (rSur.GetSurround() != css::text::WrapTextMode_THROUGH &&
                     !rSur.IsContour()) )
                 {
