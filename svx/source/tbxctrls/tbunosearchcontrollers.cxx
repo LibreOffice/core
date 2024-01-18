@@ -43,6 +43,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -243,12 +244,21 @@ void FindTextFieldControl::SetTextToSelected_Impl()
     try
     {
         css::uno::Reference<css::frame::XController> xController(m_xFrame->getController(), css::uno::UNO_SET_THROW);
-        css::uno::Reference<css::frame::XModel> xModel(xController->getModel(), css::uno::UNO_SET_THROW);
-        css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), css::uno::UNO_QUERY_THROW);
-        if (xIndexAccess->getCount() > 0)
+        uno::Reference<text::XTextViewCursorSupplier> const xTVCS(xController, uno::UNO_QUERY);
+        if (xTVCS.is())
         {
-            css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY_THROW);
-            aString = xTextRange->getString();
+            uno::Reference<text::XTextViewCursor> const xTVC(xTVCS->getViewCursor());
+            aString = xTVC->getString();
+        }
+        else
+        {
+            uno::Reference<frame::XModel> xModel(xController->getModel(), uno::UNO_SET_THROW);
+            uno::Reference<container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), uno::UNO_QUERY_THROW);
+            if (xIndexAccess->getCount() > 0)
+            {
+                uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+                aString = xTextRange->getString();
+            }
         }
     }
     catch ( ... )
