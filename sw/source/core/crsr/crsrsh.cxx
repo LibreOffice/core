@@ -2936,6 +2936,7 @@ OUString SwCursorShell::GetSelText() const
 }
 
 /** get the nth character of the current SSelection
+    in the same paragraph as the start/end.
 
     @param bEnd    Start counting from the end? From start otherwise.
     @param nOffset position of the character
@@ -2951,8 +2952,14 @@ sal_Unicode SwCursorShell::GetChar( bool bEnd, tools::Long nOffset )
     if( !pTextNd )
         return 0;
 
-    const sal_Int32 nPos = pPos->GetContentIndex();
-    const OUString& rStr = pTextNd->GetText();
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTextNd->getLayoutFrame(GetLayout())));
+    if (!pFrame)
+    {
+        return 0;
+    }
+
+    const sal_Int32 nPos(sal_Int32(pFrame->MapModelToViewPos(*pPos)));
+    const OUString& rStr(pFrame->GetText());
     sal_Unicode cCh = 0;
 
     if (((nPos+nOffset) >= 0 ) && (nPos+nOffset) < rStr.getLength())
