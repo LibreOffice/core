@@ -273,10 +273,9 @@ handleCertificateValidationRequest_(
         altNames = comphelper::sequenceToContainer<std::vector<security::CertAltNameEntry>>(sanExtension->getAlternativeNames());
     }
 
-    OUString certHostName = getContentPart( rRequest.Certificate->getSubjectName() );
     uno::Sequence< OUString > certHostNames(altNames.size() + 1);
     auto pcertHostNames = certHostNames.getArray();
-    pcertHostNames[0] = certHostName;
+    pcertHostNames[0] = getContentPart(rRequest.Certificate->getSubjectName());
 
     for (size_t n = 0; n < altNames.size(); ++n)
     {
