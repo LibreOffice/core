@@ -557,15 +557,22 @@ void SdrPageView::AdjHdl()
     GetView().AdjustMarkHdl();
 }
 
-void SdrPageView::SetLayer(const OUString& rName, SdrLayerIDSet& rBS, bool bJa)
+// return true if changed, false if unchanged
+bool SdrPageView::SetLayer(const OUString& rName, SdrLayerIDSet& rBS, bool bJa)
 {
-    if(!GetPage())
-        return;
+    if (!GetPage())
+        return false;
 
     SdrLayerID nID = GetPage()->GetLayerAdmin().GetLayerID(rName);
 
-    if(SDRLAYER_NOTFOUND != nID)
-        rBS.Set(nID, bJa);
+    if (SDRLAYER_NOTFOUND == nID)
+        return false;
+
+    if (rBS.IsSet(nID) == bJa)
+        return false;
+
+    rBS.Set(nID, bJa);
+    return true;
 }
 
 bool SdrPageView::IsLayer(const OUString& rName, const SdrLayerIDSet& rBS) const

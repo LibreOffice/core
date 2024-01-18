@@ -415,22 +415,15 @@ void SdrPaintView::DeleteDeviceFromPaintView(OutputDevice& rOldDev)
 
 void SdrPaintView::SetLayerVisible(const OUString& rName, bool bShow)
 {
-    if(mpPageView)
-    {
-        mpPageView->SetLayerVisible(rName, bShow);
-    }
-
+    const bool bChanged = mpPageView && mpPageView->SetLayerVisible(rName, bShow);
+    if (!bChanged)
+        return;
     InvalidateAllWin();
 }
 
 bool SdrPaintView::IsLayerVisible(const OUString& rName) const
 {
-    if(mpPageView)
-    {
-        return mpPageView->IsLayerVisible(rName);
-    }
-
-    return false;
+    return mpPageView && mpPageView->IsLayerVisible(rName);
 }
 
 void SdrPaintView::SetLayerLocked(const OUString& rName, bool bLock)

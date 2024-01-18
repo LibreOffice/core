@@ -164,6 +164,7 @@ public:
     void testStatusBarLocale();
     void testLongFirstColumnMouseClick();
     void testSidebarLocale();
+    void testNoInvalidateOnSave();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -238,6 +239,7 @@ public:
     CPPUNIT_TEST(testStatusBarLocale);
     CPPUNIT_TEST(testLongFirstColumnMouseClick);
     CPPUNIT_TEST(testSidebarLocale);
+    CPPUNIT_TEST(testNoInvalidateOnSave);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3654,6 +3656,36 @@ void ScTiledRenderingTest::testSidebarLocale()
     CPPUNIT_ASSERT(it != aView2.m_aStateChanges.end());
     std::string aLocale = it->second.get<std::string>("locale");
     CPPUNIT_ASSERT_EQUAL(std::string("de-DE"), aLocale);
+}
+
+// Saving shouldn't trigger an invalidation
+void ScTiledRenderingTest::testNoInvalidateOnSave()
+{
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
+    loadFromURL(u"invalidate-on-save.ods");
+
+    // .uno:Save modifies the original file, make a copy first
+    saveAndReload("calc8");
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // track invalidations
+    ViewCallback aView;
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    dispatchCommand(mxComponent, ".uno:Save", aArgs);
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView.m_bInvalidateTiles);
 }
 
 }
