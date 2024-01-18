@@ -863,7 +863,20 @@ void SwTextShell::ExecTransliteration( SfxRequest const & rReq )
 void SwTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
-        GetShell().TransliterateText( m_aRotateCase.getNextMode() );
+    {
+        SwWrtShell& rSh = GetShell();
+        if (rSh.HasSelection())
+        {
+            rSh.TransliterateText(m_aRotateCase.getNextMode());
+        }
+        else
+        {
+            rSh.Push(); // save cur cursor
+            if ((rSh.IsEndWrd() || rSh.IsStartWord() || rSh.IsInWord()) && rSh.SelWrd())
+                rSh.TransliterateText(m_aRotateCase.getNextMode());
+            rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+        }
+    }
 }
 
 SwTextShell::SwTextShell(SwView &_rView) :
