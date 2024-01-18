@@ -152,7 +152,7 @@ class SW_DLLPUBLIC SwEditShell : public SwCursorShell
      that will be used by GetGraphic() and GetGraphicSize(). */
     SAL_DLLPRIVATE SwGrfNode *GetGrfNode_() const ;
 
-    SAL_DLLPRIVATE void DeleteSel(SwPaM& rPam, bool isArtificialSelection, bool* pUndo = nullptr);
+    SAL_DLLPRIVATE void DeleteSel(SwPaM& rPam, bool isArtificialSelection, bool goLeft = false, bool* pUndo = nullptr);
 
     SAL_DLLPRIVATE void SetSectionAttr_( SwSectionFormat& rSectFormat, const SfxItemSet& rSet );
 
@@ -178,7 +178,7 @@ public:
 
     /** Delete content of all ranges.
      If whole nodes are selected, these nodes get deleted. */
-    bool Delete(bool isArtificialSelection = false);
+    bool Delete(bool isArtificialSelection = false, bool goLeft = false);
 
     /// Remove a complete paragraph.
     bool DelFullPara();
