@@ -169,7 +169,7 @@ bool SwWrtShell::DelLeft()
             {
                 SwActContext aActContext(this);
                 ResetCursorStack();
-                Delete(false);
+                Delete(false, true);
                 UpdateAttr();
             }
             if( IsBlockMode() )
@@ -277,7 +277,7 @@ bool SwWrtShell::DelLeft()
             }
         }
     }
-    bool bRet = Delete(true);
+    bool bRet = Delete(true, true);
     if( !bRet && bSwap )
         SwCursorShell::SwapPam();
     CloseMark( bRet );
