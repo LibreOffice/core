@@ -585,7 +585,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
         m_nBreakStart = m_nBreakPos;
 
-        bHyph = BreakType::HYPHENATION == aResult.breakType;
+        bHyph = BreakType::HYPHENATION == aResult.breakType &&
+                // allow hyphenation of the word only if it's not disabled by character formatting
+                LANGUAGE_NONE != rInf.GetTextFrame()->GetLangOfChar(
+                        TextFrameIndex( sal_Int32(m_nBreakPos) +
+                                aResult.rHyphenatedWord->getHyphenationPos() ),
+                        1, true, /*bNoneIfNoHyphenation=*/true );
 
         if (bHyph && m_nBreakPos != TextFrameIndex(COMPLETE_STRING))
         {

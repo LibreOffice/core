@@ -23,6 +23,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <hintids.hxx>
 #include <editeng/rsiditem.hxx>
+#include <editeng/nhypitem.hxx>
 #include <osl/diagnose.h>
 #include <svl/whiter.hxx>
 #include <svl/itemiter.hxx>
@@ -3487,7 +3488,7 @@ void SwTextNode::ClearSwpHintsArr( bool bDelFields )
 }
 
 LanguageType SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
-                           sal_uInt16 nScript ) const
+                           sal_uInt16 nScript, bool const bNoneIfNoHyphenation ) const
 {
     LanguageType nRet = LANGUAGE_DONTKNOW;
 
@@ -3497,7 +3498,9 @@ LanguageType SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
     }
 
     // #i91465# Consider nScript if pSwpHints == 0
-    const TypedWhichId<SvxLanguageItem> nWhichId = GetWhichOfScript( RES_CHRATR_LANGUAGE, nScript );
+    const sal_uInt16 nWhichId = bNoneIfNoHyphenation
+            ? RES_CHRATR_NOHYPHEN
+            : GetWhichOfScript( RES_CHRATR_LANGUAGE, nScript );
 
     if ( HasHints() )
     {
@@ -3531,8 +3534,18 @@ LanguageType SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                     if( pHt->DontExpand() ? nBegin >= *pEndIdx : nBegin > *pEndIdx)
                         continue;
                 }
-                const SvxLanguageItem* pItem = CharFormat::GetItem( *pHt, nWhichId );
-                const LanguageType nLng = pItem->GetLanguage();
+                const SfxPoolItem* pItem = CharFormat::GetItem( *pHt, nWhichId );
+
+                if ( RES_CHRATR_NOHYPHEN == nWhichId )
+                {
+                   // bNoneIfNoHyphenation = true: return with LANGUAGE_NONE,
+                   // if the hyphenation is disabled by character formatting
+                   if  ( static_cast<const SvxNoHyphenItem*>(pItem)->GetValue() )
+                       return LANGUAGE_NONE;
+                   continue;
+                }
+
+                const LanguageType nLng = static_cast<const SvxLanguageItem*>(pItem)->GetLanguage();
 
                 // does the attribute completely cover the range?
                 if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
@@ -3544,7 +3557,7 @@ LanguageType SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
     }
     if( LANGUAGE_DONTKNOW == nRet )
     {
-        nRet = GetSwAttrSet().Get( nWhichId ).GetLanguage();
+        nRet = static_cast<const SvxLanguageItem&>(GetSwAttrSet().Get( nWhichId )).GetLanguage();
         if( LANGUAGE_DONTKNOW == nRet )
             nRet = GetAppLanguage();
     }
