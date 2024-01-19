@@ -268,7 +268,7 @@ struct ScTableInfo
     SCSIZE              mnArrCapacity;
     bool                mbPageMode;
 
-    explicit            ScTableInfo(const SCSIZE capacity = 1024);
+    explicit            ScTableInfo(SCROW nStartRow, SCROW nEndRow);
                         ~ScTableInfo();
     ScTableInfo(const ScTableInfo&) = delete;
     const ScTableInfo& operator=(const ScTableInfo&) = delete;
