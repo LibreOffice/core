@@ -19,7 +19,21 @@
 
 #pragma once
 
-/// @see PORGRP_* masks in porlin.hxx for meaning of bits!
+/// Portion groups
+constexpr sal_uInt16 PORGRP_TXT       = 0x8000;
+constexpr sal_uInt16 PORGRP_EXP       = 0x4000;
+constexpr sal_uInt16 PORGRP_FLD       = 0x2000;
+constexpr sal_uInt16 PORGRP_HYPH      = 0x1000;
+constexpr sal_uInt16 PORGRP_NUMBER    = 0x0800;
+constexpr sal_uInt16 PORGRP_GLUE      = 0x0400;
+constexpr sal_uInt16 PORGRP_FIX       = 0x0200;
+constexpr sal_uInt16 PORGRP_TAB       = 0x0100;
+// Small special groups
+constexpr sal_uInt16 PORGRP_FIXMARG   = 0x0040;
+//#define PORGRP_?  0x0020
+constexpr sal_uInt16 PORGRP_TABNOTLFT = 0x0010;
+constexpr sal_uInt16 PORGRP_TOXREF    = 0x0008;
+
 enum class PortionType
 {
     NONE        = 0x0000,
@@ -35,59 +49,59 @@ enum class PortionType
     ControlChar = 0x0087,
     Bookmark    = 0x0088,
 
-    Text        = 0x8000,
-    Lay         = 0x8001,
-    Para        = 0x8002,
-    Hanging     = 0x8004,
-    InputField  = 0x8005,
-    FieldMark   = 0x8006,
-    FieldFormCheckbox = 0x8007,
+    Text              = PORGRP_TXT | 0x00,
+    Lay               = PORGRP_TXT | 0x01,
+    Para              = PORGRP_TXT | 0x02,
+    Hanging           = PORGRP_TXT | 0x04,
+    InputField        = PORGRP_TXT | 0x05,
+    FieldMark         = PORGRP_TXT | 0x06,
+    FieldFormCheckbox = PORGRP_TXT | 0x07,
 
-    Drop        = 0x8080,
-    Tox         = 0x8089,
-    IsoTox      = 0x808a,
-    Ref         = 0x808b,
-    IsoRef      = 0x808c,
-    Meta        = 0x808d,
-    ContentControl = 0x808e,
+    Drop              = PORGRP_TXT | 0x80,
+    Tox               = PORGRP_TXT | PORGRP_TOXREF | 0x81,
+    IsoTox            = PORGRP_TXT | PORGRP_TOXREF | 0x82,
+    Ref               = PORGRP_TXT | PORGRP_TOXREF | 0x83,
+    IsoRef            = PORGRP_TXT | PORGRP_TOXREF | 0x84,
+    Meta              = PORGRP_TXT | PORGRP_TOXREF | 0x85,
+    ContentControl    = PORGRP_TXT | PORGRP_TOXREF | 0x86,
 
-    Expand      = 0xc080,
-    Blank       = 0xc081,
-    PostIts     = 0xc082,
+    Expand      = PORGRP_TXT | PORGRP_EXP | 0x80,
+    Blank       = PORGRP_TXT | PORGRP_EXP | 0x81,
+    PostIts     = PORGRP_TXT | PORGRP_EXP | 0x82,
 
-    Hyphen         = 0xd080,
-    HyphenStr      = 0xd081,
-    SoftHyphen     = 0xd082,
-    SoftHyphenStr  = 0xd083,
-    SoftHyphenComp = 0xd084,
+    Hyphen         = PORGRP_TXT | PORGRP_EXP | PORGRP_HYPH | 0x80,
+    HyphenStr      = PORGRP_TXT | PORGRP_EXP | PORGRP_HYPH | 0x81,
+    SoftHyphen     = PORGRP_TXT | PORGRP_EXP | PORGRP_HYPH | 0x82,
+    SoftHyphenStr  = PORGRP_TXT | PORGRP_EXP | PORGRP_HYPH | 0x83,
+    SoftHyphenComp = PORGRP_TXT | PORGRP_EXP | PORGRP_HYPH | 0x84,
 
-    Field       = 0xe080,
-    Hidden      = 0xe081,
-    QuoVadis    = 0xe082,
-    ErgoSum     = 0xe083,
-    Combined    = 0xe084,
-    Footnote    = 0xe085,
+    Field       = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | 0x80,
+    Hidden      = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | 0x81,
+    QuoVadis    = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | 0x82,
+    ErgoSum     = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | 0x83,
+    Combined    = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | 0x84,
+    Footnote    = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | 0x85,
 
-    FootnoteNum = 0xe880,
-    Number      = 0xe881,
-    Bullet      = 0xe882,
-    GrfNum      = 0xe883,
+    FootnoteNum = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | PORGRP_NUMBER | 0x80,
+    Number      = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | PORGRP_NUMBER | 0x81,
+    Bullet      = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | PORGRP_NUMBER | 0x82,
+    GrfNum      = PORGRP_TXT | PORGRP_EXP | PORGRP_FLD | PORGRP_NUMBER | 0x83,
 
-    Glue        = 0x0480,
+    Glue        = PORGRP_GLUE | 0x80,
 
-    Margin      = 0x04c0,
+    Margin      = PORGRP_GLUE | PORGRP_FIXMARG | 0x80,
 
-    Fix         = 0x06c0,
-    Fly         = 0x06c1,
+    Fix         = PORGRP_GLUE | PORGRP_FIX | PORGRP_FIXMARG | 0x80,
+    Fly         = PORGRP_GLUE | PORGRP_FIX | PORGRP_FIXMARG | 0x81,
 
     // Tabulator, not table
-    Tab         = 0x0750,
+    Tab         = PORGRP_GLUE | PORGRP_FIX | PORGRP_TAB | PORGRP_FIXMARG | PORGRP_TABNOTLFT | 0x00,
 
-    TabRight    = 0x07d0,
-    TabCenter   = 0x07d1,
-    TabDecimal  = 0x07d2,
+    TabRight    = PORGRP_GLUE | PORGRP_FIX | PORGRP_TAB | PORGRP_FIXMARG | PORGRP_TABNOTLFT | 0x80,
+    TabCenter   = PORGRP_GLUE | PORGRP_FIX | PORGRP_TAB | PORGRP_FIXMARG | PORGRP_TABNOTLFT | 0x81,
+    TabDecimal  = PORGRP_GLUE | PORGRP_FIX | PORGRP_TAB | PORGRP_FIXMARG | PORGRP_TABNOTLFT | 0x82,
 
-    TabLeft     = 0x0740,
+    TabLeft     = PORGRP_GLUE | PORGRP_FIX | PORGRP_TAB | PORGRP_FIXMARG | 0x00,
 };
 
 namespace sw

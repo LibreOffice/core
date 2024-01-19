@@ -30,22 +30,6 @@ class SwTextPaintInfo;
 class SwTextFormatInfo;
 class SwPortionHandler;
 
-/// Portion groups
-/// @see enum PortionType in txttypes.hxx
-#define PORGRP_TXT      0x8000
-#define PORGRP_EXP      0x4000
-#define PORGRP_FLD      0x2000
-#define PORGRP_HYPH     0x1000
-#define PORGRP_NUMBER   0x0800
-#define PORGRP_GLUE     0x0400
-#define PORGRP_FIX      0x0200
-#define PORGRP_TAB      0x0100
-// Small special groups
-#define PORGRP_FIXMARG  0x0040
-//#define PORGRP_?  0x0020
-#define PORGRP_TABNOTLFT 0x0010
-#define PORGRP_TOXREF   0x0008
-
 /// Base class for anything that can be part of a line in the Writer layout.
 /// Typically owned by SwLineLayout.
 class SAL_DLLPUBLIC_RTTI SwLinePortion: public SwPosSize

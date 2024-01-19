@@ -152,9 +152,8 @@ const char* sw::PortionTypeToString(PortionType nType)
 
         case PortionType::TabLeft:
             return "PortionType::TabLeft";
-        default:
-            return "Unknown";
     }
+    return "Unknown";
 }
 
 void SwFrame::dumpTopMostAsXml(xmlTextWriterPtr writer) const
