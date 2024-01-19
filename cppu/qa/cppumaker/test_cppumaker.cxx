@@ -352,6 +352,7 @@
 #include <test/codemaker/cppumaker/TestException1.hpp>
 #include <test/codemaker/cppumaker/TestException2.hpp>
 #include <test/codemaker/cppumaker/Constants.hpp>
+#include <test/codemaker/cppumaker/ProblematicConstantNames.hpp>
 
 #include <memory>
 #include <com/sun/star/uno/Any.hxx>

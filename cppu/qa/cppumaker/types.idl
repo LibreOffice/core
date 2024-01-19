@@ -751,6 +751,10 @@ constants UnsignedHyperBits {
     const unsigned hyper ALL = 18446744073709551615;
 };
 
+constants ProblematicConstantNames {
+    const long auto = 0;
+};
+
 }; }; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

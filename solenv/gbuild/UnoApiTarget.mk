@@ -243,12 +243,10 @@ $(if $(filter offapi udkapi, $(1)),\
 	$(foreach hdr,$(3),$(eval $(call gb_UnoApiEmbindTarget__add_embind,$(1),$(2),$(hdr)))))
 endef
 
-# CaptionEscapeDirection contains "auto" as a variable name.. so exclude that
 define gb_UnoApiEmbindTarget__add_embind
-$(if $(filter-out CaptionEscapeDirection_embind, $(3)),\
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,unoembind,\
 	UnoApiHeadersTarget/$(1)/comprehensive/$(2)/$(3) \
-)))
+))
 
 endef
 

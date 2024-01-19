@@ -167,126 +167,127 @@ OString translateUnoToCppIdentifier(
         /* unoIdentifier == "or_eq" */
         || unoIdentifier == "xor"
         /* unoIdentifier == "xor_eq" */
-        // Standard macros:
-        || (unoIdentifier == "BUFSIZ"
-                || unoIdentifier == "CLOCKS_PER_SEC"
-                || unoIdentifier == "EDOM"
-                || unoIdentifier == "EOF"
-                || unoIdentifier == "ERANGE"
-                || unoIdentifier == "EXIT_FAILURE"
-                || unoIdentifier == "EXIT_SUCCESS"
-                || unoIdentifier == "FILENAME_MAX"
-                || unoIdentifier == "FOPEN_MAX"
-                || unoIdentifier == "HUGE_VAL"
-                || unoIdentifier == "LC_ALL"
-                || unoIdentifier == "LC_COLLATE"
-                || unoIdentifier == "LC_CTYPE"
-                || unoIdentifier == "LC_MONETARY"
-                || unoIdentifier == "LC_NUMERIC"
-                || unoIdentifier == "LC_TIME"
-                || unoIdentifier == "L_tmpnam"
-                || unoIdentifier == "MB_CUR_MAX"
-                || unoIdentifier == "NULL"
-                || unoIdentifier == "RAND_MAX"
-                || unoIdentifier == "SEEK_CUR"
-                || unoIdentifier == "SEEK_END"
-                || unoIdentifier == "SEEK_SET"
-                || unoIdentifier == "SIGABRT"
-                || unoIdentifier == "SIGFPE"
-                || unoIdentifier == "SIGILL"
-                || unoIdentifier == "SIGINT"
-                || unoIdentifier == "SIGSEGV"
-                || unoIdentifier == "SIGTERM"
-                || unoIdentifier == "SIG_DFL"
-                || unoIdentifier == "SIG_ERR"
-                || unoIdentifier == "SIG_IGN"
-                || unoIdentifier == "TMP_MAX"
-                || unoIdentifier == "WCHAR_MAX"
-                || unoIdentifier == "WCHAR_MIN"
-                || unoIdentifier == "WEOF"
-                /* unoIdentifier == "_IOFBF" */
-                /* unoIdentifier == "_IOLBF" */
-                /* unoIdentifier == "_IONBF" */
-                || unoIdentifier == "assert"
-                || unoIdentifier == "errno"
-                || unoIdentifier == "offsetof"
-                || unoIdentifier == "setjmp"
-                || unoIdentifier == "stderr"
-                || unoIdentifier == "stdin"
-                || unoIdentifier == "stdout"
-                /* unoIdentifier == "va_arg" */
-                /* unoIdentifier == "va_end" */
-                /* unoIdentifier == "va_start" */
-                // Standard values:
-                || unoIdentifier == "CHAR_BIT"
-                || unoIdentifier == "CHAR_MAX"
-                || unoIdentifier == "CHAR_MIN"
-                || unoIdentifier == "DBL_DIG"
-                || unoIdentifier == "DBL_EPSILON"
-                || unoIdentifier == "DBL_MANT_DIG"
-                || unoIdentifier == "DBL_MAX"
-                || unoIdentifier == "DBL_MAX_10_EXP"
-                || unoIdentifier == "DBL_MAX_EXP"
-                || unoIdentifier == "DBL_MIN"
-                || unoIdentifier == "DBL_MIN_10_EXP"
-                || unoIdentifier == "DBL_MIN_EXP"
-                || unoIdentifier == "FLT_DIG"
-                || unoIdentifier == "FLT_EPSILON"
-                || unoIdentifier == "FLT_MANT_DIG"
-                || unoIdentifier == "FLT_MAX"
-                || unoIdentifier == "FLT_MAX_10_EXP"
-                || unoIdentifier == "FLT_MAX_EXP"
-                || unoIdentifier == "FLT_MIN"
-                || unoIdentifier == "FLT_MIN_10_EXP"
-                || unoIdentifier == "FLT_MIN_EXP"
-                || unoIdentifier == "FLT_RADIX"
-                || unoIdentifier == "FLT_ROUNDS"
-                || unoIdentifier == "INT_MAX"
-                || unoIdentifier == "INT_MIN"
-                || unoIdentifier == "LDBL_DIG"
-                || unoIdentifier == "LDBL_EPSILON"
-                || unoIdentifier == "LDBL_MANT_DIG"
-                || unoIdentifier == "LDBL_MAX"
-                || unoIdentifier == "LDBL_MAX_10_EXP"
-                || unoIdentifier == "LDBL_MAX_EXP"
-                || unoIdentifier == "LDBL_MIN"
-                || unoIdentifier == "LDBL_MIN_10_EXP"
-                || unoIdentifier == "LDBL_MIN_EXP"
-                || unoIdentifier == "LONG_MAX"
-                || unoIdentifier == "LONG_MIN"
-                || unoIdentifier == "MB_LEN_MAX"
-                || unoIdentifier == "SCHAR_MAX"
-                || unoIdentifier == "SCHAR_MIN"
-                || unoIdentifier == "SHRT_MAX"
-                || unoIdentifier == "SHRT_MIN"
-                || unoIdentifier == "UCHAR_MAX"
-                || unoIdentifier == "UINT_MAX"
-                || unoIdentifier == "ULONG_MAX"
-                || unoIdentifier == "USHRT_MAX")
-            || (transmode == IdentifierTranslationMode::Global
-                && (// Standard types:
-                    /* unoIdentifier == "clock_t" */
-                    /* unoIdentifier == "div_t" */
-                    unoIdentifier == "FILE"
-                    /* unoIdentifier == "fpos_t" */
-                    /* unoIdentifier == "jmp_buf" */
-                    || unoIdentifier == "lconv"
-                    /* unoIdentifier == "ldiv_t" */
-                    /* unoIdentifier == "mbstate_t" */
-                    /* unoIdentifier == "ptrdiff_t" */
-                    /* unoIdentifier == "sig_atomic_t" */
-                    /* unoIdentifier == "size_t" */
-                    /* unoIdentifier == "time_t" */
-                    || unoIdentifier == "tm"
-                    /* unoIdentifier == "va_list" */
-                    /* unoIdentifier == "wctrans_t" */
-                    /* unoIdentifier == "wctype_t" */
-                    /* unoIdentifier == "wint_t" */
-                    // Standard namespaces:
-                    || unoIdentifier == "std"))
-            // Others:
-            || unoIdentifier == "NDEBUG"
-            || (forbidden != nullptr && unoIdentifier == *forbidden) )
+        || (transmode != IdentifierTranslationMode::KeywordsOnly
+            // Standard macros:
+            && ((unoIdentifier == "BUFSIZ"
+                    || unoIdentifier == "CLOCKS_PER_SEC"
+                    || unoIdentifier == "EDOM"
+                    || unoIdentifier == "EOF"
+                    || unoIdentifier == "ERANGE"
+                    || unoIdentifier == "EXIT_FAILURE"
+                    || unoIdentifier == "EXIT_SUCCESS"
+                    || unoIdentifier == "FILENAME_MAX"
+                    || unoIdentifier == "FOPEN_MAX"
+                    || unoIdentifier == "HUGE_VAL"
+                    || unoIdentifier == "LC_ALL"
+                    || unoIdentifier == "LC_COLLATE"
+                    || unoIdentifier == "LC_CTYPE"
+                    || unoIdentifier == "LC_MONETARY"
+                    || unoIdentifier == "LC_NUMERIC"
+                    || unoIdentifier == "LC_TIME"
+                    || unoIdentifier == "L_tmpnam"
+                    || unoIdentifier == "MB_CUR_MAX"
+                    || unoIdentifier == "NULL"
+                    || unoIdentifier == "RAND_MAX"
+                    || unoIdentifier == "SEEK_CUR"
+                    || unoIdentifier == "SEEK_END"
+                    || unoIdentifier == "SEEK_SET"
+                    || unoIdentifier == "SIGABRT"
+                    || unoIdentifier == "SIGFPE"
+                    || unoIdentifier == "SIGILL"
+                    || unoIdentifier == "SIGINT"
+                    || unoIdentifier == "SIGSEGV"
+                    || unoIdentifier == "SIGTERM"
+                    || unoIdentifier == "SIG_DFL"
+                    || unoIdentifier == "SIG_ERR"
+                    || unoIdentifier == "SIG_IGN"
+                    || unoIdentifier == "TMP_MAX"
+                    || unoIdentifier == "WCHAR_MAX"
+                    || unoIdentifier == "WCHAR_MIN"
+                    || unoIdentifier == "WEOF"
+                    /* unoIdentifier == "_IOFBF" */
+                    /* unoIdentifier == "_IOLBF" */
+                    /* unoIdentifier == "_IONBF" */
+                    || unoIdentifier == "assert"
+                    || unoIdentifier == "errno"
+                    || unoIdentifier == "offsetof"
+                    || unoIdentifier == "setjmp"
+                    || unoIdentifier == "stderr"
+                    || unoIdentifier == "stdin"
+                    || unoIdentifier == "stdout"
+                    /* unoIdentifier == "va_arg" */
+                    /* unoIdentifier == "va_end" */
+                    /* unoIdentifier == "va_start" */
+                    // Standard values:
+                    || unoIdentifier == "CHAR_BIT"
+                    || unoIdentifier == "CHAR_MAX"
+                    || unoIdentifier == "CHAR_MIN"
+                    || unoIdentifier == "DBL_DIG"
+                    || unoIdentifier == "DBL_EPSILON"
+                    || unoIdentifier == "DBL_MANT_DIG"
+                    || unoIdentifier == "DBL_MAX"
+                    || unoIdentifier == "DBL_MAX_10_EXP"
+                    || unoIdentifier == "DBL_MAX_EXP"
+                    || unoIdentifier == "DBL_MIN"
+                    || unoIdentifier == "DBL_MIN_10_EXP"
+                    || unoIdentifier == "DBL_MIN_EXP"
+                    || unoIdentifier == "FLT_DIG"
+                    || unoIdentifier == "FLT_EPSILON"
+                    || unoIdentifier == "FLT_MANT_DIG"
+                    || unoIdentifier == "FLT_MAX"
+                    || unoIdentifier == "FLT_MAX_10_EXP"
+                    || unoIdentifier == "FLT_MAX_EXP"
+                    || unoIdentifier == "FLT_MIN"
+                    || unoIdentifier == "FLT_MIN_10_EXP"
+                    || unoIdentifier == "FLT_MIN_EXP"
+                    || unoIdentifier == "FLT_RADIX"
+                    || unoIdentifier == "FLT_ROUNDS"
+                    || unoIdentifier == "INT_MAX"
+                    || unoIdentifier == "INT_MIN"
+                    || unoIdentifier == "LDBL_DIG"
+                    || unoIdentifier == "LDBL_EPSILON"
+                    || unoIdentifier == "LDBL_MANT_DIG"
+                    || unoIdentifier == "LDBL_MAX"
+                    || unoIdentifier == "LDBL_MAX_10_EXP"
+                    || unoIdentifier == "LDBL_MAX_EXP"
+                    || unoIdentifier == "LDBL_MIN"
+                    || unoIdentifier == "LDBL_MIN_10_EXP"
+                    || unoIdentifier == "LDBL_MIN_EXP"
+                    || unoIdentifier == "LONG_MAX"
+                    || unoIdentifier == "LONG_MIN"
+                    || unoIdentifier == "MB_LEN_MAX"
+                    || unoIdentifier == "SCHAR_MAX"
+                    || unoIdentifier == "SCHAR_MIN"
+                    || unoIdentifier == "SHRT_MAX"
+                    || unoIdentifier == "SHRT_MIN"
+                    || unoIdentifier == "UCHAR_MAX"
+                    || unoIdentifier == "UINT_MAX"
+                    || unoIdentifier == "ULONG_MAX"
+                    || unoIdentifier == "USHRT_MAX")
+                || (transmode == IdentifierTranslationMode::Global
+                    && (// Standard types:
+                        /* unoIdentifier == "clock_t" */
+                        /* unoIdentifier == "div_t" */
+                        unoIdentifier == "FILE"
+                        /* unoIdentifier == "fpos_t" */
+                        /* unoIdentifier == "jmp_buf" */
+                        || unoIdentifier == "lconv"
+                        /* unoIdentifier == "ldiv_t" */
+                        /* unoIdentifier == "mbstate_t" */
+                        /* unoIdentifier == "ptrdiff_t" */
+                        /* unoIdentifier == "sig_atomic_t" */
+                        /* unoIdentifier == "size_t" */
+                        /* unoIdentifier == "time_t" */
+                        || unoIdentifier == "tm"
+                        /* unoIdentifier == "va_list" */
+                        /* unoIdentifier == "wctrans_t" */
+                        /* unoIdentifier == "wctype_t" */
+                        /* unoIdentifier == "wint_t" */
+                        // Standard namespaces:
+                        || unoIdentifier == "std"))
+                // Others:
+                || unoIdentifier == "NDEBUG"
+                || (forbidden != nullptr && unoIdentifier == *forbidden))) )
     {
         return OString::Concat(prefix) + "_" + unoIdentifier;
     } else {

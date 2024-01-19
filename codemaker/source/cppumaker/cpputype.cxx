@@ -1937,7 +1937,11 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
             out << "double";
             break;
         }
-        out << " " << member.name << " = ";
+        out << " "
+            << codemaker::cpp::translateUnoToCppIdentifier(
+                u2b(member.name), "constant",
+                codemaker::cpp::IdentifierTranslationMode::KeywordsOnly)
+            << " = ";
         switch (member.value.type) {
         case unoidl::ConstantValue::TYPE_BOOLEAN:
             out << (member.value.booleanValue ? "sal_True" : "sal_False");
