@@ -84,8 +84,9 @@ const o3tl::enumarray<SvxNumValCategory, double> fSvxNumValConst = {
     -1234.56789012345678,   // SvxNumValCategory::Standard
     -0.1295,                // SvxNumValCategory::Percent
     -1234.0,                // SvxNumValCategory::Currency
-    36525.5678935185,       // SvxNumValCategory::Date
-    36525.5678935185,       // SvxNumValCategory::Time
+    // tdf#38231 - change default example date value to 1999-12-01
+    36495.5678935185,       // SvxNumValCategory::Date
+    36495.5678935185,       // SvxNumValCategory::Time
     12345.67889,            // SvxNumValCategory::Scientific
     123.456,                // SvxNumValCategory::Fraction
     1.0,                    // SvxNumValCategory::Boolean

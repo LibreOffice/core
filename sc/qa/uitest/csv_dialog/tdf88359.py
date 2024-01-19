@@ -34,7 +34,7 @@ class Tdf88359(UITestCase):
             # Without the fix in place, this test would have failed with
             # AssertionError: 'Date' != 'Text'
             self.assertEqual("Date", get_state_as_dict(xliststore1)["SelectEntryText"])
-            self.assertEqual("1999-12-31T13:37:46", get_state_as_dict(xliststore2)["SelectEntryText"])
+            self.assertEqual("1999-12-01T13:37:46", get_state_as_dict(xliststore2)["SelectEntryText"])
             self.assertEqual("YYYY-MM-DD\"T\"HH:MM:SS", get_state_as_dict(xformatted)["Text"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

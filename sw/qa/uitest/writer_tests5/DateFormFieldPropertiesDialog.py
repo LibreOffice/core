@@ -24,17 +24,17 @@ class dateFormFieldDialog(UITestCase):
 
                 # check whether we have the right format selected
                 self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/01/99")
 
                 # select a new format
                 itemsList.getChild("11").executeAction("SELECT", tuple());
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-01")
 
 
             # open the dialog again
             with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
                 itemsList = xDialog.getChild("date_formats_treeview")
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-01")
 
 
     def test_date_field_with_custom_format(self):
@@ -55,7 +55,7 @@ class dateFormFieldDialog(UITestCase):
                 # SelectEntryText doesn't match the sample string, so all this
                 # is rather fragile depending on actual locale data.
                 self.assertEqual(get_state_as_dict(itemsList)["Children"], "21")
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "1999. december 31., péntek[System]")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "1999. december 1., szerda[System]")
 
 
     def test_date_reformat(self):
@@ -70,11 +70,11 @@ class dateFormFieldDialog(UITestCase):
 
                 # check whether we have the right format selected
                 self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/01/99")
 
                 # select a new format
                 itemsList.getChild("11").executeAction("SELECT", tuple());
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-01")
 
 
             # after applying the new format, the field content should be updated
@@ -92,11 +92,11 @@ class dateFormFieldDialog(UITestCase):
 
                 # check whether we have the right format selected
                 self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Fri 31/Dec 99")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Wed 01/Dec 99")
 
                 # select a new format
                 itemsList.getChild("11").executeAction("SELECT", tuple());
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-01")
 
 
             # a placeholder text is not changed by format change
@@ -117,11 +117,11 @@ class dateFormFieldDialog(UITestCase):
 
                 # check whether we have the right format selected
                 self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/01/99")
 
                 # select a new format
                 itemsList.getChild("3").executeAction("SELECT", tuple());
-                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Dec 31, 1999")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Dec 1, 1999")
 
 
             # a placeholder text is not changed by format change
