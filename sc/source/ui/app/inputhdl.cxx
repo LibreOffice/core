@@ -523,7 +523,7 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
     Fraction aZoomX = rViewData.GetZoomX();
     Fraction aZoomY = rViewData.GetZoomY();
 
-    ScTableInfo aTabInfo;
+    ScTableInfo aTabInfo(nY1, nY2);
     pDocSh->GetDocument().FillInfo( aTabInfo, nX1, nY1, nX2, nY2,
                                     nTab, nPPTX, nPPTY, false, false );
 

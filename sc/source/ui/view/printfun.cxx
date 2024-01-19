@@ -558,7 +558,7 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
 
     //  Assemble data
 
-    ScTableInfo aTabInfo;
+    ScTableInfo aTabInfo(nY1, nY2);
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
                    nScaleX, nScaleY, false, bFormula );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
@@ -1421,7 +1421,7 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
     pBorderDoc->InitUndo( rDoc, 0,0, true,true );
     pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
 
-    ScTableInfo aTabInfo;
+    ScTableInfo aTabInfo(0, 1);
     pBorderDoc->FillInfo( aTabInfo, 0,0, 0,0, 0,
                                         nScaleX, nScaleY, false, false );
     OSL_ENSURE(aTabInfo.mnArrCount,"nArrCount == 0");
@@ -1633,7 +1633,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
                     //  Assemble data
 
-    ScTableInfo aTabInfo;
+    ScTableInfo aTabInfo(nY1, nY2);
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nPrintTab,
                                         nScaleX, nScaleY, true, aTableParam.bFormulas );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
