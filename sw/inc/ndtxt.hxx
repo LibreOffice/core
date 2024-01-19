@@ -720,7 +720,7 @@ public:
     void fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const;
 
     LanguageType GetLang( const sal_Int32 nBegin, const sal_Int32 nLen = 0,
-                    sal_uInt16 nScript = 0 ) const;
+                    sal_uInt16 nScript = 0, bool bNoneIfNoHyphenation = false ) const;
 
     /// in ndcopy.cxx
     bool IsSymbolAt(sal_Int32 nBegin) const; // In itratr.cxx.

@@ -1459,11 +1459,11 @@ SwDoc const& SwTextFrame::GetDoc() const
 }
 
 LanguageType SwTextFrame::GetLangOfChar(TextFrameIndex const nIndex,
-        sal_uInt16 const nScript, bool const bNoChar) const
+        sal_uInt16 const nScript, bool const bNoChar, bool const bNoneIfNoHyphenation) const
 {
     // a single character can be mapped uniquely!
     std::pair<SwTextNode const*, sal_Int32> const pos(MapViewToModel(nIndex));
-    return pos.first->GetLang(pos.second, bNoChar ? 0 : 1, nScript);
+    return pos.first->GetLang(pos.second, bNoChar ? 0 : 1, nScript, bNoneIfNoHyphenation);
 }
 
 void SwTextFrame::ResetPreps()
