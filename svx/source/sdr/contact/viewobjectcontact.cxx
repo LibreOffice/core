@@ -422,6 +422,7 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                                 eElement,
                                 bBackground,
                                 bImage,
+                                false, // Decorative
                                 std::move(rNewPrimitiveSequence),
                                 pAnchorKey,
                                 &annotIds))
@@ -438,6 +439,7 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                         vcl::PDFWriter::Division,
                         true,
                         true,
+                        true, // Decorative
                         std::move(rNewPrimitiveSequence))
                 };
         }

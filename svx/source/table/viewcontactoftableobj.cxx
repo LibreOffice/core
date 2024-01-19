@@ -384,6 +384,7 @@ namespace sdr::contact
                                         eType,
                                         pPage->IsMasterPage(),
                                         false,
+                                        false,
                                         std::move(cell)) };
                             }
                             row.append(cell);
@@ -395,6 +396,7 @@ namespace sdr::contact
                                 new drawinglayer::primitive2d::StructureTagPrimitive2D(
                                     vcl::PDFWriter::TableRow,
                                     pPage->IsMasterPage(),
+                                    false,
                                     false,
                                     std::move(row)) };
                         }

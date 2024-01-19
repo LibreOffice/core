@@ -1116,8 +1116,9 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
 
     const bool bPDFExport(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportFormFields());
     bool bDoProcessRecursively(true);
+    bool bDecorative = (mpCurrentStructureTag && mpCurrentStructureTag->isDecorative());
 
-    if (bPDFExport)
+    if (bPDFExport && !bDecorative)
     {
         // PDF export. Emulate data handling from UnoControlPDFExportContact
         std::unique_ptr<vcl::PDFWriter::AnyWidget> pPDFControl(
@@ -1190,7 +1191,10 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
 
     if (mpPDFExtOutDevData)
     { // no corresponding PDF Form, use Figure instead
-        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Figure);
+        if (!bDecorative)
+            mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Figure);
+        else
+            mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
         mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement, vcl::PDFWriter::Block);
         auto const range(rControlPrimitive.getB2DRange(getViewInformation2D()));
         tools::Rectangle const aLogicRect(
@@ -1198,7 +1202,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             basegfx::fround(range.getMaxX()), basegfx::fround(range.getMaxY()));
         mpPDFExtOutDevData->SetStructureBoundingBox(aLogicRect);
         OUString const& rAltText(rControlPrimitive.GetAltText());
-        if (!rAltText.isEmpty())
+        if (!rAltText.isEmpty() && !bDecorative)
         {
             mpPDFExtOutDevData->SetAlternateText(rAltText);
         }

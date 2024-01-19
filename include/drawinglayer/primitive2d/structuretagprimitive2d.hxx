@@ -49,6 +49,8 @@ namespace drawinglayer::primitive2d
             bool                                    mbBackground;
             /// flag for image (OBJ_GRAF)
             bool                                    mbIsImage;
+            /// flag for form control object
+            bool                                    mbIsDecorative;
             /// anchor structure element (Writer)
             void const* m_pAnchorStructureElementKey;
             /// for Annot structure element, the ids of the annotations
@@ -60,6 +62,7 @@ namespace drawinglayer::primitive2d
                 const vcl::PDFWriter::StructElement& rStructureElement,
                 bool bBackground,
                 bool bIsImage,
+                bool bIsDecorative,
                 Primitive2DContainer&& aChildren,
                 void const* pAnchorStructureElementKey = nullptr,
                 ::std::vector<sal_Int32> const* pAnnotIds = nullptr);
@@ -68,6 +71,7 @@ namespace drawinglayer::primitive2d
             const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }
             bool isBackground() const { return mbBackground; }
             bool isImage() const { return mbIsImage; }
+            bool isDecorative() const { return mbIsDecorative; }
             bool isTaggedSdrObject() const;
             void const* GetAnchorStructureElementKey() const { return m_pAnchorStructureElementKey; }
             ::std::vector<sal_Int32> GetAnnotIds() const { return m_AnnotIds; }
