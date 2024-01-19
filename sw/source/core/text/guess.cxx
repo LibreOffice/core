@@ -253,9 +253,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         {
             // portion fits to line
             m_nCutPos = rInf.GetIdx() + nMaxLen;
-            bool bRet = maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
-                                                           m_nBreakWidth, m_nExtraBlankWidth,
-                                                           nMaxSizeDiff, rInf, rSI, nMaxComp);
+            bool bRet = rPor.InFieldGrp()
+                        || maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
+                                                              m_nBreakWidth, m_nExtraBlankWidth,
+                                                              nMaxSizeDiff, rInf, rSI, nMaxComp);
             if( nItalic &&
                 (m_nCutPos >= TextFrameIndex(rInf.GetText().getLength()) ||
                   // #i48035# Needed for CalcFitToContent
@@ -408,9 +409,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // there likely has been a pixel rounding error in GetTextBreak
         if ( m_nBreakWidth <= nLineWidth )
         {
-            bool bRet = maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
-                                                           m_nBreakWidth, m_nExtraBlankWidth,
-                                                           nMaxSizeDiff, rInf, rSI, nMaxComp);
+            bool bRet = rPor.InFieldGrp()
+                        || maybeAdjustPositionsForBlockAdjust(m_nCutPos, m_nBreakPos, m_nBreakStart,
+                                                              m_nBreakWidth, m_nExtraBlankWidth,
+                                                              nMaxSizeDiff, rInf, rSI, nMaxComp);
 
             if (nItalic && (m_nBreakPos + TextFrameIndex(1)) >= TextFrameIndex(rInf.GetText().getLength()))
                 m_nBreakWidth += nItalic;
