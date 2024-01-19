@@ -8639,7 +8639,7 @@ sc/source/ui/cctrl/tbzoomsliderctrl.cxx
 sc/source/ui/condformat/colorformat.cxx
 sc/source/ui/condformat/condformatdlg.cxx
 sc/source/ui/condformat/condformatdlgentry.cxx
-sc/source/ui/condformat/condformatdlgitem.cxx
+sc/source/ui/condformat/condformatdlgdata.cxx
 sc/source/ui/condformat/condformathelper.cxx
 sc/source/ui/condformat/condformatmgr.cxx
 sc/source/ui/dataprovider/csvdataprovider.cxx

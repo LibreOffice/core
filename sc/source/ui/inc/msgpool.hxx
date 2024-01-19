@@ -25,7 +25,6 @@
 #include <svl/stritem.hxx>
 
 #include "uiitems.hxx"
-#include "condformatdlgitem.hxx"
 
 class ScDocumentPool;
 
@@ -40,7 +39,6 @@ class ScMessagePool final : public SfxItemPool
     ScPivotItem         aGlobalPivotItem;
     ScSolveItem         aGlobalSolveItem;
     ScUserListItem      aGlobalUserListItem;
-    ScCondFormatDlgItem aCondFormatDlgItem;
 
     std::vector<SfxPoolItem*>    mvPoolDefaults;
     rtl::Reference<ScDocumentPool> pDocPool;

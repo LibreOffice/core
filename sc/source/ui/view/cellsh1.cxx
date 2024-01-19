@@ -74,7 +74,7 @@
 #include <colorscale.hxx>
 #include <condformatdlg.hxx>
 #include <attrib.hxx>
-#include <condformatdlgitem.hxx>
+#include <condformatdlgdata.hxx>
 #include <impex.hxx>
 
 #include <globstr.hrc>
@@ -171,7 +171,7 @@ void SetTabNoAndCursor( const ScViewData& rViewData, std::u16string_view rCellId
 }
 
 void HandleConditionalFormat(sal_uInt32 nIndex, bool bCondFormatDlg, bool bContainsCondFormat,
-                             const sal_uInt16 nSlot, SfxViewShell* pTabViewShell)
+                             const sal_uInt16 nSlot, ScTabViewShell* pTabViewShell)
 {
     condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
     switch (nSlot)
@@ -201,9 +201,9 @@ void HandleConditionalFormat(sal_uInt32 nIndex, bool bCondFormatDlg, bool bConta
     {
         // Put the xml string parameter to initialize the
         // Conditional Format Dialog.
-        ScCondFormatDlgItem aDlgItem(nullptr, nIndex, false); // Change here
-        aDlgItem.SetDialogType(eType);
-        pTabViewShell->GetPool().DirectPutItemInPool(aDlgItem);
+        std::shared_ptr<ScCondFormatDlgData> pDlgItem(std::make_shared<ScCondFormatDlgData>(nullptr, nIndex, false));
+        pDlgItem->SetDialogType(eType);
+        pTabViewShell->setScCondFormatDlgItem(pDlgItem);
 
         sal_uInt16 nId = ScCondFormatDlgWrapper::GetChildWindowId();
         SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
@@ -2160,13 +2160,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 sal_uInt32  nIndex      = sal_uInt32(-1);
                 bool        bManaged    = false;
 
-                // Get the pool item stored by Conditional Format Manager Dialog.
-                ItemSurrogates aSurrogates;
-                pTabViewShell->GetPool().GetItemSurrogates(aSurrogates, SCITEM_CONDFORMATDLGDATA);
-                if (aSurrogates.begin() != aSurrogates.end())
+                const std::shared_ptr<ScCondFormatDlgData>& rDlgItem(pTabViewShell->getScCondFormatDlgItem());
+                if (rDlgItem)
                 {
-                    const ScCondFormatDlgItem* pDlgItem = static_cast<const ScCondFormatDlgItem*>(*aSurrogates.begin());
-                    nIndex = pDlgItem->GetIndex();
+                    nIndex = rDlgItem->GetIndex();
                     bManaged = true;
                 }
 
@@ -2872,14 +2869,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAddress aPos(rData.GetCurX(), rData.GetCurY(), rData.GetTabNo());
 
                 ScConditionalFormatList* pList = nullptr;
-
-                const ScCondFormatDlgItem* pDlgItem = nullptr;
-                ItemSurrogates aSurrogates;
-                pTabViewShell->GetPool().GetItemSurrogates(aSurrogates, SCITEM_CONDFORMATDLGDATA);
-                if (aSurrogates.begin() != aSurrogates.end())
+                const std::shared_ptr<ScCondFormatDlgData>& rDlgItem(pTabViewShell->getScCondFormatDlgItem());
+                if (rDlgItem)
                 {
-                    pDlgItem= static_cast<const ScCondFormatDlgItem*>(*aSurrogates.begin());
-                    pList = const_cast<ScCondFormatDlgItem*>(pDlgItem)->GetConditionalFormatList();
+                    pList = rDlgItem->GetConditionalFormatList();
                 }
 
                 if (!pList)
@@ -2888,10 +2881,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 VclPtr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
                     pTabViewShell->GetFrameWeld(), rDoc, pList));
 
-                if (pDlgItem)
+                if (rDlgItem)
                     pDlg->SetModified();
 
-                pDlg->StartExecuteAsync([this, pDlg, &rData, pTabViewShell, pDlgItem, aPos](sal_Int32 nRet){
+                pDlg->StartExecuteAsync([this, pDlg, &rData, pTabViewShell, rDlgItem, aPos](sal_Int32 nRet){
                     std::unique_ptr<ScConditionalFormatList> pCondFormatList = pDlg->GetConditionalFormatList();
                     if(nRet == RET_OK && pDlg->CondFormatsChanged())
                     {
@@ -2901,8 +2894,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         // Put the xml string parameter to initialize the
                         // Conditional Format Dialog. ( add new )
-                        pTabViewShell->GetPool().DirectPutItemInPool(ScCondFormatDlgItem(
-                                    std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), -1, true));
+                        pTabViewShell->setScCondFormatDlgItem(std::make_shared<ScCondFormatDlgData>(
+                            std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), -1, true));
                         // Queue message to open Conditional Format Dialog
                         GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
                     }
@@ -2912,7 +2905,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         sal_Int32 nIndex = pFormat ? pFormat->GetKey() : -1;
                         // Put the xml string parameter to initialize the
                         // Conditional Format Dialog. ( edit selected conditional format )
-                        pTabViewShell->GetPool().DirectPutItemInPool(ScCondFormatDlgItem(
+                        pTabViewShell->setScCondFormatDlgItem(std::make_shared<ScCondFormatDlgData>(
                                     std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), nIndex, true));
 
                         // Queue message to open Conditional Format Dialog
@@ -2921,8 +2914,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                         pCondFormatList.reset();
 
-                    if (pDlgItem)
-                        pTabViewShell->GetPool().DirectRemoveItemFromPool(*pDlgItem);
+                    if (rDlgItem)
+                        pTabViewShell->setScCondFormatDlgItem(nullptr);
 
                     pDlg->disposeOnce();
                 });

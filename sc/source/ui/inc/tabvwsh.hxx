@@ -60,6 +60,8 @@ class ScDPObject;
 class ScNavigatorSettings;
 class ScRangeName;
 class ScDrawTransferObj;
+class ScCondFormatDlgData;
+
 namespace sc { class SparklineShell; }
 
 struct ScHeaderFieldData;
@@ -189,6 +191,8 @@ private:
     OUString   maScope;
 
     std::unique_ptr<ScDragData> m_pDragData;
+    std::shared_ptr<ScCondFormatDlgData> m_pScCondFormatDlgItem;
+
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -444,6 +448,9 @@ public:
 
     void SetMoveKeepEdit(bool value) { bMoveKeepEdit = value; };
     bool GetMoveKeepEdit() { return bMoveKeepEdit; };
+
+    void setScCondFormatDlgItem(const std::shared_ptr<ScCondFormatDlgData>& rItem) { m_pScCondFormatDlgItem = rItem; }
+    const std::shared_ptr<ScCondFormatDlgData>& getScCondFormatDlgItem() const { return m_pScCondFormatDlgItem; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

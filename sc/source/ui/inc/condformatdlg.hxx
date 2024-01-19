@@ -10,7 +10,7 @@
 #pragma once
 
 #include <rangelst.hxx>
-#include "condformatdlgitem.hxx"
+#include "condformatdlgdata.hxx"
 #include "condformatdlgentry.hxx"
 
 #include "anyrefdg.hxx"
@@ -82,7 +82,7 @@ private:
     ScAddress maPos;
     ScViewData* mpViewData;
 
-    std::shared_ptr<ScCondFormatDlgItem> mpDlgItem;
+    std::shared_ptr<ScCondFormatDlgData> mpDlgItem;
 
     OUString msBaseTitle;
 
@@ -108,7 +108,7 @@ protected:
 
 public:
     ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pWindow,
-                                 ScViewData* pViewData, const ScCondFormatDlgItem* pDlgItem);
+                                 ScViewData* pViewData, const std::shared_ptr<ScCondFormatDlgData>& rItem);
     virtual ~ScCondFormatDlg() override;
 
     std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;

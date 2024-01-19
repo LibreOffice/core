@@ -35,7 +35,6 @@ SfxItemInfo const aMsgItemInfos[] =
     { SID_PIVOT_TABLE,           SFX_ITEMINFOFLAG_NONE },   // SCITEM_PIVOTDATA
     { SID_SOLVE,                 SFX_ITEMINFOFLAG_NONE },   // SCITEM_SOLVEDATA
     { SID_SCUSERLISTS,           SFX_ITEMINFOFLAG_NONE },   // SCITEM_USERLIST
-    { 0,                         SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }  // SCITEM_CONDFORMATDLGDATA
 };
 
 ScMessagePool::ScMessagePool()
@@ -52,7 +51,6 @@ ScMessagePool::ScMessagePool()
     aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, nullptr, nullptr, false ) ),
     aGlobalSolveItem        ( ScSolveItem           ( SCITEM_SOLVEDATA, nullptr ) ),
     aGlobalUserListItem     ( ScUserListItem        ( SCITEM_USERLIST ) ),
-    aCondFormatDlgItem      ( ScCondFormatDlgItem   ( nullptr, -1, false ) ),
 
     mvPoolDefaults(MSGPOOL_END - MSGPOOL_START + 1),
     pDocPool(new ScDocumentPool)
@@ -66,7 +64,6 @@ ScMessagePool::ScMessagePool()
     mvPoolDefaults[SCITEM_PIVOTDATA         - MSGPOOL_START] = &aGlobalPivotItem;
     mvPoolDefaults[SCITEM_SOLVEDATA         - MSGPOOL_START] = &aGlobalSolveItem;
     mvPoolDefaults[SCITEM_USERLIST          - MSGPOOL_START] = &aGlobalUserListItem;
-    mvPoolDefaults[SCITEM_CONDFORMATDLGDATA - MSGPOOL_START] = &aCondFormatDlgItem;
 
     SetDefaults( &mvPoolDefaults );
 

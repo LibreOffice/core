@@ -21,7 +21,7 @@
 #include <docsh.hxx>
 #include <docfunc.hxx>
 #include <condformatdlgentry.hxx>
-#include <condformatdlgitem.hxx>
+#include <condformatdlgdata.hxx>
 
 ScCondFormatList::ScCondFormatList(ScCondFormatDlg* pDialogParent,
                                    std::unique_ptr<weld::ScrolledWindow> xWindow,
@@ -416,12 +416,14 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry&, rEntry, void )
 
 ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     weld::Window* pParent, ScViewData* pViewData,
-    const ScCondFormatDlgItem* pItem)
+    const std::shared_ptr<ScCondFormatDlgData>& rItem)
         : ScAnyRefDlgController(pB, pCW, pParent,
                         (SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui"),
                         "ConditionalFormatDialog")
     , mpViewData(pViewData)
-    , mpDlgItem(pItem->Clone())
+    // previous version based on SfxPoolItem used SfxPoolItem::Clone here, so make a copy
+    // using copy constructor
+    , mpDlgItem(std::make_shared<ScCondFormatDlgData>(*rItem))
     , mpLastEdit(nullptr)
     , mxBtnOk(m_xBuilder->weld_button("ok"))
     , mxBtnAdd(m_xBuilder->weld_button("add"))
@@ -634,8 +636,8 @@ void ScCondFormatDlg::OkPressed()
             pFormat->SetKey(nKey);
             pList->InsertNew(std::move(pFormat));
         }
-        mpViewData->GetViewShell()->GetPool().DirectPutItemInPool(*mpDlgItem);
 
+        mpViewData->GetViewShell()->setScCondFormatDlgItem(mpDlgItem);
         SetDispatcherLock( false );
         // Queue message to open Conditional Format Manager Dialog
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,
@@ -650,7 +652,7 @@ void ScCondFormatDlg::CancelPressed()
 {
     if ( mpDlgItem->IsManaged() )
     {
-        mpViewData->GetViewShell()->GetPool().DirectPutItemInPool(*mpDlgItem);
+        mpViewData->GetViewShell()->setScCondFormatDlgItem(mpDlgItem);
         SetDispatcherLock( false );
         // Queue message to open Conditional Format Manager Dialog
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,

@@ -130,6 +130,7 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
     // avoid unnecessary unregister/register actions
     const bool bWasRegistered(nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()));
     const bool bWillBeRegistered(nullptr != rHolder.m_pItem && rHolder.getPool().NeedsSurrogateSupport(rHolder.m_pItem->Which()));
+    SfxItemPool* pOldPool(m_pPool);
 
     if (nullptr != m_pItem)
         implCleanupItemEntry(m_pItem);
@@ -146,7 +147,7 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
         if (bWillBeRegistered)
             getPool().registerPoolItemHolder(*this);
         else
-            getPool().unregisterPoolItemHolder(*this);
+            pOldPool->unregisterPoolItemHolder(*this);
     }
 
     return *this;

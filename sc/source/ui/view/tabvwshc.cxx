@@ -51,7 +51,7 @@
 #include <condformatdlg.hxx>
 #include <condformateasydlg.hxx>
 #include <xmlsourcedlg.hxx>
-#include <condformatdlgitem.hxx>
+#include <condformatdlgdata.hxx>
 #include <formdata.hxx>
 #include <inputwin.hxx>
 
@@ -425,25 +425,18 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case WID_CONDFRMT_REF:
         {
-            const ScCondFormatDlgItem* pDlgItem = nullptr;
             // Get the pool item stored by Conditional Format Manager Dialog.
-            ItemSurrogates aSurrogates;
-            GetPool().GetItemSurrogates(aSurrogates, SCITEM_CONDFORMATDLGDATA);
-            if (aSurrogates.begin() != aSurrogates.end())
-            {
-                const SfxPoolItem* pItem = *aSurrogates.begin();
-                pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
-            }
+            const std::shared_ptr<ScCondFormatDlgData>& rDlgItem(getScCondFormatDlgItem());
 
-            if (pDlgItem)
+            if (rDlgItem)
             {
                 ScViewData& rViewData = GetViewData();
                 rViewData.SetRefTabNo( rViewData.GetTabNo() );
 
-                xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, pDlgItem);
+                xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, rDlgItem);
 
                 // Remove the pool item stored by Conditional Format Manager Dialog.
-                GetPool().DirectRemoveItemFromPool(*pDlgItem);
+                setScCondFormatDlgItem(nullptr);
             }
 
             break;

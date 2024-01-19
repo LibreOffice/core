@@ -94,9 +94,8 @@ class SvxSetItem;
 #define SCITEM_PIVOTDATA            TypedWhichId<ScPivotItem>(1106)
 #define SCITEM_SOLVEDATA            TypedWhichId<ScSolveItem>(1107)
 #define SCITEM_USERLIST             TypedWhichId<ScUserListItem>(1108)
-#define SCITEM_CONDFORMATDLGDATA    TypedWhichId<ScCondFormatDlgItem>(1109)
 
-#define MSGPOOL_END                 1109
+#define MSGPOOL_END                 1108
 
 // Item-IDs for attributes:
 

@@ -398,7 +398,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/cctrl/tbzoomsliderctrl \
     sc/source/ui/condformat/condformatdlg \
     sc/source/ui/condformat/condformatdlgentry \
-    sc/source/ui/condformat/condformatdlgitem \
+    sc/source/ui/condformat/condformatdlgdata \
     sc/source/ui/condformat/condformateasydlg \
     sc/source/ui/condformat/condformathelper \
     sc/source/ui/condformat/colorformat \

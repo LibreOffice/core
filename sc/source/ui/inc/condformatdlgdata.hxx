@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include <svl/poolitem.hxx>
-
+#include <sal/config.h>
 #include <memory>
 
 namespace condformat::dialog
@@ -28,21 +27,14 @@ enum ScCondFormatDialogType
 
 class ScConditionalFormatList;
 
-class ScCondFormatDlgItem : public SfxPoolItem
+class ScCondFormatDlgData
 {
 public:
-    ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList> pCondFormats, sal_Int32 nItem,
+    ScCondFormatDlgData(std::shared_ptr<ScConditionalFormatList> pCondFormats, sal_Int32 nItem,
                         bool bManaged);
 
-    virtual ~ScCondFormatDlgItem() override;
-
-    ScCondFormatDlgItem(ScCondFormatDlgItem const&) = default;
-    ScCondFormatDlgItem(ScCondFormatDlgItem&&) = default;
-    ScCondFormatDlgItem& operator=(ScCondFormatDlgItem const&) = delete; // due to SfxPoolItem
-    ScCondFormatDlgItem& operator=(ScCondFormatDlgItem&&) = delete; // due to SfxPoolItem
-
-    virtual bool operator==(const SfxPoolItem&) const override;
-    virtual ScCondFormatDlgItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    ScCondFormatDlgData(ScCondFormatDlgData const&) = default;
+    ScCondFormatDlgData(ScCondFormatDlgData&&) = default;
 
     bool IsManaged() const;
     condformat::dialog::ScCondFormatDialogType GetDialogType() const;
