@@ -6602,10 +6602,16 @@ void ScGridWindow::DeleteSelectionOverlay()
 
 void ScGridWindow::UpdateSelectionOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    const MapMode aDrawMode = GetDrawMapMode();
+    const MapMode aOldMode = GetMapMode();
+    comphelper::ScopeGuard aMapModeGuard(
+        [&aOldMode, &aDrawMode, this] {
+            if (aOldMode != aDrawMode)
+                SetMapMode(aOldMode);
+        }
+    );
+    if (aOldMode != aDrawMode)
+        SetMapMode(aDrawMode);
 
     DeleteSelectionOverlay();
     std::vector<tools::Rectangle> aRects;
@@ -6677,9 +6683,6 @@ void ScGridWindow::UpdateSelectionOverlay()
             ScInputHandler::SendReferenceMarks(pViewShell, aReferenceMarks);
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::UpdateHighlightOverlay()
@@ -6842,10 +6845,16 @@ void ScGridWindow::UpdateDragRectOverlay()
     bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
 
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    const MapMode aDrawMode = GetDrawMapMode();
+    const MapMode aOldMode = GetMapMode();
+    comphelper::ScopeGuard aMapModeGuard(
+        [&aOldMode, &aDrawMode, this] {
+            if (aOldMode != aDrawMode)
+                SetMapMode(aOldMode);
+        }
+    );
+    if (aOldMode != aDrawMode)
+        SetMapMode(aDrawMode);
 
     DeleteDragRectOverlay();
 
@@ -6998,9 +7007,6 @@ void ScGridWindow::UpdateDragRectOverlay()
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteHeaderOverlay()
@@ -7010,10 +7016,16 @@ void ScGridWindow::DeleteHeaderOverlay()
 
 void ScGridWindow::UpdateHeaderOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    const MapMode aDrawMode = GetDrawMapMode();
+    const MapMode aOldMode = GetMapMode();
+    comphelper::ScopeGuard aMapModeGuard(
+        [&aOldMode, &aDrawMode, this] {
+            if (aOldMode != aDrawMode)
+                SetMapMode(aOldMode);
+        }
+    );
+    if (aOldMode != aDrawMode)
+        SetMapMode(aDrawMode);
 
     DeleteHeaderOverlay();
 
@@ -7044,9 +7056,6 @@ void ScGridWindow::UpdateHeaderOverlay()
             mpOOHeader->append(std::move(pOverlay));
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteShrinkOverlay()
@@ -7056,10 +7065,16 @@ void ScGridWindow::DeleteShrinkOverlay()
 
 void ScGridWindow::UpdateShrinkOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    const MapMode aDrawMode = GetDrawMapMode();
+    const MapMode aOldMode = GetMapMode();
+    comphelper::ScopeGuard aMapModeGuard(
+        [&aOldMode, &aDrawMode, this] {
+            if (aOldMode != aDrawMode)
+                SetMapMode(aOldMode);
+        }
+    );
+    if (aOldMode != aDrawMode)
+        SetMapMode(aDrawMode);
 
     DeleteShrinkOverlay();
 
@@ -7111,9 +7126,6 @@ void ScGridWindow::UpdateShrinkOverlay()
             mpOOShrink->append(std::move(pOverlay));
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteSparklineGroupOverlay()
@@ -7123,9 +7135,14 @@ void ScGridWindow::DeleteSparklineGroupOverlay()
 
 void ScGridWindow::UpdateSparklineGroupOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-
-    MapMode aOldMode = GetMapMode();
+    const MapMode aDrawMode = GetDrawMapMode();
+    const MapMode aOldMode = GetMapMode();
+    comphelper::ScopeGuard aMapModeGuard(
+        [&aOldMode, &aDrawMode, this] {
+            if (aOldMode != aDrawMode)
+                SetMapMode(aOldMode);
+        }
+    );
     if (aOldMode != aDrawMode)
         SetMapMode(aDrawMode);
 
@@ -7174,9 +7191,6 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
             }
         }
     }
-
-    if (aOldMode != aDrawMode)
-        SetMapMode(aOldMode);
 }
 
 // #i70788# central method to get the OverlayManager safely
