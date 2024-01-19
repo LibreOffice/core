@@ -325,7 +325,13 @@ published service CharacterProperties
 
 
     /** This optional property determines if the word can be hyphenated at the
-        character.
+        character by automatic hyphenation.
+
+        <p>Setting to `true` will disable hyphenation enabled by ParaIsHyphenation.</p>
+
+        <p>Note: implemented since LibreOffice 24.2.</p>
+
+        @see ParaIsHyphenation
      */
     [optional, property] boolean CharNoHyphenation;
 

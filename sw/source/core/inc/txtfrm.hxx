@@ -587,7 +587,7 @@ public:
     TextFrameIndex GetDropLen(TextFrameIndex nWishLen) const;
 
     LanguageType GetLangOfChar(TextFrameIndex nIndex, sal_uInt16 nScript,
-            bool bNoChar = false) const;
+            bool bNoChar = false, bool bNoneIfNoHyphenation = false ) const;
 
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void CheckDirection( bool bVert ) override;

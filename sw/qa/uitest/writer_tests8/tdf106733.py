@@ -12,9 +12,9 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.linguistic.linguservice import get_lingu_service_manager
 from com.sun.star.lang import Locale
 
-# handle tdf#119908 smart justify with automatic hyphenation
+# handle tdf#106733 hyphenation of words disabled by character formatting
 
-class tdf159102(UITestCase):
+class tdf106733(UITestCase):
     def is_supported_locale(self, language, country):
         xLinguServiceManager = get_lingu_service_manager(self.ui_test._xContext)
         xHyphenator = xLinguServiceManager.getHyphenator()
@@ -40,8 +40,8 @@ class tdf159102(UITestCase):
             xxLanguageEntryWritingAidsEntry = xLanguageEntry.getChild('1')
             xxLanguageEntryWritingAidsEntry.executeAction("SELECT", tuple())          # Writing Aids
 
-            # add hyphenation "cur=sus" and "ege=stas" to the custom dictionary
-            # to solve the non-accessible hyphenation patterns for the test
+            # add hyphenations to the custom dictionary to solve the non-accessible
+            # hyphenation patterns for the test
 
             # Select an editable dictionary (list of Ignored words)
             dictionaries = xDialog.getChild("lingudicts")
@@ -59,39 +59,54 @@ class tdf159102(UITestCase):
             # open Edit dialog window
             edit = xDialog.getChild("lingudictsedit")
             with self.ui_test.execute_blocking_action(edit.executeAction, args=('CLICK', ()), close_button="close") as xEdit:
-                # write cur=sus into the input box
+                # add in=ertially and ex=cept to the custom hyphenations
                 inputbox = xEdit.getChild("word")
-                inputbox.executeAction("TYPE", mkPropertyValues({"TEXT": "cur=sus"}))
+                inputbox.executeAction("TYPE", mkPropertyValues({"TEXT": "ex=cept"}))
                 add = xEdit.getChild("newreplace")
                 add.executeAction("CLICK", tuple())
-                inputbox.executeAction("TYPE", mkPropertyValues({"TEXT": "ege=stas"}))
+                inputbox.executeAction("TYPE", mkPropertyValues({"TEXT": "in=ertially"}))
                 add.executeAction("CLICK", tuple())
 
-    def test_tdf159102_smart_justify_with_automatic_hyphenation(self):
+    def test_tdf106733_disable_hyphenation(self):
         supported_locale = self.is_supported_locale("en", "US")
         if not supported_locale:
             self.skipTest("no hyphenation patterns for en_US available")
 
-        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-        with self.ui_test.load_file(get_url_for_data_file("tdf159102.fodt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf106733.fodt")) as writer_doc:
             # we must not depend on the installed hyphenation patterns,
-            # so extend user dictionary temporarily with the hyphenation cur=sus and ege=stas
+            # so extend user dictionary temporarily with the requested hyphenations
             self.set_custom_hyphenation()
-            xToolkit.processEventsToIdle()
-            # delete the text of the first line
-            self.xUITest.executeCommand(".uno:GoToEndOfLine")
-            self.xUITest.executeCommand('.uno:StartOfDocumentSel')
-            self.xUITest.executeCommand('.uno:Delete')
-            paragraphs = writer_doc.Text.createEnumeration()
-            para1 = paragraphs.nextElement()
-            # This was "stas.", i.e. too much shrinking
-            self.assertEqual("sus egestas.", para1.String)
 
-            # check next paragraph (containing different text portions)
-            self.xUITest.executeCommand(".uno:GoDown")
+            # delete the text of the first line
+            for i in range(5):
+                self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoToEndOfLine")
             self.xUITest.executeCommand('.uno:StartOfDocumentSel')
             self.xUITest.executeCommand('.uno:Delete')
             paragraphs = writer_doc.Text.createEnumeration()
             para1 = paragraphs.nextElement()
-            self.assertEqual("sus egestas.", para1.String)
+            # check default "ex=cept" hyphenation
+            self.assertEqual(True, para1.String.startswith("cept"))
+
+            # check disabled hyphenations (by direct character formatting)
+            for i in range(6):
+                self.xUITest.executeCommand(".uno:GoDown")
+            self.xUITest.executeCommand(".uno:GoToEndOfLine")
+            self.xUITest.executeCommand('.uno:StartOfDocumentSel')
+            self.xUITest.executeCommand('.uno:Delete')
+            paragraphs = writer_doc.Text.createEnumeration()
+            para1 = paragraphs.nextElement()
+            # This was False (the line started with "cept", because of the enabled hyphenation)
+            self.assertEqual(True, para1.String.startswith(" except"))
+
+            # check disabled hyphenations (by character style)
+            for i in range(6):
+                self.xUITest.executeCommand(".uno:GoDown")
+            self.xUITest.executeCommand(".uno:GoToEndOfLine")
+            self.xUITest.executeCommand('.uno:StartOfDocumentSel')
+            self.xUITest.executeCommand('.uno:Delete')
+            paragraphs = writer_doc.Text.createEnumeration()
+            para1 = paragraphs.nextElement()
+            # This was False (the line started with "cept", because of the enabled hyphenation)
+            self.assertEqual(True, para1.String.startswith(" except"))
+
