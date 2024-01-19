@@ -670,6 +670,10 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
 
 OUString SfxHelp::GetURLHelpText(std::u16string_view aURL)
 {
+    // hyperlinks are handled differently in Online
+    if (comphelper::LibreOfficeKit::isActive())
+        return OUString();
+
     bool bCtrlClickHlink = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
 
     // "ctrl-click to follow link:" for not MacOS
