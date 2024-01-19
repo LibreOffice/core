@@ -2785,8 +2785,6 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
              Application::SetDialogCancelMode(DialogCancelMode::LOKSilent);
         }
 
-        const OUString sFilterOptions = aOptions;
-
         rtl::Reference<LOKInteractionHandler> const pInteraction(
             new LOKInteractionHandler("load", pLib));
         auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
@@ -2822,7 +2820,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // as regular files, otherwise we cannot save them; it will try
         // to bring saveas dialog which cannot work with LOK case
         uno::Sequence<css::beans::PropertyValue> aFilterOptions{
-            comphelper::makePropertyValue("FilterOptions", sFilterOptions),
+            comphelper::makePropertyValue("FilterOptions", aOptions),
             comphelper::makePropertyValue("InteractionHandler", xInteraction),
             comphelper::makePropertyValue("MacroExecutionMode", nMacroExecMode),
             comphelper::makePropertyValue("AsTemplate", false),
