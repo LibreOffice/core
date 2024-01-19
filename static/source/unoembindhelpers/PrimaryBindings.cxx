@@ -8,7 +8,6 @@
  */
 #ifdef EMSCRIPTEN
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XReference.hpp>
 
 #include <emscripten/bind.h>
 
