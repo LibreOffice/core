@@ -1016,7 +1016,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             natvis_path = os.path.join(gbuildparser.srcdir, 'solenv/vs/LibreOffice.natvis')
             f.write('\t\t%(natvis)s = %(natvis)s\n' % {'natvis': natvis_path})
             # The natstepfilter file allows to skip specific functions when stepping into in debugging
-            natstepfilter_path = os.path.join(gbuildparser.srcdir, 'solenv/vs/.natstepfilter')
+            natstepfilter_path = os.path.join(gbuildparser.srcdir, 'solenv/vs/LibreOffice.natstepfilter')
             f.write('\t\t%(natstepfilter)s = %(natstepfilter)s\n' % {'natstepfilter': natstepfilter_path})
             f.write('\tEndProjectSection\n')
             f.write('EndProject\n')
