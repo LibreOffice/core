@@ -111,7 +111,8 @@ public:
                             SwPaM const*const pCopiedPaM,
                             SwNode& rStartIdx,
                             const bool bCopyFlyAtFly = false,
-                            SwCopyFlags flags = SwCopyFlags::Default) const;
+                            SwCopyFlags flags = SwCopyFlags::Default,
+                            bool bMakeNewFrames = true) const;
 
     /// Parameters for _Rst and lcl_SetTextFormatColl
     //originallyfrom docfmt.cxx

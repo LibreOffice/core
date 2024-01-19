@@ -3828,12 +3828,61 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 
     if (rRg.aStart != rRg.aEnd)
     {
+        ++aSavePos;
+    }
+
+#if OSL_DEBUG_LEVEL > 0
+    {
+        //JP 17.06.99: Bug 66973 - check count only if the selection is in
+        // the same section or there's no section, because sections that are
+        // not fully selected are not copied.
+        const SwSectionNode* pSSectNd = rRg.aStart.GetNode().FindSectionNode();
+        SwNodeIndex aTmpI( rRg.aEnd, -1 );
+        const SwSectionNode* pESectNd = aTmpI.GetNode().FindSectionNode();
+        if( pSSectNd == pESectNd &&
+            !rRg.aStart.GetNode().IsSectionNode() &&
+            !aTmpI.GetNode().IsEndNode() )
+        {
+            // If the range starts with a SwStartNode, it isn't copied
+            SwNodeOffset offset( (rRg.aStart.GetNode().GetNodeType() != SwNodeType::Start) ? 1 : 0 );
+            OSL_ENSURE( rInsPos.GetIndex() - aSavePos.GetIndex() ==
+                    rRg.aEnd.GetIndex() - rRg.aStart.GetIndex() - 1 + offset,
+                    "An insufficient number of nodes were copied!" );
+        }
+    }
+#endif
+
+    {
+        ::sw::UndoGuard const undoGuard(rDest.GetIDocumentUndoRedo());
+        // this must happen before lcl_DeleteRedlines() because it counts nodes
+        CopyFlyInFlyImpl(rRg, pCopiedPaM ? &pCopiedPaM->first : nullptr,
+            // see comment below regarding use of pCopiedPaM->second
+            (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->GetNode())
+                ? pCopiedPaM->second.GetNode()
+                : aSavePos.GetNode(),
+            bCopyFlyAtFly,
+            flags,
+            false);
+    }
+
+    SwNodeRange aCpyRange( aSavePos.GetNode(), rInsPos );
+
+    if( bDelRedlines && ( RedlineFlags::DeleteRedlines & rDest.getIDocumentRedlineAccess().GetRedlineFlags() ))
+        lcl_DeleteRedlines( rRg, aCpyRange );
+
+    rDest.GetNodes().DelDummyNodes( aCpyRange );
+
+    // tdf#159023 create layout frames after DelDummyNodes():
+    // InsertCnt_() does early return on the first SwPlaceholderNode
+    if (rRg.aStart != rRg.aEnd)
+    {
+        --aSavePos; // restore temporarily...
         bool isRecreateEndNode(false);
         if (bMakeNewFrames) // tdf#130685 only after aRedlRest
         {   // recreate from previous node (could be merged now)
             o3tl::sorted_vector<SwTextFrame*> frames;
-            SwTextNode * pNode = aSavePos.GetNode().GetTextNode();
-            SwTextNode *const pEndNode = rInsPos.GetTextNode();
+            SwTextNode * pNode(aSavePos.GetNode().GetTextNode());
+            SwTextNode *const pEndNode(rInsPos.GetTextNode());
             if (pEndNode)
             {
                 SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
@@ -3861,7 +3910,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
                     {
                         if (pFrame->getRootFrame()->HasMergedParas())
                         {
-                            auto const it = frames.find(pFrame);
+                            auto const it(frames.find(pFrame));
                             if (it != frames.end())
                             {
                                 frames.erase(it);
@@ -3885,50 +3934,11 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             // if it was the first node in the document so that MakeFrames()
             // will find the existing (wasn't deleted) frame on it
             SwNodeIndex const end(rInsPos,
-                    SwNodeOffset((!isRecreateEndNode || isAtStartOfSection)
+                SwNodeOffset((!isRecreateEndNode || isAtStartOfSection)
                     ? 0 : +1));
             ::MakeFrames(&rDest, aSavePos.GetNode(), end.GetNode());
         }
     }
-
-#if OSL_DEBUG_LEVEL > 0
-    {
-        //JP 17.06.99: Bug 66973 - check count only if the selection is in
-        // the same section or there's no section, because sections that are
-        // not fully selected are not copied.
-        const SwSectionNode* pSSectNd = rRg.aStart.GetNode().FindSectionNode();
-        SwNodeIndex aTmpI( rRg.aEnd, -1 );
-        const SwSectionNode* pESectNd = aTmpI.GetNode().FindSectionNode();
-        if( pSSectNd == pESectNd &&
-            !rRg.aStart.GetNode().IsSectionNode() &&
-            !aTmpI.GetNode().IsEndNode() )
-        {
-            // If the range starts with a SwStartNode, it isn't copied
-            SwNodeOffset offset( (rRg.aStart.GetNode().GetNodeType() != SwNodeType::Start) ? 1 : 0 );
-            OSL_ENSURE( rInsPos.GetIndex() - aSavePos.GetIndex() ==
-                    rRg.aEnd.GetIndex() - rRg.aStart.GetIndex() - 1 + offset,
-                    "An insufficient number of nodes were copied!" );
-        }
-    }
-#endif
-
-    {
-        ::sw::UndoGuard const undoGuard(rDest.GetIDocumentUndoRedo());
-        CopyFlyInFlyImpl(rRg, pCopiedPaM ? &pCopiedPaM->first : nullptr,
-            // see comment below regarding use of pCopiedPaM->second
-            (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->GetNode())
-                ? pCopiedPaM->second.GetNode()
-                : aSavePos.GetNode(),
-            bCopyFlyAtFly,
-            flags);
-    }
-
-    SwNodeRange aCpyRange( aSavePos.GetNode(), rInsPos );
-
-    if( bDelRedlines && ( RedlineFlags::DeleteRedlines & rDest.getIDocumentRedlineAccess().GetRedlineFlags() ))
-        lcl_DeleteRedlines( rRg, aCpyRange );
-
-    rDest.GetNodes().DelDummyNodes( aCpyRange );
 }
 
 // note: for the redline Show/Hide this must be in sync with
@@ -3938,7 +3948,8 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     SwPaM const*const pCopiedPaM,
     SwNode& rStartIdx,
     const bool bCopyFlyAtFly,
-    SwCopyFlags const flags) const
+    SwCopyFlags const flags,
+    bool const bMakeNewFrames) const
 {
     assert(!pCopiedPaM || pCopiedPaM->End()->GetNode() == rRg.aEnd.GetNode());
 
@@ -4142,7 +4153,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 
         // Copy the format and set the new anchor
         aVecSwFrameFormat.push_back( rDest.getIDocumentLayoutAccess().CopyLayoutFormat( *(*it).GetFormat(),
-                aAnchor, false, true ) );
+                aAnchor, false, bMakeNewFrames) );
         ++it;
     }
 
