@@ -49,10 +49,6 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     bContainsCenter(false)
 {
     OUString sOn( bFooter ? SC_UNO_PAGE_FTRON : SC_UNO_PAGE_HDRON );
-    OUString sContent( bFooter ? SC_UNO_PAGE_RIGHTFTRCON : SC_UNO_PAGE_RIGHTHDRCON );
-    OUString sContentLeft( bFooter ? SC_UNO_PAGE_LEFTFTRCONT : SC_UNO_PAGE_LEFTHDRCONT );
-    OUString sContentFirst( bFooter ? SC_UNO_PAGE_FIRSTFTRCONT : SC_UNO_PAGE_FIRSTHDRCONT );
-    OUString sShareContent( bFooter ? SC_UNO_PAGE_FTRSHARED : SC_UNO_PAGE_HDRSHARED );
     OUString sShareFirstContent( bFooter ? SC_UNO_PAGE_FIRSTFTRSHARED : SC_UNO_PAGE_FIRSTHDRSHARED );
     bool bDisplay( true );
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
@@ -65,6 +61,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     bool bOn(::cppu::any2bool(xPropSet->getPropertyValue( sOn )));
     if( bLeft || bFirst )
     {
+        OUString sShareContent( bFooter ? SC_UNO_PAGE_FTRSHARED : SC_UNO_PAGE_HDRSHARED );
         const OUString sShare = bLeft ? sShareContent : sShareFirstContent;
         if( bOn && bDisplay )
         {
@@ -86,16 +83,16 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     }
     if (bLeft)
     {
-        sCont = sContentLeft;
+        sCont = bFooter ? SC_UNO_PAGE_LEFTFTRCONT : SC_UNO_PAGE_LEFTHDRCONT;
     }
     else if (bFirst)
     {
-        sCont = sContentFirst;
+        sCont = bFooter ? SC_UNO_PAGE_FIRSTFTRCONT : SC_UNO_PAGE_FIRSTHDRCONT;
         xPropSet->setPropertyValue( sShareFirstContent, uno::Any(!bDisplay) );
     }
     else
     {
-        sCont = sContent;
+        sCont = bFooter ? SC_UNO_PAGE_RIGHTFTRCON : SC_UNO_PAGE_RIGHTHDRCON;
     }
     xPropSet->getPropertyValue( sCont ) >>= xHeaderFooterContent;
 }

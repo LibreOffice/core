@@ -583,7 +583,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
 
     Reference< XHierarchicalNameAccess > xHierAccess( getHierAccess( sProvider,
                                                                      "org.openoffice.Office.Common" ) );
-    OUString system( getKey( xHierAccess,"Help/System" ) );
+    configData.system = getKey(xHierAccess,"Help/System");
     bool showBasic( getBooleanKey(xHierAccess,"Help/ShowBasic") );
     OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
@@ -626,8 +626,11 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     {
     }
 
-    OUString productVersion( setupversion + " " + setupextension );
-    OUString locale( getKey( xHierAccess,"L10N/ooLocale" ) );
+    configData.m_vReplacement[0] = utl::ConfigManager::getProductName();
+    configData.m_vReplacement[1] = setupversion + " " + setupextension; // productVersion
+    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
+
+    configData.locale = getKey(xHierAccess,"L10N/ooLocale");
 
     // Determine fileurl from url and locale
     OUString url;
@@ -638,24 +641,24 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     OUString ret;
     sal_Int32 idx;
     osl::DirectoryItem aDirItem;
-    if( osl::FileBase::E_None == osl::DirectoryItem::get( url + locale,aDirItem ) )
-        ret = locale;
-    else if( ( ( idx = locale.indexOf( '-' ) ) != -1 ||
-               ( idx = locale.indexOf( '_' ) ) != -1 ) &&
-             osl::FileBase::E_None == osl::DirectoryItem::get( url + locale.subView( 0,idx ),
+    if( osl::FileBase::E_None == osl::DirectoryItem::get( url + configData.locale, aDirItem ) )
+        ret = configData.locale;
+    else if( ( ( idx = configData.locale.indexOf( '-' ) ) != -1 ||
+               ( idx = configData.locale.indexOf( '_' ) ) != -1 ) &&
+             osl::FileBase::E_None == osl::DirectoryItem::get( url + configData.locale.subView( 0,idx ),
                                                                aDirItem ) )
-        ret = locale.copy( 0,idx );
+        ret = configData.locale.copy( 0,idx );
     else
-        {
-        locale = "en-US";
+    {
+        configData.locale= "en-US";
         ret = "en";
-        }
+    }
     url += ret;
 
     // first of all, try do determine whether there are any *.tree files present
 
     // Start with extensions to set them at the end of the list
-    TreeFileIterator aTreeIt( locale );
+    TreeFileIterator aTreeIt(configData.locale);
     OUString aTreeFile;
     sal_Int32 nFileSize;
     for (;;)
@@ -716,12 +719,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     configData.m_vAdd[2] = 11;
     configData.m_vAdd[3] = 14;
     configData.m_vAdd[4] = 12;
-    configData.m_vReplacement[0] = utl::ConfigManager::getProductName();
-    configData.m_vReplacement[1] = productVersion;
-    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
 
-    configData.system = system;
-    configData.locale = locale;
     configData.appendix =
         "?Language=" +
         configData.locale +

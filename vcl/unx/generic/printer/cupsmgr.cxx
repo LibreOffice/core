@@ -98,7 +98,7 @@ struct GetPPDAttribs
 #pragma GCC diagnostic pop
 #endif
         MutexGuard aGuard( *m_pSyncMutex );
-        m_aResult = aResult;
+        m_aResult = std::move(aResult);
         m_aCondition.set();
         unref();
     }

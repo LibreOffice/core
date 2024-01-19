@@ -54,9 +54,9 @@ void OWriterConnection::construct(const OUString& rURL,
 
     sal_Int32 nLen = rURL.indexOf(':');
     nLen = rURL.indexOf(':', nLen + 1);
-    OUString aDSN(rURL.copy(nLen + 1));
 
-    m_aFileName = aDSN;
+    m_aFileName = rURL.copy(nLen + 1); // DSN
+
     INetURLObject aURL;
     aURL.SetSmartProtocol(INetProtocol::File);
     {
