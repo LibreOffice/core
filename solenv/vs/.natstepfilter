@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StepFilter xmlns="http://schemas.microsoft.com/vstudio/debugger/natstepfilter/2010">
+    <Function>
+        <Name>std::unique_ptr&lt;.*&gt;::operator-&gt;</Name>
+        <Action>NoStepInto</Action>
+    </Function>
+    <Function>
+        <Name>std::shared_ptr&lt;.*&gt;::operator-&gt;</Name>
+        <Action>NoStepInto</Action>
+    </Function>
+    <Function>
+        <Name>tools::SvRef&lt;.*&gt;::operator-&gt;</Name>
+        <Action>NoStepInto</Action>
+    </Function>
+    <Function>
+        <Name>com::sun::star::uno::Reference&lt;.*&gt;::operator-&gt;</Name>
+        <Action>NoStepInto</Action>
+    </Function>
+    <Function>
+        <Name>rtl::Reference&lt;.*&gt;::operator-&gt;</Name>
+        <Action>NoStepInto</Action>
+    </Function>
+</StepFilter>
