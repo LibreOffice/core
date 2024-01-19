@@ -2282,6 +2282,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159050)
                 u"PortionType::Margin"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159271)
+{
+    // Given a document with a field with several spaces in a field content
+    createSwDoc("fld-in-tbl.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Make sure there is only one page, one table with one row and two cells, and one paragraph
+    assertXPath(pXmlDoc, "/root/page"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/tab"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page/body/txt"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt/SwParaPortion"_ostr, 1);
+
+    // Without the fix, this would fail:
+    // - Expected: 1
+    // - Actual  : 16
+    // - In <>, XPath '/root/page/body/tab/row/cell[2]/txt//SwLineLayout' number of nodes is incorrect
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt//SwLineLayout"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt//SwFieldPortion"_ostr, 1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
