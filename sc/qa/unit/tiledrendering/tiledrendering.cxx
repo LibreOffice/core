@@ -3432,11 +3432,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     // what matters is that they are not utterly different rectangles
     // Without fix result is originally:
     // Comparing invalidation rects Left expected 278 actual 1213 Tolerance 50
-    CppUnit::AssertPointEqualWithTolerance("Comparing invalidations topleft",
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(
                                           aView1.m_aInvalidations[0].TopLeft(),
                                           aView2.m_aInvalidations[0].TopLeft(),
                                           100);
-    CppUnit::AssertPointEqualWithTolerance("Comparing invalidations bottomleft",
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(
                                           aView1.m_aInvalidations[0].BottomLeft(),
                                           aView2.m_aInvalidations[0].BottomLeft(),
                                           100);

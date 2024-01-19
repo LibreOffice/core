@@ -56,7 +56,6 @@ $(eval $(call gb_Library_add_exception_objects,test,\
 	test/source/helper/form \
 	test/source/helper/shape \
 	test/source/helper/transferable \
-	test/source/cppunitasserthelper \
 ))
 
 # vim: set noet sw=4 ts=4:
