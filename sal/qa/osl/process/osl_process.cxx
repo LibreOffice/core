@@ -396,7 +396,7 @@ public:
             suBatch.pData,
             nullptr,
             0,
-            osl_Process_NORMAL,
+            osl_Process_HIDDEN,
             nullptr,
             suCWD.pData,
             nullptr,
