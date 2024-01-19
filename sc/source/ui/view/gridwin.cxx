@@ -6169,10 +6169,16 @@ void ScGridWindow::DeleteCopySourceOverlay()
 
 void ScGridWindow::UpdateCopySourceOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    const MapMode aDrawMode = GetDrawMapMode();
+    const MapMode aOldMode = GetMapMode();
+    comphelper::ScopeGuard aMapModeGuard(
+        [&aOldMode, &aDrawMode, this] {
+            if (aOldMode != aDrawMode)
+                SetMapMode(aOldMode);
+        }
+    );
+    if (aOldMode != aDrawMode)
+        SetMapMode(aDrawMode);
 
     DeleteCopySourceOverlay();
 
@@ -6223,9 +6229,6 @@ void ScGridWindow::UpdateCopySourceOverlay()
         xOverlayManager->add(*pDashedBorder);
         mpOOSelectionBorder->append(std::move(pDashedBorder));
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 static std::vector<tools::Rectangle> convertPixelToLogical(
@@ -6416,10 +6419,16 @@ void ScGridWindow::UpdateCursorOverlay()
 {
     ScDocument& rDoc = mrViewData.GetDocument();
 
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    const MapMode aDrawMode = GetDrawMapMode();
+    const MapMode aOldMode = GetMapMode();
+    comphelper::ScopeGuard aMapModeGuard(
+        [&aOldMode, &aDrawMode, this] {
+            if (aOldMode != aDrawMode)
+                SetMapMode(aOldMode);
+        }
+    );
+    if (aOldMode != aDrawMode)
+        SetMapMode(aDrawMode);
 
     // Existing OverlayObjects may be transformed in later versions.
     // For now, just re-create them.
@@ -6578,9 +6587,6 @@ void ScGridWindow::UpdateCursorOverlay()
             }
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::GetCellSelection(std::vector<tools::Rectangle>& rLogicRects)
@@ -6748,10 +6754,16 @@ void ScGridWindow::DeleteAutoFillOverlay()
 
 void ScGridWindow::UpdateAutoFillOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    const MapMode aDrawMode = GetDrawMapMode();
+    const MapMode aOldMode = GetMapMode();
+    comphelper::ScopeGuard aMapModeGuard(
+        [&aOldMode, &aDrawMode, this] {
+            if (aOldMode != aDrawMode)
+                SetMapMode(aOldMode);
+        }
+    );
+    if (aOldMode != aDrawMode)
+        SetMapMode(aDrawMode);
 
     DeleteAutoFillOverlay();
 
@@ -6830,9 +6842,6 @@ void ScGridWindow::UpdateAutoFillOverlay()
         mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
         mpOOAutoFill->append(std::move(pOverlay));
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteDragRectOverlay()
