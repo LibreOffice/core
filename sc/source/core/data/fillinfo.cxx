@@ -1049,13 +1049,16 @@ void ScDocument::FillInfo(
         rArray.MirrorSelfX();
 }
 
-ScTableInfo::ScTableInfo(const SCSIZE capacity)
-    : mpRowInfo(new RowInfo[capacity])
-    , mnArrCount(0)
-    , mnArrCapacity(capacity)
+/// We seem to need to allocate two extra rows here, not sure why
+///
+ScTableInfo::ScTableInfo(SCROW nStartRow, SCROW nEndRow)
+    : mnArrCount(0)
+    , mnArrCapacity(nEndRow - nStartRow + 3)
     , mbPageMode(false)
 {
-    memset(static_cast<void*>(mpRowInfo.get()), 0, mnArrCapacity * sizeof(RowInfo));
+    assert(nStartRow >= 0);
+    assert(nEndRow >= nStartRow);
+    mpRowInfo.reset(new RowInfo[nEndRow - nStartRow + 3] {});
 }
 
 ScTableInfo::~ScTableInfo()
