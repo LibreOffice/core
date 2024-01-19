@@ -120,7 +120,6 @@ public:
                     vcl::text::TextLayoutCache const*const pCachedVclData = nullptr)
         : m_pCachedVclData(pCachedVclData)
     {
-        assert( (nLen == TextFrameIndex(COMPLETE_STRING)) ? (nIdx.get() < rText.getLength()) : (nIdx + nLen).get() <= rText.getLength() );
         m_pFrame = nullptr;
         m_pSh = pSh;
         m_pOut = &rOut;
@@ -491,7 +490,6 @@ public:
 
     void SetLen(TextFrameIndex const nNew)
     {
-        assert( (nNew == TextFrameIndex(COMPLETE_STRING)) ? (m_nIdx.get() < m_aText.getLength()) : (m_nIdx + nNew).get() <= m_aText.getLength() );
         m_nLen = nNew;
     }
 

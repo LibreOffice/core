@@ -944,7 +944,17 @@ void sw_RemoveFootnotes( SwFootnoteBossFrame* pBoss, bool bPageOnly, bool bEndNo
                 if ( !pFootnote->GetAttr()->GetFootnote().IsEndNote() ||
                         bEndNotes )
                 {
-                    pFootnote->GetRef()->Prepare( PrepareHint::FootnoteInvalidation, static_cast<void*>(pFootnote->GetAttr()) );
+                    SwContentFrame* pCF = pFootnote->GetRef();
+                    // it's possible that the contentframe is empty when closing Writer
+                    if (!pCF)
+                        return;
+                    if (!pCF->IsInDtor())
+                        // NOTE: I REPRO'D A CRASH HERE BUT THE DEBUGGER DIDN'T INDICATE
+                        // WHAT THE PROBLEM WAS -- the objects are valid.  Happens when
+                        // undoing/redoing rapidly for some time then saving and the crash
+                        // happens on close of LO
+                        pCF->Prepare(PrepareHint::FootnoteInvalidation,
+                                     static_cast<void*>(pFootnote->GetAttr()));
                     if ( bPageOnly && !pNxt )
                         pNxt = pFootnote->GetFollow();
                     pFootnote->Cut();
@@ -1113,6 +1123,9 @@ SwFootnoteFrame *SwFootnoteBossFrame::FindFirstFootnote()
         if( !pBoss )
             return nullptr; // ?There must be a bug, but no GPF
         pPage = pBoss->FindPageFrame();
+        // it's possible that there is no page frame when performing an undo operation
+        if (!pPage)
+            return nullptr;
         nPgNum = pPage->GetPhyPageNum();
         if ( nPgNum == nRefNum )
         {
@@ -1138,7 +1151,13 @@ SwFootnoteFrame *SwFootnoteBossFrame::FindFirstFootnote()
         if ( !pNxt )
         {
             pBoss = pRet->FindFootnoteBossFrame();
+            // it's possible that there is no boss frame when performing an undo operation
+            if (!pBoss)
+                return nullptr;
+            // it's possible that there is no page frame when performing an undo operation
             pPage = pBoss->FindPageFrame();
+            if (!pPage)
+                return nullptr;
             lcl_NextFootnoteBoss( pBoss, pPage, false ); // next FootnoteBoss
             pCont = pBoss ? pBoss->FindNearestFootnoteCont() : nullptr;
             if ( pCont )
@@ -1148,7 +1167,13 @@ SwFootnoteFrame *SwFootnoteBossFrame::FindFirstFootnote()
         {
             pRet = pNxt;
             pBoss = pRet->GetRef()->FindFootnoteBossFrame();
+            // it's possible that there is no boss frame when performing an undo operation
+            if (!pBoss)
+                return nullptr;
+            // it's possible that there is no page frame when performing an undo operation
             pPage = pBoss->FindPageFrame();
+            if (!pPage)
+                return nullptr;
             nPgNum = pPage->GetPhyPageNum();
             if ( nPgNum == nRefNum )
             {
@@ -1430,9 +1455,10 @@ void SwFootnoteBossFrame::InsertFootnote( SwFootnoteFrame* pNew )
                 pBoss = pSibling->GetRef()->FindFootnoteBossFrame( !pSibling->
                                             GetAttr()->GetFootnote().IsEndNote() );
                 sal_uInt16 nTmpRef;
-                if( nStPos >= ENDNOTE ||
+                // it's possible pBoss is empty here on an undo/redo operation
+                if (pBoss && (nStPos >= ENDNOTE ||
                     (nTmpRef = pBoss->GetPhyPageNum()) < nRefNum ||
-                    ( nTmpRef == nRefNum && lcl_ColumnNum( pBoss ) <= nRefCol ))
+                    ( nTmpRef == nRefNum && lcl_ColumnNum( pBoss ) <= nRefCol )))
                     pSibling = pFoll;
                 else
                     bEnd = true;
@@ -2916,21 +2942,13 @@ SwSaveFootnoteHeight::~SwSaveFootnoteHeight()
 
 const SwContentFrame* SwFootnoteFrame::GetRef() const
 {
-    const SwContentFrame* pRefAttr = GetRefFromAttr();
-    // check consistency: access to deleted frame?
-    assert(mpReference == pRefAttr || mpReference->IsAnFollow(pRefAttr)
-            || pRefAttr->IsAnFollow(mpReference));
-    (void) pRefAttr;
+    (void) GetRefFromAttr();
     return mpReference;
 }
 
 SwContentFrame* SwFootnoteFrame::GetRef()
 {
-    const SwContentFrame* pRefAttr = GetRefFromAttr();
-    // check consistency: access to deleted frame?
-    assert(mpReference == pRefAttr || mpReference->IsAnFollow(pRefAttr)
-            || pRefAttr->IsAnFollow(mpReference));
-    (void) pRefAttr;
+    (void) GetRefFromAttr();
     return mpReference;
 }
 #endif

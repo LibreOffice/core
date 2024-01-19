@@ -475,8 +475,16 @@ const SwContentFrame* SwContentFrame::ImplGetNextContentFrame( bool bFwd ) const
 SwPageFrame* SwFrame::ImplFindPageFrame()
 {
     SwFrame *pRet = this;
-    while ( pRet && !pRet->IsPageFrame() )
+    if (pRet->IsInDtor())
+        return nullptr;
+    while ( pRet )
     {
+        if (pRet->IsInDtor())
+            return nullptr;
+
+        if (pRet->IsPageFrame())
+            break;
+
         if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrame() )
@@ -528,7 +536,7 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
             bMoveToPageFrame = !bFAtEnd && !bNoBalance;
         }
     }
-    while (pRet
+    while (pRet && !pRet->IsInDtor()
            && ((!bMoveToPageFrame && !pRet->IsFootnoteBossFrame())
                || (bMoveToPageFrame && !pRet->IsPageFrame())))
     {
@@ -559,10 +567,14 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
 SwTabFrame* SwFrame::ImplFindTabFrame()
 {
     SwFrame *pRet = this;
+    if (pRet->IsInDtor())
+        return nullptr;
     while ( !pRet->IsTabFrame() )
     {
         pRet = pRet->GetUpper();
         if ( !pRet )
+            return nullptr;
+        if (pRet->IsInDtor())
             return nullptr;
     }
     return static_cast<SwTabFrame*>(pRet);
@@ -571,10 +583,14 @@ SwTabFrame* SwFrame::ImplFindTabFrame()
 SwSectionFrame* SwFrame::ImplFindSctFrame()
 {
     SwFrame *pRet = this;
+    if (pRet->IsInDtor())
+        return nullptr;
     while ( !pRet->IsSctFrame() )
     {
         pRet = pRet->GetUpper();
         if ( !pRet )
+            return nullptr;
+        if (pRet->IsInDtor())
             return nullptr;
     }
     return static_cast<SwSectionFrame*>(pRet);
