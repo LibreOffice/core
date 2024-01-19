@@ -78,6 +78,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/lok.hxx>
@@ -1515,9 +1516,27 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 // open where SdModule::ExecuteNewDocument will launch it instead when that dialog is dismissed
                 if (SfxApplication::IsTipOfTheDayDue() && !bIsHeadlessOrUITest && !IsInModalMode())
                 {
-                    // tdf#127946 pass in argument for dialog parent
-                    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
-                    GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
+                    bool bIsBaseFormOpen = false;
+
+                    const auto xCurrentFrame = GetFrame().GetFrameInterface();
+                    const auto xContext = comphelper::getProcessComponentContext();
+                    const auto xModuleManager = css::frame::ModuleManager::create(xContext);
+                    switch (vcl::EnumContext::GetApplicationEnum(
+                        xModuleManager->identify(xCurrentFrame)))
+                    {
+                        case vcl::EnumContext::Application::WriterForm:
+                            bIsBaseFormOpen = true;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!bIsBaseFormOpen)
+                    {
+                        // tdf#127946 pass in argument for dialog parent
+                        SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
+                        GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {},
+                                                     { &aDocFrame });
+                    }
                 }
 
                 // inform about the community involvement
