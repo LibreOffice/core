@@ -304,7 +304,8 @@ PlotAreaConverter::PlotAreaConverter( const ConverterRoot& rParent, PlotAreaMode
     ConverterBase< PlotAreaModel >( rParent, rModel ),
     mb3dChart( false ),
     mbWall3dChart( false ),
-    mbPieChart( false )
+    mbPieChart( false ),
+    mbSingleSeriesTitle( false )
 {
 }
 
