@@ -5670,13 +5670,13 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                 for (auto n = pFormats->size(); 1 < n;)
                 {
                     SwIterator<SwTextINetFormat, SwCharFormat> aIter(*(*pFormats)[--n]);
-                    for (SwTextINetFormat* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
+                    for (SwTextINetFormat* pFnd = aIter.First(); pFnd; pFnd = aIter.Next())
                     {
                         if (pTextINetFormat == pFnd)
                         {
                             BringURLFieldsToAttention(SwGetINetAttrs {SwGetINetAttr(pCnt->GetName(),
                                                                       *pTextINetFormat)});
-                            break;
+                            return;
                         }
                     }
                 }
