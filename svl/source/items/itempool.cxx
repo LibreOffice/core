@@ -33,13 +33,6 @@
 #include <cassert>
 #include <vector>
 
-#ifdef DBG_UTIL
-static size_t nAllDirectlyPooledSfxPoolItemCount(0);
-static size_t nRemainingDirectlyPooledSfxPoolItemCount(0);
-size_t getAllDirectlyPooledSfxPoolItemCount() { return nAllDirectlyPooledSfxPoolItemCount; }
-size_t getRemainingDirectlyPooledSfxPoolItemCount() { return nRemainingDirectlyPooledSfxPoolItemCount; }
-#endif
-
 // WhichIDs that need to set SFX_ITEMINFOFLAG_SUPPORT_SURROGATE in SfxItemInfo
 // to true to allow a register of all items of that type/with that WhichID
 // to be accessible using SfxItemPool::GetItemSurrogates. Created by
@@ -418,7 +411,6 @@ SfxItemPool::SfxItemPool
 , eDefMetric(MapUnit::MapCM)
 , maRegisteredSfxItemSets()
 , maRegisteredSfxPoolItemHolders()
-, maDirectPutItems()
 , mbPreDeleteDone(false)
 {
     eDefMetric = MapUnit::MapTwip;
@@ -471,7 +463,6 @@ SfxItemPool::SfxItemPool
 , eDefMetric(MapUnit::MapCM)
 , maRegisteredSfxItemSets()
 , maRegisteredSfxPoolItemHolders()
-, maDirectPutItems()
 , mbPreDeleteDone(false)
 {
     eDefMetric = rPool.eDefMetric;
@@ -698,11 +689,6 @@ void SfxItemPool::Delete()
     // Inform e.g. running Requests
     aBC.Broadcast( SfxHint( SfxHintId::Dying ) );
 
-    // delete direct put items, may assert here when not empty
-    for (const auto& rCand : maDirectPutItems)
-        delete rCand;
-    maDirectPutItems.clear();
-
     // default items
     for (auto rItemPtr : maPoolDefaults)
     {
@@ -768,33 +754,6 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
     {
         assert(false && "unknown WhichId - cannot reset pool default");
     }
-}
-
-const SfxPoolItem& SfxItemPool::DirectPutItemInPool(const SfxPoolItem& rItem)
-{
-#ifdef DBG_UTIL
-    nAllDirectlyPooledSfxPoolItemCount++;
-    nRemainingDirectlyPooledSfxPoolItemCount++;
-#endif
-    // use SfxPoolItemHolder now to secure lifetime
-    SfxPoolItemHolder* pHolder(new SfxPoolItemHolder(*GetMasterPool(), &rItem));
-    GetMasterPool()->maDirectPutItems.insert(pHolder);
-    return *pHolder->getItem();
-}
-
-void SfxItemPool::DirectRemoveItemFromPool(const SfxPoolItem& rItem)
-{
-#ifdef DBG_UTIL
-    nRemainingDirectlyPooledSfxPoolItemCount--;
-#endif
-    directPutSfxPoolItemHolders& rDirects(GetMasterPool()->maDirectPutItems);
-    for (directPutSfxPoolItemHolders::iterator aIter(rDirects.begin()); aIter != rDirects.end(); aIter++)
-        if ((*aIter)->getItem() == &rItem)
-        {
-            delete *aIter;
-            rDirects.erase(aIter);
-            break;
-        }
 }
 
 const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const

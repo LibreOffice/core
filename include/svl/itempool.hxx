@@ -31,12 +31,15 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 
+// flag definitions to be used for _nItemInfoFlags
+// in SfxItemInfo
+#define SFX_ITEMINFOFLAG_NONE               0x0000
+
 // Defines if this Item needs to be registered at the pool
 // to make it accessible for the GetItemSurrogates call. It
 // will not be included when this flag is not set, but also
 // needs no registration. There are SAL_INFO calls in the
 // GetItemSurrogates impl that will mention that
-#define SFX_ITEMINFOFLAG_NONE               0x0000
 #define SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  0x0001
 
 struct SfxItemInfo
@@ -51,15 +54,9 @@ struct SfxItemInfo
     sal_uInt16  _nItemInfoFlags;
 };
 
-#ifdef DBG_UTIL
-SVL_DLLPUBLIC size_t getAllDirectlyPooledSfxPoolItemCount();
-SVL_DLLPUBLIC size_t getRemainingDirectlyPooledSfxPoolItemCount();
-#endif
-
 typedef std::unordered_set<SfxItemSet*> registeredSfxItemSets;
 class SfxPoolItemHolder;
 typedef std::unordered_set<SfxPoolItemHolder*> registeredSfxPoolItemHolders;
-typedef std::unordered_set<SfxPoolItemHolder*> directPutSfxPoolItemHolders;
 typedef std::vector<const SfxPoolItem*> ItemSurrogates;
 
 /** Base class for providers of defaults of SfxPoolItems.
@@ -96,7 +93,6 @@ class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
 
     registeredSfxItemSets maRegisteredSfxItemSets;
     registeredSfxPoolItemHolders maRegisteredSfxPoolItemHolders;
-    directPutSfxPoolItemHolders maDirectPutItems;
     bool mbPreDeleteDone;
 
 private:
@@ -186,9 +182,6 @@ public:
     virtual rtl::Reference<SfxItemPool> Clone() const;
     const OUString&                 GetName() const;
 
-    const SfxPoolItem& DirectPutItemInPool(const SfxPoolItem&);
-    void DirectRemoveItemFromPool(const SfxPoolItem&);
-
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
     template<class T> const T&      GetDefaultItem( TypedWhichId<T> nWhich ) const
     { return static_cast<const T&>(GetDefaultItem(sal_uInt16(nWhich))); }
@@ -213,15 +206,15 @@ public:
     };
 
     // Iterate using a lambda/callback with read/write access to registered SfxPoolItems.
-    // If you use this, look for current usages, inside the callback you may
-    // return true; // to continue callback (like 'continue')
-    // return false; // to end callbacks (like 'break')
+    // If you use this (look for current usages) inside the callback you may
+    //   return true; // to continue callback (like 'continue')
+    //   return false; // to end callbacks (like 'break')
     void iterateItemSurrogates(
         sal_uInt16 nWhich,
         const std::function<bool(SfxItemPool::SurrogateData& rData)>& rItemCallback) const;
 
-    // read-only access to registered SfxPoolItems
-    // NOTE: In no case use static_cast and change those Items (!)
+    // Read-only access to registered SfxPoolItems
+    // NOTE: In *no* case use const_cast and change those Items (!)
     // Read commit text for more information
     void GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const;
 

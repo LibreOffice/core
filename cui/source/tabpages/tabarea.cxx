@@ -75,55 +75,46 @@ SvxAreaTabDialog::SvxAreaTabDialog
 
 void SvxAreaTabDialog::SavePalettes()
 {
-    SfxObjectShell* pShell = SfxObjectShell::Current();
+    SfxObjectShell* pShell(SfxObjectShell::Current());
+    if (!pShell)
+    {
+        SAL_WARN("cui.dialogs", "SvxAreaTabDialog: No SfxObjectShell!");
+        return;
+    }
+
     if( mpNewColorList != mpDrawModel->GetColorList() )
     {
         mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewColorList.get()) );
         SvxColorListItem aColorListItem( mpNewColorList, SID_COLOR_TABLE );
-        if ( pShell )
-            pShell->PutItem( aColorListItem );
-        else
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aColorListItem);
+        pShell->PutItem( aColorListItem );
         mpColorList = mpDrawModel->GetColorList();
     }
     if( mpNewGradientList != mpDrawModel->GetGradientList() )
     {
         mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewGradientList.get()) );
         SvxGradientListItem aItem( mpNewGradientList, SID_GRADIENT_LIST );
-        if ( pShell )
-            pShell->PutItem( aItem );
-        else
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
+        pShell->PutItem( aItem );
         mpGradientList = mpDrawModel->GetGradientList();
     }
     if( mpNewHatchingList != mpDrawModel->GetHatchList() )
     {
         mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewHatchingList.get()) );
         SvxHatchListItem aItem( mpNewHatchingList, SID_HATCH_LIST );
-        if ( pShell )
-            pShell->PutItem( aItem );
-        else
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
+        pShell->PutItem( aItem );
         mpHatchingList = mpDrawModel->GetHatchList();
     }
     if( mpNewBitmapList != mpDrawModel->GetBitmapList() )
     {
         mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewBitmapList.get()) );
         SvxBitmapListItem aItem( mpNewBitmapList, SID_BITMAP_LIST );
-        if ( pShell )
-            pShell->PutItem( aItem );
-        else
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
+        pShell->PutItem( aItem );
         mpBitmapList = mpDrawModel->GetBitmapList();
     }
     if( mpNewPatternList != mpDrawModel->GetPatternList() )
     {
         mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewPatternList.get()) );
         SvxPatternListItem aItem( mpNewPatternList, SID_PATTERN_LIST );
-        if( pShell )
-            pShell->PutItem( aItem );
-        else
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
+        pShell->PutItem( aItem );
         mpPatternList = mpDrawModel->GetPatternList();
     }
 
@@ -145,10 +136,7 @@ void SvxAreaTabDialog::SavePalettes()
 
         SvxHatchListItem aItem( mpHatchingList, SID_HATCH_LIST );
         // ToolBoxControls are informed:
-        if ( pShell )
-            pShell->PutItem( aItem );
-        else
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
+        pShell->PutItem( aItem );
     }
 
     if( mnBitmapListState & ChangeType::MODIFIED )
@@ -158,12 +146,7 @@ void SvxAreaTabDialog::SavePalettes()
 
         SvxBitmapListItem aItem( mpBitmapList, SID_BITMAP_LIST );
         // ToolBoxControls are informed:
-        if ( pShell )
-            pShell->PutItem( aItem );
-        else
-        {
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
-        }
+        pShell->PutItem( aItem );
     }
 
     if( mnPatternListState & ChangeType::MODIFIED )
@@ -173,10 +156,7 @@ void SvxAreaTabDialog::SavePalettes()
 
         SvxPatternListItem aItem( mpPatternList, SID_PATTERN_LIST );
         // ToolBoxControls are informed:
-        if( pShell )
-            pShell->PutItem( aItem );
-        else
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
+        pShell->PutItem( aItem );
     }
 
     if( mnGradientListState & ChangeType::MODIFIED )
@@ -186,24 +166,14 @@ void SvxAreaTabDialog::SavePalettes()
 
         SvxGradientListItem aItem( mpGradientList, SID_GRADIENT_LIST );
         // ToolBoxControls are informed:
-        if ( pShell )
-            pShell->PutItem( aItem );
-        else
-        {
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
-        }
+        pShell->PutItem( aItem );
     }
 
     if (mnColorListState & ChangeType::MODIFIED && mpColorList.is())
     {
         SvxColorListItem aItem( mpColorList, SID_COLOR_TABLE );
         // ToolBoxControls are informed:
-        if ( pShell )
-            pShell->PutItem( aItem );
-        else
-        {
-            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
-        }
+        pShell->PutItem( aItem );
     }
 }
 

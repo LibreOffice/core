@@ -204,10 +204,6 @@ Application::~Application()
     SAL_INFO("vcl.items", "ITEM: " << getAllocatedSfxPoolItemHolderCount() << " SfxPoolItemHolders still allocated at shutdown");
     SAL_INFO("vcl.items", "ITEM: " << getUsedSfxPoolItemHolderCount() << " SfxPoolItemHolders were incarnated during runtime");
 
-    // Same mechanism for SfxPoolItem(s)directly put to a Pool
-    SAL_INFO("vcl.items", "ITEM: " << getRemainingDirectlyPooledSfxPoolItemCount() << " SfxPoolItems still directly put in Pool at shutdown (deleted @Pool destruction)");
-    SAL_INFO("vcl.items", "ITEM: " << getAllDirectlyPooledSfxPoolItemCount() << " SfxPoolItems directly put in Pool");
-
     // Additional call to list still incarnated SfxPoolItems (under 'svl.items')
     listAllocatedSfxPoolItems();
 
