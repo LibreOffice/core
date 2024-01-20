@@ -42,6 +42,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow
     sal_Int32 nTableTop = getXPath(pDump, "//tab/row/infos/bounds"_ostr, "top"_ostr).toInt32();
     // The entire table must be below the rectangle
     CPPUNIT_ASSERT(nTableTop > nRectBottom);
+
+    // pre-emptive test: rectangle "margin" offset against cell, not outside-table-paragraph.
+    // Since layoutInCell is true (as a non-defined default), the cell is the fly reference, thus
+    // the rectangle should start at the paper's edge, 1.3cm to the left of the start of the table.
+    sal_Int32 nRectLeft
+        = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nTableLeft = getXPath(pDump, "//tab/row/infos/bounds"_ostr, "left"_ostr).toInt32();
+    CPPUNIT_ASSERT(nTableLeft > nRectLeft);
 }
 
 } // end of anonymous namespace
