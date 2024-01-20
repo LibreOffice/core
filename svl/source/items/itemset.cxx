@@ -127,7 +127,7 @@ const SfxPoolItemHolder& SfxPoolItemHolder::operator=(const SfxPoolItemHolder& r
     if (this == &rHolder || *this == rHolder)
         return *this;
 
-    // avoid unneccessary unregister/register actions
+    // avoid unnecessary unregister/register actions
     const bool bWasRegistered(nullptr != m_pItem && getPool().NeedsSurrogateSupport(m_pItem->Which()));
     const bool bWillBeRegistered(nullptr != rHolder.m_pItem && rHolder.getPool().NeedsSurrogateSupport(rHolder.m_pItem->Which()));
 
