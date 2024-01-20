@@ -83,7 +83,7 @@ EditEngine* SidebarTextControl::GetEditEngine() const
     OutlinerView* pOutlinerView = mrSidebarWin.GetOutlinerView();
     if (!pOutlinerView)
         return nullptr;
-    return pOutlinerView->GetEditView().GetEditEngine();
+    return &pOutlinerView->GetEditView().getEditEngine();
 }
 
 void SidebarTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -110,14 +110,14 @@ void SidebarTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     EditView* pEditView = GetEditView();
     pEditView->setEditViewCallbacks(this);
 
-    EditEngine* pEditEngine = GetEditEngine();
+    EditEngine& rEditEngine = pEditView->getEditEngine();
     // For tdf#143443 note we want an 'infinite' height initially (which is the
     // editengines default). For tdf#144686 it is helpful if the initial width
     // is the "SidebarWidth" so the calculated text height is always meaningful
     // for layout in the sidebar.
-    Size aPaperSize(mrPostItMgr.GetSidebarWidth(), pEditEngine->GetPaperSize().Height());
-    pEditEngine->SetPaperSize(aPaperSize);
-    pEditEngine->SetRefDevice(mrDocView.GetWrtShell().getIDocumentDeviceAccess().getReferenceDevice(false));
+    Size aPaperSize(mrPostItMgr.GetSidebarWidth(), rEditEngine.GetPaperSize().Height());
+    rEditEngine.SetPaperSize(aPaperSize);
+    rEditEngine.SetRefDevice(mrDocView.GetWrtShell().getIDocumentDeviceAccess().getReferenceDevice(false));
 
     pEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
     pEditView->SetBackgroundColor(aBgColor);

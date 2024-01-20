@@ -159,13 +159,14 @@ class EDITENG_DLLPUBLIC EditView final
 public:
     typedef std::vector<VclPtr<vcl::Window>> OutWindowSet;
 
-public: // Needed for Undo
-    ImpEditView*    GetImpEditView() const      { return pImpEditView.get(); }
-    ImpEditEngine*  GetImpEditEngine() const;
+    ImpEditView* GetImpEditView() const { return pImpEditView.get(); }
+    ImpEditEngine& getImpEditEngine() const;
+
+    void setEditEngine(EditEngine* pEditEngine);
+    EditEngine& getEditEngine() const;
 
 private:
-    std::unique_ptr<ImpEditView>
-                    pImpEditView;
+    std::unique_ptr<ImpEditView> pImpEditView;
     OUString        aDicNameSingle;
 
                     EditView( const EditView& ) = delete;
@@ -182,9 +183,6 @@ public:
     // set EditViewCallbacks for external handling of Repaints/Visualization
     void setEditViewCallbacks(EditViewCallbacks* pEditViewCallbacks);
     EditViewCallbacks* getEditViewCallbacks() const;
-
-    void            SetEditEngine( EditEngine* pEditEngine );
-    EditEngine*     GetEditEngine() const;
 
     void            SetWindow( vcl::Window* pWin );
     vcl::Window*    GetWindow() const;

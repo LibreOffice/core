@@ -29,7 +29,7 @@
 static void lcl_DoSetSelection( EditView const * pView, sal_uInt16 nPara )
 {
     EPaM aEPaM( nPara, 0 );
-    EditPaM aPaM( pView->GetImpEditEngine()->CreateEditPaM( aEPaM ) );
+    EditPaM aPaM = pView->getImpEditEngine().CreateEditPaM(aEPaM);
     aPaM.SetIndex( aPaM.GetNode()->Len() );
     EditSelection aSel( aPaM, aPaM );
     pView->GetImpEditView()->SetEditSelection( aSel );

@@ -178,11 +178,11 @@ Point LOKSpecialPositioning::GetRefPoint() const
 
 //  class ImpEditView
 
-ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow ) :
+ImpEditView::ImpEditView( EditView* pView, EditEngine* pEditEngine, vcl::Window* pWindow ) :
     pEditView(pView),
     mpViewShell(nullptr),
     mpOtherShell(nullptr),
-    pEditEngine(pEng),
+    mpEditEngine(pEditEngine),
     pOutWin(pWindow),
     nInvMore(1),
     nControl(EVControlBits::AUTOSCROLL | EVControlBits::ENABLEPASTE),
@@ -193,7 +193,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     bReadOnly(false),
     bClickedInSelection(false),
     bActiveDragAndDropListener(false),
-    aOutArea( Point(), pEng->GetPaperSize() ),
+    aOutArea( Point(), mpEditEngine->GetPaperSize() ),
     eSelectionMode(EESelectionMode::Std),
     eAnchorMode(EEAnchorMode::TopLeft),
     mpEditViewCallbacks(nullptr),
@@ -201,8 +201,8 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     mbSuppressLOKMessages(false),
     mbNegativeX(false)
 {
-    aEditSelection.Min() = pEng->GetEditDoc().GetStartPaM();
-    aEditSelection.Max() = pEng->GetEditDoc().GetEndPaM();
+    aEditSelection.Min() = mpEditEngine->GetEditDoc().GetStartPaM();
+    aEditSelection.Max() = mpEditEngine->GetEditDoc().GetEndPaM();
 
     SelectionChanged();
 }
@@ -248,12 +248,14 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
     SelectionChanged();
 
     if (comphelper::LibreOfficeKit::isActive())
-        // Tiled rendering: selections are only painted when we are in selection mode.
-        pEditEngine->SetInSelectionMode(aEditSelection.HasRange());
-
-    if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
     {
-        const EditDoc& rDoc = pEditEngine->GetEditDoc();
+        // Tiled rendering: selections are only painted when we are in selection mode.
+        getEditEngine().SetInSelectionMode(aEditSelection.HasRange());
+    }
+
+    if (getImpEditEngine().GetNotifyHdl().IsSet() )
+    {
+        const EditDoc& rDoc = getEditEngine().GetEditDoc();
         const EditPaM pmEnd = rDoc.GetEndPaM();
         EENotifyType eNotifyType;
         if (rDoc.Count() > 1 &&
@@ -267,12 +269,13 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
             eNotifyType = EE_NOTIFY_TEXTVIEWSELECTIONCHANGED;
         }
         EENotify aNotify( eNotifyType );
-        pEditEngine->pImpEditEngine->GetNotifyHdl().Call( aNotify );
+        getImpEditEngine().GetNotifyHdl().Call( aNotify );
     }
-    if(pEditEngine->pImpEditEngine->IsFormatted())
+
+    if (getImpEditEngine().IsFormatted())
     {
         EENotify aNotify(EE_NOTIFY_PROCESSNOTIFICATIONS);
-        pEditEngine->pImpEditEngine->GetNotifyHdl().Call(aNotify);
+        getImpEditEngine().GetNotifyHdl().Call(aNotify);
     }
 }
 
@@ -489,9 +492,9 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     if ( !pRegion && !comphelper::LibreOfficeKit::isActive())
     {
-        if ( !pEditEngine->pImpEditEngine->IsUpdateLayout() )
+        if (!getImpEditEngine().IsUpdateLayout())
             return;
-        if ( pEditEngine->pImpEditEngine->IsInUndo() )
+        if (getImpEditEngine().IsInUndo())
             return;
 
         if ( !aTmpSel.HasRange() )
@@ -500,8 +503,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
         // aTmpOutArea: if OutputArea > Paper width and
         // Text > Paper width ( over large fields )
         tools::Rectangle aTmpOutArea( aOutArea );
-        if ( aTmpOutArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
-            aTmpOutArea.SetRight( aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width() );
+        if ( aTmpOutArea.GetWidth() > getImpEditEngine().GetPaperSize().Width() )
+            aTmpOutArea.SetRight( aTmpOutArea.Left() + getImpEditEngine().GetPaperSize().Width() );
         rTarget.IntersectClipRegion( aTmpOutArea );
 
         if (pOutWin && pOutWin->GetCursor())
@@ -511,20 +514,20 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     if (comphelper::LibreOfficeKit::isActive() || pRegion)
         pPolyPoly = tools::PolyPolygon();
 
-    DBG_ASSERT( !pEditEngine->IsIdleFormatterActive(), "DrawSelectionXOR: Not formatted!" );
-    aTmpSel.Adjust( pEditEngine->GetEditDoc() );
+    DBG_ASSERT(!getEditEngine().IsIdleFormatterActive(), "DrawSelectionXOR: Not formatted!");
+    aTmpSel.Adjust(getEditEngine().GetEditDoc());
 
     ContentNode* pStartNode = aTmpSel.Min().GetNode();
     ContentNode* pEndNode = aTmpSel.Max().GetNode();
-    const sal_Int32 nStartPara = pEditEngine->GetEditDoc().GetPos(pStartNode);
-    const sal_Int32 nEndPara = pEditEngine->GetEditDoc().GetPos(pEndNode);
+    const sal_Int32 nStartPara = getEditEngine().GetEditDoc().GetPos(pStartNode);
+    const sal_Int32 nEndPara = getEditEngine().GetEditDoc().GetPos(pEndNode);
     if (nStartPara == EE_PARA_NOT_FOUND || nEndPara == EE_PARA_NOT_FOUND)
         return;
 
     bool bStartHandleVisible = false;
     bool bEndHandleVisible = false;
     bool bLOKCalcRTL = mpLOKSpecialPositioning &&
-        (mpLOKSpecialPositioning->IsLayoutRTL() || pEditEngine->IsRightToLeft(nStartPara));
+        (mpLOKSpecialPositioning->IsLayoutRTL() || getEditEngine().IsRightToLeft(nStartPara));
 
     auto DrawHighlight = [&, nStartLine = sal_Int32(0), nEndLine = sal_Int32(0)](
                              const ImpEditEngine::LineAreaInfo& rInfo) mutable {
@@ -575,9 +578,9 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             if (nEndIndex < nStartIndex)
                 nEndIndex = nStartIndex;
 
-            tools::Rectangle aTmpRect(pEditEngine->pImpEditEngine->GetEditCursor(
+            tools::Rectangle aTmpRect(getImpEditEngine().GetEditCursor(
                 rInfo.rPortion, *rInfo.pLine, nStartIndex, GetCursorFlags::NONE));
-            const Size aLineOffset = pEditEngine->pImpEditEngine->getTopLeftDocOffset(rInfo.aArea);
+            const Size aLineOffset = getImpEditEngine().getTopLeftDocOffset(rInfo.aArea);
             aTmpRect.Move(0, aLineOffset.Height());
 
             // Only paint if in the visible range ...
@@ -595,7 +598,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' position
             if (!bPartOfLine)
             {
-                Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(rInfo.rPortion, *rInfo.pLine);
+                Range aLineXPosStartEnd = getEditEngine().GetLineXPosStartEnd(rInfo.rPortion, *rInfo.pLine);
                 aTmpRect.SetLeft(aLineXPosStartEnd.Min());
                 aTmpRect.SetRight(aLineXPosStartEnd.Max());
                 aTmpRect.Move(aLineOffset.Width(), 0);
@@ -609,15 +612,15 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
                 while (nTmpStartIndex < nEndIndex)
                 {
-                    pEditEngine->pImpEditEngine->GetRightToLeft(rInfo.nPortion, nTmpStartIndex + 1,
+                    getImpEditEngine().GetRightToLeft(rInfo.nPortion, nTmpStartIndex + 1,
                                                                 &nWritingDirStart, &nTmpEndIndex);
                     if (nTmpEndIndex > nEndIndex)
                         nTmpEndIndex = nEndIndex;
 
                     DBG_ASSERT(nTmpEndIndex > nTmpStartIndex, "DrawSelectionXOR, Start >= End?");
 
-                    tools::Long nX1 = pEditEngine->GetXPos(rInfo.rPortion, *rInfo.pLine, nTmpStartIndex, true);
-                    tools::Long nX2 = pEditEngine->GetXPos(rInfo.rPortion, *rInfo.pLine, nTmpEndIndex);
+                    tools::Long nX1 = getEditEngine().GetXPos(rInfo.rPortion, *rInfo.pLine, nTmpStartIndex, true);
+                    tools::Long nX2 = getEditEngine().GetXPos(rInfo.rPortion, *rInfo.pLine, nTmpEndIndex);
 
                     aTmpRect.SetLeft(std::min(nX1, nX2));
                     aTmpRect.SetRight(std::max(nX1, nX2));
@@ -631,7 +634,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
         }
         return ImpEditEngine::CallbackResult::Continue;
     };
-    pEditEngine->pImpEditEngine->IterateLineAreas(DrawHighlight, ImpEditEngine::IterFlag::none);
+    getImpEditEngine().IterateLineAreas(DrawHighlight, ImpEditEngine::IterFlag::none);
 
     if (comphelper::LibreOfficeKit::isActive() && mpViewShell && pOutWin)
         lokSelectionCallback(pPolyPoly, bStartHandleVisible, bEndHandleVisible);
@@ -742,12 +745,12 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
 
 bool ImpEditView::IsVertical() const
 {
-    return pEditEngine->pImpEditEngine->IsEffectivelyVertical();
+    return getImpEditEngine().IsEffectivelyVertical();
 }
 
 bool ImpEditView::IsTopToBottom() const
 {
-    return pEditEngine->pImpEditEngine->IsTopToBottom();
+    return getImpEditEngine().IsTopToBottom();
 }
 
 tools::Rectangle ImpEditView::GetVisDocArea() const
@@ -760,14 +763,14 @@ Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
     // Window Position => Position Document
     Point aPoint;
 
-    if ( !pEditEngine->pImpEditEngine->IsEffectivelyVertical() )
+    if (!getImpEditEngine().IsEffectivelyVertical())
     {
         aPoint.setX( rWindowPos.X() - aOutArea.Left() + GetVisDocLeft() );
         aPoint.setY( rWindowPos.Y() - aOutArea.Top() + GetVisDocTop() );
     }
     else
     {
-        if (pEditEngine->pImpEditEngine->IsTopToBottom())
+        if (getImpEditEngine().IsTopToBottom())
         {
             aPoint.setX( rWindowPos.Y() - aOutArea.Top() + GetVisDocLeft() );
             aPoint.setY( aOutArea.Right() - rWindowPos.X() + GetVisDocTop() );
@@ -787,14 +790,14 @@ Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
     // Document position => window position
     Point aPoint;
 
-    if ( !pEditEngine->pImpEditEngine->IsEffectivelyVertical() )
+    if (!getImpEditEngine().IsEffectivelyVertical())
     {
         aPoint.setX( rDocPos.X() + aOutArea.Left() - GetVisDocLeft() );
         aPoint.setY( rDocPos.Y() + aOutArea.Top() - GetVisDocTop() );
     }
     else
     {
-        if (pEditEngine->pImpEditEngine->IsTopToBottom())
+        if (getImpEditEngine().IsTopToBottom())
         {
             aPoint.setX( aOutArea.Right() - rDocPos.Y() + GetVisDocTop() );
             aPoint.setY( rDocPos.X() + aOutArea.Top() - GetVisDocLeft() );
@@ -815,7 +818,7 @@ tools::Rectangle ImpEditView::GetWindowPos( const tools::Rectangle& rDocRect ) c
     Point aPos( GetWindowPos( rDocRect.TopLeft() ) );
     Size aSz = rDocRect.GetSize();
     tools::Rectangle aRect;
-    if ( !pEditEngine->pImpEditEngine->IsEffectivelyVertical() )
+    if (!getImpEditEngine().IsEffectivelyVertical())
     {
         aRect = tools::Rectangle( aPos, aSz );
     }
@@ -906,7 +909,7 @@ void ImpEditView::ResetOutputArea( const tools::Rectangle& rRect )
     SetOutputArea(rRect);
 
     // invalidate surrounding areas if update is true
-    if(aOldArea.IsEmpty() || !pEditEngine->pImpEditEngine->IsUpdateLayout())
+    if(aOldArea.IsEmpty() || !getImpEditEngine().IsUpdateLayout())
         return;
 
     // #i119885# use grown area if needed; do when getting bigger OR smaller
@@ -965,8 +968,8 @@ void ImpEditView::RecalcOutputArea()
     // X:
     if ( DoAutoWidth() )
     {
-        if ( pEditEngine->pImpEditEngine->GetStatus().AutoPageWidth() )
-            aNewSz.setWidth( pEditEngine->pImpEditEngine->GetPaperSize().Width() );
+        if (getImpEditEngine().GetStatus().AutoPageWidth())
+            aNewSz.setWidth(getImpEditEngine().GetPaperSize().Width());
         switch ( eAnchorMode )
         {
             case EEAnchorMode::TopLeft:
@@ -996,8 +999,8 @@ void ImpEditView::RecalcOutputArea()
     // Y:
     if ( DoAutoHeight() )
     {
-        if ( pEditEngine->pImpEditEngine->GetStatus().AutoPageHeight() )
-            aNewSz.setHeight( pEditEngine->pImpEditEngine->GetPaperSize().Height() );
+        if (getImpEditEngine().GetStatus().AutoPageHeight())
+            aNewSz.setHeight(getImpEditEngine().GetPaperSize().Height());
         switch ( eAnchorMode )
         {
             case EEAnchorMode::TopLeft:
@@ -1105,13 +1108,13 @@ boost::property_tree::ptree getHyperlinkPropTree(const OUString& sText, const OU
 
 tools::Rectangle ImpEditView::ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const
 {
-    tools::Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nShowCursorFlags );
+    tools::Rectangle aEditCursor = getImpEditEngine().PaMtoEditCursor( aPaM, nShowCursorFlags );
     if ( !IsInsertMode() && !aEditSelection.HasRange() )
     {
         if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
         {
             // If we are behind a portion, and the next portion has other direction, we must change position...
-            aEditCursor.SetLeft( pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left() );
+            aEditCursor.SetLeft(getImpEditEngine().PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left() );
             aEditCursor.SetRight( aEditCursor.Left() );
 
             sal_Int32 nTextPortion = rParaPortion.GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
@@ -1122,10 +1125,10 @@ tools::Rectangle ImpEditView::ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nS
             }
             else
             {
-                EditPaM aNext = pEditEngine->CursorRight( aPaM );
-                tools::Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly );
+                EditPaM aNext = getEditEngine().CursorRight( aPaM );
+                tools::Rectangle aTmpRect = getImpEditEngine().PaMtoEditCursor( aNext, GetCursorFlags::TextOnly );
                 if ( aTmpRect.Top() != aEditCursor.Top() )
-                    aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
+                    aTmpRect = getImpEditEngine().PaMtoEditCursor( aNext, GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
                 aEditCursor.SetRight( aTmpRect.Left() );
             }
         }
@@ -1145,11 +1148,11 @@ tools::Rectangle ImpEditView::GetEditCursor() const
     EditPaM aPaM( aEditSelection.Max() );
 
     sal_Int32 nTextPortionStart = 0;
-    sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+    sal_Int32 nPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
     if (nPara == EE_PARA_NOT_FOUND) // #i94322
         return tools::Rectangle();
 
-    ParaPortion const& rParaPortion = pEditEngine->GetParaPortions().getRef(nPara);
+    ParaPortion const& rParaPortion = getEditEngine().GetParaPortions().getRef(nPara);
 
     GetCursorFlags nShowCursorFlags = nExtraCursorFlags | GetCursorFlags::TextOnly;
 
@@ -1173,17 +1176,17 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     if ( ( aOutArea.Left() >= aOutArea.Right() ) && ( aOutArea.Top() >= aOutArea.Bottom() ) )
         return;
 
-    pEditEngine->CheckIdleFormatter();
-    if (!pEditEngine->IsFormatted())
-        pEditEngine->pImpEditEngine->FormatDoc();
+    getEditEngine().CheckIdleFormatter();
+    if (!getEditEngine().IsFormatted())
+        getImpEditEngine().FormatDoc();
 
     // For some reasons I end up here during the formatting, if the Outliner
     // is initialized in Paint, because no SetPool();
-    if ( pEditEngine->pImpEditEngine->IsFormatting() )
+    if (getImpEditEngine().IsFormatting())
         return;
-    if ( !pEditEngine->pImpEditEngine->IsUpdateLayout() )
+    if (!getImpEditEngine().IsUpdateLayout())
         return;
-    if ( pEditEngine->pImpEditEngine->IsInUndo() )
+    if (getImpEditEngine().IsInUndo())
         return;
 
     if (pOutWin && pOutWin->GetCursor() != GetCursor())
@@ -1192,11 +1195,11 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     EditPaM aPaM( aEditSelection.Max() );
 
     sal_Int32 nTextPortionStart = 0;
-    sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+    sal_Int32 nPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
     if (nPara == EE_PARA_NOT_FOUND) // #i94322
         return;
 
-    ParaPortion const& rParaPortion = pEditEngine->GetParaPortions().getRef(nPara);
+    ParaPortion const& rParaPortion = getEditEngine().GetParaPortions().getRef(nPara);
 
     GetCursorFlags nShowCursorFlags = nExtraCursorFlags | GetCursorFlags::TextOnly;
 
@@ -1211,7 +1214,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
     tools::Rectangle aEditCursor = ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, rParaPortion);
 
-    if ( bGotoCursor  ) // && (!pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() ) )
+    if ( bGotoCursor  ) // && (!getImpEditEngine().GetStatus().AutoPageSize() ) )
     {
         // check if scrolling is necessary...
         // if scrolling, then update () and Scroll ()!
@@ -1221,7 +1224,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         tools::Rectangle aTmpVisArea( GetVisDocArea() );
         // aTmpOutArea: if OutputArea > Paper width and
         // Text > Paper width ( over large fields )
-        tools::Long nMaxTextWidth = !IsVertical() ? pEditEngine->pImpEditEngine->GetPaperSize().Width() : pEditEngine->pImpEditEngine->GetPaperSize().Height();
+        tools::Long nMaxTextWidth = !IsVertical() ? getImpEditEngine().GetPaperSize().Width() : getImpEditEngine().GetPaperSize().Height();
         if ( aTmpVisArea.GetWidth() > nMaxTextWidth )
             aTmpVisArea.SetRight( aTmpVisArea.Left() + nMaxTextWidth );
 
@@ -1275,11 +1278,11 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             tools::Long nDiffY = !IsVertical() ? nDocDiffY : (IsTopToBottom() ? nDocDiffX : -nDocDiffX);
 
             if ( nDiffX )
-                pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EditStatusFlags::HSCROLL;
+                getEditEngine().GetInternalEditStatus().GetStatusWord() = getEditEngine().GetInternalEditStatus().GetStatusWord() | EditStatusFlags::HSCROLL;
             if ( nDiffY )
-                pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EditStatusFlags::VSCROLL;
+                getEditEngine().GetInternalEditStatus().GetStatusWord() = getEditEngine().GetInternalEditStatus().GetStatusWord() | EditStatusFlags::VSCROLL;
             Scroll( -nDiffX, -nDiffY );
-            pEditEngine->pImpEditEngine->DelayedCallStatusHdl();
+            getImpEditEngine().DelayedCallStatusHdl();
         }
     }
 
@@ -1351,7 +1354,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 Point aRefPointLogical = GetOutputArea().TopLeft();
                 // Get the relative coordinates w.r.t refpoint in display hmm.
                 aCursorRectPureLogical.Move(-aRefPointLogical.X(), -aRefPointLogical.Y());
-                if (pEditEngine->IsRightToLeft(nPara) || mpLOKSpecialPositioning->IsLayoutRTL())
+                if (getEditEngine().IsRightToLeft(nPara) || mpLOKSpecialPositioning->IsLayoutRTL())
                 {
                     tools::Long nMirrorW = GetOutputArea().GetWidth();
                     tools::Long nLeft = aCursorRectPureLogical.Left(), nRight = aCursorRectPureLogical.Right();
@@ -1410,7 +1413,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             else
             {
                 // is cursor at a misspelled word ?
-                uno::Reference<linguistic2::XSpellChecker1>  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
+                uno::Reference<linguistic2::XSpellChecker1>  xSpeller(getImpEditEngine().GetSpeller());
                 bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
                 EditView* pActiveView = GetEditViewPtr();
 
@@ -1454,7 +1457,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         }
 
         CursorDirection nCursorDir = CursorDirection::NONE;
-        if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
+        if ( IsInsertMode() && !aEditSelection.HasRange() && (getImpEditEngine().HasDifferentRTLLevels(aPaM.GetNode()) ) )
         {
             sal_uInt16 nTextPortion = rParaPortion.GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, bool(nShowCursorFlags & GetCursorFlags::PreferPortionStart) );
             const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[nTextPortion];
@@ -1470,7 +1473,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             GetCursor()->Show();
         {
             SvxFont aFont;
-            pEditEngine->SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
+            getEditEngine().SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
 
             InputContext aInputContext(std::move(aFont), InputContextFlags::Text | InputContextFlags::ExtText);
             if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
@@ -1481,7 +1484,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     }
     else
     {
-        pEditEngine->pImpEditEngine->GetStatus().GetStatusWord() = pEditEngine->pImpEditEngine->GetStatus().GetStatusWord() | EditStatusFlags::CURSOROUT;
+        getImpEditEngine().GetStatus().GetStatusWord() = getImpEditEngine().GetStatus().GetStatusWord() | EditStatusFlags::CURSOROUT;
         GetCursor()->Hide();
         GetCursor()->SetPos( Point( -1, -1 ) );
         GetCursor()->SetSize( Size( 0, 0 ) );
@@ -1499,7 +1502,7 @@ void ImpEditView::ScrollStateChange()
 
 Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRangeCheck )
 {
-    DBG_ASSERT( pEditEngine->pImpEditEngine->IsFormatted(), "Scroll: Not formatted!" );
+    DBG_ASSERT(getImpEditEngine().IsFormatted(), "Scroll: Not formatted!");
     if ( !ndX && !ndY )
         return Pair( 0, 0 );
 
@@ -1533,10 +1536,10 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
             aNewVisArea.AdjustBottom( -ndX );
         }
     }
-    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Bottom() > static_cast<tools::Long>(pEditEngine->pImpEditEngine->GetTextHeight()) ) )
+    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Bottom() > static_cast<tools::Long>(getImpEditEngine().GetTextHeight()) ) )
     {
         // GetTextHeight still optimizing!
-        tools::Long nDiff = pEditEngine->pImpEditEngine->GetTextHeight() - aNewVisArea.Bottom(); // negative
+        tools::Long nDiff = getImpEditEngine().GetTextHeight() - aNewVisArea.Bottom(); // negative
         aNewVisArea.Move( 0, nDiff );   // could end up in the negative area...
     }
     if ( aNewVisArea.Top() < 0 )
@@ -1561,9 +1564,9 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
             aNewVisArea.AdjustRight(ndY );
         }
     }
-    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Right() > static_cast<tools::Long>(pEditEngine->pImpEditEngine->CalcTextWidth( false )) ) )
+    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Right() > static_cast<tools::Long>(getImpEditEngine().CalcTextWidth( false )) ) )
     {
-        tools::Long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( false ) - aNewVisArea.Right();     // negative
+        tools::Long nDiff = getImpEditEngine().CalcTextWidth( false ) - aNewVisArea.Right();     // negative
         aNewVisArea.Move( nDiff, 0 );   // could end up in the negative area...
     }
     if ( aNewVisArea.Left() < 0 )
@@ -1624,10 +1627,10 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
                 pCrsr->Show();
         }
 
-        if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
+        if (getImpEditEngine().GetNotifyHdl().IsSet())
         {
             EENotify aNotify( EE_NOTIFY_TEXTVIEWSCROLLED );
-            pEditEngine->pImpEditEngine->GetNotifyHdl().Call( aNotify );
+            getImpEditEngine().GetNotifyHdl().Call( aNotify );
         }
 
         if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
@@ -1682,10 +1685,10 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
             {
                 if ( !bReadOnly && IsPasteEnabled() )
                 {
-                    pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
+                    getImpEditEngine().UndoActionStart( EDITUNDO_PASTE );
                     uno::Reference<datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
-                    Paste( aClipBoard, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
-                    pEditEngine->pImpEditEngine->UndoActionEnd();
+                    Paste( aClipBoard, getImpEditEngine().GetStatus().AllowPasteSpecial() );
+                    getImpEditEngine().UndoActionEnd();
                     bDone = true;
                 }
             }
@@ -1696,7 +1699,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
     }
 
     if( !bDone )
-        bDone = pEditEngine->PostKeyEvent( rKeyEvent, GetEditViewPtr(), pFrameWin );
+        bDone = getEditEngine().PostKeyEvent( rKeyEvent, GetEditViewPtr(), pFrameWin );
 
     return bDone;
 }
@@ -1720,36 +1723,36 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
         CutCopy( aClipBoard, false );
     }
 
-    return pEditEngine->pImpEditEngine->MouseButtonUp( rMouseEvent, GetEditViewPtr() );
+    return getImpEditEngine().MouseButtonUp( rMouseEvent, GetEditViewPtr() );
 }
 
 void ImpEditView::ReleaseMouse()
 {
-    pEditEngine->pImpEditEngine->ReleaseMouse();
+    getImpEditEngine().ReleaseMouse();
 }
 
 bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
-    pEditEngine->CheckIdleFormatter();  // If fast typing and mouse button downs
+    getEditEngine().CheckIdleFormatter();  // If fast typing and mouse button downs
     nTravelXPos         = TRAVEL_X_DONTKNOW;
     nExtraCursorFlags   = GetCursorFlags::NONE;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
-    bool bPrevUpdateLayout = pEditEngine->pImpEditEngine->SetUpdateLayout(true);
+    bool bPrevUpdateLayout = getImpEditEngine().SetUpdateLayout(true);
     bClickedInSelection = IsSelectionAtPoint( rMouseEvent.GetPosPixel() );
-    bool bRet = pEditEngine->pImpEditEngine->MouseButtonDown( rMouseEvent, GetEditViewPtr() );
-    pEditEngine->pImpEditEngine->SetUpdateLayout(bPrevUpdateLayout);
+    bool bRet = getImpEditEngine().MouseButtonDown( rMouseEvent, GetEditViewPtr() );
+    getImpEditEngine().SetUpdateLayout(bPrevUpdateLayout);
     return bRet;
 }
 
 bool ImpEditView::MouseMove( const MouseEvent& rMouseEvent )
 {
-    return pEditEngine->pImpEditEngine->MouseMove( rMouseEvent, GetEditViewPtr() );
+    return getImpEditEngine().MouseMove( rMouseEvent, GetEditViewPtr() );
 }
 
 bool ImpEditView::Command(const CommandEvent& rCEvt)
 {
-    pEditEngine->CheckIdleFormatter();  // If fast typing and mouse button down
-    return pEditEngine->pImpEditEngine->Command(rCEvt, GetEditViewPtr());
+    getEditEngine().CheckIdleFormatter();  // If fast typing and mouse button down
+    return getImpEditEngine().Command(rCEvt, GetEditViewPtr());
 }
 
 
@@ -1767,7 +1770,7 @@ bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong )
     bool bIsWrong = false;
     if ( rPaM.GetNode()->GetWrongList() )
     {
-        EditSelection aSel = pEditEngine->SelectWord( rPaM, css::i18n::WordType::DICTIONARY_WORD );
+        EditSelection aSel = getEditEngine().SelectWord( rPaM, css::i18n::WordType::DICTIONARY_WORD );
         bIsWrong = rPaM.GetNode()->GetWrongList()->HasWrong( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
         if ( bIsWrong && bMarkIfWrong )
         {
@@ -1782,17 +1785,17 @@ bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong )
 OUString ImpEditView::SpellIgnoreWord()
 {
     OUString aWord;
-    if ( pEditEngine->pImpEditEngine->GetSpeller().is() )
+    if (getImpEditEngine().GetSpeller().is())
     {
         EditPaM aPaM = GetEditSelection().Max();
         if ( !HasSelection() )
         {
-            EditSelection aSel = pEditEngine->SelectWord(aPaM);
-            aWord = pEditEngine->pImpEditEngine->GetSelected( aSel );
+            EditSelection aSel = getEditEngine().SelectWord(aPaM);
+            aWord = getImpEditEngine().GetSelected( aSel );
         }
         else
         {
-            aWord = pEditEngine->pImpEditEngine->GetSelected( GetEditSelection() );
+            aWord = getImpEditEngine().GetSelected( GetEditSelection() );
             // And deselect
             DrawSelectionXOR();
             SetEditSelection( EditSelection( aPaM, aPaM ) );
@@ -1804,15 +1807,15 @@ OUString ImpEditView::SpellIgnoreWord()
             uno::Reference<linguistic2::XDictionary> xDic = LinguMgr::GetIgnoreAllList();
             if (xDic.is())
                 xDic->add( aWord, false, OUString() );
-            EditDoc& rDoc = pEditEngine->GetEditDoc();
+            EditDoc& rDoc = getEditEngine().GetEditDoc();
             sal_Int32 nNodes = rDoc.Count();
             for ( sal_Int32 n = 0; n < nNodes; n++ )
             {
                 ContentNode* pNode = rDoc.GetObject( n );
                 pNode->GetWrongList()->MarkWrongsInvalid();
             }
-            pEditEngine->pImpEditEngine->DoOnlineSpelling( aPaM.GetNode() );
-            pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
+            getImpEditEngine().DoOnlineSpelling( aPaM.GetNode() );
+            getImpEditEngine().StartOnlineSpellTimer();
         }
     }
     return aWord;
@@ -1822,17 +1825,17 @@ void ImpEditView::DeleteSelected()
 {
     DrawSelectionXOR();
 
-    pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
+    getImpEditEngine().UndoActionStart( EDITUNDO_DELETE );
 
-    EditPaM aPaM = pEditEngine->pImpEditEngine->DeleteSelected( GetEditSelection() );
+    EditPaM aPaM = getImpEditEngine().DeleteSelected( GetEditSelection() );
 
-    pEditEngine->pImpEditEngine->UndoActionEnd();
+    getImpEditEngine().UndoActionEnd();
 
     SetEditSelection( EditSelection( aPaM, aPaM ) );
 
     DrawSelectionXOR();
 
-    pEditEngine->pImpEditEngine->FormatAndLayout( GetEditViewPtr() );
+    getImpEditEngine().FormatAndLayout( GetEditViewPtr() );
     ShowCursor( DoAutoScroll(), true );
 }
 
@@ -1842,7 +1845,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
         return nullptr;
 
     Point aDocPos( GetDocPos( rPos ) );
-    EditPaM aPaM = pEditEngine->GetPaM(aDocPos, false);
+    EditPaM aPaM = getEditEngine().GetPaM(aDocPos, false);
     if (!aPaM)
         return nullptr;
 
@@ -1863,7 +1866,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
             {
                 DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "No FieldItem...");
                 if ( pPara )
-                    *pPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+                    *pPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
                 if ( pPos )
                     *pPos = rAttr.GetStart();
                 return static_cast<const SvxFieldItem*>(rAttr.GetItem());
@@ -1882,16 +1885,16 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
         return false;
 
     Point aDocPos( GetDocPos( rPos ) );
-    EditPaM aPaM = pEditEngine->GetPaM(aDocPos, false);
+    EditPaM aPaM = getEditEngine().GetPaM(aDocPos, false);
     if (!aPaM)
         return false;
 
     if ( aPaM.GetIndex() == 0 )
     {
-        sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
-        tools::Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
-        tools::Long nY = pEditEngine->GetDocPosTopLeft( nPara ).Y();
-        ParaPortion const& rParaPortion = pEditEngine->GetParaPortions().getRef(nPara);
+        sal_Int32 nPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
+        tools::Rectangle aBulletArea = getEditEngine().GetBulletArea( nPara );
+        tools::Long nY = getEditEngine().GetDocPosTopLeft( nPara ).Y();
+        ParaPortion const& rParaPortion = getEditEngine().GetParaPortions().getRef(nPara);
         nY += rParaPortion.GetFirstLineOffset();
         if ( ( aDocPos.Y() > ( nY + aBulletArea.Top() ) ) &&
              ( aDocPos.Y() < ( nY + aBulletArea.Bottom() ) ) &&
@@ -1912,7 +1915,7 @@ void ImpEditView::CutCopy(uno::Reference<datatransfer::clipboard::XClipboard> co
     if ( !(rxClipboard.is() && HasSelection()) )
         return;
 
-    uno::Reference<datatransfer::XTransferable> xData = pEditEngine->CreateTransferable( GetEditSelection() );
+    uno::Reference<datatransfer::XTransferable> xData = getEditEngine().CreateTransferable( GetEditSelection() );
 
     {
         SolarMutexReleaser aReleaser;
@@ -1934,9 +1937,9 @@ void ImpEditView::CutCopy(uno::Reference<datatransfer::clipboard::XClipboard> co
 
     if (bCut)
     {
-        pEditEngine->pImpEditEngine->UndoActionStart(EDITUNDO_CUT);
+        getImpEditEngine().UndoActionStart(EDITUNDO_CUT);
         DeleteSelected();
-        pEditEngine->pImpEditEngine->UndoActionEnd();
+        getImpEditEngine().UndoActionEnd();
     }
 }
 
@@ -1959,18 +1962,18 @@ void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> cons
     if ( !xDataObj.is() || !EditEngine::HasValidData( xDataObj ) )
         return;
 
-    pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
+    getImpEditEngine().UndoActionStart( EDITUNDO_PASTE );
 
     EditSelection aSel( GetEditSelection() );
     if ( aSel.HasRange() )
     {
         DrawSelectionXOR();
-        aSel = pEditEngine->DeleteSelection(aSel);
+        aSel = getEditEngine().DeleteSelection(aSel);
     }
 
     PasteOrDropInfos aPasteOrDropInfos;
-    aPasteOrDropInfos.nStartPara = pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
-    pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
+    aPasteOrDropInfos.nStartPara = getEditEngine().GetEditDoc().GetPos( aSel.Min().GetNode() );
+    getEditEngine().HandleBeginPasteOrDrop(aPasteOrDropInfos);
 
     if ( DoSingleLinePaste() )
     {
@@ -1985,7 +1988,7 @@ void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> cons
                 aData >>= aTmpText;
                 OUString aText(convertLineEnd(aTmpText, LINEEND_LF));
                 aText = aText.replaceAll( OUStringChar(LINE_SEP), " " );
-                aSel = pEditEngine->InsertText(aSel, aText);
+                aSel = getEditEngine().InsertText(aSel, aText);
             }
             catch( ... )
             {
@@ -1998,18 +2001,18 @@ void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> cons
         // Prevent notifications of paragraph inserts et al that would trigger
         // a11y to format content in a half-ready state when obtaining
         // paragraphs. Collect and broadcast when done instead.
-        aSel = pEditEngine->InsertText(
+        aSel = getEditEngine().InsertText(
             xDataObj, OUString(), aSel.Min(),
-            bUseSpecial && pEditEngine->GetInternalEditStatus().AllowPasteSpecial(), format);
+            bUseSpecial && getEditEngine().GetInternalEditStatus().AllowPasteSpecial(), format);
     }
 
-    aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
-    pEditEngine->HandleEndPasteOrDrop(aPasteOrDropInfos);
+    aPasteOrDropInfos.nEndPara = getEditEngine().GetEditDoc().GetPos( aSel.Max().GetNode() );
+    getEditEngine().HandleEndPasteOrDrop(aPasteOrDropInfos);
 
-    pEditEngine->pImpEditEngine->UndoActionEnd();
+    getImpEditEngine().UndoActionEnd();
     SetEditSelection( aSel );
-    pEditEngine->pImpEditEngine->UpdateSelections();
-    pEditEngine->pImpEditEngine->FormatAndLayout( GetEditViewPtr() );
+    getImpEditEngine().UpdateSelections();
+    getImpEditEngine().FormatAndLayout( GetEditViewPtr() );
     ShowCursor( DoAutoScroll(), true );
 }
 
@@ -2020,11 +2023,11 @@ bool ImpEditView::IsInSelection( const EditPaM& rPaM )
     if ( !aSel.HasRange() )
         return false;
 
-    aSel.Adjust( pEditEngine->GetEditDoc() );
+    aSel.Adjust(getEditEngine().GetEditDoc());
 
-    sal_Int32 nStartNode = pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
-    sal_Int32 nEndNode = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
-    sal_Int32 nCurNode = pEditEngine->GetEditDoc().GetPos( rPaM.GetNode() );
+    sal_Int32 nStartNode = getEditEngine().GetEditDoc().GetPos( aSel.Min().GetNode() );
+    sal_Int32 nEndNode = getEditEngine().GetEditDoc().GetPos( aSel.Max().GetNode() );
+    sal_Int32 nCurNode = getEditEngine().GetEditDoc().GetPos( rPaM.GetNode() );
 
     if ( ( nCurNode > nStartNode ) && ( nCurNode < nEndNode ) )
         return true;
@@ -2068,7 +2071,7 @@ bool ImpEditView::IsSelectionInSinglePara() const
 
 void ImpEditView::CreateAnchor()
 {
-    pEditEngine->SetInSelectionMode(true);
+    getEditEngine().SetInSelectionMode(true);
     EditSelection aNewSelection(GetEditSelection());
     aNewSelection.Min() = aNewSelection.Max();
     SetEditSelection(aNewSelection);
@@ -2077,7 +2080,7 @@ void ImpEditView::CreateAnchor()
 
 void ImpEditView::DeselectAll()
 {
-    pEditEngine->SetInSelectionMode(false);
+    getEditEngine().SetInSelectionMode(false);
     DrawSelectionXOR();
     EditSelection aNewSelection(GetEditSelection());
     aNewSelection.Min() = aNewSelection.Max();
@@ -2106,19 +2109,19 @@ bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
     const OutputDevice& rOutDev = GetOutputDevice();
     Point aMousePos = rOutDev.PixelToLogic(rPosPixel);
 
-    if ( ( !GetOutputArea().Contains( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
+    if ( ( !GetOutputArea().Contains( aMousePos ) ) && !getImpEditEngine().IsInSelectionMode() )
     {
         return false;
     }
 
     Point aDocPos( GetDocPos( aMousePos ) );
-    EditPaM aPaM = pEditEngine->GetPaM(aDocPos, false);
+    EditPaM aPaM = getEditEngine().GetPaM(aDocPos, false);
     return IsInSelection( aPaM );
 }
 
 bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
 {
-    pEditEngine->CheckIdleFormatter();
+    getEditEngine().CheckIdleFormatter();
 
     Point aMousePos( rPointPixel );
 
@@ -2126,7 +2129,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     const OutputDevice& rOutDev = GetOutputDevice();
     aMousePos = rOutDev.PixelToLogic( aMousePos );
 
-    if ( ( !GetOutputArea().Contains( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
+    if ( ( !GetOutputArea().Contains( aMousePos ) ) && !getImpEditEngine().IsInSelectionMode() )
     {
         return false;
     }
@@ -2136,7 +2139,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     // Can be optimized: first go through the lines within a paragraph for PAM,
     // then again with the PaM for the Rect, even though the line is already
     // known... This must not be, though!
-    EditPaM aPaM = pEditEngine->GetPaM(aDocPos);
+    EditPaM aPaM = getEditEngine().GetPaM(aDocPos);
     bool bGotoCursor = DoAutoScroll();
 
     // aTmpNewSel: Diff between old and new, not the new selection, unless for tiled rendering
@@ -2147,7 +2150,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     EditSelection aNewEditSelection( GetEditSelection() );
 
     aNewEditSelection.Max() = aPaM;
-    if (!pEditEngine->GetSelectionEngine().HasAnchor())
+    if (!getEditEngine().GetSelectionEngine().HasAnchor())
     {
         if ( aNewEditSelection.Min() != aPaM )
         {
@@ -2168,7 +2171,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
         SetEditSelection( aNewEditSelection );
     }
 
-    bool bForceCursor = pDragAndDropInfo == nullptr && !pEditEngine->pImpEditEngine->IsInSelectionMode();
+    bool bForceCursor = pDragAndDropInfo == nullptr && !getImpEditEngine().IsInSelectionMode();
     ShowCursor( bGotoCursor, bForceCursor );
     return true;
 }
@@ -2245,7 +2248,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
     Point aMousePosPixel( rDGE.DragOriginX, rDGE.DragOriginY );
 
     EditSelection aCopySel( GetEditSelection() );
-    aCopySel.Adjust( pEditEngine->GetEditDoc() );
+    aCopySel.Adjust(getEditEngine().GetEditDoc());
 
     if ( HasSelection() && bClickedInSelection )
     {
@@ -2262,7 +2265,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         {
             pDragAndDropInfo.reset(new DragAndDropInfo());
             pDragAndDropInfo->pField = pField;
-            ContentNode* pNode = pEditEngine->GetEditDoc().GetObject( nPara );
+            ContentNode* pNode = getEditEngine().GetEditDoc().GetObject( nPara );
             aCopySel = EditSelection( EditPaM( pNode, nPos ), EditPaM( pNode, nPos+1 ) );
             SetEditSelection(aCopySel);
             DrawSelectionXOR();
@@ -2273,15 +2276,15 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         {
             pDragAndDropInfo.reset(new DragAndDropInfo());
             pDragAndDropInfo->bOutlinerMode = true;
-            EditPaM aStartPaM( pEditEngine->GetEditDoc().GetObject( nPara ), 0 );
+            EditPaM aStartPaM(getEditEngine().GetEditDoc().GetObject(nPara), 0);
             EditPaM aEndPaM( aStartPaM );
-            const SfxInt16Item& rLevel = pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
-            for ( sal_Int32 n = nPara +1; n < pEditEngine->GetEditDoc().Count(); n++ )
+            const SfxInt16Item& rLevel = getEditEngine().GetParaAttrib(nPara, EE_PARA_OUTLLEVEL);
+            for ( sal_Int32 n = nPara +1; n < getEditEngine().GetEditDoc().Count(); n++ )
             {
-                const SfxInt16Item& rL = pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL );
+                const SfxInt16Item& rL = getEditEngine().GetParaAttrib( n, EE_PARA_OUTLLEVEL );
                 if ( rL.GetValue() > rLevel.GetValue() )
                 {
-                    aEndPaM.SetNode( pEditEngine->GetEditDoc().GetObject( n ) );
+                    aEndPaM.SetNode( getEditEngine().GetEditDoc().GetObject( n ) );
                 }
                 else
                 {
@@ -2304,9 +2307,9 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
     aSz = GetOutputDevice().PixelToLogic( aSz );
     pDragAndDropInfo->nSensibleRange = static_cast<sal_uInt16>(aSz.Width());
     pDragAndDropInfo->nCursorWidth = static_cast<sal_uInt16>(aSz.Width()) / 2;
-    pDragAndDropInfo->aBeginDragSel = pEditEngine->pImpEditEngine->CreateESel( aCopySel );
+    pDragAndDropInfo->aBeginDragSel = getImpEditEngine().CreateESel( aCopySel );
 
-    uno::Reference<datatransfer::XTransferable> xData = pEditEngine->CreateTransferable(aCopySel);
+    uno::Reference<datatransfer::XTransferable> xData = getEditEngine().CreateTransferable(aCopySel);
 
     sal_Int8 nActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
@@ -2379,32 +2382,32 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
             }
 
             DrawSelectionXOR();
-            EditSelection aDelSel( pEditEngine->pImpEditEngine->CreateSel( aToBeDelSel ) );
-            DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->GetEditDoc() ), "ToBeDel is buggy!" );
-            pEditEngine->DeleteSelection(aDelSel);
+            EditSelection aDelSel(getImpEditEngine().CreateSel(aToBeDelSel));
+            DBG_ASSERT( !aDelSel.DbgIsBuggy(getEditEngine().GetEditDoc()), "ToBeDel is buggy!");
+            getEditEngine().DeleteSelection(aDelSel);
             if ( !bBeforeSelection )
             {
-                DBG_ASSERT( !pEditEngine->pImpEditEngine->CreateSel( aNewSel ).DbgIsBuggy(pEditEngine->GetEditDoc()), "Bad" );
-                SetEditSelection( pEditEngine->pImpEditEngine->CreateSel( aNewSel ) );
+                DBG_ASSERT(!getImpEditEngine().CreateSel(aNewSel).DbgIsBuggy(getEditEngine().GetEditDoc()), "Bad");
+                SetEditSelection(getImpEditEngine().CreateSel(aNewSel));
             }
-            pEditEngine->pImpEditEngine->FormatAndLayout( pEditEngine->pImpEditEngine->GetActiveView() );
+            getImpEditEngine().FormatAndLayout(getImpEditEngine().GetActiveView());
             DrawSelectionXOR();
         }
         else
         {
             // other EditEngine ...
-            if (pEditEngine->HasText())   // #88630# SC is removing the content when switching the task
+            if (getEditEngine().HasText())   // #88630# SC is removing the content when switching the task
                 DeleteSelected();
         }
     }
 
     if ( pDragAndDropInfo->bUndoAction )
-        pEditEngine->pImpEditEngine->UndoActionEnd();
+        getImpEditEngine().UndoActionEnd();
 
     HideDDCursor();
     ShowCursor( DoAutoScroll(), true );
     pDragAndDropInfo.reset();
-    pEditEngine->GetEndDropHdl().Call(GetEditViewPtr());
+    getEditEngine().GetEndDropHdl().Call(GetEditViewPtr());
 }
 
 void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
@@ -2416,14 +2419,14 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
     if ( !(pDragAndDropInfo && pDragAndDropInfo->bDragAccepted) )
         return;
 
-    pEditEngine->GetBeginDropHdl().Call(GetEditViewPtr());
+    getEditEngine().GetBeginDropHdl().Call(GetEditViewPtr());
     bool bChanges = false;
 
     HideDDCursor();
 
     if ( pDragAndDropInfo->bStarterOfDD )
     {
-        pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DRAGANDDROP );
+        getImpEditEngine().UndoActionStart( EDITUNDO_DRAGANDDROP );
         pDragAndDropInfo->bUndoAction = true;
     }
 
@@ -2443,23 +2446,23 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
             EditPaM aPaM( pDragAndDropInfo->aDropDest );
 
             PasteOrDropInfos aPasteOrDropInfos;
-            aPasteOrDropInfos.nStartPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
-            pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
+            aPasteOrDropInfos.nStartPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
+            getEditEngine().HandleBeginPasteOrDrop(aPasteOrDropInfos);
 
-            EditSelection aNewSel = pEditEngine->InsertText(
-                xDataObj, OUString(), aPaM, pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
+            EditSelection aNewSel = getEditEngine().InsertText(
+                xDataObj, OUString(), aPaM, getEditEngine().GetInternalEditStatus().AllowPasteSpecial());
 
-            aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aNewSel.Max().GetNode() );
-            pEditEngine->HandleEndPasteOrDrop(aPasteOrDropInfos);
+            aPasteOrDropInfos.nEndPara = getEditEngine().GetEditDoc().GetPos( aNewSel.Max().GetNode() );
+            getEditEngine().HandleEndPasteOrDrop(aPasteOrDropInfos);
 
             SetEditSelection( aNewSel );
-            pEditEngine->pImpEditEngine->FormatAndLayout( pEditEngine->pImpEditEngine->GetActiveView() );
+            getImpEditEngine().FormatAndLayout(getImpEditEngine().GetActiveView());
             if ( pDragAndDropInfo->bStarterOfDD )
             {
                 // Only set if the same engine!
-                pDragAndDropInfo->aDropSel.nStartPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+                pDragAndDropInfo->aDropSel.nStartPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
                 pDragAndDropInfo->aDropSel.nStartPos = aPaM.GetIndex();
-                pDragAndDropInfo->aDropSel.nEndPara = pEditEngine->GetEditDoc().GetPos( aNewSel.Max().GetNode() );
+                pDragAndDropInfo->aDropSel.nEndPara = getEditEngine().GetEditDoc().GetPos( aNewSel.Max().GetNode() );
                 pDragAndDropInfo->aDropSel.nEndPos = aNewSel.Max().GetIndex();
                 pDragAndDropInfo->bDroppedInMe = true;
             }
@@ -2559,15 +2562,15 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
             }
 
             Point aDocPos( GetDocPos( aMousePos ) );
-            EditPaM aPaM = pEditEngine->GetPaM( aDocPos );
+            EditPaM aPaM = getEditEngine().GetPaM( aDocPos );
             pDragAndDropInfo->aDropDest = aPaM;
             if ( pDragAndDropInfo->bOutlinerMode )
             {
-                sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
-                ParaPortion* pPPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
+                sal_Int32 nPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
+                ParaPortion* pPPortion = getEditEngine().GetParaPortions().SafeGetObject( nPara );
                 if (pPPortion)
                 {
-                    tools::Long nDestParaStartY = pEditEngine->GetParaPortions().GetYOffset( pPPortion );
+                    tools::Long nDestParaStartY = getEditEngine().GetParaPortions().GetYOffset( pPPortion );
                     tools::Long nRel = aDocPos.Y() - nDestParaStartY;
                     if ( nRel < ( pPPortion->GetHeight() / 2 ) )
                     {
@@ -2588,9 +2591,9 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
             else if ( HasSelection() )
             {
                 // it must not be dropped into a selection
-                EPaM aP = pEditEngine->pImpEditEngine->CreateEPaM( aPaM );
+                EPaM aP = getImpEditEngine().CreateEPaM( aPaM );
                 ESelection aDestSel( aP.nPara, aP.nIndex, aP.nPara, aP.nIndex);
-                ESelection aCurSel = pEditEngine->pImpEditEngine->CreateESel( GetEditSelection() );
+                ESelection aCurSel = getImpEditEngine().CreateESel( GetEditSelection() );
                 aCurSel.Adjust();
                 if ( !(aDestSel < aCurSel) && !(aDestSel > aCurSel) )
                 {
@@ -2603,22 +2606,22 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                 if ( pDragAndDropInfo->bOutlinerMode )
                 {
                     tools::Long nDDYPos(0);
-                    if ( pDragAndDropInfo->nOutlinerDropDest < pEditEngine->GetEditDoc().Count() )
+                    if ( pDragAndDropInfo->nOutlinerDropDest < getEditEngine().GetEditDoc().Count() )
                     {
-                        ParaPortion* pPPortion = pEditEngine->GetParaPortions().SafeGetObject( pDragAndDropInfo->nOutlinerDropDest );
+                        ParaPortion* pPPortion = getEditEngine().GetParaPortions().SafeGetObject( pDragAndDropInfo->nOutlinerDropDest );
                         if (pPPortion)
-                            nDDYPos = pEditEngine->GetParaPortions().GetYOffset( pPPortion );
+                            nDDYPos = getEditEngine().GetParaPortions().GetYOffset( pPPortion );
                     }
                     else
                     {
-                        nDDYPos = pEditEngine->pImpEditEngine->GetTextHeight();
+                        nDDYPos = getImpEditEngine().GetTextHeight();
                     }
                     Point aStartPos( 0, nDDYPos );
                     aStartPos = GetWindowPos( aStartPos );
                     Point aEndPos( GetOutputArea().GetWidth(), nDDYPos );
                     aEndPos = GetWindowPos( aEndPos );
                     aEditCursor = rOutDev.LogicToPixel( tools::Rectangle( aStartPos, aEndPos ) );
-                    if ( !pEditEngine->IsEffectivelyVertical() )
+                    if (!getEditEngine().IsEffectivelyVertical())
                     {
                         aEditCursor.AdjustTop( -1 );
                         aEditCursor.AdjustBottom( 1 );
@@ -2640,7 +2643,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                 }
                 else
                 {
-                    aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM );
+                    aEditCursor = getImpEditEngine().PaMtoEditCursor( aPaM );
                     Point aTopLeft( GetWindowPos( aEditCursor.TopLeft() ) );
                     aEditCursor.SetPos( aTopLeft );
                     aEditCursor.SetRight( aEditCursor.Left() + pDragAndDropInfo->nCursorWidth );

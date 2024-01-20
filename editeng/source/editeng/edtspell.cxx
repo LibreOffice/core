@@ -49,9 +49,9 @@ EditSpellWrapper::EditSpellWrapper(weld::Widget* pWindow,
 
 void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
 {
-    EditEngine* pEE = pEditView->GetEditEngine();
-    ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
-    SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
+    EditEngine& rEditEngine = pEditView->getEditEngine();
+    ImpEditEngine& rImpEditEngine = pEditView->getImpEditEngine();
+    SpellInfo* pSpellInfo = rImpEditEngine.GetSpellInfo();
 
     if ( eArea == SvxSpellArea::BodyStart )
     {
@@ -63,13 +63,13 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
             pSpellInfo->bSpellToEnd = false;
             pSpellInfo->aSpellTo = pSpellInfo->aSpellStart;
             pEditView->GetImpEditView()->SetEditSelection(
-                    pEE->GetEditDoc().GetStartPaM() );
+                    rEditEngine.GetEditDoc().GetStartPaM() );
         }
         else
         {
             pSpellInfo->bSpellToEnd = true;
-            pSpellInfo->aSpellTo = pImpEE->CreateEPaM(
-                    pEE->GetEditDoc().GetStartPaM() );
+            pSpellInfo->aSpellTo = rImpEditEngine.CreateEPaM(
+                    rEditEngine.GetEditDoc().GetStartPaM() );
         }
     }
     else if ( eArea == SvxSpellArea::BodyEnd )
@@ -80,15 +80,15 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
         if ( !IsStartDone() )
         {
             pSpellInfo->bSpellToEnd = true;
-            pSpellInfo->aSpellTo = pImpEE->CreateEPaM(
-                    pEE->GetEditDoc().GetEndPaM() );
+            pSpellInfo->aSpellTo = rImpEditEngine.CreateEPaM(
+                    rEditEngine.GetEditDoc().GetEndPaM() );
         }
         else
         {
             pSpellInfo->bSpellToEnd = false;
             pSpellInfo->aSpellTo = pSpellInfo->aSpellStart;
             pEditView->GetImpEditView()->SetEditSelection(
-                    pEE->GetEditDoc().GetEndPaM() );
+                    rEditEngine.GetEditDoc().GetEndPaM() );
         }
     }
     else if ( eArea == SvxSpellArea::Body )
@@ -103,24 +103,24 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
 
 void EditSpellWrapper::SpellContinue()
 {
-    SetLast( pEditView->GetImpEditEngine()->ImpSpell( pEditView ) );
+    SetLast(pEditView->getImpEditEngine().ImpSpell(pEditView));
 }
 
 bool EditSpellWrapper::SpellMore()
 {
-    EditEngine* pEE = pEditView->GetEditEngine();
-    ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
-    SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
+    EditEngine& rEditEngine = pEditView->getEditEngine();
+    ImpEditEngine& rImpEditEngine = pEditView->getImpEditEngine();
+    SpellInfo* pSpellInfo = rImpEditEngine.GetSpellInfo();
     bool bMore = false;
     if ( pSpellInfo->bMultipleDoc )
     {
-        bMore = pEE->SpellNextDocument();
+        bMore = rEditEngine.SpellNextDocument();
         if ( bMore )
         {
             // The text has been entered into the engine, when backwards then
             // it must be behind the selection.
             pEditView->GetImpEditView()->SetEditSelection(
-                        pEE->GetEditDoc().GetStartPaM() );
+                        rEditEngine.GetEditDoc().GetStartPaM() );
         }
     }
     return bMore;
@@ -135,10 +135,10 @@ void EditSpellWrapper::ReplaceAll( const OUString &rNewText )
 
 void EditSpellWrapper::CheckSpellTo()
 {
-    ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
-    SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
+    ImpEditEngine& rImpEditEngine = pEditView->getImpEditEngine();
+    SpellInfo* pSpellInfo = rImpEditEngine.GetSpellInfo();
     EditPaM aPaM( pEditView->GetImpEditView()->GetEditSelection().Max() );
-    EPaM aEPaM = pImpEE->CreateEPaM( aPaM );
+    EPaM aEPaM = rImpEditEngine.CreateEPaM( aPaM );
     if ( aEPaM.nPara == pSpellInfo->aSpellTo.nPara )
     {
         // Check if SpellToEnd still has a valid Index, if replace has been

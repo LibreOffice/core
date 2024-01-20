@@ -312,7 +312,7 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
     // as we don't support RTL in Math, we need to swap values from selection when they were done
     // in RTL form
     aSelection.Adjust();
-    OUString selected = pEditView->GetEditEngine()->GetText(aSelection);
+    OUString selected = pEditView->getEditEngine().GetText(aSelection);
 
     // Check is auto close brackets/braces is disabled
     SmModule *pMod = SM_MOD();
@@ -322,7 +322,7 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
         autoClose = true;
     else if (selected.isEmpty() && !aSelection.HasRange())
     {
-        selected = pEditView->GetEditEngine()->GetText(aSelection.nEndPara);
+        selected = pEditView->getEditEngine().GetText(aSelection.nEndPara);
         if (!selected.isEmpty())
         {
             sal_Int32 index = selected.indexOf("\n", aSelection.nEndPos);
@@ -543,7 +543,7 @@ void SmEditTextWindow::SetText(const OUString& rText)
     aModifyIdle.Start();
 
     // Apply zoom to smeditwindow text
-    static_cast<SmEditEngine*>(pEditView->GetEditEngine())->executeZoom(pEditView);
+    static_cast<SmEditEngine&>(pEditView->getEditEngine()).executeZoom(pEditView);
     pEditView->SetSelection(eSelection);
 }
 
@@ -780,7 +780,7 @@ void SmEditTextWindow::InsertText(const OUString& rText)
     // Note: Insertion of a space in front of commands is done here and
     // in SmEditWindow::InsertCommand.
     ESelection aSelection = pEditView->GetSelection();
-    OUString aCurrentFormula = pEditView->GetEditEngine()->GetText();
+    OUString aCurrentFormula = pEditView->getEditEngine().GetText();
     sal_Int32 nStartIndex = 0;
 
     // get the start position (when we get a multi line formula)
@@ -850,11 +850,9 @@ void SmEditWindow::DeleteEditView()
 {
     if (EditView* pEditView = GetEditView())
     {
-        if (EditEngine* pEditEngine = pEditView->GetEditEngine())
-        {
-            pEditEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
-            pEditEngine->RemoveView(pEditView);
-        }
+        EditEngine& rEditEngine = pEditView->getEditEngine();
+        rEditEngine.SetStatusEventHdl( Link<EditStatus&,void>() );
+        rEditEngine.RemoveView(pEditView);
         mxTextControlWin.reset();
         mxTextControl.reset();
     }

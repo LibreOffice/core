@@ -284,7 +284,7 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
 
 bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 {
-    if( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode())
+    if( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->getEditEngine().IsInSelectionMode())
         return pEditView->MouseMove( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -299,7 +299,7 @@ bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 
 bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode() )
+    if ( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->getEditEngine().IsInSelectionMode() )
         return pEditView->MouseButtonDown( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -347,7 +347,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 
 bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if ( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode() )
+    if ( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->getEditEngine().IsInSelectionMode() )
         return pEditView->MouseButtonUp( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -1380,13 +1380,13 @@ void OutlinerView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCal
 
 void OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
-    sal_Int32 nOldParaCount = pEditView->GetEditEngine()->GetParagraphCount();
+    sal_Int32 nOldParaCount = pEditView->getEditEngine().GetParagraphCount();
     ESelection aOldSel = pEditView->GetSelection();
     aOldSel.Adjust();
 
     pEditView->Read( rInput, eFormat, pHTTPHeaderAttrs );
 
-    tools::Long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
+    tools::Long nParaDiff = pEditView->getEditEngine().GetParagraphCount() - nOldParaCount;
     sal_Int32 nChangesStart = aOldSel.nStartPara;
     sal_Int32 nChangesEnd = nChangesStart + nParaDiff + (aOldSel.nEndPara-aOldSel.nStartPara);
 
@@ -1468,17 +1468,17 @@ bool GetStatusValueForThesaurusFromContext(
 {
     // get text and locale for thesaurus look up
     OUString aText;
-    EditEngine *pEditEngine = rEditView.GetEditEngine();
+    EditEngine& rEditEngine = rEditView.getEditEngine();
     ESelection aTextSel( rEditView.GetSelection() );
     if (!aTextSel.HasRange())
-        aTextSel = pEditEngine->GetWord( aTextSel, i18n::WordType::DICTIONARY_WORD );
-    aText = pEditEngine->GetText( aTextSel );
+        aTextSel = rEditEngine.GetWord( aTextSel, i18n::WordType::DICTIONARY_WORD );
+    aText = rEditEngine.GetText( aTextSel );
     aTextSel.Adjust();
 
-    if (!isSingleScriptType(pEditEngine->GetScriptType(aTextSel)))
+    if (!isSingleScriptType(rEditEngine.GetScriptType(aTextSel)))
         return false;
 
-    LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos ).nLang;
+    LanguageType nLang = rEditEngine.GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos ).nLang;
     OUString aLangText( LanguageTag::convertToBcp47( nLang ) );
 
     // set word and locale to look up as status value

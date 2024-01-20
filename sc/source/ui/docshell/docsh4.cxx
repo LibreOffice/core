@@ -1331,7 +1331,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     const LanguageType nLangToUse = SvtLanguageTable::GetLanguageType( aLangText );
                     SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
 
-                    SfxItemSet aAttrs = pEditView->GetEditEngine()->GetEmptyItemSet();
+                    SfxItemSet aAttrs = pEditView->getEditEngine().GetEmptyItemSet();
                     if (nScriptType == SvtScriptType::LATIN)
                         aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE ) );
                     if (nScriptType == SvtScriptType::COMPLEX)

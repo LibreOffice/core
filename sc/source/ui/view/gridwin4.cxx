@@ -656,15 +656,15 @@ private:
 
 namespace
 {
-int lcl_GetMultiLineHeight(EditEngine* pEditEngine)
+int lcl_GetMultiLineHeight(EditEngine& rEditEngine)
 {
     int nHeight = 0;
-    int nParagraphs = pEditEngine->GetParagraphCount();
-    if (nParagraphs > 1 || (nParagraphs > 0 && pEditEngine->GetLineCount(0) > 1))
+    int nParagraphs = rEditEngine.GetParagraphCount();
+    if (nParagraphs > 1 || (nParagraphs > 0 && rEditEngine.GetLineCount(0) > 1))
     {
         for (int nPara = 0; nPara < nParagraphs; nPara++)
         {
-            nHeight += pEditEngine->GetLineCount(nPara) * pEditEngine->GetLineHeight(nPara);
+            nHeight += rEditEngine.GetLineCount(nPara) * rEditEngine.GetLineHeight(nPara);
         }
     }
 
@@ -1147,9 +1147,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                             if (bIsTiledRendering)
                             {
-                                EditEngine* pEditEngine = pOtherEditView->GetEditEngine();
-                                if (pEditEngine)
-                                    aEnd.AdjustY(lcl_GetMultiLineHeight(pEditEngine));
+                                EditEngine& rEditEngine = pOtherEditView->getEditEngine();
+                                aEnd.AdjustY(lcl_GetMultiLineHeight(rEditEngine));
                             }
 
                             if (bLokRTL)

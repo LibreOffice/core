@@ -542,7 +542,7 @@ uno::Reference<datatransfer::XTransferable> ViewShell::GetSelectionTransferable(
         return uno::Reference<datatransfer::XTransferable>();
 
     EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
-    return rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
+    return rEditView.getEditEngine().CreateTransferable(rEditView.GetSelection());
 }
 
 void ViewShell::SetGraphicMm100Position(bool bStart, const Point& rPosition)

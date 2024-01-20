@@ -64,50 +64,49 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     auto* pOLV = pView1->GetTextEditOutlinerView();
     CPPUNIT_ASSERT(pOLV);
     auto& rEditView = pOLV->GetEditView();
-    auto* pEditEngine = rEditView.GetEditEngine();
-    CPPUNIT_ASSERT(pEditEngine);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pEditEngine->GetParagraphCount());
+    auto& rEditEngine = rEditView.getEditEngine();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rEditEngine.GetParagraphCount());
 
     // Add paragraph 4
     rEditView.SetSelection(ESelection(3, 0, 3, 0));
     rEditView.InsertText(u"\nD4"_ustr);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pEditEngine->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rEditEngine.GetParagraphCount());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(87.49, pEditEngine->getGlobalFontScale().getY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(90.0, pEditEngine->getGlobalSpacingScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(87.49, rEditEngine.getGlobalFontScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(90.0, rEditEngine.getGlobalSpacingScale().getY(), 1E-2);
 
     // Add paragraph 5
     rEditView.SetSelection(ESelection(4, 0, 4, 0));
     rEditView.InsertText(u"\nD5"_ustr);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pEditEngine->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rEditEngine.GetParagraphCount());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(54.68, pEditEngine->getGlobalFontScale().getY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pEditEngine->getGlobalSpacingScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(54.68, rEditEngine.getGlobalFontScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, rEditEngine.getGlobalSpacingScale().getY(), 1E-2);
 
     // Add paragraph 6
     rEditView.SetSelection(ESelection(5, 0, 5, 0));
     rEditView.InsertText(u"\nD6"_ustr);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pEditEngine->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rEditEngine.GetParagraphCount());
 
     // Delete paragraph 6
     rEditView.SetSelection(ESelection(4, EE_TEXTPOS_MAX_COUNT, 5, EE_TEXTPOS_MAX_COUNT));
     rEditView.DeleteSelected();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pEditEngine->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rEditEngine.GetParagraphCount());
 
     // Delete paragraph 5
     rEditView.SetSelection(ESelection(3, EE_TEXTPOS_MAX_COUNT, 4, EE_TEXTPOS_MAX_COUNT));
     rEditView.DeleteSelected();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pEditEngine->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rEditEngine.GetParagraphCount());
 
     // Delete paragraph 4
     rEditView.SetSelection(ESelection(2, EE_TEXTPOS_MAX_COUNT, 3, EE_TEXTPOS_MAX_COUNT));
     rEditView.DeleteSelected();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pEditEngine->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rEditEngine.GetParagraphCount());
 
     // not ideal - scaling should be 100%, but close enough
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.05, pEditEngine->getGlobalFontScale().getY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pEditEngine->getGlobalSpacingScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.05, rEditEngine.getGlobalFontScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, rEditEngine.getGlobalSpacingScale().getY(), 1E-2);
 
     // are we still in text edit mode?
     CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());

@@ -125,7 +125,6 @@ void ScExtraEditViewManager::Apply(SfxViewShell* pViewShell, ScSplitPos eWhich)
     mpOtherEditView = pOtherViewShell->GetViewData().GetEditView(eWhich);
     if (mpOtherEditView != nullptr)
     {
-        DBG_ASSERT(mpOtherEditView->GetEditEngine(), "Edit view has no valid engine.");
         for (int i = 0; i < 4; ++i)
         {
             ScGridWindow* pWin = mpGridWin[i].get();
@@ -2219,7 +2218,7 @@ void ScTabView::UpdateEditView()
             tools::Long nY = GetViewData().GetCurYForTab(nRefTabNo);
 
             aViewData.SetEditEngine(eCurrent,
-                static_cast<ScEditEngineDefaulter*>(pEditView->GetEditEngine()),
+                static_cast<ScEditEngineDefaulter*>(&pEditView->getEditEngine()),
                 pGridWin[i], nX, nY );
             if (eCurrent == eActive)
                 pEditView->ShowCursor( false );

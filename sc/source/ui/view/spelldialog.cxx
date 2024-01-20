@@ -269,7 +269,7 @@ bool ScSpellDialogChildWindow::IsSelectionChanged()
         return true;
 
     if( EditView* pEditView = mpViewData->GetSpellingView() )
-        if( pEditView->GetEditEngine() != mxEngine.get() )
+        if (&pEditView->getEditEngine() != mxEngine.get())
             return true;
 
     ScRangeList aCurrentRangeList;

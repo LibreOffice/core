@@ -300,7 +300,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         EditView* pTableView = pHdl->GetActiveView();
                         pHdl->DataChanging();
                         if (pTableView)
-                            pTableView->GetEditEngine()->SetText(aStr);
+                            pTableView->getEditEngine().SetText(aStr);
                         pHdl->DataChanged();
 
                         SC_MOD()->SetInputMode(SC_INPUT_NONE);

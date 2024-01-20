@@ -167,7 +167,7 @@ EditEngine* AnnotationTextWindow::GetEditEngine() const
     OutlinerView* pOutlinerView = mrContents.GetOutlinerView();
     if (!pOutlinerView)
         return nullptr;
-    return pOutlinerView->GetEditView().GetEditEngine();
+    return &pOutlinerView->GetEditView().getEditEngine();
 }
 
 void AnnotationTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)

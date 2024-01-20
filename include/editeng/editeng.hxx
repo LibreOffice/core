@@ -159,6 +159,8 @@ public:
         const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial,
         SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
+    EDITENG_DLLPRIVATE ImpEditEngine& getImpl();
+
 private:
     std::unique_ptr<ImpEditEngine>  pImpEditEngine;
 

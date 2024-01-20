@@ -122,17 +122,17 @@ bool TextConvWrapper::ConvMore_impl()
     // modified version of SvxSpellWrapper::SpellMore
 
     bool bMore = false;
-    EditEngine* pEE = m_pEditView->GetEditEngine();
-    ImpEditEngine* pImpEE = m_pEditView->GetImpEditEngine();
-    ConvInfo* pConvInfo = pImpEE->GetConvInfo();
+    EditEngine& rEditEngine = m_pEditView->getEditEngine();
+    ImpEditEngine& rImpEditEngine = m_pEditView->getImpEditEngine();
+    ConvInfo* pConvInfo = rImpEditEngine.GetConvInfo();
     if ( pConvInfo->bMultipleDoc )
     {
-        bMore = pEE->ConvertNextDocument();
+        bMore = rEditEngine.ConvertNextDocument();
         if ( bMore )
         {
             // The text has been entered in this engine ...
             m_pEditView->GetImpEditView()->SetEditSelection(
-                        pEE->GetEditDoc().GetStartPaM() );
+                        rEditEngine.GetEditDoc().GetStartPaM() );
         }
     }
     return bMore;
@@ -143,9 +143,9 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
 {
     // modified version of EditSpellWrapper::SpellStart
 
-    EditEngine* pEE = m_pEditView->GetEditEngine();
-    ImpEditEngine* pImpEE = m_pEditView->GetImpEditEngine();
-    ConvInfo* pConvInfo = pImpEE->GetConvInfo();
+    EditEngine& rEditEngine = m_pEditView->getEditEngine();
+    ImpEditEngine& rImpEditEngine = m_pEditView->getImpEditEngine();
+    ConvInfo* pConvInfo = rImpEditEngine.GetConvInfo();
 
     if ( eArea == SvxSpellArea::BodyStart )
     {
@@ -156,13 +156,12 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
             pConvInfo->aConvTo = pConvInfo->aConvStart;
             pConvInfo->aConvContinue = EPaM( 0, 0 );
             m_pEditView->GetImpEditView()->SetEditSelection(
-                    pEE->GetEditDoc().GetStartPaM() );
+                    rEditEngine.GetEditDoc().GetStartPaM() );
         }
         else
         {
             pConvInfo->bConvToEnd = true;
-            pConvInfo->aConvTo = pImpEE->CreateEPaM(
-                    pEE->GetEditDoc().GetStartPaM() );
+            pConvInfo->aConvTo = rImpEditEngine.CreateEPaM(rEditEngine.GetEditDoc().GetStartPaM() );
         }
     }
     else if ( eArea == SvxSpellArea::BodyEnd )
@@ -179,16 +178,14 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
         else
         {
             // nothing selected: convert to end of document
-            pConvInfo->aConvTo = pImpEE->CreateEPaM(
-                pEE->GetEditDoc().GetEndPaM() );
+            pConvInfo->aConvTo = rImpEditEngine.CreateEPaM(rEditEngine.GetEditDoc().GetEndPaM() );
         }
     }
     else if ( eArea == SvxSpellArea::Body )
     {
         // called by ConvNext_impl...
         pConvInfo->aConvContinue = pConvInfo->aConvStart;
-        pConvInfo->aConvTo = pImpEE->CreateEPaM(
-            pEE->GetEditDoc().GetEndPaM() );
+        pConvInfo->aConvTo = rImpEditEngine.CreateEPaM(rEditEngine.GetEditDoc().GetEndPaM() );
     }
     else
     {
@@ -204,7 +201,7 @@ bool TextConvWrapper::ConvContinue_impl()
     // get next convertible text portion and its language
     m_aConvText.clear();
     m_nConvTextLang = LANGUAGE_NONE;
-    m_pEditView->GetImpEditEngine()->ImpConvert( m_aConvText, m_nConvTextLang,
+    m_pEditView->getImpEditEngine().ImpConvert( m_aConvText, m_nConvTextLang,
             m_pEditView, GetSourceLanguage(), m_aConvSel,
             m_bAllowChange, GetTargetLanguage(), GetTargetFont() );
     return !m_aConvText.isEmpty();
@@ -341,15 +338,15 @@ void TextConvWrapper::ReplaceUnit(
     m_nUnitOffset = m_nUnitOffset + nUnitStart + aNewTxt.getLength();
 
     // remember current original language for later use
-    ImpEditEngine *pImpEditEng = m_pEditView->GetImpEditEngine();
+    ImpEditEngine& rImpEditEngine = m_pEditView->getImpEditEngine();
     ESelection aOldSel     = m_pEditView->GetSelection();
     //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
 
 #ifdef DBG_UTIL
-    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( aOldSel ).Min() ).nLang;
+    LanguageType nOldLang   = rImpEditEngine.GetLanguage(rImpEditEngine.CreateSel( aOldSel ).Min() ).nLang;
 #endif
 
-    pImpEditEng->UndoActionStart( EDITUNDO_INSERT );
+    rImpEditEngine.UndoActionStart( EDITUNDO_INSERT );
 
     // according to FT we should currently not bother about keeping
     // attributes in Hangul/Hanja conversion and leave that untouched.
@@ -380,11 +377,10 @@ void TextConvWrapper::ReplaceUnit(
         }
     }
 
-    pImpEditEng->UndoActionEnd();
+    rImpEditEngine.UndoActionEnd();
 
     // adjust ConvContinue / ConvTo if necessary
-    ImpEditEngine* pImpEE = m_pEditView->GetImpEditEngine();
-    ConvInfo* pConvInfo = pImpEE->GetConvInfo();
+    ConvInfo* pConvInfo = rImpEditEngine.GetConvInfo();
     sal_Int32 nDelta = aNewTxt.getLength() - aOrigTxt.getLength();
     if (nDelta != 0)
     {

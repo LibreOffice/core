@@ -428,9 +428,9 @@ void ScInputWindow::StartFormula()
                 TextGrabFocus();
                 if (pViewSh && !pViewSh->isLOKDesktop())
                 {
-                    nStartPara = nEndPara = pView->GetEditEngine()->GetParagraphCount() ?
-                        (pView->GetEditEngine()->GetParagraphCount() - 1) : 0;
-                    nStartPos = nEndPos = pView->GetEditEngine()->GetTextLen(nStartPara);
+                    nStartPara = nEndPara = pView->getEditEngine().GetParagraphCount() ?
+                        (pView->getEditEngine().GetParagraphCount() - 1) : 0;
+                    nStartPos = nEndPos = pView->getEditEngine().GetTextLen(nStartPara);
                 }
             }
             pView->SetSelection(ESelection(nStartPara, nStartPos, nEndPara, nEndPos));
@@ -675,8 +675,8 @@ void ScInputWindow::SwitchToTextWin()
         EditView* pView = mxTextWindow->GetEditView();
         if (pView)
         {
-            sal_Int32 nPara =  pView->GetEditEngine()->GetParagraphCount() ? ( pView->GetEditEngine()->GetParagraphCount() - 1 ) : 0;
-            sal_Int32 nLen = pView->GetEditEngine()->GetTextLen( nPara );
+            sal_Int32 nPara =  pView->getEditEngine().GetParagraphCount() ? ( pView->getEditEngine().GetParagraphCount() - 1 ) : 0;
+            sal_Int32 nLen = pView->getEditEngine().GetTextLen( nPara );
             ESelection aSel( nPara, nLen, nPara, nLen );
             pView->SetSelection( aSel ); // set cursor to end of text
         }
@@ -1406,7 +1406,7 @@ void ScTextWnd::Resize()
 
 int ScTextWnd::GetEditEngTxtHeight() const
 {
-    return m_xEditView ? m_xEditView->GetEditEngine()->GetTextHeight() : 0;
+    return m_xEditView ? m_xEditView->getEditEngine().GetTextHeight() : 0;
 }
 
 void ScTextWnd::SetScrollBarRange()
@@ -1524,7 +1524,7 @@ static void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
 static void lcl_ModifyRTLVisArea( EditView* pEditView )
 {
     tools::Rectangle aVisArea = pEditView->GetVisArea();
-    Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
+    Size aPaper = pEditView->getEditEngine().GetPaperSize();
     tools::Long nDiff = aPaper.Width() - aVisArea.Right();
     aVisArea.AdjustLeft(nDiff );
     aVisArea.AdjustRight(nDiff );

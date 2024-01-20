@@ -191,9 +191,9 @@ AbsoluteScreenPixelRectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() co
     {
         if ( meObjectType == CellInEditMode )
         {
-            if ( mpEditView && mpEditView->GetEditEngine() )
+            if (mpEditView)
             {
-                MapMode aMapMode( mpEditView->GetEditEngine()->GetRefMapMode() );
+                MapMode aMapMode(mpEditView->getEditEngine().GetRefMapMode());
                 tools::Rectangle aScreenBoundsLog = mpWindow->LogicToPixel( mpEditView->GetOutputArea(), aMapMode );
                 Point aCellLoc = aScreenBoundsLog.TopLeft();
                 AbsoluteScreenPixelRectangle aWindowRect = mpWindow->GetWindowExtentsAbsolute();

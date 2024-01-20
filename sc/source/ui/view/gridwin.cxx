@@ -2852,7 +2852,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             bool bAlt = rMEvt.IsMod2();
             if ( !bAlt && !nButtonDown && ScGlobal::ShouldOpenURL() && pFld )
                 SetPointer( PointerStyle::RefHand );
-            else if ( pEditView->GetEditEngine()->IsEffectivelyVertical() )
+            else if (pEditView->getEditEngine().IsEffectivelyVertical())
                 SetPointer( PointerStyle::TextVertical );
             else
                 SetPointer( PointerStyle::Text );
@@ -3401,7 +3401,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         }
 
         //  if edit mode was just started above, online spelling may be incomplete
-        pEditView->GetEditEngine()->CompleteOnlineSpelling();
+        pEditView->getEditEngine().CompleteOnlineSpelling();
 
         //  IsCursorAtWrongSpelledWord could be used for !bMouse
         //  if there was a corresponding ExecuteSpellPopup call
@@ -3500,12 +3500,12 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
             //  handle selection within the EditView
 
             EditView* pEditView = mrViewData.GetEditView( eWhich );     // not NULL (HasEditView)
-            EditEngine* pEditEngine = pEditView->GetEditEngine();
+            EditEngine& rEditEngine = pEditView->getEditEngine();
             tools::Rectangle aOutputArea = pEditView->GetOutputArea();
             tools::Rectangle aVisArea = pEditView->GetVisArea();
 
             Point aTextPos = PixelToLogic( rPosPixel );
-            if ( pEditEngine->IsEffectivelyVertical() )            // have to manually transform position
+            if (rEditEngine.IsEffectivelyVertical())            // have to manually transform position
             {
                 aTextPos -= aOutputArea.TopRight();
                 tools::Long nTemp = -aTextPos.X();
@@ -3516,7 +3516,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
                 aTextPos -= aOutputArea.TopLeft();
             aTextPos += aVisArea.TopLeft();             // position in the edit document
 
-            EPosition aDocPosition = pEditEngine->FindDocPosition(aTextPos);
+            EPosition aDocPosition = rEditEngine.FindDocPosition(aTextPos);
             ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
             ESelection aSelection = pEditView->GetSelection();
             aSelection.Adjust();    // needed for IsLess/IsGreater

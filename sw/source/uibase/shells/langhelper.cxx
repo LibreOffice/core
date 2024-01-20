@@ -58,11 +58,11 @@ namespace SwLangHelper
     {
         ESelection aSelection = pOLV->GetSelection();
         EditView& rEditView=pOLV->GetEditView();
-        EditEngine* pEditEngine=rEditView.GetEditEngine();
+        EditEngine& rEditEngine = rEditView.getEditEngine();
 
         // the value of used script types
         const SvtScriptType nScriptType =pOLV->GetSelectedScriptType();
-        OUString aScriptTypesInUse( OUString::number( static_cast<int>(nScriptType) ) );//pEditEngine->GetScriptType(aSelection)
+        OUString aScriptTypesInUse( OUString::number( static_cast<int>(nScriptType) ) );//rEditEngine.GetScriptType(aSelection)
 
         // get keyboard language
         OUString aKeyboardLang;
@@ -78,11 +78,11 @@ namespace SwLangHelper
             aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
         // build sequence for status value
-        uno::Sequence< OUString > aSeq{ aCurrentLang,
+        uno::Sequence<OUString> aSeq{ aCurrentLang,
                                         aScriptTypesInUse,
                                         aKeyboardLang,
-                                        SwLangHelper::GetTextForLanguageGuessing( pEditEngine,
-                                                                                  aSelection ) };
+                                        SwLangHelper::GetTextForLanguageGuessing(&rEditEngine, aSelection)
+        };
 
         // set sequence as status value
         SfxStringListItem aItem( SID_LANGUAGE_STATUS );
@@ -200,7 +200,7 @@ namespace SwLangHelper
         if (nLang == LANGUAGE_DONTKNOW)
             return;
 
-        EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : nullptr;
+        EditEngine* pEditEngine = pOLV ? &pOLV->GetEditView().getEditEngine() : nullptr;
         OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
 
         //get ScriptType
@@ -284,7 +284,7 @@ namespace SwLangHelper
             // (for paragraph is handled by previously having set the selection to the
             // whole paragraph)
 
-            EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : nullptr;
+            EditEngine* pEditEngine = pOLV ? &pOLV->GetEditView().getEditEngine() : nullptr;
             OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
             if (pEditEngine)
             {
@@ -332,13 +332,13 @@ namespace SwLangHelper
 
             // ugly hack, as it seems that EditView/EditEngine does not update their spellchecking marks
             // when setting a new language attribute
-            EditEngine* pEditEngine = rEditView.GetEditEngine();
-            EEControlBits nCntrl = pEditEngine->GetControlWord();
+            EditEngine& rEditEngine = rEditView.getEditEngine();
+            EEControlBits nCntrl = rEditEngine.GetControlWord();
             // turn off
-            pEditEngine->SetControlWord(nCntrl & ~EEControlBits::ONLINESPELLING);
+            rEditEngine.SetControlWord(nCntrl & ~EEControlBits::ONLINESPELLING);
             //turn back on
-            pEditEngine->SetControlWord(nCntrl);
-            pEditEngine->CompleteOnlineSpelling();
+            rEditEngine.SetControlWord(nCntrl);
+            rEditEngine.CompleteOnlineSpelling();
 
             rEditView.Invalidate();
         }

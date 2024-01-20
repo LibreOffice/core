@@ -88,6 +88,11 @@ static bool bDebugPaint = false;
 
 static rtl::Reference<SfxItemPool> pGlobalPool;
 
+ImpEditEngine& EditEngine::getImpl()
+{
+    return *pImpEditEngine;
+}
+
 EditEngine::EditEngine( SfxItemPool* pItemPool )
 {
     pImpEditEngine.reset( new ImpEditEngine( this, pItemPool ) );

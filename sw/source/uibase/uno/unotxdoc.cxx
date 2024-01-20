@@ -3742,7 +3742,7 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
         {
             // Editing shape text
             EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
-            xTransferable = rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
+            xTransferable = rEditView.getEditEngine().CreateTransferable(rEditView.GetSelection());
         }
     }
 
@@ -3752,7 +3752,7 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
         {
             // Editing postit text.
             EditView& rEditView = pWin->GetOutlinerView()->GetEditView();
-            xTransferable = rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
+            xTransferable = rEditView.getEditEngine().CreateTransferable(rEditView.GetSelection());
         }
     }
 

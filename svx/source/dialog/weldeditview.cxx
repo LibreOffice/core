@@ -144,7 +144,7 @@ void WeldEditView::Resize()
         pEditView->ShowCursor();
 
         const tools::Long nMaxVisAreaStart
-            = pEditView->GetEditEngine()->GetTextHeight() - aOutputSize.Height();
+            = pEditView->getEditEngine().GetTextHeight() - aOutputSize.Height();
         tools::Rectangle aVisArea(pEditView->GetVisArea());
         if (aVisArea.Top() > nMaxVisAreaStart)
         {

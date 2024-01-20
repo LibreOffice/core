@@ -1543,7 +1543,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         else
         {
             lcl_LOKRemoveWindow(GetViewShell(), eWhich);
-            pEditView[eWhich]->SetEditEngine(pNewEngine);
+            pEditView[eWhich]->setEditEngine(pNewEngine);
         }
 
         if (pEditView[eWhich]->GetWindow() != pWin)
@@ -1555,7 +1555,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
     else
     {
-        pEditView[eWhich].reset(new EditView( pNewEngine, pWin ));
+        pEditView[eWhich].reset(new EditView(pNewEngine, pWin));
 
         if (bLOKActive)
         {
@@ -1873,8 +1873,7 @@ void ScViewData::EditGrowX()
 
     bool bLayoutRTL = rLocalDoc.IsLayoutRTL( nTabNo );
 
-    ScEditEngineDefaulter* pEngine =
-        static_cast<ScEditEngineDefaulter*>( pCurView->GetEditEngine() );
+    ScEditEngineDefaulter* pEngine = static_cast<ScEditEngineDefaulter*>(&pCurView->getEditEngine());
     vcl::Window* pWin = pCurView->GetWindow();
 
     // Get the left- and right-most column positions.
@@ -2166,38 +2165,38 @@ void ScViewData::EditGrowY( bool bInitial )
         return;
     }
 
-    EditEngine* pEngine = pCurView->GetEditEngine();
+    EditEngine& rEngine = pCurView->getEditEngine();
     vcl::Window* pWin = pCurView->GetWindow();
 
     SCROW nBottom = GetPosY(eVWhich) + VisibleCellsY(eVWhich);
 
-    Size        aSize = pEngine->GetPaperSize();
+    Size aSize = rEngine.GetPaperSize();
     Size aSizePTwips;
     tools::Rectangle   aArea = pCurView->GetOutputArea();
     tools::Rectangle aAreaPTwips;
 
     if (bLOKPrintTwips)
     {
-        aSizePTwips = pEngine->GetLOKSpecialPaperSize();
+        aSizePTwips = rEngine.GetLOKSpecialPaperSize();
         aAreaPTwips = pCurView->GetLOKSpecialOutputArea();
     }
 
-    tools::Long        nOldBottom = aArea.Bottom();
-    tools::Long        nTextHeight = pEngine->GetTextHeight();
+    tools::Long nOldBottom = aArea.Bottom();
+    tools::Long nTextHeight = rEngine.GetTextHeight();
 
     //  When editing a formula in a cell with optimal height, allow a larger portion
     //  to be clipped before extending to following rows, to avoid obscuring cells for
     //  reference input (next row is likely to be useful in formulas).
     tools::Long nAllowedExtra = SC_GROWY_SMALL_EXTRA;
     if (nEditEndRow == nEditRow && !(mrDoc.GetRowFlags(nEditRow, nTabNo) & CRFlags::ManualSize) &&
-            pEngine->GetParagraphCount() <= 1 )
+            rEngine.GetParagraphCount() <= 1 )
     {
         //  If the (only) paragraph starts with a '=', it's a formula.
         //  If this is the initial call and the text is empty, allow the larger value, too,
         //  because this occurs in the normal progress of editing a formula.
         //  Subsequent calls with empty text might involve changed attributes (including
         //  font height), so they are treated like normal text.
-        OUString aText = pEngine->GetText(  0 );
+        OUString aText = rEngine.GetText(  0 );
         if ( ( aText.isEmpty() && bInitial ) || aText.startsWith("=") )
             nAllowedExtra = SC_GROWY_BIG_EXTRA;
     }
@@ -2251,17 +2250,19 @@ void ScViewData::ResetEditView()
 {
     EditEngine* pEngine = nullptr;
     for (sal_uInt16 i=0; i<4; i++)
+    {
         if (pEditView[i])
         {
             if (bEditActive[i])
             {
                 lcl_LOKRemoveWindow(GetViewShell(), static_cast<ScSplitPos>(i));
-                pEngine = pEditView[i]->GetEditEngine();
+                pEngine = &pEditView[i]->getEditEngine();
                 pEngine->RemoveView(pEditView[i].get());
                 pEditView[i]->SetOutputArea( tools::Rectangle() );
             }
             bEditActive[i] = false;
         }
+    }
 
     if (pEngine)
         pEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
@@ -2269,15 +2270,13 @@ void ScViewData::ResetEditView()
 
 void ScViewData::KillEditView()
 {
-    EditEngine* pEngine = nullptr;
     for (sal_uInt16 i=0; i<4; i++)
         if (pEditView[i])
         {
             if (bEditActive[i])
             {
-                pEngine = pEditView[i]->GetEditEngine();
-                if (pEngine)
-                    pEngine->RemoveView(pEditView[i].get());
+                EditEngine& rEngine = pEditView[i]->getEditEngine();
+                rEngine.RemoveView(pEditView[i].get());
             }
             pEditView[i].reset();
         }

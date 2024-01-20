@@ -21,7 +21,7 @@ void URLFieldHelper::RemoveURLField(EditView& pEditView)
     if (auto pUrlField = dynamic_cast<const SvxURLField*>(pField))
     {
         ESelection aSel = pEditView.GetSelection();
-        pEditView.GetEditEngine()->QuickInsertText(pUrlField->GetRepresentation(), aSel);
+        pEditView.getEditEngine().QuickInsertText(pUrlField->GetRepresentation(), aSel);
         pEditView.Invalidate();
     }
 }

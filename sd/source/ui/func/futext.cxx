@@ -1377,14 +1377,11 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
                     pOLV = pView->GetTextEditOutlinerView();
                     if( pOLV )
                     {
-                        EditEngine* pEditEngine = pOLV->GetEditView().GetEditEngine();
-                        if( pEditEngine )
-                        {
-                            ESelection aSel;
-                            aSel.nEndPara = pEditEngine->GetParagraphCount()-1;
-                            aSel.nEndPos = pEditEngine->GetTextLen(aSel.nEndPara);
-                            pOLV->SetSelection(aSel);
-                        }
+                        EditEngine& rEditEngine = pOLV->GetEditView().getEditEngine();
+                        ESelection aSel;
+                        aSel.nEndPara = rEditEngine.GetParagraphCount() - 1;
+                        aSel.nEndPos = rEditEngine.GetTextLen(aSel.nEndPara);
+                        pOLV->SetSelection(aSel);
 
                         ChangeFontSize( bGrow, pOLV, pFontList, pView );
                     }

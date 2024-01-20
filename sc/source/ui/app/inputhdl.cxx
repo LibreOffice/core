@@ -635,15 +635,15 @@ static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelect
         pView->SetSelection( ESelection( aOldSel.nEndPara, aOldSel.nEndPos,
                                          aOldSel.nEndPara, aOldSel.nEndPos ) );
 
-    EditEngine* pEngine = pView->GetEditEngine();
-    pEngine->QuickInsertText( rNewStr, rOldSel );
+    EditEngine& rEngine = pView->getEditEngine();
+    rEngine.QuickInsertText( rNewStr, rOldSel );
 
     // Dummy InsertText for Update and Paint
     // To do that we need to cancel the selection from above (before QuickInsertText)
     pView->InsertText( OUString() );
 
-    const sal_Int32 nPara = pEngine->GetParagraphCount() - 1;
-    const sal_Int32 nLen = pEngine->GetTextLen(nPara);
+    const sal_Int32 nPara = rEngine.GetParagraphCount() - 1;
+    const sal_Int32 nLen = rEngine.GetTextLen(nPara);
     ESelection aSel( nPara, nLen, nPara, nLen );
     pView->SetSelection( aSel ); // Set cursor to the end
 }
@@ -1640,7 +1640,7 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
     ESelection aSel = pView->GetSelection();
 
     bool bNoInitialLetter = false;
-    OUString aOld = pView->GetEditEngine()->GetText(0);
+    OUString aOld = pView->getEditEngine().GetText(0);
     // in case we want just insert a function and not completing
     if ( comphelper::LibreOfficeKit::isActive() )
     {
@@ -1775,10 +1775,9 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
 
     bool bEdit = false;
     OUString aFormula;
-    const EditEngine* pEditEngine = pEditView->GetEditEngine();
-    if (pEditEngine)
+    EditEngine const& rEditEngine = pEditView->getEditEngine();
     {
-        aFormula = pEditEngine->GetText(0);
+        aFormula = rEditEngine.GetText(0);
         /* TODO: LOK: are you sure you want '+' and '-' let start formulas with
          * function names? That was meant for "data typist" numeric keyboard
          * input. */
@@ -2661,22 +2660,22 @@ static void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
 {
     OSL_ENSURE( rSel.nStartPara==0 && rSel.nEndPara==0, "SetTopSelection: Para != 0" );
 
-    EditEngine* pEngine = pEditView->GetEditEngine();
-    sal_Int32 nCount = pEngine->GetParagraphCount();
+    EditEngine& rEngine = pEditView->getEditEngine();
+    sal_Int32 nCount = rEngine.GetParagraphCount();
     if (nCount > 1)
     {
-        sal_Int32 nParLen = pEngine->GetTextLen(rSel.nStartPara);
+        sal_Int32 nParLen = rEngine.GetTextLen(rSel.nStartPara);
         while (rSel.nStartPos > nParLen && rSel.nStartPara+1 < nCount)
         {
             rSel.nStartPos -= nParLen + 1; // Including space from line break
-            nParLen = pEngine->GetTextLen(++rSel.nStartPara);
+            nParLen = rEngine.GetTextLen(++rSel.nStartPara);
         }
 
-        nParLen = pEngine->GetTextLen(rSel.nEndPara);
+        nParLen = rEngine.GetTextLen(rSel.nEndPara);
         while (rSel.nEndPos > nParLen && rSel.nEndPara+1 < nCount)
         {
             rSel.nEndPos -= nParLen + 1; // Including space from line break
-            nParLen = pEngine->GetTextLen(++rSel.nEndPara);
+            nParLen = rEngine.GetTextLen(++rSel.nEndPara);
         }
     }
 
@@ -2753,7 +2752,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
     {
         //  table EditEngine is formatted below, input line needs formatting after paste
         //  #i20282# not when called from the input line's modify handler
-        pTopView->GetEditEngine()->QuickFormatDoc( true );
+        pTopView->getEditEngine().QuickFormatDoc( true );
 
         //  #i23720# QuickFormatDoc hides the cursor, but can't show it again because it
         //  can't safely access the EditEngine's current view, so the cursor has to be
@@ -3085,11 +3084,11 @@ static void lcl_SelectionToEnd( EditView* pView )
 {
     if ( pView )
     {
-        EditEngine* pEngine = pView->GetEditEngine();
-        sal_Int32 nParCnt = pEngine->GetParagraphCount();
+        EditEngine& rEngine = pView->getEditEngine();
+        sal_Int32 nParCnt = rEngine.GetParagraphCount();
         if ( nParCnt == 0 )
             nParCnt = 1;
-        ESelection aSel( nParCnt-1, pEngine->GetTextLen(nParCnt-1) ); // empty selection, cursor at the end
+        ESelection aSel( nParCnt-1, rEngine.GetTextLen(nParCnt-1) ); // empty selection, cursor at the end
         pView->SetSelection( aSel );
     }
 }
@@ -3762,12 +3761,12 @@ void ScInputHandler::ClearText()
 
     if (pTableView)
     {
-        pTableView->GetEditEngine()->SetText( "" );
+        pTableView->getEditEngine().SetText( "" );
         pTableView->SetSelection( ESelection(0,0, 0,0) );
     }
     if (pTopView)
     {
-        pTopView->GetEditEngine()->SetText( "" );
+        pTopView->getEditEngine().SetText( "" );
         pTopView->SetSelection( ESelection(0,0, 0,0) );
     }
 
@@ -3957,7 +3956,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
 
                         if (pTableView)
                         {
-                            pTableView->GetEditEngine()->SetText( aStrLoP );
+                            pTableView->getEditEngine().SetText( aStrLoP );
                             if ( !aStrLoP.isEmpty() )
                                 pTableView->SetSelection( ESelection(0,0, 0,0) );   // before the '%'
 
@@ -3966,7 +3965,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                         }
                         if (pTopView)
                         {
-                            pTopView->GetEditEngine()->SetText( aStrLoP );
+                            pTopView->getEditEngine().SetText( aStrLoP );
                             if ( !aStrLoP.isEmpty() )
                                 pTopView->SetSelection( ESelection(0,0, 0,0) );     // before the '%'
                         }
@@ -4181,12 +4180,12 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
                     {
                         if (pTableView)
                         {
-                            pTableView->GetEditEngine()->SetText( "" );
+                            pTableView->getEditEngine().SetText( "" );
                             pTableView->SetSelection( ESelection(0,0, 0,0) );
                         }
                         if (pTopView)
                         {
-                            pTopView->GetEditEngine()->SetText( "" );
+                            pTopView->getEditEngine().SetText( "" );
                             pTopView->SetSelection( ESelection(0,0, 0,0) );
                         }
                     }
@@ -4524,7 +4523,7 @@ void ScInputHandler::InputChanged( const EditView* pView, bool bFromNotify )
     bool bFromTopNotify = ( bFromNotify && pView == pTopView );
 
     bool bNewView = DataChanging();                     //FIXME: Is this at all possible?
-    aCurrentText = pView->GetEditEngine()->GetText();   // Also remember the string
+    aCurrentText = pView->getEditEngine().GetText();   // Also remember the string
     mpEditEngine->SetTextCurrentDefaults( aCurrentText );
     DataChanged( bFromTopNotify );
     bTextValid = true; // Is set to false in DataChanged
@@ -4625,7 +4624,7 @@ EditView* ScInputHandler::GetFuncEditView()
             SetMode( SC_INPUT_TABLE );
             bCreatingFuncView = false;
             if ( pTableView )
-                pTableView->GetEditEngine()->SetText( OUString() );
+                pTableView->getEditEngine().SetText( OUString() );
         }
         pView = pTableView;
     }
@@ -4677,7 +4676,7 @@ void ScInputHandler::InputReplaceSelection( std::u16string_view aStr )
     if (pView)
     {
         pView->SetEditEngineUpdateLayout( false );
-        pView->GetEditEngine()->SetText( aFormText );
+        pView->getEditEngine().SetText( aFormText );
         pView->SetSelection( ESelection(0,nFormSelStart, 0,nFormSelEnd) );
         pView->SetEditEngineUpdateLayout( true );
     }

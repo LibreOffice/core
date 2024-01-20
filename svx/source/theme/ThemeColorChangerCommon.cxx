@@ -62,9 +62,7 @@ bool updateEditEngTextSections(model::ColorSet const& rColorSet, SdrObject* pObj
     if (!pOutlinerView)
         return false;
 
-    auto* pEditEngine = pOutlinerView->GetEditView().GetEditEngine();
-    if (!pEditEngine)
-        return false;
+    auto& rEditEngine = pOutlinerView->GetEditView().getEditEngine();
 
     OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
     if (pOutlinerParagraphObject)
@@ -82,9 +80,9 @@ bool updateEditEngTextSections(model::ColorSet const& rColorSet, SdrObject* pObj
             model::ComplexColor const& rComplexColor = pItem->getComplexColor();
             if (rComplexColor.isValidThemeType())
             {
-                SfxItemSet aSet(pEditEngine->GetAttribs(rSection.mnParagraph, rSection.mnStart,
-                                                        rSection.mnEnd,
-                                                        GetAttribsFlags::CHARATTRIBS));
+                SfxItemSet aSet(rEditEngine.GetAttribs(rSection.mnParagraph, rSection.mnStart,
+                                                       rSection.mnEnd,
+                                                       GetAttribsFlags::CHARATTRIBS));
                 Color aNewColor = rColorSet.resolveColor(rComplexColor);
                 std::unique_ptr<SvxColorItem> pNewItem(pItem->Clone());
                 pNewItem->setColor(aNewColor);
@@ -92,7 +90,7 @@ bool updateEditEngTextSections(model::ColorSet const& rColorSet, SdrObject* pObj
 
                 ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph,
                                       rSection.mnEnd);
-                pEditEngine->QuickSetAttribs(aSet, aSelection);
+                rEditEngine.QuickSetAttribs(aSet, aSelection);
             }
         }
     }

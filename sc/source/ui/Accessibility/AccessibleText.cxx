@@ -658,10 +658,9 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 }
 
 ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, OutputDevice* pWin, bool isClone)
-    :
-    mpEditView(pEditView),
-    mpEditEngine(pEditView ? pEditView->GetEditEngine() : nullptr),
-    mpWindow(pWin)
+    : mpEditView(pEditView)
+    , mpEditEngine(pEditView ? &pEditView->getEditEngine() : nullptr)
+    , mpWindow(pWin)
 {
     // If the object is cloned, do NOT add notify hdl.
     mbIsCloned = isClone;
@@ -706,7 +705,7 @@ SvxTextForwarder* ScAccessibleEditObjectTextData::GetTextForwarder()
     if ((!mpForwarder && mpEditView) || (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet()))
     {
         if (!mpEditEngine)
-            mpEditEngine = mpEditView->GetEditEngine();
+            mpEditEngine = &mpEditView->getEditEngine();
         // If the object is cloned, do NOT add notify hdl.
         if (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet()&&!mbIsCloned)
             mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
@@ -769,12 +768,12 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
         delete mpEditEngine;
         mpEditEngine = nullptr;    // don't access in ScAccessibleEditObjectTextData dtor!
     }
-    else if (mpTxtWnd && mpTxtWnd->HasEditView() && mpTxtWnd->GetEditView()->GetEditEngine())
+    else if (mpTxtWnd && mpTxtWnd->HasEditView())
     {
         //  the NotifyHdl also has to be removed from the ScTextWnd's EditEngine
         //  (it's set in ScAccessibleEditLineTextData::GetTextForwarder, and mpEditEngine
         //  is reset there)
-        mpTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
+        mpTxtWnd->GetEditView()->getEditEngine().SetNotifyHdl(Link<EENotify&,void>());
     }
 }
 
@@ -868,8 +867,8 @@ void ScAccessibleEditLineTextData::ResetEditMode()
 {
     if (mbEditEngineCreated && mpEditEngine)
         delete mpEditEngine;
-    else if (mpTxtWnd && mpTxtWnd->HasEditView() && mpTxtWnd->GetEditView()->GetEditEngine())
-        mpTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
+    else if (mpTxtWnd && mpTxtWnd->HasEditView())
+        mpTxtWnd->GetEditView()->getEditEngine().SetNotifyHdl(Link<EENotify&,void>());
     mpEditEngine = nullptr;
 
     mpForwarder.reset();

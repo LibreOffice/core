@@ -270,7 +270,7 @@ private:
     OutlinerViewShell*        mpViewShell;
     /// Another shell, just listening to our state, if any.
     OutlinerViewShell*        mpOtherShell;
-    EditEngine*               pEditEngine;
+    EditEngine* mpEditEngine;
     VclPtr<vcl::Window>       pOutWin;
     EditView::OutWindowSet    aOutWindowSet;
     std::optional<PointerStyle>  mxPointer;
@@ -351,6 +351,10 @@ public:
                     virtual ~ImpEditView() override;
 
     EditView*       GetEditViewPtr() { return pEditView; }
+
+    EditEngine& getEditEngine() const { return *mpEditEngine; }
+    ImpEditEngine& getImpEditEngine() const { return getEditEngine().getImpl(); }
+
 
     sal_uInt16      GetScrollDiffX() const          { return nScrollDiffX; }
     void            SetScrollDiffX( sal_uInt16 n )  { nScrollDiffX = n; }

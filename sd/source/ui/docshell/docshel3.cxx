@@ -335,7 +335,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                             const LanguageType nLangToUse = SvtLanguageTable::GetLanguageType( aNewLangTxt );
                             SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
 
-                            SfxItemSet aAttrs = rEditView.GetEditEngine()->GetEmptyItemSet();
+                            SfxItemSet aAttrs = rEditView.getEditEngine().GetEmptyItemSet();
                             if (nScriptType == SvtScriptType::LATIN)
                                 aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE ) );
                             if (nScriptType == SvtScriptType::COMPLEX)

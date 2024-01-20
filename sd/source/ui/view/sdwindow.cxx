@@ -219,7 +219,7 @@ void Window::KeyInput(const KeyEvent& rKEvt)
     {
         mpViewShell->GetDoc()->dumpAsXml(nullptr);
         if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())
-            pOLV->GetEditView().GetEditEngine()->dumpAsXmlEditDoc(nullptr);
+            pOLV->GetEditView().getEditEngine().dumpAsXmlEditDoc(nullptr);
         return;
     }
 
