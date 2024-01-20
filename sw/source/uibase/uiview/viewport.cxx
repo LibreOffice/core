@@ -1163,6 +1163,7 @@ bool SwView::UpdateScrollbars()
         const tools::Long lOfst = bBorder ? 0 : DOCUMENTBORDER * 2;
         aTmpSz.AdjustWidth(lOfst ); aTmpSz.AdjustHeight(lOfst );
 
+        if (m_pVScrollbar)
         {
             const bool bVScrollVisible = m_pVScrollbar->IsScrollbarVisible(true);
             m_pVScrollbar->DocSzChgd( aTmpSz );
@@ -1170,6 +1171,7 @@ bool SwView::UpdateScrollbars()
             if ( bVScrollVisible != m_pVScrollbar->IsScrollbarVisible(true) )
                 bRet = true;
         }
+        if (m_pHScrollbar)
         {
             const bool bHScrollVisible = m_pHScrollbar->IsScrollbarVisible(true);
             m_pHScrollbar->DocSzChgd( aTmpSz );
