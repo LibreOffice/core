@@ -105,7 +105,6 @@ public:
     ObjectIdentifier( const css::uno::Any& rAny );
 
     bool operator==( const ObjectIdentifier& rOID ) const;
-    bool operator!=( const ObjectIdentifier& rOID ) const;
     bool operator<( const ObjectIdentifier& rOID ) const;
 
     static OUString createClassifiedIdentifierForObject(

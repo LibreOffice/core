@@ -142,11 +142,6 @@ namespace basegfx
         return mpImpl->isEqual(*rMat.mpImpl);
     }
 
-    bool B3DHomMatrix::operator!=(const B3DHomMatrix& rMat) const
-    {
-        return !(*this == rMat);
-    }
-
     void B3DHomMatrix::rotate(double fAngleX,double fAngleY,double fAngleZ)
     {
         if(fTools::equalZero(fAngleX) && fTools::equalZero(fAngleY) && fTools::equalZero(fAngleZ))

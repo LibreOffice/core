@@ -259,11 +259,6 @@ bool ObjectIdentifier::operator==( const ObjectIdentifier& rOID ) const
          ( m_xAdditionalShape == rOID.m_xAdditionalShape );
 }
 
-bool ObjectIdentifier::operator!=( const ObjectIdentifier& rOID ) const
-{
-    return !operator==( rOID );
-}
-
 bool ObjectIdentifier::operator<( const ObjectIdentifier& rOID ) const
 {
     bool bReturn = false;

@@ -99,7 +99,6 @@ namespace basegfx
 
         // comparison
         bool operator==(const B3DHomMatrix& rMat) const;
-        bool operator!=(const B3DHomMatrix& rMat) const;
 
         // multiplication, division by constant value
         B3DHomMatrix& operator*=(double fValue);
