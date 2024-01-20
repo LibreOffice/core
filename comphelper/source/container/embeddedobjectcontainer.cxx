@@ -238,8 +238,7 @@ bool EmbeddedObjectContainer::HasEmbeddedObjects() const
 
 bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )
 {
-    auto aIt = pImpl->maNameToObjectMap.find( rName );
-    if (aIt != pImpl->maNameToObjectMap.end())
+    if (pImpl->maNameToObjectMap.contains(rName))
         return true;
     if (!pImpl->mxStorage.is())
         return false;
@@ -256,8 +255,7 @@ bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rNa
     // allows to detect whether the object was already instantiated
     // currently the filter instantiate it on loading, so this method allows
     // to avoid objects pointing to the same persistence
-    auto aIt = pImpl->maNameToObjectMap.find( rName );
-    return ( aIt != pImpl->maNameToObjectMap.end() );
+    return pImpl->maNameToObjectMap.contains(rName);
 }
 
 OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) const
