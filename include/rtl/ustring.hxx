@@ -167,6 +167,7 @@ template<std::size_t N> struct ExceptCharArrayDetector<OUStringLiteral<N>> {};
   less people should have understanding problems when they use this class.
 */
 
+// coverity[ missing_move_assignment : SUPPRESS] - don't report the suppressed move assignment
 class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI OUString
 {
 public:
@@ -587,6 +588,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
+#if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     /**
       Move assign a new string.
 
@@ -598,6 +600,7 @@ public:
         std::swap(pData, str.pData);
         return *this;
     }
+#endif
 #endif
 
     /**

@@ -188,6 +188,7 @@ template<OStringLiteral L> struct OStringHolder {
   use this class.
 */
 
+// coverity[ missing_move_assignment : SUPPRESS] - don't report the suppressed move assignment
 class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI OString
 {
 public:
@@ -509,6 +510,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
+#if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     /**
       Move assign a new string.
 
@@ -523,6 +525,7 @@ public:
         rtl_string_new( &str.pData );
         return *this;
     }
+#endif
 #endif
 
     /**
