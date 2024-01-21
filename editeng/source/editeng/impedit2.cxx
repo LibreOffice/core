@@ -989,7 +989,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView const * mpEditView, const 
     const EditLine& rLine = pParaPortion->GetLines()[nLine];
     bool bEmptyLine = rLine.GetStart() == rLine.GetEnd();
 
-    mpEditView->getImpl().nExtraCursorFlags = GetCursorFlags::NONE;
+    mpEditView->getImpl().mnExtraCursorFlags = GetCursorFlags::NONE;
 
     if ( !bEmptyLine )
     {
@@ -1044,7 +1044,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView const * pEditView, const 
     const EditLine& rLine = pParaPortion->GetLines()[nLine];
     bool bEmptyLine = rLine.GetStart() == rLine.GetEnd();
 
-    pEditView->getImpl().nExtraCursorFlags = GetCursorFlags::NONE;
+    pEditView->getImpl().mnExtraCursorFlags = GetCursorFlags::NONE;
 
     bool bParaRTL = IsRightToLeft( nPara );
 
@@ -1272,13 +1272,13 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView const * pView )
     const EditLine& rLine = pPPortion->GetLines()[nLine];
 
     tools::Long nX;
-    if ( pView->getImpl().nTravelXPos == TRAVEL_X_DONTKNOW )
+    if ( pView->getImpl().mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = GetXPos(*pPPortion, rLine, rPaM.GetIndex());
-        pView->getImpl().nTravelXPos = nX + mnOnePixelInRef;
+        pView->getImpl().mnTravelXPos = nX + mnOnePixelInRef;
     }
     else
-        nX = pView->getImpl().nTravelXPos;
+        nX = pView->getImpl().mnTravelXPos;
 
     EditPaM aNewPaM( rPaM );
     if ( nLine )    // same paragraph
@@ -1315,14 +1315,14 @@ EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView const * pView )
     sal_Int32 nLine = pPPortion->GetLineNumber( rPaM.GetIndex() );
 
     tools::Long nX;
-    if ( pView->getImpl().nTravelXPos == TRAVEL_X_DONTKNOW )
+    if ( pView->getImpl().mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         const EditLine& rLine = pPPortion->GetLines()[nLine];
         nX = GetXPos(*pPPortion, rLine, rPaM.GetIndex());
-        pView->getImpl().nTravelXPos = nX + mnOnePixelInRef;
+        pView->getImpl().mnTravelXPos = nX + mnOnePixelInRef;
     }
     else
-        nX = pView->getImpl().nTravelXPos;
+        nX = pView->getImpl().mnTravelXPos;
 
     EditPaM aNewPaM( rPaM );
     if ( nLine < pPPortion->GetLines().Count()-1 )

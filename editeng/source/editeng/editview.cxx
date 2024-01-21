@@ -183,11 +183,11 @@ EditEngine& EditView::getEditEngine() const
 
 tools::Rectangle EditView::GetInvalidateRect() const
 {
-    if ( !getImpl().DoInvalidateMore() )
-        return getImpl().aOutArea;
+    if (!getImpl().DoInvalidateMore())
+        return getImpl().maOutputArea;
     else
     {
-        tools::Rectangle aRect( getImpl().aOutArea );
+        tools::Rectangle aRect(getImpl().maOutputArea);
         tools::Long nMore = getImpl().GetOutputDevice().PixelToLogic( Size( getImpl().GetInvalidateMore(), 0 ) ).Width();
         aRect.AdjustLeft( -nMore );
         aRect.AdjustRight(nMore );
@@ -229,7 +229,7 @@ void EditView::InvalidateOtherViewWindows( const tools::Rectangle& rInvRect )
     if (comphelper::LibreOfficeKit::isActive())
     {
         bool bNegativeX = IsNegativeX();
-        for (auto& pWin : getImpl().aOutWindowSet)
+        for (auto& pWin : getImpl().maOutWindowSet)
         {
             if (pWin)
             {
@@ -249,12 +249,12 @@ void EditView::Invalidate()
 
 void EditView::SetReadOnly( bool bReadOnly )
 {
-    getImpl().bReadOnly = bReadOnly;
+    getImpl().mbReadOnly = bReadOnly;
 }
 
 bool EditView::IsReadOnly() const
 {
-    return getImpl().bReadOnly;
+    return getImpl().mbReadOnly;
 }
 
 void EditView::SetSelection( const ESelection& rESel )
@@ -364,15 +364,15 @@ void EditView::setEditEngine(EditEngine* pEditEngine)
     getImpl().SetEditSelection( aStartSel );
 }
 
-void EditView::SetWindow( vcl::Window* pWin )
+void EditView::SetWindow(vcl::Window* pWindow)
 {
-    getImpl().pOutWin = pWin;
+    getImpl().mpOutputWindow = pWindow;
     getImpEditEngine().GetSelEngine().Reset();
 }
 
 vcl::Window* EditView::GetWindow() const
 {
-    return getImpl().pOutWin;
+    return getImpl().mpOutputWindow;
 }
 
 OutputDevice& EditView::GetOutputDevice() const
@@ -390,7 +390,7 @@ LanguageType EditView::GetInputLanguage() const
 
 bool EditView::HasOtherViewWindow( vcl::Window* pWin )
 {
-    OutWindowSet& rOutWindowSet = getImpl().aOutWindowSet;
+    OutWindowSet& rOutWindowSet = getImpl().maOutWindowSet;
     auto found = std::find(rOutWindowSet.begin(), rOutWindowSet.end(), pWin);
     return (found != rOutWindowSet.end());
 }
@@ -399,13 +399,13 @@ bool EditView::AddOtherViewWindow( vcl::Window* pWin )
 {
     if (HasOtherViewWindow(pWin))
         return false;
-    getImpl().aOutWindowSet.emplace_back(pWin);
+    getImpl().maOutWindowSet.emplace_back(pWin);
     return true;
 }
 
 bool EditView::RemoveOtherViewWindow( vcl::Window* pWin )
 {
-    OutWindowSet& rOutWindowSet = getImpl().aOutWindowSet;
+    OutWindowSet& rOutWindowSet = getImpl().maOutWindowSet;
     auto found = std::find(rOutWindowSet.begin(), rOutWindowSet.end(), pWin);
     if (found == rOutWindowSet.end())
         return false;
@@ -446,7 +446,7 @@ PointerStyle EditView::GetPointer() const
 
 vcl::Cursor* EditView::GetCursor() const
 {
-    return getImpl().pCursor.get();
+    return getImpl().GetCursor();
 }
 
 void EditView::InsertText( const OUString& rStr, bool bSelect, bool bLOKShowSelect )
@@ -533,9 +533,9 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
 
     if (getImpl().mpViewShell && !bActivate)
     {
-        if (!getImpl().pOutWin)
+        if (!getImpl().mpOutputWindow)
             return;
-        VclPtr<vcl::Window> pParent = getImpl().pOutWin->GetParentWithLOKNotifier();
+        VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithLOKNotifier();
         if (pParent && pParent->GetLOKWindowId() != 0)
             return;
 
@@ -551,9 +551,9 @@ void EditView::HideCursor(bool bDeactivate)
 
     if (getImpl().mpViewShell && !bDeactivate)
     {
-        if (!getImpl().pOutWin)
+        if (!getImpl().mpOutputWindow)
             return;
-        VclPtr<vcl::Window> pParent = getImpl().pOutWin->GetParentWithLOKNotifier();
+        VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithLOKNotifier();
         if (pParent && pParent->GetLOKWindowId() != 0)
             return;
 
@@ -575,7 +575,7 @@ const SfxItemSet& EditView::GetEmptyItemSet() const
 
 void EditView::SetAttribs( const SfxItemSet& rSet )
 {
-    DBG_ASSERT( !getImpl().aEditSelection.IsInvalid(), "Blind Selection in..." );
+    DBG_ASSERT(!getImpl().maEditSelection.IsInvalid(), "Blind Selection in...");
 
     getImpl().DrawSelectionXOR();
     getEditEngine().SetAttribs( getImpl().GetEditSelection(), rSet, SetAttribsMode::WholeWord );
@@ -631,7 +631,7 @@ void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 
 SfxItemSet EditView::GetAttribs()
 {
-    DBG_ASSERT( !getImpl().aEditSelection.IsInvalid(), "Blind Selection in..." );
+    DBG_ASSERT(!getImpl().maEditSelection.IsInvalid(), "Blind Selection in...");
     return getImpEditEngine().GetAttribs( getImpl().GetEditSelection() );
 }
 
@@ -754,12 +754,12 @@ void EditView::RegisterOtherShell(OutlinerViewShell* pOtherShell)
 
 void EditView::SetControlWord( EVControlBits nWord )
 {
-    getImpl().nControl = nWord;
+    getImpl().mnControl = nWord;
 }
 
 EVControlBits EditView::GetControlWord() const
 {
-    return getImpl().nControl;
+    return getImpl().mnControl;
 }
 
 std::unique_ptr<EditTextObject> EditView::CreateTextObject()

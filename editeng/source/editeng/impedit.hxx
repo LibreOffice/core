@@ -263,38 +263,37 @@ class ImpEditView : public vcl::unohelper::DragAndDropClient
     using vcl::unohelper::DragAndDropClient::dragOver;
 
 private:
-    EditView*                 pEditView;
-    std::unique_ptr<vcl::Cursor, o3tl::default_delete<vcl::Cursor>>  pCursor;
-    std::optional<Color>      mxBackgroundColor;
+    EditView* mpEditView;
+    std::unique_ptr<vcl::Cursor, o3tl::default_delete<vcl::Cursor>> mpCursor;
+    std::optional<Color> mxBackgroundColor;
     /// Containing view shell, if any.
-    OutlinerViewShell*        mpViewShell;
+    OutlinerViewShell* mpViewShell;
     /// Another shell, just listening to our state, if any.
-    OutlinerViewShell*        mpOtherShell;
+    OutlinerViewShell* mpOtherShell;
     EditEngine* mpEditEngine;
-    VclPtr<vcl::Window>       pOutWin;
-    EditView::OutWindowSet    aOutWindowSet;
-    std::optional<PointerStyle>  mxPointer;
-    std::unique_ptr<DragAndDropInfo>  pDragAndDropInfo;
+    VclPtr<vcl::Window> mpOutputWindow;
+    EditView::OutWindowSet maOutWindowSet;
+    std::optional<PointerStyle> mxPointer;
+    std::unique_ptr<DragAndDropInfo> mpDragAndDropInfo;
 
-    css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
+    css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> mxDnDListener;
 
+    tools::Long mnInvalidateMore;
+    EVControlBits mnControl;
+    sal_uInt32 mnTravelXPos;
+    GetCursorFlags mnExtraCursorFlags;
+    sal_uInt16 mnCursorBidiLevel;
+    sal_uInt16 mnScrollDiffX;
+    bool mbReadOnly;
+    bool mbClickedInSelection;
+    bool mbActiveDragAndDropListener;
 
-    tools::Long                nInvMore;
-    EVControlBits       nControl;
-    sal_uInt32          nTravelXPos;
-    GetCursorFlags      nExtraCursorFlags;
-    sal_uInt16          nCursorBidiLevel;
-    sal_uInt16          nScrollDiffX;
-    bool                bReadOnly;
-    bool                bClickedInSelection;
-    bool                bActiveDragAndDropListener;
-
-    Point               aAnchorPoint;
-    tools::Rectangle           aOutArea;
-    Point               aVisDocStartPos;
-    EESelectionMode     eSelectionMode;
-    EditSelection       aEditSelection;
-    EEAnchorMode        eAnchorMode;
+    Point maAnchorPoint;
+    tools::Rectangle maOutputArea;
+    Point maVisDocStartPos;
+    EESelectionMode meSelectionMode;
+    EditSelection maEditSelection;
+    EEAnchorMode meAnchorMode;
 
     /// mechanism to change from the classic refresh mode that simply
     // invalidates the area where text was changed. When set, the invalidate
@@ -347,20 +346,20 @@ protected:
     tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const;
 
 public:
-                    ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow );
-                    virtual ~ImpEditView() override;
+    ImpEditView(EditView* pView, EditEngine* pEditEngine, vcl::Window* pWindow);
+    virtual ~ImpEditView() override;
 
-    EditView*       GetEditViewPtr() { return pEditView; }
+    EditView* GetEditViewPtr() { return mpEditView; }
 
     EditEngine& getEditEngine() const { return *mpEditEngine; }
     ImpEditEngine& getImpEditEngine() const { return getEditEngine().getImpl(); }
 
 
-    sal_uInt16      GetScrollDiffX() const          { return nScrollDiffX; }
-    void            SetScrollDiffX( sal_uInt16 n )  { nScrollDiffX = n; }
+    sal_uInt16 GetScrollDiffX() const { return mnScrollDiffX; }
+    void SetScrollDiffX(sal_uInt16 n) { mnScrollDiffX = n; }
 
-    sal_uInt16      GetCursorBidiLevel() const      { return nCursorBidiLevel; }
-    void            SetCursorBidiLevel( sal_uInt16 n ) { nCursorBidiLevel = n; }
+    sal_uInt16 GetCursorBidiLevel() const { return mnCursorBidiLevel; }
+    void SetCursorBidiLevel(sal_uInt16 n) { mnCursorBidiLevel = n; }
 
     Point           GetDocPos( const Point& rWindowPos ) const;
     Point           GetWindowPos( const Point& rDocPos ) const;
@@ -368,7 +367,7 @@ public:
 
     void                SetOutputArea( const tools::Rectangle& rRect );
     void                ResetOutputArea( const tools::Rectangle& rRect );
-    const tools::Rectangle&    GetOutputArea() const   { return aOutArea; }
+    const tools::Rectangle& GetOutputArea() const { return maOutputArea; }
 
     bool            IsVertical() const;
     bool            IsTopToBottom() const;
@@ -384,20 +383,29 @@ public:
     void            CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bCut );
     void            Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial = false, SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
-    void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
+    void SetVisDocStartPos(const Point& rPos) { maVisDocStartPos = rPos; }
 
-    tools::Long            GetVisDocLeft() const { return aVisDocStartPos.X(); }
-    tools::Long            GetVisDocTop() const { return aVisDocStartPos.Y(); }
-    tools::Long            GetVisDocRight() const { return aVisDocStartPos.X() + ( !IsVertical() ? aOutArea.GetWidth() : aOutArea.GetHeight() ); }
-    tools::Long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
+    tools::Long GetVisDocLeft() const { return maVisDocStartPos.X(); }
+    tools::Long GetVisDocTop() const { return maVisDocStartPos.Y(); }
+    tools::Long GetVisDocRight() const
+    {
+        return maVisDocStartPos.X() + ( !IsVertical() ? maOutputArea.GetWidth() : maOutputArea.GetHeight() );
+    }
+    tools::Long GetVisDocBottom() const
+    {
+        return maVisDocStartPos.Y() + ( !IsVertical() ? maOutputArea.GetHeight() : maOutputArea.GetWidth() );
+    }
     tools::Rectangle       GetVisDocArea() const;
 
-    const EditSelection&  GetEditSelection() const { return aEditSelection; }
-    void            SetEditSelection( const EditSelection& rEditSelection );
-    bool            HasSelection() const { return aEditSelection.HasRange(); }
+    const EditSelection&  GetEditSelection() const { return maEditSelection; }
+    void SetEditSelection(const EditSelection& rEditSelection);
+    bool HasSelection() const { return maEditSelection.HasRange(); }
 
     void SelectionChanged();
-    void            DrawSelectionXOR() { DrawSelectionXOR( aEditSelection ); }
+    void DrawSelectionXOR()
+    {
+        DrawSelectionXOR(maEditSelection);
+    }
     void            DrawSelectionXOR( EditSelection, vcl::Region* pRegion = nullptr, OutputDevice* pTargetDevice = nullptr );
     void GetSelectionRectangles(EditSelection aTmpSel, std::vector<tools::Rectangle>& rLogicRects);
 
@@ -405,7 +413,7 @@ public:
 
     OutputDevice&   GetOutputDevice() const;
     weld::Widget*   GetPopupParent(tools::Rectangle& rRect) const;
-    vcl::Window*    GetWindow() const           { return pOutWin; }
+    vcl::Window* GetWindow() const { return mpOutputWindow; }
 
     void            SetSelectionMode( EESelectionMode eMode );
 
@@ -431,9 +439,9 @@ public:
 
     vcl::Cursor* GetCursor()
     {
-        if ( !pCursor )
-            pCursor.reset( new vcl::Cursor );
-        return pCursor.get();
+        if (!mpCursor)
+            mpCursor.reset(new vcl::Cursor);
+        return mpCursor.get();
     }
 
     void            AddDragAndDropListeners();
@@ -452,7 +460,7 @@ public:
     bool            IsSelectionInSinglePara() const;
 
     void            SetAnchorMode( EEAnchorMode eMode );
-    EEAnchorMode    GetAnchorMode() const           { return eAnchorMode; }
+    EEAnchorMode GetAnchorMode() const { return meAnchorMode; }
     void            CalcAnchorPoint();
     void            RecalcOutputArea();
 
@@ -461,17 +469,17 @@ public:
     void            ShowCursor( bool bGotoCursor, bool bForceVisCursor );
     Pair            Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
-    void        SetInsertMode( bool bInsert );
-    bool        IsInsertMode() const            { return !( nControl & EVControlBits::OVERWRITE ); }
+    void SetInsertMode( bool bInsert );
+    bool IsInsertMode() const { return !(mnControl & EVControlBits::OVERWRITE); }
 
-    bool        IsPasteEnabled() const          { return bool( nControl & EVControlBits::ENABLEPASTE ); }
+    bool IsPasteEnabled() const { return bool(mnControl & EVControlBits::ENABLEPASTE); }
 
-    bool        DoSingleLinePaste() const       { return bool( nControl & EVControlBits::SINGLELINEPASTE ); }
-    bool        DoAutoScroll() const            { return bool( nControl & EVControlBits::AUTOSCROLL ); }
-    bool        DoAutoSize() const              { return bool( nControl & EVControlBits::AUTOSIZE ); }
-    bool        DoAutoWidth() const             { return bool( nControl & EVControlBits::AUTOSIZEX); }
-    bool        DoAutoHeight() const            { return bool( nControl & EVControlBits::AUTOSIZEY); }
-    bool        DoInvalidateMore() const        { return bool( nControl & EVControlBits::INVONEMORE ); }
+    bool DoSingleLinePaste() const { return bool(mnControl & EVControlBits::SINGLELINEPASTE); }
+    bool DoAutoScroll() const { return bool(mnControl & EVControlBits::AUTOSCROLL); }
+    bool DoAutoSize() const { return bool(mnControl & EVControlBits::AUTOSIZE); }
+    bool DoAutoWidth() const { return bool(mnControl & EVControlBits::AUTOSIZEX); }
+    bool DoAutoHeight() const { return bool(mnControl & EVControlBits::AUTOSIZEY); }
+    bool DoInvalidateMore() const { return bool(mnControl & EVControlBits::INVONEMORE ); }
 
     void        SetBackgroundColor( const Color& rColor );
     const Color& GetBackgroundColor() const;
@@ -489,8 +497,14 @@ public:
     void            DeleteSelected();
 
     //  If possible invalidate more than OutputArea, for the DrawingEngine text frame
-    void            SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
-    sal_uInt16      GetInvalidateMore() const { return static_cast<sal_uInt16>(nInvMore); }
+    void SetInvalidateMore(sal_uInt16 nPixel)
+    {
+        mnInvalidateMore = nPixel;
+    }
+    sal_uInt16 GetInvalidateMore() const
+    {
+        return sal_uInt16(mnInvalidateMore);
+    }
 
     void InitLOKSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
                                    const Point& rVisDocStartPos);

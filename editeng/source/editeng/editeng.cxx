@@ -1400,7 +1400,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     if ( ( !IsEffectivelyVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||
          ( IsEffectivelyVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ))
     {
-        pEditView->getImpl().nTravelXPos = TRAVEL_X_DONTKNOW;
+        pEditView->getImpl().mnTravelXPos = TRAVEL_X_DONTKNOW;
     }
 
     if ( /* ( nCode != KEY_HOME ) && ( nCode != KEY_END ) && */
@@ -1410,8 +1410,8 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
         pEditView->getImpl().SetCursorBidiLevel( CURSOR_BIDILEVEL_DONTKNOW );
     }
 
-    if ( bSetCursorFlags )
-        pEditView->getImpl().nExtraCursorFlags = nNewCursorFlags;
+    if (bSetCursorFlags)
+        pEditView->getImpl().mnExtraCursorFlags = nNewCursorFlags;
 
     if ( bModified )
     {
