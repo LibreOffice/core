@@ -32,8 +32,7 @@ namespace codemaker::cppumaker {
 enum class FileType
 {
     HDL,
-    HPP,
-    EMBIND_CXX
+    HPP
 };
 }
 

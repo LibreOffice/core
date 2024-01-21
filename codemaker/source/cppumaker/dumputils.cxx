@@ -74,20 +74,6 @@ void dumpTypeIdentifier(FileStream & out, std::u16string_view entityName) {
     out << entityName.substr(entityName.rfind('.') + 1);
 }
 
-bool dumpTypeFullWithDecorator(FileStream& out, std::u16string_view entityName, std::u16string_view decorator)
-{
-    bool bOutput = false;
-    for (sal_Int32 i = 0; i >= 0;)
-    {
-        std::u16string_view id(o3tl::getToken(entityName, 0, '.', i));
-        if (i >= 0)
-        {
-            out << id << decorator;
-            bOutput = true;
-        }
-    }
-    return bOutput;
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

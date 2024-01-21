@@ -43,7 +43,12 @@ class TypeManager final : public salhelper::SimpleReferenceObject {
 public:
     TypeManager();
 
+    rtl::Reference<unoidl::Manager> const & getManager() const { return manager_; }
+
     void loadProvider(OUString const & uri, bool primary);
+
+    std::vector<rtl::Reference<unoidl::Provider>> const & getPrimaryProviders() const
+    { return primaryProviders_; }
 
     bool foundAtPrimaryProvider(OUString const & name) const;
 

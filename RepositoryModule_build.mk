@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	shell \
 	solenv \
 	soltools \
+	$(if $(filter EMSCRIPTEN,$(BUILD_TYPE_FOR_HOST)),static) \
 	stoc \
 	store \
 	tools \
