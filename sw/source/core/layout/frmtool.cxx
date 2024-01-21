@@ -3786,6 +3786,28 @@ void SwFrameHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
+static sal_uInt64 CalcCurrentDist(sal_Int64 nDiffX, sal_Int64 nDiffY)
+{
+    sal_Int64 nDiffX2, nDiffY2;
+    if (o3tl::checked_multiply(nDiffX, nDiffX, nDiffX2))
+    {
+        SAL_WARN("sw.pageframe", "CalcCurrentDist overflow: X " << nDiffX);
+        return std::numeric_limits<sal_uInt64>::max();
+    }
+    if (o3tl::checked_multiply(nDiffY, nDiffY, nDiffY2))
+    {
+        SAL_WARN("sw.pageframe", "CalcCurrentDist overflow: Y " << nDiffY);
+        return std::numeric_limits<sal_uInt64>::max();
+    }
+    sal_uInt64 ret;
+    if (o3tl::checked_add<sal_uInt64>(nDiffX2, nDiffY2, ret))
+    {
+        SAL_WARN("sw.pageframe", "CalcCurrentDist overflow: " << nDiffX2 << " + " << nDiffY2);
+        return std::numeric_limits<sal_uInt64>::max();
+    }
+    return ret;
+}
+
 SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, sw::BroadcastingModify const& rMod,
         SwFrameType const nFrameType, SwPosition const*const pPos,
         std::pair<Point, bool> const*const pViewPosAndCalcFrame)
@@ -3863,7 +3885,7 @@ SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, sw::BroadcastingModif
                     // Point not in rectangle. Compare distances:
                     const Point aCalcRectCenter = aCalcRect.Center();
                     const Point aDiff = aCalcRectCenter - pViewPosAndCalcFrame->first;
-                    const sal_uInt64 nCurrentDist = sal_Int64(aDiff.getX()) * sal_Int64(aDiff.getX()) + sal_Int64(aDiff.getY()) * sal_Int64(aDiff.getY()); // opt: no sqrt
+                    const sal_uInt64 nCurrentDist = CalcCurrentDist(aDiff.getX(), aDiff.getY());
                     if ( !pMinFrame || nCurrentDist < nMinDist )
                     {
                         pMinFrame = pTmpFrame;
