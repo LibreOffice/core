@@ -152,7 +152,7 @@ $(call gb_UnoApiHeadersTarget_get_real_comprehensive_target,%) : \
 	$(call gb_Output_announce,$*,$(true),HPC,3)
 	$(call gb_Trace_StartRange,$*,HPC)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*), \
-		-C $(if $(filter EMSCRIPTEN, $(OS)), -W))
+		-C)
 	$(call gb_Trace_EndRange,$*,HPC)
 
 $(call gb_UnoApiHeadersTarget_get_real_target,%) : \
@@ -235,19 +235,6 @@ endef
 # call gb_UnoApiHeadersTarget_add_headerfiles,unoapi,directory,headerfilenames
 define gb_UnoApiHeadersTarget_add_headerfiles
 $(foreach hdr,$(3),$(call gb_UnoApiHeadersTarget_add_headerfile,$(1),$(2)/$(hdr)))
-endef
-
-# call gb_UnoApiEmbindTarget_add_embind,unoapi,directory,headerfilenames
-define gb_UnoApiHeadersTarget_add_embind
-$(if $(filter offapi udkapi, $(1)),\
-	$(foreach hdr,$(3),$(eval $(call gb_UnoApiEmbindTarget__add_embind,$(1),$(2),$(hdr)))))
-endef
-
-define gb_UnoApiEmbindTarget__add_embind
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,unoembind,\
-	UnoApiHeadersTarget/$(1)/comprehensive/$(2)/$(3) \
-))
-
 endef
 
 define gb_UnoApiHeadersTarget__use_api_for_target

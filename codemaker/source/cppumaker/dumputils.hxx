@@ -35,9 +35,6 @@ bool dumpNamespaceOpen(FileStream& out, std::u16string_view entityName, bool ful
 bool dumpNamespaceClose(FileStream& out, std::u16string_view entityName, bool fullModuleType);
 
 void dumpTypeIdentifier(FileStream& out, std::u16string_view entityName);
-
-bool dumpTypeFullWithDecorator(FileStream& out, std::u16string_view entityName,
-                               std::u16string_view decorator);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

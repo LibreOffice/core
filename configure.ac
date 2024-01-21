@@ -1424,6 +1424,9 @@ if test "$_os" = "Emscripten"; then
     if test $EMSCRIPTEN_ERROR -ne 0; then
         AC_MSG_ERROR(["Please fix your EMSDK setup to build with Emscripten!"])
     fi
+
+    dnl Some build-side things are conditional on "EMSCRIPTEN in BUILD_TYPE_FOR_HOST":
+    BUILD_TYPE="$BUILD_TYPE EMSCRIPTEN"
 fi
 AC_SUBST(EMSDK_FILE_PACKAGER)
 

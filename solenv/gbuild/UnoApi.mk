@@ -36,8 +36,6 @@ define gb_UnoApi_add_idlfiles
 $(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
 $(call gb_UnoApiHeadersTarget_add_headerfiles,$(1),$(2),$(addsuffix .hpp,$(3)))
 $(call gb_UnoApiHeadersTarget_add_headerfiles,$(1),$(2),$(addsuffix .hdl,$(3)))
-$(if $(filter EMSCRIPTEN, $(OS)),\
-	$(call gb_UnoApiHeadersTarget_add_embind,$(1),$(2),$(addsuffix _embind,$(3))))
 
 endef
 
@@ -70,20 +68,5 @@ define gb_UnoApi_set_reference_rdbfile
 $(call gb_UnoApiTarget_set_reference_rdbfile,$(1),$(2))
 
 endef
-
-ifeq ($(OS),EMSCRIPTEN)
-$(eval $(call gb_StaticLibrary_StaticLibrary,unoembind))
-$(eval $(call gb_StaticLibrary_set_include,unoembind,\
-	$$(INCLUDE) \
-))
-$(eval $(call gb_StaticLibrary_use_api,unoembind,\
-	offapi \
-	udkapi \
-))
-$(eval $(call gb_StaticLibrary_add_exception_objects,unoembind,\
-	static/source/unoembindhelpers/PrimaryBindings\
-))
-
-endif
 
 # vim: set noet sw=4 ts=4:
