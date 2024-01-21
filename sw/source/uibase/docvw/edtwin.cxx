@@ -896,6 +896,25 @@ void SwEditWin::FlushInBuffer()
         return;
 
     SwWrtShell& rSh = m_rView.GetWrtShell();
+    uno::Reference<frame::XDispatchRecorder> xRecorder
+        = m_rView.GetViewFrame().GetBindings().GetRecorder();
+
+    comphelper::ScopeGuard showTooltipGuard(
+        [this, &rSh]
+        {
+            SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+            const bool bAutoTextShown
+                = rACfg.IsAutoTextTip() && ShowAutoText(rSh.GetChunkForAutoText());
+            if (!bAutoTextShown)
+            {
+                SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
+                if (pACorr && pACorr->GetSwFlags().bAutoCompleteWords)
+                    ShowAutoCorrectQuickHelp(rSh.GetPrevAutoCorrWord(*pACorr), *pACorr);
+            }
+        });
+    if (!m_bMaybeShowTooltipAfterBufferFlush || xRecorder)
+        showTooltipGuard.dismiss();
+    m_bMaybeShowTooltipAfterBufferFlush = false;
 
     // generate new sequence input checker if not already done
     if ( !pCheckIt )
@@ -993,8 +1012,6 @@ void SwEditWin::FlushInBuffer()
         }
     }
 
-    uno::Reference< frame::XDispatchRecorder > xRecorder =
-            m_rView.GetViewFrame().GetBindings().GetRecorder();
     if ( xRecorder.is() )
     {
         // determine shell
@@ -1380,6 +1397,9 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             return;
         }
     }
+
+    // Do not show autotext / word completion tooltips in intermediate flushes
+    m_bMaybeShowTooltipAfterBufferFlush = false;
 
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
 
@@ -2821,19 +2841,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
     if( KEY_UP == nKey || KEY_DOWN == nKey || KEY_PAGEUP == nKey || KEY_PAGEDOWN == nKey )
         GetView().GetViewFrame().GetBindings().Update( FN_STAT_PAGE );
 
+    m_bMaybeShowTooltipAfterBufferFlush = bNormalChar;
+
     // in case the buffered characters are inserted
     if( bFlushBuffer && !m_aInBuffer.isEmpty() )
     {
         FlushInBuffer();
-
-        // maybe show Tip-Help
-        if (bNormalChar)
-        {
-            const bool bAutoTextShown
-                = pACfg && pACfg->IsAutoTextTip() && ShowAutoText(rSh.GetChunkForAutoText());
-            if (!bAutoTextShown && pACorr && pACorr->GetSwFlags().bAutoCompleteWords)
-                ShowAutoCorrectQuickHelp(rSh.GetPrevAutoCorrWord(*pACorr), *pACorr);
-        }
     }
 
     // get the word count dialog to update itself
