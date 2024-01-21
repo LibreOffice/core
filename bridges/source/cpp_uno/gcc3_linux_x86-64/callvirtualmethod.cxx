@@ -27,6 +27,13 @@
 #include "abi.hxx"
 #include "callvirtualmethod.hxx"
 
+#if defined(__has_feature)
+#  if __has_feature(memory_sanitizer)
+#    include <sanitizer/msan_interface.h>
+#    define MEMORY_SANITIZER
+#  endif
+#endif
+
 // The call instruction within the asm block of callVirtualMethod may throw
 // exceptions.  At least GCC 4.7.0 with -O0 would create (unnecessary)
 // .gcc_exception_table call-site table entries around all other calls in this
@@ -154,6 +161,10 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         *static_cast<float *>(pRegisterReturn) = *reinterpret_cast<float *>(&data.xmm0);
         break;
     case typelib_TypeClass_DOUBLE:
+#if defined(MEMORY_SANITIZER)
+        // In the absence of a better idea just unpoison this
+        __msan_unpoison(&data.xmm0, sizeof(data.xmm0));
+#endif
         *static_cast<double *>( pRegisterReturn ) = data.xmm0;
         break;
     default:
