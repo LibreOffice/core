@@ -62,8 +62,7 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
         {
             pSpellInfo->bSpellToEnd = false;
             pSpellInfo->aSpellTo = pSpellInfo->aSpellStart;
-            pEditView->GetImpEditView()->SetEditSelection(
-                    rEditEngine.GetEditDoc().GetStartPaM() );
+            pEditView->getImpl().SetEditSelection(rEditEngine.GetEditDoc().GetStartPaM());
         }
         else
         {
@@ -87,8 +86,7 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
         {
             pSpellInfo->bSpellToEnd = false;
             pSpellInfo->aSpellTo = pSpellInfo->aSpellStart;
-            pEditView->GetImpEditView()->SetEditSelection(
-                    rEditEngine.GetEditDoc().GetEndPaM() );
+            pEditView->getImpl().SetEditSelection(rEditEngine.GetEditDoc().GetEndPaM());
         }
     }
     else if ( eArea == SvxSpellArea::Body )
@@ -119,8 +117,7 @@ bool EditSpellWrapper::SpellMore()
         {
             // The text has been entered into the engine, when backwards then
             // it must be behind the selection.
-            pEditView->GetImpEditView()->SetEditSelection(
-                        rEditEngine.GetEditDoc().GetStartPaM() );
+            pEditView->getImpl().SetEditSelection(rEditEngine.GetEditDoc().GetStartPaM());
         }
     }
     return bMore;
@@ -137,7 +134,7 @@ void EditSpellWrapper::CheckSpellTo()
 {
     ImpEditEngine& rImpEditEngine = pEditView->getImpEditEngine();
     SpellInfo* pSpellInfo = rImpEditEngine.GetSpellInfo();
-    EditPaM aPaM( pEditView->GetImpEditView()->GetEditSelection().Max() );
+    EditPaM aPaM( pEditView->getImpl().GetEditSelection().Max() );
     EPaM aEPaM = rImpEditEngine.CreateEPaM( aPaM );
     if ( aEPaM.nPara == pSpellInfo->aSpellTo.nPara )
     {

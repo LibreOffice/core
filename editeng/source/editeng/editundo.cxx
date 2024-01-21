@@ -32,7 +32,7 @@ static void lcl_DoSetSelection( EditView const * pView, sal_uInt16 nPara )
     EditPaM aPaM = pView->getImpEditEngine().CreateEditPaM(aEPaM);
     aPaM.SetIndex( aPaM.GetNode()->Len() );
     EditSelection aSel( aPaM, aPaM );
-    pView->GetImpEditView()->SetEditSelection( aSel );
+    pView->getImpl().SetEditSelection( aSel );
 }
 
 EditUndoManager::EditUndoManager(sal_uInt16 nMaxUndoActionCount )
@@ -64,18 +64,18 @@ bool EditUndoManager::Undo()
         }
     }
 
-    mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelectionXOR(); // Remove the old selection
+    mpEditEngine->GetActiveView()->getImpl().DrawSelectionXOR(); // Remove the old selection
 
     mpEditEngine->SetUndoMode( true );
     bool bDone = SfxUndoManager::Undo();
     mpEditEngine->SetUndoMode( false );
 
-    EditSelection aNewSel( mpEditEngine->GetActiveView()->GetImpEditView()->GetEditSelection() );
+    EditSelection aNewSel( mpEditEngine->GetActiveView()->getImpl().GetEditSelection() );
     DBG_ASSERT( !aNewSel.IsInvalid(), "Invalid selection after Undo () ");
     DBG_ASSERT( !aNewSel.DbgIsBuggy( mpEditEngine->GetEditDoc() ), "Broken selection afte Undo () ");
 
     aNewSel.Min() = aNewSel.Max();
-    mpEditEngine->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    mpEditEngine->GetActiveView()->getImpl().SetEditSelection( aNewSel );
     if (mpEditEngine->IsUpdateLayout())
         mpEditEngine->FormatAndLayout( mpEditEngine->GetActiveView(), true );
 
@@ -100,18 +100,18 @@ bool EditUndoManager::Redo()
         }
     }
 
-    mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelectionXOR(); // Remove the old selection
+    mpEditEngine->GetActiveView()->getImpl().DrawSelectionXOR(); // Remove the old selection
 
     mpEditEngine->SetUndoMode( true );
     bool bDone = SfxUndoManager::Redo();
     mpEditEngine->SetUndoMode( false );
 
-    EditSelection aNewSel( mpEditEngine->GetActiveView()->GetImpEditView()->GetEditSelection() );
+    EditSelection aNewSel( mpEditEngine->GetActiveView()->getImpl().GetEditSelection() );
     DBG_ASSERT( !aNewSel.IsInvalid(), "Invalid selection after Undo () ");
     DBG_ASSERT( !aNewSel.DbgIsBuggy( mpEditEngine->GetEditDoc() ), "Broken selection afte Undo () ");
 
     aNewSel.Min() = aNewSel.Max();
-    mpEditEngine->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    mpEditEngine->GetActiveView()->getImpl().SetEditSelection( aNewSel );
     if (mpEditEngine->IsUpdateLayout())
         mpEditEngine->FormatAndLayout( mpEditEngine->GetActiveView() );
 
@@ -122,7 +122,7 @@ EditUndo::EditUndo(sal_uInt16 nI, EditEngine* pEE) :
     nId(nI), mnViewShellId(-1), mpEditEngine(pEE)
 {
     const EditView* pEditView = mpEditEngine ? mpEditEngine->GetActiveView() : nullptr;
-    const OutlinerViewShell* pViewShell = pEditView ? pEditView->GetImpEditView()->GetViewShell() : nullptr;
+    const OutlinerViewShell* pViewShell = pEditView ? pEditView->getImpl().GetViewShell() : nullptr;
     if (pViewShell)
         mnViewShellId = pViewShell->GetViewShellId();
 }
@@ -173,7 +173,7 @@ void EditUndoDelContent::Undo()
     ContentNode* pNode = mpContentNode.get();
     GetEditEngine()->InsertContent(std::move(mpContentNode), nNode);
     EditSelection aSel(EditPaM(pNode, 0), EditPaM(pNode, pNode->Len()));
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection(aSel);
 }
 
 void EditUndoDelContent::Redo()
@@ -208,7 +208,7 @@ void EditUndoDelContent::Redo()
 
     EditPaM aPaM(pCheckNode, pCheckNode->Len());
 
-    pEE->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    pEE->GetActiveView()->getImpl().SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 EditUndoConnectParas::EditUndoConnectParas(
@@ -270,7 +270,7 @@ void EditUndoConnectParas::Undo()
             GetEditEngine()->SetStyleSheet( nNode+1, static_cast<SfxStyleSheet*>(GetEditEngine()->GetStyleSheetPool()->Find( aRightStyleName, eRightStyleFamily )) );
     }
 
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 void EditUndoConnectParas::Redo()
@@ -278,7 +278,7 @@ void EditUndoConnectParas::Redo()
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: Np Active View!" );
     EditPaM aPaM = GetEditEngine()->ConnectContents( nNode, bBackward );
 
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 EditUndoSplitPara::EditUndoSplitPara(
@@ -292,14 +292,14 @@ void EditUndoSplitPara::Undo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditPaM aPaM = GetEditEngine()->ConnectContents(nNode, false);
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 void EditUndoSplitPara::Redo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditPaM aPaM = GetEditEngine()->SplitContent(nNode, nSepPos);
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 EditUndoInsertChars::EditUndoInsertChars(
@@ -315,7 +315,7 @@ void EditUndoInsertChars::Undo()
     EditSelection aSel( aPaM, aPaM );
     aSel.Max().SetIndex( aSel.Max().GetIndex() + aText.getLength() );
     EditPaM aNewPaM( GetEditEngine()->DeleteSelection(aSel) );
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aNewPaM, aNewPaM ) );
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection( EditSelection( aNewPaM, aNewPaM ) );
 }
 
 void EditUndoInsertChars::Redo()
@@ -325,7 +325,7 @@ void EditUndoInsertChars::Redo()
     GetEditEngine()->InsertText(EditSelection(aPaM, aPaM), aText);
     EditPaM aNewPaM( aPaM );
     aNewPaM.SetIndex( aNewPaM.GetIndex() + aText.getLength() );
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aNewPaM ) );
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection( EditSelection( aPaM, aNewPaM ) );
 }
 
 bool EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
@@ -357,7 +357,7 @@ void EditUndoRemoveChars::Undo()
     EditSelection aSel( aPaM, aPaM );
     GetEditEngine()->InsertText(aSel, aText);
     aSel.Max().SetIndex( aSel.Max().GetIndex() + aText.getLength() );
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection(aSel);
 }
 
 void EditUndoRemoveChars::Redo()
@@ -367,7 +367,7 @@ void EditUndoRemoveChars::Redo()
     EditSelection aSel( aPaM, aPaM );
     aSel.Max().SetIndex( aSel.Max().GetIndex() + aText.getLength() );
     EditPaM aNewPaM = GetEditEngine()->DeleteSelection(aSel);
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aNewPaM);
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection(aNewPaM);
 }
 
 EditUndoInsertFeature::EditUndoInsertFeature(
@@ -392,7 +392,7 @@ void EditUndoInsertFeature::Undo()
     aSel.Max().SetIndex( aSel.Max().GetIndex()+1 );
     GetEditEngine()->DeleteSelection(aSel);
     aSel.Max().SetIndex( aSel.Max().GetIndex()-1 ); // For Selection
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection(aSel);
 }
 
 void EditUndoInsertFeature::Redo()
@@ -404,7 +404,7 @@ void EditUndoInsertFeature::Redo()
     if ( pFeature->Which() == EE_FEATURE_FIELD )
         GetEditEngine()->UpdateFieldsOnly();
     aSel.Max().SetIndex( aSel.Max().GetIndex()+1 );
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection(aSel);
 }
 
 EditUndoMoveParagraphs::EditUndoMoveParagraphs(
@@ -433,14 +433,14 @@ void EditUndoMoveParagraphs::Undo()
         nTmpDest += aTmpRange.Len();
 
     EditSelection aNewSel = GetEditEngine()->MoveParagraphs(aTmpRange, nTmpDest);
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection( aNewSel );
 }
 
 void EditUndoMoveParagraphs::Redo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditSelection aNewSel = GetEditEngine()->MoveParagraphs(nParagraphs, nDest);
-    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    GetEditEngine()->GetActiveView()->getImpl().SetEditSelection( aNewSel );
 }
 
 EditUndoSetStyleSheet::EditUndoSetStyleSheet(
@@ -577,7 +577,7 @@ void EditUndoSetAttribs::ImpSetSelection()
 {
     EditEngine* pEE = GetEditEngine();
     EditSelection aSel = pEE->CreateSelection(aESel);
-    pEE->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
+    pEE->GetActiveView()->getImpl().SetEditSelection(aSel);
 }
 
 EditUndoTransliteration::EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, TransliterationFlags nM) :
@@ -622,7 +622,7 @@ void EditUndoTransliteration::Undo()
         aNewSel.Max().SetIndex( aNewSel.Max().GetIndex() + aDelSel.Min().GetIndex() );
     }
     pEE->DeleteSelected( aDelSel );
-    pEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    pEE->GetActiveView()->getImpl().SetEditSelection( aNewSel );
 }
 
 void EditUndoTransliteration::Redo()
@@ -632,7 +632,7 @@ void EditUndoTransliteration::Redo()
 
     EditSelection aSel = pEE->CreateSelection(aOldESel);
     EditSelection aNewSel = pEE->TransliterateText( aSel, nMode );
-    pEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    pEE->GetActiveView()->getImpl().SetEditSelection( aNewSel );
 }
 
 EditUndoMarkSelection::EditUndoMarkSelection(EditEngine* pEE, const ESelection& rSel) :
@@ -648,7 +648,7 @@ void EditUndoMarkSelection::Undo()
         if ( GetEditEngine()->IsFormatted() )
             GetEditEngine()->GetActiveView()->SetSelection( aSelection );
         else
-            GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( GetEditEngine()->CreateSelection(aSelection) );
+            GetEditEngine()->GetActiveView()->getImpl().SetEditSelection(GetEditEngine()->CreateSelection(aSelection));
     }
 }
 

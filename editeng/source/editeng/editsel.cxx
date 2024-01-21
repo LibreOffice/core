@@ -31,7 +31,7 @@ EditSelFunctionSet::EditSelFunctionSet()
 void EditSelFunctionSet::CreateAnchor()
 {
     if ( pCurView )
-        pCurView->pImpEditView->CreateAnchor();
+        pCurView->getImpl().CreateAnchor();
 }
 
 void EditSelFunctionSet::DestroyAnchor()
@@ -42,13 +42,13 @@ void EditSelFunctionSet::DestroyAnchor()
 void EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool )
 {
     if ( pCurView )
-        pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );
+        pCurView->getImpl().SetCursorAtPoint( rPointPixel );
 }
 
 bool EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     if ( pCurView )
-        return pCurView->pImpEditView->IsSelectionAtPoint( rPointPixel );
+        return pCurView->getImpl().IsSelectionAtPoint( rPointPixel );
 
     return false;
 }
@@ -69,7 +69,7 @@ void EditSelFunctionSet::BeginDrag()
 void EditSelFunctionSet::DeselectAll()
 {
     if ( pCurView )
-        pCurView->pImpEditView->DeselectAll();
+        pCurView->getImpl().DeselectAll();
 }
 
 

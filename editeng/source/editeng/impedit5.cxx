@@ -224,7 +224,7 @@ ViewShellId ImpEditEngine::CreateViewShellId()
     ViewShellId nRet(-1);
 
     const EditView* pEditView = mpEditEngine ? mpEditEngine->GetActiveView() : nullptr;
-    const OutlinerViewShell* pViewShell = pEditView ? pEditView->GetImpEditView()->GetViewShell() : nullptr;
+    const OutlinerViewShell* pViewShell = pEditView ? pEditView->getImpl().GetViewShell() : nullptr;
     if (pViewShell)
         nRet = pViewShell->GetViewShellId();
 

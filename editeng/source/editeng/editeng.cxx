@@ -309,11 +309,11 @@ void EditEngine::InsertView(EditView* pEditView, size_t nIndex)
     rViews.insert(rViews.begin()+nIndex, pEditView);
 
     EditSelection aStartSel = pImpEditEngine->GetEditDoc().GetStartPaM();
-    pEditView->pImpEditView->SetEditSelection( aStartSel );
+    pEditView->getImpl().SetEditSelection( aStartSel );
     if ( !pImpEditEngine->GetActiveView() )
         pImpEditEngine->SetActiveView( pEditView );
 
-    pEditView->pImpEditView->AddDragAndDropListeners();
+    pEditView->getImpl().AddDragAndDropListeners();
 }
 
 EditView* EditEngine::RemoveView( EditView* pView )
@@ -334,7 +334,7 @@ EditView* EditEngine::RemoveView( EditView* pView )
             pImpEditEngine->SetActiveView( nullptr );
             pImpEditEngine->GetSelEngine().SetCurView( nullptr );
         }
-        pView->pImpEditView->RemoveDragAndDropListeners();
+        pView->getImpl().RemoveDragAndDropListeners();
 
     }
     return pRemoved;
@@ -401,11 +401,10 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
     for (EditView* pView : pImpEditEngine->maEditViews)
     {
         if ( bAutoPageSize )
-            pView->pImpEditView->RecalcOutputArea();
-        else if ( pView->pImpEditView->DoAutoSize() )
+            pView->getImpl().RecalcOutputArea();
+        else if (pView->getImpl().DoAutoSize())
         {
-            pView->pImpEditView->ResetOutputArea( tools::Rectangle(
-                pView->pImpEditView->GetOutputArea().TopLeft(), aNewSize ) );
+            pView->getImpl().ResetOutputArea(tools::Rectangle(pView->getImpl().GetOutputArea().TopLeft(), aNewSize));
         }
     }
 
@@ -1009,7 +1008,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     GetCursorFlags nNewCursorFlags = GetCursorFlags::NONE;
     bool bSetCursorFlags = true;
 
-    EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
+    EditSelection aCurSel( pEditView->getImpl().GetEditSelection() );
     DBG_ASSERT( !aCurSel.IsInvalid(), "Blinde Selection in EditEngine::PostKeyEvent" );
 
     OUString aAutoText( pImpEditEngine->GetAutoCompleteText() );
@@ -1127,7 +1126,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
 
                     if ( aCurSel.HasRange() ) {
                         Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
-                        pEditView->pImpEditView->CutCopy( aSelection, false );
+                        pEditView->getImpl().CutCopy( aSelection, false );
                     }
 
                     bMoved = true;
@@ -1210,9 +1209,9 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                         break;
                     }
 
-                    pEditView->pImpEditView->DrawSelectionXOR();
+                    pEditView->getImpl().DrawSelectionXOR();
                     pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
-                    aCurSel = pImpEditEngine->DeleteLeftOrRight( aCurSel, nDel, nMode );
+                    aCurSel = getImpl().DeleteLeftOrRight( aCurSel, nDel, nMode );
                     pImpEditEngine->UndoActionEnd();
                     bModified = true;
                     bAllowIdle = false;
@@ -1245,7 +1244,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             {
                 if ( !bReadOnly )
                 {
-                    pEditView->pImpEditView->DrawSelectionXOR();
+                    pEditView->getImpl().DrawSelectionXOR();
                     if ( !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
                     {
                         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
@@ -1300,7 +1299,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
                     sal_Unicode nCharCode = rKeyEvent.GetCharCode();
-                    pEditView->pImpEditView->DrawSelectionXOR();
+                    pEditView->getImpl().DrawSelectionXOR();
                     // Autocorrection?
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
                         ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
@@ -1374,8 +1373,8 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                 {
                                     pImpEditEngine->SetAutoCompleteText( aComplete, false );
                                     Point aPos = pImpEditEngine->PaMtoEditCursor( aCurSel.Max() ).TopLeft();
-                                    aPos = pEditView->pImpEditView->GetWindowPos( aPos );
-                                    aPos = pEditView->pImpEditView->GetWindow()->LogicToPixel( aPos );
+                                    aPos = pEditView->getImpl().GetWindowPos( aPos );
+                                    aPos = pEditView->getImpl().GetWindow()->LogicToPixel( aPos );
                                     aPos = pEditView->GetWindow()->OutputToScreenPixel( aPos );
                                     aPos.AdjustY( -3 );
                                     Help::ShowQuickHelp( pEditView->GetWindow(), tools::Rectangle( aPos, Size( 1, 1 ) ), aComplete, QuickHelpFlags::Bottom|QuickHelpFlags::Left );
@@ -1391,28 +1390,28 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
         }
     }
 
-    pEditView->pImpEditView->SetEditSelection( aCurSel );
+    pEditView->getImpl().SetEditSelection( aCurSel );
     if (comphelper::LibreOfficeKit::isActive())
     {
-        pEditView->pImpEditView->DrawSelectionXOR();
+        pEditView->getImpl().DrawSelectionXOR();
     }
     pImpEditEngine->UpdateSelections();
 
     if ( ( !IsEffectivelyVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||
          ( IsEffectivelyVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ))
     {
-        pEditView->pImpEditView->nTravelXPos = TRAVEL_X_DONTKNOW;
+        pEditView->getImpl().nTravelXPos = TRAVEL_X_DONTKNOW;
     }
 
     if ( /* ( nCode != KEY_HOME ) && ( nCode != KEY_END ) && */
         ( !IsEffectivelyVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ) ||
          ( IsEffectivelyVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ))
     {
-        pEditView->pImpEditView->SetCursorBidiLevel( CURSOR_BIDILEVEL_DONTKNOW );
+        pEditView->getImpl().SetCursorBidiLevel( CURSOR_BIDILEVEL_DONTKNOW );
     }
 
     if ( bSetCursorFlags )
-        pEditView->pImpEditView->nExtraCursorFlags = nNewCursorFlags;
+        pEditView->getImpl().nExtraCursorFlags = nNewCursorFlags;
 
     if ( bModified )
     {
@@ -1426,8 +1425,8 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     }
     else if ( bMoved )
     {
-        bool bGotoCursor = pEditView->pImpEditView->DoAutoScroll();
-        pEditView->pImpEditView->ShowCursor( bGotoCursor, true );
+        bool bGotoCursor = pEditView->getImpl().DoAutoScroll();
+        pEditView->getImpl().ShowCursor( bGotoCursor, true );
         pImpEditEngine->CallStatusHdl();
     }
 
@@ -2555,7 +2554,7 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
     }
 
     for (EditView* pView : pImpEditEngine->maEditViews)
-        pView->pImpEditView->ScrollStateChange();
+        pView->getImpl().ScrollStateChange();
 }
 
 OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const

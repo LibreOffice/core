@@ -159,14 +159,14 @@ class EDITENG_DLLPUBLIC EditView final
 public:
     typedef std::vector<VclPtr<vcl::Window>> OutWindowSet;
 
-    ImpEditView* GetImpEditView() const { return pImpEditView.get(); }
+    ImpEditView& getImpl() const { return *mpImpEditView; }
     ImpEditEngine& getImpEditEngine() const;
 
     void setEditEngine(EditEngine* pEditEngine);
     EditEngine& getEditEngine() const;
 
 private:
-    std::unique_ptr<ImpEditView> pImpEditView;
+    std::unique_ptr<ImpEditView> mpImpEditView;
     OUString        aDicNameSingle;
 
                     EditView( const EditView& ) = delete;

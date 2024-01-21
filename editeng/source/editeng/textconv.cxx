@@ -131,7 +131,7 @@ bool TextConvWrapper::ConvMore_impl()
         if ( bMore )
         {
             // The text has been entered in this engine ...
-            m_pEditView->GetImpEditView()->SetEditSelection(
+            m_pEditView->getImpl().SetEditSelection(
                         rEditEngine.GetEditDoc().GetStartPaM() );
         }
     }
@@ -155,7 +155,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
             pConvInfo->bConvToEnd = false;
             pConvInfo->aConvTo = pConvInfo->aConvStart;
             pConvInfo->aConvContinue = EPaM( 0, 0 );
-            m_pEditView->GetImpEditView()->SetEditSelection(
+            m_pEditView->getImpl().SetEditSelection(
                     rEditEngine.GetEditDoc().GetStartPaM() );
         }
         else
@@ -340,7 +340,7 @@ void TextConvWrapper::ReplaceUnit(
     // remember current original language for later use
     ImpEditEngine& rImpEditEngine = m_pEditView->getImpEditEngine();
     ESelection aOldSel     = m_pEditView->GetSelection();
-    //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
+    //EditSelection aOldEditSel = pEditView->getImpl().GetEditSelection();
 
 #ifdef DBG_UTIL
     LanguageType nOldLang   = rImpEditEngine.GetLanguage(rImpEditEngine.CreateSel( aOldSel ).Min() ).nLang;

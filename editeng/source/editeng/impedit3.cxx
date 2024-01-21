@@ -332,7 +332,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         if ( !aClipRect.IsEmpty() )
         {
             // convert to window coordinates...
-            aClipRect = pView->pImpEditView->GetWindowPos( aClipRect );
+            aClipRect = pView->getImpl().GetWindowPos( aClipRect );
 
             // moved to one executing method to allow finer control
             pView->InvalidateWindow(aClipRect);
@@ -343,7 +343,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
     if ( pCurView )
     {
-        bool bGotoCursor = pCurView->pImpEditView->DoAutoScroll();
+        bool bGotoCursor = pCurView->getImpl().DoAutoScroll();
         pCurView->ShowCursor( bGotoCursor );
     }
 
@@ -442,8 +442,7 @@ void ImpEditEngine::FormatDoc()
 
                     for (EditView* pView : maEditViews)
                     {
-                        ImpEditView* pImpView = pView->pImpEditView.get();
-                        pImpView->ScrollStateChange();
+                        pView->getImpl().ScrollStateChange();
                     }
 
                 }
@@ -479,16 +478,15 @@ void ImpEditEngine::FormatDoc()
         {
             for (EditView* pView : maEditViews)
             {
-                ImpEditView* pImpView = pView->pImpEditView.get();
-                if ( pImpView->DoAutoHeight() )
+                ImpEditView& rImpView = pView->getImpl();
+                if (rImpView.DoAutoHeight())
                 {
-                    Size aSz( pImpView->GetOutputArea().GetWidth(), mnCurTextHeight );
+                    Size aSz(rImpView.GetOutputArea().GetWidth(), mnCurTextHeight);
                     if ( aSz.Height() > maMaxAutoPaperSize.Height() )
                         aSz.setHeight( maMaxAutoPaperSize.Height() );
                     else if ( aSz.Height() < maMinAutoPaperSize.Height() )
                         aSz.setHeight( maMinAutoPaperSize.Height() );
-                    pImpView->ResetOutputArea( tools::Rectangle(
-                        pImpView->GetOutputArea().TopLeft(), aSz ) );
+                    rImpView.ResetOutputArea( tools::Rectangle(rImpView.GetOutputArea().TopLeft(), aSz));
                 }
             }
         }
@@ -587,7 +585,7 @@ void ImpEditEngine::CheckAutoPageSize()
 
     for (EditView* pView : maEditViews)
     {
-        pView->pImpEditView->RecalcOutputArea();
+        pView->getImpl().RecalcOutputArea();
     }
 }
 

@@ -1484,10 +1484,10 @@ EESpellState ImpEditEngine::Spell(EditView* pEditView, weld::Widget* pDialogPare
     // In MultipleDoc always from the front / rear ...
     if ( bMultipleDoc )
     {
-        pEditView->pImpEditView->SetEditSelection( maEditDoc.GetStartPaM() );
+        pEditView->getImpl().SetEditSelection( maEditDoc.GetStartPaM() );
     }
 
-    EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
+    EditSelection aCurSel( pEditView->getImpl().GetEditSelection() );
     CreateSpellInfo( bMultipleDoc );
 
     bool bIsStart = false;
@@ -1503,12 +1503,12 @@ EESpellState ImpEditEngine::Spell(EditView* pEditView, weld::Widget* pDialogPare
 
     if ( !bMultipleDoc )
     {
-        pEditView->pImpEditView->DrawSelectionXOR();
+        pEditView->getImpl().DrawSelectionXOR();
         if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
             aCurSel.Max().SetIndex( aCurSel.Max().GetNode()->Len() );
         aCurSel.Min() = aCurSel.Max();
-        pEditView->pImpEditView->SetEditSelection( aCurSel );
-        pEditView->pImpEditView->DrawSelectionXOR();
+        pEditView->getImpl().SetEditSelection( aCurSel );
+        pEditView->getImpl().DrawSelectionXOR();
         pEditView->ShowCursor( true, false );
     }
     EESpellState eState = mpSpellInfo->eState;
@@ -1559,11 +1559,11 @@ void ImpEditEngine::Convert( EditView* pEditView, weld::Widget* pDialogParent,
 
     // In MultipleDoc always from the front / rear ...
     if ( bMultipleDoc )
-        pEditView->pImpEditView->SetEditSelection( maEditDoc.GetStartPaM() );
+        pEditView->getImpl().SetEditSelection( maEditDoc.GetStartPaM() );
 
 
     // initialize pConvInfo
-    EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
+    EditSelection aCurSel( pEditView->getImpl().GetEditSelection() );
     aCurSel.Adjust( maEditDoc );
     mpConvInfo.reset(new ConvInfo);
     mpConvInfo->bMultipleDoc = bMultipleDoc;
@@ -1624,12 +1624,12 @@ void ImpEditEngine::Convert( EditView* pEditView, weld::Widget* pDialogParent,
 
     if ( !bMultipleDoc )
     {
-        pEditView->pImpEditView->DrawSelectionXOR();
+        pEditView->getImpl().DrawSelectionXOR();
         if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
             aCurSel.Max().SetIndex( aCurSel.Max().GetNode()->Len() );
         aCurSel.Min() = aCurSel.Max();
-        pEditView->pImpEditView->SetEditSelection( aCurSel );
-        pEditView->pImpEditView->DrawSelectionXOR();
+        pEditView->getImpl().SetEditSelection( aCurSel );
+        pEditView->getImpl().DrawSelectionXOR();
         pEditView->ShowCursor( true, false );
     }
     mpConvInfo.reset();
@@ -1825,9 +1825,9 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         mpConvInfo->aConvContinue = CreateEPaM( aCurSel.Max() );
     }
 
-    pEditView->pImpEditView->DrawSelectionXOR();
-    pEditView->pImpEditView->SetEditSelection( aCurSel );
-    pEditView->pImpEditView->DrawSelectionXOR();
+    pEditView->getImpl().DrawSelectionXOR();
+    pEditView->getImpl().SetEditSelection( aCurSel );
+    pEditView->getImpl().DrawSelectionXOR();
     pEditView->ShowCursor( true, false );
 
     rConvTxt = aRes;
@@ -1841,7 +1841,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     DBG_ASSERT(mxSpeller.is(), "No spell checker set!");
 
     ContentNode* pLastNode = maEditDoc.GetObject( maEditDoc.Count()-1 );
-    EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
+    EditSelection aCurSel( pEditView->getImpl().GetEditSelection() );
     aCurSel.Min() = aCurSel.Max();
 
     Reference< XSpellAlternatives > xSpellAlt;
@@ -1894,9 +1894,9 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
             mpSpellInfo->eState = EESpellState::ErrorFound;
     }
 
-    pEditView->pImpEditView->DrawSelectionXOR();
-    pEditView->pImpEditView->SetEditSelection( aCurSel );
-    pEditView->pImpEditView->DrawSelectionXOR();
+    pEditView->getImpl().DrawSelectionXOR();
+    pEditView->getImpl().SetEditSelection( aCurSel );
+    pEditView->getImpl().DrawSelectionXOR();
     pEditView->ShowCursor( true, false );
     return xSpellAlt;
 }
@@ -1949,7 +1949,7 @@ bool ImpEditEngine::SpellSentence(EditView const & rEditView,
     svx::SpellPortions& rToFill )
 {
     bool bRet = false;
-    EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
+    EditSelection aCurSel( rEditView.getImpl().GetEditSelection() );
     if (!mpSpellInfo)
         CreateSpellInfo( true );
     mpSpellInfo->aCurSentenceStart = aCurSel.Min();
@@ -1999,7 +1999,7 @@ bool ImpEditEngine::SpellSentence(EditView const & rEditView,
         while( xAlt.is() );
 
         //set the selection to the end of the current sentence
-        rEditView.pImpEditView->SetEditSelection(aSentencePaM.Max());
+        rEditView.getImpl().SetEditSelection(aSentencePaM.Max());
     }
     return bRet;
 }
@@ -2050,7 +2050,7 @@ void ImpEditEngine::AddPortionIterated(
         //iterate over the text to find changes in language
         //set the mark equal to the point
         EditPaM aCursor(aStart);
-        rEditView.pImpEditView->SetEditSelection( aCursor );
+        rEditView.getImpl().SetEditSelection( aCursor );
         LanguageType eStartLanguage = GetLanguage( aCursor ).nLang;
         //search for a field attribute at the beginning - only the end position
         //of this field is kept to end a portion at that position
@@ -2108,7 +2108,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
 
     // get current paragraph length to calculate later on how the sentence length changed,
     // in order to place the cursor at the end of the sentence again
-    EditSelection aOldSel( rEditView.pImpEditView->GetEditSelection() );
+    EditSelection aOldSel( rEditView.getImpl().GetEditSelection() );
     sal_Int32 nOldLen = aOldSel.Max().GetNode()->Len();
 
     UndoActionStart( EDITUNDO_INSERT );
@@ -2134,7 +2134,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
             if(!bSetToEnd)
             {
                 bSetToEnd = true;
-                rEditView.pImpEditView->SetEditSelection( aCurrentOldPosition->Max() );
+                rEditView.getImpl().SetEditSelection( aCurrentOldPosition->Max() );
             }
 
             SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
@@ -2208,11 +2208,11 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
         // restore cursor position to the end of the modified sentence.
         // (This will define the continuation position for spell/grammar checking)
         // First: check if the sentence/para length changed
-        const sal_Int32 nDelta = rEditView.pImpEditView->GetEditSelection().Max().GetNode()->Len() - nOldLen;
+        const sal_Int32 nDelta = rEditView.getImpl().GetEditSelection().Max().GetNode()->Len() - nOldLen;
         const sal_Int32 nEndOfSentence = aOldSel.Max().GetIndex() + nDelta;
         aNext = EditPaM( aOldSel.Max().GetNode(), nEndOfSentence );
     }
-    rEditView.pImpEditView->SetEditSelection( aNext );
+    rEditView.getImpl().SetEditSelection( aNext );
 
     if (IsUpdateLayout())
         FormatAndLayout();
@@ -2223,7 +2223,7 @@ void ImpEditEngine::PutSpellingToSentenceStart( EditView const & rEditView )
 {
     if (mpSpellInfo && !mpSpellInfo->aLastSpellContentSelections.empty())
     {
-        rEditView.pImpEditView->SetEditSelection(mpSpellInfo->aLastSpellContentSelections.begin()->Min());
+        rEditView.getImpl().SetEditSelection(mpSpellInfo->aLastSpellContentSelections.begin()->Min());
     }
 }
 
@@ -2247,7 +2247,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
     EditPaM aCursorPos;
     if (mpActiveView && !bSpellAtCursorPos)
     {
-        aCursorPos = mpActiveView->pImpEditView->GetEditSelection().Max();
+        aCursorPos = mpActiveView->getImpl().GetEditSelection().Max();
     }
 
     bool bRestartTimer = false;
@@ -2398,8 +2398,8 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                             if ( !aClipRect.IsEmpty() )
                             {
                                 // convert to window coordinates...
-                                aClipRect.SetPos( pView->pImpEditView->GetWindowPos( aClipRect.TopLeft() ) );
-                                pView->pImpEditView->InvalidateAtWindow(aClipRect);
+                                aClipRect.SetPos( pView->getImpl().GetWindowPos( aClipRect.TopLeft() ) );
+                                pView->getImpl().InvalidateAtWindow(aClipRect);
                             }
                         }
                     }
@@ -2466,7 +2466,7 @@ void ImpEditEngine::ClearSpellErrors()
 
 EESpellState ImpEditEngine::StartThesaurus(EditView* pEditView, weld::Widget* pDialogParent)
 {
-    EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
+    EditSelection aCurSel( pEditView->getImpl().GetEditSelection() );
     if ( !aCurSel.HasRange() )
         aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
     OUString aWord( GetSelected( aCurSel ) );
@@ -2481,9 +2481,9 @@ EESpellState ImpEditEngine::StartThesaurus(EditView* pEditView, weld::Widget* pD
     if (xDlg->Execute() == RET_OK)
     {
         // Replace Word...
-        pEditView->pImpEditView->DrawSelectionXOR();
-        pEditView->pImpEditView->SetEditSelection( aCurSel );
-        pEditView->pImpEditView->DrawSelectionXOR();
+        pEditView->getImpl().DrawSelectionXOR();
+        pEditView->getImpl().SetEditSelection( aCurSel );
+        pEditView->getImpl().DrawSelectionXOR();
         pEditView->InsertText(xDlg->GetWord());
         pEditView->ShowCursor(true, false);
     }
@@ -2495,7 +2495,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
 {
     sal_Int32 nFound = 0;
 
-    EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
+    EditSelection aCurSel( pEditView->getImpl().GetEditSelection() );
 
     // FIND_ALL is not possible without multiple selection.
     if ( ( rSearchItem.GetCommand() == SvxSearchCmd::FIND ) ||
@@ -2523,7 +2523,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
         SvxSearchItem aTmpItem( rSearchItem );
         aTmpItem.SetBackward( false );
 
-        pEditView->pImpEditView->DrawSelectionXOR();
+        pEditView->getImpl().DrawSelectionXOR();
 
         aCurSel.Adjust( maEditDoc );
         EditPaM aStartPaM = aTmpItem.GetSelection() ? aCurSel.Min() : maEditDoc.GetStartPaM();
@@ -2542,13 +2542,13 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
             EditPaM aNewPaM( aFoundSel.Max() );
             if ( aNewPaM.GetIndex() > aNewPaM.GetNode()->Len() )
                 aNewPaM.SetIndex( aNewPaM.GetNode()->Len() );
-            pEditView->pImpEditView->SetEditSelection( aNewPaM );
+            pEditView->getImpl().SetEditSelection( aNewPaM );
             FormatAndLayout( pEditView );
             UndoActionEnd();
         }
         else
         {
-            pEditView->pImpEditView->DrawSelectionXOR();
+            pEditView->getImpl().DrawSelectionXOR();
             pEditView->ShowCursor( true, false );
         }
     }
@@ -2557,7 +2557,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
 
 bool ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditView )
 {
-    EditSelection aSel( pEditView->pImpEditView->GetEditSelection() );
+    EditSelection aSel( pEditView->getImpl().GetEditSelection() );
     aSel.Adjust( maEditDoc );
     EditPaM aStartPaM( aSel.Max() );
     if ( rSearchItem.GetSelection() && !rSearchItem.GetBackward() )
@@ -2571,18 +2571,18 @@ bool ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditVie
         bFound = ImpSearch( rSearchItem, aSel, aStartPaM, aFoundSel );
     }
 
-    pEditView->pImpEditView->DrawSelectionXOR();
+    pEditView->getImpl().DrawSelectionXOR();
     if ( bFound )
     {
         // First, set the minimum, so the whole word is in the visible range.
-        pEditView->pImpEditView->SetEditSelection( aFoundSel.Min() );
+        pEditView->getImpl().SetEditSelection( aFoundSel.Min() );
         pEditView->ShowCursor( true, false );
-        pEditView->pImpEditView->SetEditSelection( aFoundSel );
+        pEditView->getImpl().SetEditSelection( aFoundSel );
     }
     else
-        pEditView->pImpEditView->SetEditSelection( aSel.Max() );
+        pEditView->getImpl().SetEditSelection( aSel.Max() );
 
-    pEditView->pImpEditView->DrawSelectionXOR();
+    pEditView->getImpl().DrawSelectionXOR();
     pEditView->ShowCursor( true, false );
     return bFound;
 }
