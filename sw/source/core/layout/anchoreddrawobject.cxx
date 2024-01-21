@@ -619,13 +619,15 @@ void SwAnchoredDrawObject::InvalidateObjPos()
 
 SwFrameFormat* SwAnchoredDrawObject::GetFrameFormat()
 {
-    assert(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
-    return static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat();
+    if (SwDrawContact* pDC = static_cast<SwDrawContact*>(GetUserCall(GetDrawObj())))
+        return pDC->GetFormat();
+    return nullptr;
 }
 const SwFrameFormat* SwAnchoredDrawObject::GetFrameFormat() const
 {
-    assert(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
-    return static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat();
+    if (SwDrawContact* pDC = static_cast<SwDrawContact*>(GetUserCall(GetDrawObj())))
+        return pDC->GetFormat();
+    return nullptr;
 }
 
 SwRect SwAnchoredDrawObject::GetObjRect() const

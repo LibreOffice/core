@@ -2596,12 +2596,15 @@ void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
 {
     // Notify accessible layout.
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    SwViewShell* pSh = getRootFrame()->GetCurrShell();
-    if( pSh )
+    if (!mbInDtor)
     {
-        SwRootFrame* pLayout = getRootFrame();
-        if (pLayout && pLayout->IsAnyShellAccessible())
-            pSh->Imp()->DisposeAccessibleObj(_rToRemoveObj.GetDrawObj(), false);
+        SwViewShell* pSh = getRootFrame()->GetCurrShell();
+        if (pSh)
+        {
+            SwRootFrame* pLayout = getRootFrame();
+            if (pLayout && pLayout->IsAnyShellAccessible())
+                pSh->Imp()->DisposeAccessibleObj(_rToRemoveObj.GetDrawObj(), false);
+        }
     }
 #endif
 
