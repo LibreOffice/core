@@ -1729,7 +1729,11 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
             aValue.Name = sPropertyName;
             aValue.Value = xTextRangeProperties->getPropertyValue(sPropertyName);
             if( nProperty < 4 )
+            {
                 xTextRangeProperties->setPropertyValue( sPropertyName, uno::Any(table::BorderLine2()));
+                if (!aValue.Value.hasValue())
+                    aValue.Value <<= table::BorderLine2();
+            }
             else // border spacing
             {
                 sal_Int32 nDistance = 0;
