@@ -44,6 +44,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow
     CPPUNIT_ASSERT(nTableTop > nRectBottom);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
+{
+    loadFromFile(u"tdf159207_footerFramePrBorder.docx"); // re-imports as editeng Frame/Shape
+
+    // given a doc with footer paragraphs frame (with a top border, but no left border)
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    auto aBorder = getProperty<table::BorderLine2>(xFrame0, "LeftBorder");
+    sal_uInt32 nBorderWidth
+        = aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance;
+    // Without patch it failed with Expected 0, Actual 26
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Left border:", static_cast<sal_uInt32>(0), nBorderWidth);
+
+    // TODO: there SHOULD BE a top border, and even if loaded, it would be lost on re-import...
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
