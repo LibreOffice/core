@@ -1845,6 +1845,24 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 
     if (ret)
     {
+        uno::Reference<text::XTextDocument> xTextDocument(xModel, uno::UNO_QUERY);
+        uno::Reference<text::XText> xText(xTextDocument->getText());
+        uno::Reference<container::XEnumerationAccess> xParaAccess(xText, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParaEnum(xParaAccess->createEnumeration());
+        while (xParaEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            // discourage very long paragraphs for fuzzing performance
+            if (xPara && xPara->getString().getLength() > 15000)
+            {
+                ret = false;
+                break;
+            }
+        }
+    }
+
+    if (ret)
+    {
         css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), UNO_SET_THROW);
         utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
 
