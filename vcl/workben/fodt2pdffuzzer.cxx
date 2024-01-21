@@ -57,10 +57,16 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 
 extern "C" size_t LLVMFuzzerMutate(uint8_t* Data, size_t Size, size_t MaxSize);
 
+extern "C" {
+__attribute__((weak)) void __msan_unpoison(const volatile void*, size_t) {}
+}
+
 extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* Data, size_t Size, size_t MaxSize,
                                           unsigned int /*Seed*/)
 {
     size_t Ret = LLVMFuzzerMutate(Data, Size, MaxSize);
+
+    __msan_unpoison(Data, Ret);
 
     // an effort to only generate valid xml, in this fuzzer we only really care
     // about the deeper levels of turning valid input into writer layout and
