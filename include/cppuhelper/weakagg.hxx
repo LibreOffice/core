@@ -20,8 +20,7 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_CPPUHELPER_WEAKAGG_HXX
-#define INCLUDED_CPPUHELPER_WEAKAGG_HXX
+#pragma once
 
 #include "cppuhelper/weak.hxx"
 #include "cppuhelper/weakref.hxx"
@@ -101,7 +100,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
