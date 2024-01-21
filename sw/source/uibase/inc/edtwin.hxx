@@ -122,7 +122,8 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::DocWindow,
                         selection position depending on what has changed lately
                      */
                     m_bUseInputLanguage: 1,
-                    m_bObjectSelect   : 1;
+                    m_bObjectSelect   : 1,
+                    m_bMaybeShowTooltipAfterBufferFlush : 1 = false;
 
     sal_uInt16          m_nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          m_nKS_NUMINDENTINC_Count;
