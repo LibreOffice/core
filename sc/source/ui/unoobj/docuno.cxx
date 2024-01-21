@@ -902,7 +902,7 @@ OUString ScModelObj::hyperlinkInfoAtPosition(int x, int y)
             const Point point(x * pViewData->GetPPTX(), y * pViewData->GetPPTY());
             OUString name;
             OUString url;
-            pGridWindow->GetEditUrl(point, &name, &url);
+            (void)pGridWindow->GetEditUrl(point, &name, &url);
             return url;
         }
     }
