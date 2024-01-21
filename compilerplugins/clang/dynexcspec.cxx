@@ -80,7 +80,7 @@ public:
                 << decl->getSourceRange();
         }
         if (rewriter != nullptr) {
-            if (!(decl->isDefined() || decl->isPure())) {
+            if (!(decl->isDefined() || compat::isPureVirtual(decl))) {
                 return true;
             }
             if (auto m = dyn_cast<CXXMethodDecl>(decl)) {

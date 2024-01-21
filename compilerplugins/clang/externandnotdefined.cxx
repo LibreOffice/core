@@ -34,7 +34,7 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (ignoreLocation(functionDecl)) {
         return true;
     }
-    if (functionDecl->isDefined() || functionDecl->isPure()
+    if (functionDecl->isDefined() || compat::isPureVirtual(functionDecl)
       || (functionDecl->getLinkageAndVisibility().getLinkage()
           != compat::Linkage::External)) {
         return true;

@@ -152,7 +152,7 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
     if (!bCanonicalDeclIsSalCall)
         return true;
 
-    if (!decl->isThisDeclarationADefinition() && !(methodDecl && methodDecl->isPure()))
+    if (!decl->isThisDeclarationADefinition() && !(methodDecl && compat::isPureVirtual(methodDecl)))
         return true;
 
     m_decls.insert(decl);

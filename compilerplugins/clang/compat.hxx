@@ -12,6 +12,7 @@
 #include <string>
 #include <utility>
 
+#include "clang/AST/Decl.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprCXX.h"
 #include "clang/Basic/SourceManager.h"
@@ -238,6 +239,14 @@ inline bool isOrdinary(clang::StringLiteral const * expr) {
     return expr->isOrdinary();
 #else
     return expr->isAscii();
+#endif
+}
+
+inline bool isPureVirtual(clang::FunctionDecl const * decl) {
+#if CLANG_VERSION >= 180000
+    return decl->isPureVirtual();
+#else
+    return decl->isPure();
 #endif
 }
 

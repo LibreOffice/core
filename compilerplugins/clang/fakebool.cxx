@@ -374,7 +374,7 @@ void FakeBool::run() {
                            dyn_cast<FunctionDecl>(
                                decl->getDeclContext())
                            ->getNameInfo().getLoc()))
-                   || f->isDefined() || f->isPure())
+                   || f->isDefined() || compat::isPureVirtual(f))
                   && k != OverrideKind::MAYBE && rewrite(loc, fbk)))
             {
                 report(
@@ -425,7 +425,7 @@ void FakeBool::run() {
             if (!((compiler.getSourceManager().isInMainFile(
                        compiler.getSourceManager().getSpellingLoc(
                            decl->getNameInfo().getLoc()))
-                   || f->isDefined() || f->isPure())
+                   || f->isDefined() || compat::isPureVirtual(f))
                   && rewrite(loc, fbk)))
             {
                 report(
