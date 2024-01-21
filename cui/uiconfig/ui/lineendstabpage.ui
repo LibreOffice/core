@@ -60,6 +60,19 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
+                  <object class="GtkLabel" id="FT_LINE_END_STYLE">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="lineendstabpage|FT_LINE_END_STYLE">Arrow _style:</property>
+                    <property name="use-underline">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel" id="FT_TITLE">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -70,33 +83,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="FT_LINE_END_STYLE">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="lineendstabpage|FT_LINE_END_STYLE">Arrow _style:</property>
-                    <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
                     <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="EDT_NAME">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="halign">start</property>
-                    <property name="width-chars">30</property>
-                    <property name="truncate-multiline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -118,6 +105,19 @@
                         <attribute name="surface">3</attribute>
                       </attributes>
                     </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="EDT_NAME">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="halign">start</property>
+                    <property name="width-chars">30</property>
+                    <property name="truncate-multiline">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
