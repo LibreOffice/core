@@ -296,30 +296,25 @@ namespace accessibility
         return AccessibleRole::PANEL;
     }
 
-
     OUString AccessibleTabBar::getAccessibleDescription( )
     {
         OExternalLockGuard aGuard( this );
 
-        OUString sDescription;
-        if ( m_pTabBar )
-            sDescription = m_pTabBar->GetAccessibleDescription();
+        if (m_pTabBar)
+            return m_pTabBar->GetAccessibleDescription();
 
-        return sDescription;
+        return OUString();
     }
-
 
     OUString AccessibleTabBar::getAccessibleName(  )
     {
         OExternalLockGuard aGuard( this );
 
-        OUString sName;
-        if ( m_pTabBar )
-            sName = m_pTabBar->GetAccessibleName();
+        if (m_pTabBar)
+            return m_pTabBar->GetAccessibleName();
 
-        return sName;
+        return OUString();
     }
-
 
     Reference< XAccessibleRelationSet > AccessibleTabBar::getAccessibleRelationSet(  )
     {
@@ -327,7 +322,6 @@ namespace accessibility
 
         return new utl::AccessibleRelationSetHelper;
     }
-
 
     sal_Int64 AccessibleTabBar::getAccessibleStateSet(  )
     {

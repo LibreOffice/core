@@ -368,7 +368,6 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
     aInfFile.SetGroup( aGroupIdent );
 
     // first, delete all table indices
-    OString aNDX;
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     sal_uInt16 nKey = 0;
 
@@ -376,7 +375,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
     {
         // Does the key point to an index file?...
         OString aKeyName = aInfFile.GetKeyName( nKey );
-        aNDX = aKeyName.copy(0,3);
+        OString aNDX = aKeyName.copy(0,3);
 
         //...if yes, delete index file, nKey is at subsequent key
         if (aNDX == "NDX")

@@ -264,24 +264,20 @@ namespace accessibility
         return nIndexInParent;
     }
 
-
     sal_Int16 AccessibleTabBarPage::getAccessibleRole(  )
     {
         return AccessibleRole::PAGE_TAB;
     }
 
-
     OUString AccessibleTabBarPage::getAccessibleDescription( )
     {
         OExternalLockGuard aGuard( this );
 
-        OUString sDescription;
-        if ( m_pTabBar )
-            sDescription = m_pTabBar->GetHelpText( m_nPageId );
+        if (m_pTabBar)
+            return m_pTabBar->GetHelpText(m_nPageId);
 
-        return sDescription;
+        return OUString();
     }
-
 
     OUString AccessibleTabBarPage::getAccessibleName(  )
     {
@@ -290,14 +286,12 @@ namespace accessibility
         return m_sPageText;
     }
 
-
     Reference< XAccessibleRelationSet > AccessibleTabBarPage::getAccessibleRelationSet(  )
     {
         OExternalLockGuard aGuard( this );
 
         return new utl::AccessibleRelationSetHelper;
     }
-
 
     sal_Int64 AccessibleTabBarPage::getAccessibleStateSet(  )
     {

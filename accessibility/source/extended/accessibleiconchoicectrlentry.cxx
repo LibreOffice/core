@@ -165,11 +165,10 @@ namespace accessibility
 
     OUString AccessibleIconChoiceCtrlEntry::implGetText()
     {
-        OUString sRet;
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry( m_nIndex );
-        if ( pEntry )
-            sRet = pEntry->GetDisplayText();
-        return sRet;
+        if (pEntry)
+            return pEntry->GetDisplayText();
+        return OUString();
     }
 
     Locale AccessibleIconChoiceCtrlEntry::implGetLocale()

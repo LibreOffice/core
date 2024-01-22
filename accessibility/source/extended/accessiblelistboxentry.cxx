@@ -214,11 +214,10 @@ namespace accessibility
 
     OUString AccessibleListBoxEntry::implGetText()
     {
-        OUString sRet;
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( pEntry )
-            sRet = SvTreeListBox::SearchEntryTextWithHeadTitle( pEntry );
-        return sRet;
+        if (pEntry)
+            return SvTreeListBox::SearchEntryTextWithHeadTitle(pEntry);
+        return OUString();
     }
 
     Locale AccessibleListBoxEntry::implGetLocale()
@@ -232,8 +231,6 @@ namespace accessibility
     }
 
     // XTypeProvider
-
-
     Sequence< sal_Int8 > AccessibleListBoxEntry::getImplementationId()
     {
         return css::uno::Sequence<sal_Int8>();
