@@ -2735,10 +2735,12 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
         return;
 
     // New area extended to the right/bottom of the sheet after last col/row
+    tools::Rectangle aNewArea(Point(0, 0), aNewSize);
     // excluding overlapping area with aNewArea
-    tools::Rectangle aNewArea = bColumn ?
-        tools::Rectangle(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight()):
-        tools::Rectangle(0, aOldSize.getHeight(), aNewSize.getWidth(), aNewSize.getHeight());
+    if (bColumn)
+        aNewArea.SetLeft(aOldSize.getWidth());
+    else
+        aNewArea.SetTop(aOldSize.getHeight());
 
     // Only invalidate if spreadsheet has extended to the right or bottom
     if ((bColumn && aNewArea.getOpenWidth()) || (!bColumn && aNewArea.getOpenHeight()))

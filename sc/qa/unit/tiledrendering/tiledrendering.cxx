@@ -1920,7 +1920,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetRowColumnHeadersInvalidation)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 49725, 13005), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(26775, 0), Size(22950, 13005)), aView1.m_aInvalidations[0]);
 
     // Extend area top-to-bottom
     aView1.m_bInvalidateTiles = false;
@@ -1931,7 +1931,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetRowColumnHeadersInvalidation)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 49725, 19380), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 13005), Size(49725, 6375)), aView1.m_aInvalidations[0]);
 
     // Extend area left-to-right
     aView1.m_bInvalidateTiles = false;
@@ -1942,7 +1942,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetRowColumnHeadersInvalidation)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(49725, 0, 75225, 19380), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(49725, 0), Size(25500, 19380)), aView1.m_aInvalidations[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpHorizontallyInvalidation)
@@ -3704,6 +3704,47 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     // Check the A1 cell is selected in view #2
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), ScDocShell::GetViewData()->GetCurX());
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
+}
+
+// if we extend the tiled area to the right and bottom we want two resulting area
+// that don't overlap. If they overlap that typically creates an unnecessary full
+// screen invalidation.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtendedAreasDontOverlap)
+{
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    // Set an arbitrary initial size smaller than the final size
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 1000, 1000));
+
+    Scheduler::ProcessEventsToIdle();
+
+    // register to track View #1 invalidations
+    ViewCallback aView1;
+
+    // extend to the right and bottom
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 39750, 12780));
+
+    Scheduler::ProcessEventsToIdle();
+
+    // we should get two rectangles for the two new areas
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
+
+    // And those should not overlap, otherwise they would merge to form
+    // a mega rectangle, which defeats the purpose of creating two rects
+    // in the first place.
+    CPPUNIT_ASSERT_MESSAGE("Invalidations should not overlap",
+        !aView1.m_aInvalidations[0].Overlaps(aView1.m_aInvalidations[1]));
+
+    // But they should be adjacent
+    CPPUNIT_ASSERT_EQUAL(aView1.m_aInvalidations[0].Top() +
+                         aView1.m_aInvalidations[0].GetSize().Height(),
+                         aView1.m_aInvalidations[1].Top());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
