@@ -116,6 +116,7 @@ IMPL_ABSTDLG_CLASS(AbstractScreenshotAnnotationDlg)
 IMPL_ABSTDLG_CLASS(AbstractSignatureLineDialog)
 IMPL_ABSTDLG_CLASS(AbstractSignSignatureLineDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxCharacterMapDialog)
+IMPL_ABSTDLG_CLASS(AbstractSecurityOptionsDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxHpLinkDlg)
 IMPL_ABSTDLG_CLASS(AbstractSvxJSearchOptionsDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxMultiPathDialog)
@@ -872,6 +873,16 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(weld::Wi
     if (xDlg)
         return VclPtr<CuiAbstractController_Impl>::Create(std::move(xDlg));
     return nullptr;
+}
+
+VclPtr<AbstractSecurityOptionsDialog> AbstractDialogFactory_Impl::CreateSvxSecurityOptionsDialog(weld::Window* pParent)
+{
+    return VclPtr<AbstractSecurityOptionsDialog_Impl>::Create(std::make_unique<svx::SecurityOptionsDialog>(pParent));
+}
+
+bool AbstractSecurityOptionsDialog_Impl::SetSecurityOptions()
+{
+    return m_xDlg->SetSecurityOptions();
 }
 
 // TabDialog outside the drawing layer
