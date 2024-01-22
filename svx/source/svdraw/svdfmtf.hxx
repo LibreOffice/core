@@ -121,7 +121,7 @@ class ImpSdrGDIMetaFileImport final
 
     // #i125211# The MetaCommentAction needs to advance (if used), thus
     // give current metafile and index which may be changed
-    void DoAction(MetaCommentAction const & rAct, GDIMetaFile const & rMtf, sal_uLong& a);
+    void DoAction(MetaCommentAction const & rAct, GDIMetaFile const & rMtf, size_t& a);
 
     // missing actions added
     void DoAction(MetaTextRectAction const & rAct);

@@ -114,9 +114,9 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
 
 void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile const & rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport)
 {
-    const sal_uLong nCount(rMtf.GetActionSize());
+    const size_t nCount = rMtf.GetActionSize();
 
-    for(sal_uLong a(0); a < nCount; a++)
+    for(size_t a = 0; a < nCount; a++)
     {
         MetaAction* pAct = rMtf.GetAction(a);
 
@@ -1219,7 +1219,7 @@ void ImpSdrGDIMetaFileImport::MapScaling()
 }
 
 
-void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaFile const & rMtf, sal_uLong& a) // GDIMetaFile* pMtf )
+void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaFile const & rMtf, size_t& a) // GDIMetaFile* pMtf )
 {
     bool aSkipComment = false;
 

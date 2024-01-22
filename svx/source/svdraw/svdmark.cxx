@@ -292,8 +292,8 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
 
             if(pLastOL == pNewOL)
             {
-                const sal_uLong nLastNum(pLastObj!=nullptr ? pLastObj->GetOrdNum() : 0);
-                const sal_uLong nNewNum(pNewObj !=nullptr ? pNewObj ->GetOrdNum() : 0);
+                const sal_uInt32 nLastNum(pLastObj!=nullptr ? pLastObj->GetOrdNum() : 0);
+                const sal_uInt32 nNewNum(pNewObj !=nullptr ? pNewObj ->GetOrdNum() : 0);
 
                 if(nNewNum < nLastNum)
                 {
