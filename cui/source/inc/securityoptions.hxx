@@ -75,6 +75,7 @@ namespace svx
 
         DECL_LINK(ShowPersonalInfosToggle, weld::Toggleable&, void);
 
+        bool SetSecurityOptions();
         void changeKeepSecurityInfosEnabled();
     };
 }

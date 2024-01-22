@@ -1843,8 +1843,7 @@ IMPL_LINK_NOARG(SfxViewFrame, MacroButtonHandler, weld::Button&, void)
 
 IMPL_LINK_NOARG(SfxViewFrame, SecurityButtonHandler, weld::Button&, void)
 {
-    SfxUInt16Item aPageID(SID_OPTIONS_PAGEID, sal_uInt16(RID_SVXPAGE_INET_SECURITY));
-    GetDispatcher()->ExecuteList(SID_OPTIONS_TREEDIALOG, SfxCallMode::SYNCHRON, { &aPageID });
+    GetDispatcher()->Execute(SID_OPTIONS_SECURITY, SfxCallMode::SYNCHRON);
     RemoveInfoBar(u"securitywarn");
 }
 

@@ -109,6 +109,14 @@ public:
     virtual void        AllowEmpty() = 0;
 };
 
+class VCL_DLLPUBLIC AbstractSecurityOptionsDialog : public VclAbstractDialog
+{
+protected:
+    virtual             ~AbstractSecurityOptionsDialog() override = default;
+public:
+    virtual bool        SetSecurityOptions() = 0;
+};
+
 class VCL_DLLPUBLIC AbstractScreenshotAnnotationDlg : public VclAbstractDialog
 {
 protected:

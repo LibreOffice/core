@@ -27,7 +27,6 @@
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/securityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -52,7 +51,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
-#include "securityoptions.hxx"
+#include <securityoptions.hxx>
 #include "webconninfo.hxx"
 #include "certpath.hxx"
 #include "tsaurls.hxx"
@@ -834,25 +833,6 @@ DeactivateRC SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-namespace
-{
-    bool CheckAndSave( SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModified )
-    {
-        bool bModified = false;
-        if ( !SvtSecurityOptions::IsReadOnly( _eOpt ) )
-        {
-            bModified = SvtSecurityOptions::IsOptionSet( _eOpt ) != _bIsChecked;
-            if ( bModified )
-            {
-                SvtSecurityOptions::SetOption( _eOpt, _bIsChecked );
-                _rModified = true;
-            }
-        }
-
-        return bModified;
-    }
-}
-
 OUString SvxSecurityTabPage::GetAllStrings()
 {
     OUString sAllStrings;
@@ -892,21 +872,8 @@ bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
 
-    if (m_xSecOptDlg)
-    {
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnSaveOrSend, m_xSecOptDlg->IsSaveOrSendDocsChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnSigning, m_xSecOptDlg->IsSignDocsChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnPrint, m_xSecOptDlg->IsPrintDocsChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnCreatePdf, m_xSecOptDlg->IsCreatePdfChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, m_xSecOptDlg->IsRemovePersInfoChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo, m_xSecOptDlg->IsRemoveRedlineInfoChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo, m_xSecOptDlg->IsRemoveDocUserInfoChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo, m_xSecOptDlg->IsRemoveNoteAuthorInfoChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo, m_xSecOptDlg->IsRemoveDocVersionInfoChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DocWarnRecommendPassword, m_xSecOptDlg->IsRecommPasswdChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::CtrlClickHyperlink, m_xSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, m_xSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
-        CheckAndSave( SvtSecurityOptions::EOption::DisableActiveContent, m_xSecOptDlg->IsDisableActiveContentChecked(), bModified );
+    if (m_xSecOptDlg) {
+        bModified = m_xSecOptDlg->SetSecurityOptions();
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(

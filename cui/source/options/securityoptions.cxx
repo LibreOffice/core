@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <securityoptions.hxx>
 #include <unotools/securityoptions.hxx>
-#include "securityoptions.hxx"
 
 namespace
 {
@@ -30,6 +30,15 @@ namespace
         rFixedImage.set_visible(!bEnable);
         rCheckBox.set_active(SvtSecurityOptions::IsOptionSet(eOption));
         return bEnable;
+    }
+
+    void CheckAndSave(SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModified)
+    {
+        if (!SvtSecurityOptions::IsReadOnly(_eOpt) && SvtSecurityOptions::IsOptionSet(_eOpt) != _bIsChecked)
+        {
+            SvtSecurityOptions::SetOption(_eOpt, _bIsChecked);
+            _rModified = true;
+        }
     }
 }
 
@@ -105,6 +114,26 @@ void SecurityOptionsDialog::init()
 
     if (!SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo))
         changeKeepSecurityInfosEnabled();
+}
+
+bool SecurityOptionsDialog::SetSecurityOptions()
+{
+    bool bModified = false;
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnSaveOrSend, IsSaveOrSendDocsChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnSigning, IsSignDocsChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnPrint, IsPrintDocsChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnCreatePdf, IsCreatePdfChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, IsRemovePersInfoChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo, IsRemoveRedlineInfoChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo, IsRemoveDocUserInfoChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo, IsRemoveNoteAuthorInfoChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo, IsRemoveDocVersionInfoChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocWarnRecommendPassword, IsRecommPasswdChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::CtrlClickHyperlink, IsCtrlHyperlinkChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, IsBlockUntrustedRefererLinksChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DisableActiveContent, IsDisableActiveContentChecked(), bModified);
+
+    return bModified;
 }
 
 void SecurityOptionsDialog::changeKeepSecurityInfosEnabled()
