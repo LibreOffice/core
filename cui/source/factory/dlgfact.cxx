@@ -122,8 +122,8 @@ IMPL_ABSTDLG_CLASS(AbstractSvxJSearchOptionsDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxMultiPathDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxNameDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxNewDictionaryDialog)
-IMPL_ABSTDLG_CLASS(AbstractSvxObjectNameDialog)
-IMPL_ABSTDLG_CLASS(AbstractSvxObjectTitleDescDialog)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectNameDialog, SvxObjectNameDialog)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectTitleDescDialog, SvxObjectTitleDescDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxPathSelectDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxPostItDialog)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxSearchSimilarityDialog,SvxSearchSimilarityDialog)
@@ -595,9 +595,9 @@ IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameTooltipHdl, SvxNameDialog&,
     return aCheckNameTooltipHdl.Call(*this);
 }
 
-void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
+OUString AbstractSvxObjectNameDialog_Impl::GetName()
 {
-    rName = m_xDlg->GetName();
+    return m_xDlg->GetName();
 }
 
 void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink)

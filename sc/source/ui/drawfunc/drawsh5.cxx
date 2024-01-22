@@ -509,58 +509,64 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
                     {
-                        OUString aName = pSelected->GetName();
+                        OUString aOldName = pSelected->GetName();
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         vcl::Window* pWin = rViewData.GetActiveWin();
-                        ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(pWin ? pWin->GetFrameWeld() : nullptr, aName));
+                        VclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(pWin ? pWin->GetFrameWeld() : nullptr, aOldName));
 
                         pDlg->SetCheckNameHdl(LINK(this, ScDrawShell, NameObjectHdl));
 
-                        if(RET_OK == pDlg->Execute())
-                        {
-                            ScDocShell* pDocSh = rViewData.GetDocShell();
-                            pDlg->GetName(aName);
-
-                            if (aName != pSelected->GetName())
+                        pDlg->StartExecuteAsync(
+                            [this, pDlg, pSelected] (sal_Int32 nResult)->void
                             {
-                                // handle name change
-                                const SdrObjKind nObjType(pSelected->GetObjIdentifier());
-
-                                if (SdrObjKind::Graphic == nObjType && aName.isEmpty())
+                                if (nResult == RET_OK)
                                 {
-                                    //  graphics objects must have names
-                                    //  (all graphics are supposed to be in the navigator)
-                                    ScDrawLayer* pModel = rViewData.GetDocument().GetDrawLayer();
+                                    ScDocShell* pDocSh = rViewData.GetDocShell();
+                                    OUString aNewName = pDlg->GetName();
 
-                                    if(pModel)
+                                    if (aNewName != pSelected->GetName())
                                     {
-                                        aName = pModel->GetNewGraphicName();
+                                        // handle name change
+                                        const SdrObjKind nObjType(pSelected->GetObjIdentifier());
+
+                                        if (SdrObjKind::Graphic == nObjType && aNewName.isEmpty())
+                                        {
+                                            //  graphics objects must have names
+                                            //  (all graphics are supposed to be in the navigator)
+                                            ScDrawLayer* pModel = rViewData.GetDocument().GetDrawLayer();
+
+                                            if(pModel)
+                                            {
+                                                aNewName = pModel->GetNewGraphicName();
+                                            }
+                                        }
+
+                                        //  An undo action for renaming is missing in svdraw (99363).
+                                        //  For OLE objects (which can be identified using the persist name),
+                                        //  ScUndoRenameObject can be used until there is a common action for all objects.
+                                        if(SdrObjKind::OLE2 == nObjType)
+                                        {
+                                            const OUString aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
+
+                                            if(!aPersistName.isEmpty())
+                                            {
+                                                pDocSh->GetUndoManager()->AddUndoAction(
+                                                    std::make_unique<ScUndoRenameObject>(pDocSh, aPersistName, pSelected->GetName(), aNewName));
+                                            }
+                                        }
+
+                                        // set new name
+                                        pSelected->SetName(aNewName);
                                     }
+
+                                    // ChartListenerCollectionNeedsUpdate is needed for Navigator update
+                                    pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
+                                    pDocSh->SetDrawModified();
                                 }
-
-                                //  An undo action for renaming is missing in svdraw (99363).
-                                //  For OLE objects (which can be identified using the persist name),
-                                //  ScUndoRenameObject can be used until there is a common action for all objects.
-                                if(SdrObjKind::OLE2 == nObjType)
-                                {
-                                    const OUString aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
-
-                                    if(!aPersistName.isEmpty())
-                                    {
-                                        pDocSh->GetUndoManager()->AddUndoAction(
-                                            std::make_unique<ScUndoRenameObject>(pDocSh, aPersistName, pSelected->GetName(), aName));
-                                    }
-                                }
-
-                                // set new name
-                                pSelected->SetName(aName);
+                                pDlg->disposeOnce();
                             }
-
-                            // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                            pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
-                            pDocSh->SetDrawModified();
-                        }
+                        );
                     }
                 }
                 break;
@@ -647,8 +653,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
 IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
-    OUString aName;
-    rDialog.GetName( aName );
+    OUString aName = rDialog.GetName();
 
     ScDrawLayer* pModel = rViewData.GetDocument().GetDrawLayer();
     if ( !aName.isEmpty() && pModel )

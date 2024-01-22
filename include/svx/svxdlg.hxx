@@ -175,7 +175,7 @@ class AbstractSvxObjectNameDialog :public VclAbstractDialog
 protected:
     virtual ~AbstractSvxObjectNameDialog() override = default;
 public:
-    virtual void GetName(OUString& rName) = 0;
+    virtual OUString GetName() = 0;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) = 0;
 };
 

@@ -2662,24 +2662,28 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OUString aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(GetFrameWeld(), aName));
+                VclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(GetFrameWeld(), aName));
 
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
 
-                if(RET_OK == pDlg->Execute())
-                {
-                    pDlg->GetName(aName);
-                    pSelected->SetName(aName);
+                pDlg->StartExecuteAsync(
+                    [this, pDlg, pSelected] (sal_Int32 nResult)->void
+                    {
+                        if (nResult == RET_OK)
+                        {
+                            pSelected->SetName(pDlg->GetName());
 
-                    SdPage* pPage = GetActualPage();
-                    if (pPage)
-                        pPage->notifyObjectRenamed(pSelected);
-                }
+                            SdPage* pPage = GetActualPage();
+                            if (pPage)
+                                pPage->notifyObjectRenamed(pSelected);
+                        }
+                        pDlg->disposeOnce();
+                        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                        rBindings.Invalidate( SID_NAVIGATOR_STATE, true );
+                        rBindings.Invalidate( SID_CONTEXT );
+                    }
+                );
             }
-
-            SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, true );
-            rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
             rReq.Ignore();

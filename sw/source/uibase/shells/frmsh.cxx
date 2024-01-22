@@ -675,14 +675,17 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             {
                 OUString aName(rSh.GetFlyName());
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(
+                VclPtr<AbstractSvxObjectNameDialog> pDlg(
                     pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
 
-                if ( pDlg->Execute() == RET_OK )
-                {
-                    pDlg->GetName(aName);
-                    rSh.SetFlyName(aName);
-                }
+                pDlg->StartExecuteAsync(
+                    [this, pDlg] (sal_Int32 nResult)->void
+                    {
+                        if (nResult == RET_OK)
+                            GetShell().SetFlyName(pDlg->GetName());
+                        pDlg->disposeOnce();
+                    }
+                );
             }
         }
         break;

@@ -596,27 +596,32 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 // #i68101#
                 SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
-                OUString aName(pSelected->GetName());
+                OUString aOrigName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
+                VclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aOrigName));
 
                 pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
 
-                if(RET_OK == pDlg->Execute())
-                {
-                    const OUString aOrigName = aName;
-                    pDlg->GetName(aName);
-                    pSelected->SetName(aName);
-                    pSh->SetModified();
-
-                    // update accessibility sidebar object name if we modify the object name on the navigator bar
-                    if (!aName.isEmpty() && aOrigName != aName)
+                pDlg->StartExecuteAsync(
+                    [pDlg, pSelected, pSh, aOrigName] (sal_Int32 nResult)->void
                     {
-                        if (SwNode* pSwNode = FindFrameFormat(pSelected)->GetAnchor().GetAnchorNode())
-                            pSwNode->resetAndQueueAccessibilityCheck(true);
+                        if (nResult == RET_OK)
+                        {
+                            OUString aNewName = pDlg->GetName();
+                            pSelected->SetName(aNewName);
+                            pSh->SetModified();
+
+                            // update accessibility sidebar object name if we modify the object name on the navigator bar
+                            if (!aNewName.isEmpty() && aOrigName != aNewName)
+                            {
+                                if (SwNode* pSwNode = FindFrameFormat(pSelected)->GetAnchor().GetAnchorNode())
+                                    pSwNode->resetAndQueueAccessibilityCheck(true);
+                            }
+                        }
+                        pDlg->disposeOnce();
                     }
-                }
+                );
             }
 
             break;
@@ -727,8 +732,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&
     OSL_ENSURE(rMarkList.GetMarkCount() == 1, "wrong draw selection");
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const OUString sCurrentName = pObj->GetName();
-    OUString sNewName;
-    rNameDialog.GetName(sNewName);
+    OUString sNewName = rNameDialog.GetName();
     bool bRet = false;
     if (sNewName.isEmpty() || sCurrentName == sNewName)
         bRet = true;

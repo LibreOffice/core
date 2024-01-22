@@ -285,8 +285,8 @@ class SvxObjectNameDialog;
 class SvxObjectTitleDescDialog;
 
 // AbstractSvxObjectNameDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSvxObjectNameDialog,SvxObjectNameDialog)
-    virtual void GetName(OUString& rName) override ;
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectNameDialog,SvxObjectNameDialog)
+    virtual OUString GetName() override;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) override;
 
 private:
@@ -295,7 +295,7 @@ private:
 };
 
 // AbstractSvxObjectTitleDescDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSvxObjectTitleDescDialog,SvxObjectTitleDescDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectTitleDescDialog,SvxObjectTitleDescDialog)
     virtual void GetTitle(OUString& rName) override;
     virtual void GetDescription(OUString& rName) override;
     virtual void IsDecorative(bool & rIsDecorative) override;
