@@ -433,20 +433,25 @@ void ShapeController::executeDispatch_RenameObject()
     if ( !pSelectedObj )
         return;
 
-    OUString aName = pSelectedObj->GetName();
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     weld::Window* pChartWindow(m_pChartController->GetChartFrame());
-    ScopedVclPtr< AbstractSvxObjectNameDialog > pDlg(
-        pFact->CreateSvxObjectNameDialog(pChartWindow, aName));
+    VclPtr< AbstractSvxObjectNameDialog > pDlg(
+        pFact->CreateSvxObjectNameDialog(pChartWindow, pSelectedObj->GetName()));
     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
-    if ( pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
-        if (pSelectedObj->GetName() != aName)
+    pDlg->StartExecuteAsync(
+        [pDlg, pSelectedObj] (sal_Int32 nResult)->void
         {
-            pSelectedObj->SetName( aName );
+            if (nResult == RET_OK)
+            {
+                OUString aName = pDlg->GetName();
+                if (pSelectedObj->GetName() != aName)
+                {
+                    pSelectedObj->SetName( aName );
+                }
+            }
+            pDlg->disposeOnce();
         }
-    }
+    );
 }
 
 void ShapeController::executeDispatch_ChangeZOrder( ChartCommandID nId )

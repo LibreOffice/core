@@ -284,7 +284,7 @@ class SvxObjectNameDialog;
 class SvxObjectTitleDescDialog;
 
 // AbstractSvxObjectNameDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSvxObjectNameDialog,SvxObjectNameDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectNameDialog,SvxObjectNameDialog)
     virtual OUString GetName() override;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) override;
 
