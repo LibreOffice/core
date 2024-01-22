@@ -440,7 +440,7 @@ void ShapeController::executeDispatch_RenameObject()
     if ( pDlg->Execute() == RET_OK )
     {
         pDlg->GetName(aName);
-        if (pSelectedObj->GetName() == aName)
+        if (pSelectedObj->GetName() != aName)
         {
             pSelectedObj->SetName( aName );
         }
