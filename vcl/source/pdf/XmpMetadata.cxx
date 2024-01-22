@@ -83,6 +83,14 @@ void XmpMetadata::write()
             aXmlWriter.content("application/pdf"_ostr);
             aXmlWriter.endElement();
 
+            aXmlWriter.startElement("dc:date");
+            aXmlWriter.startElement("rdf:Seq");
+            aXmlWriter.startElement("rdf:li");
+            aXmlWriter.content(m_sCreateDate);
+            aXmlWriter.endElement();
+            aXmlWriter.endElement();
+            aXmlWriter.endElement();
+
             if (!msTitle.isEmpty())
             {
                 // this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
