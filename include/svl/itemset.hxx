@@ -42,6 +42,7 @@ SVL_DLLPUBLIC size_t getUsedSfxPoolItemHolderCount();
 SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, bool bPassingOwnership);
 void implCleanupItemEntry(SfxPoolItem const* pSource);
 
+// coverity[ missing_move_assignment : SUPPRESS] - don't report about missing move assignment
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxPoolItemHolder
 {
     SfxItemPool*            m_pPool;
