@@ -582,22 +582,28 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         vcl::Window* pWin = rViewData.GetActiveWin();
-                        ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
+                        VclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
                                     pWin ? pWin->GetFrameWeld() : nullptr, aTitle, aDescription, isDecorative));
 
-                        if(RET_OK == pDlg->Execute())
-                        {
-                            ScDocShell* pDocSh = rViewData.GetDocShell();
+                        pDlg->StartExecuteAsync(
+                            [this, pDlg, pSelected] (sal_Int32 nResult)->void
+                            {
+                                if (nResult == RET_OK)
+                                {
+                                    ScDocShell* pDocSh = rViewData.GetDocShell();
 
-                            // handle Title and Description
-                            pSelected->SetTitle(pDlg->GetTitle());
-                            pSelected->SetDescription(pDlg->GetDescription());
-                            pSelected->SetDecorative(pDlg->IsDecorative());
+                                    // handle Title and Description
+                                    pSelected->SetTitle(pDlg->GetTitle());
+                                    pSelected->SetDescription(pDlg->GetDescription());
+                                    pSelected->SetDecorative(pDlg->IsDecorative());
 
-                            // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                            pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
-                            pDocSh->SetDrawModified();
-                        }
+                                    // ChartListenerCollectionNeedsUpdate is needed for Navigator update
+                                    pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
+                                    pDocSh->SetDrawModified();
+                                }
+                                pDlg->disposeOnce();
+                            }
+                        );
                     }
                 }
                 break;

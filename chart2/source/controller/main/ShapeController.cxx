@@ -403,14 +403,20 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
     bool isDecorative(pSelectedObj->IsDecorative());
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     weld::Window* pChartWindow(m_pChartController->GetChartFrame());
-    ScopedVclPtr< AbstractSvxObjectTitleDescDialog > pDlg(
+    VclPtr< AbstractSvxObjectTitleDescDialog > pDlg(
         pFact->CreateSvxObjectTitleDescDialog(pChartWindow, aTitle, aDescription, isDecorative));
-    if ( pDlg->Execute() == RET_OK )
-    {
-        pSelectedObj->SetTitle( pDlg->GetTitle() );
-        pSelectedObj->SetDescription( pDlg->GetDescription() );
-        pSelectedObj->SetDecorative(pDlg->IsDecorative());
-    }
+    pDlg->StartExecuteAsync(
+        [pDlg, pSelectedObj] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                pSelectedObj->SetTitle( pDlg->GetTitle() );
+                pSelectedObj->SetDescription( pDlg->GetDescription() );
+                pSelectedObj->SetDecorative(pDlg->IsDecorative());
+            }
+            pDlg->disposeOnce();
+        }
+    );
 }
 
 void ShapeController::executeDispatch_RenameObject()

@@ -698,16 +698,22 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 bool isDecorative(rSh.IsObjDecorative());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
+                VclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
                     pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
                         aTitle, aDescription, isDecorative));
 
-                if ( pDlg->Execute() == RET_OK )
-                {
-                    rSh.SetObjDescription(pDlg->GetDescription());
-                    rSh.SetObjTitle(pDlg->GetTitle());
-                    rSh.SetObjDecorative(pDlg->IsDecorative());
-                }
+                pDlg->StartExecuteAsync(
+                    [this, pDlg] (sal_Int32 nResult)->void
+                    {
+                        if (nResult == RET_OK)
+                        {
+                            GetShell().SetObjDescription(pDlg->GetDescription());
+                            GetShell().SetObjTitle(pDlg->GetTitle());
+                            GetShell().SetObjDecorative(pDlg->IsDecorative());
+                        }
+                        pDlg->disposeOnce();
+                    }
+                );
             }
         }
         break;

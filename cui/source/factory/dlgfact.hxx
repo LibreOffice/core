@@ -294,7 +294,7 @@ private:
 };
 
 // AbstractSvxObjectTitleDescDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSvxObjectTitleDescDialog,SvxObjectTitleDescDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectTitleDescDialog,SvxObjectTitleDescDialog)
     virtual OUString GetTitle() override;
     virtual OUString GetDescription() override;
     virtual bool IsDecorative() override;

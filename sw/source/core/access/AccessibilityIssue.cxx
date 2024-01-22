@@ -252,6 +252,8 @@ void AccessibilityIssue::quickFixIssue() const
     if (canGotoIssue())
         gotoIssue();
 
+    bool bResetAndQueue = true;
+
     switch (m_eIssueObject)
     {
         case IssueObject::GRAPHIC:
@@ -267,18 +269,24 @@ void AccessibilityIssue::quickFixIssue() const
 
                 SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
-                    pFact->CreateSvxObjectTitleDescDialog(pWrtShell->GetView().GetFrameWeld(),
-                                                          aTitle, aDescription, isDecorative));
+                VclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
+                    pWrtShell->GetView().GetFrameWeld(), aTitle, aDescription, isDecorative));
 
-                if (pDlg->Execute() == RET_OK)
-                {
-                    m_pDoc->SetFlyFrameTitle(*pFlyFormat, pDlg->GetTitle());
-                    m_pDoc->SetFlyFrameDescription(*pFlyFormat, pDlg->GetDescription());
-                    m_pDoc->SetFlyFrameDecorative(*pFlyFormat, pDlg->IsDecorative());
+                bResetAndQueue = false;
+                pDlg->StartExecuteAsync(
+                    [this, pDlg, pFlyFormat, pWrtShell](sal_Int32 nResult) -> void {
+                        if (nResult == RET_OK)
+                        {
+                            m_pDoc->SetFlyFrameTitle(*pFlyFormat, pDlg->GetTitle());
+                            m_pDoc->SetFlyFrameDescription(*pFlyFormat, pDlg->GetDescription());
+                            m_pDoc->SetFlyFrameDecorative(*pFlyFormat, pDlg->IsDecorative());
 
-                    pWrtShell->SetModified();
-                }
+                            pWrtShell->SetModified();
+                        }
+                        pDlg->disposeOnce();
+                        if (m_pNode)
+                            m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
+                    });
             }
         }
         break;
@@ -295,18 +303,23 @@ void AccessibilityIssue::quickFixIssue() const
                 bool isDecorative(pObj->IsDecorative());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
-                    pFact->CreateSvxObjectTitleDescDialog(pWrtShell->GetView().GetFrameWeld(),
-                                                          aTitle, aDescription, isDecorative));
+                VclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
+                    pWrtShell->GetView().GetFrameWeld(), aTitle, aDescription, isDecorative));
 
-                if (RET_OK == pDlg->Execute())
-                {
-                    pObj->SetTitle(pDlg->GetTitle());
-                    pObj->SetDescription(pDlg->GetDescription());
-                    pObj->SetDecorative(pDlg->IsDecorative());
+                bResetAndQueue = false;
+                pDlg->StartExecuteAsync([this, pDlg, pObj, pWrtShell](sal_Int32 nResult) -> void {
+                    if (nResult == RET_OK)
+                    {
+                        pObj->SetTitle(pDlg->GetTitle());
+                        pObj->SetDescription(pDlg->GetDescription());
+                        pObj->SetDecorative(pDlg->IsDecorative());
 
-                    pWrtShell->SetModified();
-                }
+                        pWrtShell->SetModified();
+                    }
+                    pDlg->disposeOnce();
+                    if (m_pNode)
+                        m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
+                });
             }
         }
         break;
@@ -371,7 +384,7 @@ void AccessibilityIssue::quickFixIssue() const
         default:
             break;
     }
-    if (m_pNode)
+    if (bResetAndQueue && m_pNode)
         m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
 }
 

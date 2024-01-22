@@ -2700,20 +2700,25 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 bool isDecorative(pSelected->IsDecorative());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
+                VclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
                             GetFrameWeld(), aTitle, aDescription, isDecorative));
 
-                if(RET_OK == pDlg->Execute())
-                {
-                    pSelected->SetTitle(pDlg->GetTitle());
-                    pSelected->SetDescription(pDlg->GetDescription());
-                    pSelected->SetDecorative(pDlg->IsDecorative());
-                }
+                pDlg->StartExecuteAsync(
+                    [this, pDlg, pSelected] (sal_Int32 nResult)->void
+                    {
+                        if (nResult == RET_OK)
+                        {
+                            pSelected->SetTitle(pDlg->GetTitle());
+                            pSelected->SetDescription(pDlg->GetDescription());
+                            pSelected->SetDecorative(pDlg->IsDecorative());
+                        }
+                        pDlg->disposeOnce();
+                        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                        rBindings.Invalidate( SID_NAVIGATOR_STATE, true );
+                        rBindings.Invalidate( SID_CONTEXT );
+                    }
+                );
             }
-
-            SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, true );
-            rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
             rReq.Ignore();

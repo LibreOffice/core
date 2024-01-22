@@ -626,17 +626,23 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 bool isDecorative(pSelected->IsDecorative());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
+                VclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
                             aTitle, aDescription, isDecorative));
 
-                if(RET_OK == pDlg->Execute())
-                {
-                    pSelected->SetTitle(pDlg->GetTitle());
-                    pSelected->SetDescription(pDlg->GetDescription());
-                    pSelected->SetDecorative(pDlg->IsDecorative());
+                pDlg->StartExecuteAsync(
+                    [pDlg, pSelected, pSh] (sal_Int32 nResult)->void
+                    {
+                        if (nResult == RET_OK)
+                        {
+                            pSelected->SetTitle(pDlg->GetTitle());
+                            pSelected->SetDescription(pDlg->GetDescription());
+                            pSelected->SetDecorative(pDlg->IsDecorative());
 
-                    pSh->SetModified();
-                }
+                            pSh->SetModified();
+                        }
+                        pDlg->disposeOnce();
+                    }
+                );
             }
 
             break;
