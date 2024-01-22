@@ -487,23 +487,23 @@ sal_uInt16 XLineStyleItem::GetValueCount() const
 
 XDash::XDash(css::drawing::DashStyle eTheDash, sal_uInt16 nTheDots, double nTheDotLen,
              sal_uInt16 nTheDashes, double nTheDashLen, double nTheDistance) :
-    eDash(eTheDash),
-    nDots(nTheDots),
-    nDashes(nTheDashes),
-    nDotLen(nTheDotLen),
-    nDashLen(nTheDashLen),
-    nDistance(nTheDistance)
+    m_eDash(eTheDash),
+    m_nDots(nTheDots),
+    m_nDashes(nTheDashes),
+    m_nDotLen(nTheDotLen),
+    m_nDashLen(nTheDashLen),
+    m_nDistance(nTheDistance)
 {
 }
 
 bool XDash::operator==(const XDash& rDash) const
 {
-    return ( eDash      == rDash.eDash      &&
-             nDots      == rDash.nDots      &&
-             nDotLen    == rDash.nDotLen    &&
-             nDashes    == rDash.nDashes    &&
-             nDashLen   == rDash.nDashLen   &&
-             nDistance  == rDash.nDistance );
+    return ( m_eDash      == rDash.m_eDash      &&
+             m_nDots      == rDash.m_nDots      &&
+             m_nDotLen    == rDash.m_nDotLen    &&
+             m_nDashes    == rDash.m_nDashes    &&
+             m_nDashLen   == rDash.m_nDashLen   &&
+             m_nDistance  == rDash.m_nDistance );
 }
 
 // XDash is translated into an array of doubles which describe the lengths of the

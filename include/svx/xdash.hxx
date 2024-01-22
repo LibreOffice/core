@@ -30,12 +30,12 @@
 
 class SVXCORE_DLLPUBLIC XDash final
 {
-    css::drawing::DashStyle  eDash;
-    sal_uInt16               nDots;
-    sal_uInt16               nDashes;
-    double                   nDotLen;
-    double                   nDashLen;
-    double                   nDistance;
+    css::drawing::DashStyle  m_eDash;
+    sal_uInt16               m_nDots;
+    sal_uInt16               m_nDashes;
+    double                   m_nDotLen;
+    double                   m_nDashLen;
+    double                   m_nDistance;
 
 public:
           XDash(css::drawing::DashStyle eDash = css::drawing::DashStyle_RECT,
@@ -44,19 +44,19 @@ public:
 
     bool operator==(const XDash& rDash) const;
 
-    void SetDashStyle(css::drawing::DashStyle eNewStyle) { eDash = eNewStyle; }
-    void SetDots(sal_uInt16 nNewDots)                    { nDots = nNewDots; }
-    void SetDotLen(double nNewDotLen)                    { nDotLen = nNewDotLen; }
-    void SetDashes(sal_uInt16 nNewDashes)                { nDashes = nNewDashes; }
-    void SetDashLen(double nNewDashLen)                  { nDashLen = nNewDashLen; }
-    void SetDistance(double nNewDistance)                { nDistance = nNewDistance; }
+    void SetDashStyle(css::drawing::DashStyle eNewStyle) { m_eDash = eNewStyle; }
+    void SetDots(sal_uInt16 nNewDots)                    { m_nDots = nNewDots; }
+    void SetDotLen(double nNewDotLen)                    { m_nDotLen = nNewDotLen; }
+    void SetDashes(sal_uInt16 nNewDashes)                { m_nDashes = nNewDashes; }
+    void SetDashLen(double nNewDashLen)                  { m_nDashLen = nNewDashLen; }
+    void SetDistance(double nNewDistance)                { m_nDistance = nNewDistance; }
 
-    css::drawing::DashStyle  GetDashStyle() const        { return eDash; }
-    sal_uInt16               GetDots() const             { return nDots; }
-    double                   GetDotLen() const           { return nDotLen; }
-    sal_uInt16               GetDashes() const           { return nDashes; }
-    double                   GetDashLen() const          { return nDashLen; }
-    double                   GetDistance() const         { return nDistance; }
+    css::drawing::DashStyle  GetDashStyle() const        { return m_eDash; }
+    sal_uInt16               GetDots() const             { return m_nDots; }
+    double                   GetDotLen() const           { return m_nDotLen; }
+    sal_uInt16               GetDashes() const           { return m_nDashes; }
+    double                   GetDashLen() const          { return m_nDashLen; }
+    double                   GetDistance() const         { return m_nDistance; }
 
     // XDash is translated into an array of doubles which describe the lengths of the
     // dashes, dots and empty passages. It returns the complete length of the full DashDot
