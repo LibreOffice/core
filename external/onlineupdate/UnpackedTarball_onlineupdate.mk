@@ -21,7 +21,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,onlineupdate, \
 ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,onlineupdate, \
     external/onlineupdate/cygpath.patch \
-    external/onlineupdate/inifiles.patch \
 ))
 endif
 

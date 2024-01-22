@@ -47,12 +47,8 @@ sub check_simple_packager_project
         $installer::globals::is_simple_packager_project = 1;
         $installer::globals::patch_user_dir = 1;
     }
-    elsif( $installer::globals::packageformat eq "archive" )
-    {
-        $installer::globals::is_simple_packager_project = 1;
-        $installer::globals::record_archive_metadata = 1;
-    }
-    elsif( $installer::globals::packageformat eq "dmg" )
+    elsif(( $installer::globals::packageformat eq "archive" ) ||
+          ( $installer::globals::packageformat eq "dmg" ) )
     {
         $installer::globals::is_simple_packager_project = 1;
     }
@@ -612,9 +608,6 @@ sub create_simple_package
     # stripping files ?!
     if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild )) { strip_libraries($filesref, $languagestringref); }
 
-    my @archive_metadata_skip;
-    my @archive_metadata_cond;
-
     # copy Files
     installer::logger::print_message( "... copying files ...\n" );
     installer::logger::include_header_into_logfile("Copying files:");
@@ -663,18 +656,6 @@ sub create_simple_package
                         chmod oct($onefile->{'UnixRights'}), $destination;
                     }
                 }
-            }
-        }
-
-        if ($installer::globals::record_archive_metadata)
-        {
-            if ($onefile->{'Styles'} =~ /\b(ASSEMBLY|ASSIGNCOMPONENT|FONT)\b/)
-            {
-                push(@archive_metadata_skip, $onefile->{'destination'});
-            }
-            elsif ($onefile->{'modules'} =~ /^gid_Module_(Langpack|Optional)_/)
-            {
-                push(@archive_metadata_cond, $onefile->{'destination'});
             }
         }
     }
@@ -743,14 +724,6 @@ sub create_simple_package
     elsif ( $installer::globals::packageformat eq "dmg" )
     {
         create_package($installdir, $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, ".dmg");
-    }
-
-    if ($installer::globals::record_archive_metadata)
-    {
-        open(HANDLE, '>', "$installer::globals::csp_installdir/../metadata") or die $!;
-        print HANDLE "skip $_\n" foreach (sort(@archive_metadata_skip));
-        print HANDLE "cond $_\n" foreach (sort(@archive_metadata_cond));
-        close HANDLE;
     }
 
     # Analyzing the log file
