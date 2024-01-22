@@ -119,7 +119,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
     if( pDlg->Execute() != RET_OK )
         return;
 
-    pDlg->GetName( aName );
+    aName = pDlg->GetName();
     bDifferent = true;
 
     for( ::tools::Long i = 0; i < nCount && bDifferent; i++ )

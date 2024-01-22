@@ -88,17 +88,15 @@ void TSAURLsDialog::AddTSAURL(const OUString& rURL)
 
 IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, weld::Button&, void)
 {
-    OUString aURL;
     OUString aDesc(m_xEnterAUrl->get_label());
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractSvxNameDialog> pDlg(
-        pFact->CreateSvxNameDialog(m_xDialog.get(), aURL, aDesc));
+        pFact->CreateSvxNameDialog(m_xDialog.get(), OUString(), aDesc));
 
     if (pDlg->Execute() == RET_OK)
     {
-        pDlg->GetName(aURL);
-        AddTSAURL(aURL);
+        AddTSAURL(pDlg->GetName());
         m_xOKBtn->set_sensitive(true);
     }
     m_xURLListBox->unselect_all();

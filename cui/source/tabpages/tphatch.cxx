@@ -422,7 +422,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
     while( pDlg->Execute() == RET_OK )
     {
-        pDlg->GetName( aName );
+        aName = pDlg->GetName();
 
         bValidHatchName = (SearchHatchList(aName) == -1);
         if( bValidHatchName )
@@ -535,7 +535,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
     bool bLoop = true;
     while( bLoop && pDlg->Execute() == RET_OK )
     {
-        pDlg->GetName( aName );
+        aName = pDlg->GetName();
         sal_Int32 nHatchPos = SearchHatchList( aName );
         bool bValidHatchName = (nHatchPos == static_cast<sal_Int32>(nPos) ) || (nHatchPos == -1);
 

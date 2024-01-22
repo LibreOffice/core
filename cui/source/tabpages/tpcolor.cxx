@@ -350,7 +350,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
     while (pDlg->Execute() == RET_OK)
     {
-        pDlg->GetName( aName );
+        aName = pDlg->GetName();
 
         bValidColorName = (FindInCustomColors(aName) == -1);
         if (bValidColorName)

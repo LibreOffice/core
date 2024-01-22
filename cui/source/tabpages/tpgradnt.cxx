@@ -342,7 +342,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
     while (pDlg->Execute() == RET_OK)
     {
-        pDlg->GetName( aName );
+        aName = pDlg->GetName();
 
         bValidGradientName = (SearchGradientList(aName) == -1);
 
@@ -475,7 +475,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void
     bool bLoop = true;
     while( bLoop && pDlg->Execute() == RET_OK )
     {
-        pDlg->GetName( aName );
+        aName = pDlg->GetName();
         sal_Int32 nGradientPos = SearchGradientList(aName);
         bool bValidGradientName = (nGradientPos == static_cast<sal_Int32>(nPos) ) || (nGradientPos == -1);
 

@@ -546,9 +546,9 @@ tools::Long AbstractFmInputRecordNoDialog_Impl::GetValue() const
     return m_xDlg->GetNewDictionary();
 }
 
-void AbstractSvxNameDialog_Impl::GetName(OUString& rName)
+OUString AbstractSvxNameDialog_Impl::GetName()
 {
-    rName = m_xDlg->GetName();
+    return m_xDlg->GetName();
 }
 
 void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink )
@@ -594,9 +594,9 @@ IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameTooltipHdl, SvxNameDialog&,
     return aCheckNameTooltipHdl.Call(*this);
 }
 
-void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
+OUString AbstractSvxObjectNameDialog_Impl::GetName()
 {
-    rName = m_xDlg->GetName();
+    return m_xDlg->GetName();
 }
 
 void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink)
@@ -618,19 +618,19 @@ IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectNameDia
     return aCheckNameHdl.Call(*this);
 }
 
-void AbstractSvxObjectTitleDescDialog_Impl::GetTitle(OUString& rTitle)
+OUString AbstractSvxObjectTitleDescDialog_Impl::GetTitle()
 {
-    rTitle = m_xDlg->GetTitle();
+    return m_xDlg->GetTitle();
 }
 
-void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(OUString& rDescription)
+OUString AbstractSvxObjectTitleDescDialog_Impl::GetDescription()
 {
-    rDescription = m_xDlg->GetDescription();
+    return m_xDlg->GetDescription();
 }
 
-void AbstractSvxObjectTitleDescDialog_Impl::IsDecorative(bool & rIsDecorative)
+bool AbstractSvxObjectTitleDescDialog_Impl::IsDecorative()
 {
-    rIsDecorative = m_xDlg->IsDecorative();
+    return m_xDlg->IsDecorative();
 }
 
 OUString AbstractSvxMultiPathDialog_Impl::GetPath() const

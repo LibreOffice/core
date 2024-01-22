@@ -273,13 +273,9 @@ void AccessibilityIssue::quickFixIssue() const
 
                 if (pDlg->Execute() == RET_OK)
                 {
-                    pDlg->GetTitle(aTitle);
-                    pDlg->GetDescription(aDescription);
-                    pDlg->IsDecorative(isDecorative);
-
-                    m_pDoc->SetFlyFrameTitle(*pFlyFormat, aTitle);
-                    m_pDoc->SetFlyFrameDescription(*pFlyFormat, aDescription);
-                    m_pDoc->SetFlyFrameDecorative(*pFlyFormat, isDecorative);
+                    m_pDoc->SetFlyFrameTitle(*pFlyFormat, pDlg->GetTitle());
+                    m_pDoc->SetFlyFrameDescription(*pFlyFormat, pDlg->GetDescription());
+                    m_pDoc->SetFlyFrameDecorative(*pFlyFormat, pDlg->IsDecorative());
 
                     pWrtShell->SetModified();
                 }
@@ -305,13 +301,9 @@ void AccessibilityIssue::quickFixIssue() const
 
                 if (RET_OK == pDlg->Execute())
                 {
-                    pDlg->GetTitle(aTitle);
-                    pDlg->GetDescription(aDescription);
-                    pDlg->IsDecorative(isDecorative);
-
-                    pObj->SetTitle(aTitle);
-                    pObj->SetDescription(aDescription);
-                    pObj->SetDecorative(isDecorative);
+                    pObj->SetTitle(pDlg->GetTitle());
+                    pObj->SetDescription(pDlg->GetDescription());
+                    pObj->SetDecorative(pDlg->IsDecorative());
 
                     pWrtShell->SetModified();
                 }
@@ -335,9 +327,7 @@ void AccessibilityIssue::quickFixIssue() const
                     pShell->GetModel(), uno::UNO_QUERY_THROW);
                 const uno::Reference<document::XDocumentProperties> xDocumentProperties(
                     xDPS->getDocumentProperties());
-                OUString sName;
-                aNameDialog->GetName(sName);
-                xDocumentProperties->setTitle(sName);
+                xDocumentProperties->setTitle(aNameDialog->GetName());
 
                 m_pDoc->getOnlineAccessibilityCheck()->resetAndQueueDocumentLevel();
             }

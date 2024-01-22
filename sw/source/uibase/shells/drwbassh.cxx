@@ -596,7 +596,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 if(RET_OK == pDlg->Execute())
                 {
                     const OUString aOrigName = aName;
-                    pDlg->GetName(aName);
+                    aName = pDlg->GetName();
                     pSelected->SetName(aName);
                     pSh->SetModified();
 
@@ -631,13 +631,9 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
                 if(RET_OK == pDlg->Execute())
                 {
-                    pDlg->GetTitle(aTitle);
-                    pDlg->GetDescription(aDescription);
-                    pDlg->IsDecorative(isDecorative);
-
-                    pSelected->SetTitle(aTitle);
-                    pSelected->SetDescription(aDescription);
-                    pSelected->SetDecorative(isDecorative);
+                    pSelected->SetTitle(pDlg->GetTitle());
+                    pSelected->SetDescription(pDlg->GetDescription());
+                    pSelected->SetDecorative(pDlg->IsDecorative());
 
                     pSh->SetModified();
                 }
@@ -717,8 +713,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&
     OSL_ENSURE(rMarkList.GetMarkCount() == 1, "wrong draw selection");
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const OUString sCurrentName = pObj->GetName();
-    OUString sNewName;
-    rNameDialog.GetName(sNewName);
+    OUString sNewName = rNameDialog.GetName();
     bool bRet = false;
     if (sNewName.isEmpty() || sCurrentName == sNewName)
         bRet = true;

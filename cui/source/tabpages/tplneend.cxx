@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
         while( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
         {
-            pDlg->GetName( aName );
+            aName = pDlg->GetName();
             bDifferent = true;
 
             for( tools::Long i = 0; i < nCount && bDifferent; i++ )
@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
         while ( bLoop && pDlg->Execute() == RET_OK )
         {
-            pDlg->GetName( aName );
+            aName = pDlg->GetName();
             bDifferent = true;
 
             for( tools::Long i = 0; i < nCount && bDifferent; i++ )

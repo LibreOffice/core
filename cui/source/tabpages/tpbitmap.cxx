@@ -527,7 +527,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
     bool bLoop = true;
     while( bLoop && pDlg->Execute() == RET_OK )
     {
-        pDlg->GetName( aName );
+        aName = pDlg->GetName();
         sal_Int32 nBitmapPos = SearchBitmapList( aName );
         bool bValidBitmapName = (nBitmapPos == static_cast<sal_Int32>(nPos) ) || (nBitmapPos == -1);
 
@@ -740,7 +740,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 
         while( pDlg->Execute() == RET_OK )
         {
-            pDlg->GetName( aName );
+            aName = pDlg->GetName();
 
             bool bDifferent = true;
 

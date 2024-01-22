@@ -919,8 +919,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
         ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 pWin ? pWin->GetFrameWeld() : nullptr,
                 aPageName, aDescr));
-        OUString aOldName;
-        aNameDlg->GetName( aOldName );
+        OUString aOldName = aNameDlg->GetName();
         aNameDlg->SetText( aTitle );
         aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ) );
         aNameDlg->SetCheckNameTooltipHdl( LINK( this, SlotManager, RenameSlideTooltipHdl ) );
@@ -928,8 +927,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
 
         if( aNameDlg->Execute() == RET_OK )
         {
-            OUString aNewName;
-            aNameDlg->GetName( aNewName );
+            OUString aNewName = aNameDlg->GetName();
             if (aNewName != aPageName)
             {
                 bool bResult =
@@ -938,8 +936,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
                 DBG_ASSERT( bResult, "Couldn't rename slide or page" );
             }
         }
-        OUString aNewName;
-        aNameDlg->GetName( aNewName );
+        OUString aNewName = aNameDlg->GetName();
         collectUIInformation({{"OldName", aOldName}, {"NewName", aNewName}}, "RENAME");
         aNameDlg.disposeAndClear();
     }
@@ -951,8 +948,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
 
 IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
 {
-    OUString aNewName;
-    rDialog.GetName( aNewName );
+    OUString aNewName = rDialog.GetName();
 
     model::SharedPageDescriptor pDescriptor (
         mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());

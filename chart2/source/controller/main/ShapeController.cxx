@@ -217,8 +217,7 @@ void ShapeController::describeSupportedFeatures()
 
 IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
-    OUString aName;
-    rDialog.GetName( aName );
+    OUString aName = rDialog.GetName();
 
     if ( !aName.isEmpty() )
     {
@@ -408,12 +407,9 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
         pFact->CreateSvxObjectTitleDescDialog(pChartWindow, aTitle, aDescription, isDecorative));
     if ( pDlg->Execute() == RET_OK )
     {
-        pDlg->GetTitle( aTitle );
-        pDlg->GetDescription( aDescription );
-        pDlg->IsDecorative(isDecorative);
-        pSelectedObj->SetTitle( aTitle );
-        pSelectedObj->SetDescription( aDescription );
-        pSelectedObj->SetDecorative(isDecorative);
+        pSelectedObj->SetTitle( pDlg->GetTitle() );
+        pSelectedObj->SetDescription( pDlg->GetDescription() );
+        pSelectedObj->SetDecorative(pDlg->IsDecorative());
     }
 }
 
@@ -439,7 +435,7 @@ void ShapeController::executeDispatch_RenameObject()
     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
     if ( pDlg->Execute() == RET_OK )
     {
-        pDlg->GetName(aName);
+        aName = pDlg->GetName();
         if (pSelectedObj->GetName() != aName)
         {
             pSelectedObj->SetName( aName );

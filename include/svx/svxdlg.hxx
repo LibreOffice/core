@@ -162,7 +162,7 @@ class AbstractSvxNameDialog : public VclAbstractDialog
 protected:
     virtual ~AbstractSvxNameDialog() override = default;
 public:
-    virtual void    GetName( OUString& rName ) = 0;
+    virtual OUString GetName() = 0;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink ) = 0;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink ) = 0;
     virtual void    SetEditHelpId(const OUString&) = 0;
@@ -175,7 +175,7 @@ class AbstractSvxObjectNameDialog :public VclAbstractDialog
 protected:
     virtual ~AbstractSvxObjectNameDialog() override = default;
 public:
-    virtual void GetName(OUString& rName) = 0;
+    virtual OUString GetName() = 0;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) = 0;
 };
 
@@ -184,9 +184,9 @@ class AbstractSvxObjectTitleDescDialog :public VclAbstractDialog
 protected:
     virtual ~AbstractSvxObjectTitleDescDialog() override = default;
 public:
-    virtual void GetTitle(OUString& rTitle) = 0;
-    virtual void GetDescription(OUString& rDescription) = 0;
-    virtual void IsDecorative(bool & rIsDecorative) = 0;
+    virtual OUString GetTitle() = 0;
+    virtual OUString GetDescription() = 0;
+    virtual bool IsDecorative() = 0;
 };
 
 /// Abstract class provides the get information from the numbering and position dialog.

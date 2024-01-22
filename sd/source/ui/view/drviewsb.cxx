@@ -119,8 +119,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
 
 IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
 {
-    OUString aNewName;
-    rDialog.GetName( aNewName );
+    OUString aNewName = rDialog.GetName();
 
     SdPage* pCurrentPage = GetDoc()->GetSdPage( maTabControl->GetCurPagePos(), GetPageKind() );
 

@@ -978,7 +978,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, weld::Button&, rButton, vo
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         if(RET_OK == aNameDlg->Execute())
         {
-            aNameDlg->GetName(sName);
+            sName = aNameDlg->GetName();
             pColorConfig->AddScheme(sName);
             pExtColorConfig->AddScheme(sName);
             m_xColorSchemeLB->append_text(sName);
@@ -1009,8 +1009,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, weld::Button&, rButton, vo
 
 IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog&, rDialog, bool )
 {
-    OUString sName;
-    rDialog.GetName(sName);
+    OUString sName = rDialog.GetName();
     return !sName.isEmpty() && m_xColorSchemeLB->find_text(sName) == -1;
 }
 

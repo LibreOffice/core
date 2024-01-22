@@ -680,8 +680,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    pDlg->GetName(aName);
-                    rSh.SetFlyName(aName);
+                    rSh.SetFlyName(pDlg->GetName());
                 }
             }
         }
@@ -705,13 +704,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    pDlg->GetDescription(aDescription);
-                    pDlg->GetTitle(aTitle);
-                    pDlg->IsDecorative(isDecorative);
-
-                    rSh.SetObjDescription(aDescription);
-                    rSh.SetObjTitle(aTitle);
-                    rSh.SetObjDecorative(isDecorative);
+                    rSh.SetObjDescription(pDlg->GetDescription());
+                    rSh.SetObjTitle(pDlg->GetTitle());
+                    rSh.SetObjDecorative(pDlg->IsDecorative());
                 }
             }
         }

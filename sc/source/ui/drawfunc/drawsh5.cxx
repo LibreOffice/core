@@ -520,7 +520,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         if(RET_OK == pDlg->Execute())
                         {
                             ScDocShell* pDocSh = rViewData.GetDocShell();
-                            pDlg->GetName(aName);
+                            aName = pDlg->GetName();
 
                             if (aName != pSelected->GetName())
                             {
@@ -590,12 +590,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             ScDocShell* pDocSh = rViewData.GetDocShell();
 
                             // handle Title and Description
-                            pDlg->GetTitle(aTitle);
-                            pDlg->GetDescription(aDescription);
-                            pDlg->IsDecorative(isDecorative);
-                            pSelected->SetTitle(aTitle);
-                            pSelected->SetDescription(aDescription);
-                            pSelected->SetDecorative(isDecorative);
+                            pSelected->SetTitle(pDlg->GetTitle());
+                            pSelected->SetDescription(pDlg->GetDescription());
+                            pSelected->SetDecorative(pDlg->IsDecorative());
 
                             // ChartListenerCollectionNeedsUpdate is needed for Navigator update
                             pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
@@ -647,8 +644,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
 IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
-    OUString aName;
-    rDialog.GetName( aName );
+    OUString aName = rDialog.GetName();
 
     ScDrawLayer* pModel = rViewData.GetDocument().GetDrawLayer();
     if ( !aName.isEmpty() && pModel )

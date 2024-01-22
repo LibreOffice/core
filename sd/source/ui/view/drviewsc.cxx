@@ -62,8 +62,7 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 
 IMPL_LINK( DrawViewShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
-    OUString aName;
-    rDialog.GetName( aName );
+    OUString aName = rDialog.GetName();
     return aName.isEmpty() || ( GetDoc() && !GetDoc()->GetObj( aName ) );
 }
 

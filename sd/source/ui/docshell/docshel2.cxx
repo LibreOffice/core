@@ -293,7 +293,7 @@ bool DrawDocShell::CheckPageName(weld::Window* pWin, OUString& rName)
 
         if( aNameDlg->Execute() == RET_OK )
         {
-            aNameDlg->GetName( rName );
+            rName = aNameDlg->GetName();
             bIsNameValid = IsNewPageNameValid( rName );
         }
     }
@@ -411,8 +411,7 @@ bool DrawDocShell::IsPageNameUnique( std::u16string_view rPageName ) const
 
 IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
 {
-    OUString aNewName;
-    rDialog.GetName( aNewName );
+    OUString aNewName = rDialog.GetName();
     return IsNewPageNameValid( aNewName );
 }
 

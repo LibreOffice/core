@@ -860,8 +860,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if( aNameDlg->Execute() == RET_OK )
                     {
-                        OUString aNewName;
-                        aNameDlg->GetName( aNewName );
+                        OUString aNewName = aNameDlg->GetName();
                         if (aNewName != aPageName)
                         {
                             bool bResult = RenameSlide( maTabControl->GetPageId(nPage), aNewName );
@@ -2672,8 +2671,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if(RET_OK == pDlg->Execute())
                 {
-                    pDlg->GetName(aName);
-                    pSelected->SetName(aName);
+                    pSelected->SetName(pDlg->GetName());
 
                     SdPage* pPage = GetActualPage();
                     if (pPage)
@@ -2707,12 +2705,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if(RET_OK == pDlg->Execute())
                 {
-                    pDlg->GetTitle(aTitle);
-                    pDlg->GetDescription(aDescription);
-                    pDlg->IsDecorative(isDecorative);
-                    pSelected->SetTitle(aTitle);
-                    pSelected->SetDescription(aDescription);
-                    pSelected->SetDecorative(isDecorative);
+                    pSelected->SetTitle(pDlg->GetTitle());
+                    pSelected->SetDescription(pDlg->GetDescription());
+                    pSelected->SetDecorative(pDlg->IsDecorative());
                 }
             }
 

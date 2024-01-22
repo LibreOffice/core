@@ -882,7 +882,7 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
 
                 while( !bNameOK && pDlg->Execute() == RET_OK )
                 {
-                    pDlg->GetName( aNewName );
+                    aNewName = pDlg->GetName();
 
                     if( !mrDoc.GetObj( aNewName ) )
                         bNameOK = true;

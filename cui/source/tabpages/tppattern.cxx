@@ -341,7 +341,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
     while( pDlg->Execute() == RET_OK )
     {
-        pDlg->GetName( aName );
+        aName = pDlg->GetName();
 
         bValidPatternName = (SearchPatternList(aName) == -1);
 
@@ -441,7 +441,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 
     while( bLoop && pDlg->Execute() == RET_OK )
     {
-        pDlg->GetName( aName );
+        aName = pDlg->GetName();
         sal_Int32 nPatternPos = SearchPatternList(aName);
         bool bValidPatternName = (nPatternPos == static_cast<sal_Int32>(nPos) ) || (nPatternPos == -1);
 

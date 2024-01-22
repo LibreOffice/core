@@ -265,7 +265,7 @@ DECL_ABSTDLG_CLASS(AbstractSvxNewDictionaryDialog,SvxNewDictionaryDialog)
 
 // AbstractSvxNameDialog_Impl
 DECL_ABSTDLG_CLASS(AbstractSvxNameDialog,SvxNameDialog)
-    virtual void    GetName( OUString& rName ) override ;
+    virtual OUString GetName() override;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink ) override ;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&, OUString>& rLink ) override ;
     virtual void    SetEditHelpId(const OUString&) override ;
@@ -285,7 +285,7 @@ class SvxObjectTitleDescDialog;
 
 // AbstractSvxObjectNameDialog_Impl
 DECL_ABSTDLG_CLASS(AbstractSvxObjectNameDialog,SvxObjectNameDialog)
-    virtual void GetName(OUString& rName) override ;
+    virtual OUString GetName() override;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) override;
 
 private:
@@ -295,9 +295,9 @@ private:
 
 // AbstractSvxObjectTitleDescDialog_Impl
 DECL_ABSTDLG_CLASS(AbstractSvxObjectTitleDescDialog,SvxObjectTitleDescDialog)
-    virtual void GetTitle(OUString& rName) override;
-    virtual void GetDescription(OUString& rName) override;
-    virtual void IsDecorative(bool & rIsDecorative) override;
+    virtual OUString GetTitle() override;
+    virtual OUString GetDescription() override;
+    virtual bool IsDecorative() override;
 };
 
 // AbstractSvxMultiPathDialog_Impl
