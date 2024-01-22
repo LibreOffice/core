@@ -171,6 +171,7 @@ public:
     void setDataBindingStoreItemID(const OUString& sValue) { m_sDataBindingStoreItemID = sValue; }
     const OUString& GetDataBindingStoreItemID() const { return m_sDataBindingStoreItemID; }
 
+    bool isFieldStartRangeSet() const { return m_xFieldStartRange.is(); }
     void setFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
     {
         m_xFieldStartRange = xStartRange;
