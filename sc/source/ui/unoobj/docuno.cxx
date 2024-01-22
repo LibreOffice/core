@@ -1158,13 +1158,6 @@ void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
         if (pTabView)
             pTabView->extendTiledAreaIfNeeded();
     }
-
-    // Set the GridWindow size to the client area size, so that the logic in GridWindow works correctly
-    // for the current view and doesn't cause any unexpected behaviour related to window size and checks if we are
-    // outside of the window.
-
-    ScGridWindow* pGridWindow = pViewData->GetActiveWin();
-    pGridWindow->SetOutputSizePixel(Size(rRectangle.GetWidth() * pViewData->GetPPTX(), rRectangle.GetHeight() * pViewData->GetPPTY()));
 }
 
 void ScModelObj::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
