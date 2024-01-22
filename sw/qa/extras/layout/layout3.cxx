@@ -2303,6 +2303,42 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159271)
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt//SwFieldPortion"_ostr, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159259)
+{
+    // Given a document with a block sdt with a single field, having framePr aligned to right
+    createSwDoc("sdt+framePr.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Make sure there is only one page and one paragraph with one line and one anchored object
+    assertXPath(pXmlDoc, "/root/page"_ostr, 1);
+    // Without the fix, this would fail: there were two paragraphs
+    assertXPath(pXmlDoc, "/root/page/body/txt"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout"_ostr, 1);
+    // Without the fix, this would fail: there was a field portion in the line
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, 0);
+    // Without the fix, this would fail: there was no anchored objects
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly"_ostr, 1);
+
+    const sal_Int32 paraRight
+        = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds"_ostr, "right"_ostr).toInt32();
+    const sal_Int32 paraHeight
+        = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds"_ostr, "height"_ostr).toInt32();
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), paraRight);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), paraHeight);
+
+    const sal_Int32 flyRight
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "right"_ostr)
+              .toInt32();
+    const sal_Int32 flyHeight
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr)
+              .toInt32();
+
+    CPPUNIT_ASSERT_EQUAL(paraRight, flyRight); // The fly is right-aligned
+    CPPUNIT_ASSERT_EQUAL(paraHeight, flyHeight);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
