@@ -418,8 +418,21 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     if (pModelObj)
         aNewSize = pModelObj->getDocumentSize();
 
+    if (aOldSize == aNewSize)
+        return;
+
     if (!pDocSh)
         return;
+
+    if (pModelObj)
+    {
+        ScGridWindow* pGridWindow = aViewData.GetActiveWin();
+        if (pGridWindow)
+        {
+            Size aNewSizePx(aNewSize.Width() * aViewData.GetPPTX(), aNewSize.Height() * aViewData.GetPPTY());
+            pGridWindow->SetOutputSizePixel(aNewSizePx);
+        }
+    }
 
     // New area extended to the right of the sheet after last column
     // including overlapping area with aNewRowArea
