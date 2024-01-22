@@ -225,49 +225,49 @@
      }
 --- tools/update-packaging/common.sh
 +++ tools/update-packaging/common.sh
-@@ -76,6 +76,15 @@
+@@ -76,17 +76,8 @@
      forced=
    fi
  
-+  if [ -n "$IFSFILE" ]; then
-+    ifsline=$(grep -F " \"$f\"" "$IFSFILE")
-+    if [ -n "$ifsline" ]; then
-+      testfile=$(printf '%s' "$ifsline" | cut -f 2 -d '"')
-+      verbose_notice "     add-if \"$testfile\" \"$f\""
-+      echo "add-if \"$testfile\" \"$f\"" >> "$filev3"
-+      return
-+    fi
-+  fi
-   is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
-   if [ $is_extension = "1" ]; then
-     # Use the subdirectory of the extensions folder as the file to test
-@@ -113,6 +122,15 @@
+-  is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
+-  if [ $is_extension = "1" ]; then
+-    # Use the subdirectory of the extensions folder as the file to test
+-    # before performing this add instruction.
+-    testdir=$(echo "$f" | sed 's/\(.*distribution\/extensions\/[^\/]*\)\/.*/\1/')
+-    verbose_notice "     add-if \"$testdir\" \"$f\""
+-    echo "add-if \"$testdir\" \"$f\"" >> "$filev3"
+-  else
+-    verbose_notice "        add \"$f\"$forced"
+-    echo "add \"$f\"" >> "$filev3"
+-  fi
++  verbose_notice "     add-if \"$f\" \"$f\"$forced"
++  echo "add-if \"$f\" \"$f\"" >> "$filev3"
+ }
+ 
+ check_for_add_if_not_update() {
+@@ -113,17 +104,8 @@
    f="$1"
    filev3="$2"
  
-+  if [ -n "$IFSFILE" ]; then
-+    ifsline=$(grep -F " \"$f\"" "$IFSFILE")
-+    if [ -n "$ifsline" ]; then
-+      testfile=$(printf '%s' "$ifsline" | cut -f 2 -d '"')
-+      verbose_notice "   patch-if \"$testfile\" \"$f.patch\" \"$f\""
-+      echo "patch-if \"$testfile\" \"$f.patch\" \"$f\"" >> "$filev3"
-+      return
-+    fi
-+  fi
-   is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
-   if [ $is_extension = "1" ]; then
-     # Use the subdirectory of the extensions folder as the file to test
+-  is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
+-  if [ $is_extension = "1" ]; then
+-    # Use the subdirectory of the extensions folder as the file to test
+-    # before performing this add instruction.
+-    testdir=$(echo "$f" | sed 's/\(.*distribution\/extensions\/[^\/]*\)\/.*/\1/')
+-    verbose_notice "   patch-if \"$testdir\" \"$f.patch\" \"$f\""
+-    echo "patch-if \"$testdir\" \"$f.patch\" \"$f\"" >> "$filev3"
+-  else
+-    verbose_notice "      patch \"$f.patch\" \"$f\""
+-    echo "patch \"$f.patch\" \"$f\"" >> "$filev3"
+-  fi
++  verbose_notice "   patch-if \"$f\" \"$f.patch\" \"$f\""
++  echo "patch-if \"$f\" \"$f.patch\" \"$f\"" >> "$filev3"
+ }
+ 
+ append_remove_instructions() {
 --- tools/update-packaging/make_full_update.sh
 +++ tools/update-packaging/make_full_update.sh
-@@ -45,6 +45,7 @@
- 
- archive="$1"
- targetdir="$2"
-+IFSFILE=$3
- # Prevent the workdir from being inside the targetdir so it isn't included in
- # the update mar.
- if [ $(echo "$targetdir" | grep -c '\/$') = 1 ]; then
-@@ -53,9 +54,10 @@
+@@ -53,9 +53,10 @@
  fi
  workdir="$targetdir.work"
  updatemanifestv3="$workdir/updatev3.manifest"
@@ -279,7 +279,7 @@
  
  # Generate a list of all files in the target directory.
  pushd "$targetdir"
-@@ -66,7 +68,6 @@
+@@ -66,7 +67,6 @@
  if [ ! -f "precomplete" ]; then
    if [ ! -f "Contents/Resources/precomplete" ]; then
      notice "precomplete file is missing!"
@@ -287,7 +287,7 @@
    fi
  fi
  
-@@ -99,7 +100,7 @@
+@@ -99,7 +99,7 @@
    $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$targetdir/$f" > "$workdir/$f"
    copy_perm "$targetdir/$f" "$workdir/$f"
  
@@ -296,7 +296,7 @@
  done
  
  # Append remove instructions for any dead files.
-@@ -110,7 +111,7 @@
+@@ -110,7 +110,7 @@
  $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force "$updatemanifestv3" && mv -f "$updatemanifestv3.xz" "$updatemanifestv3"
  
  mar_command="$mar_command -C \"$workdir\" -c output.mar"
@@ -307,15 +307,7 @@
  # cleanup
 --- tools/update-packaging/make_incremental_update.sh
 +++ tools/update-packaging/make_incremental_update.sh
-@@ -104,6 +104,7 @@
- archive="$1"
- olddir="$2"
- newdir="$3"
-+IFSFILE=$4
- # Prevent the workdir from being inside the targetdir so it isn't included in
- # the update mar.
- if [ $(echo "$newdir" | grep -c '\/$') = 1 ]; then
-@@ -112,9 +113,10 @@
+@@ -112,9 +112,10 @@
  fi
  workdir="$(mktemp -d)"
  updatemanifestv3="$workdir/updatev3.manifest"
@@ -327,7 +319,7 @@
  
  # Generate a list of all files in the target directory.
  pushd "$olddir"
-@@ -135,7 +137,6 @@
+@@ -135,7 +136,6 @@
  if [ ! -f "precomplete" ]; then
    if [ ! -f "Contents/Resources/precomplete" ]; then
      notice "precomplete file is missing!"
@@ -335,7 +327,7 @@
    fi
  fi
  
-@@ -170,7 +171,7 @@
+@@ -170,7 +170,7 @@
        $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$newdir/$f" > "$workdir/$f"
        copy_perm "$newdir/$f" "$workdir/$f"
        make_add_if_not_instruction "$f" "$updatemanifestv3"
@@ -344,7 +336,7 @@
        continue 1
      fi
  
-@@ -180,7 +181,7 @@
+@@ -180,7 +180,7 @@
        $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$newdir/$f" > "$workdir/$f"
        copy_perm "$newdir/$f" "$workdir/$f"
        make_add_instruction "$f" "$updatemanifestv3" 1
@@ -353,7 +345,7 @@
        continue 1
      fi
  
-@@ -227,11 +228,11 @@
+@@ -227,11 +227,11 @@
          make_patch_instruction "$f" "$updatemanifestv3"
          mv -f "$patchfile" "$workdir/$f.patch"
          rm -f "$workdir/$f"
@@ -367,7 +359,7 @@
        fi
      fi
    else
-@@ -270,7 +271,7 @@
+@@ -270,7 +270,7 @@
    fi
  
  
@@ -376,7 +368,7 @@
  done
  
  notice ""
-@@ -302,7 +303,7 @@
+@@ -302,7 +302,7 @@
  $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force "$updatemanifestv3" && mv -f "$updatemanifestv3.xz" "$updatemanifestv3"
  
  mar_command="$mar_command -C \"$workdir\" -c output.mar"

@@ -185,7 +185,6 @@ BEGIN
     $installer::globals::is_copy_only_project = 0;
     $installer::globals::is_simple_packager_project = 0;
     $installer::globals::patch_user_dir = 0;
-    $installer::globals::record_archive_metadata = 0;
     $installer::globals::languagepack = 0;
     $installer::globals::helppack = 0;
     $installer::globals::refresh_includepaths = 0;
