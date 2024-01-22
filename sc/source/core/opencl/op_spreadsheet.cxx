@@ -171,7 +171,9 @@ void OpVLookup::GenSlidingWindowFunction(outputstream &ss,
         }
 
         ss << "    }\n";
-        ss << "    if(rowNum!=-1)\n";
+        ss << "    if(rowNum!=-1 && tmp";
+        ss << 3 + (secondParaWidth - 1);
+        ss << " == 0)\n";
         ss << "    {\n";
         for (int j = 0; j < secondParaWidth; j++)
         {
