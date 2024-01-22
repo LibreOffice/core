@@ -3586,9 +3586,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 sAdditionsTag = pStringArg->GetValue();
 
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractAdditionsDialog> pDlg(
+            VclPtr<AbstractAdditionsDialog> pDlg(
                 pFact->CreateAdditionsDialog(GetFrameWeld(), sAdditionsTag));
-            pDlg->Execute();
+            pDlg->StartExecuteAsync(
+                [pDlg] (sal_Int32 /*nResult*/)->void
+                {
+                    pDlg->disposeOnce();
+                }
+            );
             Cancel();
             rReq.Ignore ();
         }

@@ -91,9 +91,14 @@ void SwView::ExecDlgExt(SfxRequest const& rReq)
                 sAdditionsTag = pStringArg->GetValue();
 
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractAdditionsDialog> pDialog(
+            VclPtr<AbstractAdditionsDialog> pDialog(
                 pFact->CreateAdditionsDialog(GetFrameWeld(), sAdditionsTag));
-            pDialog->Execute();
+            pDialog->StartExecuteAsync(
+                [pDialog] (sal_Int32 /*nResult*/)->void
+                {
+                    pDialog->disposeOnce();
+                }
+            );
             break;
         }
         case SID_SIGN_SIGNATURELINE:
