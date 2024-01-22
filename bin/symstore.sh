@@ -120,7 +120,7 @@ VERBOSE=verbose_none
 USAGE="Usage: $0 [-h|-k <keep_num_versions>|-p <symbol_store_path>|-c <comment>|-n|-v]
        -h:          this cruft
        -c <comment> specifies a comment for the transaction
-       -n           do not store exe/dll on the symbole server
+       -n           do not store exe/dll on the symbol server
        -k <int>:    keep this number of old symbol versions around
                     (default: ${MAX_KEEP}. Set to 0 for unlimited)
        -v           verbose mode, output detail report of files
