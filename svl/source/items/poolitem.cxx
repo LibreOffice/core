@@ -488,6 +488,21 @@ void listAllocatedSfxPoolItems()
 }
 #endif
 
+const SfxPoolItem* DefaultItemInstanceManager::find(const SfxPoolItem& rItem) const
+{
+    for (const auto& rCandidate : maRegistered)
+        if (rCandidate->Which() == rItem.Which() && *rCandidate == rItem)
+            return rCandidate;
+
+    return nullptr;
+}
+
+void DefaultItemInstanceManager::add(const SfxPoolItem& rItem) { maRegistered.insert(&rItem); }
+
+void DefaultItemInstanceManager::remove(const SfxPoolItem& rItem) { maRegistered.erase(&rItem); }
+
+ItemInstanceManager* SfxPoolItem::getItemInstanceManager() const { return nullptr; }
+
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
@@ -517,7 +532,7 @@ SfxPoolItem::~SfxPoolItem()
     incarnatedSfxPoolItems().erase(this);
     m_bDeleted = true;
 #endif
-    assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF) && "destroying item in use");
+    assert((m_nRefCount == 0) && "destroying item in use");
 }
 
 bool SfxPoolItem::operator==(const SfxPoolItem& rCmp) const

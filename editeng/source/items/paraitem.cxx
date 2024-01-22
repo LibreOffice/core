@@ -338,6 +338,12 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 
 // class SvxAdjustItem ---------------------------------------------------
 
+ItemInstanceManager* SvxAdjustItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
+
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId ),
     bOneBlock( false ), bLastCenter( false ), bLastBlock( false )
@@ -397,6 +403,7 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_EXPAND_SINGLE :
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             bOneBlock = Any2Bool(rVal);
             break;
     }

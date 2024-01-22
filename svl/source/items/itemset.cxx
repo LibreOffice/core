@@ -36,6 +36,8 @@
 
 #include <items_helper.hxx>
 
+static bool g_bDisableItemInstanceManager(getenv("SVL_DISABLE_ITEM_INSTANCE_MANAGER"));
+
 #ifdef DBG_UTIL
 static size_t nAllocatedSfxItemSetCount(0);
 static size_t nUsedSfxItemSetCount(0);
@@ -45,6 +47,45 @@ size_t getAllocatedSfxItemSetCount() { return nAllocatedSfxItemSetCount; }
 size_t getUsedSfxItemSetCount() { return nUsedSfxItemSetCount; }
 size_t getAllocatedSfxPoolItemHolderCount() { return nAllocatedSfxPoolItemHolderCount; }
 size_t getUsedSfxPoolItemHolderCount() { return nUsedSfxPoolItemHolderCount; }
+
+typedef std::unordered_map<sal_uInt16, std::pair<sal_uInt32, const char*>> HightestUsage;
+static HightestUsage aHightestUsage;
+
+static void addUsage(const SfxPoolItem& rCandidate)
+{
+    HightestUsage::iterator aHit(aHightestUsage.find(rCandidate.Which()));
+    if (aHit == aHightestUsage.end())
+    {
+        aHightestUsage.insert({rCandidate.Which(), {1, typeid(rCandidate).name()}});
+        return;
+    }
+    aHit->second.first++;
+}
+
+void listSfxPoolItemsWithHighestUsage(sal_uInt16 nNum)
+{
+    struct sorted {
+        sal_uInt16 nWhich;
+        sal_uInt32 nUsage;
+        const char* pType;
+        sorted(sal_uInt16 _nWhich, sal_uInt32 _nUsage, const char* _pType)
+            : nWhich(_nWhich), nUsage(_nUsage), pType(_pType) {}
+        bool operator<(const sorted& rDesc) const { return nUsage > rDesc.nUsage; }
+    };
+    std::vector<sorted> aSorted;
+    aSorted.reserve(aHightestUsage.size());
+    for (const auto& rEntry : aHightestUsage)
+        aSorted.emplace_back(rEntry.first, rEntry.second.first, rEntry.second.second);
+    std::sort(aSorted.begin(), aSorted.end());
+    sal_uInt16 a(0);
+    SAL_INFO("svl.items", "ITEM: List of the " << nNum << " SfxPoolItems with highest non-RefCounted usages:");
+    for (const auto& rEntry : aSorted)
+    {
+        SAL_INFO("svl.items", "  ITEM(" << a << "): Which: " << rEntry.nWhich << " Uses: " << rEntry.nUsage << " Type: " << rEntry.pType);
+        if (++a >= nNum)
+            break;
+    }
+}
 #endif
 // NOTE: Only needed for one Item in SC (see notes below for
 // ScPatternAttr). Still keep it so that when errors
@@ -390,14 +431,9 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     //     }
     // }
 
-    // the Item itself is shareable when it already is used somewhere
-    // which is equivalent to be referenced already. IsPooledItem also
-    // checked for SFX_ITEMS_MAXREF, that is not needed here. Use a
-    // fake 'while' loop and 'break' to make this better readable
-
-    // only try to share items that are already shared somehow, else
-    // these items are probably not (heap) item-ptr's (but on the
-    // stack or else)
+    // The Item itself is shareable when it is used/added at an instance
+    // that RefCounts the Item, SfxItemPool or SfxPoolItemHolder. Try
+    // to share items that are already shared
     while(pSource->GetRefCount() > 0)
     {
         if (!pSource->isShareable())
@@ -413,6 +449,29 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         return pSource;
     }
 
+    // check if we can globally share the Item using the
+    // ItemInstanceManager (only for shareable Items)
+    while (!g_bDisableItemInstanceManager && pSource->isShareable())
+    {
+        ItemInstanceManager* pManager(pSource->getItemInstanceManager());
+        if (nullptr == pManager)
+            // not supported by this Item, done
+            break;
+
+        const SfxPoolItem* pAlternative(pManager->find(*pSource));
+        if(nullptr == pAlternative)
+            // none found, done
+            break;
+
+        // need to delete evtl. handed over ownership change Item
+        if (bPassingOwnership)
+            delete pSource;
+
+        // If we get here we can share the Item
+        pAlternative->AddRef();
+        return pAlternative;
+    }
+
     // check if the handed over and to be directly used item is a
     // SfxSetItem, that would make it pool-dependent. It then must have
     // the same target-pool, ensure that by the cost of cloning it
@@ -426,6 +485,11 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         delete pOld;
     }
 
+#ifdef DBG_UTIL
+    // create statistics for listSfxPoolItemsWithHighestUsage
+    addUsage(*pSource);
+#endif
+
     // when we reach this line we know that we have to add/create a new item. If
     // bPassingOwnership is given just use the item, else clone it
     if (!bPassingOwnership)
@@ -433,6 +497,15 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
 
     // increase RefCnt 0->1
     pSource->AddRef();
+
+    // check if we should register this Item for the global
+    // ItemInstanceManager mechanism (only for shareable Items)
+    if (!g_bDisableItemInstanceManager && pSource->isShareable())
+    {
+        ItemInstanceManager* pManager(pSource->getItemInstanceManager());
+        if (nullptr != pManager)
+            pManager->add(*pSource);
+    }
 
     return pSource;
 }
@@ -471,6 +544,15 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
     if (IsDefaultItem(pSource))
         // default items (static and dynamic) are owned by the pool, do not delete
         return;
+
+    // check if we should remove this Item from the global
+    // ItemInstanceManager mechanism (only for shareable Items)
+    if (!g_bDisableItemInstanceManager && pSource->isShareable())
+    {
+        ItemInstanceManager* pManager(pSource->getItemInstanceManager());
+        if (nullptr != pManager)
+            pManager->remove(*pSource);
+    }
 
     // decrease RefCnt before deleting (destructor asserts for it and that's
     // good to find other errors)

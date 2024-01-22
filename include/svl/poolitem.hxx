@@ -32,12 +32,11 @@
 #include <tools/mapunit.hxx>
 #include <tools/long.hxx>
 #include <boost/property_tree/ptree_fwd.hpp>
+#include <unordered_set>
 
 class IntlWrapper;
 
-#define SFX_ITEMS_OLD_MAXREF                0xffef
-#define SFX_ITEMS_MAXREF                    0xfffffffe
-
+#define SFX_ITEMS_MAXREF                    0xffffffff
 #define CONVERT_TWIPS                       0x80    // Uno conversion for measurement (for MemberId)
 
 // warning, if there is no boolean inside the any this will always return the value false
@@ -53,6 +52,12 @@ inline bool Any2Bool( const css::uno::Any&rValue )
 
     return bValue;
 }
+
+// Offer simple assert if Item is RefCounted (RefCnt > 1) and thus CANNOT be changed.
+// This should be used at *all* SfxPoolItem set* mehods. Remember that SfxPoolItems
+// are by design intended to be create-one, read-only, shared data packages
+#define ASSERT_CHANGE_REFCOUNTED_ITEM \
+    assert(!GetRefCount() && "ERROR: RefCounted SfxPoolItem CANNOT be changed (!)")
 
 /*
  * The values of this enum describe the degree of textual
@@ -106,6 +111,7 @@ SVL_DLLPUBLIC void listAllocatedSfxPoolItems();
 class SfxItemPool;
 class SfxItemSet;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
+class ItemInstanceManager;
 
 class SVL_DLLPUBLIC SfxPoolItem
 {
@@ -168,10 +174,13 @@ protected:
     void setIsSetItem() { m_bIsSetItem = true; }
     void setNonShareable() { m_bShareable = false; }
 
+    // access ItemInstanceManager for this Item, default
+    // is nullptr
+    virtual ItemInstanceManager* getItemInstanceManager() const;
+
 public:
     inline void AddRef(sal_uInt32 n = 1) const
     {
-        assert(m_nRefCount <= SFX_ITEMS_MAXREF && "AddRef with non-Pool-Item");
         assert(n <= SFX_ITEMS_MAXREF - m_nRefCount && "AddRef: refcount overflow");
         m_nRefCount += n;
     }
@@ -194,7 +203,6 @@ public:
 private:
     inline sal_uInt32 ReleaseRef(sal_uInt32 n = 1) const
     {
-        assert(m_nRefCount <= SFX_ITEMS_MAXREF && "ReleaseRef with non-Pool-Item");
         assert(n <= m_nRefCount);
         m_nRefCount -= n;
         return m_nRefCount;
@@ -281,7 +289,37 @@ private:
     SfxPoolItem&             operator=( const SfxPoolItem& ) = delete;
 };
 
+// basic Interface definition
+class SVL_DLLPUBLIC ItemInstanceManager
+{
+    // allow *only* ItemSetTooling to access
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
+    friend void implCleanupItemEntry(SfxPoolItem const*);
 
+    // standard interface, accessed exclusively
+    // by implCreateItemEntry/implCleanupItemEntry
+    virtual const SfxPoolItem* find(const SfxPoolItem&) const = 0;
+    virtual void add(const SfxPoolItem&) = 0;
+    virtual void remove(const SfxPoolItem&) = 0;
+};
+
+// offering a default implementation that can be use for
+// each SfxPoolItem (except when !isShareable()). It just
+// uses an unordered_set holding ptrs to SfxPoolItems added
+// and SfxPoolItem::opeator== to linearly search for one.
+// Thus thisi is not the fastest, but as fast as old 'poooled'
+// stuff - btter use an intelligent, pro-Item implementation
+// that does e.g. hashing or whatever might be feasible for
+// that specific Item (see other derivations)
+class SVL_DLLPUBLIC DefaultItemInstanceManager : public ItemInstanceManager
+{
+    std::unordered_set<const SfxPoolItem*>  maRegistered;
+
+public:
+    virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
+    virtual void add(const SfxPoolItem&) override;
+    virtual void remove(const SfxPoolItem&) override;
+};
 
 inline bool IsPoolDefaultItem(const SfxPoolItem *pItem )
 {
@@ -300,7 +338,7 @@ inline bool IsDefaultItem( const SfxPoolItem *pItem )
 
 inline bool IsPooledItem( const SfxPoolItem *pItem )
 {
-    return pItem && pItem->GetRefCount() > 0 && pItem->GetRefCount() <= SFX_ITEMS_MAXREF;
+    return pItem && pItem->GetRefCount() > 0;
 }
 
 SVL_DLLPUBLIC extern SfxPoolItem const * const INVALID_POOL_ITEM;

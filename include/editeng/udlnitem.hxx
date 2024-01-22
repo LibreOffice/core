@@ -33,6 +33,9 @@ class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem<FontLineStyle>
     Color maColor;
     model::ComplexColor maComplexColor;
 
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     SvxTextLineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
@@ -61,7 +64,10 @@ public:
     FontLineStyle           GetLineStyle() const
                                 { return GetValue(); }
     void                    SetLineStyle( FontLineStyle eNew )
-                                { SetValue(eNew); }
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        SetValue(eNew);
+    }
 
     const Color& GetColor() const { return maColor; }
     void SetColor(const Color& rColor) { maColor = rColor; }
@@ -73,6 +79,7 @@ public:
 
     void setComplexColor(model::ComplexColor const& rComplexColor)
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         maComplexColor = rComplexColor;
     }
 };

@@ -54,6 +54,9 @@ class EDITENG_DLLPUBLIC SvxBrushItem final : public SfxPoolItem
 
     void        ApplyGraphicTransparency_Impl();
 
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -89,7 +92,11 @@ public:
 
     const Color&    GetColor() const                { return aColor; }
     Color&          GetColor()                      { return aColor; }
-    void            SetColor( const Color& rCol)    { aColor = rCol; }
+    void            SetColor( const Color& rCol)
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        aColor = rCol;
+    }
 
     const model::ComplexColor& getComplexColor() const
     {
@@ -100,11 +107,16 @@ public:
 
     void setComplexColor(model::ComplexColor const& rComplexColor)
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         maComplexColor = rComplexColor;
     }
 
     const Color&    GetFiltColor() const             { return aFilterColor; }
-    void            SetFiltColor( const Color& rCol) { aFilterColor = rCol; }
+    void            SetFiltColor( const Color& rCol)
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        aFilterColor = rCol;
+    }
 
     SvxGraphicPosition  GetGraphicPos() const       { return eGraphicPos; }
 

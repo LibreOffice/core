@@ -44,6 +44,9 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxEnumItemInterface
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
 
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -68,17 +71,20 @@ public:
 
     void SetOneWord( const SvxAdjust eType )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         bOneBlock  = eType == SvxAdjust::Block;
     }
 
     void SetLastBlock( const SvxAdjust eType )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         bLastBlock = eType == SvxAdjust::Block;
         bLastCenter = eType == SvxAdjust::Center;
     }
 
     void SetAdjust( const SvxAdjust eType )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         bLeft = eType == SvxAdjust::Left;
         bRight = eType == SvxAdjust::Right;
         bCenter = eType == SvxAdjust::Center;
@@ -132,6 +138,7 @@ public:
 
     void SetAsFlags(sal_Int8 nFlags)
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         bOneBlock = 0 != (nFlags & 0x0001);
         bLastCenter = 0 != (nFlags & 0x0002);
         bLastBlock = 0 != (nFlags & 0x0004);

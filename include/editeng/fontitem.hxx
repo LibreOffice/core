@@ -34,6 +34,9 @@ class EDITENG_DLLPUBLIC SvxFontItem final : public SfxPoolItem
     FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -55,46 +58,31 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     // Access methods:
-    void SetFamilyName(const OUString& rFamilyName)
-    {
-        aFamilyName = rFamilyName;
-    }
+    void SetFamilyName(const OUString& rFamilyName);
     const OUString &GetFamilyName() const
     {
         return aFamilyName;
     }
 
-    void SetStyleName(const OUString &rStyleName)
-    {
-        aStyleName = rStyleName;
-    }
+    void SetStyleName(const OUString &rStyleName);
     const OUString &GetStyleName() const
     {
         return aStyleName;
     }
 
-    void SetFamily(FontFamily _eFamily)
-    {
-        eFamily = _eFamily;
-    }
+    void SetFamily(FontFamily _eFamily);
     FontFamily GetFamily() const
     {
         return eFamily;
     }
 
-    void SetPitch(FontPitch _ePitch)
-    {
-        ePitch = _ePitch;
-    }
+    void SetPitch(FontPitch _ePitch);
     FontPitch GetPitch() const
     {
         return ePitch;
     }
 
-    void SetCharSet(rtl_TextEncoding _eEncoding)
-    {
-        eTextEncoding = _eEncoding;
-    }
+    void SetCharSet(rtl_TextEncoding _eEncoding);
     rtl_TextEncoding GetCharSet() const
     {
         return eTextEncoding;

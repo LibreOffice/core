@@ -3978,6 +3978,12 @@ void SvxLineItem::SetLine( const SvxBorderLine* pNew )
     pLine.reset( pNew ? new SvxBorderLine( *pNew ) : nullptr );
 }
 
+ItemInstanceManager* SvxBrushItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
+
 SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
@@ -4201,6 +4207,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 aNewCol.SetAlpha(aColor.GetAlpha());
             }
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             aColor = aNewCol;
         }
         break;
@@ -4209,6 +4216,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nTrans = 0;
             if ( !( rVal >>= nTrans ) || nTrans < 0 || nTrans > 100 )
                 return false;
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             aColor.SetAlpha(255 - lcl_PercentToTransparency(nTrans));
         }
         break;
@@ -4220,7 +4228,10 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
 
             if (xComplexColor.is())
+            {
+                ASSERT_CHANGE_REFCOUNTED_ITEM;
                 maComplexColor = model::color::getFromXComplexColor(xComplexColor);
+            }
         }
         break;
 
@@ -4234,11 +4245,13 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     return false;
                 eLocation = static_cast<style::GraphicLocation>(nValue);
             }
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetGraphicPos( static_cast<SvxGraphicPosition>(static_cast<sal_uInt16>(eLocation)) );
         }
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             aColor.SetAlpha( Any2Bool( rVal ) ? 0 : 255 );
         break;
 
@@ -4262,6 +4275,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 maStrLink.clear();
 
+                ASSERT_CHANGE_REFCOUNTED_ITEM;
                 std::unique_ptr<GraphicObject> xOldGrfObj(std::move(xGraphicObject));
                 xGraphicObject.reset(new GraphicObject(aGraphic));
                 ApplyGraphicTransparency_Impl();
@@ -4285,6 +4299,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 OUString sLink;
                 rVal >>= sLink;
+                ASSERT_CHANGE_REFCOUNTED_ITEM;
                 SetGraphicFilter( sLink );
             }
         }
@@ -4295,6 +4310,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             rVal >>= nTmp;
             if(nTmp >= 0 && nTmp <= 100)
             {
+                ASSERT_CHANGE_REFCOUNTED_ITEM;
                 nGraphicTransparency = sal_Int8(nTmp);
                 if (xGraphicObject)
                     ApplyGraphicTransparency_Impl();
@@ -4308,6 +4324,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (!(rVal >>= nVal))
                 return false;
 
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             nShadingValue = nVal;
         }
         break;
@@ -4457,6 +4474,7 @@ void SvxBrushItem::setGraphicTransparency(sal_Int8 nNew)
 {
     if (nNew != nGraphicTransparency)
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         nGraphicTransparency = nNew;
         ApplyGraphicTransparency_Impl();
     }
@@ -4470,6 +4488,10 @@ const Graphic* SvxBrushItem::GetGraphic(OUString const & referer) const
 
 void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
 {
+    if (eGraphicPos == eNew)
+        return;
+
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     eGraphicPos = eNew;
 
     if ( GPOS_NONE == eGraphicPos )
@@ -4491,6 +4513,7 @@ void SvxBrushItem::SetGraphic( const Graphic& rNew )
 {
     if ( maStrLink.isEmpty() )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         if (xGraphicObject)
             xGraphicObject->SetGraphic(rNew);
         else
@@ -4511,6 +4534,7 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
 {
     if ( maStrLink.isEmpty() )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         if (xGraphicObject)
             *xGraphicObject = rNewObj;
         else
@@ -4529,6 +4553,7 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
 
 void SvxBrushItem::SetGraphicLink( const OUString& rNew )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     if ( rNew.isEmpty() )
         maStrLink.clear();
     else
@@ -4540,6 +4565,7 @@ void SvxBrushItem::SetGraphicLink( const OUString& rNew )
 
 void SvxBrushItem::SetGraphicFilter( const OUString& rNew )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     maStrFilter = rNew;
 }
 
@@ -4569,6 +4595,12 @@ void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+
+ItemInstanceManager* SvxFrameDirectionItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
                                             sal_uInt16 _nWhich )
@@ -4618,6 +4650,7 @@ bool SvxFrameDirectionItem::PutValue( const css::uno::Any& rVal,
     bool bRet = ( rVal >>= nVal );
     if( bRet )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         // translate WritingDirection2 constants into SvxFrameDirection
         switch( nVal )
         {

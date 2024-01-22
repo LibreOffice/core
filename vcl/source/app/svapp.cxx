@@ -207,6 +207,9 @@ Application::~Application()
     // Additional call to list still incarnated SfxPoolItems (under 'svl.items')
     listAllocatedSfxPoolItems();
 
+    // List SfxPoolItems with highest RefCounts, these are the best
+    // candidates to add a ItemInstanceManager mechanism
+    listSfxPoolItemsWithHighestUsage(20);
 #endif
 }
 

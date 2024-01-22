@@ -41,9 +41,11 @@ class EDITENG_DLLPUBLIC SvxFontHeightItem final : public SfxPoolItem
     sal_uInt16  nProp;       // default 100%
     MapUnit ePropUnit;       // Percent, Twip, ...
 
-private:
     friend void Create_legacy_direct_set(SvxFontHeightItem& rItem, sal_uInt32 nH, sal_uInt16 nP, MapUnit eP);
     void legacy_direct_set(sal_uInt32 nH, sal_uInt16 nP, MapUnit eP) { nHeight = nH; nProp = nP; ePropUnit = eP; }
+
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -75,7 +77,7 @@ public:
 
     void SetProp( sal_uInt16 nNewProp, MapUnit eUnit )
         {
-            DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             nProp = nNewProp;
             ePropUnit = eUnit;
         }

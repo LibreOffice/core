@@ -82,6 +82,7 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <libxml/xmlwriter.h>
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -159,29 +160,85 @@ bool SvxFontListItem::GetPresentation
 
 // class SvxFontItem -----------------------------------------------------
 
-SvxFontItem::SvxFontItem( const sal_uInt16 nId ) :
-    SfxPoolItem( nId )
+typedef std::unordered_map<size_t, const SfxPoolItem*> SvxFontItemMap;
+
+namespace
 {
-    eFamily = FAMILY_SWISS;
-    ePitch = PITCH_VARIABLE;
-    eTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+    class SvxFontItemInstanceManager : public ItemInstanceManager
+    {
+        SvxFontItemMap  maRegistered;
+
+        static size_t hashCode(const SfxPoolItem&);
+
+        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
+        virtual void add(const SfxPoolItem&) override;
+        virtual void remove(const SfxPoolItem&) override;
+    };
+
+    size_t SvxFontItemInstanceManager::hashCode(const SfxPoolItem& rItem)
+    {
+        const SvxFontItem& rFontItem(static_cast<const SvxFontItem&>(rItem));
+        std::size_t seed(0);
+        o3tl::hash_combine(seed, rItem.Which());
+        o3tl::hash_combine(seed, rFontItem.GetFamilyName().hashCode());
+        o3tl::hash_combine(seed, rFontItem.GetStyleName().hashCode());
+        o3tl::hash_combine(seed, rFontItem.GetFamily());
+        o3tl::hash_combine(seed, rFontItem.GetPitch());
+        o3tl::hash_combine(seed, rFontItem.GetCharSet());
+        return seed;
+    }
+
+    const SfxPoolItem* SvxFontItemInstanceManager::find(const SfxPoolItem& rItem) const
+    {
+        SvxFontItemMap::const_iterator aHit(maRegistered.find(hashCode(rItem)));
+        if (aHit != maRegistered.end())
+            return aHit->second;
+        return nullptr;
+    }
+
+    void SvxFontItemInstanceManager::add(const SfxPoolItem& rItem)
+    {
+        maRegistered.insert({hashCode(rItem), &rItem});
+    }
+
+    void SvxFontItemInstanceManager::remove(const SfxPoolItem& rItem)
+    {
+        maRegistered.erase(hashCode(rItem));
+    }
 }
 
-
-SvxFontItem::SvxFontItem( const FontFamily eFam, OUString aName,
-                  OUString aStName, const FontPitch eFontPitch,
-                  const rtl_TextEncoding eFontTextEncoding, const sal_uInt16 nId ) :
-
-    SfxPoolItem( nId ),
-
-    aFamilyName(std::move(aName)),
-    aStyleName(std::move(aStName))
+ItemInstanceManager* SvxFontItem::getItemInstanceManager() const
 {
-    eFamily = eFam;
-    ePitch = eFontPitch;
-    eTextEncoding = eFontTextEncoding;
+    static SvxFontItemInstanceManager aManager;
+    return &aManager;
 }
 
+SvxFontItem::SvxFontItem(
+    const sal_uInt16 nId)
+: SfxPoolItem( nId )
+, aFamilyName()
+, aStyleName()
+, eFamily(FAMILY_SWISS)
+, ePitch(PITCH_VARIABLE)
+, eTextEncoding(RTL_TEXTENCODING_DONTKNOW)
+{
+}
+
+SvxFontItem::SvxFontItem(
+    const FontFamily eFam,
+    OUString aName,
+    OUString aStName,
+    const FontPitch eFontPitch,
+    const rtl_TextEncoding eFontTextEncoding,
+    const sal_uInt16 nId)
+: SfxPoolItem( nId )
+, aFamilyName(std::move(aName))
+, aStyleName(std::move(aStName))
+, eFamily(eFam)
+, ePitch(eFontPitch)
+, eTextEncoding(eFontTextEncoding)
+{
+}
 
 bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -223,6 +280,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             if ( !( rVal >>= aFontDescriptor ))
                 return false;
 
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             aFamilyName = aFontDescriptor.Name;
             aStyleName = aFontDescriptor.StyleName;
             eFamily = static_cast<FontFamily>(aFontDescriptor.Family);
@@ -235,6 +293,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             OUString aStr;
             if(!(rVal >>= aStr))
                 return false;
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             aFamilyName = aStr;
         }
         break;
@@ -243,6 +302,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             OUString aStr;
             if(!(rVal >>= aStr))
                 return false;
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             aStyleName = aStr;
         }
         break;
@@ -251,6 +311,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nFamily = sal_Int16();
             if(!(rVal >>= nFamily))
                 return false;
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             eFamily = static_cast<FontFamily>(nFamily);
         }
         break;
@@ -259,6 +320,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nSet = sal_Int16();
             if(!(rVal >>= nSet))
                 return false;
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             eTextEncoding = static_cast<rtl_TextEncoding>(nSet);
         }
         break;
@@ -267,6 +329,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nPitch = sal_Int16();
             if(!(rVal >>= nPitch))
                 return false;
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             ePitch =  static_cast<FontPitch>(nPitch);
         }
         break;
@@ -274,13 +337,58 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
     return true;
 }
 
+void SvxFontItem::SetFamilyName(const OUString& rFamilyName)
+{
+    if (aFamilyName == rFamilyName)
+        return;
+
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
+    aFamilyName = rFamilyName;
+}
+
+void SvxFontItem::SetStyleName(const OUString &rStyleName)
+{
+    if (aStyleName == rStyleName)
+        return;
+
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
+    aStyleName = rStyleName;
+}
+
+void SvxFontItem::SetFamily(FontFamily _eFamily)
+{
+    if (eFamily == _eFamily)
+        return;
+
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
+    eFamily = _eFamily;
+}
+
+void SvxFontItem::SetPitch(FontPitch _ePitch)
+{
+    if (ePitch == _ePitch)
+        return;
+
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
+    ePitch = _ePitch;
+}
+
+void SvxFontItem::SetCharSet(rtl_TextEncoding _eEncoding)
+{
+    if (eTextEncoding == _eEncoding)
+        return;
+
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
+    eTextEncoding = _eEncoding;
+}
 
 bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
 {
+    if (this == &rAttr)
+        return true;
+
     assert(SfxPoolItem::operator==(rAttr));
-
-    const SvxFontItem& rItem = static_cast<const SvxFontItem&>(rAttr);
-
+    const SvxFontItem& rItem(static_cast<const SvxFontItem&>(rAttr));
     bool bRet = ( eFamily == rItem.eFamily &&
                  aFamilyName == rItem.aFamilyName &&
                  aStyleName == rItem.aStyleName );
@@ -293,6 +401,7 @@ bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
             SAL_INFO( "editeng.items", "FontItem::operator==(): only pitch or rtl_TextEncoding different ");
         }
     }
+
     return bRet;
 }
 
@@ -327,6 +436,12 @@ void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 // class SvxPostureItem --------------------------------------------------
+
+ItemInstanceManager* SvxPostureItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
 
 SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const sal_uInt16 nId ) :
     SfxEnumItem( nId, ePosture )
@@ -396,6 +511,7 @@ bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch( nMemberId )
     {
         case MID_ITALIC:
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetBoolValue(Any2Bool(rVal));
         break;
         case MID_POSTURE:
@@ -409,6 +525,7 @@ bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
                 eSlant = static_cast<awt::FontSlant>(nValue);
             }
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetValue(vcl::unohelper::ConvertFontSlant(eSlant));
         }
     }
@@ -427,6 +544,7 @@ bool SvxPostureItem::GetBoolValue() const
 
 void SvxPostureItem::SetBoolValue( bool bVal )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     SetValue( bVal ? ITALIC_NORMAL : ITALIC_NONE );
 }
 
@@ -440,6 +558,12 @@ void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 // class SvxWeightItem ---------------------------------------------------
+
+ItemInstanceManager* SvxWeightItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
 
 SvxWeightItem::SvxWeightItem( const FontWeight eWght, const sal_uInt16 nId ) :
     SfxEnumItem( nId, eWght )
@@ -461,6 +585,7 @@ bool SvxWeightItem::GetBoolValue() const
 
 void SvxWeightItem::SetBoolValue( bool bVal )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     SetValue( bVal ? WEIGHT_BOLD : WEIGHT_NORMAL );
 }
 
@@ -532,6 +657,7 @@ bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch( nMemberId )
     {
         case MID_BOLD   :
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetBoolValue(Any2Bool(rVal));
         break;
         case MID_WEIGHT:
@@ -544,6 +670,7 @@ bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     return false;
                 fValue = static_cast<float>(nValue);
             }
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetValue( vcl::unohelper::ConvertFontWeight(static_cast<float>(fValue)) );
         }
         break;
@@ -561,6 +688,12 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 // class SvxFontHeightItem -----------------------------------------------
+
+ItemInstanceManager* SvxFontHeightItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
 
 SvxFontHeightItem::SvxFontHeightItem( const sal_uInt32 nSz,
                                       const sal_uInt16 nPrp,
@@ -739,6 +872,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if( fPoint < 0. || fPoint > 10000. )
                     return false;
 
+                ASSERT_CHANGE_REFCOUNTED_ITEM;
                 nHeight = static_cast<tools::Long>( fPoint * 20.0 + 0.5 );        // Twips
                 if (!bConvert)
                     nHeight = convertTwipToMm100(nHeight);  // Convert, if the item contains 1/100mm
@@ -771,6 +905,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
             }
 
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             nHeight = static_cast<tools::Long>( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
                 nHeight = convertTwipToMm100(nHeight);  // Convert, if the item contains 1/100mm
@@ -782,6 +917,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nNew))
                 return true;
 
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             nHeight = lcl_GetRealHeight_Impl(nHeight, nProp, ePropUnit, bConvert);
 
             nHeight *= nNew;
@@ -801,6 +937,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     return false;
                 fValue = static_cast<float>(nValue);
             }
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             sal_Int16 nCoreDiffValue = static_cast<sal_Int16>(fValue * 20.);
             nHeight += bConvert ? nCoreDiffValue : convertTwipToMm100(nCoreDiffValue);
             nProp = static_cast<sal_uInt16>(static_cast<sal_Int16>(fValue));
@@ -841,6 +978,7 @@ bool SvxFontHeightItem::GetPresentation
 
 void SvxFontHeightItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     nHeight = static_cast<sal_uInt32>(BigInt::Scale( nHeight, nMult, nDiv ));
 }
 
@@ -855,6 +993,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewP
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     if( MapUnit::MapRelative != eUnit )
         nHeight = nNewHeight + ::ItemToControl( short(nNewProp), eUnit,
                                                 FieldUnit::TWIP );
@@ -872,6 +1011,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     if( MapUnit::MapRelative != eMetric )
         nHeight = nNewHeight +
                 ::ControlToItem( ::ItemToControl(static_cast<short>(nNewProp), eMetric,
@@ -898,6 +1038,12 @@ void SvxFontHeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxTextLineItem ------------------------------------------------
 
+ItemInstanceManager* SvxTextLineItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
+
 SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SfxEnumItem(nId, eSt)
     , maColor(COL_TRANSPARENT)
@@ -919,6 +1065,7 @@ bool SvxTextLineItem::GetBoolValue() const
 
 void SvxTextLineItem::SetBoolValue( bool bVal )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     SetValue( bVal ? LINESTYLE_SINGLE : LINESTYLE_NONE );
 }
 
@@ -988,6 +1135,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch(nMemberId)
     {
     case MID_TEXTLINED:
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         SetBoolValue(Any2Bool(rVal));
     break;
     case MID_TL_STYLE:
@@ -996,7 +1144,10 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         if(!(rVal >>= nValue))
             bRet = false;
         else
+        {
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetValue(static_cast<FontLineStyle>(nValue));
+        }
     }
     break;
     case MID_TL_COLOR:
@@ -1008,6 +1159,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             // Keep transparence, because it contains the information
             // whether the font color or the stored color should be used
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             sal_uInt8 nAlpha = maColor.GetAlpha();
             maColor = nCol;
             maColor.SetAlpha( nAlpha );
@@ -1021,10 +1173,14 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             return false;
 
         if (xComplexColor.is())
+        {
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             maComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        }
     }
     break;
     case MID_TL_HASCOLOR:
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         maColor.SetAlpha( Any2Bool( rVal ) ? 255 : 0 );
     break;
     }
@@ -1123,6 +1279,12 @@ OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 // class SvxCrossedOutItem -----------------------------------------------
 
+ItemInstanceManager* SvxCrossedOutItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
+
 SvxCrossedOutItem::SvxCrossedOutItem( const FontStrikeout eSt, const sal_uInt16 nId )
     : SfxEnumItem( nId, eSt )
 {
@@ -1143,6 +1305,7 @@ bool SvxCrossedOutItem::GetBoolValue() const
 
 void SvxCrossedOutItem::SetBoolValue( bool bVal )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     SetValue( bVal ? STRIKEOUT_SINGLE : STRIKEOUT_NONE );
 }
 
@@ -1214,6 +1377,7 @@ bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
                 return false;
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetValue(static_cast<FontStrikeout>(nValue));
         }
         break;
@@ -1917,6 +2081,12 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 // class SvxLanguageItem -------------------------------------------------
 
+ItemInstanceManager* SvxLanguageItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
+
 SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const sal_uInt16 nId )
     : SvxLanguageItem_Base( nId , eLang )
 {
@@ -1976,6 +2146,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nValue))
                 return false;
 
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetValue(LanguageType(nValue));
         }
         break;
@@ -1985,6 +2156,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= aLocale))
                 return false;
 
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
             SetValue( LanguageTag::convertToLanguageType( aLocale, false));
         }
         break;
@@ -2052,6 +2224,12 @@ bool SvxBlinkItem::GetPresentation
 }
 
 // class SvxEmphaisMarkItem ---------------------------------------------------
+
+ItemInstanceManager* SvxEmphasisMarkItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
 
 SvxEmphasisMarkItem::SvxEmphasisMarkItem( const FontEmphasisMark nValue,
                                         TypedWhichId<SvxEmphasisMarkItem> nId )
@@ -2145,6 +2323,7 @@ bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             case FontEmphasis::ACCENT_BELOW: nMark = FontEmphasisMark::Accent|FontEmphasisMark::PosBelow; break;
             default: return false;
         }
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         SetValue( static_cast<sal_Int16>(nMark) );
     }
     break;
@@ -2486,6 +2665,12 @@ bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
 |*    class SvxCharReliefItem
 *************************************************************************/
 
+ItemInstanceManager* SvxCharReliefItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aManager;
+    return &aManager;
+}
+
 SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,
                                          const sal_uInt16 nId )
     : SfxEnumItem( nId, eValue )
@@ -2539,7 +2724,10 @@ bool SvxCharReliefItem::PutValue( const css::uno::Any& rVal,
             sal_Int16 nVal = -1;
             rVal >>= nVal;
             if(nVal >= 0 && nVal <= sal_Int16(FontRelief::Engraved))
+            {
+                ASSERT_CHANGE_REFCOUNTED_ITEM;
                 SetValue( static_cast<FontRelief>(nVal) );
+            }
             else
                 bRet = false;
         }
