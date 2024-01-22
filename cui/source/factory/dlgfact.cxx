@@ -103,7 +103,7 @@ using ::com::sun::star::uno::Reference;
 using namespace svx;
 
 IMPL_ABSTDLG_CLASS(AbstractAdditionsDialog)
-IMPL_ABSTDLG_CLASS(AbstractDiagramDialog)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractDiagramDialog, DiagramDialog)
 IMPL_ABSTDLG_CLASS(AbstractFmInputRecordNoDialog)
 IMPL_ABSTDLG_CLASS(AbstractFmSearchDialog)
 IMPL_ABSTDLG_CLASS(AbstractFmShowColsDialog)

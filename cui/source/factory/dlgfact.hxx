@@ -419,7 +419,7 @@ DECL_ABSTDLG_CLASS(AbstractAdditionsDialog,weld::GenericDialogController)
 };
 
 // AbstractDiagramDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractDiagramDialog,DiagramDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractDiagramDialog,DiagramDialog)
 };
 
 //AbstractDialogFactory_Impl implementations

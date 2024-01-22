@@ -295,10 +295,15 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         {
                             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                             vcl::Window* pWin = rViewData.GetActiveWin();
-                            ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
+                            VclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                                 pWin ? pWin->GetFrameWeld() : nullptr,
                                 *static_cast<SdrObjGroup*>(pObj));
-                            pDlg->Execute();
+                            pDlg->StartExecuteAsync(
+                                [pDlg] (sal_Int32 /*nResult*/)->void
+                                {
+                                    pDlg->disposeOnce();
+                                }
+                            );
                         }
                     }
                 }

@@ -503,10 +503,15 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     else // SID_EDIT_DIAGRAM
                     {
                         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                        ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
+                        VclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                             GetFrameWeld(),
                             *static_cast<SdrObjGroup*>(pObj));
-                        pDlg->Execute();
+                        pDlg->StartExecuteAsync(
+                            [pDlg] (sal_Int32 /*nResult*/)->void
+                            {
+                                pDlg->disposeOnce();
+                            }
+                        );
                     }
                 }
             }

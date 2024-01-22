@@ -462,10 +462,15 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         else // SID_EDIT_DIAGRAM
                         {
                             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                            ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
+                            VclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                                 GetView().GetFrameWeld(),
                                 *static_cast<SdrObjGroup*>(pObj));
-                            pDlg->Execute();
+                            pDlg->StartExecuteAsync(
+                                [pDlg] (sal_Int32 /*nResult*/)->void
+                                {
+                                    pDlg->disposeOnce();
+                                }
+                            );
                         }
                     }
                 }
