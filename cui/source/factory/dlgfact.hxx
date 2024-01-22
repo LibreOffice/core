@@ -403,7 +403,8 @@ DECL_ABSTDLG_CLASS(AbstractScreenshotAnnotationDlg,ScreenshotAnnotationDlg)
 };
 
 // AbstractSignatureLineDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSignatureLineDialog,SignatureLineDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSignatureLineDialog,SignatureLineDialog)
+    virtual void Apply() override { m_xDlg->Apply(); }
 };
 
 // AbstractQrCodeGenDialog_Impl
@@ -412,6 +413,7 @@ DECL_ABSTDLG_CLASS_ASYNC(AbstractQrCodeGenDialog,QrCodeGenDialog)
 
 // AbstractSignSignatureLineDialog_Impl
 DECL_ABSTDLG_CLASS_ASYNC(AbstractSignSignatureLineDialog,SignSignatureLineDialog)
+    virtual void Apply() override { m_xDlg->Apply(); }
 };
 
 // AbstractAdditionsDialog_Impl

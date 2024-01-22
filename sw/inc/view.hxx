@@ -518,7 +518,7 @@ public:
     void            Execute(SfxRequest&);
     void            ExecLingu(SfxRequest&);
     void            ExecDlg(SfxRequest const &);
-    void            ExecDlgExt(SfxRequest const &);
+    void            ExecDlgExt(SfxRequest&);
     void            ExecColl(SfxRequest const &);
     void            ExecutePrint(SfxRequest&);
     void            ExecDraw(const SfxRequest&);

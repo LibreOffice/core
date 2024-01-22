@@ -27,7 +27,6 @@ public:
 
 protected:
     css::uno::Reference<css::frame::XModel> m_xModel;
-    virtual void Apply() = 0;
     static OUString getCDataString(std::u16string_view rString);
 };
 

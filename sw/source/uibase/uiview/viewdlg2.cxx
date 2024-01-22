@@ -46,7 +46,7 @@
 
 using namespace css;
 
-void SwView::ExecDlgExt(SfxRequest const& rReq)
+void SwView::ExecDlgExt(SfxRequest& rReq)
 {
     switch (rReq.GetSlot())
     {
@@ -65,9 +65,19 @@ void SwView::ExecDlgExt(SfxRequest const& rReq)
         {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
             const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
-            ScopedVclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
+            VclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
                 GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_SIGNATURELINE));
-            pDialog->Execute();
+            auto xRequest = std::make_shared<SfxRequest>(rReq);
+            rReq.Ignore(); // the 'old' request is not relevant any more
+            pDialog->StartExecuteAsync(
+                [pDialog, xRequest] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                        pDialog->Apply();
+                    pDialog->disposeOnce();
+                    xRequest->Done();
+                }
+            );
             break;
         }
         case SID_INSERT_QRCODE:
@@ -108,8 +118,10 @@ void SwView::ExecDlgExt(SfxRequest const& rReq)
             VclPtr<AbstractSignSignatureLineDialog> pDialog(
                 pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel));
             pDialog->StartExecuteAsync(
-                [pDialog] (sal_Int32 /*nResult*/)->void
+                [pDialog] (sal_Int32 nResult)->void
                 {
+                    if (nResult == RET_OK)
+                        pDialog->Apply();
                     pDialog->disposeOnce();
                 }
             );

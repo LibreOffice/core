@@ -26,10 +26,8 @@ SignatureLineDialogBase::SignatureLineDialogBase(weld::Widget* pParent, Referenc
 
 short SignatureLineDialogBase::run()
 {
-    short nRet = GenericDialogController::run();
-    if (nRet == RET_OK)
-        Apply();
-    return nRet;
+    assert(false && "these dialogs are async now");
+    return -1;
 }
 
 OUString SignatureLineDialogBase::getCDataString(std::u16string_view rString)

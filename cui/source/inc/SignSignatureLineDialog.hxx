@@ -20,6 +20,8 @@ class SignSignatureLineDialog : public SignatureLineDialogBase
 public:
     SignSignatureLineDialog(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel);
 
+    void Apply();
+
 private:
     std::unique_ptr<weld::Entry> m_xEditName;
     std::unique_ptr<weld::TextView> m_xEditComment;
@@ -42,7 +44,6 @@ private:
 
     void ValidateFields();
     css::uno::Reference<css::graphic::XGraphic> getSignedGraphic(bool bValid);
-    virtual void Apply() override;
 
     DECL_LINK(clearImage, weld::Button&, void);
     DECL_LINK(loadImage, weld::Button&, void);

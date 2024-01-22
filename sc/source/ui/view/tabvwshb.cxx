@@ -402,9 +402,19 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
 
                 VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
+                VclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
                     pWin->GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_SIGNATURELINE));
-                pDialog->Execute();
+                auto xRequest = std::make_shared<SfxRequest>(rReq);
+                rReq.Ignore(); // the 'old' request is not relevant any more
+                pDialog->StartExecuteAsync(
+                    [pDialog, xRequest] (sal_Int32 nResult)->void
+                    {
+                        if (nResult == RET_OK)
+                            pDialog->Apply();
+                        pDialog->disposeOnce();
+                        xRequest->Done();
+                    }
+                );
                 break;
             }
 
@@ -417,8 +427,10 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 VclPtr<AbstractSignSignatureLineDialog> pDialog(
                     pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel));
                 pDialog->StartExecuteAsync(
-                    [pDialog] (sal_Int32 /*nResult*/)->void
+                    [pDialog] (sal_Int32 nResult)->void
                     {
+                        if (nResult == RET_OK)
+                            pDialog->Apply();
                         pDialog->disposeOnce();
                     }
                 );

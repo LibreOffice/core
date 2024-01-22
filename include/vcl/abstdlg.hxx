@@ -119,12 +119,16 @@ class VCL_DLLPUBLIC AbstractSignatureLineDialog : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSignatureLineDialog() override = default;
+public:
+    virtual void Apply() = 0;
 };
 
 class VCL_DLLPUBLIC AbstractSignSignatureLineDialog : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSignSignatureLineDialog() override = default;
+public:
+    virtual void Apply() = 0;
 };
 
 class VCL_DLLPUBLIC AbstractQrCodeGenDialog : public VclAbstractDialog
