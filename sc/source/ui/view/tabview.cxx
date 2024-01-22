@@ -2734,6 +2734,16 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     if (!pDocSh)
         return;
 
+    if (pModelObj)
+    {
+        ScGridWindow* pGridWindow = rViewData.GetActiveWin();
+        if (pGridWindow)
+        {
+            Size aNewSizePx(aNewSize.Width() * rViewData.GetPPTX(), aNewSize.Height() * rViewData.GetPPTY());
+            pGridWindow->SetOutputSizePixel(aNewSizePx);
+        }
+    }
+
     // New area extended to the right/bottom of the sheet after last col/row
     tools::Rectangle aNewArea(Point(0, 0), aNewSize);
     // excluding overlapping area with aNewArea

@@ -3603,6 +3603,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     // very long (longer than ~800px default size of GridWindow) triggers a code-path where the cell
     // selected is the neighbouring cell even when we clicked on the area of the first cell.
 
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
     ScModelObj* pModelObj = createDoc("DocumentWithLongFirstColumn.ods");
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
