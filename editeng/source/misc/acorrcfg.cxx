@@ -645,7 +645,6 @@ void SvxSwAutoCorrCfg::ImplCommit()
          css::uno::Any(rParent.bAutoFmtByInput), // "Format/ByInput/Enable"
          css::uno::Any(rSwFlags.bChgToEnEmDash), // "Format/ByInput/ChangeDash"
          css::uno::Any(rSwFlags.bSetNumRule),
-         css::uno::Any(rSwFlags.bSetNumRuleAfterSpace),
             // "Format/ByInput/ApplyNumbering/Enable"
          css::uno::Any(rSwFlags.bSetBorder), // "Format/ByInput/ChangeToBorders"
          css::uno::Any(rSwFlags.bCreateTable), // "Format/ByInput/ChangeToTable"
@@ -679,7 +678,9 @@ void SvxSwAutoCorrCfg::ImplCommit()
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset"
          css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitch())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"
-         css::uno::Any(rSwFlags.bSetDOIAttr)});
+         css::uno::Any(rSwFlags.bSetDOIAttr),
+         css::uno::Any(rSwFlags.bSetNumRuleAfterSpace), // "Format/ByInput/ApplyNumberingAfterSpace"
+        });
             // "Format/Option/SetDOIAttribute"
 }
 
