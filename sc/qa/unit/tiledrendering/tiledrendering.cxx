@@ -177,6 +177,7 @@ public:
     void testCellMinimalInvalidations();
     void testCellInvalidationDocWithExistingZoom();
     void testOptimalRowHeight();
+    void testExtendedAreasDontOverlap();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -255,6 +256,7 @@ public:
     CPPUNIT_TEST(testCellMinimalInvalidations);
     CPPUNIT_TEST(testCellInvalidationDocWithExistingZoom);
     CPPUNIT_TEST(testOptimalRowHeight);
+    CPPUNIT_TEST(testExtendedAreasDontOverlap);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2107,7 +2109,7 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 49725, 13005), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(26775, 0), Size(22950, 13005)), aView1.m_aInvalidations[0]);
 
     // Extend area top-to-bottom
     aView1.m_bInvalidateTiles = false;
@@ -2118,7 +2120,7 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 49725, 19380), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 13005), Size(49725, 6375)), aView1.m_aInvalidations[0]);
 
     // Extend area left-to-right
     aView1.m_bInvalidateTiles = false;
@@ -2129,7 +2131,7 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(49725, 0, 75225, 19380), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(49725, 0), Size(25500, 19380)), aView1.m_aInvalidations[0]);
 }
 
 void ScTiledRenderingTest::testJumpHorizontallyInvalidation()
@@ -3915,6 +3917,40 @@ void ScTiledRenderingTest::testOptimalRowHeight()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("After setOptimalHeight: Row#306 height is invalid!", sal_uInt16(504), pDoc->GetRowHeight(nRow, 0));
+}
+
+// if we extend the tiled area to the right and bottom we want two resulting area
+// that don't overlap. If they overlap that typically creates an unnecessary full
+// screen invalidation.
+void ScTiledRenderingTest::testExtendedAreasDontOverlap()
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pModelObj && pView);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // register to track View #1 invalidations
+    ViewCallback aView1;
+
+    // extend to the right and bottom
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 39750, 12780));
+
+    Scheduler::ProcessEventsToIdle();
+
+    // we should get two rectangles for the two new areas
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
+
+    // And those should not overlap, otherwise they would merge to form
+    // a mega rectangle, which defeats the purpose of creating two rects
+    // in the first place.
+    CPPUNIT_ASSERT_MESSAGE("Invalidations should not overlap",
+        !aView1.m_aInvalidations[0].Overlaps(aView1.m_aInvalidations[1]));
+
+    // But they should be adjacent
+    CPPUNIT_ASSERT_EQUAL(aView1.m_aInvalidations[0].Top() +
+                         aView1.m_aInvalidations[0].GetSize().Height(),
+                         aView1.m_aInvalidations[1].Top());
 }
 
 }
