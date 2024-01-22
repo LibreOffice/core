@@ -358,10 +358,18 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     }
     if ( rProperties.isBandRow() )
     {
+        bool bHasFirstColFillColor
+            = (rProperties.isFirstCol() && rTable.getFirstCol().getFillProperties()
+               && rTable.getFirstCol().getFillProperties()->maFillColor.isUsed());
+
+        bool bHasLastColFillColor
+            = (rProperties.isLastCol() && rTable.getLastCol().getFillProperties()
+               && rTable.getLastCol().getFillProperties()->maFillColor.isUsed());
+
         if ( ( !rProperties.isFirstRow() || ( nRow != 0 ) ) &&
             ( !rProperties.isLastRow() || ( nRow != nMaxRow ) ) &&
-            ( !rProperties.isFirstCol() || ( nColumn != 0 ) ) &&
-            ( !rProperties.isLastCol() || ( nColumn != nMaxColumn ) ) )
+            ( !rProperties.isFirstCol() || ( nColumn != 0 ) || !bHasFirstColFillColor ) &&
+            ( !rProperties.isLastCol() || ( nColumn != nMaxColumn ) || !bHasLastColFillColor ) )
         {
             sal_Int32 nBand = nRow;
             if ( rProperties.isFirstRow() )
