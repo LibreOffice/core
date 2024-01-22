@@ -221,8 +221,13 @@ public:
     bool      m_bLayoutInCell;
     bool      m_bCompatForcedLayoutInCell;
     bool m_bAllowOverlap = true;
+
+    // Opaque means not in the background (but instead, the graphic will be over top of the text)
+    // This flag holds where LO will ACTUALLY put the graphic
     bool      m_bOpaque;
+    // BehindDoc means in the background. This flag says the graphic REQUESTED to be behind the text
     bool      m_bBehindDoc;
+
     bool      m_bContour;
     bool      m_bContourOutside;
     WrapPolygon::Pointer_t mpWrapPolygon;
@@ -395,11 +400,22 @@ public:
         if (oZOrder)
         {
             // tdf#120760 Send objects with behinddoc=true to the back.
-            // Only relativeHeight zOrders have been used if m_bBehindDoc is set,
-            // and they have already been set as negative values (to be below all z-indexes).
+
+            // zOrder can be defined either by z-index or by relativeHeight.
+            // z-index indicates background with a negative value,
+            // while relativeHeight indicates background with BehindDoc = true.
+            //
+            // In general, all z-index-defined shapes appear on top of relativeHeight graphics
+            // regardless of the value.
+            // So we have to try to put all relativeHeights as far back as possible,
+            // and this has already partially happened because they were already made to be negative
+            // but now the behindDoc relativeHeights need to be forced to the very back.
+            //
             // Subtract even more so behindDoc relativeHeights will be behind
-            // other relativeHeights and negative z-indexes (needed for IsInHeaderFooter).
-            // relativeHeight removed 0x1E00 0000, so can subtract another 0x6200 0000
+            // foreground relativeHeights and also behind all of the negative z-indexes
+            // (especially needed for IsInHeaderFooter, as EVERYTHING is forced to the background).
+            //
+            // relativeHeight already removed 0x1E00 0000, so can subtract another 0x6200 0000
             if (bBehindText)
                 oZOrder = *oZOrder - 0x62000000;
 
