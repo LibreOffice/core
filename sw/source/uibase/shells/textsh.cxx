@@ -997,8 +997,13 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         auto xFrame = GetView().GetViewFrame().GetFrame().GetFrameInterface();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetView().GetFrameWeld(), aAllSet, xFrame));
-        pDlg->Execute();
+        VclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetView().GetFrameWeld(), aAllSet, xFrame));
+        pDlg->StartExecuteAsync(
+            [pDlg] (sal_Int32 /*nResult*/)->void
+            {
+                pDlg->disposeOnce();
+            }
+        );
         return;
     }
 

@@ -727,8 +727,13 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         // If character is selected, it can be shown
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         auto xFrame = m_rView.GetViewFrame().GetFrame().GetFrameInterface();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(m_rView.GetFrameWeld(), aAllSet, xFrame));
-        pDlg->Execute();
+        VclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(m_rView.GetFrameWeld(), aAllSet, xFrame));
+        pDlg->StartExecuteAsync(
+            [pDlg] (sal_Int32 /*nResult*/)->void
+            {
+                pDlg->disposeOnce();
+            }
+        );
         return;
     }
 

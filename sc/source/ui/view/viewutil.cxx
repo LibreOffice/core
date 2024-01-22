@@ -324,8 +324,13 @@ void ScViewUtil::ExecuteCharMap(const SvxFontItem& rOldFont,
     aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
     aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
     auto xFrame = rFrame.GetFrame().GetFrameInterface();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rShell.GetFrameWeld(), aSet, xFrame));
-    pDlg->Execute();
+    VclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rShell.GetFrameWeld(), aSet, xFrame));
+    pDlg->StartExecuteAsync(
+        [pDlg] (sal_Int32 /*nResult*/)->void
+        {
+            pDlg->disposeOnce();
+        }
+    );
 }
 
 bool ScViewUtil::IsFullScreen( const SfxViewShell& rViewShell )

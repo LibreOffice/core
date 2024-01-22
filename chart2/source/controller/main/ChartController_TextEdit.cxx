@@ -177,42 +177,49 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     vcl::Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetChartFrame(), aSet, nullptr));
-    if( pDlg->Execute() != RET_OK )
-        return;
+    VclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetChartFrame(), aSet, nullptr));
+    pDlg->StartExecuteAsync(
+        [this, pDlg] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                const SfxItemSet* pSet = pDlg->GetOutputItemSet();
+                OUString aString;
+                if (pSet)
+                    if (const SfxStringItem* pCharMapItem = pSet->GetItemIfSet(SID_CHARMAP))
+                        aString = pCharMapItem->GetValue();
 
-    const SfxItemSet* pSet = pDlg->GetOutputItemSet();
-    OUString aString;
-    if (pSet)
-        if (const SfxStringItem* pCharMapItem = pSet->GetItemIfSet(SID_CHARMAP))
-            aString = pCharMapItem->GetValue();
+                OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+                SdrOutliner*  pOutliner = m_pDrawViewWrapper->getOutliner();
 
-    OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
-    SdrOutliner*  pOutliner = m_pDrawViewWrapper->getOutliner();
+                if(pOutliner && pOutlinerView)
+                {
+                    // insert string to outliner
 
-    if(!pOutliner || !pOutlinerView)
-        return;
+                    // prevent flicker
+                    pOutlinerView->HideCursor();
+                    pOutliner->SetUpdateLayout(false);
 
-    // insert string to outliner
+                    // delete current selection by inserting empty String, so current
+                    // attributes become unique (sel. has to be erased anyway)
+                    pOutlinerView->InsertText(OUString());
 
-    // prevent flicker
-    pOutlinerView->HideCursor();
-    pOutliner->SetUpdateLayout(false);
+                    pOutlinerView->InsertText(aString, true);
 
-    // delete current selection by inserting empty String, so current
-    // attributes become unique (sel. has to be erased anyway)
-    pOutlinerView->InsertText(OUString());
+                    ESelection aSel = pOutlinerView->GetSelection();
+                    aSel.nStartPara = aSel.nEndPara;
+                    aSel.nStartPos = aSel.nEndPos;
+                    pOutlinerView->SetSelection(aSel);
 
-    pOutlinerView->InsertText(aString, true);
+                    // show changes
+                    pOutliner->SetUpdateLayout(true);
+                    pOutlinerView->ShowCursor();
+                }
+            }
+            pDlg->disposeOnce();
+        }
+    );
 
-    ESelection aSel = pOutlinerView->GetSelection();
-    aSel.nStartPara = aSel.nEndPara;
-    aSel.nStartPos = aSel.nEndPos;
-    pOutlinerView->SetSelection(aSel);
-
-    // show changes
-    pOutliner->SetUpdateLayout(true);
-    pOutlinerView->ShowCursor();
 }
 
 rtl::Reference< ::chart::AccessibleTextHelper >

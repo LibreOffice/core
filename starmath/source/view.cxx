@@ -1815,10 +1815,15 @@ void SmViewShell::Execute(SfxRequest& rReq)
             aSet.Put(SfxBoolItem(FN_PARAM_1, false));
             aSet.Put(SfxStringItem(SID_FONT_NAME,
                                    GetDoc()->GetFormat().GetFont(FNT_VARIABLE).GetFamilyName()));
-            ScopedVclPtr<SfxAbstractDialog> pDialog(
+            VclPtr<SfxAbstractDialog> pDialog(
                 pFact->CreateCharMapDialog(pWin ? pWin->GetFrameWeld() : nullptr, aSet,
                                            GetViewFrame().GetFrame().GetFrameInterface()));
-            pDialog->Execute();
+            pDialog->StartExecuteAsync(
+                [pDialog] (sal_Int32 /*nResult*/)->void
+                {
+                    pDialog->disposeOnce();
+                }
+            );
         }
         break;
 

@@ -1791,8 +1791,13 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
         // If character is selected then it can be shown.
         auto xFrame = m_rView.GetViewFrame().GetFrame().GetFrameInterface();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(m_rView.GetFrameWeld(), aAllSet, xFrame));
-        pDlg->Execute();
+        VclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(m_rView.GetFrameWeld(), aAllSet, xFrame));
+        pDlg->StartExecuteAsync(
+            [pDlg] (sal_Int32 /*nResult*/)->void
+            {
+                pDlg->disposeOnce();
+            }
+        );
         return;
     }
 
