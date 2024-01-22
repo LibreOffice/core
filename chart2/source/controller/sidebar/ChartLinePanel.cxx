@@ -232,23 +232,6 @@ void ChartLinePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
     doUpdateModel(pModel);
 }
 
-void ChartLinePanel::setLineJoint(const XLineJointItem* pItem)
-{
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
-        getPropSet(mxModel);
-
-    if (!xPropSet.is())
-        return;
-
-    PreventUpdate aPreventUpdate(mbUpdate);
-    if (pItem)
-        xPropSet->setPropertyValue("LineJoint", css::uno::Any(pItem->GetValue()));
-}
-
-void ChartLinePanel::setLineCap(const XLineCapItem* /*pItem*/)
-{
-}
-
 void ChartLinePanel::setLineTransparency(const XLineTransparenceItem& rItem)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =

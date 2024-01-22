@@ -77,12 +77,9 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mxTBWidth(m_xBuilder->weld_toolbar("width")),
     mxFTTransparency(m_xBuilder->weld_label("translabel")),
     mxMFTransparent(m_xBuilder->weld_metric_spin_button("linetransparency", FieldUnit::PERCENT)),
-    mxFTEdgeStyle(m_xBuilder->weld_label("cornerlabel")),
-    mxLBEdgeStyle(m_xBuilder->weld_combo_box("edgestyle")),
-    mxFTCapStyle(m_xBuilder->weld_label("caplabel")),
-    mxLBCapStyle(m_xBuilder->weld_combo_box("linecapstyle")),
-    mxGridLineProps(m_xBuilder->weld_widget("lineproperties")),
-    mxBoxArrowProps(m_xBuilder->weld_widget("arrowproperties")),
+    mxArrowHeadStyleFT(m_xBuilder->weld_label("arrowlabel")),
+    mxArrowHeadStyleTB(m_xBuilder->weld_toolbar("arrowheadstyle")),
+    mxArrowHeadStyleDispatch(new ToolbarUnoDispatcher(*mxArrowHeadStyleTB, *m_xBuilder, rxFrame)),
     mxLineWidthPopup(new LineWidthPopup(mxTBWidth.get(), *this)),
     mxLineStyleNoneChange(new LineStyleNoneChange(*this)),
     mnTrans(0),
@@ -106,12 +103,8 @@ LinePropertyPanelBase::~LinePropertyPanelBase()
     mxMFTransparent.reset();
     mxLineStyleDispatch.reset();
     mxLineStyleTB.reset();
-    mxFTEdgeStyle.reset();
-    mxLBEdgeStyle.reset();
-    mxFTCapStyle.reset();
-    mxLBCapStyle.reset();
-    mxGridLineProps.reset();
-    mxBoxArrowProps.reset();
+    mxArrowHeadStyleTB.reset();
+    mxArrowHeadStyleFT.reset();
 }
 
 void LinePropertyPanelBase::Initialize()
@@ -132,10 +125,6 @@ void LinePropertyPanelBase::Initialize()
     mxTBWidth->connect_clicked(LINK(this, LinePropertyPanelBase, ToolboxWidthSelectHdl));
 
     mxMFTransparent->connect_value_changed(LINK(this, LinePropertyPanelBase, ChangeTransparentHdl));
-
-    mxLBEdgeStyle->connect_changed( LINK( this, LinePropertyPanelBase, ChangeEdgeStyleHdl ) );
-
-    mxLBCapStyle->connect_changed( LINK( this, LinePropertyPanelBase, ChangeCapStyleHdl ) );
 
     SvxLineStyleToolBoxControl* pLineStyleControl = getLineStyleToolBoxControl(*mxLineStyleDispatch);
     pLineStyleControl->setLineStyleIsNoneFunction(*mxLineStyleNoneChange);
@@ -196,177 +185,6 @@ void LinePropertyPanelBase::updateLineWidth(bool bDisabled, bool bSetOrDefault,
 
     mbWidthValuable = false;
     SetWidthIcon();
-}
-
-void LinePropertyPanelBase::updateLineJoint(bool bDisabled, bool bSetOrDefault,
-        const SfxPoolItem* pState)
-{
-    if(bDisabled)
-    {
-        mxLBEdgeStyle->set_sensitive(false);
-        mxFTEdgeStyle->set_sensitive(false);
-    }
-    else
-    {
-        mxLBEdgeStyle->set_sensitive(true);
-        mxFTEdgeStyle->set_sensitive(true);
-    }
-
-    if(bSetOrDefault)
-    {
-        if (const XLineJointItem* pItem = dynamic_cast<const XLineJointItem*>(pState))
-        {
-            sal_Int32 nEntryPos(0);
-
-            switch(pItem->GetValue())
-            {
-                case drawing::LineJoint_ROUND:
-                {
-                    nEntryPos = 1;
-                    break;
-                }
-                case drawing::LineJoint_NONE:
-                {
-                    nEntryPos = 2;
-                    break;
-                }
-                case drawing::LineJoint_MIDDLE:
-                case drawing::LineJoint_MITER:
-                {
-                    nEntryPos = 3;
-                    break;
-                }
-                case drawing::LineJoint_BEVEL:
-                {
-                    nEntryPos = 4;
-                    break;
-                }
-
-                default:
-                break;
-            }
-
-            if(nEntryPos)
-            {
-                mxLBEdgeStyle->set_active(nEntryPos - 1);
-                return;
-            }
-        }
-    }
-
-    mxLBEdgeStyle->set_active(-1);
-}
-
-void LinePropertyPanelBase::updateLineCap(bool bDisabled, bool bSetOrDefault,
-        const SfxPoolItem* pState)
-{
-    mxLBCapStyle->set_sensitive(!bDisabled);
-    mxFTCapStyle->set_sensitive(!bDisabled);
-
-    if(bSetOrDefault)
-    {
-        if (const XLineCapItem* pItem = dynamic_cast<const XLineCapItem*>(pState))
-        {
-            sal_Int32 nEntryPos(0);
-
-            switch(pItem->GetValue())
-            {
-                case drawing::LineCap_BUTT:
-                {
-                    nEntryPos = 1;
-                    break;
-                }
-                case drawing::LineCap_ROUND:
-                {
-                    nEntryPos = 2;
-                    break;
-                }
-                case drawing::LineCap_SQUARE:
-                {
-                    nEntryPos = 3;
-                    break;
-                }
-
-                default:
-                break;
-            }
-
-            if(nEntryPos)
-            {
-                mxLBCapStyle->set_active(nEntryPos - 1);
-                return;
-            }
-        }
-    }
-
-    mxLBCapStyle->set_active(-1);
-}
-
-IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEdgeStyleHdl, weld::ComboBox&, void)
-{
-    const sal_Int32 nPos(mxLBEdgeStyle->get_active());
-
-    if (nPos == -1 || !mxLBEdgeStyle->get_value_changed_from_saved())
-        return;
-
-    std::unique_ptr<XLineJointItem> pItem;
-
-    switch(nPos)
-    {
-        case 0: // rounded
-        {
-            pItem.reset(new XLineJointItem(drawing::LineJoint_ROUND));
-            break;
-        }
-        case 1: // none
-        {
-            pItem.reset(new XLineJointItem(drawing::LineJoint_NONE));
-            break;
-        }
-        case 2: // mitered
-        {
-            pItem.reset(new XLineJointItem(drawing::LineJoint_MITER));
-            break;
-        }
-        case 3: // beveled
-        {
-            pItem.reset(new XLineJointItem(drawing::LineJoint_BEVEL));
-            break;
-        }
-    }
-
-    setLineJoint(pItem.get());
-}
-
-IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeCapStyleHdl, weld::ComboBox&, void)
-{
-    const sal_Int32 nPos(mxLBCapStyle->get_active());
-
-    if (!(nPos != -1 && mxLBCapStyle->get_value_changed_from_saved()))
-        return;
-
-    std::unique_ptr<XLineCapItem> pItem;
-
-    switch(nPos)
-    {
-        case 0: // flat
-        {
-            pItem.reset(new XLineCapItem(drawing::LineCap_BUTT));
-            break;
-        }
-        case 1: // round
-        {
-            pItem.reset(new XLineCapItem(drawing::LineCap_ROUND));
-            break;
-        }
-        case 2: // square
-        {
-            pItem.reset(new XLineCapItem(drawing::LineCap_SQUARE));
-            break;
-        }
-    }
-
-    setLineCap(pItem.get());
 }
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ToolboxWidthSelectHdl, const OUString&, void)
@@ -437,12 +255,10 @@ void LinePropertyPanelBase::SetWidth(tools::Long nWidth)
 
 void LinePropertyPanelBase::ActivateControls()
 {
-    mxGridLineProps->set_sensitive(!mbNoneLineStyle);
-    mxBoxArrowProps->set_sensitive(!mbNoneLineStyle);
-    mxLineStyleTB->set_item_sensitive(".uno:LineEndStyle", !mbNoneLineStyle);
+    mxArrowHeadStyleTB->set_item_sensitive(".uno:LineEndStyle", !mbNoneLineStyle);
 
-    mxBoxArrowProps->set_visible(mbArrowSupported);
-    mxLineStyleTB->set_item_visible(".uno:LineEndStyle", mbArrowSupported);
+    mxArrowHeadStyleFT->set_visible(mbArrowSupported);
+    mxArrowHeadStyleTB->set_item_visible(".uno:LineEndStyle", mbArrowSupported);
 }
 
 void LinePropertyPanelBase::setMapUnit(MapUnit eMapUnit)

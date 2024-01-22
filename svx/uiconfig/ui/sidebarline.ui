@@ -14,7 +14,7 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
-      <!-- n-columns=2 n-rows=7 -->
+      <!-- n-columns=2 n-rows=4 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -44,17 +44,6 @@
             <property name="toolbar-style">icons</property>
             <property name="show-arrow">False</property>
             <property name="icon_size">2</property>
-            <child>
-              <object class="GtkMenuToolButton" id=".uno:LineEndStyle">
-                <property name="visible">True</property>
-                <property name="tooltip-text" translatable="yes" context="sidebarline|linestyle|tooltip_text">Select the style of the arrowheads.</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">False</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkMenuToolButton" id=".uno:XLineStyle">
                 <property name="visible">True</property>
@@ -190,12 +179,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="cornerlabel">
+          <object class="GtkLabel" id="arrowlabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="sidebarline|cornerlabel">_Corner style:</property>
+            <property name="label" translatable="yes" context="sidebarline|arrowlabel">Arrow styles:</property>
             <property name="use-underline">True</property>
-            <property name="mnemonic-widget">edgestyle</property>
+            <property name="mnemonic-widget">width</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -204,114 +193,28 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="caplabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="sidebarline|caplabel">Ca_p style:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">linecapstyle</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="linecapstyle">
+          <object class="GtkToolbar" id="arrowheadstyle">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="tooltip-text" translatable="yes" context="sidebarline|linecapstyle|tooltip_text">Select the style of the line caps.</property>
-            <property name="hexpand">True</property>
-            <items>
-              <item translatable="yes" context="sidebarline|linecapstyle">Flat</item>
-              <item translatable="yes" context="sidebarline|linecapstyle">Round</item>
-              <item translatable="yes" context="sidebarline|linecapstyle">Square</item>
-            </items>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="linecapstyle-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="sidebarline|linecapstyle-atkobject">Cap Style</property>
+            <property name="halign">end</property>
+            <property name="toolbar-style">icons</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">2</property>
+            <child>
+              <object class="GtkMenuToolButton" id=".uno:LineEndStyle">
+                <property name="visible">True</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarline|arrowheadstyle|tooltip_text">Select the style of the arrowheads.</property>
+                <property name="use-underline">True</property>
               </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="edgestyle">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="tooltip-text" translatable="yes" context="sidebarline|edgestyle|tooltip_text">Select the style of the edge connections.</property>
-            <property name="hexpand">True</property>
-            <items>
-              <item translatable="yes" context="sidebarline|edgestyle">Rounded</item>
-              <item translatable="yes" context="sidebarline|edgestyle">- none -</item>
-              <item translatable="yes" context="sidebarline|edgestyle">Mitered</item>
-              <item translatable="yes" context="sidebarline|edgestyle">Beveled</item>
-            </items>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="edgestyle-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="sidebarline|edgestyle-atkobject">Corner Style</property>
-              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="homogeneous">False</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
             <property name="top-attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="arrowproperties">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <!-- n-columns=3 n-rows=3 -->
-          <object class="GtkGrid" id="lineproperties">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">6</property>
           </packing>
         </child>
       </object>

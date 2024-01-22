@@ -42,8 +42,6 @@ LinePropertyPanel::LinePropertyPanel(
     maDashControl (SID_ATTR_LINE_DASH, *pBindings, *this),
     maWidthControl(SID_ATTR_LINE_WIDTH, *pBindings, *this),
     maTransControl(SID_ATTR_LINE_TRANSPARENCE, *pBindings, *this),
-    maEdgeStyle(SID_ATTR_LINE_JOINT, *pBindings, *this),
-    maCapStyle(SID_ATTR_LINE_CAP, *pBindings, *this),
     mpBindings(pBindings)
 {
     setMapUnit(maWidthControl.GetCoreMetric());
@@ -55,8 +53,6 @@ LinePropertyPanel::~LinePropertyPanel()
     maDashControl.dispose();
     maWidthControl.dispose();
     maTransControl.dispose();
-    maEdgeStyle.dispose();
-    maCapStyle.dispose();
 }
 
 std::unique_ptr<PanelLayout> LinePropertyPanel::Create (
@@ -94,16 +90,6 @@ void LinePropertyPanel::NotifyItemUpdate(
             updateLineWidth(bDisabled, bSetOrDefault, pState);
             break;
         }
-        case SID_ATTR_LINE_JOINT:
-        {
-            updateLineJoint(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_ATTR_LINE_CAP:
-        {
-            updateLineCap(bDisabled, bSetOrDefault, pState);
-            break;
-        }
     }
     ActivateControls();
 }
@@ -135,18 +121,6 @@ void LinePropertyPanel::HandleContextChange(
         disableArrowHead();
     else
         enableArrowHead();
-}
-
-void LinePropertyPanel::setLineJoint(const XLineJointItem* pItem)
-{
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_JOINT,
-            SfxCallMode::RECORD, { pItem });
-}
-
-void LinePropertyPanel::setLineCap(const XLineCapItem* pItem)
-{
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_CAP,
-            SfxCallMode::RECORD, { pItem });
 }
 
 void LinePropertyPanel::setLineTransparency(const XLineTransparenceItem& rItem)
