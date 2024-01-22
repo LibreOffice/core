@@ -670,6 +670,7 @@ class SvxZoomItem;
 #define SID_BASICIDE_WATCH                  TypedWhichId<SfxBoolItem>( SID_BASICIDE_START + 55 )
 #define SID_BASICIDE_STACK                  TypedWhichId<SfxBoolItem>( SID_BASICIDE_START + 56 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
+#define SID_OPTIONS_SECURITY                ( SID_BASICIDE_START + 863)
 
 // SlotIds for Apps --------------------------------------------------------
 #define FN_PARAM                            (SID_SW_START + 1100)

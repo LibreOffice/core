@@ -5497,6 +5497,23 @@ SfxVoidItem MoreDictionaries SID_MORE_DICTIONARIES
         GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem OptionsSecurityDialog SID_OPTIONS_SECURITY
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Options;
+]
+
 SfxVoidItem ActivateStyleApply SID_ACTIVATE_STYLE_APPLY
 ()
 [

@@ -2424,6 +2424,7 @@ cui/source/inc/pastedlg.hxx
 cui/source/inc/postdlg.hxx
 cui/source/inc/scriptdlg.hxx
 cui/source/inc/sdrcelldlg.hxx
+cui/source/inc/securityoptions.hxx
 cui/source/inc/splitcelldlg.hxx
 cui/source/inc/srchxtra.hxx
 cui/source/inc/swpossizetabpage.hxx
@@ -2489,7 +2490,6 @@ cui/source/options/optupdt.hxx
 cui/source/options/sdbcdriverenum.cxx
 cui/source/options/sdbcdriverenum.hxx
 cui/source/options/securityoptions.cxx
-cui/source/options/securityoptions.hxx
 cui/source/options/treeopt.cxx
 cui/source/options/webconninfo.cxx
 cui/source/options/webconninfo.hxx

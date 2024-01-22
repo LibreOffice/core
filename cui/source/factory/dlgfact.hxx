@@ -49,6 +49,7 @@
 #include <postdlg.hxx>
 #include <QrCodeGenDialog.hxx>
 #include <screenshotannotationdlg.hxx>
+#include <securityoptions.hxx>
 #include <showcols.hxx>
 #include <SignatureLineDialog.hxx>
 #include <SignSignatureLineDialog.hxx>
@@ -402,6 +403,11 @@ DECL_ABSTDLG_CLASS_UNIQUE(AbstractSvxCharacterMapDialog,SfxAbstractDialog,SvxCha
 DECL_ABSTDLG_CLASS(AbstractScreenshotAnnotationDlg,ScreenshotAnnotationDlg)
 };
 
+// AbstractSecurityOptionsDialog_Impl
+DECL_ABSTDLG_CLASS(AbstractSecurityOptionsDialog, svx::SecurityOptionsDialog)
+    virtual bool SetSecurityOptions() override;
+};
+
 // AbstractSignatureLineDialog_Impl
 DECL_ABSTDLG_CLASS(AbstractSignatureLineDialog,SignatureLineDialog)
 };
@@ -591,6 +597,8 @@ public:
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window* pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;
 
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(weld::Dialog& rParentDialog) override;
+
+    virtual VclPtr<AbstractSecurityOptionsDialog> CreateSvxSecurityOptionsDialog(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractSignatureLineDialog>
     CreateSignatureLineDialog(weld::Window* pParent,

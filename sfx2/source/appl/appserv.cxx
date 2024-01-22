@@ -1503,6 +1503,20 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             break;
         }
 
+        case SID_OPTIONS_SECURITY:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            VclPtr<AbstractSecurityOptionsDialog> pDlg =
+                pFact->CreateSvxSecurityOptionsDialog(rReq.GetFrameWeld());
+
+            if (pDlg->Execute() == RET_OK) {
+                pDlg->SetSecurityOptions();
+            }
+
+            pDlg.disposeAndClear();
+            break;
+        }
+
         case SID_MORE_DICTIONARIES:
         {
             uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(

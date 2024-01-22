@@ -425,6 +425,8 @@ public:
 
     virtual DialogGetRanges                    GetDialogGetRangesFunc() = 0;
 
+    virtual VclPtr<AbstractSecurityOptionsDialog> CreateSvxSecurityOptionsDialog(weld::Window* pParent) override = 0;
+
     virtual VclPtr<AbstractScriptSelectorDialog> CreateScriptSelectorDialog(weld::Window* pParent,
             const css::uno::Reference< css::frame::XFrame >& rxFrame) override = 0;
 

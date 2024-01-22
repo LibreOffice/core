@@ -337,6 +337,10 @@ shell SfxApplication
     [
         ExecMethod = OfaExec_Impl ;
     ]
+    SID_OPTIONS_SECURITY
+    [
+        ExecMethod = OfaExec_Impl ;
+    ]
 }
 
 shell SfxModule
