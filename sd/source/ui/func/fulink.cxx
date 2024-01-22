@@ -68,9 +68,15 @@ void FuLink::DoExecute( SfxRequest& )
     sfx2::LinkManager* pLinkManager = mpDoc->GetLinkManager();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(mpViewShell->GetFrameWeld(), pLinkManager));
-    pDlg->Execute();
-    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
+    VclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(mpViewShell->GetFrameWeld(), pLinkManager));
+    auto pViewShell = mpViewShell;
+    pDlg->StartExecuteAsync(
+        [pDlg, pViewShell] (sal_Int32 /*nResult*/)->void
+        {
+            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
+            pDlg->disposeOnce();
+        }
+    );
 }
 
 } // end of namespace sd

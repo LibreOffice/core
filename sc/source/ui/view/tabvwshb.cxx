@@ -365,7 +365,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
     MakeDrawLayer();
 
-    SfxBindings& rBindings = GetViewFrame().GetBindings();
     ScTabView*   pTabView  = GetViewData().GetView();
     vcl::Window*      pWin      = pTabView->GetActiveWin();
     ScDrawView*  pView     = pTabView->GetScDrawView();
@@ -505,11 +504,18 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     break;
                 }
 
-                ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(pWin->GetFrameWeld(), rDoc.GetLinkManager()));
-                pDlg->Execute();
-                rBindings.Invalidate( nSlot );
-                SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
-                rReq.Done();
+                VclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(pWin->GetFrameWeld(), rDoc.GetLinkManager()));
+                auto xRequest = std::make_shared<SfxRequest>(rReq);
+                rReq.Ignore(); // the 'old' request is not relevant any more
+                pDlg->StartExecuteAsync(
+                    [this, pDlg, xRequest] (sal_Int32 /*nResult*/)->void
+                    {
+                        GetViewFrame().GetBindings().Invalidate( SID_LINKS );
+                        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
+                        pDlg->disposeOnce();
+                        xRequest->Done();
+                    }
+                );
             }
             break;
 

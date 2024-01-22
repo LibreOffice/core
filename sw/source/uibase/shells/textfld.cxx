@@ -151,8 +151,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             }
 
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetView().GetFrameWeld(), &rSh.GetLinkManager(), false, &rLink));
-                            pDlg->Execute();
+                            VclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetView().GetFrameWeld(), &rSh.GetLinkManager(), false, &rLink));
+                            pDlg->StartExecuteAsync(
+                                [pDlg] (sal_Int32 /*nResult*/)->void
+                                {
+                                    pDlg->disposeOnce();
+                                }
+                            );
                         }
                         break;
                     }

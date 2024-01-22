@@ -2477,8 +2477,13 @@ void SwView::EditLinkDlg()
 
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetViewFrame().GetFrameWeld(), &GetWrtShell().GetLinkManager(), bWeb));
-    pDlg->Execute();
+    VclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetViewFrame().GetFrameWeld(), &GetWrtShell().GetLinkManager(), bWeb));
+    pDlg->StartExecuteAsync(
+        [pDlg] (sal_Int32 /*nResult*/)->void
+        {
+            pDlg->disposeOnce();
+        }
+    );
 }
 
 namespace sw {

@@ -360,7 +360,7 @@ DECL_ABSTDLG_CLASS_SHARED_ASYNC(AbstractPasteDialog,SfxAbstractPasteDialog,SvPas
 };
 
 // AbstractLinksDialog_Impl
-DECL_ABSTDLG_CLASS_UNIQUE(AbstractLinksDialog,SfxAbstractLinksDialog,SvBaseLinksDlg)
+DECL_ABSTDLG_CLASS_SHARED_ASYNC(AbstractLinksDialog,SfxAbstractLinksDialog,SvBaseLinksDlg)
 };
 
 // AbstractSvxPostItDialog_Impl
