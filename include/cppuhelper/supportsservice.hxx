@@ -11,7 +11,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#pragma once
+#ifndef INCLUDED_CPPUHELPER_SUPPORTSSERVICE_HXX
+#define INCLUDED_CPPUHELPER_SUPPORTSSERVICE_HXX
 
 #include "sal/config.h"
 
@@ -46,5 +47,7 @@ bool CPPUHELPER_DLLPUBLIC supportsService(
     rtl::OUString const & name);
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

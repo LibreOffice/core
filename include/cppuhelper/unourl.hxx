@@ -21,7 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#pragma once
+#ifndef INCLUDED_CPPUHELPER_UNOURL_HXX
+#define INCLUDED_CPPUHELPER_UNOURL_HXX
 
 #include "sal/config.h"
 
@@ -181,5 +182,7 @@ private:
     Impl* m_pImpl;
 };
 }
+
+#endif // INCLUDED_RTL_UNOURL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

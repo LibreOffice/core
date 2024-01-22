@@ -20,7 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#pragma once
+#ifndef INCLUDED_CPPUHELPER_SHLIB_HXX
+#define INCLUDED_CPPUHELPER_SHLIB_HXX
 
 #include "cppuhelper/cppuhelperdllapi.h"
 #include "com/sun/star/uno/Reference.h"
@@ -80,5 +81,7 @@ SAL_CALL writeSharedLibComponentInfo(
     css::uno::Reference< css::registry::XRegistryKey > const & xKey );
 
 } // end namespace cppu
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

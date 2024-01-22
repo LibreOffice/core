@@ -20,7 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#pragma once
+#ifndef INCLUDED_CPPUHELPER_WEAKREF_HXX
+#define INCLUDED_CPPUHELPER_WEAKREF_HXX
 
 #include "sal/config.h"
 
@@ -221,5 +222,7 @@ public:
 }
 }
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

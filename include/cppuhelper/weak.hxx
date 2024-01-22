@@ -20,7 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#pragma once
+#ifndef INCLUDED_CPPUHELPER_WEAK_HXX
+#define INCLUDED_CPPUHELPER_WEAK_HXX
 
 #include <cassert>
 #include <cstddef>
@@ -177,5 +178,7 @@ static inline css::uno::XWeak* getXWeak(OWeakObject* instance) { return instance
 /// @endcond
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
