@@ -1,30 +1,20 @@
 import os
 import hashlib
-import zipfile
-import tarfile
+import subprocess
+
+from path import convert_to_native
 
 
 def uncompress_file_to_dir(compressed_file, uncompress_dir):
-    extension = os.path.splitext(compressed_file)[1]
-
     os.makedirs(uncompress_dir, exist_ok=True)
 
-    if extension == '.gz':
-        with tarfile.open(compressed_file) as tar:
-            tar.extractall(uncompress_dir)
-    elif extension == '.zip':
-        with zipfile.ZipFile(compressed_file) as zip_file:
-            zip_file.extractall(uncompress_dir)
+    if subprocess.call([
+            'msiexec', '/a', convert_to_native(compressed_file).replace('/', '\\'),
+            '/quiet',
+            'TARGETDIR=' + convert_to_native(uncompress_dir).replace('/', '\\')]) != 0:
+        raise Exception(f'msiexec failed')
 
-        uncompress_dir = os.path.join(uncompress_dir, os.listdir(uncompress_dir)[0])
-        if " " in os.listdir(uncompress_dir)[0]:
-            print("replacing whitespace in directory name")
-            os.rename(os.path.join(uncompress_dir, os.listdir(uncompress_dir)[0]),
-                      os.path.join(uncompress_dir, os.listdir(uncompress_dir)[0].replace(" ", "_")))
-    else:
-        print("Error: unknown extension " + extension)
-
-    return os.path.join(uncompress_dir, os.listdir(uncompress_dir)[0])
+    return uncompress_dir
 
 
 BUF_SIZE = 1048576

@@ -42,16 +42,13 @@ create-update-info:
 	rm -rf $(UPDATE_DIR) || true
 	mkdir -p $(MAR_DIR)/language
 	MAR=$(INSTDIR)/program/mar $(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_full_mar.py),$(SRCDIR)/bin/update/create_full_mar.py) "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)'
-	$(if $(filter WNT,$(OS)),, \
-		MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)' \
-	)
 
 create-partial-info:
 	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
 	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
 	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
 	$(eval MAR_NAME_PREFIX := $(PRODUCTNAME)_$(VERSION)_$(PLATFORM)_$(BUILDID))
-	MBSDIFF=$(WORKDIR)/LinkTarget/Executable/mbsdiff MAR=$(INSTDIR)/program/mar $(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_partial_update.py),$(SRCDIR)/bin/update/create_partial_update.py) "$(WORKDIR)" "$(MAR_NAME_PREFIX)" LOOnlineUpdater "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" "$(PRODUCTNAME)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)' "$(ONLINEUPDATE_MAR_OLDARCHIVE)" "$(ONLINEUPDATE_MAR_OLDMETADATA)"
+	MBSDIFF=$(WORKDIR)/LinkTarget/Executable/mbsdiff MAR=$(INSTDIR)/program/mar $(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_partial_update.py),$(SRCDIR)/bin/update/create_partial_update.py) "$(WORKDIR)" "$(MAR_NAME_PREFIX)" LOOnlineUpdater "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" "$(PRODUCTNAME)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)' "$(ONLINEUPDATE_MAR_OLDMSI)"
 
 # also possible to bypass the dependencies/the gbuild processing by just running
 # LD_LIBRARY_PATH=instdir/program make cmd cmd='ALL_LANGS="$(ALL_LANGS)" workdir/LinkTarget/Executable/pocheck'
