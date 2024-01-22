@@ -2945,6 +2945,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
+    if (m_rView.GetPostItMgr()->IsHitSidebarDragArea(aMEvt.GetPosPixel()))
+    {
+        mbIsDragSidebar = true;
+        return;
+    }
+
     m_rView.GetPostItMgr()->SetActiveSidebarWin(nullptr);
 
     GrabFocus();
@@ -4061,6 +4067,11 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             return;
         }
     }
+    if (m_rView.GetPostItMgr()->IsHitSidebarDragArea(rMEvt.GetPosPixel()))
+    {
+        SetPointer(PointerStyle::HSizeBar);
+        return;
+    }
 
     //ignore key modifiers for format paintbrush
     {
@@ -4611,6 +4622,13 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             pWindow->MouseButtonUp(rMEvt);
             return;
         }
+    }
+
+    if (mbIsDragSidebar)
+    {
+        m_rView.GetPostItMgr()->SetSidebarWidth(rMEvt.GetPosPixel());
+        mbIsDragSidebar = false;
+        return;
     }
 
     bool bCallBase = true;
@@ -5412,6 +5430,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_bIsRowDrag(false),
     m_bUseInputLanguage(false),
     m_bObjectSelect(false),
+    mbIsDragSidebar(false),
     m_nKS_NUMDOWN_Count(0),
     m_nKS_NUMINDENTINC_Count(0),
     m_pFrameControlsManager(new SwFrameControlsManager(this))

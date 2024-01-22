@@ -150,7 +150,8 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool ShowScrollbar(const tools::ULong aPage) const;
         bool HasNotes() const ;
         bool ShowNotes() const;
-        void SetSidebarWidth(sal_uInt16 nPx);
+        void SetSidebarWidth(Point aPoint);
+        tools::Rectangle GetSidebarRect(const Point& rPointLogic);
         tools::ULong GetSidebarWidth(bool bPx = false) const;
         tools::ULong GetSidebarBorderWidth(bool bPx = false) const;
 
@@ -183,6 +184,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool IsHit(const Point &aPointPixel);
         /// Get the matching window that is responsible for handling mouse events of rPointLogic, if any.
         vcl::Window* IsHitSidebarWindow(const Point& rPointLogic);
+        bool IsHitSidebarDragArea(const Point& rPointLogic);
         Color GetArrowColor(sal_uInt16 aDirection, tools::ULong aPage) const;
 
         sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pField) const;

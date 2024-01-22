@@ -1979,32 +1979,25 @@ bool SwPostItMgr::ShowScrollbar(const tools::ULong aPage) const
         return false;
 }
 
-bool SwPostItMgr::IsHit(const Point &aPointPixel)
+bool SwPostItMgr::IsHit(const Point& aPointPixel)
 {
-    if (HasNotes() && ShowNotes())
-    {
-        const Point aPoint = mpEditWin->PixelToLogic(aPointPixel);
-        const SwRootFrame* pLayout = mpWrtShell->GetLayout();
-        SwRect aPageFrame;
-        const tools::ULong nPageNum = SwPostItHelper::getPageInfo( aPageFrame, pLayout, aPoint );
-        if( nPageNum )
-        {
-            tools::Rectangle aRect;
-            OSL_ENSURE(mPages.size()>nPageNum-1,"SwPostitMgr:: page container size wrong");
-            aRect = mPages[nPageNum-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
-                    ? tools::Rectangle(Point(aPageFrame.Left()-GetSidebarWidth()-GetSidebarBorderWidth(),aPageFrame.Top()),Size(GetSidebarWidth(),aPageFrame.Height()))
-                    : tools::Rectangle( Point(aPageFrame.Right()+GetSidebarBorderWidth(),aPageFrame.Top()) , Size(GetSidebarWidth(),aPageFrame.Height()));
-            if (aRect.Contains(aPoint))
-            {
-                // we hit the note's sidebar
-                // lets now test for the arrow area
-                if (mPages[nPageNum-1]->bScrollbar)
-                    return ScrollbarHit(nPageNum,aPoint);
-                else
-                    return false;
-            }
-        }
-    }
+    if (!HasNotes() || !ShowNotes())
+        return false;
+
+    const Point aPoint = mpEditWin->PixelToLogic(aPointPixel);
+    tools::Rectangle aRect(GetSidebarRect(aPoint));
+    if (!aRect.Contains(aPoint))
+        return false;
+
+    // we hit the note's sidebar
+    // lets now test for the arrow area
+    SwRect aPageFrame;
+    const tools::ULong nPageNum
+        = SwPostItHelper::getPageInfo(aPageFrame, mpWrtShell->GetLayout(), aPoint);
+    if (!nPageNum)
+        return false;
+    if (mPages[nPageNum - 1]->bScrollbar)
+        return ScrollbarHit(nPageNum, aPoint);
     return false;
 }
 
@@ -2036,6 +2029,38 @@ vcl::Window* SwPostItMgr::IsHitSidebarWindow(const Point& rPointLogic)
     }
 
     return pRet;
+}
+
+tools::Rectangle SwPostItMgr::GetSidebarRect(const Point& rPointLogic)
+{
+    const SwRootFrame* pLayout = mpWrtShell->GetLayout();
+    SwRect aPageFrame;
+    const tools::ULong nPageNum = SwPostItHelper::getPageInfo(aPageFrame, pLayout, rPointLogic);
+    if (!nPageNum)
+        return tools::Rectangle();
+
+    OSL_ENSURE(mPages.size() > nPageNum - 1, "SwPostitMgr:: page container size wrong");
+    return mPages[nPageNum - 1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
+               ? tools::Rectangle(
+                     Point(aPageFrame.Left() - GetSidebarWidth() - GetSidebarBorderWidth(),
+                           aPageFrame.Top()),
+                     Size(GetSidebarWidth(), aPageFrame.Height()))
+               : tools::Rectangle(
+                     Point(aPageFrame.Right() + GetSidebarBorderWidth(), aPageFrame.Top()),
+                     Size(GetSidebarWidth(), aPageFrame.Height()));
+}
+
+bool SwPostItMgr::IsHitSidebarDragArea(const Point& rPointPx)
+{
+    if (!HasNotes() || !ShowNotes())
+        return false;
+    const Point aPoint = mpEditWin->PixelToLogic(rPointPx);
+    tools::Rectangle aDragArea(GetSidebarRect(aPoint));
+    aDragArea.SetPos(Point(aDragArea.TopRight().X() - 50, aDragArea.TopRight().Y()));
+    Size aS(aDragArea.GetSize());
+    aS.setWidth(100);
+    aDragArea.SetSize(aS);
+    return aDragArea.Contains(aPoint);
 }
 
 tools::Rectangle SwPostItMgr::GetBottomScrollRect(const tools::ULong aPage) const
@@ -2151,12 +2176,15 @@ bool SwPostItMgr::HasNotes() const
     return !mvPostItFields.empty();
 }
 
-void SwPostItMgr::SetSidebarWidth(sal_uInt16 nPx)
+void SwPostItMgr::SetSidebarWidth(Point aMousePos)
 {
     sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
-    double nFactor = static_cast<double>(nPx) /  static_cast<double>(nZoom);
+    sal_uInt16 nPxWidth
+        = aMousePos.X() - mpEditWin->LogicToPixel(GetSidebarRect(aMousePos).TopLeft()).X();
+    double nFactor = static_cast<double>(nPxWidth) / static_cast<double>(nZoom);
     nFactor = std::clamp(nFactor, 1.0, 8.0);
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Writer::Notes::DisplayWidthFactor::set(nFactor, xChanges);
     xChanges->commit();
     LayoutPostIts();

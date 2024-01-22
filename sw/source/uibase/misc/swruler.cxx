@@ -257,8 +257,7 @@ void SwCommentRuler::MouseButtonUp(const MouseEvent& rMEvt)
         SvxRuler::MouseButtonUp(rMEvt);
         return;
     }
-    mpViewShell->GetPostItMgr()->SetSidebarWidth(rMEvt.GetPosPixel().X()
-                                                 - GetCommentControlRegion().TopLeft().X());
+    mpViewShell->GetPostItMgr()->SetSidebarWidth(rMEvt.GetPosPixel());
     mbIsDrag = false;
     Invalidate();
 }
