@@ -2321,7 +2321,7 @@ void ScViewFunc::SetWidthOrHeight(
                     Fraction aZoomX = GetViewData().GetZoomX();
                     Fraction aZoomY = GetViewData().GetZoomY();
 
-                    ScSizeDeviceProvider aProv(pDocSh);
+                    ScSizeDeviceProvider aProv(pDocSh, comphelper::LibreOfficeKit::isActive() /* bForceOwnDevice */);
                     if (aProv.IsPrinter())
                     {
                         nPPTX = aProv.GetPPTX();

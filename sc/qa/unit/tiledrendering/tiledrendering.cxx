@@ -57,6 +57,7 @@
 #include <drwlayer.hxx>
 #include <editutil.hxx>
 #include <undomanager.hxx>
+#include <columnspanset.hxx>
 
 using namespace css;
 
@@ -175,6 +176,7 @@ public:
     void testNoInvalidateOnSave();
     void testCellMinimalInvalidations();
     void testCellInvalidationDocWithExistingZoom();
+    void testOptimalRowHeight();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -252,6 +254,7 @@ public:
     CPPUNIT_TEST(testNoInvalidateOnSave);
     CPPUNIT_TEST(testCellMinimalInvalidations);
     CPPUNIT_TEST(testCellInvalidationDocWithExistingZoom);
+    CPPUNIT_TEST(testOptimalRowHeight);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3884,6 +3887,34 @@ void ScTiledRenderingTest::testCellInvalidationDocWithExistingZoom()
                                           aView2.m_aInvalidations[0],
                                           aView1.m_aInvalidations[0],
                                           50);
+}
+
+void ScTiledRenderingTest::testOptimalRowHeight()
+{
+    ScModelObj* pModelObj = createDoc("rowheight.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 82545, 22290, 7380));
+    pModelObj->setClientZoom(256, 256, 3072, 3072);
+    Scheduler::ProcessEventsToIdle();
+
+    constexpr SCROW nRow = 305;
+    pView->SetCursor(0, nRow);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Before setOptimalHeight: Row#306 height is invalid!", sal_uInt16(300), pDoc->GetRowHeight(nRow, 0));
+
+    std::vector<sc::ColRowSpan> aRowArr(1, sc::ColRowSpan(nRow, nRow));
+    pView->SetWidthOrHeight(false, aRowArr, SC_SIZE_OPTIMAL, 0);
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("After setOptimalHeight: Row#306 height is invalid!", sal_uInt16(504), pDoc->GetRowHeight(nRow, 0));
 }
 
 }

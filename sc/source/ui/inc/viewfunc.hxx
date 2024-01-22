@@ -208,7 +208,7 @@ public:
 
     void            DeleteContents( InsertDeleteFlags nFlags );
 
-    void SetWidthOrHeight(
+    SC_DLLPUBLIC void SetWidthOrHeight(
         bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
         sal_uInt16 nSizeTwips, bool bRecord = true, const ScMarkData* pMarkData = nullptr );
 

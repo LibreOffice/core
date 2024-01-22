@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tiledrendering, \
 $(eval $(call gb_CppunitTest_use_externals,sc_tiledrendering,\
     boost_headers \
     libxml2 \
+    mdds_headers \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_tiledrendering,\

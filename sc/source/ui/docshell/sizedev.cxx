@@ -25,10 +25,10 @@
 #include <scmod.hxx>
 #include <inputopt.hxx>
 
-ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
+ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh, bool bForceOwnDevice )
 {
     bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
-    if ( bTextWysiwyg )
+    if ( bTextWysiwyg && !bForceOwnDevice)
     {
         pDevice = pDocSh->GetPrinter();
         bOwner = false;
