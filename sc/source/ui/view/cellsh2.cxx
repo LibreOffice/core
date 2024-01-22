@@ -355,10 +355,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(
+                VclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(
                     pTabViewShell->GetFrameWeld(), pTabViewShell));
-
-                pDlg->Execute();
+                pDlg->StartExecuteAsync(
+                    [pDlg] (sal_Int32 /*nResult*/)->void
+                    {
+                        pDlg->disposeOnce();
+                    }
+                );
 
                 rReq.Done();
             }

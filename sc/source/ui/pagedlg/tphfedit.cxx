@@ -189,21 +189,26 @@ void ScEditWindow::SetCharAttributes()
 
     if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(true);
 
-    SfxItemSet aSet( m_xEditView->GetAttribs() );
+    std::shared_ptr<SfxItemSet> xSet = std::make_shared<SfxItemSet>( m_xEditView->GetAttribs() );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-        mpDialog,  &aSet, pDocSh, false));
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
+        mpDialog,  xSet.get(), pDocSh, false));
     pDlg->SetText( ScResId( STR_TEXTATTRS ) );
-    if ( pDlg->Execute() == RET_OK )
-    {
-        aSet.ClearItem();
-        aSet.Put( *pDlg->GetOutputItemSet() );
-        m_xEditView->SetAttribs( aSet );
-    }
-
-    if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(false);
+    pDlg->StartExecuteAsync(
+        [this, pDlg, pTabViewSh, xSet] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                xSet->ClearItem();
+                xSet->Put( *pDlg->GetOutputItemSet() );
+                m_xEditView->SetAttribs( *xSet );
+            }
+            pDlg->disposeOnce();
+            if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(false);
+        }
+    );
 }
 
 bool ScEditWindow::KeyInput( const KeyEvent& rKEvt )

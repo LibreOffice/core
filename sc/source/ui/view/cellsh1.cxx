@@ -1213,13 +1213,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pTabViewShell->HasSelectionForDrillDown( nOrientation ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        ScopedVclPtr<AbstractScDPShowDetailDlg> pDlg( pFact->CreateScDPShowDetailDlg(
+                        VclPtr<AbstractScDPShowDetailDlg> pDlg( pFact->CreateScDPShowDetailDlg(
                             pTabViewShell->GetFrameWeld(), *pDPObj, nOrientation ) );
-                        if ( pDlg->Execute() == RET_OK )
-                        {
-                            OUString aNewDimName( pDlg->GetDimensionName() );
-                            pTabViewShell->SetDataPilotDetails( true, &aNewDimName );
-                        }
+                        pDlg->StartExecuteAsync(
+                            [pDlg, pTabViewShell] (sal_Int32 nResult)->void
+                            {
+                                if (nResult == RET_OK)
+                                {
+                                    OUString aNewDimName( pDlg->GetDimensionName() );
+                                    pTabViewShell->SetDataPilotDetails( true, &aNewDimName );
+                                }
+                                pDlg->disposeOnce();
+                            }
+                        );
                     }
                     else if ( !pDPObj->IsServiceData() &&
                                pDPObj->GetDataFieldPositionData(
@@ -1252,22 +1258,31 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         const Date& rNullDate( GetViewData().GetDocument().GetFormatTable()->GetNullDate() );
-                        ScopedVclPtr<AbstractScDPDateGroupDlg> pDlg( pFact->CreateScDPDateGroupDlg(
+                        VclPtr<AbstractScDPDateGroupDlg> pDlg( pFact->CreateScDPDateGroupDlg(
                             pTabViewShell->GetFrameWeld(),
                             aNumInfo, nParts, rNullDate ) );
-                        if( pDlg->Execute() == RET_OK )
-                        {
-                            aNumInfo = pDlg->GetGroupInfo();
-                            pTabViewShell->DateGroupDataPilot( aNumInfo, pDlg->GetDatePart() );
-                        }
+                        pDlg->StartExecuteAsync(
+                            [pDlg, pTabViewShell] (sal_Int32 nResult)->void
+                            {
+                                if (nResult == RET_OK)
+                                    pTabViewShell->DateGroupDataPilot( pDlg->GetGroupInfo(), pDlg->GetDatePart() );
+                                pDlg->disposeOnce();
+                            }
+                        );
                     }
                     else if ( pTabViewShell->HasSelectionForNumGroup( aNumInfo ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        ScopedVclPtr<AbstractScDPNumGroupDlg> pDlg( pFact->CreateScDPNumGroupDlg(
+                        VclPtr<AbstractScDPNumGroupDlg> pDlg( pFact->CreateScDPNumGroupDlg(
                             pTabViewShell->GetFrameWeld(), aNumInfo ) );
-                        if( pDlg->Execute() == RET_OK )
-                            pTabViewShell->NumGroupDataPilot( pDlg->GetGroupInfo() );
+                        pDlg->StartExecuteAsync(
+                            [pDlg, pTabViewShell] (sal_Int32 nResult)->void
+                            {
+                                if (nResult == RET_OK)
+                                    pTabViewShell->NumGroupDataPilot( pDlg->GetGroupInfo() );
+                                pDlg->disposeOnce();
+                            }
+                        );
                     }
                     else
                         pTabViewShell->GroupDataPilot();
@@ -1719,14 +1734,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAddress aCellPos(nPosX, nPosY, GetViewData().GetTabNo());
                     auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
                     pObj->SetOverwriting(true);
-                    if (pDlg->Execute()) {
-                        ScAsciiOptions aOptions;
-                        pDlg->GetOptions(aOptions);
-                        pDlg->SaveParameters();
-                        pObj->SetExtOptions(aOptions);
-                        pObj->ImportString(sStrBuffer, format);
-                    }
-                    pDlg->disposeOnce();
+                    pDlg->StartExecuteAsync(
+                        [pDlg, pObj, sStrBuffer, format] (sal_Int32 nResult)->void
+                        {
+                            if (nResult)
+                            {
+                                ScAsciiOptions aOptions;
+                                pDlg->GetOptions(aOptions);
+                                pDlg->SaveParameters();
+                                pObj->SetExtOptions(aOptions);
+                                pObj->ImportString(sStrBuffer, format);
+                            }
+                            pDlg->disposeOnce();
+                        }
+                    );
                     rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success, 0 = fail
                     rReq.Done();
                 }

@@ -557,20 +557,25 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     weld::Window* pWin = rViewData.GetDialogParent();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(pWin, &aNewAttr, pView));
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(pWin, &aNewAttr, pView));
 
-    sal_uInt16 nResult = pDlg->Execute();
+    pDlg->StartExecuteAsync(
+        [pDlg, bHasMarked, pView] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                if ( bHasMarked )
+                    pView->SetAttributes( *pDlg->GetOutputItemSet() );
+                else
+                    pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
-    if ( RET_OK == nResult )
-    {
-        if ( bHasMarked )
-            pView->SetAttributes( *pDlg->GetOutputItemSet() );
-        else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
+                pView->InvalidateAttribs();
+            }
+            pDlg->disposeOnce();
+        }
+    );
 
-        pView->InvalidateAttribs();
-        rReq.Done();
-    }
+    rReq.Done();
 }
 
 void ScDrawShell::ExecuteMeasureDlg( SfxRequest& rReq )
@@ -584,20 +589,25 @@ void ScDrawShell::ExecuteMeasureDlg( SfxRequest& rReq )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     weld::Window* pWin = rViewData.GetDialogParent();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog(pWin, aNewAttr, pView, RID_SVXPAGE_MEASURE));
+    VclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog(pWin, aNewAttr, pView, RID_SVXPAGE_MEASURE));
 
-    sal_uInt16 nResult = pDlg->Execute();
+    pDlg->StartExecuteAsync(
+        [pDlg, bHasMarked, pView] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                if ( bHasMarked )
+                    pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
+                else
+                    pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
-    if ( RET_OK == nResult )
-    {
-        if ( bHasMarked )
-            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
-        else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
+                pView->InvalidateAttribs();
+            }
+            pDlg->disposeOnce();
+        }
+    );
 
-        pView->InvalidateAttribs();
-        rReq.Done();
-    }
+    rReq.Done();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
