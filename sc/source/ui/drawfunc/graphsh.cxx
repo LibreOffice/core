@@ -111,27 +111,22 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
         if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
             if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             {
-                GraphicObject aFilterObj( pGraphicObj->GetGraphicObject() );
-
-                if( SvxGraphicFilterResult::NONE ==
-                    SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
-                {
-                    SdrPageView* pPageView = pView->GetSdrPageView();
-
-                    if( pPageView )
+                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, pGraphicObj->GetGraphicObject(),
+                    [this, pView, pGraphicObj, pObj] (GraphicObject aFilterObj) -> void
                     {
-                        rtl::Reference<SdrGrafObj> pFilteredObj = SdrObject::Clone(*pGraphicObj, pGraphicObj->getSdrModelFromSdrObject());
-                        OUString    aStr = pView->GetDescriptionOfMarkedObjects() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
-                        pView->BegUndo( aStr );
-                        pFilteredObj->SetGraphicObject( aFilterObj );
-                        pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj.get() );
-                        pView->EndUndo();
-                    }
-                }
+                        if( SdrPageView* pPageView = pView->GetSdrPageView() )
+                        {
+                            rtl::Reference<SdrGrafObj> pFilteredObj = SdrObject::Clone(*pGraphicObj, pGraphicObj->getSdrModelFromSdrObject());
+                            OUString aStr = pView->GetDescriptionOfMarkedObjects() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
+                            pView->BegUndo( aStr );
+                            pFilteredObj->SetGraphicObject( aFilterObj );
+                            pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj.get() );
+                            pView->EndUndo();
+                        }
+                        Invalidate();
+                    });
             }
     }
-
-    Invalidate();
 }
 
 void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )

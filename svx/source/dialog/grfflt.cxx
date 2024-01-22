@@ -33,224 +33,247 @@
 #include <svx/svxdlg.hxx>
 
 
-SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq, GraphicObject& rFilterObject )
+static void handleGraphicFilterDialog(const VclPtr<AbstractGraphicFilterDialog>& pDlg,
+        const Graphic& aInputGraphic,
+        std::function<void(GraphicObject)> f);
+
+void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
+                        const GraphicObject& rInputObject,
+                        std::function<void(GraphicObject)> f)
 {
-    const Graphic&  rGraphic = rFilterObject.GetGraphic();
-    SvxGraphicFilterResult nRet = SvxGraphicFilterResult::UnsupportedGraphicType;
+    Graphic aInputGraphic = rInputObject.GetGraphic();
 
-    if( rGraphic.GetType() == GraphicType::Bitmap )
+    if( aInputGraphic.GetType() != GraphicType::Bitmap )
+        return;
+
+    SfxViewFrame*   pViewFrame = SfxViewFrame::Current();
+    SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : nullptr;
+    weld::Window*   pFrameWeld = (pViewFrame && pViewFrame->GetViewShell()) ? pViewFrame->GetViewShell()->GetFrameWeld() : nullptr;
+
+    switch( rReq.GetSlot() )
     {
-        SfxViewFrame*   pViewFrame = SfxViewFrame::Current();
-        SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : nullptr;
-        weld::Window*   pFrameWeld = (pViewFrame && pViewFrame->GetViewShell()) ? pViewFrame->GetViewShell()->GetFrameWeld() : nullptr;
-        Graphic         aGraphic;
-
-        switch( rReq.GetSlot() )
+        case SID_GRFFILTER_INVERT:
         {
-            case SID_GRFFILTER_INVERT:
+            Graphic aOutputGraphic;
+
+            if( pShell )
+                pShell->SetWaitCursor( true );
+
+            if( aInputGraphic.IsAnimated() )
             {
-                if( pShell )
-                    pShell->SetWaitCursor( true );
+                Animation aAnimation( aInputGraphic.GetAnimation() );
 
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if( aAnimation.Invert() )
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if( aBmpEx.Invert() )
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( false );
+                if( aAnimation.Invert() )
+                    aOutputGraphic = aAnimation;
             }
-            break;
-
-            case SID_GRFFILTER_SMOOTH:
+            else
             {
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSmooth(pFrameWeld, rGraphic, 0.7));
-                if( aDlg->Execute() == RET_OK )
-                    aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
+                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
 
-            case SID_GRFFILTER_SHARPEN:
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( true );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if (BitmapFilter::Filter(aAnimation, BitmapSharpenFilter()))
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if (BitmapFilter::Filter(aBmpEx, BitmapSharpenFilter()))
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( false );
-            }
-            break;
-
-            case SID_GRFFILTER_REMOVENOISE:
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( true );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if (BitmapFilter::Filter(aAnimation, BitmapMedianFilter()))
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if (BitmapFilter::Filter(aBmpEx, BitmapMedianFilter()))
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( false );
-            }
-            break;
-
-            case SID_GRFFILTER_SOBEL:
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( true );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if (BitmapFilter::Filter(aAnimation, BitmapSobelGreyFilter()))
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if (BitmapFilter::Filter(aBmpEx, BitmapSobelGreyFilter()))
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( false );
-            }
-            break;
-
-            case SID_GRFFILTER_MOSAIC:
-            {
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterMosaic(pFrameWeld, rGraphic));
-                if( aDlg->Execute() == RET_OK )
-                    aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case SID_GRFFILTER_EMBOSS:
-            {
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterEmboss(pFrameWeld, rGraphic));
-                if( aDlg->Execute() == RET_OK )
-                    aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case SID_GRFFILTER_POSTER:
-            {
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterPoster(pFrameWeld, rGraphic));
-                if( aDlg->Execute() == RET_OK )
-                    aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case SID_GRFFILTER_POPART:
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( true );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if (BitmapFilter::Filter(aAnimation, BitmapPopArtFilter()))
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if (BitmapFilter::Filter(aBmpEx, BitmapPopArtFilter()))
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( false );
-            }
-            break;
-
-            case SID_GRFFILTER_SEPIA:
-            {
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSepia(pFrameWeld, rGraphic));
-                if( aDlg->Execute() == RET_OK )
-                    aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case SID_GRFFILTER_SOLARIZE:
-            {
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSolarize(pFrameWeld, rGraphic));
-                if( aDlg->Execute() == RET_OK )
-                    aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case SID_GRFFILTER :
-            {
-                // do nothing; no error
-                nRet = SvxGraphicFilterResult::NONE;
-                break;
+                if( aBmpEx.Invert() )
+                    aOutputGraphic = aBmpEx;
             }
 
-            default:
+            if( pShell )
+                pShell->SetWaitCursor( false );
+
+            if( aOutputGraphic.GetType() != GraphicType::NONE )
+                f(aOutputGraphic);
+        }
+        break;
+
+        case SID_GRFFILTER_SMOOTH:
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            handleGraphicFilterDialog(pFact->CreateGraphicFilterSmooth(pFrameWeld, aInputGraphic, 0.7), aInputGraphic, f);
+        }
+        break;
+
+        case SID_GRFFILTER_SHARPEN:
+        {
+            Graphic aOutputGraphic;
+
+            if( pShell )
+                pShell->SetWaitCursor( true );
+
+            if( aInputGraphic.IsAnimated() )
             {
-                OSL_FAIL( "SvxGraphicFilter: selected filter slot not yet implemented" );
-                nRet = SvxGraphicFilterResult::UnsupportedSlot;
+                Animation aAnimation( aInputGraphic.GetAnimation() );
+
+                if (BitmapFilter::Filter(aAnimation, BitmapSharpenFilter()))
+                    aOutputGraphic = aAnimation;
             }
-            break;
+            else
+            {
+                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+
+                if (BitmapFilter::Filter(aBmpEx, BitmapSharpenFilter()))
+                    aOutputGraphic = aBmpEx;
+            }
+
+            if( pShell )
+                pShell->SetWaitCursor( false );
+
+            if( aOutputGraphic.GetType() != GraphicType::NONE )
+                f(aOutputGraphic);
+        }
+        break;
+
+        case SID_GRFFILTER_REMOVENOISE:
+        {
+            Graphic aOutputGraphic;
+
+            if( pShell )
+                pShell->SetWaitCursor( true );
+
+            if( aInputGraphic.IsAnimated() )
+            {
+                Animation aAnimation( aInputGraphic.GetAnimation() );
+
+                if (BitmapFilter::Filter(aAnimation, BitmapMedianFilter()))
+                    aOutputGraphic = aAnimation;
+            }
+            else
+            {
+                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+
+                if (BitmapFilter::Filter(aBmpEx, BitmapMedianFilter()))
+                    aOutputGraphic = aBmpEx;
+            }
+
+            if( pShell )
+                pShell->SetWaitCursor( false );
+
+            if( aOutputGraphic.GetType() != GraphicType::NONE )
+                f(aOutputGraphic);
+        }
+        break;
+
+        case SID_GRFFILTER_SOBEL:
+        {
+            Graphic aOutputGraphic;
+
+            if( pShell )
+                pShell->SetWaitCursor( true );
+
+            if( aInputGraphic.IsAnimated() )
+            {
+                Animation aAnimation( aInputGraphic.GetAnimation() );
+
+                if (BitmapFilter::Filter(aAnimation, BitmapSobelGreyFilter()))
+                    aOutputGraphic = aAnimation;
+            }
+            else
+            {
+                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+
+                if (BitmapFilter::Filter(aBmpEx, BitmapSobelGreyFilter()))
+                    aOutputGraphic = aBmpEx;
+            }
+
+            if( pShell )
+                pShell->SetWaitCursor( false );
+
+            if( aOutputGraphic.GetType() != GraphicType::NONE )
+                f(aOutputGraphic);
+        }
+        break;
+
+        case SID_GRFFILTER_MOSAIC:
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            handleGraphicFilterDialog(pFact->CreateGraphicFilterMosaic(pFrameWeld, aInputGraphic), aInputGraphic, f);
+        }
+        break;
+
+        case SID_GRFFILTER_EMBOSS:
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            handleGraphicFilterDialog(pFact->CreateGraphicFilterEmboss(pFrameWeld, aInputGraphic), aInputGraphic, f);
+        }
+        break;
+
+        case SID_GRFFILTER_POSTER:
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            handleGraphicFilterDialog(pFact->CreateGraphicFilterPoster(pFrameWeld, aInputGraphic), aInputGraphic, f);
+        }
+        break;
+
+        case SID_GRFFILTER_POPART:
+        {
+            Graphic aOutputGraphic;
+
+            if( pShell )
+                pShell->SetWaitCursor( true );
+
+            if( aInputGraphic.IsAnimated() )
+            {
+                Animation aAnimation( aInputGraphic.GetAnimation() );
+
+                if (BitmapFilter::Filter(aAnimation, BitmapPopArtFilter()))
+                    aOutputGraphic = aAnimation;
+            }
+            else
+            {
+                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+
+                if (BitmapFilter::Filter(aBmpEx, BitmapPopArtFilter()))
+                    aOutputGraphic = aBmpEx;
+            }
+
+            if( pShell )
+                pShell->SetWaitCursor( false );
+
+            if( aOutputGraphic.GetType() != GraphicType::NONE )
+                f(aOutputGraphic);
+        }
+        break;
+
+        case SID_GRFFILTER_SEPIA:
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            handleGraphicFilterDialog(pFact->CreateGraphicFilterSepia(pFrameWeld, aInputGraphic), aInputGraphic, f);
+        }
+        break;
+
+        case SID_GRFFILTER_SOLARIZE:
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            handleGraphicFilterDialog(pFact->CreateGraphicFilterSolarize(pFrameWeld, aInputGraphic), aInputGraphic, f);
+        }
+        break;
+
+        case SID_GRFFILTER :
+        {
+            // do nothing; no error
+            return;
         }
 
-        if( aGraphic.GetType() != GraphicType::NONE )
+        default:
         {
-            rFilterObject.SetGraphic( aGraphic );
-            nRet = SvxGraphicFilterResult::NONE;
+            OSL_FAIL( "SvxGraphicFilter: selected filter slot not yet implemented" );
+            return;
         }
     }
-
-    return nRet;
 }
 
+static void handleGraphicFilterDialog(const VclPtr<AbstractGraphicFilterDialog>& pDlg,
+        const Graphic& aInputGraphic,
+        std::function<void(GraphicObject)> f)
+{
+    pDlg->StartExecuteAsync(
+        [pDlg, aInputGraphic, f] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                Graphic aOutputGraphic = pDlg->GetFilteredGraphic( aInputGraphic, 1.0, 1.0 );
+                f(aOutputGraphic);
+            }
+            pDlg->disposeOnce();
+        }
+    );
+}
 
 void SvxGraphicFilter::DisableGraphicFilterSlots( SfxItemSet& rSet )
 {

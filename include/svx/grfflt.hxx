@@ -22,10 +22,6 @@
 
 #include <svx/svxdllapi.h>
 
-enum class SvxGraphicFilterResult {
-    NONE, UnsupportedGraphicType, UnsupportedSlot
-};
-
 class GraphicObject;
 class SfxRequest;
 class SfxItemSet;
@@ -34,7 +30,9 @@ class SVX_DLLPUBLIC SvxGraphicFilter
 {
 public:
 
-    static SvxGraphicFilterResult ExecuteGrfFilterSlot( SfxRequest const & rReq, GraphicObject& rFilterObject );
+    /// this will execute a dialog and then call function f with the output of the filtering operation
+    static void     ExecuteGrfFilterSlot( SfxRequest const & rReq, const GraphicObject& rInputObject,
+                        std::function<void(GraphicObject)> f);
     static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
 };
 

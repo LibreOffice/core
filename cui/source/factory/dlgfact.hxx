@@ -329,7 +329,7 @@ DECL_ABSTDLG_CLASS(AbstractFmSearchDialog,FmSearchDialog)
 };
 
 // AbstractGraphicFilterDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractGraphicFilterDialog,GraphicFilterDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractGraphicFilterDialog,GraphicFilterDialog)
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 

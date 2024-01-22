@@ -689,11 +689,12 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
                 const GraphicObject* pFilterObj( GetShell().GetGraphicObj() );
                 if ( pFilterObj )
                 {
-                    GraphicObject aFilterObj( *pFilterObj );
-                    if( SvxGraphicFilterResult::NONE ==
-                        SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ))
-                        GetShell().ReRead( OUString(), OUString(),
-                                           &aFilterObj.GetGraphic() );
+                    SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, *pFilterObj,
+                        [this] (GraphicObject aFilteredObject) -> void
+                        {
+                            GetShell().ReRead( OUString(), OUString(),
+                                               &aFilteredObject.GetGraphic() );
+                        });
                 }
             }
             break;
