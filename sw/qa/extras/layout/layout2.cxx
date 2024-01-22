@@ -2918,6 +2918,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf156725)
                 "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column[2]/body/txt", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf159259)
+{
+    // Given a document with a block sdt with a single field, having framePr aligned to right
+    createSwDoc("sdt+framePr.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Make sure there is only one page and one paragraph with one line and one anchored object
+    assertXPath(pXmlDoc, "/root/page", 1);
+    // Without the fix, this would fail: there were two paragraphs
+    assertXPath(pXmlDoc, "/root/page/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion", 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout", 1);
+    // Without the fix, this would fail: there was a field portion in the line
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion", 0);
+    // Without the fix, this would fail: there was no anchored objects
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored", 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly", 1);
+
+    const sal_Int32 paraRight
+        = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds", "right").toInt32();
+    const sal_Int32 paraHeight
+        = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds", "height").toInt32();
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), paraRight);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), paraHeight);
+
+    const sal_Int32 flyRight
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "right").toInt32();
+    const sal_Int32 flyHeight
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32();
+
+    CPPUNIT_ASSERT_EQUAL(paraRight, flyRight); // The fly is right-aligned
+    CPPUNIT_ASSERT_EQUAL(paraHeight, flyHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

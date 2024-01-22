@@ -4362,14 +4362,24 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             }
             else if (m_pImpl->IsOpenFieldCommand() && !m_pImpl->IsForceGenericFields())
             {
-                if (bInSdtBlockText && m_pImpl->m_pSdtHelper->hasUnusedText())
-                    m_pImpl->m_pSdtHelper->createPlainTextControl();
+                if (bInSdtBlockText)
+                {
+                    if (m_pImpl->m_pSdtHelper->hasUnusedText())
+                        m_pImpl->m_pSdtHelper->createPlainTextControl();
+                    else if (!m_pImpl->m_pSdtHelper->isFieldStartRangeSet())
+                        m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
+                }
                 m_pImpl->AppendFieldCommand(sText);
             }
             else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
             {
-                if (bInSdtBlockText && m_pImpl->m_pSdtHelper->hasUnusedText())
-                    m_pImpl->m_pSdtHelper->createPlainTextControl();
+                if (bInSdtBlockText)
+                {
+                    if (m_pImpl->m_pSdtHelper->hasUnusedText())
+                        m_pImpl->m_pSdtHelper->createPlainTextControl();
+                    else if (!m_pImpl->m_pSdtHelper->isFieldStartRangeSet())
+                        m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
+                }
                 /*depending on the success of the field insert operation this result will be
                   set at the field or directly inserted into the text*/
                 m_pImpl->AppendFieldResult(sText);
