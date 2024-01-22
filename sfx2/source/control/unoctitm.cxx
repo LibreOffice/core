@@ -670,7 +670,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                         {
                             if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(aItem.getItem()))
                                 bSuccess = pBoolItem->GetValue();
-                            else if ( !aItem.getItem()->isVoidItem() )
+                            else if ( !IsDisabledItem(aItem.getItem()) )
                                 bSuccess = true;  // all other types are true
                         }
                         // else bSuccess = false look to line 664 it is false
@@ -733,7 +733,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         aEvent.State = css::frame::DispatchResultState::FAILURE;
 
     aEvent.Source = static_cast<css::frame::XDispatch*>(pDispatch);
-    if ( bSuccess && aItem && !aItem.getItem()->isVoidItem() )
+    if ( bSuccess && aItem && !IsDisabledItem(aItem.getItem()) )
     {
         sal_uInt16 nSubId( 0 );
         if ( eMapUnit == MapUnit::MapTwip )
@@ -834,7 +834,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         return;
 
     css::uno::Any aState;
-    if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && !pState->isVoidItem() )
+    if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && !IsDisabledItem(pState) )
     {
         // Retrieve metric from pool to have correct sub ID when calling QueryValue
         sal_uInt16     nSubId( 0 );

@@ -494,7 +494,6 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 #ifdef DBG_UTIL
     , m_nSerialNumber(nUsedSfxPoolItemCount)
 #endif
-    , m_bIsVoidItem(false)
     , m_bStaticDefault(false)
     , m_bPoolDefault(false)
     , m_bIsSetItem(false)
@@ -642,7 +641,7 @@ bool SfxPoolItem::areSame(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2)
 {
     if (pItem1 == pItem2)
         // pointer compare, this handles already
-        // nullptr, INVALID_POOL_ITEM, SfxVoidItem
+        // nullptr, INVALID_POOL_ITEM, DISABLED_POOL_ITEM
         // and if any Item is indeed handed over twice
         return true;
 
@@ -689,14 +688,16 @@ bool SfxPoolItem::areSame(const SfxPoolItem& rItem1, const SfxPoolItem& rItem2)
 
 namespace
 {
-class InvalidItem final : public SfxPoolItem
+class InvalidOrDisabledItem final : public SfxPoolItem
 {
     virtual bool operator==(const SfxPoolItem&) const override { return true; }
     virtual SfxPoolItem* Clone(SfxItemPool*) const override { return nullptr; }
 };
-InvalidItem aInvalidItem;
+InvalidOrDisabledItem aInvalidItem;
+InvalidOrDisabledItem aDisabledItem;
 }
 
 SfxPoolItem const* const INVALID_POOL_ITEM = &aInvalidItem;
+SfxPoolItem const* const DISABLED_POOL_ITEM = &aDisabledItem;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

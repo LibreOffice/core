@@ -25,19 +25,16 @@ SfxPoolItem* SfxVoidItem::CreateDefault() { return new SfxVoidItem(0); }
 SfxVoidItem::SfxVoidItem(sal_uInt16 which)
     : SfxPoolItem(which)
 {
-    setIsVoidItem();
 }
 
 SfxVoidItem::SfxVoidItem(const SfxVoidItem& rCopy)
     : SfxPoolItem(rCopy.Which())
 {
-    setIsVoidItem();
 }
 
 SfxVoidItem::SfxVoidItem(SfxVoidItem&& rOrig)
     : SfxPoolItem(rOrig)
 {
-    setIsVoidItem();
 }
 
 bool SfxVoidItem::operator==(const SfxPoolItem& rCmp) const

@@ -590,7 +590,7 @@ bool SfxObjectShell::PrepareClose
                 aPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
 
-            if (!aPoolItem || aPoolItem.getItem()->isVoidItem() )
+            if (!aPoolItem || IsDisabledItem(aPoolItem.getItem()) )
                 return false;
             if ( auto pBoolItem = dynamic_cast< const SfxBoolItem *>( aPoolItem.getItem() ) )
                 if ( !pBoolItem->GetValue() )

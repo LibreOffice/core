@@ -246,9 +246,9 @@ public:
     { return HasItem(sal_uInt16(nWhich), reinterpret_cast<const SfxPoolItem**>(ppItem)); }
 
     void DisableItem(sal_uInt16 nWhich)
-        { DisableItem_ForWhichID(nWhich); }
+        { DisableOrInvalidateItem_ForWhichID(true, nWhich); }
     void InvalidateItem(sal_uInt16 nWhich)
-        { InvalidateItem_ForWhichID(nWhich); }
+        { DisableOrInvalidateItem_ForWhichID(false, nWhich); }
     sal_uInt16                  ClearItem( sal_uInt16 nWhich = 0);
     void                        ClearInvalidItems();
     void                        InvalidateAllItems(); // HACK(via nWhich = 0) ???
@@ -315,10 +315,8 @@ private:
     void MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2, bool bIgnoreDefaults);
 
     // split version(s) of InvalidateItem/DisableItem for input types WhichID and Offset
-    void InvalidateItem_ForWhichID(sal_uInt16 nWhich);
-    void InvalidateItem_ForOffset(sal_uInt16 nOffset);
-    void DisableItem_ForWhichID(sal_uInt16 nWhich);
-    void DisableItem_ForOffset(sal_uInt16 nOffset);
+    void DisableOrInvalidateItem_ForWhichID(bool bDsiable, sal_uInt16 nWhich);
+    void DisableOrInvalidateItem_ForOffset(bool bDisable, sal_uInt16 nOffset);
 
     // split version(s) of GetItemStateImpl for input types WhichID and Offset
     SfxItemState GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const;

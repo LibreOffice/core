@@ -105,8 +105,8 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
 
     if (nullptr != pOld)
     {
-        // do not handle if an invalid item is involved
-        if (IsInvalidItem(pOld))
+        // do not handle if an invalid or disabled item is involved
+        if (IsInvalidItem(pOld) || IsDisabledItem(pOld))
             return;
 
         // get WhichID from pOld
@@ -115,8 +115,8 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
 
     if (nullptr != pNew)
     {
-        // do not handle if an invalid item is involved
-        if (IsInvalidItem(pNew))
+        // do not handle if an invalid or disabled item is involved
+        if (IsInvalidItem(pNew) || IsDisabledItem(pNew))
             return;
 
         if (0 == nWhich)
@@ -127,7 +127,7 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
     }
 
     // all given items are valid. If we got no WhichID != 0 then
-    // pOld == pNew == nullptr or SfxVoidItem(0) and we have no
+    // pOld == pNew == nullptr or IsDisabledItem and we have no
     // valid input. Also not needed if !IsWhich (aka > SFX_WHICH_MAX)
     if (0 == nWhich || !SfxItemPool::IsWhich(nWhich))
         return;

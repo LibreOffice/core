@@ -131,33 +131,28 @@ class SVL_DLLPUBLIC SfxPoolItem
 
     // bitfield for Item attributes that are Item-Dependent
 
-    // Item is a SfxVoidItem (used for SfxItemState::DISABLED,
-    // but unfortunately also for some slot stuff with
-    // Which != 0) -> needs cleanup
-    bool        m_bIsVoidItem : 1;          // bit 0
-
     // Item is registered at some Pool as default.
     //   m_bStaticDefault: direct Pool Item (CAUTION:
     //     these are not really 'static', but should be)
     //     -> needs cleanup
     //   m_bPoolDefault: set by user using SetPoolDefaultItem
     //     those should be better called 'UserDefault'
-    bool        m_bStaticDefault : 1;       // bit 1
-    bool        m_bPoolDefault : 1;         // bit 2
+    bool        m_bStaticDefault : 1;       // bit 0
+    bool        m_bPoolDefault : 1;         // bit 1
 
     // Item is derived from SfxSetItem -> is Pool-dependent
-    bool        m_bIsSetItem : 1;           // bit 3
+    bool        m_bIsSetItem : 1;           // bit 2
 
     // Defines if the Item can be shared/RefCounted else it will be cloned.
     // Default is true - as it should be for all Items. It is needed by some
     // SW items, so protected to let them set it in constructor. If this could
     // be fixed at that Items we may remove this again.
-    bool        m_bShareable : 1;           // bit 4
+    bool        m_bShareable : 1;           // bit 3
 
 protected:
 #ifdef DBG_UTIL
     // this flag will make debugging item stuff much simpler
-    bool        m_bDeleted : 1;             // bit 5
+    bool        m_bDeleted : 1;             // bit 4
 #endif
 
 private:
@@ -168,7 +163,6 @@ private:
     }
 
 protected:
-    void setIsVoidItem() { m_bIsVoidItem = true; }
     void setStaticDefault() { m_bStaticDefault = true; }
     void setPoolDefault() { m_bPoolDefault = true; }
     void setIsSetItem() { m_bIsSetItem = true; }
@@ -186,7 +180,6 @@ public:
     sal_uInt32 getSerialNumber() const { return m_nSerialNumber; }
 #endif
 
-    bool isVoidItem() const { return m_bIsVoidItem; }
     bool isStaticDefault() const { return m_bStaticDefault; }
     bool isPoolDefault() const { return m_bPoolDefault; }
     bool isSetItem() const { return m_bIsSetItem; }
@@ -311,10 +304,16 @@ inline bool IsPooledItem( const SfxPoolItem *pItem )
 }
 
 SVL_DLLPUBLIC extern SfxPoolItem const * const INVALID_POOL_ITEM;
+SVL_DLLPUBLIC extern SfxPoolItem const * const DISABLED_POOL_ITEM;
 
 inline bool IsInvalidItem(const SfxPoolItem *pItem)
 {
     return pItem == INVALID_POOL_ITEM;
+}
+
+inline bool IsDisabledItem(const SfxPoolItem *pItem)
+{
+    return pItem == DISABLED_POOL_ITEM;
 }
 
 SVL_DLLPUBLIC bool areSfxPoolItemPtrsEqual(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2);

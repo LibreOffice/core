@@ -123,14 +123,13 @@ constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC_CJK     (EE_CHAR_S
 constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC_CTL     (EE_CHAR_START+24);
 constexpr TypedWhichId<SvxEmphasisMarkItem>    EE_CHAR_EMPHASISMARK   (EE_CHAR_START+25);
 constexpr TypedWhichId<SvxCharReliefItem>      EE_CHAR_RELIEF         (EE_CHAR_START+26);
-constexpr TypedWhichId<SfxVoidItem>            EE_CHAR_RUBI_DUMMY     (EE_CHAR_START+27);
-constexpr TypedWhichId<SvXMLAttrContainerItem> EE_CHAR_XMLATTRIBS     (EE_CHAR_START+28);
-constexpr TypedWhichId<SvxOverlineItem>        EE_CHAR_OVERLINE       (EE_CHAR_START+29);
-constexpr TypedWhichId<SvxCaseMapItem>         EE_CHAR_CASEMAP        (EE_CHAR_START+30);
-constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+31);
-constexpr TypedWhichId<SvxColorItem>           EE_CHAR_BKGCOLOR       (EE_CHAR_START+32);
+constexpr TypedWhichId<SvXMLAttrContainerItem> EE_CHAR_XMLATTRIBS     (EE_CHAR_START+27);
+constexpr TypedWhichId<SvxOverlineItem>        EE_CHAR_OVERLINE       (EE_CHAR_START+28);
+constexpr TypedWhichId<SvxCaseMapItem>         EE_CHAR_CASEMAP        (EE_CHAR_START+29);
+constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+30);
+constexpr TypedWhichId<SvxColorItem>           EE_CHAR_BKGCOLOR       (EE_CHAR_START+31);
 
-constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 32);
+constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 31);
 
 constexpr sal_uInt16 EE_FEATURE_START   (EE_CHAR_END + 1);
 constexpr sal_uInt16 EE_FEATURE_TAB     (EE_FEATURE_START + 0);

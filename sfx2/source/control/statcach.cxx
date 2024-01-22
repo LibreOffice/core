@@ -82,6 +82,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
         std::unique_ptr<SfxPoolItem> pItem;
         sal_uInt16 nId = pCache->GetId();
         SfxItemState eState = SfxItemState::DISABLED;
+        const SfxPoolItem* pArg(nullptr);
         if ( !aStatus.IsEnabled )
         {
             // default
@@ -128,18 +129,19 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
                 else
                     pItem.reset( new SfxVoidItem( nId ) );
             }
+            pArg = pItem.get();
         }
         else
         {
             // DONTCARE status
-            pItem.reset( new SfxVoidItem(0) );
+            pArg = DISABLED_POOL_ITEM;
             eState = SfxItemState::UNKNOWN;
         }
 
         for ( SfxControllerItem *pCtrl = pCache->GetItemLink();
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChangedAtToolBoxControl( nId, eState, pItem.get() );
+            pCtrl->StateChangedAtToolBoxControl( nId, eState, pArg );
     }
 }
 

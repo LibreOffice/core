@@ -1203,8 +1203,7 @@ void SfxBindings::UpdateControllers_Impl
               SfxItemPool::IsSlot(rFound.nWhichId) )
     {
         // no Status or Default but without Pool
-        SfxVoidItem aVoid(0);
-        rCache.SetState( SfxItemState::UNKNOWN, &aVoid );
+        rCache.SetState( SfxItemState::UNKNOWN, DISABLED_POOL_ITEM );
     }
     else if ( SfxItemState::DISABLED == eState )
         rCache.SetState(SfxItemState::DISABLED, nullptr);

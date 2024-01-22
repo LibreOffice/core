@@ -293,6 +293,11 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         // just use pSource which equals INVALID_POOL_ITEM
         return pSource;
 
+    if (IsDisabledItem(pSource))
+        // SfxItemState::DISABLED aka invalid item
+        // just use pSource which equals DISABLED_POOL_ITEM
+        return pSource;
+
     // CAUTION: static default items are not *that* static as it seems
     // (or: should be). If they are freed with the Pool (see
     // ::ReleaseDefaults) they will be deleted. Same is true for
@@ -306,7 +311,8 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
 
     if (0 == pSource->Which())
     {
-        // These *should* be SfxVoidItem(0) the only Items with 0 == WhichID,
+        // There should be no Items with 0 == WhichID, but there are some
+        // constructed for dialog return values AKA result (look for SetReturnValue)
         // these need to be cloned (currently...)
         if (bPassingOwnership)
             return pSource;
@@ -441,9 +447,15 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
         // nothing to do for invalid item entries
         return;
 
+    if (IsDisabledItem(pSource))
+        // SfxItemState::DISABLED aka invalid item
+        // just use pSource which equals DISABLED_POOL_ITEM
+        return;
+
     if (0 == pSource->Which())
     {
-        // These *should* be SfxVoidItem(0) the only Items with 0 == WhichID
+        // There should be no Items with 0 == WhichID, but there are some
+        // constructed for dialog return values AKA result (look for SetReturnValue)
         // and need to be deleted
         delete pSource;
         return;
@@ -612,8 +624,8 @@ void SfxItemSet::checkRemovePoolRegistration(const SfxPoolItem* pItem)
         // no Item, done
         return;
 
-    if (IsInvalidItem(pItem) || pItem->isVoidItem() || 0 == pItem->Which())
-        // checks IsInvalidItem/SfxVoidItem(0)
+    if (IsInvalidItem(pItem) || IsDisabledItem(pItem))
+        // checks IsInvalidItem/IsDisabledItem
         return;
 
     if (SfxItemPool::IsSlot(pItem->Which()))
@@ -641,8 +653,8 @@ void SfxItemSet::checkAddPoolRegistration(const SfxPoolItem* pItem)
         // no Item, done
         return;
 
-    if (IsInvalidItem(pItem) || pItem->isVoidItem() || 0 == pItem->Which())
-        // checks IsInvalidItem/SfxVoidItem(0)
+    if (IsInvalidItem(pItem) || IsDisabledItem(pItem))
+        // checks IsInvalidItem/IsDisabledItem
         return;
 
     if (SfxItemPool::IsSlot(pItem->Which()))
@@ -669,7 +681,7 @@ sal_uInt16 SfxItemSet::ClearSingleItem_ForOffset( sal_uInt16 nOffset )
 {
     assert(nOffset < TotalCount());
     const_iterator aEntry(begin() + nOffset);
-    assert(nullptr == *aEntry || IsInvalidItem(*aEntry) || (*aEntry)->isVoidItem() || 0 != (*aEntry)->Which());
+    assert(nullptr == *aEntry || IsInvalidItem(*aEntry) || IsDisabledItem(*aEntry) || 0 != (*aEntry)->Which());
 
     if (nullptr == *aEntry)
         // no entry, done
@@ -789,7 +801,7 @@ SfxItemState SfxItemSet::GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPo
         // Different ones are present
         return SfxItemState::DONTCARE;
 
-    if (pCandidate->isVoidItem())
+    if (IsDisabledItem(pCandidate))
         // Item is Disabled
         return SfxItemState::DISABLED;
 
@@ -840,10 +852,9 @@ const SfxPoolItem* SfxItemSet::PutImplAsTargetWhich(const SfxPoolItem& rItem, sa
 
 const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, bool bPassingOwnership)
 {
-    if (0 == rItem.Which())
+    if (IsDisabledItem(&rItem))
     {
-        // no action needed: this *should* be SfxVoidItem(0) the only Items
-        // with 0 == WhichID -> only to be used by SfxItemSet::DisableItem
+        // no action needed: IsDisabledItem
         if (bPassingOwnership)
             delete &rItem;
         return nullptr;
@@ -933,7 +944,7 @@ bool SfxItemSet::Put(const SfxItemSet& rSource, bool bInvalidAsDefault)
                     }
                     else
                     {
-                        InvalidateItem_ForWhichID(nWhich);
+                        DisableOrInvalidateItem_ForWhichID(false, nWhich);
                     }
                 }
                 else
@@ -998,7 +1009,7 @@ void SfxItemSet::PutExtended
                             break;
 
                         case SfxItemState::DONTCARE:
-                            InvalidateItem_ForWhichID(nWhich);
+                            DisableOrInvalidateItem_ForWhichID(false, nWhich);
                             break;
 
                         default:
@@ -1025,7 +1036,7 @@ void SfxItemSet::PutExtended
                         break;
 
                     case SfxItemState::DONTCARE:
-                        InvalidateItem_ForWhichID(nWhich);
+                        DisableOrInvalidateItem_ForWhichID(false, nWhich);
                         break;
 
                     default:
@@ -1264,7 +1275,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
                 return GetPool()->GetDefaultItem(nWhich);
             }
 #ifdef DBG_UTIL
-            if ((*aFoundOne)->isVoidItem())
+            if (IsDisabledItem(*aFoundOne))
                 SAL_INFO("svl.items", "SFX_WARNING: Getting disabled Item");
 #endif
             return **aFoundOne;
@@ -1598,8 +1609,8 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet )
 
 void SfxItemSet::MergeValue(const SfxPoolItem& rAttr, bool bIgnoreDefaults)
 {
-    if (0 == rAttr.Which())
-        // seems to be SfxVoidItem(0), nothing to do
+    if (IsDisabledItem(&rAttr))
+        // is IsDisabledItem, nothing to do
         return;
 
     const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(rAttr.Which()));
@@ -1610,17 +1621,17 @@ void SfxItemSet::MergeValue(const SfxPoolItem& rAttr, bool bIgnoreDefaults)
     }
 }
 
-void SfxItemSet::InvalidateItem_ForWhichID(sal_uInt16 nWhich)
+void SfxItemSet::DisableOrInvalidateItem_ForWhichID(bool bDisable, sal_uInt16 nWhich)
 {
     const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(nWhich));
 
     if (INVALID_WHICHPAIR_OFFSET != nOffset)
     {
-        InvalidateItem_ForOffset(nOffset);
+        DisableOrInvalidateItem_ForOffset(bDisable, nOffset);
     }
 }
 
-void SfxItemSet::InvalidateItem_ForOffset(sal_uInt16 nOffset)
+void SfxItemSet::DisableOrInvalidateItem_ForOffset(bool bDisable, sal_uInt16 nOffset)
 {
     // check and assert from invalid offset. The caller is responsible for
     // ensuring a valid offset (see callers, all checked & safe)
@@ -1634,10 +1645,14 @@ void SfxItemSet::InvalidateItem_ForOffset(sal_uInt16 nOffset)
     }
     else
     {
-        // entry is set
-        if (IsInvalidItem(*aFoundOne))
+        if (bDisable && IsDisabledItem(*aFoundOne))
+            // already disabled item, done
+            return;
+
+        if (!bDisable && IsInvalidItem(*aFoundOne))
             // already invalid item, done
             return;
+
 
         // cleanup entry
         checkRemovePoolRegistration(*aFoundOne);
@@ -1645,54 +1660,7 @@ void SfxItemSet::InvalidateItem_ForOffset(sal_uInt16 nOffset)
     }
 
     // set new entry
-    *aFoundOne = INVALID_POOL_ITEM;
-}
-
-void SfxItemSet::DisableItem_ForWhichID(sal_uInt16 nWhich)
-{
-    const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(nWhich));
-
-    if (INVALID_WHICHPAIR_OFFSET != nOffset)
-    {
-        DisableItem_ForOffset(nOffset);
-    }
-}
-
-void SfxItemSet::DisableItem_ForOffset(sal_uInt16 nOffset)
-{
-    // check and assert from invalid offset. The caller is responsible for
-    // ensuring a valid offset (see callers, all checked & safe)
-    assert(nOffset < TotalCount());
-    const_iterator aFoundOne(begin() + nOffset);
-
-    if (nullptr == *aFoundOne)
-    {
-        // entry goes from nullptr -> invalid
-        ++m_nCount;
-    }
-    else
-    {
-        // entry is set
-        if ((*aFoundOne)->isVoidItem() && 0 == (*aFoundOne)->Which())
-            // already invalid item, done
-            return;
-    }
-
-    // prepare new entry
-    const SfxPoolItem* pNew(implCreateItemEntry(*GetPool(), new SfxVoidItem(0), true));
-
-    // Notification-Callback
-    if(m_aCallback)
-    {
-        m_aCallback(*aFoundOne, pNew);
-    }
-
-    // cleanup entry (remove only)
-    checkRemovePoolRegistration(*aFoundOne);
-    implCleanupItemEntry(*aFoundOne);
-
-    // set new entry
-    *aFoundOne = pNew;
+    *aFoundOne = bDisable ? DISABLED_POOL_ITEM : INVALID_POOL_ITEM;
 }
 
 sal_uInt16 SfxItemSet::GetWhichByOffset( sal_uInt16 nOffset ) const

@@ -137,19 +137,18 @@ DefItems::DefItems()
     rDefItems[44] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
     rDefItems[45] = new SvxEmphasisMarkItem( FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK );
     rDefItems[46] = new SvxCharReliefItem( FontRelief::NONE, EE_CHAR_RELIEF );
-    rDefItems[47] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
-    rDefItems[48] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
-    rDefItems[49] = new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
-    rDefItems[50] = new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP );
-    rDefItems[51] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
-    rDefItems[52] = new SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR );
+    rDefItems[47] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
+    rDefItems[48] = new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
+    rDefItems[49] = new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP );
+    rDefItems[50] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
+    rDefItems[51] = new SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR );
     // Features
-    rDefItems[53] = new SfxVoidItem( EE_FEATURE_TAB );
-    rDefItems[54] = new SfxVoidItem( EE_FEATURE_LINEBR );
-    rDefItems[55] = new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV );
-    rDefItems[56] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
+    rDefItems[52] = new SfxVoidItem( EE_FEATURE_TAB );
+    rDefItems[53] = new SfxVoidItem( EE_FEATURE_LINEBR );
+    rDefItems[54] = new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV );
+    rDefItems[55] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
-    assert(EDITITEMCOUNT == 57 && "ITEMCOUNT changed, adjust DefItems!");
+    assert(EDITITEMCOUNT == 56 && "ITEMCOUNT changed, adjust DefItems!");
 
     // Init DefFonts:
     GetDefaultFonts( *static_cast<SvxFontItem*>(rDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START]),

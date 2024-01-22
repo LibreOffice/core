@@ -515,7 +515,7 @@ SfxPoolItemHolder SfxShell::GetSlotState
     {
         if ( pStateSet )
             pStateSet->ClearItem(nSlotId);
-        return SfxPoolItemHolder(rPool, new SfxVoidItem(0), true);
+        return SfxPoolItemHolder(rPool, DISABLED_POOL_ITEM);
     }
 
     // bItemStateSet && eState >= SfxItemState::DEFAULT
