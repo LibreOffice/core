@@ -199,6 +199,28 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrappedByTable)
     // i.e. the inline table was under the floating one, not on the right of it.
     CPPUNIT_ASSERT_LESS(nFloatingBottom, nInlineTop);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInlineTableThenSplitFly)
+{
+    // Given a document with a floating table ("right") and an inline table ("left"):
+    // When laying out the document:
+    createSwDoc("floattable-not-wrapped-by-table.docx");
+
+    // Then make sure the inline table is on the left (small negative offset):
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage);
+    SwFrame* pBody = pPage->FindBodyCont();
+    auto pTab = pBody->GetLower()->GetNext()->DynCastTabFrame();
+    SwTwips nInlineLeft = pTab->getFramePrintArea().Left();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 0
+    // - Actual  : 6958
+    // i.e. "left" was on the right, its horizontal margin was not a small negative value but a
+    // large positive one.
+    CPPUNIT_ASSERT_LESS(static_cast<SwTwips>(0), nInlineLeft);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
