@@ -25,7 +25,10 @@
 
 class SwWrtShell;
 
-// frame dialog
+/// Insert -> Frame -> Frame on the UI.
+///
+/// Also available via the .uno:InsertFrame command. This is just the dialog itself, the individual
+/// tabpages are created and added in the constructor.
 class SwFrameDlg final : public SfxTabDialogController
 {
     bool m_bFormat;
