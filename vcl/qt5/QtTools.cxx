@@ -193,7 +193,8 @@ QMessageBox::StandardButtons vclButtonsTypeToQtButton(VclButtonsType eButtonType
         case VclButtonsType::OkCancel:
             buttons = QMessageBox::Ok | QMessageBox::Cancel;
             break;
-            // Add more cases based on our needs
+        default:
+            assert(false && "Unhandled VCLButtonsType");
     }
     return buttons;
 }
