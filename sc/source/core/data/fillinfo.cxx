@@ -1072,16 +1072,16 @@ void ScDocument::FillInfo(
         rArray.MirrorSelfX();
 }
 
-/// We seem to need to allocate two extra rows here, not sure why
+/// We seem to need to allocate three extra rows here, not sure why
 ///
 ScTableInfo::ScTableInfo(SCROW nStartRow, SCROW nEndRow)
     : mnArrCount(0)
-    , mnArrCapacity(nEndRow - nStartRow + 3)
+    , mnArrCapacity(nEndRow - nStartRow + 4)
     , mbPageMode(false)
 {
     assert(nStartRow >= 0);
     assert(nEndRow >= nStartRow);
-    mpRowInfo.reset(new RowInfo[nEndRow - nStartRow + 3] {});
+    mpRowInfo.reset(new RowInfo[nEndRow - nStartRow + 4] {});
 }
 
 ScTableInfo::~ScTableInfo()
