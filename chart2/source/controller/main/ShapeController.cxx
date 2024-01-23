@@ -320,20 +320,26 @@ void ShapeController::executeDispatch_TextAttributes()
         pDrawViewWrapper->MergeAttrFromMarked( aAttr, false );
     }
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr< SfxAbstractTabDialog > pDlg(
+    VclPtr< SfxAbstractTabDialog > pDlg(
         pFact->CreateTextTabDialog(pChartWindow, &aAttr, pDrawViewWrapper));
-    if ( pDlg->Execute() == RET_OK )
-    {
-        const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
-        if ( bHasMarked )
+    pDlg->StartExecuteAsync(
+        [pDlg, bHasMarked, pDrawViewWrapper] (sal_Int32 nResult)->void
         {
-            pDrawViewWrapper->SetAttributes( *pOutAttr );
+            if ( RET_OK == nResult )
+            {
+                const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
+                if ( bHasMarked )
+                {
+                    pDrawViewWrapper->SetAttributes( *pOutAttr );
+                }
+                else
+                {
+                    pDrawViewWrapper->SetDefaultAttr( *pOutAttr, false );
+                }
+            }
+            pDlg->disposeOnce();
         }
-        else
-        {
-            pDrawViewWrapper->SetDefaultAttr( *pOutAttr, false );
-        }
-    }
+    );
 }
 
 void ShapeController::executeDispatch_TransformDialog()

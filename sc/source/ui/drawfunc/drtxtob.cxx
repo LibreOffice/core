@@ -887,19 +887,35 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_DRAWTEXT_ATTR_DLG:
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(mrViewData.GetDialogParent(), &aEditAttr, pView));
+                    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(mrViewData.GetDialogParent(), &aEditAttr, pView));
+                    auto xRequest = std::make_shared<SfxRequest>(rReq);
+                    rReq.Ignore(); // the 'old' request is not relevant any more
+                    pDlg->StartExecuteAsync(
+                        [this, pDlg, pArgs, aNewAttr, bSet, xRequest, pView] (sal_Int32 nResult) mutable -> void
+                        {
+                            if ( RET_OK == nResult )
+                                aNewAttr.Put( *pDlg->GetOutputItemSet() );
 
-                    bDone = ( RET_OK == pDlg->Execute() );
+                            pDlg->disposeOnce();
 
-                    if ( bDone )
-                        aNewAttr.Put( *pDlg->GetOutputItemSet() );
+                            SfxBindings& rBindings = mrViewData.GetBindings();
+                            rBindings.Invalidate( SID_TABLE_VERT_NONE );
+                            rBindings.Invalidate( SID_TABLE_VERT_CENTER );
+                            rBindings.Invalidate( SID_TABLE_VERT_BOTTOM );
 
-                    pDlg.disposeAndClear();
-
-                    SfxBindings& rBindings = mrViewData.GetBindings();
-                    rBindings.Invalidate( SID_TABLE_VERT_NONE );
-                    rBindings.Invalidate( SID_TABLE_VERT_CENTER );
-                    rBindings.Invalidate( SID_TABLE_VERT_BOTTOM );
+                            if ( bSet || RET_OK == nResult )
+                            {
+                                xRequest->Done( aNewAttr );
+                                pArgs = xRequest->GetArgs();
+                            }
+                            if (pArgs)
+                            {
+                                // use args directly
+                                pView->SetAttributes( *pArgs );
+                                mrViewData.GetScDrawView()->InvalidateDrawTextAttrs();
+                            }
+                        }
+                    );
                 }
                 break;
         }

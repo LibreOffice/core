@@ -559,10 +559,12 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
     weld::Window* pWin = rViewData.GetDialogParent();
     VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(pWin, &aNewAttr, pView));
 
+    auto xRequest = std::make_shared<SfxRequest>(rReq);
+    rReq.Ignore(); // the 'old' request is not relevant any more
     pDlg->StartExecuteAsync(
-        [pDlg, bHasMarked, pView] (sal_Int32 nResult)->void
+        [pDlg, xRequest, bHasMarked, pView] (sal_Int32 nResult)->void
         {
-            if (nResult == RET_OK)
+            if ( RET_OK == nResult )
             {
                 if ( bHasMarked )
                     pView->SetAttributes( *pDlg->GetOutputItemSet() );
@@ -570,12 +572,11 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
                     pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
                 pView->InvalidateAttribs();
+                xRequest->Done();
             }
             pDlg->disposeOnce();
         }
     );
-
-    rReq.Done();
 }
 
 void ScDrawShell::ExecuteMeasureDlg( SfxRequest& rReq )

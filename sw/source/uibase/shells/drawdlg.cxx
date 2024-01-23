@@ -61,26 +61,32 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         case FN_DRAWTEXT_ATTR_DLG:
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(rReq.GetFrameWeld(), &aNewAttr, pView));
-            sal_uInt16 nResult = pDlg->Execute();
-
-            if (nResult == RET_OK)
-            {
-                if (pView->AreObjectsMarked())
+            VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(rReq.GetFrameWeld(), &aNewAttr, pView));
+            auto xRequest = std::make_shared<SfxRequest>(rReq);
+            rReq.Ignore(); // the 'old' request is not relevant any more
+            pDlg->StartExecuteAsync(
+                [pDlg, xRequest, pView, pSh] (sal_Int32 nResult)->void
                 {
-                    pSh->StartAction();
-                    pView->SetAttributes(*pDlg->GetOutputItemSet());
-                    auto vMarkedObjs = pView->GetMarkedObjects();
-                    for (auto pObj : vMarkedObjs)
+                    if (nResult == RET_OK)
                     {
-                        // If the shape has textframe, set its params as well.
-                        if (SwTextBoxHelper::hasTextFrame(pObj))
-                            SwTextBoxHelper::updateTextBoxMargin(pObj);
+                        if (pView->AreObjectsMarked())
+                        {
+                            pSh->StartAction();
+                            pView->SetAttributes(*pDlg->GetOutputItemSet());
+                            auto vMarkedObjs = pView->GetMarkedObjects();
+                            for (auto pObj : vMarkedObjs)
+                            {
+                                // If the shape has textframe, set its params as well.
+                                if (SwTextBoxHelper::hasTextFrame(pObj))
+                                    SwTextBoxHelper::updateTextBoxMargin(pObj);
+                            }
+                            xRequest->Done(*(pDlg->GetOutputItemSet()));
+                            pSh->EndAction();
+                        }
                     }
-                    rReq.Done(*(pDlg->GetOutputItemSet()));
-                    pSh->EndAction();
+                    pDlg->disposeOnce();
                 }
-            }
+            );
         }
         break;
 

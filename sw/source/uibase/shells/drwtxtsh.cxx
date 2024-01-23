@@ -439,19 +439,25 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 SfxItemSet aNewAttr(m_pSdrView->GetModel().GetItemPool());
                 m_pSdrView->GetAttributes( aNewAttr );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
+                VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
                             GetView().GetFrameWeld(),
                             &aNewAttr, m_pSdrView ));
-                sal_uInt16 nResult = pDlg->Execute();
-
-                if (nResult == RET_OK)
-                {
-                    if (m_pSdrView->AreObjectsMarked())
+                auto xRequest = std::make_shared<SfxRequest>(rReq);
+                rReq.Ignore(); // the 'old' request is not relevant any more
+                pDlg->StartExecuteAsync(
+                    [this, pDlg, xRequest] (sal_Int32 nResult)->void
                     {
-                        m_pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
-                        rReq.Done(*(pDlg->GetOutputItemSet()));
+                        if (nResult == RET_OK)
+                        {
+                            if (m_pSdrView->AreObjectsMarked())
+                            {
+                                m_pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
+                                xRequest->Done(*(pDlg->GetOutputItemSet()));
+                            }
+                        }
+                        pDlg->disposeOnce();
                     }
-                }
+                );
             }
             break;
         case SID_TABLE_VERT_NONE:
