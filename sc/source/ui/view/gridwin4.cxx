@@ -1196,12 +1196,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                     // same zoom level as view used for painting
                     aNewOutputArea = rDevice.LogicToPixel(aOrigOutputAreaTw);
                 }
+                // a small workaround for getting text position matching cursor position horizontally.
+                const tools::Long nCursorGapPx = 2;
                 // Transform the cell range X coordinates such that the edit cell area is
                 // horizontally mirrored w.r.t the (combined-)tile.
                 aNewOutputArea = tools::Rectangle(
                     pLokRTLCtxt->docToTilePos(aNewOutputArea.Left() - aOriginAbsPx.X()) + aOriginAbsPx.X(),
                     aNewOutputArea.Top(),
-                    pLokRTLCtxt->docToTilePos(aNewOutputArea.Right() - aOriginAbsPx.X()) + aOriginAbsPx.X(),
+                    pLokRTLCtxt->docToTilePos(aNewOutputArea.Right() - aOriginAbsPx.X()) + aOriginAbsPx.X() + nCursorGapPx,
                     aNewOutputArea.Bottom());
                 aNewOutputArea.Normalize();
             }
