@@ -483,19 +483,28 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 }
             }
 
-            // if there is a named paragraph format recorded and the user wants to apply it
-            if(!m_aParaStyle.isEmpty() && !bNoParagraphFormats )
+            if (!bNoParagraphFormats)
             {
-                // look for the named paragraph format in the pool
-                SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle, SfxStyleFamily::Para));
-                if( pStyle )
+                const SwNumRule* pNumRule
+                    = rWrtShell.GetNumRuleAtCurrCursorPos();
+                if (pNumRule && !pNumRule->IsOutlineRule())
                 {
-                    // store the attributes from this style in aItemVector in order
-                    // not to apply them as automatic formatting attributes later in the code
-                    lcl_AppendSetItems( aItemVector, pStyle->GetCollection()->GetAttrSet());
+                    rWrtShell.NumOrBulletOff();
+                }
+                // if there is a named paragraph format recorded and the user wants to apply it
+                if(!m_aParaStyle.isEmpty())
+                {
+                    // look for the named paragraph format in the pool
+                    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle, SfxStyleFamily::Para));
+                    if( pStyle )
+                    {
+                        // store the attributes from this style in aItemVector in order
+                        // not to apply them as automatic formatting attributes later in the code
+                        lcl_AppendSetItems( aItemVector, pStyle->GetCollection()->GetAttrSet());
 
-                    // apply the named format
-                    rWrtShell.SetTextFormatColl( pStyle->GetCollection() );
+                        // apply the named format
+                        rWrtShell.SetTextFormatColl( pStyle->GetCollection() );
+                    }
                 }
             }
         }
