@@ -27,9 +27,11 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <unoprnms.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -561,6 +563,43 @@ CPPUNIT_TEST_FIXTURE(Test, tdf150927)
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
 
     assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']"_ostr, 2);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
+{
+    // 1. Remove personal info, keep user info
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
+    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(true, pBatch);
+    pBatch->commit();
+
+    loadAndReload("personalmetadata.odt");
+    xmlDocUniquePtr pXmlDoc = parseExport("meta.xml");
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator"_ostr, 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date"_ostr, 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date"_ostr, 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator"_ostr, 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by"_ostr, 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date"_ostr, 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
+
+    // 2. Remove user info too
+    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(false, pBatch);
+    pBatch->commit();
+
+    loadAndReload("personalmetadata.odt");
+    pXmlDoc = parseExport("meta.xml");
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf151100)
