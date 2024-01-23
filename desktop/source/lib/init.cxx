@@ -7476,6 +7476,12 @@ static void preloadData()
     if(bAbort)
         std::cerr << "CheckExtensionDependencies failed" << std::endl;
 
+    std::cerr << "Preload textencodings"; // sal_textenc
+    // Use RTL_TEXTENCODING_MS_1250 to trigger Impl_getTextEncodingData
+    // to dlopen sal_textenclo
+    (void)OUStringToOString(u"arbitrary string", RTL_TEXTENCODING_MS_1250);
+    std::cerr << "\n";
+
     // setup LanguageTool config before spell checking init
     setLanguageToolConfig();
 
