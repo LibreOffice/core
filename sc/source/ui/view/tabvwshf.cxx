@@ -1038,12 +1038,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     uno::Reference<container::XNameReplace> xEvents( new ScSheetEventsObj( pDocSh, nCurrentTab ) );
                     uno::Reference<frame::XFrame> xFrame = GetViewFrame().GetFrame().GetFrameInterface();
                     SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
-                    ScopedVclPtr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
+                    VclPtr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
                         GetFrameWeld(), xFrame, false, xEvents, 0 ) );
-                    if ( pDialog->Execute() == RET_OK )
-                    {
-                            // the dialog modifies the settings directly
-                    }
+                    // the dialog modifies the settings directly
+                    pDialog->StartExecuteAsync(
+                        [pDialog] (sal_Int32 /*nResult*/)->void
+                        {
+                            pDialog->disposeOnce();
+                        }
+                    );
                 }
                 break;
         case FID_TOGGLEHIDDENCOLROW:

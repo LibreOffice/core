@@ -1236,17 +1236,18 @@ public:
         :m_aItems( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM> )
     {
         m_aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, _bUnoDialogMode ) );
-        m_xDlg.reset(new SvxMacroAssignDlg(_pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent));
+        m_xDlg = std::make_shared<SvxMacroAssignDlg>(_pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent);
     }
 
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
 
 private:
     SfxItemSet                              m_aItems;
-    std::unique_ptr<SvxMacroAssignDlg> m_xDlg;
+    std::shared_ptr<SvxMacroAssignDlg> m_xDlg;
 };
 
-IMPL_ABSTDLG_CLASS(SvxMacroAssignDialog)
+IMPL_ABSTDLG_CLASS_ASYNC(SvxMacroAssignDialog, SvxMacroAssignDlg)
 }
 
 
