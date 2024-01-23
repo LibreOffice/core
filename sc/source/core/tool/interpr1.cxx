@@ -65,7 +65,7 @@
 #include <queryiter.hxx>
 #include <tokenarray.hxx>
 #include <compare.hxx>
-
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
@@ -2357,16 +2357,20 @@ void ScInterpreter::ScCell()
                             eConv == FormulaGrammar::CONV_XL_OOX)
                         {
                             // file name and table name: FILEPATH/[FILENAME]TABLE
-                            aFuncResult = rURLObj.GetPartBeforeLastName()
-                                + "[" + rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous)
-                                + "]" + aTabName;
+                            if (!comphelper::LibreOfficeKit::isActive())
+                                aFuncResult = rURLObj.GetPartBeforeLastName();
+                            aFuncResult += "[" + rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous) +
+                                           "]" + aTabName;
                         }
                         else
                         {
                             // file name and table name: 'FILEPATH/FILENAME'#$TABLE
-                            aFuncResult = "'"
-                                + rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)
-                                + "'#$" + aTabName;
+                            aFuncResult = "'";
+                            if (!comphelper::LibreOfficeKit::isActive())
+                                aFuncResult += rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+                            else
+                                aFuncResult += rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
+                            aFuncResult += "'#$" + aTabName;
                         }
                     }
                 }
