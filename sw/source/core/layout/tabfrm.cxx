@@ -3296,6 +3296,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
 
         bool bShiftDown = css::text::WrapTextMode_NONE == nSurround;
         bool bSplitFly = pFly->IsFlySplitAllowed();
+        const SwRect aFlyRectWithoutSpaces = pFly->GetObjRect();
         if (!bShiftDown && bAddVerticalFlyOffsets)
         {
             if (nSurround == text::WrapTextMode_PARALLEL && isHoriOrientShiftDown)
@@ -3310,7 +3311,6 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
 
                 // Ignore spacing when determining the left/right edge of the fly, like
                 // Word does.
-                const SwRect aFlyRectWithoutSpaces = pFly->GetObjRect();
                 basegfx::B1DRange aFlyRange(aRectFnSet.GetLeft(aFlyRectWithoutSpaces),
                                             aRectFnSet.GetRight(aFlyRectWithoutSpaces));
 
@@ -3373,9 +3373,16 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         bool bFlyHoriOrientLeft = text::HoriOrientation::LEFT == rHori.GetHoriOrient();
         if (bSplitFly && !bFlyHoriOrientLeft)
         {
-            // If a split fly is oriented "from left", we already checked if it has enough space on
-            // the right, so from-left and left means the same here.
-            bFlyHoriOrientLeft = rHori.GetHoriOrient() == text::HoriOrientation::NONE;
+            // Only shift to the right if we don't have enough space on the left.
+            SwTwips nTabWidth = getFramePrintArea().Width();
+            SwTwips nWidthDeadline = aFlyRectWithoutSpaces.Left()
+                                     - pFly->GetAnchorFrame()->GetUpper()->getFrameArea().Left();
+            if (nTabWidth > nWidthDeadline)
+            {
+                // If a split fly is oriented "from left", we already checked if it has enough space on
+                // the right, so from-left and left means the same here.
+                bFlyHoriOrientLeft = rHori.GetHoriOrient() == text::HoriOrientation::NONE;
+            }
         }
         if ((css::text::WrapTextMode_RIGHT == nSurround
              || css::text::WrapTextMode_PARALLEL == nSurround)
