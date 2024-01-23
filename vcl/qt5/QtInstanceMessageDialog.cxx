@@ -9,6 +9,8 @@
 
 #include <QtInstanceMessageDialog.hxx>
 
+#include <QtWidgets/QPushButton>
+
 namespace
 {
 QMessageBox::ButtonRole lcl_vclResponseTypeToQtMessageBoxButtonRole(int nResponseType)
@@ -107,6 +109,24 @@ void QtInstanceMessageDialog::add_button(const OUString& rText, int nResponse, c
     assert(m_pMessageDialog);
     m_pMessageDialog->addButton(vclToQtStringWithAccelerator(rText),
                                 lcl_vclResponseTypeToQtMessageBoxButtonRole(nResponse));
+}
+
+void QtInstanceMessageDialog::set_default_response(int nResponse)
+{
+    assert(m_pMessageDialog);
+
+    const QList<QAbstractButton*> aButtons = m_pMessageDialog->buttons();
+    for (QAbstractButton* pAbstractButton : aButtons)
+    {
+        QPushButton* pButton = dynamic_cast<QPushButton*>(pAbstractButton);
+        assert(pButton);
+        const QMessageBox::ButtonRole eRole = m_pMessageDialog->buttonRole(pButton);
+        if (lcl_qtMessageBoxButtonRoleToVclResponseType(eRole) == nResponse)
+        {
+            m_pMessageDialog->setDefaultButton(pButton);
+            return;
+        }
+    }
 }
 
 int QtInstanceMessageDialog::run()

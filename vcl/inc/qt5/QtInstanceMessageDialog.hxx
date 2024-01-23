@@ -33,6 +33,7 @@ public:
     // weld::Dialog overrides
     virtual void add_button(const OUString& rText, int nResponse,
                             const OUString& rHelpId = {}) override;
+    virtual void set_default_response(int nResponse) override;
     virtual int run() override;
 };
 
