@@ -13,7 +13,12 @@
 
 class QtInstanceWindow : public QtInstanceContainer, public virtual weld::Window
 {
-    virtual void set_title(const OUString&) override;
+    QWidget* m_pWidget;
+
+public:
+    QtInstanceWindow(QWidget* pWidget);
+
+    virtual void set_title(const OUString& rTitle) override;
     virtual OUString get_title() const override;
     virtual void window_move(int, int) override;
     virtual void set_modal(bool) override;

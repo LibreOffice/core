@@ -10,7 +10,8 @@
 #include <QtInstanceDialog.hxx>
 
 QtInstanceDialog::QtInstanceDialog(QDialog* pDialog)
-    : m_pDialog(pDialog)
+    : QtInstanceWindow(pDialog)
+    , m_pDialog(pDialog)
 {
 }
 
