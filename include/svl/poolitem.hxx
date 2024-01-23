@@ -54,7 +54,7 @@ inline bool Any2Bool( const css::uno::Any&rValue )
 }
 
 // Offer simple assert if Item is RefCounted (RefCnt > 1) and thus CANNOT be changed.
-// This should be used at *all* SfxPoolItem set* mehods. Remember that SfxPoolItems
+// This should be used at *all* SfxPoolItem set* methods. Remember that SfxPoolItems
 // are by design intended to be create-one, read-only, shared data packages
 #define ASSERT_CHANGE_REFCOUNTED_ITEM \
     assert(!GetRefCount() && "ERROR: RefCounted SfxPoolItem CANNOT be changed (!)")
@@ -306,9 +306,9 @@ class SVL_DLLPUBLIC ItemInstanceManager
 // offering a default implementation that can be use for
 // each SfxPoolItem (except when !isShareable()). It just
 // uses an unordered_set holding ptrs to SfxPoolItems added
-// and SfxPoolItem::opeator== to linearly search for one.
-// Thus thisi is not the fastest, but as fast as old 'poooled'
-// stuff - btter use an intelligent, pro-Item implementation
+// and SfxPoolItem::operator== to linearly search for one.
+// Thus this is not the fastest, but as fast as old 'poooled'
+// stuff - better use an intelligent, pro-Item implementation
 // that does e.g. hashing or whatever might be feasible for
 // that specific Item (see other derivations)
 class SVL_DLLPUBLIC DefaultItemInstanceManager : public ItemInstanceManager
