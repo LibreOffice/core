@@ -64,7 +64,7 @@
 #include <queryiter.hxx>
 #include <tokenarray.hxx>
 #include <compare.hxx>
-
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
@@ -2346,9 +2346,12 @@ void ScInterpreter::ScCell()
                         const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
                         OUString aTabName;
                         mrDoc.GetName( nTab, aTabName );
-                        aFuncResult = "'"
-                            + rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)
-                            + "'#$" + aTabName;
+                        aFuncResult = "'";
+                        if (!comphelper::LibreOfficeKit::isActive())
+                            aFuncResult += rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+                        else
+                            aFuncResult += rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
+                        aFuncResult += "'#$" + aTabName;
                     }
                 }
             }
