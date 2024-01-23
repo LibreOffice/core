@@ -28,6 +28,7 @@
 #include <drawingml/lineproperties.hxx>
 #include <drawingml/presetgeometrynames.hxx>
 #include <drawingml/shape3dproperties.hxx>
+#include <drawingml/scene3dhelper.hxx>
 #include "effectproperties.hxx"
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <drawingml/textbody.hxx>
@@ -842,7 +843,7 @@ void lcl_doSpecialMSOWidthHeightToggle(basegfx::B2DHomMatrix& aTransformation)
     return;
 }
 
-void lcl_RotateAtCenter(basegfx::B2DHomMatrix& aTransformation,sal_Int32 nMSORotationAngle)
+void lcl_RotateAtCenter(basegfx::B2DHomMatrix& aTransformation, sal_Int32 nMSORotationAngle)
 {
     if (nMSORotationAngle == 0)
         return;
@@ -853,6 +854,15 @@ void lcl_RotateAtCenter(basegfx::B2DHomMatrix& aTransformation,sal_Int32 nMSORot
     aTransformation.rotate(fRad);
     aTransformation.translate(aCenter);
     return;
+}
+
+Degree100 lcl_MSORotateAngleToAPIAngle(const sal_Int32 nMSORotationAngle)
+{
+    // Converts a shape rotation angle from MSO to angle for API property RotateAngle
+    // from unit 1/60000 deg to unit 1/100 deg
+    Degree100 nAngle(nMSORotationAngle / 600);
+    // API RotateAngle has opposite direction than nMSORotationAngle, thus 'minus'.
+    return NormAngle36000(-nAngle);
 }
 }
 
@@ -937,7 +947,43 @@ Reference< XShape > const & Shape::createAndInsert(
 
     bool bIsCustomShape = (aServiceName == "com.sun.star.drawing.CustomShape" || bIsCroppedGraphic);
     bool bIsConnectorShape = (aServiceName == "com.sun.star.drawing.ConnectorShape");
-    if(bIsCroppedGraphic)
+
+    // Look for 3D. Its z-rotation and extrusion color become shape properties. Do it early as
+    // graphics might use 3D too and in that case should be imported as custom shape as well.
+    double fShapeRotateInclCamera = 0.0; // unit rad; same orientation as shape property RotateAngle
+    Color aExtrusionColor;
+    Scene3DHelper aScene3DHelper;
+    bool bHas3DEffect = aScene3DHelper.setExtrusionProperties(
+        mp3DPropertiesPtr, mnRotation, getCustomShapeProperties()->getExtrusionPropertyMap(),
+        fShapeRotateInclCamera, aExtrusionColor);
+    // Currently the other places use unit 1/60000deg and MSO shape rotate orientation, thus convert.
+    sal_Int32 nShapeRotateInclCamera = -basegfx::rad2deg<60000>(fShapeRotateInclCamera);
+
+    bool bIs3DGraphic = aServiceName == "com.sun.star.drawing.GraphicObjectShape" && bHas3DEffect;
+    if (bIs3DGraphic)
+    {
+        // The parts which use bIs3DGraphic are commented out for now (3x) because the export does
+        // not re-create the image, and because the rendering of images with transparent parts is
+        // broken in extrusion mode (tdf#159515). In principle it works that way to get 3D-effects
+        // on images.
+        SAL_INFO("oox.drawingml",
+        "Shape::createAndInsert: image with 3D effect conversion disabled");
+    }
+    // bIsCustomShape |= bIs3DGraphic;
+
+    // The extrusion color does not belong to the extrusion properties but is secondary color in
+    // the style of the shape, FillColor2 in API.
+    if (aExtrusionColor.isUsed())
+    {
+        // FillColor2 is not yet transformed to ComplexColor.
+        ::Color aColor = aExtrusionColor.getColor(rFilterBase.getGraphicHelper());
+        maShapeProperties.setProperty(PROP_FillColor2, aColor);
+    }
+    // ToDo: MS Office 'automatic' color uses line color if it exists, LO uses fill color. We might
+    // need to change color here in case of 'automatic'.
+
+    // if (bIsCroppedGraphic || bIs3DGraphic), disabled for now, see comment #965
+    if (bIsCroppedGraphic)
     {
         aServiceName = "com.sun.star.drawing.CustomShape";
         mpGraphicPropertiesPtr->mbIsCustomShape = true;
@@ -1057,11 +1103,10 @@ Reference< XShape > const & Shape::createAndInsert(
     // The flip contained in aParentScale will affect orientation of object rotation angle.
     sal_Int16 nOrientation = ((aParentScale.getX() < 0) != (aParentScale.getY() < 0)) ? -1 : 1;
     // ToDo: Not sure about the restrictions given by bUseRotationTransform.
-    // Since LibreOffice doesn't have 3D camera options for 2D shapes, rotate the shape opposite of
-    // the camera Z axis rotation, in order to produce the same visual result from MSO
-    const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.value_or(0);
-    if (bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0))
-        lcl_RotateAtCenter(aTransformation, nOrientation * (mnRotation - nCameraRotation));
+    if (bUseRotationTransform && nShapeRotateInclCamera != 0)
+    {
+        lcl_RotateAtCenter(aTransformation, nOrientation * nShapeRotateInclCamera);
+    }
 
     if (fParentRotate != 0.0)
         aTransformation.rotate(fParentRotate);
@@ -1319,8 +1364,9 @@ Reference< XShape > const & Shape::createAndInsert(
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
-        if(mnRotation != 0 && bIsCustomShape)
-            aShapeProps.setProperty( PROP_RotateAngle, sal_Int32( NormAngle36000( Degree100(mnRotation / -600) ) ));
+        if(nShapeRotateInclCamera != 0 && bIsCustomShape)
+            aShapeProps.setProperty(PROP_RotateAngle,
+                                    sal_Int32(lcl_MSORotateAngleToAPIAngle(nShapeRotateInclCamera)));
         if( bIsEmbMedia ||
             bIsCustomShape ||
             aServiceName == "com.sun.star.drawing.GraphicObjectShape" ||
@@ -1341,7 +1387,8 @@ Reference< XShape > const & Shape::createAndInsert(
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
         if (getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill)
             getFillProperties().assignUsed(aFillProperties);
-        if(!bIsCroppedGraphic)
+        // if(!bIsCroppedGraphic && !bIs3DGraphic), disabled for now, see comment #960
+        if (!bIsCroppedGraphic)
             aFillProperties.pushToPropMap(aShapeProps, rGraphicHelper, mnRotation, nFillPhClr,
                                           css::awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height),
                                           nFillPhClrTheme, mbFlipH, mbFlipV, bIsCustomShape);
@@ -1834,11 +1881,10 @@ Reference< XShape > const & Shape::createAndInsert(
 
         // tdf#133037: a bit hackish: force Shape to rotate in the opposite direction the camera would rotate
         PropertySet aPropertySet(mxShape);
-        if ( !bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0) )
+        if ( !bUseRotationTransform && (nShapeRotateInclCamera !=0) )
         {
-            // use the same logic for rotation from VML exporter (SimpleShape::implConvertAndInsert at vmlshape.cxx)
-            Degree100 nAngle = NormAngle36000( Degree100((mnRotation - nCameraRotation) / -600) );
-            aPropertySet.setAnyProperty( PROP_RotateAngle, Any( sal_Int32( nAngle.get() ) ) );
+            Degree100 nAngle(lcl_MSORotateAngleToAPIAngle(nShapeRotateInclCamera));
+            aPropertySet.setAnyProperty(PROP_RotateAngle, Any( sal_Int32(nAngle)));
             aPropertySet.setAnyProperty( PROP_HoriOrientPosition, Any( maPosition.X ) );
             aPropertySet.setAnyProperty( PROP_VertOrientPosition, Any( maPosition.Y ) );
         }

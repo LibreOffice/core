@@ -38,6 +38,7 @@ BottomBorder
 BottomBorderComplexColor
 BottomBorderDistance
 BottomMargin
+Brightness
 BuiltInUnit
 BulletChar
 BulletColor
@@ -141,9 +142,11 @@ DefaultState
 DefaultText
 DefaultValue
 DeletedLegendEntries
+Depth
 DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
+Diffusion
 DisableComplexChartTypes
 DisableDataTableDialog
 DisplayLabels
@@ -168,6 +171,7 @@ ExternalDocLinks
 ExternalLinks
 ExtrapolateBackward
 ExtrapolateForward
+Extrusion
 FileFormat
 FillBackground
 FillBitmapMode
@@ -179,6 +183,7 @@ FillBitmapSizeX
 FillBitmapSizeY
 FillBitmap
 FillColor
+FillColor2
 FillColorTheme
 FillColorLumMod
 FillColorLumOff
@@ -195,6 +200,9 @@ FillUseSlideBackground
 Filter
 FilterCriteriaSource
 FilterOptions
+FirstLightDirection
+FirstLightHarsh
+FirstLightLevel
 FirstLineOffset
 FirstPageFooterContent
 FirstPageHeaderContent
@@ -321,6 +329,7 @@ LeftMargin
 LeftPageFooterContent
 LeftPageHeaderContent
 LegacyFragment
+LightFace
 LineCap
 LineColor
 LineComplexColor
@@ -348,6 +357,8 @@ MaxFieldCount
 MaxTextLen
 MediaType
 MediaURL
+Metal
+MetalType
 MinorTickmarks
 MirroredX
 MirroredY
@@ -370,10 +381,12 @@ NumberingIsNumber
 NumberingLevel
 NumberingRules
 NumberingType
+NumberOfLineSegments
 Offset
 OpCodeMap
 Opaque
 Orientation
+Origin
 OutputPosition
 Outline
 OverlapSequence
@@ -423,6 +436,7 @@ PrivateStream
 PrivateTempFileURL
 ProgressValueMax
 ProgressValueMin
+ProjectionMode
 Protected
 RadiusRangeMaximum
 RadiusRangeMinimum
@@ -460,6 +474,7 @@ RightPageHeaderContent
 Role
 RotateAngle
 RotateReference
+RotationCenter
 RotationHorizontal
 RotationVertical
 RowGrand
@@ -476,9 +491,13 @@ ScrollValue
 ScrollValueMax
 ScrollValueMin
 ScrollWidth
+SecondLightDirection
+SecondLightHarsh
+SecondLightLevel
 Segments
 SelectedItems
 SelectedPage
+ShadeMode
 Shadow
 ShadowAlignment
 ShadowColor
@@ -489,6 +508,7 @@ ShadowTransparence
 ShadowBlur
 ShadowXDistance
 ShadowYDistance
+Shininess
 Show
 ShowBorder
 ShowCharts
@@ -518,10 +538,12 @@ Size100thMM
 SizePixel
 SizeProtect
 SizeType
+Skew
 SkipDuplicates
 SortInfo
 Sound
 SoundOn
+Specularity
 Speed
 Spin
 SpinIncrement
@@ -614,6 +636,7 @@ VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
 ViewBox
+ViewPoint
 Visible
 VisibleFlag
 VisibleSize

@@ -181,6 +181,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/objectdefaultcontext \
     oox/source/drawingml/presetgeometrynames \
     oox/source/drawingml/scene3dcontext \
+    oox/source/drawingml/scene3dhelper \
     oox/source/drawingml/shapecontext \
     oox/source/drawingml/shape \
     oox/source/drawingml/shape3dproperties \

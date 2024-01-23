@@ -124,6 +124,7 @@ public:
 
     sal_Int32 getArcNum() { return mnArcNum++; }
     sal_Int32 countArcTo() { return mnArcNum; }
+    PropertyMap& getExtrusionPropertyMap() { return maExtrusionPropertyMap; }
 
     /**
        Returns whether or not the current CustomShapeProperties
@@ -156,6 +157,7 @@ private:
     static void initializePresetDataMap();
 
     sal_Int32 mnArcNum;
+    PropertyMap maExtrusionPropertyMap;
 };
 
 }

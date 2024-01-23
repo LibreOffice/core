@@ -129,6 +129,11 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_TextCameraZRotateAngle, mnTextCameraZRotateAngle );
         if (moTextAreaRotateAngle.has_value())
             aPropertyMap.setProperty(PROP_TextRotateAngle, moTextAreaRotateAngle.value());
+        if (!maExtrusionPropertyMap.empty())
+        {
+            Sequence< PropertyValue > aExtrusionSequence = maExtrusionPropertyMap.makePropertyValueSequence();
+            aPropertyMap.setAnyProperty( PROP_Extrusion, css::uno::Any(aExtrusionSequence));
+        }
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
@@ -361,6 +366,11 @@ void CustomShapeProperties::pushToPropSet(
             aHandlesRange[ i ] = aHandle.makePropertyValueSequence();
         }
         aPropertyMap.setProperty( PROP_Handles, aHandles);
+        if (!maExtrusionPropertyMap.empty())
+        {
+            Sequence< PropertyValue > aExtrusionSequence = maExtrusionPropertyMap.makePropertyValueSequence();
+            aPropertyMap.setProperty( PROP_Extrusion, aExtrusionSequence);
+        }
 
 #ifdef DEBUG
         // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks

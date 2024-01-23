@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_check_targets,oox,\
 	CppunitTest_oox_shape \
 	CppunitTest_oox_export \
     CppunitTest_oox_mcgr \
+    CppunitTest_oox_testscene3d \
     CppunitTest_oox_wpc_drawing_canvas \
 ))
 endif
