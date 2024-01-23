@@ -223,6 +223,19 @@
        LOG_WARN(("Install directory updater could not be determined."));
        result = FALSE;
      }
+--- onlineupdate/source/update/updater/updater.cpp
++++ onlineupdate/source/update/updater/updater.cpp
+@@ -4174,6 +4174,10 @@
+         NS_tmkdir(gDeleteDirPath, 0755);
+       }
+     }
++
++    if (_setmaxstdio(8192) == -1) {
++        LOG(("_setmaxstdio failed"));
++    }
+ #endif /* XP_WIN */
+ 
+     // Run update process on a background thread. ShowProgressUI may return
 --- tools/update-packaging/common.sh
 +++ tools/update-packaging/common.sh
 @@ -76,17 +76,8 @@
