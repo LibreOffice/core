@@ -308,9 +308,22 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwCharURLPage, EventHdl, weld::Button&, void)
 {
-    if (SwView* pView = GetActiveView())
-        m_bModified |= SwMacroAssignDlg::INetFormatDlg(GetFrameWeld(),
-                        pView->GetWrtShell(), m_oINetMacroTable);
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+
+    SvxMacroItem aItem( RES_FRMMACRO );
+    if( !m_oINetMacroTable )
+        m_oINetMacroTable.emplace();
+    else
+        aItem.SetMacroTable( *m_oINetMacroTable );
+
+    SwMacroAssignDlg::INetFormatDlg(GetFrameWeld(), pView->GetWrtShell(), aItem,
+        [this] (const SvxMacroItem& rItem)
+        {
+            m_oINetMacroTable.emplace(rItem.GetMacroTable());
+            m_bModified = true;
+        });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

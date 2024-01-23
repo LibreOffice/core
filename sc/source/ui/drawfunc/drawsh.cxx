@@ -441,32 +441,39 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
         xFrame = GetViewShell()->GetViewFrame().GetFrame().GetFrameInterface();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog( pWin, aItemSet, xFrame ));
-    if ( pMacroDlg->Execute() != RET_OK )
-        return;
-
-    const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
-    const SvxMacroItem* pItem = pOutSet->GetItemIfSet( SID_ATTR_MACROITEM, false );
-    if( !pItem )
-        return;
-
-    OUString sMacro;
-    const SvxMacro* pMacro = pItem->GetMacroTable().Get( SvMacroItemId::OnClick );
-    if ( pMacro )
-        sMacro = pMacro->GetMacName();
-
-    if ( pObj->IsGroupObject() )
-    {
-        SdrObjList* pOL = pObj->GetSubList();
-        for (const rtl::Reference<SdrObject>& pChildObj : *pOL)
+    VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog( pWin, aItemSet, xFrame ));
+    pMacroDlg->StartExecuteAsync(
+        [this, pMacroDlg, pObj, pInfo] (sal_Int32 nResult) mutable -> void
         {
-            pInfo = ScDrawLayer::GetMacroInfo( pChildObj.get(), true );
-            pInfo->SetMacro( sMacro );
+            ScopedVclPtr<SfxAbstractDialog> pDlgDisposer(std::move(pMacroDlg));
+            if (nResult != RET_OK)
+                return;
+
+            const SfxItemSet* pOutSet = pDlgDisposer->GetOutputItemSet();
+            const SvxMacroItem* pItem = pOutSet->GetItemIfSet( SID_ATTR_MACROITEM, false );
+            if( !pItem )
+                return;
+
+            OUString sMacro;
+            const SvxMacro* pMacro = pItem->GetMacroTable().Get( SvMacroItemId::OnClick );
+            if ( pMacro )
+                sMacro = pMacro->GetMacName();
+
+            if ( pObj->IsGroupObject() )
+            {
+                SdrObjList* pOL = pObj->GetSubList();
+                for (const rtl::Reference<SdrObject>& pChildObj : *pOL)
+                {
+                    pInfo = ScDrawLayer::GetMacroInfo( pChildObj.get(), true );
+                    pInfo->SetMacro( sMacro );
+                }
+            }
+            else
+                pInfo->SetMacro( sMacro );
+            setModified();
         }
-    }
-    else
-        pInfo->SetMacro( sMacro );
-    setModified();
+    );
+
 }
 
 void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )

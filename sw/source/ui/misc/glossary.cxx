@@ -657,18 +657,26 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
         aSet.Put( aItem );
         aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
 
-        const SvxMacroItem* pMacroItem;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(m_xDialog.get(), aSet,
+        VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(m_xDialog.get(), aSet,
             m_pShell->GetView().GetViewFrame().GetFrame().GetFrameInterface() ));
-        if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
-            (pMacroItem = pMacroDlg->GetOutputItemSet()->GetItemIfSet( RES_FRMMACRO, false )) )
-        {
-            const SvxMacroTableDtor& rTable = pMacroItem->GetMacroTable();
-            m_pGlossaryHdl->SetMacros( m_xShortNameEdit->get_text(),
-                                        rTable.Get( SvMacroItemId::SwStartInsGlossary ),
-                                        rTable.Get( SvMacroItemId::SwEndInsGlossary ) );
-        }
+        if (pMacroDlg)
+            pMacroDlg->StartExecuteAsync(
+                [this, pMacroDlg] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                    {
+                        if (const SvxMacroItem* pMacroItem = pMacroDlg->GetOutputItemSet()->GetItemIfSet( RES_FRMMACRO, false ))
+                        {
+                            const SvxMacroTableDtor& rTable = pMacroItem->GetMacroTable();
+                            m_pGlossaryHdl->SetMacros( m_xShortNameEdit->get_text(),
+                                                        rTable.Get( SvMacroItemId::SwStartInsGlossary ),
+                                                        rTable.Get( SvMacroItemId::SwEndInsGlossary ) );
+                        }
+                    }
+                    pMacroDlg->disposeOnce();
+                }
+            );
     }
     else if (rItemIdent == "import")
     {

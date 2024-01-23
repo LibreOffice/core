@@ -141,7 +141,7 @@ IMPL_ABSTDLG_CLASS_ASYNC(AbstractThesaurusDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractControllerAsync,weld::DialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractTabController,SfxTabDialogController)
 IMPL_ABSTDLG_CLASS(CuiAbstractController)
-IMPL_ABSTDLG_CLASS(CuiAbstractSingleTabController)
+IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractSingleTabController, SfxSingleTabDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractWidgetTestControllerAsync,weld::GenericDialogController)
 
 short AbstractHyphenWordDialog_Impl::Execute()

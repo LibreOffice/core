@@ -114,7 +114,7 @@ DECL_ABSTDLG_CLASS_SHARED_ASYNC(CuiAbstractWidgetTestControllerAsync, VclAbstrac
 };
 
 // CuiAbstractSingleTabController_Impl
-DECL_ABSTDLG_CLASS_UNIQUE(CuiAbstractSingleTabController, SfxAbstractDialog, SfxSingleTabDialogController)
+DECL_ABSTDLG_CLASS_SHARED_ASYNC(CuiAbstractSingleTabController, SfxAbstractDialog, SfxSingleTabDialogController)
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     //From class Window.
     virtual void          SetText( const OUString& rStr ) override;

@@ -665,15 +665,21 @@ void IMapWindow::DoMacroAssign()
     aSet.Put( aMacroItem );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(GetDrawingArea(), aSet, mxDocumentFrame));
+    VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(GetDrawingArea(), aSet, mxDocumentFrame));
 
-    if ( pMacroDlg->Execute() == RET_OK )
-    {
-        const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
-        pIMapObj->SetMacroTable( pOutSet->Get( SID_ATTR_MACROITEM ).GetMacroTable() );
-        pModel->SetChanged();
-        UpdateInfo( false );
-    }
+    pMacroDlg->StartExecuteAsync(
+        [this, pMacroDlg, pIMapObj] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
+                pIMapObj->SetMacroTable( pOutSet->Get( SID_ATTR_MACROITEM ).GetMacroTable() );
+                pModel->SetChanged();
+                UpdateInfo( false );
+            }
+            pMacroDlg->disposeOnce();
+        }
+    );
 }
 
 void IMapWindow::DoPropertyDialog()
