@@ -13,9 +13,9 @@
 
 class QtInstanceDialog : public QtInstanceWindow, public virtual weld::Dialog
 {
-public:
     std::unique_ptr<QDialog> m_pDialog;
 
+public:
     QtInstanceDialog(QDialog* pDialog);
 
     virtual bool runAsync(std::shared_ptr<Dialog> const&,
