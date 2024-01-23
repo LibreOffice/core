@@ -3692,6 +3692,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf159101)
                 "expand"_ostr, "two");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf157628)
+{
+    createSwDoc("tdf157628.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwLinePortion"_ostr,
+                "portion"_ostr, "This is in first row");
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[2]/SwLinePortion"_ostr,
+                "portion"_ostr, "This is second row*");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf142694)
 {
     createSwDoc("tdf142694-1.odt");
