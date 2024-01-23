@@ -1009,6 +1009,8 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         case SwContentControlType::PLAIN_TEXT:
         {
             pDescriptor = std::make_unique<vcl::PDFWriter::EditWidget>();
+            auto pEditWidget = static_cast<vcl::PDFWriter::EditWidget*>(pDescriptor.get());
+            pEditWidget->MultiLine = true;
             break;
         }
         case SwContentControlType::CHECKBOX:
