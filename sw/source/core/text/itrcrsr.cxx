@@ -1610,8 +1610,11 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
 
     // Skip space at the end of the line
     if( bLastPortion && (m_pCurr->GetNext() || m_pFrame->GetFollow() )
-        && rText[sal_Int32(nCurrStart + nLength) - 1] == ' ' )
+        && sal_Int32(nLength) != 0
+        && rText[sal_Int32(nCurrStart + nLength) - 1] == ' ')
+    {
         --nLength;
+    }
 
     if( nWidth > nX ||
       ( nWidth == nX && pPor->IsMultiPortion() && static_cast<SwMultiPortion*>(pPor)->IsDouble() ) )
