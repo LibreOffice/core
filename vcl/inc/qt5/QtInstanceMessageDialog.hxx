@@ -29,6 +29,11 @@ public:
     virtual OUString get_primary_text() const override;
 
     virtual OUString get_secondary_text() const override;
+
+    // weld::Dialog overrides
+    virtual void add_button(const OUString& rText, int nResponse,
+                            const OUString& rHelpId = {}) override;
+    virtual int run() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
