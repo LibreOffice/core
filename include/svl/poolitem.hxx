@@ -118,6 +118,7 @@ class SVL_DLLPUBLIC SfxPoolItem
     friend class SfxItemPool;
     friend class SfxItemDisruptor_Impl;
     friend class SfxItemSet;
+    friend class InstanceManagerHelper;
 
     // allow ItemSetTooling to access
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
@@ -316,6 +317,7 @@ class SVL_DLLPUBLIC DefaultItemInstanceManager : public ItemInstanceManager
     std::unordered_set<const SfxPoolItem*>  maRegistered;
 
 public:
+    virtual ~DefaultItemInstanceManager() = default;
     virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
     virtual void add(const SfxPoolItem&) override;
     virtual void remove(const SfxPoolItem&) override;
