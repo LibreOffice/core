@@ -95,6 +95,9 @@ void SvXMLMetaExport::SimpleDateTimeElement( const util::DateTime & rDate,
 
 void SvXMLMetaExport::MExport_()
 {
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+    bool bRemoveUserInfo = bRemovePersonalInfo && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo);
+
     //  generator
     {
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_GENERATOR,
@@ -115,22 +118,19 @@ void SvXMLMetaExport::MExport_()
                            XML_NAMESPACE_DC, XML_SUBJECT );
 
     //  created...
-    SimpleStringElement  ( mxDocProps->getAuthor(),
-                           XML_NAMESPACE_META, XML_INITIAL_CREATOR );
-    SimpleDateTimeElement( mxDocProps->getCreationDate(),
-                           XML_NAMESPACE_META, XML_CREATION_DATE );
+    if (!bRemoveUserInfo)
+    {
+        SimpleStringElement(mxDocProps->getAuthor(), XML_NAMESPACE_META, XML_INITIAL_CREATOR);
+        SimpleDateTimeElement(mxDocProps->getCreationDate(), XML_NAMESPACE_META, XML_CREATION_DATE);
 
-    //  modified...
-    SimpleStringElement  ( mxDocProps->getModifiedBy(),
-                           XML_NAMESPACE_DC, XML_CREATOR );
-    SimpleDateTimeElement( mxDocProps->getModificationDate(),
-                           XML_NAMESPACE_DC, XML_DATE );
+        //  modified...
+        SimpleStringElement(mxDocProps->getModifiedBy(), XML_NAMESPACE_DC, XML_CREATOR);
+        SimpleDateTimeElement(mxDocProps->getModificationDate(), XML_NAMESPACE_DC, XML_DATE);
 
-    //  printed...
-    SimpleStringElement  ( mxDocProps->getPrintedBy(),
-                           XML_NAMESPACE_META, XML_PRINTED_BY );
-    SimpleDateTimeElement( mxDocProps->getPrintDate(),
-                           XML_NAMESPACE_META, XML_PRINT_DATE );
+        //  printed...
+        SimpleStringElement(mxDocProps->getPrintedBy(), XML_NAMESPACE_META, XML_PRINTED_BY);
+        SimpleDateTimeElement(mxDocProps->getPrintDate(), XML_NAMESPACE_META, XML_PRINT_DATE);
+    }
 
     //  keywords
     const uno::Sequence< OUString > keywords = mxDocProps->getKeywords();
@@ -151,6 +151,7 @@ void SvXMLMetaExport::MExport_()
     }
 
     //  editing cycles
+    if (!bRemovePersonalInfo)
     {
         SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META, XML_EDITING_CYCLES,
@@ -161,6 +162,7 @@ void SvXMLMetaExport::MExport_()
 
     //  editing duration
     //  property is a int32 (seconds)
+    if (!bRemovePersonalInfo)
     {
         sal_Int32 secs = mxDocProps->getEditingDuration();
         SvXMLElementExport aElem( mrExport,
@@ -208,7 +210,7 @@ void SvXMLMetaExport::MExport_()
 
     //  template
     const OUString sTplPath = mxDocProps->getTemplateURL();
-    if ( !sTplPath.isEmpty() )
+    if ( !bRemovePersonalInfo && !sTplPath.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
@@ -318,7 +320,9 @@ void SvXMLMetaExport::Export()
 {
     uno::Reference< xml::sax::XSAXSerializable> xSAXable(mxDocProps,
         uno::UNO_QUERY);
-    if (xSAXable.is()) {
+    bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo);
+    if (xSAXable.is() && !bRemovePersonalInfo) {
         ::std::vector< beans::StringPair > namespaces;
         const SvXMLNamespaceMap & rNsMap(mrExport.GetNamespaceMap());
         for (sal_uInt16 key = rNsMap.GetFirstKey();
