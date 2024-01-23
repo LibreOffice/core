@@ -158,6 +158,11 @@ QString vclMessageTypeToQtTitle(VclMessageType eType);
 QMessageBox::StandardButtons vclButtonsTypeToQtButton(VclButtonsType eButtonType);
 int qtResponseTypeToVclResponseType(int ret);
 
+/** Converts a string potentially containing a '~' character to indicate an accelerator
+ *  to the Qt variant using '&' for the accelerator.
+ */
+QString vclToQtStringWithAccelerator(const OUString& rText);
+
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
                                                      const QString& rString)

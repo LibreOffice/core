@@ -71,8 +71,7 @@ bool QtMenu::VisibleMenuBar() { return true; }
 void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
 {
     sal_uInt16 nId = pSalMenuItem->mnId;
-    OUString aText = mpVCLMenu->GetItemText(nId);
-    NativeItemText(aText);
+    const QString aText = vclToQtStringWithAccelerator(mpVCLMenu->GetItemText(nId));
     vcl::KeyCode nAccelKey = mpVCLMenu->GetAccelKey(nId);
 
     pSalMenuItem->mpAction.reset();
@@ -83,7 +82,7 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
         // top-level menu
         if (validateQMenuBar())
         {
-            QMenu* pQMenu = new QMenu(toQString(aText), nullptr);
+            QMenu* pQMenu = new QMenu(aText, nullptr);
             connectHelpSignalSlots(pQMenu, pSalMenuItem);
             pSalMenuItem->mpMenu.reset(pQMenu);
 
@@ -122,7 +121,7 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
         if (pSalMenuItem->mpSubMenu)
         {
             // submenu
-            QMenu* pQMenu = new QMenu(toQString(aText), nullptr);
+            QMenu* pQMenu = new QMenu(aText, nullptr);
             connectHelpSignalSlots(pQMenu, pSalMenuItem);
             pSalMenuItem->mpMenu.reset(pQMenu);
 
@@ -172,7 +171,7 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
             else
             {
                 // leaf menu
-                QAction* pAction = new QAction(toQString(aText), nullptr);
+                QAction* pAction = new QAction(aText, nullptr);
                 pSalMenuItem->mpAction.reset(pAction);
 
                 if ((nPos != MENU_APPEND)
@@ -556,9 +555,7 @@ void QtMenu::SetItemText(unsigned, SalMenuItem* pItem, const OUString& rText)
     QAction* pAction = pSalMenuItem->getAction();
     if (pAction)
     {
-        OUString aText(rText);
-        NativeItemText(aText);
-        pAction->setText(toQString(aText));
+        pAction->setText(vclToQtStringWithAccelerator(rText));
     }
 }
 
@@ -681,14 +678,6 @@ void QtMenu::slotMenuAboutToHide(QtMenuItem* pQItem)
 
         pTopLevel->GetMenu()->HandleMenuDeActivateEvent(pMenu);
     }
-}
-
-void QtMenu::NativeItemText(OUString& rItemText)
-{
-    // preserve literal '&'s in menu texts
-    rItemText = rItemText.replaceAll("&", "&&");
-
-    rItemText = rItemText.replace('~', '&');
 }
 
 void QtMenu::slotCloseDocument()

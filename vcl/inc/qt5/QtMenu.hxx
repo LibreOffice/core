@@ -57,7 +57,6 @@ private:
     static OUString m_sCurrentHelpId;
 
     void DoFullMenuUpdate(Menu* pMenuBar);
-    static void NativeItemText(OUString& rItemText);
 
     void InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos);
 

@@ -212,4 +212,10 @@ int qtResponseTypeToVclResponseType(int ret)
     return ret;
 }
 
+QString vclToQtStringWithAccelerator(const OUString& rText)
+{
+    // preserve literal '&'s and use '&' instead of '~' for the accelerator
+    return toQString(rText.replaceAll("&", "&&").replace('~', '&'));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
