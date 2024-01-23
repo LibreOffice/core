@@ -63,8 +63,8 @@
 #include <queryentry.hxx>
 #include <tokenarray.hxx>
 #include <compare.hxx>
-
 #include <com/sun/star/util/SearchResult.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
@@ -2308,7 +2308,10 @@ void ScInterpreter::ScCell()
                         OUStringBuffer aBuf;
                         aBuf.append('\'');
                         const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
-                        aBuf.append(rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+                        if (!comphelper::LibreOfficeKit::isActive())
+                            aBuf.append(rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+                        else
+                            aBuf.append(rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous));
                         aBuf.append("'#$");
                         OUString aTabName;
                         mrDoc.GetName( nTab, aTabName );
