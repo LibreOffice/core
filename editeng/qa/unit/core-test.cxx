@@ -33,6 +33,7 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 
 #include <memory>
 #include <editeng/outliner.hxx>
@@ -67,6 +68,9 @@ public:
 
     /// Test Copy/Paste using Legacy Format
     void testCopyPaste();
+
+    /// Test Paste using HTML
+    void testHTMLPaste();
 
     /// Test Copy/Paste with selective selection over multiple paragraphs
     void testMultiParaSelCopyPaste();
@@ -114,6 +118,7 @@ public:
     CPPUNIT_TEST(testAutocorrect);
     CPPUNIT_TEST(testHyperlinkCopyPaste);
     CPPUNIT_TEST(testCopyPaste);
+    CPPUNIT_TEST(testHTMLPaste);
     CPPUNIT_TEST(testMultiParaSelCopyPaste);
     CPPUNIT_TEST(testTabsCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
@@ -712,6 +717,62 @@ void Test::testCopyPaste()
     // Assert changes
     CPPUNIT_ASSERT_EQUAL( aTextLen + aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(aText + aText), rDoc.GetParaAsString(sal_Int32(0)) );
+}
+
+/// XTransferable implementation that provides simple HTML content.
+class TestHTMLTransferable : public cppu::WeakImplHelper<datatransfer::XTransferable>
+{
+public:
+    uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override;
+    uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override;
+};
+
+uno::Any TestHTMLTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+{
+    if (rFlavor.MimeType != "text/html")
+    {
+        return {};
+    }
+
+    uno::Any aRet;
+    SvMemoryStream aStream;
+    aStream.WriteOString("<!DOCTYPE html>\n<html><body>test</body></html>");
+    aRet <<= uno::Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()), aStream.GetSize());
+    return aRet;
+}
+
+uno::Sequence<datatransfer::DataFlavor> TestHTMLTransferable::getTransferDataFlavors()
+{
+    datatransfer::DataFlavor aFlavor;
+    aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+    aFlavor.MimeType = "text/html";
+    aFlavor.HumanPresentableName = aFlavor.MimeType;
+    return { aFlavor };
+}
+
+sal_Bool TestHTMLTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+{
+    return rFlavor.MimeType == "text/html"
+           && rFlavor.DataType == cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+}
+
+void Test::testHTMLPaste()
+{
+    // Given an empty editeng document:
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+    uno::Reference< datatransfer::XTransferable > xData(new TestHTMLTransferable);
+
+    // When trying to paste HTML:
+    aEditEngine.InsertText(xData, OUString(), rDoc.GetEndPaM(), true);
+
+    // Then make sure the text gets pasted:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: test
+    // - Actual  :
+    // i.e. RTF and plain text paste worked, but not HTML.
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 
 void Test::testMultiParaSelCopyPaste()

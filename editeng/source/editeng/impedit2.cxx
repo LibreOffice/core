@@ -3941,7 +3941,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             }
         }
         if (!bDone) {
-            // HTML
+            // HTML_SIMPLE
             SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML_SIMPLE, aFlavor);
             bool bHtmlSupported = rxDataObj->isDataFlavorSupported(aFlavor);
             if (bHtmlSupported && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::HTML_SIMPLE == format)) {
@@ -3962,6 +3962,37 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 }
                 catch (const css::uno::Exception&)
                 {
+                }
+            }
+        }
+
+        if (!bDone)
+        {
+            // HTML
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML, aFlavor);
+            bool bHtmlSupported = rxDataObj->isDataFlavorSupported(aFlavor);
+            if (bHtmlSupported
+                && (format == SotClipboardFormatId::NONE || format == SotClipboardFormatId::HTML))
+            {
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData(aFlavor);
+                    uno::Sequence<sal_Int8> aSeq;
+                    aData >>= aSeq;
+                    SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
+                    OUString aExpectedPrefix = u"<!DOCTYPE html>";
+                    OUString aActualPrefix;
+                    aHtmlStream.ReadByteStringLine(aActualPrefix, RTL_TEXTENCODING_UTF8,
+                                                   aExpectedPrefix.getLength());
+                    if (aActualPrefix == aExpectedPrefix)
+                    {
+                        aNewSelection = Read(aHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
+                    }
+                    bDone = true;
+                }
+                catch (const css::uno::Exception&)
+                {
+                    TOOLS_WARN_EXCEPTION("editeng", "HTML paste failed");
                 }
             }
         }
