@@ -16,7 +16,7 @@
 class ScTabViewShell;
 class ScDocument;
 
-#define MAX_DATAFORM_COLS   256
+#define MAX_DATAFORM_COLS   32
 #define MAX_DATAFORM_ROWS   32000
 
 class ScDataFormDlg : public weld::GenericDialogController

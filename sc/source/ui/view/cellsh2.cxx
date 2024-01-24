@@ -53,6 +53,7 @@
 #include <validat.hxx>
 #include <validate.hxx>
 #include <datamapper.hxx>
+#include <datafdlg.hxx>
 
 #include <scui_def.hxx>
 #include <scabstdlg.hxx>
@@ -353,6 +354,18 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_DATA_FORM:
             {
+                ScViewData& rData = GetViewData();
+                ScRange aRange;
+                rData.GetSimpleArea( aRange );
+                ScAddress aStart = aRange.aStart;
+                ScAddress aEnd = aRange.aEnd;
+
+                if((aEnd.Col() - aStart.Col()) >= MAX_DATAFORM_COLS)
+                {
+                    rData.GetDocShell()->ErrorMessage(STR_TOO_MANY_COLUMNS_DATA_FORM);
+                    break;
+                }
+
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 VclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(

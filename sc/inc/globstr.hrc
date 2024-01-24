@@ -219,6 +219,7 @@
 #define STR_MATRIXFRAGMENTERR                   NC_("STR_MATRIXFRAGMENTERR", "You cannot change only part of an array.")
 #define STR_PAGEHEADER                          NC_("STR_PAGEHEADER", "Header")
 #define STR_PAGEFOOTER                          NC_("STR_PAGEFOOTER", "Footer")
+#define STR_TOO_MANY_COLUMNS_DATA_FORM          NC_("STR_TOO_MANY_COLUMNS_DATA_FORM", "Too many columns in the data form.")
 
 /* BEGIN error constants and error strings. */
 #define STR_ERROR_STR                           NC_("STR_ERROR_STR", "Err:")
