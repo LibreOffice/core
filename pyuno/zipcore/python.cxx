@@ -79,42 +79,36 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             exit(EXIT_FAILURE);
         }
     }
-    wchar_t bootstrap[MY_LENGTH(L"vnd.sun.star.pathname:") + MAX_PATH] =
-        L"vnd.sun.star.pathname:"; //TODO: overflow
-    wchar_t * bootstrapEnd = tools::buildPath(
-        bootstrap + MY_LENGTH(L"vnd.sun.star.pathname:"), path, pathEnd,
-        MY_STRING(L"fundamental.ini"));
-    if (bootstrapEnd == nullptr) {
+    std::wstring bootstrap = tools::buildPath({ path, pathEnd }, L"fundamental.ini");
+    if (bootstrap.empty()) {
         exit(EXIT_FAILURE);
     }
-    wchar_t pythonpath2[MAX_PATH];
-    wchar_t * pythonpath2End = tools::buildPath(
-        pythonpath2, path, pathEnd,
-        MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\lib"));
-    if (pythonpath2End == nullptr) {
+    bootstrap = L"vnd.sun.star.pathname:" + bootstrap;
+    std::wstring pythonpath2 = tools::buildPath(
+        { path, pathEnd },
+        L"\\python-core-" PYTHON_VERSION_STRING L"\\lib");
+    if (pythonpath2.empty()) {
         exit(EXIT_FAILURE);
     }
-    wchar_t pythonpath3[MAX_PATH];
-    wchar_t * pythonpath3End = tools::buildPath(
-        pythonpath3, path, pathEnd,
-        MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\lib\\site-packages"));
-    if (pythonpath3End == nullptr) {
+    std::wstring pythonpath3 = tools::buildPath(
+        { path, pathEnd },
+        L"\\python-core-" PYTHON_VERSION_STRING L"\\lib\\site-packages");
+    if (pythonpath3.empty()) {
         exit(EXIT_FAILURE);
     }
-    wchar_t pythonhome[MAX_PATH];
-    wchar_t * pythonhomeEnd = tools::buildPath(
-        pythonhome, path, pathEnd, MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING));
-    if (pythonhomeEnd == nullptr) {
+    std::wstring pythonhome = tools::buildPath(
+        { path, pathEnd },
+        L"\\python-core-" PYTHON_VERSION_STRING);
+    if (pythonhome.empty()) {
         exit(EXIT_FAILURE);
     }
-    wchar_t pythonexe[MAX_PATH];
-    wchar_t * pythonexeEnd = tools::buildPath(
-        pythonexe, path, pathEnd,
-        MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\bin\\python.exe"));
-    if (pythonexeEnd == nullptr) {
+    std::wstring pythonexe = tools::buildPath(
+        { path, pathEnd },
+        L"\\python-core-" PYTHON_VERSION_STRING L"\\bin\\python.exe");
+    if (pythonexe.empty()) {
         exit(EXIT_FAILURE);
     }
-    std::size_t clSize = MY_LENGTH(L"\"") + 4 * (pythonexeEnd - pythonexe) +
+    std::size_t clSize = MY_LENGTH(L"\"") + 4 * pythonexe.size() +
         MY_LENGTH(L"\"\0"); //TODO: overflow
         // 4 * len: each char preceded by backslash, each trailing backslash
         // doubled
@@ -123,7 +117,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             //TODO: overflow
     }
     wchar_t * cl = new wchar_t[clSize];
-    wchar_t * cp = encode(cl, pythonhome);
+    wchar_t * cp = encode(cl, pythonhome.data());
     for (int i = 1; i < argc; ++i) {
         *cp++ = L' ';
         cp = encode(cp, argv[i]);
@@ -169,12 +163,12 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             exit(EXIT_FAILURE);
         }
     }
-    len = (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
-        MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
+    len = (pathEnd - path) + MY_LENGTH(L";") + pythonpath2.size() +
+        MY_LENGTH(L";") + pythonpath3.size() +
         (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; //TODO: overflow
     value = new wchar_t[len];
     _snwprintf(
-        value, len, L"%s;%s;%s%s%s", path, pythonpath2, pythonpath3,
+        value, len, L"%s;%s;%s%s%s", path, pythonpath2.c_str(), pythonpath3.c_str(),
         n == 0 ? L"" : L";", orig);
     if (!SetEnvironmentVariableW(L"PYTHONPATH", value)) {
         exit(EXIT_FAILURE);
@@ -183,13 +177,13 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         delete [] orig;
     }
     delete [] value;
-    if (!SetEnvironmentVariableW(L"PYTHONHOME", pythonhome)) {
+    if (!SetEnvironmentVariableW(L"PYTHONHOME", pythonhome.data())) {
         exit(EXIT_FAILURE);
     }
     n = GetEnvironmentVariableW(L"URE_BOOTSTRAP", nullptr, 0);
     if (n == 0) {
         if (GetLastError() != ERROR_ENVVAR_NOT_FOUND ||
-            !SetEnvironmentVariableW(L"URE_BOOTSTRAP", bootstrap))
+            !SetEnvironmentVariableW(L"URE_BOOTSTRAP", bootstrap.data()))
         {
             exit(EXIT_FAILURE);
         }
@@ -199,7 +193,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     startinfo.cb = sizeof (STARTUPINFOW);
     PROCESS_INFORMATION procinfo;
     if (!CreateProcessW(
-            pythonexe, cl, nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT, nullptr,
+            pythonexe.data(), cl, nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT, nullptr,
             nullptr, &startinfo, &procinfo)) {
         exit(EXIT_FAILURE);
     }

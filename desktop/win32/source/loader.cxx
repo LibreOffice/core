@@ -33,9 +33,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
-#define MY_LENGTH(s) (std::size(s) - 1)
-#define MY_STRING(s) (s), MY_LENGTH(s)
-
 namespace {
 
 void fail()
@@ -85,9 +82,10 @@ std::wstring getCWDarg()
 {
     std::wstring s(L" \"-env:OOO_CWD=");
 
-    WCHAR cwd[MAX_PATH];
-    DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
-    if (cwdLen == 0 || cwdLen >= MAX_PATH)
+    DWORD cwdLen = GetCurrentDirectoryW(0, nullptr);
+    std::vector<WCHAR> cwd(cwdLen);
+    cwdLen = GetCurrentDirectoryW(cwdLen, cwd.data());
+    if (cwdLen == 0 || cwdLen >= cwd.size())
     {
         s += L'0';
     }
@@ -96,7 +94,7 @@ std::wstring getCWDarg()
         s += L'2';
 
         size_t n = 0; // number of trailing backslashes
-        for (auto* p = cwd; *p; ++p)
+        for (auto* p = cwd.data(); *p; ++p)
         {
             WCHAR c = *p;
             if (c == L'$')
@@ -132,26 +130,30 @@ WCHAR* commandLineAppend(WCHAR* buffer, std::wstring_view text)
 
 // Set the PATH environment variable in the current (loader) process, so that a
 // following CreateProcess has the necessary environment:
-// @param binPath
-// Must point to an array of size at least MAX_PATH.  Is filled with the null
-// terminated full path to the "bin" file corresponding to the current
-// executable.
-// @param iniDirectory
-// Must point to an array of size at least MAX_PATH.  Is filled with the null
-// terminated full directory path (ending in "\") to the "ini" file
-// corresponding to the current executable.
-void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
-    if (!GetModuleFileNameW(nullptr, iniDirectory, MAX_PATH)) {
-        fail();
+// returns a pair of strings { binPath, iniDirectory }
+// * binPath is the full path to the "bin" file corresponding to the current executable.
+// * iniDirectory is the full directory path (ending in "\") to the "ini" file corresponding to the
+// current executable.
+[[nodiscard]] std::pair<std::wstring, std::wstring> extendLoaderEnvironment()
+{
+    std::vector<wchar_t> executable_path(MAX_PATH);
+    DWORD exe_len;
+    for (;;)
+    {
+        exe_len = GetModuleFileNameW(nullptr, executable_path.data(), executable_path.size());
+        if (!exe_len)
+            fail();
+        if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+        {
+            executable_path.resize(exe_len + 4); // to accomodate a possible ".bin" in the end
+            break;
+        }
+        executable_path.resize(executable_path.size() * 2);
     }
-    WCHAR * iniDirEnd = tools::filename(iniDirectory);
-    WCHAR name[MAX_PATH + MY_LENGTH(L".bin")];
-        // hopefully std::size_t is large enough to not overflow
-    WCHAR * nameEnd = name;
-    for (WCHAR * p = iniDirEnd; *p != L'\0'; ++p) {
-        *nameEnd++ = *p;
-    }
-    if (!(nameEnd - name >= 4 && nameEnd[-4] == L'.' &&
+    WCHAR* iniDirEnd = tools::filename(executable_path.data());
+    std::wstring_view iniDirView(executable_path.data(), iniDirEnd);
+    WCHAR* nameEnd = executable_path.data() + exe_len;
+    if (!(nameEnd - iniDirEnd >= 4 && nameEnd[-4] == L'.' &&
          (((nameEnd[-3] == L'E' || nameEnd[-3] == L'e') &&
            (nameEnd[-2] == L'X' || nameEnd[-2] == L'x') &&
            (nameEnd[-1] == L'E' || nameEnd[-1] == L'e')) ||
@@ -165,30 +167,30 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
     nameEnd[-3] = 'b';
     nameEnd[-2] = 'i';
     nameEnd[-1] = 'n';
-    tools::buildPath(binPath, iniDirectory, iniDirEnd, name, nameEnd - name);
-    *iniDirEnd = L'\0';
-    std::size_t const maxEnv = 32767;
-    WCHAR env[maxEnv];
-    DWORD n = GetEnvironmentVariableW(L"PATH", env, maxEnv);
-    if ((n >= maxEnv || n == 0) && GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
+    std::wstring_view nameView(iniDirEnd, nameEnd);
+
+    WCHAR env[32767];
+    DWORD n = GetEnvironmentVariableW(L"PATH", env, std::size(env));
+    if ((n >= std::size(env) || n == 0) && GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
         fail();
     }
+    std::wstring_view envView(env, n);
     // must be first in PATH to override other entries
-    assert(*(iniDirEnd - 1) == L'\\'); // hence -1 below
-    std::wstring_view iniDirView(iniDirectory, iniDirEnd - iniDirectory - 1);
-    if (!std::wstring_view(env, n).starts_with(iniDirView) || env[iniDirView.size()] != L';')
+    assert(iniDirView.back() == L'\\'); // hence -1 below
+    std::wstring_view iniDirView1(iniDirView.substr(0, iniDirView.size() - 1));
+    if (!envView.starts_with(iniDirView1) || env[iniDirView1.size()] != L';')
     {
-        WCHAR pad[MAX_PATH + maxEnv];
-            // hopefully std::size_t is large enough to not overflow
-        WCHAR* p = commandLineAppend(pad, iniDirView);
+        std::wstring pad(iniDirView1);
         if (n != 0) {
-            *p++ = L';';
-            commandLineAppend(p, std::wstring_view(env, n));
+            pad += L';';
+            pad += envView;
         }
-        if (!SetEnvironmentVariableW(L"PATH", pad)) {
+        if (!SetEnvironmentVariableW(L"PATH", pad.data())) {
             fail();
         }
     }
+
+    return { tools::buildPath(iniDirView, nameView), std::wstring(iniDirView) };
 }
 
 }
@@ -197,10 +199,7 @@ namespace desktop_win32 {
 
 int officeloader_impl(bool bAllowConsole)
 {
-    WCHAR szTargetFileName[MAX_PATH] = {};
-    WCHAR szIniDirectory[MAX_PATH];
-
-    extendLoaderEnvironment(szTargetFileName, szIniDirectory);
+    const auto& [szTargetFileName, szIniDirectory] = extendLoaderEnvironment();
 
     STARTUPINFOW aStartupInfo;
     ZeroMemory(&aStartupInfo, sizeof(aStartupInfo));
@@ -221,56 +220,38 @@ int officeloader_impl(bool bAllowConsole)
     bool fallbackForMaxMemoryInMB = true;
     bool fallbackForExcludeChildProcesses = true;
 
-    const WCHAR* szIniFile = L"\\fundamental.override.ini";
-    const size_t nDirLen = wcslen(szIniDirectory);
-    if (wcslen(szIniFile) + nDirLen < MAX_PATH)
+    try
     {
-        WCHAR szBootstrapIni[MAX_PATH];
-        wcscpy(szBootstrapIni, szIniDirectory);
-        wcscpy(&szBootstrapIni[nDirLen], szIniFile);
-
-        try
-        {
-            boost::property_tree::ptree pt;
-            std::ifstream aFile(szBootstrapIni);
-            boost::property_tree::ini_parser::read_ini(aFile, pt);
-            nMaxMemoryInMB = pt.get("Bootstrap.LimitMaximumMemoryInMB", nMaxMemoryInMB);
-            fallbackForMaxMemoryInMB = !pt.get_child_optional("Bootstrap.LimitMaximumMemoryInMB");
-            bExcludeChildProcesses = pt.get("Bootstrap.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
-            fallbackForExcludeChildProcesses
-                = !pt.get_child_optional("Bootstrap.ExcludeChildProcessesFromLimit");
-        }
-        catch (...)
-        {
-            nMaxMemoryInMB = 0;
-        }
+        boost::property_tree::ptree pt;
+        std::ifstream aFile(szIniDirectory + L"\\fundamental.override.ini");
+        boost::property_tree::ini_parser::read_ini(aFile, pt);
+        nMaxMemoryInMB = pt.get("Bootstrap.LimitMaximumMemoryInMB", nMaxMemoryInMB);
+        fallbackForMaxMemoryInMB = !pt.get_child_optional("Bootstrap.LimitMaximumMemoryInMB");
+        bExcludeChildProcesses = pt.get("Bootstrap.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
+        fallbackForExcludeChildProcesses
+            = !pt.get_child_optional("Bootstrap.ExcludeChildProcessesFromLimit");
+    }
+    catch (...)
+    {
+        nMaxMemoryInMB = 0;
     }
     // For backwards compatibility, for now also try to read the values from bootstrap.ini if
     // fundamental.override.ini does not provide them:
     if (fallbackForMaxMemoryInMB || fallbackForExcludeChildProcesses) {
-        const WCHAR* szFallbackIniFile = L"\\bootstrap.ini";
-        const size_t nFallbackDirLen = wcslen(szIniDirectory);
-        if (wcslen(szFallbackIniFile) + nFallbackDirLen < MAX_PATH)
+        try
         {
-            WCHAR szBootstrapIni[MAX_PATH];
-            wcscpy(szBootstrapIni, szIniDirectory);
-            wcscpy(&szBootstrapIni[nFallbackDirLen], szFallbackIniFile);
-
-            try
-            {
-                boost::property_tree::ptree pt;
-                std::ifstream aFile(szBootstrapIni);
-                boost::property_tree::ini_parser::read_ini(aFile, pt);
-                if (fallbackForMaxMemoryInMB) {
-                    nMaxMemoryInMB = pt.get("Win32.LimitMaximumMemoryInMB", nMaxMemoryInMB);
-                }
-                if (fallbackForExcludeChildProcesses) {
-                    bExcludeChildProcesses = pt.get("Win32.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
-                }
+            boost::property_tree::ptree pt;
+            std::ifstream aFile(szIniDirectory + L"\\bootstrap.ini");
+            boost::property_tree::ini_parser::read_ini(aFile, pt);
+            if (fallbackForMaxMemoryInMB) {
+                nMaxMemoryInMB = pt.get("Win32.LimitMaximumMemoryInMB", nMaxMemoryInMB);
             }
-            catch (...)
-            {
+            if (fallbackForExcludeChildProcesses) {
+                bExcludeChildProcesses = pt.get("Win32.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
             }
+        }
+        catch (...)
+        {
         }
     }
 
@@ -355,9 +336,9 @@ int officeloader_impl(bool bAllowConsole)
 
         PROCESS_INFORMATION aProcessInfo;
 
-        fSuccess = CreateProcessW(szTargetFileName, lpCommandLine, nullptr, nullptr, TRUE,
-                                  bAllowConsole ? 0 : DETACHED_PROCESS, nullptr, szIniDirectory,
-                                  &aStartupInfo, &aProcessInfo);
+        fSuccess = CreateProcessW(szTargetFileName.data(), lpCommandLine, nullptr, nullptr, TRUE,
+                                  bAllowConsole ? 0 : DETACHED_PROCESS, nullptr,
+                                  szIniDirectory.data(), &aStartupInfo, &aProcessInfo);
 
         if (fSuccess)
         {
@@ -402,9 +383,7 @@ int officeloader_impl(bool bAllowConsole)
 
 int unopkgloader_impl(bool bAllowConsole)
 {
-    WCHAR        szTargetFileName[MAX_PATH];
-    WCHAR        szIniDirectory[MAX_PATH];
-    extendLoaderEnvironment(szTargetFileName, szIniDirectory);
+    const auto& [szTargetFileName, szIniDirectory] = extendLoaderEnvironment();
 
     STARTUPINFOW aStartupInfo{};
     aStartupInfo.cb = sizeof(aStartupInfo);
@@ -412,49 +391,31 @@ int unopkgloader_impl(bool bAllowConsole)
 
     DWORD   dwExitCode = DWORD(-1);
 
-    size_t iniDirLen = wcslen(szIniDirectory);
     std::wstring sCWDarg = getCWDarg();
-    WCHAR redirect[MAX_PATH];
     DWORD dummy;
-    bool hasRedirect =
-        tools::buildPath(
-            redirect, szIniDirectory, szIniDirectory + iniDirLen,
-            MY_STRING(L"redirect.ini")) != nullptr &&
-            (GetBinaryTypeW(redirect, &dummy) || // cheaper check for file existence?
+    std::wstring redirect = tools::buildPath(szIniDirectory, L"redirect.ini");
+    bool hasRedirect = !redirect.empty() &&
+            (GetBinaryTypeW(redirect.data(), &dummy) || // cheaper check for file existence?
                 GetLastError() != ERROR_FILE_NOT_FOUND);
     LPWSTR cl1 = GetCommandLineW();
-    WCHAR* cl2 = new WCHAR[
-        wcslen(cl1) +
-            (hasRedirect
-                ? (MY_LENGTH(L" \"-env:INIFILENAME=vnd.sun.star.pathname:") +
-                    iniDirLen + MY_LENGTH(L"redirect.ini\""))
-                : 0) +
-            sCWDarg.size() + 1];
-    // 4 * cwdLen: each char preceded by backslash, each trailing backslash
-    // doubled
-    WCHAR* p = commandLineAppend(cl2, cl1);
-    if (hasRedirect) {
-        p = commandLineAppend(p, L" \"-env:INIFILENAME=vnd.sun.star.pathname:");
-        p = commandLineAppend(p, szIniDirectory);
-        p = commandLineAppend(p, L"redirect.ini\"");
-    }
-    commandLineAppend(p, sCWDarg);
+    std::wstring cl2 = cl1;
+    if (hasRedirect)
+        cl2 += L" \"-env:INIFILENAME=vnd.sun.star.pathname:" + redirect + L"\"";
+    cl2 += sCWDarg;
 
     PROCESS_INFORMATION aProcessInfo;
 
     bool fSuccess = CreateProcessW(
-        szTargetFileName,
-        cl2,
+        szTargetFileName.data(),
+        cl2.data(),
         nullptr,
         nullptr,
         TRUE,
         bAllowConsole ? 0 : DETACHED_PROCESS,
         nullptr,
-        szIniDirectory,
+        szIniDirectory.data(),
         &aStartupInfo,
         &aProcessInfo);
-
-    delete[] cl2;
 
     if (fSuccess)
     {

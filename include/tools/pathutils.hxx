@@ -21,6 +21,9 @@
 
 #include <sal/config.h>
 
+#include <string>
+#include <string_view>
+
 #if defined(_WIN32)
 #include <cstddef>
 #define WIN32_LEAN_AND_MEAN
@@ -49,21 +52,14 @@ WCHAR* filename(WCHAR* path);
     as there are no symbolic links on Windows (as with symbolic links, x\y\.. and
     x might denote different directories).
 
-    @param path
-        An output parameter taking the resulting path; must point at a valid
-        range of memory of size at least MAX_PATH.  If NULL is returned, the
-        content is unspecified.
-    @param frontBegin, frontEnd
-        Forms a valid range [frontBegin .. frontEnd) of less than MAX_PATH size.
+    @param front
+        First path
     @param backBegin, backLength
-        Forms a valid range [backBegin .. backBegin + backLength) of less than
-        MAX_PATH size.
+        Second path
     @return
-        A pointer to the terminating null character of the concatenation, or NULL
-        if a failure occurred.
+        The concatenation, empty if a failure occurred.
 */
-WCHAR* buildPath(WCHAR* path, WCHAR const* frontBegin, WCHAR const* frontEnd,
-                 WCHAR const* backBegin, std::size_t backLength);
+std::wstring buildPath(std::wstring_view front, std::wstring_view back);
 }
 
 #endif

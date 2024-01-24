@@ -50,14 +50,11 @@ void writePath(
     wchar_t const * frontBegin, wchar_t const * frontEnd,
     wchar_t const * backBegin, std::size_t backLength)
 {
-    wchar_t path[MAX_PATH];
-    wchar_t * end = tools::buildPath(
-        path, frontBegin, frontEnd, backBegin, backLength);
-    if (end == nullptr) {
+    std::wstring path = tools::buildPath({ frontBegin, frontEnd }, { backBegin, backLength });
+    if (path.empty()) {
         exit(EXIT_FAILURE);
     }
-    std::size_t n = (end - path) * sizeof (wchar_t);
-    if (fwrite(path, 1, n, stdout) != n) {
+    if (fwrite(path.data(), sizeof (wchar_t), path.size(), stdout) != path.size()) {
         exit(EXIT_FAILURE);
     }
 }
