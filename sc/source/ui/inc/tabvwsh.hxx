@@ -44,6 +44,7 @@ struct SfxChildWinInfo;
 class AbstractScInsertTableDlg;
 class AbstractScMoveTableDlg;
 class AbstractScTabBgColorDlg;
+class AbstractScStringInputDlg;
 class ScArea;
 class ScAuditingShell;
 class ScDrawShell;
@@ -460,6 +461,8 @@ private:
     void ExecuteInsertTable( SfxRequest& rReq );
     void DoInsertTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScInsertTableDlg>& pDlg );
     void ExecuteAppendOrRenameTable( SfxRequest& rReq );
+    void ExecuteAppendOrRenameTableDialog( const VclPtr<AbstractScStringInputDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, sal_uInt16 nSlot );
+    bool DoAppendOrRenameTableDialog( sal_Int32 nResult, const VclPtr<AbstractScStringInputDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, sal_uInt16 nSlot );
     void ExecuteSetTableBackgroundCol( SfxRequest& rReq );
     void ExecuteTableBackgroundDialog( const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );
     bool DoTableBackgroundDialog( sal_Int32 nResult, const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );

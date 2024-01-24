@@ -1094,7 +1094,6 @@ void ScTabViewShell::ExecuteAppendOrRenameTable(SfxRequest& rReq)
     }
     else
     {
-        OUString aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
         OUString aName;
         OUString aDlgTitle;
         OUString sHelpId;
@@ -1116,54 +1115,78 @@ void ScTabViewShell::ExecuteAppendOrRenameTable(SfxRequest& rReq)
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-        ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
+        VclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
             GetFrameWeld(), aDlgTitle, ScResId(SCSTR_NAME),
             aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
             sHelpId));
 
-        sal_uInt16 nRet    = RET_OK;
-        bool     bDone   = false;
-        while ( !bDone && nRet == RET_OK )
+        auto xRequest = std::make_shared<SfxRequest>(rReq);
+        rReq.Ignore(); // the 'old' request is not relevant any more
+        ExecuteAppendOrRenameTableDialog(pDlg, xRequest, nSlot);
+    }
+}
+
+void ScTabViewShell::ExecuteAppendOrRenameTableDialog(const VclPtr<AbstractScStringInputDlg>& pDlg,
+                        const std::shared_ptr<SfxRequest>& xReq,
+                        sal_uInt16 nSlot)
+{
+    pDlg->StartExecuteAsync(
+        [this, pDlg, xReq, nSlot] (sal_Int32 nResult)->void
         {
-            nRet = pDlg->Execute();
+            if (DoAppendOrRenameTableDialog(nResult, pDlg, xReq, nSlot))
+                ExecuteAppendOrRenameTableDialog(pDlg, xReq, nSlot);
+            else
+                pDlg->disposeOnce();
+        }
+    );
+}
 
-            if ( nRet == RET_OK )
-            {
-                aName = pDlg->GetInputString();
+bool ScTabViewShell::DoAppendOrRenameTableDialog(sal_Int32 nResult, const VclPtr<AbstractScStringInputDlg>& pDlg,
+                        const std::shared_ptr<SfxRequest>& xReq,
+                        sal_uInt16 nSlot)
+{
+    if (nResult != RET_OK)
+        return false;
 
-                switch ( nSlot )
-                {
-                    case FID_TAB_APPEND:
-                        bDone = AppendTable( aName );
-                        break;
-                    case FID_TAB_RENAME:
-                        bDone = RenameTable( aName, nTabNr );
-                        break;
-                }
+    ScViewData& rViewData   = GetViewData();
+    SCTAB nTabNr = rViewData.GetTabNo();
+    bool     bDone   = false;
 
-                if ( bDone )
-                {
-                    rReq.AppendItem( SfxStringItem( nSlot, aName ) );
-                    rReq.Done();
-                }
-                else
-                {
-                    if( rReq.IsAPI() )
-                    {
+    OUString aName = pDlg->GetInputString();
+
+    switch ( nSlot )
+    {
+        case FID_TAB_APPEND:
+            bDone = AppendTable( aName );
+            break;
+        case FID_TAB_RENAME:
+            bDone = RenameTable( aName, nTabNr );
+            break;
+    }
+
+    if ( bDone )
+    {
+        xReq->AppendItem( SfxStringItem( nSlot, aName ) );
+        xReq->Done();
+    }
+    else
+    {
+        if( xReq->IsAPI() )
+        {
 #if HAVE_FEATURE_SCRIPTING
-                        StarBASIC::Error( ERRCODE_BASIC_SETPROP_FAILED ); // XXX error handling???
+            StarBASIC::Error( ERRCODE_BASIC_SETPROP_FAILED ); // XXX error handling???
 #endif
-                    }
-                    else
-                    {
-                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                  VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
-                        nRet = xBox->run();
-                    }
-                }
-            }
+        }
+        else
+        {
+            OUString aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
+            xBox->run();
         }
     }
+
+    return !bDone;
 }
 
 void ScTabViewShell::ExecuteSetTableBackgroundCol(SfxRequest& rReq)

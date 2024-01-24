@@ -936,6 +936,11 @@ short AbstractScStringInputDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScStringInputDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 OUString AbstractScStringInputDlg_Impl::GetInputString() const
 {
     return m_xDlg->GetInputString();

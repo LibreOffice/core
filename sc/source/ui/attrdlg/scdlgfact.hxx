@@ -559,13 +559,14 @@ public:
 
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg
 {
-    std::unique_ptr<ScStringInputDlg> m_xDlg;
+    std::shared_ptr<ScStringInputDlg> m_xDlg;
 public:
-    explicit AbstractScStringInputDlg_Impl(std::unique_ptr<ScStringInputDlg> p)
+    explicit AbstractScStringInputDlg_Impl(std::shared_ptr<ScStringInputDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual OUString GetInputString() const override;
 
     // screenshotting
