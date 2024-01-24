@@ -5909,6 +5909,7 @@ if test "$cross_compiling" = "yes"; then
         OPENSSL
         ORCUS
         PYTHON
+        REPORTBUILDER
         SCRIPTING
         ZLIB
         ZXCVBN
