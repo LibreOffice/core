@@ -2671,16 +2671,9 @@ void SwAccessibleMap::InvalidateFocus()
 
     if(GetShell()->IsPreview())
     {
-        uno::Reference<XAccessible> xAcc = GetDocumentView_( true );
-        if (xAcc)
-        {
-            SwAccessiblePreview *pAccPreview = static_cast<SwAccessiblePreview *>(xAcc.get());
-            if (pAccPreview)
-            {
-                pAccPreview->InvalidateFocus();
-                return ;
-            }
-        }
+        rtl::Reference<SwAccessibleContext> xDocView = GetDocumentView_(true);
+        assert(xDocView.is());
+        xDocView->InvalidateFocus();
     }
 
     rtl::Reference < SwAccessibleContext > xAcc = mxCursorContext;
