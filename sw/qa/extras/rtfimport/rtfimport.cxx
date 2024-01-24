@@ -1515,7 +1515,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextLeft");
     aActual = xHeaderTextLeft->getString();
-    CPPUNIT_ASSERT_EQUAL(OUString("\nHeader Page 2 ?"), aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString(SAL_NEWLINE_STRING "Header Page 2 ?"), aActual);
 #endif
 }
 
