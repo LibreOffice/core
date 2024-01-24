@@ -1481,201 +1481,252 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     // create new or process through Dialog:
     if ( nSlotId == SID_STYLE_NEW || nSlotId == SID_STYLE_EDIT )
     {
-        if ( pStyleSheet )
+        if (pStyleSheet)
         {
-            SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg;
-            bool bPage = false;
-
-            // Store old Items from the style
-            SfxItemSet aOldSet = pStyleSheet->GetItemSet();
-            OUString aOldName = pStyleSheet->GetName();
-
-            switch ( eFam )
-            {
-                case SfxStyleFamily::Page:
-                    bPage = true;
-                    break;
-
-                case SfxStyleFamily::Para:
-                    {
-                        SfxItemSet& rSet = pStyleSheet->GetItemSet();
-
-                        if ( const SfxUInt32Item* pItem = rSet.GetItemIfSet( ATTR_VALUE_FORMAT,
-                                false ) )
-                        {
-                            // Produce and format NumberFormat Value from Value and Language
-                            sal_uLong nFormat = pItem->GetValue();
-                            LanguageType eLang =
-                                rSet.Get(ATTR_LANGUAGE_FORMAT ).GetLanguage();
-                            sal_uLong nLangFormat = rDoc.GetFormatTable()->
-                                GetFormatForLanguageIfBuiltIn( nFormat, eLang );
-                            if ( nLangFormat != nFormat )
-                            {
-                                SfxUInt32Item aNewItem( ATTR_VALUE_FORMAT, nLangFormat );
-                                rSet.Put( aNewItem );
-                                aOldSet.Put( aNewItem );
-                                // Also in aOldSet for comparison after the  dialog,
-                                // Otherwise might miss a language change
-                            }
-                        }
-
-                        std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem(
-                            ScTabViewShell::MakeNumberInfoItem(rDoc, GetViewData()));
-
-                        pDocSh->PutItem( *pNumberInfoItem );
-                        bPage = false;
-
-                        // Definitely a SvxBoxInfoItem with Table = sal_False in set:
-                        // (If there is no item, the dialogue will also delete the
-                        // BORDER_OUTER SvxBoxItem from the Template Set)
-                        if ( rSet.GetItemState( ATTR_BORDER_INNER, false ) != SfxItemState::SET )
-                        {
-                            SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
-                            aBoxInfoItem.SetTable(false);       // no inner lines
-                            aBoxInfoItem.SetDist(true);
-                            aBoxInfoItem.SetMinDist(false);
-                            rSet.Put( aBoxInfoItem );
-                        }
-                    }
-                    break;
-
-                case SfxStyleFamily::Frame:
-                default:
-                    break;
-            }
-
-            SetInFormatDialog(true);
-
-            SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-            rStyleSet.MergeRange( XATTR_FILL_FIRST, XATTR_FILL_LAST );
-
-            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-            weld::Window* pDialogParent = rReq.GetFrameWeld();
-            if (!pDialogParent)
-                pDialogParent = GetFrameWeld();
-
-            if (eFam == SfxStyleFamily::Frame)
-                pDlg.disposeAndReset(pFact->CreateScDrawStyleDlg(pDialogParent, *pStyleSheet, GetDrawView()));
-            else
-                pDlg.disposeAndReset(pFact->CreateScStyleDlg(pDialogParent, *pStyleSheet, bPage));
-
-            short nResult = pDlg->Execute();
-            SetInFormatDialog(false);
-
-            if ( nResult == RET_OK )
-            {
-                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-
-                if ( pOutSet )
-                {
-                    nRetMask = sal_uInt16(pStyleSheet->GetMask());
-
-                    // Attribute comparisons (earlier in ModifyStyleSheet) now here
-                    // with the old values (the style is already changed)
-                    if ( SfxStyleFamily::Para == eFam )
-                    {
-                        SfxItemSet& rNewSet = pStyleSheet->GetItemSet();
-                        bool bNumFormatChanged;
-                        if ( ScGlobal::CheckWidthInvalidate(
-                                            bNumFormatChanged, rNewSet, aOldSet ) )
-                            rDoc.InvalidateTextWidth( nullptr, nullptr, bNumFormatChanged );
-
-                        SCTAB nTabCount = rDoc.GetTableCount();
-                        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                            rDoc.SetStreamValid(nTab, false);
-
-                        sal_uLong nOldFormat = aOldSet.Get( ATTR_VALUE_FORMAT ).GetValue();
-                        sal_uLong nNewFormat = rNewSet.Get( ATTR_VALUE_FORMAT ).GetValue();
-                        if ( nNewFormat != nOldFormat )
-                        {
-                            SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                            const SvNumberformat* pOld = pFormatter->GetEntry( nOldFormat );
-                            const SvNumberformat* pNew = pFormatter->GetEntry( nNewFormat );
-                            if ( pOld && pNew && pOld->GetLanguage() != pNew->GetLanguage() )
-                                rNewSet.Put( SvxLanguageItem(
-                                                pNew->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
-                        }
-
-                        rDoc.getCellAttributeHelper().CellStyleCreated(rDoc, pStyleSheet->GetName());
-                    }
-                    else if ( SfxStyleFamily::Page == eFam )
-                    {
-                        //! Here also queries for Page Styles
-
-                        OUString aNewName = pStyleSheet->GetName();
-                        if ( aNewName != aOldName &&
-                                rDoc.RenamePageStyleInUse( aOldName, aNewName ) )
-                        {
-                            rBindings.Invalidate( SID_STATUS_PAGESTYLE );
-                            rBindings.Invalidate( FID_RESET_PRINTZOOM );
-                        }
-
-                        rDoc.ModifyStyleSheet( *pStyleSheet, *pOutSet );
-                        rBindings.Invalidate( FID_RESET_PRINTZOOM );
-                    }
-                    else
-                    {
-                        SfxItemSet& rAttr = pStyleSheet->GetItemSet();
-                        sdr::properties::CleanupFillProperties(rAttr);
-
-                        // check for unique names of named items for xml
-                        auto checkForUniqueItem = [&] (auto nWhichId)
-                        {
-                            if (auto pOldItem = rAttr.GetItemIfSet(nWhichId, false))
-                            {
-                                if (auto pNewItem = pOldItem->checkForUniqueItem(&GetDrawView()->GetModel()))
-                                    rAttr.Put(std::move(pNewItem));
-                            }
-                        };
-
-                        checkForUniqueItem(XATTR_FILLBITMAP);
-                        checkForUniqueItem(XATTR_LINEDASH);
-                        checkForUniqueItem(XATTR_LINESTART);
-                        checkForUniqueItem(XATTR_LINEEND);
-                        checkForUniqueItem(XATTR_FILLGRADIENT);
-                        checkForUniqueItem(XATTR_FILLFLOATTRANSPARENCE);
-                        checkForUniqueItem(XATTR_FILLHATCH);
-
-                        static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
-                        GetScDrawView()->InvalidateAttribs();
-                    }
-
-                    pDocSh->SetDocumentModified();
-
-                    if ( SfxStyleFamily::Para == eFam )
-                    {
-                        ScTabViewShell::UpdateNumberFormatter(
-                                *( pDocSh->GetItem(SID_ATTR_NUMBERFORMAT_INFO) ));
-
-                        UpdateStyleSheetInUse( pStyleSheet );
-                        InvalidateAttribs();
-                    }
-
-                    aNewData.InitFromStyle( pStyleSheet );
-                    bAddUndo = true;
-                }
-            }
-            else
-            {
-                if ( nSlotId == SID_STYLE_NEW )
-                    pStylePool->Remove( pStyleSheet );
-                else
-                {
-                    // If in the meantime something was painted with the
-                    // temporary changed item set
-                    pDocSh->PostPaintGridAll();
-                }
-            }
+            ExecuteStyleEdit(rReq, pStyleSheet, nRetMask, nSlotId, bAddUndo, bUndo,
+                    aOldData, aNewData, eFamily, bStyleToMarked, bListAction, pEditObject, aSelection);
+            return; // skip calling ExecuteStyleEditPost because we invoked an async dialog
         }
     }
+
+    ExecuteStyleEditPost(rReq, pStyleSheet, nSlotId, nRetMask, bAddUndo, bUndo,
+            eFamily, aOldData, aNewData, bStyleToMarked, bListAction, pEditObject, aSelection);
+}
+
+void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyleSheet, sal_uInt16 nRetMask,
+                        sal_uInt16 nSlotId, bool bAddUndo, bool bUndo,
+                        ScStyleSaveData& rOldData, ScStyleSaveData& rNewData, SfxStyleFamily eFamily,
+                        bool bStyleToMarked, bool bListAction,
+                        SdrObject* pEditObject, ESelection aSelection)
+{
+    ScDocShell*     pDocSh      = GetViewData().GetDocShell();
+    ScDocument&     rDoc        = pDocSh->GetDocument();
+    SfxStyleFamily  eFam = pStyleSheet->GetFamily();
+    VclPtr<SfxAbstractTabDialog> pDlg;
+    bool bPage = false;
+
+    // Store old Items from the style
+    std::shared_ptr<SfxItemSet> xOldSet = std::make_shared<SfxItemSet>(pStyleSheet->GetItemSet());
+    OUString aOldName = pStyleSheet->GetName();
+
+    switch ( eFam )
+    {
+        case SfxStyleFamily::Page:
+            bPage = true;
+            break;
+
+        case SfxStyleFamily::Para:
+            {
+                SfxItemSet& rSet = pStyleSheet->GetItemSet();
+
+                if ( const SfxUInt32Item* pItem = rSet.GetItemIfSet( ATTR_VALUE_FORMAT,
+                        false ) )
+                {
+                    // Produce and format NumberFormat Value from Value and Language
+                    sal_uLong nFormat = pItem->GetValue();
+                    LanguageType eLang =
+                        rSet.Get(ATTR_LANGUAGE_FORMAT ).GetLanguage();
+                    sal_uLong nLangFormat = rDoc.GetFormatTable()->
+                        GetFormatForLanguageIfBuiltIn( nFormat, eLang );
+                    if ( nLangFormat != nFormat )
+                    {
+                        SfxUInt32Item aNewItem( ATTR_VALUE_FORMAT, nLangFormat );
+                        rSet.Put( aNewItem );
+                        xOldSet->Put( aNewItem );
+                        // Also in aOldSet for comparison after the  dialog,
+                        // Otherwise might miss a language change
+                    }
+                }
+
+                std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem(
+                    ScTabViewShell::MakeNumberInfoItem(rDoc, GetViewData()));
+
+                pDocSh->PutItem( *pNumberInfoItem );
+                bPage = false;
+
+                // Definitely a SvxBoxInfoItem with Table = sal_False in set:
+                // (If there is no item, the dialogue will also delete the
+                // BORDER_OUTER SvxBoxItem from the Template Set)
+                if ( rSet.GetItemState( ATTR_BORDER_INNER, false ) != SfxItemState::SET )
+                {
+                    SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
+                    aBoxInfoItem.SetTable(false);       // no inner lines
+                    aBoxInfoItem.SetDist(true);
+                    aBoxInfoItem.SetMinDist(false);
+                    rSet.Put( aBoxInfoItem );
+                }
+            }
+            break;
+
+        case SfxStyleFamily::Frame:
+        default:
+            break;
+    }
+
+    SetInFormatDialog(true);
+
+    SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
+    rStyleSet.MergeRange( XATTR_FILL_FIRST, XATTR_FILL_LAST );
+
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+    weld::Window* pDialogParent = rReq.GetFrameWeld();
+    if (!pDialogParent)
+        pDialogParent = GetFrameWeld();
+
+    if (eFam == SfxStyleFamily::Frame)
+        pDlg = pFact->CreateScDrawStyleDlg(pDialogParent, *pStyleSheet, GetDrawView());
+    else
+        pDlg = pFact->CreateScStyleDlg(pDialogParent, *pStyleSheet, bPage);
+
+    auto xRequest = std::make_shared<SfxRequest>(rReq);
+    rReq.Ignore(); // the 'old' request is not relevant any more
+    pDlg->StartExecuteAsync(
+        [this, pDlg, xRequest, pStyleSheet, nRetMask, xOldSet, nSlotId, bAddUndo, bUndo,
+            aOldData=rOldData, aNewData=rNewData, aOldName, eFamily, bStyleToMarked, bListAction,
+            pEditObject, aSelection]
+        (sal_Int32 nResult) mutable -> void
+        {
+            SetInFormatDialog(false);
+            ExecuteStyleEditDialog(pDlg, pStyleSheet, nResult, nRetMask, xOldSet, nSlotId,
+                    bAddUndo, aNewData, aOldName);
+            pDlg->disposeOnce();
+            ExecuteStyleEditPost(*xRequest, pStyleSheet, nSlotId, nRetMask, bAddUndo, bUndo, eFamily,
+                    aOldData, aNewData, bStyleToMarked, bListAction, pEditObject, aSelection);
+        }
+    );
+}
+
+void ScTabViewShell::ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
+                        SfxStyleSheetBase* pStyleSheet, sal_uInt16 nResult,
+                        sal_uInt16& rnRetMask, std::shared_ptr<SfxItemSet> xOldSet, const sal_uInt16 nSlotId,
+                        bool& rbAddUndo, ScStyleSaveData& rNewData, std::u16string_view aOldName)
+{
+    ScDocShell*     pDocSh = GetViewData().GetDocShell();
+    ScDocument&     rDoc = pDocSh->GetDocument();
+    SfxBindings&    rBindings = GetViewData().GetBindings();
+    SfxStyleSheetBasePool* pStylePool = rDoc.GetStyleSheetPool();
+    SfxStyleFamily  eFam = pStyleSheet->GetFamily();
+    if ( nResult == RET_OK )
+    {
+        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+
+        if ( pOutSet )
+        {
+            rnRetMask = sal_uInt16(pStyleSheet->GetMask());
+
+            // Attribute comparisons (earlier in ModifyStyleSheet) now here
+            // with the old values (the style is already changed)
+            if ( SfxStyleFamily::Para == eFam )
+            {
+                SfxItemSet& rNewSet = pStyleSheet->GetItemSet();
+                bool bNumFormatChanged;
+                if ( ScGlobal::CheckWidthInvalidate(
+                                    bNumFormatChanged, rNewSet, *xOldSet ) )
+                    rDoc.InvalidateTextWidth( nullptr, nullptr, bNumFormatChanged );
+
+                SCTAB nTabCount = rDoc.GetTableCount();
+                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                    rDoc.SetStreamValid(nTab, false);
+
+                sal_uLong nOldFormat = xOldSet->Get( ATTR_VALUE_FORMAT ).GetValue();
+                sal_uLong nNewFormat = rNewSet.Get( ATTR_VALUE_FORMAT ).GetValue();
+                if ( nNewFormat != nOldFormat )
+                {
+                    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                    const SvNumberformat* pOld = pFormatter->GetEntry( nOldFormat );
+                    const SvNumberformat* pNew = pFormatter->GetEntry( nNewFormat );
+                    if ( pOld && pNew && pOld->GetLanguage() != pNew->GetLanguage() )
+                        rNewSet.Put( SvxLanguageItem(
+                                        pNew->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
+                }
+
+                rDoc.getCellAttributeHelper().CellStyleCreated(rDoc, pStyleSheet->GetName());
+            }
+            else if ( SfxStyleFamily::Page == eFam )
+            {
+                //! Here also queries for Page Styles
+
+                OUString aNewName = pStyleSheet->GetName();
+                if ( aNewName != aOldName &&
+                        rDoc.RenamePageStyleInUse( aOldName, aNewName ) )
+                {
+                    rBindings.Invalidate( SID_STATUS_PAGESTYLE );
+                    rBindings.Invalidate( FID_RESET_PRINTZOOM );
+                }
+
+                rDoc.ModifyStyleSheet( *pStyleSheet, *pOutSet );
+                rBindings.Invalidate( FID_RESET_PRINTZOOM );
+            }
+            else
+            {
+                SfxItemSet& rAttr = pStyleSheet->GetItemSet();
+                sdr::properties::CleanupFillProperties(rAttr);
+
+                // check for unique names of named items for xml
+                auto checkForUniqueItem = [&] (auto nWhichId)
+                {
+                    if (auto pOldItem = rAttr.GetItemIfSet(nWhichId, false))
+                    {
+                        if (auto pNewItem = pOldItem->checkForUniqueItem(&GetDrawView()->GetModel()))
+                            rAttr.Put(std::move(pNewItem));
+                    }
+                };
+
+                checkForUniqueItem(XATTR_FILLBITMAP);
+                checkForUniqueItem(XATTR_LINEDASH);
+                checkForUniqueItem(XATTR_LINESTART);
+                checkForUniqueItem(XATTR_LINEEND);
+                checkForUniqueItem(XATTR_FILLGRADIENT);
+                checkForUniqueItem(XATTR_FILLFLOATTRANSPARENCE);
+                checkForUniqueItem(XATTR_FILLHATCH);
+
+                static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
+                GetScDrawView()->InvalidateAttribs();
+            }
+
+            pDocSh->SetDocumentModified();
+
+            if ( SfxStyleFamily::Para == eFam )
+            {
+                ScTabViewShell::UpdateNumberFormatter(
+                        *( pDocSh->GetItem(SID_ATTR_NUMBERFORMAT_INFO) ));
+
+                UpdateStyleSheetInUse( pStyleSheet );
+                InvalidateAttribs();
+            }
+
+            rNewData.InitFromStyle( pStyleSheet );
+            rbAddUndo = true;
+        }
+    }
+    else
+    {
+        if ( nSlotId == SID_STYLE_NEW )
+            pStylePool->Remove( pStyleSheet );
+        else
+        {
+            // If in the meantime something was painted with the
+            // temporary changed item set
+            pDocSh->PostPaintGridAll();
+        }
+    }
+}
+
+void ScTabViewShell::ExecuteStyleEditPost(SfxRequest& rReq, SfxStyleSheetBase* pStyleSheet,
+                        sal_uInt16 nSlotId, sal_uInt16 nRetMask, bool bAddUndo, bool bUndo,
+                        const SfxStyleFamily eFamily,
+                        ScStyleSaveData& rOldData, ScStyleSaveData& rNewData,
+                        bool bStyleToMarked, bool bListAction,
+                        SdrObject* pEditObject, ESelection aSelection)
+{
+    ScDocShell*     pDocSh = GetViewData().GetDocShell();
 
     rReq.SetReturnValue( SfxUInt16Item( nSlotId, nRetMask ) );
 
     if ( bAddUndo && bUndo)
         pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoModifyStyle>( pDocSh, eFamily, aOldData, aNewData ) );
+                    std::make_unique<ScUndoModifyStyle>( pDocSh, eFamily, rOldData, rNewData ) );
 
     if ( bStyleToMarked )
     {

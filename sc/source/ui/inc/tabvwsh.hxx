@@ -37,6 +37,7 @@
 #include <map>
 
 class SdrOle2Obj;
+class SfxAbstractTabDialog;
 class SfxBindings;
 class SfxChildWindow;
 class SvxNumberInfoItem;
@@ -45,6 +46,7 @@ class AbstractScInsertTableDlg;
 class AbstractScMoveTableDlg;
 class AbstractScTabBgColorDlg;
 class AbstractScStringInputDlg;
+class ScStyleSaveData;
 class ScArea;
 class ScAuditingShell;
 class ScDrawShell;
@@ -466,6 +468,21 @@ private:
     void ExecuteSetTableBackgroundCol( SfxRequest& rReq );
     void ExecuteTableBackgroundDialog( const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );
     bool DoTableBackgroundDialog( sal_Int32 nResult, const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );
+    void ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyleSheet, sal_uInt16 nRetMask, sal_uInt16 nSlotId,
+                            bool bAddUndo, bool bUndo,
+                            ScStyleSaveData& rOldData, ScStyleSaveData& rNewData,
+                            SfxStyleFamily eFamily, bool bStyleToMarked, bool bListAction,
+                            SdrObject* pEditObject, ESelection aSelection);
+    void ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
+                            SfxStyleSheetBase* pStyleSheet, sal_uInt16 nResult, sal_uInt16& rnRetMask,
+                            std::shared_ptr<SfxItemSet> xOldSet, sal_uInt16 nSlotId,
+                            bool& rbAddUndo,
+                            ScStyleSaveData& rNewData, std::u16string_view aOldName);
+    void ExecuteStyleEditPost(SfxRequest& rReq, SfxStyleSheetBase* pStyleSheet, sal_uInt16 nSlotId,
+                            sal_uInt16 nRetMask, bool bAddUndo, bool bUndo, SfxStyleFamily eFamily,
+                            ScStyleSaveData& rOldData, ScStyleSaveData& rNewData,
+                            bool bStyleToMarked, bool bListAction,
+                            SdrObject* pEditObject, ESelection aSelection);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
