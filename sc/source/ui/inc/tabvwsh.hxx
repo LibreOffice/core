@@ -451,6 +451,10 @@ public:
 
     void setScCondFormatDlgItem(const std::shared_ptr<ScCondFormatDlgData>& rItem) { m_pScCondFormatDlgItem = rItem; }
     const std::shared_ptr<ScCondFormatDlgData>& getScCondFormatDlgItem() const { return m_pScCondFormatDlgItem; }
+
+private:
+    void ExecuteMoveTable( SfxRequest& rReq );
+    void ExecuteInsertTable( SfxRequest& rReq );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
