@@ -758,12 +758,18 @@ IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, vo
     if (m_oldLink.IsSet())
         m_oldLink.Call(pLink);
 
+    if (m_pShell->IsViewLocked())
+    {
+        return; // tdf#142806 avoid slowdown when storing files
+    }
+
     SwDocShell* pDocSh = m_pShell->GetDoc()->GetDocShell();
     std::vector<svx::sidebar::TreeNode> aStore;
 
-    SwEditShell* pEditSh = pDocSh ? pDocSh->GetDoc()->GetEditShell() : nullptr;
-    if (pEditSh && pEditSh->GetCursor()->GetPointNode().GetTextNode())
-        UpdateTree(*pDocSh, *pEditSh, aStore, m_nParIdx);
+    if (m_pShell->GetCursor()->GetPointNode().GetTextNode())
+    {
+        UpdateTree(*pDocSh, *m_pShell, aStore, m_nParIdx);
+    }
 
     updateEntries(aStore, m_nParIdx);
 }
