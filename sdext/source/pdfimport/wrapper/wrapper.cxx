@@ -107,6 +107,7 @@ enum parseKey {
     SETTRANSFORMATION,
     STARTPAGE,
     STROKEPATH,
+    TILINGPATTERNFILL,
     UPDATEBLENDMODE,
     UPDATECTM,
     UPDATEFILLCOLOR,
@@ -195,6 +196,7 @@ public:
     void                 readLink();
     void                 readMaskedImage();
     void                 readSoftMaskedImage();
+    void                 readTilingPatternFill();
 };
 
 /** Unescapes line-ending characters in input string. These
@@ -813,6 +815,35 @@ void LineParser::readSoftMaskedImage()
     m_parser.m_pSink->drawAlphaMaskedImage( aImage, aMask );
 }
 
+void LineParser::readTilingPatternFill()
+{
+    sal_Int32 nX0, nY0, nX1, nY1, nPaintType;
+    double nXStep, nYStep;
+    geometry::AffineMatrix2D aMat;
+    readInt32(nX0);
+    readInt32(nY0);
+    readInt32(nX1);
+    readInt32(nY1);
+
+    readDouble(nXStep);
+    readDouble(nYStep);
+
+    readInt32(nPaintType);
+
+    readDouble(aMat.m00);
+    readDouble(aMat.m10);
+    readDouble(aMat.m01);
+    readDouble(aMat.m11);
+    readDouble(aMat.m02);
+    readDouble(aMat.m12);
+
+    // The tile is an image with alpha
+    [[maybe_unused]]const uno::Sequence<beans::PropertyValue> aTile ( readImageImpl() );
+    (void)aTile; // Unused until later patch
+    // TODO
+    //   use the parsed data
+}
+
 void Parser::parseLine( std::string_view aLine )
 {
     OSL_PRECOND( m_pSink,         "Invalid sink" );
@@ -865,6 +896,8 @@ void Parser::parseLine( std::string_view aLine )
         }
         case STROKEPATH:
             m_pSink->strokePath(lp.readPath()); break;
+        case TILINGPATTERNFILL:
+            lp.readTilingPatternFill(); break;
         case UPDATECTM:
             lp.readTransformation(); break;
         case UPDATEFILLCOLOR:

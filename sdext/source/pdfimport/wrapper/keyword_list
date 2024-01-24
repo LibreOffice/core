@@ -38,6 +38,7 @@ setTextRenderMode,SETTEXTRENDERMODE
 setTransformation,SETTRANSFORMATION
 startPage,STARTPAGE
 strokePath,STROKEPATH
+tilingPatternFill,TILINGPATTERNFILL
 updateBlendMode,UPDATEBLENDMODE
 updateCtm,UPDATECTM
 updateFillColor,UPDATEFILLCOLOR
