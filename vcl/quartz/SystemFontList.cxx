@@ -52,7 +52,6 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     rDFA.SetMicrosoftSymbolEncoded( false );
 
     // get font name
-#ifdef MACOSX
     CFStringRef pLang = nullptr;
     CFStringRef pFamilyName = static_cast<CFStringRef>(
             CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang ));
@@ -65,12 +64,6 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
         }
         pFamilyName = static_cast<CFStringRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute ));
     }
-#else
-    // No "Application" on iOS. And it is unclear whether this code
-    // snippet will actually ever get invoked on iOS anyway. So just
-    // use the old code that uses a non-localized font name.
-    CFStringRef pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
-#endif
 
     rDFA.SetFamilyName( GetOUString( pFamilyName ) );
 
