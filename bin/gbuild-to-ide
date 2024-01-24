@@ -26,25 +26,25 @@ import collections
 import urllib.parse
 
 class GbuildLinkTarget:
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target):
-        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.cxxflags, self.cobjects, self.objcxxobjects, self.cflags, self.linked_libs, self.link_target) = (
-            name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target):
+        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.cxxflags, self.cobjects, self.objcxxobjects, self.cflags, self.linked_libs, self.linked_static_libs, self.link_target) = (
+            name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target)
 
     def short_name(self):
         return self.name
 
     def is_empty(self):
-        return not self.include and not self.defs and not self.cxxobjects and not self.cobjects and not self.linked_libs
+        return not self.include and not self.defs and not self.cxxobjects and not self.cobjects and not self.linked_libs and not self.linked_static_libs
 
     def __str__(self):
-        return '%s at %s with include path: %s, isystem includes: %s, defines: %s, objects: %s, cxxflags: %s, cobjects: %s, cflags: %s and linked libs: %s' % (
+        return '%s at %s with include path: %s, isystem includes: %s, defines: %s, objects: %s, cxxflags: %s, cobjects: %s, cflags: %s, linked libs: %s and linked static libs: %s' % (
             self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects,
-            self.cxxflags, self.cobjects, self.cflags, self.linked_libs)
+            self.cxxflags, self.cobjects, self.cflags, self.linked_libs, self.linked_static_libs)
 
 
 class GbuildLib(GbuildLinkTarget):
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target):
-        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target)
 
     def short_name(self):
         """Return the short name of target based on the Library_* makefile name"""
@@ -56,9 +56,23 @@ class GbuildLib(GbuildLinkTarget):
     def library_name(self):
         return self.name
 
+class GbuildStaticLib(GbuildLinkTarget):
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target)
+
+    def short_name(self):
+        """Return the short name of target based on the StaticLibrary_* makefile name"""
+        return 'StaticLibrary %s' % self.name
+
+    def target_name(self):
+        return 'StaticLibrary_%s' % self.name
+
+    def library_name(self):
+        return self.name
+
 class GbuildTest(GbuildLinkTarget):
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target):
-        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target)
 
     def short_name(self):
         """Return the short name of target based n the CppunitTest_* makefile names"""
@@ -68,8 +82,8 @@ class GbuildTest(GbuildLinkTarget):
         return 'CppunitTest_%s' % self.name
 
 class GbuildExe(GbuildLinkTarget):
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target):
-        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, linked_static_libs, link_target)
 
     def short_name(self):
         """Return the short name of target based on the Executable_* makefile name"""
@@ -92,13 +106,14 @@ class GbuildParser:
         self.makecmd = makecmd
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
         (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
-        (self.libs, self.exes, self.tests, self.modulenamelist) = ([], [], [], [])
+        (self.libs, self.static_libs, self.exes, self.tests, self.modulenamelist) = ([], [], [], [], [])
         (self.target_by_path, self.target_by_location) = ({}, {})
 
     includepattern = re.compile(r'-I(\S+)')
     isystempattern = re.compile(r'-isystem\s*(\S+)')
     warningpattern = re.compile(r'-W\S+')
     libpattern = re.compile(r'Library_(.*)\.mk')
+    staticlibpattern = re.compile(r'StaticLibrary_(.*)\.mk')
     exepattern = re.compile(r'Executable_(.*)\.mk')
     testpattern = re.compile(r'CppunitTest_(.*)\.mk')
 
@@ -149,6 +164,25 @@ class GbuildParser:
             GbuildParser.__split_objs(json['OBJCXXOBJECTS']),
             GbuildParser.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
             json['LINKED_LIBS'].strip().split(' '),
+            json['LINKED_STATIC_LIBS'].strip().split(' '),
+            json['LINKTARGET'].strip())
+
+    @staticmethod
+    def __static_lib_from_json(json):
+        (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
+        return GbuildStaticLib(
+            GbuildParser.staticlibpattern.match(os.path.basename(json['MAKEFILE'])).group(1),
+            os.path.dirname(json['MAKEFILE']),
+            foundincludes,
+            foundisystem,
+            GbuildParser.__split_defs(json['DEFS']),
+            GbuildParser.__split_objs(json['CXXOBJECTS']),
+            GbuildParser.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            GbuildParser.__split_objs(json['COBJECTS']),
+            GbuildParser.__split_objs(json['OBJCXXOBJECTS']),
+            GbuildParser.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
+            json['LINKED_LIBS'].strip().split(' '),
+            json['LINKED_STATIC_LIBS'].strip().split(' '),
             json['LINKTARGET'].strip())
 
     @staticmethod
@@ -174,6 +208,7 @@ class GbuildParser:
             GbuildParser.__split_objs(json['OBJCXXOBJECTS']),
             GbuildParser.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
             json['LINKED_LIBS'].strip().split(' '),
+            json['LINKED_STATIC_LIBS'].strip().split(' '),
             json['LINKTARGET'].strip())
 
     @staticmethod
@@ -191,6 +226,7 @@ class GbuildParser:
             GbuildParser.__split_objs(json['OBJCXXOBJECTS']),
             GbuildParser.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
             json['LINKED_LIBS'].strip().split(' '),
+            json['LINKED_STATIC_LIBS'].strip().split(' '),
             json['LINKTARGET'].strip())
 
     def parse(self):
@@ -198,6 +234,10 @@ class GbuildParser:
             with open(os.path.join(self.workdir, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
                 lib = self.__lib_from_json(json.load(f))
                 self.libs.append(lib)
+        for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'StaticLibrary')):
+            with open(os.path.join(self.workdir, 'GbuildToJson', 'StaticLibrary', jsonfilename), 'r') as f:
+                static_lib = self.__static_lib_from_json(json.load(f))
+                self.static_libs.append(static_lib)
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Executable')):
             with open(os.path.join(self.workdir, 'GbuildToJson', 'Executable', jsonfilename), 'r') as f:
                 exe = self.__exe_from_json(json.load(f))
@@ -206,7 +246,7 @@ class GbuildParser:
             with open(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest', jsonfilename), 'r') as f:
                 test = self.__test_from_json(json.load(f))
                 self.tests.append(test)
-        for target in set(self.libs) | set(self.exes) | set(self.tests):
+        for target in set(self.libs) | set(self.static_libs) | set(self.exes) | set(self.tests):
             if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
@@ -990,6 +1030,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     def write_solution(self, solution_path, projects):
         print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
         library_projects = [project for project in projects if project.target in self.gbuildparser.libs]
+        static_library_projects = [project for project in projects if project.target in self.gbuildparser.static_libs]
         test_projects = [project for project in projects if project.target in self.gbuildparser.tests]
         executable_projects = [project for project in projects if project.target in self.gbuildparser.exes]
         with open(solution_path, 'w') as f:
@@ -1003,6 +1044,8 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                          target.short_name(), proj_path, project.guid))
                 libs_in_solution = self.get_dependency_libs(target.linked_libs,
                                                             library_projects)
+                libs_in_solution |= self.get_dependency_libs(target.linked_static_libs,
+                                                             static_library_projects)
                 if libs_in_solution:
                     f.write('\tProjectSection(ProjectDependencies) = postProject\n')
                     for lib_guid in libs_in_solution.keys():
@@ -1023,12 +1066,16 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             # Folders to group tests/libraries/executables
             nmake_tests_guid = 'CF544F7B-9D02-4D83-8370-5887851209B7'
             nmake_libraries_guid = 'C624F43D-616C-4627-B58F-F5C2047B7BDC'
+            nmake_static_libraries_guid = 'EB2CD1D4-7C29-4232-9B1E-9FB1FE62D61C'
             nmake_executables_guid = '1CD80999-9FA9-4BA9-B4D9-6E33035CF648'
             f.write('Project("{%s}") = "Tests", "Tests", "{%s}"\n' %
                     (VisualStudioIntegrationGenerator.nmake_folder_guid, nmake_tests_guid))
             f.write('EndProject\n')
             f.write('Project("{%s}") = "Libraries", "Libraries", "{%s}"\n' %
                     (VisualStudioIntegrationGenerator.nmake_folder_guid, nmake_libraries_guid))
+            f.write('EndProject\n')
+            f.write('Project("{%s}") = "StaticLibraries", "StaticLibraries", "{%s}"\n' %
+                    (VisualStudioIntegrationGenerator.nmake_folder_guid, nmake_static_libraries_guid))
             f.write('EndProject\n')
             f.write('Project("{%s}") = "Executables", "Executables", "{%s}"\n' %
                     (VisualStudioIntegrationGenerator.nmake_folder_guid, nmake_executables_guid))
@@ -1046,6 +1093,8 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 f.write('\t\t{%s} = {%s}\n' % (project.guid, nmake_tests_guid))
             for project in library_projects:
                 f.write('\t\t{%s} = {%s}\n' % (project.guid, nmake_libraries_guid))
+            for project in static_library_projects:
+                f.write('\t\t{%s} = {%s}\n' % (project.guid, nmake_static_libraries_guid))
             for project in executable_projects:
                 f.write('\t\t{%s} = {%s}\n' % (project.guid, nmake_executables_guid))
             f.write('\tEndGlobalSection\n')

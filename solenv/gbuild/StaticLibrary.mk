@@ -38,8 +38,12 @@ $(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_lin
 
 endef
 
+define gb_StaticLibrary_register_target
+endef
+
 # call gb_StaticLibrary__StaticLibrary_impl,staticlib,linktarget
 define gb_StaticLibrary__StaticLibrary_impl
+$(call gb_StaticLibrary_register_target, $(1), $(2))
 $(call gb_LinkTarget_LinkTarget,$(2),StaticLibrary_$(1),NONE)
 $(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
 $(call gb_StaticLibrary_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))

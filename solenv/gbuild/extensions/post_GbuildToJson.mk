@@ -92,6 +92,13 @@ $(call gb_LinkTarget_get_target,$(2)): $(gb_Helper_MISCDUMMY) $(gb_GbuildToJson_
 $(call gb_LinkTarget_get_target,$(2)): T_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 endef
 
+define gb_StaticLibrary_register_target
+gbuildtojson : $(call gb_LinkTarget_get_target,$(2))
+
+$(call gb_LinkTarget_get_target,$(2)): $(gb_Helper_MISCDUMMY) $(gb_GbuildToJson_PHONY)
+$(call gb_LinkTarget_get_target,$(2)): T_MAKEFILE := $(lastword $(MAKEFILE_LIST))
+endef
+
 gb_LinkTarget_use_static_libraries =
 gb_UnoApiHeadersTarget_get_target = $(gb_Helper_MISCDUMMY)
 gb_UnpackedTarball_get_final_target = $(gb_Helper_MISCDUMMY)
@@ -175,7 +182,7 @@ $(call gb_Module_get_check_target,$(1)) : $(3)
 endef
 
 define gb_Module_add_target
-$(if $(filter Library_% Executable_%,$(2)),$(call gb_Module__add_target_impl,$(1),$(2),$$(gb_Module_CURRENTTARGET)))
+$(if $(filter Library_% Executable_% StaticLibrary_%,$(2)),$(call gb_Module__add_target_impl,$(1),$(2),$$(gb_Module_CURRENTTARGET)))
 endef
 
 define gb_Module_add_check_target
