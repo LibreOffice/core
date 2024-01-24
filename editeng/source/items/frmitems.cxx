@@ -3980,8 +3980,8 @@ void SvxLineItem::SetLine( const SvxBorderLine* pNew )
 
 ItemInstanceManager* SvxBrushItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxBrushItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
@@ -4598,8 +4598,8 @@ void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 ItemInstanceManager* SvxFrameDirectionItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxFrameDirectionItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,

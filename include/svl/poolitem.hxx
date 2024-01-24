@@ -176,7 +176,12 @@ protected:
     void setNonShareable() { m_bShareable = false; }
 
     // access ItemInstanceManager for this Item, default
-    // is nullptr
+    // is nullptr. If you overload this it is expected that
+    // you return a ptr to a static, Item-local managed
+    // instance that exists the whole office lifetime. This
+    // usually means to have a static instance irectly in the
+    // implementation of the overloaded function (just grep
+    // for examples)
     virtual ItemInstanceManager* getItemInstanceManager() const;
 
 public:
@@ -297,6 +302,19 @@ class SVL_DLLPUBLIC ItemInstanceManager
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
+    // Define for which class to register (usually typeid().hash_code()).
+    std::size_t     m_aClassHash;
+
+public:
+    ItemInstanceManager(const std::size_t aClassHash)
+    : m_aClassHash(aClassHash)
+    {
+    }
+    virtual ~ItemInstanceManager() = default;
+
+    std::size_t getClassHash() const { return m_aClassHash; }
+
+private:
     // standard interface, accessed exclusively
     // by implCreateItemEntry/implCleanupItemEntry
     virtual const SfxPoolItem* find(const SfxPoolItem&) const = 0;
@@ -317,7 +335,12 @@ class SVL_DLLPUBLIC DefaultItemInstanceManager : public ItemInstanceManager
     std::unordered_set<const SfxPoolItem*>  maRegistered;
 
 public:
-    virtual ~DefaultItemInstanceManager() = default;
+    DefaultItemInstanceManager(const std::size_t aClassHash)
+    : ItemInstanceManager(aClassHash)
+    {
+    }
+
+private:
     virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
     virtual void add(const SfxPoolItem&) override;
     virtual void remove(const SfxPoolItem&) override;

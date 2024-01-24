@@ -91,6 +91,15 @@ namespace
     {
         SfxBoolItemMap  maRegistered;
 
+    public:
+        SfxBoolItemInstanceManager()
+        : ItemInstanceManager(typeid(SfxBoolItem).hash_code())
+        {
+        }
+
+    private:
+        // standard interface, accessed exclusively
+        // by implCreateItemEntry/implCleanupItemEntry
         virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
         virtual void add(const SfxPoolItem&) override;
         virtual void remove(const SfxPoolItem&) override;
@@ -149,8 +158,8 @@ namespace
 
 ItemInstanceManager* SfxBoolItem::getItemInstanceManager() const
 {
-    static SfxBoolItemInstanceManager aManager;
-    return &aManager;
+    static SfxBoolItemInstanceManager aInstanceManager;
+    return &aInstanceManager;
 }
 
 void SfxBoolItem::SetValue(bool const bTheValue)

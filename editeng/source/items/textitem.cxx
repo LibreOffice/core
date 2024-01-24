@@ -168,8 +168,17 @@ namespace
     {
         SvxFontItemMap  maRegistered;
 
+    public:
+        SvxFontItemInstanceManager()
+        : ItemInstanceManager(typeid(SvxFontItem).hash_code())
+        {
+        }
+
+    private:
         static size_t hashCode(const SfxPoolItem&);
 
+        // standard interface, accessed exclusively
+        // by implCreateItemEntry/implCleanupItemEntry
         virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
         virtual void add(const SfxPoolItem&) override;
         virtual void remove(const SfxPoolItem&) override;
@@ -209,8 +218,8 @@ namespace
 
 ItemInstanceManager* SvxFontItem::getItemInstanceManager() const
 {
-    static SvxFontItemInstanceManager aManager;
-    return &aManager;
+    static SvxFontItemInstanceManager aInstanceManager;
+    return &aInstanceManager;
 }
 
 SvxFontItem::SvxFontItem(
@@ -439,8 +448,8 @@ void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 ItemInstanceManager* SvxPostureItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxPostureItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const sal_uInt16 nId ) :
@@ -561,8 +570,8 @@ void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 ItemInstanceManager* SvxWeightItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxWeightItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxWeightItem::SvxWeightItem( const FontWeight eWght, const sal_uInt16 nId ) :
@@ -691,8 +700,8 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 ItemInstanceManager* SvxFontHeightItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxFontHeightItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxFontHeightItem::SvxFontHeightItem( const sal_uInt32 nSz,
@@ -1038,12 +1047,6 @@ void SvxFontHeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxTextLineItem ------------------------------------------------
 
-ItemInstanceManager* SvxTextLineItem::getItemInstanceManager() const
-{
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
-}
-
 SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SfxEnumItem(nId, eSt)
     , maColor(COL_TRANSPARENT)
@@ -1196,6 +1199,11 @@ bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 
 // class SvxUnderlineItem ------------------------------------------------
 
+ItemInstanceManager* SvxUnderlineItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxUnderlineItem).hash_code());
+    return &aInstanceManager;
+}
 
 SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SvxTextLineItem( eSt, nId )
@@ -1237,6 +1245,12 @@ OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 }
 
 // class SvxOverlineItem ------------------------------------------------
+
+ItemInstanceManager* SvxOverlineItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxOverlineItem).hash_code());
+    return &aInstanceManager;
+}
 
 SvxOverlineItem::SvxOverlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SvxTextLineItem( eSt, nId )
@@ -1281,8 +1295,8 @@ OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 ItemInstanceManager* SvxCrossedOutItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxCrossedOutItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxCrossedOutItem::SvxCrossedOutItem( const FontStrikeout eSt, const sal_uInt16 nId )
@@ -2083,8 +2097,8 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 ItemInstanceManager* SvxLanguageItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxLanguageItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const sal_uInt16 nId )
@@ -2231,8 +2245,8 @@ bool SvxBlinkItem::GetPresentation
 
 ItemInstanceManager* SvxEmphasisMarkItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxEmphasisMarkItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxEmphasisMarkItem::SvxEmphasisMarkItem( const FontEmphasisMark nValue,
@@ -2671,8 +2685,8 @@ bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
 
 ItemInstanceManager* SvxCharReliefItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aManager;
-    return &aManager;
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxCharReliefItem).hash_code());
+    return &aInstanceManager;
 }
 
 SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,

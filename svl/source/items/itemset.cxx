@@ -324,6 +324,42 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
+// Class that implements global Item sharing. It uses rtti to
+// associate every Item-derivation with a possible incarnation
+// of a DefaultItemInstanceManager. This is the default, it will
+// give direct implementatioons at the Items that overload
+// getItemInstanceManager() preference. These are expected to
+// return static instances of aderived implementation of a
+// ItemInstanceManager.
+// All in all there are now the following possibilities to support
+// this for individual Item derivations:
+// (1) Do nothing:
+//     In that case, if the Item is shareable, the new mechanism
+//     will kick in: It will start sharing the Item globally,
+//     but not immediately: After a defined amount of allowed
+//     non-shared ocurrences (look for NUMBER_OF_UNSHARED_INSTANCES)
+//     an instance of the default ItemInstanceManager, a
+//     DefaultItemInstanceManager, will be incarnated and used.
+//     NOTE: Mixing shared/unshared instances is not a problem (we
+//     might even implement a kind of 're-hash' when this kicks in,
+//     but is not really needded).
+// (2) Overload getItemInstanceManager for SfxPoolItem in a class
+//     derived from SfxPoolItem and...
+// (2a) Return a static incarnation of DefaultItemInstanceManager to
+//      immediately start global sharing of that Item derivation.
+// (2b) Implement and return your own implementation and static
+//      incarnation of ItemInstanceManager to do something better/
+//      faster that the default implementation can do. Example:
+//      SvxFontItem, uses hashing now.
+// There are two supported ENVVARs to use:
+// (a) SVL_DISABLE_ITEM_INSTANCE_MANAGER:
+//     This disables the mechanism of global Item sharing completely.
+//     This can be used to test/check speed/memory needs compared with
+//     using it, but also may come in handy to check if evtl. errors/
+//     regressions have to do with it.
+// (b) SVL_SHARE_ITEMS_GLOBALLY_INSTANTLY:
+//     This internally forces the NUMBER_OF_UNSHARED_INSTANCES to be
+//     ignored and start sharing ALL Item derivations instantly.
 class InstanceManagerHelper
 {
     typedef std::unordered_map<std::size_t, std::pair<sal_uInt16, DefaultItemInstanceManager*>> managerTypeMap;
@@ -348,24 +384,29 @@ public:
         if (!rItem.isShareable())
             return nullptr;
 
-        // prefer getting an ItemInstanceManager directly from
+        // Prefer getting an ItemInstanceManager directly from
         // the Item: These are the extra implemented (and thus
-        // hopefully fast) incarnations
+        // hopefully fastest) incarnations
         ItemInstanceManager* pManager(rItem.getItemInstanceManager());
-        if (nullptr != pManager)
+
+        // Check for correct hash, there may be derivations of that class.
+        // Note that Managers from the Items are *not* added to local list,
+        // they are expected to be static instances at the Items
+        const std::size_t aHash(typeid(rItem).hash_code());
+        if (nullptr != pManager && pManager->getClassHash() == aHash)
             return pManager;
 
-        // get hash and check memory for existing entry
-        const std::size_t aHash(typeid(rItem).hash_code());
+        // check local memory for existing entry
         managerTypeMap::iterator aHit(maManagerPerType.find(aHash));
 
-        // no instance yet, create one to start usage-counting
+        // no instance yet
         if (aHit == maManagerPerType.end())
         {
+            // create a default one to start usage-counting
             if (g_bShareImmediately)
             {
-                // create and immediately start sharing
-                DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager);
+                // create, insert locally and immediately start sharing
+                DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(aHash));
                 maManagerPerType.insert({aHash, std::make_pair(0, pNew)});
                 return pNew;
             }
@@ -375,21 +416,21 @@ public:
             return nullptr;
         }
 
-        // if there is already a ItemInstanceManager incarnated, return it
+        // if there is already an ItemInstanceManager incarnated, return it
         if (nullptr != aHit->second.second)
             return aHit->second.second;
 
         if (aHit->second.first > 0)
         {
-            // still not the neeed number of hits, countdown & return nullptr
+            // still not the needed number of hits, countdown & return nullptr
             aHit->second.first--;
             return nullptr;
         }
 
-        // here there is not yet a ItemInstanceManager incarnated. Do
-        // so and return it
+        // here the countdown is zero and there is not yet a ItemInstanceManager
+        // incarnated. Do so, regsiter and return it
         assert(nullptr == aHit->second.second);
-        DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager);
+        DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(aHash));
         aHit->second.second = pNew;
 
         return pNew;
@@ -405,15 +446,19 @@ public:
         if (!rItem.isShareable())
             return nullptr;
 
-        // prefer getting an ItemInstanceManager directly from
+        // Prefer getting an ItemInstanceManager directly from
         // the Item: These are the extra implemented (and thus
-        // hopefully fast) incarnations
+        // hopefully fastest) incarnations
         ItemInstanceManager* pManager(rItem.getItemInstanceManager());
-        if (nullptr != pManager)
+
+        // Check for correct hash, there may be derivations of that class.
+        // Note that Managers from the Items are *not* added to local list,
+        // they are expected to be static instances at the Items
+        const std::size_t aHash(typeid(rItem).hash_code());
+        if (nullptr != pManager && pManager->getClassHash() == aHash)
             return pManager;
 
-        // get hash and check memory for existing entry
-        const std::size_t aHash(typeid(rItem).hash_code());
+        // check local memory for existing entry
         managerTypeMap::iterator aHit(maManagerPerType.find(aHash));
 
         if (aHit == maManagerPerType.end())
@@ -424,7 +469,7 @@ public:
         if (nullptr != aHit->second.second)
             return aHit->second.second;
 
-        // count-up neeed number of hits again if item is released
+        // count-up needed number of hits again if item is released
         if (aHit->second.first < NUMBER_OF_UNSHARED_INSTANCES)
             aHit->second.first++;
 
@@ -432,6 +477,7 @@ public:
     }
 };
 
+// the single static instance that takes over that global Item sharing
 static InstanceManagerHelper aInstanceManagerHelper;
 
 SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, bool bPassingOwnership)
@@ -442,12 +488,12 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         return nullptr;
 
     if (IsInvalidItem(pSource))
-        // SfxItemState::DONTCARE aka invalid item
+        // SfxItemState::DONTCARE aka INVALID_POOL_ITEM
         // just use pSource which equals INVALID_POOL_ITEM
         return pSource;
 
     if (IsDisabledItem(pSource))
-        // SfxItemState::DISABLED aka invalid item
+        // SfxItemState::DISABLED aka DISABLED_POOL_ITEM
         // just use pSource which equals DISABLED_POOL_ITEM
         return pSource;
 
@@ -472,28 +518,27 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         return pSource->Clone();
     }
 
-    // get correct target WhichID
-    sal_uInt16 nWhich(pSource->Which());
+#ifdef DBG_UTIL
+    // remember WhichID due to being able to assert Clone() error(s)
+    const sal_uInt16 nWhich(pSource->Which());
+#endif
 
-    if (SfxItemPool::IsSlot(nWhich))
+    if (SfxItemPool::IsSlot(pSource->Which()))
     {
         // SlotItems were always cloned in original (even when bPassingOwnership),
         // so do that here, too (but without bPassingOwnership).
         // They do not need to be registered at pool (actually impossible, pools
         // do not have entries for SlotItems) so handle here early
         if (!bPassingOwnership)
-            pSource = pSource->Clone(rPool.GetMasterPool());
-
-        // ARGH! Found out that *some* ::Clone implementations fail to also clone the
-        // WhichID set at the original Item, e.g. SfxFrameItem. Corrected there, but
-        // there may be more cases, so add a SAL_WARN here and correct this
-        if (pSource->Which() != nWhich)
         {
-            SAL_WARN("svl.items", "ITEM: Clone of Item with class " << typeid(*pSource).name() << " did NOT copy/set WhichID (!)");
-            const_cast<SfxPoolItem*>(pSource)->SetWhich(nWhich);
+            pSource = pSource->Clone(rPool.GetMasterPool());
+            // ARGH! Found out that *some* ::Clone implementations fail to also clone the
+            // WhichID set at the original Item, e.g. SfxFrameItem. Assert, this is an error
+#ifdef DBG_UTIL
+            assert(pSource->Which() == nWhich && "ITEM: Clone of Item did NOT copy/set WhichID (!)");
+#endif
         }
 
-        pSource->AddRef();
         return pSource;
     }
 
@@ -515,7 +560,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // if (IsStaticDefaultItem(pSource))
     // {
     //     assert(!bPassingOwnership && "ITEM: PassingOwnership not possible combined with StaticDefault (!)");
-    //     const SfxPoolItem* pStatic(pTargetPool->GetItem2Default(nWhich));
+    //     const SfxPoolItem* pStatic(pTargetPool->GetItem2Default(pSource->Which()));
     //     if (nullptr != pStatic)
     //     {
     //         if (SfxPoolItem::areSame(pSource, pStatic))
@@ -530,7 +575,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // else if (IsDefaultItem(pSource))
     // {
     //     assert(!bPassingOwnership && "ITEM: PassingOwnership not possible combined with DynamicDefault (!)");
-    //     const SfxPoolItem* pDynamic(pTargetPool->GetPoolDefaultItem(nWhich));
+    //     const SfxPoolItem* pDynamic(pTargetPool->GetPoolDefaultItem(pSource->Which()));
     //     if (nullptr != pDynamic)
     //     {
     //         if (SfxPoolItem::areSame(pSource, pDynamic))
@@ -572,6 +617,12 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
             // no already globally shared one found, done
             break;
 
+        // Here we do *not* need to check if it is an SfxSetItem
+        // and cannot be shared if they are in/use another pool:
+        // The SfxItemSet::operator== will check for SfxItemPools
+        // being equal, thus when found in global share the Pool
+        // cannot be equal
+
         // need to delete evtl. handed over ownership change Item
         if (bPassingOwnership)
             delete pSource;
@@ -591,6 +642,9 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     {
         const SfxPoolItem* pOld(pSource);
         pSource = pSource->Clone(pMasterPool);
+#ifdef DBG_UTIL
+        assert(pSource->Which() == nWhich && "ITEM: Clone of Item did NOT copy/set WhichID (!)");
+#endif
         delete pOld;
     }
 
@@ -602,7 +656,12 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // when we reach this line we know that we have to add/create a new item. If
     // bPassingOwnership is given just use the item, else clone it
     if (!bPassingOwnership)
+    {
         pSource = pSource->Clone(pMasterPool);
+#ifdef DBG_UTIL
+        assert(pSource->Which() == nWhich && "ITEM: Clone of Item did NOT copy/set WhichID (!)");
+#endif
+    }
 
     // increase RefCnt 0->1
     pSource->AddRef();
@@ -622,12 +681,13 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
         return;
 
     if (IsInvalidItem(pSource))
+        // SfxItemState::DONTCARE aka INVALID_POOL_ITEM
         // nothing to do for invalid item entries
         return;
 
     if (IsDisabledItem(pSource))
-        // SfxItemState::DISABLED aka invalid item
-        // just use pSource which equals DISABLED_POOL_ITEM
+        // SfxItemState::DONTCARE aka DISABLED_POOL_ITEM
+        // nothing to do for disabled item entries
         return;
 
     if (0 == pSource->Which())
@@ -635,6 +695,13 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
         // There should be no Items with 0 == WhichID, but there are some
         // constructed for dialog return values AKA result (look for SetReturnValue)
         // and need to be deleted
+        delete pSource;
+        return;
+    }
+
+    if (SfxItemPool::IsSlot(pSource->Which()))
+    {
+        // SlotItems are cloned, so delete
         delete pSource;
         return;
     }

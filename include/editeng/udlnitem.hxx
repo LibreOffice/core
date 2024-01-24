@@ -33,9 +33,6 @@ class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem<FontLineStyle>
     Color maColor;
     model::ComplexColor maComplexColor;
 
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     SvxTextLineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
@@ -90,6 +87,9 @@ public:
 
 class EDITENG_DLLPUBLIC SvxUnderlineItem final : public SvxTextLineItem
 {
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -106,6 +106,9 @@ public:
 
 class EDITENG_DLLPUBLIC SvxOverlineItem final : public SvxTextLineItem
 {
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 
