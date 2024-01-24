@@ -32,7 +32,7 @@
           <desc>Contains an initialization vector for the password encryption.</desc>
         </info>
       </prop>
-      <prop oor:name="Password" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="Password" oor:type="xs:string">
         <info>
           <desc>Contains a password encoded with the master password.</desc>
         </info>

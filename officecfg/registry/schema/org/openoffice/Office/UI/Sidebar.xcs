@@ -32,7 +32,7 @@
         </info>
         <value></value>
       </prop>
-      <prop oor:name="Id" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="Id" oor:type="xs:string">
         <info>
           <desc>Internally used to identify the deck.  Not displayed in the UI.</desc>
         </info>
@@ -157,13 +157,13 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="Id" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="Id" oor:type="xs:string">
         <info>
           <desc>Internally used to identify the panel.</desc>
         </info>
         <value></value>
       </prop>
-      <prop oor:name="DeckId" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="DeckId" oor:type="xs:string">
         <info>
           <desc>Id of the deck to which the panel belongs.</desc>
         </info>

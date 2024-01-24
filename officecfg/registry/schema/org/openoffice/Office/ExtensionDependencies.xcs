@@ -26,17 +26,17 @@
       <info>
         <desc>Describes the additional meta data for an extension whereas the node name have to be the extension identifier.</desc>
       </info>
-      <prop oor:name="Versions" oor:type="oor:string-list" oor:localized="false">
+      <prop oor:name="Versions" oor:type="oor:string-list">
         <info>
           <desc>Specifies a list of extension versions for which the extra dependencies should be active.</desc>
         </info>
       </prop>
-      <prop oor:name="Platforms" oor:type="oor:string-list" oor:localized="false">
+      <prop oor:name="Platforms" oor:type="oor:string-list">
         <info>
           <desc>Specifies a list of platforms for which the extra dependencies mechanism is active.</desc>
         </info>
       </prop>
-      <prop oor:name="Dependencies" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="Dependencies" oor:type="xs:string">
         <info>
           <desc>Specifies a list of additional dependencies.</desc>
         </info>

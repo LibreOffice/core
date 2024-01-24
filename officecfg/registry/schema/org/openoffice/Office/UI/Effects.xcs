@@ -36,12 +36,12 @@
       <info>
         <desc>Provides a mapping between transition ids and their hierarchical representation on the user interface.</desc>
       </info>
-      <prop oor:name="Set" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="Set" oor:type="xs:string">
         <info>
           <desc>A localized text that describes the set of similar looking transitions the transition belongs to.</desc>
         </info>
       </prop>
-      <prop oor:name="Variant" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="Variant" oor:type="xs:string">
         <info>
           <desc>A localized text that identifies the variant inside a set of similar looking transitions the transition belongs to.</desc>
         </info>
@@ -56,7 +56,7 @@
           <desc>A localized text that describes the animation effect.</desc>
         </info>
       </prop>
-      <prop oor:name="Group" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="Group" oor:type="xs:string">
         <info>
           <desc>A localized text that describes the top-level group of transitions the transition belongs to.</desc>
         </info>
@@ -71,7 +71,7 @@
           <desc>A localized text that names the preset category.</desc>
         </info>
       </prop>
-      <prop oor:name="Effects" oor:type="oor:string-list" oor:localized="false">
+      <prop oor:name="Effects" oor:type="oor:string-list">
         <info>
           <desc>A list of custom effect node names</desc>
         </info>

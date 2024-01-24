@@ -46,7 +46,7 @@
           <desc>Used for Tooltips (Toolbar and Glade Widgets that have their 'action_name' specified.). Defaults to PopupLabel, then Label if empty.</desc>
         </info>
       </prop>
-      <prop oor:name="TargetURL" oor:type="xs:string" oor:localized="false">
+      <prop oor:name="TargetURL" oor:type="xs:string">
         <info>
           <desc>The actual command to use for everything except label/icon, typically when the main command doesn't map to a valid application slot.</desc>
         </info>
