@@ -150,9 +150,9 @@ public: \
 #define SFX_VIEW_REGISTRATION(DocClass) \
             DocClass::Factory().RegisterViewFactory( *Factory() )
 
-template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
+template<class T> bool checkSfxViewShell(const SfxViewShell& pShell)
 {
-    return dynamic_cast<const T*>(pShell) != nullptr;
+    return dynamic_cast<const T*>(&pShell) != nullptr;
 }
 
 typedef std::unordered_map<OUString, std::pair<Color, int>> StylesHighlighterColorMap;
@@ -204,10 +204,10 @@ protected:
 
 public:
     // Iteration
-    SAL_WARN_UNUSED_RESULT static SfxViewShell* GetFirst( bool bOnlyVisible = true, const std::function<bool ( const SfxViewShell* )>& isViewShell = nullptr );
+    SAL_WARN_UNUSED_RESULT static SfxViewShell* GetFirst( bool bOnlyVisible = true, const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
     SAL_WARN_UNUSED_RESULT static SfxViewShell* GetNext( const SfxViewShell& rPrev,
                                          bool bOnlyVisible = true,
-                                         const std::function<bool ( const SfxViewShell* )>& isViewShell = nullptr );
+                                         const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
     SAL_WARN_UNUSED_RESULT static SfxViewShell* Current();
 
     SAL_WARN_UNUSED_RESULT static SfxViewShell* Get( const css::uno::Reference< css::frame::XController>& i_rController );

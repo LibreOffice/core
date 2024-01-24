@@ -130,8 +130,8 @@ const SfxViewShell* LokStarMathHelper::GetSmViewShell()
 {
     if (vcl::Window* pGraphWindow = GetGraphicWindow())
     {
-        return SfxViewShell::GetFirst(false, [pGraphWindow](const SfxViewShell* shell) {
-            return shell->GetWindow() && shell->GetWindow()->IsChild(pGraphWindow);
+        return SfxViewShell::GetFirst(false, [pGraphWindow](const SfxViewShell& shell) {
+            return shell.GetWindow() && shell.GetWindow()->IsChild(pGraphWindow);
         });
     }
     return nullptr;

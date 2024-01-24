@@ -3007,7 +3007,7 @@ void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue 
 SfxViewShell* SfxViewShell::GetFirst
 (
     bool          bOnlyVisible,
-    const std::function< bool ( const SfxViewShell* ) >& isViewShell
+    const std::function< bool ( const SfxViewShell& ) >& isViewShell
 )
 {
     // search for a SfxViewShell of the specified type
@@ -3024,7 +3024,7 @@ SfxViewShell* SfxViewShell::GetFirst
             // That doesn't seem to be needed anymore, but keep an assert, just in case.
             assert(std::find(SfxGetpApp()->GetViewFrames_Impl().begin(), SfxGetpApp()->GetViewFrames_Impl().end(),
                 &pShell->GetViewFrame()) != SfxGetpApp()->GetViewFrames_Impl().end());
-            if ( ( !bOnlyVisible || pShell->GetViewFrame().IsVisible() ) && (!isViewShell || isViewShell(pShell)))
+            if ( ( !bOnlyVisible || pShell->GetViewFrame().IsVisible() ) && (!isViewShell || isViewShell(*pShell)))
                 return pShell;
         }
     }
@@ -3037,7 +3037,7 @@ SfxViewShell* SfxViewShell::GetNext
 (
     const SfxViewShell& rPrev,
     bool                bOnlyVisible,
-    const std::function<bool ( const SfxViewShell* )>& isViewShell
+    const std::function<bool ( const SfxViewShell& )>& isViewShell
 )
 {
     std::vector<SfxViewShell*> &rShells = SfxGetpApp()->GetViewShells_Impl();
@@ -3053,7 +3053,7 @@ SfxViewShell* SfxViewShell::GetNext
         {
             assert(std::find(SfxGetpApp()->GetViewFrames_Impl().begin(), SfxGetpApp()->GetViewFrames_Impl().end(),
                 &pShell->GetViewFrame()) != SfxGetpApp()->GetViewFrames_Impl().end());
-            if ( ( !bOnlyVisible || pShell->GetViewFrame().IsVisible() ) && (!isViewShell || isViewShell(pShell)) )
+            if ( ( !bOnlyVisible || pShell->GetViewFrame().IsVisible() ) && (!isViewShell || isViewShell(*pShell)) )
                 return pShell;
         }
     }

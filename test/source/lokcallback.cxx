@@ -150,8 +150,8 @@ void TestLokCallbackWrapper::flushLOKData()
         return;
     // Ask for payloads of all the pending types that need updating, and call the generic callback with that data.
     assert(m_viewId >= 0);
-    SfxViewShell* viewShell = SfxViewShell::GetFirst(false, [this](const SfxViewShell* shell) {
-        return shell->GetViewShellId().get() == m_viewId;
+    SfxViewShell* viewShell = SfxViewShell::GetFirst(false, [this](const SfxViewShell& shell) {
+        return shell.GetViewShellId().get() == m_viewId;
     });
     assert(viewShell != nullptr);
     // First move data to local structures, so that callbacks don't possibly modify it.
@@ -168,8 +168,8 @@ void TestLokCallbackWrapper::flushLOKData()
     }
     for (const PerViewIdData& data : updatedTypesPerViewId)
     {
-        viewShell = SfxViewShell::GetFirst(false, [data](const SfxViewShell* shell) {
-            return shell->GetViewShellId().get() == data.sourceViewId;
+        viewShell = SfxViewShell::GetFirst(false, [data](const SfxViewShell& shell) {
+            return shell.GetViewShellId().get() == data.sourceViewId;
         });
         assert(viewShell != nullptr);
         std::optional<OString> payload = viewShell->getLOKPayload(data.type, data.viewId);

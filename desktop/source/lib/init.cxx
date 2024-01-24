@@ -2280,7 +2280,7 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
         return;
     assert(m_viewId >= 0);
     SfxViewShell* viewShell = SfxViewShell::GetFirst( false,
-        [this](const SfxViewShell* shell) { return shell->GetViewShellId().get() == m_viewId; } );
+        [this](const SfxViewShell& shell) { return shell.GetViewShellId().get() == m_viewId; } );
     assert(viewShell != nullptr);
 
     // First move data to local structures, so that callbacks don't possibly modify it.
@@ -2323,7 +2323,7 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
                 {
                     assert(sourceViewId >= 0);
                     sourceViewShell = SfxViewShell::GetFirst( false,
-                    [sourceViewId](const SfxViewShell* shell) { return shell->GetViewShellId().get() == sourceViewId; } );
+                    [sourceViewId](const SfxViewShell& shell) { return shell.GetViewShellId().get() == sourceViewId; } );
                 }
                 if(sourceViewShell == nullptr)
                 {
@@ -2364,7 +2364,7 @@ void CallbackFlushHandler::Invoke()
     // so it must be done before taking the mutex.
     assert(m_viewId >= 0);
     if(SfxViewShell* viewShell = SfxViewShell::GetFirst( false,
-        [this](const SfxViewShell* shell) { return shell->GetViewShellId().get() == m_viewId; } ))
+        [this](const SfxViewShell& shell) { return shell.GetViewShellId().get() == m_viewId; } ))
     {
         viewShell->flushPendingLOKInvalidateTiles();
     }
