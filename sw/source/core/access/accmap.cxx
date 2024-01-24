@@ -1556,14 +1556,11 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     const unsigned int SELECTION_WITH_NUM = 10;
     if (vecxShapeAdd.size() > SELECTION_WITH_NUM )
     {
-         uno::Reference< XAccessible > xDoc = GetDocumentView( );
-         SwAccessibleContext * pCont = static_cast<SwAccessibleContext *>(xDoc.get());
-         if (pCont)
-         {
-             AccessibleEventObject aEvent;
-             aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-             pCont->FireAccessibleEvent(aEvent);
-         }
+        rtl::Reference<SwAccessibleContext> xDoc = GetDocumentView_(false);
+        assert(xDoc.is());
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
+        xDoc->FireAccessibleEvent(aEvent);
     }
     else
     {
@@ -1696,7 +1693,7 @@ SwAccessibleMap::~SwAccessibleMap()
     mpVSh->GetLayout()->RemoveAccessibleShell();
 }
 
-uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView_(
+rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetDocumentView_(
     bool bPagePreview )
 {
     DBG_TESTSOLARMUTEX();

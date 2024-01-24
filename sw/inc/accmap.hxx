@@ -131,8 +131,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
 
     void InvalidateRelationSet_( const SwFrame* pFrame, bool bFrom );
 
-    css::uno::Reference<css::accessibility::XAccessible>
-            GetDocumentView_( bool bPagePreview );
+    rtl::Reference<SwAccessibleContext> GetDocumentView_(bool bPagePreview);
 
     /** method to build up a new data structure of the accessible paragraphs,
         which have a selection
