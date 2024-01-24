@@ -350,6 +350,11 @@ short AbstractScTabBgColorDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScTabBgColorDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScImportOptionsDlg_Impl::Execute()
 {
     return m_xDlg->run();

@@ -43,6 +43,7 @@ class SvxNumberInfoItem;
 struct SfxChildWinInfo;
 class AbstractScInsertTableDlg;
 class AbstractScMoveTableDlg;
+class AbstractScTabBgColorDlg;
 class ScArea;
 class ScAuditingShell;
 class ScDrawShell;
@@ -460,6 +461,8 @@ private:
     void DoInsertTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScInsertTableDlg>& pDlg );
     void ExecuteAppendOrRenameTable( SfxRequest& rReq );
     void ExecuteSetTableBackgroundCol( SfxRequest& rReq );
+    void ExecuteTableBackgroundDialog( const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );
+    bool DoTableBackgroundDialog( sal_Int32 nResult, const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -575,13 +575,14 @@ public:
 
 class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg
 {
-    std::unique_ptr<ScTabBgColorDlg> m_xDlg;
+    std::shared_ptr<ScTabBgColorDlg> m_xDlg;
 public:
-    explicit AbstractScTabBgColorDlg_Impl(std::unique_ptr<ScTabBgColorDlg> p)
+    explicit AbstractScTabBgColorDlg_Impl(std::shared_ptr<ScTabBgColorDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual void GetSelectedColor( Color& rColor ) const override;
 
     // screenshotting

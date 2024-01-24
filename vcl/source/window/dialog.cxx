@@ -1182,7 +1182,21 @@ void Dialog::EndDialog( tools::Long nResult )
     // coverity[check_after_deref] - ImplEndExecuteModal might trigger destruction of mpDialogImpl
     if ( mpDialogImpl && mpDialogImpl->maEndCtx.isSet() )
     {
+        // We have a special case with async-dialogs that re-execute themselves.
+        // In order to prevent overwriting state we need here, we need to extract
+        // all the state we need before before calling maEndDialogFn, because
+        // maEndDialogFn might itself call StartExecuteAsync and store new state.
+        std::shared_ptr<weld::DialogController> xOwnerDialogController = std::move(mpDialogImpl->maEndCtx.mxOwnerDialogController);
+        std::shared_ptr<weld::Dialog> xOwnerSelf = std::move(mpDialogImpl->maEndCtx.mxOwnerSelf);
+        auto xOwner = std::move(mpDialogImpl->maEndCtx.mxOwner);
+        if ( mpDialogImpl->mbStartedModal )
+        {
+            mpDialogImpl->mbStartedModal = false;
+            mpDialogImpl->mnResult = -1;
+        }
+        mbInExecute = false;
         auto fn = std::move(mpDialogImpl->maEndCtx.maEndDialogFn);
+
         // std::move leaves maEndDialogFn in a valid state with unspecified
         // value. For the SwSyncBtnDlg case gcc and msvc left maEndDialogFn
         // unset, but clang left maEndDialogFn at its original value, keeping
@@ -1190,23 +1204,29 @@ void Dialog::EndDialog( tools::Long nResult )
         // an inconsistent lifecycle for the dialog. Force it to be unset.
         mpDialogImpl->maEndCtx.maEndDialogFn = nullptr;
         fn(nResult);
-    }
 
-    if ( mpDialogImpl && mpDialogImpl->mbStartedModal )
-    {
-        mpDialogImpl->mbStartedModal = false;
-        mpDialogImpl->mnResult = -1;
-    }
-    mbInExecute = false;
-
-    if ( mpDialogImpl )
-    {
-        // Destroy ourselves (if we have a context with VclPtr owner)
-        std::shared_ptr<weld::DialogController> xOwnerDialogController = std::move(mpDialogImpl->maEndCtx.mxOwnerDialogController);
-        std::shared_ptr<weld::Dialog> xOwnerSelf = std::move(mpDialogImpl->maEndCtx.mxOwnerSelf);
-        mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
+        // Destroy ourselves, if we have a context with VclPtr owner, and
+        // we have not been re-executed.
+        if (!mpDialogImpl || !mpDialogImpl->maEndCtx.isSet())
+            xOwner.disposeAndClear();
         xOwnerDialogController.reset();
         xOwnerSelf.reset();
+    }
+    else
+    {
+        if ( mpDialogImpl && mpDialogImpl->mbStartedModal )
+        {
+            mpDialogImpl->mbStartedModal = false;
+            mpDialogImpl->mnResult = -1;
+        }
+        mbInExecute = false;
+        if ( mpDialogImpl)
+        {
+            // Destroy ourselves (if we have a context with VclPtr owner)
+            std::shared_ptr<weld::DialogController> xOwnerDialogController = std::move(mpDialogImpl->maEndCtx.mxOwnerDialogController);
+            std::shared_ptr<weld::Dialog> xOwnerSelf = std::move(mpDialogImpl->maEndCtx.mxOwnerSelf);
+            mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
+        }
     }
 }
 
