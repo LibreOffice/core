@@ -191,7 +191,8 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
                                    && mrModel.mxTitle->mxTextProp.is()
                                    && mrModel.mxTitle->mxTextProp->isEmpty();
             // Also for tdf#146487
-            bool bEmptyRichText = mrModel.mxTitle->mxText.is()
+            bool bEmptyRichText = mrModel.mxTitle
+                && mrModel.mxTitle->mxText.is()
                 && mrModel.mxTitle->mxText->mxTextBody.is()
                 && mrModel.mxTitle->mxText->mxTextBody->isEmpty();
 
