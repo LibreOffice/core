@@ -68,24 +68,6 @@
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName);                                                     \
     void TestName::verify()
 
-// bAbsolute - decide if relative link should be converted to absolute on import
-#define DECLARE_LINKS_IMPORT_TEST(TestName, FileName, bAbsolute)                                   \
-    class TestName : public Test                                                                   \
-    {                                                                                              \
-    public:                                                                                        \
-        CPPUNIT_TEST_SUITE(TestName);                                                              \
-        CPPUNIT_TEST(Import);                                                                      \
-        CPPUNIT_TEST_SUITE_END();                                                                  \
-        void Import()                                                                              \
-        {                                                                                          \
-            SetAbsolute(bAbsolute);                                                                \
-            executeImportTest(FileName);                                                           \
-        }                                                                                          \
-        void verify() override;                                                                    \
-    };                                                                                             \
-    CPPUNIT_TEST_SUITE_REGISTRATION(TestName);                                                     \
-    void TestName::verify()
-
 class Test : public SwModelTestBase
 {
 public:
@@ -115,8 +97,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeImport)
     CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
 
-DECLARE_LINKS_IMPORT_TEST(testRelativeToAbsoluteImport, "relative-link.docx", USE_ABSOLUTE)
+CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteImport)
 {
+    SetAbsolute(USE_ABSOLUTE);
+    createSwDoc("relative-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
     OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
@@ -124,8 +108,10 @@ DECLARE_LINKS_IMPORT_TEST(testRelativeToAbsoluteImport, "relative-link.docx", US
     CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
 
-DECLARE_LINKS_IMPORT_TEST(testAbsoluteToAbsoluteImport, "absolute-link.docx", USE_ABSOLUTE)
+CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteImport)
 {
+    SetAbsolute(USE_ABSOLUTE);
+    createSwDoc("absolute-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
     // # should be encoded
@@ -133,8 +119,10 @@ DECLARE_LINKS_IMPORT_TEST(testAbsoluteToAbsoluteImport, "absolute-link.docx", US
                          getProperty<OUString>(xText, "HyperLinkURL"));
 }
 
-DECLARE_LINKS_IMPORT_TEST(testAbsoluteToRelativeImport, "absolute-link.docx", USE_RELATIVE)
+CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeImport)
 {
+    SetAbsolute(USE_RELATIVE);
+    createSwDoc("absolute-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
     // when target file (B:\\...) & document with link (temp dir) are placed on different partitions, absolute path will be loaded
@@ -142,8 +130,10 @@ DECLARE_LINKS_IMPORT_TEST(testAbsoluteToRelativeImport, "absolute-link.docx", US
                          getProperty<OUString>(xText, "HyperLinkURL"));
 }
 
-DECLARE_LINKS_IMPORT_TEST(testTdf123627_import, "tdf123627.docx", USE_RELATIVE)
+CPPUNIT_TEST_FIXTURE(Test, testTdf123627_import)
 {
+    SetAbsolute(USE_RELATIVE);
+    createSwDoc("tdf123627.docx");
     uno::Reference<text::XTextRange> xText = getRun(getParagraph(1), 1);
     OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
