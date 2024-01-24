@@ -823,6 +823,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     // Reformat all lines from here...
 
+    int nStartNextLineAfterMultiLineField = 0;
+
     sal_Int32 nDelFromLine = -1;
     bool bLineBreak = false;
 
@@ -845,6 +847,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         assert(pLine);
 
         bForceOneRun = false;
+        bool bFieldStartNextLine = false;
 
         bool bEOL = false;
         bool bEOC = false;
@@ -852,6 +855,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         sal_Int32 nPortionEnd = 0;
 
         tools::Long nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth);
+        // Multiline hyperlink may need to know if the next line is bigger.
+        tools::Long nStartXNextLine = nStartX;
         if ( nIndex == 0 )
         {
             tools::Long nFI = scaleXSpacingValue(rLRItem.GetTextFirstLineOffset());
@@ -863,6 +868,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
         }
 
+        nStartX += nStartNextLineAfterMultiLineField;
+        nStartNextLineAfterMultiLineField = 0;
         tools::Long nMaxLineWidth = calculateMaxLineWidth(nStartX, rLRItem);
 
         // Problem:
@@ -1113,7 +1120,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             aFieldValue, 0, aFieldValue.getLength(), &aTmpDXArray));
 
                         // So no scrolling for oversized fields
-                        if ( pPortion->GetSize().Width() > nXWidth )
+                        if (pPortion->GetSize().Width() > nXWidth - nTmpWidth)
                         {
                             // create ExtraPortionInfo on-demand, flush lineBreaksList
                             ExtraPortionInfo *pExtraInfo = pPortion->GetExtraInfos();
@@ -1145,6 +1152,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                         nDone));
                             sal_Int32 nLastCellBreak(0);
                             sal_Int32 nLineStartX(0);
+                            nLineStartX = -nTmpWidth;
 
                             // always add 1st line break (safe, we already know we are larger than nXWidth)
                             pExtraInfo->lineBreaksList.push_back(0);
@@ -1162,6 +1170,22 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                         if(0 != a)
                                         {
                                             pExtraInfo->lineBreaksList.push_back(a);
+                                            // the following lines may be different sized
+                                            if (nStartX > nStartXNextLine)
+                                            {
+                                                nXWidth += nStartX - nStartXNextLine;
+                                                pLine->SetNextLinePosXDiff(nStartX
+                                                                           - nStartXNextLine);
+                                                nStartXNextLine = nStartX;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //even the 1. char does not fit..
+                                            //this means the field should start on next line
+                                            //except if the actual line is a full line already
+                                            if (nLineStartX < 0 || nStartX > nStartXNextLine)
+                                                bFieldStartNextLine = true;
                                         }
 
                                         // moveLineStart forward in X
@@ -1178,6 +1202,17 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                         1,
                                         nDone);
                                 }
+                            }
+                            //next Line should start here... after this field end
+                            if (!bFieldStartNextLine)
+                                nStartNextLineAfterMultiLineField
+                                    = aTmpDXArray[nTextLength - 1] - nLineStartX;
+                            else if (pExtraInfo)
+                            {
+                                // if the 1. character does not fit,
+                                // but there is pExtraInfo, then delete it
+                                pPortion->SetExtraInfos(nullptr);
+                                pExtraInfo = nullptr;
                             }
                         }
                         nTmpWidth += pPortion->GetSize().Width();
@@ -1403,13 +1438,29 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         }
         else if ( bFixedEnd )
         {
-            pLine->SetEnd( nPortionStart );
-            pLine->SetEndPortion( nTmpPortion-1 );
+            if (bFieldStartNextLine)
+            {
+                pLine->SetEnd(nPortionStart);
+                pLine->SetEndPortion(nTmpPortion - 1);
+            }
+            else
+            {
+                pLine->SetEnd(nPortionStart + 1);
+                pLine->SetEndPortion(nTmpPortion);
+            }
         }
         else if ( bLineBreak || bBrokenLine )
         {
-            pLine->SetEnd( nPortionStart+1 );
-            pLine->SetEndPortion( nTmpPortion-1 );
+            if (bFieldStartNextLine)
+            {
+                pLine->SetEnd(nPortionStart);
+                pLine->SetEndPortion(nTmpPortion - 2);
+            }
+            else
+            {
+                pLine->SetEnd(nPortionStart + 1);
+                pLine->SetEndPortion(nTmpPortion - 1);
+            }
             bEOC = false; // was set above, maybe change the sequence of the if's?
         }
         else if ( !bEOL && !bContinueLastPortion )
@@ -3313,7 +3364,6 @@ Point ImpEditEngine::MoveToNextLine(
 }
 
 // TODO: use IterateLineAreas in ImpEditEngine::Paint, to avoid algorithm duplication
-
 void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, Degree10 nOrientation )
 {
     if ( !IsUpdateLayout() && !bStripOnly )
@@ -3382,15 +3432,15 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
             for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
             {
-                EditLine const& rLine = rParaPortion.GetLines()[nLine];
-                sal_Int32 nIndex = rLine.GetStart();
-                tools::Long nLineHeight = rLine.GetHeight();
+                EditLine* pLine = &GetParaPortions().getRef(nParaPortion).GetLines()[nLine];
+                sal_Int32 nIndex = pLine->GetStart();
+                tools::Long nLineHeight = pLine->GetHeight();
                 if (nLine != nLastLine)
                     nLineHeight += nVertLineSpacing;
                 MoveToNextLine(aStartPos, nLineHeight, nColumn, aOrigin);
                 aTmpPos = aStartPos;
-                adjustXDirectionAware(aTmpPos, rLine.GetStartPosX());
-                adjustYDirectionAware(aTmpPos, rLine.GetMaxAscent() - nLineHeight);
+                adjustXDirectionAware(aTmpPos, pLine->GetStartPosX());
+                adjustYDirectionAware(aTmpPos, pLine->GetMaxAscent() - nLineHeight);
 
                 if ( ( !IsEffectivelyVertical() && ( aStartPos.Y() > aClipRect.Top() ) )
                     || ( IsEffectivelyVertical() && IsTopToBottom() && aStartPos.X() < aClipRect.Right() )
@@ -3418,15 +3468,24 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                     bool bParsingFields = false;
                     std::vector< sal_Int32 >::iterator itSubLines;
+                    tools::Long nFirstPortionXOffset = 0;
 
-                    for ( sal_Int32 nPortion = rLine.GetStartPortion(); nPortion <= rLine.GetEndPortion(); nPortion++ )
+                    for ( sal_Int32 nPortion = pLine->GetStartPortion(); nPortion <= pLine->GetEndPortion(); nPortion++ )
                     {
                         DBG_ASSERT(rParaPortion.GetTextPortions().Count(), "Line without Textportion in Paint!");
                         const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[nPortion];
 
-                        const tools::Long nPortionXOffset = GetPortionXOffset(rParaPortion, rLine, nPortion);
+                        const tools::Long nPortionXOffset = GetPortionXOffset(rParaPortion, *pLine, nPortion);
                         setXDirectionAwareFrom(aTmpPos, aStartPos);
-                        adjustXDirectionAware(aTmpPos, nPortionXOffset);
+
+                        if (nPortion == pLine->GetStartPortion())
+                            nFirstPortionXOffset = nPortionXOffset;
+
+                        if (!bParsingFields)
+                            adjustXDirectionAware(aTmpPos, nPortionXOffset);
+                        else
+                            adjustXDirectionAware(aTmpPos, nFirstPortionXOffset);
+
                         if (isXOverflowDirectionAware(aTmpPos, aClipRect))
                             break; // No further output in line necessary
 
@@ -3488,13 +3547,13 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aText = rParaPortion.GetNode()->GetString();
                                     nTextStart = nIndex;
                                     nTextLen = rTextPortion.GetLen();
-                                    pDXArray = std::span(rLine.GetCharPosArray().data() + (nIndex - rLine.GetStart()),
-                                                    rLine.GetCharPosArray().size() - (nIndex - rLine.GetStart()));
+                                    pDXArray = std::span(pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart()),
+                                                    pLine->GetCharPosArray().size() - (nIndex - pLine->GetStart()));
 
-                                    if (!rLine.GetKashidaArray().empty())
+                                    if (!pLine->GetKashidaArray().empty())
                                     {
-                                        pKashidaArray = std::span(rLine.GetKashidaArray().data() + (nIndex - rLine.GetStart()),
-                                                    rLine.GetKashidaArray().size() - (nIndex - rLine.GetStart()));
+                                        pKashidaArray = std::span(pLine->GetKashidaArray().data() + (nIndex - pLine->GetStart()),
+                                                    pLine->GetKashidaArray().size() - (nIndex - pLine->GetStart()));
                                     }
 
                                     // Paint control characters (#i55716#)
@@ -3522,7 +3581,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                 const tools::Long nAdvanceX = ( nTmpIdx == nTmpEnd ?
                                                                          rTextPortion.GetSize().Width() :
                                                                          pDXArray[ nTmpIdx - nTextStart ] ) - nHalfBlankWidth;
-                                                const tools::Long nAdvanceY = -rLine.GetMaxAscent();
+                                                const tools::Long nAdvanceY = -pLine->GetMaxAscent();
 
                                                 Point aTopLeftRectPos( aTmpPos );
                                                 adjustXDirectionAware(aTopLeftRectPos, nAdvanceX);
@@ -3530,7 +3589,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                                 Point aBottomRightRectPos( aTopLeftRectPos );
                                                 adjustXDirectionAware(aBottomRightRectPos, 2 * nHalfBlankWidth);
-                                                adjustYDirectionAware(aBottomRightRectPos, rLine.GetHeight());
+                                                adjustYDirectionAware(aBottomRightRectPos, pLine->GetHeight());
 
                                                 rOutDev.Push( vcl::PushFlags::FILLCOLOR );
                                                 rOutDev.Push( vcl::PushFlags::LINECOLOR );
@@ -3579,15 +3638,12 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     nTextStart = 0;
                                     nTextLen = aText.getLength();
                                     ExtraPortionInfo *pExtraInfo = rTextPortion.GetExtraInfos();
-                                    // Do not split the Fields into different lines while editing
-                                    // With EditView on Overlay bStripOnly is now set for stripping to
-                                    // primitives. To stay compatible in EditMode use mpActiveView to detect
-                                    // when we are in EditMode. For whatever reason URLs are drawn as single
-                                    // line in edit mode, originally clipped against edit area (which is no
-                                    // longer done in Overlay mode and allows to *read* the URL).
-                                    // It would be difficult to change this due to needed adaptations in
-                                    // EditEngine (look for lineBreaksList creation)
-                                    if (nullptr == mpActiveView && bStripOnly && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
+                                    //For historical reasons URLs was drawn as single line in edit mode
+                                    //but now we changed it, so it wraps similar as simple text.
+                                    //It is not perfect, it still use lineBreaksList, so it won’t seek
+                                    //word ends to wrap text there, but it would be difficult to change
+                                    //this due to needed adaptations in EditEngine
+                                    if (bStripOnly && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
                                     {
                                         bParsingFields = true;
                                         itSubLines = pExtraInfo->lineBreaksList.begin();
@@ -3597,13 +3653,14 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     {
                                         if( itSubLines != pExtraInfo->lineBreaksList.begin() )
                                         {
-                                            // only use GetMaxAscent(), rLine.GetHeight() will not
+                                            // only use GetMaxAscent(), pLine->GetHeight() will not
                                             // proceed as needed (see PortionKind::TEXT above and nAdvanceY)
                                             // what will lead to a compressed look with multiple lines
-                                            const sal_uInt16 nMaxAscent(rLine.GetMaxAscent());
+                                            const sal_uInt16 nMaxAscent(pLine->GetMaxAscent());
 
                                             aTmpPos += MoveToNextLine(aStartPos, nMaxAscent,
                                                                       nColumn, aOrigin);
+                                            adjustXDirectionAware(aTmpPos, -pLine->GetNextLinePosXDiff());
                                         }
                                         std::vector< sal_Int32 >::iterator curIt = itSubLines;
                                         ++itSubLines;
@@ -3623,14 +3680,26 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                 // tdf#148966 don't paint the line break following a
                                                 // multiline field based on a compat flag
                                                 OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(mpEditEngine)};
+                                                int nStartNextLine = rParaPortion.GetLines()[nLine + 1].GetStartPortion();
+                                                const TextPortion& rNextTextPortion = rParaPortion.GetTextPortions()[nStartNextLine];
                                                 if (pOutlEditEng
                                                     && pOutlEditEng->GetCompatFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)
                                                            .value_or(false))
                                                 {
-                                                    int nStartNextLine = rParaPortion.GetLines()[nLine + 1].GetStartPortion();
-                                                    const TextPortion& rNextTextPortion = rParaPortion.GetTextPortions()[nStartNextLine];
                                                     if (rNextTextPortion.GetKind() == PortionKind::LINEBREAK)
                                                         ++nLine; //ignore the following linebreak
+                                                }
+                                                else if (mpActiveView && rNextTextPortion.GetKind() == PortionKind::LINEBREAK)
+                                                {
+                                                    // if we are at edit mode, the compat flag does not work
+                                                    // here we choose to work if compat flag is true,
+                                                    // this is better for newer documents
+                                                    nLine++;
+                                                }
+                                                if (rNextTextPortion.GetKind() != PortionKind::LINEBREAK)
+                                                {
+                                                    nLine++;
+                                                    pLine = &GetParaPortions().getRef(nParaPortion).GetLines()[nLine];
                                                 }
                                             }
                                         }
@@ -3750,7 +3819,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     const lang::Locale aLocale(GetLocale(EditPaM(rParaPortion.GetNode(), nIndex + 1)));
 
                                     // create EOL and EOP bools
-                                    const bool bEndOfLine(nPortion == rLine.GetEndPortion());
+                                    const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                     const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
                                     // get Overline color (from ((const SvxOverlineItem*)GetItem())->GetColor() in
@@ -3897,7 +3966,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         if ( bDrawFrame )
                                         {
                                             Point aTopLeft( aTmpPos );
-                                            aTopLeft.AdjustY( -(rLine.GetMaxAscent()) );
+                                            aTopLeft.AdjustY( -(pLine->GetMaxAscent()) );
                                             if ( nOrientation )
                                                 aOrigin.RotateAround(aTopLeft, nOrientation);
                                             tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
@@ -3910,7 +3979,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldData))
                                             {
                                                 Point aTopLeft(aTmpPos);
-                                                aTopLeft.AdjustY(-(rLine.GetMaxAscent()));
+                                                aTopLeft.AdjustY(-(pLine->GetMaxAscent()));
 
                                                 tools::Rectangle aRect(aTopLeft, rTextPortion.GetSize());
                                                 vcl::PDFExtOutDevBookmarkEntry aBookmark;
@@ -4001,7 +4070,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     if ( bStripOnly )
                                     {
                                         // create EOL and EOP bools
-                                        const bool bEndOfLine(nPortion == rLine.GetEndPortion());
+                                        const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                         const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
                                         const Color aOverlineColor(rOutDev.GetOverlineColor());
@@ -4021,7 +4090,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     // #i108052# When stripping, a callback for _empty_ paragraphs is also needed.
                                     // This was optimized away (by not rendering the space-only tab portion), so do
                                     // it manually here.
-                                    const bool bEndOfLine(nPortion == rLine.GetEndPortion());
+                                    const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                     const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
                                     const Color aOverlineColor(rOutDev.GetOverlineColor());
