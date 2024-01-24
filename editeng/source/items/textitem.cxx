@@ -107,7 +107,7 @@ SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkIte
 SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0_deg10, false, TypedWhichId<SvxCharRotateItem>(0));}
 SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, TypedWhichId<SvxCharScaleWidthItem>(0));}
 SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
-
+SfxPoolItem* SvxNoHyphenItem::CreateDefault() {return new SvxNoHyphenItem(false, 0);}
 
 // class SvxFontListItem -------------------------------------------------
 
@@ -2166,8 +2166,8 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 // class SvxNoHyphenItem -------------------------------------------------
 
-SvxNoHyphenItem::SvxNoHyphenItem( const sal_uInt16 nId ) :
-    SfxBoolItem( nId , true )
+SvxNoHyphenItem::SvxNoHyphenItem( const bool bNoHyphen, const sal_uInt16 nId ) :
+    SfxBoolItem( nId, bNoHyphen )
 {
 }
 
@@ -2184,8 +2184,12 @@ bool SvxNoHyphenItem::GetPresentation
     OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
-    rText.clear();
-    return false;
+    if ( GetValue() )
+        rText = EditResId(RID_SVXITEMS_NOHYPHENATION_TRUE);
+    else
+        rText.clear();
+
+    return GetValue();
 }
 
 /*

@@ -2590,6 +2590,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
         case RES_CHRATR_FONTSIZE:
         case RES_CHRATR_ESCAPEMENT:
         case RES_CHRATR_CONTOUR:
+        case RES_CHRATR_NOHYPHEN:
         case RES_PARATR_NUMRULE:
             rInvFlags |= SwContentFrameInvFlags::SetCompletePaint;
             break;

@@ -41,6 +41,7 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/autokernitem.hxx>
+#include <editeng/nhypitem.hxx>
 #include <editeng/colritem.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -2429,6 +2430,7 @@ SvxCharPositionPage::SvxCharPositionPage(weld::Container* pPage, weld::DialogCon
     , m_xScaleWidthMF(m_xBuilder->weld_metric_spin_button("scalewidthsb", FieldUnit::PERCENT))
     , m_xKerningMF(m_xBuilder->weld_metric_spin_button("kerningsb", FieldUnit::POINT))
     , m_xPairKerningBtn(m_xBuilder->weld_check_button("pairkerning"))
+    , m_xNoHyphenationBtn(m_xBuilder->weld_check_button("nohyphenation"))
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
 #ifdef IOS
@@ -2794,6 +2796,16 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     else
         m_xPairKerningBtn->set_active(false);
 
+    // No hyphenation
+    nWhich = GetWhich( sal_uInt16(19) );  // number borrowed from RES_CHRATR_NOHYPHEN
+    if ( rSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
+    {
+        const SvxNoHyphenItem& rItem = static_cast<const SvxNoHyphenItem&>(rSet->Get( nWhich ));
+        m_xNoHyphenationBtn->set_active(rItem.GetValue());
+    }
+    else
+        m_xNoHyphenationBtn->set_active(false);
+
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if ( rSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
@@ -2874,6 +2886,7 @@ void SvxCharPositionPage::ChangesApplied()
     m_xScaleWidthMF->save_value();
     m_xKerningMF->save_value();
     m_xPairKerningBtn->save_state();
+    m_xNoHyphenationBtn->save_state();
 }
 
 bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
@@ -2958,6 +2971,18 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     if (m_xPairKerningBtn->get_state_changed_from_saved())
     {
         rSet->Put( SvxAutoKernItem( m_xPairKerningBtn->get_active(), nWhich ) );
+        bModified = true;
+    }
+    else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
+        rSet->InvalidateItem(nWhich);
+
+    // No hyphenation
+
+    nWhich = GetWhich( sal_uInt16(19) );  // number borrowed from RES_CHRATR_NOHYPHEN
+
+    if (m_xNoHyphenationBtn->get_state_changed_from_saved())
+    {
+        rSet->Put( SvxNoHyphenItem( m_xNoHyphenationBtn->get_active(), nWhich ) );
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )

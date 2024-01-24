@@ -188,6 +188,8 @@ class formatCharacter(UITestCase):
                 xKerning = xDialog.getChild("kerningsb")
                 xPairKerning = xDialog.getChild("pairkerning")
                 xFitToLine = xDialog.getChild("fittoline")
+                xNoHyphenation = xDialog.getChild("nohyphenation")
+                self.assertEqual(get_state_as_dict(xNoHyphenation)["Selected"], "false")
 
                 xSuperscript.executeAction("CLICK", tuple())
                 xRelFontSize.executeAction("UP", tuple())
@@ -196,6 +198,7 @@ class formatCharacter(UITestCase):
                 xKerning.executeAction("UP", tuple())
                 xPairKerning.executeAction("CLICK", tuple())
                 xFitToLine.executeAction("CLICK", tuple())
+                xNoHyphenation.executeAction("CLICK", tuple())
 
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
@@ -208,6 +211,7 @@ class formatCharacter(UITestCase):
                 xKerning = xDialog.getChild("kerningsb")
                 xPairKerning = xDialog.getChild("pairkerning")
                 xFitToLine = xDialog.getChild("fittoline")
+                xNoHyphenation = xDialog.getChild("nohyphenation")
 
                 self.assertEqual(get_state_as_dict(xSuperscript)["Checked"], "true")
                 self.assertEqual(get_state_as_dict(x90deg)["Checked"], "true")
@@ -215,6 +219,7 @@ class formatCharacter(UITestCase):
                 self.assertEqual(get_state_as_dict(xKerning)["Text"], "0.1 pt")
                 self.assertEqual(get_state_as_dict(xPairKerning)["Selected"], "false")
                 self.assertEqual(get_state_as_dict(xFitToLine)["Selected"], "true")
+                self.assertEqual(get_state_as_dict(xNoHyphenation)["Selected"], "true")
 
 
 

@@ -1495,6 +1495,8 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMa
                     { UNO_NAME_CHAR_SHADOWED,          RES_CHRATR_SHADOWED,    cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
                     // SvxContouredItem
                     { UNO_NAME_CHAR_CONTOURED,         RES_CHRATR_CONTOUR,     cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
+                    // SvxNoHyphenItem
+                    { UNO_NAME_CHAR_NO_HYPHENATION,    RES_CHRATR_NOHYPHEN,    cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
                     // SvxCrossedOutItem
                     { UNO_NAME_CHAR_STRIKEOUT,     RES_CHRATR_CROSSEDOUT, cppu::UnoType<sal_Int16>::get(),PropertyAttribute::MAYBEVOID,  MID_CROSS_OUT                        },
                     // SvxUnderlineItem

@@ -543,6 +543,8 @@
                     { UNO_NAME_PARA_LINE_SPACING, RES_PARATR_LINESPACING, cppu::UnoType<css::style::LineSpacing>::get(),       PropertyAttribute::MAYBEVOID,     CONVERT_TWIPS},   \
                     { UNO_NAME_PARA_RIGHT_MARGIN, RES_MARGIN_RIGHT, cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
                     { UNO_NAME_TABSTOPS, RES_PARATR_TABSTOP,   cppu::UnoType< cppu::UnoSequenceType<css::style::TabStop> >::get(),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
+                    { UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN,   cppu::UnoType<bool>::get(),       PROPERTY_NONE, 0}, \
+
 
 #define FILL_PROPERTIES_SW_BMP \
     { UNO_NAME_FILLBMP_LOGICAL_SIZE,               XATTR_FILLBMP_SIZELOG,      cppu::UnoType<bool>::get(),       0,  0}, \

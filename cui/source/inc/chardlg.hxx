@@ -269,6 +269,7 @@ private:
 
     std::unique_ptr<weld::MetricSpinButton> m_xKerningMF;
     std::unique_ptr<weld::CheckButton> m_xPairKerningBtn;
+    std::unique_ptr<weld::CheckButton> m_xNoHyphenationBtn;
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );

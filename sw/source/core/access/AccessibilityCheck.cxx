@@ -699,6 +699,11 @@ public:
                 case RES_CHRATR_CONTOUR:
                     sFormattingType = "Outline";
                     break;
+
+                case RES_CHRATR_NOHYPHEN:
+                    sFormattingType = "No Hyphenation";
+                    break;
+
                 default:
                     break;
             }
@@ -758,6 +763,7 @@ public:
                 || aSwAttrSet.GetItem(RES_CHRATR_OVERLINE, false)
                 || aSwAttrSet.GetItem(RES_CHRATR_CROSSEDOUT, false)
                 || aSwAttrSet.GetItem(RES_CHRATR_RELIEF, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_NOHYPHEN, false)
                 || aSwAttrSet.GetItem(RES_CHRATR_CONTOUR, false))
             {
                 auto pIssue

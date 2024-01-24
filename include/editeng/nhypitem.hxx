@@ -26,7 +26,9 @@
 class EDITENG_DLLPUBLIC SvxNoHyphenItem final : public SfxBoolItem
 {
 public:
-    SvxNoHyphenItem( const sal_uInt16 nId  );
+    static SfxPoolItem* CreateDefault();
+
+    SvxNoHyphenItem( const bool bNoHyphen, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SvxNoHyphenItem* Clone( SfxItemPool *pPool = nullptr ) const override;
