@@ -41,7 +41,7 @@ class SfxBindings;
 class SfxChildWindow;
 class SvxNumberInfoItem;
 struct SfxChildWinInfo;
-
+class AbstractScInsertTableDlg;
 class ScArea;
 class ScAuditingShell;
 class ScDrawShell;
@@ -455,6 +455,7 @@ public:
 private:
     void ExecuteMoveTable( SfxRequest& rReq );
     void ExecuteInsertTable( SfxRequest& rReq );
+    void DoInsertTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScInsertTableDlg>& pDlg );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -199,6 +199,11 @@ short AbstractScInsertTableDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScInsertTableDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScSelEntryDlg_Impl::Execute()
 {
     return m_xDlg->run();

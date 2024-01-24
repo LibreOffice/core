@@ -295,13 +295,14 @@ public:
 
 class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
 {
-    std::unique_ptr<ScInsertTableDlg> m_xDlg;
+    std::shared_ptr<ScInsertTableDlg> m_xDlg;
 public:
-    explicit AbstractScInsertTableDlg_Impl(std::unique_ptr<ScInsertTableDlg> p)
+    explicit AbstractScInsertTableDlg_Impl(std::shared_ptr<ScInsertTableDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
+    virtual bool            StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual bool            GetTablesFromFile() override;
     virtual bool            GetTablesAsLink() override;
     virtual const OUString* GetFirstTable( sal_uInt16* pN = nullptr ) override;

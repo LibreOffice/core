@@ -1126,97 +1126,114 @@ void ScTabViewShell::ExecuteInsertTable(SfxRequest& rReq)
     }
     else                                // dialog
     {
+        auto xRequest = std::make_shared<SfxRequest>(rReq);
+        rReq.Ignore(); // the 'old' request is not relevant any more
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-        ScopedVclPtr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetFrameWeld(), rViewData,
+        VclPtr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetFrameWeld(), rViewData,
             nTabSelCount, nSlot == FID_INS_TABLE_EXT));
-        if ( RET_OK == pDlg->Execute() )
-        {
-            if (pDlg->GetTablesFromFile())
+        pDlg->StartExecuteAsync(
+            [this, pDlg, xRequest] (sal_Int32 nResult)->void
             {
-                std::vector<SCTAB> nTabs;
-                sal_uInt16 n = 0;
-                const OUString* pStr = pDlg->GetFirstTable( &n );
-                while ( pStr )
-                {
-                    nTabs.push_back( static_cast<SCTAB>(n) );
-                    pStr = pDlg->GetNextTable( &n );
-                }
-                bool bLink = pDlg->GetTablesAsLink();
-                if (!nTabs.empty())
-                {
-                    if(pDlg->IsTableBefore())
-                    {
-                        ImportTables( pDlg->GetDocShellTables(), nTabs.size(), nTabs.data(),
-                                    bLink,nTabNr );
-                    }
-                    else
-                    {
-                        SCTAB   nTabAfter    = nTabNr+1;
+                if (nResult == RET_OK)
+                    DoInsertTableFromDialog(*xRequest, pDlg);
+                pDlg->disposeOnce();
+            }
+        );
+    }
+}
 
-                        for(SCTAB j=nCurrentTab+1;j<nTabCount;j++)
-                        {
-                            if(!rDoc.IsScenario(j))
-                            {
-                                nTabAfter=j;
-                                break;
-                            }
-                        }
+void ScTabViewShell::DoInsertTableFromDialog(SfxRequest& rReq, const VclPtr<AbstractScInsertTableDlg>& pDlg)
+{
+    ScViewData& rViewData   = GetViewData();
+    ScDocument& rDoc        = rViewData.GetDocument();
+    SCTAB       nCurrentTab = rViewData.GetTabNo();
+    SCTAB       nTabNr      = nCurrentTab;
+    SCTAB       nTabCount   = rDoc.GetTableCount();
+    ScMarkData& rMark    = rViewData.GetMarkData();
 
-                        ImportTables( pDlg->GetDocShellTables(), nTabs.size(), nTabs.data(),
-                                    bLink,nTabAfter );
-                    }
-                }
+    if (pDlg->GetTablesFromFile())
+    {
+        std::vector<SCTAB> nTabs;
+        sal_uInt16 n = 0;
+        const OUString* pStr = pDlg->GetFirstTable( &n );
+        while ( pStr )
+        {
+            nTabs.push_back( static_cast<SCTAB>(n) );
+            pStr = pDlg->GetNextTable( &n );
+        }
+        bool bLink = pDlg->GetTablesAsLink();
+        if (!nTabs.empty())
+        {
+            if(pDlg->IsTableBefore())
+            {
+                ImportTables( pDlg->GetDocShellTables(), nTabs.size(), nTabs.data(),
+                            bLink,nTabNr );
             }
             else
             {
-                SCTAB nCount=pDlg->GetTableCount();
-                if(pDlg->IsTableBefore())
-                {
-                    if(nCount==1 && !pDlg->GetFirstTable()->isEmpty())
-                    {
-                        rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
-                        rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabNr) + 1 ) );        // 1-based
-                        rReq.Done();
+                SCTAB   nTabAfter    = nTabNr+1;
 
-                        InsertTable( *pDlg->GetFirstTable(), nTabNr );
-                    }
-                    else
+                for(SCTAB j=nCurrentTab+1;j<nTabCount;j++)
+                {
+                    if(!rDoc.IsScenario(j))
                     {
-                        std::vector<OUString> aNames(0);
-                        InsertTables( aNames, nTabNr,nCount );
+                        nTabAfter=j;
+                        break;
                     }
                 }
-                else
+
+                ImportTables( pDlg->GetDocShellTables(), nTabs.size(), nTabs.data(),
+                            bLink,nTabAfter );
+            }
+        }
+    }
+    else
+    {
+        SCTAB nCount=pDlg->GetTableCount();
+        if(pDlg->IsTableBefore())
+        {
+            if(nCount==1 && !pDlg->GetFirstTable()->isEmpty())
+            {
+                rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
+                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabNr) + 1 ) );        // 1-based
+                rReq.Done();
+
+                InsertTable( *pDlg->GetFirstTable(), nTabNr );
+            }
+            else
+            {
+                std::vector<OUString> aNames(0);
+                InsertTables( aNames, nTabNr,nCount );
+            }
+        }
+        else
+        {
+            SCTAB   nTabAfter    = nTabNr+1;
+            SCTAB nSelHigh = rMark.GetLastSelected();
+
+            for(SCTAB j=nSelHigh+1;j<nTabCount;j++)
+            {
+                if(!rDoc.IsScenario(j))
                 {
-                    SCTAB   nTabAfter    = nTabNr+1;
-                    SCTAB nSelHigh = rMark.GetLastSelected();
-
-                    for(SCTAB j=nSelHigh+1;j<nTabCount;j++)
-                    {
-                        if(!rDoc.IsScenario(j))
-                        {
-                            nTabAfter=j;
-                            break;
-                        }
-                        else // #101672#; increase nTabAfter, because it is possible that the scenario tables are the last
-                            nTabAfter = j + 1;
-                    }
-
-                    if(nCount==1 && !pDlg->GetFirstTable()->isEmpty())
-                    {
-                        rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
-                        rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabAfter) + 1 ) );     // 1-based
-                        rReq.Done();
-
-                        InsertTable( *pDlg->GetFirstTable(), nTabAfter);
-                    }
-                    else
-                    {
-                        std::vector<OUString> aNames(0);
-                        InsertTables( aNames, nTabAfter,nCount);
-                    }
+                    nTabAfter=j;
+                    break;
                 }
+                else // #101672#; increase nTabAfter, because it is possible that the scenario tables are the last
+                    nTabAfter = j + 1;
+            }
+
+            if(nCount==1 && !pDlg->GetFirstTable()->isEmpty())
+            {
+                rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
+                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabAfter) + 1 ) );     // 1-based
+                rReq.Done();
+
+                InsertTable( *pDlg->GetFirstTable(), nTabAfter);
+            }
+            else
+            {
+                std::vector<OUString> aNames(0);
+                InsertTables( aNames, nTabAfter,nCount);
             }
         }
     }
