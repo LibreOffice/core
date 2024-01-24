@@ -364,7 +364,10 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
             && *pStart <= pos && pos <= *pEnd)
         {
             SwRect charRect;
-            if (rShell.GetCurrFrame(false)->GetCharRect(charRect, pos, &cms, false)
+            std::pair<Point, bool> const tmp(center, false);
+            SwContentFrame const*const pFrame(
+                pos.nNode.GetNode().GetTextNode()->getLayoutFrame(rShell.GetLayout(), &pos, &tmp));
+            if (pFrame->GetCharRect(charRect, pos, &cms, false)
                 && rRect.Overlaps(charRect))
             {
                 ret.push_back(rRect);
