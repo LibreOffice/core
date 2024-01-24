@@ -2600,40 +2600,49 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
     // splitting of portions vertically (causes spurious extra PDF annotations)
     if (eMode == RectsMode::NoAnchoredFlys)
     {
-        assert(pStartFrame == pEndFrame); // link or field all in 1 frame
-        assert(pStartFrame->IsTextFrame());
-        SwTextGridItem const*const pGrid(GetGridItem(pStartFrame->FindPageFrame()));
-        SwTextPaintInfo info(static_cast<SwTextFrame*>(pStartFrame), pStartFrame->FindPageFrame()->getFrameArea());
-        SwTextPainter painter(static_cast<SwTextFrame*>(pStartFrame), &info);
-        // because nothing outside the start/end has been added, it doesn't
-        // matter to match exactly the start/end, subtracting outside is no-op
-        painter.CharToLine(static_cast<SwTextFrame*>(pStartFrame)->MapModelToViewPos(*pStartPos));
-        do
+        for (SwContentFrame * pFrame = pStartFrame; ; pFrame = pFrame->GetFollow())
         {
-            info.SetPos(painter.GetTopLeft());
-            bool const bAdjustBaseLine(
-                painter.GetLineInfo().HasSpecialAlign(pStartFrame->IsVertical())
-                || nullptr != pGrid || painter.GetCurr()->GetHangingBaseline());
-            SwTwips nAscent, nHeight;
-            painter.CalcAscentAndHeight(nAscent, nHeight);
-            SwTwips const nOldY(info.Y());
-            for (SwLinePortion const* pLP = painter.GetCurr()->GetFirstPortion();
-                    pLP; pLP = pLP->GetNextPortion())
+            assert(pFrame->IsTextFrame());
+            SwTextGridItem const*const pGrid(GetGridItem(pFrame->FindPageFrame()));
+            SwTextPaintInfo info(static_cast<SwTextFrame*>(pFrame), pFrame->FindPageFrame()->getFrameArea());
+            SwTextPainter painter(static_cast<SwTextFrame*>(pFrame), &info);
+            // because nothing outside the start/end has been added, it doesn't
+            // matter to match exactly the start/end, subtracting outside is no-op
+            if (pFrame == pStartFrame)
             {
-                if (pLP->IsFlyPortion())
+                painter.CharToLine(static_cast<SwTextFrame*>(pFrame)->MapModelToViewPos(*pStartPos));
+            }
+            do
+            {
+                info.SetPos(painter.GetTopLeft());
+                bool const bAdjustBaseLine(
+                    painter.GetLineInfo().HasSpecialAlign(pFrame->IsVertical())
+                    || nullptr != pGrid || painter.GetCurr()->GetHangingBaseline());
+                SwTwips nAscent, nHeight;
+                painter.CalcAscentAndHeight(nAscent, nHeight);
+                SwTwips const nOldY(info.Y());
+                for (SwLinePortion const* pLP = painter.GetCurr()->GetFirstPortion();
+                        pLP; pLP = pLP->GetNextPortion())
                 {
-                    info.Y(info.Y() + (bAdjustBaseLine
-                            ? painter.AdjustBaseLine(*painter.GetCurr(), pLP)
-                            : nAscent));
-                    SwRect flyPortion;
-                    info.CalcRect(*pLP, &flyPortion);
-                    Sub(aRegion, flyPortion);
-                    info.Y(nOldY);
+                    if (pLP->IsFlyPortion())
+                    {
+                        info.Y(info.Y() + (bAdjustBaseLine
+                                ? painter.AdjustBaseLine(*painter.GetCurr(), pLP)
+                                : nAscent));
+                        SwRect flyPortion;
+                        info.CalcRect(*pLP, &flyPortion);
+                        Sub(aRegion, flyPortion);
+                        info.Y(nOldY);
+                    }
+                    pLP->Move(info);
                 }
-                pLP->Move(info);
+            }
+            while (painter.Next());
+            if (pFrame == pEndFrame)
+            {
+                break;
             }
         }
-        while (painter.Next());
     }
     else while (pPage)
     {
