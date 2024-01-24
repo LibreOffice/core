@@ -1517,12 +1517,17 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         ++pShape;
     }
 
+    rtl::Reference<SwAccessibleContext> xDocView = GetDocumentView_(false);
+    assert(xDocView.is());
+
     for (const auto& rpShape : vecxShapeRemove)
     {
-        ::accessibility::AccessibleShape *pAccShape = rpShape.get();
-        if (pAccShape)
+        if (rpShape.is())
         {
-            pAccShape->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(), uno::Any(), -1);
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
+            aEvent.NewValue <<= uno::Reference<XAccessible>(rpShape);
+            xDocView->FireAccessibleEvent(aEvent);
         }
     }
 
@@ -1554,20 +1559,20 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     const unsigned int SELECTION_WITH_NUM = 10;
     if (vecxShapeAdd.size() > SELECTION_WITH_NUM )
     {
-        rtl::Reference<SwAccessibleContext> xDoc = GetDocumentView_(false);
-        assert(xDoc.is());
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-        xDoc->FireAccessibleEvent(aEvent);
+        xDocView->FireAccessibleEvent(aEvent);
     }
     else
     {
         for (const auto& rpShape : vecxShapeAdd)
         {
-            ::accessibility::AccessibleShape *pAccShape = rpShape.get();
-            if (pAccShape)
+            if (rpShape.is())
             {
-                pAccShape->CommitChange(AccessibleEventId::SELECTION_CHANGED_ADD, uno::Any(), uno::Any(), -1);
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
+                aEvent.NewValue <<= uno::Reference<XAccessible>(rpShape);
+                xDocView->FireAccessibleEvent(aEvent);
             }
         }
     }
