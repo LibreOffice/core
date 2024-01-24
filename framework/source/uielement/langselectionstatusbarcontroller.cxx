@@ -244,10 +244,7 @@ void LangSelectionStatusbarController::LangMenu(
     }
     else if (nId == MID_LANG_DEF_MORE)
     {
-        if (bCalc)
-            aBuff.append( ".uno:FormatCellDialog" );
-        else
-            aBuff.append( ".uno:LanguageStatus?Language:string=*" );
+        aBuff.append( ".uno:LanguageStatus?Language:string=*" );
     }
     else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
     {

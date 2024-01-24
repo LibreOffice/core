@@ -1252,12 +1252,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 sal_Int32 nPos = 0;
                 if ( aLangText == "*" )
                 {
-                    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    ScTabViewShell* pSh = GetBestViewShell();
-                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(pSh ? pSh->GetDialogParent() : nullptr, SID_LANGUAGE_OPTIONS));
-                    pDlg->Execute();
-
-                    rDoc.GetLanguage( eLang, eCjk, eCtl );
+                    if (ScTabViewShell* pSh = GetBestViewShell())
+                    {
+                        pSh->ExecuteCellFormatDlg(rReq, "font");
+                        pBindings->Invalidate(SID_LANGUAGE_STATUS);
+                    }
                 }
                 else if ( (nPos = aLangText.indexOf(aDocLangPrefix)) != -1 )
                 {
