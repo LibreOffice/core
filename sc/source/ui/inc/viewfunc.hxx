@@ -369,6 +369,15 @@ private:
 
     void            PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMarkData& rMark);
 
+    bool            PasteDataFormatSource( SotClipboardFormatId nFormatId,
+                                        SCCOL nPosX, SCROW nPosY,
+                                        bool bAllowDialogs,
+                                        TransferableDataHelper& rDataHelper, Point& rPos);
+    bool            PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
+                                        const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
+                                        SCCOL nPosX, SCROW nPosY,
+                                        bool bAllowDialogs, TransferableDataHelper& rDataHelper );
+
     sal_uInt16      GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula );
 
     void            StartFormatArea();

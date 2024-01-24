@@ -117,196 +117,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
          nFormatId == SotClipboardFormatId::LINK_SOURCE_OLE ||
          nFormatId == SotClipboardFormatId::EMBEDDED_OBJ_OLE )
     {
-        uno::Reference < io::XInputStream > xStm;
-        TransferableObjectDescriptor   aObjDesc;
-
-        if (aDataHelper.GetTransferableObjectDescriptor(SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc))
-            xStm = aDataHelper.GetInputStream(nFormatId, OUString());
-
-        if (xStm.is())
-        {
-            if ( aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_60 ) )
-            {
-                uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm );
-
-                // mba: BaseURL doesn't make sense for clipboard
-                // #i43716# Medium must be allocated with "new".
-                // DoLoad stores the pointer and deletes it with the SfxObjectShell.
-                SfxMedium* pMedium = new SfxMedium( xStore, OUString() );
-
-                //  TODO/LATER: is it a problem that we don't support binary formats here?
-                ScDocShellRef xDocShRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT);
-                if (xDocShRef->DoLoad(pMedium))
-                {
-                    ScDocument& rSrcDoc = xDocShRef->GetDocument();
-                    SCTAB nSrcTab = rSrcDoc.GetVisibleTab();
-                    if (!rSrcDoc.HasTable(nSrcTab))
-                        nSrcTab = 0;
-
-                    ScMarkData aSrcMark(rSrcDoc.GetSheetLimits());
-                    aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
-                    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
-
-                    SCCOL nFirstCol, nLastCol;
-                    SCROW nFirstRow, nLastRow;
-                    if ( rSrcDoc.GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
-                    {
-                        rSrcDoc.GetCellArea( nSrcTab, nLastCol, nLastRow );
-                        if (nLastCol < nFirstCol)
-                            nLastCol = nFirstCol;
-                        if (nLastRow < nFirstRow)
-                            nLastRow = nFirstRow;
-                    }
-                    else
-                    {
-                        nFirstCol = nLastCol = 0;
-                        nFirstRow = nLastRow = 0;
-                    }
-
-                    bool bIncludeObjects = false; // include drawing layer objects in CopyToClip ?
-
-                    if (nFormatId == SotClipboardFormatId::EMBED_SOURCE)
-                    {
-                        const ScDrawLayer* pDraw = rSrcDoc.GetDrawLayer();
-                        SCCOL nPrintEndCol = nFirstCol;
-                        SCROW nPrintEndRow = nFirstRow;
-                        bool bHasObjects = pDraw && pDraw->HasObjects();
-                        // Extend the range to include the drawing layer objects.
-                        if (bHasObjects && rSrcDoc.GetPrintArea(nSrcTab, nPrintEndCol, nPrintEndRow, true))
-                        {
-                            nLastCol = std::max<SCCOL>(nLastCol, nPrintEndCol);
-                            nLastRow = std::max<SCROW>(nLastRow, nPrintEndRow);
-                        }
-
-                        bIncludeObjects = bHasObjects;
-                    }
-
-                    ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
-                    rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark, false, bIncludeObjects);
-                    ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
-
-                    SetCursor( nPosX, nPosY );
-                    Unmark();
-                    PasteFromClip( InsertDeleteFlags::ALL, pClipDoc.get(),
-                                    ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
-                                    bAllowDialogs );
-                    bRet = true;
-                }
-
-                xDocShRef->DoClose();
-                xDocShRef.clear();
-            }
-            else
-            {
-                OUString aName;
-                uno::Reference < embed::XEmbeddedObject > xObj = GetViewData().GetViewShell()->GetObjectShell()->
-                        GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
-                if ( xObj.is() )
-                {
-                    // try to get the replacement image from the clipboard
-                    Graphic aGraphic;
-                    SotClipboardFormatId nGrFormat = SotClipboardFormatId::NONE;
-
-                    // limit the size of the preview metafile to 100000 actions
-                    GDIMetaFile aMetafile;
-                    if (aDataHelper.GetGDIMetaFile(SotClipboardFormatId::GDIMETAFILE, aMetafile, 100000))
-                    {
-                        nGrFormat = SotClipboardFormatId::GDIMETAFILE;
-                        aGraphic = aMetafile;
-                    }
-
-                    // insert replacement image ( if there is one ) into the object helper
-                    if ( nGrFormat != SotClipboardFormatId::NONE )
-                    {
-                        datatransfer::DataFlavor aDataFlavor;
-                        SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
-                    }
-                    else
-                        PasteObject( aPos, xObj, &aObjDesc.maSize );
-
-                    bRet = true;
-                }
-                else
-                {
-                    OSL_FAIL("Error in CreateAndLoad");
-                }
-            }
-        }
-        else
-        {
-            if ( aDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aObjDesc ) )
-            {
-                OUString aName;
-                uno::Reference < embed::XEmbeddedObject > xObj;
-                xStm = aDataHelper.GetInputStream(SotClipboardFormatId::EMBED_SOURCE_OLE, OUString());
-                if (!xStm.is())
-                    aDataHelper.GetInputStream(SotClipboardFormatId::EMBEDDED_OBJ_OLE, OUString());
-
-                if (xStm.is())
-                {
-                    xObj = GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
-                }
-                else
-                {
-                    try
-                    {
-                        uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator =
-                            embed::MSOLEObjectSystemCreator::create( ::comphelper::getProcessComponentContext() );
-
-                        embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
-                                                            xTmpStor,
-                                                            "DummyName",
-                                                            uno::Sequence< beans::PropertyValue >() );
-
-                        // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
-                        // for example whether the object should be an iconified one
-                        xObj = aInfo.Object;
-                        if ( xObj.is() )
-                            GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
-                    }
-                    catch( uno::Exception& )
-                    {}
-                }
-
-                if ( xObj.is() )
-                {
-                    // try to get the replacement image from the clipboard
-                    Graphic aGraphic;
-                    SotClipboardFormatId nGrFormat = SotClipboardFormatId::NONE;
-
-// (for Selection Manager in Trusted Solaris)
-#ifndef __sun
-                    if( aDataHelper.GetGraphic( SotClipboardFormatId::SVXB, aGraphic ) )
-                        nGrFormat = SotClipboardFormatId::SVXB;
-                    else if( aDataHelper.GetGraphic( SotClipboardFormatId::GDIMETAFILE, aGraphic ) )
-                        nGrFormat = SotClipboardFormatId::GDIMETAFILE;
-                    else if( aDataHelper.GetGraphic( SotClipboardFormatId::BITMAP, aGraphic ) )
-                        nGrFormat = SotClipboardFormatId::BITMAP;
-#endif
-
-                    // insert replacement image ( if there is one ) into the object helper
-                    if ( nGrFormat != SotClipboardFormatId::NONE )
-                    {
-                        datatransfer::DataFlavor aDataFlavor;
-                        SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
-                    }
-                    else
-                        PasteObject( aPos, xObj, &aObjDesc.maSize );
-
-                    // let object stay in loaded state after insertion
-                    SdrOle2Obj::Unload( xObj, embed::Aspects::MSOLE_CONTENT );
-                    bRet = true;
-                }
-                else
-                {
-                    OSL_FAIL("Error creating external OLE object");
-                }
-            }
-            //TODO/LATER: if format is not available, create picture
-        }
+        bRet = PasteDataFormatSource(nFormatId, nPosX, nPosY, bAllowDialogs, aDataHelper, aPos);
     }
     else if ( nFormatId == SotClipboardFormatId::LINK )      // LINK is also in ScImportExport
     {
@@ -315,139 +126,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     else if ( ScImportExport::IsFormatSupported( nFormatId ) || nFormatId == SotClipboardFormatId::RTF ||
                 nFormatId == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT )
     {
-        if ( nFormatId == SotClipboardFormatId::RTF && ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) ) )
-        {
-            //  use EditView's PasteSpecial / Drop
-            PasteRTF( nPosX, nPosY, rxTransferable );
-            bRet = true;
-        }
-        else
-        {
-            ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
-            auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
-            pObj->SetOverwriting( true );
-
-
-            auto pStrBuffer = std::make_shared<OUString>();
-            tools::SvRef<SotTempStream> xStream;
-            if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.is() )
-            {
-                // Static variables for per-session storage. This could be
-                // changed to longer-term storage in future.
-                static bool bHaveSavedPreferences = false;
-                static LanguageType eSavedLanguage;
-                static bool bSavedDateConversion;
-                static bool bSavedScientificConversion;
-
-                if (nFormatId == SotClipboardFormatId::HTML &&
-                    !comphelper::LibreOfficeKit::isActive())
-                {
-                    if (bHaveSavedPreferences)
-                    {
-                        ScAsciiOptions aOptions;
-                        aOptions.SetLanguage(eSavedLanguage);
-                        aOptions.SetDetectSpecialNumber(bSavedDateConversion);
-                        aOptions.SetDetectScientificNumber(bSavedScientificConversion);
-                        pObj->SetExtOptions(aOptions);
-                    }
-                    else
-                    {
-                        // Launch the text import options dialog.  For now, we do
-                        // this for html pasting only, but in the future it may
-                        // make sense to do it for other data types too.
-                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        vcl::Window* pParent = GetActiveWin();
-                        ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
-                            pFact->CreateScTextImportOptionsDlg(pParent ? pParent->GetFrameWeld() : nullptr));
-
-                        if (pDlg->Execute() == RET_OK)
-                        {
-                            ScAsciiOptions aOptions;
-                            aOptions.SetLanguage(pDlg->GetLanguageType());
-                            aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
-                            aOptions.SetDetectScientificNumber(pDlg->IsScientificConversionSet());
-                            if (!pDlg->IsKeepAskingSet())
-                            {
-                                bHaveSavedPreferences = true;
-                                eSavedLanguage = pDlg->GetLanguageType();
-                                bSavedDateConversion = pDlg->IsDateConversionSet();
-                                bSavedScientificConversion = pDlg->IsScientificConversionSet();
-                            }
-                            pObj->SetExtOptions(aOptions);
-                        }
-                        else
-                        {
-                            // prevent error dialog for user cancel action
-                            bRet = true;
-                        }
-                    }
-                }
-                if(!bRet)
-                    bRet = pObj->ImportStream( *xStream, OUString(), nFormatId );
-                // mba: clipboard always must contain absolute URLs (could be from alien source)
-            }
-            else if ((nFormatId == SotClipboardFormatId::STRING || nFormatId == SotClipboardFormatId::STRING_TSVC)
-                    && aDataHelper.GetString( nFormatId, *pStrBuffer ))
-            {
-                // Do CSV dialog if more than one line. But not if invoked from Automation.
-                const SfxViewShell* pViewShell = SfxViewShell::Current();
-                sal_Int32 nDelim = pStrBuffer->indexOf('\n');
-                if (!(pViewShell && pViewShell->isLOKMobilePhone()) && !comphelper::Automation::AutomationInvokedZone::isActive()
-                    && nDelim >= 0 && nDelim != pStrBuffer->getLength () - 1)
-                {
-                    vcl::Window* pParent = GetActiveWin();
-
-                    auto pStrm = std::make_shared<ScImportStringStream>(*pStrBuffer);
-
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    VclPtr<AbstractScImportAsciiDlg> pDlg(
-                        pFact->CreateScImportAsciiDlg(pParent ? pParent->GetFrameWeld() : nullptr, OUString(), pStrm.get(), SC_PASTETEXT));
-
-                    bAllowDialogs = bAllowDialogs && !SC_MOD()->IsInExecuteDrop();
-
-                    pDlg->StartExecuteAsync([this, pDlg, &rDoc, pStrm, nFormatId, pStrBuffer, pObj, bAllowDialogs](sal_Int32 nResult){
-                        bool bShowErrorDialog = bAllowDialogs;
-                        if (RET_OK == nResult)
-                        {
-                            ScAsciiOptions aOptions;
-                            pDlg->GetOptions( aOptions );
-                            pDlg->SaveParameters();
-                            pObj->SetExtOptions( aOptions );
-                            pObj->ImportString( *pStrBuffer, nFormatId );
-
-                            // TODO: what if (aObj.IsOverflow())
-                            // Content was partially pasted, which can be undone by
-                            // the user though.
-                            bShowErrorDialog = bShowErrorDialog && pObj->IsOverflow();
-                        }
-                        else
-                        {
-                            bShowErrorDialog = false;
-                            // Yes, no failure, don't raise a "couldn't paste"
-                            // dialog if user cancelled.
-                        }
-
-                        InvalidateAttribs();
-                        GetViewData().UpdateInputHandler();
-
-                        rDoc.SetPastingDrawFromOtherDoc( false );
-
-                        if (bShowErrorDialog)
-                            ErrorMessage(STR_PASTE_ERROR);
-                        pDlg->disposeOnce();
-                    });
-                    return true;
-                }
-                else
-                    bRet = pObj->ImportString( *pStrBuffer, nFormatId );
-            }
-            else if ((nFormatId != SotClipboardFormatId::STRING && nFormatId != SotClipboardFormatId::STRING_TSVC)
-                    && aDataHelper.GetString( nFormatId, *pStrBuffer ))
-                bRet = pObj->ImportString( *pStrBuffer, nFormatId );
-
-            InvalidateAttribs();
-            GetViewData().UpdateInputHandler();
-        }
+        bRet = PasteDataFormatFormattedText(nFormatId, rxTransferable, nPosX, nPosY,
+                                        bAllowDialogs, aDataHelper);
     }
     else if (nFormatId == SotClipboardFormatId::SBA_DATAEXCHANGE)
     {
@@ -813,6 +493,344 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     CursorPosChanged();
 
     return true;
+}
+
+bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
+                    SCCOL nPosX, SCROW nPosY, bool bAllowDialogs,
+                    TransferableDataHelper& rDataHelper, Point& rPos )
+{
+    bool bRet = false;
+    uno::Reference < io::XInputStream > xStm;
+    TransferableObjectDescriptor   aObjDesc;
+
+    if (rDataHelper.GetTransferableObjectDescriptor(SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc))
+        xStm = rDataHelper.GetInputStream(nFormatId, OUString());
+
+    if (xStm.is())
+    {
+        if ( aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_60 ) )
+        {
+            uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm );
+
+            // mba: BaseURL doesn't make sense for clipboard
+            // #i43716# Medium must be allocated with "new".
+            // DoLoad stores the pointer and deletes it with the SfxObjectShell.
+            SfxMedium* pMedium = new SfxMedium( xStore, OUString() );
+
+            //  TODO/LATER: is it a problem that we don't support binary formats here?
+            ScDocShellRef xDocShRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT);
+            if (xDocShRef->DoLoad(pMedium))
+            {
+                ScDocument& rSrcDoc = xDocShRef->GetDocument();
+                SCTAB nSrcTab = rSrcDoc.GetVisibleTab();
+                if (!rSrcDoc.HasTable(nSrcTab))
+                    nSrcTab = 0;
+
+                ScMarkData aSrcMark(rSrcDoc.GetSheetLimits());
+                aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
+                ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+
+                SCCOL nFirstCol, nLastCol;
+                SCROW nFirstRow, nLastRow;
+                if ( rSrcDoc.GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
+                {
+                    rSrcDoc.GetCellArea( nSrcTab, nLastCol, nLastRow );
+                    if (nLastCol < nFirstCol)
+                        nLastCol = nFirstCol;
+                    if (nLastRow < nFirstRow)
+                        nLastRow = nFirstRow;
+                }
+                else
+                {
+                    nFirstCol = nLastCol = 0;
+                    nFirstRow = nLastRow = 0;
+                }
+
+                bool bIncludeObjects = false; // include drawing layer objects in CopyToClip ?
+
+                if (nFormatId == SotClipboardFormatId::EMBED_SOURCE)
+                {
+                    const ScDrawLayer* pDraw = rSrcDoc.GetDrawLayer();
+                    SCCOL nPrintEndCol = nFirstCol;
+                    SCROW nPrintEndRow = nFirstRow;
+                    bool bHasObjects = pDraw && pDraw->HasObjects();
+                    // Extend the range to include the drawing layer objects.
+                    if (bHasObjects && rSrcDoc.GetPrintArea(nSrcTab, nPrintEndCol, nPrintEndRow, true))
+                    {
+                        nLastCol = std::max<SCCOL>(nLastCol, nPrintEndCol);
+                        nLastRow = std::max<SCROW>(nLastRow, nPrintEndRow);
+                    }
+
+                    bIncludeObjects = bHasObjects;
+                }
+
+                ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
+                rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark, false, bIncludeObjects);
+                ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
+
+                SetCursor( nPosX, nPosY );
+                Unmark();
+                PasteFromClip( InsertDeleteFlags::ALL, pClipDoc.get(),
+                                ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
+                                bAllowDialogs );
+                bRet = true;
+            }
+
+            xDocShRef->DoClose();
+            xDocShRef.clear();
+        }
+        else
+        {
+            OUString aName;
+            uno::Reference < embed::XEmbeddedObject > xObj = GetViewData().GetViewShell()->GetObjectShell()->
+                    GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+            if ( xObj.is() )
+            {
+                // try to get the replacement image from the clipboard
+                Graphic aGraphic;
+                SotClipboardFormatId nGrFormat = SotClipboardFormatId::NONE;
+
+                // limit the size of the preview metafile to 100000 actions
+                GDIMetaFile aMetafile;
+                if (rDataHelper.GetGDIMetaFile(SotClipboardFormatId::GDIMETAFILE, aMetafile, 100000))
+                {
+                    nGrFormat = SotClipboardFormatId::GDIMETAFILE;
+                    aGraphic = aMetafile;
+                }
+
+                // insert replacement image ( if there is one ) into the object helper
+                if ( nGrFormat != SotClipboardFormatId::NONE )
+                {
+                    datatransfer::DataFlavor aDataFlavor;
+                    SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
+                    PasteObject( rPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
+                }
+                else
+                    PasteObject( rPos, xObj, &aObjDesc.maSize );
+
+                bRet = true;
+            }
+            else
+            {
+                OSL_FAIL("Error in CreateAndLoad");
+            }
+        }
+    }
+    else
+    {
+        if ( rDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aObjDesc ) )
+        {
+            OUString aName;
+            uno::Reference < embed::XEmbeddedObject > xObj;
+            xStm = rDataHelper.GetInputStream(SotClipboardFormatId::EMBED_SOURCE_OLE, OUString());
+            if (!xStm.is())
+                rDataHelper.GetInputStream(SotClipboardFormatId::EMBEDDED_OBJ_OLE, OUString());
+
+            if (xStm.is())
+            {
+                xObj = GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+            }
+            else
+            {
+                try
+                {
+                    uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                    uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator =
+                        embed::MSOLEObjectSystemCreator::create( ::comphelper::getProcessComponentContext() );
+
+                    embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
+                                                        xTmpStor,
+                                                        "DummyName",
+                                                        uno::Sequence< beans::PropertyValue >() );
+
+                    // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
+                    // for example whether the object should be an iconified one
+                    xObj = aInfo.Object;
+                    if ( xObj.is() )
+                        GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( xObj.is() )
+            {
+                // try to get the replacement image from the clipboard
+                Graphic aGraphic;
+                SotClipboardFormatId nGrFormat = SotClipboardFormatId::NONE;
+
+// (for Selection Manager in Trusted Solaris)
+#ifndef __sun
+                if( rDataHelper.GetGraphic( SotClipboardFormatId::SVXB, aGraphic ) )
+                    nGrFormat = SotClipboardFormatId::SVXB;
+                else if( rDataHelper.GetGraphic( SotClipboardFormatId::GDIMETAFILE, aGraphic ) )
+                    nGrFormat = SotClipboardFormatId::GDIMETAFILE;
+                else if( rDataHelper.GetGraphic( SotClipboardFormatId::BITMAP, aGraphic ) )
+                    nGrFormat = SotClipboardFormatId::BITMAP;
+#endif
+
+                // insert replacement image ( if there is one ) into the object helper
+                if ( nGrFormat != SotClipboardFormatId::NONE )
+                {
+                    datatransfer::DataFlavor aDataFlavor;
+                    SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
+                    PasteObject( rPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
+                }
+                else
+                    PasteObject( rPos, xObj, &aObjDesc.maSize );
+
+                // let object stay in loaded state after insertion
+                SdrOle2Obj::Unload( xObj, embed::Aspects::MSOLE_CONTENT );
+                bRet = true;
+            }
+            else
+            {
+                OSL_FAIL("Error creating external OLE object");
+            }
+        }
+        //TODO/LATER: if format is not available, create picture
+    }
+    return bRet;
+}
+
+bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
+                    const uno::Reference<datatransfer::XTransferable>& rxTransferable,
+                    SCCOL nPosX, SCROW nPosY, bool bAllowDialogs,
+                    TransferableDataHelper& rDataHelper )
+{
+    if ( nFormatId == SotClipboardFormatId::RTF && rDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) )
+    {
+        //  use EditView's PasteSpecial / Drop
+        PasteRTF( nPosX, nPosY, rxTransferable );
+        return true;
+    }
+
+    bool bRet = false;
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
+    auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
+    pObj->SetOverwriting( true );
+
+    auto pStrBuffer = std::make_shared<OUString>();
+    tools::SvRef<SotTempStream> xStream;
+    if ( rDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.is() )
+    {
+        // Static variables for per-session storage. This could be
+        // changed to longer-term storage in future.
+        static bool bHaveSavedPreferences = false;
+        static LanguageType eSavedLanguage;
+        static bool bSavedDateConversion;
+        static bool bSavedScientificConversion;
+
+        if (nFormatId == SotClipboardFormatId::HTML &&
+            !comphelper::LibreOfficeKit::isActive())
+        {
+            if (bHaveSavedPreferences)
+            {
+                ScAsciiOptions aOptions;
+                aOptions.SetLanguage(eSavedLanguage);
+                aOptions.SetDetectSpecialNumber(bSavedDateConversion);
+                aOptions.SetDetectScientificNumber(bSavedScientificConversion);
+                pObj->SetExtOptions(aOptions);
+            }
+            else
+            {
+                // Launch the text import options dialog.  For now, we do
+                // this for html pasting only, but in the future it may
+                // make sense to do it for other data types too.
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                vcl::Window* pParent = GetActiveWin();
+                ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
+                    pFact->CreateScTextImportOptionsDlg(pParent ? pParent->GetFrameWeld() : nullptr));
+
+                if (pDlg->Execute() == RET_OK)
+                {
+                    ScAsciiOptions aOptions;
+                    aOptions.SetLanguage(pDlg->GetLanguageType());
+                    aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
+                    aOptions.SetDetectScientificNumber(pDlg->IsScientificConversionSet());
+                    if (!pDlg->IsKeepAskingSet())
+                    {
+                        bHaveSavedPreferences = true;
+                        eSavedLanguage = pDlg->GetLanguageType();
+                        bSavedDateConversion = pDlg->IsDateConversionSet();
+                        bSavedScientificConversion = pDlg->IsScientificConversionSet();
+                    }
+                    pObj->SetExtOptions(aOptions);
+                }
+                else
+                {
+                    // prevent error dialog for user cancel action
+                    bRet = true;
+                }
+            }
+        }
+        if(!bRet)
+            bRet = pObj->ImportStream( *xStream, OUString(), nFormatId );
+        // mba: clipboard always must contain absolute URLs (could be from alien source)
+    }
+    else if ((nFormatId == SotClipboardFormatId::STRING || nFormatId == SotClipboardFormatId::STRING_TSVC)
+            && rDataHelper.GetString( nFormatId, *pStrBuffer ))
+    {
+        // Do CSV dialog if more than one line. But not if invoked from Automation.
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        sal_Int32 nDelim = pStrBuffer->indexOf('\n');
+        if (!(pViewShell && pViewShell->isLOKMobilePhone()) && !comphelper::Automation::AutomationInvokedZone::isActive()
+            && nDelim >= 0 && nDelim != pStrBuffer->getLength () - 1)
+        {
+            vcl::Window* pParent = GetActiveWin();
+
+            auto pStrm = std::make_shared<ScImportStringStream>(*pStrBuffer);
+
+            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+            VclPtr<AbstractScImportAsciiDlg> pDlg(
+                pFact->CreateScImportAsciiDlg(pParent ? pParent->GetFrameWeld() : nullptr, OUString(), pStrm.get(), SC_PASTETEXT));
+
+            bAllowDialogs = bAllowDialogs && !SC_MOD()->IsInExecuteDrop();
+
+            pDlg->StartExecuteAsync([this, pDlg, &rDoc, pStrm, nFormatId, pStrBuffer, pObj, bAllowDialogs](sal_Int32 nResult){
+                bool bShowErrorDialog = bAllowDialogs;
+                if (RET_OK == nResult)
+                {
+                    ScAsciiOptions aOptions;
+                    pDlg->GetOptions( aOptions );
+                    pDlg->SaveParameters();
+                    pObj->SetExtOptions( aOptions );
+                    pObj->ImportString( *pStrBuffer, nFormatId );
+
+                    // TODO: what if (aObj.IsOverflow())
+                    // Content was partially pasted, which can be undone by
+                    // the user though.
+                    bShowErrorDialog = bShowErrorDialog && pObj->IsOverflow();
+                }
+                else
+                {
+                    bShowErrorDialog = false;
+                    // Yes, no failure, don't raise a "couldn't paste"
+                    // dialog if user cancelled.
+                }
+
+                InvalidateAttribs();
+                GetViewData().UpdateInputHandler();
+
+                rDoc.SetPastingDrawFromOtherDoc( false );
+
+                if (bShowErrorDialog)
+                    ErrorMessage(STR_PASTE_ERROR);
+                pDlg->disposeOnce();
+            });
+            return true;
+        }
+        else
+            bRet = pObj->ImportString( *pStrBuffer, nFormatId );
+    }
+    else if ((nFormatId != SotClipboardFormatId::STRING && nFormatId != SotClipboardFormatId::STRING_TSVC)
+            && rDataHelper.GetString( nFormatId, *pStrBuffer ))
+        bRet = pObj->ImportString( *pStrBuffer, nFormatId );
+
+    InvalidateAttribs();
+    GetViewData().UpdateInputHandler();
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
