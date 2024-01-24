@@ -1018,7 +1018,7 @@ void AccessibleShape::disposing()
     maShapeTreeInfo.dispose();
 
     // Call base classes.
-    AccessibleContextBase::dispose ();
+    AccessibleContextBase::disposing();
 }
 
 sal_Int64 SAL_CALL
