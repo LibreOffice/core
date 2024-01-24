@@ -2797,6 +2797,13 @@ bool EditEngine::HasValidData( const css::uno::Reference< css::datatransfer::XTr
         datatransfer::DataFlavor aFlavor;
         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
         bValidData = rTransferable->isDataFlavorSupported( aFlavor );
+
+        if (!bValidData)
+        {
+            // Allow HTML-only clipboard, i.e. without plain text.
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML, aFlavor);
+            bValidData = rTransferable->isDataFlavorSupported(aFlavor);
+        }
     }
 
     return bValidData;
