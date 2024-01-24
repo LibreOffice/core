@@ -1016,7 +1016,7 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-        ScopedVclPtr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetFrameWeld(),
+        VclPtr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetFrameWeld(),
             aDefaultName));
 
         SCTAB nTableCount = rDoc.GetTableCount();
@@ -1032,39 +1032,18 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
         // is selected.
         pDlg->EnableRenameTable(nTabSelCount == 1);
 
-        if ( pDlg->Execute() == RET_OK )
-        {
-            nDoc = pDlg->GetSelectedDocument();
-            nTab = pDlg->GetSelectedTable();
-            bCpy = pDlg->GetCopyTable();
-            bool bRna = pDlg->GetRenameTable();
-            // Leave aTabName string empty, when Rename is FALSE.
-            if( bRna )
+        auto xRequest = std::make_shared<SfxRequest>(rReq);
+        rReq.Ignore(); // the 'old' request is not relevant any more
+        pDlg->StartExecuteAsync(
+            [this, pDlg, xRequest] (sal_Int32 nResult)->void
             {
-               pDlg->GetTabNameString( aTabName );
-            }
-            bDoIt = true;
-
-            OUString aFoundDocName;
-            if ( nDoc != SC_DOC_NEW )
-            {
-                ScDocShell* pSh = ScDocShell::GetShellByNum( nDoc );
-                if (pSh)
+                if (nResult == RET_OK)
                 {
-                    aFoundDocName = pSh->GetTitle();
-                    if ( !pSh->GetDocument().IsDocEditable() )
-                    {
-                        ErrorMessage(STR_READONLYERR);
-                        bDoIt = false;
-                    }
+                    DoMoveTableFromDialog(*xRequest, pDlg);
                 }
+                pDlg->disposeOnce();
             }
-            rReq.AppendItem( SfxStringItem( FID_TAB_MOVE, aFoundDocName ) );
-            // 1-based table, if not APPEND
-            SCTAB nBasicTab = ( nTab <= MAXTAB ) ? (nTab+1) : nTab;
-            rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab) ) );
-            rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bCpy ) );
-        }
+        );
     }
 
     if( bDoIt )
@@ -1238,4 +1217,45 @@ void ScTabViewShell::DoInsertTableFromDialog(SfxRequest& rReq, const VclPtr<Abst
         }
     }
 }
+
+void ScTabViewShell::DoMoveTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScMoveTableDlg>& pDlg )
+{
+    sal_uInt16 nDoc = pDlg->GetSelectedDocument();
+    SCTAB nTab = pDlg->GetSelectedTable();
+    bool bCpy = pDlg->GetCopyTable();
+    bool bRna = pDlg->GetRenameTable();
+    OUString aTabName;
+    // Leave aTabName string empty, when Rename is FALSE.
+    if( bRna )
+    {
+       pDlg->GetTabNameString( aTabName );
+    }
+    bool bDoIt = true;
+
+    OUString aFoundDocName;
+    if ( nDoc != SC_DOC_NEW )
+    {
+        ScDocShell* pSh = ScDocShell::GetShellByNum( nDoc );
+        if (pSh)
+        {
+            aFoundDocName = pSh->GetTitle();
+            if ( !pSh->GetDocument().IsDocEditable() )
+            {
+                ErrorMessage(STR_READONLYERR);
+                bDoIt = false;
+            }
+        }
+    }
+    rReq.AppendItem( SfxStringItem( FID_TAB_MOVE, aFoundDocName ) );
+    // 1-based table, if not APPEND
+    SCTAB nBasicTab = ( nTab <= MAXTAB ) ? (nTab+1) : nTab;
+    rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab) ) );
+    rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bCpy ) );
+    if( bDoIt )
+    {
+        rReq.Done();        // record, while doc is active
+        MoveTable( nDoc, nTab, bCpy, &aTabName );
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

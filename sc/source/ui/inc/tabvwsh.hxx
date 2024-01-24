@@ -42,6 +42,7 @@ class SfxChildWindow;
 class SvxNumberInfoItem;
 struct SfxChildWinInfo;
 class AbstractScInsertTableDlg;
+class AbstractScMoveTableDlg;
 class ScArea;
 class ScAuditingShell;
 class ScDrawShell;
@@ -454,6 +455,7 @@ public:
 
 private:
     void ExecuteMoveTable( SfxRequest& rReq );
+    void DoMoveTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScMoveTableDlg>& pDlg );
     void ExecuteInsertTable( SfxRequest& rReq );
     void DoInsertTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScInsertTableDlg>& pDlg );
 };
