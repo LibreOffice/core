@@ -19,9 +19,9 @@ namespace svx
 {
 namespace DocumentColorHelper
 {
-static inline Color getColorFromItem(const SvxColorItem* pItem) { return pItem->GetValue(); }
+inline Color getColorFromItem(const SvxColorItem* pItem) { return pItem->GetValue(); }
 
-static inline Color getColorFromItem(const SvxBrushItem* pItem) { return pItem->GetColor(); }
+inline Color getColorFromItem(const SvxBrushItem* pItem) { return pItem->GetColor(); }
 
 template <class T>
 void queryColors(const sal_uInt16 nAttrib, const SfxItemPool* pPool, std::set<Color>& rOutput)
