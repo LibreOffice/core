@@ -1739,7 +1739,11 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
                     rBoxes.insert( pBox );
                 if( nFound )
                 {
-                    nBottom = nRow;
+                    //if box is hiding cells bottom needs to be moved
+                    if (pBox->getRowSpan() > 1)
+                        nBottom = std::max(nBottom, size_t(nRow + pBox->getRowSpan() - 1));
+                    else
+                        nBottom = std::max(nRow, nBottom);
                     lcl_CheckMinMax( nLowerMin, nLowerMax, *pLine, nCol, true );
                     ++nFound;
                     break;
@@ -1747,6 +1751,9 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
                 else
                 {
                     nTop = nRow;
+                    //if box is hiding cells bottom needs to be moved
+                    if (pBox->getRowSpan() > 1)
+                        nBottom = nRow + pBox->getRowSpan() - 1;
                     lcl_CheckMinMax( nUpperMin, nUpperMax, *pLine, nCol, true );
                     ++nFound;
                      // If start and end node are identical, we're nearly done...

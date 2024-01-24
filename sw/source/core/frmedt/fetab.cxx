@@ -2120,8 +2120,8 @@ SwTab SwFEShell::WhichMouseTabCol( const Point &rPt ) const
     {
         while( pFrame && pFrame->Lower() && pFrame->Lower()->IsRowFrame() )
             pFrame = static_cast<const SwCellFrame*>(static_cast<const SwLayoutFrame*>(pFrame->Lower())->Lower());
-        if( pFrame && pFrame->GetTabBox()->GetSttNd() &&
-            pFrame->GetTabBox()->GetSttNd()->IsInProtectSect() )
+        if( pFrame && ((pFrame->GetTabBox()->GetSttNd() &&
+            pFrame->GetTabBox()->GetSttNd()->IsInProtectSect()) || (pFrame->GetTabBox()->getRowSpan() < 0)))
             pFrame = nullptr;
     }
 
