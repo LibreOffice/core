@@ -198,126 +198,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 //  FID_TAB_RENAME      - "name"-property for basic
                 //  equal execute, but MENU_RENAME may be disabled inside GetState
 
-                if ( nSlot == FID_TAB_MENU_RENAME )
-                    nSlot = FID_TAB_RENAME;             // equal execute
-
-                SCTAB nTabNr = rViewData.GetTabNo();
-                ScMarkData& rMark = rViewData.GetMarkData();
-                SCTAB nTabSelCount = rMark.GetSelectCount();
-
-                if ( !rDoc.IsDocEditable() )
-                    break; // everything locked
-
-                if ( nSlot != FID_TAB_APPEND &&
-                        ( rDoc.IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
-                    break; // no rename
-
-                if( pReqArgs != nullptr )
-                {
-                    bool        bDone   = false;
-                    const SfxPoolItem* pItem;
-                    OUString      aName;
-
-                    if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
-                    {
-                        nTabNr = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-
-                        // inserting is 1-based, let's be consistent
-                        if (nTabNr > 0)
-                            --nTabNr;
-                    }
-
-                    if( pReqArgs->HasItem( nSlot, &pItem ) )
-                        aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
-
-                    switch ( nSlot )
-                    {
-                        case FID_TAB_APPEND:
-                            bDone = AppendTable( aName );
-                            break;
-                        case FID_TAB_RENAME:
-                            bDone = RenameTable( aName, nTabNr );
-                            break;
-                    }
-
-                    if( bDone )
-                    {
-                        rReq.Done( *pReqArgs );
-                    }
-                }
-                else
-                {
-                    sal_uInt16      nRet    = RET_OK;
-                    bool        bDone   = false;
-                    OUString      aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
-                    OUString aName;
-                    OUString      aDlgTitle;
-                    OUString sHelpId;
-
-                    switch ( nSlot )
-                    {
-                        case FID_TAB_APPEND:
-                            aDlgTitle = ScResId(SCSTR_APDTABLE);
-                            rDoc.CreateValidTabName( aName );
-                            sHelpId = HID_SC_APPEND_NAME;
-                            break;
-
-                        case FID_TAB_RENAME:
-                            aDlgTitle = ScResId(SCSTR_RENAMETAB);
-                            rDoc.GetName( rViewData.GetTabNo(), aName );
-                            sHelpId = HID_SC_RENAME_NAME;
-                            break;
-                    }
-
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-                    ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
-                        GetFrameWeld(), aDlgTitle, ScResId(SCSTR_NAME),
-                        aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
-                        sHelpId));
-
-
-                    while ( !bDone && nRet == RET_OK )
-                    {
-                        nRet = pDlg->Execute();
-
-                        if ( nRet == RET_OK )
-                        {
-                            aName = pDlg->GetInputString();
-
-                            switch ( nSlot )
-                            {
-                                case FID_TAB_APPEND:
-                                    bDone = AppendTable( aName );
-                                    break;
-                                case FID_TAB_RENAME:
-                                    bDone = RenameTable( aName, nTabNr );
-                                    break;
-                            }
-
-                            if ( bDone )
-                            {
-                                rReq.AppendItem( SfxStringItem( nSlot, aName ) );
-                                rReq.Done();
-                            }
-                            else
-                            {
-                                if( rReq.IsAPI() )
-                                {
-#if HAVE_FEATURE_SCRIPTING
-                                    StarBASIC::Error( ERRCODE_BASIC_SETPROP_FAILED ); // XXX error handling???
-#endif
-                                }
-                                else
-                                {
-                                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                              VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
-                                    nRet = xBox->run();
-                                }
-                            }
-                        }
-                    }
-                }
+                ExecuteAppendOrRenameTable(rReq);
             }
             break;
 
@@ -1255,6 +1136,134 @@ void ScTabViewShell::DoMoveTableFromDialog( SfxRequest& rReq, const VclPtr<Abstr
     {
         rReq.Done();        // record, while doc is active
         MoveTable( nDoc, nTab, bCpy, &aTabName );
+    }
+}
+
+void ScTabViewShell::ExecuteAppendOrRenameTable(SfxRequest& rReq)
+{
+    ScViewData& rViewData   = GetViewData();
+    ScDocument& rDoc        = rViewData.GetDocument();
+    sal_uInt16  nSlot       = rReq.GetSlot();
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
+
+    if ( nSlot == FID_TAB_MENU_RENAME )
+        nSlot = FID_TAB_RENAME;             // equal execute
+
+    SCTAB nTabNr = rViewData.GetTabNo();
+    ScMarkData& rMark = rViewData.GetMarkData();
+    SCTAB nTabSelCount = rMark.GetSelectCount();
+
+    if ( !rDoc.IsDocEditable() )
+        return; // everything locked
+
+    if ( nSlot != FID_TAB_APPEND &&
+            ( rDoc.IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
+        return; // no rename
+
+    if( pReqArgs != nullptr )
+    {
+        bool        bDone   = false;
+        const SfxPoolItem* pItem;
+        OUString      aName;
+
+        if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
+        {
+            nTabNr = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+
+            // inserting is 1-based, let's be consistent
+            if (nTabNr > 0)
+                --nTabNr;
+        }
+
+        if( pReqArgs->HasItem( nSlot, &pItem ) )
+            aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+        switch ( nSlot )
+        {
+            case FID_TAB_APPEND:
+                bDone = AppendTable( aName );
+                break;
+            case FID_TAB_RENAME:
+                bDone = RenameTable( aName, nTabNr );
+                break;
+        }
+
+        if( bDone )
+        {
+            rReq.Done( *pReqArgs );
+        }
+    }
+    else
+    {
+        OUString aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
+        OUString aName;
+        OUString aDlgTitle;
+        OUString sHelpId;
+
+        switch ( nSlot )
+        {
+            case FID_TAB_APPEND:
+                aDlgTitle = ScResId(SCSTR_APDTABLE);
+                rDoc.CreateValidTabName( aName );
+                sHelpId = HID_SC_APPEND_NAME;
+                break;
+
+            case FID_TAB_RENAME:
+                aDlgTitle = ScResId(SCSTR_RENAMETAB);
+                rDoc.GetName( rViewData.GetTabNo(), aName );
+                sHelpId = HID_SC_RENAME_NAME;
+                break;
+        }
+
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+        ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
+            GetFrameWeld(), aDlgTitle, ScResId(SCSTR_NAME),
+            aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
+            sHelpId));
+
+        sal_uInt16 nRet    = RET_OK;
+        bool     bDone   = false;
+        while ( !bDone && nRet == RET_OK )
+        {
+            nRet = pDlg->Execute();
+
+            if ( nRet == RET_OK )
+            {
+                aName = pDlg->GetInputString();
+
+                switch ( nSlot )
+                {
+                    case FID_TAB_APPEND:
+                        bDone = AppendTable( aName );
+                        break;
+                    case FID_TAB_RENAME:
+                        bDone = RenameTable( aName, nTabNr );
+                        break;
+                }
+
+                if ( bDone )
+                {
+                    rReq.AppendItem( SfxStringItem( nSlot, aName ) );
+                    rReq.Done();
+                }
+                else
+                {
+                    if( rReq.IsAPI() )
+                    {
+#if HAVE_FEATURE_SCRIPTING
+                        StarBASIC::Error( ERRCODE_BASIC_SETPROP_FAILED ); // XXX error handling???
+#endif
+                    }
+                    else
+                    {
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                  VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
+                        nRet = xBox->run();
+                    }
+                }
+            }
+        }
     }
 }
 

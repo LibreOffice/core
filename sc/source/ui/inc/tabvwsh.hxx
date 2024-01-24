@@ -458,6 +458,7 @@ private:
     void DoMoveTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScMoveTableDlg>& pDlg );
     void ExecuteInsertTable( SfxRequest& rReq );
     void DoInsertTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScInsertTableDlg>& pDlg );
+    void ExecuteAppendOrRenameTable( SfxRequest& rReq );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
