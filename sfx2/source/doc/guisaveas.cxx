@@ -1521,7 +1521,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         }
     }
 
-    if (!comphelper::LibreOfficeKit::isActive() && !( m_nStoreMode & EXPORT_REQUESTED ) )
+    if (!comphelper::LibreOfficeKit::isActive() && !( m_nStoreMode & EXPORT_REQUESTED ) && SfxViewShell::Current() )
     {
         SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
 
