@@ -1495,7 +1495,6 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
 
     std::vector<::rtl::Reference<::accessibility::AccessibleShape>> vecxShapeAdd;
     std::vector<::rtl::Reference<::accessibility::AccessibleShape>> vecxShapeRemove;
-    int nCountSelectedShape=0;
 
     vcl::Window *pWin = GetShell()->GetWin();
     bool bFocused = pWin && pWin->HasFocus();
@@ -1545,7 +1544,6 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
                 {
                     vecxShapeAdd.push_back(pShape->second);
                 }
-                ++nCountSelectedShape;
             }
         }
 
@@ -1564,17 +1562,12 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     }
     else
     {
-        short nEventID = AccessibleEventId::SELECTION_CHANGED_ADD;
-        if (nCountSelectedShape <= 1 && vecxShapeAdd.size() == 1 )
-        {
-            nEventID = AccessibleEventId::SELECTION_CHANGED;
-        }
         for (const auto& rpShape : vecxShapeAdd)
         {
             ::accessibility::AccessibleShape *pAccShape = rpShape.get();
             if (pAccShape)
             {
-                pAccShape->CommitChange(nEventID, uno::Any(), uno::Any(), -1);
+                pAccShape->CommitChange(AccessibleEventId::SELECTION_CHANGED_ADD, uno::Any(), uno::Any(), -1);
             }
         }
     }
