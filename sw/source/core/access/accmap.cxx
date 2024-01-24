@@ -1493,9 +1493,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     if( !pShapes )
         return;
 
-    typedef std::vector< ::rtl::Reference < ::accessibility::AccessibleShape >  >  VEC_SHAPE;
-    VEC_SHAPE vecxShapeAdd;
-    VEC_SHAPE vecxShapeRemove;
+    std::vector<::rtl::Reference<::accessibility::AccessibleShape>> vecxShapeAdd;
+    std::vector<::rtl::Reference<::accessibility::AccessibleShape>> vecxShapeRemove;
     int nCountSelectedShape=0;
 
     vcl::Window *pWin = GetShell()->GetWin();
