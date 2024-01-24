@@ -3903,7 +3903,32 @@ SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, sw::BroadcastingModif
     } while( bClientIterChanged );
 
     if( pPos && pMinFrame && pMinFrame->IsTextFrame() )
-        return static_cast<SwTextFrame*>(pMinFrame)->GetFrameAtPos( *pPos );
+    {
+        SwTextFrame * pAtPos(static_cast<SwTextFrame*>(pMinFrame)->GetFrameAtPos(*pPos));
+        if (!pViewPosAndCalcFrame)
+        {
+            return pAtPos;
+        }
+        TextFrameIndex nPos(pAtPos->MapModelToViewPos(*pPos));
+        SwPageFrame const*const pPage(pAtPos->getRootFrame()->GetPageAtPos(
+                pViewPosAndCalcFrame->first, nullptr, true));
+        SwFrame * pOnPage(pAtPos); // if all else fails return first one
+        ++nPos; // follow field portions are on follow frames that have mnOffset
+            // already incremented past the field, need to check that index too
+        while (pAtPos && pAtPos->GetOffset() <= nPos)
+        {
+            if (pAtPos->getFrameArea().Contains(pViewPosAndCalcFrame->first))
+            {
+                return pAtPos;
+            }
+            if (pAtPos->FindPageFrame() == pPage)
+            {
+                pOnPage = pAtPos;
+            }
+            pAtPos = pAtPos->GetFollow();
+        }
+        return pOnPage;
+    }
 
     return pMinFrame;
 }
