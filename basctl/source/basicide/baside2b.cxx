@@ -2050,6 +2050,10 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aEWVScrollBar(VclPtr<ScrollAdaptor>::Create(this, false)),
     aEWHScrollBar(VclPtr<ScrollAdaptor>::Create(this, true))
 {
+    // tdf#153853 The line numbering and breakpoint windows should appear on
+    // the left, even on RTL locales
+    EnableRTL(false);
+
     aEdtWindow->Show();
     aBrkWindow->Show();
 
@@ -2858,6 +2862,7 @@ CodeCompleteWindow::CodeCompleteWindow(EditorWindow* pPar)
     m_xListBox->connect_changed(LINK(this, CodeCompleteWindow, ImplSelectHdl));
     m_xListBox->connect_key_press(LINK(this, CodeCompleteWindow, KeyInputHdl));
     m_xListBox->make_sorted();
+    m_xListBox->set_direction(false);
 
     m_xListBox->set_size_request(150, 150); // default, this will adopt the line length
     SetSizePixel(m_xContainer->get_preferred_size());

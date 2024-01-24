@@ -21,6 +21,9 @@ LineNumberWindow::LineNumberWindow(vcl::Window* pParent, ModulWindow* pModulWind
     , m_pModulWindow(pModulWindow)
     , m_nCurYOffset(0)
 {
+    // tdf#153853 The line number window does not need to be affected by RTL
+    EnableRTL(false);
+
     const Wallpaper aBackground(GetSettings().GetStyleSettings().GetWindowColor());
     SetBackground(aBackground);
     GetWindow(GetWindowType::Border)->SetBackground(aBackground);
