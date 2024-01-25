@@ -2,3 +2,4 @@
 --disable-odk
 --host=x86_64-pc-cygwin
 --with-privacy-policy-url=https://enable-online-update
+--enable-python=internal

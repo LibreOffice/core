@@ -4,3 +4,4 @@
 --disable-odk
 --with-package-format=dmg
 --disable-online-update
+--enable-python=internal
