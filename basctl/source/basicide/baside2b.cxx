@@ -1303,9 +1303,12 @@ void EditorWindow::ChangeFontColor( Color aColor )
 
 void EditorWindow::UpdateSyntaxHighlighting ()
 {
-    const sal_uInt32 nCount = pEditEngine->GetParagraphCount();
-    for (sal_uInt32 i = 0; i < nCount; ++i)
-        DoDelayedSyntaxHighlight(i);
+    if (pEditEngine)
+    {
+        const sal_uInt32 nCount = pEditEngine->GetParagraphCount();
+        for (sal_uInt32 i = 0; i < nCount; ++i)
+            DoDelayedSyntaxHighlight(i);
+    }
 }
 
 void EditorWindow::ImplSetFont()
