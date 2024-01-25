@@ -45,6 +45,7 @@ namespace SvtSecurityOptions
         DocWarnKeepDocUserInfo,
         DocWarnKeepNoteAuthorDateInfo,
         DocWarnKeepDocVersionInfo,
+        DocKeepPrinterSettings,
         DocWarnRecommendPassword,
         MacroSecLevel,
         MacroTrustedAuthors,

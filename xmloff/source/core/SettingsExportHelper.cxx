@@ -28,6 +28,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -276,8 +277,17 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
     {
         m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_SET );
+        bool bSkipPrinterSettings = SvtSecurityOptions::IsOptionSet(
+                                        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+                                    && !SvtSecurityOptions::IsOptionSet(
+                                           SvtSecurityOptions::EOption::DocKeepPrinterSettings);
         for (const auto& rProp : aProps)
+        {
+            if (bSkipPrinterSettings
+                && (rProp.Name == "PrinterSetup" || rProp.Name == "PrinterName"))
+                continue;
             CallTypeFunction(rProp.Value, rProp.Name);
+        }
         m_rContext.EndElement( true );
     }
 }

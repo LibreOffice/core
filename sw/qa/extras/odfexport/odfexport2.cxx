@@ -584,6 +584,15 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
+    pXmlDoc = parseExport("settings.xml");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']"_ostr,
+        0);
+    assertXPath(
+        pXmlDoc,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterSetup']"_ostr,
+        0);
 
     // 2. Remove user info too
     officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(false, pBatch);
@@ -600,6 +609,15 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
+    pXmlDoc = parseExport("settings.xml");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']"_ostr,
+        0);
+    assertXPath(
+        pXmlDoc,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterSetup']"_ostr,
+        0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf151100)

@@ -2448,6 +2448,14 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="KeepDocPrinterSettingsOnSaving" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>
+              Specifies whether to keep printer settings on saving if RemovePersonalInfoOnSaving is true.
+            </desc>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="RecommendPasswordProtection" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether to recommend password protection when saving

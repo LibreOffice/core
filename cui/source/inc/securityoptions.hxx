@@ -53,6 +53,8 @@ namespace svx
         std::unique_ptr<weld::Widget> m_xNoteAuthorImg;
         std::unique_ptr<weld::CheckButton> m_xDocumentVersionCB;
         std::unique_ptr<weld::Widget> m_xDocumentVersionImg;
+        std::unique_ptr<weld::CheckButton> m_xPrinterSettingsCB;
+        std::unique_ptr<weld::Widget> m_xPrinterSettingsImg;
 
     public:
         SecurityOptionsDialog(weld::Window* pParent);
@@ -68,6 +70,7 @@ namespace svx
         bool IsRemoveDocUserInfoChecked() const { return m_xDocPropertiesCB->get_active(); }
         bool IsRemoveNoteAuthorInfoChecked() const { return m_xNoteAuthorCB->get_active(); }
         bool IsRemoveDocVersionInfoChecked() const { return m_xDocumentVersionCB->get_active(); }
+        bool IsKeepPrinterSettingsChecked() const { return m_xPrinterSettingsCB->get_active(); }
         bool IsRecommPasswdChecked() const { return m_xRecommPasswdCB->get_active(); }
         bool IsCtrlHyperlinkChecked() const { return m_xCtrlHyperlinkCB->get_active(); }
         bool IsBlockUntrustedRefererLinksChecked() const { return m_xBlockUntrustedRefererLinksCB->get_active(); }

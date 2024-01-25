@@ -83,6 +83,9 @@ bool IsReadOnly( EOption eOption )
         case SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo:
             bReadonly = officecfg::Office::Common::Security::Scripting::KeepDocVersionInfoOnSaving::isReadOnly();
             break;
+        case SvtSecurityOptions::EOption::DocKeepPrinterSettings:
+            bReadonly = officecfg::Office::Common::Security::Scripting::KeepDocPrinterSettingsOnSaving::isReadOnly();
+            break;
         case SvtSecurityOptions::EOption::DocWarnRecommendPassword:
             bReadonly = officecfg::Office::Common::Security::Scripting::RecommendPasswordProtection::isReadOnly();
             break;
@@ -329,6 +332,9 @@ bool IsOptionSet( EOption eOption )
         case SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo:
             bSet = officecfg::Office::Common::Security::Scripting::KeepDocVersionInfoOnSaving::get();
             break;
+        case SvtSecurityOptions::EOption::DocKeepPrinterSettings:
+            bSet = officecfg::Office::Common::Security::Scripting::KeepDocPrinterSettingsOnSaving::get();
+            break;
         case SvtSecurityOptions::EOption::DocWarnRecommendPassword:
             bSet = officecfg::Office::Common::Security::Scripting::RecommendPasswordProtection::get();
             break;
@@ -381,6 +387,9 @@ void SetOption( EOption eOption, bool bValue )
             break;
         case SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo:
              officecfg::Office::Common::Security::Scripting::KeepDocVersionInfoOnSaving::set(bValue, xChanges);
+            break;
+        case SvtSecurityOptions::EOption::DocKeepPrinterSettings:
+             officecfg::Office::Common::Security::Scripting::KeepDocPrinterSettingsOnSaving::set(bValue, xChanges);
             break;
         case SvtSecurityOptions::EOption::DocWarnRecommendPassword:
              officecfg::Office::Common::Security::Scripting::RecommendPasswordProtection::set(bValue, xChanges);
