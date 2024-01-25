@@ -170,35 +170,6 @@ QString vclMessageTypeToQtTitle(VclMessageType eType)
     return title;
 }
 
-QMessageBox::StandardButtons vclButtonsTypeToQtButton(VclButtonsType eButtonType)
-{
-    QMessageBox::StandardButtons buttons = QMessageBox::NoButton;
-    switch (eButtonType)
-    {
-        case VclButtonsType::NONE:
-            buttons = QMessageBox::NoButton;
-            break;
-        case VclButtonsType::Ok:
-            buttons = QMessageBox::Ok;
-            break;
-        case VclButtonsType::Close:
-            buttons = QMessageBox::Close;
-            break;
-        case VclButtonsType::Cancel:
-            buttons = QMessageBox::Cancel;
-            break;
-        case VclButtonsType::YesNo:
-            buttons = QMessageBox::Yes | QMessageBox::No;
-            break;
-        case VclButtonsType::OkCancel:
-            buttons = QMessageBox::Ok | QMessageBox::Cancel;
-            break;
-        default:
-            assert(false && "Unhandled VCLButtonsType");
-    }
-    return buttons;
-}
-
 int qtResponseTypeToVclResponseType(int ret)
 {
     if (ret == QDialog::Accepted)
