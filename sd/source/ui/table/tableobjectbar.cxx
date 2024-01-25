@@ -122,40 +122,50 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         switch( nSlotId )
         {
         case SID_TABLE_INSERT_ROW_DLG:
+        case SID_TABLE_INSERT_COL_DLG:
+        {
+            auto xRequest = std::make_shared<SfxRequest>(rReq);
+            rReq.Ignore(); // the 'old' request is not relevant any more
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            vcl::Window* pWin = mpView->GetViewShell()->GetParentWindow();
+            VclPtr<SvxAbstractInsRowColDlg> pDlg( pFact->CreateSvxInsRowColDlg(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                               nSlotId == SID_TABLE_INSERT_COL_DLG,
+                                                               SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) );
+            pDlg->StartExecuteAsync(
+                [pDlg, xRequest, nSlotId, xController, pBindings] (sal_Int32 nResult) mutable ->void
+                {
+                    if (nResult == RET_OK)
+                    {
+                        sal_uInt16 nCount = pDlg->getInsertCount();
+                        bool bInsertAfter = !pDlg->isInsertBefore();
+
+                        if (nSlotId == SID_TABLE_INSERT_ROW_DLG)
+                            nSlotId = SID_TABLE_INSERT_ROW;
+                        else
+                            nSlotId = SID_TABLE_INSERT_COL;
+
+                        xRequest->AppendItem(SfxInt16Item(nSlotId, nCount));
+                        xRequest->AppendItem(SfxBoolItem(SID_TABLE_PARAM_INSERT_AFTER, bInsertAfter));
+
+                        xRequest->SetSlot( nSlotId );
+                    }
+                    pDlg->disposeOnce();
+                    xController->Execute( *xRequest );
+                    pBindings->Invalidate( SID_UNDO );
+                    pBindings->Invalidate( SID_REDO );
+                }
+            );
+            return;
+        }
         case SID_TABLE_INSERT_ROW_BEFORE:
         case SID_TABLE_INSERT_ROW_AFTER:
-        case SID_TABLE_INSERT_COL_DLG:
         case SID_TABLE_INSERT_COL_BEFORE:
         case SID_TABLE_INSERT_COL_AFTER:
         {
-            ScopedVclPtr<SvxAbstractInsRowColDlg> pDlg;
-            if (nSlotId == SID_TABLE_INSERT_ROW_DLG || nSlotId == SID_TABLE_INSERT_COL_DLG)
-            {
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                vcl::Window* pWin = mpView->GetViewShell()->GetParentWindow();
-                pDlg.disposeAndReset( pFact->CreateSvxInsRowColDlg(pWin ? pWin->GetFrameWeld() : nullptr,
-                                                                   nSlotId == SID_TABLE_INSERT_COL_DLG,
-                                                                   SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) );
-
-                if (pDlg->Execute() != 1)
-                    break;
-            }
-
             sal_uInt16 nCount = 1;
             bool bInsertAfter = (nSlotId == SID_TABLE_INSERT_ROW_AFTER) || (nSlotId == SID_TABLE_INSERT_COL_AFTER);
 
-            if (nSlotId == SID_TABLE_INSERT_ROW_DLG)
-            {
-                nCount = pDlg->getInsertCount();
-                bInsertAfter = !pDlg->isInsertBefore();
-            }
-            else if (nSlotId == SID_TABLE_INSERT_COL_DLG)
-            {
-                nCount = pDlg->getInsertCount();
-                bInsertAfter = !pDlg->isInsertBefore();
-            }
-
-            if (nSlotId == SID_TABLE_INSERT_ROW_DLG || nSlotId == SID_TABLE_INSERT_ROW_BEFORE || nSlotId == SID_TABLE_INSERT_ROW_AFTER)
+            if ( nSlotId == SID_TABLE_INSERT_ROW_BEFORE || nSlotId == SID_TABLE_INSERT_ROW_AFTER)
                 nSlotId = SID_TABLE_INSERT_ROW;
             else
                 nSlotId = SID_TABLE_INSERT_COL;

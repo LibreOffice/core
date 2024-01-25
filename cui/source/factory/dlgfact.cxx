@@ -1475,7 +1475,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateOptionsDialog(weld::
 
 VclPtr<SvxAbstractInsRowColDlg> AbstractDialogFactory_Impl::CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OUString& rHelpId)
 {
-    return VclPtr<SvxInsRowColDlg>::Create(pParent, bCol, rHelpId);
+    return VclPtr<SvxAbstractInsRowColDlg_Impl>::Create(std::make_shared<SvxInsRowColDlg>(pParent, bCol, rHelpId));
 }
 
 VclPtr<AbstractPasswordToOpenModifyDialog> AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog(

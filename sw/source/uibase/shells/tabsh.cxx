@@ -990,20 +990,29 @@ void SwTableShell::Execute(SfxRequest &rReq)
             const SfxSlot* pSlot = GetStaticInterface()->GetSlot(nSlot);
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
+                auto xRequest = std::make_shared<SfxRequest>(rReq);
+                rReq.Ignore(); // the 'old' request is not relevant any more
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<SvxAbstractInsRowColDlg> pDlg(pFact->CreateSvxInsRowColDlg(GetView().GetFrameWeld(),
+                VclPtr<SvxAbstractInsRowColDlg> pDlg(pFact->CreateSvxInsRowColDlg(GetView().GetFrameWeld(),
                                                                                         nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand()));
-                if( pDlg->Execute() == 1 )
-                {
-                    const TypedWhichId<SfxUInt16Item> nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG)
-                        ? FN_TABLE_INSERT_COL_AFTER : FN_TABLE_INSERT_ROW_AFTER;
-                    SfxUInt16Item aCountItem( nDispatchSlot, pDlg->getInsertCount() );
-                    SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
-                    SfxViewFrame& rVFrame = GetView().GetViewFrame();
-                    rVFrame.GetDispatcher()->ExecuteList(nDispatchSlot,
-                        SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
-                        { &aCountItem, &aAfter });
-                }
+                pDlg->StartExecuteAsync(
+                    [this, pDlg, xRequest, nSlot] (sal_Int32 nResult)->void
+                    {
+                        if (nResult == RET_OK)
+                        {
+                            const TypedWhichId<SfxUInt16Item> nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG)
+                                ? FN_TABLE_INSERT_COL_AFTER : FN_TABLE_INSERT_ROW_AFTER;
+                            SfxUInt16Item aCountItem( nDispatchSlot, pDlg->getInsertCount() );
+                            SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
+                            SfxViewFrame& rVFrame = GetView().GetViewFrame();
+                            rVFrame.GetDispatcher()->ExecuteList(nDispatchSlot,
+                                SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                                { &aCountItem, &aAfter });
+                        }
+                        pDlg->disposeOnce();
+                        xRequest->Done();
+                    }
+                );
             }
             break;
         }
