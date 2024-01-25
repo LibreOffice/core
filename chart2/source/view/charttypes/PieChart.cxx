@@ -386,12 +386,10 @@ void PieChart::createTextLabelShape(
             aOuterCirclePoint.Y - aPieLabelInfo.aOrigin.getY() );
     double fSquaredPieRadius = aRadiusVector.scalar(aRadiusVector);
     double fPieRadius = sqrt( fSquaredPieRadius );
-    double fAngleDegree
-        = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree / 2.0;
-    while (fAngleDegree > 360.0)
-        fAngleDegree -= 360.0;
-    while (fAngleDegree < 0.0)
-        fAngleDegree += 360.0;
+    const double fHalfWidthAngleDegree = rParam.mfUnitCircleWidthAngleDegree / 2.0;
+    // fAngleDegree: the angle through the center of the slice / the bisecting ray
+    const double fAngleDegree
+        = NormAngle360(rParam.mfUnitCircleStartAngleDegree + fHalfWidthAngleDegree);
 
     awt::Point aOuterPosition = PlottingPositionHelper::transformSceneToScreenPosition(
         m_aPosHelper.transformUnitCircleToScene(fAngleDegree, rParam.mfUnitCircleOuterRadius, 0),
