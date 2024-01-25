@@ -342,7 +342,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
 //     DefaultItemInstanceManager, will be incarnated and used.
 //     NOTE: Mixing shared/unshared instances is not a problem (we
 //     might even implement a kind of 're-hash' when this kicks in,
-//     but is not really needded).
+//     but is not really needed).
 // (2) Overload getItemInstanceManager for SfxPoolItem in a class
 //     derived from SfxPoolItem and...
 // (2a) Return a static incarnation of DefaultItemInstanceManager to
