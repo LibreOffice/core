@@ -428,7 +428,7 @@ public:
         }
 
         // here the countdown is zero and there is not yet a ItemInstanceManager
-        // incarnated. Do so, regsiter and return it
+        // incarnated. Do so, register and return it
         assert(nullptr == aHit->second.second);
         DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(aHash));
         aHit->second.second = pNew;
