@@ -51,10 +51,11 @@ const WhichRangesContainer SwWrapTabPage::s_aWrapPageRg(svl::Items<
 >);
 
 SwWrapDlg::SwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
-    : SfxSingleTabDialogController(pParent, &rSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
+    : SwWrapDlgBase{rSet}, // this is an async dialog, so we need to store a copy of the rSet
+      SfxSingleTabDialogController(pParent, &maInputSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
 {
     // create TabPage
-    auto xNewPage = SwWrapTabPage::Create(get_content_area(), this, &rSet);
+    auto xNewPage = SwWrapTabPage::Create(get_content_area(), this, &maInputSet);
     SwWrapTabPage* pWrapPage = static_cast<SwWrapTabPage*>(xNewPage.get());
     pWrapPage->SetFormatUsed(false, bDrawMode);
     pWrapPage->SetShell(pWrtShell);

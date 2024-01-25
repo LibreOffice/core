@@ -43,7 +43,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    void        Execute(SfxRequest const &);
+    void        Execute(SfxRequest&);
     void        GetState(SfxItemSet &);
     void        GetDrawAttrStateForIFBX( SfxItemSet& rSet );
     void        DisableState(SfxItemSet &rSet);
