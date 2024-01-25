@@ -129,6 +129,8 @@ ContextHandlerRef DataLabelContext::onCreateContext( sal_Int32 nElement, const A
                     mrModel.mobShowDataLabelsRange = rAttribs.getBool( XML_val );
                     return nullptr;
                 }
+                else if (nElement == C15_TOKEN(layout))
+                    return new LayoutContext(*this, mrModel.mxLayout.getOrCreate());
             break;
         }
     }
