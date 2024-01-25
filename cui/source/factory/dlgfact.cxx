@@ -821,18 +821,23 @@ void AbstractPasswordToOpenModifyDialog_Impl::AllowEmpty()
 // Create dialogs with simplest interface
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Window* pParent, sal_uInt32 nResId)
 {
-    std::unique_ptr<OfaTreeOptionsDialog> xDlg;
     switch ( nResId )
     {
-        case SID_OPTIONS_TREEDIALOG :
         case SID_OPTIONS_DATABASES :
+        {
+            Reference< frame::XFrame > xFrame;
+            auto xDlg = std::make_shared<OfaTreeOptionsDialog>(pParent, xFrame, /*bActivateLastSelection*/false);
+            xDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
+            return VclPtr<CuiAbstractControllerAsync_Impl>::Create(std::move(xDlg));
+        }
+        case SID_OPTIONS_TREEDIALOG :
         case SID_LANGUAGE_OPTIONS :
         {
             bool bActivateLastSelection = false;
             if (nResId == SID_OPTIONS_TREEDIALOG)
                 bActivateLastSelection = true;
             Reference< frame::XFrame > xFrame;
-            xDlg = std::make_unique<OfaTreeOptionsDialog>(pParent, xFrame, bActivateLastSelection);
+            auto xDlg = std::make_unique<OfaTreeOptionsDialog>(pParent, xFrame, bActivateLastSelection);
             if (nResId == SID_OPTIONS_DATABASES)
             {
                 xDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
@@ -842,15 +847,14 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Wind
                 //open the tab page "tools/options/languages"
                 xDlg->ActivatePage(OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE);
             }
+            return VclPtr<CuiAbstractController_Impl>::Create(std::move(xDlg));
         }
         break;
-        default:
-            break;
-    }
 
-    if (xDlg)
-        return VclPtr<CuiAbstractController_Impl>::Create(std::move(xDlg));
-    return nullptr;
+        default:
+            assert(false);
+            return nullptr;
+    }
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(weld::Window* pParent, const Reference< frame::XFrame >& rxFrame,

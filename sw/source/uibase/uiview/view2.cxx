@@ -3048,8 +3048,13 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                 if (RET_OK == xWarning->run())
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
-                    pDlg->Execute();
+                    VclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
+                    pDlg->StartExecuteAsync(
+                        [pDlg] (sal_Int32 /*nResult*/)->void
+                        {
+                            pDlg->disposeOnce();
+                        }
+                    );
                 }
                 return ;
             }
