@@ -102,7 +102,8 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
             FN_PARAM_PRINTER, FN_PARAM_STDFONTS,
             FN_PARAM_WRTSHELL, FN_PARAM_WRTSHELL,
             FN_PARAM_SHADOWCURSOR, FN_PARAM_SHADOWCURSOR,
-            FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED>
+            FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
+            FN_PARAM_FMT_AIDS_AUTOCOMPL, FN_PARAM_FMT_AIDS_AUTOCOMPL>
         aRet(GetPool());
 
     aRet.Put( SwDocDisplayItem( aViewOpt ) );
@@ -111,6 +112,7 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     {
         aRet.Put( SwShadowCursorItem( aViewOpt ));
         aRet.Put( SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, aViewOpt.IsCursorInProtectedArea()));
+        aRet.Put(SwFmtAidsAutoComplItem(aViewOpt));
     }
 
     if( pAppView )
@@ -391,6 +393,11 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if( const SfxBoolItem* pItem = rSet.GetItemIfSet( FN_PARAM_CRSR_IN_PROTECTED, false ))
     {
         aViewOpt.SetCursorInProtectedArea(pItem->GetValue());
+    }
+
+    if (const SwFmtAidsAutoComplItem* pItem = rSet.GetItemIfSet(FN_PARAM_FMT_AIDS_AUTOCOMPL, false))
+    {
+        aViewOpt.SetEncloseWithCharactersOn(pItem->IsEncloseWithCharactersOn());
     }
 
     // set elements for the current view and shell

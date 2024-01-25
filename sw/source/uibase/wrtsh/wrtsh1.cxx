@@ -986,6 +986,17 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::std::optiona
     collectUIInformation("BREAK_PAGE", "parameter");
 }
 
+// Insert enclosing characters
+// Selections will be overwritten
+void SwWrtShell::InsertEnclosingChars(std::u16string_view sStartStr, std::u16string_view sEndStr)
+{
+    for (SwPaM& rPaM : SwWrtShell::GetCursor()->GetRingContainer())
+    {
+        const OUString aStr = sStartStr + rPaM.GetText() + sEndStr;
+        SwViewShell::getIDocumentContentOperations().ReplaceRange(rPaM, aStr, false);
+    }
+}
+
 // Insert hard page break;
 // Selections will be overwritten
 

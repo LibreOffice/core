@@ -21,6 +21,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <swdtflvr.hxx>
 #include <o3tl/string_view.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <swacorr.hxx>
 
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -311,6 +313,87 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
     // or in BigPtrArray::operator[] (tdf#159816):
     // Assertion failed: idx < m_nSize
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
+{
+    createSwDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Check that the particular setting is turned on by default
+    const SwViewOption* pVwOpt = pTextDoc->GetDocShell()->GetWrtShell()->GetViewOptions();
+    CPPUNIT_ASSERT(pVwOpt);
+    CPPUNIT_ASSERT(pVwOpt->IsEncloseWithCharactersOn());
+
+    // Localized quotation marks
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    CPPUNIT_ASSERT(pACorr);
+    LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
+    OUString sStartSingleQuote{ pACorr->GetQuote('\'', true, eLang) };
+    OUString sEndSingleQuote{ pACorr->GetQuote('\'', false, eLang) };
+    OUString sStartDoubleQuote{ pACorr->GetQuote('\"', true, eLang) };
+    OUString sEndDoubleQuote{ pACorr->GetQuote('\"', false, eLang) };
+
+    // Insert some text to work with
+    uno::Sequence<beans::PropertyValue> aArgsInsert(
+        comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("abcd")) } }));
+    dispatchCommand(mxComponent, ".uno:InsertText", aArgsInsert);
+    CPPUNIT_ASSERT_EQUAL(OUString("abcd"), pTextDoc->getText()->getString());
+
+    // Successfully enclose the text; afterwards the selection should exist with the new
+    // enclosed text
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '(', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("(abcd)"), pTextDoc->getText()->getString());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '[', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("[(abcd)]"), pTextDoc->getText()->getString());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '{', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("{[(abcd)]}"), pTextDoc->getText()->getString());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\'', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString(sStartSingleQuote + "{[(abcd)]}" + sEndSingleQuote),
+                         pTextDoc->getText()->getString());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\"', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString(sStartDoubleQuote + sStartSingleQuote + "{[(abcd)]}"
+                                  + sEndSingleQuote + sEndDoubleQuote),
+                         pTextDoc->getText()->getString());
+
+    // Disable the setting and check that enclosing doesn't happen anymore
+    const_cast<SwViewOption*>(pVwOpt)->SetEncloseWithCharactersOn(false);
+    CPPUNIT_ASSERT(!pVwOpt->IsEncloseWithCharactersOn());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '(', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("("), pTextDoc->getText()->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '[', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("["), pTextDoc->getText()->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '{', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("{"), pTextDoc->getText()->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\'', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sStartSingleQuote, pTextDoc->getText()->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\"', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, pTextDoc->getText()->getString());
 }
 
 } // end of anonymous namespace

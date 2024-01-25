@@ -103,6 +103,24 @@ public:
     using ConfigItem::SetModified;
 };
 
+class SwFmtAidsAutoComplConfig final : public utl::ConfigItem
+{
+private:
+    SwMasterUsrPref& m_rParent;
+
+    static css::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void ImplCommit() override;
+
+public:
+    SwFmtAidsAutoComplConfig(SwMasterUsrPref& rParent);
+    virtual ~SwFmtAidsAutoComplConfig() override;
+
+    virtual void Notify(const css::uno::Sequence<OUString>& aPropertyNames) override;
+    void Load();
+    using ConfigItem::SetModified;
+};
+
 class SwWebColorConfig final : public utl::ConfigItem
 {
 private:
@@ -127,6 +145,7 @@ class SwMasterUsrPref : public SwViewOption
     friend class SwGridConfig;
     friend class SwCursorConfig;
     friend class SwWebColorConfig;
+    friend class SwFmtAidsAutoComplConfig;
 
     SwFieldUpdateFlags m_eFieldUpdateFlags;    //update of fields and charts
     sal_Int32   m_nLinkUpdateMode;
@@ -146,6 +165,7 @@ class SwMasterUsrPref : public SwViewOption
     SwGridConfig        m_aGridConfig;
     SwCursorConfig      m_aCursorConfig;
     std::unique_ptr<SwWebColorConfig>   m_pWebColorConfig;
+    SwFmtAidsAutoComplConfig m_aFmtAidsAutoComplConfig;
 
     bool m_bApplyCharUnit; // apply_char_unit
 public:
@@ -162,6 +182,7 @@ public:
             m_aCursorConfig.SetModified();
             if(m_pWebColorConfig)
                 m_pWebColorConfig->SetModified();
+            m_aFmtAidsAutoComplConfig.SetModified();
         }
 
     void SetUpdateLinkMode(sal_Int32 nSet, bool bNoModify = false)
@@ -266,6 +287,15 @@ public:
                         m_aLayoutConfig.SetModified();
                     }
                 }
+
+    void SetEncloseWithCharactersOn(bool bVal, bool noModify = false)
+    {
+        this->SwViewOption::SetEncloseWithCharactersOn(bVal);
+        if (!noModify)
+        {
+            m_aFmtAidsAutoComplConfig.SetModified();
+        }
+    }
 };
 
 #endif

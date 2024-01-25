@@ -318,6 +318,10 @@ class SwShdwCursorOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xMathBaselineAlignmentCB;
     std::unique_ptr<weld::Widget> m_xMathBaselineAlignmentImg;
 
+    std::unique_ptr<weld::Frame> m_xFmtAidsAutoComplFrame;
+    std::unique_ptr<weld::CheckButton> m_xEncloseWithCharactersCB;
+    std::unique_ptr<weld::Widget> m_xEncloseWithCharactersImg;
+
 public:
     SwShdwCursorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwShdwCursorOptionsTabPage() override;

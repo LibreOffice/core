@@ -850,7 +850,7 @@ class SwUINumRuleItem;
 #define FN_PARAM_CRSR_IN_PROTECTED      TypedWhichId<SfxBoolItem>(FN_PARAM2+13) /* Cursor in protected areas */
 #define FN_PARAM_TOX_TYPE               TypedWhichId<SfxUInt16Item>(FN_PARAM2+14) /* TOX type in tox dialog*/
 #define FN_PARAM_LINK_DISPLAY_NAME      (FN_PARAM2+15) /* LinkDisplayName property*/
-// free
+#define FN_PARAM_FMT_AIDS_AUTOCOMPL     TypedWhichId<SwFmtAidsAutoComplItem>(FN_PARAM2+16) /* Formatting aids autocomplete options */
 #define FN_PARAM_CONTOUR_PP             (FN_PARAM2+17) /* contour PolyPolygon*/
 
 #define FN_ANCHOR_POSITION              (FN_PARAM2+18) /* AnchorPosition property */

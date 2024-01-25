@@ -251,6 +251,7 @@ SwViewOption::SwViewOption() :
     mbViewLayoutBookMode(false),
     mbHideWhitespaceMode(false),
     m_bShowPlaceHolderFields( true ),
+    m_bEncloseWithCharactersOn( true ),
     m_nZoom( 100 ),
     m_eZoom( SvxZoomType::PERCENT ),
     m_nTableDestination(TBL_DEST_CELL)
@@ -327,6 +328,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     mbHideWhitespaceMode = rVOpt.mbHideWhitespaceMode;
     m_bShowPlaceHolderFields = rVOpt.m_bShowPlaceHolderFields;
+    m_bEncloseWithCharactersOn = rVOpt.m_bEncloseWithCharactersOn;
     m_bIdle           = rVOpt.m_bIdle;
     m_nDefaultAnchor  = rVOpt.m_nDefaultAnchor;
     m_nTocEntryLvl = rVOpt.m_nTocEntryLvl;
@@ -373,6 +375,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     mbHideWhitespaceMode = rVOpt.mbHideWhitespaceMode;
     m_bShowPlaceHolderFields = rVOpt.m_bShowPlaceHolderFields;
+    m_bEncloseWithCharactersOn = rVOpt.m_bEncloseWithCharactersOn;
     m_bIdle           = rVOpt.m_bIdle;
     m_nDefaultAnchor  = rVOpt.m_nDefaultAnchor;
     m_aColorConfig    = rVOpt.m_aColorConfig;

@@ -232,6 +232,36 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
     rVOpt.SetShdwCursorFillMode( m_eMode );
 }
 
+SwFmtAidsAutoComplItem::SwFmtAidsAutoComplItem()
+    : SfxPoolItem(FN_PARAM_FMT_AIDS_AUTOCOMPL)
+    , m_bEncloseWithCharactersOn(true)
+{
+}
+
+SwFmtAidsAutoComplItem::SwFmtAidsAutoComplItem(const SwViewOption& rVOpt)
+    : SfxPoolItem(FN_PARAM_FMT_AIDS_AUTOCOMPL)
+    , m_bEncloseWithCharactersOn(rVOpt.IsEncloseWithCharactersOn())
+{
+}
+
+SwFmtAidsAutoComplItem* SwFmtAidsAutoComplItem::Clone(SfxItemPool*) const
+{
+    return new SwFmtAidsAutoComplItem(*this);
+}
+
+bool SwFmtAidsAutoComplItem::operator==(const SfxPoolItem& rCmp) const
+{
+    assert(SfxPoolItem::operator==(rCmp));
+    const SwFmtAidsAutoComplItem& rItem = static_cast<const SwFmtAidsAutoComplItem&>(rCmp);
+
+    return m_bEncloseWithCharactersOn == rItem.m_bEncloseWithCharactersOn;
+}
+
+void SwFmtAidsAutoComplItem::FillViewOptions(SwViewOption& rVOpt) const
+{
+    rVOpt.SetEncloseWithCharactersOn(m_bEncloseWithCharactersOn);
+}
+
 #ifdef DBG_UTIL
 SwTestItem* SwTestItem::Clone( SfxItemPool* ) const
 {

@@ -2578,8 +2578,45 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     m_aInBuffer += " ";
                 }
 
-                const bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-                if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || rSh.IsNbspRunNext() ) &&
+                const SwViewOption& rVwOpt = SwViewOption::GetCurrentViewOptions();
+                const bool bIsAutoCorrectChar = SvxAutoCorrect::IsAutoCorrectChar(aCh);
+                if (!aKeyEvent.GetRepeat() && rSh.HasSelection()
+                    && rVwOpt.IsEncloseWithCharactersOn()
+                    && SwViewOption::IsEncloseWithCharactersTrigger(aCh))
+                {
+                    FlushInBuffer();
+                    switch (aCh)
+                    {
+                        case '(':
+                            rSh.InsertEnclosingChars(u"(", u")");
+                            break;
+                        case '[':
+                            rSh.InsertEnclosingChars(u"[", u"]");
+                            break;
+                        case '{':
+                            rSh.InsertEnclosingChars(u"{", u"}");
+                            break;
+                        case '\"':
+                        {
+                            LanguageType eLang
+                                = Application::GetSettings().GetLanguageTag().getLanguageType();
+                            OUString sStartQuote{ pACorr->GetQuote('\"', true, eLang) };
+                            OUString sEndQuote{ pACorr->GetQuote('\"', false, eLang) };
+                            rSh.InsertEnclosingChars(sStartQuote, sEndQuote);
+                            break;
+                        }
+                        case '\'':
+                        {
+                            LanguageType eLang
+                                = Application::GetSettings().GetLanguageTag().getLanguageType();
+                            OUString sStartQuote{ pACorr->GetQuote('\'', true, eLang) };
+                            OUString sEndQuote{ pACorr->GetQuote('\'', false, eLang) };
+                            rSh.InsertEnclosingChars(sStartQuote, sEndQuote);
+                            break;
+                        }
+                    }
+                }
+                else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || rSh.IsNbspRunNext() ) &&
                         pACfg->IsAutoFormatByInput() &&
                     (( pACorr->IsAutoCorrFlag( ACFlags::ChgWeightUnderl ) &&
                         ( '*' == aCh || '_' == aCh ) ) ||

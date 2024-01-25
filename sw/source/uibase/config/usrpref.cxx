@@ -52,6 +52,7 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_aGridConfig(bWeb, *this),
     m_aCursorConfig(*this),
     m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
+    m_aFmtAidsAutoComplConfig(*this),
     m_bApplyCharUnit(false)
 {
     if (comphelper::IsFuzzing())
@@ -73,6 +74,7 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_aCursorConfig.Load();
     if(m_pWebColorConfig)
         m_pWebColorConfig->Load();
+    m_aFmtAidsAutoComplConfig.Load();
 }
 
 SwMasterUsrPref::~SwMasterUsrPref()
@@ -567,6 +569,75 @@ void SwCursorConfig::Load()
 }
 
 void SwCursorConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+
+Sequence<OUString> SwFmtAidsAutoComplConfig::GetPropertyNames()
+{
+    static const char* aPropNames[] = {
+        "EncloseWithCharacters", // 0
+    };
+    const int nCount = SAL_N_ELEMENTS(aPropNames);
+    Sequence<OUString> aNames(nCount);
+    OUString* pNames = aNames.getArray();
+    for (int i = 0; i < nCount; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    return aNames;
+}
+
+SwFmtAidsAutoComplConfig::SwFmtAidsAutoComplConfig(SwMasterUsrPref& rPar)
+    : ConfigItem("Office.Writer/FmtAidsAutocomplete", ConfigItemMode::ReleaseTree)
+    , m_rParent(rPar)
+{
+}
+
+SwFmtAidsAutoComplConfig::~SwFmtAidsAutoComplConfig() {}
+
+void SwFmtAidsAutoComplConfig::ImplCommit()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    for (int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch (nProp)
+        {
+            case 0:
+                pValues[nProp] <<= m_rParent.IsEncloseWithCharactersOn();
+                break; // "FmtAidsAutocomplete/EncloseWithCharacters"
+        }
+    }
+    PutProperties(aNames, aValues);
+}
+
+void SwFmtAidsAutoComplConfig::Load()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    const Any* pValues = aValues.getConstArray();
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    for (int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        if (pValues[nProp].hasValue())
+        {
+            switch (nProp)
+            {
+                case 0:
+                {
+                    bool bSet = false;
+                    pValues[nProp] >>= bSet;
+                    m_rParent.SetEncloseWithCharactersOn(bSet);
+                    break; // "FmtAidsAutocomplete/EncloseWithCharacters"
+                }
+            }
+        }
+    }
+}
+
+void SwFmtAidsAutoComplConfig::Notify(const css::uno::Sequence<OUString>&) {}
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
     ConfigItem("Office.WriterWeb/Background", ConfigItemMode::ReleaseTree),

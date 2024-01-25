@@ -133,6 +133,27 @@ public:
     void SetOn( bool bFlag )            { m_bOn = bFlag; }
 };
 
+class SW_DLLPUBLIC SwFmtAidsAutoComplItem final : public SfxPoolItem
+{
+    friend class SwShdwCursorOptionsTabPage;
+    friend class SwModule;
+
+    bool m_bEncloseWithCharactersOn;
+
+public:
+    SwFmtAidsAutoComplItem();
+    SwFmtAidsAutoComplItem(const SwViewOption& rVOpt);
+
+    virtual SwFmtAidsAutoComplItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual bool operator==(const SfxPoolItem&) const override;
+
+    void FillViewOptions(SwViewOption& rVOpt) const;
+
+    bool IsEncloseWithCharactersOn() const { return m_bEncloseWithCharactersOn; }
+
+    void SetEncloseWithCharactersOn(bool bFlag) { m_bEncloseWithCharactersOn = bFlag; }
+};
+
 #ifdef DBG_UTIL
 
 // Item for settings dialog - test settings

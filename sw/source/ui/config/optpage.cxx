@@ -1642,6 +1642,9 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xDefaultAnchorTypeImg(m_xBuilder->weld_widget("lockAnchor"))
     , m_xMathBaselineAlignmentCB(m_xBuilder->weld_check_button("mathbaseline"))
     , m_xMathBaselineAlignmentImg(m_xBuilder->weld_widget("lockmathbaseline"))
+    , m_xFmtAidsAutoComplFrame(m_xBuilder->weld_frame("fmtaidsautocompleteframe"))
+    , m_xEncloseWithCharactersCB(m_xBuilder->weld_check_button("enclosewithcharacters"))
+    , m_xEncloseWithCharactersImg(m_xBuilder->weld_widget("lockenclosewithcharacters"))
 {
     SwFillMode eMode = SwFillMode::Tab;
     bool bIsOn = false;
@@ -1652,6 +1655,13 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
         bIsOn = pItem->IsOn();
     }
     m_xOnOffCB->set_active( bIsOn );
+
+    bool bIsEncloseWithCharactersOn = false;
+    if (const SwFmtAidsAutoComplItem* pItem = rSet.GetItemIfSet(FN_PARAM_FMT_AIDS_AUTOCOMPL, false))
+    {
+        bIsEncloseWithCharactersOn = pItem->IsEncloseWithCharactersOn();
+    }
+    m_xEncloseWithCharactersCB->set_active(bIsEncloseWithCharactersOn);
 
     m_xDirectCursorFillMode->set_active( static_cast<int>(eMode) );
     const SfxUInt16Item* pHtmlModeItem = rSet.GetItemIfSet(SID_HTML_MODE, false);
@@ -1672,6 +1682,9 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     m_xCursorProtFrame->hide();
     m_xCursorInProtCB->hide();
     m_xImageFrame->hide();
+
+    m_xFmtAidsAutoComplFrame->hide();
+    m_xEncloseWithCharactersCB->hide();
 }
 
 SwShdwCursorOptionsTabPage::~SwShdwCursorOptionsTabPage()
@@ -1693,8 +1706,8 @@ void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
 OUString SwShdwCursorOptionsTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "layoutopt", "displayfl", "cursoropt",      "cursorlabel",
-                          "fillmode",  "lbImage",   "lbDefaultAnchor" };
+    OUString labels[] = { "layoutopt", "displayfl", "cursoropt",       "cursorlabel",
+                          "fillmode",  "lbImage",   "lbDefaultAnchor", "autocomplete" };
 
     for (const auto& label : labels)
     {
@@ -1703,8 +1716,9 @@ OUString SwShdwCursorOptionsTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { "mathbaseline", "paragraph",  "hyphens",   "spaces",       "nonbreak",   "tabs",
-            "break",        "hiddentext", "bookmarks", "cursorinprot", "cursoronoff" };
+        = { "mathbaseline", "paragraph",    "hyphens",     "spaces",
+            "nonbreak",     "tabs",         "break",       "hiddentext",
+            "bookmarks",    "cursorinprot", "cursoronoff", "enclosewithcharacters" };
 
     for (const auto& check : checkButton)
     {
@@ -1740,6 +1754,16 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     if( m_xCursorInProtCB->get_state_changed_from_saved())
     {
         rSet->Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_xCursorInProtCB->get_active()));
+        bRet = true;
+    }
+
+    SwFmtAidsAutoComplItem aFmtAidsAutoComplOpt;
+    aFmtAidsAutoComplOpt.SetEncloseWithCharactersOn(m_xEncloseWithCharactersCB->get_active());
+    if (const SwFmtAidsAutoComplItem* pFmtAidsAutoComplItem
+        = rSet->GetItemIfSet(FN_PARAM_FMT_AIDS_AUTOCOMPL, false);
+        !pFmtAidsAutoComplItem || *pFmtAidsAutoComplItem != aFmtAidsAutoComplOpt)
+    {
+        rSet->Put(aFmtAidsAutoComplOpt);
         bRet = true;
     }
 
@@ -1795,6 +1819,17 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
     } else {
         m_xMathBaselineAlignmentCB->hide();
     }
+
+    bool bIsEncloseWithCharactersOn = false;
+    if (const SwFmtAidsAutoComplItem* pItem
+        = rSet->GetItemIfSet(FN_PARAM_FMT_AIDS_AUTOCOMPL, false))
+    {
+        bIsEncloseWithCharactersOn = pItem->IsEncloseWithCharactersOn();
+    }
+    bReadOnly = officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::isReadOnly();
+    m_xEncloseWithCharactersCB->set_active(bIsEncloseWithCharactersOn);
+    m_xEncloseWithCharactersCB->set_sensitive(!bReadOnly);
+    m_xEncloseWithCharactersImg->set_visible(bReadOnly);
 
     if( const SfxBoolItem* pItem = rSet->GetItemIfSet( FN_PARAM_CRSR_IN_PROTECTED, false ) )
         m_xCursorInProtCB->set_active(pItem->GetValue());

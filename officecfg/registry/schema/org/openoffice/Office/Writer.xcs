@@ -2061,6 +2061,19 @@
         </prop>
       </group>
     </group>
+    <group oor:name="FmtAidsAutocomplete">
+      <info>
+        <desc>Contains formatting aids auto complete options.</desc>
+      </info>
+      <prop oor:name="EncloseWithCharacters" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Formatting Aids - Enclose with characters -->
+        <info>
+          <desc>Specifies whether selected text will be enclosed with parentheses, square brackets, curly braces or quotation marks, depending on which button is pressed.</desc>
+          <label>Enclose with characters</label>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
     <group oor:name="Revision">
       <info>
         <desc>Contains settings for change recording.</desc>

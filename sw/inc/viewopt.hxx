@@ -252,39 +252,40 @@ class SW_DLLPUBLIC SwViewOption
 
     static sal_uInt16   s_nPixelTwips;// 1 Pixel == ? Twips
 
-    OUString        m_sSymbolFont;        // Symbolfont.
-    ViewOptFlags1   m_nCoreOptions;       // Bits for SwViewShell.
-    ViewOptCoreFlags2 m_nCore2Options;    // Bits for SwViewShell.
-    ViewOptFlags2   m_nUIOptions;         // UI-Bits
-    Color           m_aRetouchColor;      // DefaultBackground for BrowseView
-    Size            m_aSnapSize;          // Describes horizontal and vertical snap.
-    sal_uInt16      mnViewLayoutColumns;  // # columns for edit view
-    short           m_nDivisionX;         // Grid division.
-    short           m_nDivisionY;
-    sal_uInt8       m_nPagePreviewRow;       // Page Preview Row/Columns.
-    sal_uInt8       m_nPagePreviewCol;       // Page Preview Row/Columns.
-    SwFillMode      m_nShadowCursorFillMode;  // FillMode for ShadowCursor.
-    bool            m_bReadonly : 1;      // Readonly-Doc.
-    bool            m_bStarOneSetting : 1;// Prevent from UI automatics (no scrollbars in readonly documents).
-    bool            m_bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
-    bool            m_bSelectionInReadonly : 1; // Determines whether selection is switched on in readonly documents.
-    bool            mbFormView : 1;
-    bool            mbBrowseMode : 1;
-    bool            mbBookView : 1;      // View mode for page preview.
-    bool            mbViewLayoutBookMode : 1; // Book view mode for edit view.
-    bool            mbHideWhitespaceMode : 1; // Hide header, footer, and pagebreak.
-    bool            m_bShowPlaceHolderFields : 1; // Only used in printing!
-    mutable bool    m_bIdle;
-    sal_Int32       m_nDefaultAnchor;     // GetDefaultAnchorType() to convert int to RndStdIds
+    OUString          m_sSymbolFont;                // Symbolfont.
+    ViewOptFlags1     m_nCoreOptions;               // Bits for SwViewShell.
+    ViewOptCoreFlags2 m_nCore2Options;              // Bits for SwViewShell.
+    ViewOptFlags2     m_nUIOptions;                 // UI-Bits
+    Color             m_aRetouchColor;              // DefaultBackground for BrowseView
+    Size              m_aSnapSize;                  // Describes horizontal and vertical snap.
+    sal_uInt16        mnViewLayoutColumns;          // # columns for edit view
+    short             m_nDivisionX;                 // Grid division.
+    short             m_nDivisionY;
+    sal_uInt8         m_nPagePreviewRow;            // Page Preview Row/Columns.
+    sal_uInt8         m_nPagePreviewCol;            // Page Preview Row/Columns.
+    SwFillMode        m_nShadowCursorFillMode;      // FillMode for ShadowCursor.
+    bool              m_bReadonly : 1;              // Readonly-Doc.
+    bool              m_bStarOneSetting : 1;        // Prevent from UI automatics (no scrollbars in readonly documents).
+    bool              m_bIsPagePreview : 1;         // The preview mustn't print field/footnote/... shadings.
+    bool              m_bSelectionInReadonly : 1;   // Determines whether selection is switched on in readonly documents.
+    bool              mbFormView : 1;
+    bool              mbBrowseMode : 1;
+    bool              mbBookView : 1;               // View mode for page preview.
+    bool              mbViewLayoutBookMode : 1;     // Book view mode for edit view.
+    bool              mbHideWhitespaceMode : 1;     // Hide header, footer, and pagebreak.
+    bool              m_bShowPlaceHolderFields : 1; // Only used in printing!
+    bool              m_bEncloseWithCharactersOn : 1;
+    mutable bool      m_bIdle;
+    sal_Int32         m_nDefaultAnchor;             // GetDefaultAnchorType() to convert int to RndStdIds
     // tdf#135266 - tox dialog: remember last used entry level depending on the index type
-    sal_uInt8 m_nTocEntryLvl;
-    sal_uInt8 m_nIdxEntryLvl;
+    sal_uInt8         m_nTocEntryLvl;
+    sal_uInt8         m_nIdxEntryLvl;
 
     // Scale
-    sal_uInt16          m_nZoom;          // In percent.
-    SvxZoomType     m_eZoom;              // 'enum' for zoom.
+    sal_uInt16        m_nZoom;                     // In percent.
+    SvxZoomType       m_eZoom;                     // 'enum' for zoom.
 
-    sal_uInt8            m_nTableDestination;      // Destination for table background.
+    sal_uInt8         m_nTableDestination;         // Destination for table background.
 
 #ifdef DBG_UTIL
     // Corresponds to statements in ui/config/cfgvw.src.
@@ -792,6 +793,25 @@ public:
     void   SetShadowCursor(bool b)
         { SetUIOption(b, ViewOptFlags2::ShadowCursor); }
 
+    // Enclose with characters autocomplete, switch on/off
+    bool IsEncloseWithCharactersOn() const { return m_bEncloseWithCharactersOn; }
+    void SetEncloseWithCharactersOn(bool b) { m_bEncloseWithCharactersOn = b; }
+
+    static bool IsEncloseWithCharactersTrigger(sal_Unicode cChar)
+    {
+        switch (cChar)
+        {
+            case '(':  [[fallthrough]];
+            case '{':  [[fallthrough]];
+            case '[':  [[fallthrough]];
+            case '\'': [[fallthrough]];
+            case '\"':
+                return true;
+            default:
+                return false;
+        }
+    }
+
     //move vertical ruler to the right
     bool    IsVRulerRight()    const
         { return bool(m_nUIOptions & ViewOptFlags2::VRulerRight); }
@@ -877,6 +897,7 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
     m_nUIOptions = rVOpt.m_nUIOptions;
     m_nTableDestination = rVOpt.m_nTableDestination;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
+    m_bEncloseWithCharactersOn = rVOpt.m_bEncloseWithCharactersOn;
 }
 
 // Helper function for checking HTML-capabilities.
