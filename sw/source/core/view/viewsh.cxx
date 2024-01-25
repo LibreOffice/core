@@ -2217,14 +2217,7 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
         if(&rSh == this)
             continue;
         SwViewOption aOpt( *rSh.GetViewOptions() );
-        aOpt.SetFieldName( rOpt.IsFieldName() );
-        aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
-        aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
-        aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
-        aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
-        aOpt.SetHideWhitespaceMode(rOpt.IsHideWhitespaceMode());
-        aOpt.SetViewLayoutColumns(rOpt.GetViewLayoutColumns());
-        aOpt.SetPostIts(rOpt.IsPostIts());
+        aOpt.SyncLayoutRelatedViewOptions(rOpt);
         if ( !(aOpt == *rSh.GetViewOptions()) )
             rSh.ImplApplyViewOptions( aOpt );
     }

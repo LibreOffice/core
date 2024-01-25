@@ -612,6 +612,18 @@ bool SwViewOption::IsIgnoreProtectedArea()
     return gIgnoreProtectedArea.get();
 }
 
+void SwViewOption::SyncLayoutRelatedViewOptions(const SwViewOption& rOpt)
+{
+    SetFieldName(rOpt.IsFieldName());
+    SetShowHiddenField(rOpt.IsShowHiddenField());
+    SetShowHiddenPara(rOpt.IsShowHiddenPara());
+    SetShowHiddenChar(rOpt.IsShowHiddenChar());
+    SetViewLayoutBookMode(rOpt.IsViewLayoutBookMode());
+    SetHideWhitespaceMode(rOpt.IsHideWhitespaceMode());
+    SetViewLayoutColumns(rOpt.GetViewLayoutColumns());
+    SetPostIts(rOpt.IsPostIts());
+}
+
 const SwViewOption& SwViewOption::GetCurrentViewOptions()
 {
     SfxViewShell* pCurrentShell = SfxViewShell::Current();

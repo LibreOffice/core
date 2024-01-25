@@ -856,6 +856,8 @@ public:
 
     // Useful for when getting the current view SwViewOption is not possible otherwise
     static const SwViewOption& GetCurrentViewOptions();
+
+    void SyncLayoutRelatedViewOptions(const SwViewOption& rOpt);
 };
 
 inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const
