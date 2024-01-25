@@ -97,7 +97,7 @@ SwDrawBaseShell::~SwDrawBaseShell()
     SwTransferable::ClearSelection( GetShell() );
 }
 
-void SwDrawBaseShell::Execute(SfxRequest const &rReq)
+void SwDrawBaseShell::Execute(SfxRequest& rReq)
 {
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();
@@ -141,23 +141,32 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         aSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, pSh->GetLayerId().get()));
 
                         pSh->GetObjAttr(aSet);
+
+                        auto xRequest = std::make_shared<SfxRequest>(rReq);
+                        rReq.Ignore(); // the 'old' request is not relevant any more
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg(GetView().GetFrameWeld(), aSet, pSh));
-
-                        if (pDlg->Execute() == RET_OK)
-                        {
-                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                            if(const SfxInt16Item* pWrapItem = pOutSet->GetItemIfSet(FN_DRAW_WRAP_DLG, false))
+                        VclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg(GetView().GetFrameWeld(), aSet, pSh));
+                        pDlg->StartExecuteAsync(
+                            [pDlg, pSh, xRequest] (sal_Int32 nResult)->void
                             {
-                                short nLayer = pWrapItem->GetValue();
-                                if (nLayer == 1)
-                                    pSh->SelectionToHeaven();
-                                else
-                                    pSh->SelectionToHell();
-                            }
+                                if (nResult == RET_OK)
+                                {
+                                    const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                                    if(const SfxInt16Item* pWrapItem = pOutSet->GetItemIfSet(FN_DRAW_WRAP_DLG, false))
+                                    {
+                                        short nLayer = pWrapItem->GetValue();
+                                        if (nLayer == 1)
+                                            pSh->SelectionToHeaven();
+                                        else
+                                            pSh->SelectionToHell();
+                                    }
 
-                            pSh->SetObjAttr(*pOutSet);
-                        }
+                                    pSh->SetObjAttr(*pOutSet);
+                                }
+                                pDlg->disposeOnce();
+                                xRequest->Done();
+                            }
+                        );
                     }
                 }
             }

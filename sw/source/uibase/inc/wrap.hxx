@@ -26,7 +26,12 @@
 class SfxItemSet;
 class SwWrtShell;
 
-class SwWrapDlg final : public SfxSingleTabDialogController
+struct SwWrapDlgBase
+{
+    SfxItemSet maInputSet;
+};
+
+class SwWrapDlg final : private SwWrapDlgBase, public SfxSingleTabDialogController
 {
 public:
     SwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);

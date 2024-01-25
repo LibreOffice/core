@@ -112,6 +112,11 @@ short SwAbstractSfxController_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool SwAbstractSfxController_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractNumFormatDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -1121,7 +1126,7 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBorderDlg(weld::
     return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwBorderDlg>(pParent, rSet, nType));
 }
 
-VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh)
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh)
 {
     return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwWrapDlg>(pParent, rSet, pSh, true/*bDrawMode*/));
 }

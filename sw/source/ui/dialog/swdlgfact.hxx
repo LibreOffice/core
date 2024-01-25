@@ -116,13 +116,14 @@ public:
 
 class SwAbstractSfxController_Impl : public SfxAbstractDialog
 {
-    std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
+    std::shared_ptr<SfxSingleTabDialogController> m_xDlg;
 public:
-    explicit SwAbstractSfxController_Impl(std::unique_ptr<SfxSingleTabDialogController> p)
+    explicit SwAbstractSfxController_Impl(std::shared_ptr<SfxSingleTabDialogController> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual const SfxItemSet* GetOutputItemSet() const override;
     virtual void SetText(const OUString& rStr) override;
 };
@@ -792,7 +793,7 @@ public:
                                                                   const SwTableAutoFormat* pSelFormat = nullptr) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) override;
 
-    virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh) override;
+    virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(weld::Window* pParent,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) override;
