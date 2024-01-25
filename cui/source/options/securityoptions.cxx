@@ -73,6 +73,8 @@ SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent)
     , m_xNoteAuthorImg(m_xBuilder->weld_widget("locknoteauthor"))
     , m_xDocumentVersionCB(m_xBuilder->weld_check_button("documentversion"))
     , m_xDocumentVersionImg(m_xBuilder->weld_widget("lockdocumentversion"))
+    , m_xPrinterSettingsCB(m_xBuilder->weld_check_button("printersettings"))
+    , m_xPrinterSettingsImg(m_xBuilder->weld_widget("lockprintersettings"))
 {
     m_xRemovePersInfoCB->connect_toggled(LINK(this, SecurityOptionsDialog, ShowPersonalInfosToggle));
     init();
@@ -103,6 +105,8 @@ void SecurityOptionsDialog::init()
         *m_xNoteAuthorImg);
     enableAndSet(SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo, *m_xDocumentVersionCB,
         *m_xDocumentVersionImg);
+    enableAndSet(SvtSecurityOptions::EOption::DocKeepPrinterSettings, *m_xPrinterSettingsCB,
+        *m_xPrinterSettingsImg);
     enableAndSet(SvtSecurityOptions::EOption::DocWarnRecommendPassword, *m_xRecommPasswdCB,
         *m_xRecommPasswdImg);
     enableAndSet(SvtSecurityOptions::EOption::CtrlClickHyperlink, *m_xCtrlHyperlinkCB,
@@ -128,6 +132,7 @@ bool SecurityOptionsDialog::SetSecurityOptions()
     CheckAndSave(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo, IsRemoveDocUserInfoChecked(), bModified);
     CheckAndSave(SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo, IsRemoveNoteAuthorInfoChecked(), bModified);
     CheckAndSave(SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo, IsRemoveDocVersionInfoChecked(), bModified);
+    CheckAndSave(SvtSecurityOptions::EOption::DocKeepPrinterSettings, IsKeepPrinterSettingsChecked(), bModified);
     CheckAndSave(SvtSecurityOptions::EOption::DocWarnRecommendPassword, IsRecommPasswdChecked(), bModified);
     CheckAndSave(SvtSecurityOptions::EOption::CtrlClickHyperlink, IsCtrlHyperlinkChecked(), bModified);
     CheckAndSave(SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, IsBlockUntrustedRefererLinksChecked(), bModified);
@@ -143,6 +148,7 @@ void SecurityOptionsDialog::changeKeepSecurityInfosEnabled()
     m_xDocPropertiesCB->set_sensitive(bEnable);
     m_xNoteAuthorCB->set_sensitive(bEnable);
     m_xDocumentVersionCB->set_sensitive(bEnable);
+    m_xPrinterSettingsCB->set_sensitive(bEnable);
 }
 
 }
