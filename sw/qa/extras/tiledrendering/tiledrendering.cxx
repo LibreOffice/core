@@ -762,6 +762,7 @@ namespace {
         bool m_bOwnSelectionSet;
         bool m_bViewSelectionSet;
         OString m_aViewSelection;
+        OString m_aViewRenderState;
         bool m_bTilesInvalidated;
         bool m_bViewCursorVisible;
         bool m_bGraphicViewSelection;
@@ -907,6 +908,11 @@ namespace {
                         boost::property_tree::ptree aTree;
                         boost::property_tree::read_json(aStream, aTree);
                         m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
+                    }
+                    break;
+                case LOK_CALLBACK_VIEW_RENDER_STATE:
+                    {
+                        m_aViewRenderState = pPayload;
                     }
                     break;
                 case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
@@ -2986,24 +2992,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
     comphelper::dispatchCommand(".uno:ControlCodes", {});
 }
 
-CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShowHiddenCharsWhenShowFormatting)
-{
-    // In LOKit, ignore the config setting for
-    // Tools - Options - Writer - Formatting Aids - Display Formatting - Hidden characters
-    // and always show hidden content when showing pilcrow formatting
-
-    createSwDoc("hiddenLoremIpsum.docx");
-
-    // Since LOKit is active in TiledRendering, turning on "Show formatting" will show hidden text.
-    comphelper::dispatchCommand(".uno:ControlCodes", {}); // show format marks
-    Scheduler::ProcessEventsToIdle();
-
-    // Without this patch, no body text would be visible - so only 1 page instead of 3.
-    CPPUNIT_ASSERT_EQUAL(3, getPages());
-
-    comphelper::dispatchCommand(".uno:ControlCodes", {});
-}
-
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDoubleUnderlineAndStrikeOut)
 {
     // Load a document where the tracked text moving is visible with
@@ -4086,6 +4074,35 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineTooltip)
     CPPUNIT_ASSERT(vec[1].toInt32() != 0);
     CPPUNIT_ASSERT(vec[2].toInt32() != 0);
     CPPUNIT_ASSERT(vec[3].toInt32() != 0);
+}
+
+// toggling Formatting Marks on/off for one view should have no effect on other views
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testToggleFormattingMarks)
+{
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nView1 = SfxLokHelper::getView();
+
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    SfxLokHelper::setView(nView1);
+    ViewCallback aView1;
+
+    SfxLokHelper::setView(nView2);
+    ViewCallback aView2;
+
+    OString sOrigView2RenderState = pXTextDocument->getViewRenderState();
+
+    comphelper::dispatchCommand(".uno:ControlCodes", {});
+
+    Scheduler::ProcessEventsToIdle();
+
+    // 1. change to view #2 shouldn't result in an update to view #1 renderstate
+    CPPUNIT_ASSERT(aView1.m_aViewRenderState.isEmpty());
+    // 2. toggling on ControlCodes should result in view #2 render state reporting
+    // 'P' for Pilcrow
+    CPPUNIT_ASSERT_EQUAL(OString("P" + sOrigView2RenderState), aView2.m_aViewRenderState);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
