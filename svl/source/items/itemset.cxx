@@ -337,7 +337,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
 //     In that case, if the Item is shareable, the new mechanism
 //     will kick in: It will start sharing the Item globally,
 //     but not immediately: After a defined amount of allowed
-//     non-shared ocurrences (look for NUMBER_OF_UNSHARED_INSTANCES)
+//     non-shared occurrences (look for NUMBER_OF_UNSHARED_INSTANCES)
 //     an instance of the default ItemInstanceManager, a
 //     DefaultItemInstanceManager, will be incarnated and used.
 //     NOTE: Mixing shared/unshared instances is not a problem (we
