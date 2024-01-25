@@ -506,17 +506,8 @@ void PieChart::createTextLabelShape(
         {
             sal_Int32 nX1 = aPieLabelInfo.aOuterPosition.getX();
             sal_Int32 nY1 = aPieLabelInfo.aOuterPosition.getY();
-            sal_Int32 nX2 = nX1;
-            sal_Int32 nY2 = nY1;
-            if (nX1 < aRect.getMinX())
-                nX2 = aRect.getMinX();
-            else if (nX1 > aRect.getMaxX())
-                nX2 = aRect.getMaxX();
-
-            if (nY1 < aRect.getMinY())
-                nY2 = aRect.getMinY();
-            else if (nY1 > aRect.getMaxY())
-                nY2 = aRect.getMaxY();
+            const sal_Int32 nX2 = std::clamp(nX1, aRect.getMinX(), aRect.getMaxX());
+            const sal_Int32 nY2 = std::clamp(nY1, aRect.getMinY(), aRect.getMaxY());
 
             const sal_Int32 nLabelSquaredDistanceFromOrigin
                 = (nX2 - aOrigin.X) * (nX2 - aOrigin.X) + (nY2 - aOrigin.Y) * (nY2 - aOrigin.Y);
@@ -1286,20 +1277,11 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     {
         if( labelInfo.bMoved && labelInfo.bShowLeaderLine )
         {
+            const basegfx::B2IRectangle aRect(lcl_getRect(labelInfo.xLabelGroupShape));
             sal_Int32 nX1 = labelInfo.aOuterPosition.getX();
             sal_Int32 nY1 = labelInfo.aOuterPosition.getY();
-            sal_Int32 nX2 = nX1;
-            sal_Int32 nY2 = nY1;
-            ::basegfx::B2IRectangle aRect( lcl_getRect( labelInfo.xLabelGroupShape ) );
-            if( nX1 < aRect.getMinX() )
-                nX2 = aRect.getMinX();
-            else if( nX1 > aRect.getMaxX() )
-                nX2 = aRect.getMaxX();
-
-            if( nY1 < aRect.getMinY() )
-                nY2 = aRect.getMinY();
-            else if( nY1 > aRect.getMaxY() )
-                nY2 = aRect.getMaxY();
+            const sal_Int32 nX2 = std::clamp(nX1, aRect.getMinX(), aRect.getMaxX());
+            const sal_Int32 nY2 = std::clamp(nY1, aRect.getMinY(), aRect.getMaxY());
 
             //when the line is very short compared to the page size don't create one
             ::basegfx::B2DVector aLength(nX1-nX2, nY1-nY2);

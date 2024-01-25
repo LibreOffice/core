@@ -707,20 +707,12 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
                     // "ShowCustomLeaderLines"
                     rDataSeries.getModel()->getFastPropertyValue( PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES ).get<sal_Bool>())
                 {
+                    const basegfx::B2IRectangle aRect(
+                        BaseGFXHelper::makeRectangle(aRelPos, xTextShape->getSize()));
                     sal_Int32 nX1 = rScreenPosition2D.X;
                     sal_Int32 nY1 = rScreenPosition2D.Y;
-                    sal_Int32 nX2 = nX1;
-                    sal_Int32 nY2 = nY1;
-                    ::basegfx::B2IRectangle aRect(BaseGFXHelper::makeRectangle(aRelPos, xTextShape->getSize()));
-                    if (nX1 < aRelPos.X)
-                        nX2 = aRelPos.X;
-                    else if (nX1 > aRect.getMaxX())
-                        nX2 = aRect.getMaxX();
-
-                    if (nY1 < aRect.getMinY())
-                        nY2 = aRect.getMinY();
-                    else if (nY1 > aRect.getMaxY())
-                        nY2 = aRect.getMaxY();
+                    const sal_Int32 nX2 = std::clamp(nX1, aRelPos.X, aRect.getMaxX());
+                    const sal_Int32 nY2 = std::clamp(nY1, aRect.getMinY(), aRect.getMaxY());
 
                     //when the line is very short compared to the page size don't create one
                     ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
