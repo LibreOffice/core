@@ -327,7 +327,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
 // Class that implements global Item sharing. It uses rtti to
 // associate every Item-derivation with a possible incarnation
 // of a DefaultItemInstanceManager. This is the default, it will
-// give direct implementatioons at the Items that overload
+// give direct implementations at the Items that overload
 // getItemInstanceManager() preference. These are expected to
 // return static instances of a derived implementation of a
 // ItemInstanceManager.
