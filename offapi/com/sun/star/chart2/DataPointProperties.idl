@@ -317,6 +317,12 @@ service DataPointProperties
         @since LibreOffice 7.0
     */
     [optional, maybevoid, property] ::com::sun::star::chart2::RelativePosition CustomLabelPosition;
+
+    /** Custom size associated with the CUSTOM label placement.
+
+        @since LibreOffice 24.8
+    */
+    [optional, maybevoid, property] ::com::sun::star::chart2::RelativeSize CustomLabelSize;
 };
 
 } ; // chart2

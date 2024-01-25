@@ -401,6 +401,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 {
                     GetPropertySet()->setPropertyValue("LabelPlacement", uno::Any(nNew));
                     GetPropertySet()->setPropertyValue("CustomLabelPosition", uno::Any());
+                    GetPropertySet()->setPropertyValue("CustomLabelSize", uno::Any());
                     bChanged = true;
                 }
             }

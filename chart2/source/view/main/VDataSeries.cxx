@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
@@ -643,6 +644,26 @@ bool VDataSeries::isLabelCustomPos(sal_Int32 nPointIndex) const
         TOOLS_WARN_EXCEPTION("chart2", "");
     }
     return bCustom;
+}
+
+awt::Size VDataSeries::getLabelCustomSize(sal_Int32 nPointIndex) const
+{
+    awt::Size aSize(-1, -1);
+    try
+    {
+        RelativeSize aCustomLabelSize;
+        const uno::Reference<beans::XPropertySet> xPointProps(getPropertiesOfPoint(nPointIndex));
+        if (xPointProps.is() && (xPointProps->getPropertyValue("CustomLabelSize") >>= aCustomLabelSize))
+        {
+            aSize.Width = static_cast<sal_Int32>(aCustomLabelSize.Primary * m_aReferenceSize.Width);
+            aSize.Height = static_cast<sal_Int32>(aCustomLabelSize.Secondary * m_aReferenceSize.Height);
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+    return aSize;
 }
 
 double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const

@@ -324,14 +324,18 @@ void PieChart::createTextLabelShape(
     sal_Int32 nLabelPlacement = rSeries.getLabelPlacement(
         nPointIndex, m_xChartTypeModel, m_aPosHelper.isSwapXAndY());
 
+    // has an X/Y offset (relative to the OUTSIDE label default position) been provided?
+    const bool bHasCustomLabelPlacement = nLabelPlacement == css::chart::DataLabelPlacement::CUSTOM;
+    if (bHasCustomLabelPlacement)
+        nLabelPlacement = css::chart::DataLabelPlacement::OUTSIDE;
+
     ///when the placement is of `AVOID_OVERLAP` type a later rearrangement of
     ///the label position is allowed; the `createTextLabelShape` treats the
     ///`AVOID_OVERLAP` as if it was of `CENTER` type;
 
     double nVal = rSeries.getYValue(nPointIndex);
     //AVOID_OVERLAP is in fact "Best fit" in the UI.
-    bool bMovementAllowed = nLabelPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP
-                            || nLabelPlacement == css::chart::DataLabelPlacement::CUSTOM;
+    bool bMovementAllowed = nLabelPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP;
     if( bMovementAllowed )
         nLabelPlacement = css::chart::DataLabelPlacement::CENTER;
 
@@ -398,14 +402,26 @@ void PieChart::createTextLabelShape(
 
     // set the maximum text width to be used when text wrapping is enabled
     double fTextMaximumFrameWidth = 0.8 * fPieRadius;
-    if (nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE
-        && m_aAvailableOuterRect.getWidth())
+    if (m_aAvailableOuterRect.getWidth())
     {
-        if ((fAngleDegree >= 67.5 && fAngleDegree <= 112.5)
-            || (fAngleDegree >= 247.5 && fAngleDegree <= 292.5))
-            fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth() / 3.0;
-        else
-            fTextMaximumFrameWidth = 0.85 * (m_aAvailableOuterRect.getWidth() / 2.0 - fPieRadius);
+        if (bHasCustomLabelPlacement)
+        {
+            // if a custom width has been provided, then use that of course,
+            // otherwise use the interoperability-compliant 1/5 of the chart space as max width
+            const awt::Size aCustomSize = rSeries.getLabelCustomSize(nPointIndex);
+            if (aCustomSize.Width > 0)
+                fTextMaximumFrameWidth = aCustomSize.Width;
+            else
+                fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth() / 5.0;
+        }
+        else if (nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE)
+        {
+            if ((fAngleDegree >= 67.5 && fAngleDegree <= 112.5)
+                || (fAngleDegree >= 247.5 && fAngleDegree <= 292.5))
+                fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth() / 3.0;
+            else
+                fTextMaximumFrameWidth = 0.85 * (m_aAvailableOuterRect.getWidth() / 2.0 - fPieRadius);
+        }
     }
     sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
 
@@ -430,9 +446,7 @@ void PieChart::createTextLabelShape(
          *  First off the routine try to place the label inside the related pie slice,
          *  if this is not possible the label is placed outside.
          */
-        if (rSeries.getLabelPlacement(nPointIndex, m_xChartTypeModel, m_aPosHelper.isSwapXAndY())
-                == css::chart::DataLabelPlacement::CUSTOM
-            || !performLabelBestFitInnerPlacement(rParam, aPieLabelInfo))
+        if (!performLabelBestFitInnerPlacement(rParam, aPieLabelInfo))
         {
             if (m_aAvailableOuterRect.getWidth())
             {

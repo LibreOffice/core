@@ -21,6 +21,7 @@
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
@@ -291,6 +292,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         {
             RelativePosition aPos(mrModel.mxLayout->mfX, mrModel.mxLayout->mfY, css::drawing::Alignment_TOP_LEFT);
             aPropSet.setProperty(PROP_CustomLabelPosition, aPos);
+            const RelativeSize aSize(mrModel.mxLayout->mfW, mrModel.mxLayout->mfH);
+            aPropSet.setProperty(PROP_CustomLabelSize, aSize);
             sal_Int32 nPlacement = -1;
             if (bIsPie && aPropSet.getProperty(nPlacement, PROP_LabelPlacement)
                 && nPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP)

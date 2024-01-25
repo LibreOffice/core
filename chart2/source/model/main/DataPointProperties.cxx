@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
@@ -447,6 +448,11 @@ void DataPointProperties::AddPropertiesToVector(
                   cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back("CustomLabelSize", PROP_DATAPOINT_LABEL_CUSTOM_SIZE,
+                                cppu::UnoType<chart2::RelativeSize>::get(),
+                                beans::PropertyAttribute::BOUND
+                                    | beans::PropertyAttribute::MAYBEVOID);
 }
 
 void DataPointProperties::AddDefaultsToMap(

@@ -123,6 +123,7 @@ CursorPositionY
 CurveName
 CurveStyle
 CustomLabelPosition
+CustomLabelSize
 CustomShapeGeometry
 D3DSceneAmbientColor
 D3DSceneLightColor2

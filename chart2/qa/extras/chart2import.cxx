@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
 #include <iterator>
 
 #include <com/sun/star/util/Color.hpp>
@@ -37,6 +38,8 @@
 #include <basegfx/utils/gradienttools.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 
+namespace
+{
 class Chart2ImportTest : public ChartTest
 {
 public:
@@ -45,6 +48,11 @@ public:
 protected:
     void testTransparentBackground(std::u16string_view filename);
 };
+
+OUString getShapeDump(css::uno::Reference<css::chart::XChartDocument> const& doc)
+{
+    return css::uno::Reference<css::qa::XDumper>(doc, css::uno::UNO_QUERY_THROW)->dump("shapes");
+}
 
 // error bar import
 // split method up into smaller chunks for more detailed tests
@@ -187,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSteppedLines)
     }
 }
 
-static uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XChartDocument > const & xChart1Doc)
+uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XChartDocument > const & xChart1Doc)
 {
     CPPUNIT_ASSERT(xChart1Doc.is());
     uno::Reference< chart::XChartDataArray > xChartData ( xChart1Doc->getData(), UNO_QUERY_THROW);
@@ -1988,6 +1996,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146487)
     Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
     uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT_MESSAGE("chart doc should not have a title", !xTitle.is());
+
+    // tdf#146756 use manualLayout Width that was provided (so Green;  $7,654,321 is not wrapped
+    if (!IsDefaultDPI())
+        return;
+    uno::Reference<chart::XChartDocument> xDoc = getChartDocFromDrawImpress(0, 0);
+    OString aXmlDump = OUStringToOString(getShapeDump(xDoc), RTL_TEXTENCODING_UTF8);
+    xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
+    OString aPath("//XShape[@text='Green;  $7,654,321 ']"_ostr);
+    assertXPath(pXmlDoc, aPath, 1);
+    // Expected - 1 line tall(371), not 4 lines(1481).
+    CPPUNIT_ASSERT_EQUAL(OUString("371"), getXPath(pXmlDoc, aPath, "sizeY"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFixedSizeBarChartVeryLongLabel)
@@ -2248,6 +2267,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPieChartPlotAreaMarginWithAutomaticLa
     }
 }
 
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

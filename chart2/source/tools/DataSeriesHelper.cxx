@@ -467,7 +467,10 @@ void setPropertyAlsoToAllAttributedDataPoints( const rtl::Reference< ::chart::Da
                 continue;
             xPointProp->setPropertyValue( rPropertyName, rPropertyValue );
             if( rPropertyName == "LabelPlacement" )
+            {
                 xPointProp->setPropertyValue("CustomLabelPosition", uno::Any());
+                xPointProp->setPropertyValue("CustomLabelSize", uno::Any());
+            }
         }
     }
 }
