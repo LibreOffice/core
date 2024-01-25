@@ -703,24 +703,22 @@ void ChartController::executeDlg_ObjectProperties( const OUString& rSelectedObje
 {
     OUString aObjectCID = lcl_getFormatCIDforSelectedCID( rSelectedObjectCID );
 
-    UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
-                ActionDescriptionProvider::ActionType::Format,
-                ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
-            m_xUndoManager );
+    auto aUndoGuard = std::make_shared<UndoGuard>(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::ActionType::Format,
+            ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
+        m_xUndoManager );
 
-    bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, false );
-    if( bSuccess )
-        aUndoGuard.commit();
+    ChartController::executeDlg_ObjectProperties_withUndoGuard( aUndoGuard, aObjectCID, false );
 }
 
-bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
-    const OUString& rObjectCID, bool bSuccessOnUnchanged )
+void ChartController::executeDlg_ObjectProperties_withUndoGuard(
+    std::shared_ptr<UndoGuard> aUndoGuard,const OUString& rObjectCID, bool bSuccessOnUnchanged )
 {
     //return true if the properties were changed successfully
-    bool bRet = false;
     if( rObjectCID.isEmpty() )
     {
-       return bRet;
+       return;
     }
     try
     {
@@ -728,12 +726,12 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
         if( eObjectType==OBJECTTYPE_UNKNOWN )
         {
-            return bRet;
+            return;
         }
         if( eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR )
         {
             if( !getFirstDiagram()->isSupportingFloorAndWall() )
-                return bRet;
+                return;
         }
 
         //convert properties to ItemSet
@@ -742,14 +740,14 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         rtl::Reference<::chart::ChartModel> xChartDoc(getChartModel());
 
-        std::unique_ptr<wrapper::ItemConverter> pItemConverter(
+        std::shared_ptr<wrapper::ItemConverter> pItemConverter(
             createItemConverter( rObjectCID, xChartDoc, m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
                                  m_xChartView.get(),
                                  &aRefSizeProv));
 
         if (!pItemConverter)
-            return bRet;
+            return;
 
         SfxItemSet aItemSet = pItemConverter->CreateEmptyItemSet();
 
@@ -764,10 +762,10 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get() );
 
         SolarMutexGuard aGuard;
-        SchAttribTabDlg aDlg(
-                GetChartFrame(), &aItemSet, &aDialogParameter,
-                &aViewElementListProvider,
-                xChartDoc );
+        std::shared_ptr<SchAttribTabDlg> aDlgPtr = std::make_shared<SchAttribTabDlg>(
+            GetChartFrame(), &aItemSet, &aDialogParameter,
+            &aViewElementListProvider,
+            xChartDoc);
 
         if(aDialogParameter.HasSymbolProperties())
         {
@@ -786,25 +784,26 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
             sal_Int32 const nStandardSymbol=0;//@todo get from somewhere
             std::optional<Graphic> oAutoSymbolGraphic(std::in_place, aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, &aSymbolShapeProperties ) );
             // note: the dialog takes the ownership of pSymbolShapeProperties and pAutoSymbolGraphic
-            aDlg.setSymbolInformation( std::move(aSymbolShapeProperties), std::move(oAutoSymbolGraphic) );
+            aDlgPtr->setSymbolInformation( std::move(aSymbolShapeProperties), std::move(oAutoSymbolGraphic) );
         }
         if( aDialogParameter.HasStatisticProperties() )
         {
-            aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+            aDlgPtr->SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( xChartDoc, m_xChartView, rObjectCID ) );
         }
 
         //open the dialog
-        if (aDlg.run() == RET_OK || (bSuccessOnUnchanged && aDlg.DialogWasClosedWithOK()))
+        SfxTabDialogController::runAsync(aDlgPtr, [aDlgPtr, xChartDoc, pItemConverter, bSuccessOnUnchanged, aUndoGuard] (int nResult)
         {
-            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
-            if(pOutItemSet)
-            {
-                ControllerLockGuardUNO aCLGuard(xChartDoc);
-                (void)pItemConverter->ApplyItemSet(*pOutItemSet); //model should be changed now
-                bRet = true;
+            if (nResult == RET_OK || (bSuccessOnUnchanged && aDlgPtr->DialogWasClosedWithOK())) {
+                const SfxItemSet* pOutItemSet = aDlgPtr->GetOutputItemSet();
+                if(pOutItemSet) {
+                    ControllerLockGuardUNO aCLGuard(xChartDoc);
+                    (void)pItemConverter->ApplyItemSet(*pOutItemSet); //model should be changed now
+                    aUndoGuard->commit();
+                }
             }
-        }
+        });
     }
     catch( const util::CloseVetoException& )
     {
@@ -812,7 +811,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
     catch( const uno::RuntimeException& )
     {
     }
-    return bRet;
 }
 
 void ChartController::executeDispatch_View3D()

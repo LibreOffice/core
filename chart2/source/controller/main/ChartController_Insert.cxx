@@ -358,7 +358,7 @@ void ChartController::executeDispatch_OpenLegendDialog()
 
 void ChartController::executeDispatch_InsertMenu_DataLabels()
 {
-    UndoGuard aUndoGuard(
+    std::shared_ptr<UndoGuard> aUndoGuard = std::make_shared<UndoGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_DATALABELS )),
         m_xUndoManager );
@@ -375,12 +375,9 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         OUString aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticles(
             ObjectIdentifier::getSeriesParticleFromCID(m_aSelection.getSelectedCID()), aChildParticle );
 
-        bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, true );
-        if( bSuccess )
-            aUndoGuard.commit();
+        ChartController::executeDlg_ObjectProperties_withUndoGuard( aUndoGuard, aObjectCID, true );
         return;
     }
-
     try
     {
         wrapper::AllDataLabelItemConverter aItemConverter(
@@ -408,7 +405,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
             ControllerLockGuardUNO aCLGuard( getChartModel() );
             bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
             if( bChanged )
-                aUndoGuard.commit();
+                aUndoGuard->commit();
         }
     }
     catch(const uno::RuntimeException&)
