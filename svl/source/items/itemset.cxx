@@ -329,7 +329,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
 // of a DefaultItemInstanceManager. This is the default, it will
 // give direct implementatioons at the Items that overload
 // getItemInstanceManager() preference. These are expected to
-// return static instances of aderived implementation of a
+// return static instances of a derived implementation of a
 // ItemInstanceManager.
 // All in all there are now the following possibilities to support
 // this for individual Item derivations:
