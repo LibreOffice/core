@@ -179,7 +179,7 @@ protected:
     // is nullptr. If you overload this it is expected that
     // you return a ptr to a static, Item-local managed
     // instance that exists the whole office lifetime. This
-    // usually means to have a static instance irectly in the
+    // usually means to have a static instance directly in the
     // implementation of the overloaded function (just grep
     // for examples)
     virtual ItemInstanceManager* getItemInstanceManager() const;
