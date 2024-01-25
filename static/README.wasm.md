@@ -223,29 +223,33 @@ improvement! ;)
 Some usage examples through javascript of the current implementation:
 ```js
 // inserts a string at the start of the Writer document.
+Module.init_unoembind_uno();
+let css = Module.unoembind_uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
-xTextDocument = new Module.com$sun$star$text$XTextDocumentRef(xModel, Module.UnoReference_Query.UNO_QUERY);
+xTextDocument = new css.text.XTextDocument(xModel, Module.UnoReference_Query.UNO_QUERY);
 xText = xTextDocument.getText();
-xSimpleText = new Module.com$sun$star$text$XSimpleTextRef(xText, Module.UnoReference_Query.UNO_QUERY);
+xSimpleText = new css.text.XSimpleText(xText, Module.UnoReference_Query.UNO_QUERY);
 xTextCursor = xSimpleText.createTextCursor();
-xTextRange = new Module.com$sun$star$text$XTextRangeRef(xTextCursor, Module.UnoReference_Query.UNO_QUERY);
+xTextRange = new css.text.XTextRange(xTextCursor, Module.UnoReference_Query.UNO_QUERY);
 xTextRange.setString(new Module.OUString("string here!"));
 xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
 ```
 
 ```js
 // changes each paragraph of the Writer document to a random color.
+Module.init_unoembind_uno();
+let css = Module.unoembind_uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
-xTextDocument = new Module.com$sun$star$text$XTextDocumentRef(xModel, Module.UnoReference_Query.UNO_QUERY);
+xTextDocument = new css.text.XTextDocument(xModel, Module.UnoReference_Query.UNO_QUERY);
 xText = xTextDocument.getText();
-xEnumAccess = new Module.com$sun$star$container$XEnumerationAccessRef(xText, Module.UnoReference_Query.UNO_QUERY);
+xEnumAccess = new css.container.XEnumerationAccess(xText, Module.UnoReference_Query.UNO_QUERY);
 xParaEnumeration = xEnumAccess.createEnumeration();
 
 while (xParaEnumeration.hasMoreElements()) {
-    xParagraph = new Module.com$sun$star$text$XTextRangeRef();
+    xParagraph = new css.text.XTextRange();
     xParagraph.set(xParaEnumeration.nextElement(), Module.UnoReference_Query.UNO_QUERY);
     if (xParagraph.is()) {
-        xParaProps = new Module.com$sun$star$beans$XPropertySetRef(xParagraph, Module.UnoReference_Query.UNO_QUERY);
+        xParaProps = new css.beans.XPropertySet(xParagraph, Module.UnoReference_Query.UNO_QUERY);
         xParaProps.setPropertyValue(new Module.OUString("CharColor"), new Module.Any(Math.floor(Math.random() * 0xFFFFFF), Module.UnoType.long));
     }
 }
