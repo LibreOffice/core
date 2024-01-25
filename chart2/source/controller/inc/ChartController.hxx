@@ -436,7 +436,7 @@ private:
     void executeDispatch_ObjectProperties();
     void executeDispatch_FormatObject( std::u16string_view rDispatchCommand );
     void executeDlg_ObjectProperties( const OUString& rObjectCID );
-    bool executeDlg_ObjectProperties_withoutUndoGuard( const OUString& rObjectCID, bool bSuccessOnUnchanged );
+    void executeDlg_ObjectProperties_withUndoGuard( std::shared_ptr<UndoGuard> aUndoGuard, const OUString& rObjectCID, bool bSuccessOnUnchanged );
 
     void executeDispatch_ChartType();
 
