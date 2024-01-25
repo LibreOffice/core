@@ -411,7 +411,7 @@ public:
                 return pNew;
             }
 
-            // start countown from NUMBER_OF_UNSHARED_INSTANCES until zero is reached
+            // start countdown from NUMBER_OF_UNSHARED_INSTANCES until zero is reached
             maManagerPerType.insert({aHash, std::make_pair(NUMBER_OF_UNSHARED_INSTANCES, nullptr)});
             return nullptr;
         }
