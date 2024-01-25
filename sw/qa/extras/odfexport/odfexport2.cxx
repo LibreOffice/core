@@ -543,15 +543,24 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 
     loadAndReload("personalmetadata.odt");
     xmlDocUniquePtr pXmlDoc = parseExport("meta.xml");
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template", 0);
+    pXmlDoc = parseExport("settings.xml");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']",
+        0);
+    assertXPath(
+        pXmlDoc,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterSetup']",
+        0);
 
     // 2. Remove user info too
     officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(false, pBatch);
@@ -559,15 +568,24 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 
     loadAndReload("personalmetadata.odt");
     pXmlDoc = parseExport("meta.xml");
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template", 0);
+    pXmlDoc = parseExport("settings.xml");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']",
+        0);
+    assertXPath(
+        pXmlDoc,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterSetup']",
+        0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf151100)
