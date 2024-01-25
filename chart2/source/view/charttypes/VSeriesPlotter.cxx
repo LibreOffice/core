@@ -731,13 +731,11 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
 
         // in case legend symbol has to be displayed, text shape position is
         // slightly changed.
-        const awt::Point aUnrotatedTextPos(xTextShape->getPosition());
         if( xSymbol.is() )
         {
-            const awt::Point aOldTextPos( xTextShape->getPosition() );
-            awt::Point aNewTextPos( aOldTextPos );
+            awt::Point aNewTextPos(xTextShape->getPosition());
 
-            awt::Point aSymbolPosition( aUnrotatedTextPos );
+            awt::Point aSymbolPosition(aNewTextPos);
             awt::Size aSymbolSize( xSymbol->getSize() );
             awt::Size aTextSize = xTextShape->getSize();
 
