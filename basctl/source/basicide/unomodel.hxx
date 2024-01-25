@@ -53,6 +53,9 @@ public:
                                       const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
     virtual void SAL_CALL storeToURL( const   OUString& sURL,
                                       const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
+
+    // XModel
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection() override;
 };
 
 } // namespace basctl

@@ -19,6 +19,7 @@
 
 
 #include "basdoc.hxx"
+#include <basidesh.hxx>
 #include <iderdll.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <comphelper/sequence.hxx>
@@ -28,6 +29,41 @@
 #include <vcl/svapp.hxx>
 
 #include "unomodel.hxx"
+
+
+namespace {
+
+// Implements XEnumeration to hold a single selected portion of text
+// This will actually only hold a single string value
+class SelectionEnumeration : public ::cppu::WeakImplHelper<css::container::XEnumeration>
+{
+private:
+    OUString m_sText;
+    bool m_bHasElements;
+
+public:
+    explicit SelectionEnumeration(OUString& sSelectedText)
+        : m_sText(sSelectedText)
+        , m_bHasElements(true) {}
+
+    virtual sal_Bool SAL_CALL hasMoreElements() override
+    {
+        return m_bHasElements;
+    }
+
+    virtual css::uno::Any SAL_CALL nextElement() override
+    {
+        if (m_bHasElements)
+        {
+            m_bHasElements = false;
+            return css::uno::Any(m_sText);
+        }
+
+        throw css::container::NoSuchElementException();
+    }
+};
+
+} // End of unnamed namespace
 
 namespace basctl
 {
@@ -112,6 +148,21 @@ void SAL_CALL SIDEModel::storeToURL( const OUString&,
 void  SIDEModel::notImplemented()
 {
     throw io::IOException("Can't store IDE model" );
+}
+
+// XModel
+css::uno::Reference< css::uno::XInterface > SAL_CALL SIDEModel::getCurrentSelection()
+{
+    SolarMutexGuard aGuard;
+    uno::Reference<container::XEnumeration> xEnum;
+    Shell* pShell = GetShell();
+
+    if (pShell)
+    {
+        OUString sText = GetShell()->GetSelectionText(false);
+        xEnum = new SelectionEnumeration(sText);
+    }
+    return xEnum;
 }
 
 } // namespace basctl

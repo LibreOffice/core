@@ -45,6 +45,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/SearchAlgorithms.hpp>
@@ -253,11 +254,22 @@ void FindTextFieldControl::SetTextToSelected_Impl()
         else
         {
             uno::Reference<frame::XModel> xModel(xController->getModel(), uno::UNO_SET_THROW);
-            uno::Reference<container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), uno::UNO_QUERY_THROW);
-            if (xIndexAccess->getCount() > 0)
+            uno::Reference<uno::XInterface> xSelection = xModel->getCurrentSelection();
+            uno::Reference<container::XIndexAccess> xIndexAccess(xSelection, uno::UNO_QUERY);
+            if (xIndexAccess.is())
             {
-                uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
-                aString = xTextRange->getString();
+                if (xIndexAccess->getCount() > 0)
+                {
+                    uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+                    aString = xTextRange->getString();
+                }
+            }
+            else
+            {
+                // The Basic IDE returns a XEnumeration with a single item
+                uno::Reference<container::XEnumeration> xEnum(xSelection, uno::UNO_QUERY_THROW);
+                if (xEnum->hasMoreElements())
+                    xEnum->nextElement() >>= aString;
             }
         }
     }
