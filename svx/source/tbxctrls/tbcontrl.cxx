@@ -92,16 +92,19 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svl/currencytable.hxx>
+#include <svl/zformat.hxx>
 #include <svtools/langtab.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <o3tl/temporary.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <bitmaps.hlst>
 #include <sal/log.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <sfx2/IDocumentModelAccessor.hxx>
 
 #include <comphelper/lok.hxx>
 #include <tools/json_writer.hxx>
@@ -3919,7 +3922,13 @@ namespace
             SvNumberFormatter aFormatter( m_xControl->getContext(), LANGUAGE_SYSTEM );
             m_eFormatLanguage = aFormatter.GetLanguage();
 
-            SvxCurrencyToolBoxControl::GetCurrencySymbols( aList, true, aCurrencyList );
+            std::vector<sfx::CurrencyID> aCurrencyIDs;
+
+            SfxObjectShell* pDocShell = SfxObjectShell::Current();
+            if (auto pModelAccessor = pDocShell->GetDocumentModelAccessor())
+                aCurrencyIDs = pModelAccessor->getDocumentCurrencies();
+
+            SvxCurrencyToolBoxControl::GetCurrencySymbols(aList, true, aCurrencyList, aCurrencyIDs);
 
             sal_uInt16 nPos = 0, nCount = 0;
             sal_Int32 nSelectedPos = -1;
@@ -4109,8 +4118,9 @@ Reference< css::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessib
 }
 
 //static
-void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
-                                                    std::vector<sal_uInt16>& rCurrencyList )
+void SvxCurrencyToolBoxControl::GetCurrencySymbols(std::vector<OUString>& rList, bool bFlag,
+                                                   std::vector<sal_uInt16>& rCurrencyList,
+                                                   std::vector<sfx::CurrencyID> const& rDocumentCurrencyIDs)
 {
     rCurrencyList.clear();
 
@@ -4120,8 +4130,7 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
     sal_uInt16 nStart = 1;
 
     OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) + " " );
-    aString += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
-                                       rCurrencyTable[0].GetLanguage() ) );
+    aString += ApplyLreOrRleEmbedding(SvtLanguageTable::GetLanguageString(rCurrencyTable[0].GetLanguage()));
 
     rList.push_back( aString );
     rCurrencyList.push_back( sal_uInt16(-1) ); // nAuto
@@ -4140,17 +4149,40 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
 
     for( sal_uInt16 i = 1; i < nCount; ++i )
     {
-        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) );
+        auto& rCurrencyEntry = rCurrencyTable[i];
+
+        OUString aStr( ApplyLreOrRleEmbedding(rCurrencyEntry.GetBankSymbol()));
         aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol() );
+        aStr += ApplyLreOrRleEmbedding(rCurrencyEntry.GetSymbol());
         aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
-                                        rCurrencyTable[i].GetLanguage() ) );
+        aStr += ApplyLreOrRleEmbedding(SvtLanguageTable::GetLanguageString(rCurrencyEntry.GetLanguage()));
 
         std::vector<OUString>::size_type j = nStart;
-        for( ; j < rList.size(); ++j )
-            if ( aCollator.compareString( aStr, rList[j] ) < 0 )
-                break;  // insert before first greater than
+
+        // Search if the currency is present in the document
+        auto iter = std::find_if(rDocumentCurrencyIDs.begin(), rDocumentCurrencyIDs.end(), [rCurrencyEntry](sfx::CurrencyID const& rCurrency)
+        {
+            const NfCurrencyEntry* pEntry = SvNumberFormatter::GetCurrencyEntry(o3tl::temporary(bool()), rCurrency.aSymbol, rCurrency.aExtension, rCurrency.eLanguage);
+
+            if (pEntry)
+                return rCurrencyEntry.GetLanguage() == pEntry->GetLanguage() && rCurrencyEntry.GetSymbol() == pEntry->GetSymbol();
+
+            return false;
+        });
+
+        // If currency is in document, insert it on top
+        if (iter != rDocumentCurrencyIDs.end())
+        {
+            nStart++;
+        }
+        else
+        {
+            for( ; j < rList.size(); ++j )
+            {
+                if ( aCollator.compareString( aStr, rList[j] ) < 0 )
+                    break;  // insert before first greater than
+            }
+        }
 
         rList.insert( rList.begin() + j, aStr );
         rCurrencyList.insert( rCurrencyList.begin() + j, i );
@@ -4164,7 +4196,8 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
     for ( sal_uInt16 i = 1; i < nCount; ++i )
     {
         bool bInsert = true;
-        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) );
+        auto& rCurrencyEntry = rCurrencyTable[i];
+        OUString aStr( ApplyLreOrRleEmbedding(rCurrencyEntry.GetBankSymbol()));
 
         std::vector<OUString>::size_type j = nCont;
         for ( ; j < rList.size() && bInsert; ++j )

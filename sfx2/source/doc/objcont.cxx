@@ -57,6 +57,7 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/IDocumentModelAccessor.hxx>
 #include <memory>
 #include <helpids.h>
 
@@ -337,6 +338,11 @@ std::set<Color> SfxObjectShell::GetDocColors()
 }
 
 std::shared_ptr<model::ColorSet> SfxObjectShell::GetThemeColors() { return {}; }
+
+std::shared_ptr<sfx::IDocumentModelAccessor> SfxObjectShell::GetDocumentModelAccessor() const
+{
+    return {};
+}
 
 sfx::AccessibilityIssueCollection SfxObjectShell::runAccessibilityCheck()
 {

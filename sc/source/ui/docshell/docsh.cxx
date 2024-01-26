@@ -142,6 +142,7 @@
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
 #include <refupdatecontext.hxx>
+#include <DocumentModelAccessor.hxx>
 
 #include <memory>
 #include <vector>
@@ -217,6 +218,13 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
 std::set<Color> ScDocShell::GetDocColors()
 {
     return m_pDocument->GetDocColors();
+}
+
+std::shared_ptr<sfx::IDocumentModelAccessor> ScDocShell::GetDocumentModelAccessor() const
+{
+    std::shared_ptr<sfx::IDocumentModelAccessor> pReturn;
+    pReturn.reset(new sc::DocumentModelAccessor(m_pDocument));
+    return pReturn;
 }
 
 std::shared_ptr<model::ColorSet> ScDocShell::GetThemeColors()

@@ -180,6 +180,7 @@ public:
                                sal_Int32 nFileFormat,
                                bool bTemplate = false ) const override;
 
+    std::shared_ptr<sfx::IDocumentModelAccessor> GetDocumentModelAccessor() const override;
     virtual std::set<Color> GetDocColors() override;
     virtual std::shared_ptr<model::ColorSet> GetThemeColors() override;
 
