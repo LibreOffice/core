@@ -101,6 +101,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CHANGES_PASSWORD,
     HANDLE_CONSIDER_WRAP_ON_OBJPOS,
     HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,
+    HANDLE_NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER,
     HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,
     HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,
     HANDLE_TABLE_ROW_KEEP,
@@ -205,6 +206,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,                cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(),           0},
         { OUString("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         cppu::UnoType<bool>::get(),           0},
         { OUString("IgnoreFirstLineIndentInNumbering"),   HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,         cppu::UnoType<bool>::get(),           0},
+        { u"NoSpaceAfterHangingFootnoteNumbering"_ustr,   HANDLE_NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER, cppu::UnoType<bool>::get(),           0},
         { OUString("DoNotJustifyLinesWithManualBreak"),   HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,         cppu::UnoType<bool>::get(),           0},
         { OUString("DoNotResetParaAttrsForNumFont"),   HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,         cppu::UnoType<bool>::get(),           0},
         { OUString("TableRowKeep"),               HANDLE_TABLE_ROW_KEEP,         cppu::UnoType<bool>::get(),           0},
@@ -697,6 +699,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             bool bTmp = *o3tl::doAccess<bool>(rValue);
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, bTmp);
+        }
+        break;
+        case HANDLE_NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER, bTmp);
         }
         break;
         case HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
@@ -1377,6 +1385,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING);
+        }
+        break;
+        case HANDLE_NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER);
         }
         break;
         case HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
