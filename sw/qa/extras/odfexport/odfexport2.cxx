@@ -1148,6 +1148,105 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
         "is-legal"_ostr, "true");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
+{
+    // Testing NoSpaceAfterHangingFootnoteNumbering compat option
+
+    createSwDoc("footnote_spacing_hanging_para.docx");
+    // 1. Make sure that DOCX import sets NoSpaceAfterHangingFootnoteNumbering option, and creates
+    // correct layout
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(true), xSettings->getPropertyValue(
+                                                 u"NoSpaceAfterHangingFootnoteNumbering"_ustr));
+
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        sal_Int32 width
+            = getXPath(pXmlDoc,
+                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                       "width"_ostr)
+                  .toInt32();
+        CPPUNIT_ASSERT(width);
+        CPPUNIT_ASSERT_LESS(sal_Int32(100), width); // It was 720, i.e. 0.5 inch
+    }
+
+    saveAndReload(mpFilter);
+    // 2. Make sure that exported document has NoSpaceAfterHangingFootnoteNumbering option set,
+    // and has correct layout
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
+        assertXPathContent(
+            pXmlDoc,
+            "//config:config-item[@config:name='NoSpaceAfterHangingFootnoteNumbering']"_ostr,
+            "true");
+
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(true), xSettings->getPropertyValue(
+                                                 u"NoSpaceAfterHangingFootnoteNumbering"_ustr));
+
+        pXmlDoc = parseLayoutDump();
+        sal_Int32 width = getXPath(
+            pXmlDoc, "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+            "width"_ostr).toInt32();
+        CPPUNIT_ASSERT(width);
+        CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
+    }
+
+    createSwDoc("footnote_spacing_hanging_para.doc");
+    // 3. Make sure that DOC import sets NoSpaceAfterHangingFootnoteNumbering option, and creates
+    // correct layout
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(true), xSettings->getPropertyValue(
+                                                 u"NoSpaceAfterHangingFootnoteNumbering"_ustr));
+
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        sal_Int32 width
+            = getXPath(pXmlDoc,
+                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                       "width"_ostr)
+                  .toInt32();
+        CPPUNIT_ASSERT(width);
+        CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
+    }
+
+    createSwDoc("footnote_spacing_hanging_para.rtf");
+    // 4. Make sure that RTF import sets NoSpaceAfterHangingFootnoteNumbering option, and creates
+    // correct layout
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(true), xSettings->getPropertyValue(
+                                                 u"NoSpaceAfterHangingFootnoteNumbering"_ustr));
+
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        sal_Int32 width
+            = getXPath(pXmlDoc,
+                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                       "width"_ostr)
+                  .toInt32();
+        CPPUNIT_ASSERT(width);
+        CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
+    }
+
+    createSwDoc();
+    // 5. Make sure that a new Writer document has this setting set to false
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(false), xSettings->getPropertyValue(
+                                                  u"NoSpaceAfterHangingFootnoteNumbering"_ustr));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
