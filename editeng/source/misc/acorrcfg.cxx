@@ -65,13 +65,12 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
                             continue;
 
                         const OUString aBcp47( aTitle.copy( 5, aTitle.getLength() - 9));
-                        OUString aCanonicalized;
                         // Ignore invalid langtags and canonicalize for good,
                         // allow private-use tags.
-                        if (!LanguageTag::isValidBcp47( aBcp47, &aCanonicalized))
+                        const LanguageTag aLanguageTag (aBcp47, true);
+                        if (!aLanguageTag.isValidBcp47())
                             continue;
 
-                        const LanguageTag aLanguageTag( aCanonicalized);
                         if (SvtLanguageTable::HasLanguageType( aLanguageTag.getLanguageType()))
                             continue;
 
@@ -83,7 +82,7 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
                         // other private-use tag (which should not fallback,
                         // but avoid).
                         if (aLanguageTag.getCountry().isEmpty()
-                                && LanguageTag::isValidBcp47( aCanonicalized, nullptr,
+                                && LanguageTag::isValidBcp47( aLanguageTag.getBcp47(), nullptr,
                                     LanguageTag::PrivateUse::DISALLOW))
                         {
                             LanguageTag aFallback( aLanguageTag);
