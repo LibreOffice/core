@@ -137,6 +137,8 @@ struct ViewOptFlags1
             && bShowChangesInMargin == rOther.bShowChangesInMargin
             && bShowChangesInMargin2 == rOther.bShowChangesInMargin2;
     }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 enum class ViewOptCoreFlags2 {
@@ -853,6 +855,8 @@ public:
     void SetTocEntryLvl(sal_uInt8 n) { m_nTocEntryLvl = n; }
     sal_uInt8 GetIdxEntryLvl() const { return m_nIdxEntryLvl; }
     void SetIdxEntryLvl(sal_uInt8 n) { m_nIdxEntryLvl = n; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     // Useful for when getting the current view SwViewOption is not possible otherwise
     static const SwViewOption& GetCurrentViewOptions();

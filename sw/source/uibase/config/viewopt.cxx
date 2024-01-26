@@ -638,4 +638,19 @@ const SwViewOption& SwViewOption::GetCurrentViewOptions()
     return aDefaultViewOptions;
 }
 
+void SwViewOption::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwViewOption"));
+    m_nCoreOptions.dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
+void ViewOptFlags1::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ViewOptFlags1"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("view-metachars"), "%s",
+                                            BAD_CAST(OString::boolean(bViewMetachars).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
