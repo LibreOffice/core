@@ -5537,6 +5537,7 @@ if test "$using_x11" = yes; then
         disable_x11_tests
         if test "$DISABLE_DYNLOADING" = TRUE; then
             test_qt5=yes
+            test_qt6=yes
         fi
     fi
 else
@@ -13331,7 +13332,7 @@ then
     QT6_CFLAGS=$(printf '%s' "$QT6_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     QT6_LIBS="-L$qt6_libdir -lQt6Core -lQt6Gui -lQt6Widgets -lQt6Network"
     if test "$_os" = "Emscripten"; then
-        QT6_LIBS="$QT6_LIBS -lqtpcre2 -lQt6EventDispatcherSupport -lQt6FontDatabaseSupport -L${qt6_platformsdir} -lqwasm"
+        QT6_LIBS="$QT6_LIBS -lQt6BundledPcre2 -lQt6BundledZLIB -L${qt6_platformsdir} -lqwasm -sGL_ENABLE_GET_PROC_ADDRESS"
     fi
 
     if test "$USING_X11" = TRUE; then

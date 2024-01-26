@@ -27,7 +27,9 @@ $(eval $(call gb_Executable_add_cobjects,soffice_bin,\
     desktop/source/app/main \
 ))
 
+ifeq ($(OS)-$(ENABLE_QT5),EMSCRIPTEN-TRUE)
 $(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/soffice_args.js))
+endif
 
 ifeq ($(OS),WNT)
 
@@ -55,6 +57,12 @@ $(call gb_LinkTarget__static_lib_dummy_depend,unoembind)
 $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
 	-s EXPORTED_FUNCTIONS=["_main"$(COMMA)"_libreofficekit_hook"$(COMMA)"_libreofficekit_hook_2"$(COMMA)"_lok_preinit"$(COMMA)"_lok_preinit_2"] -Wl$(COMMA)--whole-archive $(call gb_StaticLibrary_get_target,unoembind) -Wl$(COMMA)--no-whole-archive \
 ))
+ifeq ($(ENABLE_QT6),TRUE)
+$(eval $(call gb_Executable_add_ldflags,soffice_bin, \
+    -s MODULARIZE=1 \
+    -s EXPORT_NAME=soffice_entry \
+))
+endif
 
 endif
 

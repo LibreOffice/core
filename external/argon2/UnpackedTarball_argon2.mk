@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,argon2,1))
 $(eval $(call gb_UnpackedTarball_add_patches,argon2,\
 	external/argon2/0001-Fix-possible-compiler-error-due-to-undefined-_MSC_VE.patch \
 	$(if $(filter WNT_AARCH64,$(OS)_$(CPUNAME)),external/argon2/0002-Add-WinARM64-vcxproj-config.patch) \
+	external/argon2/private-symbols.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

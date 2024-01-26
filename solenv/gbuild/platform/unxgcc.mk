@@ -182,7 +182,10 @@ $(if $(and $(filter CppunitTest Executable,$(TARGETTYPE)),$(filter EMSCRIPTEN,$(
 $(if $(filter TRUE,$(ENABLE_QT5)), \
     sed -e 's/@APPNAME@/$(subst $(gb_Executable_EXT),,$(notdir $(1)))/' $(QT5_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(notdir $(1)) && \
     cp $(QT5_PLATFORMS_SRCDIR)/qtlogo.svg $(QT5_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) && \
-) \
+,$(if $(filter TRUE,$(ENABLE_QT6)), \
+    sed -e 's/@APPNAME@/$(basename $(notdir $(1)))/g' -e 's/@APPEXPORTNAME@/$(basename $(notdir $(1)))_entry/g' -e 's/@PRELOAD@//g' -e 's|const instance = await qtLoad$(OPEN_PAREN){|const instance = await qtLoad$(OPEN_PAREN){ "arguments": ["--norestore"$(COMMA) "--nologo"$(COMMA) "--writer"$(COMMA) "/android/default-document/example.odt"]$(COMMA)|' -e 's/}$(CLOSE_PAREN);$$/}$(CLOSE_PAREN); window.Module = instance;/' $(QT6_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(basename $(notdir $(1))).html && \
+    cp $(QT6_PLATFORMS_SRCDIR)/qtlogo.svg $(QT6_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) && \
+)) \
     cp $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data $(dir $(1))/soffice.data && \
     cp $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.metadata $(dir $(1))/soffice.data.js.metadata \
 )
