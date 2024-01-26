@@ -1037,6 +1037,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         ts_digest.len = aTsHashResult.size();
 
         unsigned char cOne = 1;
+        unsigned char cTRUE = 0xff; // under DER rules true is 0xff, false is 0x00
         src.version.type = siUnsignedInteger;
         src.version.data = &cOne;
         src.version.len = sizeof(cOne);
@@ -1056,8 +1057,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         src.nonce.len = sizeof(nNonce);
 
         src.certReq.type = siUnsignedInteger;
-        src.certReq.data = &cOne;
-        src.certReq.len = sizeof(cOne);
+        src.certReq.data = &cTRUE;
+        src.certReq.len = sizeof(cTRUE);
 
         src.extensions = nullptr;
 
