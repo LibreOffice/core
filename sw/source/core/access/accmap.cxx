@@ -2949,8 +2949,7 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
     Point aPoint = o3tl::toTwips( rPoint, o3tl::Length::mm100 );
     if (const vcl::Window* pWin = GetShell()->GetWin())
     {
-        MapMode aMapMode;
-        GetMapMode( aPoint, aMapMode );
+        const MapMode aMapMode = GetMapMode(aPoint);
         aPoint = pWin->LogicToPixel( aPoint, aMapMode );
         aPoint = Point(pWin->OutputToAbsoluteScreenPixel( aPoint ));
     }
@@ -2963,8 +2962,7 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
     Size aSize( o3tl::toTwips( rSize, o3tl::Length::mm100 ) );
     if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
-        MapMode aMapMode;
-        GetMapMode( Point(0,0), aMapMode );
+        const MapMode aMapMode = GetMapMode(Point(0, 0));
         aSize = pWin->LogicToPixel( aSize, aMapMode );
     }
 
@@ -3073,8 +3071,7 @@ Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
     Point aPoint;
     if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
-        MapMode aMapMode;
-        GetMapMode( rPoint, aMapMode );
+        const MapMode aMapMode = GetMapMode(rPoint);
         aPoint = pWin->PixelToLogic( rPoint, aMapMode );
     }
     return aPoint;
@@ -3118,8 +3115,7 @@ tools::Rectangle SwAccessibleMap::CoreToPixel( const SwRect& rRect ) const
     tools::Rectangle aRect;
     if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
-        MapMode aMapMode;
-        GetMapMode( rRect.TopLeft(), aMapMode );
+        const MapMode aMapMode = GetMapMode(rRect.TopLeft());
         aRect = pWin->LogicToPixel( rRect.SVRect(), aMapMode );
 
         tools::Rectangle aTmpRect = pWin->PixelToLogic( aRect, aMapMode );
@@ -3137,8 +3133,7 @@ tools::Rectangle SwAccessibleMap::CoreToPixel( const SwRect& rRect ) const
     output device for mapping logic document positions to page preview window
     positions and vice versa and doesn't take care to recover its changes.
 */
-void SwAccessibleMap::GetMapMode( const Point& _rPoint,
-                                  MapMode&     _orMapMode ) const
+MapMode SwAccessibleMap::GetMapMode(const Point& _rPoint) const
 {
     MapMode aMapMode = GetShell()->GetWin()->GetMapMode();
     if( GetShell()->IsPreview() )
@@ -3146,7 +3141,7 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
         assert(mpPreview != nullptr);
         mpPreview->AdjustMapMode( aMapMode, _rPoint );
     }
-    _orMapMode = aMapMode;
+    return aMapMode;
 }
 
 Size SwAccessibleMap::GetPreviewPageSize(sal_uInt16 const nPreviewPageNum) const

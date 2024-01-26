@@ -297,12 +297,9 @@ private:
         input parameter - constant reference to point to determine the mapping
         mode adjustments for page/print preview.
 
-        @param _orMapMode
-        output parameter - reference to the mapping mode, which is determined
-        by the method
+        @return mapping mode, which is determined by the method
     */
-    void GetMapMode( const Point& _rPoint,
-                     MapMode&     _orMapMode ) const;
+    MapMode GetMapMode(const Point& _rPoint) const;
 public:
     virtual bool IsDocumentSelAll() override;
 };
