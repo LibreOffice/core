@@ -221,7 +221,14 @@ void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg
         aFillColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
     }
     SetApplicationBackgroundColor(aFillColor);
+
+    SdrOutliner& rOutliner = GetModel()->GetDrawOutliner();
+    Color aOldBackColor = rOutliner.GetBackgroundColor();
+    rOutliner.SetBackgroundColor(aFillColor);
+
     E3dView::CompleteRedraw( pOut, rReg );
+
+    rOutliner.SetBackgroundColor(aOldBackColor);
 }
 
 SdrObject* DrawViewWrapper::getSelectedObject() const
