@@ -479,7 +479,10 @@ bool Bootstrap_Impl::getValue(
 
     if (_override_base_ini != nullptr
         && _override_base_ini->getDirectValue(key, value, mode, requestStack))
+    {
+        SAL_INFO("sal.bootstrap", "getValue(" << key << ") from fundamental.override.ini");
         return true;
+    }
 
     if (key == "_OS")
     {
