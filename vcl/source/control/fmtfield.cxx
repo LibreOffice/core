@@ -27,10 +27,12 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/toolkit/field.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/formattedfielduiobject.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 #include <limits>
@@ -1358,6 +1360,12 @@ void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     SpinField::DumpAsPropertyTree(rJsonWriter);
     Formatter& rFormatter = GetFormatter();
+
+    if (weld::TimeFormatter* timeFormatter = dynamic_cast<weld::TimeFormatter*>(&rFormatter))
+    {
+        // weld::TimeFormatter uses h24 format
+        rJsonWriter.put("type", "time");
+    }
     rJsonWriter.put("min", rFormatter.GetMinValue());
     rJsonWriter.put("max", rFormatter.GetMaxValue());
     rJsonWriter.put("value", rFormatter.GetValue());
