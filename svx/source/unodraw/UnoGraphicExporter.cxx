@@ -597,7 +597,8 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner();
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
     rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
-    rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor() );
+    ::Color aOldBackColor(rOutl.GetBackgroundColor());
+    rOutl.SetBackgroundColor(pPage->GetPageBackgroundColor());
 
     // #i102251#
     const EEControlBits nOldCntrl(rOutl.GetControlWord());
@@ -988,6 +989,8 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
     // #i102251#
     rOutl.SetControlWord(nOldCntrl);
+
+    rOutl.SetBackgroundColor(aOldBackColor);
 
     return bRet;
 
