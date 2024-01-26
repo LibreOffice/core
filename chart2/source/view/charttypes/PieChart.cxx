@@ -395,12 +395,35 @@ void PieChart::createTextLabelShape(
     const double fAngleDegree
         = NormAngle360(rParam.mfUnitCircleStartAngleDegree + fHalfWidthAngleDegree);
 
+    // aOuterPosition: slice midpoint on the circumference,
+    // which is where an outside/custom label would be connected
     awt::Point aOuterPosition = PlottingPositionHelper::transformSceneToScreenPosition(
         m_aPosHelper.transformUnitCircleToScene(fAngleDegree, rParam.mfUnitCircleOuterRadius, 0),
         m_xLogicTarget, m_nDimension);
     aPieLabelInfo.aOuterPosition = basegfx::B2IVector(aOuterPosition.X, aOuterPosition.Y);
 
-    // set the maximum text width to be used when text wrapping is enabled
+    /* There are basically three places where a label could be placed in a pie chart
+     * 1.) outside the slice
+     *      -typically used for long labels or charts with many, thin slices
+     * 2.) inside the slice (center or edge)
+     *      -typically used for charts with 5 or less slices
+     * 3.) in a custom location
+     *      -typically set (by auto-positioning I presume) when labels overlap
+     *
+     * Selecting a good width for the text is critical to achieving good-looking labels.
+     * Our bestFit algorithm completely depends on a good starting guess.
+     * Lots of room for improvement here...
+     * Warning: complication due to 3D ovals (so can't use normal circle functions),
+     * donuts(m_bUseRings), auto re-scaling of the pie chart, etc.
+     *
+     * Based on observation, Microsoft uses 1/5 of the chart space as its text limit,
+     * although it will reduce the width (as long as it is not a custom position)
+     * if doing so means that the now-taller-text will fit inside the slice,
+     * so best if we do the same for our charts.
+     */
+
+    // set the maximum text width to be used when text wrapping is enabled (default text wrap is on)
+    /* A reasonable start for bestFitting a 90deg slice oriented on an Axis is 80% of the radius */
     double fTextMaximumFrameWidth = 0.8 * fPieRadius;
     const double fCompatMaxTextLen =  m_aAvailableOuterRect.getWidth() / 5.0;
     if (m_aAvailableOuterRect.getWidth())
@@ -417,15 +440,21 @@ void PieChart::createTextLabelShape(
         }
         else if (nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE)
         {
+            // use up to 80% of the available space from the slice edge to the edge of the chart
             const sal_Int32 nOuterX = aPieLabelInfo.aOuterPosition.getX();
             if (fAngleDegree < 90 || fAngleDegree > 270) // label is placed on the right side
                 fTextMaximumFrameWidth = 0.8 * abs(m_aAvailableOuterRect.getWidth() - nOuterX);
             else // label is placed on the left side
                 fTextMaximumFrameWidth = 0.8 * nOuterX;
 
+            // limited of course to the 1/5 maximum allowed for compatibility
             fTextMaximumFrameWidth = std::min(fTextMaximumFrameWidth, fCompatMaxTextLen);
          }
     }
+    /* TODO: better guesses for INSIDE: does the slice better handle wide text or tall/wrapped text?
+     *       * wide: center near X-axis, shorter text content, slice > 90degree wide
+     *       * tall: center near Y-axis, longer text content, many categories shown
+     */
     sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
 
     ///the text shape for the label is created
@@ -449,11 +478,17 @@ void PieChart::createTextLabelShape(
          *  First off the routine try to place the label inside the related pie slice,
          *  if this is not possible the label is placed outside.
          */
+
+        /* Note: bestFit surprisingly does not adjust the width of the label,
+         *       so having an optimal width already set when createDataLabel ran earlier
+         *       is crucial (and currently lacking)!
+         * TODO: * change bestFit to treat the width as a max width, and reduce if beneficial
+         */
         if (!performLabelBestFitInnerPlacement(rParam, aPieLabelInfo))
         {
             if (m_aAvailableOuterRect.getWidth())
             {
-                /* This was bestFit, but it didn't fit. So how best to handle this?
+                /* This tried to bestFit, but it didn't fit. So how best to handle this?
                  *
                  * Two possible cases relating to compatibility
                  * 1.) It did fit for Microsoft, but our bestFit wasn't able to do the same
@@ -465,7 +500,7 @@ void PieChart::createTextLabelShape(
                  *   * In that case, the compatible max length would be best
                  *   * can expect the chart space has been properly sized to handle the max length
                  *
-                 * In the native LO case, it is also best to use as small as possible,
+                 * In the native LO case, it is also best to be as small as possible,
                  * so that the user creating the diagram is annoyed and makes the chart area larger.
                  *
                  * Therefore, handle this by making the label as small as possible.
@@ -483,6 +518,7 @@ void PieChart::createTextLabelShape(
                 nTextMaximumFrameWidth = ceil(std::min(fTextMaximumFrameWidth, fCompatMaxTextLen));
             }
 
+            // find the position to connect an Outside label to
             nScreenValueOffsetInRadiusDirection = (m_nDimension != 3) ? 150 : 0;
             aScreenPosition2D
                 = aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(
@@ -504,6 +540,7 @@ void PieChart::createTextLabelShape(
             }
 
             uno::Reference<drawing::XShapes> xShapes(xChild->getParent(), uno::UNO_QUERY);
+            /* question: why remove and rebuild? Can't the existing one just be changed? */
             xShapes->remove(aPieLabelInfo.xTextShape);
             aPieLabelInfo.xTextShape
                 = createDataLabel(xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum,
