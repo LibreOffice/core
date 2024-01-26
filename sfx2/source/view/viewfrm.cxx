@@ -3406,8 +3406,11 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         if (pDeckIdItem)
         {
             const OUString aDeckId(pDeckIdItem->GetValue());
+            // Compatibility with old LOK "toggle always"
+            // TODO: check LOK with tdf#142978 Show a11y sidebar when finding issues on PDF export, hash: 53fc5fa
+            const bool isLOK = comphelper::LibreOfficeKit::isActive();
             const SfxBoolItem* pToggleItem = rReq.GetArg<SfxBoolItem>(SID_SIDEBAR_DECK_TOGGLE);
-            bool bToggle = pToggleItem && pToggleItem->GetValue();
+            bool bToggle = isLOK || (pToggleItem && pToggleItem->GetValue());
             ::sfx2::sidebar::Sidebar::ShowDeck(aDeckId, this, bToggle);
         }
         rReq.Done();
