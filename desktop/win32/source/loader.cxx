@@ -167,6 +167,8 @@ int officeloader_impl(bool bAllowConsole)
     // read limit values from fundamental.override.ini
     unsigned int nMaxMemoryInMB = 0;
     bool bExcludeChildProcesses = true;
+    bool fallbackForMaxMemoryInMB = true;
+    bool fallbackForExcludeChildProcesses = true;
 
     const WCHAR* szIniFile = L"\\fundamental.override.ini";
     const size_t nDirLen = wcslen(szIniDirectory);
@@ -182,11 +184,42 @@ int officeloader_impl(bool bAllowConsole)
             std::ifstream aFile(szBootstrapIni);
             boost::property_tree::ini_parser::read_ini(aFile, pt);
             nMaxMemoryInMB = pt.get("Bootstrap.LimitMaximumMemoryInMB", nMaxMemoryInMB);
+            fallbackForMaxMemoryInMB = !pt.get_child_optional("Bootstrap.LimitMaximumMemoryInMB");
             bExcludeChildProcesses = pt.get("Bootstrap.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
+            fallbackForExcludeChildProcesses
+                = !pt.get_child_optional("Bootstrap.ExcludeChildProcessesFromLimit");
         }
         catch (...)
         {
             nMaxMemoryInMB = 0;
+        }
+    }
+    // For backwards compatibility, for now also try to read the values from bootstrap.ini if
+    // fundamental.override.ini does not provide them:
+    if (fallbackForMaxMemoryInMB || fallbackForExcludeChildProcesses) {
+        const WCHAR* szFallbackIniFile = L"\\bootstrap.ini";
+        const size_t nFallbackDirLen = wcslen(szIniDirectory);
+        if (wcslen(szFallbackIniFile) + nFallbackDirLen < MAX_PATH)
+        {
+            WCHAR szBootstrapIni[MAX_PATH];
+            wcscpy(szBootstrapIni, szIniDirectory);
+            wcscpy(&szBootstrapIni[nFallbackDirLen], szFallbackIniFile);
+
+            try
+            {
+                boost::property_tree::ptree pt;
+                std::ifstream aFile(szBootstrapIni);
+                boost::property_tree::ini_parser::read_ini(aFile, pt);
+                if (fallbackForMaxMemoryInMB) {
+                    nMaxMemoryInMB = pt.get("Win32.LimitMaximumMemoryInMB", nMaxMemoryInMB);
+                }
+                if (fallbackForExcludeChildProcesses) {
+                    bExcludeChildProcesses = pt.get("Win32.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
+                }
+            }
+            catch (...)
+            {
+            }
         }
     }
 
