@@ -62,6 +62,7 @@
 #include <svl/srchitem.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <sfx2/IDocumentModelAccessor.hxx>
 
 #include <sfx2/sfxsids.hrc>
 
@@ -237,6 +238,7 @@ public:
     void testProtectedSheetEditByColumn();
 
     void testInsertColumnsWithFormulaCells();
+    void testDocumentModelAccessor_getDocumentCurrencies();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -337,6 +339,7 @@ public:
     CPPUNIT_TEST(testProtectedSheetEditByRow);
     CPPUNIT_TEST(testProtectedSheetEditByColumn);
     CPPUNIT_TEST(testInsertColumnsWithFormulaCells);
+    CPPUNIT_TEST(testDocumentModelAccessor_getDocumentCurrencies);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -7028,6 +7031,44 @@ void Test::testInsertColumnsWithFormulaCells()
     }
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testDocumentModelAccessor_getDocumentCurrencies()
+{
+    m_pDoc->InsertTab(0, "Sheet1");
+
+    // Check Document Currencies
+    auto pAccessor = m_xDocShell->GetDocumentModelAccessor();
+    CPPUNIT_ASSERT(pAccessor);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pAccessor->getDocumentCurrencies().size());
+
+    // Set a currency to a cell
+    {
+        m_pDoc->SetValue(ScAddress(0, 0, 0), 2.0);
+
+        OUString aCode(u"#.##0,00[$€-424]");
+
+        sal_Int32 nCheckPos;
+        SvNumFormatType eType;
+        sal_uInt32 nFormat;
+
+        m_pDoc->GetFormatTable()->PutEntry(aCode, nCheckPos, eType, nFormat, LANGUAGE_SLOVENIAN);
+        CPPUNIT_ASSERT_EQUAL(SvNumFormatType::CURRENCY, eType);
+
+        ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+        SfxItemSet& rSet = aNewAttrs.GetItemSet();
+        rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+        m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs); // A1.
+        CPPUNIT_ASSERT_EQUAL(OUString(u"2,00€"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    }
+
+    // Check Document Currencies Again
+    auto aCurrencyIDs = pAccessor->getDocumentCurrencies();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCurrencyIDs.size());
+
+    CPPUNIT_ASSERT_EQUAL(LANGUAGE_SLOVENIAN, aCurrencyIDs[0].eLanguage);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"-424"), aCurrencyIDs[0].aExtension);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"€"), aCurrencyIDs[0].aSymbol);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

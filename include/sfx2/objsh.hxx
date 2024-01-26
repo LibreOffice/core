@@ -88,7 +88,10 @@ namespace sfx2
 {
     class SvLinkSource;
     class StyleManager;
+    class IXmlIdRegistry;
 }
+
+namespace sfx { class IDocumentModelAccessor; }
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -105,8 +108,6 @@ namespace com::sun::star::security { struct DocumentSignatureInformation; }
 namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::lang { class XComponent; }
 namespace com::sun::star::text { class XTextRange; }
-
-namespace sfx2 { class IXmlIdRegistry; }
 
 #define SFX_TITLE_TITLE    0
 #define SFX_TITLE_FILENAME 1
@@ -564,7 +565,8 @@ public:
                                 GetDialogContainer();
     StarBASIC*                  GetBasic() const;
 
-    virtual std::set<Color>     GetDocColors();
+    virtual std::shared_ptr<sfx::IDocumentModelAccessor> GetDocumentModelAccessor() const;
+    virtual std::set<Color> GetDocColors();
     virtual std::shared_ptr<model::ColorSet> GetThemeColors();
 
     // Accessibility Check

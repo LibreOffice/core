@@ -30,6 +30,7 @@
 #include <svx/numfmtsh.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/tbcontrl.hxx>
+#include <sfx2/IDocumentModelAccessor.hxx>
 
 #include <limits>
 
@@ -1390,7 +1391,9 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, sal_
 
     bool bFlag = (pTmpCurrencyEntry == nullptr);
 
-    SvxCurrencyToolBoxControl::GetCurrencySymbols(rList, bFlag, aCurCurrencyList);
+    std::vector<sfx::CurrencyID> aDocumentCurrencyIDs;
+    SvxCurrencyToolBoxControl::GetCurrencySymbols(rList, bFlag, aCurCurrencyList,
+                                                  aDocumentCurrencyIDs);
 
     if (pPos == nullptr)
         return;
