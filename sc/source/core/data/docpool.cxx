@@ -136,7 +136,7 @@ SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_ALIGN_MARGIN,                SFX_ITEMINFOFLAG_NONE },    // ATTR_MARGIN
     { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_MERGE
     { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_MERGE_FLAG
-    { SID_ATTR_NUMBERFORMAT_VALUE,          SFX_ITEMINFOFLAG_NONE },    // ATTR_VALUE_FORMAT
+    { SID_ATTR_NUMBERFORMAT_VALUE,          SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_VALUE_FORMAT
     { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_LANGUAGE_FORMAT from 329, is combined with SID_ATTR_NUMBERFORMAT_VALUE in the dialog
     { SID_ATTR_BRUSH,                       SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_BACKGROUND
     { SID_SCATTR_PROTECTION,                SFX_ITEMINFOFLAG_NONE },    // ATTR_PROTECTION

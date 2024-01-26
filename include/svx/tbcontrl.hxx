@@ -146,10 +146,8 @@ class SfxStyleSheetBasePool;
 class SfxTemplateItem;
 class PaletteManager;
 
-namespace svx
-{
-    class ToolboxButtonColorUpdaterBase;
-}
+namespace svx { class ToolboxButtonColorUpdaterBase; }
+namespace sfx { struct CurrencyID; }
 
 class SvxStyleToolBoxControl final : public cppu::ImplInheritanceHelper<svt::ToolboxController,
                                                                                           css::lang::XServiceInfo>
@@ -264,7 +262,8 @@ public:
     * @see SvxNumberFormatShell::GetCurrencySymbols
     **/
     static void GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
-                                    std::vector<sal_uInt16>& rCurrencyList );
+                                    std::vector<sal_uInt16>& rCurrencyList,
+                                    std::vector<sfx::CurrencyID> const& rCurrencyIDs);
 
     explicit SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
     virtual ~SvxCurrencyToolBoxControl() override;
