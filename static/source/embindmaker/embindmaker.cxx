@@ -455,7 +455,7 @@ void writeJsMap(std::ostream& out, Module const& module, std::string const& pref
         {
             out << ",\n";
         }
-        out << prefix << "'" << ifc.copy(ifc.lastIndexOf('.') + 1) << "': Module." << jsName(ifc)
+        out << prefix << "'" << ifc.copy(ifc.lastIndexOf('.') + 1) << "': instance." << jsName(ifc)
             << "Ref";
         comma = true;
     }
@@ -597,9 +597,9 @@ SAL_IMPLEMENT_MAIN()
             std::cerr << "Cannot open \"" << jsPathname << "\" for writing\n";
             std::exit(EXIT_FAILURE);
         }
-        jsOut << "Module.init_unoembind_" << name
-              << " = function() {\n"
-                 "    Module.unoembind_"
+        jsOut << "function init_unoembind_" << name
+              << "(instance) {\n"
+                 "    instance.unoembind_"
               << name << " = {\n";
         writeJsMap(jsOut, *module, "        ");
         jsOut << "    };\n"
