@@ -422,7 +422,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         { COL_GRAY7,        COL_GRAY7       }, // CALCPAGEBREAKAUTOMATIC
         { Color(0x2300dc),  Color(0x2300DC) }, // CALCHIDDENCOLROW
         { COL_LIGHTRED,     COL_LIGHTRED    }, // CALCTEXTOVERFLOW
-        { COL_LIGHTMAGENTA, COL_LIGHTMAGENTA}, // CALCCOMMENT
+        { Color(0xbf819e),  Color(0xbf819e) }, // CALCCOMMENT
         { COL_LIGHTBLUE,    Color(0x355269) }, // CALCDETECTIVE
         { COL_LIGHTRED,     Color(0xC9211E) }, // CALCDETECTIVEERROR
         { Color(0xef0fff),  Color(0x0D23D5) }, // CALCREFERENCE
