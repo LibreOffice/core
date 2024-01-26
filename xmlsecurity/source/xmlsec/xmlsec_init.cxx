@@ -28,20 +28,20 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
 {
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
-        throw RuntimeException() ;
+        throw RuntimeException("Failed to initialize XML Security (xmlsec) library") ;
     }
 
     //Init xmlsec crypto engine library
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
     if( xmlSecMSCngInit() < 0 ) {
         xmlSecShutdown();
-        throw RuntimeException();
+        throw RuntimeException("Failed to initialize XML Security (xmlsec) for Microsoft crypto engine library");
     }
 #endif
 #ifdef XMLSEC_CRYPTO_NSS
     if( xmlSecNssInit() < 0 ) {
         xmlSecShutdown();
-        throw RuntimeException();
+        throw RuntimeException("Failed to Initialize XML Security (xmlsec) NSS crypto engine library");
     }
 #endif
 
@@ -54,7 +54,7 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
         xmlSecNssShutdown();
 #endif
         xmlSecShutdown() ;
-        throw RuntimeException() ;
+        throw RuntimeException("Failed to Initialize XML Security (xmlsec) NSS crypto engine library") ;
     }
 }
 
