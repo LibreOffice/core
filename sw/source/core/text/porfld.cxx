@@ -577,9 +577,12 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
 
         if ( !mbLabelAlignmentPosAndSpaceModeActive )
         {
-            if (!rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
+            if ((!rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
                  // #i32902#
-                 !IsFootnoteNumPortion() )
+                 !IsFootnoteNumPortion()) ||
+                 // tdf#159382
+                (IsFootnoteNumPortion() &&
+                 rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER)))
             {
                 nDiff = rInf.Left()
                     + rInf.GetTextFrame()->GetTextNodeForParaProps()->

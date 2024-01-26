@@ -133,6 +133,7 @@ class DocumentSettingManager final :
     // non-ui-compatibility flags:
     bool mbOldNumbering                             : 1;
     bool mbIgnoreFirstLineIndentInNumbering         : 1;   // #i47448#
+    bool mbNoSpaceAfterHangingFootnoteNumbering     : 1;   // tdf#159382
     bool mbDoNotJustifyLinesWithManualBreak         : 1;   // #i49277#
     bool mbDoNotResetParaAttrsForNumFont            : 1;   // #i53199#
     bool mbTableRowKeep                             : 1;
