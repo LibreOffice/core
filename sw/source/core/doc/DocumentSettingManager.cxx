@@ -138,6 +138,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
             = aOptions.GetDefault(SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara);
         mbUseVariableWidthNBSP
             = aOptions.GetDefault(SvtCompatibilityEntry::Index::UseVariableWidthNBSP);
+        mbNoSpaceAfterHangingFootnoteNumbering = aOptions.GetDefault( SvtCompatibilityEntry::Index::NoSpaceAfterHangingFootnoteNumbering );
     }
     else
     {

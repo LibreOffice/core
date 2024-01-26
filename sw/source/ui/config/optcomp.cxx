@@ -103,7 +103,8 @@ static sal_uInt32 convertBools2Ulong_Impl
     bool _bMsWordCompTrailingBlanks,
     bool bSubtractFlysAnchoredAtFlys,
     bool bEmptyDbFieldHidesPara,
-    bool bUseVariableWidthNBSP
+    bool bUseVariableWidthNBSP,
+    bool bNoSpaceAfterHangingFootnoteNumbering
 )
 {
     sal_uInt32 nRet = 0;
@@ -155,6 +156,9 @@ static sal_uInt32 convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if (bUseVariableWidthNBSP)
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if (bNoSpaceAfterHangingFootnoteNumbering)
         nRet |= nSetBit;
 
     return nRet;
@@ -225,7 +229,9 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ),
-            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseVariableWidthNBSP ) );
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseVariableWidthNBSP ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::NoSpaceAfterHangingFootnoteNumbering )
+        );
         m_xFormattingLB->append(OUString::number(nOptions), sNewEntry);
     }
 }
@@ -334,7 +340,9 @@ sal_uInt32 SwCompatibilityOptPage::GetDocumentOptions() const
             rIDocumentSettingAccess.get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ),
             rIDocumentSettingAccess.get( DocumentSettingId::SUBTRACT_FLYS ),
             rIDocumentSettingAccess.get( DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA ),
-            rIDocumentSettingAccess.get( DocumentSettingId::USE_VARIABLE_WIDTH_NBSP ) );
+            rIDocumentSettingAccess.get( DocumentSettingId::USE_VARIABLE_WIDTH_NBSP ),
+            rIDocumentSettingAccess.get(DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER)
+        );
     }
     return nRet;
 }
@@ -451,6 +459,11 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
                     case SvtCompatibilityEntry::Index::UseVariableWidthNBSP:
                         m_pWrtShell->GetDoc()->getIDocumentSettingAccess()
                             .set(DocumentSettingId::USE_VARIABLE_WIDTH_NBSP, bChecked);
+                        break;
+
+                    case SvtCompatibilityEntry::Index::NoSpaceAfterHangingFootnoteNumbering:
+                        m_pWrtShell->GetDoc()->getIDocumentSettingAccess().set(
+                            DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER, bChecked);
                         break;
 
                     default:

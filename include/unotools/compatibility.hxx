@@ -62,6 +62,7 @@ class SvtCompatibilityEntry
             SubtractFlysAnchoredAtFlys,
             EmptyDbFieldHidesPara,
             UseVariableWidthNBSP,
+            NoSpaceAfterHangingFootnoteNumbering,
 
             /// special entry: optcomp.cxx converts the other values to
             /// integers but not this one because it doesn't have its own

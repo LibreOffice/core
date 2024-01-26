@@ -65,6 +65,7 @@ SvtCompatibilityEntry::SvtCompatibilityEntry()
     setValue<bool>( Index::EmptyDbFieldHidesPara, true );
     setValue<bool>( Index::AddTableLineSpacing, false );
     setValue<bool>( Index::UseVariableWidthNBSP, false );
+    setValue<bool>(Index::NoSpaceAfterHangingFootnoteNumbering, false);
 }
 
 OUString SvtCompatibilityEntry::getName( const Index rIdx )
@@ -91,6 +92,7 @@ OUString SvtCompatibilityEntry::getName( const Index rIdx )
         "SubtractFlysAnchoredAtFlys",
         "EmptyDbFieldHidesPara",
         "UseVariableWidthNBSP",
+        "NoSpaceAfterHangingFootnoteNumbering",
 
         "AddTableLineSpacing" // Must be the last one
     };

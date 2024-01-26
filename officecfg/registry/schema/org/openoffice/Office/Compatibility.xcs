@@ -134,6 +134,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="NoSpaceAfterHangingFootnoteNumbering" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Do not add an extra space after number in footnotes with hanging first line</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>
