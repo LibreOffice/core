@@ -520,11 +520,14 @@ void PieChart::createTextLabelShape(
             else if (nY1 > aRect.getMaxY())
                 nY2 = aRect.getMaxY();
 
-            sal_Int32 nSquaredDistanceFromOrigin
+            const sal_Int32 nLabelSquaredDistanceFromOrigin
                 = (nX2 - aOrigin.X) * (nX2 - aOrigin.X) + (nY2 - aOrigin.Y) * (nY2 - aOrigin.Y);
+            // can't use fSquaredPieRadius for 3D charts, since no longer a true circle
+            const sal_Int32 nPieEdgeSquaredDistanceFromOrigin
+                = (nX1 - aOrigin.X) * (nX1 - aOrigin.X) + (nY1 - aOrigin.Y) * (nY1 - aOrigin.Y);
 
             // tdf#138018 Don't show leader line when custom positioned data label is inside pie chart
-            if (nSquaredDistanceFromOrigin > fSquaredPieRadius)
+            if (nLabelSquaredDistanceFromOrigin > nPieEdgeSquaredDistanceFromOrigin)
             {
                 //when the line is very short compared to the page size don't create one
                 ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
