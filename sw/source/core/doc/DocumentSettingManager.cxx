@@ -192,6 +192,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION: return mbConsiderWrapOnObjPos;
         case DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK: return mbDoNotJustifyLinesWithManualBreak;
         case DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING: return mbIgnoreFirstLineIndentInNumbering;
+        case DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER: return mbNoSpaceAfterHangingFootnoteNumbering;
         case DocumentSettingId::TABLE_ROW_KEEP: return mbTableRowKeep;
         case DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
         case DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
@@ -336,6 +337,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
             mbIgnoreFirstLineIndentInNumbering = value;
+            break;
+        case DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER:
+            mbNoSpaceAfterHangingFootnoteNumbering = value;
             break;
 
         case DocumentSettingId::TABLE_ROW_KEEP:
@@ -697,6 +701,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbStylesNoDefault = rSource.mbStylesNoDefault;
     mbOldNumbering = rSource.mbOldNumbering;
     mbIgnoreFirstLineIndentInNumbering = rSource.mbIgnoreFirstLineIndentInNumbering;
+    mbNoSpaceAfterHangingFootnoteNumbering = rSource.mbNoSpaceAfterHangingFootnoteNumbering;
     mbDoNotJustifyLinesWithManualBreak = rSource.mbDoNotJustifyLinesWithManualBreak;
     mbDoNotResetParaAttrsForNumFont = rSource.mbDoNotResetParaAttrsForNumFont;
     mbTableRowKeep = rSource.mbTableRowKeep;
@@ -878,6 +883,12 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("value"),
         BAD_CAST(OString::boolean(mbIgnoreFirstLineIndentInNumbering).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbNoSpaceAfterHangingFootnoteNumbering"));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::boolean(mbNoSpaceAfterHangingFootnoteNumbering).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbDoNotJustifyLinesWithManualBreak"));
