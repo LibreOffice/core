@@ -114,9 +114,9 @@ IMPL_LINK_NOARG(SvxMetricField, ModifyHdl, weld::MetricSpinButton&, void)
 
 void SvxMetricField::ReleaseFocus_Impl()
 {
-    if( SfxViewShell::Current() )
+    if (const SfxViewShell* pViewShell = SfxViewShell::Current())
     {
-        vcl::Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        vcl::Window* pShellWnd = pViewShell->GetWindow();
         if ( pShellWnd )
             pShellWnd->GrabFocus();
     }

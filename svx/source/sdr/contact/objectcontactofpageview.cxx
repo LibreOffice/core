@@ -219,8 +219,8 @@ namespace sdr::contact
             aNewViewInformation2D.setViewport(aViewRange);
             aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(GetSdrPage()));
             aNewViewInformation2D.setViewTime(fCurrentTime);
-            if (SfxViewShell::Current())
-                aNewViewInformation2D.setAutoColor(SfxViewShell::Current()->GetColorConfigColor(svtools::DOCCOLOR));
+            if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+                aNewViewInformation2D.setAutoColor(pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
             updateViewInformation2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
