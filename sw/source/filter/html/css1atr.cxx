@@ -1055,7 +1055,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
             {
                 // the Attribute exists only in the reference; the default
                 // might have to be exported
-                rItemSet.Put( rItemSet.GetPool()->GetDefaultItem(nWhich) );
+                rItemSet.Put( rItemSet.GetPool()->GetUserOrPoolDefaultItem(nWhich) );
             }
         }
 

@@ -1104,7 +1104,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                     {
                         // fetch the default from ItemPool
                         if(SfxItemPool::IsWhich(pMap->nWID))
-                            aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                            aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
                     }
 
                     if( aSet.GetItemState( pMap->nWID ) == SfxItemState::SET )
@@ -1208,7 +1208,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
                 {
                     // fetch the default from ItemPool
                     if(SfxItemPool::IsWhich(pMap->nWID))
-                        aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                        aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
                 }
 
                 if( aSet.Count() )
@@ -1586,7 +1586,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
             if( SfxItemPool::IsWhich(pMap->nWID) )
             {
                 SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
-                aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
                 return GetAnyForItem( aSet, pMap );
             }
         }

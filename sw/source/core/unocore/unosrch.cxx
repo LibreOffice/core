@@ -154,7 +154,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     auto funcClone = [&rSet](sal_uInt16 nWID, std::unique_ptr<SfxPoolItem> & rpPoolItem)
     {
         if(!rpPoolItem)
-            rpPoolItem.reset(rSet.GetPool()->GetDefaultItem(nWID).Clone());
+            rpPoolItem.reset(rSet.GetPool()->GetUserOrPoolDefaultItem(nWID).Clone());
         return rpPoolItem.get();
     };
     for(auto const & rPair : maValues)

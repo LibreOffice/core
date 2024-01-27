@@ -286,7 +286,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
 void SwDoc::RemoveAllFormatLanguageDependencies()
 {
     /* Restore the language independent pool defaults and styles. */
-    GetAttrPool().ResetPoolDefaultItem( RES_PARATR_ADJUST );
+    GetAttrPool().ResetUserDefaultItem( RES_PARATR_ADJUST );
 
     SwTextFormatColl * pTextFormatColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD );
 
@@ -305,7 +305,7 @@ void SwDoc::RemoveAllFormatLanguageDependencies()
     }
 
     //#i16874# AutoKerning as default for new documents
-    GetAttrPool().ResetPoolDefaultItem( RES_CHRATR_AUTOKERN );
+    GetAttrPool().ResetUserDefaultItem( RES_CHRATR_AUTOKERN );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

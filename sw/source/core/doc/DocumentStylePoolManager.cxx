@@ -133,7 +133,7 @@ namespace
         };
         for(const auto & n : aArr)
         {
-            LanguageType nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
+            LanguageType nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetUserOrPoolDefaultItem(
                                 n.nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
@@ -162,7 +162,7 @@ namespace
 
         for(const auto & n : aArr)
         {
-            LanguageType nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
+            LanguageType nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetUserOrPoolDefaultItem(
                                 n.nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( n.nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );

@@ -44,7 +44,7 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
     // RTF default FontSize 12Pt
     tools::Long nMM = o3tl::convert(12, o3tl::Length::pt, o3tl::Length::mm100);
 
-    pPool->SetPoolDefaultItem( SvxFontHeightItem( nMM, 100, EE_CHAR_FONTHEIGHT ) );
+    pPool->SetUserDefaultItem( SvxFontHeightItem( nMM, 100, EE_CHAR_FONTHEIGHT ) );
     // Free-flying pInsDefault
     pInsDefault.reset( new ScRTFCellDefault( pPool.get() ) );
 }

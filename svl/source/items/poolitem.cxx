@@ -510,7 +510,8 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     , m_nSerialNumber(nUsedSfxPoolItemCount)
 #endif
     , m_bStaticDefault(false)
-    , m_bPoolDefault(false)
+    , m_bDynamicDefault(false)
+    , m_bUserDefault(false)
     , m_bIsSetItem(false)
     , m_bShareable(true)
 #ifdef DBG_UTIL

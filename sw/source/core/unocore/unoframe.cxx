@@ -2629,7 +2629,7 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
         if ( pEntry->nWID < RES_FRMATR_END )
         {
             const SfxPoolItem& rDefItem =
-                pFormat->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+                pFormat->GetDoc()->GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
             rDefItem.QueryValue(aRet, pEntry->nMemberId);
         }
 

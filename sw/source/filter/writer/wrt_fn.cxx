@@ -89,7 +89,7 @@ SwHTMLWriter& Out_SfxItemSet( const SwAttrFnTab pTab, SwHTMLWriter& rWrt,
         while( nWhich )
         {
             if( SfxItemState::SET == aIter.GetItemState( bDeep, &pItem ) &&
-                (   *pItem != rPool.GetDefaultItem( nWhich )
+                (   *pItem != rPool.GetUserOrPoolDefaultItem( nWhich )
                     || ( pSet->GetParent() &&
                         *pItem != pSet->GetParent()->Get( nWhich ))
                 ))

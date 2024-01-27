@@ -139,7 +139,7 @@ void SmEditEngine::setSmItemPool(SfxItemPool* mpItemPool, const SvtLinguOptions&
         vcl::Font aFont = OutputDevice::GetDefaultFont(aFontData.nFontType, nLang,
                                                        GetDefaultFontFlags::OnlyOne);
         aFont.SetColor(aTextColor);
-        mpItemPool->SetPoolDefaultItem(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
+        mpItemPool->SetUserDefaultItem(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
                                                    aFont.GetStyleName(), aFont.GetPitch(),
                                                    aFont.GetCharSet(), aFontData.nFontInfoId));
     }
@@ -148,11 +148,11 @@ void SmEditEngine::setSmItemPool(SfxItemPool* mpItemPool, const SvtLinguOptions&
     SvxFontHeightItem aFontHeight(
         aDefaultDevice->LogicToPixel(Size(0, 11), MapMode(MapUnit::MapPoint)).Height(), 100,
         EE_CHAR_FONTHEIGHT);
-    mpItemPool->SetPoolDefaultItem(aFontHeight);
+    mpItemPool->SetUserDefaultItem(aFontHeight);
     aFontHeight.SetWhich(EE_CHAR_FONTHEIGHT_CJK);
-    mpItemPool->SetPoolDefaultItem(aFontHeight);
+    mpItemPool->SetUserDefaultItem(aFontHeight);
     aFontHeight.SetWhich(EE_CHAR_FONTHEIGHT_CTL);
-    mpItemPool->SetPoolDefaultItem(aFontHeight);
+    mpItemPool->SetUserDefaultItem(aFontHeight);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

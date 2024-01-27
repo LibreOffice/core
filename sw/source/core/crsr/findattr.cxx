@@ -278,7 +278,7 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
                 break; // end of text attributes
 
             if( SfxItemState::SET == rSet.GetItemState( nWhich, !m_bNoColls, &pFndItem )
-                && !CmpAttr( *pFndItem, rSet.GetPool()->GetDefaultItem( nWhich ) ))
+                && !CmpAttr( *pFndItem, rSet.GetPool()->GetUserOrPoolDefaultItem( nWhich ) ))
             {
                 m_pFindArr[ nWhich - m_nArrStart ] =
                     SwSrchChrAttr( *pFndItem, m_nNodeStart, m_nNodeEnd );
@@ -412,7 +412,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
             if( SfxItemState::DONTCARE == eState  )
             {
                 // Will the attribute become valid?
-                if( !CmpAttr( m_aComapeSet.GetPool()->GetDefaultItem( nWhch ),
+                if( !CmpAttr( m_aComapeSet.GetPool()->GetUserOrPoolDefaultItem( nWhch ),
                     *pTmpItem ))
                 {
                     // search attribute and extend if needed
@@ -570,7 +570,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
             if( SfxItemState::DONTCARE == eState  )
             {
                 // Will the attribute become valid?
-                if( !CmpAttr( m_aComapeSet.GetPool()->GetDefaultItem( nWhch ),
+                if( !CmpAttr( m_aComapeSet.GetPool()->GetUserOrPoolDefaultItem( nWhch ),
                     *pTmpItem ) )
                 {
                     // search attribute and extend if needed
@@ -889,7 +889,7 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
         {
             nWhich = rCmpSet.GetWhichByOffset( aIter.GetCurPos() );
             if( SfxItemState::SET != rNdSet.GetItemState( nWhich, !bNoColls, &pNdItem )
-                || CmpAttr( *pNdItem, rNdSet.GetPool()->GetDefaultItem( nWhich ) ))
+                || CmpAttr( *pNdItem, rNdSet.GetPool()->GetUserOrPoolDefaultItem( nWhich ) ))
                 return false;
         }
         else
@@ -1384,7 +1384,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
                 // reset all that are not set with pool defaults
                 if( !IsInvalidItem( pItem ) && SfxItemState::SET !=
                     pReplSet->GetItemState( pItem->Which(), false ))
-                    aSet.Put( pPool->GetDefaultItem( pItem->Which() ));
+                    aSet.Put( pPool->GetUserOrPoolDefaultItem( pItem->Which() ));
 
                 pItem = aIter.NextItem();
             } while (pItem);

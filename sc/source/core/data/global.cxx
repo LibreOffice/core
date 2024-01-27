@@ -146,10 +146,10 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
         // Contains a Default Item
         // PoolItems, meaning Item comparison necessary
         if (!pOldItem)
-            pOldItem = &rOldAttrs.GetPool()->GetDefaultItem( nWhich );
+            pOldItem = &rOldAttrs.GetPool()->GetUserOrPoolDefaultItem( nWhich );
 
         if (!pNewItem)
-            pNewItem = &rNewAttrs.GetPool()->GetDefaultItem( nWhich );
+            pNewItem = &rNewAttrs.GetPool()->GetUserOrPoolDefaultItem( nWhich );
 
         bInvalidate = (*pNewItem != *pOldItem);
     }

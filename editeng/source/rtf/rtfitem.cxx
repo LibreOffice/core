@@ -1842,7 +1842,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
             while( nTabCount )
                 const_cast<SvxTabStop&>(aNewTab[ --nTabCount ]).GetAdjustment() = SvxTabAdjust::Default;
 
-            pAttrPool->SetPoolDefaultItem( aNewTab );
+            pAttrPool->SetUserDefaultItem( aNewTab );
         }
         break;
     }
@@ -1854,7 +1854,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
         const SfxPoolItem* pItem = aIter.GetCurItem();
         do
         {
-            pAttrPool->SetPoolDefaultItem( *pItem );
+            pAttrPool->SetUserDefaultItem( *pItem );
             pItem = aIter.NextItem();
         } while (pItem);
     }

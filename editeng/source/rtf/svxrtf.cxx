@@ -598,7 +598,7 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
         return it->second;
     }
     const SvxFontItem& rDfltFont =
-        pAttrPool->GetDefaultItem(aPlainMap[SID_ATTR_CHAR_FONT]);
+        pAttrPool->GetUserOrPoolDefaultItem(aPlainMap[SID_ATTR_CHAR_FONT]);
     pDfltFont->SetFamilyName( rDfltFont.GetStyleName() );
     pDfltFont->SetFamily( rDfltFont.GetFamily() );
     return *pDfltFont;
@@ -653,7 +653,7 @@ void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
         {
             if (SfxItemPool::IsWhich(nWhich) &&
                 SfxItemState::SET == aIter.GetItemState( false, &pItem ) &&
-                     rPool.GetDefaultItem( nWhich ) == *pItem )
+                     rPool.GetUserOrPoolDefaultItem( nWhich ) == *pItem )
                 aIter.ClearItem();       // delete
         }
     }
@@ -674,7 +674,7 @@ void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
             }
             else if (SfxItemPool::IsWhich(nWhich) &&
                     SfxItemState::SET == aIter.GetItemState( false, &pItem ) &&
-                     rPool.GetDefaultItem( nWhich ) == *pItem )
+                     rPool.GetUserOrPoolDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete
         }
     }
@@ -959,7 +959,7 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
         {
             SvxScriptSpaceItem aItem( false, nId );
             if( bNewDoc )
-                pAttrPool->SetPoolDefaultItem( aItem );
+                pAttrPool->SetUserDefaultItem( aItem );
             else
                 pRTFDefaults->Put( aItem );
         }

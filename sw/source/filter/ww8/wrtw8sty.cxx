@@ -552,7 +552,7 @@ void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
     // dynamic defaults
     const SfxItemPool& rPool = *rFormat.GetAttrSet().GetPool();
     for( n = nStt; n < nEnd; ++n )
-        aFlags[ n - RES_CHRATR_BEGIN ] = nullptr != rPool.GetPoolDefaultItem( n )
+        aFlags[ n - RES_CHRATR_BEGIN ] = nullptr != rPool.GetUserDefaultItem( n )
             || SfxItemState::SET == m_rExport.m_rDoc.GetDfltTextFormatColl()->GetItemState( n, false );
 
     // static defaults, that differs between WinWord and SO
@@ -925,7 +925,7 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
         pFont->GetFamily(), pFont->GetCharSet()));
 
     const SfxItemPool& rPool = rDoc.GetAttrPool();
-    pFont = rPool.GetPoolDefaultItem(RES_CHRATR_FONT);
+    pFont = rPool.GetUserDefaultItem(RES_CHRATR_FONT);
     if (nullptr != pFont)
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),

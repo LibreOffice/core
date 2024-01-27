@@ -2896,7 +2896,7 @@ const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
         if (!pRet)
             pRet = m_pStandardFormatColl ? &(m_pStandardFormatColl->GetFormatAttr(nWhich)) : nullptr;
         if (!pRet)
-            pRet = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
+            pRet = &m_rDoc.GetAttrPool().GetUserOrPoolDefaultItem(nWhich);
     }
     else if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
     {
@@ -2912,7 +2912,7 @@ const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
         if (!pRet)
             pRet = m_pStandardFormatColl ? &(m_pStandardFormatColl->GetFormatAttr(nWhich)) : nullptr;
         if (!pRet)
-            pRet = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
+            pRet = &m_rDoc.GetAttrPool().GetUserOrPoolDefaultItem(nWhich);
     }
     else
         pRet = m_xCtrlStck->GetFormatAttr(*m_pPaM->GetPoint(), nWhich);
@@ -4401,7 +4401,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                             pLeftMargin->SetTextLeft(pNumFormat->GetIndentAt());
 
                             // If have not explicit left, set number format list tab position is doc default tab
-                            const SvxTabStopItem *pDefaultStopItem = m_rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP);
+                            const SvxTabStopItem *pDefaultStopItem = m_rDoc.GetAttrPool().GetUserDefaultItem(RES_PARATR_TABSTOP);
                             if ( pDefaultStopItem &&  pDefaultStopItem->Count() > 0 )
                                 const_cast<SwNumFormat*>(pNumFormat)->SetListtabPos( const_cast<SvxTabStop&>((*pDefaultStopItem)[0]).GetTabPos() );
                         }

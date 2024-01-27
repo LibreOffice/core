@@ -100,7 +100,7 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
         {
             // if the item isn't set we maybe take the default item
             if( !bSet )
-                pEEItem = &rObjItemSet.GetPool()->GetDefaultItem(nEEWhich);
+                pEEItem = &rObjItemSet.GetPool()->GetUserOrPoolDefaultItem(nEEWhich);
 
             // now we clone the item with the which id of the writer
             rItemSet.Put( pEEItem->CloneSetWhich(nSwWhich) );

@@ -58,16 +58,16 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     constexpr tools::Long nDefEdgeDist
         = o3tl::convert(500, o3tl::Length::mm100, o3tl::Length::twip);
 
-    pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
-    pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
-    pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
-    pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
+    pSdrPool->SetUserDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
+    pSdrPool->SetUserDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
+    pSdrPool->SetUserDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
+    pSdrPool->SetUserDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
 
     // #i33700# // Set shadow distance defaults as PoolDefaultItems
     constexpr tools::Long nDefShadowDist
         = o3tl::convert(300, o3tl::Length::mm100, o3tl::Length::twip);
-    pSdrPool->SetPoolDefaultItem(makeSdrShadowXDistItem(nDefShadowDist));
-    pSdrPool->SetPoolDefaultItem(makeSdrShadowYDistItem(nDefShadowDist));
+    pSdrPool->SetUserDefaultItem(makeSdrShadowXDistItem(nDefShadowDist));
+    pSdrPool->SetUserDefaultItem(makeSdrShadowYDistItem(nDefShadowDist));
 
     rtl::Reference<SfxItemPool> pEEgPool = EditEngine::CreatePool();
 
@@ -141,7 +141,7 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
             const SfxItemSet* pParent(GetParent());
             m_pOldSet->PutImpl(nullptr != pParent
                 ? pParent->Get(nWhich)
-                : GetPool()->GetDefaultItem(nWhich), false);
+                : GetPool()->GetUserOrPoolDefaultItem(nWhich), false);
         }
         else if (!IsInvalidItem(pOld))
         {
@@ -159,7 +159,7 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
             const SfxItemSet* pParent(GetParent());
             m_pNewSet->PutImpl(nullptr != pParent
                 ? pParent->Get(nWhich)
-                : GetPool()->GetDefaultItem(nWhich), false);
+                : GetPool()->GetUserOrPoolDefaultItem(nWhich), false);
         }
         else if (!IsInvalidItem(pNew))
         {

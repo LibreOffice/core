@@ -107,7 +107,7 @@ CntItemPool::CntItemPool()
     SetItemInfos( pPoolDefs_Impl->GetItemInfos() );
 
     // Set static pool default items.
-    SetDefaults( pPoolDefs_Impl->GetDefaults() );
+    SetPoolDefaults( pPoolDefs_Impl->GetDefaults() );
 }
 
 
@@ -115,7 +115,7 @@ CntItemPool::CntItemPool()
 CntItemPool::~CntItemPool()
 {
     // Release static pool default items.
-    ReleaseDefaults();
+    ReleasePoolDefaults();
 }
 
 

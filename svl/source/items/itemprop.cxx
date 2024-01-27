@@ -120,7 +120,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry& rEntry
     const SfxPoolItem* pItem = nullptr;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID) )
-        pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
+        pItem = &rSet.GetPool()->GetUserOrPoolDefaultItem(rEntry.nWID);
     // return item values as uno::Any
     if(eState >= SfxItemState::DEFAULT && pItem)
     {
@@ -168,7 +168,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry& rEntry
     std::unique_ptr<SfxPoolItem> pNewItem;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID))
-        pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
+        pItem = &rSet.GetPool()->GetUserOrPoolDefaultItem(rEntry.nWID);
     if (pItem)
     {
         pNewItem.reset(pItem->Clone());

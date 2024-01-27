@@ -739,7 +739,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         .WriteOString(OOO_STRING_SVTOOLS_RTF_ANSI);
     Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_DEFF);
     Strm().WriteNumberAsString(
-        m_aFontHelper.GetId(m_rDoc.GetAttrPool().GetDefaultItem(RES_CHRATR_FONT)));
+        m_aFontHelper.GetId(m_rDoc.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_FONT)));
     // If this not exist, MS don't understand our ansi characters (0x80-0xff).
     Strm().WriteOString("\\adeflang1025");
 
@@ -1258,7 +1258,7 @@ void RtfExport::OutColorTable()
     {
         auto pCol = GetDfltAttr(RES_CHRATR_COLOR);
         InsColor(pCol->GetValue());
-        pCol = rPool.GetPoolDefaultItem(RES_CHRATR_COLOR);
+        pCol = rPool.GetUserDefaultItem(RES_CHRATR_COLOR);
         if (pCol)
             InsColor(pCol->GetValue());
         rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_COLOR);
@@ -1297,7 +1297,7 @@ void RtfExport::OutColorTable()
     {
         auto pBackground = static_cast<const SvxBrushItem*>(GetDfltAttr(*pIds));
         InsColor(pBackground->GetColor());
-        pBackground = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds));
+        pBackground = static_cast<const SvxBrushItem*>(rPool.GetUserDefaultItem(*pIds));
         if (pBackground)
         {
             InsColor(pBackground->GetColor());
@@ -1317,7 +1317,7 @@ void RtfExport::OutColorTable()
     {
         auto pShadow = GetDfltAttr(RES_SHADOW);
         InsColor(pShadow->GetColor());
-        pShadow = rPool.GetPoolDefaultItem(RES_SHADOW);
+        pShadow = rPool.GetUserDefaultItem(RES_SHADOW);
         if (nullptr != pShadow)
         {
             InsColor(pShadow->GetColor());
@@ -1335,7 +1335,7 @@ void RtfExport::OutColorTable()
 
     // frame border color
     {
-        const SvxBoxItem* pBox = rPool.GetPoolDefaultItem(RES_BOX);
+        const SvxBoxItem* pBox = rPool.GetUserDefaultItem(RES_BOX);
         if (nullptr != pBox)
             InsColorLine(*pBox);
         rPool.GetItemSurrogates(aSurrogates, RES_BOX);
@@ -1348,7 +1348,7 @@ void RtfExport::OutColorTable()
     }
 
     {
-        const SvxBoxItem* pCharBox = rPool.GetPoolDefaultItem(RES_CHRATR_BOX);
+        const SvxBoxItem* pCharBox = rPool.GetUserDefaultItem(RES_CHRATR_BOX);
         if (pCharBox)
             InsColorLine(*pCharBox);
         rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_BOX);

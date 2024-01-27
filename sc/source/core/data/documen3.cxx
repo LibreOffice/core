@@ -1976,9 +1976,9 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
     if ( mxPoolHelper.is() )
     {
         ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
-        pPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, ATTR_FONT_LANGUAGE ) );
-        pPool->SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, ATTR_CJK_FONT_LANGUAGE ) );
-        pPool->SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, ATTR_CTL_FONT_LANGUAGE ) );
+        pPool->SetUserDefaultItem( SvxLanguageItem( eLanguage, ATTR_FONT_LANGUAGE ) );
+        pPool->SetUserDefaultItem( SvxLanguageItem( eCjkLanguage, ATTR_CJK_FONT_LANGUAGE ) );
+        pPool->SetUserDefaultItem( SvxLanguageItem( eCtlLanguage, ATTR_CTL_FONT_LANGUAGE ) );
     }
 
     UpdateDrawLanguages(); // Set edit engine defaults in drawing layer pool
@@ -2097,7 +2097,7 @@ void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     RemoveFlagsTab( nCol, nRow, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
 
-    const ScMergeAttr* pDefAttr = &mxPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE );
+    const ScMergeAttr* pDefAttr = &mxPoolHelper->GetDocPool()->GetUserOrPoolDefaultItem( ATTR_MERGE );
     ApplyAttr( nCol, nRow, nTab, *pDefAttr );
 }
 

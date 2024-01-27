@@ -171,11 +171,11 @@ SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHel
     m_pItemPool->SetDefaultMetric(m_eObjUnit);
 
 // using static SdrEngineDefaults only if default SvxFontHeight item is not available
-    const SfxPoolItem* pPoolItem = m_pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
+    const SfxPoolItem* pPoolItem = m_pItemPool->GetUserDefaultItem( EE_CHAR_FONTHEIGHT );
     if (pPoolItem)
         mnDefTextHgt = static_cast<const SvxFontHeightItem*>(pPoolItem)->GetHeight();
 
-    m_pItemPool->SetPoolDefaultItem( makeSdrTextWordWrapItem( false ) );
+    m_pItemPool->SetUserDefaultItem( makeSdrTextWordWrapItem( false ) );
 
     SetTextDefaults();
     m_pLayerAdmin->SetModel(this);
@@ -638,7 +638,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
     aSvxFontItem.SetStyleName(OUString());
     aSvxFontItem.SetPitch( aFont.GetPitch());
     aSvxFontItem.SetCharSet( aFont.GetCharSet() );
-    pItemPool->SetPoolDefaultItem(aSvxFontItem);
+    pItemPool->SetUserDefaultItem(aSvxFontItem);
 
     // get DEFAULTFONT_CJK_TEXT and set at pool as dynamic default
     vcl::Font aFontCJK(OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
@@ -647,7 +647,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
     aSvxFontItemCJK.SetStyleName(OUString());
     aSvxFontItemCJK.SetPitch( aFontCJK.GetPitch());
     aSvxFontItemCJK.SetCharSet( aFontCJK.GetCharSet());
-    pItemPool->SetPoolDefaultItem(aSvxFontItemCJK);
+    pItemPool->SetUserDefaultItem(aSvxFontItemCJK);
 
     // get DEFAULTFONT_CTL_TEXT and set at pool as dynamic default
     vcl::Font aFontCTL(OutputDevice::GetDefaultFont(DefaultFontType::CTL_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
@@ -656,15 +656,15 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
     aSvxFontItemCTL.SetStyleName(OUString());
     aSvxFontItemCTL.SetPitch( aFontCTL.GetPitch() );
     aSvxFontItemCTL.SetCharSet( aFontCTL.GetCharSet());
-    pItemPool->SetPoolDefaultItem(aSvxFontItemCTL);
+    pItemPool->SetUserDefaultItem(aSvxFontItemCTL);
 
     // set dynamic FontHeight defaults
-    pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT ) );
-    pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
-    pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+    pItemPool->SetUserDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT ) );
+    pItemPool->SetUserDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+    pItemPool->SetUserDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
     // set FontColor defaults
-    pItemPool->SetPoolDefaultItem( SvxColorItem(SdrEngineDefaults::GetFontColor(), EE_CHAR_COLOR) );
+    pItemPool->SetUserDefaultItem( SvxColorItem(SdrEngineDefaults::GetFontColor(), EE_CHAR_COLOR) );
 }
 
 SdrOutliner& SdrModel::GetDrawOutliner(const SdrTextObj* pObj) const

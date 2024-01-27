@@ -313,7 +313,7 @@ const SvxNumBulletItem* FuBulletAndPosition::GetNumBulletItem(SfxItemSet& aNewAt
     }
 
     if( pItem == nullptr )
-        pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+        pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetUserDefaultItem(EE_PARA_NUMBULLET);
 
     //DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in the Pool!" );
 

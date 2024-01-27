@@ -1147,7 +1147,7 @@ void SdDrawDocument::SetTextDefaults() const
     aBulletItem.SetStart(1);
     aBulletItem.SetScale(45);               // In percent
     aBulletItem.SetSymbol( 0x25CF );                // In points
-    m_pItemPool->SetPoolDefaultItem( aBulletItem );
+    m_pItemPool->SetUserDefaultItem( aBulletItem );
 
     // New BulletItem
     SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
@@ -1173,12 +1173,12 @@ void SdDrawDocument::SetTextDefaults() const
     }
 
     SvxNumBulletItem aNumBulletItem( std::move(aNumRule), EE_PARA_NUMBULLET );
-    m_pItemPool->SetPoolDefaultItem( aNumBulletItem );
+    m_pItemPool->SetUserDefaultItem( aNumBulletItem );
 }
 
 css::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
 {
-    const SfxPoolItem*                  pItem = ( m_pItemPool ? m_pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : nullptr );
+    const SfxPoolItem*                  pItem = ( m_pItemPool ? m_pItemPool->GetUserDefaultItem( EE_PARA_WRITINGDIR ) : nullptr );
     css::text::WritingMode eRet = css::text::WritingMode_LR_TB;
 
     if( pItem )
@@ -1215,14 +1215,14 @@ void SdDrawDocument::SetDefaultWritingMode(css::text::WritingMode eMode )
     }
 
     SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
-    m_pItemPool->SetPoolDefaultItem( aModeItem );
+    m_pItemPool->SetUserDefaultItem( aModeItem );
 
     SvxAdjustItem aAdjust( SvxAdjust::Left, EE_PARA_JUST );
 
     if( eMode == css::text::WritingMode_RL_TB )
         aAdjust.SetAdjust( SvxAdjust::Right );
 
-    m_pItemPool->SetPoolDefaultItem( aAdjust );
+    m_pItemPool->SetUserDefaultItem( aAdjust );
 }
 
 void SdDrawDocument::getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )

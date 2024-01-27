@@ -377,7 +377,7 @@ namespace SwLangHelper
         else if (nState == SfxItemState::DEFAULT)
         {
             // since the attribute is not set: retrieve the default value
-            nLang = aSet.GetPool()->GetDefaultItem( nLangWhichId ).GetLanguage();
+            nLang = aSet.GetPool()->GetUserOrPoolDefaultItem( nLangWhichId ).GetLanguage();
         }
         else if (nState == SfxItemState::DONTCARE)
         {

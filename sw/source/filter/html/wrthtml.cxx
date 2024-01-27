@@ -1032,7 +1032,7 @@ static void OutBodyColor( const char* pTag, const SwFormat *pFormat,
     else if( pRefItem )
     {
         // The item was still set in the HTML template so we output the default
-        pColorItem = &rItemSet.GetPool()->GetDefaultItem( RES_CHRATR_COLOR );
+        pColorItem = &rItemSet.GetPool()->GetUserOrPoolDefaultItem( RES_CHRATR_COLOR );
     }
 
     if( pColorItem )

@@ -304,7 +304,7 @@ ScDocumentPool::ScDocumentPool()
     mvPoolDefaults[ ATTR_PAGE_SCALETO    - ATTR_STARTINDEX ] = new ScPageScaleToItem( 1, 1 );
     mvPoolDefaults[ ATTR_HIDDEN          - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_HIDDEN, false );
 
-    SetDefaults( &mvPoolDefaults );
+    SetPoolDefaults( &mvPoolDefaults );
 }
 
 ScDocumentPool::~ScDocumentPool()

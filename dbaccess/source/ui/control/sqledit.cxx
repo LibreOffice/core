@@ -96,21 +96,21 @@ void SQLEditView::SetItemPoolFont(SfxItemPool* pItemPool)
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
     vcl::Font aAppFont(sFontName, aFontSize);
 
-    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
                                               "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO));
-    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
                                               "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO_CJK));
-    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
                                               "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO_CTL));
 
-    pItemPool->SetPoolDefaultItem(
+    pItemPool->SetUserDefaultItem(
         SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT));
-    pItemPool->SetPoolDefaultItem(
+    pItemPool->SetUserDefaultItem(
         SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CJK));
-    pItemPool->SetPoolDefaultItem(
+    pItemPool->SetUserDefaultItem(
         SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CTL));
 }
 

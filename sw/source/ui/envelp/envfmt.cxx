@@ -206,7 +206,7 @@ void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
 
         // Insert tabs, default tabs into ItemSet
         const SvxTabStopItem& rDefTabs =
-            pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
+            pSh->GetView().GetCurShell()->GetPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP);
 
         const sal_uInt16 nDefDist = o3tl::narrowing<sal_uInt16>(::GetTabDist( rDefTabs ));
         SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );

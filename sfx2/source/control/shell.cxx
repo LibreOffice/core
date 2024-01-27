@@ -497,7 +497,7 @@ SfxPoolItemHolder SfxShell::GetSlotState
         if ( eState == SfxItemState::DEFAULT )
         {
             if ( SfxItemPool::IsWhich(nSlotId) )
-                pItem = &rPool.GetDefaultItem(nSlotId);
+                pItem = &rPool.GetUserOrPoolDefaultItem(nSlotId);
             else
                 eState = SfxItemState::DONTCARE;
         }

@@ -569,9 +569,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         bool bCheckSdrDflt = false;
         const sal_uInt16 nWhich = pItem->Which();
-        aOld.Put( GetAttrPool().GetDefaultItem( nWhich ) );
-        GetAttrPool().SetPoolDefaultItem( *pItem );
-        aNew.Put( GetAttrPool().GetDefaultItem( nWhich ) );
+        aOld.Put( GetAttrPool().GetUserOrPoolDefaultItem( nWhich ) );
+        GetAttrPool().SetUserDefaultItem( *pItem );
+        aNew.Put( GetAttrPool().GetUserOrPoolDefaultItem( nWhich ) );
 
         if (isCHRATR(nWhich) || isTXTATR(nWhich))
         {
@@ -611,7 +611,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                 {
                     std::unique_ptr<SfxPoolItem> pCpy(pItem->Clone());
                     pCpy->SetWhich( nEdtWhich );
-                    pSdrPool->SetPoolDefaultItem( *pCpy );
+                    pSdrPool->SetUserDefaultItem( *pCpy );
                 }
             }
         }
@@ -679,7 +679,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
 /// Get the default attribute in this document
 const SfxPoolItem& SwDoc::GetDefault( sal_uInt16 nFormatHint ) const
 {
-    return GetAttrPool().GetDefaultItem( nFormatHint );
+    return GetAttrPool().GetUserOrPoolDefaultItem( nFormatHint );
 }
 
 /// Delete the formats

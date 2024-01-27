@@ -955,17 +955,17 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALE, false,
                                       reinterpret_cast<const SfxPoolItem**>(&pScaleItem) );
     if ( SfxItemState::DEFAULT == eState )
-        pScaleItem = &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALE );
+        pScaleItem = &pParamSet->GetPool()->GetUserOrPoolDefaultItem( ATTR_PAGE_SCALE );
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALETO, false,
                                       reinterpret_cast<const SfxPoolItem**>(&pScaleToItem) );
     if ( SfxItemState::DEFAULT == eState )
-        pScaleToItem = &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETO );
+        pScaleToItem = &pParamSet->GetPool()->GetUserOrPoolDefaultItem( ATTR_PAGE_SCALETO );
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false,
                                       reinterpret_cast<const SfxPoolItem**>(&pScaleToPagesItem) );
     if ( SfxItemState::DEFAULT == eState )
-        pScaleToPagesItem = &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETOPAGES );
+        pScaleToPagesItem = &pParamSet->GetPool()->GetUserOrPoolDefaultItem( ATTR_PAGE_SCALETOPAGES );
 
     OSL_ENSURE( pScaleItem && pScaleToItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
 

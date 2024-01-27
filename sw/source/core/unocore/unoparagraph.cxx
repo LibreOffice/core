@@ -1213,7 +1213,7 @@ SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
 
     if(bBelowFrameAtrEnd || bDrawingLayerRange)
     {
-        const SfxPoolItem& rDefItem = rTextNode.GetDoc().GetAttrPool().GetDefaultItem(pEntry->nWID);
+        const SfxPoolItem& rDefItem = rTextNode.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
 
         rDefItem.QueryValue(aRet, pEntry->nMemberId);
     }

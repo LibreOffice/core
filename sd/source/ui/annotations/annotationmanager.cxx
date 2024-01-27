@@ -99,10 +99,10 @@ SfxItemPool* GetAnnotationPool()
     if( !s_pAnnotationPool )
     {
         s_pAnnotationPool = EditEngine::CreatePool();
-        s_pAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
+        s_pAnnotationPool->SetUserDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
 
         vcl::Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
-        s_pAnnotationPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+        s_pAnnotationPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
     }
 
     return s_pAnnotationPool.get();

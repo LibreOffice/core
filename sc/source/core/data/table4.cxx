@@ -1298,7 +1298,7 @@ void ScTable::GetBackColorArea(SCCOL& rStartCol, SCROW& /*rStartRow*/,
                                SCCOL& rEndCol, SCROW& rEndRow ) const
 {
     bool bExtend;
-    const SvxBrushItem* pDefBackground = &rDocument.GetPool()->GetDefaultItem(ATTR_BACKGROUND);
+    const SvxBrushItem* pDefBackground = &rDocument.GetPool()->GetUserOrPoolDefaultItem(ATTR_BACKGROUND);
 
     rStartCol = std::min<SCCOL>(rStartCol, aCol.size() - 1);
     rEndCol = std::min<SCCOL>(rEndCol, aCol.size() - 1);

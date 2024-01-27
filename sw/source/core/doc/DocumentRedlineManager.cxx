@@ -439,7 +439,7 @@ namespace
                     sal_uInt16 nWhich = aTmp.GetWhichByOffset(nItem);
                     if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
                         SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
-                            aTmp2.Put( aTmp.GetPool()->GetDefaultItem(nWhich) );
+                            aTmp2.Put( aTmp.GetPool()->GetUserOrPoolDefaultItem(nWhich) );
                 }
             }
 

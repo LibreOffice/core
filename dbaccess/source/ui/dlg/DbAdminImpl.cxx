@@ -89,7 +89,7 @@ namespace
         OSL_ENSURE( pPool, "implCheckItemType: invalid item pool!" );
         if ( pPool )
         {
-            const SfxPoolItem& rDefItem = pPool->GetDefaultItem( _nId );
+            const SfxPoolItem& rDefItem = pPool->GetUserOrPoolDefaultItem( _nId );
             bCorrectType = isItemType(&rDefItem);
         }
         return bCorrectType;

@@ -379,7 +379,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                             if( !pItem && !pTextNd->HasSwAttrSet() )
                             {
                                 pNewPaM = new SwPaM(*pNd, nStt, *pNd, nEnd);
-                                pItem = pAutoSet->GetPool()->GetPoolDefaultItem( nWhich );
+                                pItem = pAutoSet->GetPool()->GetUserDefaultItem( nWhich );
                                 vItem.emplace_back( pItem,  std::unique_ptr<SwPaM>(pNewPaM) );
                             }
                         }

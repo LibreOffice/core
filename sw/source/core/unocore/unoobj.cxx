@@ -2198,7 +2198,7 @@ uno::Any SwUnoCursorHelper::GetPropertyDefault(
     {
         SwDoc& rDoc = rPaM.GetDoc();
         const SfxPoolItem& rDefItem =
-            rDoc.GetAttrPool().GetDefaultItem(pEntry->nWID);
+            rDoc.GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
         rDefItem.QueryValue(aRet, pEntry->nMemberId);
     }
     return aRet;
@@ -2647,7 +2647,7 @@ SwXTextCursor::getPropertyDefaults(
             if (pEntry->nWID < RES_FRMATR_END)
             {
                 const SfxPoolItem& rDefItem =
-                    rDoc.GetAttrPool().GetDefaultItem(pEntry->nWID);
+                    rDoc.GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
                 rDefItem.QueryValue(pAny[i], pEntry->nMemberId);
             }
         }

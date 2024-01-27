@@ -552,7 +552,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, false, &pItem);
 
     if( SfxItemState::DEFAULT == eState )
-        pItem = &rPool.GetDefaultItem(RES_PARATR_ADJUST);
+        pItem = &rPool.GetUserOrPoolDefaultItem(RES_PARATR_ADJUST);
     if( SfxItemState::DEFAULT <= eState )
     {
         eAdjust = static_cast<const SvxAdjustItem* >( pItem)->GetAdjust();
@@ -562,14 +562,14 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     short nEsc = 0;
     eState =  aCoreSet.GetItemState(RES_CHRATR_ESCAPEMENT, false, &pItem);
     if( SfxItemState::DEFAULT == eState )
-        pItem = &rPool.GetDefaultItem(RES_CHRATR_ESCAPEMENT);
+        pItem = &rPool.GetUserOrPoolDefaultItem(RES_CHRATR_ESCAPEMENT);
     if( eState >= SfxItemState::DEFAULT )
         nEsc = static_cast<const SvxEscapementItem* >(pItem)->GetEsc();
 
     sal_uInt16 nLineSpace = 0;
     eState =  aCoreSet.GetItemState(RES_PARATR_LINESPACING, false, &pItem);
     if( SfxItemState::DEFAULT == eState )
-        pItem = &rPool.GetDefaultItem(RES_PARATR_LINESPACING);
+        pItem = &rPool.GetUserOrPoolDefaultItem(RES_PARATR_LINESPACING);
     if( SfxItemState::DEFAULT <= eState &&
             static_cast<const SvxLineSpacingItem* >(pItem)->GetLineSpaceRule() == SvxLineSpaceRule::Auto )
     {
@@ -583,7 +583,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     SvxCaseMap eCaseMap = SvxCaseMap::NotMapped;
     eState = aCoreSet.GetItemState(RES_CHRATR_CASEMAP, false, &pItem);
     if (eState == SfxItemState::DEFAULT)
-        pItem = &rPool.GetDefaultItem(RES_CHRATR_CASEMAP);
+        pItem = &rPool.GetUserOrPoolDefaultItem(RES_CHRATR_CASEMAP);
     if (eState >= SfxItemState::DEFAULT)
         eCaseMap = static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap();
 

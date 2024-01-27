@@ -251,7 +251,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot
     rSet.GetItemState( nWh, true, &pItem );
 
     if ( !pItem && nWh != nSlot )
-        pItem = &pPool->GetDefaultItem( nWh );
+        pItem = &pPool->GetUserOrPoolDefaultItem( nWh );
     return pItem;
 }
 

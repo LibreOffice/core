@@ -63,7 +63,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
     SfxItemPool* pPool = rSet.GetPool();
     (void)rSet.GetItemState( pMap->nWID, bSearchInParent, &pItem );
     if( nullptr == pItem && pPool )
-        pItem = &(pPool->GetDefaultItem( pMap->nWID ));
+        pItem = &(pPool->GetUserOrPoolDefaultItem( pMap->nWID ));
 
     const MapUnit eMapUnit = pPool ? pPool->GetMetric(pMap->nWID) : MapUnit::Map100thMM;
     sal_uInt8 nMemberId = pMap->nMemberId;
@@ -118,7 +118,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, 
             return;
         }
 
-        pItem = &pPool->GetDefaultItem( pMap->nWID );
+        pItem = &pPool->GetUserOrPoolDefaultItem( pMap->nWID );
     }
 
     uno::Any aValue(rVal);
@@ -166,7 +166,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
     {
         // Get Default from ItemPool
         if(SfxItemPool::IsWhich(pMap->nWID))
-            aSet.Put(mrItemPool.GetDefaultItem(pMap->nWID));
+            aSet.Put(mrItemPool.GetUserOrPoolDefaultItem(pMap->nWID));
     }
 
     if(aSet.Count())

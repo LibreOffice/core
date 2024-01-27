@@ -1669,7 +1669,7 @@ SvxFrameDirection SwDoc::GetTextDirection( const SwPosition& rPos,
             }
         }
         if( !pItem )
-            pItem = &GetAttrPool().GetDefaultItem( RES_FRAMEDIR );
+            pItem = &GetAttrPool().GetUserOrPoolDefaultItem( RES_FRAMEDIR );
         nRet = pItem->GetValue();
     }
     return nRet;

@@ -123,7 +123,7 @@ void Scheduler::ImplDeInitScheduler()
     SAL_INFO( "vcl.schedule.deinit",
               "DeInit the scheduler - pending tasks: " << nTasks );
 
-    // clean up all the sfx::SfxItemDisruptor_Impl Idles
+    // clean up all Idles
     Unlock();
     ProcessEventsToIdle();
     Lock();

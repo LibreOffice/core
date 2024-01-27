@@ -213,7 +213,7 @@ bool ScfTools::CheckItems( const SfxItemSet& rItemSet, const sal_uInt16* pnWhich
 
 void ScfTools::PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, sal_uInt16 nWhichId, bool bSkipPoolDef )
 {
-    if( !bSkipPoolDef || (rItem != rItemSet.GetPool()->GetDefaultItem( nWhichId )) )
+    if( !bSkipPoolDef || (rItem != rItemSet.GetPool()->GetUserOrPoolDefaultItem( nWhichId )) )
     {
         rItemSet.Put( rItem.CloneSetWhich(nWhichId) );
     }

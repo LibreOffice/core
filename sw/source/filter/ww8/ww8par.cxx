@@ -1486,7 +1486,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
     {
         SwContentNode const*const pNd = rPos.GetNode().GetContentNode();
         if (!pNd)
-            pItem = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
+            pItem = &m_rDoc.GetAttrPool().GetUserOrPoolDefaultItem(nWhich);
         else
         {
             /*
@@ -1814,7 +1814,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         {
             SvxTabStopItem aOrig = pSty ?
                 pSty->GetFormatAttr(RES_PARATR_TABSTOP) :
-                m_rDoc.GetAttrPool().GetDefaultItem(RES_PARATR_TABSTOP);
+                m_rDoc.GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP);
             NewAttr(aOrig);
         }
     }
@@ -1876,7 +1876,7 @@ void SwWW8ImplReader::ImportDop()
     SvxTabStopItem aNewTab( 1, sal_uInt16(nDefTabSiz), SvxTabAdjust::Default, RES_PARATR_TABSTOP );
     const_cast<SvxTabStop&>(aNewTab[0]).GetAdjustment() = SvxTabAdjust::Default;
 
-    m_rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
+    m_rDoc.GetAttrPool().SetUserDefaultItem( aNewTab );
 
     // Import zoom factor
     if (m_xWDop->wScaleSaved)

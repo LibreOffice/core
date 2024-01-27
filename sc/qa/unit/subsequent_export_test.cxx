@@ -76,19 +76,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testDefaultFontHeight)
 
     ScDocument* pDoc = getScDoc();
     ScDocumentPool* pPool = pDoc->GetPool();
-    pPool->SetPoolDefaultItem(SvxFontHeightItem(400, 100, ATTR_FONT_HEIGHT));
-    pPool->SetPoolDefaultItem(SvxFontHeightItem(400, 100, ATTR_CJK_FONT_HEIGHT));
-    pPool->SetPoolDefaultItem(SvxFontHeightItem(400, 100, ATTR_CTL_FONT_HEIGHT));
+    pPool->SetUserDefaultItem(SvxFontHeightItem(400, 100, ATTR_FONT_HEIGHT));
+    pPool->SetUserDefaultItem(SvxFontHeightItem(400, 100, ATTR_CJK_FONT_HEIGHT));
+    pPool->SetUserDefaultItem(SvxFontHeightItem(400, 100, ATTR_CTL_FONT_HEIGHT));
 
     saveAndReload("calc8");
 
     pDoc = getScDoc();
     pPool = pDoc->GetPool();
-    const SvxFontHeightItem& rItem = pPool->GetDefaultItem(ATTR_FONT_HEIGHT);
+    const SvxFontHeightItem& rItem = pPool->GetUserOrPoolDefaultItem(ATTR_FONT_HEIGHT);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(400), rItem.GetHeight());
-    const SvxFontHeightItem& rCJKItem = pPool->GetDefaultItem(ATTR_CJK_FONT_HEIGHT);
+    const SvxFontHeightItem& rCJKItem = pPool->GetUserOrPoolDefaultItem(ATTR_CJK_FONT_HEIGHT);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(400), rCJKItem.GetHeight());
-    const SvxFontHeightItem& rCTLItem = pPool->GetDefaultItem(ATTR_CTL_FONT_HEIGHT);
+    const SvxFontHeightItem& rCTLItem = pPool->GetUserOrPoolDefaultItem(ATTR_CTL_FONT_HEIGHT);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(400), rCTLItem.GetHeight());
 }
 

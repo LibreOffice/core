@@ -191,7 +191,7 @@ void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyNa
     if ( pMap->nFlags & PropertyAttribute::READONLY)
         throw RuntimeException( "setPropertyToDefault: property is read-only: " + rPropertyName, getXWeak() );
     SfxItemPool& rSet (m_pDoc->GetAttrPool());
-    rSet.ResetPoolDefaultItem ( pMap->nWID );
+    rSet.ResetUserDefaultItem ( pMap->nWID );
 }
 
 Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName )
@@ -203,7 +203,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
         throw UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
     Any aRet;
     SfxItemPool& rSet (m_pDoc->GetAttrPool());
-    SfxPoolItem const*const pItem = rSet.GetPoolDefaultItem(pMap->nWID);
+    SfxPoolItem const*const pItem = rSet.GetUserDefaultItem(pMap->nWID);
     if (pItem)
     {
         pItem->QueryValue( aRet, pMap->nMemberId );

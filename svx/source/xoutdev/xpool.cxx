@@ -214,7 +214,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     // if it's my own creation level, set Defaults and ItemInfos
     if(XATTR_START == GetFirstWhich() && XATTR_END == GetLastWhich())
     {
-        SetDefaults(mpLocalPoolDefaults);
+        SetPoolDefaults(mpLocalPoolDefaults);
         SetItemInfos(mpLocalItemInfos.get());
     }
 }
@@ -235,7 +235,7 @@ XOutdevItemPool::~XOutdevItemPool()
 {
     Delete();
     // release and delete static pool default items
-    ReleaseDefaults(true);
+    ReleasePoolDefaults(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

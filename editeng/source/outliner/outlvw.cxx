@@ -857,7 +857,7 @@ void OutlinerView::ToggleBullets()
                     // determine default numbering rule for bullets
                     const ESelection aSelection(nPara, 0);
                     const SfxItemSet aTmpSet(pOwner->pEditEngine->GetAttribs(aSelection));
-                    const SfxPoolItem& rPoolItem = aTmpSet.GetPool()->GetDefaultItem( EE_PARA_NUMBULLET );
+                    const SfxPoolItem& rPoolItem = aTmpSet.GetPool()->GetUserOrPoolDefaultItem( EE_PARA_NUMBULLET );
                     const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(&rPoolItem);
                     pDefaultBulletNumRule =  pNumBulletItem ? &pNumBulletItem->GetNumRule() : nullptr;
                 }

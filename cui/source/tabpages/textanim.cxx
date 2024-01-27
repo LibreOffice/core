@@ -140,7 +140,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANIKIND );
 
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIKIND );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_ANIKIND );
 
     eAniKind = static_cast<const SdrTextAniKindItem*>(pItem)->GetValue();
     m_xLbEffect->set_active(sal::static_int_cast<sal_Int32>(eAniKind));
@@ -149,7 +149,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     // animation direction
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANIDIRECTION );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDIRECTION );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_ANIDIRECTION );
 
     SelectDirection(static_cast<const SdrTextAniDirectionItem*>(pItem)->GetValue());
     m_aUpState = m_xBtnUp->get_state();
@@ -160,7 +160,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     // Start inside
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANISTARTINSIDE );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTARTINSIDE );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_ANISTARTINSIDE );
 
     if (static_cast<const SdrTextAniStartInsideItem*>(pItem)->GetValue())
         m_xTsbStartInside->set_state(TRISTATE_TRUE);
@@ -171,7 +171,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     // Stop inside
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANISTOPINSIDE );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTOPINSIDE );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_ANISTOPINSIDE );
 
     if (static_cast<const SdrTextAniStopInsideItem*>(pItem)->GetValue())
         m_xTsbStopInside->set_state(TRISTATE_TRUE);
@@ -182,7 +182,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     // quantity
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANICOUNT );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANICOUNT );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_ANICOUNT );
 
     tools::Long nValue = static_cast<tools::Long>(static_cast<const SdrTextAniCountItem*>(pItem)->GetValue());
     m_xNumFldCount->set_value(nValue);
@@ -207,7 +207,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     // delay
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANIDELAY );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDELAY );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_ANIDELAY );
 
     nValue = static_cast<tools::Long>(static_cast<const SdrTextAniDelayItem*>(pItem)->GetValue());
     m_xMtrFldDelay->set_value(nValue, FieldUnit::NONE);
@@ -224,7 +224,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     // step size
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANIAMOUNT );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
 
     nValue = static_cast<tools::Long>(static_cast<const SdrTextAniAmountItem*>(pItem)->GetValue());
     if (nValue <= 0)

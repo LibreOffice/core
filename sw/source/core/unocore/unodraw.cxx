@@ -1996,7 +1996,7 @@ uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
             throw uno::RuntimeException();
 
         const SfxPoolItem& rDefItem =
-            pFormat->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+            pFormat->GetDoc()->GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
         rDefItem.QueryValue(aRet, pEntry->nMemberId);
 
     }

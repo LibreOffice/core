@@ -530,7 +530,7 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
         if(SfxItemPool::IsWhich(nWID)
                 && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
                 && rAnys.GetUsrAnyForID(*pSrcProp))
-            rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
+            rSet.Put(rSet.GetPool()->GetUserOrPoolDefaultItem(nWID));
     }
 
     for(const SfxItemPropertyMapEntry* pSrcProp : rSrc.getPropertyEntries())
@@ -1564,7 +1564,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
         {
             // get default from ItemPool
             if(SfxItemPool::IsWhich(pMap->nWID))
-                pSet->Put(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                pSet->Put(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
         }
 
         if( pSet->GetItemState( pMap->nWID ) == SfxItemState::SET )
@@ -1633,7 +1633,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             {
                 // get default from ItemPool
                 if(SfxItemPool::IsWhich(pMap->nWID))
-                    aSet.Put(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                    aSet.Put(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
             }
 
             if(aSet.Count())
@@ -3065,7 +3065,7 @@ uno::Any SvxShape::_getPropertyDefault( const OUString& aPropertyName )
         throw beans::UnknownPropertyException( "No WhichID " + OUString::number(pMap->nWID) + " for " + aPropertyName, getXWeak());
 
     SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID );
-    aSet.Put(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+    aSet.Put(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
 
     return GetAnyForItem( aSet, pMap );
 }

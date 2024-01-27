@@ -2399,7 +2399,7 @@ uno::Any SwXStyle::GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwS
             else
                 pFormat = m_pDoc->GetDfltFrameFormat();
             const SwAttrPool* pPool = pFormat->GetAttrSet().GetPool();
-            const SfxPoolItem& rItem = pPool->GetDefaultItem(pEntry->nWID);
+            const SfxPoolItem& rItem = pPool->GetUserOrPoolDefaultItem(pEntry->nWID);
             rItem.QueryValue(aValue, pEntry->nMemberId);
         }
         break;
@@ -2777,7 +2777,7 @@ uno::Sequence<uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::Sequen
         }
         else if(pEntry->nWID != rSet.GetPool()->GetSlotId(pEntry->nWID))
         {
-            const SfxPoolItem& rItem = rSet.GetPool()->GetDefaultItem(pEntry->nWID);
+            const SfxPoolItem& rItem = rSet.GetPool()->GetUserOrPoolDefaultItem(pEntry->nWID);
             rItem.QueryValue(pRet[i], pEntry->nMemberId);
         }
     }

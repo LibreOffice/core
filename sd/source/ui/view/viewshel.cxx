@@ -900,7 +900,7 @@ const SvxNumBulletItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, TypedW
     }
 
     if( pItem == nullptr )
-        pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+        pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetUserDefaultItem(EE_PARA_NUMBULLET);
 
     aNewAttr.Put(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
 

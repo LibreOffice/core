@@ -76,14 +76,11 @@ class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
-    // unit testing
-    friend class PoolItemTest;
-
     const SfxItemInfo*              pItemInfos;
     SfxBroadcaster                  aBC;
     OUString                        aName;
-    std::vector<SfxPoolItem*>       maPoolDefaults;
-    std::vector<SfxPoolItem*>*      mpStaticDefaults;
+    std::vector<SfxPoolItem*>       maUserDefaults;
+    std::vector<SfxPoolItem*>*      mpPoolDefaults;
     SfxItemPool*                    mpMaster;
     rtl::Reference<SfxItemPool>     mpSecondary;
     WhichRangesContainer            mpPoolRanges;
@@ -132,18 +129,35 @@ public:
 
     SfxBroadcaster&                 BC();
 
-    void                            SetPoolDefaultItem( const SfxPoolItem& );
+    // UserDefaults: Every PoolDefault can be 'overloaded' with a user-defined
+    // default. This is then owned by the pool. The read access is limited
+    // to check the UserDefaults, so it *will* return nullptr if none is set
+    void                            SetUserDefaultItem( const SfxPoolItem& );
+    const SfxPoolItem*              GetUserDefaultItem( sal_uInt16 nWhich ) const;
+    template<class T> const T*      GetUserDefaultItem( TypedWhichId<T> nWhich ) const
+    { return static_cast<const T*>(GetUserDefaultItem(sal_uInt16(nWhich))); }
+    void                            ResetUserDefaultItem( sal_uInt16 nWhich );
 
-    const SfxPoolItem*              GetPoolDefaultItem( sal_uInt16 nWhich ) const;
+    // PoolDefaults: Owned by the pool. The read access will only return
+    // nullptr if the WhichID aske for is not in the range of the pool,
+    // making the request invalid.
+    void                            SetPoolDefaults(std::vector<SfxPoolItem*>* pDefaults);
+    void                            ClearPoolDefaults();
+    void                            ReleasePoolDefaults( bool bDelete = false );
+    static void                     ReleasePoolDefaults( std::vector<SfxPoolItem*> *pDefaults, bool bDelete = false );
+    const SfxPoolItem *             GetPoolDefaultItem(sal_uInt16 nWhich) const;
     template<class T> const T*      GetPoolDefaultItem( TypedWhichId<T> nWhich ) const
     { return static_cast<const T*>(GetPoolDefaultItem(sal_uInt16(nWhich))); }
 
-    void                            ResetPoolDefaultItem( sal_uInt16 nWhich );
-
-    void                            SetDefaults(std::vector<SfxPoolItem*>* pDefaults);
-    void                            ClearDefaults();
-    void                            ReleaseDefaults( bool bDelete = false );
-    static void                     ReleaseDefaults( std::vector<SfxPoolItem*> *pDefaults, bool bDelete = false );
+    // UserOrPoolDefaults: Combination of UserDefaults and PoolDefaults.
+    // UserDefaults will be preferred. If none is set for that WhichID,
+    // the PoolDefault will be returned.
+    // Note that read access will return a reference, but this will lead
+    // to an asserted error when the given WhichID is not in the range of
+    // the pool.
+    const SfxPoolItem&              GetUserOrPoolDefaultItem( sal_uInt16 nWhich ) const;
+    template<class T> const T&      GetUserOrPoolDefaultItem( TypedWhichId<T> nWhich ) const
+    { return static_cast<const T&>(GetUserOrPoolDefaultItem(sal_uInt16(nWhich))); }
 
     virtual MapUnit                 GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( MapUnit eNewMetric );
@@ -181,13 +195,6 @@ public:
                                                      const IntlWrapper& rIntlWrapper ) const;
     virtual rtl::Reference<SfxItemPool> Clone() const;
     const OUString&                 GetName() const;
-
-    const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
-    template<class T> const T&      GetDefaultItem( TypedWhichId<T> nWhich ) const
-    { return static_cast<const T&>(GetDefaultItem(sal_uInt16(nWhich))); }
-    const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
-    template<class T> const T*      GetItem2Default( TypedWhichId<T> nWhich ) const
-    { return static_cast<const T*>(GetItem2Default(sal_uInt16(nWhich))); }
 
 public:
     // SurrogateData callback helper for iterateItemSurrogates
@@ -227,7 +234,6 @@ public:
     SfxItemPool*                    GetLastPoolInChain();
     SfxItemPool*                    GetMasterPool() const;
     void                            FreezeIdRanges();
-
     void                            Delete();
 
     // syntactical sugar: direct call to not have to use the flag define
@@ -240,14 +246,25 @@ public:
     template<class T>
     TypedWhichId<T>                 GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const
     { return TypedWhichId<T>(GetWhich(sal_uInt16(nSlot), bDeep)); }
+
+    // get SlotID that may be registered in the SfxItemInfo for
+    // the given WhichID.
+    // If none is defined, return nWhich.
+    // If nWhich is not a WhichID, return nWhich.
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich ) const;
+
+    // tries to translate back from SlotID to WhichID. That may be
+    // expensive, it needs to linerarly iterate over SfxItemInfo
+    // to evtl. find if a SlotID is defined for a WhichID
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
+
+    // same as GetSlotId, but returns 0 in error cases, so:
+    // If none is defined, return 0.
+    // If nWhich is not a WhichID, return 0.
     sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich ) const;
 
-    static bool                     IsWhich(sal_uInt16 nId) {
-                                        return nId && nId <= SFX_WHICH_MAX; }
-    static bool                     IsSlot(sal_uInt16 nId) {
-                                        return nId && nId > SFX_WHICH_MAX; }
+    static bool IsWhich(sal_uInt16 nId) { return nId && nId <= SFX_WHICH_MAX; }
+    static bool IsSlot(sal_uInt16 nId) { return nId && nId > SFX_WHICH_MAX; }
 
 private:
     const SfxItemPool&              operator=(const SfxItemPool &) = delete;

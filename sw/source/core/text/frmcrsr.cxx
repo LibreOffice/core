@@ -1538,7 +1538,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                         else
                         {
                             const SvxTabStopItem& rTab =
-                                pSet->GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
+                                pSet->GetPool()->GetUserOrPoolDefaultItem( RES_PARATR_TABSTOP );
                             const SwTwips nDefTabDist = rTab[0].GetTabPos();
                             nRightTab = nLeftTab - nTextLeft;
                             nRightTab /= nDefTabDist;

@@ -212,7 +212,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
         aSet.Put( *mpSet );
 
         if( !aSet.Count() )
-            aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
+            aSet.Put( rPool.GetUserOrPoolDefaultItem( pEntry->nWID ) );
 
         if( pEntry->nMemberId == MID_NAME && ( pEntry->nWID == XATTR_FILLBITMAP || pEntry->nWID == XATTR_FILLGRADIENT || pEntry->nWID == XATTR_FILLHATCH || pEntry->nWID == XATTR_FILLFLOATTRANSPARENCE ) )
         {
@@ -272,7 +272,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
             aSet.Put( *mpSet );
 
             if( !aSet.Count() )
-                aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
+                aSet.Put( rPool.GetUserOrPoolDefaultItem( pEntry->nWID ) );
 
             // get value from ItemSet
             aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
@@ -391,7 +391,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
     {
         SfxItemPool& rPool = *mpSet->GetPool();
         SfxItemSet aSet(rPool, pEntry->nWID, pEntry->nWID);
-        aSet.Put(rPool.GetDefaultItem(pEntry->nWID));
+        aSet.Put(rPool.GetUserOrPoolDefaultItem(pEntry->nWID));
 
         aAny = SvxItemPropertySet_getPropertyValue(pEntry, aSet);
     }

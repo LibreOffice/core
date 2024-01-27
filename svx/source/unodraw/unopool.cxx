@@ -81,11 +81,11 @@ void SvxUnoDrawPool::getAny( SfxItemPool const * pPool, const comphelper::Proper
     {
     case OWN_ATTR_FILLBMP_MODE:
         {
-            if (pPool->GetDefaultItem(XATTR_FILLBMP_TILE).GetValue())
+            if (pPool->GetUserOrPoolDefaultItem(XATTR_FILLBMP_TILE).GetValue())
             {
                 rValue <<= drawing::BitmapMode_REPEAT;
             }
-            else if (pPool->GetDefaultItem(XATTR_FILLBMP_STRETCH).GetValue())
+            else if (pPool->GetUserOrPoolDefaultItem(XATTR_FILLBMP_STRETCH).GetValue())
             {
                 rValue <<= drawing::BitmapMode_STRETCH;
             }
@@ -105,7 +105,7 @@ void SvxUnoDrawPool::getAny( SfxItemPool const * pPool, const comphelper::Proper
 
             // Assure, that ID is a Which-ID (it could be a Slot-ID.)
             // Thus, convert handle to Which-ID.
-            pPool->GetDefaultItem( pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) ) ).QueryValue( rValue, nMemberId );
+            pPool->GetUserOrPoolDefaultItem( pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) ) ).QueryValue( rValue, nMemberId );
         }
     }
 
@@ -154,15 +154,15 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
                     eMode = static_cast<drawing::BitmapMode>(nMode);
                 }
 
-                pPool->SetPoolDefaultItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
-                pPool->SetPoolDefaultItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
+                pPool->SetUserDefaultItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
+                pPool->SetUserDefaultItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
                 return;
             }
             while(false);
 
     default:
         {
-            std::unique_ptr<SfxPoolItem> pNewItem( pPool->GetDefaultItem( nWhich ).Clone() );
+            std::unique_ptr<SfxPoolItem> pNewItem( pPool->GetUserOrPoolDefaultItem( nWhich ).Clone() );
             sal_uInt8 nMemberId = pEntry->mnMemberId;
             if( pPool->GetMetric(nWhich) == MapUnit::Map100thMM )
                 nMemberId &= (~CONVERT_TWIPS);
@@ -170,7 +170,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
             if( !pNewItem->PutValue( aValue, nMemberId ) )
                 throw lang::IllegalArgumentException();
 
-            pPool->SetPoolDefaultItem( *pNewItem );
+            pPool->SetUserDefaultItem( *pNewItem );
         }
     }
 }
@@ -223,8 +223,8 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
                 {
                     // use method <IsStaticDefaultItem(..)> instead of using
                     // probably incompatible item pool <mpDefaultPool>.
-                    if ( IsStaticDefaultItem( &(pPool->GetDefaultItem( XATTR_FILLBMP_STRETCH )) ) ||
-                         IsStaticDefaultItem( &(pPool->GetDefaultItem( XATTR_FILLBMP_TILE )) ) )
+                    if ( IsStaticDefaultItem( &(pPool->GetUserOrPoolDefaultItem( XATTR_FILLBMP_STRETCH )) ) ||
+                         IsStaticDefaultItem( &(pPool->GetUserOrPoolDefaultItem( XATTR_FILLBMP_TILE )) ) )
                     {
                         *pStates = beans::PropertyState_DEFAULT_VALUE;
                     }
@@ -235,8 +235,8 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
                 }
                 break;
             case OWN_ATTR_TEXTCOLUMNS:
-                if (IsStaticDefaultItem(&pPool->GetDefaultItem(sal_uInt16(SDRATTR_TEXTCOLUMNS_NUMBER)))
-                    && IsStaticDefaultItem(&pPool->GetDefaultItem(sal_uInt16(SDRATTR_TEXTCOLUMNS_SPACING))))
+                if (IsStaticDefaultItem(&pPool->GetUserOrPoolDefaultItem(sal_uInt16(SDRATTR_TEXTCOLUMNS_NUMBER)))
+                    && IsStaticDefaultItem(&pPool->GetUserOrPoolDefaultItem(sal_uInt16(SDRATTR_TEXTCOLUMNS_SPACING))))
                     *pStates = beans::PropertyState_DEFAULT_VALUE;
                 else
                     *pStates = beans::PropertyState_DIRECT_VALUE;
@@ -245,8 +245,8 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
                 //#i18732# - correction:
                 // use method <IsStaticDefaultItem(..)> instead of using probably
                 // incompatible item pool <mpDefaultPool>.
-                const SfxPoolItem& r1 = pPool->GetDefaultItem( nWhich );
-                //const SfxPoolItem& r2 = mpDefaultPool->GetDefaultItem( nWhich );
+                const SfxPoolItem& r1 = pPool->GetUserOrPoolDefaultItem( nWhich );
+                //const SfxPoolItem& r2 = mpDefaultPool->GetUserOrPoolDefaultItem( nWhich );
 
                 if ( IsStaticDefaultItem( &r1 ) )
                 {
@@ -282,20 +282,20 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
     const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) );
     if ( pPool && pPool != mpDefaultsPool.get() )
     {
-        // use method <ResetPoolDefaultItem(..)> instead of using probably incompatible item pool <mpDefaultsPool>.
-        pPool->ResetPoolDefaultItem( nWhich );
+        // use method <ResetUserDefaultItem(..)> instead of using probably incompatible item pool <mpDefaultsPool>.
+        pPool->ResetUserDefaultItem( nWhich );
     }
 }
 
 uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry* pEntry )
 {
     SolarMutexGuard aGuard;
-    //#i18732# - use method <GetPoolDefaultItem(..)> instead of
+    //#i18732# - use method <GetUserDefaultItem(..)> instead of
     // using probably incompatible item pool <mpDefaultsPool>
     uno::Any aAny;
     SfxItemPool* pPool = getModelPool( true );
     const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) );
-    const SfxPoolItem *pItem = pPool->GetPoolDefaultItem ( nWhich );
+    const SfxPoolItem *pItem = pPool->GetUserDefaultItem ( nWhich );
     if (pItem)
     {
         pItem->QueryValue( aAny, pEntry->mnMemberId );

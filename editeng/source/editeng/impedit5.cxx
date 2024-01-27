@@ -386,7 +386,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
         {
             if ( aCurSet.GetItemState( nWhich ) == SfxItemState::DEFAULT )
             {
-                aCurSet.Put( maEditDoc.GetItemPool().GetDefaultItem( nWhich ) );
+                aCurSet.Put( maEditDoc.GetItemPool().GetUserOrPoolDefaultItem( nWhich ) );
             }
         }
     }

@@ -31,7 +31,7 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
     };
 
     rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test", 1, 1, aItems);
-    pPool->SetDefaults(&aDefaults);
+    pPool->SetPoolDefaults(&aDefaults);
     {
         // Set up parents in mixed order to make sure we do not sort by pointer address.
         SfxItemSet aParent1(*pPool, svl::Items<1, 1>);
@@ -88,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testFixedItemSet)
                                    { 2, SFX_ITEMINFOFLAG_NONE }
     };
     rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test", 1, 1, aItems);
-    pPool->SetDefaults(&aDefaults);
+    pPool->SetPoolDefaults(&aDefaults);
 
     SfxItemSetFixed<1, 2> aItemSet1(*pPool);
 

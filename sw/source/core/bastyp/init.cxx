@@ -707,7 +707,7 @@ void FinitCore()
 #if OSL_DEBUG_LEVEL > 0
     // free defaults to prevent assertions
     if ( aAttrTab[0]->GetRefCount() )
-        SfxItemPool::ReleaseDefaults( &aAttrTab );
+        SfxItemPool::ReleasePoolDefaults( &aAttrTab );
 #endif
     delete SwDoc::s_pAutoCompleteWords;
 

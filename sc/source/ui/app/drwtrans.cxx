@@ -442,7 +442,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                 // for the changed pool defaults from drawing layer pool set those
                 // attributes as hard attributes to preserve them for saving
                 const SfxItemPool& rItemPool = pDrawModel->GetItemPool();
-                const SvxFontHeightItem& rDefaultFontHeight = rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
+                const SvxFontHeightItem& rDefaultFontHeight = rItemPool.GetUserOrPoolDefaultItem(EE_CHAR_FONTHEIGHT);
 
                 // SW should have no MasterPages
                 OSL_ENSURE(0 == pDrawModel->GetMasterPageCount(), "SW with MasterPages (!)");

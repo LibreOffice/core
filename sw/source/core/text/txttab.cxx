@@ -184,7 +184,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             if( USHRT_MAX == nDefTabDist )
             {
                 const SvxTabStopItem& rTab =
-                    m_pFrame->GetAttrSet()->GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
+                    m_pFrame->GetAttrSet()->GetPool()->GetUserOrPoolDefaultItem( RES_PARATR_TABSTOP );
                 if( rTab.Count() )
                     nDefTabDist = o3tl::narrowing<sal_uInt16>(rTab[0].GetTabPos());
                 else

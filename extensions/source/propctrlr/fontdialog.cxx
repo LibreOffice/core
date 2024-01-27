@@ -566,14 +566,14 @@ namespace pcr
     void ControlCharacterDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
     {
         // from the pool, get and remember the font list (needs to be deleted)
-        const SvxFontListItem& rFontListItem = static_cast<const SvxFontListItem&>(_rpPool->GetDefaultItem(FontItemIds::CFID_FONTLIST));
+        const SvxFontListItem& rFontListItem = static_cast<const SvxFontListItem&>(_rpPool->GetUserOrPoolDefaultItem(FontItemIds::CFID_FONTLIST));
         const FontList* pFontList = rFontListItem.GetFontList();
 
         // _first_ delete the set (referring the pool)
         _rpSet.reset();
 
         // delete the pool
-        _rpPool->ReleaseDefaults(true);
+        _rpPool->ReleasePoolDefaults(true);
             // the "true" means delete the items, too
         _rpPool = nullptr;
 

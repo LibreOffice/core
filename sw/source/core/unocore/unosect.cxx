@@ -1613,7 +1613,7 @@ SwXTextSection::getPropertyDefault(const OUString& rPropertyName)
         {
             SwDoc *const pDoc = pFormat->GetDoc();
             const SfxPoolItem& rDefItem =
-                pDoc->GetAttrPool().GetDefaultItem(pEntry->nWID);
+                pDoc->GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
             rDefItem.QueryValue(aRet, pEntry->nMemberId);
         }
     }

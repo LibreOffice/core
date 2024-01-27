@@ -5118,7 +5118,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, Sc
             rDoc.CopyToDocument(aExtended, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
         }
 
-        const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetDefaultItem( ATTR_MERGE );
+        const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetUserOrPoolDefaultItem( ATTR_MERGE );
         ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
         aPattern.GetItemSet().Put( rDefAttr );
         rDoc.ApplyPatternAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),

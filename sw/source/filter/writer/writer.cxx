@@ -362,10 +362,10 @@ void Writer::PutEditEngFontsInAttrPool()
 
 void Writer::AddFontItems_( SfxItemPool& rPool, sal_uInt16 nW )
 {
-    const SvxFontItem* pFont = static_cast<const SvxFontItem*>(&rPool.GetDefaultItem( nW ));
+    const SvxFontItem* pFont = static_cast<const SvxFontItem*>(&rPool.GetUserOrPoolDefaultItem( nW ));
     AddFontItem( rPool, *pFont );
 
-    pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem( nW ));
+    pFont = static_cast<const SvxFontItem*>(rPool.GetUserDefaultItem( nW ));
     if( nullptr != pFont )
         AddFontItem( rPool, *pFont );
 

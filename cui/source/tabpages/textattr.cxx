@@ -109,28 +109,28 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
 
     const SdrMetricItem* pItem = GetItem(*rAttrs, SDRATTR_TEXT_LEFTDIST);
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LEFTDIST );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_LEFTDIST );
 
     SetMetricValue(*m_xMtrFldLeft, pItem->GetValue(), eUnit);
     m_xMtrFldLeft->save_value();
 
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_RIGHTDIST );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_RIGHTDIST );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_RIGHTDIST );
 
     SetMetricValue(*m_xMtrFldRight, pItem->GetValue(), eUnit);
     m_xMtrFldRight->save_value();
 
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_UPPERDIST );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_UPPERDIST );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_UPPERDIST );
 
     SetMetricValue(*m_xMtrFldTop, pItem->GetValue(), eUnit);
     m_xMtrFldTop->save_value();
 
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_LOWERDIST );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LOWERDIST );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_TEXT_LOWERDIST );
 
     SetMetricValue(*m_xMtrFldBottom, pItem->GetValue(), eUnit);
     m_xMtrFldBottom->save_value();

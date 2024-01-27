@@ -937,7 +937,7 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
             SfxItemState eNewState = rSource.GetItemState( nId, true, &pNewItem );
             if ( eNewState == SfxItemState::SET )
             {
-                if ( *pNewItem != rMergeSet.GetPool()->GetDefaultItem(nId) )
+                if ( *pNewItem != rMergeSet.GetPool()->GetUserOrPoolDefaultItem(nId) )
                     rMergeSet.InvalidateItem( nId );
             }
         }
@@ -951,7 +951,7 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
             }
             else // Default
             {
-                if ( *pOldItem != rSource.GetPool()->GetDefaultItem(nId) )
+                if ( *pOldItem != rSource.GetPool()->GetUserOrPoolDefaultItem(nId) )
                     rMergeSet.InvalidateItem( nId );
             }
         }
@@ -1523,8 +1523,8 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
         SCROW  nCountY = pItem->GetRowMerge();
         if (nCountX>1 || nCountY>1)
         {
-            const ScMergeAttr* pAttr = &rDocument.GetPool()->GetDefaultItem( ATTR_MERGE );
-            const ScMergeFlagAttr* pFlagAttr = &rDocument.GetPool()->GetDefaultItem( ATTR_MERGE_FLAG );
+            const ScMergeAttr* pAttr = &rDocument.GetPool()->GetUserOrPoolDefaultItem( ATTR_MERGE );
+            const ScMergeFlagAttr* pFlagAttr = &rDocument.GetPool()->GetUserOrPoolDefaultItem( ATTR_MERGE_FLAG );
 
             OSL_ENSURE( nCountY==1 || nThisStart==nThisEnd, "What's up?" );
 
@@ -2243,7 +2243,7 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
     {
             //  ApplyAttr for areas
 
-        const SfxPoolItem& rDef = rDocument.GetPool()->GetDefaultItem( ATTR_MERGE );
+        const SfxPoolItem& rDef = rDocument.GetPool()->GetUserOrPoolDefaultItem( ATTR_MERGE );
         for (SCSIZE nAdd=0; nAdd<nSize; nAdd++)
             rDocument.ApplyAttr( nCol, nStartRow+nAdd, nTab, rDef );
 

@@ -1291,7 +1291,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
             else if ( eOldState != SfxItemState::DONTCARE )
             {
                 //  not set in OldAttrs -> compare item value to default item
-                if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nSubWhich ) )
+                if ( *pThisItem == rThisSet.GetPool()->GetUserOrPoolDefaultItem( nSubWhich ) )
                 {
                     rThisSet.ClearItem( nSubWhich );
                     mxVisible.reset();

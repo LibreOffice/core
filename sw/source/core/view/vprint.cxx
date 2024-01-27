@@ -318,9 +318,9 @@ void SwViewShell::FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt)
     const SfxItemPool& rPool = GetAttrPool();
     for( sal_uInt16 nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
     {
-        const SfxPoolItem* pCpyItem = rPool.GetPoolDefaultItem( nWh );
+        const SfxPoolItem* pCpyItem = rPool.GetUserDefaultItem( nWh );
         if( nullptr != pCpyItem )
-            rPrtDoc.GetAttrPool().SetPoolDefaultItem( *pCpyItem );
+            rPrtDoc.GetAttrPool().SetUserDefaultItem( *pCpyItem );
     }
 
     // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into

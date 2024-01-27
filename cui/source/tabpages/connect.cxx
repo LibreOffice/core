@@ -124,7 +124,7 @@ void SvxConnectionPage::SetMetricValueAndSave(const SfxItemSet* rAttrs, weld::Me
     const SfxPoolItem* pItem = GetItem( *rAttrs,  nWhich);
     const SfxItemPool* pPool = rAttrs->GetPool();
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( nWhich );
+        pItem = &pPool->GetUserOrPoolDefaultItem( nWhich );
     SetMetricValue(rField, pItem->StaticWhichCast(nWhich).GetValue(), eUnit);
     rField.save_value();
 }
@@ -164,7 +164,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     // SdrEdgeLineDeltaAnzItem
     pItem = GetItem( *rAttrs, SDRATTR_EDGELINEDELTACOUNT );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTACOUNT );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_EDGELINEDELTACOUNT );
     switch (pItem->StaticWhichCast(SDRATTR_EDGELINEDELTACOUNT).GetValue())
     {
         case 0:
@@ -187,7 +187,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     // SdrEdgeKindItem
     pItem = GetItem( *rAttrs, SDRATTR_EDGEKIND );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_EDGEKIND );
     m_xLbType->set_active(
         sal::static_int_cast<sal_uInt16>(pItem->StaticWhichCast(SDRATTR_EDGEKIND).GetValue()));
     m_xLbType->save_value();
@@ -374,7 +374,7 @@ void SvxConnectionPage::FillTypeLB()
     const SfxItemPool* pPool = rOutAttrs.GetPool();
 
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_EDGEKIND );
     const SdrEdgeKindItem* pEdgeKindItem = &pItem->StaticWhichCast(SDRATTR_EDGEKIND);
     const sal_uInt16 nCount = pEdgeKindItem->GetValueCount();
     for (sal_uInt16 i = 0; i < nCount; i++)

@@ -68,7 +68,7 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, 
     for(sal_uInt16 nWhichId : aWhichIds)
     {
         const SvxFontItem& rFont =
-            static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));
+            static_cast<const SvxFontItem&>(rPool.GetUserOrPoolDefaultItem( nWhichId ));
         aFonts.push_back(&rFont);
         ItemSurrogates aSurrogates;
         rPool.GetItemSurrogates(aSurrogates, nWhichId);

@@ -169,7 +169,7 @@ void ScDocument::InitDrawLayer( ScDocShell* pDocShell )
 
     // set draw defaults directly
     SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
-    rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
+    rDrawPool.SetUserDefaultItem( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
     UpdateDrawLanguages();
     if (bImportingXML)
@@ -185,9 +185,9 @@ void ScDocument::UpdateDrawLanguages()
     if (mpDrawLayer)
     {
         SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
-        rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
-        rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, EE_CHAR_LANGUAGE_CJK ) );
-        rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, EE_CHAR_LANGUAGE_CTL ) );
+        rDrawPool.SetUserDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
+        rDrawPool.SetUserDefaultItem( SvxLanguageItem( eCjkLanguage, EE_CHAR_LANGUAGE_CJK ) );
+        rDrawPool.SetUserDefaultItem( SvxLanguageItem( eCtlLanguage, EE_CHAR_LANGUAGE_CTL ) );
     }
 }
 

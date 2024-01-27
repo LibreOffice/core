@@ -52,8 +52,8 @@ DrawModelWrapper::DrawModelWrapper()
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(MapUnit::Map100thMM);
-    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
-    pMasterPool->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
+    pMasterPool->SetUserDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
+    pMasterPool->SetUserDefaultItem(makeSvx3DPercentDiagonalItem (5));
 
     // append chart pool to end of pool chain
     pMasterPool->GetLastPoolInChain()->SetSecondaryPool(m_xChartItemPool.get());

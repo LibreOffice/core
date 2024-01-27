@@ -363,11 +363,11 @@ void ScDocument::FillInfo(
     RowInfo* pRowInfo = rTabInfo.mpRowInfo.get();
 
     const SvxBrushItem* pDefBackground =
-            &pPool->GetDefaultItem( ATTR_BACKGROUND );
+            &pPool->GetUserOrPoolDefaultItem( ATTR_BACKGROUND );
     const ScMergeAttr* pDefMerge =
-            &pPool->GetDefaultItem( ATTR_MERGE );
+            &pPool->GetUserOrPoolDefaultItem( ATTR_MERGE );
     const SvxShadowItem* pDefShadow =
-            &pPool->GetDefaultItem( ATTR_SHADOW );
+            &pPool->GetUserOrPoolDefaultItem( ATTR_SHADOW );
 
     SCSIZE nArrRow;
     SCSIZE nArrCount;

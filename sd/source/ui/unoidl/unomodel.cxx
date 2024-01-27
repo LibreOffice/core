@@ -1410,7 +1410,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                         pSeq[nSeqIndex++] <<= sal_Int16(pFont->GetCharSet());
                     }
 
-                    const SvxFontItem& rFont = static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));
+                    const SvxFontItem& rFont = static_cast<const SvxFontItem&>(rPool.GetUserOrPoolDefaultItem( nWhichId ));
 
                     pSeq[nSeqIndex++] <<= rFont.GetFamilyName();
                     pSeq[nSeqIndex++] <<= rFont.GetStyleName();

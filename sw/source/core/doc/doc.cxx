@@ -1905,7 +1905,7 @@ void SwDoc::SetMissingDictionaries( bool bIsMissing )
 
 void SwDoc::SetLanguage(const LanguageType eLang, const sal_uInt16 nId)
 {
-    mpAttrPool->SetPoolDefaultItem(SvxLanguageItem(eLang, nId));
+    mpAttrPool->SetUserDefaultItem(SvxLanguageItem(eLang, nId));
 }
 
 bool SwDoc::HasParagraphDirectFormatting(const SwPosition& rPos)

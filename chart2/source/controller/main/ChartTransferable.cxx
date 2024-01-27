@@ -123,7 +123,7 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                     // for the changed pool defaults from drawing layer pool set those
                     // attributes as hard attributes to preserve them for saving
                     const SfxItemPool& rItemPool = pMarkedObjModel->GetItemPool();
-                    const SvxFontHeightItem& rDefaultFontHeight = rItemPool.GetDefaultItem( EE_CHAR_FONTHEIGHT );
+                    const SvxFontHeightItem& rDefaultFontHeight = rItemPool.GetUserOrPoolDefaultItem( EE_CHAR_FONTHEIGHT );
                     sal_uInt16 nCount = pMarkedObjModel->GetPageCount();
                     for ( sal_uInt16 i = 0; i < nCount; ++i )
                     {

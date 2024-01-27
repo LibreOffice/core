@@ -95,7 +95,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
             if( GetItemProperty( nWhich, aProperty ))
             {
                 // put the Property into the itemset
-                std::unique_ptr<SfxPoolItem> pItem(rPool.GetDefaultItem( nWhich ).Clone());
+                std::unique_ptr<SfxPoolItem> pItem(rPool.GetUserOrPoolDefaultItem( nWhich ).Clone());
 
                 if( pItem )
                 {

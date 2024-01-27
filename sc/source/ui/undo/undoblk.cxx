@@ -2307,7 +2307,7 @@ void ScUndoRemoveMerge::Redo()
             // There is no need to extend merge area because it's already been extended.
             ScRange aRange = rOption.getSingleRange(nTab);
 
-            const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetDefaultItem( ATTR_MERGE );
+            const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetUserOrPoolDefaultItem( ATTR_MERGE );
             ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
             aPattern.GetItemSet().Put( rDefAttr );
             rDoc.ApplyPatternAreaTab( rOption.mnStartCol, rOption.mnStartRow,

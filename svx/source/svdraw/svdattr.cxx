@@ -374,7 +374,7 @@ SdrItemPool::SdrItemPool(
     mpLocalItemInfos[SDRATTR_WRITINGMODE2 - SDRATTR_START]._nItemInfoSlotID = 0 /*TODO*/;
 
     // it's my own creation level, set Defaults and ItemInfos
-    SetDefaults(mpLocalPoolDefaults);
+    SetPoolDefaults(mpLocalPoolDefaults);
     SetItemInfos(mpLocalItemInfos.get());
 }
 

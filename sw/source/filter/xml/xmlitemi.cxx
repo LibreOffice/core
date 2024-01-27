@@ -201,7 +201,7 @@ void SwXMLImportTableItemMapper_Impl::finished(
         // if not set, try the pool
         if ((SfxItemState::SET != eState) && SfxItemPool::IsWhich(Ids[i][0]))
         {
-            pItem = &rSet.GetPool()->GetDefaultItem(Ids[i][0]);
+            pItem = &rSet.GetPool()->GetUserOrPoolDefaultItem(Ids[i][0]);
         }
 
         // do we have an item?

@@ -183,12 +183,12 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
     else
     {
         ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-        std::unique_ptr<SfxPoolItem> pNewItem(pPool->GetDefaultItem(pEntry->nWID).Clone());
+        std::unique_ptr<SfxPoolItem> pNewItem(pPool->GetUserOrPoolDefaultItem(pEntry->nWID).Clone());
 
         if( !pNewItem->PutValue( aValue, pEntry->nMemberId ) )
             throw lang::IllegalArgumentException();
 
-        pPool->SetPoolDefaultItem( *pNewItem );
+        pPool->SetUserDefaultItem( *pNewItem );
 
         ItemsChanged();
     }
@@ -232,7 +232,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
     else
     {
         ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-        const SfxPoolItem& rItem = pPool->GetDefaultItem( pEntry->nWID );
+        const SfxPoolItem& rItem = pPool->GetUserOrPoolDefaultItem( pEntry->nWID );
         rItem.QueryValue( aRet, pEntry->nMemberId );
     }
     return aRet;
@@ -268,7 +268,7 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString
         //  check if pool default is set
 
         ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-        if ( pPool->GetPoolDefaultItem( nWID ) != nullptr )
+        if ( pPool->GetUserDefaultItem( nWID ) != nullptr )
             eRet = beans::PropertyState_DIRECT_VALUE;
     }
 
@@ -301,7 +301,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const OUString& aPropertyN
     if (pEntry->nWID)
     {
         ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-        pPool->ResetPoolDefaultItem( pEntry->nWID );
+        pPool->ResetUserDefaultItem( pEntry->nWID );
 
         ItemsChanged();
     }
@@ -324,7 +324,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropert
     if (pEntry->nWID)
     {
         ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-        const SfxPoolItem* pItem = pPool->GetItem2Default( pEntry->nWID );
+        const SfxPoolItem* pItem = pPool->GetPoolDefaultItem( pEntry->nWID );
         if (pItem)
             pItem->QueryValue( aRet, pEntry->nMemberId );
     }

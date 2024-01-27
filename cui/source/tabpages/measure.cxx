@@ -149,14 +149,14 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 
     // SdrMeasureLineDistItem
     if( pItem == nullptr )
-        pItem = &pPool->GetDefaultItem( SDRATTR_MEASURELINEDIST );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_MEASURELINEDIST );
     SetMetricValue(*m_xMtrFldLineDist, static_cast<const SdrMetricItem*>(pItem)->GetValue(), eUnit);
     m_xMtrFldLineDist->save_value();
 
     // SdrMeasureHelplineOverhangItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEOVERHANG );
     if( pItem == nullptr )
-        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
     SetMetricValue(*m_xMtrFldHelplineOverhang, static_cast<const SdrMetricItem*>(pItem)->GetValue(),
                    eUnit);
     m_xMtrFldHelplineOverhang->save_value();
@@ -164,7 +164,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureHelplineDistItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEDIST );
     if( pItem == nullptr )
-        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
     SetMetricValue(*m_xMtrFldHelplineDist, static_cast<const SdrMetricItem*>(pItem)->GetValue(),
                    eUnit);
     m_xMtrFldHelplineDist->save_value();
@@ -172,7 +172,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureHelpline1LenItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE1LEN );
     if( pItem == nullptr )
-        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
     SetMetricValue(*m_xMtrFldHelpline1Len, static_cast<const SdrMetricItem*>(pItem)->GetValue(),
                    eUnit);
     m_xMtrFldHelpline1Len->save_value();
@@ -180,7 +180,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureHelpline2LenItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE2LEN );
     if( pItem == nullptr )
-        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
     SetMetricValue(*m_xMtrFldHelpline2Len, static_cast<const SdrMetricItem*>(pItem)->GetValue(),
                    eUnit);
     m_xMtrFldHelpline2Len->save_value();
@@ -200,7 +200,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureDecimalPlacesItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREDECIMALPLACES );
     if( pItem == nullptr )
-        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
+        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
     m_xMtrFldDecimalPlaces->set_value(
       static_cast<const SdrMeasureDecimalPlacesItem*>(pItem)->GetValue());
     m_xMtrFldDecimalPlaces->save_value();

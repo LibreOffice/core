@@ -560,7 +560,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // if (IsStaticDefaultItem(pSource))
     // {
     //     assert(!bPassingOwnership && "ITEM: PassingOwnership not possible combined with StaticDefault (!)");
-    //     const SfxPoolItem* pStatic(pTargetPool->GetItem2Default(pSource->Which()));
+    //     const SfxPoolItem* pStatic(pTargetPool->GetPoolDefaultItem(pSource->Which()));
     //     if (nullptr != pStatic)
     //     {
     //         if (SfxPoolItem::areSame(pSource, pStatic))
@@ -575,7 +575,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // else if (IsDefaultItem(pSource))
     // {
     //     assert(!bPassingOwnership && "ITEM: PassingOwnership not possible combined with DynamicDefault (!)");
-    //     const SfxPoolItem* pDynamic(pTargetPool->GetPoolDefaultItem(pSource->Which()));
+    //     const SfxPoolItem* pDynamic(pTargetPool->GetUserDefaultItem(pSource->Which()));
     //     if (nullptr != pDynamic)
     //     {
     //         if (SfxPoolItem::areSame(pSource, pDynamic))
@@ -1254,7 +1254,7 @@ void SfxItemSet::PutExtended
                     switch (eDontCareAs)
                     {
                         case SfxItemState::SET:
-                            PutImpl(rSource.GetPool()->GetDefaultItem(nWhich), false);
+                            PutImpl(rSource.GetPool()->GetUserOrPoolDefaultItem(nWhich), false);
                             break;
 
                         case SfxItemState::DEFAULT:
@@ -1281,7 +1281,7 @@ void SfxItemSet::PutExtended
                 switch (eDefaultAs)
                 {
                     case SfxItemState::SET:
-                        PutImpl(rSource.GetPool()->GetDefaultItem(nWhich), false);
+                        PutImpl(rSource.GetPool()->GetUserOrPoolDefaultItem(nWhich), false);
                         break;
 
                     case SfxItemState::DEFAULT:
@@ -1506,7 +1506,7 @@ const SfxPoolItem* SfxItemSet::GetItem(sal_uInt16 nId, bool bSearchInParent) con
 
     if (bSearchInParent && SfxItemState::DEFAULT == eState && SfxItemPool::IsWhich(nWhich))
     {
-        pItem = &GetPool()->GetDefaultItem(nWhich);
+        pItem = &GetPool()->GetUserOrPoolDefaultItem(nWhich);
     }
 
     return pItem;
@@ -1525,7 +1525,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
         {
             if (IsInvalidItem(*aFoundOne))
             {
-                return GetPool()->GetDefaultItem(nWhich);
+                return GetPool()->GetUserOrPoolDefaultItem(nWhich);
             }
 #ifdef DBG_UTIL
             if (IsDisabledItem(*aFoundOne))
@@ -1542,7 +1542,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 
     // Get the Default from the Pool and return
     assert(m_pPool);
-    return GetPool()->GetDefaultItem(nWhich);
+    return GetPool()->GetUserOrPoolDefaultItem(nWhich);
 }
 
 /**
@@ -1753,7 +1753,7 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
             *ppFnd1 = INVALID_POOL_ITEM;
 
         else if ( pFnd2 && !bIgnoreDefaults &&
-                  GetPool()->GetDefaultItem(pFnd2->Which()) != *pFnd2 )
+                  GetPool()->GetUserOrPoolDefaultItem(pFnd2->Which()) != *pFnd2 )
             // Decision table: default, set, !=, sal_False
             *ppFnd1 = INVALID_POOL_ITEM;
 
@@ -1776,7 +1776,7 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
         {
             // 2nd Item is Default
             if ( !bIgnoreDefaults &&
-                 **ppFnd1 != GetPool()->GetDefaultItem((*ppFnd1)->Which()) )
+                 **ppFnd1 != GetPool()->GetUserOrPoolDefaultItem((*ppFnd1)->Which()) )
             {
                 // Decision table: set, default, !=, sal_False
                 checkRemovePoolRegistration(*ppFnd1);
@@ -1789,7 +1789,7 @@ void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *p
         {
             // 2nd Item is dontcare
             if ( !bIgnoreDefaults ||
-                 **ppFnd1 != GetPool()->GetDefaultItem( (*ppFnd1)->Which()) )
+                 **ppFnd1 != GetPool()->GetUserOrPoolDefaultItem( (*ppFnd1)->Which()) )
             {
                 // Decision table: set, dontcare, doesn't matter, sal_False
                 // or:             set, dontcare, !=, sal_True

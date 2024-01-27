@@ -4732,7 +4732,7 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             OSL_FAIL( "Attribute Null" );
         }
     }
-    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+    return &mxPoolHelper->GetDocPool()->GetUserOrPoolDefaultItem( nWhich );
 }
 
 const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
@@ -4747,7 +4747,7 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             OSL_FAIL( "Attribute Null" );
         }
     }
-    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+    return &mxPoolHelper->GetDocPool()->GetUserOrPoolDefaultItem( nWhich );
 }
 
 const SfxPoolItem* ScDocument::GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const

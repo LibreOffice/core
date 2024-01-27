@@ -421,7 +421,7 @@ void ODbAdminDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Re
     // delete the pool
     if (_rpPool)
     {
-        _rpPool->ReleaseDefaults(true);
+        _rpPool->ReleasePoolDefaults(true);
             // the "true" means delete the items, too
         _rpPool = nullptr;
     }

@@ -163,7 +163,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetDefaultPaperSize() );
 
                         SvxSetItem      aHFSetItem(
-                                            rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) );
+                                            rItemPool.GetUserOrPoolDefaultItem(ATTR_PAGE_HEADERSET) );
 
                         SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
                         SvxSizeItem     aHFSizeItem( // 0,5 cm + distance
@@ -210,14 +210,14 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                                         SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
                         pSet->Put( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ) );
 
-                        rItemPool.SetPoolDefaultItem( aPageItem );
-                        rItemPool.SetPoolDefaultItem( aPaperSizeItem );
-                        rItemPool.SetPoolDefaultItem( aLRSpaceItem );
-                        rItemPool.SetPoolDefaultItem( aULSpaceItem );
-                        rItemPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALE, 100 ) );
+                        rItemPool.SetUserDefaultItem( aPageItem );
+                        rItemPool.SetUserDefaultItem( aPaperSizeItem );
+                        rItemPool.SetUserDefaultItem( aLRSpaceItem );
+                        rItemPool.SetUserDefaultItem( aULSpaceItem );
+                        rItemPool.SetUserDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALE, 100 ) );
                         ScPageScaleToItem aScaleToItem;
-                        rItemPool.SetPoolDefaultItem( aScaleToItem );
-                        rItemPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 0 ) );
+                        rItemPool.SetUserDefaultItem( aScaleToItem );
+                        rItemPool.SetUserDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 0 ) );
                     }
                 }
                 break;

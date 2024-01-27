@@ -5904,7 +5904,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
                  ( !bTestForDefault ||
                    nWhich == RES_UL_SPACE ||
                    nWhich == RES_LR_SPACE ||
-                   *pItem != rPool.GetDefaultItem( nWhich ) ||
+                   *pItem != rPool.GetUserOrPoolDefaultItem( nWhich ) ||
                    ( pSet->GetParent() && *pItem != pSet->GetParent()->Get( nWhich ) ) ) )
             {
                 OutputItem( *pItem );

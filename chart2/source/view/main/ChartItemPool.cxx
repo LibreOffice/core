@@ -200,7 +200,7 @@ ChartItemPool::ChartItemPool():
     pItemInfos[SCHATTR_STYLE_SYMBOL - SCHATTR_START]._nItemInfoSlotID = SID_ATTR_SYMBOLTYPE;
     pItemInfos[SCHATTR_SYMBOL_SIZE - SCHATTR_START]._nItemInfoSlotID  = SID_ATTR_SYMBOLSIZE;
 
-    SetDefaults(ppPoolDefaults);
+    SetPoolDefaults(ppPoolDefaults);
     SetItemInfos(pItemInfos.get());
 }
 
@@ -213,7 +213,7 @@ ChartItemPool::~ChartItemPool()
 {
     Delete();
     // release and delete static pool default items
-    ReleaseDefaults(true);
+    ReleasePoolDefaults(true);
 }
 
 rtl::Reference<SfxItemPool> ChartItemPool::Clone() const

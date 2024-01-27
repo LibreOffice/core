@@ -463,7 +463,7 @@ static void WriteDop( WW8Export& rWrt )
 
     // write default TabStop
     const SvxTabStopItem& rTabStop =
-        rWrt.m_rDoc.GetAttrPool().GetDefaultItem(RES_PARATR_TABSTOP);
+        rWrt.m_rDoc.GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP);
     rDop.dxaTab = o3tl::narrowing<sal_uInt16>(rTabStop[0].GetTabPos());
 
     // Zoom factor and type

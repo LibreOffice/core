@@ -279,19 +279,19 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
     SfxItemPool& rPool = GetItemPool();
     rPool.SetDefaultMetric(MapUnit::Map100thMM);
     SvxFrameDirectionItem aModeItem( SvxFrameDirection::Environment, EE_PARA_WRITINGDIR );
-    rPool.SetPoolDefaultItem( aModeItem );
+    rPool.SetUserDefaultItem( aModeItem );
 
     // #i33700#
     // Set shadow distance defaults as PoolDefaultItems. Details see bug.
-    rPool.SetPoolDefaultItem(makeSdrShadowXDistItem(300));
-    rPool.SetPoolDefaultItem(makeSdrShadowYDistItem(300));
+    rPool.SetUserDefaultItem(makeSdrShadowXDistItem(300));
+    rPool.SetUserDefaultItem(makeSdrShadowYDistItem(300));
 
     // default for script spacing depends on locale, see SdDrawDocument ctor in sd
     LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     if (MsLangId::isKorean(eOfficeLanguage) || eOfficeLanguage == LANGUAGE_JAPANESE)
     {
         // secondary is edit engine pool
-        rPool.GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+        rPool.GetSecondaryPool()->SetUserDefaultItem( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
     }
 
     rPool.FreezeIdRanges();                         // the pool is also used directly
@@ -320,16 +320,16 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
     SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
     if ( pOutlinerPool )
     {
-         m_pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
-         m_pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));           // 12Pt
-         m_pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CTL ));           // 12Pt
+         m_pItemPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
+         m_pItemPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));           // 12Pt
+         m_pItemPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CTL ));           // 12Pt
     }
     SfxItemPool* pHitOutlinerPool = rHitOutliner.GetEditTextObjectPool();
     if ( pHitOutlinerPool )
     {
-         pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));    // 12Pt
-         pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));    // 12Pt
-         pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CTL ));    // 12Pt
+         pHitOutlinerPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));    // 12Pt
+         pHitOutlinerPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));    // 12Pt
+         pHitOutlinerPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CTL ));    // 12Pt
     }
 
     // initial undo mode as in Calc document

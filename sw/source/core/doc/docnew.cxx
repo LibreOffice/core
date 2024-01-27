@@ -869,8 +869,8 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
              nWhich <= rPair.second; ++nWhich)
         {
             const SfxPoolItem& rSourceAttr =
-                rSource.mpAttrPool->GetDefaultItem(nWhich);
-            if (rSourceAttr != mpAttrPool->GetDefaultItem(nWhich))
+                rSource.mpAttrPool->GetUserOrPoolDefaultItem(nWhich);
+            if (rSourceAttr != mpAttrPool->GetUserOrPoolDefaultItem(nWhich))
                 aNewDefaults.Put(rSourceAttr);
         }
     }

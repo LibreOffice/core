@@ -381,9 +381,9 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         // determine default-distance
         SfxItemPool* pPool = m_rOutAttrs.GetPool();
         {
-            sal_Int32 n = pPool->GetDefaultItem(SDRATTR_SHADOWXDIST).GetValue();
+            sal_Int32 n = pPool->GetUserOrPoolDefaultItem(SDRATTR_SHADOWXDIST).GetValue();
             if (n == 0)
-                n = pPool->GetDefaultItem(SDRATTR_SHADOWYDIST).GetValue();
+                n = pPool->GetUserOrPoolDefaultItem(SDRATTR_SHADOWYDIST).GetValue();
             SetMetricValue(*m_xMtrDistance, std::abs(n), m_ePoolUnit);
         }
 

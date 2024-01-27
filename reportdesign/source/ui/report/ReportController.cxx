@@ -2408,7 +2408,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
     };
 
-    pPool->SetDefaults(&pDefaults);
+    pPool->SetPoolDefaults(&pDefaults);
 
 
     pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why

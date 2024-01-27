@@ -1530,7 +1530,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             // Tabulators: Put DefaultTabs into ItemSet
             const SvxTabStopItem& rDefTabs =
-                            GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
+                            GetPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP);
 
             const sal_uInt16 nDefDist = o3tl::narrowing<sal_uInt16>(::GetTabDist( rDefTabs ));
             SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );

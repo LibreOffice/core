@@ -295,9 +295,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     // Generate and write out Font table  ...
     std::vector<std::unique_ptr<SvxFontItem>> aFontTable;
     // default font must be up front, so DEF font in RTF
-    aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO ) ) );
-    aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CJK ) ) );
-    aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CTL ) ) );
+    aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetUserOrPoolDefaultItem( EE_CHAR_FONTINFO ) ) );
+    aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetUserOrPoolDefaultItem( EE_CHAR_FONTINFO_CJK ) ) );
+    aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetUserOrPoolDefaultItem( EE_CHAR_FONTINFO_CTL ) ) );
     for ( sal_uInt16 nScriptType = 0; nScriptType < 3; nScriptType++ )
     {
         sal_uInt16 nWhich = EE_CHAR_FONTINFO;
@@ -387,7 +387,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     SvxColorList aColorList;
     // COL_AUTO should be the default color, always put it first
     aColorList.emplace_back(COL_AUTO);
-    SvxColorItem const& rDefault(maEditDoc.GetItemPool().GetDefaultItem(EE_CHAR_COLOR));
+    SvxColorItem const& rDefault(maEditDoc.GetItemPool().GetUserOrPoolDefaultItem(EE_CHAR_COLOR));
     if (rDefault.GetValue() != COL_AUTO) // is the default always AUTO?
     {
         aColorList.push_back(rDefault.GetValue());
@@ -501,7 +501,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput.WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteOString( "\\EditEnginePoolDefaults" );
     for ( sal_uInt16 nPoolDefItem = EE_PARA_START; nPoolDefItem <= EE_CHAR_END; nPoolDefItem++)
     {
-        const SfxPoolItem& rItem = maEditDoc.GetItemPool().GetDefaultItem( nPoolDefItem );
+        const SfxPoolItem& rItem = maEditDoc.GetItemPool().GetUserOrPoolDefaultItem( nPoolDefItem );
         WriteItemAsRTF( rItem, rOutput, 0, 0, aFontTable, aColorList );
     }
     rOutput.WriteChar( '}' ) << endl;

@@ -65,7 +65,7 @@ ScMessagePool::ScMessagePool()
     mvPoolDefaults[SCITEM_SOLVEDATA         - MSGPOOL_START] = &aGlobalSolveItem;
     mvPoolDefaults[SCITEM_USERLIST          - MSGPOOL_START] = &aGlobalUserListItem;
 
-    SetDefaults( &mvPoolDefaults );
+    SetPoolDefaults( &mvPoolDefaults );
 
     SetSecondaryPool( pDocPool.get() );
 }

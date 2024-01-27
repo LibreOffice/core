@@ -208,13 +208,13 @@ uno::Any SvxUnoFontDescriptor::getPropertyDefault( SfxItemPool* pPool )
         !SfxItemPool::IsWhich(EE_CHAR_WLM))
         return aAny;
 
-    aSet.Put(pPool->GetDefaultItem(EE_CHAR_FONTINFO));
-    aSet.Put(pPool->GetDefaultItem(EE_CHAR_FONTHEIGHT));
-    aSet.Put(pPool->GetDefaultItem(EE_CHAR_ITALIC));
-    aSet.Put(pPool->GetDefaultItem(EE_CHAR_UNDERLINE));
-    aSet.Put(pPool->GetDefaultItem(EE_CHAR_WEIGHT));
-    aSet.Put(pPool->GetDefaultItem(EE_CHAR_STRIKEOUT));
-    aSet.Put(pPool->GetDefaultItem(EE_CHAR_WLM));
+    aSet.Put(pPool->GetUserOrPoolDefaultItem(EE_CHAR_FONTINFO));
+    aSet.Put(pPool->GetUserOrPoolDefaultItem(EE_CHAR_FONTHEIGHT));
+    aSet.Put(pPool->GetUserOrPoolDefaultItem(EE_CHAR_ITALIC));
+    aSet.Put(pPool->GetUserOrPoolDefaultItem(EE_CHAR_UNDERLINE));
+    aSet.Put(pPool->GetUserOrPoolDefaultItem(EE_CHAR_WEIGHT));
+    aSet.Put(pPool->GetUserOrPoolDefaultItem(EE_CHAR_STRIKEOUT));
+    aSet.Put(pPool->GetUserOrPoolDefaultItem(EE_CHAR_WLM));
 
     awt::FontDescriptor aDesc;
 

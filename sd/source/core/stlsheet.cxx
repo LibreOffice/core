@@ -1062,7 +1062,7 @@ void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const cs
         }
         else
         {
-            aSet.Put( GetPool()->GetPool().GetDefaultItem( pEntry->nWID ) );
+            aSet.Put( GetPool()->GetPool().GetUserOrPoolDefaultItem( pEntry->nWID ) );
         }
     }
 
@@ -1172,7 +1172,7 @@ css::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
             aSet.Put(  *pItem );
 
         if( !aSet.Count() )
-            aSet.Put( GetPool()->GetPool().GetDefaultItem( pEntry->nWID ) );
+            aSet.Put( GetPool()->GetPool().GetUserOrPoolDefaultItem( pEntry->nWID ) );
 
         if(SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pEntry, aAny ))
             return aAny;
@@ -1495,7 +1495,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName )
     {
         SfxItemPool& rMyPool = GetPool()->GetPool();
         SfxItemSet aSet( rMyPool, pEntry->nWID, pEntry->nWID);
-        aSet.Put( rMyPool.GetDefaultItem( pEntry->nWID ) );
+        aSet.Put( rMyPool.GetUserOrPoolDefaultItem( pEntry->nWID ) );
         aRet = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
     }
     return aRet;
