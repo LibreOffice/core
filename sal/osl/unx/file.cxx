@@ -988,6 +988,9 @@ oslFileError openFilePath(const OString& filePath, oslFileHandle* pHandle,
     if (flags & O_EXCL && !(flags & O_CREAT))
         flags &= ~O_EXCL;
 
+    // set close-on-exec by default
+    flags |= O_CLOEXEC;
+
     /* open the file */
     int fd = open_c( filePath, flags, mode );
     if (fd == -1)
