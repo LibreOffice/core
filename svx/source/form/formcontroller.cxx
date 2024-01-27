@@ -2125,7 +2125,7 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
     bool bTouch = true;
     if (::comphelper::hasProperty(FM_PROP_ENABLED, xSet))
         bTouch = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ENABLED));
-    if (::comphelper::hasProperty(FM_PROP_READONLY, xSet))
+    if (bTouch && ::comphelper::hasProperty(FM_PROP_READONLY, xSet))
         bTouch = !::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_READONLY));
 
     if (!bTouch)
