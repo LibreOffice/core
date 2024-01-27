@@ -298,22 +298,26 @@ class CodeliteIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         self.create_workspace_file()
         for module in self.gbuildparser.modulenamelist:
-            self.create_project_file(module)
+            if os.path.exists(module): # ignore external modules
+                self.create_project_file(module)
         #self.create_project_file('vcl')
 
     def create_workspace_file(self):
         root_node = ET.Element('CodeLite_Workspace', Name='libo2', Database='./libo2.tags', Version='10.0.0')
         for module in self.gbuildparser.modulenamelist:
-            ET.SubElement(root_node, 'Project', Name=module, Path='%s/%s.project' % (module, module), Active='No')
+            if os.path.exists(module): # ignore external modules
+                ET.SubElement(root_node, 'Project', Name=module, Path='%s/%s.project' % (module, module), Active='No')
         build_matrix_node = ET.SubElement(root_node, 'BuildMatrix')
         workspace_config_node = ET.SubElement(build_matrix_node, 'WorkspaceConfiguration', Name='Debug', Selected='yes')
         ET.SubElement(workspace_config_node, 'Environment')
         for module in self.gbuildparser.modulenamelist:
-            ET.SubElement(workspace_config_node, 'Project', Name=module, ConfigName='Debug')
+            if os.path.exists(module): # ignore external modules
+                ET.SubElement(workspace_config_node, 'Project', Name=module, ConfigName='Debug')
         workspace_config_node = ET.SubElement(build_matrix_node, 'WorkspaceConfiguration', Name='Release', Selected='yes')
         ET.SubElement(workspace_config_node, 'Environment')
         for module in self.gbuildparser.modulenamelist:
-            ET.SubElement(workspace_config_node, 'Project', Name=module, ConfigName='Release')
+            if os.path.exists(module): # ignore external modules
+                 ET.SubElement(workspace_config_node, 'Project', Name=module, ConfigName='Release')
 
         self.write_pretty_xml(root_node, os.path.join(self.gbuildparser.builddir, 'libo2.workspace'))
 
