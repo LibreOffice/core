@@ -27,11 +27,16 @@
 #include "abi.hxx"
 #include "callvirtualmethod.hxx"
 
-#if defined(__has_feature)
-#  if __has_feature(memory_sanitizer)
-#    include <sanitizer/msan_interface.h>
-#    define MEMORY_SANITIZER
-#  endif
+#ifndef __has_feature
+#  define __has_feature(x) 0
+#endif
+
+#if __has_feature(memory_sanitizer)
+#  include <sanitizer/msan_interface.h>
+   // In the absence of a better idea just unpoison this
+#  define MSAN_UNPOISON_RETURN_REGISTER() __msan_unpoison(pRegisterReturn, pReturnTypeRef->pType->nSize)
+#else
+#  define MSAN_UNPOISON_RETURN_REGISTER()
 #endif
 
 // The call instruction within the asm block of callVirtualMethod may throw
@@ -142,30 +147,32 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
         *static_cast<sal_uInt64 *>( pRegisterReturn ) = data.rax;
+        MSAN_UNPOISON_RETURN_REGISTER();
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
     case typelib_TypeClass_ENUM:
         *static_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &data.rax );
+        MSAN_UNPOISON_RETURN_REGISTER();
         break;
     case typelib_TypeClass_CHAR:
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
         *static_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &data.rax );
+        MSAN_UNPOISON_RETURN_REGISTER();
         break;
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
         *static_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &data.rax );
+        MSAN_UNPOISON_RETURN_REGISTER();
         break;
     case typelib_TypeClass_FLOAT:
         *static_cast<float *>(pRegisterReturn) = *reinterpret_cast<float *>(&data.xmm0);
+        MSAN_UNPOISON_RETURN_REGISTER();
         break;
     case typelib_TypeClass_DOUBLE:
-#if defined(MEMORY_SANITIZER)
-        // In the absence of a better idea just unpoison this
-        __msan_unpoison(&data.xmm0, sizeof(data.xmm0));
-#endif
         *static_cast<double *>( pRegisterReturn ) = data.xmm0;
+        MSAN_UNPOISON_RETURN_REGISTER();
         break;
     default:
         {
