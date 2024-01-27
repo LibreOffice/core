@@ -1139,6 +1139,9 @@ oslFileError openFilePath(const OString& filePath, oslFileHandle* pHandle,
     if (isForbidden( filePath, uFlags ))
         return osl_File_E_ACCES;
 
+    // set close-on-exec by default
+    flags |= O_CLOEXEC;
+
     /* open the file */
     int fd = open_c( filePath, flags, mode );
     if (fd == -1)
