@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <rtl/ref.hxx>
 
+class SvxDrawPage;
 class SwGrfFormatColl;
 class SwDoc;
 class SwOLENode;
@@ -80,6 +81,8 @@ public:
         basegfx::B2DRange& rRange,
         bool bSynchron);
     void resetBufferedData();
+
+    SvxDrawPage* tryToGetChartDrawPage() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

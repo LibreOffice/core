@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
@@ -47,11 +48,13 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 #include <vcl/svapp.hxx>
 #include <strings.hrc>
 #include <svx/charthelper.hxx>
+#include <svx/unopage.hxx>
 #include <comphelper/threadpool.hxx>
 #include <atomic>
 #include <deque>
@@ -1234,6 +1237,22 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
     }
 
     return m_aPrimitive2DSequence;
+}
+
+SvxDrawPage* SwOLEObj::tryToGetChartDrawPage() const
+{
+    if (!m_xOLERef.is() || !m_xOLERef.IsChart())
+        return nullptr;
+    const uno::Reference<frame::XModel> xModel(m_xOLERef->getComponent(), uno::UNO_QUERY);
+    if (!xModel.is())
+        return nullptr;
+    const uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xModel, uno::UNO_QUERY);
+    if (!xDrawPageSupplier)
+        return nullptr;
+    const uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
+    if (!xDrawPage)
+        return nullptr;
+    return comphelper::getFromUnoTunnel<SvxDrawPage>(xDrawPage);
 }
 
 void SwOLEObj::resetBufferedData()
