@@ -29,6 +29,7 @@
 #include <rtl/character.hxx>
 #include <o3tl/string_view.hxx>
 #include <utility>
+#include <vector>
 
 SbiScanner::SbiScanner(OUString _aBuf, StarBASIC* p)
     : aBuf(std::move(_aBuf))
@@ -209,6 +210,17 @@ bool SbiScanner::readLine()
     return true;
 }
 
+// Function to check if a string is a valid compiler directive
+static bool isValidCompilerDirective(std::u16string_view directive) {
+    static const std::vector<std::u16string_view> validDirectives = {
+        u"if", u"elseif", u"else", u"end", u"const"
+    };
+
+    return std::any_of(validDirectives.begin(), validDirectives.end(), [&](const auto& valid) {
+        return o3tl::matchIgnoreAsciiCase(directive, valid);
+    });
+}
+
 bool SbiScanner::NextSym()
 {
     // memorize for the EOLN-case
@@ -220,7 +232,6 @@ bool SbiScanner::NextSym()
     eScanType = SbxVARIANT;
     aSym.clear();
     bHash = bSymbol = bNumber = bSpaces = false;
-    bool bCompilerDirective = false;
 
     // read in line?
     if (nLineIdx == -1)
@@ -256,6 +267,8 @@ bool SbiScanner::NextSym()
     if(nCol < aLine.getLength() && aLine[nCol] == '#')
     {
         sal_Int32 nLineTempIdx = nLineIdx;
+        std::u16string_view candidate(aLine.subView(nCol + 1));
+
         do
         {
             nLineTempIdx++;
@@ -266,9 +279,20 @@ bool SbiScanner::NextSym()
         {
             ++nLineIdx;
             ++nCol;
-            //ignore compiler directives (# is first non-space character)
+            //handle compiler directives (# is first non-space character)
             if (nOldCol2 == 0)
-                bCompilerDirective = true;
+            {
+                if (isValidCompilerDirective(candidate))
+                {
+                    // Skip the whole line if starts with a hash and is a valid compiler directive
+                    nCol = 0;
+                    goto eoln;
+                }
+                else
+                {
+                    GenError(ERRCODE_BASIC_SYNTAX);
+                }
+            }
             else
                 bHash = true;
         }
@@ -660,10 +684,9 @@ bool SbiScanner::NextSym()
 
 PrevLineCommentLbl:
 
-    if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
-                                    ( bCompilerDirective ||
-                                      aSym.startsWith("'") ||
-                                      aSym.equalsIgnoreAsciiCase( "REM" ) ) ) )
+    if (bPrevLineExtentsComment ||
+        (eScanType != SbxSTRING &&
+        (aSym.startsWith("'") || aSym.equalsIgnoreAsciiCase("REM") || aSym.startsWith("#"))))
     {
         bPrevLineExtentsComment = false;
         aSym = "REM";

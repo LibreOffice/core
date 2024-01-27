@@ -114,4 +114,57 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402_vba)
     CPPUNIT_ASSERT(!aMacro.HasError());
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf93727_if)
+{
+    // #If and #End directive
+    MacroSnippet aMacro("Sub doUnitTest\n"
+                        "  #If 1 = 1 Then\n"
+                        "      Const a = 10\n"
+                        "  #End If\n"
+                        "End Sub\n");
+    aMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("#If directive causes compile error", !aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf93727_else)
+{
+    // #Else directive
+    MacroSnippet aMacro("Sub doUnitTest\n"
+                        "a = 0\n"
+                        "#If 1 = 0 Then\n"
+                        "    a = 10\n"
+                        "#Else\n"
+                        "    a = 20\n"
+                        "#End If\n"
+                        "End Sub\n");
+    aMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("#Else directive causes compile error", !aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf93727_elseif)
+{
+    // #ElseIf directive
+    MacroSnippet aMacro("Sub doUnitTest\n"
+                        "a = 0\n"
+                        "  #If 1 = 0 Then\n"
+                        "      a = 10\n"
+                        "  #ElseIf 2 = 2 Then\n"
+                        "      a = 20\n"
+                        "  #End If\n"
+                        "End Sub\n");
+    aMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("#ElseIf directive causes compile error", !aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf93727_const)
+{
+    // #Const directive
+    MacroSnippet aMacro("#Const MaxValue = 1000\n"
+                        "Sub doUnitTest\n"
+                        "   Dim value As Integer\n"
+                        "   value = MaxValue\n"
+                        "End Sub\n");
+    aMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("#Const directive causes compile error", !aMacro.HasError());
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
