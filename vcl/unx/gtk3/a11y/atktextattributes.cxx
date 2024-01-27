@@ -924,7 +924,7 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
     {
         sal_Unicode lastFillChar = ' ';
 
-        for( const auto& rTabStop : std::as_const(theTabStops) )
+        for (const auto& rTabStop : theTabStops)
         {
             bool is_default_tab = (style::TabAlign_DEFAULT == rTabStop.Alignment);
 

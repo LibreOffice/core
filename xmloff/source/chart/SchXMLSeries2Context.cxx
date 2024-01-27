@@ -1247,7 +1247,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         if (xPointPropInfo.is())
                         {
                             uno::Sequence<beans::Property> aProperties = xPointPropInfo->getProperties();
-                            for (const auto& rProperty : std::as_const(aProperties))
+                            for (const auto& rProperty : aProperties)
                             {
                                 if (!rProperty.Name.startsWith("Char")
                                     || rProperty.Name.startsWith("Chart"))

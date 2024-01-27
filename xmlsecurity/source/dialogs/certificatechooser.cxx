@@ -211,7 +211,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
         }
 
         // fill list of certificates; the first entry will be selected
-        for (const auto& xCert : std::as_const(xCerts))
+        for (const auto& xCert : xCerts)
         {
             std::shared_ptr<UserData> userData = std::make_shared<UserData>();
             userData->xCertificate = xCert;

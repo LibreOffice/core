@@ -1550,7 +1550,7 @@ TypeDescription IUnknownWrapper::getInterfaceMemberDescOfCurrentCall(std::u16str
 {
     TypeDescription ret;
 
-    for( auto const & rType : std::as_const(m_seqTypes) )
+    for (auto const& rType : m_seqTypes)
     {
         TypeDescription _curDesc( rType );
         _curDesc.makeComplete();

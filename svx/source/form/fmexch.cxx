@@ -230,7 +230,7 @@ namespace svxform
     {
         ListBoxEntrySet().swap(m_aSelectedEntries);
 
-        for (const css::uno::Sequence<sal_uInt32>& rPaths : std::as_const(m_aControlPaths))
+        for (const css::uno::Sequence<sal_uInt32>& rPaths : m_aControlPaths)
         {
             std::unique_ptr<weld::TreeIter> xSearch(pTreeBox->make_iterator(pRoot));
             for (const sal_uInt32 nThisPath : rPaths)

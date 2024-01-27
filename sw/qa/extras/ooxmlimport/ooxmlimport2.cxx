@@ -830,7 +830,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103345)
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (beans::PropertyValue const& prop : std::as_const(aProps))
+    for (beans::PropertyValue const& prop : aProps)
     {
         if (prop.Name == "NumberingType")
         {

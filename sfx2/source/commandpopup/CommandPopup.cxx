@@ -64,7 +64,7 @@ void MenuContentHandler::gatherMenuContent(
         bool bIsVisible = true;
         bool bIsEnabled = true;
 
-        for (auto const& rProperty : std::as_const(aProperties))
+        for (auto const& rProperty : aProperties)
         {
             OUString aPropertyName = rProperty.Name;
             if (aPropertyName == "CommandURL")

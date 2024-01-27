@@ -2268,7 +2268,7 @@ uno::Sequence< beans::PropertyValue > SfxObjectShell::GetDocumentProtectionFromG
     {
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
-        for( const auto& rProp : std::as_const(propList) )
+        for (const auto& rProp : propList)
         {
             if (rProp.Name == "DocumentProtection")
             {

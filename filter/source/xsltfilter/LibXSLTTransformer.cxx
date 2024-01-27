@@ -521,7 +521,7 @@ namespace XSLT
 #endif
 
         m_parameters.clear();
-        for (const Any& p : std::as_const(params))
+        for (const Any& p : params)
         {
             NamedValue nv;
             p >>= nv;

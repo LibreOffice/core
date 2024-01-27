@@ -85,7 +85,7 @@ short SvColorDialog::Execute(weld::Window* pParent)
         if( ret )
         {
             props = xPropertyAccess->getPropertyValues();
-            for( const auto& rProp : std::as_const(props) )
+            for (const auto& rProp : props)
             {
                 if( rProp.Name == sColor )
                 {
@@ -146,7 +146,7 @@ IMPL_LINK( SvColorDialog, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*,
         Reference< XPropertyAccess > xPropertyAccess( mxDialog, UNO_QUERY_THROW );
         Sequence< PropertyValue > props = xPropertyAccess->getPropertyValues();
 
-        for( const auto& rProp : std::as_const(props) )
+        for (const auto& rProp : props)
         {
             if( rProp.Name == sColor )
             {

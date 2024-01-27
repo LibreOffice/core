@@ -973,7 +973,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletCharAndFont)
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
     OUString sBulletChar(u'\xf06c');
-    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "BulletChar")
             CPPUNIT_ASSERT_EQUAL_MESSAGE("BulletChar incorrect.", sBulletChar,

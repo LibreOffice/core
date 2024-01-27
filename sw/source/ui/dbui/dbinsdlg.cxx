@@ -1471,7 +1471,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
 {
     Sequence <OUString> aNames = GetNodeNames(OUString());
     //remove entries that contain this data source + table at first
-    for(OUString const & nodeName : std::as_const(aNames))
+    for (OUString const& nodeName : aNames)
     {
         Sequence<Any> aSourceProperties = GetProperties({ nodeName + "/DataSource", nodeName + "/Command" });
         const Any* pSourceProps = aSourceProperties.getArray();

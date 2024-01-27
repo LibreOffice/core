@@ -127,7 +127,7 @@ void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >&
             break;
     }
 
-    for( const beans::PropertyValue& rProp : std::as_const(aParams) )
+    for (const beans::PropertyValue& rProp : aParams)
     {
         if ( rProp.Name == "ProvideHiddenThemes" )
             rProp.Value >>= mbHiddenThemes;

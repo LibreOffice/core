@@ -39,7 +39,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBibliographyLoader)
 
     // Without the accompanying fix in place, this test would have failed, as the last column
     // (LOCAL_URL) had an empty field name:
-    for (const auto& rPair : std::as_const(aSeq))
+    for (const auto& rPair : aSeq)
     {
         CPPUNIT_ASSERT(!rPair.Name.isEmpty());
     }

@@ -328,7 +328,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
 
                         Sequence< beans::PropertyValue > aFilterData;
                         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
-                        for ( const beans::PropertyValue& rProp : std::as_const(aFilterData) )
+                        for (const beans::PropertyValue& rProp : aFilterData)
                             if ( rProp.Name == "Type" )
                                 rProp.Value >>= aTypeName;
 
@@ -341,7 +341,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
 
                             Sequence< beans::PropertyValue > aTypeData;
                             xTypeDetection->getByName( aTypeName ) >>= aTypeData;
-                            for ( const beans::PropertyValue& rProp : std::as_const(aTypeData) )
+                            for (const beans::PropertyValue& rProp : aTypeData)
                                 if ( rProp.Name == "MediaType" )
                                     rProp.Value >>= aDocMimetype;
                         }

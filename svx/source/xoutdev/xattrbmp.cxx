@@ -260,7 +260,7 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         uno::Sequence< beans::PropertyValue >   aPropSeq;
         if( rVal >>= aPropSeq )
         {
-            for ( const auto& rProp : std::as_const(aPropSeq) )
+            for (const auto& rProp : aPropSeq)
             {
                 if ( rProp.Name == "Name" )
                     bSetName = (rProp.Value >>= aName);

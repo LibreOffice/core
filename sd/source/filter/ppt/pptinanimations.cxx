@@ -557,7 +557,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
 
     bool bAfterEffect = false;
     sal_Int32 nMasterRel = 0;
-    for( const NamedValue& rValue : std::as_const(aUserData) )
+    for (const NamedValue& rValue : aUserData)
     {
         if ( rValue.Name == "after-effect" )
         {

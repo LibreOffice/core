@@ -29,7 +29,7 @@ void SAL_CALL DispatchDisabler::initialize( const uno::Sequence< uno::Any >& aAr
     if( aArguments.hasElements() &&
         ( aArguments[0] >>= aDisabledURLs ) )
     {
-        for( OUString const & url : std::as_const(aDisabledURLs) )
+        for (OUString const& url : aDisabledURLs)
             maDisabledURLs.insert(url);
     }
 }

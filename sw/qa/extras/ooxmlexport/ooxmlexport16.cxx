@@ -447,7 +447,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
         auto aCustomShapeGeometry = xProperties->getPropertyValue("CustomShapeGeometry")
                                         .get<uno::Sequence<beans::PropertyValue>>();
         // Find for shape type
-        for (const auto& aCustomGeometryIterator : std::as_const(aCustomShapeGeometry))
+        for (const auto& aCustomGeometryIterator : aCustomShapeGeometry)
         {
             if (aCustomGeometryIterator.Name == "Type")
                 CPPUNIT_ASSERT_MESSAGE(

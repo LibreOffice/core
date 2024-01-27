@@ -554,7 +554,7 @@ sal_Int32 CCRS_PropertySetInfo
 bool CCRS_PropertySetInfo
         ::impl_queryProperty( std::u16string_view rName, Property& rProp ) const
 {
-    for( const Property& rMyProp : std::as_const(*m_xProperties) )
+    for (const Property& rMyProp : *m_xProperties)
     {
         if( rMyProp.Name == rName )
         {
@@ -593,7 +593,7 @@ sal_Int32 CCRS_PropertySetInfo
     while( bFound )
     {
         bFound = false;
-        for( const auto & rProp : std::as_const(*m_xProperties) )
+        for (const auto& rProp : *m_xProperties)
         {
             if( nHandle == rProp.Handle )
             {

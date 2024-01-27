@@ -1351,7 +1351,7 @@ void PrintDialog::setupOptionalUI()
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         OUString aGroupingHint;
 
-        for( const beans::PropertyValue& rEntry : std::as_const(aOptProp) )
+        for (const beans::PropertyValue& rEntry : aOptProp)
         {
             if ( rEntry.Name == "ID" )
             {
@@ -1589,7 +1589,7 @@ void PrintDialog::setupOptionalUI()
                 continue;
 
             // iterate options
-            for( const auto& rChoice : std::as_const(aChoices) )
+            for (const auto& rChoice : aChoices)
                 xList->append_text(rChoice);
 
             sal_Int32 nSelectVal = 0;

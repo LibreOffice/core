@@ -1754,7 +1754,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 aClassSeq.realloc( nIfaceCount + 1 );
                 aClassSeq.getArray()[ nIfaceCount ] = xImplClass2;
 
-                for( const Reference<XIdlClass>& rxIfaceClass : std::as_const(aClassSeq) )
+                for (const Reference<XIdlClass>& rxIfaceClass : aClassSeq)
                 {
                     if (!seen.insert(rxIfaceClass->getName()).second) {
                         continue;

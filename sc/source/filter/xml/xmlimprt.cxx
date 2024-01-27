@@ -1363,7 +1363,7 @@ void SAL_CALL ScXMLImport::endDocument()
                 uno::Sequence< beans::PropertyValue > aSeq;
                 if (xIndexAccess->getByIndex(0) >>= aSeq)
                 {
-                    for (const auto& rProp : std::as_const(aSeq))
+                    for (const auto& rProp : aSeq)
                     {
                         OUString sName(rProp.Name);
                         if (sName == SC_ACTIVETABLE)

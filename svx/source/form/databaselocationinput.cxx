@@ -90,7 +90,7 @@ namespace svx
 
         // forward the allowed extensions to the input control
         OUStringBuffer aExtensionList;
-        for ( auto const & extension : std::as_const(m_aFilterExtensions) )
+        for (auto const& extension : m_aFilterExtensions)
         {
             aExtensionList.append( extension + ";" );
         }

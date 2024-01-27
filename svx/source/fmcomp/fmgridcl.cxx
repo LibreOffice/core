@@ -1379,7 +1379,7 @@ void FmGridControl::DeleteSelectedRows()
                 else
                 {
                     // select the remaining rows
-                    for (const sal_Int32 nSuccess : std::as_const(aDeletedRows))
+                    for (const sal_Int32 nSuccess : aDeletedRows)
                     {
                         try
                         {

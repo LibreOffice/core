@@ -3130,7 +3130,7 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                     ui::DockingArea                       nDockedArea( ui::DockingArea_DOCKINGAREA_DEFAULT );
 
                     xPersistentWindowState->getByName( rWindowElementName ) >>= aPropValueSeq;
-                    for ( beans::PropertyValue const & rProp : std::as_const(aPropValueSeq) )
+                    for (beans::PropertyValue const& rProp : aPropValueSeq)
                     {
                         if ( rProp.Name == WINDOWSTATE_PROPERTY_DOCKINGAREA )
                             rProp.Value >>= nDockedArea;

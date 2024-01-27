@@ -949,13 +949,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     pViewFrame->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, aNbItem);
 
                     // Show toolbars
-                    for ( const OUString& rName : std::as_const(aMandatoryToolbars) )
+                    for (const OUString& rName : aMandatoryToolbars)
                     {
                         xLayoutManager->createElement( rName );
                         xLayoutManager->showElement( rName );
                     }
 
-                    for ( const OUString& rName : std::as_const(aUserToolbars) )
+                    for (const OUString& rName : aUserToolbars)
                     {
                         xLayoutManager->createElement( rName );
                         xLayoutManager->showElement( rName );

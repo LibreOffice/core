@@ -1467,7 +1467,7 @@ void SortedIndividualInt32List::InsertHolidayList(
         if( !(rHolAny >>= aAnySeq) )
             throw lang::IllegalArgumentException();
 
-        for( const uno::Sequence< uno::Any >& rSubSeq : std::as_const(aAnySeq) )
+        for (const uno::Sequence<uno::Any>& rSubSeq : aAnySeq)
         {
             for( const uno::Any& rAny : rSubSeq )
                 InsertHolidayList( rAnyConv, rAny, nNullDate, false/*bInsertOnWeekend*/ );
@@ -2022,7 +2022,7 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars )
                 if( !(r >>= aValArr) )
                     throw lang::IllegalArgumentException();
 
-                for( const uno::Sequence< uno::Any >& rArr : std::as_const(aValArr) )
+                for (const uno::Sequence<uno::Any>& rArr : aValArr)
                     Append( rArr );
                 }
                 break;

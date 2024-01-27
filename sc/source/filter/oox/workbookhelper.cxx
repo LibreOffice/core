@@ -765,7 +765,7 @@ void WorkbookHelper::finalizeWorkbookImport()
 
     OUString sTabName;
     Reference< XNameAccess > xSheetsNC;
-    for (const auto& rProp : std::as_const(aSeq))
+    for (const auto& rProp : aSeq)
     {
         OUString sName(rProp.Name);
         if (sName == SC_ACTIVETABLE)
@@ -790,7 +790,7 @@ void WorkbookHelper::finalizeWorkbookImport()
     if ( !(aAny >>= aProperties) )
         return;
 
-    for (const auto& rProp : std::as_const(aProperties))
+    for (const auto& rProp : aProperties)
     {
         OUString sName(rProp.Name);
         if (sName == SC_POSITIONLEFT)

@@ -605,7 +605,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104445)
         uno::Sequence<beans::PropertyValue> aBulletProps;
         xNumRule->getByIndex(0) >>= aBulletProps;
 
-        for (beans::PropertyValue const& rProp : std::as_const(aBulletProps))
+        for (beans::PropertyValue const& rProp : aBulletProps)
         {
             if (rProp.Name == "NumberingType")
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(style::NumberingType::NUMBER_NONE),
@@ -627,7 +627,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104445)
         uno::Sequence<beans::PropertyValue> aBulletProps;
         xNumRule->getByIndex(0) >>= aBulletProps;
 
-        for (beans::PropertyValue const& rProp : std::as_const(aBulletProps))
+        for (beans::PropertyValue const& rProp : aBulletProps)
         {
             if (rProp.Name == "NumberingType")
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(style::NumberingType::CHAR_SPECIAL),
@@ -1432,7 +1432,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testOOXTheme)
     xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
 
     bool bTheme = false;
-    for (beans::PropertyValue const& prop : std::as_const(aGrabBag))
+    for (beans::PropertyValue const& prop : aGrabBag)
     {
         if (prop.Name == "OOXTheme")
         {

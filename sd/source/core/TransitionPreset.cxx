@@ -341,7 +341,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         uno::Sequence< OUString > aFiles;
         xNameAccess->getByName("TransitionFiles") >>= aFiles;
 
-        for( const auto& rFile : std::as_const(aFiles) )
+        for (const auto& rFile : aFiles)
         {
             OUString aURL = comphelper::getExpandedUri(xContext, rFile);
 

@@ -351,7 +351,7 @@ void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< OUString>
         sal_uInt16 nSelectedAddress)
 {
     m_aAddressBlocks = rBlocks;
-    for (const auto& rAddressBlock : std::as_const(m_aAddressBlocks))
+    for (const auto& rAddressBlock : m_aAddressBlocks)
         m_xPreview->AddAddress(rAddressBlock);
     m_xPreview->SelectAddress(nSelectedAddress);
 }
@@ -365,7 +365,7 @@ const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks
     {
         uno::Sequence< OUString >aTemp(m_aAddressBlocks.getLength());
         auto it = aTemp.getArray();
-        *it = std::as_const(m_aAddressBlocks)[nSelect];
+        *it = m_aAddressBlocks[nSelect];
         it = std::copy_n(std::cbegin(m_aAddressBlocks), nSelect - 1, std::next(it));
         std::copy(std::next(std::cbegin(m_aAddressBlocks), nSelect + 1), std::cend(m_aAddressBlocks), it);
         m_aAddressBlocks = aTemp;
@@ -864,7 +864,7 @@ void SwAssignFieldsControl::Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfi
         rNewLB.append_text(SwResId(SW_STR_NONE));
         rNewLB.set_active(0);
 
-        for (const OUString& rField : std::as_const(aFields))
+        for (const OUString& rField : aFields)
             rNewLB.append_text(rField);
         //select the ListBox
         //if there is an assignment

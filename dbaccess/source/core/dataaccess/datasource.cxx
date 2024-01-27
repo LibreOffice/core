@@ -798,7 +798,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 if (!(rValue >>= aValues))
                     throw IllegalArgumentException();
 
-                for ( auto const & checkName : std::as_const(aValues) )
+                for (auto const& checkName : aValues)
                 {
                     if ( checkName.Name.isEmpty() )
                         throw IllegalArgumentException();

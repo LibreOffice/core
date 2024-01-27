@@ -538,7 +538,7 @@ DECLARE_RTFEXPORT_TEST(testTdf104085, "tdf104085.rtf")
                                                     uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
-    for (beans::PropertyValue const& prop : std::as_const(aProps))
+    for (beans::PropertyValue const& prop : aProps)
     {
         if (prop.Name == "BulletChar")
             return;
@@ -566,7 +566,7 @@ DECLARE_RTFEXPORT_TEST(testLeveljcCenter, "leveljc-center.rtf")
                                                     uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
-    for (beans::PropertyValue const& prop : std::as_const(aProps))
+    for (beans::PropertyValue const& prop : aProps)
     {
         if (prop.Name == "Adjust")
         {

@@ -126,7 +126,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "Hyphenators",
                 "org.openoffice.lingu.LibHnjHyphenator", aFormatList );
-        for (const auto& rFormat : std::as_const(aFormatList))
+        for (const auto& rFormat : aFormatList)
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
                     aLinguCfg.GetActiveDictionariesByFormat( rFormat ) );

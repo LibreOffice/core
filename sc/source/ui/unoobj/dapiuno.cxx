@@ -792,7 +792,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                     aServiceDesc = *pOldDesc;
 
                 OUString aStrVal;
-                for (const beans::PropertyValue& rProp : std::as_const(aArgSeq))
+                for (const beans::PropertyValue& rProp : aArgSeq)
                 {
                     OUString aPropName(rProp.Name);
 

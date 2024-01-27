@@ -1751,7 +1751,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
         if (xProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
             xProps->getPropertyValue("InteropGrabBag") >>= grabBag;
 
-        for (auto const& it : std::as_const(grabBag))
+        for (auto const& it : grabBag)
             if (it.Name == "3DEffectProperties")
                 bHas3DEffectinShape = true;
 

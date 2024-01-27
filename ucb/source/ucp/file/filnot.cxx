@@ -192,7 +192,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
             rListener->propertiesChange( Changes );
     }
 
-    for( const auto& rChange : std::as_const(Changes) )
+    for (const auto& rChange : Changes)
     {
         uno::Sequence< beans::PropertyChangeEvent > seq{ rChange };
         it = m_aListeners.find( rChange.PropertyName );

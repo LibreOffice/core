@@ -531,7 +531,7 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
         );
 
         // now loop through our own props
-        for ( const Property& rProp : std::as_const(aProps) )
+        for (const Property& rProp : aProps)
         {
             // look for the current property in the properties of our aggregate
             const Property* pAggPropPos = ::std::find_if( std::cbegin(aAggregateProps), std::cend(aAggregateProps), PropertyNameEqual( rProp.Name ) );

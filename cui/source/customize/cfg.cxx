@@ -492,7 +492,7 @@ void SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
                     if ( a >>= aPropSeq )
                     {
                         OUString aMenuLabel;
-                        for ( const beans::PropertyValue& prop : std::as_const(aPropSeq) )
+                        for (const beans::PropertyValue& prop : aPropSeq)
                         {
                             if ( bContextMenu )
                             {
@@ -723,7 +723,7 @@ OUString ContextMenuSaveInData::GetUIName( const OUString& rResourceURL )
         catch ( const css::uno::Exception& )
         {}
 
-        for ( const auto& aProp : std::as_const(aProps) )
+        for (const auto& aProp : aProps)
         {
             if ( aProp.Name == ITEM_DESCRIPTOR_UINAME )
             {
@@ -751,7 +751,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
         catch ( const css::lang::IllegalArgumentException& )
         {}
 
-        for ( const auto& aElement : std::as_const(aElementsInfo) )
+        for (const auto& aElement : aElementsInfo)
         {
             OUString aUrl;
             for ( const auto& aElementProp : aElement )
@@ -799,7 +799,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
         catch ( const css::lang::IllegalArgumentException& )
         {}
 
-        for ( const auto& aElement : std::as_const(aParentElementsInfo) )
+        for (const auto& aElement : aParentElementsInfo)
         {
             OUString aUrl;
             for ( const auto& aElementProp : aElement )
@@ -1203,7 +1203,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
                 DBG_UNHANDLED_EXCEPTION("cui.customize");
             }
 
-            for ( uno::Reference < frame::XFrame > const & xf : std::as_const(aFrameList) )
+            for (uno::Reference<frame::XFrame> const& xf : aFrameList)
             {
                 if ( xf.is() && xf != m_xFrame )
                 {
@@ -2001,7 +2001,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 
             if ( a >>= aProps )
             {
-                for ( beans::PropertyValue const & prop : std::as_const(aProps) )
+                for (beans::PropertyValue const& prop : aProps)
                 {
                     if ( prop.Name == ITEM_DESCRIPTOR_STYLE )
                     {
@@ -2128,7 +2128,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 
             if ( a >>= aProps )
             {
-                for ( beans::PropertyValue const & prop : std::as_const(aProps) )
+                for (beans::PropertyValue const& prop : aProps)
                 {
                     if ( prop.Name == ITEM_DESCRIPTOR_UINAME )
                     {
@@ -2155,7 +2155,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
             uno::Sequence< beans::PropertyValue > aPropSeq;
             if ( a >>= aPropSeq )
             {
-                for ( beans::PropertyValue const & prop : std::as_const(aPropSeq) )
+                for (beans::PropertyValue const& prop : aPropSeq)
                 {
                     if ( prop.Name == ITEM_DESCRIPTOR_LABEL )
                     {
@@ -2657,7 +2657,7 @@ void ToolbarSaveInData::LoadToolbar(
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
-                        for ( beans::PropertyValue const & prop : std::as_const(aPropSeq) )
+                        for (beans::PropertyValue const& prop : aPropSeq)
                         {
                             if ( prop.Name == "Name" )
                             {

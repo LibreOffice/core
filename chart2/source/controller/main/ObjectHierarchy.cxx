@@ -230,7 +230,7 @@ void ObjectHierarchy::createAxesTree(
     std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true );
     if( !m_bOrderingForElementSelector )
     {
-        for (const auto & rAxis : std::as_const(aAxes))
+        for (const auto& rAxis : aAxes)
             rContainer.push_back( ObjectIdentifier::createClassifiedIdentifierForObject( rAxis, xChartDoc ) );
     }
 

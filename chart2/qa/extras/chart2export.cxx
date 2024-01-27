@@ -473,7 +473,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
    const char* const testEmbeddedFileNames[] {"word/embeddings/Microsoft_Excel_Worksheet3.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet2.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet1.xlsx"};
-   for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
+   for (beans::PropertyValue const& prop : aGrabBag)
    {
        if (prop.Name == "OOXEmbeddings")
        {
@@ -1142,7 +1142,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsOleObjectGrabBag)
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
    const char* const testEmbeddedFileNames[] = {"word/embeddings/oleObject1.bin"};
-   for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
+   for (beans::PropertyValue const& prop : aGrabBag)
    {
        if (prop.Name == "OOXEmbeddings")
        {

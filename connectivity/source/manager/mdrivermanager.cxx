@@ -343,7 +343,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
             // at the moment this is the first of all drivers we know
 
         // loop through the names in the precedence order
-        for ( const OUString& rDriverOrder : std::as_const(aDriverOrder) )
+        for (const OUString& rDriverOrder : aDriverOrder)
         {
             if (aNoPrefDriversStart == m_aDriversBS.end())
                 break;

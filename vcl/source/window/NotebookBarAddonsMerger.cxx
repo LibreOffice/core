@@ -117,8 +117,7 @@ void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWi
     {
         aExtension = aNotebookBarAddonsItem.aAddonValues[nIdx];
 
-        for (const css::uno::Sequence<css::beans::PropertyValue>& pExtension :
-             std::as_const(aExtension))
+        for (const css::uno::Sequence<css::beans::PropertyValue>& pExtension : aExtension)
         {
             VclPtr<vcl::Window> pOptionalParent;
             pOptionalParent = VclPtr<OptionalBox>::Create(pParent);

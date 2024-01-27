@@ -601,8 +601,8 @@ bool hasDataLabelAtPoint( const rtl::Reference< DataSeries >& xSeries, sal_Int32
             // "AttributedDataPoints"
             if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
             {
-                auto aIt = std::find( std::as_const(aAttributedDataPointIndexList).begin(), std::as_const(aAttributedDataPointIndexList).end(), nPointIndex );
-                if( aIt != std::as_const(aAttributedDataPointIndexList).end())
+                auto aIt = std::find( aAttributedDataPointIndexList.begin(), aAttributedDataPointIndexList.end(), nPointIndex );
+                if (aIt != aAttributedDataPointIndexList.end())
                     xProp = xSeries->getDataPointByIndex(nPointIndex);
                 else
                     xProp = xSeries;

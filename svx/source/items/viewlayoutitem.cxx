@@ -112,7 +112,7 @@ bool SvxViewLayoutItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                 bool  bBookMode = false;
                 bool bAllConverted( true );
                 sal_Int16 nConvertedCount( 0 );
-                for ( const auto& rProp : std::as_const(aSeq) )
+                for (const auto& rProp : aSeq)
                 {
                     if ( rProp.Name == VIEWLAYOUT_PARAM_COLUMNS )
                     {

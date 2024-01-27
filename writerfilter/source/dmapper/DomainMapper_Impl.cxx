@@ -180,7 +180,7 @@ static void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >
 
     sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();
     if (nResult > 0 && o3tl::make_unsigned(nResult) < sItems.size())
-        rxFieldProps->setPropertyValue( "SelectedItem", uno::Any( std::as_const(sItems)[ nResult ] ) );
+        rxFieldProps->setPropertyValue("SelectedItem", uno::Any(sItems[nResult]));
     if ( !pFFDataHandler->getHelpText().isEmpty() )
          rxFieldProps->setPropertyValue( "Help", uno::Any( pFFDataHandler->getHelpText() ) );
 }
@@ -4729,7 +4729,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
 
-                for (const auto& rProp : std::as_const(aGrabBag))
+                for (const auto& rProp : aGrabBag)
                 {
                     if (rProp.Name == "VML-Z-ORDER")
                     {
@@ -4774,7 +4774,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                for (const auto& rProp : std::as_const(aGrabBag))
+                for (const auto& rProp : aGrabBag)
                 {
                     if (rProp.Name == "VML-Z-ORDER")
                     {
@@ -4946,7 +4946,7 @@ bool DomainMapper_Impl::IsSdtEndBefore()
             {
                 uno::Sequence<beans::PropertyValue> aCharGrabBag;
                 rCurrentCharProp.Value >>= aCharGrabBag;
-                for (const auto& rProp : std::as_const(aCharGrabBag))
+                for (const auto& rProp : aCharGrabBag)
                 {
                     if(rProp.Name == "SdtEndBefore")
                     {

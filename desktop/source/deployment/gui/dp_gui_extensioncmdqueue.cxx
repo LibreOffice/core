@@ -363,7 +363,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     {
         std::vector< OUString > deps;
         deps.reserve(depExc.UnsatisfiedDependencies.getLength());
-        for (auto const & i : std::as_const(depExc.UnsatisfiedDependencies))
+        for (auto const& i : depExc.UnsatisfiedDependencies)
         {
             deps.push_back( dp_misc::Dependencies::getErrorText(i) );
         }

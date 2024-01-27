@@ -349,7 +349,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
     // check if there is URL, URL must exist
     OUString aURL;
-    for ( beans::PropertyValue const & prop : std::as_const(aTempMedDescr) )
+    for (beans::PropertyValue const& prop : aTempMedDescr)
         if ( prop.Name == "URL" )
             prop.Value >>= aURL;
 

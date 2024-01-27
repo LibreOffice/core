@@ -759,7 +759,7 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
                     Reference<beans::XPropertySet> xSeriesProp(mDataPoint.m_xSeries, uno::UNO_QUERY);
                     xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
                     std::vector<sal_Int32> deletedLegendEntries;
-                    for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
+                    for (const auto& deletedLegendEntry : deletedLegendEntriesSeq)
                     {
                         deletedLegendEntries.push_back(deletedLegendEntry);
                     }

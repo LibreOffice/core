@@ -5933,9 +5933,9 @@ static char* getLanguages(const char* pCommand)
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
     boost::property_tree::ptree aValues;
-    for ( css::lang::Locale const & rLocale : std::as_const(aLocales) )
+    for (css::lang::Locale const& rLocale : aLocales)
         addLocale(aValues, rLocale);
-    for ( css::lang::Locale const & rLocale : std::as_const(aGrammarLocales) )
+    for (css::lang::Locale const& rLocale : aGrammarLocales)
         addLocale(aValues, rLocale);
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
@@ -7448,7 +7448,7 @@ static void preloadData()
     std::cerr << "Preloading dictionaries: ";
     css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
-    for (auto &it : std::as_const(aLocales))
+    for (auto& it : aLocales)
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;
@@ -7469,7 +7469,7 @@ static void preloadData()
     css::uno::Reference<linguistic2::XSupportedLocales> xThesLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     aLocales = xThesLocales->getLocales();
     std::cerr << "Preloading thesauri: ";
-    for (auto &it : std::as_const(aLocales))
+    for (auto& it : aLocales)
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;
@@ -7505,7 +7505,7 @@ static void preloadData()
             aLocales = xSpell->getLocales();
     }
 
-    for (const auto& aLocale : std::as_const(aLocales))
+    for (const auto& aLocale : aLocales)
     {
         //TODO: Add more types and cache more aggressively. For now this initializes the fontcache.
         using namespace ::com::sun::star::i18n::ScriptType;

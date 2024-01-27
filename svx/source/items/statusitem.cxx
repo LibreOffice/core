@@ -75,7 +75,7 @@ bool SvxStatusItem::PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
                 sal_Int16 nTypeTmp(0);
                 bool bAllConverted(true);
                 sal_Int16 nConvertedCount(0);
-                for (const auto& rProp : std::as_const(aSeq))
+                for (const auto& rProp : aSeq)
                 {
                     if (rProp.Name == STATUS_PARAM_VALUE)
                     {

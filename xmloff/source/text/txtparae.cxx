@@ -632,7 +632,7 @@ void FieldParamExporter::Export()
         {
             Sequence<OUString> vValue;
             aValue >>= vValue;
-            for(const OUString & i : std::as_const(vValue))
+            for (const OUString& i : vValue)
             {
                 ExportParameter(rParameter, i);
             }
@@ -2190,7 +2190,7 @@ void XMLTextParagraphExport::exportParagraph(
                         else
                             rPropSetHelper.getValue(
                                        PARA_OUTLINE_CONTENT_VISIBLE, xPropSet ) >>= propList;
-                        for (const auto& rProp : std::as_const(propList))
+                        for (const auto& rProp : propList)
                         {
                             OUString propName = rProp.Name;
                             if (propName == "OutlineContentVisibleAttr")

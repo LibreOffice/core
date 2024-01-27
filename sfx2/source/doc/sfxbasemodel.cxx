@@ -1079,7 +1079,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
             Sequence< beans::PropertyValue > aFinalCache;
             sal_Int32 nFinalLength = 0;
 
-            for ( const auto& rOrg : std::as_const(m_pData->m_seqArguments) )
+            for (const auto& rOrg : m_pData->m_seqArguments)
             {
                 auto bNew = std::none_of(std::cbegin(seqArgsOld), std::cend(seqArgsOld),
                     [&rOrg](const beans::PropertyValue& rOld){ return rOld.Name == rOrg.Name; });

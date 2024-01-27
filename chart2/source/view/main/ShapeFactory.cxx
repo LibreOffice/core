@@ -2227,7 +2227,7 @@ rtl::Reference<SvxShapeText>
             if( xFormattedString.hasElements() )
             {
                 OUString aLabel;
-                for( const auto & i : std::as_const(xFormattedString) )
+                for (const auto& i : xFormattedString)
                     aLabel += i->getString();
                 aLabel = ShapeFactory::getStackedString( aLabel, bStackCharacters );
 
@@ -2249,7 +2249,7 @@ rtl::Reference<SvxShapeText>
         }
         else
         {
-            for( const uno::Reference< chart2::XFormattedString >& rxFS : std::as_const(xFormattedString) )
+            for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
             {
                 xTextCursor->gotoEnd(false);
                 xShape->insertString( xTextCursor, rxFS->getString(), false );

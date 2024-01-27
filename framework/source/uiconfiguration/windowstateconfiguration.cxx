@@ -1287,12 +1287,12 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentC
     }
     Sequence< PropertyValue > aSeq;
 
-    for ( OUString const & aModuleIdentifier : std::as_const(aElementNames) )
+    for (OUString const& aModuleIdentifier : aElementNames)
     {
         if ( xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
         {
             OUString aWindowStateFileStr;
-            for ( PropertyValue const & rProp : std::as_const(aSeq) )
+            for (PropertyValue const& rProp : aSeq)
             {
                 if ( rProp.Name == "ooSetupFactoryWindowStateConfigRef" )
                 {

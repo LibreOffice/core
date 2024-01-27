@@ -112,7 +112,7 @@ void SAL_CALL LpsolveSolver::solve()
     ScSolverCellHashMap aCellsHash;
     aCellsHash[maObjective].reserve( nVariables + 1 );                  // objective function
 
-    for (const auto& rConstr : std::as_const(maConstraints))
+    for (const auto& rConstr : maConstraints)
     {
         table::CellAddress aCellAddr = rConstr.Left;
         aCellsHash[aCellAddr].reserve( nVariables + 1 );                // constraints: left hand side
@@ -197,7 +197,7 @@ void SAL_CALL LpsolveSolver::solve()
 
     set_add_rowmode(lp, TRUE);
 
-    for (const auto& rConstr : std::as_const(maConstraints))
+    for (const auto& rConstr : maConstraints)
     {
         // integer constraints are set later
         sheet::SolverConstraintOperator eOp = rConstr.Operator;
@@ -265,7 +265,7 @@ void SAL_CALL LpsolveSolver::solve()
 
     // apply single-var integer constraints
 
-    for (const auto& rConstr : std::as_const(maConstraints))
+    for (const auto& rConstr : maConstraints)
     {
         sheet::SolverConstraintOperator eOp = rConstr.Operator;
         if ( eOp == sheet::SolverConstraintOperator_INTEGER ||

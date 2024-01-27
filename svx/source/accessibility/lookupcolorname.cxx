@@ -79,7 +79,7 @@ ColorNameMap::ColorNameMap()
     if (!xNA.is())
         return;
 
-    for (const auto& rName : std::as_const(aNames))
+    for (const auto& rName : aNames)
     {
         // Get the numerical value for the i-th color name.
         try

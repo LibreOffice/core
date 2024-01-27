@@ -1319,7 +1319,7 @@ void makeRedline( SwPaM const & rPaM,
             aEntries.reserve(aRevertProperties.getLength());
             sal_uInt16 nStyleId = USHRT_MAX;
             sal_uInt16 nNumId = USHRT_MAX;
-            for (const auto& rRevertProperty : std::as_const(aRevertProperties))
+            for (const auto& rRevertProperty : aRevertProperties)
             {
                 const OUString &rPropertyName = rRevertProperty.Name;
                 SfxItemPropertyMapEntry const* pEntry = rPropSet.getPropertyMap().getByName(rPropertyName);

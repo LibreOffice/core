@@ -370,7 +370,7 @@ void ExportDocumentHandler::exportTableRows()
             m_xDelegatee->endElement(sCell);
         }
     }
-    for(const auto& rColumn : std::as_const(m_aColumns))
+    for (const auto& rColumn : m_aColumns)
     {
         OUString sFormula = "field:[" + rColumn + "]";
         rtl::Reference<comphelper::AttributeList> pList = new comphelper::AttributeList();

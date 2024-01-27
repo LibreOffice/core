@@ -883,7 +883,7 @@ DECLARE_RTFEXPORT_TEST(testFdo59638, "fdo59638.rtf")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "BulletChar")
         {

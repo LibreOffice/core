@@ -407,7 +407,7 @@ public:
         sal_Int32 nStartRow = mrDocRow;
         sal_Int32 nRowCount = maSeq.getLength();
         sal_Int32 nMaxColCount = 0;
-        for ( const uno::Sequence< seq >& rRow : std::as_const(maSeq) )
+        for (const uno::Sequence<seq>& rRow : maSeq)
         {
             sal_Int32 nColCount = rRow.getLength();
             if ( nColCount > nMaxColCount )

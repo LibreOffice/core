@@ -1498,7 +1498,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     else if(aValue >>= aParam)
                     {
                         tools::PolyPolygon aPoly(o3tl::narrowing<sal_uInt16>(aParam.getLength()));
-                        for(const ::drawing::PointSequence& rPointSeq : std::as_const(aParam))
+                        for (const ::drawing::PointSequence& rPointSeq : aParam)
                         {
                             sal_Int32 nPoints = rPointSeq.getLength();
                             const ::awt::Point* pPoints = rPointSeq.getConstArray();

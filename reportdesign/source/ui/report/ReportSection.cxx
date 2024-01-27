@@ -247,7 +247,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
             {
                 uno::Sequence< uno::Reference<report::XReportComponent> > aCopies;
                 rObject.Value >>= aCopies;
-                for (const uno::Reference<report::XReportComponent>& rCopy : std::as_const(aCopies))
+                for (const uno::Reference<report::XReportComponent>& rCopy : aCopies)
                 {
                     SdrObject* pObject = SdrObject::getSdrObjectFromXShape( rCopy );
                     if ( pObject )

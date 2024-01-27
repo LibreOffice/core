@@ -278,7 +278,7 @@ namespace pcr
                 aResolvedStrings.reserve( aStrings.getLength() );
                 try
                 {
-                    for ( const OUString& rIdStr : std::as_const(aStrings) )
+                    for (const OUString& rIdStr : aStrings)
                     {
                         OUString aPureIdStr = rIdStr.copy( 1 );
                         if( xStringResourceResolver->hasEntryForId( aPureIdStr ) )
@@ -331,7 +331,7 @@ namespace pcr
             if( ! (_rValue >>= aFontPropertyValues) )
                 SAL_WARN("extensions.propctrlr", "setPropertyValue: unable to get property " << PROPERTY_ID_FONT);
 
-            for ( const NamedValue& fontPropertyValue : std::as_const(aFontPropertyValues) )
+            for (const NamedValue& fontPropertyValue : aFontPropertyValues)
                 m_xComponent->setPropertyValue( fontPropertyValue.Name, fontPropertyValue.Value );
         }
         else
@@ -444,7 +444,7 @@ namespace pcr
                         aValue <<= aNewIdStrings;
 
                         // Remove old ids from resource for all locales
-                        for( const OUString& rIdStr : std::as_const(aOldIdStrings) )
+                        for (const OUString& rIdStr : aOldIdStrings)
                         {
                             OUString aPureIdStr = rIdStr.copy( 1 );
                             for ( const Locale& rLocale : aLocaleSeq )

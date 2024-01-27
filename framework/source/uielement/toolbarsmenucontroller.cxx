@@ -345,7 +345,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 
                 if ( a >>= aWindowState )
                 {
-                    for ( PropertyValue const & prop : std::as_const(aWindowState) )
+                    for (PropertyValue const& prop : aWindowState)
                     {
                         if ( prop.Name == WINDOWSTATE_PROPERTY_UINAME )
                             prop.Value >>= aUIName;

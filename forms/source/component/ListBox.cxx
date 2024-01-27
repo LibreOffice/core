@@ -1416,7 +1416,7 @@ namespace frm
             ::std::set< sal_Int16 > aSelectionSet;
 
             // find the selection entries in our item list
-            for ( OUString const & selectEntry : std::as_const(aSelectEntries) )
+            for (OUString const& selectEntry : aSelectEntries)
             {
                 int idx = 0;
                 for(const OUString& s : getStringItemList())

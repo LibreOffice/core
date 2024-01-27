@@ -969,7 +969,7 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
     // Only write docVars if there will be at least a single docVar.
     bool bStarted = false;
     constexpr OUString aPrefix(u"com.sun.star.text.fieldmaster.User."_ustr);
-    for (const auto& rMasterName : std::as_const(aMasterNames))
+    for (const auto& rMasterName : aMasterNames)
     {
         if (!rMasterName.startsWith(aPrefix))
         {
@@ -1274,14 +1274,14 @@ void DocxExport::WriteSettings()
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
 
-        for( const auto& rProp : std::as_const(propList) )
+        for (const auto& rProp : propList)
         {
             if ( rProp.Name == "ThemeFontLangProps" )
             {
                 uno::Sequence< beans::PropertyValue > themeFontLangProps;
                 rProp.Value >>= themeFontLangProps;
                 OUString aValues[3];
-                for( const auto& rThemeFontLangProp : std::as_const(themeFontLangProps) )
+                for (const auto& rThemeFontLangProp : themeFontLangProps)
                 {
                     if( rThemeFontLangProp.Name == "val" )
                         rThemeFontLangProp.Value >>= aValues[0];
@@ -1304,7 +1304,7 @@ void DocxExport::WriteSettings()
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 rProp.Value >>= aCompatSettingsSequence;
 
-                for(const auto& rCompatSetting : std::as_const(aCompatSettingsSequence))
+                for (const auto& rCompatSetting : aCompatSettingsSequence)
                 {
                     uno::Sequence< beans::PropertyValue > aCompatSetting;
                     rCompatSetting.Value >>= aCompatSetting;
@@ -1312,7 +1312,7 @@ void DocxExport::WriteSettings()
                     OUString aUri;
                     OUString aValue;
 
-                    for(const auto& rPropVal : std::as_const(aCompatSetting))
+                    for (const auto& rPropVal : aCompatSetting)
                     {
                         if( rPropVal.Name == "name" )
                             rPropVal.Value >>= aName;
@@ -1361,7 +1361,7 @@ void DocxExport::WriteSettings()
                     bool bIsProtectionTrackChanges = false;
                     // if grabbag protection is not enforced, allow Writer protection to override
                     bool bEnforced = false;
-                    for (const auto& rAttribute : std::as_const(rAttributeList))
+                    for (const auto& rAttribute : rAttributeList)
                     {
                         static DocxStringTokenMap const aTokens[] =
                         {
@@ -1511,7 +1511,7 @@ void DocxExport::WriteGlossary()
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue( aName ) >>= propList;
     sal_Int32 collectedProperties = 0;
-    for ( const auto& rProp : std::as_const(propList) )
+    for (const auto& rProp : propList)
     {
         OUString propName = rProp.Name;
         if ( propName == "OOXGlossary" )
@@ -1837,7 +1837,7 @@ void DocxExport::WriteEmbeddings()
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXEmbeddings"; });
     if (pProp != std::cend(propList))
         pProp->Value >>= embeddingsList;
-    for (const auto& rEmbedding : std::as_const(embeddingsList))
+    for (const auto& rEmbedding : embeddingsList)
     {
         OUString embeddingPath = rEmbedding.Name;
         uno::Reference<io::XInputStream> embeddingsStream;
@@ -2040,14 +2040,14 @@ sal_Int32 DocxExport::getWordCompatibilityModeFromGrabBag() const
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
 
-        for (const auto& rProp : std::as_const(propList))
+        for (const auto& rProp : propList)
         {
             if (rProp.Name == "CompatSettings")
             {
                 css::uno::Sequence< css::beans::PropertyValue > aCurrentCompatSettings;
                 rProp.Value >>= aCurrentCompatSettings;
 
-                for (const auto& rCurrentCompatSetting : std::as_const(aCurrentCompatSettings))
+                for (const auto& rCurrentCompatSetting : aCurrentCompatSettings)
                 {
                     uno::Sequence< beans::PropertyValue > aCompatSetting;
                     rCurrentCompatSetting.Value >>= aCompatSetting;
@@ -2056,7 +2056,7 @@ sal_Int32 DocxExport::getWordCompatibilityModeFromGrabBag() const
                     OUString sUri;
                     OUString sVal;
 
-                    for (const auto& rPropVal : std::as_const(aCompatSetting))
+                    for (const auto& rPropVal : aCompatSetting)
                     {
                         if ( rPropVal.Name == "name" ) rPropVal.Value >>= sName;
                         if ( rPropVal.Name == "uri" )  rPropVal.Value >>= sUri;

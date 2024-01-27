@@ -634,7 +634,7 @@ bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rS
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (beans::PropertyValue const& rProp : std::as_const(aCustomShapeGeometry))
+    for (beans::PropertyValue const& rProp : aCustomShapeGeometry)
     {
         if (rProp.Name == "Path")
         {
@@ -643,7 +643,7 @@ bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rS
         }
     }
 
-    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "Segments")
         {

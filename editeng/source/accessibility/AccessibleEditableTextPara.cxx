@@ -2384,7 +2384,7 @@ namespace accessibility
         uno::Sequence< beans::PropertyValue > aOutSequence( aProperties.getLength() );
         beans::PropertyValue* pOutSequence = aOutSequence.getArray();
         sal_Int32 nOutLen = 0;
-        for (const beans::Property& rProperty : std::as_const(aProperties))
+        for (const beans::Property& rProperty : aProperties)
         {
             // calling implementation functions:
             // _getPropertyState and _getPropertyValue (see below) to provide
@@ -2470,7 +2470,7 @@ namespace accessibility
         uno::Sequence< beans::PropertyValue > aOutSequence( aProperties.getLength() );
         beans::PropertyValue* pOutSequence = aOutSequence.getArray();
         sal_Int32 nOutLen = 0;
-        for (const beans::Property& rProperty : std::as_const(aProperties))
+        for (const beans::Property& rProperty : aProperties)
         {
             // calling 'regular' functions that will operate on the selection
             PropertyState eState = xPropSet->getPropertyState( rProperty.Name );

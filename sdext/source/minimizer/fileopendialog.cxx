@@ -67,7 +67,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
             {
                 FilterEntry aFilterEntry;
                 bool bImpressFilter = false;
-                for ( const PropertyValue& rProperty : std::as_const(aFilterProperties) )
+                for (const PropertyValue& rProperty : aFilterProperties)
                 {
                     bool bStop = false;
                     switch( TKGet( rProperty.Name ) )

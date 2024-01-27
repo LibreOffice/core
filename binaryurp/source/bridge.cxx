@@ -772,7 +772,7 @@ void Bridge::handleCommitChangeRequest(
     css::uno::Sequence< css::bridge::ProtocolProperty > s;
     [[maybe_unused]] bool ok = (mapBinaryToCppAny(inArguments[0]) >>= s);
     assert(ok);
-    for (const auto & pp : std::as_const(s)) {
+    for (const auto & pp : s) {
         if (pp.Name == "CurrentContext") {
             bCcMode = true;
         } else {

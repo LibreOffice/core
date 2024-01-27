@@ -453,7 +453,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
         if (xSetInfo.is())
             aProperties = xSetInfo->getProperties();
 
-        for ( const Property& rProperty : std::as_const(aProperties) )
+        for (const Property& rProperty : aProperties)
         {
             if  (   ( ( rProperty.Attributes & PropertyAttribute::TRANSIENT) != 0 )
                 &&  ( ( rProperty.Attributes & PropertyAttribute::READONLY) == 0 )

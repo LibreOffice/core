@@ -167,7 +167,7 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
 {
     maMediaDescriptor = aProps;
 
-    for ( const auto& rProp : std::as_const(maMediaDescriptor) )
+    for (const auto& rProp : maMediaDescriptor)
     {
         if ( rProp.Name == "FilterData" )
         {
@@ -191,7 +191,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
 
     OUString aInternalFilterName;
     uno::Reference<graphic::XGraphic> xGraphic;
-    for ( const auto& rProp : std::as_const(maMediaDescriptor) )
+    for (const auto& rProp : maMediaDescriptor)
     {
         const OUString& rName = rProp.Name;
         if ( rName == "FilterName" )

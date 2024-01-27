@@ -320,7 +320,7 @@ void MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigr
         supported_migration aSupportedMigration;
         aSupportedMigration.name      = supportedVersion;
         aSupportedMigration.nPriority = nPriority;
-        for (OUString const & s : std::as_const(seqVersions))
+        for (OUString const& s : seqVersions)
             aSupportedMigration.supported_versions.push_back(s.trim());
         insertSorted( rAvailableMigrations, aSupportedMigration );
         SAL_INFO( "desktop.migration", " available migration '" << aSupportedMigration.name << "'" );
@@ -347,31 +347,31 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
 
         // read included files from current step description
         if (tmpAccess->getByName("IncludedFiles") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
+            for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.includeFiles.push_back(rSeqEntry);
         }
 
         // excluded files...
         if (tmpAccess->getByName("ExcludedFiles") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
+            for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.excludeFiles.push_back(rSeqEntry);
         }
 
         // included nodes...
         if (tmpAccess->getByName("IncludedNodes") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
+            for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.includeConfig.push_back(rSeqEntry);
         }
 
         // excluded nodes...
         if (tmpAccess->getByName("ExcludedNodes") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
+            for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.excludeConfig.push_back(rSeqEntry);
         }
 
         // excluded extensions...
         if (tmpAccess->getByName("ExcludedExtensions") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
+            for (const OUString& rSeqEntry : tmpSeq)
                 tmpStep.excludeExtensions.push_back(rSeqEntry);
         }
 
@@ -977,7 +977,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
     for (int n=0; n<nOldCount; ++n) {
         MigrationItem aMigrationItem;
         if (xIndexOld->getByIndex(n) >>= aProps) {
-            for(beans::PropertyValue const & prop : std::as_const(aProps)) {
+            for(beans::PropertyValue const & prop : aProps) {
                 if ( prop.Name == ITEM_DESCRIPTOR_COMMANDURL )
                     prop.Value >>= aMigrationItem.m_sCommandURL;
                 else if ( prop.Name == ITEM_DESCRIPTOR_CONTAINER )
@@ -992,7 +992,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
     for (int n=0; n<nNewCount; ++n) {
         MigrationItem aMigrationItem;
         if (xIndexNew->getByIndex(n) >>= aProps) {
-            for(beans::PropertyValue const & prop : std::as_const(aProps)) {
+            for(beans::PropertyValue const & prop : aProps) {
                 if ( prop.Name == ITEM_DESCRIPTOR_COMMANDURL )
                     prop.Value >>= aMigrationItem.m_sCommandURL;
                 else if ( prop.Name == ITEM_DESCRIPTOR_CONTAINER )
@@ -1059,7 +1059,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
 
                 uno::Sequence< beans::PropertyValue > aPropSeq;
                 xTemp->getByIndex(i) >>= aPropSeq;
-                for (beans::PropertyValue const & prop : std::as_const(aPropSeq)) {
+                for (beans::PropertyValue const & prop : aPropSeq) {
                     OUString sPropName = prop.Name;
                     if ( sPropName == ITEM_DESCRIPTOR_COMMANDURL )
                         prop.Value >>= sCommandURL;
@@ -1094,7 +1094,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                     OUString sCmd;
                     uno::Sequence< beans::PropertyValue > aTempPropSeq;
                     xTemp->getByIndex(i) >>= aTempPropSeq;
-                    for (beans::PropertyValue const & prop : std::as_const(aTempPropSeq)) {
+                    for (beans::PropertyValue const & prop : aTempPropSeq) {
                         if ( prop.Name == ITEM_DESCRIPTOR_COMMANDURL ) {
                             prop.Value >>= sCmd;
                             break;
@@ -1154,7 +1154,7 @@ uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewToolbarSett
         if (newProp.Name == sModuleShortName) {
             uno::Sequence< beans::PropertyValue > lToolbarSettingsSeq;
             newProp.Value >>= lToolbarSettingsSeq;
-            for (auto const & prop : std::as_const(lToolbarSettingsSeq)) {
+            for (auto const & prop : lToolbarSettingsSeq) {
                 if (prop.Name == sToolbarName) {
                     prop.Value >>= xNewToolbarSettings;
                     break;

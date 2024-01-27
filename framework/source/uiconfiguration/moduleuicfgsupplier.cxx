@@ -144,7 +144,7 @@ Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSuppli
         {
             Sequence< PropertyValue > lProps;
             m_xModuleMgr->getByName(sModuleIdentifier) >>= lProps;
-            for (PropertyValue const & rProp : std::as_const(lProps))
+            for (PropertyValue const& rProp : lProps)
             {
                 if ( rProp.Name == "ooSetupFactoryShortName" )
                 {

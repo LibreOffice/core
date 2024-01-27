@@ -1721,7 +1721,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
     uno::Sequence< beans::PropertyValue > aClickProperties;
     if( xEvents->hasByName( gsOnClick ) && (xEvents->getByName( gsOnClick ) >>= aClickProperties) )
     {
-        for( const auto& rProperty : std::as_const(aClickProperties) )
+        for (const auto& rProperty : aClickProperties)
         {
             if( !( nFound & Found::CLICKEVENTTYPE ) && rProperty.Name == gsEventType )
             {
@@ -3278,7 +3278,7 @@ void XMLShapeExport::ImpExportAppletShape(
         // export parameters
         uno::Sequence< beans::PropertyValue > aCommands;
         xPropSet->getPropertyValue("AppletCommands") >>= aCommands;
-        for( const auto& rCommand : std::as_const(aCommands) )
+        for (const auto& rCommand : aCommands)
         {
             rCommand.Value >>= aStr;
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.Name );
@@ -3325,7 +3325,7 @@ void XMLShapeExport::ImpExportPluginShape(
         // export parameters
         uno::Sequence< beans::PropertyValue > aCommands;
         xPropSet->getPropertyValue("PluginCommands") >>= aCommands;
-        for( const auto& rCommand : std::as_const(aCommands) )
+        for (const auto& rCommand : aCommands)
         {
             rCommand.Value >>= aStr;
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.Name );
@@ -4375,7 +4375,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
             bool bCoordinates = false;
             OUString aCustomShapeType( "non-primitive" );
 
-            for ( const beans::PropertyValue& rGeoProp : std::as_const(aGeoPropSeq) )
+            for (const beans::PropertyValue& rGeoProp : aGeoPropSeq)
             {
                 switch( EASGet( rGeoProp.Name ) )
                 {
@@ -4426,7 +4426,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         if ( rGeoProp.Value >>= aExtrusionPropSeq )
                         {
                             bool bSkewValuesProvided = false;
-                            for ( const beans::PropertyValue& rProp : std::as_const(aExtrusionPropSeq) )
+                            for (const beans::PropertyValue& rProp : aExtrusionPropSeq)
                             {
                                 switch( EASGet( rProp.Name ) )
                                 {
@@ -4780,7 +4780,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
                         if ( rGeoProp.Value >>= aTextPathPropSeq )
                         {
-                            for ( const beans::PropertyValue& rProp : std::as_const(aTextPathPropSeq) )
+                            for (const beans::PropertyValue& rProp : aTextPathPropSeq)
                             {
                                 switch( EASGet( rProp.Name ) )
                                 {
@@ -4840,7 +4840,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         uno::Sequence< beans::PropertyValue > aPathPropSeq;
                         if ( rGeoProp.Value >>= aPathPropSeq )
                         {
-                            for ( const beans::PropertyValue& rProp : std::as_const(aPathPropSeq) )
+                            for (const beans::PropertyValue& rProp : aPathPropSeq)
                             {
                                 switch( EASGet( rProp.Name ) )
                                 {
@@ -4897,7 +4897,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         {
                                             if ( aGluePoints.hasElements() )
                                             {
-                                                for( const auto& rGluePoint : std::as_const(aGluePoints) )
+                                                for (const auto& rGluePoint : aGluePoints)
                                                 {
                                                     ExportParameter( aStrBuffer, rGluePoint.First );
                                                     ExportParameter( aStrBuffer, rGluePoint.Second );
@@ -4955,7 +4955,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         {
                                             if ( aPathTextFrames.hasElements() )
                                             {
-                                                for ( const auto& rPathTextFrame : std::as_const(aPathTextFrames) )
+                                                for (const auto& rPathTextFrame : aPathTextFrames)
                                                 {
                                                     ExportParameter( aStrBuffer, rPathTextFrame.TopLeft.First );
                                                     ExportParameter( aStrBuffer, rPathTextFrame.TopLeft.Second );

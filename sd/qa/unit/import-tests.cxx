@@ -281,14 +281,14 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFreeformShapeGluePoints)
     xFreeformShape->getPropertyValue("CustomShapeGeometry") >>= aProps;
 
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
             aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
     }
 
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
-    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "GluePoints")
         {
@@ -548,14 +548,14 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf147459)
     xTriangleShape->getPropertyValue("CustomShapeGeometry") >>= aProps;
 
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
             aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
     }
 
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
-    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "GluePoints")
         {

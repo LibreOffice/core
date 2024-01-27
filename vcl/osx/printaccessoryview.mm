@@ -1019,7 +1019,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
         Sequence< OUString > aChoices;
         Sequence< sal_Bool > aChoicesDisabled;
         sal_Int32 aSelectionChecked = 0;
-        for( const beans::PropertyValue& rEntry : std::as_const(aOptProp) )
+        for( const beans::PropertyValue& rEntry : aOptProp )
         {
             if( rEntry.Name == "ControlType" )
             {
@@ -1068,7 +1068,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
         CGFloat nAttachOffset = 0;
         bool bIgnore = false;
 
-        for( const beans::PropertyValue& rEntry : std::as_const(aOptProp) )
+        for( const beans::PropertyValue& rEntry : aOptProp )
         {
             if( rEntry.Name == "Text" )
             {

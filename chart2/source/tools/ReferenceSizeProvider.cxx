@@ -111,7 +111,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
             // "AttributedDataPoints"
             if( elem->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS) >>= aPointIndexes )
             {
-                for( sal_Int32 idx : std::as_const(aPointIndexes) )
+                for (sal_Int32 idx : aPointIndexes)
                     setValuesAtPropertySet(
                         elem->getDataPointByIndex( idx ) );
             }
@@ -274,7 +274,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
             // "AttributedDataPoints"
             if( elem->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS) >>= aPointIndexes )
             {
-                for( sal_Int32 idx : std::as_const(aPointIndexes) )
+                for (sal_Int32 idx : aPointIndexes)
                 {
                     getAutoResizeFromPropSet(
                         elem->getDataPointByIndex( idx ), eResult );

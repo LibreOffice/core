@@ -598,7 +598,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
             }
         }
 
-        for( auto const & line : std::as_const(aTextList) )
+        for (auto const& line : aTextList)
         {
             if( !line.isEmpty() )
             {
@@ -2803,7 +2803,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             for( sal_Int32 nIdx=0; nIdx<aCategoryNames.getLength(); ++nIdx )
             {
                 bool deletedLegendEntry = false;
-                for (const auto& deletedLegendEntryIdx : std::as_const(deletedLegendEntries))
+                for (const auto& deletedLegendEntryIdx : deletedLegendEntries)
                 {
                     if (nIdx == deletedLegendEntryIdx)
                     {

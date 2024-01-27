@@ -2368,7 +2368,7 @@ bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< XValu
         // < SYNCHRONIZED
     }
 
-    for ( auto const & type : std::as_const(aTypeCandidates) )
+    for (auto const& type : aTypeCandidates)
     {
         if ( _rxBinding->supportsType( type ) )
             return true;

@@ -613,7 +613,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
 
         // collect the names of the additional settings
         PropertyValueSet aInfos;
-        for (const PropertyValue& rAdditionalInfo : std::as_const(aAdditionalInfo))
+        for (const PropertyValue& rAdditionalInfo : aAdditionalInfo)
         {
             if( rAdditionalInfo.Name == "JDBCDRV" )
             {   // compatibility

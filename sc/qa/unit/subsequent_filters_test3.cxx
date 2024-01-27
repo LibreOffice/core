@@ -784,7 +784,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyUpright)
     {
         uno::Sequence<beans::PropertyValue> aGrabBag;
         xShapeProperties->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-        for (auto& aProp : std::as_const(aGrabBag))
+        for (auto& aProp : aGrabBag)
         {
             if (aProp.Name == "Upright")
             {
@@ -800,7 +800,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyUpright)
     sal_Int32 nAngle;
     uno::Any aGeom = xShapeProperties->getPropertyValue("CustomShapeGeometry");
     auto aGeomSeq = aGeom.get<Sequence<beans::PropertyValue>>();
-    for (const auto& aProp : std::as_const(aGeomSeq))
+    for (const auto& aProp : aGeomSeq)
     {
         if (aProp.Name == "TextPreRotateAngle")
         {

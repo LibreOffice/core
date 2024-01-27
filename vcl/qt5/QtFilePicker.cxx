@@ -458,7 +458,7 @@ void QtFilePicker::handleSetListValue(QComboBox* pWidget, sal_Int16 nControlActi
         {
             Sequence<OUString> aStringList;
             rValue >>= aStringList;
-            for (auto const& sItem : std::as_const(aStringList))
+            for (auto const& sItem : aStringList)
                 pWidget->addItem(toQString(sItem));
             break;
         }

@@ -340,7 +340,7 @@ bool OWriteStream_Impl::IsEncrypted()
     }
 
     bool bToBeEncr = false;
-    for ( const auto& rProp : std::as_const(m_aProps) )
+    for (const auto& rProp : m_aProps)
     {
         if ( rProp.Name == "Encrypted" )
         {

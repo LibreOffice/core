@@ -189,7 +189,7 @@ void PropertyChgHelper::AddAsPropListener()
 {
     if (xPropSet.is())
     {
-        for (const OUString& rPropName : std::as_const(aPropNames))
+        for (const OUString& rPropName : aPropNames)
         {
             if (!rPropName.isEmpty())
                 xPropSet->addPropertyChangeListener( rPropName, this );
@@ -201,7 +201,7 @@ void PropertyChgHelper::RemoveAsPropListener()
 {
     if (xPropSet.is())
     {
-        for (const OUString& rPropName : std::as_const(aPropNames))
+        for (const OUString& rPropName : aPropNames)
         {
             if (!rPropName.isEmpty())
                 xPropSet->removePropertyChangeListener( rPropName, this );

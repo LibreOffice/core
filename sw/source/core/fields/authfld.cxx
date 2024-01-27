@@ -816,7 +816,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
     OUStringBuffer sBuf(+(AUTH_FIELD_END - 1));
     comphelper::string::padToLength(sBuf, (AUTH_FIELD_END - 1), TOX_STYLE_DELIMITER);
     OUString sToSet(sBuf.makeStringAndClear());
-    for(const PropertyValue& rParam : std::as_const(aParam))
+    for (const PropertyValue& rParam : aParam)
     {
         const sal_Int32 nFound = lcl_Find(rParam.Name);
         if(nFound >= 0)

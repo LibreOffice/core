@@ -176,7 +176,7 @@ void Data::initProperties(
             //XXX  Special interpretation of getter/setter exceptions only
             // works if the specified exceptions are of the exact type, not
             // of a supertype:
-            for (const auto & ex : std::as_const(excs)) {
+            for (const auto & ex : excs) {
                 if ( ex->getName() == "com.sun.star.beans.UnknownPropertyException" )
                 {
                     bGetUnknown = true;
@@ -184,7 +184,7 @@ void Data::initProperties(
                 }
             }
             excs = attr->getSetExceptions();
-            for (const auto & ex : std::as_const(excs)) {
+            for (const auto & ex : excs) {
                 if ( ex->getName() == "com.sun.star.beans.UnknownPropertyException" )
                 {
                     bSetUnknown = true;

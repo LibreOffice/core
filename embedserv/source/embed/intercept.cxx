@@ -233,7 +233,7 @@ void Interceptor::generateFeatureStateEvent()
 
             }
 
-            for(uno::Reference<css::frame::XStatusListener> const & control : std::as_const(aSeq))
+            for (uno::Reference<css::frame::XStatusListener> const& control : aSeq)
                 control->statusChanged(aStateEvent);
         }
     }

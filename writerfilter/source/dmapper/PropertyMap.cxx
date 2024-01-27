@@ -1955,12 +1955,12 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
                 vValues.push_back( pIter->Value );
             }
         }
-        for ( const beans::PropertyValue & v : std::as_const(vCharVals) )
+        for (const beans::PropertyValue& v : vCharVals)
         {
             vNames.push_back( v.Name );
             vValues.push_back( v.Value );
         }
-        for ( const beans::PropertyValue & v : std::as_const(vParaVals) )
+        for (const beans::PropertyValue& v : vParaVals)
         {
             vNames.push_back( v.Name );
             vValues.push_back( v.Value );

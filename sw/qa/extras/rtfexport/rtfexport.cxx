@@ -421,7 +421,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo53113)
             rProp.Value >>= aPathProps;
     }
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
-    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "Coordinates")
             rProp.Value >>= aPairs;
@@ -544,7 +544,7 @@ DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
     uno::Reference<awt::XBitmap> xBitmap;
     sal_Int16 nNumberingType = -1;
 
-    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "NumberingType")
             nNumberingType = rProp.Value.get<sal_Int16>();
@@ -695,7 +695,7 @@ DECLARE_RTFEXPORT_TEST(testFdo66682, "fdo66682.rtf")
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     OUString aListFormat;
-    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "ListFormat")
             aListFormat = rProp.Value.get<OUString>();

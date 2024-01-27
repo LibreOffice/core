@@ -927,7 +927,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         {
             uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
-            for (const auto& rProp : std::as_const(aGrabBag))
+            for (const auto& rProp : aGrabBag)
             {
                 if (rProp.Name == "ooxml:CT_SdtPlaceholder_docPart_val")
                     m_aPlaceHolderDocPart = rProp.Value.get<OUString>();
@@ -937,7 +937,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         {
             uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
-            for (const auto& rProp : std::as_const(aGrabBag))
+            for (const auto& rProp : aGrabBag)
             {
                 if (rProp.Name == "ooxml:CT_SdtColor_val")
                     m_aColor = rProp.Value.get<OUString>();
@@ -2557,13 +2557,13 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
 
         // Store databindings data for later writing to corresponding XMLs
         OUString sPrefixMapping, sXpath;
-        for (const auto& rProp : std::as_const(aGrabBagSdt))
+        for (const auto& rProp : aGrabBagSdt)
         {
             if (rProp.Name == "ooxml:CT_SdtPr_dataBinding")
             {
                 uno::Sequence<beans::PropertyValue> aDataBindingProps;
                 rProp.Value >>= aDataBindingProps;
-                for (const auto& rDBProp : std::as_const(aDataBindingProps))
+                for (const auto& rDBProp : aDataBindingProps)
                 {
                     if (rDBProp.Name == "ooxml:CT_DataBinding_prefixMappings")
                         sPrefixMapping = rDBProp.Value.get<OUString>();
@@ -3470,7 +3470,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
         }
     }
 
-    for (const auto& rAttribute : std::as_const(aAttributes))
+    for (const auto& rAttribute : aAttributes)
     {
         uno::Any aAny = rAttribute.Value;
         OString aValue;
@@ -4833,7 +4833,7 @@ void DocxAttributeOutput::LatentStyles()
     // Extract default attributes first.
     rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList = FastSerializerHelper::createAttrList();
     uno::Sequence<beans::PropertyValue> aLsdExceptions;
-    for (const auto& rLatentStyle : std::as_const(aLatentStyles))
+    for (const auto& rLatentStyle : aLatentStyles)
     {
         if (sal_Int32 nToken = DocxStringGetToken(aDefaultTokens, rLatentStyle.Name))
             pAttributeList->add(FSNS(XML_w, nToken), rLatentStyle.Value.get<OUString>());
@@ -4844,13 +4844,13 @@ void DocxAttributeOutput::LatentStyles()
     m_pSerializer->startElementNS(XML_w, XML_latentStyles, detachFrom(pAttributeList));
 
     // Then handle the exceptions.
-    for (const auto& rLsdException : std::as_const(aLsdExceptions))
+    for (const auto& rLsdException : aLsdExceptions)
     {
         pAttributeList = FastSerializerHelper::createAttrList();
 
         uno::Sequence<beans::PropertyValue> aAttributes;
         rLsdException.Value >>= aAttributes;
-        for (const auto& rAttribute : std::as_const(aAttributes))
+        for (const auto& rAttribute : aAttributes)
             if (sal_Int32 nToken = DocxStringGetToken(aExceptionTokens, rAttribute.Name))
                 pAttributeList->add(FSNS(XML_w, nToken), rAttribute.Value.get<OUString>());
 
@@ -5839,7 +5839,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     if (pObjectsInterop != std::cend(aObjectsInteropList))
         pObjectsInterop->Value >>= aObjectInteropAttributes;
 
-    for( const auto& rObjectInteropAttribute : std::as_const(aObjectInteropAttributes) )
+    for (const auto& rObjectInteropAttribute : aObjectInteropAttributes)
     {
         if ( rObjectInteropAttribute.Name == "ProgID" )
         {
@@ -9993,7 +9993,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             rGrabBagElement.second >>= aGrabBagSeq;
 
-            for (const auto& rProp : std::as_const(aGrabBagSeq))
+            for (const auto& rProp : aGrabBagSeq)
             {
                 OUString sVal = rProp.Value.get<OUString>();
 

@@ -2988,7 +2988,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
         {
             uno::Sequence<beans::NamedValue> aEncryptionData;
             pEncryptionDataItem->GetValue() >>= aEncryptionData;
-            for (const auto& rItem : std::as_const(aEncryptionData))
+            for (const auto& rItem : aEncryptionData)
             {
                 if (rItem.Name == "CryptoType")
                 {

@@ -464,7 +464,7 @@ void PngImageWriter::setParameters(css::uno::Sequence<css::beans::PropertyValue>
             css::uno::Sequence<css::beans::PropertyValue> aAdditionalChunkSequence;
             if (rValue.Value >>= aAdditionalChunkSequence)
             {
-                for (const auto& rAdditionalChunk : std::as_const(aAdditionalChunkSequence))
+                for (const auto& rAdditionalChunk : aAdditionalChunkSequence)
                 {
                     if (rAdditionalChunk.Name.getLength() == 4)
                     {

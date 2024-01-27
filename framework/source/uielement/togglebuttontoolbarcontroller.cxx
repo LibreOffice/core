@@ -113,7 +113,7 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
                 m_aCurrentSelection.clear();
 
                 arg.Value >>= aList;
-                for ( OUString const & label : std::as_const(aList) )
+                for (OUString const& label : aList)
                 {
                     m_aDropdownMenuList.push_back( DropdownMenuItem() );
                     m_aDropdownMenuList.back().mLabel = label;

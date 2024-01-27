@@ -41,7 +41,7 @@ void XFunctionDescriptions::testGetById()
     OUString aName1;
     uno::Sequence<beans::PropertyValue> aProps1;
     CPPUNIT_ASSERT(xFD->getByIndex(nNumber) >>= aProps1);
-    for (const auto& aProp : std::as_const(aProps1))
+    for (const auto& aProp : aProps1)
     {
         if (aProp.Name == "Id")
             aId1 = aProp.Value.get<sal_Int32>();

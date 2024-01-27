@@ -1256,7 +1256,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMissingBulletAndIndent)
     uno::Sequence<beans::PropertyValue> aBulletProps;
     xNumRule->getByIndex(1) >>= aBulletProps;
 
-    for (beans::PropertyValue const& rProp : std::as_const(aBulletProps))
+    for (beans::PropertyValue const& rProp : aBulletProps)
     {
         if (rProp.Name == "LeftMargin")
             CPPUNIT_ASSERT_EQUAL(sal_Int32(309), rProp.Value.get<sal_Int32>());

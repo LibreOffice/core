@@ -317,7 +317,7 @@ sal_Bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
     if (!m_aSuppLocales.hasElements())
         getLocales();
 
-    for (auto const& suppLocale : std::as_const(m_aSuppLocales))
+    for (auto const& suppLocale : m_aSuppLocales)
         if (rLocale == suppLocale)
             return true;
 

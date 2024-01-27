@@ -1235,7 +1235,7 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
                 xCellProperties->getPropertyValue("CellInteropGrabBag") >>= aCellGrabBag;
                 OUString sFormula;
                 bool bReplace = false;
-                for (const auto& rProp : std::as_const(aCellGrabBag))
+                for (const auto& rProp : aCellGrabBag)
                 {
                     if ( rProp.Name == "CellFormulaConverted" )
                     {

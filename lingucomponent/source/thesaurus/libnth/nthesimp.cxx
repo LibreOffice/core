@@ -108,7 +108,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "Thesauri",
                 "org.openoffice.lingu.new.Thesaurus", aFormatList );
-        for (const auto& rFormat : std::as_const(aFormatList))
+        for (const auto& rFormat : aFormatList)
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
                     aLinguCfg.GetActiveDictionariesByFormat( rFormat ) );

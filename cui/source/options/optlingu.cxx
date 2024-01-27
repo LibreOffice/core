@@ -647,7 +647,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     }
 
     Sequence< OUString > aCfgSvcs;
-    for(auto const & locale : std::as_const(aAllServiceLocales))
+    for (auto const& locale : aAllServiceLocales)
     {
         LanguageType nLang = LanguageTag::convertToLanguageType( locale );
 

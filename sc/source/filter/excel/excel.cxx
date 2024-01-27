@@ -344,7 +344,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         uno::Sequence<beans::NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
 
         tools::SvRef<SotStorage> xEncryptedRootStrg = new SotStorage(pOriginalMediaStrm, false);
-        for (const beans::NamedValue & aStreamData : std::as_const(aStreams))
+        for (const beans::NamedValue& aStreamData : aStreams)
         {
             // To avoid long paths split and open substorages recursively
             // Splitting paths manually, since comphelper::string::split is trimming special characters like \0x01, \0x09

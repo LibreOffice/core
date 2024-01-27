@@ -327,7 +327,7 @@ CustomLabelData lcl_getCustomLabelField(SvXMLExport const& rExport,
             CustomLabelData aData;
             Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aCustomLabels;
             aAny >>= aCustomLabels;
-            for (const auto& rField: std::as_const(aCustomLabels))
+            for (const auto& rField : aCustomLabels)
             {
                 if (rField->getFieldType() == chart2::DataPointCustomLabelFieldType_CELLRANGE)
                 {
@@ -3553,7 +3553,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     }
     else
     {
-        for( sal_Int32 nCurrIndex : std::as_const(aDataPointSeq) )
+        for (sal_Int32 nCurrIndex : aDataPointSeq)
         {
             aPropertyStates.clear();
             aDataLabelPropertyStates.clear();
@@ -3684,7 +3684,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
                                     OUString::number( aLastPoint.mnRepeat ));
 
-            for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
+            for (const auto& deletedLegendEntry : deletedLegendEntriesSeq)
             {
                 if (nIndex == deletedLegendEntry)
                 {
@@ -3710,7 +3710,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
                             OUString::number( aLastPoint.mnRepeat ));
 
-    for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
+    for (const auto& deletedLegendEntry : deletedLegendEntriesSeq)
     {
         if (nIndex == deletedLegendEntry)
         {

@@ -1592,7 +1592,7 @@ bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
         }
         OUString aNodeName( OUString::createFromAscii(pNodeName) );
 
-        for (const lang::Locale& rLocale : std::as_const(aLocales))
+        for (const lang::Locale& rLocale : aLocales)
         {
             uno::Sequence< OUString > aSvcImplNames = pDsp->GetServiceList( rLocale );
 
@@ -1627,7 +1627,7 @@ static uno::Sequence< OUString > GetLangSvcList( const uno::Any &rVal )
     {
         rVal >>= aRes;
 #if OSL_DEBUG_LEVEL > 0
-        for (const OUString& rSvcName : std::as_const(aRes))
+        for (const OUString& rSvcName : aRes)
         {
             SAL_WARN_IF( rSvcName.isEmpty(), "linguistic", "service impl-name missing" );
         }

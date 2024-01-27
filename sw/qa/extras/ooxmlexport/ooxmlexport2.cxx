@@ -679,7 +679,7 @@ DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
     uno::Reference<awt::XBitmap> xBitmap;
     sal_Int16 nNumberingType = -1;
 
-    for (beans::PropertyValue const & rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "NumberingType")
             nNumberingType = rProp.Value.get<sal_Int16>();
@@ -959,7 +959,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (beans::PropertyValue const & rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "BulletChar")
         {

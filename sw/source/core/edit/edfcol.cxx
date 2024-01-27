@@ -1802,13 +1802,13 @@ void SwEditShell::SignParagraph()
 
     const OUString signature = OStringToOUString(sigBuf, RTL_TEXTENCODING_UTF8, 0);
 
-    auto it = std::find_if(std::as_const(aProperties).begin(), std::as_const(aProperties).end(), [](const beans::PropertyValue& rValue)
+    auto it = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
                                                     {
                                                         return rValue.Name == "Usage";
                                                     });
 
     OUString aUsage;
-    if (it != std::as_const(aProperties).end())
+    if (it != aProperties.end())
         it->Value >>= aUsage;
 
     // 4. Add metadata

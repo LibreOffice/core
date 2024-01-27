@@ -203,7 +203,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const OUString& a
         uno::Sequence< beans::PropertyValue > aFilterData;
         if ( aFilterAnyData >>= aFilterData )
         {
-            for ( const auto & prop : std::as_const(aFilterData) )
+            for (const auto& prop : aFilterData)
                 if ( prop.Name == "DocumentService" )
                     prop.Value >>= aDocServiceName;
         }
@@ -234,7 +234,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
                 uno::Sequence< beans::PropertyValue > aType;
                 if ( xEnum->nextElement() >>= aType )
                 {
-                    for ( const auto & prop : std::as_const(aType) )
+                    for (const auto& prop : aType)
                     {
                         OUString aFilterName;
                         if ( prop.Name == "PreferredFilter"
@@ -565,7 +565,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
 {
     OUString aFilterName;
 
-    for ( const auto & prop : std::as_const(aMediaDescr) )
+    for (const auto& prop : aMediaDescr)
         if ( prop.Name == "FilterName" )
             prop.Value >>= aFilterName;
 
@@ -584,7 +584,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
         OUString aTypeName = xTypeDetection->queryTypeByDescriptor(aTempMD, bAllowDeepDetection);
 
         // get FilterName
-        for ( const auto & prop : std::as_const(aTempMD) )
+        for (const auto& prop : aTempMD)
             if ( prop.Name == "FilterName" )
                 prop.Value >>= aFilterName;
 
@@ -604,7 +604,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
 
             if ( xNameAccess.is() && ( xNameAccess->getByName( aTypeName ) >>= aTypes ) )
             {
-                for ( const auto & prop : std::as_const(aTypes) )
+                for (const auto& prop : aTypes)
                 {
                     if ( prop.Name == "PreferredFilter" && ( prop.Value >>= aFilterName ) )
                     {
@@ -628,7 +628,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                         uno::Sequence< beans::NamedValue >& aObject )
 {
     OUString aDocName;
-    for ( const auto & nv : std::as_const(aObject) )
+    for (const auto& nv : aObject)
         if ( nv.Name == "ObjectDocumentServiceName" )
         {
             nv.Value >>= aDocName;

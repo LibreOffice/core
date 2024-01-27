@@ -425,7 +425,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
 
     Sequence<css::beans::PropertyValue> aSeq;
     rArgs[0] >>= aSeq;
-    for (const auto& rVal : std::as_const(aSeq))
+    for (const auto& rVal : aSeq)
     {
         if (rVal.Name == "UserData")
         {

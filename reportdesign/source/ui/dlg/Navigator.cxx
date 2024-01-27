@@ -360,7 +360,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent )
     }
     else
     {
-        for (const uno::Reference<report::XReportComponent>& rElem : std::as_const(aSelection))
+        for (const uno::Reference<report::XReportComponent>& rElem : aSelection)
         {
             bool bEntry = find(rElem, *xEntry);
             if (bEntry && !m_xTreeView->is_selected(*xEntry))

@@ -223,7 +223,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
             uno::Sequence< uno::Sequence < beans::NamedValue > > aKeyInfoSequence;
             *pKeyInfoProperty >>= aKeyInfoSequence;
-            for (const uno::Sequence<beans::NamedValue>& rKeyInfoSequence : std::as_const(aKeyInfoSequence))
+            for (const uno::Sequence<beans::NamedValue>& rKeyInfoSequence : aKeyInfoSequence)
             {
                 uno::Sequence < sal_Int8 > aPgpKeyID;
                 uno::Sequence < sal_Int8 > aPgpKeyPacket;

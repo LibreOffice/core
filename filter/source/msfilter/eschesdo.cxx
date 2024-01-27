@@ -164,7 +164,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 if ( xPropInfo.is() && xPropInfo->hasPropertyByName( "InteropGrabBag" ) )
                 {
                     xPropertySet->getPropertyValue( "InteropGrabBag" ) >>= aGrabBag;
-                    for (const beans::PropertyValue& rProp : std::as_const(aGrabBag))
+                    for (const beans::PropertyValue& rProp : aGrabBag)
                     {
                         if (rProp.Name == "mso-edit-as")
                         {

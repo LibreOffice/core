@@ -315,7 +315,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     {
         rtl::Reference<ElementDescriptor> popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
-        for ( const auto& rItemValue : std::as_const(itemValues) )
+        for (const auto& rItemValue : itemValues)
         {
             rtl::Reference<ElementDescriptor> item = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
             item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
@@ -362,7 +362,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     {
         rtl::Reference<ElementDescriptor> popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
-        for ( const auto& rItemValue : std::as_const(itemValues) )
+        for (const auto& rItemValue : itemValues)
         {
             rtl::Reference<ElementDescriptor> item = new ElementDescriptor(_xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
             item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );

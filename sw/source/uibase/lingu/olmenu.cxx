@@ -324,7 +324,7 @@ SwSpellPopup::SwSpellPopup(
 
         m_aDics = xDicList->getDictionaries();
 
-        for( const uno::Reference< linguistic2::XDictionary >& rDic : std::as_const(m_aDics) )
+        for (const uno::Reference<linguistic2::XDictionary>& rDic : m_aDics)
         {
             uno::Reference< linguistic2::XDictionary >  xDicTmp = rDic;
             if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
@@ -476,7 +476,7 @@ SwSpellPopup::SwSpellPopup(
         }
 
         sal_uInt16 nItemId = MN_SUGGESTION_START;
-        for (const OUString& aEntry : std::as_const(rSuggestions))
+        for (const OUString& aEntry : rSuggestions)
         {
             m_xPopupMenu->InsertItem(nItemId, aEntry, MenuItemBits::NONE, {}, nPos++);
             m_xPopupMenu->SetHelpId(nItemId, HID_LINGU_REPLACE);

@@ -821,7 +821,7 @@ bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 css::drawing::LineDash aLineDash;
                 OUString aName;
                 bool bLineDash( false );
-                for ( const auto& rProp : std::as_const(aPropSeq) )
+                for (const auto& rProp : aPropSeq)
                 {
                     if ( rProp.Name == "Name" )
                         rProp.Value >>= aName;
@@ -2344,7 +2344,7 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
             {
                 OUString aName;
 
-                for ( const auto& rProp : std::as_const(aPropSeq) )
+                for (const auto& rProp : aPropSeq)
                 {
                     if ( rProp.Name == "Name" )
                         rProp.Value >>= aName;
@@ -2789,7 +2789,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 css::drawing::Hatch aUnoHatch;
                 OUString aName;
                 bool bHatch( false );
-                for ( const auto& rProp : std::as_const(aPropSeq) )
+                for (const auto& rProp : aPropSeq)
                 {
                     if ( rProp.Name == "Name" )
                         rProp.Value >>= aName;

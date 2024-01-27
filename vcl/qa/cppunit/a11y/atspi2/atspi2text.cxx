@@ -435,7 +435,7 @@ private:
             sal_Unicode lastFillChar = ' ';
             const char* p = atspiValue.data();
 
-            for (const auto& rTabStop : std::as_const(theTabStops))
+            for (const auto& rTabStop : theTabStops)
             {
                 if ((style::TabAlign_DEFAULT == rTabStop.Alignment) != defaultTabs)
                     continue;

@@ -614,7 +614,7 @@ void UICommandDescription::impl_fillElements(const char* _pName)
         if ( m_xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
         {
             OUString aCommandStr;
-            for ( PropertyValue const & prop : std::as_const(aSeq) )
+            for (PropertyValue const& prop : aSeq)
             {
                 if ( prop.Name.equalsAscii(_pName) )
                 {

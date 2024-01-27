@@ -146,7 +146,7 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  )
     uno::Sequence< uno::Any > sIndices;
     aConverted >>= sIndices;
     XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec aShapes;
-    for( const auto& rIndex : std::as_const(sIndices) )
+    for (const auto& rIndex : sIndices)
     {
         uno::Reference< drawing::XShape > xShape;
         if ( rIndex.getValueTypeClass() == uno::TypeClass_STRING )

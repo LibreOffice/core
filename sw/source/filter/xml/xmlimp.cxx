@@ -402,7 +402,7 @@ void SwXMLImport::startDocument()
             if( aAny >>= aFamiliesSeq )
             {
                 SfxStyleFamily nFamilyMask = SfxStyleFamily::None;
-                for( const OUString& rFamily : std::as_const(aFamiliesSeq) )
+                for (const OUString& rFamily : aFamiliesSeq)
                 {
                     if( rFamily=="FrameStyles" )
                         nFamilyMask |= SfxStyleFamily::Frame;
@@ -481,7 +481,7 @@ void SwXMLImport::startDocument()
 
                 if (xProps.is() && xInfo.is())
                 {
-                    for (const auto& rProp : std::as_const(aProps))
+                    for (const auto& rProp : aProps)
                     {
                         if (xInfo->hasPropertyByName(rProp.Name))
                         {

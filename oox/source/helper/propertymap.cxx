@@ -391,7 +391,7 @@ static void lclDumpAnyValue( const Any& value)
                     Sequence< PropertyValue > aBulletPropSeq;
                     fprintf (stderr, "level %d\n", k);
                     if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
-                        for (const PropertyValue& rProp : std::as_const(aBulletPropSeq)) {
+                        for (const PropertyValue& rProp : aBulletPropSeq) {
                             fprintf(stderr, "%46s = ", USS (rProp.Name));
                             lclDumpAnyValue (rProp.Value);
                         }
@@ -820,7 +820,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
             Sequence< PropertyValue > aBulletPropSeq;
             fprintf (stderr, "level %d\n", k);
             if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
-                for (const PropertyValue& rProp : std::as_const(aBulletPropSeq)) {
+                for (const PropertyValue& rProp : aBulletPropSeq) {
                     fprintf(stderr, "%46s = ", USS (rProp.Name));
                     lclDumpAnyValue (rProp.Value);
                 }

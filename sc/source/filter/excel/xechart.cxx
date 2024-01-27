@@ -1934,7 +1934,7 @@ bool XclExpChSeries::ConvertDataSeries(
                 Sequence< sal_Int32 > aPointIndexes;
                 if( aSeriesProp.GetProperty( aPointIndexes, EXC_CHPROP_ATTRIBDATAPOINTS ) && aPointIndexes.hasElements() )
                 {
-                    for( const sal_Int32 nPointIndex : std::as_const(aPointIndexes) )
+                    for (const sal_Int32 nPointIndex : aPointIndexes)
                     {
                         if (nPointIndex >= nMaxPointCount)
                             break;

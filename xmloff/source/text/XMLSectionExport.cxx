@@ -1540,7 +1540,7 @@ void XMLSectionExport::ExportLevelParagraphStyles(
                                            true, true);
 
             // iterate over styles in this level
-            for(const auto& rStyleName : std::as_const(aStyleNames))
+            for (const auto& rStyleName : aStyleNames)
             {
                 // stylename attribute
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT,
@@ -1652,7 +1652,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
     aAny = xPropSet->getPropertyValue("SortKeys");
     Sequence<Sequence<PropertyValue> > aKeys;
     aAny >>= aKeys;
-    for(const Sequence<PropertyValue> & rKey : std::as_const(aKeys))
+    for (const Sequence<PropertyValue>& rKey : aKeys)
     {
         for(const PropertyValue& rValue : rKey)
         {

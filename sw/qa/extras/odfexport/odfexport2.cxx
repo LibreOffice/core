@@ -759,7 +759,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
                                                     uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
-    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "BulletChar")
             return;

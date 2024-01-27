@@ -223,7 +223,7 @@ void TheExtensionManager::checkUpdates()
                         e.Context, anyEx );
     }
 
-    for ( auto const & i : std::as_const(xAllPackages) )
+    for (auto const& i : xAllPackages)
     {
         uno::Reference< deployment::XPackage > xPackage = dp_misc::getExtensionWithHighestVersion(i);
         OSL_ASSERT(xPackage.is());
@@ -306,7 +306,7 @@ void TheExtensionManager::createPackageList()
                         e.Context, anyEx );
     }
 
-    for ( uno::Sequence< uno::Reference< deployment::XPackage > > const & xPackageList : std::as_const(xAllPackages) )
+    for (uno::Sequence<uno::Reference<deployment::XPackage>> const& xPackageList : xAllPackages)
     {
         for ( uno::Reference< deployment::XPackage > const & xPackage : xPackageList )
         {

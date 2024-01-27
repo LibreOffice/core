@@ -797,13 +797,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92527)
     uno::Sequence<beans::PropertyValue> aProps;
     xPropertySet2->getPropertyValue("CustomShapeGeometry") >>= aProps;
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
             aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
     }
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
-    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "Coordinates")
             aCoordinates

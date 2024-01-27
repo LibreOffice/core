@@ -163,7 +163,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             }
 
             sal_Int32 nNumArgs = 1;
-            for ( const auto& rProp : std::as_const(aDescr) )
+            for (const auto& rProp : aDescr)
             {
                 if ( rProp.Name == "InteractionHandler"
                   || rProp.Name == "Password"

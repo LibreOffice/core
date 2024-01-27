@@ -3312,7 +3312,7 @@ void FmXFormShell::CreateExternalView_Lock()
                 aColumnProps.realloc(nExistentDescs + aProps.getLength());
                 pColumnProps = aColumnProps.getArray() + nExistentDescs;
 
-                for (const Property& rProp : std::as_const(aProps))
+                for (const Property& rProp : aProps)
                 {
                     if (rProp.Name == FM_PROP_LABEL)
                         // already set

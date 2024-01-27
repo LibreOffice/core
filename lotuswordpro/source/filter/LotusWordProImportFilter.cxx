@@ -227,7 +227,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( css::uno::Sequence< Property
     OUString sTypeName( "writer_LotusWordPro_Document" );
     OUString sURL;
     uno::Reference < XInputStream > xInputStream;
-    for (const PropertyValue& rValue : std::as_const(Descriptor))
+    for (const PropertyValue& rValue : Descriptor)
     {
         if ( rValue.Name == "TypeName" )
             rValue.Value >>= sTypeName;

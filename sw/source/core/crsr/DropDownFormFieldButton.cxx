@@ -33,7 +33,7 @@ void DropDownFormFieldButton::InitDropdown()
     if (pListEntries != pParameters->end())
     {
         pListEntries->second >>= vListEntries;
-        for (OUString const& i : std::as_const(vListEntries))
+        for (OUString const& i : vListEntries)
             m_xTreeView->append_text(i);
     }
 

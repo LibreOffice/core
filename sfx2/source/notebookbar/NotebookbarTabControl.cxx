@@ -309,7 +309,7 @@ void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext> co
                 sal_uInt16 nType = ItemType::DEFAULT;
                 bool bVisible = true;
 
-                for ( const auto& aProp: std::as_const(aPropSequence) )
+                for (const auto& aProp : aPropSequence)
                 {
                     if ( aProp.Name == "CommandURL" )
                         aProp.Value >>= aCommandURL;

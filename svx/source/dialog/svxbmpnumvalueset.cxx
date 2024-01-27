@@ -290,7 +290,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     aLevelAny >>= aLevel;
                     aNumberingTypes[i] = 0;
                     aParentNumberings[i] = 0;
-                    for(const PropertyValue& rProp : std::as_const(aLevel))
+                    for (const PropertyValue& rProp : aLevel)
                     {
                         if ( rProp.Name == "NumberingType" )
                             rProp.Value >>= aNumberingTypes[i];

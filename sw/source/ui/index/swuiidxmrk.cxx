@@ -1414,7 +1414,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
                 uno::Sequence<beans::PropertyValue> aSeq;
                 if( aNames >>= aSeq)
                 {
-                    for(const beans::PropertyValue& rProp : std::as_const(aSeq))
+                    for (const beans::PropertyValue& rProp : aSeq)
                     {
                         sal_Int16 nField = 0;
                         rProp.Value >>= nField;

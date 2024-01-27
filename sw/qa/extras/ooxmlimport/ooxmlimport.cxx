@@ -1568,7 +1568,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf101626)
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (beans::PropertyValue const & rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "BulletChar")
         {
@@ -1589,7 +1589,7 @@ CPPUNIT_TEST_FIXTURE(Test,  testTdf106606)
         uno::Sequence<beans::PropertyValue>     aProps;
         xLevels->getByIndex( 0 ) >>= aProps; // 1st level
 
-        for ( beans::PropertyValue const & rProp : std::as_const(aProps))
+        for (beans::PropertyValue const& rProp : aProps)
         {
             // If the image was prematurely removed from cache when processed for previous numbering list, then the sequence hasn't the property.
             if ( rProp.Name == "GraphicBitmap" )

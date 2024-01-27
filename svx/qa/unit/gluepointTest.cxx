@@ -62,7 +62,7 @@ bool lcl_getGeometryGluePoints(
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (beans::PropertyValue const& rProp : std::as_const(aCustomShapeGeometry))
+    for (beans::PropertyValue const& rProp : aCustomShapeGeometry)
     {
         if (rProp.Name == "Path")
         {
@@ -71,7 +71,7 @@ bool lcl_getGeometryGluePoints(
         }
     }
 
-    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "GluePoints")
         {

@@ -275,7 +275,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     // check if there is URL, URL must exist
     OUString aURL;
-    for ( beans::PropertyValue const & prop : std::as_const(aTempMedDescr) )
+    for (beans::PropertyValue const& prop : aTempMedDescr)
         if ( prop.Name == "URL" )
             prop.Value >>= aURL;
 
@@ -332,7 +332,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     uno::Sequence< beans::PropertyValue > aTempMedDescr( lArguments );
 
     OUString aURL;
-    for ( beans::PropertyValue const & prop : std::as_const(aTempMedDescr) )
+    for (beans::PropertyValue const& prop : aTempMedDescr)
         if ( prop.Name == "URL" )
             prop.Value >>= aURL;
 

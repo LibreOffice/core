@@ -90,7 +90,7 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         }
     }
 
-    for ( const beans::PropertyValue& rProp : std::as_const(maFilterDataSequence) )
+    for (const beans::PropertyValue& rProp : maFilterDataSequence)
     {
         if ( rProp.Name == "PixelWidth" )
         {

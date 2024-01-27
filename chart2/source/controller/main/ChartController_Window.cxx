@@ -1070,8 +1070,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         {
                             if( bIsPoint )
                             {
-                                auto aIt = std::find( std::as_const(aAttributedDataPointIndexList).begin(), std::as_const(aAttributedDataPointIndexList).end(), nPointIndex );
-                                if( aIt != std::as_const(aAttributedDataPointIndexList).end())
+                                auto aIt = std::find( aAttributedDataPointIndexList.begin(), aAttributedDataPointIndexList.end(), nPointIndex );
+                                if (aIt != aAttributedDataPointIndexList.end())
                                     bSelectedPointIsFormatted = true;
                                 else
                                     bHasFormattedDataPointsOtherThanSelected = true;

@@ -69,7 +69,7 @@ bool initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChil
     Sequence<Any> aCondSeq;
     if (rAny >>= aCondSeq)
     {
-        for (const auto& rCond : std::as_const(aCondSeq))
+        for (const auto& rCond : aCondSeq)
         {
             Cond aCond(rCond, bIsMainSeqChild);
             if (aCond.isValid())

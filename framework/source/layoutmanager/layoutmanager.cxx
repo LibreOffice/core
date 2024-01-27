@@ -532,7 +532,7 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
         if ( rPersistentWindowState->hasByName( aName ) && (rPersistentWindowState->getByName( aName ) >>= aWindowState) )
         {
             bool bValue( false );
-            for ( PropertyValue const & rProp : std::as_const(aWindowState) )
+            for (PropertyValue const& rProp : aWindowState)
             {
                 if ( rProp.Name == WINDOWSTATE_PROPERTY_DOCKED )
                 {
@@ -2483,7 +2483,7 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
         uno::Sequence< beans::PropertyValue > aProps;
         xMenuIndex->getByIndex( nIndex ) >>= aProps;
         OUString aCommand;
-        for ( beans::PropertyValue const & rProp : std::as_const(aProps) )
+        for (beans::PropertyValue const& rProp : aProps)
         {
             if (rProp.Name == "CommandURL")
             {

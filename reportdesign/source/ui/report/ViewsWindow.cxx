@@ -1228,7 +1228,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                     aNewPos.setY( 0 );
 
                 Point aPrevious;
-                for (beans::NamedValue const & namedVal : std::as_const(aAllreadyCopiedObjects))
+                for (beans::NamedValue const& namedVal : aAllreadyCopiedObjects)
                 {
                     uno::Sequence< uno::Reference<report::XReportComponent> > aClones;
                     namedVal.Value >>= aClones;

@@ -229,7 +229,7 @@ void GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aE
                 Reference< XInterface > (), 2);
     }
     OUString macroURL;
-    for( const auto& rProp : std::as_const(props) )
+    for (const auto& rProp : props)
     {
         if ( rProp.Name == "Script" )
             rProp.Value >>= macroURL;

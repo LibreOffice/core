@@ -263,7 +263,7 @@ void CustomAnimationPresets::importEffects()
         uno::Sequence< OUString > aFiles;
         xNameAccess->getByName( "EffectFiles" ) >>= aFiles;
 
-        for( const auto& rFile : std::as_const(aFiles) )
+        for (const auto& rFile : aFiles)
         {
             OUString aURL = comphelper::getExpandedUri(xContext, rFile);
 
@@ -363,7 +363,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
 
                     EffectDescriptorList aEffectsList;
 
-                    for( const OUString& rEffectName : std::as_const(aEffects) )
+                    for (const OUString& rEffectName : aEffects)
                     {
                         CustomAnimationPresetPtr pEffect = getEffectDescriptor( rEffectName );
                         if( pEffect )

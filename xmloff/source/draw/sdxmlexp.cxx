@@ -1952,7 +1952,7 @@ void SdXMLExport::exportPresentationSettings()
 
             OUStringBuffer sTmp;
 
-            for( const auto& rShowName : std::as_const(aShowNames) )
+            for (const auto& rShowName : aShowNames)
             {
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, rShowName );
 

@@ -851,7 +851,7 @@ bool BibGeneralPage::AddXControl(const OUString& rName, weld::ComboBox& rList)
             {
                 css::uno::Sequence<OUString> aEntries;
                 xPropSet->getPropertyValue("StringItemList") >>= aEntries;
-                for (const OUString& rString : std::as_const(aEntries))
+                for (const OUString& rString : aEntries)
                      rList.append_text(rString);
 
                 sal_Int16 nSelection = -1;

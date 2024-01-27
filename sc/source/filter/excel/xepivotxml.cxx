@@ -721,16 +721,16 @@ void WriteGrabBagItemToStream(XclExpXmlStream& rStrm, sal_Int32 tokenId, const c
 
     css::uno::Sequence<css::xml::FastAttribute> aFastSeq;
     css::uno::Sequence<css::xml::Attribute> aUnkSeq;
-    for (const auto& a : std::as_const(aSeqs))
+    for (const auto& a : aSeqs)
     {
         if (a >>= aFastSeq)
         {
-            for (const auto& rAttr : std::as_const(aFastSeq))
+            for (const auto& rAttr : aFastSeq)
                 rStrm.WriteAttributes(rAttr.Token, rAttr.Value);
         }
         else if (a >>= aUnkSeq)
         {
-            for (const auto& rAttr : std::as_const(aUnkSeq))
+            for (const auto& rAttr : aUnkSeq)
                 pStrm->write(" ")
                     ->write(rAttr.Name)
                     ->write("=\"")

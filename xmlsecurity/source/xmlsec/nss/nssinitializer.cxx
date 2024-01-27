@@ -268,7 +268,7 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
         {
             uno::Sequence<OUString> aProductProfileList;
             xMozillaBootstrap->getProfileList(productTypeIter, aProductProfileList);
-            for (const auto& sProfile : std::as_const(aProductProfileList))
+            for (const auto& sProfile : aProductProfileList)
                 aProfileList.push_back({sProfile, xMozillaBootstrap->getProfilePath(productTypeIter, sProfile), productTypeIter});
         }
     }

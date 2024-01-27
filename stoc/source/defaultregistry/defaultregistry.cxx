@@ -758,10 +758,10 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
         return new NestedKeyImpl(name, this);
     };
 
-    for (const auto& rKeyName : std::as_const(localSeq))
+    for (const auto& rKeyName : localSeq)
         retVec.push_back(lKeyNameToRegKey(rKeyName));
 
-    for (const auto& rKeyName : std::as_const(defaultSeq))
+    for (const auto& rKeyName : defaultSeq)
     {
         if ( comphelper::findValue(localSeq, rKeyName) == -1 )
         {

@@ -158,7 +158,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         // set its properties
         if (xNewColProperties.is())
         {
-            for (const css::beans::PropertyValue& rControlProp : std::as_const(aControlProps))
+            for (const css::beans::PropertyValue& rControlProp : aControlProps)
             {
                 try
                 {

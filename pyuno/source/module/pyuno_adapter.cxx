@@ -273,7 +273,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                     }
 
                     aOutParam.realloc( nOutLength );
-                    ret = std::as_const(seq)[0];
+                    ret = seq[0];
                     std::copy_n(std::next(std::cbegin(seq)), nOutLength, aOutParam.getArray());
                 }
                 // else { sequence is a return value !}

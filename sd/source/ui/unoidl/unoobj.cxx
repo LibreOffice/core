@@ -1127,7 +1127,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
     OUString aStrLibrary;
     OUString aStrBookmark;
 
-    for( const beans::PropertyValue& rProperty : std::as_const(aProperties) )
+    for (const beans::PropertyValue& rProperty : aProperties)
     {
         if( !( nFound & FoundFlags::EventType ) && rProperty.Name == gaStrEventType )
         {

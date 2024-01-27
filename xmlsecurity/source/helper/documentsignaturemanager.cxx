@@ -179,7 +179,7 @@ bool DocumentSignatureManager::isXML(std::u16string_view rURI)
 
     if (readManifest())
     {
-        for (const uno::Sequence<beans::PropertyValue>& entry : std::as_const(m_manifest))
+        for (const uno::Sequence<beans::PropertyValue>& entry : m_manifest)
         {
             OUString sPath;
             OUString sMediaType;

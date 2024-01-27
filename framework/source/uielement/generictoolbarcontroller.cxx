@@ -287,7 +287,7 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
     {
         if (aControlCommand.Command == "SetQuickHelpText")
         {
-            for ( NamedValue const & rArg : std::as_const(aControlCommand.Arguments) )
+            for (NamedValue const& rArg : aControlCommand.Arguments)
             {
                 if (rArg.Name == "HelpText")
                 {

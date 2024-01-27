@@ -778,7 +778,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         {
             bHasGeometrySeq = true;
             SAL_INFO("oox.shape", "got custom shape geometry sequence");
-            for (const PropertyValue& rProp : std::as_const(aGeometrySeq))
+            for (const PropertyValue& rProp : aGeometrySeq)
             {
                 SAL_INFO("oox.shape", "geometry property: " << rProp.Name);
                 if (rProp.Name == "Type")
@@ -1156,7 +1156,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         uno::Sequence<beans::PropertyValue> grabBag;
         rXPropSet->getPropertyValue("InteropGrabBag") >>= grabBag;
 
-        for (auto const& it : std::as_const(grabBag))
+        for (auto const& it : grabBag)
             if (it.Name == "3DEffectProperties")
                 bHas3DEffectinShape = true;
 
@@ -2385,7 +2385,7 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     if( !aTextVerticalValue &&
         (xCellPropSet->getPropertyValue("CellInteropGrabBag") >>= aGrabBag) )
     {
-        for (auto const& rIt : std::as_const(aGrabBag))
+        for (auto const& rIt : aGrabBag)
         {
             if (rIt.Name == "mso-tcPr-vert-value")
             {
@@ -2697,19 +2697,19 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     OUString progID;
 
-    for (auto const& it : std::as_const(grabBag))
+    for (auto const& it : grabBag)
     {
         if (it.Name == "EmbeddedObjects")
         {
             uno::Sequence<beans::PropertyValue> objects;
             it.Value >>= objects;
-            for (auto const& object : std::as_const(objects))
+            for (auto const& object : objects)
             {
                 if (object.Name == entryName)
                 {
                     uno::Sequence<beans::PropertyValue> props;
                     object.Value >>= props;
-                    for (auto const& prop : std::as_const(props))
+                    for (auto const& prop : props)
                     {
                         if (prop.Name == "ProgID")
                         {

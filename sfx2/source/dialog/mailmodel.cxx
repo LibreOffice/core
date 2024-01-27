@@ -135,7 +135,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
 
         if ( aAny >>= aProps )
         {
-            for( const auto& rProp : std::as_const(aProps) )
+            for (const auto& rProp : aProps)
             {
                 if( rProp.Name == "UIComponent" )
                 {

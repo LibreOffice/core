@@ -824,7 +824,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     bool bFound = false;
-    for (beans::PropertyValue const & rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "GraphicSize")
         {

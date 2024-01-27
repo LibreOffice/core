@@ -3092,7 +3092,7 @@ void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
 
             xProps->setPropertyValue("MediaMimeType", uno::Any(maMimeType) );
 
-            for( const auto& rParam : std::as_const(maParams) )
+            for (const auto& rParam : maParams)
             {
                 const OUString& rName = rParam.Name;
 

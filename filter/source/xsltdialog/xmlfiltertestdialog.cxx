@@ -310,7 +310,7 @@ void XMLFilterTestDialog::onExportBrowse()
 
                 int nFound = 0;
 
-                for( const PropertyValue& rValue : std::as_const(aValues) )
+                for (const PropertyValue& rValue : aValues)
                 {
                     if ( rValue.Name == "Type" )
                     {
@@ -348,7 +348,7 @@ void XMLFilterTestDialog::onExportBrowse()
                         if( aAny >>= aValues2 )
                         {
                             OUString aExtension;
-                            for( const PropertyValue& rProp : std::as_const(aValues2) )
+                            for (const PropertyValue& rProp : aValues2)
                             {
                                 if ( rProp.Name == "Extensions" )
                                 {

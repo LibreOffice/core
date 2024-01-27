@@ -358,7 +358,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         // access list of text conversion dictionaries to activate
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
-        for (const OUString& rActiveConvDic : std::as_const(aOpt.aActiveConvDics))
+        for (const OUString& rActiveConvDic : aOpt.aActiveConvDics)
         {
             uno::Reference< XConversionDictionary > xDic =
                     mxNameContainer->GetByName( rActiveConvDic );

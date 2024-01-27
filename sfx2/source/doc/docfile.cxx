@@ -3853,7 +3853,7 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
     // To determine a unique name for the stream
     std::vector<sal_uInt32> aLongs;
     sal_Int32 nLength = pImpl->aVersions.getLength();
-    for ( const auto& rVersion : std::as_const(pImpl->aVersions) )
+    for (const auto& rVersion : pImpl->aVersions)
     {
         sal_uInt32 nVer = static_cast<sal_uInt32>( o3tl::toInt32(rVersion.Identifier.subView(7)));
         size_t n;

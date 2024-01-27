@@ -585,7 +585,7 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
     {
         bool hasLocationUrl = false;
 
-        for (const Reference < XRegistryKey> & xImplKey : std::as_const(subKeys))
+        for (const Reference<XRegistryKey>& xImplKey : subKeys)
         {
             Reference < XRegistryKey > xKey = xImplKey->openKey(
                 slash_UNO_slash_LOCATION );
@@ -725,7 +725,7 @@ void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xReg,
     {
         bool hasNoImplementations = false;
 
-        for (const Reference < XRegistryKey > & xServiceKey : std::as_const(subKeys))
+        for (const Reference<XRegistryKey>& xServiceKey : subKeys)
         {
             if (xServiceKey->getValueType() == RegistryValueType_ASCIILIST)
             {

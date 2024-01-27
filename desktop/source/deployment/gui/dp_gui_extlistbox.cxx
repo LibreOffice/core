@@ -148,7 +148,7 @@ void Entry_Impl::checkDependencies()
         if ( e.Cause >>= depExc )
         {
             OUStringBuffer aMissingDep( DpResId( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
-            for ( const auto& i : std::as_const(depExc.UnsatisfiedDependencies) )
+            for (const auto& i : depExc.UnsatisfiedDependencies)
             {
                 aMissingDep.append("\n"
                     + dp_misc::Dependencies::getErrorText(i));

@@ -391,7 +391,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
         {
             if ( rItemContainer->getByIndex( n ) >>= aProps )
             {
-                for ( beans::PropertyValue const & prop : std::as_const(aProps) )
+                for (beans::PropertyValue const& prop : aProps)
                 {
                     if ( prop.Name == "CommandURL" )
                     {

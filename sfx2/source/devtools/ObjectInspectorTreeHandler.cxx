@@ -758,7 +758,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     {
     }
 
-    for (auto const& aInvocationInfo : std::as_const(aInvocationInfoSequence))
+    for (auto const& aInvocationInfo : aInvocationInfoSequence)
     {
         if (aInvocationInfo.eMemberType == script::MemberType_PROPERTY)
         {

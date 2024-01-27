@@ -248,7 +248,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 
         if ( pBuf && !bAnyIsReady )
         {
-            for ( auto const & supportedFormat : std::as_const(m_aSupportedGraphFormats) )
+            for (auto const& supportedFormat : m_aSupportedGraphFormats)
                 if ( aFlavor.MimeType.match( supportedFormat.MimeType )
                   && aFlavor.DataType == supportedFormat.DataType
                   && aFlavor.DataType == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
@@ -266,7 +266,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavor& aFlavor )
 {
     // Actually all the required graphical formats must be supported
-    for ( auto const & supportedFormat : std::as_const(m_aSupportedGraphFormats) )
+    for (auto const& supportedFormat : m_aSupportedGraphFormats)
          if ( aFlavor.MimeType.match( supportedFormat.MimeType )
           && aFlavor.DataType == supportedFormat.DataType )
             return true;
@@ -1559,7 +1559,7 @@ sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataF
         RetrieveObjectDataFlavors_Impl();
     }
 
-    for ( auto const & supportedFormat : std::as_const(m_aDataFlavors) )
+    for (auto const& supportedFormat : m_aDataFlavors)
         if ( supportedFormat.MimeType.equals( aFlavor.MimeType ) && supportedFormat.DataType == aFlavor.DataType )
             return true;
 

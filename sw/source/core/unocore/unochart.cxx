@@ -662,7 +662,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     //!! by proceeding this way we automatically get rid of
     //!! multiple listed or overlapping cell ranges which should
     //!! just be ignored silently
-    for (const OUString& rSubRange : std::as_const(aSubRanges))
+    for (const OUString& rSubRange : aSubRanges)
     {
         OUString aTableName, aStartCell, aEndCell;
         bool bOk2 = GetTableAndCellsFromRangeRep(
@@ -862,7 +862,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         uno::Reference<chart2::data::XLabeledDataSequence>* pOld_LDS = aOld_LDS.getArray();
 
         sal_Int32 nNewCnt = 0;
-        for (sal_Int32 nIdx : std::as_const(aSequenceMapping))
+        for (sal_Int32 nIdx : aSequenceMapping)
         {
             // check that index to be used is valid
             // and has not yet been used
@@ -1213,7 +1213,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     GetSubranges( aCellRanges, aSortedRanges, false /*sub ranges should already be normalized*/ );
     SortSubranges( aSortedRanges, (nDtaSrcIsColumns == 1) );
     OUString aSortedCellRanges;
-    for (const OUString& rSortedRange : std::as_const(aSortedRanges))
+    for (const OUString& rSortedRange : aSortedRanges)
     {
         if (!aSortedCellRanges.isEmpty())
             aSortedCellRanges += ";";
@@ -1232,7 +1232,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                              aSequenceMapping[i] );
         pSequenceMapping[i] = std::distance(std::cbegin(aSortedMapping), it);
 
-        if (i != std::as_const(aSequenceMapping)[i])
+        if (i != aSequenceMapping[i])
             bNeedSequenceMapping = true;
     }
 

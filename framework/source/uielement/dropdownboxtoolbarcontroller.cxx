@@ -192,7 +192,7 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
                 m_pListBoxControl->clear();
 
                 rArg.Value >>= aList;
-                for (OUString const & rName : std::as_const(aList))
+                for (OUString const& rName : aList)
                     m_pListBoxControl->append_text(rName);
 
                 m_pListBoxControl->set_active(0);

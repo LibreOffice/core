@@ -248,7 +248,7 @@ OUString SvxConfigPageHelper::GetUIModuleName(
 
         if (a >>= aSeq)
         {
-            for (css::beans::PropertyValue const& rProp : std::as_const(aSeq))
+            for (css::beans::PropertyValue const& rProp : aSeq)
             {
                 if (rProp.Name == "ooSetupFactoryUIName")
                 {
@@ -282,7 +282,7 @@ bool SvxConfigPageHelper::GetMenuItemData(
         css::uno::Sequence<css::beans::PropertyValue> aProps;
         if (rItemContainer->getByIndex(nIndex) >>= aProps)
         {
-            for (css::beans::PropertyValue const& rProp : std::as_const(aProps))
+            for (css::beans::PropertyValue const& rProp : aProps)
             {
                 if (rProp.Name == ITEM_DESCRIPTOR_COMMANDURL)
                 {
@@ -325,7 +325,7 @@ bool SvxConfigPageHelper::GetToolbarItemData(
         css::uno::Sequence<css::beans::PropertyValue> aProps;
         if (rItemContainer->getByIndex(nIndex) >>= aProps)
         {
-            for (css::beans::PropertyValue const& rProp : std::as_const(aProps))
+            for (css::beans::PropertyValue const& rProp : aProps)
             {
                 if (rProp.Name == ITEM_DESCRIPTOR_COMMANDURL)
                 {

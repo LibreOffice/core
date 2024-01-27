@@ -1152,7 +1152,7 @@ void XmlFilterBase::exportCustomFragments()
 
     uno::Sequence<beans::PropertyValue> propList;
     xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
-    for (const auto& rProp : std::as_const(propList))
+    for (const auto& rProp : propList)
     {
         const OUString propName = rProp.Name;
         if (propName == "OOXCustomXml")

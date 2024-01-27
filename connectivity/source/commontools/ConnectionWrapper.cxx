@@ -202,7 +202,7 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
     auto [begin, end] = asNonConstRange(_rInfo);
     std::sort(begin,end,TPropertyValueLessFunctor());
 
-    for (PropertyValue const & prop : std::as_const(_rInfo))
+    for (PropertyValue const& prop : _rInfo)
     {
         // we only include strings an integer values
         OUString sValue;
@@ -218,7 +218,7 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
                 Sequence< OUString> aSeq;
                 if ( prop.Value >>= aSeq )
                 {
-                    for(OUString const & s : std::as_const(aSeq))
+                    for (OUString const& s : aSeq)
                         sha1.update(reinterpret_cast<unsigned char const*>(s.getStr()), s.getLength() * sizeof(sal_Unicode));
                 }
             }

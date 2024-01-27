@@ -809,7 +809,7 @@ namespace sax_fastparser {
 
         // Sort it all
         std::map< sal_Int32, Int8Sequence >::iterator iter;
-        for ( const auto nIndex : std::as_const(maOrder) )
+        for (const auto nIndex : maOrder)
         {
             iter = maData.find( nIndex );
             if ( iter != maData.end() )

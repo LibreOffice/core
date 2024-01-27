@@ -498,7 +498,7 @@ void ResourceManager::ReadContextList (
     if (!(aValue >>= aValues))
         return;
 
-    for (const OUString& sValue : std::as_const(aValues))
+    for (const OUString& sValue : aValues)
     {
         sal_Int32 nCharacterIndex (0);
         const OUString sApplicationName (o3tl::trim(o3tl::getToken(sValue, 0, ',', nCharacterIndex)));

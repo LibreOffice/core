@@ -179,7 +179,7 @@ sal_Int32 ScVbaShape::getAutoShapeType(const css::uno::Reference< drawing::XShap
         uno::Sequence< beans::PropertyValue > aGeoPropSeq;
         if ( aGeoPropSet >>= aGeoPropSeq )
         {
-            for( const auto& rProp : std::as_const(aGeoPropSeq) )
+            for (const auto& rProp : aGeoPropSeq)
             {
                 if( rProp.Name == "Type" )
                 {

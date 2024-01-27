@@ -83,7 +83,7 @@ void SmartTagMenuController::statusChanged( const css::frame::FeatureStateEvent&
     OUString aApplicationName;
     OUString aRangeText;
 
-    for ( const auto& aProperty : std::as_const(aProperties) )
+    for (const auto& aProperty : aProperties)
     {
         if ( aProperty.Name == "ActionComponents" )
             aProperty.Value >>= aActionComponents;

@@ -431,7 +431,7 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     // fill mail address and password ListBox
     assert(m_xMailToLB->get_count() == 0);
     assert(m_xPasswordLB->get_count() == 0);
-    for (const OUString& rField : std::as_const(aFields))
+    for (const OUString& rField : aFields)
     {
         m_xMailToLB->append_text(rField);
         m_xPasswordLB->append_text(rField);

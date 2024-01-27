@@ -533,7 +533,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                             RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>
                          items( rPam.GetDoc().GetAttrPool() );
 
-                    for (beans::NamedValue const & prop : std::as_const(props))
+                    for (beans::NamedValue const& prop : props)
                     {
                         SfxItemPropertyMapEntry const*const pEntry =
                             rMap.getByName(prop.Name);

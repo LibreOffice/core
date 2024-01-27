@@ -127,7 +127,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
     m_xED_CrossesAtCategory->set_visible( m_bCrossingAxisIsCategoryAxis );
     if (m_bCrossingAxisIsCategoryAxis)
     {
-        for( auto const & cat : std::as_const(m_aCategories) )
+        for (auto const& cat : m_aCategories)
             m_xED_CrossesAtCategory->append_text(cat);
     }
 

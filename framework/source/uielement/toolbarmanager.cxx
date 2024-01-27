@@ -1372,7 +1372,7 @@ void ToolBarManager::FillToolbarFromContainer( const Reference< XIndexAccess >& 
             if ( rItemContainer->getByIndex( n ) >>= aProps )
             {
                 bool bIsVisible( true );
-                for ( PropertyValue const & prop : std::as_const(aProps) )
+                for (PropertyValue const& prop : aProps)
                 {
                     if ( prop.Name == ITEM_DESCRIPTOR_COMMANDURL )
                         prop.Value >>= aCommandURL;

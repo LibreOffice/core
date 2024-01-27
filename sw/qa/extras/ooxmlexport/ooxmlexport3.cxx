@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     // Check latent styles
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
     uno::Sequence<beans::PropertyValue> aLatentStyles;
-    for (beans::PropertyValue const & prop : std::as_const(aGrabBag))
+    for (beans::PropertyValue const& prop : aGrabBag)
         if (prop.Name == "latentStyles")
             prop.Value >>= aLatentStyles;
     CPPUNIT_ASSERT(aLatentStyles.getLength()); // document should have latent styles
@@ -192,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     // Check latent style default attributes
     OUString aCount;
     uno::Sequence<beans::PropertyValue> aLatentStyleExceptions;
-    for (beans::PropertyValue const & prop : std::as_const(aLatentStyles))
+    for (beans::PropertyValue const& prop : aLatentStyles)
     {
         if (prop.Name == "count")
             aCount = prop.Value.get<OUString>();
@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     uno::Sequence<beans::PropertyValue> aLatentStyleException;
     aLatentStyleExceptions[0].Value >>= aLatentStyleException;
     OUString aName;
-    for (beans::PropertyValue const & prop : std::as_const(aLatentStyleException))
+    for (beans::PropertyValue const& prop : aLatentStyleException)
         if (prop.Name == "name")
             aName = prop.Value.get<OUString>();
     CPPUNIT_ASSERT_EQUAL(OUString("Normal"), aName); // This checks the "name" attribute of the first exception.
@@ -415,7 +415,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
     bool bTheme = false;
-    for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
+    for (beans::PropertyValue const& prop : aGrabBag)
     {
       if (prop.Name == "OOXTheme")
       {
@@ -437,7 +437,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
     bool bData = false, bLayout = false, bQStyle = false, bColor = false, bDrawing = false;
-    for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
+    for (beans::PropertyValue const& prop : aGrabBag)
     {
       if (prop.Name == "OOXData")
       {
@@ -530,7 +530,7 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
     xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
     bool CustomXml = false;
-    for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
+    for (beans::PropertyValue const& prop : aGrabBag)
     {
         if (prop.Name == "OOXCustomXml" || prop.Name == "OOXCustomXmlProps")
         {

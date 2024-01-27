@@ -288,7 +288,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
                 plOutValues = lOutValues.getArray();
             }
 
-            for( const auto& rProperty : std::as_const(lProperties) )
+            for (const auto& rProperty : lProperties)
             {
                 plOutNames [nDestinationCounter] = sNodeName + rProperty.Name;
                 plOutValues[nDestinationCounter] = rProperty.Value;

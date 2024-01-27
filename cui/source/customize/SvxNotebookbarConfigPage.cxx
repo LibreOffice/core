@@ -217,7 +217,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId
     }
 
     OUString aLabel;
-    for (auto const& prop : std::as_const(aPropSeq))
+    for (auto const& prop : aPropSeq)
         if (prop.Name == "Name")
             prop.Value >>= aLabel;
 

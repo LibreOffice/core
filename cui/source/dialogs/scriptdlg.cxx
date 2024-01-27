@@ -147,7 +147,7 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
     }
 
     Reference<XModel> xDocumentModel;
-    for ( const Reference< browse::XBrowseNode >& childNode : std::as_const(children) )
+    for (const Reference<browse::XBrowseNode>& childNode : children)
     {
         bool app = false;
         OUString uiName = childNode->getName();
@@ -178,7 +178,7 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
                 } catch(const uno::Exception&)
                     {}
 
-                for ( const beans::PropertyValue& prop : std::as_const(moduleDescr))
+                for (const beans::PropertyValue& prop : moduleDescr)
                 {
                     if ( prop.Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
@@ -278,7 +278,7 @@ void SvxScriptOrgDialog::RequestSubEntries(const weld::TreeIter& rRootEntry, Ref
         // if we catch an exception in getChildNodes then no entries are added
     }
 
-    for ( const Reference< browse::XBrowseNode >& childNode : std::as_const(children) )
+    for (const Reference<browse::XBrowseNode>& childNode : children)
     {
         OUString name( childNode->getName() );
         if (  childNode->getType() !=  browse::BrowseNodeTypes::SCRIPT)
@@ -751,7 +751,7 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
                 if(extnPos>0)
                     extn = nodeName.copy(extnPos);
             }
-            for( const Reference< browse::XBrowseNode >& n : std::as_const(childNodes) )
+            for (const Reference<browse::XBrowseNode>& n : childNodes)
             {
                 if (Concat2View(aNewName+extn) == n->getName())
                 {
@@ -778,7 +778,7 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
             {
                 OUString aUserSuppliedName = aNewDlg.GetObjectName();
                 bValid = true;
-                for( const Reference< browse::XBrowseNode >& n : std::as_const(childNodes) )
+                for (const Reference<browse::XBrowseNode>& n : childNodes)
                 {
                     if (Concat2View(aUserSuppliedName+extn) == n->getName())
                     {

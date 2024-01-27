@@ -1725,7 +1725,7 @@ uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
         else
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
 
-        for ( const auto& rKey : std::as_const(m_aStorageEncryptionKeys) )
+        for (const auto& rKey : m_aStorageEncryptionKeys)
             if ( rKey.Name == aNameToFind )
                 rKey.Value >>= aResult;
     }
@@ -1801,7 +1801,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
         }
 
-        for ( const auto& rAlgorithm : std::as_const(aAlgorithms) )
+        for (const auto& rAlgorithm : aAlgorithms)
         {
             if ( rAlgorithm.Name == "StartKeyGenerationAlgorithm" )
             {

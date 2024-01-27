@@ -245,7 +245,7 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
                 m_pComboBox->clear();
 
                 rArg.Value >>= aList;
-                for (OUString const & rName : std::as_const(aList))
+                for (OUString const& rName : aList)
                     m_pComboBox->append_text(rName);
 
                 // send notification

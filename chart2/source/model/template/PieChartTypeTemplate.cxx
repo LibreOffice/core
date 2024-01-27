@@ -446,7 +446,7 @@ void PieChartTypeTemplate::applyStyle2(
                 {
                     fOffsetToSet = 0.0;
                     bSetOffset = true;
-                    for( auto const & pointIndex : std::as_const(aAttributedDataPointIndexList) )
+                    for (auto const& pointIndex : aAttributedDataPointIndexList)
                     {
                         uno::Reference< beans::XPropertySet > xPointProp(
                             xSeries->getDataPointByIndex( pointIndex ));
@@ -471,7 +471,7 @@ void PieChartTypeTemplate::applyStyle2(
                 xSeries->setPropertyValue( aOffsetPropName, uno::Any( fOffsetToSet ));
 
                 // remove hard attributes from data points
-                for( auto const & pointIndex : std::as_const(aAttributedDataPointIndexList) )
+                for (auto const& pointIndex : aAttributedDataPointIndexList)
                 {
                     uno::Reference< beans::XPropertyState > xPointState(
                         xSeries->getDataPointByIndex( pointIndex ), uno::UNO_QUERY );

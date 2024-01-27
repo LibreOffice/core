@@ -218,7 +218,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
         aSeriesSeq = aData.Series;
 
         sal_Int32 nIndex = 0;
-        for( auto const & i : std::as_const(aSeriesSeq) )
+        for (auto const& i : aSeriesSeq)
             for( auto const & j : i )
             {
                 if( nIndex >= nFormerSeriesCount )

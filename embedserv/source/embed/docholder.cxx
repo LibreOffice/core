@@ -918,7 +918,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
             if(m_xDocument.is())
             {
                 aSeq = m_xDocument->getArgs();
-                for(beans::PropertyValue const & prop : std::as_const(aSeq))
+                for (beans::PropertyValue const& prop : aSeq)
                 {
                     if(prop.Name == "FilterName")
                     {
@@ -937,7 +937,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
                     if(xNameAccess.is() &&
                        (xNameAccess->getByName(aFilterName) >>= aSeq))
                     {
-                        for(beans::PropertyValue const & prop : std::as_const(aSeq))
+                        for (beans::PropertyValue const& prop : aSeq)
                             if(prop.Name == "UIName")
                             {
                                 prop.Value >>= m_aFilterName;

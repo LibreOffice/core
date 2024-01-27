@@ -183,7 +183,7 @@ void SAL_CALL GalleryThemePopup::statusChanged(
             else if ( ( rEvent.State >>= sItems ) && sItems.hasElements() )
             {
                 sal_uInt16 nId = 1;
-                for ( const OUString& rStr : std::as_const(sItems) )
+                for (const OUString& rStr : sItems)
                 {
                     mxBackgroundPopup->append(OUString::number(nId), rStr);
                     nId++;

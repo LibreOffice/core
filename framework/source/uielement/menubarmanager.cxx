@@ -1306,7 +1306,7 @@ void MenuBarManager::FillMenu(
                 bool bShow = true;
                 bool bEnabled = true;
 
-                for ( beans::PropertyValue const & rProp : std::as_const(aProps) )
+                for (beans::PropertyValue const& rProp : aProps)
                 {
                     OUString aPropName = rProp.Name;
                     if ( aPropName == "CommandURL" )

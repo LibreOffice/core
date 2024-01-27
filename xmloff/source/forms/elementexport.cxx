@@ -401,7 +401,7 @@ namespace xmloff
                     Sequence< OUString > aListItems;
                     m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aListItems;
                     // loop through it and write the sub elements
-                    for (const auto& rListItem : std::as_const(aListItems))
+                    for (const auto& rListItem : aListItems)
                     {
                         m_rContext.getGlobalContext().ClearAttrList();
                         AddAttribute(
@@ -1236,7 +1236,7 @@ namespace xmloff
         DBG_CHECK_PROPERTY(_rPropertyName, Sequence< sal_Int16 >);
         m_xProps->getPropertyValue(_rPropertyName) >>= aValueSequence;
 
-        for (const auto& rValue : std::as_const(aValueSequence))
+        for (const auto& rValue : aValueSequence)
             _rOut.insert(rValue);
     }
 

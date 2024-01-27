@@ -500,7 +500,7 @@ namespace svt
 
                 if ( aTemplateList.hasElements() )
                 {
-                    for ( const OUString& s : std::as_const(aTemplateList) )
+                    for (const OUString& s : aTemplateList)
                         pListbox->append_text( s );
                 }
             }
@@ -606,7 +606,7 @@ namespace svt
                     pComboBox->clear();
 
                     // add the new ones
-                    for (auto const & item : std::as_const(aItems))
+                    for (auto const& item : aItems)
                     {
                         pComboBox->append_text(item);
                     }

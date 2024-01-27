@@ -746,7 +746,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     sal_Int32 c = lFactories.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {
-        const OUString&            rFactoryName = std::as_const(lFactories)[i];
+        const OUString& rFactoryName = lFactories[i];
         SvtModuleOptions::EFactory  eFactory;
 
         if (!ClassifyFactoryByName(rFactoryName, eFactory))

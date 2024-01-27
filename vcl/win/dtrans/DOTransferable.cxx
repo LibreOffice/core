@@ -295,7 +295,7 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 {
     OSL_ASSERT( isValidFlavor( aFlavor ) );
 
-    for ( DataFlavor const & df : std::as_const(m_FlavorList) )
+    for (DataFlavor const& df : m_FlavorList)
         if ( compareDataFlavors( aFlavor, df ) )
             return true;
 

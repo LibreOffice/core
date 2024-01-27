@@ -1392,7 +1392,7 @@ void AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopu
         sal_uInt32 nIndex = aTargetSubMenuSeq.getLength();
         aTargetSubMenuSeq.realloc( nIndex + aSourceSubMenuSeq.getLength() );
         auto pTargetSubMenuSeq = aTargetSubMenuSeq.getArray();
-        for ( Sequence<PropertyValue> const & rSeq : std::as_const(aSourceSubMenuSeq) )
+        for (Sequence<PropertyValue> const& rSeq : aSourceSubMenuSeq)
             pTargetSubMenuSeq[nIndex++] = rSeq;
         rTargetPopupMenu.getArray()[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aTargetSubMenuSeq;
     }

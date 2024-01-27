@@ -612,7 +612,7 @@ namespace cmis
         iCmisProps >>= aPropsSeq;
         std::map< std::string, libcmis::PropertyPtr > aProperties;
 
-        for ( const auto& rProp : std::as_const(aPropsSeq) )
+        for (const auto& rProp : aPropsSeq)
         {
             std::string id = OUSTR_TO_STDSTR( rProp.Id );
             libcmis::PropertyPtr prop = lcl_unoToCmisProperty( rProp );

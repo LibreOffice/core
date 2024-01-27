@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     bool bBulletFound=false;
-    for (beans::PropertyValue const & rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "BulletChar")
         {
@@ -167,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
                 uno::UNO_QUERY);
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (beans::PropertyValue const & rProp : std::as_const(aProps))
+    for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "NumberingType")
         {

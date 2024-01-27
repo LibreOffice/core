@@ -411,7 +411,7 @@ namespace
                                 e.Context, anyEx );
             }
 
-            for (const uno::Sequence< uno::Reference< deployment::XPackage > > & xPackageList : std::as_const(xAllPackages))
+            for (const uno::Sequence< uno::Reference< deployment::XPackage > > & xPackageList : xAllPackages)
             {
                 for (const uno::Reference< deployment::XPackage > & xPackage : xPackageList)
                 {

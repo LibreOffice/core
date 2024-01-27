@@ -800,7 +800,7 @@ void AssignmentPersistentData::ImplCommit()
 
         bool bKnowOldTable = false;
         // fill the table list
-        for (const OUString& rTableName : std::as_const(aTableNames))
+        for (const OUString& rTableName : aTableNames)
         {
             m_xTable->append_text(rTableName);
             if (rTableName == sOldTable)
@@ -866,7 +866,7 @@ void AssignmentPersistentData::ImplCommit()
             pListbox->set_id(0, OUString::number(i));
 
             // the field names
-            for (const OUString& rColumnName : std::as_const(aColumnNames))
+            for (const OUString& rColumnName : aColumnNames)
                 pListbox->append_text(rColumnName);
 
             if (!aInitialSelection->isEmpty() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))

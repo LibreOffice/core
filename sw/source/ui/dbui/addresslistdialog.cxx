@@ -98,7 +98,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
             {
                 OUString sExtension;
                 OUString sCharSet;
-                for(const auto& rInfo : std::as_const(aInfo))
+                for (const auto& rInfo : aInfo)
                 {
                     if(rInfo.Name == "Extension")
                         rInfo.Value >>= sExtension;

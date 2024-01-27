@@ -180,7 +180,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.
     }
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-    for (beans::PropertyValue const & rProp : std::as_const(aPathProps))
+    for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "Coordinates")
             rProp.Value >>= aPairs;

@@ -1053,7 +1053,7 @@ void cppuhelper::ServiceManager::insert(css::uno::Any const & aElement)
     if (aElement >>= args) {
         std::vector< OUString > uris;
         css::uno::Reference< css::uno::XComponentContext > alienContext;
-        for (const auto & arg : std::as_const(args)) {
+        for (const auto & arg : args) {
             if (arg.Name == "uri") {
                 OUString uri;
                 if (!(arg.Value >>= uri)) {
@@ -1097,7 +1097,7 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
     css::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
         std::vector< OUString > uris;
-        for (const auto & i : std::as_const(args)) {
+        for (const auto & i : args) {
             if (i.Name != "uri") {
                 throw css::lang::IllegalArgumentException(
                     "Bad argument " + i.Name,

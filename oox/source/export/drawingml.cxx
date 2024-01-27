@@ -449,7 +449,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     {
         Sequence< PropertyValue > aGrabBag;
         mAny >>= aGrabBag;
-        for( const auto& rProp : std::as_const(aGrabBag) )
+        for (const auto& rProp : aGrabBag)
         {
             if( rProp.Name == "SpPrSolidFillSchemeClr" )
                 rProp.Value >>= sColorFillScheme;
@@ -615,7 +615,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
     {
         Sequence< PropertyValue > aGrabBag;
         mAny >>= aGrabBag;
-        for( const auto& rProp : std::as_const(aGrabBag) )
+        for (const auto& rProp : aGrabBag)
             if( rProp.Name == "GradFillDefinition" )
                 rProp.Value >>= aGradientStops;
             else if( rProp.Name == "OriginalGradFill" )
@@ -696,7 +696,7 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
         sal_Int16 nTransparency = 0;
         ::Color nRgbClr;
         Sequence< PropertyValue > aTransformations;
-        for( const auto& rProp : std::as_const(aGradientStop) )
+        for (const auto& rProp : aGradientStop)
         {
             if( rProp.Name == "SchemeClr" )
                 rProp.Value >>= sSchemeClr;
@@ -972,7 +972,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         Sequence<PropertyValue> aGrabBag;
         mAny >>= aGrabBag;
 
-        for (const auto& rProp : std::as_const(aGrabBag))
+        for (const auto& rProp : aGrabBag)
         {
             if( rProp.Name == "SpPrLnSolidFillSchemeClr" )
                 rProp.Value >>= sColorFillScheme;
@@ -987,7 +987,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             else if( rProp.Name == "EmuLineWidth" )
                 rProp.Value >>= nEmuLineWidth;
         }
-        for (const auto& rStyleProp : std::as_const(aStyleProperties))
+        for (const auto& rStyleProp : aStyleProperties)
         {
             if( rStyleProp.Name == "Color" )
                 rStyleProp.Value >>= nStyleColor;
@@ -3166,7 +3166,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     bool bHasBulletColor = false;
     awt::Size aGraphicSize;
 
-    for ( const PropertyValue& rPropValue : std::as_const(aPropertySequence) )
+    for (const PropertyValue& rPropValue : aPropertySequence)
     {
         OUString aPropName( rPropValue.Name );
         SAL_INFO("oox.shape", "pro name: " << aPropName);
@@ -3320,7 +3320,7 @@ void DrawingML::WriteParagraphTabStops(const Reference<XPropertySet>& rXPropSet)
     if (aTabStops.getLength() > 0)
         mpFS->startElementNS(XML_a, XML_tabLst);
 
-    for (const css::style::TabStop& rTabStop : std::as_const(aTabStops))
+    for (const css::style::TabStop& rTabStop : aTabStops)
     {
         OString sPosition = OString::number(GetPointFromCoordinate(rTabStop.Position));
         OString sAlignment;
@@ -3374,7 +3374,7 @@ sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >
     if (!aPropertySequence.hasElements())
         return 0;
 
-    for ( const PropertyValue& rPropValue : std::as_const(aPropertySequence) )
+    for (const PropertyValue& rPropValue : aPropertySequence)
     {
         OUString aPropName( rPropValue.Name );
         SAL_INFO("oox.shape", "pro name: " << aPropName);
@@ -3677,12 +3677,12 @@ bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertyS
         {
             mAny >>= aCustomShapeGeometryProps;
             uno::Sequence<beans::PropertyValue> aTextPathSeq;
-            for (const auto& rProp : std::as_const(aCustomShapeGeometryProps))
+            for (const auto& rProp : aCustomShapeGeometryProps)
             {
                 if (rProp.Name == "TextPath")
                 {
                     rProp.Value >>= aTextPathSeq;
-                    for (const auto& rTextPathItem : std::as_const(aTextPathSeq))
+                    for (const auto& rTextPathItem : aTextPathSeq)
                     {
                         if (rTextPathItem.Name == "TextPath")
                         {
@@ -3791,7 +3791,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         Sequence< PropertyValue > aProps;
         if ( mAny >>= aProps )
         {
-            for ( const auto& rProp : std::as_const(aProps) )
+            for (const auto& rProp : aProps)
             {
                 if (rProp.Name == "TextPreRotateAngle")
                     rProp.Value >>= nTextPreRotateAngle;
@@ -3808,7 +3808,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 else if (rProp.Name == "TextPath")
                 {
                     rProp.Value >>= aTextPathSeq;
-                    for (const auto& rTextPathItem : std::as_const(aTextPathSeq))
+                    for (const auto& rTextPathItem : aTextPathSeq)
                     {
                         if (rTextPathItem.Name == "ScaleX")
                             rTextPathItem.Value >>= bScaleX;
@@ -3865,7 +3865,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     {
         uno::Sequence<beans::PropertyValue> aGrabBag;
         rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-        for (const auto& aProp : std::as_const(aGrabBag))
+        for (const auto& aProp : aGrabBag)
         {
             if (aProp.Name == "Upright")
             {
@@ -4665,7 +4665,7 @@ bool DrawingML::WriteCustomGeometry(
     uno::Sequence<awt::Size> aPathSize;
     bool bReplaceGeoWidth = false;
     bool bReplaceGeoHeight = false;
-    for (const beans::PropertyValue& rPathProp : std::as_const(aPathProp))
+    for (const beans::PropertyValue& rPathProp : aPathProp)
     {
         if (rPathProp.Name == "Coordinates")
             rPathProp.Value >>= aPairs;
@@ -4777,7 +4777,7 @@ bool DrawingML::WriteCustomGeometry(
             aPairs[0].Second.Value >>= nYMin;
             sal_Int32 nYMax = nYMin;
 
-            for (const auto& rPair : std::as_const(aPairs))
+            for (const auto& rPair : aPairs)
             {
                 sal_Int32 nX = GetCustomGeometryPointValue(rPair.First, aCustomShape2d,
                                                            bReplaceGeoWidth, false);
@@ -5497,7 +5497,7 @@ void DrawingML::WriteShapeStyle( const Reference< XPropertySet >& xPropSet )
     Sequence< PropertyValue > aGrabBag;
     Sequence< PropertyValue > aFillRefProperties, aLnRefProperties, aEffectRefProperties;
     mAny >>= aGrabBag;
-    for( const auto& rProp : std::as_const(aGrabBag))
+    for (const auto& rProp : aGrabBag)
     {
         if( rProp.Name == "StyleFillRef" )
             rProp.Value >>= aFillRefProperties;
@@ -5557,7 +5557,7 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
             // read tag attributes
             uno::Sequence< beans::PropertyValue > aOuterShdwProps;
             rEffectProp.Value >>= aOuterShdwProps;
-            for( const auto& rOuterShdwProp : std::as_const(aOuterShdwProps) )
+            for (const auto& rOuterShdwProp : aOuterShdwProps)
             {
                 if( rOuterShdwProp.Name == "algn" )
                 {
@@ -5822,7 +5822,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
         mpFS->startElementNS(XML_a, XML_effectLst);
         bool bGlowWritten = false;
-        for( const auto& rEffect : std::as_const(aEffects) )
+        for (const auto& rEffect : aEffects)
         {
             if (!bGlowWritten
                 && (rEffect.Name == "innerShdw" || rEffect.Name == "outerShdw"
@@ -5913,7 +5913,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
     {
         Sequence< PropertyValue > a3DEffectProps;
         pShapeProp->Value >>= a3DEffectProps;
-        for( const auto& r3DEffectProp : std::as_const(a3DEffectProps) )
+        for (const auto& r3DEffectProp : a3DEffectProps)
         {
             if( r3DEffectProp.Name == "Camera" )
                 r3DEffectProp.Value >>= aEffectProps;
@@ -5930,7 +5930,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
     bool bCameraRotationPresent = false;
     rtl::Reference<sax_fastparser::FastAttributeList> aCameraAttrList = FastSerializerHelper::createAttrList();
     rtl::Reference<sax_fastparser::FastAttributeList> aCameraRotationAttrList = FastSerializerHelper::createAttrList();
-    for( const auto& rEffectProp : std::as_const(aEffectProps) )
+    for (const auto& rEffectProp : aEffectProps)
     {
         if( rEffectProp.Name == "prst" )
         {
@@ -5970,7 +5970,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
     bool bLightRigRotationPresent = false;
     rtl::Reference<sax_fastparser::FastAttributeList> aLightRigAttrList = FastSerializerHelper::createAttrList();
     rtl::Reference<sax_fastparser::FastAttributeList> aLightRigRotationAttrList = FastSerializerHelper::createAttrList();
-    for( const auto& rLightRigProp : std::as_const(aLightRigProps) )
+    for (const auto& rLightRigProp : aLightRigProps)
     {
         if( rLightRigProp.Name == "rig" || rLightRigProp.Name == "dir" )
         {
@@ -6042,7 +6042,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
     rtl::Reference<sax_fastparser::FastAttributeList> aBevelTAttrList = FastSerializerHelper::createAttrList();
     rtl::Reference<sax_fastparser::FastAttributeList> aBevelBAttrList = FastSerializerHelper::createAttrList();
     rtl::Reference<sax_fastparser::FastAttributeList> aShape3DAttrList = FastSerializerHelper::createAttrList();
-    for( const auto& rShape3DProp : std::as_const(aShape3DProps) )
+    for (const auto& rShape3DProp : aShape3DProps)
     {
         if( rShape3DProp.Name == "extrusionH" || rShape3DProp.Name == "contourW" || rShape3DProp.Name == "z" )
         {
@@ -6088,7 +6088,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
                 bBevelBPresent = true;
                 aBevelAttrList = aBevelBAttrList;
             }
-            for( const auto& rBevelProp : std::as_const(aBevelProps) )
+            for (const auto& rBevelProp : aBevelProps)
             {
                 if( rBevelProp.Name == "w" || rBevelProp.Name == "h" )
                 {
@@ -6126,7 +6126,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
         ::Color nColor;
         sal_Int32 nTransparency(0);
         Sequence< PropertyValue > aColorTransformations;
-        for( const auto& rExtrusionColorProp : std::as_const(aExtrusionColorProps) )
+        for (const auto& rExtrusionColorProp : aExtrusionColorProps)
         {
             if( rExtrusionColorProp.Name == "schemeClr" )
                 rExtrusionColorProp.Value >>= sSchemeClr;
@@ -6152,7 +6152,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
         ::Color nColor;
         sal_Int32 nTransparency(0);
         Sequence< PropertyValue > aColorTransformations;
-        for( const auto& rContourColorProp : std::as_const(aContourColorProps) )
+        for (const auto& rContourColorProp : aContourColorProps)
         {
             if( rContourColorProp.Name == "schemeClr" )
                 rContourColorProp.Value >>= sSchemeClr;
@@ -6195,7 +6195,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
     aEffect.Value >>= aAttrs;
     rtl::Reference<sax_fastparser::FastAttributeList> aAttrList = FastSerializerHelper::createAttrList();
     OString sRelId;
-    for( const auto& rAttr : std::as_const(aAttrs) )
+    for (const auto& rAttr : aAttrs)
     {
         sal_Int32 nToken = ArtisticEffectProperties::getEffectToken( rAttr.Name );
         if( nToken != XML_none )
@@ -6210,7 +6210,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
             rAttr.Value >>= aGraphic;
             Sequence< sal_Int8 > aGraphicData;
             OUString sGraphicId;
-            for( const auto& rProp : std::as_const(aGraphic) )
+            for (const auto& rProp : aGraphic)
             {
                 if( rProp.Name == "Id" )
                     rProp.Value >>= sGraphicId;
@@ -6276,7 +6276,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // retrieve the doms from the GrabBag
     uno::Sequence<beans::PropertyValue> propList;
     xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
-    for (const auto& rProp : std::as_const(propList))
+    for (const auto& rProp : propList)
     {
         OUString propName = rProp.Name;
         if (propName == "OOXData")

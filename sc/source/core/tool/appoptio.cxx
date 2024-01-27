@@ -423,7 +423,7 @@ void ScAppCfg::ReadSortListCfg()
         }
         else
         {
-            for (const OUString& rStr : std::as_const(aSeq))
+            for (const OUString& rStr : aSeq)
             {
                 aList.emplace_back(rStr);
             }

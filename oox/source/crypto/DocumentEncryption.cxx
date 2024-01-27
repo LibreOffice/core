@@ -82,7 +82,7 @@ bool DocumentEncryption::encrypt()
 
     Sequence<NamedValue> aStreams = mxPackageEncryption->encrypt(xInputStream);
 
-    for (const NamedValue & aStream : std::as_const(aStreams))
+    for (const NamedValue& aStream : aStreams)
     {
         Reference<XOutputStream> xOutputStream(mrOleStorage.openOutputStream(aStream.Name), UNO_SET_THROW);
         BinaryXOutputStream aBinaryOutputStream(xOutputStream, true);

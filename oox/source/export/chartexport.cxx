@@ -1348,7 +1348,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                     {
                         Sequence<sal_Int32> deletedLegendEntriesSeq;
                         aSeriesProp.getProperty(deletedLegendEntriesSeq, PROP_DeletedLegendEntries);
-                        for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
+                        for (const auto& deletedLegendEntry : deletedLegendEntriesSeq)
                         {
                             pFS->startElement(FSNS(XML_c, XML_legendEntry));
                             pFS->singleElement(FSNS(XML_c, XML_idx), XML_val,
@@ -3960,7 +3960,7 @@ void ChartExport::exportDataLabels(
             ;
     }
 
-    for (const sal_Int32 nIdx : std::as_const(aAttrLabelIndices))
+    for (const sal_Int32 nIdx : aAttrLabelIndices)
     {
         uno::Reference<beans::XPropertySet> xLabelPropSet = xSeries->getDataPointByIndex(nIdx);
 

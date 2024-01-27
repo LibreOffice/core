@@ -121,7 +121,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "SpellCheckers",
                 "org.openoffice.lingu.MySpellSpellChecker", aFormatList );
-        for (auto const& format : std::as_const(aFormatList))
+        for (auto const& format : aFormatList)
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
                     aLinguCfg.GetActiveDictionariesByFormat(format) );
@@ -232,7 +232,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     if (!m_aSuppLocales.hasElements())
         getLocales();
 
-    for (auto const& suppLocale : std::as_const(m_aSuppLocales))
+    for (auto const& suppLocale : m_aSuppLocales)
     {
         if (rLocale == suppLocale)
         {

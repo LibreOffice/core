@@ -107,7 +107,7 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
             aPropNames.realloc( 1 );
         }
 
-        for ( const auto& rPropName : std::as_const(aPropNames) )
+        for (const auto& rPropName : aPropNames)
             xDestProps->setPropertyValue( rPropName, xSourceProps->getPropertyValue( rPropName ) );
 }
 
@@ -302,7 +302,7 @@ OStorage_Impl::~OStorage_Impl()
     m_xPackage.clear();
 
     OUString aPropertyName = "URL";
-    for ( const auto& rProp : std::as_const(m_xProperties) )
+    for (const auto& rProp : m_xProperties)
     {
         if ( rProp.Name == aPropertyName )
         {
@@ -392,7 +392,7 @@ void OStorage_Impl::OpenOwnPackage()
                                                     uno::Any( false ) );
 
             sal_Int32 nArgNum = 2;
-            for ( const auto& rProp : std::as_const(m_xProperties) )
+            for (const auto& rProp : m_xProperties)
             {
                 if ( rProp.Name == "RepairPackage"
                   || rProp.Name == "ProgressHandler"

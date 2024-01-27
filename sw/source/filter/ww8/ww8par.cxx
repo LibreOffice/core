@@ -4972,7 +4972,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( std::u16string_view sCreatedFr
     if( xSFA->isFolder( aAddinPath ) )
         sGlobalTemplates = xSFA->getFolderContents( aAddinPath, false );
 
-    for ( const auto& rGlobalTemplate : std::as_const(sGlobalTemplates) )
+    for (const auto& rGlobalTemplate : sGlobalTemplates)
     {
         INetURLObject aObj;
         aObj.SetURL( rGlobalTemplate );

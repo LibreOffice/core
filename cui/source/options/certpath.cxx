@@ -60,7 +60,7 @@ void CertPathDialog::Init()
             "thunderbird"
         };
 
-        for (const auto& rNSSProfile : std::as_const(aProductList))
+        for (const auto& rNSSProfile : aProductList)
         {
             if (rNSSProfile.Type == mozilla::MozillaProductType_Default)
             {

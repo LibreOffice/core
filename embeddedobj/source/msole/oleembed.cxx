@@ -277,7 +277,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
             uno::Sequence< beans::PropertyValue > aFilterData;
             if ( aFilterAnyData >>= aFilterData )
             {
-                for ( beans::PropertyValue const & prop : std::as_const(aFilterData) )
+                for (beans::PropertyValue const& prop : aFilterData)
                     if ( prop.Name == "DocumentService" )
                         prop.Value >>= aDocServiceName;
             }

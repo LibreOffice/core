@@ -2011,7 +2011,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
             uno::Sequence<beans::PropertyValue> aProps;
             rIndexAccess->getByIndex(j) >>= aProps;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aProps.getLength());
-            for(const beans::PropertyValue& rProp : std::as_const(aProps))
+            for (const beans::PropertyValue& rProp : aProps)
             {
                 uno::Any aAny = rProp.Value;
                 if(rProp.Name == "Prefix" || rProp.Name == "Suffix" || rProp.Name == "BulletChar" || rProp.Name == "BulletFontName" || rProp.Name == "Transliteration")

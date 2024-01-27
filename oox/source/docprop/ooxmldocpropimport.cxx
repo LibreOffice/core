@@ -176,9 +176,9 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
 
     if( aCoreStreams.hasElements() )
         aParser.parseStream( aCoreStreams[ 0 ], true );
-    for( const auto& rExtStream : std::as_const(aExtStreams) )
+    for (const auto& rExtStream : aExtStreams)
         aParser.parseStream( rExtStream, true );
-    for( const auto& rCustomStream : std::as_const(aCustomStreams) )
+    for (const auto& rCustomStream : aCustomStreams)
         aParser.parseStream( rCustomStream, true );
 }
 

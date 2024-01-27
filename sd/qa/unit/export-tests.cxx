@@ -1188,7 +1188,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageImpress8)
     awt::Size aSize;
     sal_Int16 nNumberingType = -1;
 
-    for (beans::PropertyValue const& rProperty : std::as_const(aProperties))
+    for (beans::PropertyValue const& rProperty : aProperties)
     {
         if (rProperty.Name == "NumberingType")
         {
@@ -1238,7 +1238,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageImpressOfficeOpenXml)
     awt::Size aSize;
     sal_Int16 nNumberingType = -1;
 
-    for (beans::PropertyValue const& rProperty : std::as_const(aProperties))
+    for (beans::PropertyValue const& rProperty : aProperties)
     {
         if (rProperty.Name == "NumberingType")
         {
@@ -1290,7 +1290,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageMsPowerpoint97)
     awt::Size aSize;
     sal_Int16 nNumberingType = -1;
 
-    for (beans::PropertyValue const& rProperty : std::as_const(aProperties))
+    for (beans::PropertyValue const& rProperty : aProperties)
     {
         if (rProperty.Name == "NumberingType")
         {

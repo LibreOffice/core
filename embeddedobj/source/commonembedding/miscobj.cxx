@@ -140,7 +140,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
         throw uno::RuntimeException(); // something goes really wrong
 
     // verbs table
-    for ( auto const & verb : std::as_const(m_aObjectVerbs) )
+    for (auto const& verb : m_aObjectVerbs)
     {
         if ( verb.VerbID == embed::EmbedVerbs::MS_OLEVERB_PRIMARY )
         {

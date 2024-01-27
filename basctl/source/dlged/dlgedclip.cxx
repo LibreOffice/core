@@ -90,7 +90,7 @@ sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor
 {
     const SolarMutexGuard aGuard;
 
-    for ( auto const & i : std::as_const(m_SeqFlavors) )
+    for (auto const& i : m_SeqFlavors)
         if ( compareDataFlavors( i, rFlavor ) )
             return true;
     return false;

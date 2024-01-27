@@ -1007,7 +1007,7 @@ namespace sw::mark
         if (pListEntriesIter != pParameters->end())
         {
             pListEntriesIter->second >>= vListEntries;
-            for (const OUString& sItem : std::as_const(vListEntries))
+            for (const OUString& sItem : vListEntries)
                 sPayload.append("\"" + OUStringToOString(sItem, RTL_TEXTENCODING_UTF8) + "\", ");
             sPayload.setLength(sPayload.getLength() - 2);
         }

@@ -207,7 +207,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
     aTypeName = xTypeDetection->queryTypeByDescriptor( aArgs, true );
 
     OUString aFilterName;
-    for ( beans::PropertyValue const & prop : std::as_const(aArgs) )
+    for (beans::PropertyValue const& prop : aArgs)
         if ( prop.Name == "FilterName" )
             prop.Value >>= aFilterName;
 
@@ -219,7 +219,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
 
         if ( xNameAccess.is() && ( xNameAccess->getByName( aTypeName ) >>= aTypes ) )
         {
-            for ( beans::PropertyValue const & prop : std::as_const(aTypes) )
+            for (beans::PropertyValue const& prop : aTypes)
             {
                 if ( prop.Name == "PreferredFilter" && ( prop.Value >>= aFilterName ) )
                 {

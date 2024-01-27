@@ -1971,7 +1971,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
         m_aFilterComponents.clear();
 
         // collecting the controls
-        for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
+        for (const Reference<XControl>& rControl : m_aControls)
             implControlRemoved( rControl, true );
 
         // make database-specific things
@@ -2161,7 +2161,7 @@ void FormController::setLocks()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // lock/unlock all controls connected to a data source
-    for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
+    for (const Reference<XControl>& rControl : m_aControls)
         setControlLock( rControl );
 }
 
@@ -2299,7 +2299,7 @@ void FormController::startListening()
     m_bModified  = false;
 
     // now register at bound fields
-    for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
+    for (const Reference<XControl>& rControl : m_aControls)
         startControlModifyListening( rControl );
 }
 
@@ -2310,7 +2310,7 @@ void FormController::stopListening()
     m_bModified  = false;
 
     // now register at bound fields
-    for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
+    for (const Reference<XControl>& rControl : m_aControls)
         stopControlModifyListening( rControl );
 }
 
@@ -2619,7 +2619,7 @@ void FormController::unload()
 
 void FormController::removeBoundFieldListener()
 {
-    for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
+    for (const Reference<XControl>& rControl : m_aControls)
     {
         Reference< XPropertySet > xProp( rControl, UNO_QUERY );
         if ( xProp.is() )

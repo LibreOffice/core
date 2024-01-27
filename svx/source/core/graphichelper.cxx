@@ -328,7 +328,7 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
                     sal_Int32 nWidth = 0;
                     sal_Int32 nHeight = 0;
 
-                    for (const auto& rProp : std::as_const(aFilterData))
+                    for (const auto& rProp : aFilterData)
                     {
                         if (rProp.Name == "PixelWidth")
                         {

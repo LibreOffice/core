@@ -1044,7 +1044,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     uno::Reference<beans::XPropertySet> xOptProp(xSolver, uno::UNO_QUERY);
     if ( xOptProp.is() )
     {
-        for (const beans::PropertyValue& rValue : std::as_const(maProperties))
+        for (const beans::PropertyValue& rValue : maProperties)
         {
             try
             {
@@ -1075,7 +1075,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
             {
                 ScAddress aCellPos;
-                ScUnoConversion::FillScAddress( aCellPos, std::as_const(aVariables)[nVarPos] );
+                ScUnoConversion::FillScAddress(aCellPos, aVariables[nVarPos]);
                 rFunc.SetValueCell(aCellPos, aSolution[nVarPos], false);
             }
             mpDocShell->UnlockPaint();
@@ -1113,7 +1113,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         {
             ScAddress aCellPos;
             ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-            rFunc.SetValueCell(aCellPos, std::as_const(aOldValues)[nVarPos], false);
+            rFunc.SetValueCell(aCellPos, aOldValues[nVarPos], false);
         }
         mpDocShell->UnlockPaint();
     }
