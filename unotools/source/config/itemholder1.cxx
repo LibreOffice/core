@@ -113,10 +113,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem.reset( new SvtCommandOptions() );
             break;
 
-        case EItem::Compatibility :
-            rItem.pItem.reset( new SvtCompatibilityOptions() );
-            break;
-
         case EItem::EventConfig :
             //rItem.pItem.reset( new GlobalEventConfig() );
             break;

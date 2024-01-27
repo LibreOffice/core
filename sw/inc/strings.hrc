@@ -1470,6 +1470,27 @@
 #define STR_CHARACTER_DIRECT_FORMATTING         NC_("STR_CHARACTER_DIRECT_FORMATTING", "Character Direct Formatting")
 #define STR_CHARACTER_DIRECT_FORMATTING_TAG     NC_("STR_CHARACTER_DIRECT_FORMATTING_TAG", "df")
 
+/*--------------------------------------------------------------------
+    Description: Description of compatibility options in
+    Options->Writer->Compatibility dialog (sw/uiconfig/swriter/ui/optcompatpage.ui)
+ --------------------------------------------------------------------*/
+#define STR_COMPAT_OPT_ADDSPACING               NC_("STR_COMPAT_OPT_ADDSPACING", "Add spacing between paragraphs and tables")
+#define STR_COMPAT_OPT_ADDSPACINGATPAGES        NC_("STR_COMPAT_OPT_ADDSPACINGATPAGES", "Add paragraph and table spacing at top of first page and page breaks")
+#define STR_COMPAT_OPT_USEOURTABSTOPFORMAT      NC_("STR_COMPAT_OPT_USEOURTABSTOPFORMAT", "Use OpenOffice.org 1.1 tabstop formatting")
+#define STR_COMPAT_OPT_NOEXTERNALLEADING        NC_("STR_COMPAT_OPT_NOEXTERNALLEADING", "Do not add leading (extra space) between lines of text")
+#define STR_COMPAT_OPT_USELINESPACING           NC_("STR_COMPAT_OPT_USELINESPACING", "Use OpenOffice.org 1.1 line spacing")
+#define STR_COMPAT_OPT_ADDTABLESPACING          NC_("STR_COMPAT_OPT_ADDTABLESPACING", "Add paragraph and table spacing at bottom of table cells")
+#define STR_COMPAT_OPT_USEOBJECTPOSITIONING     NC_("STR_COMPAT_OPT_USEOBJECTPOSITIONING", "Use OpenOffice.org 1.1 object positioning")
+#define STR_COMPAT_OPT_USEOURTEXTWRAPPING       NC_("STR_COMPAT_OPT_USEOURTEXTWRAPPING", "Use OpenOffice.org 1.1 text wrapping around objects")
+#define STR_COMPAT_OPT_CONSIDERWRAPPINGSTYLE    NC_("STR_COMPAT_OPT_CONSIDERWRAPPINGSTYLE", "Consider wrapping style when positioning objects")
+#define STR_COMPAT_OPT_EXPANDWORDSPACE          NC_("STR_COMPAT_OPT_EXPANDWORDSPACE", "Justify lines with a manual line break in justified paragraphs")
+#define STR_COMPAT_OPT_PROTECTFORM              NC_("STR_COMPAT_OPT_PROTECTFORM", "Protect form (no longer protects whole document. Insert write protected section instead)")
+#define STR_COMPAT_OPT_MSWORDCOMPTRAILINGBLANKS NC_("STR_COMPAT_OPT_MSWORDCOMPTRAILINGBLANKS", "Word-compatible trailing blanks")
+#define STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS NC_("STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS", "Tolerate white lines that may appear in PDF page backgrounds")
+#define STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA    NC_("STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA", "Hide paragraphs of database fields (e.g., mail merge) with an empty value")
+#define STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP     NC_("STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP", "Render non-breaking spaces (NBSP) as standard-space-width (off for fixed size)")
+#define STR_COMPAT_OPT_NOSPACEAFTERHANGINGFOOTNOTENUMBERING NC_("STR_COMPAT_OPT_NOSPACEAFTERHANGINGFOOTNOTENUMBERING", "Do not add an extra space after number in footnotes with hanging first line")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

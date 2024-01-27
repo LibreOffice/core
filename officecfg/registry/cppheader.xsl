@@ -129,12 +129,12 @@
       <xsl:text>: public comphelper::ConfigurationGroup&lt; </xsl:text>
       <xsl:value-of select="$name"/>
       <xsl:text>&gt; {&#xA;</xsl:text>
-      <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
+      <xsl:text>    static OUString path() { static constexpr OUString PATH(<!--
       -->u"</xsl:text>
       <xsl:value-of select="$path"/>
       <xsl:text>/</xsl:text>
       <xsl:value-of select="@oor:name"/>
-      <xsl:text>"); return PATH; }&#xA;</xsl:text>
+      <xsl:text>"_ustr); return PATH; }&#xA;</xsl:text>
       <xsl:text>&#xA;</xsl:text>
       <xsl:apply-templates select="group|set|prop">
         <xsl:with-param name="path">
@@ -164,12 +164,12 @@
       <xsl:text>: public comphelper::ConfigurationSet&lt; </xsl:text>
       <xsl:value-of select="$name"/>
       <xsl:text>&gt; {&#xA;</xsl:text>
-      <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
+      <xsl:text>    static OUString path() { static constexpr OUString PATH(<!--
       -->u"</xsl:text>
       <xsl:value-of select="$path"/>
       <xsl:text>/</xsl:text>
       <xsl:value-of select="@oor:name"/>
-      <xsl:text>"); return PATH; }&#xA;</xsl:text>
+      <xsl:text>"_ustr); return PATH; }&#xA;</xsl:text>
       <xsl:text>private:&#xA;</xsl:text>
       <xsl:text>    </xsl:text>
       <xsl:value-of select="$name"/>
@@ -255,12 +255,12 @@
         <xsl:text>&gt; </xsl:text>
       </xsl:if>
       <xsl:text>&gt; {&#xA;</xsl:text>
-      <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
+      <xsl:text>    static OUString path() { static constexpr OUString PATH(<!--
       -->u"</xsl:text>
       <xsl:value-of select="$path"/>
       <xsl:text>/</xsl:text>
       <xsl:value-of select="@oor:name"/>
-      <xsl:text>"); return PATH; }&#xA;</xsl:text>
+      <xsl:text>"_ustr); return PATH; }&#xA;</xsl:text>
       <xsl:text>private:&#xA;</xsl:text>
       <xsl:text>    </xsl:text>
       <xsl:value-of select="$name"/>

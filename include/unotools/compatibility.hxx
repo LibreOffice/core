@@ -16,242 +16,61 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNOTOOLS_COMPATIBILITY_HXX
-#define INCLUDED_UNOTOOLS_COMPATIBILITY_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#pragma once
+
+#include <sal/config.h>
+
 #include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
-#include <map>
+
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <memory>
-#include <vector>
 
-namespace osl { class Mutex; }
-
-/*-************************************************************************************************************
-    @descr  Struct to hold information about one compatibility entry
-*//*-*************************************************************************************************************/
-class SvtCompatibilityEntry
+namespace comphelper
 {
-    public:
-        /*-************************************************************************************************************
-            @descr          The method SvtCompatibilityOptions::GetList() returns a list of property values.
-                            Use follow enum class to separate values by names.
-                            Sync it with sPropertyName in SvtCompatibilityEntry::getName()
-        *//*-*************************************************************************************************************/
-        enum class Index
-        {
-            /* Should be in the start. Do not remove it. */
-            Name,
-            Module,
+class ConfigurationChanges;
+};
+namespace com::sun::star::beans
+{
+class XPropertySet;
+}
+namespace com::sun::star::container
+{
+class XNameAccess;
+}
 
-            /* Editable list of compatibility options. */
-            AddSpacing,
-            AddSpacingAtPages,
-            UseOurTabStops,
-            NoExtLeading,
-            UseLineSpacing,
-            AddTableSpacing,
-            UseObjectPositioning,
-            UseOurTextWrapping,
-            ConsiderWrappingStyle,
-            ExpandWordSpace,
-            ProtectForm,
-            MsWordTrailingBlanks,
-            SubtractFlysAnchoredAtFlys,
-            EmptyDbFieldHidesPara,
-            UseVariableWidthNBSP,
-            NoSpaceAfterHangingFootnoteNumbering,
+class UNOTOOLS_DLLPUBLIC SvtCompatibility
+{
+public:
+    // Read access
+    explicit SvtCompatibility(const OUString& itemName);
+    // Write access
+    SvtCompatibility(const std::shared_ptr<comphelper::ConfigurationChanges>& batch,
+                     const OUString& itemName);
+    void set(const OUString& option, bool value);
+    bool get(const OUString& option) const;
 
-            /// special entry: optcomp.cxx converts the other values to
-            /// integers but not this one because it doesn't have its own
-            /// checkbox, so keep it at the end!
-            AddTableLineSpacing,
+    bool getPropertyReadOnly(const OUString& option) const;
 
-            /* Should be at the end. Do not remove it. */
-            INVALID
-        };
-
-        SvtCompatibilityEntry();
-
-        static OUString getName( const Index rIdx );
-
-        static constexpr OUString USER_ENTRY_NAME = u"_user"_ustr;
-        static constexpr OUString DEFAULT_ENTRY_NAME = u"_default"_ustr;
-
-        static size_t getElementCount()
-        {
-            return static_cast<size_t>(Index::INVALID);
-        }
-
-        css::uno::Any getValue( const Index rIdx ) const
-        {
-            if ( static_cast<size_t>(rIdx) < getElementCount() )
-            {
-                return m_aPropertyValue[ static_cast<int>(rIdx) ];
-            } else
-            {
-                /* Wrong index. */
-                assert( false );
-                return css::uno::Any();
-            }
-        }
-
-        template<typename T>
-        T getValue( const Index rIdx ) const
-        {
-            T aValue = T();
-
-            if ( static_cast<size_t>(rIdx) < getElementCount() )
-            {
-                m_aPropertyValue[ static_cast<int>(rIdx) ] >>= aValue;
-            } else
-            {
-                /* Wrong index. */
-                assert( false );
-            }
-
-            return aValue;
-        }
-
-        void setValue( const Index rIdx, css::uno::Any const & rValue )
-        {
-            if ( static_cast<size_t>(rIdx) < getElementCount() )
-            {
-                m_aPropertyValue[ static_cast<int>(rIdx) ] = rValue;
-            } else
-            {
-                /* Wrong index. */
-                assert( false );
-            }
-        }
-
-        template<typename T>
-        void setValue( const Index rIdx, T rValue )
-        {
-            setValue(rIdx, css::uno::Any(rValue));
-        }
-
-        bool getPropertyReadOnly(const Index rIdx) const
-        {
-            if (static_cast<size_t>(rIdx) < getElementCount())
-            {
-                return m_aPropertyReadOnly.at(static_cast<int>(rIdx));
-            }
-            else
-            {
-                /* Wrong index. */
-                assert(false);
-                return false;
-            }
-        }
-
-        void setPropertyReadOnly(const Index rIdx, const bool bReadOnly)
-        {
-            if (static_cast<size_t>(rIdx) < getElementCount())
-            {
-                m_aPropertyReadOnly.insert({ static_cast<int>(rIdx), bReadOnly });
-            }
-            else
-            {
-                /* Wrong index. */
-                assert(false);
-            }
-        }
-
-        bool haveReadOnlyProperty() const
-        {
-            bool bRet = false;
-            for (const auto& pair : m_aPropertyReadOnly)
-            {
-                if (pair.second == true)
-                {
-                    bRet = true;
-                    break;
-                }
-            }
-            return bRet;
-        }
-
-    private:
-        std::vector<css::uno::Any> m_aPropertyValue;
-        std::map<int, bool> m_aPropertyReadOnly;
+private:
+    css::uno::Reference<css::container::XNameAccess> root;
+    css::uno::Reference<css::beans::XPropertySet> item;
 };
 
-/*-************************************************************************************************************
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
-                    You can create the container if it is necessary. The class which use these mechanism
-                    is faster and smaller then a complete implementation!
-*//*-*************************************************************************************************************/
-class SvtCompatibilityOptions_Impl;
-
-/*-************************************************************************************************************
-    @short          collect information about dynamic menus
-    @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
-    @devstatus      ready to use
-*//*-*************************************************************************************************************/
-class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions final : public utl::detail::Options
+class SvtCompatibilityDefault : public SvtCompatibility
 {
-    public:
-        SvtCompatibilityOptions();
-        virtual ~SvtCompatibilityOptions() override;
-
-        /*-****************************************************************************************************
-            @short      append a new item
-            @descr
-
-            @seealso    method Clear()
-
-            @param      "aItem"             SvtCompatibilityEntry
-        *//*-*****************************************************************************************************/
-        void AppendItem( const SvtCompatibilityEntry& aItem );
-
-        /*-****************************************************************************************************
-            @short      clear complete specified list
-            @descr      Call this methods to clear the whole list.
-        *//*-*****************************************************************************************************/
-        void Clear();
-
-        void SetDefault( SvtCompatibilityEntry::Index rIdx, bool rValue );
-        bool GetDefault( SvtCompatibilityEntry::Index rIdx ) const;
-
-        /*-****************************************************************************************************
-            @short      return complete specified list
-            @descr      Call it to get all entries of compatibility options.
-                        We return a list of all nodes with its names and properties.
-            @return     A list of compatibility options is returned.
-
-            @onerror    We return an empty list.
-        *//*-*****************************************************************************************************/
-        std::vector< SvtCompatibilityEntry > GetList() const;
-
-        /*-****************************************************************************************************
-            @short      return property/option is readonly or not
-            @descr      Call it to get the readonly status of default entry of
-                        compatibility options.
-            @return     Return true if the compatibility option is true, otherwise false.
-
-            @onerror    We return false.
-        *//*-*****************************************************************************************************/
-        bool GetPropertyReadOnly( SvtCompatibilityEntry::Index rIdx ) const;
-        bool GetDefaultPropertyReadOnly( SvtCompatibilityEntry::Index rIdx ) const;
-        bool HaveDefaultReadOnlyProperty() const;
-
-    private:
-        std::shared_ptr<SvtCompatibilityOptions_Impl> m_pImpl;
-
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
-                        All access methods aren't safe!
-                        We create a static mutex only for one ime and use at different times.
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
-        UNOTOOLS_DLLPRIVATE static osl::Mutex& GetOwnStaticMutex();
+public:
+    SvtCompatibilityDefault()
+        : SvtCompatibility(u"_default"_ustr)
+    {
+    }
+    SvtCompatibilityDefault(const std::shared_ptr<comphelper::ConfigurationChanges>& batch)
+        : SvtCompatibility(batch, u"_default"_ustr)
+    {
+    }
 };
-
-#endif // INCLUDED_UNOTOOLS_COMPATIBILITY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

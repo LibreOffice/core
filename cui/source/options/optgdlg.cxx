@@ -1494,8 +1494,10 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 
         SvtScriptType nNewType = SvtLanguageOptions::GetScriptTypeOfLanguage( eNewLocale );
         bool bNewCJK = bool( nNewType & SvtScriptType::ASIAN );
-        SvtCompatibilityOptions aCompatOpts;
-        aCompatOpts.SetDefault( SvtCompatibilityEntry::Index::ExpandWordSpace, !bNewCJK );
+        auto batch = comphelper::ConfigurationChanges::create();
+        SvtCompatibilityDefault aCompatOpts(batch);
+        aCompatOpts.set(u"ExpandWordSpace"_ustr, !bNewCJK);
+        batch->commit();
     }
 
     if(m_xDecimalSeparatorCB->get_state_changed_from_saved())

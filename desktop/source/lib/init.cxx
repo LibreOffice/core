@@ -221,7 +221,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <unotools/compatibility.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/searchopt.hxx>
@@ -7528,7 +7527,6 @@ static void preloadData()
     static svtools::ColorConfig aColorConfig;
     static SvtMiscOptions aSvtMiscOptions;
     static SvtCommandOptions aSvtCommandOptions;
-    static SvtCompatibilityOptions aSvtCompatibilityOptions;
     static SvtLinguConfig aSvtLinguConfig;
     static SvtModuleOptions aSvtModuleOptions;
     static SvtPathOptions aSvtPathOptions;

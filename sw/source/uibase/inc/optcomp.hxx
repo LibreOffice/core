@@ -19,43 +19,36 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <map>
 #include <memory>
+
 #include <sfx2/tabdlg.hxx>
 #include <unotools/compatibility.hxx>
 #include <rtl/ustring.hxx>
 
 class SwWrtShell;
-struct SwCompatibilityOptPage_Impl;
 
 class SwCompatibilityOptPage final : public SfxTabPage
 {
 private:
-    // config item
-    SvtCompatibilityOptions m_aConfigItem;
-    // text of the user entry
-    OUString                m_sUserEntry;
     // shell of the current document
     SwWrtShell*             m_pWrtShell;
-    // impl object
-    std::unique_ptr<SwCompatibilityOptPage_Impl> m_pImpl;
     // saved options after "Reset"; used in "FillItemSet" for comparison
-    sal_uInt32                  m_nSavedOptions;
+    std::map<OUString, TriState> m_aSavedOptions;
 
     // controls
     std::unique_ptr<weld::Frame> m_xMain;
-    std::unique_ptr<weld::ComboBox> m_xFormattingLB;
     std::unique_ptr<weld::TreeView> m_xOptionsLB;
     std::unique_ptr<weld::Button> m_xDefaultPB;
 
     // handler
-    DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(UseAsDefaultHdl, weld::Button&, void);
 
     // private methods
     void                    InitControls( const SfxItemSet& rSet );
-    void                    SetCurrentOptions( sal_uInt32 nOptions );
-    sal_uInt32              GetDocumentOptions() const;
-    void                    WriteOptions();
+    void                    SetCurrentOptions();
 
 public:
     SwCompatibilityOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

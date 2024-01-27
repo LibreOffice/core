@@ -29,7 +29,6 @@ enum class EItem
 
     CmdOptions                    ,
     ColorConfig                   ,   // 2
-    Compatibility                 ,
     CTLOptions                    ,   // 2
 
     EventConfig                   ,

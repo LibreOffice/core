@@ -114,31 +114,29 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     // COMPATIBILITY FLAGS START
 
     // Note: Any non-hidden compatibility flag should obtain its default
-    // by asking SvtCompatibilityOptions, see below.
+    // by asking SvtCompatibilityDefault, see below.
 
     if (!comphelper::IsFuzzing())
     {
-        const SvtCompatibilityOptions aOptions;
-        mbParaSpaceMax                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddSpacing );
-        mbParaSpaceMaxAtPages               = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddSpacingAtPages );
-        mbTabCompat                         = !aOptions.GetDefault( SvtCompatibilityEntry::Index::UseOurTabStops );
+        const SvtCompatibilityDefault aOptions;
+        mbParaSpaceMax                      = aOptions.get(u"AddSpacing"_ustr);
+        mbParaSpaceMaxAtPages               = aOptions.get(u"AddSpacingAtPages"_ustr);
+        mbTabCompat                         = !aOptions.get(u"UseOurTabStopFormat"_ustr);
         mbUseVirtualDevice                  = true;
-        mbAddExternalLeading                = !aOptions.GetDefault( SvtCompatibilityEntry::Index::NoExtLeading );
-        mbOldLineSpacing                    = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseLineSpacing );
-        mbAddParaSpacingToTableCells        = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddTableSpacing );
-        mbAddParaLineSpacingToTableCells    = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddTableLineSpacing );
-        mbUseFormerObjectPos                = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseObjectPositioning );
-        mbUseFormerTextWrapping             = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseOurTextWrapping );
-        mbConsiderWrapOnObjPos              = aOptions.GetDefault( SvtCompatibilityEntry::Index::ConsiderWrappingStyle );
-        mbDoNotJustifyLinesWithManualBreak  = !aOptions.GetDefault( SvtCompatibilityEntry::Index::ExpandWordSpace );
-        mbProtectForm                       = aOptions.GetDefault( SvtCompatibilityEntry::Index::ProtectForm );
-        mbMsWordCompTrailingBlanks          = aOptions.GetDefault( SvtCompatibilityEntry::Index::MsWordTrailingBlanks );
-        mbSubtractFlys                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys );
-        mbEmptyDbFieldHidesPara
-            = aOptions.GetDefault(SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara);
-        mbUseVariableWidthNBSP
-            = aOptions.GetDefault(SvtCompatibilityEntry::Index::UseVariableWidthNBSP);
-        mbNoSpaceAfterHangingFootnoteNumbering = aOptions.GetDefault( SvtCompatibilityEntry::Index::NoSpaceAfterHangingFootnoteNumbering );
+        mbAddExternalLeading                = !aOptions.get(u"NoExternalLeading"_ustr);
+        mbOldLineSpacing                    = aOptions.get(u"UseLineSpacing"_ustr);
+        mbAddParaSpacingToTableCells        = aOptions.get(u"AddTableSpacing"_ustr);
+        mbAddParaLineSpacingToTableCells    = aOptions.get(u"AddTableLineSpacing"_ustr);
+        mbUseFormerObjectPos                = aOptions.get(u"UseObjectPositioning"_ustr);
+        mbUseFormerTextWrapping             = aOptions.get(u"UseOurTextWrapping"_ustr);
+        mbConsiderWrapOnObjPos              = aOptions.get(u"ConsiderWrappingStyle"_ustr);
+        mbDoNotJustifyLinesWithManualBreak  = !aOptions.get(u"ExpandWordSpace"_ustr);
+        mbProtectForm                       = aOptions.get(u"ProtectForm"_ustr);
+        mbMsWordCompTrailingBlanks          = aOptions.get(u"MsWordCompTrailingBlanks"_ustr);
+        mbSubtractFlys                      = aOptions.get(u"SubtractFlysAnchoredAtFlys"_ustr);
+        mbEmptyDbFieldHidesPara             = aOptions.get(u"EmptyDbFieldHidesPara"_ustr);
+        mbUseVariableWidthNBSP              = aOptions.get(u"UseVariableWidthNBSP"_ustr);
+        mbNoSpaceAfterHangingFootnoteNumbering = aOptions.get(u"NoSpaceAfterHangingFootnoteNumbering"_ustr);
     }
     else
     {
