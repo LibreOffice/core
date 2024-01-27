@@ -304,8 +304,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
                         break;
 
                     case DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER:
-                        m_pWrtShell->GetDoc()->getIDocumentSettingAccess().set(
-                            DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER, bChecked);
+                        m_pWrtShell->SetNoSpaceAfterHangingFootnoteNumber(bChecked);
                         break;
 
                     default:

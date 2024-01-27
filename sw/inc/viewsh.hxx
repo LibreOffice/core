@@ -443,6 +443,8 @@ public:
 
     void SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara);
 
+    void SetNoSpaceAfterHangingFootnoteNumber(bool bNew);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
