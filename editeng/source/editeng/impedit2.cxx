@@ -3707,11 +3707,11 @@ sal_uInt16 ImpEditEngine::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
     return 0xFFFF;
 }
 
-sal_uInt32 ImpEditEngine::GetParaHeight( sal_Int32 nParagraph )
+sal_uInt32 ImpEditEngine::GetParaHeight(sal_Int32 nParagraph) const
 {
     sal_uInt32 nHeight = 0;
 
-    ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
+    ParaPortion const* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     OSL_ENSURE( pPPortion, "Paragraph not found: GetParaHeight" );
 
     if ( pPPortion )

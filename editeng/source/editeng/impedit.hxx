@@ -1048,7 +1048,7 @@ public:
     void            GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
     sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const;
     sal_uInt16      GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine );
-    sal_uInt32      GetParaHeight( sal_Int32 nParagraph );
+    sal_uInt32 GetParaHeight(sal_Int32 nParagraph) const;
 
     SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags = GetAttribsFlags::ALL ) const;
     SfxItemSet      GetAttribs( EditSelection aSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All  );
@@ -1068,7 +1068,7 @@ public:
         return static_cast<const T&>(GetParaAttrib(nPara, sal_uInt16(nWhich)));
     }
 
-    tools::Rectangle       PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE );
+    tools::Rectangle PaMtoEditCursor(EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE);
     tools::Rectangle GetEditCursor(ParaPortion const& rPortion, EditLine const& rLine, sal_Int32 nIndex, GetCursorFlags nFlags);
 
     bool            IsModified() const { return maEditDoc.IsModified(); }
@@ -1159,6 +1159,8 @@ public:
     void                SetRefMapMode(const MapMode& rMapMode);
 
     InternalEditStatus& GetStatus() { return maStatus; }
+    InternalEditStatus const& GetStatus() const{ return maStatus; }
+
     void                CallStatusHdl();
     void                DelayedCallStatusHdl()  { maStatusTimer.Start(); }
 

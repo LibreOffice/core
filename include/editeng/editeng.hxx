@@ -159,10 +159,10 @@ public:
         const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial,
         SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
-    EDITENG_DLLPRIVATE ImpEditEngine& getImpl();
+    EDITENG_DLLPRIVATE ImpEditEngine& getImpl() const;
 
 private:
-    std::unique_ptr<ImpEditEngine>  pImpEditEngine;
+    std::unique_ptr<ImpEditEngine> mpImpEditEngine;
 
                                        EditEngine( const EditEngine& ) = delete;
                        EditEngine&     operator=( const EditEngine& ) = delete;
@@ -174,8 +174,7 @@ private:
     EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode const * pNode) const;
     EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
 
-    EDITENG_DLLPRIVATE css::uno::Reference<
-        css::datatransfer::XTransferable>
+    EDITENG_DLLPRIVATE css::uno::Reference<css::datatransfer::XTransferable>
             CreateTransferable(const EditSelection& rSelection);
 
     EDITENG_DLLPRIVATE EditPaM EndOfWord(const EditPaM& rPaM);
@@ -197,13 +196,11 @@ private:
     EDITENG_DLLPRIVATE bool HasText() const;
     EDITENG_DLLPRIVATE const EditSelectionEngine& GetSelectionEngine() const;
     EDITENG_DLLPRIVATE void SetInSelectionMode(bool b);
-
-protected:
-
+    EDITENG_DLLPRIVATE void ensureDocumentFormatted() const;
 
 public:
-                    EditEngine( SfxItemPool* pItemPool );
-    virtual         ~EditEngine();
+    EditEngine(SfxItemPool* pItemPool);
+    virtual ~EditEngine();
 
     const SfxItemSet& GetEmptyItemSet() const;
 
@@ -313,7 +310,7 @@ public:
     void            SetText( const OUString& rStr );
 
     std::unique_ptr<EditTextObject> CreateTextObject();
-    std::unique_ptr<EditTextObject> GetEmptyTextObject() const;
+    std::unique_ptr<EditTextObject> GetEmptyTextObject();
     std::unique_ptr<EditTextObject> CreateTextObject( sal_Int32 nPara, sal_Int32 nParas = 1 );
     std::unique_ptr<EditTextObject> CreateTextObject( const ESelection& rESelection );
     void            SetText( const EditTextObject& rTextObject );
@@ -426,7 +423,7 @@ public:
     void getGlobalFontScale(double& rX, double& rY) const;
     basegfx::B2DTuple getGlobalFontScale() const;
 
-    void setRoundFontSizeToPt(bool bRound) const;
+    void setRoundFontSizeToPt(bool bRound);
 
     void            SetEditTextObjectPool( SfxItemPool* pPool );
     SfxItemPool*    GetEditTextObjectPool() const;
@@ -490,8 +487,7 @@ public:
 
     bool            IsRightToLeft( sal_Int32 nPara ) const;
 
-    css::uno::Reference< css::datatransfer::XTransferable >
-                    CreateTransferable( const ESelection& rSelection ) const;
+    css::uno::Reference<css::datatransfer::XTransferable> CreateTransferable(const ESelection& rSelection);
 
     // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, must be compatible in SRC638, change later...
     void            SetBeginMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink );

@@ -345,9 +345,9 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
     fprintf( fp, "================================================================================" );
     fprintf( fp, "\n==================   Document   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    for ( sal_Int32 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions().Count(); nPortion++)
+    for ( sal_Int32 nPortion = 0; nPortion < pEE->getImpl().GetParaPortions().Count(); nPortion++)
     {
-        ParaPortion const& rPPortion = pEE->pImpEditEngine->GetParaPortions().getRef(nPortion);
+        ParaPortion const& rPPortion = pEE->getImpl().GetParaPortions().getRef(nPortion);
         fprintf( fp, "\nParagraph %" SAL_PRIdINT32 ": Length = %" SAL_PRIdINT32 ", Invalid = %i\nText = '%s'",
                  nPortion, rPPortion.GetNode()->Len(), rPPortion.IsInvalid(),
                  OUStringToOString(rPPortion.GetNode()->GetString(), RTL_TEXTENCODING_UTF8).getStr() );
@@ -434,9 +434,9 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         fprintf( fp, "\n-----------------------------------------------------------------------------" );
     }
 
-    if ( pEE->pImpEditEngine->GetStyleSheetPool() )
+    if (pEE->getImpl().GetStyleSheetPool())
     {
-        SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SfxStyleFamily::All );
+        SfxStyleSheetIterator aIter(pEE->getImpl().GetStyleSheetPool(), SfxStyleFamily::All);
         sal_uInt16 nStyles = aIter.Count();
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
@@ -458,13 +458,13 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   Defaults   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    DbgOutItemSet( fp, pEE->pImpEditEngine->GetEmptyItemSet(), true, true );
+    DbgOutItemSet(fp, pEE->getImpl().GetEmptyItemSet(), true, true);
 
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   EditEngine & Views   ======================================" );
     fprintf( fp, "\n================================================================================" );
     fprintf( fp, "\nControl: %x", unsigned( pEE->GetControlWord() ) );
-    fprintf( fp, "\nRefMapMode: %i", int( pEE->pImpEditEngine->mpRefDev->GetMapMode().GetMapUnit() ) );
+    fprintf( fp, "\nRefMapMode: %i", int( pEE->getImpl().mpRefDev->GetMapMode().GetMapUnit()));
     fprintf( fp, "\nPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64, sal_Int64(pEE->GetPaperSize().Width()), sal_Int64(pEE->GetPaperSize().Height()) );
     fprintf( fp, "\nMaxAutoPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64, sal_Int64(pEE->GetMaxAutoPaperSize().Width()), sal_Int64(pEE->GetMaxAutoPaperSize().Height()) );
     fprintf( fp, "\nMinAutoPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64 , sal_Int64(pEE->GetMinAutoPaperSize().Width()), sal_Int64(pEE->GetMinAutoPaperSize().Height()) );

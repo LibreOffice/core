@@ -94,7 +94,7 @@ std::optional<OutlinerParaObject> TextChainingUtils::DeeplyMergeParaObject(
 
 css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::CreateTransferableFromText(Outliner const *pOutl)
 {
-    const EditEngine &rEditEngine = pOutl->GetEditEngine();
+    EditEngine& rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
     sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
     ESelection aWholeTextSel(0, 0, nLastPara, rEditEngine.GetTextLen(nLastPara));
 
