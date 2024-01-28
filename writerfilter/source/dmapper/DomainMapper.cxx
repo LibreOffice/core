@@ -137,7 +137,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         m_pImpl->SetDocumentSettingsProperty("FrameAutowidthWithMorePara", uno::Any(true));
         m_pImpl->SetDocumentSettingsProperty("FootnoteInColumnToPageEnd", uno::Any(true));
         m_pImpl->SetDocumentSettingsProperty("TabAtLeftIndentForParagraphsInList", uno::Any(true));
-        m_pImpl->SetDocumentSettingsProperty("NoSpaceAfterHangingFootnoteNumbering",
+        m_pImpl->SetDocumentSettingsProperty("NoGapAfterNoteNumber",
                                              uno::Any(true));
 
         // Enable only for new documents, since pasting from clipboard can influence existing doc

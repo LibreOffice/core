@@ -582,7 +582,7 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
                  !IsFootnoteNumPortion()) ||
                  // tdf#159382
                 (IsFootnoteNumPortion() &&
-                 rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER)))
+                 rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER)))
             {
                 nDiff = rInf.Left()
                     + rInf.GetTextFrame()->GetTextNodeForParaProps()->

@@ -867,17 +867,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
 {
-    // Testing NoSpaceAfterHangingFootnoteNumbering compat option
+    // Testing NoGapAfterNoteNumber compat option
 
     createSwDoc("footnote_spacing_hanging_para.docx");
-    // 1. Make sure that DOCX import sets NoSpaceAfterHangingFootnoteNumbering option, and creates
+    // 1. Make sure that DOCX import sets NoGapAfterNoteNumber option, and creates
     // correct layout
     {
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(uno::Any(true), xSettings->getPropertyValue(
-                                                 "NoSpaceAfterHangingFootnoteNumbering"));
+                                                 "NoGapAfterNoteNumber"));
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         sal_Int32 width
@@ -890,20 +890,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
     }
 
     saveAndReload(OUString::createFromAscii(mpFilter));
-    // 2. Make sure that exported document has NoSpaceAfterHangingFootnoteNumbering option set,
+    // 2. Make sure that exported document has NoGapAfterNoteNumber option set,
     // and has correct layout
     {
         xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
         assertXPathContent(
             pXmlDoc,
-            "//config:config-item[@config:name='NoSpaceAfterHangingFootnoteNumbering']",
+            "//config:config-item[@config:name='NoGapAfterNoteNumber']",
             "true");
 
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(uno::Any(true), xSettings->getPropertyValue(
-                                                 "NoSpaceAfterHangingFootnoteNumbering"));
+                                                 "NoGapAfterNoteNumber"));
 
         pXmlDoc = parseLayoutDump();
         sal_Int32 width = getXPath(
@@ -914,14 +914,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
     }
 
     createSwDoc("footnote_spacing_hanging_para.doc");
-    // 3. Make sure that DOC import sets NoSpaceAfterHangingFootnoteNumbering option, and creates
+    // 3. Make sure that DOC import sets NoGapAfterNoteNumber option, and creates
     // correct layout
     {
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(uno::Any(true), xSettings->getPropertyValue(
-                                                 "NoSpaceAfterHangingFootnoteNumbering"));
+                                                 "NoGapAfterNoteNumber"));
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         sal_Int32 width
@@ -934,14 +934,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
     }
 
     createSwDoc("footnote_spacing_hanging_para.rtf");
-    // 4. Make sure that RTF import sets NoSpaceAfterHangingFootnoteNumbering option, and creates
+    // 4. Make sure that RTF import sets NoGapAfterNoteNumber option, and creates
     // correct layout
     {
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(uno::Any(true), xSettings->getPropertyValue(
-                                                 "NoSpaceAfterHangingFootnoteNumbering"));
+                                                 "NoGapAfterNoteNumber"));
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         sal_Int32 width
@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(uno::Any(false), xSettings->getPropertyValue(
-                                                  "NoSpaceAfterHangingFootnoteNumbering"));
+                                                  "NoGapAfterNoteNumber"));
     }
 }
 
