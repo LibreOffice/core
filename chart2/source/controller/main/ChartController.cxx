@@ -54,6 +54,7 @@
 #include <ViewElementListProvider.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <BaseCoordinateSystem.hxx>
 
@@ -1325,6 +1326,8 @@ void SAL_CALL ChartController::dispatch(
             }
         }
     }
+    else if( aCommand == "ChangeTheme" )
+        comphelper::dispatchCommand(".uno:ChangeTheme", getFrame(), rArgs);
 }
 
 void SAL_CALL ChartController::addStatusListener(
