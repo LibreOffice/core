@@ -125,6 +125,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/optimalrowheightdialog.ui"
         || rUIFile == u"modules/scalc/ui/pagetemplatedialog.ui"
         || rUIFile == u"modules/scalc/ui/paratemplatedialog.ui"
+        || rUIFile == u"modules/scalc/ui/pastespecial.ui"
         || rUIFile == u"modules/scalc/ui/pivotfielddialog.ui"
         || rUIFile == u"modules/scalc/ui/pivottablelayoutdialog.ui"
         || rUIFile == u"modules/scalc/ui/regressiondialog.ui"
