@@ -24,6 +24,7 @@
 #include <svx/svxids.hrc>
 #include <svx/sdmetitm.hxx>
 #include <svx/hlnkitem.hxx>
+#include <editeng/cmapitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -441,6 +442,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_SOFTEDGE_RADIUS:
             case SID_SET_SUB_SCRIPT:
             case SID_SET_SUPER_SCRIPT:
+            case SID_SET_SMALL_CAPS:
             {
                 bAttr = true;
             }
@@ -768,6 +770,9 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     SvxEscapement eEsc = static_cast<SvxEscapement>(pSet->Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
     rSet.Put(SfxBoolItem(SID_SET_SUPER_SCRIPT, eEsc == SvxEscapement::Superscript));
     rSet.Put(SfxBoolItem(SID_SET_SUB_SCRIPT, eEsc == SvxEscapement::Subscript));
+
+    SvxCaseMap eCaseMap = pSet->Get(EE_CHAR_CASEMAP).GetCaseMap();
+    rSet.Put(SfxBoolItem(SID_SET_SMALL_CAPS, eCaseMap == SvxCaseMap::SmallCaps));
 
     eState = pSet->GetItemState( EE_CHAR_KERNING );
     if ( eState == SfxItemState::DONTCARE )

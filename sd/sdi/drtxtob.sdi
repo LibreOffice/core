@@ -203,6 +203,12 @@ shell TextObjectBar
         StateMethod = GetAttrState;
     ]
 
+    SID_SET_SMALL_CAPS  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
     SID_ATTR_CHAR_KERNING
     [
         ExecMethod = Execute;

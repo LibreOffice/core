@@ -8487,6 +8487,23 @@ SfxBoolItem SuperScript SID_SET_SUPER_SCRIPT
     GroupId = SfxGroupId::Format;
 ]
 
+SfxBoolItem SmallCaps SID_SET_SMALL_CAPS
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
 
 SfxVoidItem SwEditOptions SID_SW_EDITOPTIONS
 ()

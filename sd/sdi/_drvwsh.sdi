@@ -2820,12 +2820,17 @@ interface DrawView
         ExecMethod = ExecChar ;
         StateMethod = GetAttrState ;
     ]
+    SID_SET_SUPER_SCRIPT
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState ;
+    ]
     SID_SET_SUB_SCRIPT
     [
         ExecMethod = ExecChar ;
         StateMethod = GetAttrState ;
     ]
-    SID_SET_SUPER_SCRIPT
+    SID_SET_SMALL_CAPS
     [
         ExecMethod = ExecChar ;
         StateMethod = GetAttrState ;

@@ -648,6 +648,18 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     }
                     break;
 
+                    case SID_SET_SMALL_CAPS:
+                    {
+                        SvxCaseMap eCaseMap = aEditAttr.Get(EE_CHAR_CASEMAP).GetCaseMap();
+                        if (eCaseMap == SvxCaseMap::SmallCaps)
+                            eCaseMap = SvxCaseMap::NotMapped;
+                        else
+                            eCaseMap = SvxCaseMap::SmallCaps;
+                        SvxCaseMapItem aItem(eCaseMap, EE_CHAR_CASEMAP);
+                        aNewAttr.Put(aItem);
+                    }
+                    break;
+
                     // attributes for TextObjectBar
                     case SID_ATTR_CHAR_FONT:
                         mpViewShell->GetViewFrame()->GetDispatcher()->

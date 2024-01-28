@@ -3811,6 +3811,17 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
             }
         }
         break;
+    case SID_SET_SMALL_CAPS:
+        {
+            SvxCaseMap eCaseMap = aEditAttr.Get(EE_CHAR_CASEMAP).GetCaseMap();
+            if (eCaseMap == SvxCaseMap::SmallCaps)
+                eCaseMap = SvxCaseMap::NotMapped;
+            else
+                eCaseMap = SvxCaseMap::SmallCaps;
+            SvxCaseMapItem aItem(eCaseMap, EE_CHAR_CASEMAP);
+            aNewAttr.Put(aItem);
+        }
+        break;
     case SID_SET_SUB_SCRIPT:
         {
             SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );

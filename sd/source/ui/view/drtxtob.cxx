@@ -28,6 +28,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/cmapitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unolingu.hxx>
@@ -620,6 +621,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     SvxEscapement eEsc = static_cast<SvxEscapement>(aAttrSet.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
     rSet.Put(SfxBoolItem(SID_SET_SUPER_SCRIPT, eEsc == SvxEscapement::Superscript));
     rSet.Put(SfxBoolItem(SID_SET_SUB_SCRIPT, eEsc == SvxEscapement::Subscript));
+
+    SvxCaseMap eCaseMap = aAttrSet.Get(EE_CHAR_CASEMAP).GetCaseMap();
+    rSet.Put(SfxBoolItem(SID_SET_SMALL_CAPS, eCaseMap == SvxCaseMap::SmallCaps));
 }
 
 } // end of namespace sd
