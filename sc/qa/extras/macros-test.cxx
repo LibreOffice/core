@@ -897,6 +897,33 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
     CPPUNIT_ASSERT_EQUAL(Any(true), aRet);
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf159412)
+{
+    // Run a macro, that itself calls two other functions using invoke,
+    // passing a small integer value to agruments of types Long and Double
+    createScDoc("tdf159412.fods");
+
+    css::uno::Any aRet;
+    css::uno::Sequence<sal_Int16> aOutParamIndex;
+    css::uno::Sequence<css::uno::Any> aOutParam;
+    css::uno::Sequence<css::uno::Any> aParams;
+
+    SfxObjectShell::CallXScript(
+        mxComponent,
+        "vnd.sun.Star.script:Standard.Module1.TestInvoke?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    OUString aReturnValue;
+    aRet >>= aReturnValue;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1 Long/2 Double
+    // - Actual  : 0 Long/0 Double
+    // i.e., the passed 1 and 2 values were lost.
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1 Long/2 Double"), aReturnValue);
+}
+
 ScMacrosTest::ScMacrosTest()
       : ScModelTestBase("/sc/qa/extras/testdocuments")
 {
