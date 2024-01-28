@@ -3090,7 +3090,7 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
             bUrl = false;
             sEntry = m_xTreeView->get_text(*xEntry);
         break;
-        // content types tha can only be inserted as a hyperlink
+        // content types that can only be inserted as a hyperlink
         case ContentTypeId::URLFIELD:
             sUrl = static_cast<SwURLFieldContent*>(pCnt)->GetURL();
             [[fallthrough]];
