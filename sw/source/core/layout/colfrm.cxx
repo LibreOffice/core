@@ -98,7 +98,7 @@ static void lcl_RemoveColumns(SwLayoutFrame *pCont, sal_uInt16 nCnt, const SwFra
     {
         SwColumnFrame *pTmp = static_cast<SwColumnFrame*>(pColumn->GetPrev());
         pColumn->Cut();
-        assert(pSave != pColumn && "we will deref pSave later, so shouldn't be deleted here"); (void)pSave;
+        assert(pColumn != pSave && "we will deref pSave later, so shouldn't be deleted here"); (void)pSave;
         SwFrame::DestroyFrame(pColumn); //format is going to be destroyed in the DTor if needed.
         pColumn = pTmp;
     }
