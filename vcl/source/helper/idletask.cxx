@@ -14,8 +14,8 @@
 IdleTask::IdleTask()
     : flag(false)
 {
-    //setting the Priority of Idle task to LOW, LOWEST
-    maIdle.SetPriority(TaskPriority::LOWEST);
+    //setting the Priority of Idle task to TOOLKIT_DEBUG
+    maIdle.SetPriority(TaskPriority::TOOLKIT_DEBUG);
     //set idle for callback
     maIdle.SetInvokeHandler(LINK(this, IdleTask, FlipFlag));
     //starting the idle
