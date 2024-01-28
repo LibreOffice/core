@@ -88,35 +88,37 @@ namespace chart
 
 void ChartController::executeDispatch_InsertAxes()
 {
-    UndoGuard aUndoGuard(
+    auto aUndoGuard = std::make_shared<UndoGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_AXES )),
         m_xUndoManager );
 
     try
     {
-        InsertAxisOrGridDialogData aDialogInput;
+        auto aDialogInput = std::make_shared<InsertAxisOrGridDialogData>();
         rtl::Reference< Diagram > xDiagram = getFirstDiagram();
-        AxisHelper::getAxisOrGridExistence( aDialogInput.aExistenceList, xDiagram );
-        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram );
+        AxisHelper::getAxisOrGridExistence( aDialogInput->aExistenceList, xDiagram );
+        AxisHelper::getAxisOrGridPossibilities( aDialogInput->aPossibilityList, xDiagram );
 
         SolarMutexGuard aGuard;
-        SchAxisDlg aDlg(GetChartFrame(), aDialogInput);
-        if (aDlg.run() == RET_OK)
-        {
-            // lock controllers till end of block
-            ControllerLockGuardUNO aCLGuard( getChartModel() );
+        auto aDlg = std::make_shared<SchAxisDlg>(GetChartFrame(), *aDialogInput);
+        aDlg->runAsync(aDlg, [this, aDlg, aDialogInput, aUndoGuard](int nResult) {
+            if ( nResult == RET_OK )
+            {
+                // lock controllers till end of block
+                ControllerLockGuardUNO aCLGuard( getChartModel() );
 
-            InsertAxisOrGridDialogData aDialogOutput;
-            aDlg.getResult(aDialogOutput);
-            std::unique_ptr< ReferenceSizeProvider > pRefSizeProvider(
-                impl_createReferenceSizeProvider());
-            bool bChanged = AxisHelper::changeVisibilityOfAxes( xDiagram
-                , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC
-                , pRefSizeProvider.get() );
-            if( bChanged )
-                aUndoGuard.commit();
-        }
+                InsertAxisOrGridDialogData aDialogOutput;
+                aDlg->getResult(aDialogOutput);
+                std::unique_ptr< ReferenceSizeProvider > pRefSizeProvider(
+                    impl_createReferenceSizeProvider());
+                bool bChanged = AxisHelper::changeVisibilityOfAxes( getFirstDiagram()
+                    , aDialogInput->aExistenceList, aDialogOutput.aExistenceList, m_xCC
+                    , pRefSizeProvider.get() );
+                if( bChanged )
+                    aUndoGuard->commit();
+            }
+        });
     }
     catch(const uno::RuntimeException&)
     {
@@ -273,28 +275,30 @@ void ChartController::executeDispatch_DeleteDataTable()
 
 void ChartController::executeDispatch_InsertTitles()
 {
-    UndoGuard aUndoGuard(
+    auto aUndoGuard = std::make_shared<UndoGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_TITLES )),
         m_xUndoManager );
 
     try
     {
-        TitleDialogData aDialogInput;
-        aDialogInput.readFromModel( getChartModel() );
+        auto aDialogInput = std::make_shared<TitleDialogData>();
+        aDialogInput->readFromModel( getChartModel() );
 
         SolarMutexGuard aGuard;
-        SchTitleDlg aDlg(GetChartFrame(), aDialogInput);
-        if (aDlg.run() == RET_OK)
-        {
-            // lock controllers till end of block
-            ControllerLockGuardUNO aCLGuard( getChartModel() );
-            TitleDialogData aDialogOutput(impl_createReferenceSizeProvider());
-            aDlg.getResult(aDialogOutput);
-            bool bChanged = aDialogOutput.writeDifferenceToModel( getChartModel(), m_xCC, &aDialogInput );
-            if( bChanged )
-                aUndoGuard.commit();
-        }
+        auto aDlg = std::make_shared<SchTitleDlg>(GetChartFrame(), *aDialogInput);
+        aDlg->runAsync(aDlg, [this, aDlg, aDialogInput, aUndoGuard](int nResult){
+            if ( nResult == RET_OK )
+            {
+                // lock controllers till end of block
+                ControllerLockGuardUNO aCLGuard( getChartModel() );
+                TitleDialogData aDialogOutput( impl_createReferenceSizeProvider() );
+                aDlg->getResult( aDialogOutput );
+                bool bChanged = aDialogOutput.writeDifferenceToModel( getChartModel(), m_xCC, aDialogInput.get() );
+                if( bChanged )
+                    aUndoGuard->commit();
+            }
+        });
     }
     catch(const uno::RuntimeException&)
     {
@@ -469,7 +473,7 @@ void ChartController::executeDispatch_InsertTrendline()
     if( !xRegressionCurveContainer.is() )
         return;
 
-    UndoLiveUpdateGuard aUndoGuard(
+    auto aUndoGuard = std::make_shared<UndoLiveUpdateGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_CURVE )),
         m_xUndoManager );
@@ -482,14 +486,14 @@ void ChartController::executeDispatch_InsertTrendline()
     if( !xCurve.is())
         return;
 
-    wrapper::RegressionCurveItemConverter aItemConverter(
+    auto aItemConverter = std::make_shared<wrapper::RegressionCurveItemConverter>(
         xCurve, xRegressionCurveContainer, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
         m_pDrawModelWrapper->getSdrModel(),
         getChartModel() );
 
     // open dialog
-    SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
-    aItemConverter.FillItemSet( aItemSet );
+    SfxItemSet aItemSet = aItemConverter->CreateEmptyItemSet();
+    aItemConverter->FillItemSet( aItemSet );
     ObjectPropertiesDialogParameter aDialogParameter(
         ObjectIdentifier::createDataCurveCID(
             ObjectIdentifier::getSeriesParticleFromCID( m_aSelection.getSelectedCID()),
@@ -497,23 +501,23 @@ void ChartController::executeDispatch_InsertTrendline()
     aDialogParameter.init( getChartModel() );
     ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
     SolarMutexGuard aGuard;
-    SchAttribTabDlg aDialog(
-        GetChartFrame(), &aItemSet, &aDialogParameter,
-        &aViewElementListProvider,
-        getChartModel() );
+    auto aDialog = std::make_shared<SchAttribTabDlg>(GetChartFrame(), &aItemSet, &aDialogParameter,
+                                                     &aViewElementListProvider, getChartModel());
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
-    if( aDialog.run() == RET_OK || aDialog.DialogWasClosedWithOK())
-    {
-        const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
-        if( pOutItemSet )
+    aDialog->runAsync(aDialog, [this, aDialog, aItemConverter, aUndoGuard](int nResult) {
+        if ( nResult == RET_OK || aDialog->DialogWasClosedWithOK() )
         {
-            ControllerLockGuardUNO aCLGuard( getChartModel() );
-            aItemConverter.ApplyItemSet( *pOutItemSet );
+            const SfxItemSet* pOutItemSet = aDialog->GetOutputItemSet();
+            if( pOutItemSet )
+            {
+                ControllerLockGuardUNO aCLGuard( getChartModel() );
+                aItemConverter->ApplyItemSet( *pOutItemSet );
+            }
+            aUndoGuard->commit();
         }
-        aUndoGuard.commit();
-    }
+    });
 }
 
 void ChartController::executeDispatch_InsertErrorBars( bool bYError )
@@ -526,7 +530,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
     if( xSeries.is())
     {
-        UndoLiveUpdateGuard aUndoGuard(
+        auto aUndoGuard = std::make_shared<UndoLiveUpdateGuard>(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert,
                 SchResId( bYError ? STR_OBJECT_ERROR_BARS_Y : STR_OBJECT_ERROR_BARS_X )),
@@ -539,46 +543,48 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                                             bYError));
 
         // get an appropriate item converter
-        wrapper::ErrorBarItemConverter aItemConverter(
+        auto aItemConverter = std::make_shared<wrapper::ErrorBarItemConverter> (
             getChartModel(), xErrorBarProp, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
             m_pDrawModelWrapper->getSdrModel(),
             getChartModel() );
 
         // open dialog
-        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+        SfxItemSet aItemSet = aItemConverter->CreateEmptyItemSet();
         aItemSet.Put(SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE,bYError));
-        aItemConverter.FillItemSet( aItemSet );
+        aItemConverter->FillItemSet( aItemSet );
         ObjectPropertiesDialogParameter aDialogParameter(
             ObjectIdentifier::createClassifiedIdentifierWithParent(
                 objType, u"", m_aSelection.getSelectedCID()));
         aDialogParameter.init( getChartModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
-        SchAttribTabDlg aDlg(
+        auto aDlg = std::make_shared<SchAttribTabDlg>(
                 GetChartFrame(), &aItemSet, &aDialogParameter,
                 &aViewElementListProvider,
                 getChartModel() );
-        aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+        aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(),
                                                                              m_xChartView, m_aSelection.getSelectedCID()));
 
         // note: when a user pressed "OK" but didn't change any settings in the
         // dialog, the SfxTabDialog returns "Cancel"
-        if (aDlg.run() == RET_OK || aDlg.DialogWasClosedWithOK())
-        {
-            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
-            if( pOutItemSet )
+        aDlg->runAsync(aDlg, [this, aDlg, aItemConverter, aUndoGuard](int nResult) {
+            if ( nResult == RET_OK || aDlg->DialogWasClosedWithOK() )
             {
-                ControllerLockGuardUNO aCLGuard( getChartModel() );
-                aItemConverter.ApplyItemSet( *pOutItemSet );
+                const SfxItemSet* pOutItemSet = aDlg->GetOutputItemSet();
+                if( pOutItemSet )
+                {
+                    ControllerLockGuardUNO aCLGuard( getChartModel() );
+                    aItemConverter->ApplyItemSet( *pOutItemSet );
+                }
+                aUndoGuard->commit();
             }
-            aUndoGuard.commit();
-        }
+        });
     }
     else
     {
         //if no series is selected insert error bars for all series
-        UndoGuard aUndoGuard(
+        auto aUndoGuard = std::make_shared<UndoGuard>(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert,
                 ObjectNameProvider::getName_ObjectForAllSeries( objType ) ),
@@ -586,32 +592,34 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
         try
         {
-            wrapper::AllSeriesStatisticsConverter aItemConverter(
+            auto aItemConverter = std::make_shared<wrapper::AllSeriesStatisticsConverter>(
                 getChartModel(), m_pDrawModelWrapper->GetItemPool() );
-            SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
-            aItemConverter.FillItemSet( aItemSet );
+            SfxItemSet aItemSet = aItemConverter->CreateEmptyItemSet();
+            aItemConverter->FillItemSet( aItemSet );
 
             //prepare and open dialog
             SolarMutexGuard aGuard;
-            InsertErrorBarsDialog aDlg(
+            auto aDlg = std::make_shared<InsertErrorBarsDialog>(
                 GetChartFrame(), aItemSet,
                 getChartModel(),
                 bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X);
 
-            aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+            aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(), m_xChartView, u"" ) );
 
-            if (aDlg.run() == RET_OK)
-            {
-                SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-                aDlg.FillItemSet( aOutItemSet );
+            aDlg->runAsync(aDlg, [this, aDlg, aItemConverter, aUndoGuard](int nResult) {
+                if ( nResult == RET_OK )
+                {
+                    SfxItemSet aOutItemSet = aItemConverter->CreateEmptyItemSet();
+                    aDlg->FillItemSet( aOutItemSet );
 
-                // lock controllers till end of block
-                ControllerLockGuardUNO aCLGuard( getChartModel() );
-                bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
-                if( bChanged )
-                    aUndoGuard.commit();
-            }
+                    // lock controllers till end of block
+                    ControllerLockGuardUNO aCLGuard( getChartModel() );
+                    bool bChanged = aItemConverter->ApplyItemSet( aOutItemSet );//model should be changed now
+                    if( bChanged )
+                        aUndoGuard->commit();
+                }
+            });
         }
         catch(const uno::RuntimeException&)
         {
