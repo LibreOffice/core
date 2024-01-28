@@ -139,7 +139,7 @@ public:
     void                            ResetUserDefaultItem( sal_uInt16 nWhich );
 
     // PoolDefaults: Owned by the pool. The read access will only return
-    // nullptr if the WhichID aske for is not in the range of the pool,
+    // nullptr if the WhichID asked for is not in the range of the pool,
     // making the request invalid.
     void                            SetPoolDefaults(std::vector<SfxPoolItem*>* pDefaults);
     void                            ClearPoolDefaults();
