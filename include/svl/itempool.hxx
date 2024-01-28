@@ -254,7 +254,7 @@ public:
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich ) const;
 
     // tries to translate back from SlotID to WhichID. That may be
-    // expensive, it needs to linerarly iterate over SfxItemInfo
+    // expensive, it needs to linearly iterate over SfxItemInfo
     // to evtl. find if a SlotID is defined for a WhichID
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
 
