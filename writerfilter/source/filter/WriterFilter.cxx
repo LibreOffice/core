@@ -304,7 +304,7 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
 
     xSettings->setPropertyValue("UseOldNumbering", uno::Any(false));
     xSettings->setPropertyValue("IgnoreFirstLineIndentInNumbering", uno::Any(false));
-    xSettings->setPropertyValue(u"NoSpaceAfterHangingFootnoteNumbering"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"NoGapAfterNoteNumber"_ustr, uno::Any(true));
     xSettings->setPropertyValue("DoNotResetParaAttrsForNumFont", uno::Any(false));
     xSettings->setPropertyValue("UseFormerLineSpacing", uno::Any(false));
     xSettings->setPropertyValue("AddParaSpacingToTableCells", uno::Any(true));
