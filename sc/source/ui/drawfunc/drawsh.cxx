@@ -562,7 +562,7 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
     auto xRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
     pDlg->StartExecuteAsync(
-        [pDlg, xRequest, bHasMarked, pView] (sal_Int32 nResult)->void
+        [pDlg, xRequest=std::move(xRequest), bHasMarked, pView] (sal_Int32 nResult)->void
         {
             if ( RET_OK == nResult )
             {

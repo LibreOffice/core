@@ -64,7 +64,7 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
     rReq.Ignore(); // the 'old' request is not relevant any more
     auto pView = mpView; // copy vars we need, FuTextAttrDlg object will be gone by the time the dialog completes
     pDlg->StartExecuteAsync(
-        [pDlg, xRequest, pView] (sal_Int32 nResult)->void
+        [pDlg, xRequest=std::move(xRequest), pView] (sal_Int32 nResult)->void
         {
             if (nResult == RET_OK)
             {

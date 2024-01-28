@@ -996,7 +996,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 VclPtr<SvxAbstractInsRowColDlg> pDlg(pFact->CreateSvxInsRowColDlg(GetView().GetFrameWeld(),
                                                                                         nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand()));
                 pDlg->StartExecuteAsync(
-                    [this, pDlg, xRequest, nSlot] (sal_Int32 nResult)->void
+                    [this, pDlg, xRequest=std::move(xRequest), nSlot] (sal_Int32 nResult)->void
                     {
                         if (nResult == RET_OK)
                         {

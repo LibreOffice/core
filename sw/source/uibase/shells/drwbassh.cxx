@@ -145,7 +145,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         VclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg(GetView().GetFrameWeld(), aSet, pSh));
                         pDlg->StartExecuteAsync(
-                            [pDlg, pSh, xRequest] (sal_Int32 nResult)->void
+                            [pDlg, pSh, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                             {
                                 if (nResult == RET_OK)
                                 {

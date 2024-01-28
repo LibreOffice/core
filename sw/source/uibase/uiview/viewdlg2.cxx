@@ -70,7 +70,7 @@ void SwView::ExecDlgExt(SfxRequest& rReq)
             auto xRequest = std::make_shared<SfxRequest>(rReq);
             rReq.Ignore(); // the 'old' request is not relevant any more
             pDialog->StartExecuteAsync(
-                [pDialog, xRequest] (sal_Int32 nResult)->void
+                [pDialog, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                 {
                     if (nResult == RET_OK)
                         pDialog->Apply();

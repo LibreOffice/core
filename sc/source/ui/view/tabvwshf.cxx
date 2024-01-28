@@ -691,8 +691,8 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
             // is selected.
             pDlg->EnableRenameTable(nTabSelCount == 1);
 
-            std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
-            pDlg->StartExecuteAsync([this, pDlg, pReq,
+            std::shared_ptr<SfxRequest> xReq = std::make_shared<SfxRequest>(rReq);
+            pDlg->StartExecuteAsync([this, pDlg, xReq=std::move(xReq),
                                      nContextMenuTab](sal_Int32 nResult) {
 
                 OUString aTableName;
@@ -727,18 +727,18 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
                             }
                         }
                     }
-                    pReq->AppendItem(SfxStringItem(FID_TAB_MOVE, aFoundDocName));
+                    xReq->AppendItem(SfxStringItem(FID_TAB_MOVE, aFoundDocName));
                     // 1-based table, if not APPEND
                     SCTAB nBasicTab = (nContextMenuTab <= MAXTAB)
                                           ? (nContextMenuTab + 1)
                                           : nContextMenuTab;
-                    pReq->AppendItem(
+                    xReq->AppendItem(
                         SfxUInt16Item(FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab)));
-                    pReq->AppendItem(SfxBoolItem(FN_PARAM_2, bCopy));
+                    xReq->AppendItem(SfxBoolItem(FN_PARAM_2, bCopy));
 
                     if (bDoItAsync)
                     {
-                        pReq->Done();
+                        xReq->Done();
 
                         // send move or copy request
                         MoveTable(nDocument, nTargetIndex, bCopy, &aTableName, true,
@@ -815,7 +815,7 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
         auto xRequest = std::make_shared<SfxRequest>(rReq);
         rReq.Ignore(); // the 'old' request is not relevant any more
         pDlg->StartExecuteAsync(
-            [this, pDlg, xRequest] (sal_Int32 nResult)->void
+            [this, pDlg, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
             {
                 if (nResult == RET_OK)
                 {
@@ -891,7 +891,7 @@ void ScTabViewShell::ExecuteInsertTable(SfxRequest& rReq)
         VclPtr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetFrameWeld(), rViewData,
             nTabSelCount, nSlot == FID_INS_TABLE_EXT));
         pDlg->StartExecuteAsync(
-            [this, pDlg, xRequest] (sal_Int32 nResult)->void
+            [this, pDlg, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
             {
                 if (nResult == RET_OK)
                     DoInsertTableFromDialog(*xRequest, pDlg);

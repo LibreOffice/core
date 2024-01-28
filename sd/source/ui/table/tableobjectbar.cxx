@@ -132,7 +132,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
                                                                nSlotId == SID_TABLE_INSERT_COL_DLG,
                                                                SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) );
             pDlg->StartExecuteAsync(
-                [pDlg, xRequest, nSlotId, xController, pBindings] (sal_Int32 nResult) mutable ->void
+                [pDlg, xRequest=std::move(xRequest), nSlotId, xController, pBindings] (sal_Int32 nResult) mutable ->void
                 {
                     if (nResult == RET_OK)
                     {
