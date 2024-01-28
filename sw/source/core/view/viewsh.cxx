@@ -1047,13 +1047,13 @@ void SwViewShell::SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara)
     EndAction();
 }
 
-void SwViewShell::SetNoSpaceAfterHangingFootnoteNumber(bool bNew)
+void SwViewShell::SetNoGapAfterNoteNumber(bool bNew)
 {
     IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
-    if (rIDSA.get(DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER) != bNew)
+    if (rIDSA.get(DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER) != bNew)
     {
         SwWait aWait(*GetDoc()->GetDocShell(), true);
-        rIDSA.set(DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER, bNew);
+        rIDSA.set(DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER, bNew);
         const SwInvalidateFlags nInv = SwInvalidateFlags::Size | SwInvalidateFlags::Pos | SwInvalidateFlags::PrtArea;
         lcl_InvalidateAllContent(*this, nInv);
     }

@@ -443,7 +443,7 @@ public:
 
     void SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara);
 
-    void SetNoSpaceAfterHangingFootnoteNumber(bool bNew);
+    void SetNoGapAfterNoteNumber(bool bNew);
 
     // DOCUMENT COMPATIBILITY FLAGS END
 

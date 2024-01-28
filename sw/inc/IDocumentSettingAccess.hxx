@@ -59,7 +59,7 @@ enum class DocumentSettingId
     TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK,
     DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,
     // tdf#159382: MS Word compatible handling of space between footnote number and text
-    NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER,
+    NO_GAP_AFTER_NOTE_NUMBER,
 
     DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE,
     TABLE_ROW_KEEP,

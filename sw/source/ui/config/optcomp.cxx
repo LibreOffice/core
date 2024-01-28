@@ -60,7 +60,7 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"SubtractFlysAnchoredAtFlys"_ustr, STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS },
     { u"EmptyDbFieldHidesPara"_ustr, STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA },
     { u"UseVariableWidthNBSP"_ustr, STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP },
-    { u"NoSpaceAfterHangingFootnoteNumbering"_ustr, STR_COMPAT_OPT_NOSPACEAFTERHANGINGFOOTNOTENUMBERING },
+    { u"NoGapAfterNoteNumber"_ustr, STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER },
 };
 
 // DocumentSettingId, negate?
@@ -82,7 +82,7 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
         { u"SubtractFlysAnchoredAtFlys"_ustr, { DocumentSettingId::SUBTRACT_FLYS, false } },
         { u"EmptyDbFieldHidesPara"_ustr, { DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, false } },
         { u"UseVariableWidthNBSP"_ustr, { DocumentSettingId::USE_VARIABLE_WIDTH_NBSP, false } },
-        { u"NoSpaceAfterHangingFootnoteNumbering"_ustr, { DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER, false } },
+        { u"NoGapAfterNoteNumber"_ustr, { DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER, false } },
 //        { u"AddTableLineSpacing"_ustr, { DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, false } },
     };
     return map.at(option);
@@ -303,8 +303,8 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
                             .set(DocumentSettingId::USE_VARIABLE_WIDTH_NBSP, bChecked);
                         break;
 
-                    case DocumentSettingId::NO_SPACE_AFTER_HANGING_FOOTNOTE_NUMBER:
-                        m_pWrtShell->SetNoSpaceAfterHangingFootnoteNumber(bChecked);
+                    case DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER:
+                        m_pWrtShell->SetNoGapAfterNoteNumber(bChecked);
                         break;
 
                     default:

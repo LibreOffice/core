@@ -1489,7 +1489,7 @@
 #define STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS NC_("STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS", "Tolerate white lines that may appear in PDF page backgrounds")
 #define STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA    NC_("STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA", "Hide paragraphs of database fields (e.g., mail merge) with an empty value")
 #define STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP     NC_("STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP", "Render non-breaking spaces (NBSP) as standard-space-width (off for fixed size)")
-#define STR_COMPAT_OPT_NOSPACEAFTERHANGINGFOOTNOTENUMBERING NC_("STR_COMPAT_OPT_NOSPACEAFTERHANGINGFOOTNOTENUMBERING", "Do not add an extra space after number in footnotes with hanging first line")
+#define STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER     NC_("STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER", "Do not add an extra space after number in footnotes / endnotes with hanging first line")
 
 #endif
 
