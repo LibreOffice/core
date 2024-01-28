@@ -2272,162 +2272,134 @@ void SbRtl_Date(StarBASIC *, SbxArray & rPar, bool bWrite)
 
 void SbRtl_IsArray(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        rPar.Get(0)->PutBool((rPar.Get(1)->GetType() & SbxARRAY) != 0);
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    rPar.Get(0)->PutBool((rPar.Get(1)->GetType() & SbxARRAY) != 0);
 }
 
 void SbRtl_IsObject(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        SbxVariable* pVar = rPar.Get(1);
-        bool bObject = pVar->IsObject();
-        SbxBase* pObj = (bObject ? pVar->GetObject() : nullptr);
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
-        if( auto pUnoClass = dynamic_cast<SbUnoClass*>( pObj) )
-        {
-            bObject = pUnoClass->getUnoClass().is();
-        }
-        rPar.Get(0)->PutBool(bObject);
+    SbxVariable* pVar = rPar.Get(1);
+    bool bObject = pVar->IsObject();
+    SbxBase* pObj = (bObject ? pVar->GetObject() : nullptr);
+
+    if( auto pUnoClass = dynamic_cast<SbUnoClass*>( pObj) )
+    {
+        bObject = pUnoClass->getUnoClass().is();
     }
+    rPar.Get(0)->PutBool(bObject);
 }
 
 void SbRtl_IsDate(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    // #46134 only string is converted, all other types result in sal_False
+    SbxVariableRef xArg = rPar.Get(1);
+    SbxDataType eType = xArg->GetType();
+    bool bDate = false;
+
+    if( eType == SbxDATE )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        bDate = true;
     }
-    else
+    else if( eType == SbxSTRING )
     {
-        // #46134 only string is converted, all other types result in sal_False
-        SbxVariableRef xArg = rPar.Get(1);
-        SbxDataType eType = xArg->GetType();
-        bool bDate = false;
+        ErrCode nPrevError = SbxBase::GetError();
+        SbxBase::ResetError();
 
-        if( eType == SbxDATE )
-        {
-            bDate = true;
-        }
-        else if( eType == SbxSTRING )
-        {
-            ErrCode nPrevError = SbxBase::GetError();
-            SbxBase::ResetError();
+        // force conversion of the parameter to SbxDATE
+        xArg->SbxValue::GetDate();
 
-            // force conversion of the parameter to SbxDATE
-            xArg->SbxValue::GetDate();
+        bDate = !SbxBase::IsError();
 
-            bDate = !SbxBase::IsError();
-
-            SbxBase::ResetError();
-            SbxBase::SetError( nPrevError );
-        }
-        rPar.Get(0)->PutBool(bDate);
+        SbxBase::ResetError();
+        SbxBase::SetError( nPrevError );
     }
+    rPar.Get(0)->PutBool(bDate);
 }
 
 void SbRtl_IsEmpty(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxVariable* pVar = nullptr;
+    if( SbiRuntime::isVBAEnabled() )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        pVar = getDefaultProp(rPar.Get(1));
+    }
+    if ( pVar )
+    {
+        pVar->Broadcast( SfxHintId::BasicDataWanted );
+        rPar.Get(0)->PutBool(pVar->IsEmpty());
     }
     else
     {
-        SbxVariable* pVar = nullptr;
-        if( SbiRuntime::isVBAEnabled() )
-        {
-            pVar = getDefaultProp(rPar.Get(1));
-        }
-        if ( pVar )
-        {
-            pVar->Broadcast( SfxHintId::BasicDataWanted );
-            rPar.Get(0)->PutBool(pVar->IsEmpty());
-        }
-        else
-        {
-            rPar.Get(0)->PutBool(rPar.Get(1)->IsEmpty());
-        }
+        rPar.Get(0)->PutBool(rPar.Get(1)->IsEmpty());
     }
 }
 
 void SbRtl_IsError(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxVariable* pVar = rPar.Get(1);
+    SbUnoObject* pObj = dynamic_cast<SbUnoObject*>( pVar  );
+    if ( !pObj )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        if ( SbxBase* pBaseObj = (pVar->IsObject() ? pVar->GetObject() : nullptr) )
+        {
+            pObj = dynamic_cast<SbUnoObject*>( pBaseObj  );
+        }
+    }
+    uno::Reference< script::XErrorQuery > xError;
+    if ( pObj )
+    {
+        xError.set( pObj->getUnoAny(), uno::UNO_QUERY );
+    }
+    if ( xError.is() )
+    {
+        rPar.Get(0)->PutBool(xError->hasError());
     }
     else
     {
-        SbxVariable* pVar = rPar.Get(1);
-        SbUnoObject* pObj = dynamic_cast<SbUnoObject*>( pVar  );
-        if ( !pObj )
-        {
-            if ( SbxBase* pBaseObj = (pVar->IsObject() ? pVar->GetObject() : nullptr) )
-            {
-                pObj = dynamic_cast<SbUnoObject*>( pBaseObj  );
-            }
-        }
-        uno::Reference< script::XErrorQuery > xError;
-        if ( pObj )
-        {
-            xError.set( pObj->getUnoAny(), uno::UNO_QUERY );
-        }
-        if ( xError.is() )
-        {
-            rPar.Get(0)->PutBool(xError->hasError());
-        }
-        else
-        {
-            rPar.Get(0)->PutBool(rPar.Get(1)->IsErr());
-        }
+        rPar.Get(0)->PutBool(rPar.Get(1)->IsErr());
     }
 }
 
 void SbRtl_IsNull(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    // #51475 because of Uno-objects return true
+    // even if the pObj value is NULL
+    SbxVariableRef pArg = rPar.Get(1);
+    bool bNull = rPar.Get(1)->IsNull();
+    if( !bNull && pArg->GetType() == SbxOBJECT )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        // #51475 because of Uno-objects return true
-        // even if the pObj value is NULL
-        SbxVariableRef pArg = rPar.Get(1);
-        bool bNull = rPar.Get(1)->IsNull();
-        if( !bNull && pArg->GetType() == SbxOBJECT )
+        SbxBase* pObj = pArg->GetObject();
+        if( !pObj )
         {
-            SbxBase* pObj = pArg->GetObject();
-            if( !pObj )
-            {
-                bNull = true;
-            }
+            bNull = true;
         }
-        rPar.Get(0)->PutBool(bNull);
     }
+    rPar.Get(0)->PutBool(bNull);
 }
 
 void SbRtl_IsNumeric(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        rPar.Get(0)->PutBool(rPar.Get(1)->IsNumericRTL());
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    rPar.Get(0)->PutBool(rPar.Get(1)->IsNumericRTL());
 }
 
 
