@@ -185,6 +185,7 @@ class navigator(UITestCase):
 
     def test_tdf158652(self):
         with self.ui_test.create_doc_in_start_center("calc"):
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = xCalcDoc.getChild("grid_window")
 
@@ -199,10 +200,12 @@ class navigator(UITestCase):
 
             commentText = mkPropertyValues({"Text":"CommentText"})
             self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", commentText)
+            xToolkit.waitUntilAllIdlesDispatched()
             xComments = xContentBox.getChild("6")
             self.assertEqual(len(xComments.getChildren()), 1)
 
             self.xUITest.executeCommand(".uno:DeleteNote")
+            xToolkit.waitUntilAllIdlesDispatched()
             xComments = xContentBox.getChild("6")
             self.assertEqual(len(xComments.getChildren()), 0)
 
