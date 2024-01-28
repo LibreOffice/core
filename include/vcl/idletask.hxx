@@ -20,9 +20,9 @@ public:
     bool GetFlag() const;
     IdleTask();
 
-    // Launch an Idle at TaskPriority::LOWEST and wait until it completes. Can
-    // be used to wait until pending Idles at higher TaskPriority::DEFAULT_IDLE
-    // have completed.
+    // Launch an Idle at reserved lowest priority of TaskPriority::TOOLKIT_DEBUG
+    // and wait until it completes. Can be used to wait until pending Idles at
+    // higher TaskPriority have completed.
     static void waitUntilIdleDispatched();
 
 private:

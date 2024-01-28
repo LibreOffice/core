@@ -34,10 +34,11 @@ enum class TaskPriority
     REPAINT,       ///< All repaint events should go in here
     POST_PAINT,    ///< Everything running directly after painting
     DEFAULT_IDLE,  ///< Default idle priority
-    LOWEST         ///< Low, very idle cleanup tasks
+    LOWEST,        ///< Low, very idle cleanup tasks
+    TOOLKIT_DEBUG  ///< Do not use. Solely for IdleTask::waitUntilIdleDispatched
 };
 
-#define PRIO_COUNT (static_cast<int>(TaskPriority::LOWEST) + 1)
+#define PRIO_COUNT (static_cast<int>(TaskPriority::TOOLKIT_DEBUG) + 1)
 
 class VCL_DLLPUBLIC Task
 {
