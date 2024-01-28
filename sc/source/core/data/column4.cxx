@@ -1255,7 +1255,7 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
             {
                 CellAttributeHolder aTemp(pPat1);
                 SetPattern(nRow, *pPat2);
-                rOther.SetPattern(nRow, *pPat1);
+                rOther.SetPattern(nRow, aTemp);
             }
         }
     }
