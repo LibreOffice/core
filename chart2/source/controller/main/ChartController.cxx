@@ -1339,17 +1339,19 @@ void SAL_CALL ChartController::releaseContextMenuInterceptor(
 
 void ChartController::executeDispatch_ChartType()
 {
-    UndoLiveUpdateGuard aUndoGuard(
-        SchResId( STR_ACTION_EDIT_CHARTTYPE ), m_xUndoManager );
+    auto aUndoGuard = std::make_shared<UndoLiveUpdateGuard>(SchResId(STR_ACTION_EDIT_CHARTTYPE),
+                                                            m_xUndoManager);
 
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
-    ChartTypeDialog aDlg(GetChartFrame(), getChartModel());
-    if (aDlg.run() == RET_OK)
-    {
-        impl_adaptDataSeriesAutoResize();
-        aUndoGuard.commit();
-    }
+    auto aDlg =  std::make_shared<ChartTypeDialog>(GetChartFrame(), getChartModel());
+    weld::DialogController::runAsync(aDlg, [this, aUndoGuard](int nResult) {
+        if (nResult == RET_OK)
+        {
+            impl_adaptDataSeriesAutoResize();
+            aUndoGuard->commit();
+        }
+    });
 }
 
 void ChartController::executeDispatch_SourceData()
