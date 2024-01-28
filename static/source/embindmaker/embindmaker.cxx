@@ -533,17 +533,18 @@ SAL_IMPLEMENT_MAIN()
             cppOut << "    template<> void raw_destructor<" << cppName(ifc) << ">(" << cppName(ifc)
                    << " *) {}\n";
         }
-        cppOut << "}\n\n"
-                  "EMSCRIPTEN_BINDINGS(unoembind_"
-               << name << ") {\n";
+        cppOut << "}\n\n";
+        unsigned long long n = 0;
         for (auto const& ifc : interfaces)
         {
             auto const ent = mgr->getManager()->findEntity(ifc);
             assert(ent.is());
             assert(ent->getSort() == unoidl::Entity::SORT_INTERFACE_TYPE);
             rtl::Reference const ifcEnt(static_cast<unoidl::InterfaceTypeEntity*>(ent.get()));
-            cppOut << "    ::emscripten::class_<" << cppName(ifc) << ">(\"" << jsName(ifc)
-                   << "\")\n";
+            cppOut << "static void __attribute__((noinline)) register" << n
+                   << "() {\n"
+                      "    ::emscripten::class_<"
+                   << cppName(ifc) << ">(\"" << jsName(ifc) << "\")\n";
             dumpAttributes(cppOut, ifc, ifcEnt);
             dumpMethods(cppOut, mgr, ifc, ifcEnt, false);
             cppOut << "        ;\n"
@@ -569,7 +570,19 @@ SAL_IMPLEMENT_MAIN()
                    << cppName(ifc) << ">::set))\n";
             dumpAttributes(cppOut, ifc, ifcEnt);
             dumpMethods(cppOut, mgr, ifc, ifcEnt, true);
-            cppOut << "        ;\n";
+            cppOut << "        ;\n"
+                      "}\n";
+            ++n;
+            if (n == 0)
+            {
+                std::cerr << "Emitting too many register functions\n";
+                std::exit(EXIT_FAILURE);
+            }
+        }
+        cppOut << "EMSCRIPTEN_BINDINGS(unoembind_" << name << ") {\n";
+        for (unsigned long long i = 0; i != n; ++i)
+        {
+            cppOut << "    register" << i << "();\n";
         }
         cppOut << "}\n";
         cppOut.close();
