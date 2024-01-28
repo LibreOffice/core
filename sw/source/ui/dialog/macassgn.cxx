@@ -101,7 +101,7 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 }
 
 void SwMacroAssignDlg::INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh, const SvxMacroItem& rItem,
-                                     std::function<void(const SvxMacroItem&)> onItemSelectedFunc )
+                                     const std::function<void(const SvxMacroItem&)>& onItemSelectedFunc )
 {
     SfxItemSetFixed<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG> aSet( rSh.GetAttrPool() );
     aSet.Put( rItem );
