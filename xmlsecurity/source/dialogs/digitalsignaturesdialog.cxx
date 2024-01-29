@@ -154,16 +154,23 @@ void GetCertificateManager(OUString& sExecutable)
     OUString aCetMgrConfig = officecfg::Office::Common::Security::Scripting::CertMgrPath::get();
     if (!aCetMgrConfig.isEmpty())
     {
+        if (aCetMgrConfig.indexOf('/') != -1
 #ifdef _WIN32
-        sal_Int32 nLastBackslashIndex = aCetMgrConfig.lastIndexOf('\\');
-#else
-        sal_Int32 nLastBackslashIndex = aCetMgrConfig.lastIndexOf('/');
+            || aCetMgrConfig.indexOf('\\') != -1
 #endif
+           )
+        {
+            sExecutable = aCetMgrConfig;
+            return;
+        }
         osl::FileBase::RC searchError = osl::File::searchFileURL(
-            aCetMgrConfig.copy(0, nLastBackslashIndex + 1), aPath,
+            aCetMgrConfig, aPath,
             aFoundGUIServer);
         if (searchError == osl::FileBase::E_None)
+        {
+            osl::File::getSystemPathFromFileURL(aFoundGUIServer, sExecutable);
             return;
+        }
     }
 
     for (const auto& rServer: aGUIServers)
