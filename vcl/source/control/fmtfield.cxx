@@ -1361,7 +1361,7 @@ void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     SpinField::DumpAsPropertyTree(rJsonWriter);
     Formatter& rFormatter = GetFormatter();
 
-    if (weld::TimeFormatter* timeFormatter = dynamic_cast<weld::TimeFormatter*>(&rFormatter))
+    if (dynamic_cast<weld::TimeFormatter*>(&rFormatter))
     {
         // weld::TimeFormatter uses h24 format
         rJsonWriter.put("type", "time");
