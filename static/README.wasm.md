@@ -226,12 +226,13 @@ Some usage examples through javascript of the current implementation:
 init_unoembind_uno(Module);
 let css = Module.unoembind_uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
-xTextDocument = new css.text.XTextDocument(xModel, Module.UnoReference_Query.UNO_QUERY);
+xTextDocument = new css.text.XTextDocument(xModel.$query());
 xText = xTextDocument.getText();
-xSimpleText = new css.text.XSimpleText(xText, Module.UnoReference_Query.UNO_QUERY);
+xSimpleText = new css.text.XSimpleText(xText.$query());
 xTextCursor = xSimpleText.createTextCursor();
-xTextRange = new css.text.XTextRange(xTextCursor, Module.UnoReference_Query.UNO_QUERY);
+xTextRange = new css.text.XTextRange(xTextCursor.$query());
 xTextRange.setString(new Module.OUString("string here!"));
+xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
 xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
 ```
 
@@ -240,16 +241,14 @@ xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); x
 init_unoembind_uno(Module);
 let css = Module.unoembind_uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
-xTextDocument = new css.text.XTextDocument(xModel, Module.UnoReference_Query.UNO_QUERY);
-xText = xTextDocument.getText();
-xEnumAccess = new css.container.XEnumerationAccess(xText, Module.UnoReference_Query.UNO_QUERY);
+init_unoembind_uno(Module);
+xEnumAccess = new css.container.XEnumerationAccess(xText.$query());
 xParaEnumeration = xEnumAccess.createEnumeration();
 
 while (xParaEnumeration.hasMoreElements()) {
-    xParagraph = new css.text.XTextRange();
-    xParagraph.set(xParaEnumeration.nextElement(), Module.UnoReference_Query.UNO_QUERY);
-    if (xParagraph.is()) {
-        xParaProps = new css.beans.XPropertySet(xParagraph, Module.UnoReference_Query.UNO_QUERY);
+    xParagraph = new css.text.XTextRange(xParaEnumeration.nextElement(), Module.uno_Reference.FromAny);
+    if (xParagraph.$is()) {
+        xParaProps = new css.beans.XPropertySet(xParagraph.$query());
         xParaProps.setPropertyValue(new Module.OUString("CharColor"), new Module.Any(Math.floor(Math.random() * 0xFFFFFF), Module.UnoType.long));
     }
 }
