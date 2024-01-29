@@ -92,6 +92,11 @@ short AbstractScColRowLabelDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScColRowLabelDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScCondFormatManagerDlg_Impl::Execute()
 {
     return m_xDlg->run();

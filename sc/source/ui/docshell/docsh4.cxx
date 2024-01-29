@@ -1424,7 +1424,6 @@ void ScDocShell::ExecuteChartSource(SfxRequest& rReq)
         m_pDocument->LimitChartArea( nTab, nCol1,nRow1, nCol2,nRow2 );
 
     // Dialog for column/row headers
-    bool bOk = true;
     if ( !bAddRange && ( !bColInit || !bRowInit ) )
     {
         ScChartPositioner aChartPositioner( *m_pDocument, nTab, nCol1,nRow1, nCol2,nRow2 );
@@ -1433,48 +1432,67 @@ void ScDocShell::ExecuteChartSource(SfxRequest& rReq)
         if (!bRowInit)
             bRowHeaders = aChartPositioner.HasRowHeaders();
 
+        auto xRequest = std::make_shared<SfxRequest>(rReq);
+        rReq.Ignore(); // the 'old' request is not relevant any more
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+        VclPtr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
+        pDlg->StartExecuteAsync(
+            [this, pDlg, xRequest, bUndo, bMultiRange, aChartName, aRangeListRef, bAddRange,
+             nCol1, nRow1, nCol2, nRow2, nTab] (sal_Int32 nResult)->void
+            {
+                if (nResult == RET_OK)
+                {
+                    bool bColHeaders2 = pDlg->IsRow();
+                    bool bRowHeaders2 = pDlg->IsCol();
 
-        ScopedVclPtr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
-        if ( pDlg->Execute() == RET_OK )
-        {
-            bColHeaders = pDlg->IsRow();
-            bRowHeaders = pDlg->IsCol();
-
-            rReq.AppendItem(SfxBoolItem(FN_PARAM_1, bColHeaders));
-            rReq.AppendItem(SfxBoolItem(FN_PARAM_2, bRowHeaders));
-        }
-        else
-            bOk = false;
+                    xRequest->AppendItem(SfxBoolItem(FN_PARAM_1, bColHeaders2));
+                    xRequest->AppendItem(SfxBoolItem(FN_PARAM_2, bRowHeaders2));
+                    ExecuteChartSourcePost(bUndo, bMultiRange,
+                        aChartName, aRangeListRef, bColHeaders2, bRowHeaders2, bAddRange,
+                        nCol1, nRow1, nCol2, nRow2, nTab);
+                }
+                pDlg->disposeOnce();
+                xRequest->Done();
+            }
+        );
     }
-
-    if (bOk)            // execute
+    else
     {
-        if (bMultiRange)
-        {
-            if (bUndo)
-            {
-                GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoChartData>( this, aChartName, aRangeListRef,
-                                            bColHeaders, bRowHeaders, bAddRange ) );
-            }
-            m_pDocument->UpdateChartArea( aChartName, aRangeListRef,
-                                        bColHeaders, bRowHeaders, bAddRange );
-        }
-        else
-        {
-            ScRange aNewRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
-            if (bUndo)
-            {
-                GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoChartData>( this, aChartName, aNewRange,
-                                            bColHeaders, bRowHeaders, bAddRange ) );
-            }
-            m_pDocument->UpdateChartArea( aChartName, aNewRange,
-                                        bColHeaders, bRowHeaders, bAddRange );
-        }
+        ExecuteChartSourcePost(bUndo, bMultiRange,
+            aChartName, aRangeListRef, bColHeaders, bRowHeaders, bAddRange,
+            nCol1, nRow1,nCol2, nRow2, nTab);
+        rReq.Done();
     }
-    rReq.Done();
+}
+
+void ScDocShell::ExecuteChartSourcePost(bool bUndo, bool bMultiRange,
+    const OUString& rChartName, const ScRangeListRef& rRangeListRef,
+    bool bColHeaders, bool bRowHeaders, bool bAddRange,
+    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab )
+{
+    if (bMultiRange)
+    {
+        if (bUndo)
+        {
+            GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoChartData>( this, rChartName, rRangeListRef,
+                                        bColHeaders, bRowHeaders, bAddRange ) );
+        }
+        m_pDocument->UpdateChartArea( rChartName, rRangeListRef,
+                                    bColHeaders, bRowHeaders, bAddRange );
+    }
+    else
+    {
+        ScRange aNewRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
+        if (bUndo)
+        {
+            GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoChartData>( this, rChartName, aNewRange,
+                                        bColHeaders, bRowHeaders, bAddRange ) );
+        }
+        m_pDocument->UpdateChartArea( rChartName, aNewRange,
+                                    bColHeaders, bRowHeaders, bAddRange );
+    }
 }
 
 bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )

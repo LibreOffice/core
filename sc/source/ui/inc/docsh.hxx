@@ -436,6 +436,10 @@ public:
 
 private:
     void ExecuteChartSource(SfxRequest& rReq);
+    void ExecuteChartSourcePost( bool bUndo, bool bMultiRange,
+        const OUString& rChartName, const ScRangeListRef& rRangeListRef,
+        bool bColHeaders, bool bRowHeaders, bool bAddRange,
+        SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab);
 };
 
 void UpdateAcceptChangesDialog();

@@ -86,13 +86,14 @@ public:
 
 class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg
 {
-    std::unique_ptr<ScColRowLabelDlg> m_xDlg;
+    std::shared_ptr<ScColRowLabelDlg> m_xDlg;
 public:
-    explicit AbstractScColRowLabelDlg_Impl(std::unique_ptr<ScColRowLabelDlg> p)
+    explicit AbstractScColRowLabelDlg_Impl(std::shared_ptr<ScColRowLabelDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual bool IsCol() override;
     virtual bool IsRow() override;
 
