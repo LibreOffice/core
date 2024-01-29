@@ -80,6 +80,7 @@ friend class SfxBindings;
 friend class SfxStateCache;
 friend class SfxPopupMenuManager;
 friend class SfxHelp;
+friend class SfxHintPoster;
 
     DECL_DLLPRIVATE_LINK( EventHdl_Impl, Timer *, void );
     void PostMsgHandler(std::unique_ptr<SfxRequest>);

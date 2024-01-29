@@ -23,6 +23,7 @@
 #include <tools/ref.hxx>
 #include <functional>
 #include <memory>
+#include <sfx2/dispatch.hxx>
 
 
 class SfxRequest;
@@ -41,17 +42,17 @@ class SfxRequest;
 class SfxHintPoster final : public SvRefBase
 {
 private:
-    std::function<void (std::unique_ptr<SfxRequest>)> m_Link;
+    class SfxDispatcher *m_Link;
 
                     DECL_LINK( DoEvent_Impl, void*, void );
 
     virtual         ~SfxHintPoster() override;
 
 public:
-                    SfxHintPoster(std::function<void (std::unique_ptr<SfxRequest>)> aLink);
+                    SfxHintPoster(SfxDispatcher *aLink);
 
     void            Post( std::unique_ptr<SfxRequest> pHint );
-    void            SetEventHdl(const std::function<void (std::unique_ptr<SfxRequest>)>& rLink);
+                    void            ClearLink();
 };
 
 #endif

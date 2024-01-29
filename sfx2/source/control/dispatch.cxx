@@ -303,7 +303,7 @@ void SfxDispatcher::Construct_Impl()
     for (SfxObjectBars_Impl & rObjBar : xImp->aObjBars)
         rObjBar.eId = ToolbarId::None;
 
-    xImp->xPoster = new SfxHintPoster(std::bind(&SfxDispatcher::PostMsgHandler, this, std::placeholders::_1));
+    xImp->xPoster = new SfxHintPoster(this);
 
     xImp->aIdle.SetPriority(TaskPriority::HIGH_IDLE );
     xImp->aIdle.SetInvokeHandler( LINK(this, SfxDispatcher, EventHdl_Impl ) );
@@ -335,7 +335,7 @@ SfxDispatcher::~SfxDispatcher()
 
     // So that no timer by Reschedule in PlugComm strikes the LeaveRegistrations
     xImp->aIdle.Stop();
-    xImp->xPoster->SetEventHdl( std::function<void (std::unique_ptr<SfxRequest>)>() );
+    xImp->xPoster->ClearLink();
 
     // Notify the stack variables in Call_Impl
     if ( xImp->pInCallAliveFlag )

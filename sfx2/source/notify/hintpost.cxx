@@ -25,8 +25,8 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>
 
-SfxHintPoster::SfxHintPoster(std::function<void(std::unique_ptr<SfxRequest>)> aLink)
-    : m_Link(std::move(aLink))
+SfxHintPoster::SfxHintPoster(SfxDispatcher* aLink)
+    : m_Link(aLink)
 {
 }
 
@@ -71,7 +71,7 @@ IMPL_LINK(SfxHintPoster, DoEvent_Impl, void*, pPostedHint, void)
             }
         }
 
-        m_Link(std::unique_ptr<SfxRequest>(pRequest));
+        m_Link->PostMsgHandler(std::unique_ptr<SfxRequest>(pRequest));
 
         if (bSetView)
         {
@@ -83,9 +83,6 @@ IMPL_LINK(SfxHintPoster, DoEvent_Impl, void*, pPostedHint, void)
     ReleaseRef();
 }
 
-void SfxHintPoster::SetEventHdl(const std::function<void(std::unique_ptr<SfxRequest>)>& rLink)
-{
-    m_Link = rLink;
-}
+void SfxHintPoster::ClearLink() { m_Link = nullptr; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
