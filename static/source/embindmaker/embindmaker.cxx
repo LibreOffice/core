@@ -455,8 +455,8 @@ void writeJsMap(std::ostream& out, Module const& module, std::string const& pref
         {
             out << ",\n";
         }
-        out << prefix << "'" << ifc.copy(ifc.lastIndexOf('.') + 1) << "': instance." << jsName(ifc)
-            << "Ref";
+        out << prefix << "'" << ifc.copy(ifc.lastIndexOf('.') + 1) << "': instance.uno_Reference_"
+            << jsName(ifc);
         comma = true;
     }
     for (auto const & [ id, sub ] : module.modules)
@@ -544,30 +544,31 @@ SAL_IMPLEMENT_MAIN()
             cppOut << "static void __attribute__((noinline)) register" << n
                    << "() {\n"
                       "    ::emscripten::class_<"
-                   << cppName(ifc) << ">(\"" << jsName(ifc) << "\")\n";
+                   << cppName(ifc) << ">(\"uno_Type_" << jsName(ifc) << "\")\n";
             dumpAttributes(cppOut, ifc, ifcEnt);
             dumpMethods(cppOut, mgr, ifc, ifcEnt, false);
-            cppOut << "        ;\n"
-                      "    ::emscripten::class_<::com::sun::star::uno::Reference<"
-                   << cppName(ifc)
-                   << ">, ::emscripten::base<::com::sun::star::uno::BaseReference>>(\""
-                   << jsName(ifc)
-                   << "Ref\")\n"
-                      "        .constructor<>()\n"
-                      "        .constructor<::com::sun::star::uno::BaseReference, "
-                      "::com::sun::star::uno::UnoReference_Query>()\n"
-                      "        .function(\"is\", &::com::sun::star::uno::Reference<"
-                   << cppName(ifc)
-                   << ">::is)\n"
-                      "        .function(\"get\", &::com::sun::star::uno::Reference<"
-                   << cppName(ifc)
-                   << ">::get, ::emscripten::allow_raw_pointers())\n"
-                      "        .function(\"set\", "
-                      "::emscripten::select_overload<bool(::com::sun::star::uno::Any const "
-                      "&, "
-                      "com::sun::star::uno::UnoReference_Query)>(&::com::sun::star::uno::"
-                      "Reference<"
-                   << cppName(ifc) << ">::set))\n";
+            cppOut
+                << "        ;\n"
+                   "    ::emscripten::class_<::com::sun::star::uno::Reference<"
+                << cppName(ifc)
+                << ">, ::emscripten::base<::com::sun::star::uno::BaseReference>>(\"uno_Reference_"
+                << jsName(ifc)
+                << "\")\n"
+                   "        .constructor<>()\n"
+                   "        .constructor<::com::sun::star::uno::BaseReference, "
+                   "::com::sun::star::uno::UnoReference_Query>()\n"
+                   "        .function(\"is\", &::com::sun::star::uno::Reference<"
+                << cppName(ifc)
+                << ">::is)\n"
+                   "        .function(\"get\", &::com::sun::star::uno::Reference<"
+                << cppName(ifc)
+                << ">::get, ::emscripten::allow_raw_pointers())\n"
+                   "        .function(\"set\", "
+                   "::emscripten::select_overload<bool(::com::sun::star::uno::Any const "
+                   "&, "
+                   "com::sun::star::uno::UnoReference_Query)>(&::com::sun::star::uno::"
+                   "Reference<"
+                << cppName(ifc) << ">::set))\n";
             dumpAttributes(cppOut, ifc, ifcEnt);
             dumpMethods(cppOut, mgr, ifc, ifcEnt, true);
             cppOut << "        ;\n"
