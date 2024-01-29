@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_LOKCHARTHELPER_HXX
-#define INCLUDED_SFX2_LOKCHARTHELPER_HXX
+#pragma once
 
 #include <sfx2/dllapi.h>
 #include <tools/gen.hxx>
@@ -93,7 +92,5 @@ private:
     VclPtr<vcl::Window> mpGraphicWindow;
     VclPtr<vcl::Window> mpWidgetWindow;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

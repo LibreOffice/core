@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_JOBSET_HXX
-#define INCLUDED_VCL_JOBSET_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
@@ -57,7 +56,5 @@ public:
 private:
     ImplType        mpData;
 };
-
-#endif // INCLUDED_VCL_JOBSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

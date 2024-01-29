@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_KEYCODES_HXX
-#define INCLUDED_VCL_KEYCODES_HXX
+#pragma once
 
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
@@ -199,7 +198,5 @@ template <> struct typed_flags<KeyIndicatorState> : is_typed_flags<KeyIndicatorS
 {
 };
 }
-
-#endif // INCLUDED_VCL_KEYCODES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

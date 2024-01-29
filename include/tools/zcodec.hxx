@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_ZCODEC_HXX
-#define INCLUDED_TOOLS_ZCODEC_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 #include <tools/long.hxx>
@@ -90,7 +89,5 @@ public:
     void            Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt32 nSize );
     tools::Long            Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

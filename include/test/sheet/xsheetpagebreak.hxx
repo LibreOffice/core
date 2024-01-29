@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_SHEET_XSHEETPAGEBREAK_HXX
-#define INCLUDED_TEST_SHEET_XSHEETPAGEBREAK_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
@@ -28,7 +27,5 @@ protected:
     ~XSheetPageBreak() {}
 };
 }
-
-#endif // INCLUDED_TEST_SHEET_XSHEETPAGEBREAK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

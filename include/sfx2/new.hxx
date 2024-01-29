@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_NEW_HXX
-#define INCLUDED_SFX2_NEW_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -102,7 +101,5 @@ public:
     SfxTemplateFlags  GetTemplateFlags() const;
     void              SetTemplateFlags(SfxTemplateFlags nSet);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SFXHTML_HXX
-#define INCLUDED_SFX2_SFXHTML_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -106,8 +105,5 @@ inline bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, std::u16string
     return ParseAreaOptions( pImageMap, rBaseURL, GetOptions(),
                              nEventMouseOver, nEventMouseOut );
 }
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
