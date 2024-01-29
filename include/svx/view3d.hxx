@@ -40,8 +40,8 @@ class Impl3DMirrorConstructOverlay;
 
 class SVXCORE_DLLPUBLIC E3dView : public SdrView
 {
-    E3dDefaultAttributes        a3DDefaultAttr;
-    MouseEvent                  aMouseEvent;                    // The parameters of the last Events (Mouse, Keyboard)
+    E3dDefaultAttributes        m_a3DDefaultAttr;
+    MouseEvent                  m_aMouseEvent;                    // The parameters of the last Events (Mouse, Keyboard)
 
     // Migrate selections
     std::unique_ptr<Impl3DMirrorConstructOverlay> mpMirrorOverlay;
@@ -69,13 +69,13 @@ public:
     virtual void DrawMarkedObj(OutputDevice& rOut) const override;
 
     // Access to the default attributes.
-    E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
+    E3dDefaultAttributes& Get3DDefaultAttributes() { return m_a3DDefaultAttr; }
     virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl, short nMinMov = -3, SdrDragMethod* pForcedMeth = nullptr) override;
     virtual void CheckPossibilities() override;
 
     // Get/Set Event
-    void SetMouseEvent(const MouseEvent& rNew) { aMouseEvent = rNew; }
-    const MouseEvent& GetMouseEvent() const { return aMouseEvent; }
+    void SetMouseEvent(const MouseEvent& rNew) { m_aMouseEvent = rNew; }
+    const MouseEvent& GetMouseEvent() const { return m_aMouseEvent; }
 
     // Override getting the model, as we need to supply a Scene together with individual 3D Objects.
     virtual std::unique_ptr<SdrModel> CreateMarkedObjModel() const override;
