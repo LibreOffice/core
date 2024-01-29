@@ -64,12 +64,23 @@ struct ComboBoxTextItem
     }
 };
 
-/// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
-class VCL_DLLPUBLIC VclBuilder
+class VCL_DLLPUBLIC BuilderBase
 {
 public:
     typedef std::map<OUString, OUString> stringmap;
     typedef std::map<OUString, std::pair<OUString, OUString>> accelmap;
+
+protected:
+    static void collectPangoAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
+    static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
+    static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
+    static void collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap);
+};
+
+/// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
+class VCL_DLLPUBLIC VclBuilder : public BuilderBase
+{
+public:
     /// These functions create a new widget with parent pParent and return it in rRet
     typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
@@ -351,10 +362,6 @@ private:
     static OUString getStyleClass(xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, stringmap &rVec) const;
-    static void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
-    static void collectAtkRelationAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
-    static void collectAtkRoleAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
-    static void collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap);
 
     void        insertMenuObject(
                    Menu *pParent,

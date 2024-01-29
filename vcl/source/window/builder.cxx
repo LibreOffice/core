@@ -2870,7 +2870,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlread
     }
 }
 
-void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+void BuilderBase::collectPangoAttribute(xmlreader::XmlReader& reader, stringmap& rMap)
 {
     xmlreader::Span span;
     int nsId;
@@ -2896,7 +2896,7 @@ void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &
         rMap[sProperty] = sValue;
 }
 
-void VclBuilder::collectAtkRelationAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+void BuilderBase::collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap)
 {
     xmlreader::Span span;
     int nsId;
@@ -2925,7 +2925,7 @@ void VclBuilder::collectAtkRelationAttribute(xmlreader::XmlReader &reader, strin
         rMap[sProperty] = sValue;
 }
 
-void VclBuilder::collectAtkRoleAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+void BuilderBase::collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap)
 {
     xmlreader::Span span;
     int nsId;
@@ -3997,7 +3997,7 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
     set_response(sID, sResponse.toInt32());
 }
 
-void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap)
+void BuilderBase::collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap)
 {
     xmlreader::Span name;
     int nsId;
