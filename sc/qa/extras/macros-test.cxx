@@ -900,7 +900,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf159412)
 {
     // Run a macro, that itself calls two other functions using invoke,
-    // passing a small integer value to agruments of types Long and Double
+    // passing a small integer value to arguments of types Long and Double
     createScDoc("tdf159412.fods");
 
     css::uno::Any aRet;
