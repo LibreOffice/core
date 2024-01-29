@@ -1184,7 +1184,7 @@ void Dialog::EndDialog( tools::Long nResult )
     {
         // We have a special case with async-dialogs that re-execute themselves.
         // In order to prevent overwriting state we need here, we need to extract
-        // all the state we need before before calling maEndDialogFn, because
+        // all the state we need before calling maEndDialogFn, because
         // maEndDialogFn might itself call StartExecuteAsync and store new state.
         std::shared_ptr<weld::DialogController> xOwnerDialogController = std::move(mpDialogImpl->maEndCtx.mxOwnerDialogController);
         std::shared_ptr<weld::Dialog> xOwnerSelf = std::move(mpDialogImpl->maEndCtx.mxOwnerSelf);
