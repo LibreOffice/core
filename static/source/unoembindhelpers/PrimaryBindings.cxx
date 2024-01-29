@@ -13,6 +13,7 @@
 
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
+#include <static/unoembindhelpers/PrimaryBindings.hxx>
 
 using namespace emscripten;
 using namespace css::uno;
@@ -34,8 +35,8 @@ Reference<css::frame::XModel> getCurrentModelFromViewSh()
 EMSCRIPTEN_BINDINGS(PrimaryBindings)
 {
     // Reference bits
-    class_<BaseReference>("BaseReference");
-    enum_<UnoReference_Query>("UnoReference_Query").value("UNO_QUERY", UNO_QUERY);
+    enum_<unoembindhelpers::uno_Reference>("uno_Reference")
+        .value("FromAny", unoembindhelpers::uno_Reference::FromAny);
 
     class_<OUString>("OUString")
         .constructor(+[](const std::u16string& rString) -> OUString { return OUString(rString); },

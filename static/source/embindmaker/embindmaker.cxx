@@ -391,52 +391,31 @@ void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manage
 }
 
 void dumpWrapper(std::ostream& out, rtl::Reference<TypeManager> const& manager,
-                 OUString const& interfaceName, unoidl::InterfaceTypeEntity::Method const& method,
-                 bool forReference)
+                 OUString const& interfaceName, unoidl::InterfaceTypeEntity::Method const& method)
 {
-    out << "        .function(\"" << method.name << "\", +[](";
-    if (forReference)
-    {
-        out << "::com::sun::star::uno::Reference<";
-    }
-    out << cppName(interfaceName);
-    if (forReference)
-    {
-        out << ">";
-    }
+    out << "        .function(\"" << method.name << "\", +[](" << cppName(interfaceName);
     out << " * the_self";
     if (!method.parameters.empty())
     {
         out << ", ";
     }
     dumpParameters(out, manager, method, true);
-    out << ") { return the_self->";
-    if (forReference)
-    {
-        out << "get()->";
-    }
-    out << method.name << "(";
+    out << ") { return the_self->" << method.name << "(";
     dumpParameters(out, manager, method, false);
     out << "); }, ::emscripten::allow_raw_pointers())\n";
 }
 
 void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
-                 OUString const& name, rtl::Reference<unoidl::InterfaceTypeEntity> const& entity,
-                 bool forReference)
+                 OUString const& name, rtl::Reference<unoidl::InterfaceTypeEntity> const& entity)
 {
     for (auto const& meth : entity->getDirectMethods())
     {
-        if (forReference)
+        if (std::any_of(meth.parameters.begin(), meth.parameters.end(), [](auto const& parameter) {
+                return parameter.direction
+                       != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
+            }))
         {
-            dumpWrapper(out, manager, name, meth, true);
-        }
-        else if (std::any_of(
-                     meth.parameters.begin(), meth.parameters.end(), [](auto const& parameter) {
-                         return parameter.direction
-                                != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
-                     }))
-        {
-            dumpWrapper(out, manager, name, meth, false);
+            dumpWrapper(out, manager, name, meth);
         }
         else
         {
@@ -455,7 +434,7 @@ void writeJsMap(std::ostream& out, Module const& module, std::string const& pref
         {
             out << ",\n";
         }
-        out << prefix << "'" << ifc.copy(ifc.lastIndexOf('.') + 1) << "': instance.uno_Reference_"
+        out << prefix << "'" << ifc.copy(ifc.lastIndexOf('.') + 1) << "': instance.uno_Type_"
             << jsName(ifc);
         comma = true;
     }
@@ -518,7 +497,8 @@ SAL_IMPLEMENT_MAIN()
         }
         cppOut << "#include <emscripten/bind.h>\n"
                   "#include <com/sun/star/uno/Any.hxx>\n"
-                  "#include <com/sun/star/uno/Reference.hxx>\n";
+                  "#include <com/sun/star/uno/Reference.hxx>\n"
+                  "#include <static/unoembindhelpers/PrimaryBindings.hxx>\n";
         for (auto const& ifc : interfaces)
         {
             cppOut << "#include <" << ifc.replace('.', '/') << ".hpp>\n";
@@ -544,33 +524,31 @@ SAL_IMPLEMENT_MAIN()
             cppOut << "static void __attribute__((noinline)) register" << n
                    << "() {\n"
                       "    ::emscripten::class_<"
-                   << cppName(ifc) << ">(\"uno_Type_" << jsName(ifc) << "\")\n";
+                   << cppName(ifc) << ">(\"uno_Type_" << jsName(ifc)
+                   << "\")\n"
+                      "        .smart_ptr<::com::sun::star::uno::Reference<"
+                   << cppName(ifc) << ">>(\"uno_Reference_" << jsName(ifc)
+                   << "\")\n"
+                      "        "
+                      ".constructor(+[](::com::sun::star::uno::Reference<::com::sun::star::uno::"
+                      "XInterface> const & the_object) { return ::com::sun::star::uno::Reference<"
+                   << cppName(ifc)
+                   << ">(the_object, ::com::sun::star::uno::UNO_QUERY); })\n"
+                      "        .constructor(+[](::com::sun::star::uno::Any const & the_object, "
+                      "[[maybe_unused]] ::unoembindhelpers::uno_Reference) { return "
+                      "::com::sun::star::uno::Reference<"
+                   << cppName(ifc)
+                   << ">(the_object, ::com::sun::star::uno::UNO_QUERY); })\n"
+                      "        .function(\"$is\", +[](::com::sun::star::uno::Reference<"
+                   << cppName(ifc)
+                   << "> const & the_self) { return the_self.is(); })\n"
+                      "        .function(\"$query\", +[](::com::sun::star::uno::Reference<"
+                   << cppName(ifc)
+                   << "> const & the_self) { return "
+                      "::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface>(the_"
+                      "self); })\n";
             dumpAttributes(cppOut, ifc, ifcEnt);
-            dumpMethods(cppOut, mgr, ifc, ifcEnt, false);
-            cppOut
-                << "        ;\n"
-                   "    ::emscripten::class_<::com::sun::star::uno::Reference<"
-                << cppName(ifc)
-                << ">, ::emscripten::base<::com::sun::star::uno::BaseReference>>(\"uno_Reference_"
-                << jsName(ifc)
-                << "\")\n"
-                   "        .constructor<>()\n"
-                   "        .constructor<::com::sun::star::uno::BaseReference, "
-                   "::com::sun::star::uno::UnoReference_Query>()\n"
-                   "        .function(\"is\", &::com::sun::star::uno::Reference<"
-                << cppName(ifc)
-                << ">::is)\n"
-                   "        .function(\"get\", &::com::sun::star::uno::Reference<"
-                << cppName(ifc)
-                << ">::get, ::emscripten::allow_raw_pointers())\n"
-                   "        .function(\"set\", "
-                   "::emscripten::select_overload<bool(::com::sun::star::uno::Any const "
-                   "&, "
-                   "com::sun::star::uno::UnoReference_Query)>(&::com::sun::star::uno::"
-                   "Reference<"
-                << cppName(ifc) << ">::set))\n";
-            dumpAttributes(cppOut, ifc, ifcEnt);
-            dumpMethods(cppOut, mgr, ifc, ifcEnt, true);
+            dumpMethods(cppOut, mgr, ifc, ifcEnt);
             cppOut << "        ;\n"
                       "}\n";
             ++n;
