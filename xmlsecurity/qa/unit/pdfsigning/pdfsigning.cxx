@@ -63,7 +63,6 @@ protected:
 public:
     PDFSigningTest();
     void setUp() override;
-    void tearDown() override;
 };
 
 PDFSigningTest::PDFSigningTest() {}
@@ -71,7 +70,7 @@ PDFSigningTest::PDFSigningTest() {}
 void PDFSigningTest::setUp()
 {
     test::BootstrapFixture::setUp();
-    MacrosTest::setUpNssGpg(m_directories, "xmlsecurity_pdfsigning");
+    MacrosTest::setUpX509(m_directories, "xmlsecurity_pdfsigning");
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -84,12 +83,6 @@ void PDFSigningTest::setUp()
     NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_ANY_SIGNATURE, 0);
 #endif
 #endif
-}
-
-void PDFSigningTest::tearDown()
-{
-    MacrosTest::tearDownNssGpg();
-    test::BootstrapFixture::tearDown();
 }
 
 std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, size_t nCount)
