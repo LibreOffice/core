@@ -28,6 +28,9 @@
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/text/ModuleDispatcher.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
@@ -197,6 +200,35 @@ namespace
         catch (const Exception &)
         {
             TOOLS_INFO_EXCEPTION( "sfx.appl", "trying to load bibliography database");
+        }
+    }
+    void lcl_disableActiveEmbeddedObjects(SfxObjectShell* pObjSh)
+    {
+        if (!pObjSh)
+            return;
+
+        comphelper::EmbeddedObjectContainer& rContainer = pObjSh->getEmbeddedObjectContainer();
+        if (!rContainer.HasEmbeddedObjects())
+            return;
+
+        const uno::Sequence<OUString> aNames = rContainer.GetObjectNames();
+        for (const auto& rName : aNames)
+        {
+            uno::Reference<embed::XEmbeddedObject> xEmbeddedObj
+                = rContainer.GetEmbeddedObject(rName);
+            if (!xEmbeddedObj.is())
+                continue;
+
+            try
+            {
+                if (xEmbeddedObj->getCurrentState() != embed::EmbedStates::LOADED)
+                {
+                    xEmbeddedObj->changeState(embed::EmbedStates::LOADED);
+                }
+            }
+            catch (const uno::Exception&)
+            {
+            }
         }
     }
 }
@@ -1469,13 +1501,23 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             short nRet = pDlg->Execute();
             pDlg.disposeAndClear();
             SfxViewFrame* pView = SfxViewFrame::GetFirst();
+            bool bDisableActiveContent
+                    = officecfg::Office::Common::Security::Scripting::DisableActiveContent::get();
+
             while ( pView )
             {
                 if (nRet == RET_OK)
                 {
                     SfxObjectShell* pObjSh = pView->GetObjectShell();
                     if (pObjSh)
+                    {
                         pObjSh->SetConfigOptionsChecked(false);
+
+                        // when active content is disabled via options dialog,
+                        // disable all current active embedded objects
+                        if (bDisableActiveContent)
+                            lcl_disableActiveEmbeddedObjects(pObjSh);
+                    }
                 }
                 pView->GetBindings().InvalidateAll(false);
                 pView = SfxViewFrame::GetNext( *pView );

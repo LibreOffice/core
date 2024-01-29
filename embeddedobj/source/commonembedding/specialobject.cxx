@@ -29,6 +29,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <specialobject.hxx>
 
@@ -137,6 +138,10 @@ sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 
 void SAL_CALL OSpecialEmbeddedObject::changeState( sal_Int32 nNewState )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get()
+         && nNewState != embed::EmbedStates::LOADED )
+        throw embed::UnreachableStateException();
+
     if ( nNewState == embed::EmbedStates::UI_ACTIVE )
         nNewState = embed::EmbedStates::INPLACE_ACTIVE;
     OCommonEmbeddedObject::changeState( nNewState );

@@ -40,6 +40,7 @@
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -475,6 +476,9 @@ uno::Sequence< sal_Int32 > const & OCommonEmbeddedObject::GetIntermediateStatesS
 
 void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get()
+        && nNewState != embed::EmbedStates::LOADED )
+        throw embed::UnreachableStateException();
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO

@@ -52,7 +52,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-
+#include <officecfg/Office/Common.hxx>
 
 #include <targetstatecontrol.hxx>
 
@@ -438,6 +438,9 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
 
 void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 {
+    if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get()
+         && nNewState != embed::EmbedStates::LOADED )
+        throw embed::UnreachableStateException();
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
