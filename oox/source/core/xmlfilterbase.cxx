@@ -33,6 +33,7 @@
 #include <o3tl/any.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <unotools/securityoptions.hxx>
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -624,6 +625,12 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const LanguageTag&
 static void
 writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >& xProperties )
 {
+    bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo);
+    bool bRemoveUserInfo
+        = bRemovePersonalInfo
+          && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo);
+
     OUString sValue;
     if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
     {
@@ -672,8 +679,11 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
         if (it->second >>= aValue)
             writeElement( pCoreProps, FSNS( XML_cp, XML_contentType ), aValue );
     }
-    writeElement( pCoreProps, FSNS( XML_dcterms, XML_created ),     xProperties->getCreationDate() );
-    writeElement( pCoreProps, FSNS( XML_dc, XML_creator ),          xProperties->getAuthor() );
+    if (!bRemoveUserInfo)
+    {
+        writeElement(pCoreProps, FSNS(XML_dcterms, XML_created), xProperties->getCreationDate());
+        writeElement(pCoreProps, FSNS(XML_dc, XML_creator), xProperties->getAuthor());
+    }
     writeElement( pCoreProps, FSNS( XML_dc, XML_description ),      xProperties->getDescription() );
 
     it = aUserDefinedProperties.find("OOXMLCorePropertyIdentifier");
@@ -685,10 +695,18 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
     }
     writeElement( pCoreProps, FSNS( XML_cp, XML_keywords ),         xProperties->getKeywords() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_language ),         LanguageTag( xProperties->getLanguage()) );
-    writeElement( pCoreProps, FSNS( XML_cp, XML_lastModifiedBy ),   xProperties->getModifiedBy() );
-    writeElement( pCoreProps, FSNS( XML_cp, XML_lastPrinted ),      xProperties->getPrintDate() );
-    writeElement( pCoreProps, FSNS( XML_dcterms, XML_modified ),    xProperties->getModificationDate() );
-    writeElement( pCoreProps, FSNS( XML_cp, XML_revision ),         xProperties->getEditingCycles() );
+
+    if (!bRemoveUserInfo)
+    {
+        writeElement(pCoreProps, FSNS(XML_cp, XML_lastModifiedBy), xProperties->getModifiedBy());
+        writeElement(pCoreProps, FSNS(XML_cp, XML_lastPrinted), xProperties->getPrintDate());
+        writeElement(pCoreProps, FSNS(XML_dcterms, XML_modified),
+                     xProperties->getModificationDate());
+    }
+    if (!bRemovePersonalInfo)
+    {
+        writeElement(pCoreProps, FSNS(XML_cp, XML_revision), xProperties->getEditingCycles());
+    }
     writeElement( pCoreProps, FSNS( XML_dc, XML_subject ),          xProperties->getSubject() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_title ),            xProperties->getTitle() );
 
@@ -708,6 +726,11 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
 static void
 writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >& xProperties )
 {
+    bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo);
+    bool bRemoveUserInfo
+        = bRemovePersonalInfo
+          && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo);
     rSelf.addRelation(
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
             u"docProps/app.xml" );
@@ -722,7 +745,8 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
     comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefinedProperties->getPropertyValues());
     comphelper::SequenceAsHashMap::iterator it;
 
-    writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
+    if (!bRemovePersonalInfo)
+        writeElement(pAppProps, XML_Template, xProperties->getTemplateName());
 
     it = aUserDefinedProperties.find("Manager");
     if (it != aUserDefinedProperties.end())
@@ -739,7 +763,8 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
     writeElement( pAppProps, XML_Notes,                 "notes" );
 #endif  /* def OOXTODO */
     // EditingDuration is in seconds, TotalTime is in minutes.
-    writeElement( pAppProps, XML_TotalTime,             xProperties->getEditingDuration() / 60 );
+    if (!bRemovePersonalInfo)
+        writeElement(pAppProps, XML_TotalTime, xProperties->getEditingDuration() / 60);
 #ifdef OOXTODO
     writeElement( pAppProps, XML_HiddenSlides,          "hidden slides" );
     writeElement( pAppProps, XML_MMClips,               "mm clips" );
@@ -817,7 +842,7 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
     }
 
     it = aUserDefinedProperties.find("Company");
-    if (it != aUserDefinedProperties.end())
+    if (it != aUserDefinedProperties.end() && !bRemoveUserInfo)
     {
         OUString aValue;
         if (it->second >>= aValue)

@@ -16,7 +16,9 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <pam.hxx>
 #include <unotxdoc.hxx>
@@ -318,6 +320,42 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Left border:", static_cast<sal_uInt32>(0), nBorderWidth);
 
     // TODO: there SHOULD BE a top border, and even if loaded, it would be lost on re-import...
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
+{
+    // 1. Remove all personal info
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
+    pBatch->commit();
+    loadAndSave("personalmetadata.docx");
+
+    xmlDocUniquePtr pAppDoc = parseExport("docProps/app.xml");
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template"_ostr, 0);
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime"_ostr, 0);
+    xmlDocUniquePtr pCoreDoc = parseExport("docProps/core.xml");
+    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created"_ostr, 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified"_ostr, 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator"_ostr, 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy"_ostr, 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted"_ostr, 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision"_ostr, 0);
+
+    // 2. Remove personal information, keep user information
+    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(true, pBatch);
+    pBatch->commit();
+    loadAndSave("personalmetadata.docx");
+
+    pAppDoc = parseExport("docProps/app.xml");
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template"_ostr, 0);
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime"_ostr, 0);
+    pCoreDoc = parseExport("docProps/core.xml");
+    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created"_ostr, 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified"_ostr, 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator"_ostr, 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy"_ostr, 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted"_ostr, 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision"_ostr, 0);
 }
 
 } // end of anonymous namespace
