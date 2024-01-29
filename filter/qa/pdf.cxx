@@ -36,7 +36,6 @@ public:
     }
 
     void setUp() override;
-    void tearDown() override;
     void doTestCommentsInMargin(bool commentsInMarginEnabled);
 };
 
@@ -44,14 +43,7 @@ void Test::setUp()
 {
     UnoApiTest::setUp();
 
-    MacrosTest::setUpNssGpg(m_directories, "filter_pdf");
-}
-
-void Test::tearDown()
-{
-    MacrosTest::tearDownNssGpg();
-
-    UnoApiTest::tearDown();
+    MacrosTest::setUpX509(m_directories, "filter_pdf");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)

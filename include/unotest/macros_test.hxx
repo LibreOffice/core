@@ -96,8 +96,10 @@ public:
     static std::unique_ptr<SvStream> parseExportStream(const OUString& url,
                                                        const OUString& rStreamName);
 
-    void setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName);
-    void tearDownNssGpg();
+    // note: there is no tearDownX509
+    void setUpX509(const test::Directories& rDirectories, const OUString& rTestName);
+    void setUpGpg(const test::Directories& rDirectories, const OUString& rTestName);
+    void tearDownGpg();
 
     static bool IsValid(const css::uno::Reference<css::security::XCertificate>& cert,
                         const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env);
