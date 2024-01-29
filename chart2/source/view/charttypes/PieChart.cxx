@@ -402,6 +402,7 @@ void PieChart::createTextLabelShape(
 
     // set the maximum text width to be used when text wrapping is enabled
     double fTextMaximumFrameWidth = 0.8 * fPieRadius;
+    const double fCompatMaxTextLen =  m_aAvailableOuterRect.getWidth() / 5.0;
     if (m_aAvailableOuterRect.getWidth())
     {
         if (bHasCustomLabelPlacement)
@@ -412,7 +413,7 @@ void PieChart::createTextLabelShape(
             if (aCustomSize.Width > 0)
                 fTextMaximumFrameWidth = aCustomSize.Width;
             else
-                fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth() / 5.0;
+                fTextMaximumFrameWidth = fCompatMaxTextLen;
         }
         else if (nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE)
         {
@@ -450,13 +451,34 @@ void PieChart::createTextLabelShape(
         {
             if (m_aAvailableOuterRect.getWidth())
             {
-                if ((fAngleDegree >= 67.5 && fAngleDegree <= 112.5)
-                    || (fAngleDegree >= 247.5 && fAngleDegree <= 292.5))
-                    fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth() / 3.0;
-                else
-                    fTextMaximumFrameWidth
-                        = 0.85 * (m_aAvailableOuterRect.getWidth() / 2.0 - fPieRadius);
-                nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
+                /* This was bestFit, but it didn't fit. So how best to handle this?
+                 *
+                 * Two possible cases relating to compatibility
+                 * 1.) It did fit for Microsoft, but our bestFit wasn't able to do the same
+                 *   * In that case, the best response is to be as small as possible
+                 *     (the distance from the chart edge to where the label attaches to the slice)
+                 *     to avoid scaling the diagram with too long outside labels,
+                 *     and to encourage fixing the bestFit algorithm.
+                 * 2.) It didn't fit for Microsoft either (possible, but less likely situation)
+                 *   * In that case, the compatible max length would be best
+                 *   * can expect the chart space has been properly sized to handle the max length
+                 *
+                 * In the native LO case, it is also best to use as small as possible,
+                 * so that the user creating the diagram is annoyed and makes the chart area larger.
+                 *
+                 * Therefore, handle this by making the label as small as possible.
+                 *
+                 * Complication (tdf122765.pptx): it is possiible for the aOuterPosition
+                 * to be outside of the available outer rectangle (somehow),
+                 * so in that bizarre case just try the positive value of the result...
+                 */
+                const sal_Int32 nOuterX = aPieLabelInfo.aOuterPosition.getX();
+                if (fAngleDegree < 90 || fAngleDegree > 270) // label is placed on the right half
+                    fTextMaximumFrameWidth = 0.8 * abs(m_aAvailableOuterRect.getWidth() - nOuterX);
+                else // label is placed on the left half
+                    fTextMaximumFrameWidth = 0.8 * nOuterX;
+
+                nTextMaximumFrameWidth = ceil(std::min(fTextMaximumFrameWidth, fCompatMaxTextLen));
             }
 
             nScreenValueOffsetInRadiusDirection = (m_nDimension != 3) ? 150 : 0;

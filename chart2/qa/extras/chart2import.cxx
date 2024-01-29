@@ -2009,6 +2009,29 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146487)
     CPPUNIT_ASSERT_EQUAL(OUString("371"), getXPath(pXmlDoc, aPath, "sizeY"_ostr));
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146756)
+{
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
+
+    // given a chart on page 2
+    loadFromFile(u"pptx/tdf146756_bestFit.pptx");
+    Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(1, 0);
+    OString aXmlDump = OUStringToOString(getShapeDump(xChartDoc), RTL_TEXTENCODING_UTF8);
+    xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
+    OString aPath("//XShape[@text='New service request and approval; 18%']"_ostr);
+    assertXPath(pXmlDoc, aPath, 1);
+    // Expected something like 4 lines tall(1697), not 11 lines(3817).
+    CPPUNIT_ASSERT_EQUAL(OUString("1697"), getXPath(pXmlDoc, aPath, "sizeY"_ostr));
+    // Expected some reasonable maximum text length for the label like 2350, not 881.
+    sal_Int32 nTextLength = getXPath(pXmlDoc, aPath, "textMaximumFrameWidth"_ostr).toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2350), nTextLength);
+    // MSO doesn't allow much more than 1/5 of the total chart width, so never go higher than that
+    CPPUNIT_ASSERT_LESS(sal_Int32(2370.6), nTextLength);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFixedSizeBarChartVeryLongLabel)
 {
     // Bar chart area size is fixed (not automatic) so we can't resize

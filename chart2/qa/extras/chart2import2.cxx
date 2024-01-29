@@ -513,8 +513,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf133376)
     CPPUNIT_ASSERT(xDataPointLabel.is());
     // Check the position of the 3rd data point label, which is out from the pie slice
     awt::Point aLabelPosition = xDataPointLabel->getPosition();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1208, aLabelPosition.X, 30);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5370, aLabelPosition.Y, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1624, aLabelPosition.X, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5635, aLabelPosition.Y, 30);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134225)
