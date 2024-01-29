@@ -4239,52 +4239,6 @@ void SwContentTree::UpdateTracking()
                                                   aContentAtPos.pFndTextAttr);
             return;
         }
-        // bookmarks - track first bookmark at cursor
-        if (mTrackContentType[ContentTypeId::BOOKMARK] &&
-                (m_pActiveShell->GetSelectionType() & SelectionType::Text))
-        {
-            SwPaM* pCursor = m_pActiveShell->GetCursor();
-            IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
-            IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
-            if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd() &&
-                    !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
-            {
-                OUString sBookmarkName;
-                SwPosition* pCursorPoint = pCursor->GetPoint();
-                while (ppBookmark != pMarkAccess->getBookmarksEnd())
-                {
-                    if (lcl_IsUiVisibleBookmark(*ppBookmark) &&
-                            *pCursorPoint >= (*ppBookmark)->GetMarkStart() &&
-                            *pCursorPoint <= (*ppBookmark)->GetMarkEnd())
-                    {
-                        sBookmarkName = (*ppBookmark)->GetName();
-                        // keep previously selected bookmark instead
-                        // of selecting a different bookmark inside of it
-                        if (sBookmarkName == m_sSelectedItem)
-                            break;
-                    }
-                    else if (!sBookmarkName.isEmpty() &&
-                        *pCursorPoint < (*ppBookmark)->GetMarkStart())
-                    {
-                        // don't search a different bookmark inside the
-                        // previous one, if the starting position of the next bookmarks
-                        // is after the cursor position (assuming that the
-                        // bookmark iterator jumps inside the same text by positions)
-                        break;
-                    }
-                    ++ppBookmark;
-                }
-
-                if (!sBookmarkName.isEmpty())
-                {
-                    // select the bookmark
-                    lcl_SelectByContentTypeAndName(this, *m_xTreeView,
-                                                       SwResId(STR_CONTENT_TYPE_BOOKMARK),
-                                                       sBookmarkName);
-                    return;
-                }
-            }
-        }
         // references
         if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
                 m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
@@ -4374,12 +4328,11 @@ void SwContentTree::UpdateTracking()
             // is not the current section
         }
     }
-    // outline
-    if (m_nOutlineTracking == 3)
-        return;
     // find out where the cursor is
     const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
-    if (!((m_bIsRoot && m_nRootType != ContentTypeId::OUTLINE) || nActPos == SwOutlineNodes::npos))
+    if (m_nOutlineTracking != 3
+        && !((m_bIsRoot && m_nRootType != ContentTypeId::OUTLINE)
+             || nActPos == SwOutlineNodes::npos))
     {
         // assure outline content type is expanded
         // this assumes outline content type is first in treeview
@@ -4461,16 +4414,62 @@ void SwContentTree::UpdateTracking()
             }
             return bRet;
         });
+        return;
     }
-    else
+
+    // bookmarks - track first bookmark at cursor
+    // tdf#159428 Only when no outline found. Showing the outline is more important than
+    // showing a bookmark at the cursor position.
+    if (mTrackContentType[ContentTypeId::BOOKMARK] &&
+            (m_pActiveShell->GetSelectionType() & SelectionType::Text))
     {
-        // clear treeview selections
-        if (m_xTreeView->count_selected_rows() > 0)
+        SwPaM* pCursor = m_pActiveShell->GetCursor();
+        IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
+        IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+        if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd()
+            && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
         {
-            m_xTreeView->unselect_all();
-            m_xTreeView->set_cursor(-1);
-            Select();
+            OUString sBookmarkName;
+            SwPosition* pCursorPoint = pCursor->GetPoint();
+            while (ppBookmark != pMarkAccess->getBookmarksEnd())
+            {
+                if (lcl_IsUiVisibleBookmark(*ppBookmark)
+                    && *pCursorPoint >= (*ppBookmark)->GetMarkStart()
+                    && *pCursorPoint <= (*ppBookmark)->GetMarkEnd())
+                {
+                    sBookmarkName = (*ppBookmark)->GetName();
+                    // keep previously selected bookmark instead
+                    // of selecting a different bookmark inside of it
+                    if (sBookmarkName == m_sSelectedItem)
+                        break;
+                }
+                else if (!sBookmarkName.isEmpty() && *pCursorPoint < (*ppBookmark)->GetMarkStart())
+                {
+                    // don't search a different bookmark inside the
+                    // previous one, if the starting position of the next bookmarks
+                    // is after the cursor position (assuming that the
+                    // bookmark iterator jumps inside the same text by positions)
+                    break;
+                }
+                ++ppBookmark;
+            }
+
+            if (!sBookmarkName.isEmpty())
+            {
+                // select the bookmark
+                lcl_SelectByContentTypeAndName(this, *m_xTreeView,
+                                               SwResId(STR_CONTENT_TYPE_BOOKMARK), sBookmarkName);
+                return;
+            }
         }
+    }
+
+    // clear treeview selections
+    if (m_xTreeView->count_selected_rows() > 0)
+    {
+        m_xTreeView->unselect_all();
+        m_xTreeView->set_cursor(-1);
+        Select();
     }
 }
 
