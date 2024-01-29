@@ -110,22 +110,18 @@ std::unique_ptr<SvStream> MacrosTest::parseExportStream(const OUString& url,
     return pStream;
 }
 
-void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName)
+void MacrosTest::setUpX509(const test::Directories& rDirectories, const OUString& rTestName)
 {
+    static bool isDone{ false };
+    if (isDone) // must only be done once on MacOSX - see below!
+    {
+        return;
+    }
+    isDone = true;
+
     OUString aSourceDir = rDirectories.getURLFromSrc(u"/test/signing-keys/");
     OUString aTargetDir
         = rDirectories.getURLFromWorkdir(Concat2View("CppunitTest/" + rTestName + ".test.user"));
-
-    // Set up NSS database in workdir/CppunitTest/
-    osl::File::copy(aSourceDir + "cert9.db", aTargetDir + "/cert9.db");
-    osl::File::copy(aSourceDir + "key4.db", aTargetDir + "/key4.db");
-    osl::File::copy(aSourceDir + "pkcs11.txt", aTargetDir + "/pkcs11.txt");
-
-    // Make gpg use our own defined setup & keys
-    osl::File::copy(aSourceDir + "pubring.gpg", aTargetDir + "/pubring.gpg");
-    osl::File::copy(aSourceDir + "random_seed", aTargetDir + "/random_seed");
-    osl::File::copy(aSourceDir + "secring.gpg", aTargetDir + "/secring.gpg");
-    osl::File::copy(aSourceDir + "trustdb.gpg", aTargetDir + "/trustdb.gpg");
 
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
@@ -136,10 +132,34 @@ void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUStri
     OUString caVar("LIBO_TEST_CRYPTOAPI_PKCS7");
     osl_setEnvironment(caVar.pData, aTargetPath.pData);
 #else
+    // Set up NSS database in workdir/CppunitTest/
+    // WARNING: on MacOSX, this *must only be done once* - once NSS has opened
+    // the files, SQLite will *stop using them* if they are overwritten or renamed!
+    osl::File::copy(aSourceDir + "cert9.db", aTargetDir + "/cert9.db");
+    osl::File::copy(aSourceDir + "key4.db", aTargetDir + "/key4.db");
+    osl::File::copy(aSourceDir + "pkcs11.txt", aTargetDir + "/pkcs11.txt");
+
     OUString mozCertVar("MOZILLA_CERTIFICATE_FOLDER");
     // explicit prefix with "sql:" needed for CentOS7 system NSS 3.67
     osl_setEnvironment(mozCertVar.pData, OUString("sql:" + aTargetPath).pData);
 #endif
+}
+
+void MacrosTest::setUpGpg(const test::Directories& rDirectories, const OUString& rTestName)
+{
+    OUString aSourceDir = rDirectories.getURLFromSrc(u"/test/signing-keys/");
+    OUString aTargetDir
+        = rDirectories.getURLFromWorkdir(Concat2View("CppunitTest/" + rTestName + ".test.user"));
+
+    OUString aTargetPath;
+    osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
+
+    // Make gpg use our own defined setup & keys
+    osl::File::copy(aSourceDir + "pubring.gpg", aTargetDir + "/pubring.gpg");
+    osl::File::copy(aSourceDir + "random_seed", aTargetDir + "/random_seed");
+    osl::File::copy(aSourceDir + "secring.gpg", aTargetDir + "/secring.gpg");
+    osl::File::copy(aSourceDir + "trustdb.gpg", aTargetDir + "/trustdb.gpg");
+
     OUString gpgHomeVar("GNUPGHOME");
     osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
 
@@ -166,7 +186,7 @@ void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUStri
 #endif
 }
 
-void MacrosTest::tearDownNssGpg()
+void MacrosTest::tearDownGpg()
 {
 #if HAVE_GPGCONF_SOCKETDIR
     // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system

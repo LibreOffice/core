@@ -92,7 +92,8 @@ void SigningTest::setUp()
 {
     UnoApiXmlTest::setUp();
 
-    MacrosTest::setUpNssGpg(m_directories, "xmlsecurity_signing");
+    MacrosTest::setUpX509(m_directories, "xmlsecurity_signing");
+    MacrosTest::setUpGpg(m_directories, "xmlsecurity_signing");
 
     // Initialize crypto after setting up the environment variables.
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -108,7 +109,7 @@ void SigningTest::setUp()
 
 void SigningTest::tearDown()
 {
-    MacrosTest::tearDownNssGpg();
+    MacrosTest::tearDownGpg();
 
     UnoApiXmlTest::tearDown();
 }

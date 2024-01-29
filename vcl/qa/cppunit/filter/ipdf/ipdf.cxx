@@ -40,7 +40,6 @@ public:
     }
 
     void setUp() override;
-    void tearDown() override;
     uno::Reference<xml::crypto::XXMLSecurityContext>& getSecurityContext()
     {
         return mxSecurityContext;
@@ -50,17 +49,10 @@ public:
 void VclFilterIpdfTest::setUp()
 {
     UnoApiTest::setUp();
-    MacrosTest::setUpNssGpg(m_directories, "vcl_filter_ipdf");
+    MacrosTest::setUpX509(m_directories, "vcl_filter_ipdf");
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
-}
-
-void VclFilterIpdfTest::tearDown()
-{
-    MacrosTest::tearDownNssGpg();
-
-    UnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
