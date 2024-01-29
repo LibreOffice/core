@@ -28,6 +28,16 @@ published interface XSystemShellExecute: com::sun::star::uno::XInterface
 {
     /** Executes an arbitrary system command.
 
+        There are generally two modes of operation for this function:
+
+        With `URIS_ONLY` among the passed-in `nFlags`, the passed-in `aCommand`
+        must be a URI that is opened in an
+        "only do secure things, make sure not to execute potentially dangerous code" way
+        (e.g., instead of running an arbitrary app, open a window showing the location of the app).
+
+        Without `URIS_ONLY` among the passed-in `nFlags`, the passed-in `aCommand` must be a
+        system pathname of an executable to run.
+
         @param aCommand
         Specifies the command to execute. This may be an executable file or a
         document which is registered with an application on a specific platform,
