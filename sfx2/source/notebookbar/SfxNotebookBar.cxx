@@ -28,7 +28,7 @@
 #include <framework/addonsoptions.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <vcl/WeldedTabbedNotebookbar.hxx>
 
 using namespace sfx2;
@@ -42,9 +42,68 @@ const char MERGE_NOTEBOOKBAR_URL[] = "URL";
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
-std::unique_ptr<ToolbarUnoDispatcher> SfxNotebookBar::m_xCalcToolboxDispatcher;
-std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>> SfxNotebookBar::m_pNotebookBarWeldedWrapper;
-std::map<const SfxViewShell*, VclPtr<NotebookBar>> SfxNotebookBar::m_pNotebookBarInstance;
+
+namespace
+{
+
+/** View specific notebook bar data */
+struct NotebookBarViewData
+{
+    std::unique_ptr<WeldedTabbedNotebookbar> m_pWeldedWrapper;
+    VclPtr<NotebookBar> m_pNotebookBar;
+    std::unique_ptr<ToolbarUnoDispatcher> m_pToolbarUnoDispatcher;
+
+    ~NotebookBarViewData()
+    {
+        if (m_pNotebookBar)
+            m_pNotebookBar.disposeAndClear();
+    }
+};
+
+/** Notebookbar instance manager is a singleton that is used for track the
+ *  per-view instances of view specifc data contained in NotebookBarViewData
+ *  class.
+ **/
+class NotebookBarViewManager final
+{
+private:
+    // map contains a view data instance for a view (SfxViewShell pointer)
+    std::unordered_map<const SfxViewShell*, std::unique_ptr<NotebookBarViewData>> m_pViewDataList;
+
+    // private constructor to prevent any other instantiation outside of get() method
+    NotebookBarViewManager() = default;
+
+    // prevent class copying
+    NotebookBarViewManager(const NotebookBarViewManager&) = delete;
+    NotebookBarViewManager& operator=(const NotebookBarViewManager&) = delete;
+
+public:
+    // Singleton get method - creates an instance on first get() call
+    static NotebookBarViewManager& get()
+    {
+        static NotebookBarViewManager gManager;
+        return gManager;
+    }
+
+    NotebookBarViewData& getViewData(const SfxViewShell* pViewShell)
+    {
+        auto aFound = m_pViewDataList.find(pViewShell);
+        if (aFound != m_pViewDataList.end()) // found
+            return *aFound->second;
+
+        // Create new view data instance
+        NotebookBarViewData* pViewData = new NotebookBarViewData;
+        m_pViewDataList.emplace(pViewShell, std::unique_ptr<NotebookBarViewData>(pViewData));
+        return *pViewData;
+    }
+
+    void removeViewData(const SfxViewShell* pViewShell)
+    {
+        m_pViewDataList.erase(pViewShell);
+    }
+};
+
+} // end anonymous namespace
 
 static void NotebookbarAddonValues(
     std::vector<Image>& aImageValues,
@@ -200,13 +259,13 @@ static utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css:
 void SfxNotebookBar::RemoveCurrentLOKWrapper()
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    auto aFound = m_pNotebookBarInstance.find(pViewShell);
-    if (aFound != m_pNotebookBarInstance.end())
+    auto& rViewData = NotebookBarViewManager::get().getViewData(pViewShell);
+
+    if (rViewData.m_pNotebookBar)
     {
         // Calls STATIC_LINK SfxNotebookBar -> VclDisposeHdl
-        // which clears also m_pNotebookBarWeldedWrapper
-        aFound->second.disposeAndClear();
-        m_pNotebookBarInstance.erase(aFound);
+        // which clears the whole InstanceManager
+        rViewData.m_pNotebookBar.disposeAndClear();
     }
 }
 
@@ -374,7 +433,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     }
 
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    bool hasWeldedWrapper = m_pNotebookBarWeldedWrapper.find(pViewShell) != m_pNotebookBarWeldedWrapper.end();
+    auto& rViewData = NotebookBarViewManager::get().getViewData(pViewShell);
+    bool hasWeldedWrapper = bool(rViewData.m_pWeldedWrapper);
 
     if (IsActive())
     {
@@ -433,22 +493,19 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
 
                 pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, "NotebookBar", aBuf, xFrame, aNotebookBarAddonsItem);
-                m_pNotebookBarInstance.emplace(std::make_pair(pViewShell, pNotebookBar));
-
+                rViewData.m_pNotebookBar = pNotebookBar;
                 assert(pNotebookBar->IsWelded());
 
                 sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
-                WeldedTabbedNotebookbar* pWrapper = new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
+                rViewData.m_pWeldedWrapper.reset(
+                        new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
                                                     pNotebookBar->GetUIFilePath(),
-                                                    xFrame,
-                                                    nWindowId);
-                m_pNotebookBarWeldedWrapper.emplace(std::make_pair(pViewShell, pWrapper));
+                                                    xFrame, nWindowId));
                 pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
 
-                // TODO: this has to be per instance!!! like m_pNotebookBarWeldedWrapper
-                // TODO: create LOK Notebookbar Instance manager which will encapsulate in single place all of these...
-                SfxNotebookBar::m_xCalcToolboxDispatcher.reset(
-                    new ToolbarUnoDispatcher(pWrapper->getWeldedToolbar(), pWrapper->getBuilder(), xFrame));
+                rViewData.m_pToolbarUnoDispatcher.reset(
+                    new ToolbarUnoDispatcher(rViewData.m_pWeldedWrapper->getWeldedToolbar(),
+                                             rViewData.m_pWeldedWrapper->getBuilder(), xFrame));
 
                 return true;
             }
@@ -619,7 +676,7 @@ void SfxNotebookBar::ReloadNotebookBar(std::u16string_view sUIPath)
 
 IMPL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, pViewShell, void)
 {
-    m_pNotebookBarWeldedWrapper.erase(pViewShell);
+    NotebookBarViewManager::get().removeViewData(pViewShell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
