@@ -380,132 +380,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case SID_CHART_SOURCE:
         case SID_CHART_ADDSOURCE:
-            if (pReqArgs)
-            {
-                ScDocument& rDoc = GetDocument();
-                const   SfxPoolItem* pItem;
-                OUString  aChartName, aRangeName;
-
-                ScRange         aSingleRange;
-                ScRangeListRef  aRangeListRef;
-                bool            bMultiRange = false;
-
-                bool bColHeaders = true;
-                bool bRowHeaders = true;
-                bool bColInit = false;
-                bool bRowInit = false;
-                bool bAddRange = (nSlot == SID_CHART_ADDSOURCE);
-
-                if( const SfxStringItem* pChartItem = pReqArgs->GetItemIfSet( SID_CHART_NAME ) )
-                    aChartName = pChartItem->GetValue();
-
-                if( const SfxStringItem* pChartItem = pReqArgs->GetItemIfSet( SID_CHART_SOURCE ) )
-                    aRangeName = pChartItem->GetValue();
-
-                if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
-                {
-                    bColHeaders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-                    bColInit = true;
-                }
-                if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
-                {
-                    bRowHeaders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-                    bRowInit = true;
-                }
-
-                ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
-                bool bValid = (aSingleRange.ParseAny(aRangeName, rDoc, aDetails) & ScRefFlags::VALID) != ScRefFlags::ZERO;
-                if (!bValid)
-                {
-                    aRangeListRef = new ScRangeList;
-                    aRangeListRef->Parse( aRangeName, rDoc, rDoc.GetAddressConvention());
-                    if ( !aRangeListRef->empty() )
-                    {
-                        bMultiRange = true;
-                        aSingleRange = aRangeListRef->front(); // for header
-                        bValid = true;
-                    }
-                    else
-                        aRangeListRef.clear();
-                }
-
-                ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-                if (pViewSh && bValid && !aChartName.isEmpty() )
-                {
-                    weld::Window* pParent = pViewSh->GetFrameWeld();
-
-                    SCCOL nCol1 = aSingleRange.aStart.Col();
-                    SCROW nRow1 = aSingleRange.aStart.Row();
-                    SCCOL nCol2 = aSingleRange.aEnd.Col();
-                    SCROW nRow2 = aSingleRange.aEnd.Row();
-                    SCTAB nTab = aSingleRange.aStart.Tab();
-
-                    //! limit always or not at all ???
-                    if (!bMultiRange)
-                        m_pDocument->LimitChartArea( nTab, nCol1,nRow1, nCol2,nRow2 );
-
-                                        // Dialog for column/row headers
-                    bool bOk = true;
-                    if ( !bAddRange && ( !bColInit || !bRowInit ) )
-                    {
-                        ScChartPositioner aChartPositioner( *m_pDocument, nTab, nCol1,nRow1, nCol2,nRow2 );
-                        if (!bColInit)
-                            bColHeaders = aChartPositioner.HasColHeaders();
-                        if (!bRowInit)
-                            bRowHeaders = aChartPositioner.HasRowHeaders();
-
-                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-                        ScopedVclPtr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
-                        if ( pDlg->Execute() == RET_OK )
-                        {
-                            bColHeaders = pDlg->IsRow();
-                            bRowHeaders = pDlg->IsCol();
-
-                            rReq.AppendItem(SfxBoolItem(FN_PARAM_1, bColHeaders));
-                            rReq.AppendItem(SfxBoolItem(FN_PARAM_2, bRowHeaders));
-                        }
-                        else
-                            bOk = false;
-                    }
-
-                    if (bOk)            // execute
-                    {
-                        if (bMultiRange)
-                        {
-                            if (bUndo)
-                            {
-                                GetUndoManager()->AddUndoAction(
-                                    std::make_unique<ScUndoChartData>( this, aChartName, aRangeListRef,
-                                                            bColHeaders, bRowHeaders, bAddRange ) );
-                            }
-                            m_pDocument->UpdateChartArea( aChartName, aRangeListRef,
-                                                        bColHeaders, bRowHeaders, bAddRange );
-                        }
-                        else
-                        {
-                            ScRange aNewRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
-                            if (bUndo)
-                            {
-                                GetUndoManager()->AddUndoAction(
-                                    std::make_unique<ScUndoChartData>( this, aChartName, aNewRange,
-                                                            bColHeaders, bRowHeaders, bAddRange ) );
-                            }
-                            m_pDocument->UpdateChartArea( aChartName, aNewRange,
-                                                        bColHeaders, bRowHeaders, bAddRange );
-                        }
-                    }
-                }
-                else
-                {
-                    OSL_FAIL("UpdateChartArea: no ViewShell or wrong data");
-                }
-                rReq.Done();
-            }
-            else
-            {
-                OSL_FAIL("SID_CHART_SOURCE without arguments");
-            }
+            ExecuteChartSource(rReq);
             break;
 
         case FID_AUTO_CALC:
@@ -1468,6 +1343,138 @@ void UpdateAcceptChangesDialog()
         if ( pChild )
             static_cast<ScAcceptChgDlgWrapper*>(pChild)->ReInitDlg();
     }
+}
+
+void ScDocShell::ExecuteChartSource(SfxRequest& rReq)
+{
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
+    sal_uInt16 nSlot = rReq.GetSlot();
+    bool bUndo (m_pDocument->IsUndoEnabled());
+    if (!pReqArgs)
+    {
+        OSL_FAIL("SID_CHART_SOURCE without arguments");
+        return;
+    }
+
+    ScDocument& rDoc = GetDocument();
+    const   SfxPoolItem* pItem;
+    OUString  aChartName, aRangeName;
+
+    ScRange         aSingleRange;
+    ScRangeListRef  aRangeListRef;
+    bool            bMultiRange = false;
+
+    bool bColHeaders = true;
+    bool bRowHeaders = true;
+    bool bColInit = false;
+    bool bRowInit = false;
+    bool bAddRange = (nSlot == SID_CHART_ADDSOURCE);
+
+    if( const SfxStringItem* pChartItem = pReqArgs->GetItemIfSet( SID_CHART_NAME ) )
+        aChartName = pChartItem->GetValue();
+
+    if( const SfxStringItem* pChartItem = pReqArgs->GetItemIfSet( SID_CHART_SOURCE ) )
+        aRangeName = pChartItem->GetValue();
+
+    if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
+    {
+        bColHeaders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        bColInit = true;
+    }
+    if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
+    {
+        bRowHeaders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        bRowInit = true;
+    }
+
+    ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
+    bool bValid = (aSingleRange.ParseAny(aRangeName, rDoc, aDetails) & ScRefFlags::VALID) != ScRefFlags::ZERO;
+    if (!bValid)
+    {
+        aRangeListRef = new ScRangeList;
+        aRangeListRef->Parse( aRangeName, rDoc, rDoc.GetAddressConvention());
+        if ( !aRangeListRef->empty() )
+        {
+            bMultiRange = true;
+            aSingleRange = aRangeListRef->front(); // for header
+            bValid = true;
+        }
+        else
+            aRangeListRef.clear();
+    }
+
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    if (!pViewSh || !bValid || aChartName.isEmpty() )
+    {
+        OSL_FAIL("UpdateChartArea: no ViewShell or wrong data");
+        rReq.Done();
+        return;
+    }
+
+    weld::Window* pParent = pViewSh->GetFrameWeld();
+
+    SCCOL nCol1 = aSingleRange.aStart.Col();
+    SCROW nRow1 = aSingleRange.aStart.Row();
+    SCCOL nCol2 = aSingleRange.aEnd.Col();
+    SCROW nRow2 = aSingleRange.aEnd.Row();
+    SCTAB nTab = aSingleRange.aStart.Tab();
+
+    //! limit always or not at all ???
+    if (!bMultiRange)
+        m_pDocument->LimitChartArea( nTab, nCol1,nRow1, nCol2,nRow2 );
+
+    // Dialog for column/row headers
+    bool bOk = true;
+    if ( !bAddRange && ( !bColInit || !bRowInit ) )
+    {
+        ScChartPositioner aChartPositioner( *m_pDocument, nTab, nCol1,nRow1, nCol2,nRow2 );
+        if (!bColInit)
+            bColHeaders = aChartPositioner.HasColHeaders();
+        if (!bRowInit)
+            bRowHeaders = aChartPositioner.HasRowHeaders();
+
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+        ScopedVclPtr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
+        if ( pDlg->Execute() == RET_OK )
+        {
+            bColHeaders = pDlg->IsRow();
+            bRowHeaders = pDlg->IsCol();
+
+            rReq.AppendItem(SfxBoolItem(FN_PARAM_1, bColHeaders));
+            rReq.AppendItem(SfxBoolItem(FN_PARAM_2, bRowHeaders));
+        }
+        else
+            bOk = false;
+    }
+
+    if (bOk)            // execute
+    {
+        if (bMultiRange)
+        {
+            if (bUndo)
+            {
+                GetUndoManager()->AddUndoAction(
+                    std::make_unique<ScUndoChartData>( this, aChartName, aRangeListRef,
+                                            bColHeaders, bRowHeaders, bAddRange ) );
+            }
+            m_pDocument->UpdateChartArea( aChartName, aRangeListRef,
+                                        bColHeaders, bRowHeaders, bAddRange );
+        }
+        else
+        {
+            ScRange aNewRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
+            if (bUndo)
+            {
+                GetUndoManager()->AddUndoAction(
+                    std::make_unique<ScUndoChartData>( this, aChartName, aNewRange,
+                                            bColHeaders, bRowHeaders, bAddRange ) );
+            }
+            m_pDocument->UpdateChartArea( aChartName, aNewRange,
+                                        bColHeaders, bRowHeaders, bAddRange );
+        }
+    }
+    rReq.Done();
 }
 
 bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )

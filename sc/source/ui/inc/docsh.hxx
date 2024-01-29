@@ -433,6 +433,9 @@ public:
     void RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
 
     ScModelObj* GetModel() const { return static_cast<ScModelObj*>(SfxObjectShell::GetModel().get()); }
+
+private:
+    void ExecuteChartSource(SfxRequest& rReq);
 };
 
 void UpdateAcceptChangesDialog();
