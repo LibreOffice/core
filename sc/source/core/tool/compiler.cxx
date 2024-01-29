@@ -4521,6 +4521,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     pFunctionStack[0].eOp = ocNone;
     pFunctionStack[0].nSep = 0;
     size_t nFunction = 0;
+    size_t nHighWatermark = 0;
     short nBrackets = 0;
     bool bInArray = false;
     eLastOp = ocOpen;
@@ -4540,6 +4541,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                     ++nFunction;
                     pFunctionStack[ nFunction ].eOp = eLastOp;
                     pFunctionStack[ nFunction ].nSep = 0;
+                    nHighWatermark = nFunction;
                 }
             }
             break;
@@ -4578,6 +4580,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                     ++nFunction;
                     pFunctionStack[ nFunction ].eOp = eOp;
                     pFunctionStack[ nFunction ].nSep = 0;
+                    nHighWatermark = nFunction;
                 }
             }
             break;
@@ -4608,6 +4611,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                     ++nFunction;
                     pFunctionStack[ nFunction ].eOp = eOp;
                     pFunctionStack[ nFunction ].nSep = 0;
+                    nHighWatermark = nFunction;
                 }
             }
             break;
@@ -4650,9 +4654,9 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             // Append a parameter for WEEKNUM, all 1.0
             // Function is already closed, parameter count is nSep+1
             size_t nFunc = nFunction + 1;
-            if (eOp == ocClose &&
-                    (pFunctionStack[ nFunc ].eOp == ocWeek &&   // 2nd week start
-                     pFunctionStack[ nFunc ].nSep == 0))
+            if (eOp == ocClose && nFunc <= nHighWatermark &&
+                     pFunctionStack[ nFunc ].nSep == 0 &&
+                     pFunctionStack[ nFunc ].eOp == ocWeek)   // 2nd week start
             {
                 if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
                         !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
